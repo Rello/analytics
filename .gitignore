@@ -1,0 +1,25 @@
+# Various
+.*.sw[po]
+*.bak
+*.BAK
+*~
+*.orig
+*.class
+.cvsignore
+Thumbs.db
+.thumbs
+*.py[co]
+_darcs/*
+CVS/*
+.svn/*
+RCS/*
+*.backup*
+*.Lock
+.idea
+docs/*
+
+# Mac OS
+.DS_Store
+__MACOSX/*
+._*
+.smbdelete*

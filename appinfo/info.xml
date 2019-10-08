@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+	<id>data</id>
+	<name>Data</name>
+	<summary>Nextcloud Data</summary>
+	<description><![CDATA[
+Data
+]]></description>
+	<version>0.0.1</version>
+	<licence>agpl</licence>
+	<author>Marcel Scherello</author>
+	<namespace>data</namespace>
+	<category>toos</category>
+	<website>https://github.com/rello/data</website>
+	<bugs>https://github.com/rello/data/issues</bugs>
+	<repository type="git">https://github.com/rello/data.git</repository>
+	<discussion>https://help.nextcloud.com/c/apps/audioplayer</discussion>
+    <screenshot>
+        https://raw.githubusercontent.com/rello/data/master/screenshots/data_logo.png
+    </screenshot>
+	<dependencies>
+		<php min-version="7.0" max-version="7.3"/>
+		<nextcloud min-version="16" max-version="17"/>
+		<owncloud min-version="9" max-version="10"/>
+	</dependencies>
+</info>
