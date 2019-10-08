@@ -13,12 +13,12 @@ use OCP\Util;
 
 //Util::addStyle('data', 'style');
 //Util::addScript('data', 'app');
-script('data', 'data_main');
+script('data', 'app');
 script('data', 'jquery.dataTables.min');
-script('data', 'highcharts');
-script('data', 'modules/data');
-script('data', 'modules/exporting');
-script('data', 'modules/export-data');
+script('data', 'highcharts/highcharts');
+script('data', 'highcharts/modules/data');
+script('data', 'highcharts/modules/exporting');
+script('data', 'highcharts/modules/export-data');
 style('data', 'jquery.dataTables.min');
 
 
