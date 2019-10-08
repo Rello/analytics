@@ -1,24 +1,22 @@
 <?php
 /**
- * Audio Player
+ * Nextcloud Data
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @author Sebastian Doell <sebastian@libasys.de>
- * @copyright 2016-2019 Marcel Scherello
- * @copyright 2015 Sebastian Doell
+ * @copyright 2019 Marcel Scherello
  */
 
 namespace OCA\data\Controller;
 
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\IRequest;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\IRequest;
 
 /**
  * Controller class for main page.

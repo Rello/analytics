@@ -1,18 +1,16 @@
 <?php
 /**
- * Audio Player
+ * Nextcloud Data
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2016-2019 Marcel Scherello
+ * @copyright 2019 Marcel Scherello
  */
 
 use OCP\Util;
 
-//Util::addStyle('data', 'style');
-//Util::addScript('data', 'app');
 script('data', 'app');
 script('data', 'jquery.dataTables.min');
 script('data', 'highcharts/highcharts');
@@ -20,9 +18,6 @@ script('data', 'highcharts/modules/data');
 script('data', 'highcharts/modules/exporting');
 script('data', 'highcharts/modules/export-data');
 style('data', 'jquery.dataTables.min');
-
-
-
 ?>
 
 <div id="app-navigation">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Audio Player Editor
+ * Nextcloud Data
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -13,12 +13,12 @@ namespace OCA\data\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\IRequest;
-use OCP\IL10N;
 use OCP\IDbConnection;
-use OCP\Share\IManager;
+use OCP\IL10N;
 use OCP\ILogger;
+use OCP\IRequest;
 use OCP\ITagManager;
+use OCP\Share\IManager;
 
 /**
  * Controller class for main page.
