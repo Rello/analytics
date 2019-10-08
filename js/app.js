@@ -64,18 +64,6 @@ OCA.Data.UI = {
         }
     },
 
-    handleDrilldownClicked: function (evt) {
-        var activeCategory = document.querySelector('#navigationDatasets .active');
-        if (evt) {
-            if (activeCategory) {
-                activeCategory.classList.remove('active');
-            }
-            var parentLi = evt.target.closest('li');
-            parentLi.classList.add('active');
-            OCA.Data.Backend.getData();
-        }
-    },
-
     buildDataTable: function (jsondata) {
         var data = Object.keys(jsondata.data[0]);
         var header = jsondata.header;

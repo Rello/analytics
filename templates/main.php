@@ -38,5 +38,5 @@ style('data', 'jquery.dataTables.min');
 </div>
 
 <div id="app-sidebar" class="details-view scroll-container disappear" data-trackid="">
-    <?php print_unescaped($this->inc('content/sidebar')); ?>
+    <?php print_unescaped($this->inc('part.sidebar')); ?>
 </div>

@@ -56,11 +56,11 @@ class DataController extends Controller
     public function getData(int $id, $objectDrilldown, $dateDrilldown)
     {
         $header = array();
-        if ($objectDrilldown === 'true') array_push($header,'Objekt');
-        if ($dateDrilldown === 'true') array_push($header,'Date');
-        array_push($header,'Value');
+        if ($objectDrilldown === 'true') array_push($header, 'Objekt');
+        if ($dateDrilldown === 'true') array_push($header, 'Date');
+        array_push($header, 'Value');
 
-        $dataset = $this->DBController->getDataset($id,$objectDrilldown,$dateDrilldown);
+        $dataset = $this->DBController->getDataset($id, $objectDrilldown, $dateDrilldown);
 
         $result = empty($dataset) ? [
             'status' => 'nodata'
@@ -70,4 +70,4 @@ class DataController extends Controller
         ];
         return new JSONResponse($result);
     }
-    }
+}

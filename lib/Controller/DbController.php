@@ -88,29 +88,6 @@ class DbController extends Controller
     }
 
     /**
-     * Add artist to db if not exist
-     * @param int $userId
-     * @param string $sArtist
-     * @return int
-     */
-    public function writeXxxToDB($userId, $sArtist)
-    {
-        $sArtist = $this->truncate($sArtist, '256');
-
-        $stmt = $this->db->prepare('SELECT `id` FROM `*PREFIX*audioplayer_artists` WHERE `user_id` = ? AND `name` = ?');
-        $stmt->execute(array($userId, $sArtist));
-        $row = $stmt->fetch();
-        if ($row) {
-            return $row['id'];
-        } else {
-            $stmt = $this->db->prepare('INSERT INTO `*PREFIX*audioplayer_artists` (`user_id`,`name`) VALUES(?,?)');
-            $stmt->execute(array($userId, $sArtist));
-            $insertid = $this->db->lastInsertId('*PREFIX*audioplayer_artists');
-            return $insertid;
-        }
-    }
-
-    /**
      * Get file id for single track
      * @param int $dataset
      * @param  $objectDrilldown
