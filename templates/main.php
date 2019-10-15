@@ -11,8 +11,12 @@
 
 use OCP\Util;
 
+Util::addStyle('data', 'style');
+
 script('data', 'app');
+script('data', 'sidebar');
 script('data', 'jquery.dataTables.min');
+script('data', 'jquery.csv.min');
 script('data', 'highcharts/highcharts');
 script('data', 'highcharts/modules/data');
 script('data', 'highcharts/modules/exporting');
@@ -37,6 +41,4 @@ style('data', 'jquery.dataTables.min');
 
 </div>
 
-<div id="app-sidebar" class="details-view scroll-container disappear" data-trackid="">
     <?php print_unescaped($this->inc('part.sidebar')); ?>
-</div>

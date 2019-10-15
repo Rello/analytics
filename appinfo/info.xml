@@ -6,7 +6,7 @@
 	<description><![CDATA[
 Data
 ]]></description>
-	<version>0.0.1</version>
+    <version>0.0.2</version>
 	<licence>agpl</licence>
 	<author>Marcel Scherello</author>
 	<namespace>data</namespace>

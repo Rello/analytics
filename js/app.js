@@ -20,51 +20,93 @@ if (!OCA.Data) {
  * @namespace OCA.Data.Core
  */
 OCA.Data.Core = {
-    loadDatasets: function () {
-
-        var navigationData = {id: "1", name: "Test 1"};
-        OCA.Data.UI.buildNavigationRow(navigationData);
-
-        navigationData = {id: "2", name: "Erich-Weinert-Straße"};
-        OCA.Data.UI.buildNavigationRow(navigationData);
-
-        navigationData = {id: "3", name: "Pflanzen"};
-        OCA.Data.UI.buildNavigationRow(navigationData);
-
-        var categoryList = document.getElementById('navigationDatasets');
-        categoryList.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
+    initNavigation: function () {
+        document.getElementById('navigationDatasets').innerHTML = '';
+        OCA.Data.Backend.getDatasets();
     },
+
+    handleDrilldownChange: function () {
+        document.querySelector('#navigationDatasets .active').click();
+    },
+
+    handleNewDatasetButton: function () {
+        OCA.Data.Backend.createDataset();
+    }
 
 };
 
 OCA.Data.UI = {
-    buildNavigationRow: function (navigationData) {
+    buildNavigation: function (data) {
+        for (var navigation of data) {
+            OCA.Data.UI.buildNavigationRow(navigation);
+        }
+    },
+
+    buildNavigationRow: function (data) {
         var li = document.createElement('li');
-        li.dataset.id = navigationData.id;
+        var typeIcon;
 
         var a = document.createElement('a');
         a.setAttribute('href', '#');
-        a.classList.add('icon-projects');
-        a.innerText = navigationData.name;
+        if (data.type === 1) typeIcon = 'icon-file';
+        else if (data.type === 2) typeIcon = 'icon-projects';
+        else if (data.type === 3) typeIcon = 'icon-external';
+        a.classList.add(typeIcon);
+        a.innerText = data.name;
+        a.dataset.id = data.id;
+        a.dataset.type = data.type;
+        a.dataset.link = data.link;
+        a.dataset.visualization = data.visualization;
+        a.dataset.name = data.name;
+        a.dataset.chart = data.chart;
+        a.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
+
+        var div = document.createElement('div');
+        div.classList.add('app-navigation-entry-utils');
+        var ul = document.createElement('ul');
+        var li2 = document.createElement('li');
+        li2.classList.add('app-navigation-entry-utils-menu-button');
+        var button = document.createElement('button');
+        button.addEventListener('click', OCA.Data.UI.handleOptionsClicked);
+        button.dataset.id = data.id;
+        button.dataset.name = data.name;
+
+        //button.classList.add(typeIcon)
+
+        li2.appendChild(button);
+        ul.appendChild(li2);
+        div.appendChild(ul);
         li.appendChild(a);
+        li.appendChild(div);
 
         var categoryList = document.getElementById('navigationDatasets');
         categoryList.appendChild(li);
     },
 
     handleNavigationClicked: function (evt) {
+
+        OCA.Data.UI.resetContent();
         var activeCategory = document.querySelector('#navigationDatasets .active');
         if (evt) {
             if (activeCategory) {
                 activeCategory.classList.remove('active');
             }
-            var parentLi = evt.target.closest('li');
-            parentLi.classList.add('active');
-            OCA.Data.Backend.getData(parentLi.dataset.id);
+            evt.target.classList.add('active');
+            if (evt.target.dataset.type === "1") OCA.Data.Backend.getDataCsv();
+            else if (evt.target.dataset.type === "2") OCA.Data.Backend.getData();
+            else if (evt.target.dataset.type === "3") OCA.Data.Backend.gettest();
         }
     },
 
+    handleOptionsClicked: function (evt) {
+        OCA.Data.Sidebar.showSidebar(evt);
+        evt.stopPropagation();
+    },
+
     buildDataTable: function (jsondata) {
+        document.getElementById('tableContainer').style.removeProperty('display');
+        document.getElementById('drilldown').style.removeProperty('display');
+
         var data = Object.keys(jsondata.data[0]);
         var header = jsondata.header;
         var i = 0;
@@ -76,125 +118,169 @@ OCA.Data.UI = {
 
         var language = {
             search: "Suche:",
-                paginate: {
-                first:      "erster",
-                    previous:   "zurück",
-                    next:       "weiter",
-                    last:       "letzter"
+            paginate: {
+                first: "erster",
+                previous: "zurück",
+                next: "weiter",
+                last: "letzter"
             },
         };
 
-        if ($.fn.dataTable.isDataTable('#example'))
-        {
-            $('#example').DataTable().destroy();
-            $('#example').empty();
-        }
-
-        $('#example').DataTable({
+        $('#tableContainer').DataTable({
             data: jsondata.data,
             columns: columns,
             language: language
-    });
+        });
+    },
+
+    buildDataTableCsv: function (jsondata) {
+        document.getElementById('tableContainer').style.removeProperty('display');
+
+        var data = $.csv.toObjects(jsondata);
+        var csvHeader = jsondata.split('\n')[0];
+        var singleHeader = csvHeader.split(',');
+        var i = 0;
+        var columns = [];
+        while (i < singleHeader.length) {
+            var text = singleHeader[i].replace(/[^a-zA-Z0-9 &%.]/g, '').trim();
+            columns[i] = {'title': text, 'data': text};
+            i += 1;
+        }
+
+        var language = {
+            search: "Suche:",
+            paginate: {
+                first: "erster",
+                previous: "zurück",
+                next: "weiter",
+                last: "letzter"
+            },
+        };
+
+        $('#tableContainer').DataTable({
+            data: data,
+            columns: columns,
+            language: language
+        });
+    },
+
+    buildHighchartCsv: function (jsondata) {
+
+        document.getElementById('chartContainer').style.removeProperty('display');
+        var chartType = document.querySelector('#navigationDatasets .active').dataset.chart;
+        Highcharts.chart('chartContainer', {
+            chart: {
+                type: chartType,
+                events: {
+                    load: function () {
+                        var theSeries = this.series;
+                        if (theSeries.length > 4) {
+                            $.each(theSeries, function () {
+                                if (this.index > 0) {
+                                    this.setVisible(false);
+                                }
+                            });
+                        }
+                    }
+                },
+            },
+            title: {
+                text: document.querySelector('#navigationDatasets .active').dataset.name
+            },
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: null
+                },
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            data: {
+                csv: jsondata,
+                enablePolling: true
+            }
+        });
     },
 
     buildHighchart: function (jsondata) {
+
+        document.getElementById('drilldown').style.removeProperty('display');
+        document.getElementById('chartContainer').style.removeProperty('display');
+        var chartType = document.querySelector('#navigationDatasets .active').dataset.chart;
+
         var objectArray = [];
+        var categories = [];
         var lastObject = 0;
         var index = 0;
 
         for (var values of jsondata.data) {
 
             if (lastObject !== values['object']) {
-                objectArray.push({data:[],name:values['object']});
+                objectArray.push({data: [], name: values['object']});
                 if (lastObject !== 0) index++;
                 lastObject = values['object'];
             }
-            objectArray[index]['data'].push([Date.UTC(values['date']),parseFloat(values['value'])]);
+            //objectArray[index]['data'].push([Date.UTC(values['date']), parseFloat(values['value'])]);
+            objectArray[index]['data'].push([values['date'], parseFloat(values['value'])]);
+            categories.push(values['date']);
 
         }
 
-        Highcharts.chart('container', {
+        Highcharts.chart('chartContainer', {
             series: objectArray,
             chart: {
-                type: 'line'
+                type: chartType,
+                events: {
+                    load: function () {
+                        var theSeries = this.series;
+                        if (theSeries.length > 2) {
+                            $.each(theSeries, function () {
+                                if (this.index > 0) {
+                                    this.setVisible(false);
+                                }
+                            });
+                        }
+                    }
+                },
             },
             title: {
-                text: 'Nextcloud Data'
+                text: document.querySelector('#navigationDatasets .active').dataset.name
             },
             yAxis: {
                 allowDecimals: false,
                 title: {
-                    text: 'Units'
-                }
+                    text: null
+                },
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
             },
             xAxis: {
-                type: 'datetime',
-                dateTimeLabelFormats: { // don't display the dummy year
-                    month: '%Y'
-                },
-                title: {
-                    text: 'Date'
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
-                        this.point.y + ' ' + this.point.name.toLowerCase();
-                }
+                categories: categories,
+                //type: 'datetime',
+                //dateTimeLabelFormats: { // don't display the dummy year
+                //    month: '%Y'
+                //},
             }
         });
     },
 
-    buildDataChart: function (jsondata) {
-        var data = Object.keys(jsondata.data[0]);
-        var ctx = document.getElementById('myChart');
+    resetContent: function () {
 
-        var player = [];
-        var score = [];
+        if ($.fn.dataTable.isDataTable('#tableContainer')) {
+            $('#tableContainer').DataTable().destroy();
+        }
 
-         score.push({t:"1491170400000",y:"500.00"});
-        score.push({t:"1491180400000",y:"500.00"});
-        score.push({t:"1491190400000",y:"500.00"});
-
-        //1491170400000
-
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: 'Kosten',
-                    data: score,
-                    type: 'line',
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                        distribution: 'series',
-                        ticks: {
-                            source: 'data',
-                            autoSkip: true
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Closing price ($)'
-                        }
-                    }]
-                },
-                elements: {
-                    line: {
-                        tension: 0 // disables bezier curves
-                    }
-                }
-            }
-        });
+        document.getElementById('chartContainer').style.display = 'none';
+        document.getElementById('chartContainer').innerHTML = ''
+        document.getElementById('tableContainer').style.display = 'none';
+        document.getElementById('tableContainer').innerHTML = ''
+        document.getElementById('drilldown').style.display = 'none';
     },
 };
 
@@ -203,33 +289,116 @@ OCA.Data.Backend = {
     getData: function () {
         var objectDrilldown = document.getElementById('checkBoxObject').checked;
         var dateDrilldown = document.getElementById('checkBoxDate').checked;
-        var id = document.querySelector('#navigationDatasets .active').dataset.id;
+        var datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/data/getdata'),
+            url: OC.generateUrl('apps/data/data/') + datasetId,
             data: {
-                'id': id,
                 'objectDrilldown': objectDrilldown,
                 'dateDrilldown': dateDrilldown
             },
-            success: function (jsondata) {
-                OCA.Data.UI.buildDataTable(jsondata);
-                OCA.Data.UI.buildHighchart(jsondata);
+            success: function (data) {
+                var visualization = document.querySelector('#navigationDatasets .active').dataset.visualization;
+                if (visualization === 'chart') OCA.Data.UI.buildHighchart(data);
+                else if (visualization === 'table') OCA.Data.UI.buildDataTable(data);
+                else {
+                    OCA.Data.UI.buildHighchart(data);
+                    OCA.Data.UI.buildDataTable(data);
+                }
             }.bind()
         });
-    }
+    },
+
+    getDataCsv: function () {
+        var link = document.querySelector('#navigationDatasets .active').dataset.link;
+        $.ajax({
+            type: "GET",
+            url: link,
+            dataType: "text",
+            success: function (data) {
+                var visualization = document.querySelector('#navigationDatasets .active').dataset.visualization;
+                if (visualization === 'chart') OCA.Data.UI.buildHighchartCsv(data);
+                else if (visualization === 'table') OCA.Data.UI.buildDataTableCsv(data);
+                else {
+                    OCA.Data.UI.buildHighchartCsv(data);
+                    OCA.Data.UI.buildDataTableCsv(data);
+                }
+            }
+        });
+    },
+
+    getDatasets: function () {
+        $.ajax({
+            type: "GET",
+            url: OC.generateUrl('apps/data/dataset'),
+            success: function (data) {
+                OCA.Data.UI.buildNavigation(data[0]);
+            }
+        });
+    },
+
+    gettest: function () {
+        $.ajax({
+            type: "GET",
+            url: OC.generateUrl('apps/data/data'),
+            success: function (data) {
+                OCA.Data.UI.buildHighchart(data);
+                OCA.Data.UI.buildDataTable(data);
+            }
+        });
+    },
+
+    createDataset: function () {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/data/dataset'),
+            success: function (data) {
+                OCA.Data.Core.initNavigation();
+            }.bind()
+        });
+    },
+
+    deleteDataset: function (datasetId) {
+        $.ajax({
+            type: 'DELETE',
+            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            success: function (data) {
+                OCA.Data.Core.initNavigation();
+            }.bind()
+        });
+    },
+
+    updateDataset: function (datasetId) {
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            data: {
+                'name': document.getElementById('tableName').value,
+                'type': document.getElementById('tableType').value,
+                'link': document.getElementById('tableLink').value,
+                'visualization': document.getElementById('tableVisualization').value,
+                'chart': document.getElementById('tableChart').value
+            },
+            success: function (data) {
+                OCA.Data.Core.initNavigation();
+            }.bind()
+        });
+    },
+
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    OCA.Data.Core.loadDatasets();
+    OCA.Data.Core.initNavigation();
 
-    document.getElementById('checkBoxObject').addEventListener('click', OCA.Data.Backend.getData);
-    document.getElementById('checkBoxDate').addEventListener('click', OCA.Data.Backend.getData);
+    document.getElementById('checkBoxObject').addEventListener('click', OCA.Data.Core.handleDrilldownChange);
+    document.getElementById('checkBoxDate').addEventListener('click', OCA.Data.Core.handleDrilldownChange);
+    document.getElementById('newDatasetButton').addEventListener('click', OCA.Data.Core.handleNewDatasetButton);
+
+    var categoryList = document.getElementById('navigationDatasets');
+    //categoryList.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
 
     $('#myInput').on('keyup', function () {
         table.search(this.value).draw();
     });
-
-
 });

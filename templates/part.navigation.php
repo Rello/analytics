@@ -11,7 +11,7 @@
  ?>
 
 <div class="app-navigation-new">
-    <button type="button" class="icon-add">
+    <button id="newDatasetButton" type="button" class="icon-add">
         New Dataset
     </button>
 </div>

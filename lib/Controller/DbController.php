@@ -12,13 +12,10 @@
 namespace OCA\data\Controller;
 
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
 use OCP\IDbConnection;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
-use OCP\ITagManager;
-use OCP\Share\IManager;
 
 /**
  * Controller class for main page.
@@ -29,8 +26,6 @@ class DbController extends Controller
     private $userId;
     private $l10n;
     private $db;
-    private $shareManager;
-    private $tagManager;
     private $logger;
 
     public function __construct(
@@ -39,8 +34,6 @@ class DbController extends Controller
         $userId,
         IL10N $l10n,
         IDbConnection $db,
-        ITagManager $tagManager,
-        IManager $shareManager,
         ILogger $logger
     )
     {
@@ -48,8 +41,6 @@ class DbController extends Controller
         $this->userId = $userId;
         $this->l10n = $l10n;
         $this->db = $db;
-        $this->shareManager = $shareManager;
-        $this->tagManager = $tagManager;
         $this->logger = $logger;
     }
 
@@ -94,7 +85,7 @@ class DbController extends Controller
      * @param  $dateDrilldown
      * @return array
      */
-    public function getDataset(int $dataset, $objectDrilldown = null, $dateDrilldown = null)
+    public function getData(int $dataset, $objectDrilldown = null, $dateDrilldown = null)
     {
         $SQL = 'SELECT';
         if ($objectDrilldown === 'true') $SQL .= ' `object`.`name` AS `object`,';
@@ -107,11 +98,99 @@ class DbController extends Controller
                 GROUP BY `fact`.`dataset`';
         if ($objectDrilldown === 'true') $SQL .= ', `object`.`name`';
         if ($dateDrilldown === 'true') $SQL .= ', `fact`.`date`';
+        $SQL .= ' ORDER BY';
+        if ($objectDrilldown === 'true') $SQL .= ' `object`,';
+        $SQL .= ' `date` ASC';
 
-        $this->logger->error($SQL);
+        // $this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, $dataset));
+        $results = $stmt->fetchAll();
+        return $results;
+    }
+
+    /**
+     * update data
+     */
+    public function updateData()
+    {
+    }
+
+    /**
+     * create data
+     */
+    public function deleteData()
+    {
+    }
+
+    /**
+     * create data
+     */
+    public function createData()
+    {
+    }
+
+    /**
+     * create dataset
+     */
+    public function createDataset()
+    {
+        $SQL = 'INSERT INTO `*PREFIX*data_dataset` (`user_id`,`name`) VALUES(?,?)';
+        //$this->logger->error($SQL);
+
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, 'New'));
+        $results = $stmt->fetchAll();
+        return $results;
+    }
+
+    /**
+     * update dataset
+     */
+    public function updateDataset($id, $name, $type, $link, $visualization, $chart)
+    {
+        $SQL = 'UPDATE `*PREFIX*data_dataset` SET `name`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ? WHERE `user_id` = ? AND `id` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($name, $type, $link, $visualization, $chart, $this->userId, $id));
+    }
+
+    /**
+     * delete dataset
+     */
+    public function deleteDataset($id)
+    {
+        $SQL = 'DELETE FROM `*PREFIX*data_dataset` WHERE `user_id` = ? AND `id` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, $id));
+    }
+
+    /**
+     * get datasets
+     */
+    public function getDatasets()
+    {
+        $SQL = 'SELECT `id`, `name`, `type`, `link`, `visualization`, `chart` FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? ORDER BY `name` ASC';
+        //$this->logger->error($SQL);
+
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId));
+        $results = $stmt->fetchAll();
+        return $results;
+    }
+
+    /**
+     * get datasets
+     * @param $id
+     * @return
+     */
+    public function getDataset($id)
+    {
+        $SQL = 'SELECT `id`, `name`, `type`, `link`, `visualization`, `chart` FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? AND `id` = ?';
+        //$this->logger->error($SQL);
+
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, $id));
         $results = $stmt->fetchAll();
         return $results;
     }
