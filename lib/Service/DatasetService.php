@@ -56,6 +56,7 @@ class DatasetService
         ] : [
             $data
         ];
+        $result = $data;
         return $result;
     }
 
@@ -100,9 +101,9 @@ class DatasetService
      * @param $chart
      * @return array
      */
-    public function update(int $datasetId, $name, $type, $link, $visualization, $chart)
+    public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart)
     {
-        $data = $this->DBController->updateDataset($datasetId, $name, $type, $link, $visualization, $chart);
+        $data = $this->DBController->updateDataset($datasetId, $name, $parent, $type, $link, $visualization, $chart);
         $result = empty($data) ? [
             'nodata'
         ] : [

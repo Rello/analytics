@@ -12,28 +12,42 @@
 namespace OCA\data\Controller;
 
 use OCA\data\Service\DataService;
+use OCA\data\Service\DatasetService;
+use OCA\data\Service\GithubService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\Files\IRootFolder;
 use OCP\IDbConnection;
 use OCP\ILogger;
 use OCP\IRequest;
-
 
 class DataController extends Controller
 {
     private $logger;
     private $DataService;
+    private $DatasetService;
+    private $GithubService;
+    private $rootFolder;
+    private $userId;
 
     public function __construct(
         string $AppName,
         IRequest $request,
+        $userId,
         ILogger $logger,
-        DataService $DataService
+        IRootFolder $rootFolder,
+        DataService $DataService,
+        GithubService $GithubService,
+        DatasetService $DatasetService
     )
     {
         parent::__construct($AppName, $request);
+        $this->userId = $userId;
         $this->logger = $logger;
         $this->DataService = $DataService;
+        $this->DatasetService = $DatasetService;
+        $this->GithubService = $GithubService;
+        $this->rootFolder = $rootFolder;
     }
 
     /**
@@ -47,59 +61,79 @@ class DataController extends Controller
      */
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
     {
-        return new DataResponse($this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown));
+        $dataset = $this->DatasetService->read($datasetId);
+        $datasetType = $dataset['type'];
+
+        if ($datasetType === 2) $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown);
+        if ($datasetType === 3) $result = $this->GithubService->read();
+
+        $result['options'] = $dataset;
+
+        return new DataResponse($result);
     }
 
-    public function index()
+    /**
+     * Get the items for the selected category
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $import
+     * @return DataResponse
+     */
+    public function importCSV(int $datasetId, $import)
     {
+        return new DataResponse($this->DataService->import($datasetId, $import));
+    }
 
-        $string = 'https://api.github.com/repos/rello/audioplayer/releases';
+    /**
+     * Get the items for the selected category
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $import
+     * @return DataResponse
+     */
+    public function importFile(int $datasetId, $path)
+    {
+        $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
+        $import = $file->getContent();
+        return new DataResponse($this->DataService->import($datasetId, $import));
+    }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_URL, $string);
-        curl_setopt($ch, CURLOPT_REFERER, $string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-        $result = curl_exec($ch);
-        curl_close($ch);
-        #echo $result;
+    /**
+     * Get the items for the selected category
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $object
+     * @param $value
+     * @param $date
+     */
+    public function update(int $datasetId, $object, $value, $date)
+    {
+        return new DataResponse($this->DataService->update($datasetId, $object, $value, $date));
+    }
 
-        $jason_a = json_decode($result, true);
-        $i = 0;
-
-        $tagName = $jason_a[0]['tag_name'];
-
-        $tagVariable = 'tag_name';
-        $tagName = $jason_a[0][$tagVariable];
-
-        $count = $jason_a[0]['assets'][0]['download_count'];
-        $count = $jason_a[0] . assets . download_cont;
-        $this->logger->error($tagName . $count);
-
-        $data = array();
-        foreach ($jason_a as $item) {
-            if ($i === 15) break;
-            $nc_value = 0;
-            foreach ($item['assets'] as $asset) {
-                if (substr($asset['name'], -2) == 'gz') $nc_value = $asset['download_count'];
-            }
-            array_push($data, ['date' => $item['tag_name'], 'value' => $nc_value]);
-            $i++;
+    /**
+     * Get the items for the selected category
+     *
+     * @NoAdminRequired
+     * @PublicPage
+     * @param $token
+     * @return DataResponse
+     */
+    public function readPublic($token, $objectDrilldown, $dateDrilldown)
+    {
+        $tokenArray = ['t44' => 4, 't33' => 3];
+        if (array_key_exists($token, $tokenArray)) {
+            $datasetId = $tokenArray[$token];
+            $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown, 'admin');
+        } else {
+            $result = ['error'];
         }
-        $header = array();
-        array_push($header, 'Version', 'Count');
 
-        $result = empty($data) ? [
-            'status' => 'nodata'
-        ] : [
-            'header' => $header,
-            'data' => $data
-        ];
+        return new DataResponse($result);
 
-        return $result;
     }
 
 }

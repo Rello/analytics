@@ -12,6 +12,11 @@
 return [
     'routes' => [
         ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+        ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
+        ['name' => 'PublicDisplay#showShare', 'url' => '/pp/{token}', 'verb' => 'GET'],
+        ['name' => 'PublicDisplay#showShare', 'url' => '/pp/{token}', 'verb' => 'GET'],
+        ['name' => 'PublicDisplay#showAuthenticate', 'url' => '/pp/{token}/authenticate/{redirect}', 'verb' => 'GET'],
+        ['name' => 'publicdisplaycontroller#showAuthenticate', 'url' => '/pp/{token}/authenticate/{redirect}', 'verb' => 'GET'],
 
         // dataset
         ['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
@@ -26,6 +31,9 @@ return [
         ['name' => 'data#read', 'url' => '/data/{datasetId}', 'verb' => 'GET'],
         ['name' => 'data#update', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'data#delete', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
+        ['name' => 'data#importCSV', 'url' => '/data/importCSV', 'verb' => 'POST'],
+        ['name' => 'data#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
+        ['name' => 'data#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
 
     ]
 ];

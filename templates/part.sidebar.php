@@ -40,11 +40,15 @@
 </div>
 
 <div hidden>
-    <div id="templateTable">
+    <div id="templateDataset">
         <div class="table" style="display: table;">
             <div style="display: table-row;">
                 <div id="tableKey1" style="display: table-cell; width: 120px;">Name</div>
                 <div style="display: table-cell;"><input id="tableName"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Parent Dataset</div>
+                <div style="display: table-cell;"><input id="tableParent"></div>
             </div>
             <div style="display: table-row;">
                 <div id="tableKey2" style="display: table-cell;">Typ</div>
@@ -108,4 +112,44 @@
             Delete Dataset
         </button>
     </div>
+    <div id="templateData">
+        <div class="table" style="display: table;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Object</div>
+                <div style="display: table-cell;"><input id="tableObject"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Value</div>
+                <div style="display: table-cell;"><input id="tableValue"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Date</div>
+                <div style="display: table-cell;"><input id="tableDate"></div>
+            </div>
+        </div>
+        <br>
+        <button id="updateDataButton" type="button">
+            Save Record
+        </button>
+        <button id="deleteDataButton" type="button" disabled>
+            Delete Record
+        </button>
+        <br>
+        <br>
+        <br>
+        <div>Import Data</div>
+        <button id="importDataFileButton" type="button">
+            From File
+        </button>
+        <button id="importDataClipboardButton" type="button">
+            From Clipboard
+        </button>
+        <br>
+        <textarea id="importDataClipboardText" rows="5" cols="50" hidden></textarea>
+        <br>
+        <button id="importDataClipboardButtonGo" type="button" hidden>
+            Import
+        </button>
+    </div>
+
 </div>

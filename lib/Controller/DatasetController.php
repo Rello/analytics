@@ -81,9 +81,9 @@ class DatasetController extends Controller
      * @param int $datasetId
      * @return DataResponse
      */
-    public function update(int $datasetId, $name, $type, $link, $visualization, $chart)
+    public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart)
     {
-        return new DataResponse($this->DatasetService->update($datasetId, $name, $type, $link, $visualization, $chart));
+        return new DataResponse($this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart));
     }
 
 }

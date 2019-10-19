@@ -94,7 +94,7 @@ OCA.Data.UI = {
             evt.target.classList.add('active');
             if (evt.target.dataset.type === "1") OCA.Data.Backend.getDataCsv();
             else if (evt.target.dataset.type === "2") OCA.Data.Backend.getData();
-            else if (evt.target.dataset.type === "3") OCA.Data.Backend.gettest();
+            else if (evt.target.dataset.type === "3") OCA.Data.Backend.getData();
         }
     },
 
@@ -209,7 +209,7 @@ OCA.Data.UI = {
 
         document.getElementById('drilldown').style.removeProperty('display');
         document.getElementById('chartContainer').style.removeProperty('display');
-        var chartType = document.querySelector('#navigationDatasets .active').dataset.chart;
+        var chartType = jsondata.options.chart;
 
         var objectArray = [];
         var categories = [];
@@ -247,7 +247,7 @@ OCA.Data.UI = {
                 },
             },
             title: {
-                text: document.querySelector('#navigationDatasets .active').dataset.name
+                text: jsondata.options.name
             },
             yAxis: {
                 allowDecimals: false,
@@ -289,17 +289,24 @@ OCA.Data.Backend = {
     getData: function () {
         var objectDrilldown = document.getElementById('checkBoxObject').checked;
         var dateDrilldown = document.getElementById('checkBoxDate').checked;
-        var datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
+
+        if (document.getElementById('sharingToken').value === '') {
+            var datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
+            var url = OC.generateUrl('apps/data/data/') + datasetId;
+        } else {
+            var token = document.getElementById('sharingToken').value;
+            var url = OC.generateUrl('apps/data/data/public/') + token;
+        }
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/data/data/') + datasetId,
+            url: url,
             data: {
                 'objectDrilldown': objectDrilldown,
                 'dateDrilldown': dateDrilldown
             },
             success: function (data) {
-                var visualization = document.querySelector('#navigationDatasets .active').dataset.visualization;
+                var visualization = data.options.visualization;
                 if (visualization === 'chart') OCA.Data.UI.buildHighchart(data);
                 else if (visualization === 'table') OCA.Data.UI.buildDataTable(data);
                 else {
@@ -338,17 +345,6 @@ OCA.Data.Backend = {
         });
     },
 
-    gettest: function () {
-        $.ajax({
-            type: "GET",
-            url: OC.generateUrl('apps/data/data'),
-            success: function (data) {
-                OCA.Data.UI.buildHighchart(data);
-                OCA.Data.UI.buildDataTable(data);
-            }
-        });
-    },
-
     createDataset: function () {
         $.ajax({
             type: 'POST',
@@ -359,44 +355,18 @@ OCA.Data.Backend = {
         });
     },
 
-    deleteDataset: function (datasetId) {
-        $.ajax({
-            type: 'DELETE',
-            url: OC.generateUrl('apps/data/dataset/') + datasetId,
-            success: function (data) {
-                OCA.Data.Core.initNavigation();
-            }.bind()
-        });
-    },
-
-    updateDataset: function (datasetId) {
-        $.ajax({
-            type: 'PUT',
-            url: OC.generateUrl('apps/data/dataset/') + datasetId,
-            data: {
-                'name': document.getElementById('tableName').value,
-                'type': document.getElementById('tableType').value,
-                'link': document.getElementById('tableLink').value,
-                'visualization': document.getElementById('tableVisualization').value,
-                'chart': document.getElementById('tableChart').value
-            },
-            success: function (data) {
-                OCA.Data.Core.initNavigation();
-            }.bind()
-        });
-    },
-
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    OCA.Data.Core.initNavigation();
+    if (document.getElementById('sharingToken').value === '') {
+        OCA.Data.Core.initNavigation();
+        document.getElementById('newDatasetButton').addEventListener('click', OCA.Data.Core.handleNewDatasetButton);
+    } else {
+        OCA.Data.Backend.getData();
+    }
 
     document.getElementById('checkBoxObject').addEventListener('click', OCA.Data.Core.handleDrilldownChange);
     document.getElementById('checkBoxDate').addEventListener('click', OCA.Data.Core.handleDrilldownChange);
-    document.getElementById('newDatasetButton').addEventListener('click', OCA.Data.Core.handleNewDatasetButton);
-
-    var categoryList = document.getElementById('navigationDatasets');
-    //categoryList.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
 
     $('#myInput').on('keyup', function () {
         table.search(this.value).draw();

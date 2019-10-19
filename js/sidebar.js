@@ -18,7 +18,7 @@ if (!OCA.Data) {
 }
 
 /**
- * @namespace OCA.Audioplayer.Sidebar
+ * @namespace OCA.Data.Sidebar
  */
 OCA.Data.Sidebar = {
     sidebar_tabs: {},
@@ -129,14 +129,15 @@ OCA.Data.Sidebar = {
             success: function (data) {
                 if (data !== 'nodata') {
 
-                    var table = document.getElementById('templateTable').cloneNode(true);
+                    var table = document.getElementById('templateDataset').cloneNode(true);
                     document.getElementById('tabContainerDataset').innerHTML = '';
                     document.getElementById('tabContainerDataset').appendChild(table);
-                    document.getElementById('tableName').value = data[0][0].name;
-                    document.getElementById('tableType').value = data[0][0].type;
-                    document.getElementById('tableLink').value = data[0][0].link;
-                    document.getElementById('tableVisualization').value = data[0][0].visualization;
-                    document.getElementById('tableChart').value = data[0][0].chart;
+                    document.getElementById('tableName').value = data[0].name;
+                    document.getElementById('tableParent').value = data[0].parent;
+                    document.getElementById('tableType').value = data[0].type;
+                    document.getElementById('tableLink').value = data[0].link;
+                    document.getElementById('tableVisualization').value = data[0].visualization;
+                    document.getElementById('tableChart').value = data[0].chart;
                     document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDatasetButton);
                     document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDatasetButton);
                 } else {
@@ -159,6 +160,14 @@ OCA.Data.Sidebar = {
         document.getElementById('tabHeaderData').classList.add('selected');
         document.getElementById('tabContainerData').classList.remove('hidden');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('audioplayer', 'Reading data') + '</p></div>';
+
+        var table = document.getElementById('templateData').cloneNode(true);
+        document.getElementById('tabContainerData').innerHTML = '';
+        document.getElementById('tabContainerData').appendChild(table);
+        document.getElementById('updateDataButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDataButton);
+        document.getElementById('deleteDataButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDataButton);
+        document.getElementById('importDataFileButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataFileButton);
+        document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataClipboardButton);
 
     },
 
@@ -247,13 +256,112 @@ OCA.Data.Sidebar = {
 
     handleDeleteDatasetButton: function () {
         var id = document.getElementById('app-sidebar').dataset.id
-        OCA.Data.Backend.deleteDataset(id);
+        OCA.Data.Sidebar.Backend.deleteDataset(id);
         OCA.Data.Sidebar.hideSidebar();
     },
 
     handleUpdateDatasetButton: function () {
         var id = document.getElementById('app-sidebar').dataset.id
-        OCA.Data.Backend.updateDataset(id);
-    }
+        OCA.Data.Sidebar.Backend.updateDataset(id);
+    },
 
-}
+    handleUpdateDataButton: function () {
+        var id = document.getElementById('app-sidebar').dataset.id
+        OCA.Data.Sidebar.Backend.updateData(id);
+    },
+
+    handleDeleteDataButton: function () {
+        OCA.Data.Sidebar.Backend.updateDataset();
+    },
+
+    handleImportDataFileButton: function () {
+        var id = document.getElementById('app-sidebar').dataset.id
+        var mimeparts = ['text/csv', 'text/plain'];
+        OC.dialogs.filepicker(t('audioplayer', 'Select file'), OCA.Data.Sidebar.Backend.importFileData.bind(this), false, mimeparts, true, 1);
+    },
+
+    handleImportDataClipboardButton: function () {
+        document.getElementById('importDataClipboardText').attributes.removeNamedItem('hidden');
+        document.getElementById('importDataClipboardButtonGo').attributes.removeNamedItem('hidden');
+        document.getElementById('importDataClipboardButtonGo').addEventListener('click', OCA.Data.Sidebar.Backend.importCsvData);
+    },
+};
+OCA.Data.Sidebar.Backend = {
+
+    deleteDataset: function (datasetId) {
+        $.ajax({
+            type: 'DELETE',
+            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            success: function (data) {
+                OCA.Data.Core.initNavigation();
+            }.bind()
+        });
+    },
+
+    updateDataset: function () {
+        var datasetId = document.getElementById('app-sidebar').dataset.id
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            data: {
+                'name': document.getElementById('tableName').value,
+                'parent': document.getElementById('tableParent').value,
+                'type': document.getElementById('tableType').value,
+                'link': document.getElementById('tableLink').value,
+                'visualization': document.getElementById('tableVisualization').value,
+                'chart': document.getElementById('tableChart').value
+            },
+            success: function (data) {
+                OCA.Data.Core.initNavigation();
+            }.bind()
+        });
+    },
+
+    updateData: function (datasetId) {
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/data/data/') + datasetId,
+            data: {
+                'object': document.getElementById('tableObject').value,
+                'value': document.getElementById('tableValue').value,
+                'date': document.getElementById('tableDate').value,
+            },
+            success: function (data) {
+                document.querySelector('#navigationDatasets .active').click();
+            }.bind()
+        });
+    },
+
+    importCsvData: function () {
+        var datasetId = document.getElementById('app-sidebar').dataset.id
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/data/data/importCSV'),
+            data: {
+                'datasetId': datasetId,
+                'import': document.getElementById('importDataClipboardText').value,
+            },
+            success: function (data) {
+                OC.Notification.showTemporary(data.insert + ' records inserted, ' + data.update + ' records updated');
+                document.querySelector('#navigationDatasets .active').click();
+            }.bind()
+        });
+    },
+
+    importFileData: function (path) {
+        var datasetId = document.getElementById('app-sidebar').dataset.id
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/data/data/importFile'),
+            data: {
+                'datasetId': datasetId,
+                'path': path,
+            },
+            success: function (data) {
+                OC.Notification.showTemporary(data.insert + ' records inserted, ' + data.update + ' records updated');
+                document.querySelector('#navigationDatasets .active').click();
+            }.bind()
+        });
+    },
+
+};

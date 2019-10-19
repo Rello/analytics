@@ -85,19 +85,18 @@ class DbController extends Controller
      * @param  $dateDrilldown
      * @return array
      */
-    public function getData(int $dataset, $objectDrilldown = null, $dateDrilldown = null)
+    public function getData(int $dataset, $objectDrilldown = null, $dateDrilldown = null, $userId = null)
     {
+        if (isset($userId)) $this->userId = $userId;
         $SQL = 'SELECT';
-        if ($objectDrilldown === 'true') $SQL .= ' `object`.`name` AS `object`,';
-        if ($dateDrilldown === 'true') $SQL .= ' `fact`.`date` AS `date`,';
-        $SQL .= ' SUM(`fact`.`value`) AS `value`';
-        $SQL .= ' FROM `*PREFIX*data_facts` AS `fact`
-                LEFT JOIN `*PREFIX*data_object` AS `object`
-                ON  `fact`.`object` = `object`.`id`
-                WHERE  `fact`.`user_id` = ? AND `fact`.`dataset` = ?
-                GROUP BY `fact`.`dataset`';
-        if ($objectDrilldown === 'true') $SQL .= ', `object`.`name`';
-        if ($dateDrilldown === 'true') $SQL .= ', `fact`.`date`';
+        if ($objectDrilldown === 'true') $SQL .= ' `object`,';
+        if ($dateDrilldown === 'true') $SQL .= ' `date`,';
+        $SQL .= ' SUM(`value`) AS `value`';
+        $SQL .= ' FROM `*PREFIX*data_facts`
+                WHERE  `user_id` = ? AND `dataset` = ?
+                GROUP BY `dataset`';
+        if ($objectDrilldown === 'true') $SQL .= ', `object`';
+        if ($dateDrilldown === 'true') $SQL .= ', `date`';
         $SQL .= ' ORDER BY';
         if ($objectDrilldown === 'true') $SQL .= ' `object`,';
         $SQL .= ' `date` ASC';
@@ -127,8 +126,25 @@ class DbController extends Controller
     /**
      * create data
      */
-    public function createData()
+    public function createData($datasetId, $object, $date, $value)
     {
+        $SQL = 'SELECT `id` FROM `*PREFIX*data_facts` WHERE `user_id` = ? AND `dataset` = ? AND `object` = ? AND `date` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, $datasetId, $object, $date));
+        $row = $stmt->fetch();
+        if ($row) {
+            $SQL = 'UPDATE `*PREFIX*data_facts` SET `value` = ? WHERE `user_id` = ? AND `dataset` = ? AND `object` = ? AND `date` = ?';
+            $stmt = $this->db->prepare($SQL);
+            $stmt->execute(array($value, $this->userId, $datasetId, $object, $date));
+            $stmt->fetchAll();
+            return 'update';
+        } else {
+            $SQL = 'INSERT INTO `*PREFIX*data_facts` (`user_id`,`dataset`,`object`,`value`,`date`) VALUES(?,?,?,?,?)';
+            $stmt = $this->db->prepare($SQL);
+            $stmt->execute(array($this->userId, $datasetId, $object, $value, $date));
+            $stmt->fetchAll();
+            return 'insert';
+        }
     }
 
     /**
@@ -148,11 +164,11 @@ class DbController extends Controller
     /**
      * update dataset
      */
-    public function updateDataset($id, $name, $type, $link, $visualization, $chart)
+    public function updateDataset($id, $name, $parent, $type, $link, $visualization, $chart)
     {
-        $SQL = 'UPDATE `*PREFIX*data_dataset` SET `name`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ? WHERE `user_id` = ? AND `id` = ?';
+        $SQL = 'UPDATE `*PREFIX*data_dataset` SET `name`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `parent`= ? WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($name, $type, $link, $visualization, $chart, $this->userId, $id));
+        $stmt->execute(array($name, $type, $link, $visualization, $chart, $parent, $this->userId, $id));
     }
 
     /**
@@ -170,7 +186,7 @@ class DbController extends Controller
      */
     public function getDatasets()
     {
-        $SQL = 'SELECT `id`, `name`, `type`, `link`, `visualization`, `chart` FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? ORDER BY `name` ASC';
+        $SQL = 'SELECT * FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? ORDER BY `name` ASC';
         //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
@@ -186,12 +202,28 @@ class DbController extends Controller
      */
     public function getDataset($id)
     {
-        $SQL = 'SELECT `id`, `name`, `type`, `link`, `visualization`, `chart` FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? AND `id` = ?';
+        $SQL = 'SELECT * FROM `*PREFIX*data_dataset` WHERE `id` = ?';
         //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $id));
-        $results = $stmt->fetchAll();
+        $stmt->execute(array($id));
+        $results = $stmt->fetch();
+        return $results;
+    }
+
+    /**
+     * get datasets
+     * @param $id
+     * @return
+     */
+    public function getDatasetOptions($id)
+    {
+        $SQL = 'SELECT `name`, `visualization`, `chart` FROM `*PREFIX*data_dataset` WHERE `id` = ?';
+        //$this->logger->error($SQL);
+
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($id));
+        $results = $stmt->fetch();
         return $results;
     }
 
