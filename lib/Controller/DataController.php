@@ -62,11 +62,11 @@ class DataController extends Controller
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
     {
         $dataset = $this->DatasetService->read($datasetId);
-        $datasetType = $dataset['type'];
 
-        if ($datasetType === 2) $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown);
-        if ($datasetType === 3) $result = $this->GithubService->read();
+        if ($dataset['type'] === 2) $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown, 'admin');
+        if ($dataset['type'] === 3) $result = $this->GithubService->read();
 
+        unset($dataset['id'], $dataset['parent'], $dataset['type'], $dataset['user_id'], $dataset['link']);
         $result['options'] = $dataset;
 
         return new DataResponse($result);
@@ -124,15 +124,16 @@ class DataController extends Controller
      */
     public function readPublic($token, $objectDrilldown, $dateDrilldown)
     {
-        $tokenArray = ['t44' => 4, 't33' => 3];
+        $tokenArray = ['t44' => 4, 't33' => 3, 't55' => 5];
         if (array_key_exists($token, $tokenArray)) {
             $datasetId = $tokenArray[$token];
-            $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown, 'admin');
+            $result = $this->read($datasetId, $objectDrilldown, $dateDrilldown);
+            return $result;
         } else {
             $result = ['error'];
+            return new DataResponse($result);
         }
 
-        return new DataResponse($result);
 
     }
 

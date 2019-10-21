@@ -132,12 +132,12 @@ OCA.Data.Sidebar = {
                     var table = document.getElementById('templateDataset').cloneNode(true);
                     document.getElementById('tabContainerDataset').innerHTML = '';
                     document.getElementById('tabContainerDataset').appendChild(table);
-                    document.getElementById('tableName').value = data[0].name;
-                    document.getElementById('tableParent').value = data[0].parent;
-                    document.getElementById('tableType').value = data[0].type;
-                    document.getElementById('tableLink').value = data[0].link;
-                    document.getElementById('tableVisualization').value = data[0].visualization;
-                    document.getElementById('tableChart').value = data[0].chart;
+                    document.getElementById('tableName').value = data.name;
+                    document.getElementById('tableParent').value = data.parent;
+                    document.getElementById('tableType').value = data.type;
+                    document.getElementById('tableLink').value = data.link;
+                    document.getElementById('tableVisualization').value = data.visualization;
+                    document.getElementById('tableChart').value = data.chart;
                     document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDatasetButton);
                     document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDatasetButton);
                 } else {
@@ -181,7 +181,7 @@ OCA.Data.Sidebar = {
         table.classList.add('table');
 
         var visualization = document.createElement('input');
-        visualization.value = data[0][0].visualization;
+        visualization.value = data.visualization;
 
         var tablerow = document.createElement('div');
         tablerow.style.display = 'table-row';
@@ -190,7 +190,7 @@ OCA.Data.Sidebar = {
         tablekey.innerText = 'Name';
 
         var name = document.createElement('input');
-        name.value = data[0][0].name;
+        name.value = data.name;
 
         var tablevalue = document.createElement('div');
         tablevalue.appendChild(name);
@@ -206,7 +206,7 @@ OCA.Data.Sidebar = {
         tablekey.innerText = 'Type';
 
         var type = document.createElement('input');
-        type.value = data[0][0].type;
+        type.value = data.type;
 
         var tablevalue = document.createElement('div');
         tablevalue.appendChild(type);

@@ -136,13 +136,13 @@ class DbController extends Controller
             $SQL = 'UPDATE `*PREFIX*data_facts` SET `value` = ? WHERE `user_id` = ? AND `dataset` = ? AND `object` = ? AND `date` = ?';
             $stmt = $this->db->prepare($SQL);
             $stmt->execute(array($value, $this->userId, $datasetId, $object, $date));
-            $stmt->fetchAll();
+            $stmt->fetch();
             return 'update';
         } else {
             $SQL = 'INSERT INTO `*PREFIX*data_facts` (`user_id`,`dataset`,`object`,`value`,`date`) VALUES(?,?,?,?,?)';
             $stmt = $this->db->prepare($SQL);
             $stmt->execute(array($this->userId, $datasetId, $object, $value, $date));
-            $stmt->fetchAll();
+            $stmt->fetch();
             return 'insert';
         }
     }
@@ -157,7 +157,7 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, 'New'));
-        $results = $stmt->fetchAll();
+        $results = $stmt->fetch();
         return $results;
     }
 
@@ -225,6 +225,21 @@ class DbController extends Controller
         $stmt->execute(array($id));
         $results = $stmt->fetch();
         return $results;
+    }
+
+    /**
+     * get datasets
+     * @param $token
+     * @return
+     */
+    public function getDatasetByToken($token)
+    {
+        $SQL = 'SELECT * FROM `*PREFIX*data_share` WHERE `token` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute([$token]);
+        $results = $stmt->fetch();
+        return $results;
+        //$this->logger->error($results['password']);
     }
 
 }

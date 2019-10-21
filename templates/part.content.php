@@ -11,8 +11,7 @@
 ?>
 <div id="data-content" style="width:100%; padding: 30px">
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
-    <input type="hidden" name="datasetId" value="<?php p($_['token']); ?>" id="datasetId">
-    <input type="hidden" name="datasetId" value="<?php p($_['token']); ?>" id="datasetId">
+    <input type="hidden" name="dataset" value="" id="datasetId">
     <div>
         <div id="drilldown" style="display: none">
             Drilldown by:

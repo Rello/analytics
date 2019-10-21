@@ -26,7 +26,8 @@ OCA.Data.Core = {
     },
 
     handleDrilldownChange: function () {
-        document.querySelector('#navigationDatasets .active').click();
+        OCA.Data.UI.resetContent();
+        OCA.Data.Backend.getData();
     },
 
     handleNewDatasetButton: function () {
