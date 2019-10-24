@@ -18,7 +18,7 @@ $navigationEntry = function () {
     return [
         'id' => 'data',
         'order' => 6,
-        'name' => \OC::$server->getL10N('data')->t('Data'),
+        'name' => \OC::$server->getL10N('data')->t('Analytics'),
         'href' => \OC::$server->getURLGenerator()->linkToRoute('data.page.index'),
         'icon' => \OC::$server->getURLGenerator()->imagePath('data', 'app.svg'),
     ];

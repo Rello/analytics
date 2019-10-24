@@ -22,17 +22,20 @@ class DatasetController extends Controller
 {
     private $logger;
     private $DatasetService;
+    private $share;
 
     public function __construct(
         $appName,
         IRequest $request,
         ILogger $logger,
+        ShareController $share,
         DatasetService $DatasetService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->DatasetService = $DatasetService;
+        $this->share = $share;
     }
 
     /**
@@ -41,7 +44,11 @@ class DatasetController extends Controller
      */
     public function index()
     {
-        return new DataResponse($this->DatasetService->index());
+        $ownDatasets = $this->DatasetService->index();
+        $sharedDatasets = $this->share->getSharedDatasets();
+        $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
+        return new DataResponse($ownDatasets);
+        //return new DataResponse($sharedDatasets);
     }
 
     /**
@@ -81,9 +88,9 @@ class DatasetController extends Controller
      * @param int $datasetId
      * @return DataResponse
      */
-    public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart)
+    public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
-        return new DataResponse($this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart));
+        return new DataResponse($this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3));
     }
 
 }

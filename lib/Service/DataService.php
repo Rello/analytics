@@ -17,14 +17,17 @@ use OCP\ILogger;
 class DataService
 {
     private $logger;
+    private $DatasetService;
     private $DBController;
 
     public function __construct(
         ILogger $logger,
+        DatasetService $DatasetService,
         DbController $DBController
     )
     {
         $this->logger = $logger;
+        $this->DatasetService = $DatasetService;
         $this->DBController = $DBController;
     }
 
@@ -40,9 +43,11 @@ class DataService
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown, $userId = null)
     {
         $header = array();
-        if ($objectDrilldown === 'true') array_push($header, 'Objekt');
-        if ($dateDrilldown === 'true') array_push($header, 'Date');
-        array_push($header, 'Value');
+        $datasetMetadata = $this->DatasetService->read($datasetId);
+        if ($objectDrilldown === 'true') $header['dimension1'] = $datasetMetadata['dimension1'];
+        if ($dateDrilldown === 'true') $header['dimension2'] = $datasetMetadata['dimension2'];
+        $header['dimension3'] = $datasetMetadata['dimension3'];
+
         $data = $this->DBController->getData($datasetId, $objectDrilldown, $dateDrilldown, $userId);
 
         $result = empty($data) ? [

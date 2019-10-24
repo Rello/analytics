@@ -13,6 +13,7 @@ namespace OCA\data\Controller;
 
 use OCA\data\Service\DataService;
 use OCA\data\Service\DatasetService;
+use OCA\data\Service\FileService;
 use OCA\data\Service\GithubService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -27,8 +28,10 @@ class DataController extends Controller
     private $DataService;
     private $DatasetService;
     private $GithubService;
+    private $FileService;
     private $rootFolder;
     private $userId;
+    private $share;
 
     public function __construct(
         string $AppName,
@@ -38,7 +41,9 @@ class DataController extends Controller
         IRootFolder $rootFolder,
         DataService $DataService,
         GithubService $GithubService,
-        DatasetService $DatasetService
+        ShareController $share,
+        DatasetService $DatasetService,
+        FileService $FileService
     )
     {
         parent::__construct($AppName, $request);
@@ -47,7 +52,9 @@ class DataController extends Controller
         $this->DataService = $DataService;
         $this->DatasetService = $DatasetService;
         $this->GithubService = $GithubService;
+        $this->FileService = $FileService;
         $this->rootFolder = $rootFolder;
+        $this->share = $share;
     }
 
     /**
@@ -61,14 +68,31 @@ class DataController extends Controller
      */
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
     {
-        $dataset = $this->DatasetService->read($datasetId);
+        // get own or shared dataset
+        $datasetMetadata = $this->DatasetService->read($datasetId);
+        if ($datasetMetadata === false) $datasetMetadata = $this->share->getSharedDataset($datasetId);
 
-        if ($dataset['type'] === 2) $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown, 'admin');
-        if ($dataset['type'] === 3) $result = $this->GithubService->read();
+        if ($datasetMetadata !== false) {
+            if ($datasetMetadata['type'] === 1) $result = $this->FileService->read($datasetMetadata['link'], $datasetMetadata['user_id']);
+            elseif ($datasetMetadata['type'] === 2) $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown, $datasetMetadata['user_id']);
+            elseif ($datasetMetadata['type'] === 3) $result = $this->GithubService->read();
 
-        unset($dataset['id'], $dataset['parent'], $dataset['type'], $dataset['user_id'], $dataset['link']);
-        $result['options'] = $dataset;
+            if ($datasetMetadata['type'] === 1) $datasetMetadata['csv'] = true;
+            else $datasetMetadata['csv'] = false;
 
+            unset($datasetMetadata['id']
+                , $datasetMetadata['parent']
+                , $datasetMetadata['user_id']
+                , $datasetMetadata['type']
+                , $datasetMetadata['link']
+                , $datasetMetadata['dimension1']
+                , $datasetMetadata['dimension2']
+                , $datasetMetadata['dimension3']);
+
+            $result['options'] = $datasetMetadata;
+        } else {
+            $result = false;
+        }
         return new DataResponse($result);
     }
 
@@ -136,5 +160,6 @@ class DataController extends Controller
 
 
     }
+
 
 }

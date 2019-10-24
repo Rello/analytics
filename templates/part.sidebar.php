@@ -10,7 +10,7 @@
  */
 ?>
 
-<div id="app-sidebar" class="details-view scroll-container disappear" data-id="">
+<div id="app-sidebar" class="details-view scroll-container disappear" data-id="" data-type="">
     <div class="detailFileInfoContainer">
         <div class="mainFileInfoView">
             <div class="thumbnailContainer">
@@ -51,7 +51,7 @@
                 <div style="display: table-cell;"><input id="tableParent"></div>
             </div>
             <div style="display: table-row;">
-                <div id="tableKey2" style="display: table-cell;">Typ</div>
+                <div id="tableKey2" style="display: table-cell;">Datasource</div>
                 <div style="display: table-cell;">
                     <select id="tableType">
                         <option value="" selected></option>
@@ -62,8 +62,24 @@
                 </div>
             </div>
             <div style="display: table-row;">
-                <div id="tableKey3" style="display: table-cell;">Datasource</div>
+                <div id="tableKey3" style="display: table-cell;">Parameter</div>
                 <div style="display: table-cell;"><input id="tableLink"></div>
+            </div>
+        </div>
+        <br>
+        <div>Data headers</div>
+        <div id="templateHeaders" class="table" style="display: table;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Dimension 1</div>
+                <div style="display: table-cell;"><input id="dimension1"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Dimension 2</div>
+                <div style="display: table-cell;"><input id="dimension2"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;">Dimension 3</div>
+                <div style="display: table-cell;"><input id="dimension3"></div>
             </div>
         </div>
         <br>
@@ -86,20 +102,6 @@
                         <option value="" selected></option>
                         <option value="line">(Time)Line</option>
                         <option value="column">Columns</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div>CRON</div>
-        <div id="templateTable" class="table" style="display: table;">
-            <div style="display: table-row;">
-                <div id="tableKey4" style="display: table-cell; width: 120px;">Schedule</div>
-                <div style="display: table-cell;">
-                    <select id="tableValue6">
-                        <option value="ct" selected>inactive</option>
-                        <option value="hourly">hourly</option>
-                        <option value="daily">daily</option>
                     </select>
                 </div>
             </div>

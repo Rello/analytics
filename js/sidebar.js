@@ -26,6 +26,7 @@ OCA.Data.Sidebar = {
     showSidebar: function (evt) {
         var navigationItem = evt.target;
         var datasetId = navigationItem.dataset.id;
+        var datasetType = navigationItem.dataset.type;
         var appsidebar = document.getElementById('app-sidebar');
 
         if (appsidebar.dataset.id === datasetId) {
@@ -38,11 +39,10 @@ OCA.Data.Sidebar = {
             if (appsidebar.dataset.id === '') {
                 $('#sidebarClose').on('click', OCA.Data.Sidebar.hideSidebar);
 
-                OCA.Data.Sidebar.constructTabs();
+                OCA.Data.Sidebar.constructTabs(datasetType);
                 document.getElementById('tabHeaderDataset').classList.add('selected');
                 OC.Apps.showAppSidebar();
             }
-
             appsidebar.dataset.id = datasetId;
             document.querySelector('.tabHeader.selected').click();
         }
@@ -53,7 +53,7 @@ OCA.Data.Sidebar = {
         this.sidebar_tabs[id] = tab;
     },
 
-    constructTabs: function () {
+    constructTabs: function (datasetType) {
         var tab = {};
 
         document.querySelector('.tabHeaders').innerHTML = '';
@@ -63,7 +63,7 @@ OCA.Data.Sidebar = {
             id: 'tabHeaderDataset',
             class: 'tabContainerDataset',
             tabindex: '1',
-            name: t('data', 'Dataset'),
+            name: t('data', 'Options'),
             action: OCA.Data.Sidebar.tabContainerDataset,
         });
 
@@ -75,13 +75,13 @@ OCA.Data.Sidebar = {
             action: OCA.Data.Sidebar.tabContainerData,
         });
 
-        //OCA.Data.Sidebar.registerSidebarTab({
-        //    id: 'tabHeaderVisualization',
-        //    class: 'tabContainerVisualization',
-        //    tabindex: '3',
-        //    name: t('data', 'Visualization'),
-        //    action: OCA.Data.Sidebar.tabContainerVisualization,
-        //});
+        OCA.Data.Sidebar.registerSidebarTab({
+            id: 'tabHeaderSharing',
+            class: 'tabContainerSharing',
+            tabindex: '3',
+            name: t('data', 'Sharing'),
+            action: OCA.Data.Sidebar.tabContainerSharing,
+        });
 
         var items = _.map(OCA.Data.Sidebar.sidebar_tabs, function (item) {
             return item;
@@ -127,7 +127,7 @@ OCA.Data.Sidebar = {
             type: 'GET',
             url: OC.generateUrl('apps/data/dataset/') + datasetId,
             success: function (data) {
-                if (data !== 'nodata') {
+                if (data !== false) {
 
                     var table = document.getElementById('templateDataset').cloneNode(true);
                     document.getElementById('tabContainerDataset').innerHTML = '';
@@ -138,16 +138,15 @@ OCA.Data.Sidebar = {
                     document.getElementById('tableLink').value = data.link;
                     document.getElementById('tableVisualization').value = data.visualization;
                     document.getElementById('tableChart').value = data.chart;
+                    document.getElementById('dimension1').value = data.dimension1;
+                    document.getElementById('dimension2').value = data.dimension2;
+                    document.getElementById('dimension3').value = data.dimension3;
                     document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDatasetButton);
                     document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDatasetButton);
                 } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('audioplayer', 'No playlist entry') + '</p></div>';
-                    document.getElementById('tabContainerDataset').innerHTML = '';
-                    document.getElementById('tabContainerDataset').appendChild(table);
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No maintenance possible') + '</p></div>';
+                    document.getElementById('tabContainerDataset').innerHTML = table;
                 }
-                //document.getElementById('tabContainerDataset').appendChild(name);
-                //document.getElementById('tabContainerDataset').appendChild(type);
-                //document.getElementById('tabContainerDataset').appendChild(visualization);
             }
         });
 
@@ -171,10 +170,10 @@ OCA.Data.Sidebar = {
 
     },
 
-    tabContainerVisualization: function () {
+    tabContainerSharing: function () {
         OCA.Data.Sidebar.resetView();
-        document.getElementById('tabHeaderVisualization').classList.add('selected');
-        document.getElementById('tabContainerVisualization').classList.remove('hidden');
+        document.getElementById('tabHeaderSharing').classList.add('selected');
+        document.getElementById('tabContainerSharing').classList.remove('hidden');
 
         var table = document.createElement('div');
         table.style.display = 'table';
@@ -309,7 +308,10 @@ OCA.Data.Sidebar.Backend = {
                 'type': document.getElementById('tableType').value,
                 'link': document.getElementById('tableLink').value,
                 'visualization': document.getElementById('tableVisualization').value,
-                'chart': document.getElementById('tableChart').value
+                'chart': document.getElementById('tableChart').value,
+                'dimension1': document.getElementById('dimension1').value,
+                'dimension2': document.getElementById('dimension2').value,
+                'dimension3': document.getElementById('dimension3').value
             },
             success: function (data) {
                 OCA.Data.Core.initNavigation();

@@ -52,14 +52,12 @@ OCA.Data.UI = {
         if (data.type === 1) typeIcon = 'icon-file';
         else if (data.type === 2) typeIcon = 'icon-projects';
         else if (data.type === 3) typeIcon = 'icon-external';
+        else if (data.type === 'S') typeIcon = 'icon-shared';
         a.classList.add(typeIcon);
         a.innerText = data.name;
         a.dataset.id = data.id;
         a.dataset.type = data.type;
-        a.dataset.link = data.link;
-        a.dataset.visualization = data.visualization;
         a.dataset.name = data.name;
-        a.dataset.chart = data.chart;
         a.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
 
         var div = document.createElement('div');
@@ -71,11 +69,12 @@ OCA.Data.UI = {
         button.addEventListener('click', OCA.Data.UI.handleOptionsClicked);
         button.dataset.id = data.id;
         button.dataset.name = data.name;
+        button.dataset.type = data.type;
 
         //button.classList.add(typeIcon)
 
         li2.appendChild(button);
-        ul.appendChild(li2);
+        if (data.type !== 'S') ul.appendChild(li2);
         div.appendChild(ul);
         li.appendChild(a);
         li.appendChild(div);
@@ -93,9 +92,8 @@ OCA.Data.UI = {
                 activeCategory.classList.remove('active');
             }
             evt.target.classList.add('active');
-            if (evt.target.dataset.type === "1") OCA.Data.Backend.getDataCsv();
-            else if (evt.target.dataset.type === "2") OCA.Data.Backend.getData();
-            else if (evt.target.dataset.type === "3") OCA.Data.Backend.getData();
+            //if (evt.target.dataset.type === "1") OCA.Data.Backend.getDataCsv();
+            OCA.Data.Backend.getData();
         }
     },
 
@@ -104,48 +102,32 @@ OCA.Data.UI = {
         evt.stopPropagation();
     },
 
-    buildDataTable: function (jsondata) {
-        document.getElementById('tableContainer').style.removeProperty('display');
-        document.getElementById('drilldown').style.removeProperty('display');
-
-        var data = Object.keys(jsondata.data[0]);
-        var header = jsondata.header;
-        var i = 0;
-        var columns = [];
-        while (i < data.length) {
-            columns[i] = {'data': data[i], 'title': header[i]};
-            i += 1;
-        }
-
-        var language = {
-            search: "Suche:",
-            paginate: {
-                first: "erster",
-                previous: "zurück",
-                next: "weiter",
-                last: "letzter"
-            },
-        };
-
-        $('#tableContainer').DataTable({
-            data: jsondata.data,
-            columns: columns,
-            language: language
-        });
-    },
-
-    buildDataTableCsv: function (jsondata) {
+    buildDataTable: function (jsondata, csv) {
         document.getElementById('tableContainer').style.removeProperty('display');
 
-        var data = $.csv.toObjects(jsondata);
-        var csvHeader = jsondata.split('\n')[0];
-        var singleHeader = csvHeader.split(',');
-        var i = 0;
-        var columns = [];
-        while (i < singleHeader.length) {
-            var text = singleHeader[i].replace(/[^a-zA-Z0-9 &%.]/g, '').trim();
-            columns[i] = {'title': text, 'data': text};
-            i += 1;
+        if (csv === true) {
+            var data = $.csv.toObjects(jsondata.data);
+            var csvHeader = jsondata.data.split('\n')[0];
+            var singleHeader = csvHeader.split(',');
+            var i = 0;
+            var columns = [];
+            while (i < singleHeader.length) {
+                var text = singleHeader[i].replace(/[^a-zA-Z0-9 &%.]/g, '').trim();
+                columns[i] = {'title': text, 'data': text};
+                i += 1;
+            }
+        } else {
+            document.getElementById('drilldown').style.removeProperty('display');
+
+            var columnKeys = Object.keys(jsondata.data[0]);
+            var header = jsondata.header;
+            var i = 0;
+            var columns = [];
+            while (i < columnKeys.length) {
+                columns[i] = {'data': columnKeys[i], 'title': header[columnKeys[i]]};
+                i += 1;
+            }
+            data = jsondata.data;
         }
 
         var language = {
@@ -165,83 +147,52 @@ OCA.Data.UI = {
         });
     },
 
-    buildHighchartCsv: function (jsondata) {
+    buildHighchart: function (jsondata, csv) {
 
-        document.getElementById('chartContainer').style.removeProperty('display');
-        var chartType = document.querySelector('#navigationDatasets .active').dataset.chart;
-        Highcharts.chart('chartContainer', {
-            chart: {
-                type: chartType,
-                events: {
-                    load: function () {
-                        var theSeries = this.series;
-                        if (theSeries.length > 4) {
-                            $.each(theSeries, function () {
-                                if (this.index > 0) {
-                                    this.setVisible(false);
-                                }
-                            });
-                        }
-                    }
-                },
-            },
-            title: {
-                text: document.querySelector('#navigationDatasets .active').dataset.name
-            },
-            yAxis: {
-                allowDecimals: false,
-                title: {
-                    text: null
-                },
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
-            data: {
-                csv: jsondata,
-                enablePolling: true
-            }
-        });
-    },
-
-    buildHighchart: function (jsondata) {
-
-        document.getElementById('drilldown').style.removeProperty('display');
         document.getElementById('chartContainer').style.removeProperty('display');
         var chartType = jsondata.options.chart;
 
-        var objectArray = [];
-        var categories = [];
-        var lastObject = 0;
-        var index = 0;
+        var dataOptions = [];
+        var seriesOptions = [];
+        var xAxisOptions = [];
+        var xAxisCategories = [];
 
-        for (var values of jsondata.data) {
+        if (csv === true) {
+            dataOptions = {csv: jsondata.data};
+        } else {
+            document.getElementById('drilldown').style.removeProperty('display');
+            var lastObject = 0;
+            var index = 0;
 
-            if (lastObject !== values['object']) {
-                objectArray.push({data: [], name: values['object']});
-                if (lastObject !== 0) index++;
-                lastObject = values['object'];
+            for (var values of jsondata.data) {
+
+                if (lastObject !== values['dimension1']) {
+                    seriesOptions.push({data: [], name: values['dimension1']});
+                    if (lastObject !== 0) index++;
+                    lastObject = values['dimension1'];
+                }
+                // create array per dimension 1 with subarrays per dimension 2 & dimension 3 (value)
+                // [0] => name: 'dimension 1', data : [ [0] => dimension 2, dimension 3],
+                // [0] => name: 'dimension 1', data : [ [1] => dimension 2, dimension 3]
+                seriesOptions[index]['data'].push([values['dimension2'], parseFloat(values['dimension3'])]);
+
+                // create array all dimension 2 for the x-axis
+                xAxisCategories.push(values['dimension2']);
             }
-            //objectArray[index]['data'].push([Date.UTC(values['date']), parseFloat(values['value'])]);
-            objectArray[index]['data'].push([values['date'], parseFloat(values['value'])]);
-            categories.push(values['date']);
-
+            xAxisOptions = {categories: xAxisCategories};
         }
 
         Highcharts.chart('chartContainer', {
-            series: objectArray,
+            series: seriesOptions,
             chart: {
                 type: chartType,
                 events: {
                     load: function () {
+                        // if there are more than 4 series, just select only one for visibility reasons
                         var theSeries = this.series;
-                        if (theSeries.length > 2) {
+                        if (theSeries.length > 4) {
                             $.each(theSeries, function () {
-                                if (this.index > 0) {
-                                    this.setVisible(false);
-                                }
+                                if (this.index > 0) this.setVisible(false);
                             });
                         }
                     }
@@ -261,13 +212,8 @@ OCA.Data.UI = {
                 align: 'right',
                 verticalAlign: 'middle'
             },
-            xAxis: {
-                categories: categories,
-                //type: 'datetime',
-                //dateTimeLabelFormats: { // don't display the dummy year
-                //    month: '%Y'
-                //},
-            }
+            //xAxis: xAxisOptions,
+            data: dataOptions
         });
     },
 
@@ -308,31 +254,14 @@ OCA.Data.Backend = {
             },
             success: function (data) {
                 var visualization = data.options.visualization;
-                if (visualization === 'chart') OCA.Data.UI.buildHighchart(data);
-                else if (visualization === 'table') OCA.Data.UI.buildDataTable(data);
+                var csv = data.options.csv;
+                if (visualization === 'chart') OCA.Data.UI.buildHighchart(data, csv);
+                else if (visualization === 'table') OCA.Data.UI.buildDataTable(data, csv);
                 else {
-                    OCA.Data.UI.buildHighchart(data);
-                    OCA.Data.UI.buildDataTable(data);
+                    OCA.Data.UI.buildHighchart(data, csv);
+                    OCA.Data.UI.buildDataTable(data, csv);
                 }
             }.bind()
-        });
-    },
-
-    getDataCsv: function () {
-        var link = document.querySelector('#navigationDatasets .active').dataset.link;
-        $.ajax({
-            type: "GET",
-            url: link,
-            dataType: "text",
-            success: function (data) {
-                var visualization = document.querySelector('#navigationDatasets .active').dataset.visualization;
-                if (visualization === 'chart') OCA.Data.UI.buildHighchartCsv(data);
-                else if (visualization === 'table') OCA.Data.UI.buildDataTableCsv(data);
-                else {
-                    OCA.Data.UI.buildHighchartCsv(data);
-                    OCA.Data.UI.buildDataTableCsv(data);
-                }
-            }
         });
     },
 
@@ -341,7 +270,7 @@ OCA.Data.Backend = {
             type: "GET",
             url: OC.generateUrl('apps/data/dataset'),
             success: function (data) {
-                OCA.Data.UI.buildNavigation(data[0]);
+                OCA.Data.UI.buildNavigation(data);
             }
         });
     },

@@ -52,5 +52,22 @@ class ShareController extends Controller
         return password_verify($password, $sharePassword);
     }
 
+    /**
+     * get all datasets shared with user
+     * @NoAdminRequired
+     */
+    public function getSharedDatasets()
+    {
+        return $this->DBController->getSharedDatasets();
+    }
+
+    /**
+     * get all datasets shared with user
+     * @NoAdminRequired
+     */
+    public function getSharedDataset($id)
+    {
+        return $this->DBController->getSharedDataset($id);
+    }
 
 }

@@ -21,6 +21,7 @@ script('data', 'highcharts/highcharts');
 script('data', 'highcharts/modules/data');
 script('data', 'highcharts/modules/exporting');
 script('data', 'highcharts/modules/export-data');
+script('core', 'sharedialogshareelistview');
 style('data', 'jquery.dataTables.min');
 ?>
 

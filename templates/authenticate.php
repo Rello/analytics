@@ -4,7 +4,7 @@
 style('data', 'authenticate');
 script('data', 'authenticate');
 ?>
-<form method="GET">
+<form method="POST">
     <fieldset class="warning">
         <?php if (!$_['wrongpw']) { ?>
             <div class="warning-info"><?php p($l->t('This dataset is password-protected')); ?></div>

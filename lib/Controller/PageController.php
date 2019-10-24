@@ -74,13 +74,29 @@ class PageController extends Controller
     /**
      * @PublicPage
      * @NoCSRFRequired
+     * @UseSession
+     *
+     * @param string $token
+     * @param string $password
+     * @return Response
+     * @throws HintException
+     */
+    public function authenticatePassword(string $token, string $password = '')
+    {
+        return $this->indexPublic($token, $password);
+    }
+
+    /**
+     * @PublicPage
+     * @UseSession
+     * @NoCSRFRequired
      * @param $token
+     * @param string $password
      * @return TemplateResponse|RedirectResponse
      */
     public function indexPublic($token, string $password = '')
     {
         $share = $this->share->getDatasetByToken($token);
-        $this->logger->error('sessionpw: ' . $this->dataSession->getPasswordForShare($token));
 
         if ($share === false) {
             // Dataset not shared or wrong token
@@ -95,9 +111,7 @@ class PageController extends Controller
                     $this->dataSession->setPasswordForShare($token, $password);
                 } else {
                     $this->dataSession->removePasswordForShare($token);
-                    return new TemplateResponse('data', 'authenticate', [
-                        'wrongpw' => $password !== '',
-                    ], 'guest');
+                    return new TemplateResponse('data', 'authenticate', ['wrongpw' => $password !== '',], 'guest');
                 }
             }
             $params['token'] = $token;
@@ -105,6 +119,4 @@ class PageController extends Controller
             return $response;
         }
     }
-
-
 }

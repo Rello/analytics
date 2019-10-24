@@ -53,14 +53,11 @@ class GithubService
         $jason_a = json_decode($result, true);
         $i = 0;
 
-        $tagName = $jason_a[0]['tag_name'];
-
-        $tagVariable = 'tag_name';
-        $tagName = $jason_a[0][$tagVariable];
-
-        $count = $jason_a[0]['assets'][0]['download_count'];
-        $count = $jason_a[0] . assets . download_cont;
-        $this->logger->error($tagName . $count);
+        //$tagName = $jason_a[0]['tag_name'];
+        //$tagVariable = 'tag_name';
+        //$tagName = $jason_a[0][$tagVariable];
+        //$count = $jason_a[0] . assets . download_cont;
+        //$this->logger->error($tagName . $count);
 
         $data = array();
         foreach ($jason_a as $item) {
@@ -69,11 +66,14 @@ class GithubService
             foreach ($item['assets'] as $asset) {
                 if (substr($asset['name'], -2) == 'gz') $nc_value = $asset['download_count'];
             }
-            array_push($data, ['date' => $item['tag_name'], 'value' => $nc_value]);
+            array_push($data, ['dimension2' => $item['tag_name'], 'dimension3' => $nc_value]);
             $i++;
         }
+
         $header = array();
-        array_push($header, 'Version', 'Count');
+        $header['dimension1'] = '';
+        $header['dimension2'] = 'Version';
+        $header['dimension3'] = 'Count';
 
         $result = empty($data) ? [
             'status' => 'nodata'
