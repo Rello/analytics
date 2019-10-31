@@ -11,12 +11,14 @@
 
 namespace OCA\data\Controller;
 
+use OCA\data\DataSession;
 use OCA\data\Service\DataService;
 use OCA\data\Service\DatasetService;
 use OCA\data\Service\FileService;
 use OCA\data\Service\GithubService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
 use OCP\IDbConnection;
 use OCP\ILogger;
@@ -32,6 +34,8 @@ class DataController extends Controller
     private $rootFolder;
     private $userId;
     private $share;
+    /** @var DataSession */
+    private $DataSession;
 
     public function __construct(
         string $AppName,
@@ -41,9 +45,10 @@ class DataController extends Controller
         IRootFolder $rootFolder,
         DataService $DataService,
         GithubService $GithubService,
-        ShareController $share,
+        ShareController $ShareController,
         DatasetService $DatasetService,
-        FileService $FileService
+        FileService $FileService,
+        DataSession $DataSession
     )
     {
         parent::__construct($AppName, $request);
@@ -54,47 +59,90 @@ class DataController extends Controller
         $this->GithubService = $GithubService;
         $this->FileService = $FileService;
         $this->rootFolder = $rootFolder;
-        $this->share = $share;
+        $this->ShareController = $ShareController;
+        $this->DataSession = $DataSession;
     }
 
     /**
-     * Get the items for the selected category
+     * get the data when requested from internal page
      *
      * @NoAdminRequired
      * @param int $datasetId
      * @param $objectDrilldown
      * @param $dateDrilldown
-     * @return DataResponse
+     * @return DataResponse|NotFoundResponse
      */
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
     {
-        // get own or shared dataset
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        if ($datasetMetadata === false) $datasetMetadata = $this->share->getSharedDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        if ($datasetMetadata === false) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
 
         if ($datasetMetadata !== false) {
-            if ($datasetMetadata['type'] === 1) $result = $this->FileService->read($datasetMetadata['link'], $datasetMetadata['user_id']);
-            elseif ($datasetMetadata['type'] === 2) $result = $this->DataService->read($datasetId, $objectDrilldown, $dateDrilldown, $datasetMetadata['user_id']);
-            elseif ($datasetMetadata['type'] === 3) $result = $this->GithubService->read();
-
-            if ($datasetMetadata['type'] === 1) $datasetMetadata['csv'] = true;
-            else $datasetMetadata['csv'] = false;
-
-            unset($datasetMetadata['id']
-                , $datasetMetadata['parent']
-                , $datasetMetadata['user_id']
-                , $datasetMetadata['type']
-                , $datasetMetadata['link']
-                , $datasetMetadata['dimension1']
-                , $datasetMetadata['dimension2']
-                , $datasetMetadata['dimension3']);
-
-            $result['options'] = $datasetMetadata;
+            $result = $this->getData($datasetMetadata, $objectDrilldown, $dateDrilldown);
+            return new DataResponse($result);
         } else {
-            $result = false;
+            return new NotFoundResponse();
         }
-        return new DataResponse($result);
     }
+
+    /**
+     * get the data when requested from public page
+     *
+     * @NoAdminRequired
+     * @PublicPage
+     * @UseSession
+     * @param $token
+     * @return DataResponse|NotFoundResponse
+     */
+    public function readPublic($token, $objectDrilldown, $dateDrilldown)
+    {
+        $share = $this->ShareController->getDatasetByToken($token);
+        if ($share === false) {
+            // Dataset not shared or wrong token
+            return new NotFoundResponse();
+        } else {
+            if ($share['password'] !== '') {
+                $password = $this->DataSession->getPasswordForShare($token);
+                $passwordVerification = $this->ShareController->verifyPassword($password, $share['password']);
+                if ($passwordVerification === false) {
+                    return new NotFoundResponse();
+                }
+            }
+            $result = $this->getData($share, $objectDrilldown, $dateDrilldown);
+            return new DataResponse($result);
+        }
+    }
+
+    /**
+     * Get the data from backend;
+     * pre-evaluation of valid datasetId within read & readPublic is trusted here
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $import
+     * @return array
+     */
+
+    private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
+    {
+        if ($datasetMetadata['type'] === 1) $result = $this->FileService->read($datasetMetadata);
+        elseif ($datasetMetadata['type'] === 2) $result = $this->DataService->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
+        elseif ($datasetMetadata['type'] === 3) $result = $this->GithubService->read($datasetMetadata);
+
+        unset($datasetMetadata['id']
+            , $datasetMetadata['parent']
+            , $datasetMetadata['user_id']
+            , $datasetMetadata['link']
+            , $datasetMetadata['dimension1']
+            , $datasetMetadata['dimension2']
+            , $datasetMetadata['dimension3']
+            , $datasetMetadata['password']
+        );
+
+        $result['options'] = $datasetMetadata;
+        return $result;
+    }
+
 
     /**
      * Get the items for the selected category
@@ -133,33 +181,9 @@ class DataController extends Controller
      * @param $value
      * @param $date
      */
-    public function update(int $datasetId, $object, $value, $date)
+    public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
-        return new DataResponse($this->DataService->update($datasetId, $object, $value, $date));
+        return new DataResponse($this->DataService->update($datasetId, $dimension1, $dimension2, $dimension3));
     }
-
-    /**
-     * Get the items for the selected category
-     *
-     * @NoAdminRequired
-     * @PublicPage
-     * @param $token
-     * @return DataResponse
-     */
-    public function readPublic($token, $objectDrilldown, $dateDrilldown)
-    {
-        $tokenArray = ['t44' => 4, 't33' => 3, 't55' => 5];
-        if (array_key_exists($token, $tokenArray)) {
-            $datasetId = $tokenArray[$token];
-            $result = $this->read($datasetId, $objectDrilldown, $dateDrilldown);
-            return $result;
-        } else {
-            $result = ['error'];
-            return new DataResponse($result);
-        }
-
-
-    }
-
 
 }

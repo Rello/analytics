@@ -10,13 +10,6 @@
 
 'use strict';
 
-if (!OCA.Data) {
-    /**
-     * @namespace
-     */
-    OCA.Data = {};
-}
-
 /**
  * @namespace OCA.Data.Sidebar
  */
@@ -128,21 +121,23 @@ OCA.Data.Sidebar = {
             url: OC.generateUrl('apps/data/dataset/') + datasetId,
             success: function (data) {
                 if (data !== false) {
-
                     var table = document.getElementById('templateDataset').cloneNode(true);
                     document.getElementById('tabContainerDataset').innerHTML = '';
                     document.getElementById('tabContainerDataset').appendChild(table);
                     document.getElementById('tableName').value = data.name;
                     document.getElementById('tableParent').value = data.parent;
                     document.getElementById('tableType').value = data.type;
-                    document.getElementById('tableLink').value = data.link;
+                    document.getElementById('tableType').addEventListener('change', OCA.Data.Sidebar.handleDatasetTypeChange);
+                    document.getElementById('datasetLink').value = data.link;
+                    document.getElementById('datasetLinkButton').addEventListener('click', OCA.Data.Sidebar.handleDatasetParameterButton);
                     document.getElementById('tableVisualization').value = data.visualization;
                     document.getElementById('tableChart').value = data.chart;
                     document.getElementById('dimension1').value = data.dimension1;
                     document.getElementById('dimension2').value = data.dimension2;
                     document.getElementById('dimension3').value = data.dimension3;
-                    document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDatasetButton);
-                    document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDatasetButton);
+                    document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDatasetDeleteButton);
+                    document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDatasetUpdateButton);
+                    OCA.Data.Sidebar.handleDatasetTypeChange();
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -153,93 +148,153 @@ OCA.Data.Sidebar = {
     },
 
     tabContainerData: function () {
-        var trackid = document.getElementById('app-sidebar').dataset.id;
+        var datasetId = document.getElementById('app-sidebar').dataset.id;
 
         OCA.Data.Sidebar.resetView();
         document.getElementById('tabHeaderData').classList.add('selected');
         document.getElementById('tabContainerData').classList.remove('hidden');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('audioplayer', 'Reading data') + '</p></div>';
 
-        var table = document.getElementById('templateData').cloneNode(true);
-        document.getElementById('tabContainerData').innerHTML = '';
-        document.getElementById('tabContainerData').appendChild(table);
-        document.getElementById('updateDataButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDataButton);
-        document.getElementById('deleteDataButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDataButton);
-        document.getElementById('importDataFileButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataFileButton);
-        document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataClipboardButton);
-
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            success: function (data) {
+                if (data !== false && data.type === OCA.Data.TYPE_INTERNAL_DB) {
+                    var table = document.getElementById('templateData').cloneNode(true);
+                    document.getElementById('tabContainerData').innerHTML = '';
+                    document.getElementById('tabContainerData').appendChild(table);
+                    document.getElementById('DataTextDimension1').innerText = data.dimension1;
+                    document.getElementById('DataTextDimension2').innerText = data.dimension2;
+                    document.getElementById('DataTextDimension3').innerText = data.dimension3;
+                    document.getElementById('updateDataButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDataButton);
+                    document.getElementById('deleteDataButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDataButton);
+                    document.getElementById('importDataFileButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataFileButton);
+                    document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataClipboardButton);
+                } else {
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'Data maintenance is not possible for this type of dataset') + '</p></div>';
+                    document.getElementById('tabContainerData').innerHTML = table;
+                }
+            }
+        });
     },
 
     tabContainerSharing: function () {
+        var datasetId = document.getElementById('app-sidebar').dataset.id;
+
         OCA.Data.Sidebar.resetView();
         document.getElementById('tabHeaderSharing').classList.add('selected');
         document.getElementById('tabContainerSharing').classList.remove('hidden');
+        document.getElementById('tabContainerSharing').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('audioplayer', 'Reading data') + '</p></div>';
 
-        var table = document.createElement('div');
-        table.style.display = 'table';
-        table.classList.add('table');
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/data/share/') + datasetId,
+            success: function (data) {
 
-        var visualization = document.createElement('input');
-        visualization.value = data.visualization;
+                var linkShareView = document.createElement('div');
+                linkShareView.classList.add('linkShareView', 'subView');
+                var shareWithList = document.createElement('div');
+                shareWithList.classList.add('shareWithList');
+                linkShareView.appendChild(shareWithList);
 
-        var tablerow = document.createElement('div');
-        tablerow.style.display = 'table-row';
+                var shareeListView = document.createElement('div');
+                shareeListView.classList.add('shareeListView', 'subView');
+                var shareWithList_sharee = document.createElement('div');
+                shareWithList_sharee.classList.add('shareWithList');
+                shareeListView.appendChild(shareWithList_sharee);
 
-        var tablekey = document.createElement('div');
-        tablekey.innerText = 'Name';
+                var li = OCA.Data.Sidebar.buildShareLinkRow(0, 0, true);
+                shareWithList.appendChild(li);
 
-        var name = document.createElement('input');
-        name.value = data.name;
+                if (data !== false) {
 
-        var tablevalue = document.createElement('div');
-        tablevalue.appendChild(name);
+                    for (var share of data) {
 
-        tablerow.appendChild(tablekey);
-        tablerow.appendChild(tablevalue);
-        table.append(tablerow);
+                        if (share.share_type === OCA.Data.SHARE_TYPE_LINK) {
+                            var li = OCA.Data.Sidebar.buildShareLinkRow(share.id, share.token, false);
+                            shareWithList.appendChild(li);
+                        } else if (share.share_type === OCA.Data.SHARE_USER) {
+                            var li = OCA.Data.Sidebar.buildShareeRow(share.id, share.uid_owner);
+                            shareWithList_sharee.appendChild(li);
+                        }
+                    }
 
-        var tablerow = document.createElement('div');
-        tablerow.style.display = 'table-row';
+                    document.getElementById('tabContainerSharing').innerHTML = '';
+                    document.getElementById('tabContainerSharing').appendChild(linkShareView);
+                    document.getElementById('tabContainerSharing').appendChild(shareeListView);
+                } else {
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No Shares found') + '</p></div>';
+                    document.getElementById('tabContainerData').innerHTML = table;
+                }
 
-        var tablekey = document.createElement('div');
-        tablekey.innerText = 'Type';
+            }
+        });
 
-        var type = document.createElement('input');
-        type.value = data.type;
+    },
 
-        var tablevalue = document.createElement('div');
-        tablevalue.appendChild(type);
+    buildShareLinkRow: function (id, token, add) {
 
-        tablerow.appendChild(tablekey);
-        tablerow.appendChild(tablevalue);
-        table.append(tablerow);
+        var li = document.createElement('li');
+        li.dataset.id = id;
 
-        var tablerow = document.createElement('div');
-        tablerow.style.display = 'table-row';
+        var avatar = document.createElement('div');
+        avatar.classList.add('avatar', 'icon-public-white');
 
-        var tablekey = document.createElement('div');
-        tablekey.innerText = 'Visualization';
+        var name = document.createElement('span');
+        name.classList.add('username');
+        name.innerText = 'Share Link';
 
-        var visualization = document.createElement('input');
-        visualization.value = data[0][0].visualization;
+        var moreIcon = document.createElement('a');
+        moreIcon.classList.add('icon', 'icon-more');
 
-        var tablevalue = document.createElement('div');
-        tablevalue.appendChild(visualization);
+        var sharingOptionsGroup = document.createElement('span');
+        sharingOptionsGroup.classList.add('sharingOptionsGroup');
 
-        tablerow.appendChild(tablekey);
-        tablerow.appendChild(tablevalue);
-        table.append(tablerow);
+        var clipboardIcon = document.createElement('a');
 
-        var html = '<div style="margin-left: 2em; background-position: initial;" class="icon-info">';
-        html += '<p style="margin-left: 2em;">' + t('audioplayer', 'Available Audio Player Add-Ons:') + '</p>';
-        html += '<p style="margin-left: 2em;"><br></p>';
-        html += '<a href="https://github.com/rello/audioplayer_editor"  target="_blank" >';
-        html += '<p style="margin-left: 2em;">- ' + t('audioplayer', 'ID3 editor') + '</p>';
-        html += '</a>';
-        html += '<a href="https://github.com/rello/audioplayer_sonos"  target="_blank" >';
-        html += '<p style="margin-left: 2em;">- ' + t('audioplayer', 'SONOS playback') + '</p>';
-        html += '</a></div>';
-        document.getElementById('tabContainerVisualization').innerHTML = html;
+        if (add === true) {
+            clipboardIcon.classList.add('icon-add', 'icon', 'new-share');
+            clipboardIcon.href = '#';
+            sharingOptionsGroup.appendChild(clipboardIcon);
+        } else {
+            clipboardIcon.classList.add('clipboard-button', 'icon', 'icon-clippy');
+            clipboardIcon.href = 'https://nc16/nextcloud/apps/data/p/' + token;
+            clipboardIcon.target = '_blank';
+            sharingOptionsGroup.appendChild(clipboardIcon);
+            sharingOptionsGroup.appendChild(moreIcon);
+        }
+
+        li.appendChild(avatar);
+        li.appendChild(name);
+        li.appendChild(sharingOptionsGroup);
+        return li;
+    },
+
+    buildShareeRow: function (id, uid_owner) {
+
+        var li = document.createElement('li');
+        li.dataset.id = id;
+
+        var avatar = document.createElement('div');
+        avatar.classList.add('avatar', 'imageplaceholderseed');
+        avatar.style = 'width: 32px;height: 32px;/* background-color: rgb(188, 92, 145); */color: rgb(255, 255, 255);font-weight: normal;text-align: center;line-height: 32px;font-size: 17.6px;';
+        avatar.innerText = uid_owner.charAt(0);
+
+        var name = document.createElement('span');
+        name.classList.add('username');
+        name.innerText = uid_owner;
+
+        var moreIcon = document.createElement('a');
+        moreIcon.classList.add('icon', 'icon-more');
+
+        var sharingOptionsGroup = document.createElement('span');
+        sharingOptionsGroup.classList.add('sharingOptionsGroup');
+        sharingOptionsGroup.appendChild(moreIcon);
+
+        li.appendChild(avatar);
+        li.appendChild(name);
+        li.appendChild(sharingOptionsGroup);
+        return li;
     },
 
     resetView: function () {
@@ -253,20 +308,74 @@ OCA.Data.Sidebar = {
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
 
-    handleDeleteDatasetButton: function () {
-        var id = document.getElementById('app-sidebar').dataset.id
+    handleDatasetDeleteButton: function () {
+        var id = document.getElementById('app-sidebar').dataset.id;
         OCA.Data.Sidebar.Backend.deleteDataset(id);
         OCA.Data.Sidebar.hideSidebar();
     },
 
-    handleUpdateDatasetButton: function () {
-        var id = document.getElementById('app-sidebar').dataset.id
+    handleDatasetUpdateButton: function () {
+        var id = document.getElementById('app-sidebar').dataset.id;
         OCA.Data.Sidebar.Backend.updateDataset(id);
     },
 
     handleUpdateDataButton: function () {
-        var id = document.getElementById('app-sidebar').dataset.id
+        var id = document.getElementById('app-sidebar').dataset.id;
         OCA.Data.Sidebar.Backend.updateData(id);
+    },
+
+    handleDatasetTypeChange: function () {
+        var type = parseInt(document.getElementById('tableType').value);
+        if (type === OCA.Data.TYPE_INTERNAL_DB) {
+            document.getElementById('datasetLinkRow').style.display = 'none';
+            document.getElementById('datasetDimensionSection').style.display = 'table';
+            document.getElementById('datasetDimensionSectionHeader').style.removeProperty('display');
+            document.getElementById('datasetVisualizationSection').style.display = 'table';
+            document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+        } else if (type === OCA.Data.TYPE_INTERNAL_FILE) {
+            document.getElementById('datasetLinkRow').style.display = 'table-row';
+            document.getElementById('datasetDimensionSection').style.display = 'none';
+            document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
+            document.getElementById('datasetVisualizationSection').style.display = 'table';
+            document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+        } else if (type === OCA.Data.TYPE_GIT) {
+            document.getElementById('datasetLinkRow').style.display = 'table-row';
+            document.getElementById('datasetDimensionSection').style.display = 'none';
+            document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
+            document.getElementById('datasetVisualizationSection').style.display = 'table';
+            document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+        } else {
+            document.getElementById('datasetLinkRow').style.display = 'none';
+            document.getElementById('datasetDimensionSection').style.display = 'none';
+            document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
+            document.getElementById('datasetVisualizationSection').style.display = 'none';
+            document.getElementById('datasetVisualizationSectionHeader').style.display = 'none';
+        }
+    },
+
+    handleDatasetParameterButton: function () {
+        var type = parseInt(document.getElementById('tableType').value);
+        if (type === OCA.Data.TYPE_GIT) {
+            OC.dialogs.prompt(
+                "Enter GitHub User/Repositors. the '/' is important here",
+                "Github API source",
+                function (button, val) {
+                    if (button === true) document.getElementById('datasetLink').value = val;
+                },
+                true,
+                "user/repo");
+        } else if (type === OCA.Data.TYPE_INTERNAL_FILE) {
+            var mimeparts = ['text/csv', 'text/plain'];
+            OC.dialogs.filepicker(
+                t('data', 'Select file'),
+                function (path) {
+                    document.getElementById('datasetLink').value = path;
+                },
+                false,
+                mimeparts,
+                true,
+                1);
+        }
     },
 
     handleDeleteDataButton: function () {
@@ -274,7 +383,6 @@ OCA.Data.Sidebar = {
     },
 
     handleImportDataFileButton: function () {
-        var id = document.getElementById('app-sidebar').dataset.id
         var mimeparts = ['text/csv', 'text/plain'];
         OC.dialogs.filepicker(t('audioplayer', 'Select file'), OCA.Data.Sidebar.Backend.importFileData.bind(this), false, mimeparts, true, 1);
     },
@@ -306,7 +414,7 @@ OCA.Data.Sidebar.Backend = {
                 'name': document.getElementById('tableName').value,
                 'parent': document.getElementById('tableParent').value,
                 'type': document.getElementById('tableType').value,
-                'link': document.getElementById('tableLink').value,
+                'link': document.getElementById('datasetLink').value,
                 'visualization': document.getElementById('tableVisualization').value,
                 'chart': document.getElementById('tableChart').value,
                 'dimension1': document.getElementById('dimension1').value,
@@ -324,9 +432,9 @@ OCA.Data.Sidebar.Backend = {
             type: 'PUT',
             url: OC.generateUrl('apps/data/data/') + datasetId,
             data: {
-                'object': document.getElementById('tableObject').value,
-                'value': document.getElementById('tableValue').value,
-                'date': document.getElementById('tableDate').value,
+                'dimension1': document.getElementById('DataDimension1').value,
+                'dimension2': document.getElementById('DataDimension2').value,
+                'dimension3': document.getElementById('DataDimension3').value,
             },
             success: function (data) {
                 document.querySelector('#navigationDatasets .active').click();

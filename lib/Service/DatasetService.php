@@ -34,30 +34,17 @@ class DatasetService
      */
     public function index()
     {
-        $data = $this->DBController->getDatasets();
-        $result = empty($data) ? [
-            'nodata'
-        ] : [
-            $data
-        ];
-        return $data;
+        return $this->DBController->getDatasets();
     }
 
     /**
-     * Get content of linked CSV file
+     * read own dataset
      * @param $id
      * @return array
      */
-    public function read($id)
+    public function getOwnDataset($id)
     {
-        $data = $this->DBController->getDataset($id);
-        $result = empty($data) ? [
-            'nodata'
-        ] : [
-            $data
-        ];
-        $result = $data;
-        return $data;
+        return $this->DBController->getOwnDataset($id);
     }
 
     /**
@@ -66,13 +53,7 @@ class DatasetService
      */
     public function create()
     {
-        $data = $this->DBController->createDataset();
-        $result = empty($data) ? [
-            'nodata'
-        ] : [
-            $data
-        ];
-        return $result;
+        return $this->DBController->createDataset();
     }
 
     /**
@@ -82,13 +63,7 @@ class DatasetService
      */
     public function delete($id)
     {
-        $data = $this->DBController->deleteDataset($id);
-        $result = empty($data) ? [
-            'nodata'
-        ] : [
-            $data
-        ];
-        return $result;
+        return $this->DBController->deleteDataset($id);
     }
 
     /**
@@ -103,13 +78,6 @@ class DatasetService
      */
     public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
-        $data = $this->DBController->updateDataset($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
-        $result = empty($data) ? [
-            'nodata'
-        ] : [
-            $data
-        ];
-        return $result;
+        return $this->DBController->updateDataset($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }
-
 }

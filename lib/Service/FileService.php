@@ -36,12 +36,13 @@ class FileService
      * Get the items for the selected category
      *
      * @NoAdminRequired
-     * @return JSONResponse
+     * @param $datasetMetadata
+     * @return array
      */
-    public function read($path, $user_id)
+    public function read($datasetMetadata)
     {
-        $this->logger->error('dataset path: ' . $path);
-        $file = $this->rootFolder->getUserFolder($user_id)->get($path);
+        $this->logger->error('dataset path: ' . $datasetMetadata['link']);
+        $file = $this->rootFolder->getUserFolder($datasetMetadata['user_id'])->get($datasetMetadata['link']);
         $data = $file->getContent();
         return ['header' => '', 'data' => $data];
     }

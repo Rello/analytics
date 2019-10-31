@@ -12,6 +12,7 @@
 use OCP\Util;
 
 Util::addStyle('data', 'style');
+Util::addStyle('data', 'sharetabview');
 
 script('data', 'app');
 script('data', 'sidebar');
@@ -21,25 +22,18 @@ script('data', 'highcharts/highcharts');
 script('data', 'highcharts/modules/data');
 script('data', 'highcharts/modules/exporting');
 script('data', 'highcharts/modules/export-data');
-script('core', 'sharedialogshareelistview');
 style('data', 'jquery.dataTables.min');
 ?>
 
 <div id="app-navigation">
-
     <?php print_unescaped($this->inc('part.navigation')); ?>
-
     <?php print_unescaped($this->inc('part.settings')); ?>
-
 </div>
 
 <div id="app-content">
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>
-
     <?php print_unescaped($this->inc('part.content')); ?>
-
 </div>
-
     <?php print_unescaped($this->inc('part.sidebar')); ?>

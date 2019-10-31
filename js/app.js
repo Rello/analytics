@@ -14,7 +14,14 @@ if (!OCA.Data) {
     /**
      * @namespace
      */
-    OCA.Data = {};
+    OCA.Data = {
+        TYPE_EMPTY_GROUP: 0,
+        TYPE_INTERNAL_FILE: 1,
+        TYPE_INTERNAL_DB: 2,
+        TYPE_GIT: 3,
+        SHARE_USER: 0,
+        SHARE_TYPE_LINK: 3
+    };
 }
 /**
  * @namespace OCA.Data.Core
@@ -86,13 +93,13 @@ OCA.Data.UI = {
     handleNavigationClicked: function (evt) {
 
         OCA.Data.UI.resetContent();
+        OCA.Data.Sidebar.hideSidebar();
         var activeCategory = document.querySelector('#navigationDatasets .active');
         if (evt) {
             if (activeCategory) {
                 activeCategory.classList.remove('active');
             }
             evt.target.classList.add('active');
-            //if (evt.target.dataset.type === "1") OCA.Data.Backend.getDataCsv();
             OCA.Data.Backend.getData();
         }
     },
@@ -254,7 +261,8 @@ OCA.Data.Backend = {
             },
             success: function (data) {
                 var visualization = data.options.visualization;
-                var csv = data.options.csv;
+                var csv;
+                if (data.options.type === 1) csv = true; else csv = false;
                 if (visualization === 'chart') OCA.Data.UI.buildHighchart(data, csv);
                 else if (visualization === 'table') OCA.Data.UI.buildDataTable(data, csv);
                 else {

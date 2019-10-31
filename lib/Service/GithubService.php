@@ -34,9 +34,9 @@ class GithubService
      * @NoAdminRequired
      * @return JSONResponse
      */
-    public function read()
+    public function read($datasetMetadata)
     {
-        $string = 'https://api.github.com/repos/rello/audioplayer/releases';
+        $string = 'https://api.github.com/repos/' . $datasetMetadata['link'] . '/releases';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

@@ -36,5 +36,11 @@ return [
         ['name' => 'data#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
         ['name' => 'data#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
 
+        // share
+        ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],
+        ['name' => 'share#read', 'url' => '/share/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'share#update', 'url' => '/share/{shareId}', 'verb' => 'PUT'],
+        ['name' => 'share#delete', 'url' => '/share/{shareId}', 'verb' => 'DELETE'],
+
     ]
 ];

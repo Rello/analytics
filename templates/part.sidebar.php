@@ -48,43 +48,48 @@
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;">Parent Dataset</div>
-                <div style="display: table-cell;"><input id="tableParent"></div>
+                <div style="display: table-cell;"><input id="tableParent">0</div>
             </div>
             <div style="display: table-row;">
                 <div id="tableKey2" style="display: table-cell;">Datasource</div>
                 <div style="display: table-cell;">
                     <select id="tableType">
                         <option value="" selected></option>
+                        <option value="0">No Data / Group</option>
                         <option value="1">Local File</option>
                         <option value="2">Database</option>
                         <option value="3">GitHub</option>
                     </select>
                 </div>
             </div>
-            <div style="display: table-row;">
-                <div id="tableKey3" style="display: table-cell;">Parameter</div>
-                <div style="display: table-cell;"><input id="tableLink"></div>
+            <div id="datasetLinkRow" style="display: table-row;">
+                <div style="display: table-cell;">Parameter</div>
+                <div style="display: table-cell;"><input id="datasetLink" disabled>
+                    <button id="datasetLinkButton" type="button">
+                        Edit
+                    </button>
+                </div>
             </div>
         </div>
         <br>
-        <div>Data headers</div>
-        <div id="templateHeaders" class="table" style="display: table;">
+        <div id="datasetDimensionSectionHeader"><h3>Column headers</h3></div>
+        <div id="datasetDimensionSection" class="table" style="display: table;">
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;">Dimension 1</div>
+                <div style="display: table-cell; width: 120px;">Column 1</div>
                 <div style="display: table-cell;"><input id="dimension1"></div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;">Dimension 2</div>
+                <div style="display: table-cell; width: 120px;">Column 2</div>
                 <div style="display: table-cell;"><input id="dimension2"></div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;">Dimension 3</div>
+                <div style="display: table-cell; width: 120px;">Column 3</div>
                 <div style="display: table-cell;"><input id="dimension3"></div>
             </div>
         </div>
         <br>
-        <div>Visualization</div>
-        <div id="templateTable" class="table" style="display: table;">
+        <div id="datasetVisualizationSectionHeader"><h3>Visualization</h3></div>
+        <div id="datasetVisualizationSection" class="table" style="display: table;">
             <div style="display: table-row;">
                 <div id="tableKey4" style="display: table-cell; width: 120px;">Display</div>
                 <div style="display: table-cell;">
@@ -117,16 +122,16 @@
     <div id="templateData">
         <div class="table" style="display: table;">
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;">Object</div>
-                <div style="display: table-cell;"><input id="tableObject"></div>
+                <div id="DataTextDimension1" style="display: table-cell; width: 120px;">Object</div>
+                <div style="display: table-cell;"><input id="DataDimension1"></div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;">Value</div>
-                <div style="display: table-cell;"><input id="tableValue"></div>
+                <div id="DataTextDimension2" style="display: table-cell; width: 120px;">Value</div>
+                <div style="display: table-cell;"><input id="DataDimension2"></div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;">Date</div>
-                <div style="display: table-cell;"><input id="tableDate"></div>
+                <div id="DataTextDimension3" style="display: table-cell; width: 120px;">Date</div>
+                <div style="display: table-cell;"><input id="DataDimension3"></div>
             </div>
         </div>
         <br>
@@ -153,5 +158,4 @@
             Import
         </button>
     </div>
-
 </div>

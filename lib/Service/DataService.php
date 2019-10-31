@@ -35,20 +35,19 @@ class DataService
      * Get the items for the selected category
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param $datasetMetadata
      * @param $objectDrilldown
      * @param $dateDrilldown
-     * @return JSONResponse
+     * @return array
      */
-    public function read(int $datasetId, $objectDrilldown, $dateDrilldown, $userId = null)
+    public function read($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
         $header = array();
-        $datasetMetadata = $this->DatasetService->read($datasetId);
         if ($objectDrilldown === 'true') $header['dimension1'] = $datasetMetadata['dimension1'];
         if ($dateDrilldown === 'true') $header['dimension2'] = $datasetMetadata['dimension2'];
         $header['dimension3'] = $datasetMetadata['dimension3'];
 
-        $data = $this->DBController->getData($datasetId, $objectDrilldown, $dateDrilldown, $userId);
+        $data = $this->DBController->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
 
         $result = empty($data) ? [
             'status' => 'nodata'
@@ -69,11 +68,11 @@ class DataService
      * @param $date
      * @return array
      */
-    public function update($datasetId, $object, $value, $date)
+    public function update($datasetId, $dimension1, $dimension2, $dimension3)
     {
         $insert = 0;
         $update = 0;
-        $action = $this->DBController->createData($datasetId, $object, $date, $value);
+        $action = $this->DBController->createData($datasetId, $dimension1, $dimension2, $dimension3);
         if ($action === 'insert') $insert++;
         elseif ($action === 'update') $update++;
 

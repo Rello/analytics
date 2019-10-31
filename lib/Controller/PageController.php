@@ -47,7 +47,7 @@ class PageController extends Controller
         IL10N $l10n,
         IURLGenerator $url,
         ShareController $share,
-        DataSession $session
+        DataSession $DataSession
     )
     {
         parent::__construct($AppName, $request);
@@ -58,7 +58,7 @@ class PageController extends Controller
         $this->logger = $logger;
         $this->url = $url;
         $this->share = $share;
-        $this->dataSession = $session;
+        $this->DataSession = $DataSession;
     }
 
     /**
@@ -105,12 +105,12 @@ class PageController extends Controller
             ]));
         } else {
             if ($share['password'] !== '') {
-                $password = $password !== '' ? $password : (string)$this->dataSession->getPasswordForShare($token);
+                $password = $password !== '' ? $password : (string)$this->DataSession->getPasswordForShare($token);
                 $passwordVerification = $this->share->verifyPassword($password, $share['password']);
                 if ($passwordVerification === true) {
-                    $this->dataSession->setPasswordForShare($token, $password);
+                    $this->DataSession->setPasswordForShare($token, $password);
                 } else {
-                    $this->dataSession->removePasswordForShare($token);
+                    $this->DataSession->removePasswordForShare($token);
                     return new TemplateResponse('data', 'authenticate', ['wrongpw' => $password !== '',], 'guest');
                 }
             }

@@ -39,8 +39,7 @@ class ShareController extends Controller
      */
     public function getDatasetByToken($token)
     {
-        $dataset = $this->DBController->getDatasetByToken($token);
-        return $dataset;
+        return $this->DBController->getDatasetByToken($token);
     }
 
     /**
@@ -64,10 +63,55 @@ class ShareController extends Controller
     /**
      * get all datasets shared with user
      * @NoAdminRequired
+     * @param $id
+     * @return
      */
     public function getSharedDataset($id)
     {
         return $this->DBController->getSharedDataset($id);
     }
 
+    /**
+     * get all datasets shared with user
+     * @NoAdminRequired
+     * @param $id
+     * @return
+     */
+    public function create($id)
+    {
+        return new DataResponse($this->DBController->createShare($id));
+    }
+
+    /**
+     * get all datasets shared with user
+     * @NoAdminRequired
+     * @param $id
+     * @return
+     */
+    public function read($datasetId)
+    {
+        return new DataResponse($this->DBController->getShare($datasetId));
+    }
+
+    /**
+     * get all datasets shared with user
+     * @NoAdminRequired
+     * @param $id
+     * @return
+     */
+    public function update($shareId)
+    {
+        return new DataResponse($this->DBController->updateShare($shareId));
+    }
+
+    /**
+     * get all datasets shared with user
+     * @NoAdminRequired
+     * @param $id
+     * @return
+     */
+    public function delete($shareId)
+    {
+        return new DataResponse($this->DBController->deleteShare($shareId));
+    }
 }

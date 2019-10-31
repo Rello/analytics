@@ -22,20 +22,20 @@ class DatasetController extends Controller
 {
     private $logger;
     private $DatasetService;
-    private $share;
+    private $ShareController;
 
     public function __construct(
         $appName,
         IRequest $request,
         ILogger $logger,
-        ShareController $share,
+        ShareController $ShareController,
         DatasetService $DatasetService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->DatasetService = $DatasetService;
-        $this->share = $share;
+        $this->ShareController = $ShareController;
     }
 
     /**
@@ -45,21 +45,20 @@ class DatasetController extends Controller
     public function index()
     {
         $ownDatasets = $this->DatasetService->index();
-        $sharedDatasets = $this->share->getSharedDatasets();
+        $sharedDatasets = $this->ShareController->getSharedDatasets();
         $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
         return new DataResponse($ownDatasets);
-        //return new DataResponse($sharedDatasets);
     }
 
     /**
-     * get dataset details
+     * get own dataset details
      * @NoAdminRequired
      * @param int $datasetId
      * @return DataResponse
      */
     public function read(int $datasetId)
     {
-        return new DataResponse($this->DatasetService->read($datasetId));
+        return new DataResponse($this->DatasetService->getOwnDataset($datasetId));
     }
 
     /**
