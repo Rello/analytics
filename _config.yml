@@ -1,9 +1,0 @@
-# Jekyll configuration
-repository: rello/data
-theme: jekyll-theme-cayman
-timezone: Europe/Berlin
-name: "Nextcloud Data"
-title: "Nextcloud Data"
-description: "Nextcloud Data"
-url: "https://github.com/rello/data"
-author: "Marcel Scherello"
