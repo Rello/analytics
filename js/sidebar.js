@@ -69,11 +69,11 @@ OCA.Data.Sidebar = {
         });
 
         OCA.Data.Sidebar.registerSidebarTab({
-            id: 'tabHeaderSharing',
-            class: 'tabContainerSharing',
+            id: 'tabHeaderShare',
+            class: 'tabContainerShare',
             tabindex: '3',
-            name: t('data', 'Sharing'),
-            action: OCA.Data.Sidebar.tabContainerSharing,
+            name: t('data', 'Share'),
+            action: OCA.Data.Sidebar.tabContainerShare,
         });
 
         var items = _.map(OCA.Data.Sidebar.sidebar_tabs, function (item) {
@@ -127,17 +127,17 @@ OCA.Data.Sidebar = {
                     document.getElementById('tableName').value = data.name;
                     document.getElementById('tableParent').value = data.parent;
                     document.getElementById('tableType').value = data.type;
-                    document.getElementById('tableType').addEventListener('change', OCA.Data.Sidebar.handleDatasetTypeChange);
+                    document.getElementById('tableType').addEventListener('change', OCA.Data.Sidebar.Dataset.handleDatasetTypeChange);
                     document.getElementById('datasetLink').value = data.link;
-                    document.getElementById('datasetLinkButton').addEventListener('click', OCA.Data.Sidebar.handleDatasetParameterButton);
+                    document.getElementById('datasetLinkButton').addEventListener('click', OCA.Data.Sidebar.Dataset.handleDatasetParameterButton);
                     document.getElementById('tableVisualization').value = data.visualization;
                     document.getElementById('tableChart').value = data.chart;
                     document.getElementById('dimension1').value = data.dimension1;
                     document.getElementById('dimension2').value = data.dimension2;
                     document.getElementById('dimension3').value = data.dimension3;
-                    document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDatasetDeleteButton);
-                    document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.handleDatasetUpdateButton);
-                    OCA.Data.Sidebar.handleDatasetTypeChange();
+                    document.getElementById('deleteDatasetButton').addEventListener('click', OCA.Data.Sidebar.Dataset.handleDatasetDeleteButton);
+                    document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.Dataset.handleDatasetUpdateButton);
+                    OCA.Data.Sidebar.Dataset.handleDatasetTypeChange();
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -166,10 +166,10 @@ OCA.Data.Sidebar = {
                     document.getElementById('DataTextDimension1').innerText = data.dimension1;
                     document.getElementById('DataTextDimension2').innerText = data.dimension2;
                     document.getElementById('DataTextDimension3').innerText = data.dimension3;
-                    document.getElementById('updateDataButton').addEventListener('click', OCA.Data.Sidebar.handleUpdateDataButton);
-                    document.getElementById('deleteDataButton').addEventListener('click', OCA.Data.Sidebar.handleDeleteDataButton);
-                    document.getElementById('importDataFileButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataFileButton);
-                    document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Data.Sidebar.handleImportDataClipboardButton);
+                    document.getElementById('updateDataButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataUpdateButton);
+                    document.getElementById('deleteDataButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataDeleteButton);
+                    document.getElementById('importDataFileButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataImportFileButton);
+                    document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataImportClipboardButton);
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'Data maintenance is not possible for this type of dataset') + '</p></div>';
                     document.getElementById('tabContainerData').innerHTML = table;
@@ -178,13 +178,13 @@ OCA.Data.Sidebar = {
         });
     },
 
-    tabContainerSharing: function () {
+    tabContainerShare: function () {
         var datasetId = document.getElementById('app-sidebar').dataset.id;
 
         OCA.Data.Sidebar.resetView();
-        document.getElementById('tabHeaderSharing').classList.add('selected');
-        document.getElementById('tabContainerSharing').classList.remove('hidden');
-        document.getElementById('tabContainerSharing').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('audioplayer', 'Reading data') + '</p></div>';
+        document.getElementById('tabHeaderShare').classList.add('selected');
+        document.getElementById('tabContainerShare').classList.remove('hidden');
+        document.getElementById('tabContainerShare').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('audioplayer', 'Reading data') + '</p></div>';
 
         $.ajax({
             type: 'GET',
@@ -203,7 +203,7 @@ OCA.Data.Sidebar = {
                 shareWithList_sharee.classList.add('shareWithList');
                 shareeListView.appendChild(shareWithList_sharee);
 
-                var li = OCA.Data.Sidebar.buildShareLinkRow(0, 0, true);
+                var li = OCA.Data.Sidebar.Share.buildShareLinkRow(0, 0, true);
                 shareWithList.appendChild(li);
 
                 if (data !== false) {
@@ -211,90 +211,25 @@ OCA.Data.Sidebar = {
                     for (var share of data) {
 
                         if (share.share_type === OCA.Data.SHARE_TYPE_LINK) {
-                            var li = OCA.Data.Sidebar.buildShareLinkRow(share.id, share.token, false);
+                            var li = OCA.Data.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, share.pass);
                             shareWithList.appendChild(li);
                         } else if (share.share_type === OCA.Data.SHARE_USER) {
-                            var li = OCA.Data.Sidebar.buildShareeRow(share.id, share.uid_owner);
+                            var li = OCA.Data.Sidebar.Share.buildShareeRow(share.id, share.uid_owner);
                             shareWithList_sharee.appendChild(li);
                         }
                     }
 
-                    document.getElementById('tabContainerSharing').innerHTML = '';
-                    document.getElementById('tabContainerSharing').appendChild(linkShareView);
-                    document.getElementById('tabContainerSharing').appendChild(shareeListView);
+                    document.getElementById('tabContainerShare').innerHTML = '';
+                    document.getElementById('tabContainerShare').appendChild(linkShareView);
+                    document.getElementById('tabContainerShare').appendChild(shareeListView);
                 } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No Shares found') + '</p></div>';
+                    var table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No Shares found') + '</p></div>';
                     document.getElementById('tabContainerData').innerHTML = table;
                 }
 
             }
         });
 
-    },
-
-    buildShareLinkRow: function (id, token, add) {
-
-        var li = document.createElement('li');
-        li.dataset.id = id;
-
-        var avatar = document.createElement('div');
-        avatar.classList.add('avatar', 'icon-public-white');
-
-        var name = document.createElement('span');
-        name.classList.add('username');
-        name.innerText = 'Share Link';
-
-        var moreIcon = document.createElement('a');
-        moreIcon.classList.add('icon', 'icon-more');
-
-        var sharingOptionsGroup = document.createElement('span');
-        sharingOptionsGroup.classList.add('sharingOptionsGroup');
-
-        var clipboardIcon = document.createElement('a');
-
-        if (add === true) {
-            clipboardIcon.classList.add('icon-add', 'icon', 'new-share');
-            clipboardIcon.href = '#';
-            sharingOptionsGroup.appendChild(clipboardIcon);
-        } else {
-            clipboardIcon.classList.add('clipboard-button', 'icon', 'icon-clippy');
-            clipboardIcon.href = 'https://nc16/nextcloud/apps/data/p/' + token;
-            clipboardIcon.target = '_blank';
-            sharingOptionsGroup.appendChild(clipboardIcon);
-            sharingOptionsGroup.appendChild(moreIcon);
-        }
-
-        li.appendChild(avatar);
-        li.appendChild(name);
-        li.appendChild(sharingOptionsGroup);
-        return li;
-    },
-
-    buildShareeRow: function (id, uid_owner) {
-
-        var li = document.createElement('li');
-        li.dataset.id = id;
-
-        var avatar = document.createElement('div');
-        avatar.classList.add('avatar', 'imageplaceholderseed');
-        avatar.style = 'width: 32px;height: 32px;/* background-color: rgb(188, 92, 145); */color: rgb(255, 255, 255);font-weight: normal;text-align: center;line-height: 32px;font-size: 17.6px;';
-        avatar.innerText = uid_owner.charAt(0);
-
-        var name = document.createElement('span');
-        name.classList.add('username');
-        name.innerText = uid_owner;
-
-        var moreIcon = document.createElement('a');
-        moreIcon.classList.add('icon', 'icon-more');
-
-        var sharingOptionsGroup = document.createElement('span');
-        sharingOptionsGroup.classList.add('sharingOptionsGroup');
-        sharingOptionsGroup.appendChild(moreIcon);
-
-        li.appendChild(avatar);
-        li.appendChild(name);
-        li.appendChild(sharingOptionsGroup);
-        return li;
     },
 
     resetView: function () {
@@ -308,6 +243,8 @@ OCA.Data.Sidebar = {
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
 
+};
+OCA.Data.Sidebar.Dataset = {
     handleDatasetDeleteButton: function () {
         var id = document.getElementById('app-sidebar').dataset.id;
         OCA.Data.Sidebar.Backend.deleteDataset(id);
@@ -317,11 +254,6 @@ OCA.Data.Sidebar = {
     handleDatasetUpdateButton: function () {
         var id = document.getElementById('app-sidebar').dataset.id;
         OCA.Data.Sidebar.Backend.updateDataset(id);
-    },
-
-    handleUpdateDataButton: function () {
-        var id = document.getElementById('app-sidebar').dataset.id;
-        OCA.Data.Sidebar.Backend.updateData(id);
     },
 
     handleDatasetTypeChange: function () {
@@ -377,22 +309,231 @@ OCA.Data.Sidebar = {
                 1);
         }
     },
+};
 
-    handleDeleteDataButton: function () {
-        OCA.Data.Sidebar.Backend.updateDataset();
+OCA.Data.Sidebar.Data = {
+    handleDataUpdateButton: function (id) {
+        var id = document.getElementById('app-sidebar').dataset.id;
+        OCA.Data.Sidebar.Backend.updateData();
     },
 
-    handleImportDataFileButton: function () {
+    handleDataDeleteButton: function () {
+        //OCA.Data.Sidebar.Backend.updateDataset();
+    },
+
+    handleDataImportFileButton: function () {
         var mimeparts = ['text/csv', 'text/plain'];
         OC.dialogs.filepicker(t('audioplayer', 'Select file'), OCA.Data.Sidebar.Backend.importFileData.bind(this), false, mimeparts, true, 1);
     },
 
-    handleImportDataClipboardButton: function () {
+    handleDataImportClipboardButton: function () {
         document.getElementById('importDataClipboardText').attributes.removeNamedItem('hidden');
         document.getElementById('importDataClipboardButtonGo').attributes.removeNamedItem('hidden');
         document.getElementById('importDataClipboardButtonGo').addEventListener('click', OCA.Data.Sidebar.Backend.importCsvData);
     },
 };
+
+OCA.Data.Sidebar.Share = {
+    buildShareLinkRow: function (id, token, add = false, pw = false) {
+
+        var li = document.createElement('li');
+        li.dataset.id = id;
+
+        var avatar = document.createElement('div');
+        avatar.classList.add('avatar', 'icon-public-white');
+
+        var name = document.createElement('span');
+        name.classList.add('username');
+        if (add) name.innerText = 'Add Share Link';
+        else name.innerText = 'Share Link';
+
+        var moreIcon = document.createElement('a');
+        moreIcon.classList.add('icon', 'icon-more');
+
+        var ShareOptionsGroup = document.createElement('span');
+        ShareOptionsGroup.classList.add('sharingOptionsGroup');
+
+        var clipboardIcon = document.createElement('a');
+
+        if (add) {
+            clipboardIcon.classList.add('icon-add', 'icon', 'new-share');
+            clipboardIcon.href = '#';
+            clipboardIcon.addEventListener('click', OCA.Data.Sidebar.Share.createLinkShare);
+            ShareOptionsGroup.appendChild(clipboardIcon);
+        } else {
+            clipboardIcon.classList.add('clipboard-button', 'icon', 'icon-clippy');
+            clipboardIcon.href = 'https://nc16/nextcloud/apps/data/p/' + token;
+            clipboardIcon.target = '_blank';
+            ShareOptionsGroup.appendChild(clipboardIcon);
+            ShareOptionsGroup.appendChild(OCA.Data.Sidebar.Share.buildShareMenu(id, pw));
+        }
+
+        li.appendChild(avatar);
+        li.appendChild(name);
+        li.appendChild(ShareOptionsGroup);
+        return li;
+    },
+
+    buildShareeRow: function (id, uid_owner) {
+
+        var li = document.createElement('li');
+        li.dataset.id = id;
+
+        var avatar = document.createElement('div');
+        avatar.classList.add('avatar', 'imageplaceholderseed');
+        avatar.style = 'width: 32px;height: 32px;/* background-color: rgb(188, 92, 145); */color: rgb(255, 255, 255);font-weight: normal;text-align: center;line-height: 32px;font-size: 17.6px;';
+        avatar.innerText = uid_owner.charAt(0);
+
+        var name = document.createElement('span');
+        name.classList.add('username');
+        name.innerText = uid_owner;
+
+        var moreIcon = document.createElement('a');
+        moreIcon.classList.add('icon', 'icon-more');
+
+        var ShareOptionsGroup = document.createElement('span');
+        ShareOptionsGroup.classList.add('sharingOptionsGroup');
+        ShareOptionsGroup.appendChild(moreIcon);
+
+        li.appendChild(avatar);
+        li.appendChild(name);
+        li.appendChild(ShareOptionsGroup);
+        return li;
+    },
+
+    buildShareMenu: function (id, pw) {
+        var shareMenu = document.createElement('div');
+        shareMenu.classList.add('share-menu');
+
+        var moreIcon = document.createElement('a');
+        moreIcon.classList.add('icon', 'icon-more');
+        moreIcon.addEventListener('click', OCA.Data.Sidebar.Share.showShareMenu);
+        shareMenu.appendChild(moreIcon);
+
+        var popoverMenue = document.createElement('div');
+        popoverMenue.classList.add('popovermenu', 'menu');
+        popoverMenue.style.display = 'none';
+        shareMenu.appendChild(popoverMenue);
+
+        var ul = document.createElement('ul');
+        popoverMenue.appendChild(ul);
+
+        var liShowPassword = document.createElement('li');
+        var spanShowPassword = document.createElement('span');
+        spanShowPassword.classList.add('menuitem');
+        var inputShowPassword = document.createElement('input');
+        inputShowPassword.type = 'checkbox';
+        inputShowPassword.name = 'showPassword';
+        inputShowPassword.id = 'showPassword-' + id;
+        inputShowPassword.classList.add('checkbox', 'showPasswordCheckbox');
+        inputShowPassword.addEventListener('click', OCA.Data.Sidebar.Share.showPassMenu);
+        var labelShowPassword = document.createElement('label');
+        labelShowPassword.setAttribute('for', 'showPassword-' + id);
+        labelShowPassword.innerText = 'Password protect';
+        liShowPassword.appendChild(spanShowPassword);
+        spanShowPassword.appendChild(inputShowPassword);
+        spanShowPassword.appendChild(labelShowPassword);
+
+        var liPassMenu = document.createElement('li');
+        liPassMenu.classList.add('linkPassMenu', 'hidden');
+        var spanPassMenu = document.createElement('span');
+        spanPassMenu.classList.add('menuitem', 'icon-share-pass');
+        var inputPassMenu = document.createElement('input');
+        inputPassMenu.type = 'password';
+        inputPassMenu.placeholder = 'Choose a password for the public link';
+        inputPassMenu.id = 'linkPassText-' + id;
+        inputPassMenu.classList.add('linkPassText');
+        var inputPassConfirm = document.createElement('input');
+        inputPassConfirm.type = 'submit';
+        inputPassConfirm.dataset.id = id;
+        inputPassConfirm.value = '';
+        inputPassConfirm.classList.add('icon-confirm', 'share-pass-submit');
+        inputPassConfirm.setAttribute('style', 'width: auto !important');
+        inputPassConfirm.addEventListener('click', OCA.Data.Sidebar.Share.updateShare);
+        liPassMenu.appendChild(spanPassMenu);
+        spanPassMenu.appendChild(inputPassMenu);
+        spanPassMenu.appendChild(inputPassConfirm);
+
+        var liUnshare = document.createElement('li');
+        var aUnshare = document.createElement('a');
+        aUnshare.href = '#';
+        aUnshare.classList.add('unshare');
+        aUnshare.dataset.id = id;
+        aUnshare.addEventListener('click', OCA.Data.Sidebar.Share.removeShare);
+        var spanUnshare = document.createElement('span');
+        spanUnshare.classList.add('icon', 'icon-delete');
+        var spanUnshareTxt = document.createElement('span');
+        spanUnshareTxt.innerText = 'Delete share link';
+        liUnshare.appendChild(aUnshare);
+        aUnshare.appendChild(spanUnshare);
+        aUnshare.appendChild(spanUnshareTxt);
+
+        ul.appendChild(liShowPassword);
+        ul.appendChild(liPassMenu);
+        ul.appendChild(liUnshare);
+
+        if (pw) {
+            liPassMenu.classList.remove('hidden');
+            inputShowPassword.checked = true;
+        }
+        return shareMenu;
+    },
+
+    showShareMenu: function (evt) {
+        var toggleState = evt.target.nextSibling.style.display;
+        if (toggleState === 'none') evt.target.nextSibling.style.display = 'block';
+        else evt.target.nextSibling.style.display = 'none';
+    },
+
+    showPassMenu: function (evt) {
+        var toggleState = evt.target.checked;
+        if (toggleState === true) evt.target.parentNode.parentNode.nextSibling.classList.remove('hidden');
+        else evt.target.parentNode.parentNode.nextSibling.classList.add('hidden');
+    },
+
+    createLinkShare: function () {
+        var datasetId = document.getElementById('app-sidebar').dataset.id
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/data/share'),
+            data: {
+                'datasetId': datasetId,
+                'type': OCA.Data.SHARE_TYPE_LINK,
+            },
+            success: function (data) {
+                document.querySelector('.tabHeader.selected').click();
+            }.bind()
+        });
+    },
+
+    removeShare: function (evt) {
+        var shareId = evt.target.parentNode.dataset.id;
+        $.ajax({
+            type: 'DELETE',
+            url: OC.generateUrl('apps/data/share/') + shareId,
+            success: function (data) {
+                document.querySelector('.tabHeader.selected').click();
+            }.bind()
+        });
+    },
+
+    updateShare: function (evt) {
+        var shareId = evt.target.dataset.id;
+        var password = evt.target.previousSibling.value;
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/data/share/') + shareId,
+            data: {
+                'password': password
+            },
+            success: function (data) {
+                document.querySelector('.tabHeader.selected').click();
+            }.bind()
+        });
+    },
+
+};
+
 OCA.Data.Sidebar.Backend = {
 
     deleteDataset: function (datasetId) {

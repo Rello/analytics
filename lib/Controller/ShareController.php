@@ -15,22 +15,26 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\Security\ISecureRandom;
 
 class ShareController extends Controller
 {
     private $logger;
     private $DBController;
+    private $secureRandom;
 
     public function __construct(
         $appName,
         IRequest $request,
         ILogger $logger,
-        DbController $DBController
+        DbController $DBController,
+        ISecureRandom $secureRandom
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->DBController = $DBController;
+        $this->secureRandom = $secureRandom;
     }
 
     /**
@@ -77,9 +81,14 @@ class ShareController extends Controller
      * @param $id
      * @return
      */
-    public function create($id)
+    public function create($datasetId, $type)
     {
-        return new DataResponse($this->DBController->createShare($id));
+        if ($type === '3') { // Link Share
+            $token = $this->generateToken();
+        }
+        $this->logger->error($type . $token);
+
+        return new DataResponse($this->DBController->createShare($datasetId, $type, null, $token));
     }
 
     /**
@@ -99,9 +108,13 @@ class ShareController extends Controller
      * @param $id
      * @return
      */
-    public function update($shareId)
+    public function update($shareId, $password)
     {
-        return new DataResponse($this->DBController->updateShare($shareId));
+        $this->logger->error($shareId . $password);
+        if ($password !== '') $password = password_hash($password, PASSWORD_DEFAULT);
+        else $password = null;
+        $this->logger->error($shareId . $password);
+        return new DataResponse($this->DBController->updateShare($shareId, $password));
     }
 
     /**
@@ -113,5 +126,18 @@ class ShareController extends Controller
     public function delete($shareId)
     {
         return new DataResponse($this->DBController->deleteShare($shareId));
+    }
+
+    /**
+     * generate to token used to authenticate federated shares
+     *
+     * @return string
+     */
+    private function generateToken()
+    {
+        $token = $this->secureRandom->generate(
+            15,
+            ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_DIGITS);
+        return $token;
     }
 }

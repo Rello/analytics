@@ -63,9 +63,9 @@ class DataService
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @param $object
-     * @param $value
-     * @param $date
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
      * @return array
      */
     public function update($datasetId, $dimension1, $dimension2, $dimension3)
@@ -117,7 +117,6 @@ class DataService
     private function detectDelimiter($data)
     {
         $delimiters = ["\t", ";", "|", ","];
-        $data_1 = null;
         $data_2 = null;
         $delimiter = $delimiters[0];
         foreach ($delimiters as $d) {

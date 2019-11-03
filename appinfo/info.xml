@@ -1,26 +1,35 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>data</id>
-	<name>Data</name>
-	<summary>Nextcloud Data</summary>
+    <name>Data and Analytics</name>
+    <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-Data
+From datasouce to reporting. Data & Analytics offers various datasources, realtime or storage backend and flexibile visualization.
+
+## Features:
+- Datasources: manual entry, files, imports, API*
+- 3rd party: e.g. GitHub Statistics
+- Storage: realtime or database
+- Visualization: Charts, Tables
+- Integration: notifications/alerts (thresholds)* workflows*
+- Shareing: user*, protected, public
+
+(*work in progress)
 ]]></description>
     <version>0.0.2</version>
 	<licence>agpl</licence>
 	<author>Marcel Scherello</author>
 	<namespace>data</namespace>
-	<category>toos</category>
+    <category>office</category>
 	<website>https://github.com/rello/data</website>
 	<bugs>https://github.com/rello/data/issues</bugs>
 	<repository type="git">https://github.com/rello/data.git</repository>
-	<discussion>https://help.nextcloud.com/c/apps/audioplayer</discussion>
+    <discussion>https://help.nextcloud.com/c/apps/data</discussion>
     <screenshot>
-        https://raw.githubusercontent.com/rello/data/master/screenshots/data_logo.png
+        https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png
     </screenshot>
 	<dependencies>
 		<php min-version="7.0" max-version="7.3"/>
 		<nextcloud min-version="16" max-version="17"/>
-		<owncloud min-version="9" max-version="10"/>
 	</dependencies>
 </info>

@@ -36,7 +36,7 @@ class PageController extends Controller
     /** @var IURLGenerator */
     private $url;
     /** @var DataSession */
-    private $dataSession;
+    private $DataSession;
 
     public function __construct(
         string $AppName,
@@ -51,7 +51,6 @@ class PageController extends Controller
     )
     {
         parent::__construct($AppName, $request);
-        $this->AppName = $AppName;
         $this->userId = $userId;
         $this->configManager = $configManager;
         $this->l10n = $l10n;
@@ -78,8 +77,7 @@ class PageController extends Controller
      *
      * @param string $token
      * @param string $password
-     * @return Response
-     * @throws HintException
+     * @return RedirectResponse|TemplateResponse
      */
     public function authenticatePassword(string $token, string $password = '')
     {
@@ -104,7 +102,7 @@ class PageController extends Controller
                 'redirect_url' => $this->url->linkToRoute('data.page.index', ['token' => $token]),
             ]));
         } else {
-            if ($share['password'] !== '') {
+            if ($share['password'] !== null) {
                 $password = $password !== '' ? $password : (string)$this->DataSession->getPasswordForShare($token);
                 $passwordVerification = $this->share->verifyPassword($password, $share['password']);
                 if ($passwordVerification === true) {
@@ -114,6 +112,7 @@ class PageController extends Controller
                     return new TemplateResponse('data', 'authenticate', ['wrongpw' => $password !== '',], 'guest');
                 }
             }
+            $params = array();
             $params['token'] = $token;
             $response = new TemplateResponse('data', 'public', $params);
             return $response;

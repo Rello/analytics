@@ -4,14 +4,18 @@ build:
             project_setup:
                 override: true
             tests:
-                override: [php-scrutinizer-run]
+              override:
+                - php-scrutinizer-run
+                - js-scrutinizer-run
+                - eslint-run
+
     environment:
-        php: 7.3
-        mysql: 5.6
+      php: 7.3.0
+      mysql: 5.5
 
 filter:
     excluded_paths:
-        - '3rdparty/*'
+      - 'js/highcharts/*'
         - 'js/jquery*'
 
 imports:

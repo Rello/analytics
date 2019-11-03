@@ -59,26 +59,6 @@ class DbController extends Controller
     }
 
     /**
-     * validate unsigned int values
-     *
-     * @param string $value
-     * @return int value
-     */
-    private function normalizeInteger($value)
-    {
-        // convert format '1/10' to '1' and '-1' to null
-        $tmp = explode('/', $value);
-        $tmp = explode('-', $tmp[0]);
-        $value = $tmp[0];
-        if (is_numeric($value) && ((int)$value) > 0) {
-            $value = (int)$value;
-        } else {
-            $value = 0;
-        }
-        return $value;
-    }
-
-    /**
      * Get file id for single track
      * @param int $dataset
      * @param  $objectDrilldown
@@ -104,8 +84,7 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($dataset));
-        $results = $stmt->fetchAll();
-        return $results;
+        return $stmt->fetchAll();
     }
 
     /**
@@ -156,8 +135,7 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, 'New', 'object', 'date', 'value'));
-        $results = $stmt->fetch();
-        return $results;
+        return $stmt->fetch();
     }
 
     /**
@@ -167,7 +145,9 @@ class DbController extends Controller
     {
         $SQL = 'UPDATE `*PREFIX*data_dataset` SET `name`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `parent`= ?, `dimension1` = ?, `dimension2` = ?, `dimension3` = ? WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
+        $name = $this->truncate($name, 64);
         $stmt->execute(array($name, $type, $link, $visualization, $chart, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
+        return $stmt->fetch();
     }
 
     /**
@@ -178,6 +158,7 @@ class DbController extends Controller
         $SQL = 'DELETE FROM `*PREFIX*data_dataset` WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, $id));
+        return $stmt->fetch();
     }
 
     /**
@@ -190,8 +171,7 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId));
-        $results = $stmt->fetchAll();
-        return $results;
+        return $stmt->fetchAll();
     }
 
     /**
@@ -203,11 +183,9 @@ class DbController extends Controller
     {
         $SQL = 'SELECT * FROM `*PREFIX*data_dataset` WHERE `id` = ? AND `user_id` = ?';
         //$this->logger->error($SQL);
-
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($id, $this->userId));
-        $results = $stmt->fetch();
-        return $results;
+        return $stmt->fetch();
     }
 
     /**
@@ -222,8 +200,7 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($id));
-        $results = $stmt->fetch();
-        return $results;
+        return $stmt->fetch();
     }
 
     // ********** SHARE ************
@@ -240,9 +217,8 @@ class DbController extends Controller
         $SQL = 'SELECT DS.*, SH.password AS password FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.token = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$token]);
-        $results = $stmt->fetch();
+        return $stmt->fetch();
         //$this->logger->error($results['password']);
-        return $results;
     }
 
     /**
@@ -255,8 +231,7 @@ class DbController extends Controller
         $this->logger->error($this->userId);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId]);
-        $results = $stmt->fetchAll();
-        return $results;
+        return $stmt->fetchAll();
     }
 
     /**
@@ -266,19 +241,18 @@ class DbController extends Controller
     public function getSharedDataset($id)
     {
         $SQL = 'SELECT DS.* FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? AND DS.id = ?';
-        $this->logger->error($id);
+        //$this->logger->error($id);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId, $id]);
-        $results = $stmt->fetch();
-        return $results;
+        return $stmt->fetch();
     }
 
-    public function createShare($id)
+    public function createShare($datasetId, $share_type, $uid_owner, $token)
     {
-        $SQL = 'SELECT DS.* FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? AND DS.id = ?';
-        $this->logger->error($id);
+        $SQL = 'INSERT INTO `*PREFIX*data_share` (`dataset`,`share_type`,`uid_owner`,`uid_initiator`,`token`) VALUES(?,?,?,?,?)';
+        //$this->logger->error($datasetId, $share_type, $uid_owner, $token);
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$this->userId, $id]);
+        $stmt->execute(array($datasetId, $share_type, $uid_owner, $this->userId, $token));
         return $stmt->fetch();
     }
 
@@ -290,21 +264,20 @@ class DbController extends Controller
         return $stmt->fetchAll();
     }
 
-    public function updateShare($shareId)
+    public function updateShare($shareId, $password)
     {
-        $SQL = 'SELECT DS.* FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? AND DS.id = ?';
-        $this->logger->error($id);
+        $SQL = 'UPDATE `*PREFIX*data_share` SET `password`= ? WHERE `uid_initiator` = ? AND `id` = ?';
+        //$this->logger->error($shareId. $password);
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$this->userId, $id]);
+        $stmt->execute([$password, $this->userId, $shareId]);
         return $stmt->fetch();
     }
 
     public function deleteShare($shareId)
     {
-        $SQL = 'SELECT DS.* FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? AND DS.id = ?';
-        $this->logger->error($id);
+        $SQL = 'DELETE FROM `*PREFIX*data_share` WHERE `uid_initiator` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$this->userId, $id]);
+        $stmt->execute([$this->userId, $shareId]);
         return $stmt->fetch();
     }
 

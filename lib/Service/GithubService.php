@@ -32,7 +32,8 @@ class GithubService
      * Get the items for the selected category
      *
      * @NoAdminRequired
-     * @return JSONResponse
+     * @param $datasetMetadata
+     * @return array
      */
     public function read($datasetMetadata)
     {
@@ -75,9 +76,7 @@ class GithubService
         $header['dimension2'] = 'Version';
         $header['dimension3'] = 'Count';
 
-        $result = empty($data) ? [
-            'status' => 'nodata'
-        ] : [
+        $result = [
             'header' => $header,
             'data' => $data
         ];

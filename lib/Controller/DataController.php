@@ -33,7 +33,6 @@ class DataController extends Controller
     private $FileService;
     private $rootFolder;
     private $userId;
-    private $share;
     /** @var DataSession */
     private $DataSession;
 
@@ -45,7 +44,6 @@ class DataController extends Controller
         IRootFolder $rootFolder,
         DataService $DataService,
         GithubService $GithubService,
-        ShareController $ShareController,
         DatasetService $DatasetService,
         FileService $FileService,
         DataSession $DataSession
@@ -59,7 +57,6 @@ class DataController extends Controller
         $this->GithubService = $GithubService;
         $this->FileService = $FileService;
         $this->rootFolder = $rootFolder;
-        $this->ShareController = $ShareController;
         $this->DataSession = $DataSession;
     }
 
@@ -101,7 +98,7 @@ class DataController extends Controller
             // Dataset not shared or wrong token
             return new NotFoundResponse();
         } else {
-            if ($share['password'] !== '') {
+            if ($share['password'] !== null) {
                 $password = $this->DataSession->getPasswordForShare($token);
                 $passwordVerification = $this->ShareController->verifyPassword($password, $share['password']);
                 if ($passwordVerification === false) {
