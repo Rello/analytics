@@ -7,7 +7,6 @@ build:
               override:
                 - php-scrutinizer-run
                 - js-scrutinizer-run
-                - eslint-run
 
     environment:
       php: 7.3.0
