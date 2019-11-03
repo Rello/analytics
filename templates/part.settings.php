@@ -20,29 +20,14 @@
     </div>
 
     <div id="app-settings-content">
-        <ul id="audio-settings">
-            <li class="audio-settings-item icon-search">
-                <a href="#" title="<?php p($l->t('Scan for audio files')); ?>" id="scanAudios" style="padding: 0 20px;">
-                    <?php p($l->t('Scan for audio files')); ?>
-                </a>
-            </li>
-            <li class="audio-settings-item icon-delete">
-                <a href="#" title="<?php p($l->t('Reset library')); ?>" id="resetAudios" style="padding: 0 20px;">
-                    <?php p($l->t('Reset library')); ?>
-                </a>
-            </li>
-            <li class="audio-settings-item icon-settings">
-                <a href="#" style="padding: 0 20px;" id="audioplayerSettings">
-                    <?php p($l->t('Advanced Settings')); ?>
-                </a>
-            </li>
-            <li class="audio-settings-item icon-external">
+        <ul id="data-settings">
+            <li class="data-settings-item icon-external">
                 <a href="https://github.com/rello/audioplayer/wiki/donate" target="_blank" style="padding: 0 20px;">
                     <?php p($l->t('Do you like this app?')); ?>
                 </a>
             </li>
-            <li class="audio-settings-item icon-info">
-                <a href="https://github.com/rello/audioplayer/wiki" target="_blank" style="padding: 0 20px;">
+            <li class="data-settings-item icon-info">
+                <a href="https://github.com/rello/data/wiki" target="_blank" style="padding: 0 20px;">
                     <?php p($l->t('More information…')); ?>
                 </a>
             </li>

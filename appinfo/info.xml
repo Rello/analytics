@@ -4,7 +4,7 @@
     <name>Data Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-From datasouce to reporting. Data Analytics offers various datasources, realtime or storage backend and flexibile visualization.
+From datasouce to reporting. Data Analytics provides modular datasources, a realtime or storage backend and flexibile visualization.
 
 ## Features:
 - Datasources: manual entry, files, imports, API*
@@ -27,6 +27,9 @@ From datasouce to reporting. Data Analytics offers various datasources, realtime
     <discussion>https://help.nextcloud.com/c/apps/data</discussion>
     <screenshot>
         https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png
+    </screenshot>
+    <screenshot>
+        https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png
     </screenshot>
 	<dependencies>
 		<php min-version="7.0" max-version="7.3"/>
