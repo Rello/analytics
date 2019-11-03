@@ -6,7 +6,7 @@ From datasouce to reporting. Data Analytics offers various datasources, realtime
 
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Main" width="350" title="Data Analytics">
 
-## Features:
+## Features
 - Datasources: manual entry, files, imports, API*
 - 3rd party: e.g. GitHub Statistics
 - Storage: stream or database
@@ -16,7 +16,9 @@ From datasouce to reporting. Data Analytics offers various datasources, realtime
 
 (*work in progress)
 
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Main" width="450" title="Data Analytics">
+## Architecture
+
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Main" width="500" title="Data Analytics">
 
 ## Installation
 - [Nextcloud App Store](https://apps.nextcloud.com/apps/data)
