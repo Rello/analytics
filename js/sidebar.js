@@ -492,7 +492,7 @@ OCA.Data.Sidebar.Share = {
     },
 
     createLinkShare: function () {
-        var datasetId = document.getElementById('app-sidebar').dataset.id
+        var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/data/share'),
@@ -547,7 +547,7 @@ OCA.Data.Sidebar.Backend = {
     },
 
     updateDataset: function () {
-        var datasetId = document.getElementById('app-sidebar').dataset.id
+        var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'PUT',
             url: OC.generateUrl('apps/data/dataset/') + datasetId,
@@ -584,7 +584,7 @@ OCA.Data.Sidebar.Backend = {
     },
 
     importCsvData: function () {
-        var datasetId = document.getElementById('app-sidebar').dataset.id
+        var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/data/data/importCSV'),
@@ -600,7 +600,7 @@ OCA.Data.Sidebar.Backend = {
     },
 
     importFileData: function (path) {
-        var datasetId = document.getElementById('app-sidebar').dataset.id
+        var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/data/data/importFile'),

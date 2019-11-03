@@ -19,6 +19,7 @@ if (!OCA.Data) {
         TYPE_INTERNAL_FILE: 1,
         TYPE_INTERNAL_DB: 2,
         TYPE_GIT: 3,
+        TYPE_SHARED: 'S',
         SHARE_USER: 0,
         SHARE_TYPE_LINK: 3
     };
@@ -56,10 +57,10 @@ OCA.Data.UI = {
 
         var a = document.createElement('a');
         a.setAttribute('href', '#');
-        if (data.type === 1) typeIcon = 'icon-file';
-        else if (data.type === 2) typeIcon = 'icon-projects';
-        else if (data.type === 3) typeIcon = 'icon-external';
-        else if (data.type === 'S') typeIcon = 'icon-shared';
+        if (data.type === OCA.Data.TYPE_INTERNAL_FILE) typeIcon = 'icon-file';
+        else if (data.type === OCA.Data.TYPE_INTERNAL_DB) typeIcon = 'icon-projects';
+        else if (data.type === OCA.Data.TYPE_GIT) typeIcon = 'icon-external';
+        else if (data.type === OCA.Data.TYPE_SHARED) typeIcon = 'icon-shared';
         a.classList.add(typeIcon);
         a.innerText = data.name;
         a.dataset.id = data.id;
@@ -81,7 +82,7 @@ OCA.Data.UI = {
         //button.classList.add(typeIcon)
 
         li2.appendChild(button);
-        if (data.type !== 'S') ul.appendChild(li2);
+        if (data.type !== OCA.Data.TYPE_SHARED) ul.appendChild(li2);
         div.appendChild(ul);
         li.appendChild(a);
         li.appendChild(div);
@@ -231,9 +232,9 @@ OCA.Data.UI = {
         }
 
         document.getElementById('chartContainer').style.display = 'none';
-        document.getElementById('chartContainer').innerHTML = ''
+        document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('tableContainer').style.display = 'none';
-        document.getElementById('tableContainer').innerHTML = ''
+        document.getElementById('tableContainer').innerHTML = '';
         document.getElementById('drilldown').style.display = 'none';
     },
 };
@@ -262,7 +263,7 @@ OCA.Data.Backend = {
             success: function (data) {
                 var visualization = data.options.visualization;
                 var csv;
-                if (data.options.type === 1) csv = true; else csv = false;
+                if (data.options.type === OCA.Data.TYPE_INTERNAL_FILE) csv = true; else csv = false;
                 if (visualization === 'chart') OCA.Data.UI.buildHighchart(data, csv);
                 else if (visualization === 'table') OCA.Data.UI.buildDataTable(data, csv);
                 else {
