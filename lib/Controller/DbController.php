@@ -247,18 +247,18 @@ class DbController extends Controller
         return $stmt->fetch();
     }
 
-    public function createShare($datasetId, $share_type, $uid_owner, $token)
+    public function createShare($datasetId, $type, $uid_owner, $token)
     {
-        $SQL = 'INSERT INTO `*PREFIX*data_share` (`dataset`,`share_type`,`uid_owner`,`uid_initiator`,`token`) VALUES(?,?,?,?,?)';
-        //$this->logger->error($datasetId, $share_type, $uid_owner, $token);
+        $SQL = 'INSERT INTO `*PREFIX*data_share` (`dataset`,`type`,`uid_owner`,`uid_initiator`,`token`) VALUES(?,?,?,?,?)';
+        //$this->logger->error($datasetId, $type, $uid_owner, $token);
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($datasetId, $share_type, $uid_owner, $this->userId, $token));
+        $stmt->execute(array($datasetId, $type, $uid_owner, $this->userId, $token));
         return $stmt->fetch();
     }
 
     public function getShare($datasetId)
     {
-        $SQL = 'SELECT id, share_type, uid_owner, token, (CASE  WHEN password IS NOT NULL THEN true ELSE false END) AS pass FROM `*PREFIX*data_share` WHERE uid_initiator = ? AND dataset = ?';
+        $SQL = 'SELECT id, type, uid_owner, token, (CASE  WHEN password IS NOT NULL THEN true ELSE false END) AS pass FROM `*PREFIX*data_share` WHERE uid_initiator = ? AND dataset = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId, $datasetId]);
         return $stmt->fetchAll();

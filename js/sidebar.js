@@ -210,10 +210,10 @@ OCA.Data.Sidebar = {
 
                     for (var share of data) {
 
-                        if (share.share_type === OCA.Data.SHARE_TYPE_LINK) {
+                        if (share.type === OCA.Data.SHARE_TYPE_LINK) {
                             var li = OCA.Data.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, share.pass);
                             shareWithList.appendChild(li);
-                        } else if (share.share_type === OCA.Data.SHARE_USER) {
+                        } else if (share.type === OCA.Data.SHARE_USER) {
                             var li = OCA.Data.Sidebar.Share.buildShareeRow(share.id, share.uid_owner);
                             shareWithList_sharee.appendChild(li);
                         }
