@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud Data
+ * Data Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -35,6 +35,7 @@ class DataController extends Controller
     private $userId;
     /** @var DataSession */
     private $DataSession;
+    private $ShareController;
 
     public function __construct(
         string $AppName,
@@ -46,6 +47,7 @@ class DataController extends Controller
         GithubService $GithubService,
         DatasetService $DatasetService,
         FileService $FileService,
+        ShareController $ShareController,
         DataSession $DataSession
     )
     {
@@ -58,6 +60,7 @@ class DataController extends Controller
         $this->FileService = $FileService;
         $this->rootFolder = $rootFolder;
         $this->DataSession = $DataSession;
+        $this->ShareController = $ShareController;
     }
 
     /**

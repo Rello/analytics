@@ -1,5 +1,5 @@
 /**
- * Nextcloud Data
+ * Data Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -7,7 +7,8 @@
  * @author Marcel Scherello <audioplayer@scherello.de>
  * @copyright 2019 Marcel Scherello
  */
-
+/** global: OCA */
+/** global: OC */
 'use strict';
 
 if (!OCA.Data) {
@@ -57,10 +58,17 @@ OCA.Data.UI = {
 
         var a = document.createElement('a');
         a.setAttribute('href', '#');
-        if (data.type === OCA.Data.TYPE_INTERNAL_FILE) typeIcon = 'icon-file';
-        else if (data.type === OCA.Data.TYPE_INTERNAL_DB) typeIcon = 'icon-projects';
-        else if (data.type === OCA.Data.TYPE_GIT) typeIcon = 'icon-external';
-        else if (data.type === OCA.Data.TYPE_SHARED) typeIcon = 'icon-shared';
+        if (data.type === OCA.Data.TYPE_INTERNAL_FILE) {
+            typeIcon = 'icon-file';
+        } else if (data.type === OCA.Data.TYPE_INTERNAL_DB) {
+            typeIcon = 'icon-projects';
+        } else if (data.type === OCA.Data.TYPE_GIT) {
+            typeIcon = 'icon-external';
+        } else if (data.type === OCA.Data.TYPE_SHARED) {
+            typeIcon = 'icon-shared';
+        } else {
+            typeIcon = '';
+        }
         a.classList.add(typeIcon);
         a.innerText = data.name;
         a.dataset.id = data.id;
@@ -82,7 +90,9 @@ OCA.Data.UI = {
         //button.classList.add(typeIcon)
 
         li2.appendChild(button);
-        if (data.type !== OCA.Data.TYPE_SHARED) ul.appendChild(li2);
+        if (data.type !== OCA.Data.TYPE_SHARED) {
+            ul.appendChild(li2);
+        }
         div.appendChild(ul);
         li.appendChild(a);
         li.appendChild(div);
@@ -112,13 +122,13 @@ OCA.Data.UI = {
 
     buildDataTable: function (jsondata, csv) {
         document.getElementById('tableContainer').style.removeProperty('display');
+        var i = 0;
+        var columns = [];
 
         if (csv === true) {
             var data = $.csv.toObjects(jsondata.data);
             var csvHeader = jsondata.data.split('\n')[0];
             var singleHeader = csvHeader.split(',');
-            var i = 0;
-            var columns = [];
             while (i < singleHeader.length) {
                 var text = singleHeader[i].replace(/[^a-zA-Z0-9 &%.]/g, '').trim();
                 columns[i] = {'title': text, 'data': text};
@@ -126,11 +136,8 @@ OCA.Data.UI = {
             }
         } else {
             document.getElementById('drilldown').style.removeProperty('display');
-
             var columnKeys = Object.keys(jsondata.data[0]);
             var header = jsondata.header;
-            var i = 0;
-            var columns = [];
             while (i < columnKeys.length) {
                 columns[i] = {'data': columnKeys[i], 'title': header[columnKeys[i]]};
                 i += 1;
@@ -176,7 +183,9 @@ OCA.Data.UI = {
 
                 if (lastObject !== values['dimension1']) {
                     seriesOptions.push({data: [], name: values['dimension1']});
-                    if (lastObject !== 0) index++;
+                    if (lastObject !== 0) {
+                        index++;
+                    }
                     lastObject = values['dimension1'];
                 }
                 // create array per dimension 1 with subarrays per dimension 2 & dimension 3 (value)
@@ -200,7 +209,9 @@ OCA.Data.UI = {
                         var theSeries = this.series;
                         if (theSeries.length > 4) {
                             $.each(theSeries, function () {
-                                if (this.index > 0) this.setVisible(false);
+                                if (this.index > 0) {
+                                    this.setVisible(false);
+                                }
                             });
                         }
                     }
@@ -244,13 +255,14 @@ OCA.Data.Backend = {
     getData: function () {
         var objectDrilldown = document.getElementById('checkBoxObject').checked;
         var dateDrilldown = document.getElementById('checkBoxDate').checked;
+        var url;
 
         if (document.getElementById('sharingToken').value === '') {
             var datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
-            var url = OC.generateUrl('apps/data/data/') + datasetId;
+            url = OC.generateUrl('apps/data/data/') + datasetId;
         } else {
             var token = document.getElementById('sharingToken').value;
-            var url = OC.generateUrl('apps/data/data/public/') + token;
+            url = OC.generateUrl('apps/data/data/public/') + token;
         }
 
         $.ajax({
@@ -263,14 +275,17 @@ OCA.Data.Backend = {
             success: function (data) {
                 var visualization = data.options.visualization;
                 var csv;
-                if (data.options.type === OCA.Data.TYPE_INTERNAL_FILE) csv = true; else csv = false;
-                if (visualization === 'chart') OCA.Data.UI.buildHighchart(data, csv);
-                else if (visualization === 'table') OCA.Data.UI.buildDataTable(data, csv);
+                csv = data.options.type === OCA.Data.TYPE_INTERNAL_FILE;
+                if (visualization === 'chart') {
+                    OCA.Data.UI.buildHighchart(data, csv);
+                } else if (visualization === 'table') {
+                    OCA.Data.UI.buildDataTable(data, csv);
+                }
                 else {
                     OCA.Data.UI.buildHighchart(data, csv);
                     OCA.Data.UI.buildDataTable(data, csv);
                 }
-            }.bind()
+            }
         });
     },
 
@@ -288,9 +303,9 @@ OCA.Data.Backend = {
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/data/dataset'),
-            success: function (data) {
+            success: function () {
                 OCA.Data.Core.initNavigation();
-            }.bind()
+            }
         });
     },
 
