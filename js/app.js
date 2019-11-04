@@ -66,15 +66,18 @@ OCA.Data.UI = {
             typeIcon = 'icon-external';
         } else if (data.type === OCA.Data.TYPE_SHARED) {
             typeIcon = 'icon-shared';
+        } else if (data.type === OCA.Data.TYPE_EMPTY_GROUP) {
+            typeIcon = 'icon-folder';
+            li.classList.add('collapsible');
         } else {
             typeIcon = '';
         }
-        a.classList.add(typeIcon);
+
+        if (typeIcon) a.classList.add(typeIcon);
         a.innerText = data.name;
         a.dataset.id = data.id;
         a.dataset.type = data.type;
         a.dataset.name = data.name;
-        a.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
 
         var div = document.createElement('div');
         div.classList.add('app-navigation-entry-utils');
@@ -87,7 +90,8 @@ OCA.Data.UI = {
         button.dataset.name = data.name;
         button.dataset.type = data.type;
 
-        //button.classList.add(typeIcon)
+        var ulSublist = document.createElement('ul');
+        ulSublist.id = 'dataset-' + data.id;
 
         li2.appendChild(button);
         if (data.type !== OCA.Data.TYPE_SHARED) {
@@ -97,7 +101,19 @@ OCA.Data.UI = {
         li.appendChild(a);
         li.appendChild(div);
 
-        var categoryList = document.getElementById('navigationDatasets');
+        if (data.type === OCA.Data.TYPE_EMPTY_GROUP) {
+            li.appendChild(ulSublist);
+            a.addEventListener('click', OCA.Data.UI.handleGroupClicked);
+        } else {
+            a.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
+        }
+
+        var categoryList;
+        if (data.parent !== 0) {
+            categoryList = document.getElementById('dataset-' + data.parent);
+        } else {
+            categoryList = document.getElementById('navigationDatasets');
+        }
         categoryList.appendChild(li);
     },
 
@@ -117,6 +133,15 @@ OCA.Data.UI = {
 
     handleOptionsClicked: function (evt) {
         OCA.Data.Sidebar.showSidebar(evt);
+        evt.stopPropagation();
+    },
+
+    handleGroupClicked: function (evt) {
+        if (evt.target.parentNode.classList.contains('open')) {
+            evt.target.parentNode.classList.remove('open');
+        } else {
+            evt.target.parentNode.classList.add('open');
+        }
         evt.stopPropagation();
     },
 

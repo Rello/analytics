@@ -9,7 +9,7 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Service;
+namespace OCA\data\Datasource;
 
 use OCA\data\Controller\DbController;
 use OCP\ILogger;

@@ -130,11 +130,11 @@ class DbController extends Controller
      */
     public function createDataset()
     {
-        $SQL = 'INSERT INTO `*PREFIX*data_dataset` (`user_id`,`name`,`dimension1`,`dimension2`,`dimension3`) VALUES(?,?,?,?,?)';
+        $SQL = 'INSERT INTO `*PREFIX*data_dataset` (`user_id`,`name`,`type`,`parent`,`dimension1`,`dimension2`,`dimension3`) VALUES(?,?,?,?,?,?,?)';
         //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, 'New', 'object', 'date', 'value'));
+        $stmt->execute(array($this->userId, 'New', 2, 0, 'object', 'date', 'value'));
         return $stmt->fetch();
     }
 
@@ -166,7 +166,7 @@ class DbController extends Controller
      */
     public function getDatasets()
     {
-        $SQL = 'SELECT id, name, type FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? ORDER BY `name` ASC';
+        $SQL = 'SELECT id, name, type, parent FROM `*PREFIX*data_dataset` WHERE  `user_id` = ? ORDER BY `parent` ASC, `name` ASC';
         //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
@@ -227,7 +227,7 @@ class DbController extends Controller
      */
     public function getSharedDatasets()
     {
-        $SQL = 'SELECT DS.id, DS.name, \'S\' as type FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? ORDER BY DS.name ASC';
+        $SQL = 'SELECT DS.id, DS.name, \'S\' as type, 0 as parent FROM `*PREFIX*data_dataset` AS DS JOIN `*PREFIX*data_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? ORDER BY DS.name ASC';
         $this->logger->error($this->userId);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId]);

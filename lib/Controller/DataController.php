@@ -12,15 +12,15 @@
 namespace OCA\data\Controller;
 
 use OCA\data\DataSession;
+use OCA\data\Datasource\FileService;
+use OCA\data\Datasource\GithubService;
 use OCA\data\Service\DataService;
 use OCA\data\Service\DatasetService;
-use OCA\data\Service\FileService;
-use OCA\data\Service\GithubService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
-use OCP\IDbConnection;
+use OCP\Files\NotFoundException;
 use OCP\ILogger;
 use OCP\IRequest;
 
@@ -71,6 +71,7 @@ class DataController extends Controller
      * @param $objectDrilldown
      * @param $dateDrilldown
      * @return DataResponse|NotFoundResponse
+     * @throws NotFoundException
      */
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
     {
@@ -92,7 +93,10 @@ class DataController extends Controller
      * @PublicPage
      * @UseSession
      * @param $token
+     * @param $objectDrilldown
+     * @param $dateDrilldown
      * @return DataResponse|NotFoundResponse
+     * @throws NotFoundException
      */
     public function readPublic($token, $objectDrilldown, $dateDrilldown)
     {
@@ -118,11 +122,12 @@ class DataController extends Controller
      * pre-evaluation of valid datasetId within read & readPublic is trusted here
      *
      * @NoAdminRequired
-     * @param int $datasetId
-     * @param $import
+     * @param $datasetMetadata
+     * @param $objectDrilldown
+     * @param $dateDrilldown
      * @return array
+     * @throws NotFoundException
      */
-
     private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
         if ($datasetMetadata['type'] === 1) $result = $this->FileService->read($datasetMetadata);
@@ -162,14 +167,13 @@ class DataController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @param $import
+     * @param $path
      * @return DataResponse
+     * @throws NotFoundException
      */
     public function importFile(int $datasetId, $path)
     {
-        $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
-        $import = $file->getContent();
-        return new DataResponse($this->DataService->import($datasetId, $import));
+        return new DataResponse($this->FileService->import($datasetId, $path));
     }
 
     /**
@@ -177,13 +181,13 @@ class DataController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @param $object
-     * @param $value
-     * @param $date
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return DataResponse
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
         return new DataResponse($this->DataService->update($datasetId, $dimension1, $dimension2, $dimension3));
     }
-
 }
