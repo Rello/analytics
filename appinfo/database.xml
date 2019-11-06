@@ -117,7 +117,7 @@
                 <name>dimension3</name>
                 <type>numeric</type>
                 <notnull>false</notnull>
-                <precision>10</precision>
+                <precision>15</precision>
                 <scale>2</scale>
             </field>
             <index>
@@ -170,6 +170,12 @@
                 <type>text</type>
                 <notnull>false</notnull>
                 <length>32</length>
+            </field>
+            <field>
+                <name>password</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>64</length>
             </field>
             <index>
                 <name>share_dataset_idx</name>

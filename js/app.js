@@ -52,6 +52,23 @@ OCA.Data.UI = {
         }
     },
 
+    fillSidebarParentDropdown: function (data) {
+        document.getElementById('tableParent').innerHTML = "";
+        var option = document.createElement('option');
+        option.text = '';
+        option.value = 0;
+        document.getElementById('tableParent').add(option);
+
+        for (var dataset of data) {
+            if (dataset.type === OCA.Data.TYPE_EMPTY_GROUP) {
+                option = document.createElement('option');
+                option.text = dataset.name;
+                option.value = dataset.id;
+                document.getElementById('tableParent').add(option);
+            }
+        }
+    },
+
     buildNavigationRow: function (data) {
         var li = document.createElement('li');
         var typeIcon;
@@ -320,6 +337,7 @@ OCA.Data.Backend = {
             url: OC.generateUrl('apps/data/dataset'),
             success: function (data) {
                 OCA.Data.UI.buildNavigation(data);
+                OCA.Data.UI.fillSidebarParentDropdown(data);
             }
         });
     },

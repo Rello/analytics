@@ -48,7 +48,11 @@
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;">Parent Dataset</div>
-                <div style="display: table-cell;"><input id="tableParent" value="0"></div>
+                <div style="display: table-cell;">
+                    <select id="tableParent">
+                        <option value="0"></option>
+                    </select>
+                </div>
             </div>
             <div style="display: table-row;">
                 <div id="tableKey2" style="display: table-cell;">Datasource</div>
