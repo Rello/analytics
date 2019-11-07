@@ -73,7 +73,7 @@
                 <length>64</length>
             </field>
             <index>
-                <name>dataset_user_id_idx</name>
+                <name>analytics_dataset_user_id_idx</name>
                 <field>
                     <name>user_id</name>
                 </field>
@@ -121,7 +121,7 @@
                 <scale>2</scale>
             </field>
             <index>
-                <name>facts_dataset_idx</name>
+                <name>analytics_facts_dataset_idx</name>
                 <field>
                     <name>dataset</name>
                 </field>
@@ -190,7 +190,7 @@
                 </field>
             </index>
             <index>
-                <name>share_token_idx</name>
+                <name>analytics_share_token_idx</name>
                 <field>
                     <name>token</name>
                 </field>

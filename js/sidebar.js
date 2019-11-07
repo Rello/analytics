@@ -118,7 +118,7 @@ OCA.Data.Sidebar = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
                 if (data !== false) {
                     var table = document.getElementById('templateDataset').cloneNode(true);
@@ -157,7 +157,7 @@ OCA.Data.Sidebar = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
                 if (data !== false && data.type === OCA.Data.TYPE_INTERNAL_DB) {
                     var table = document.getElementById('templateData').cloneNode(true);
@@ -188,7 +188,7 @@ OCA.Data.Sidebar = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/data/share/') + datasetId,
+            url: OC.generateUrl('apps/analytics/share/') + datasetId,
             success: function (data) {
 
                 var linkShareView = document.createElement('div');
@@ -495,7 +495,7 @@ OCA.Data.Sidebar.Share = {
         var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/data/share'),
+            url: OC.generateUrl('apps/analytics/share'),
             data: {
                 'datasetId': datasetId,
                 'type': OCA.Data.SHARE_TYPE_LINK,
@@ -510,7 +510,7 @@ OCA.Data.Sidebar.Share = {
         var shareId = evt.target.parentNode.dataset.id;
         $.ajax({
             type: 'DELETE',
-            url: OC.generateUrl('apps/data/share/') + shareId,
+            url: OC.generateUrl('apps/analytics/share/') + shareId,
             success: function (data) {
                 document.querySelector('.tabHeader.selected').click();
             }.bind()
@@ -522,7 +522,7 @@ OCA.Data.Sidebar.Share = {
         var password = evt.target.previousSibling.value;
         $.ajax({
             type: 'PUT',
-            url: OC.generateUrl('apps/data/share/') + shareId,
+            url: OC.generateUrl('apps/analytics/share/') + shareId,
             data: {
                 'password': password
             },
@@ -539,7 +539,7 @@ OCA.Data.Sidebar.Backend = {
     deleteDataset: function (datasetId) {
         $.ajax({
             type: 'DELETE',
-            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
                 OCA.Data.Core.initNavigation();
             }.bind()
@@ -550,7 +550,7 @@ OCA.Data.Sidebar.Backend = {
         var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'PUT',
-            url: OC.generateUrl('apps/data/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             data: {
                 'name': document.getElementById('tableName').value,
                 'parent': document.getElementById('tableParent').value,
@@ -571,7 +571,7 @@ OCA.Data.Sidebar.Backend = {
     updateData: function (datasetId) {
         $.ajax({
             type: 'PUT',
-            url: OC.generateUrl('apps/data/data/') + datasetId,
+            url: OC.generateUrl('apps/analytics/data/') + datasetId,
             data: {
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
@@ -587,7 +587,7 @@ OCA.Data.Sidebar.Backend = {
         var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/data/data/importCSV'),
+            url: OC.generateUrl('apps/analytics/data/importCSV'),
             data: {
                 'datasetId': datasetId,
                 'import': document.getElementById('importDataClipboardText').value,
@@ -603,7 +603,7 @@ OCA.Data.Sidebar.Backend = {
         var datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/data/data/importFile'),
+            url: OC.generateUrl('apps/analytics/data/importFile'),
             data: {
                 'datasetId': datasetId,
                 'path': path,

@@ -301,10 +301,10 @@ OCA.Data.Backend = {
 
         if (document.getElementById('sharingToken').value === '') {
             var datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
-            url = OC.generateUrl('apps/data/data/') + datasetId;
+            url = OC.generateUrl('apps/analytics/data/') + datasetId;
         } else {
             var token = document.getElementById('sharingToken').value;
-            url = OC.generateUrl('apps/data/data/public/') + token;
+            url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
         $.ajax({
@@ -334,7 +334,7 @@ OCA.Data.Backend = {
     getDatasets: function () {
         $.ajax({
             type: "GET",
-            url: OC.generateUrl('apps/data/dataset'),
+            url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
                 OCA.Data.UI.buildNavigation(data);
                 OCA.Data.UI.fillSidebarParentDropdown(data);
@@ -345,7 +345,7 @@ OCA.Data.Backend = {
     createDataset: function () {
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/data/dataset'),
+            url: OC.generateUrl('apps/analytics/dataset'),
             success: function () {
                 OCA.Data.Core.initNavigation();
             }

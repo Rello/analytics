@@ -12,12 +12,11 @@
 namespace OCA\Analytics\AppInfo;
 
 use OCP\AppFramework\App;
-use OCP\IContainer;
 
 class Application extends App {
 
 	public function __construct(array $urlParams = array()) {
 
-		parent::__construct('data', $urlParams);
+        parent::__construct('analytics', $urlParams);
 	}
 }

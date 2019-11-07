@@ -12,11 +12,9 @@
 
 namespace OCA\Analytics\AppInfo;
 
-use OCP\Util;
-
 $navigationEntry = function () {
     return [
-        'id' => 'data',
+        'id' => 'analytics',
         'order' => 6,
         'name' => \OC::$server->getL10N('analytics')->t('Analytics'),
         'href' => \OC::$server->getURLGenerator()->linkToRoute('analytics.page.index'),

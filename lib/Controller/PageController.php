@@ -13,8 +13,6 @@ namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\DataSession;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
@@ -66,7 +64,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $response = new TemplateResponse('data', 'main');
+        $response = new TemplateResponse('analytics', 'main');
         return $response;
     }
 
@@ -109,12 +107,12 @@ class PageController extends Controller
                     $this->DataSession->setPasswordForShare($token, $password);
                 } else {
                     $this->DataSession->removePasswordForShare($token);
-                    return new TemplateResponse('data', 'authenticate', ['wrongpw' => $password !== '',], 'guest');
+                    return new TemplateResponse('analytics', 'authenticate', ['wrongpw' => $password !== '',], 'guest');
                 }
             }
             $params = array();
             $params['token'] = $token;
-            $response = new TemplateResponse('data', 'public', $params);
+            $response = new TemplateResponse('analytics', 'public', $params);
             return $response;
         }
     }
