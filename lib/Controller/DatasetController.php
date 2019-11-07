@@ -9,9 +9,9 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Controller;
+namespace OCA\Analytics\Controller;
 
-use OCA\data\Service\DatasetService;
+use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;

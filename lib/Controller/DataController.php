@@ -9,13 +9,13 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Controller;
+namespace OCA\Analytics\Controller;
 
-use OCA\data\DataSession;
-use OCA\data\Datasource\FileService;
-use OCA\data\Datasource\GithubService;
-use OCA\data\Service\DataService;
-use OCA\data\Service\DatasetService;
+use OCA\Analytics\DataSession;
+use OCA\Analytics\Datasource\FileService;
+use OCA\Analytics\Datasource\GithubService;
+use OCA\Analytics\Service\DataService;
+use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;

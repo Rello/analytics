@@ -9,9 +9,9 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Service;
+namespace OCA\Analytics\Service;
 
-use OCA\data\Controller\DbController;
+use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
 class DataService

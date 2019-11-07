@@ -9,7 +9,7 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Controller;
+namespace OCA\Analytics\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\IDbConnection;

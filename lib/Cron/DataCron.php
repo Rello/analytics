@@ -9,10 +9,10 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Cron;
+namespace OCA\Analytics\Cron;
 
 use OC\BackgroundJob\Job;
-use OCA\data\Service\DataService;
+use OCA\Analytics\Service\DataService;
 use OCP\ILogger;
 
 class DataCron extends Job

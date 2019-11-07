@@ -9,7 +9,7 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\AppInfo;
+namespace OCA\Analytics\AppInfo;
 
 use OCP\AppFramework\App;
 use OCP\IContainer;

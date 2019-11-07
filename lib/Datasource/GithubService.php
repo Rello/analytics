@@ -9,9 +9,9 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Datasource;
+namespace OCA\Analytics\Datasource;
 
-use OCA\data\Controller\DbController;
+use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
 class GithubService

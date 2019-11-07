@@ -9,10 +9,10 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Datasource;
+namespace OCA\Analytics\Datasource;
 
-use OCA\data\Controller\DbController;
-use OCA\data\Service\DataService;
+use OCA\Analytics\Controller\DbController;
+use OCA\Analytics\Service\DataService;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\ILogger;

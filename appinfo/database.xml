@@ -5,7 +5,7 @@
     <overwrite>false</overwrite>
     <charset>utf8</charset>
     <table>
-        <name>*dbprefix*data_dataset</name>
+        <name>*dbprefix*analytics_dataset</name>
         <declaration>
             <field>
                 <name>id</name>
@@ -81,7 +81,7 @@
         </declaration>
     </table>
     <table>
-        <name>*dbprefix*data_facts</name>
+        <name>*dbprefix*analytics_facts</name>
         <declaration>
             <field>
                 <name>id</name>
@@ -129,7 +129,7 @@
         </declaration>
     </table>
     <table>
-        <name>*dbprefix*data_share</name>
+        <name>*dbprefix*analytics_share</name>
         <declaration>
             <field>
                 <name>id</name>

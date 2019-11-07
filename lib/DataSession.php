@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data;
+namespace OCA\Analytics;
 
 use OCP\ISession;
 

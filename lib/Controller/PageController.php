@@ -9,9 +9,9 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\Controller;
+namespace OCA\Analytics\Controller;
 
-use OCA\data\DataSession;
+use OCA\Analytics\DataSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -99,7 +99,7 @@ class PageController extends Controller
         if ($share === false) {
             // Dataset not shared or wrong token
             return new RedirectResponse($this->url->linkToRoute('core.login.showLoginForm', [
-                'redirect_url' => $this->url->linkToRoute('data.page.index', ['token' => $token]),
+                'redirect_url' => $this->url->linkToRoute('analytics.page.index', ['token' => $token]),
             ]));
         } else {
             if ($share['password'] !== null) {

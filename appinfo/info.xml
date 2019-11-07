@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
-	<id>data</id>
+	<id>analytics</id>
     <name>Data Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
@@ -19,7 +19,7 @@ From datasouce to reporting. Data Analytics provides modular datasources, a real
 	<version>0.1.9</version>
 	<licence>agpl</licence>
 	<author>Marcel Scherello</author>
-	<namespace>data</namespace>
+	<namespace>Analytics</namespace>
     <category>office</category>
 	<website>https://github.com/rello/data</website>
 	<bugs>https://github.com/rello/data/issues</bugs>
