@@ -10,7 +10,7 @@
  * @copyright 2019 Marcel Scherello
  */
 
-namespace OCA\data\AppInfo;
+namespace OCA\Analytics\AppInfo;
 
 use OCP\Util;
 
@@ -18,9 +18,9 @@ $navigationEntry = function () {
     return [
         'id' => 'data',
         'order' => 6,
-        'name' => \OC::$server->getL10N('data')->t('Analytics'),
-        'href' => \OC::$server->getURLGenerator()->linkToRoute('data.page.index'),
-        'icon' => \OC::$server->getURLGenerator()->imagePath('data', 'app.svg'),
+        'name' => \OC::$server->getL10N('analytics')->t('Analytics'),
+        'href' => \OC::$server->getURLGenerator()->linkToRoute('analytics.page.index'),
+        'icon' => \OC::$server->getURLGenerator()->imagePath('analytics', 'app.svg'),
     ];
 };
 \OC::$server->getNavigationManager()->add($navigationEntry);
