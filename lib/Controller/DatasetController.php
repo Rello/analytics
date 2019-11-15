@@ -14,6 +14,7 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
 use OCP\IRequest;
 
@@ -47,7 +48,7 @@ class DatasetController extends Controller
         $ownDatasets = $this->DatasetService->index();
         $sharedDatasets = $this->ShareController->getSharedDatasets();
         $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
-        return new DataResponse($ownDatasets);
+        return new JSONResponse($ownDatasets);
     }
 
     /**

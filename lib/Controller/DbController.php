@@ -80,7 +80,7 @@ class DbController extends Controller
         if ($objectDrilldown === 'true') $SQL .= ' `dimension1`,';
         $SQL .= ' `dimension2` ASC';
 
-        // $this->logger->error($SQL);
+        $this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($dataset));
@@ -114,13 +114,12 @@ class DbController extends Controller
             $SQL = 'UPDATE `*PREFIX*analytics_facts` SET `dimension3` = ? WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
             $stmt = $this->db->prepare($SQL);
             $stmt->execute(array($dimension3, $this->userId, $datasetId, $dimension1, $dimension2));
-            $stmt->fetch();
+            //$stmt->fetch();
             return 'update';
         } else {
             $SQL = 'INSERT INTO `*PREFIX*analytics_facts` (`user_id`,`dataset`,`dimension1`,`dimension2`,`dimension3`) VALUES(?,?,?,?,?)';
             $stmt = $this->db->prepare($SQL);
             $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2, $dimension3));
-            $stmt->fetch();
             return 'insert';
         }
     }
@@ -135,11 +134,22 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, 'New', 2, 0, 'object', 'date', 'value'));
-        return $stmt->fetch();
+        return true;
     }
 
     /**
      * update dataset
+     * @param $id
+     * @param $name
+     * @param $parent
+     * @param $type
+     * @param $link
+     * @param $visualization
+     * @param $chart
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return
      */
     public function updateDataset($id, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
@@ -147,18 +157,20 @@ class DbController extends Controller
         $stmt = $this->db->prepare($SQL);
         $name = $this->truncate($name, 64);
         $stmt->execute(array($name, $type, $link, $visualization, $chart, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
-        return $stmt->fetch();
+        return true;
     }
 
     /**
      * delete dataset
+     * @param $id
+     * @return
      */
     public function deleteDataset($id)
     {
         $SQL = 'DELETE FROM `*PREFIX*analytics_dataset` WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, $id));
-        return $stmt->fetch();
+        return true;
     }
 
     /**
@@ -227,7 +239,7 @@ class DbController extends Controller
      */
     public function getSharedDatasets()
     {
-        $SQL = 'SELECT DS.id, DS.name, \'S\' as type, 0 as parent FROM `*PREFIX*analytics_dataset` AS DS JOIN `*PREFIX*analytics_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? ORDER BY DS.name ASC';
+        $SQL = 'SELECT DS.id, DS.name, \'99\' as type, 0 as parent FROM `*PREFIX*analytics_dataset` AS DS JOIN `*PREFIX*analytics_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? ORDER BY DS.name ASC';
         $this->logger->error($this->userId);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId]);
@@ -253,7 +265,7 @@ class DbController extends Controller
         //$this->logger->error($datasetId, $type, $uid_owner, $token);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($datasetId, $type, $uid_owner, $this->userId, $token));
-        return $stmt->fetch();
+        return true;
     }
 
     public function getShare($datasetId)
@@ -270,7 +282,7 @@ class DbController extends Controller
         //$this->logger->error($shareId. $password);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$password, $this->userId, $shareId]);
-        return $stmt->fetch();
+        return true;
     }
 
     public function deleteShare($shareId)
@@ -278,7 +290,7 @@ class DbController extends Controller
         $SQL = 'DELETE FROM `*PREFIX*analytics_share` WHERE `uid_initiator` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId, $shareId]);
-        return $stmt->fetch();
+        return true;
     }
 
 }

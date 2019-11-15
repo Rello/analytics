@@ -72,6 +72,8 @@ class DataService
     {
         $insert = 0;
         $update = 0;
+        //$this->logger->error($dimension3);
+        $dimension3 = str_replace(',', '.', $dimension3);
         $action = $this->DBController->createData($datasetId, $dimension1, $dimension2, $dimension3);
         if ($action === 'insert') $insert++;
         elseif ($action === 'update') $update++;

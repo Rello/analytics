@@ -109,7 +109,8 @@
                 <div style="display: table-cell;">
                     <select id="tableChart">
                         <option value="" selected></option>
-                        <option value="line">(Time)Line</option>
+                        <option value="line">Line</option>
+                        <option value="datetime">Timeline (Date in column 2)</option>
                         <option value="column">Columns</option>
                     </select>
                 </div>

@@ -70,10 +70,14 @@ class DatasetService
      * Get content of linked CSV file
      * @param int $datasetId
      * @param $name
+     * @param $parent
      * @param $type
      * @param $link
      * @param $visualization
      * @param $chart
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
      * @return array
      */
     public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)

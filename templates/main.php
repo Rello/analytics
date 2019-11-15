@@ -20,8 +20,8 @@ script('analytics', 'jquery.dataTables.min');
 script('analytics', 'jquery.csv.min');
 script('analytics', 'highcharts/highcharts');
 script('analytics', 'highcharts/modules/data');
-script('analytics', 'highcharts/modules/exporting');
-script('analytics', 'highcharts/modules/export-data');
+//script('analytics', 'highcharts/modules/exporting');
+//script('analytics', 'highcharts/modules/export-data');
 style('analytics', 'jquery.dataTables.min');
 ?>
 

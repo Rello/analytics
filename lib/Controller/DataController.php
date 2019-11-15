@@ -75,10 +75,12 @@ class DataController extends Controller
      */
     public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
     {
+
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if ($datasetMetadata === false) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
 
         if ($datasetMetadata !== false) {
+            //$this->logger->error('test');
             $result = $this->getData($datasetMetadata, $objectDrilldown, $dateDrilldown);
             return new DataResponse($result);
         } else {
@@ -130,6 +132,7 @@ class DataController extends Controller
      */
     private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
+        $datasetMetadata['type'] = (int)$datasetMetadata['type'];
         if ($datasetMetadata['type'] === 1) $result = $this->FileService->read($datasetMetadata);
         elseif ($datasetMetadata['type'] === 2) $result = $this->DataService->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
         elseif ($datasetMetadata['type'] === 3) $result = $this->GithubService->read($datasetMetadata);

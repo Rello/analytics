@@ -13,6 +13,7 @@
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <div>
+        <h3 id="dataHeader"></h3>
         <div id="drilldown" style="display: none">
             Drilldown by:
             <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
