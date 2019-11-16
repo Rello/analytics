@@ -14,11 +14,11 @@ namespace OCA\Analytics\Service;
 use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
-
 class DatasetService
 {
     private $logger;
     private $DBController;
+    private $activityManager;
 
     public function __construct(
         ILogger $logger,

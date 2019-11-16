@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Service;
 
+use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
@@ -19,16 +20,19 @@ class DataService
     private $logger;
     private $DatasetService;
     private $DBController;
+    private $ActivityManager;
 
     public function __construct(
         ILogger $logger,
         DatasetService $DatasetService,
-        DbController $DBController
+        DbController $DBController,
+        ActivityManager $ActivityManager
     )
     {
         $this->logger = $logger;
         $this->DatasetService = $DatasetService;
         $this->DBController = $DBController;
+        $this->ActivityManager = $ActivityManager;
     }
 
     /**
@@ -82,6 +86,7 @@ class DataService
             'insert' => $insert,
             'update' => $update
         ];
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
         return $result;
     }
 
@@ -112,6 +117,8 @@ class DataService
             'update' => $update,
             'delimiter' => $delimiter
         ];
+
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
         return $result;
     }
 

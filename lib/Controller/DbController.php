@@ -80,7 +80,7 @@ class DbController extends Controller
         if ($objectDrilldown === 'true') $SQL .= ' `dimension1`,';
         $SQL .= ' `dimension2` ASC';
 
-        $this->logger->error($SQL);
+        //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($dataset));
@@ -240,7 +240,7 @@ class DbController extends Controller
     public function getSharedDatasets()
     {
         $SQL = 'SELECT DS.id, DS.name, \'99\' as type, 0 as parent FROM `*PREFIX*analytics_dataset` AS DS JOIN `*PREFIX*analytics_share` AS SH ON DS.id = SH.dataset WHERE SH.uid_owner = ? ORDER BY DS.name ASC';
-        $this->logger->error($this->userId);
+        //$this->logger->error($this->userId);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId]);
         return $stmt->fetchAll();

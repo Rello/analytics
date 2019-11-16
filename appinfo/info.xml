@@ -35,4 +35,16 @@ From datasouce to reporting. Data Analytics provides modular datasources, a real
 		<php min-version="7.0" max-version="7.3"/>
 		<nextcloud min-version="16" max-version="17"/>
 	</dependencies>
+    <activity>
+        <settings>
+            <setting>OCA\Analytics\Activity\SettingDataset</setting>
+            <setting>OCA\Analytics\Activity\SettingData</setting>
+        </settings>
+        <providers>
+            <provider>OCA\Analytics\Activity\Provider</provider>
+        </providers>
+        <filters>
+            <filter>OCA\Analytics\Activity\Filter</filter>
+        </filters>
+    </activity>
 </info>
