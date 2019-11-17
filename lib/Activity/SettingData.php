@@ -72,7 +72,7 @@ class SettingData implements \OCP\Activity\ISetting
      */
     public function isDefaultEnabledStream()
     {
-        return true;
+        return false;
     }
 
     /**

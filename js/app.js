@@ -21,7 +21,7 @@ if (!OCA.Data) {
         TYPE_INTERNAL_DB: 2,
         TYPE_GIT: 3,
         TYPE_SHARED: 99,
-        SHARE_USER: 0,
+        SHARE_TYPE_USER: 0,
         SHARE_TYPE_LINK: 3
     };
 }

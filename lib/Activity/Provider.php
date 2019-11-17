@@ -52,10 +52,10 @@ class Provider implements IProvider
 
         switch ($event->getSubject()) {
             case ActivityManager::SUBJECT_DATASET_ADD:
-                $parsedSubject = $this->l10n->t('You have created a new report {report}');
+                $parsedSubject = $this->l10n->t('You created a new report');
                 break;
             case ActivityManager::SUBJECT_DATASET_DELETE:
-                $parsedSubject = $this->l10n->t('You have deleted the report {report}');
+                $parsedSubject = $this->l10n->t('You deleted report {report}');
                 break;
             case ActivityManager::SUBJECT_DATASET_SHARE:
                 if ($ownActivity) {

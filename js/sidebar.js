@@ -329,7 +329,7 @@ OCA.Data.Sidebar.Share = {
                         if (parseInt(share.type) === OCA.Data.SHARE_TYPE_LINK) {
                             let li = OCA.Data.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, share.pass);
                             shareWithList.appendChild(li);
-                        } else if (parseInt(share.type) === OCA.Data.SHARE_USER) {
+                        } else if (parseInt(share.type) === OCA.Data.SHARE_TYPE_USER) {
                             let li = OCA.Data.Sidebar.Share.buildShareeRow(share.id, share.uid_owner);
                             shareWithList_sharee.appendChild(li);
                         }

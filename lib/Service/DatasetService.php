@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Service;
 
+use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
@@ -18,15 +19,17 @@ class DatasetService
 {
     private $logger;
     private $DBController;
-    private $activityManager;
+    private $ActivityManager;
 
     public function __construct(
         ILogger $logger,
-        DbController $DBController
+        DbController $DBController,
+        ActivityManager $ActivityManager
     )
     {
         $this->logger = $logger;
         $this->DBController = $DBController;
+        $this->ActivityManager = $ActivityManager;
     }
 
     /**
@@ -53,6 +56,7 @@ class DatasetService
      */
     public function create()
     {
+        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
         return $this->DBController->createDataset();
     }
 
@@ -63,6 +67,7 @@ class DatasetService
      */
     public function delete($id)
     {
+        $this->ActivityManager->triggerEvent($id, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         return $this->DBController->deleteDataset($id);
     }
 

@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Controller;
 
+use OCA\Analytics\Activity\ActivityManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
@@ -19,15 +20,20 @@ use OCP\Security\ISecureRandom;
 
 class ShareController extends Controller
 {
+    const SHARE_TYPE_USER = 0;
+    const SHARE_TYPE_LINK = 3;
+
     private $logger;
     private $DBController;
     private $secureRandom;
+    private $ActivityManager;
 
     public function __construct(
         $appName,
         IRequest $request,
         ILogger $logger,
         DbController $DBController,
+        ActivityManager $ActivityManager,
         ISecureRandom $secureRandom
     )
     {
@@ -35,11 +41,15 @@ class ShareController extends Controller
         $this->logger = $logger;
         $this->DBController = $DBController;
         $this->secureRandom = $secureRandom;
+        $this->ActivityManager = $ActivityManager;
     }
 
     /**
-     * get all datasets
+     * get all dataset by token
+     *
      * @NoAdminRequired
+     * @param $token
+     * @return array
      */
     public function getDatasetByToken($token)
     {
@@ -47,8 +57,12 @@ class ShareController extends Controller
     }
 
     /**
-     * get all datasets
+     * verify password hahes
+     *
      * @NoAdminRequired
+     * @param $password
+     * @param $sharePassword
+     * @return bool
      */
     public function verifyPassword($password, $sharePassword)
     {
@@ -57,6 +71,7 @@ class ShareController extends Controller
 
     /**
      * get all datasets shared with user
+     *
      * @NoAdminRequired
      */
     public function getSharedDatasets()
@@ -65,10 +80,11 @@ class ShareController extends Controller
     }
 
     /**
-     * get all datasets shared with user
+     * get metadata of a dataset, shared with current user
+     *
      * @NoAdminRequired
      * @param $id
-     * @return
+     * @return array
      */
     public function getSharedDataset($id)
     {
@@ -76,52 +92,55 @@ class ShareController extends Controller
     }
 
     /**
-     * get all datasets shared with user
+     * create a new share
+     *
      * @NoAdminRequired
-     * @param $id
-     * @return
+     * @param $datasetId
+     * @param $type
+     * @return DataResponse
      */
     public function create($datasetId, $type)
     {
-        if ($type === '3') { // Link Share
-            $token = $this->generateToken();
-        }
-        $this->logger->error($type . $token);
-
+        $token = $this->generateToken();
+        //$this->logger->error($type . $token);
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
         return new DataResponse($this->DBController->createShare($datasetId, $type, null, $token));
     }
 
     /**
-     * get all datasets shared with user
+     * get all shares for a dataset
+     *
      * @NoAdminRequired
-     * @param $id
-     * @return
+     * @param $datasetId
+     * @return DataResponse
      */
     public function read($datasetId)
     {
-        return new DataResponse($this->DBController->getShare($datasetId));
+        return new DataResponse($this->DBController->getShares($datasetId));
     }
 
     /**
-     * get all datasets shared with user
+     * update/set share password
+     *
      * @NoAdminRequired
-     * @param $id
-     * @return
+     * @param $shareId
+     * @param $password
+     * @return DataResponse
      */
     public function update($shareId, $password)
     {
-        $this->logger->error($shareId . $password);
+        //$this->logger->error($shareId . $password);
         if ($password !== '') $password = password_hash($password, PASSWORD_DEFAULT);
         else $password = null;
-        $this->logger->error($shareId . $password);
         return new DataResponse($this->DBController->updateShare($shareId, $password));
     }
 
     /**
-     * get all datasets shared with user
+     * delete a share
+     *
      * @NoAdminRequired
-     * @param $id
-     * @return
+     * @param $shareId
+     * @return DataResponse
      */
     public function delete($shareId)
     {

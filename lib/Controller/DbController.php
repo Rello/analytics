@@ -268,9 +268,17 @@ class DbController extends Controller
         return true;
     }
 
-    public function getShare($datasetId)
+    public function getShares($datasetId)
     {
         $SQL = 'SELECT id, type, uid_owner, token, (CASE  WHEN password IS NOT NULL THEN true ELSE false END) AS pass FROM `*PREFIX*analytics_share` WHERE uid_initiator = ? AND dataset = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute([$this->userId, $datasetId]);
+        return $stmt->fetchAll();
+    }
+
+    public function getSharedReceiver($datasetId)
+    {
+        $SQL = 'SELECT uid_owner FROM `*PREFIX*analytics_share` WHERE uid_initiator = ? AND dataset = ? AND type = 0';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId, $datasetId]);
         return $stmt->fetchAll();

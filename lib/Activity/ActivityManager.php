@@ -11,16 +11,14 @@
 
 namespace OCA\Analytics\Activity;
 
-use OCA\Analytics\Service\DatasetService;
+use OCA\Analytics\Controller\DbController;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\IL10N;
-use OCP\IUser;
-
+use OCP\ILogger;
 
 class ActivityManager
 {
-
     const OBJECT_DATASET = 'analytics_dataset';
     const OBJECT_DATA = 'analytics_data';
     const SUBJECT_DATASET_ADD = 'dataset_add';
@@ -28,22 +26,26 @@ class ActivityManager
     const SUBJECT_DATASET_SHARE = 'dataset_share';
     const SUBJECT_DATA_ADD = 'data_add';
     const SUBJECT_DATA_ADD_API = 'data_add_api';
+
     private $manager;
     private $l10n;
     private $userId;
-    private $DatasetService;
+    private $DBController;
+    private $logger;
 
     public function __construct(
         IManager $manager,
         IL10N $l10n,
-        DatasetService $DatasetService,
-        $userId
+        DbController $DBController,
+        $userId,
+        ILogger $logger
     )
     {
         $this->manager = $manager;
         $this->l10n = $l10n;
         $this->userId = $userId;
-        $this->DatasetService = $DatasetService;
+        $this->DBController = $DBController;
+        $this->logger = $logger;
     }
 
     public function triggerEvent($datasetId, $eventType, $eventSubject)
@@ -60,45 +62,31 @@ class ActivityManager
 
     private function createEvent($datasetId, $eventType, $eventSubject, $ownActivity = true, $author = null)
     {
-
-        $dataset = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetName = $datasetId !== 0 ? $this->DBController->getOwnDataset($datasetId)['name'] : '';
         $event = $this->manager->generateEvent();
         $event->setApp('analytics')
             ->setType($eventType)
             ->setAuthor($this->userId)
-            ->setObject('report', (int)$datasetId, $dataset['name'])
+            ->setObject('report', (int)$datasetId, $datasetName)
             ->setSubject($eventSubject, ['author' => $this->userId])
             ->setTimestamp(time());
         return $event;
     }
 
     /**
-     * Publish activity to all users that are part of the board of a given object
+     * Publish activity to all users that are part of the dataset
      *
      * @param IEvent $event
      */
     private function sendToUsers(IEvent $event)
     {
-        $event->setAffectedUser('admin');
-        $this->manager->publish($event);
-
-
-        switch ($event->getObjectType()) {
-            case self::DECK_OBJECT_BOARD:
-                $mapper = $this->boardMapper;
-                break;
-            case self::DECK_OBJECT_CARD:
-                $mapper = $this->cardMapper;
-                break;
-        }
-        $boardId = $mapper->findBoardId($event->getObjectId());
-        /** @var IUser $user */
-        foreach ($this->permissionService->findUsers($boardId) as $user) {
-            $event->setAffectedUser($user->getUID());
-            /** @noinspection DisconnectedForeachInstructionInspection */
+        $users = $this->DBController->getSharedReceiver($event->getObjectId());
+        //$this->logger->error($users);
+        foreach ($users as $user) {
+            $event->setAffectedUser($user['uid_owner']);
             $this->manager->publish($event);
         }
-
-
+        $event->setAffectedUser('admin');
+        $this->manager->publish($event);
     }
 }
