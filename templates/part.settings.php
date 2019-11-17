@@ -27,7 +27,7 @@
                 </a>
             </li>
             <li class="data-settings-item icon-info">
-                <a href="https://github.com/rello/data/wiki" target="_blank" style="padding: 0 20px;">
+                <a href="https://github.com/rello/analytics/wiki" target="_blank" style="padding: 0 20px;">
                     <?php p($l->t('More information…')); ?>
                 </a>
             </li>

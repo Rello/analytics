@@ -190,12 +190,14 @@ OCA.Data.UI = {
         }
 
         let language = {
-            search: "Suche:",
+            search: t('analytics', 'Search'),
+            lengthMenu: t('analytics', 'Show _MENU_ entries'),
+            infoEmpty: t('analytics', 'Showing 0 to 0 of 0 entries'),
             paginate: {
-                first: "erster",
-                previous: "zurück",
-                next: "weiter",
-                last: "letzter"
+                first: t('analytics', 'first'),
+                previous: t('analytics', 'previous'),
+                next: t('analytics', 'next'),
+                last: t('analytics', 'last')
             },
         };
 

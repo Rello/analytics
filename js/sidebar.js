@@ -56,7 +56,7 @@ OCA.Data.Sidebar = {
             id: 'tabHeaderDataset',
             class: 'tabContainerDataset',
             tabindex: '1',
-            name: t('data', 'Options'),
+            name: t('analytics', 'Options'),
             action: OCA.Data.Sidebar.Dataset.tabContainerDataset,
         });
 
@@ -64,7 +64,7 @@ OCA.Data.Sidebar = {
             id: 'tabHeaderData',
             class: 'tabContainerData',
             tabindex: '2',
-            name: t('data', 'Data'),
+            name: t('analytics', 'Data'),
             action: OCA.Data.Sidebar.Data.tabContainerData,
         });
 
@@ -72,7 +72,7 @@ OCA.Data.Sidebar = {
             id: 'tabHeaderShare',
             class: 'tabContainerShare',
             tabindex: '3',
-            name: t('data', 'Share'),
+            name: t('analytics', 'Share'),
             action: OCA.Data.Sidebar.Share.tabContainerShare,
         });
 
@@ -154,7 +154,7 @@ OCA.Data.Sidebar.Dataset = {
                     document.getElementById('updateDatasetButton').addEventListener('click', OCA.Data.Sidebar.Dataset.handleDatasetUpdateButton);
                     OCA.Data.Sidebar.Dataset.handleDatasetTypeChange();
                 } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No maintenance possible') + '</p></div>';
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
                 }
             }
@@ -216,7 +216,7 @@ OCA.Data.Sidebar.Dataset = {
         } else if (type === OCA.Data.TYPE_INTERNAL_FILE) {
             let mimeparts = ['text/csv', 'text/plain'];
             OC.dialogs.filepicker(
-                t('data', 'Select file'),
+                t('analytics', 'Select file'),
                 function (path) {
                     document.getElementById('datasetLink').value = path;
                 },
@@ -265,7 +265,7 @@ OCA.Data.Sidebar.Data = {
                         }
                     });
                 } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'Data maintenance is not possible for this type of dataset') + '</p></div>';
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
                     document.getElementById('tabContainerData').innerHTML = table;
                 }
             }
@@ -339,7 +339,7 @@ OCA.Data.Sidebar.Share = {
                     document.getElementById('tabContainerShare').appendChild(linkShareView);
                     document.getElementById('tabContainerShare').appendChild(shareeListView);
                 } else {
-                    let table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('data', 'No Shares found') + '</p></div>';
+                    let table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No Shares found') + '</p></div>';
                     document.getElementById('tabContainerData').innerHTML = table;
                 }
 
@@ -358,8 +358,8 @@ OCA.Data.Sidebar.Share = {
 
         let name = document.createElement('span');
         name.classList.add('username');
-        if (add) name.innerText = 'Add Share Link';
-        else name.innerText = 'Share Link';
+        if (add) name.innerText = t('analytics', 'Add Share Link');
+        else name.innerText = t('analytics', 'Share Link');
 
         let moreIcon = document.createElement('a');
         moreIcon.classList.add('icon', 'icon-more');
@@ -443,7 +443,7 @@ OCA.Data.Sidebar.Share = {
         inputShowPassword.addEventListener('click', OCA.Data.Sidebar.Share.showPassMenu);
         let labelShowPassword = document.createElement('label');
         labelShowPassword.setAttribute('for', 'showPassword-' + id);
-        labelShowPassword.innerText = 'Password protect';
+        labelShowPassword.innerText = t('analytics', 'Password protect');
         liShowPassword.appendChild(spanShowPassword);
         spanShowPassword.appendChild(inputShowPassword);
         spanShowPassword.appendChild(labelShowPassword);
@@ -454,7 +454,7 @@ OCA.Data.Sidebar.Share = {
         spanPassMenu.classList.add('menuitem', 'icon-share-pass');
         let inputPassMenu = document.createElement('input');
         inputPassMenu.type = 'password';
-        inputPassMenu.placeholder = 'Choose a password for the public link';
+        inputPassMenu.placeholder = t('analytics', 'Password for public link');
         inputPassMenu.id = 'linkPassText-' + id;
         inputPassMenu.classList.add('linkPassText');
         let inputPassConfirm = document.createElement('input');
@@ -477,7 +477,7 @@ OCA.Data.Sidebar.Share = {
         let spanUnshare = document.createElement('span');
         spanUnshare.classList.add('icon', 'icon-delete');
         let spanUnshareTxt = document.createElement('span');
-        spanUnshareTxt.innerText = 'Delete share link';
+        spanUnshareTxt.innerText = t('analytics', 'Delete share link');
         liUnshare.appendChild(aUnshare);
         aUnshare.appendChild(spanUnshare);
         aUnshare.appendChild(spanUnshareTxt);
@@ -613,13 +613,13 @@ OCA.Data.Sidebar.Backend = {
                 'import': document.getElementById('importDataClipboardText').value,
             },
             success: function (data) {
-                OCA.Data.UI.notification('success', data.insert + ' records inserted, ' + data.update + ' records updated');
+                OCA.Data.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
                 document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
             }.bind(),
             error: function () {
-                OCA.Data.UI.notification('error', 'Technical error. Please check the logs');
+                OCA.Data.UI.notification('error', t('analytics', 'Technical error. Please check the logs'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }
@@ -640,13 +640,13 @@ OCA.Data.Sidebar.Backend = {
                 'path': path,
             },
             success: function (data) {
-                OCA.Data.UI.notification('success', data.insert + ' records inserted, ' + data.update + ' records updated');
+                OCA.Data.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
                 document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
             }.bind(),
             error: function () {
-                OCA.Data.UI.notification('error', 'Technical error. Please check the logs');
+                OCA.Data.UI.notification('error', t('analytics', 'Technical error. Please check the logs'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }

@@ -15,9 +15,9 @@
     <div>
         <h3 id="dataHeader"></h3>
         <div id="drilldown" style="display: none">
-            Drilldown by:
+            <?php p($l->t('Drilldown')); ?>
             <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
-            <label for="checkBoxObject">Object</label>
+            <label for="checkBoxObject"><?php p($l->t('Object')); ?></label>
             <input type="hidden" id="checkBoxDate" class="checkbox" checked>
         </div>
         <div id="chartContainer" style="min-width: 310px; height: 50%; margin: 0 auto"></div>

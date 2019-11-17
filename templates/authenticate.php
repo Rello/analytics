@@ -7,7 +7,7 @@ script('analytics', 'authenticate');
 <form method="POST">
     <fieldset class="warning">
         <?php if (!$_['wrongpw']) { ?>
-            <div class="warning-info"><?php p($l->t('This dataset is password-protected')); ?></div>
+            <div class="warning-info"><?php p($l->t('This report is password-protected')); ?></div>
         <?php } else { ?>
             <div class="warning"><?php p($l->t('The password is wrong. Try again.')); ?></div>
         <?php } ?>

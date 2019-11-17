@@ -12,7 +12,7 @@
 
 <div class="app-navigation-new">
     <button id="newDatasetButton" type="button" class="icon-add">
-        New Dataset
+        <?php p($l->t('New Report')); ?>
     </button>
 </div>
 
