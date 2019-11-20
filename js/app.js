@@ -53,18 +53,19 @@ OCA.Data.UI = {
     },
 
     fillSidebarParentDropdown: function (data) {
-        document.getElementById('tableParent').innerHTML = "";
+        let tableParent = document.querySelector('#templateDataset #tableParent');
+        tableParent.innerHTML = "";
         let option = document.createElement('option');
         option.text = '';
         option.value = 0;
-        document.getElementById('tableParent').add(option);
+        tableParent.add(option);
 
         for (let dataset of data) {
             if (parseInt(dataset.type) === OCA.Data.TYPE_EMPTY_GROUP) {
                 option = document.createElement('option');
                 option.text = dataset.name;
                 option.value = dataset.id;
-                document.getElementById('tableParent').add(option);
+                tableParent.add(option);
             }
         }
     },
@@ -192,6 +193,7 @@ OCA.Data.UI = {
         let language = {
             search: t('analytics', 'Search'),
             lengthMenu: t('analytics', 'Show _MENU_ entries'),
+            info: t('analytics', 'Showing _START_ to _END_ of _TOTAL_ entries'),
             infoEmpty: t('analytics', 'Showing 0 to 0 of 0 entries'),
             paginate: {
                 first: t('analytics', 'first'),
@@ -258,6 +260,7 @@ OCA.Data.UI = {
                     categories: xAxisCategories,
                 };
             }
+            if (parseInt(jsondata.options.type) === OCA.Data.TYPE_GIT) seriesOptions[0]['showInLegend'] = false;
         }
 
         Highcharts.chart('chartContainer', {

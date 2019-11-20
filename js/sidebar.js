@@ -137,6 +137,7 @@ OCA.Data.Sidebar.Dataset = {
                 let table;
                 if (data !== false) {
                     table = document.getElementById('templateDataset').cloneNode(true);
+                    table.id = 'tableDataset';
                     document.getElementById('tabContainerDataset').innerHTML = '';
                     document.getElementById('tabContainerDataset').appendChild(table);
                     document.getElementById('tableName').value = data.name;
@@ -206,8 +207,8 @@ OCA.Data.Sidebar.Dataset = {
         let type = parseInt(document.getElementById('tableType').value);
         if (type === OCA.Data.TYPE_GIT) {
             OC.dialogs.prompt(
-                "Enter GitHub User/Repositors. the '/' is important here",
-                "Github API source",
+                t('analytics', 'Enter GitHub User/Repository. The \'/\' is important.'),
+                t('analytics', 'GitHub API'),
                 function (button, val) {
                     if (button === true) document.getElementById('datasetLink').value = val;
                 },
@@ -245,6 +246,7 @@ OCA.Data.Sidebar.Data = {
                 let table;
                 if (data !== false && parseInt(data.type) === OCA.Data.TYPE_INTERNAL_DB) {
                     table = document.getElementById('templateData').cloneNode(true);
+                    table.id = 'tableData';
                     document.getElementById('tabContainerData').innerHTML = '';
                     document.getElementById('tabContainerData').appendChild(table);
                     document.getElementById('DataTextDimension1').innerText = data.dimension1;
@@ -376,7 +378,7 @@ OCA.Data.Sidebar.Share = {
             ShareOptionsGroup.appendChild(clipboardIcon);
         } else {
             clipboardIcon.classList.add('clipboard-button', 'icon', 'icon-clippy');
-            clipboardIcon.href = 'https://nc16/nextcloud/apps/data/p/' + token;
+            clipboardIcon.href = OC.generateUrl('/apps/analytics/p/') + token;
             clipboardIcon.target = '_blank';
             ShareOptionsGroup.appendChild(clipboardIcon);
             ShareOptionsGroup.appendChild(OCA.Data.Sidebar.Share.buildShareMenu(id, pw));

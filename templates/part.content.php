@@ -14,7 +14,7 @@
     <input type="hidden" name="dataset" value="" id="datasetId">
     <div>
         <h3 id="dataHeader"></h3>
-        <div id="drilldown" style="display: none">
+        <div id="drilldown" style="display: none" hidden>
             <?php p($l->t('Drilldown')); ?>
             <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
             <label for="checkBoxObject"><?php p($l->t('Object')); ?></label>

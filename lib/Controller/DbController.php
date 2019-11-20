@@ -133,7 +133,7 @@ class DbController extends Controller
         //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, 'New', 2, 0, 'object', 'date', 'value'));
+        $stmt->execute(array($this->userId, $this->l10n->t('New'), 2, 0, $this->l10n->t('Objekt'), $this->l10n->t('Date'), $this->l10n->t('Value')));
         return true;
     }
 

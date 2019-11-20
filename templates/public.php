@@ -17,8 +17,8 @@ script('analytics', 'jquery.dataTables.min');
 script('analytics', 'jquery.csv.min');
 script('analytics', 'highcharts/highcharts');
 script('analytics', 'highcharts/modules/data');
-script('analytics', 'highcharts/modules/exporting');
-script('analytics', 'highcharts/modules/export-data');
+//script('analytics', 'highcharts/modules/exporting');
+//script('analytics', 'highcharts/modules/export-data');
 style('analytics', 'jquery.dataTables.min');
 ?>
 
@@ -29,7 +29,7 @@ style('analytics', 'jquery.dataTables.min');
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
                 <h1 class="header-appname">
-                    Nextcloud Analytics - Demo Share
+                    Data Analytics - Public Share
                 </h1>
             </a>
         </div>

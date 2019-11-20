@@ -69,8 +69,8 @@
             <div id="datasetLinkRow" style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Options')); ?></div>
                 <div style="display: table-cell;"><input id="datasetLink" disabled>
-                    <button id="datasetLinkButton" type="button">
-                        <?php p($l->t('Edit')); ?>
+                    <button id="datasetLinkButton" type="button" class="icon-rename">
+                        <?php //p($l->t('Edit')); ?>
                     </button>
                 </div>
             </div>
