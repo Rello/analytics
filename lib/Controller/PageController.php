@@ -94,7 +94,7 @@ class PageController extends Controller
     {
         $share = $this->share->getDatasetByToken($token);
 
-        if ($share === null) {
+        if (empty($share)) {
             // Dataset not shared or wrong token
             return new RedirectResponse($this->url->linkToRoute('core.login.showLoginForm', [
                 'redirect_url' => $this->url->linkToRoute('analytics.page.index', ['token' => $token]),

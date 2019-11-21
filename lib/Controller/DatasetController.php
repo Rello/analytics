@@ -65,32 +65,34 @@ class DatasetController extends Controller
     /**
      * create new datasets
      * @NoAdminRequired
+     * @return bool
      */
     public function create()
     {
-        return new DataResponse($this->DatasetService->create());
+        return $this->DatasetService->create();
     }
 
     /**
      * get dataset details
      * @NoAdminRequired
      * @param int $datasetId
-     * @return DataResponse
+     * @return bool
      */
     public function delete(int $datasetId)
     {
-        return new DataResponse($this->DatasetService->delete($datasetId));
+        return $this->DatasetService->delete($datasetId);
+        return $this->DatasetService->delete($datasetId);
     }
 
     /**
      * get dataset details
      * @NoAdminRequired
      * @param int $datasetId
-     * @return DataResponse
+     * @return bool
      */
     public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
-        return new DataResponse($this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3));
+        return $this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }
 
 }

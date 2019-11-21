@@ -10,7 +10,6 @@ build:
 
     environment:
       php: 7.3.0
-      mysql: 5.5
 
 filter:
     excluded_paths:

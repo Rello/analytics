@@ -1,6 +1,7 @@
 <?php
 /** @var $_ array */
 /** @var $l \OCP\IL10N */
+
 Util::addStyle('analytics', 'authenticate');
 Util::addScript('analytics', 'authenticate');
 ?>
