@@ -97,14 +97,14 @@ class ShareController extends Controller
      * @NoAdminRequired
      * @param $datasetId
      * @param $type
-     * @return DataResponse
+     * @return bool
      */
     public function create($datasetId, $type)
     {
         $token = $this->generateToken();
         //$this->logger->error($type . $token);
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
-        return new DataResponse($this->DBController->createShare($datasetId, $type, null, $token));
+        return $this->DBController->createShare($datasetId, $type, null, $token);
     }
 
     /**
@@ -125,14 +125,14 @@ class ShareController extends Controller
      * @NoAdminRequired
      * @param $shareId
      * @param $password
-     * @return DataResponse
+     * @return bool
      */
     public function update($shareId, $password)
     {
         //$this->logger->error($shareId . $password);
         if ($password !== '') $password = password_hash($password, PASSWORD_DEFAULT);
         else $password = null;
-        return new DataResponse($this->DBController->updateShare($shareId, $password));
+        return $this->DBController->updateShare($shareId, $password);
     }
 
     /**
@@ -140,11 +140,11 @@ class ShareController extends Controller
      *
      * @NoAdminRequired
      * @param $shareId
-     * @return DataResponse
+     * @return bool
      */
     public function delete($shareId)
     {
-        return new DataResponse($this->DBController->deleteShare($shareId));
+        return $this->DBController->deleteShare($shareId);
     }
 
     /**

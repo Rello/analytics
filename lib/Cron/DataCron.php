@@ -11,9 +11,10 @@
 
 namespace OCA\Analytics\Cron;
 
-use OC\BackgroundJob\Job;
 use OCA\Analytics\Service\DataService;
+use OCP\BackgroundJob\Job;
 use OCP\ILogger;
+use OCP\IRequest;
 
 class DataCron extends Job
 {

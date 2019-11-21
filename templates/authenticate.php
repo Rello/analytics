@@ -1,8 +1,8 @@
 <?php
 /** @var $_ array */
 /** @var $l \OCP\IL10N */
-style('analytics', 'authenticate');
-script('analytics', 'authenticate');
+Util::addStyle('analytics', 'authenticate');
+Util::addScript('analytics', 'authenticate');
 ?>
 <form method="POST">
     <fieldset class="warning">

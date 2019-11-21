@@ -92,7 +92,9 @@ OCA.Data.UI = {
             typeIcon = '';
         }
 
-        if (typeIcon) a.classList.add(typeIcon);
+        if (typeIcon) {
+            a.classList.add(typeIcon);
+        }
         a.innerText = data.name;
         a.dataset.id = data.id;
         a.dataset.type = data.type;
@@ -260,7 +262,9 @@ OCA.Data.UI = {
                     categories: xAxisCategories,
                 };
             }
-            if (parseInt(jsondata.options.type) === OCA.Data.TYPE_GIT) seriesOptions[0]['showInLegend'] = false;
+            if (parseInt(jsondata.options.type) === OCA.Data.TYPE_GIT) {
+                seriesOptions[0]['showInLegend'] = false;
+            }
         }
 
         Highcharts.chart('chartContainer', {

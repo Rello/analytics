@@ -12,14 +12,14 @@
 use OCP\Util;
 
 Util::addStyle('analytics', 'style');
-script('analytics', 'app');
-script('analytics', 'jquery.dataTables.min');
-script('analytics', 'jquery.csv.min');
-script('analytics', 'highcharts/highcharts');
-script('analytics', 'highcharts/modules/data');
-//script('analytics', 'highcharts/modules/exporting');
-//script('analytics', 'highcharts/modules/export-data');
-style('analytics', 'jquery.dataTables.min');
+Util::addStyle('analytics', 'jquery.dataTables.min');
+Util::addScript('analytics', 'app');
+Util::addScript('analytics', 'jquery.dataTables.min');
+Util::addScript('analytics', 'jquery.csv.min');
+Util::addScript('analytics', 'highcharts/highcharts');
+Util::addScript('analytics', 'highcharts/modules/data');
+//Util::addScript('analytics', 'highcharts/modules/exporting');
+//Util::addScript('analytics', 'highcharts/modules/export-data');
 ?>
 
 <header>

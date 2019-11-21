@@ -60,7 +60,7 @@ class ActivityManager
         }
     }
 
-    private function createEvent($datasetId, $eventType, $eventSubject, $ownActivity = true, $author = null)
+    private function createEvent($datasetId, $eventType, $eventSubject)
     {
         $datasetName = $datasetId !== 0 ? $this->DBController->getOwnDataset($datasetId)['name'] : '';
         $event = $this->manager->generateEvent();

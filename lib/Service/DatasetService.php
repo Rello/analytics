@@ -52,7 +52,7 @@ class DatasetService
 
     /**
      * create new dataset
-     * @return array
+     * @return bool
      */
     public function create()
     {
@@ -62,10 +62,10 @@ class DatasetService
 
     /**
      * Get content of linked CSV file
-     * @param $id
-     * @return array
+     * @param int $id
+     * @return bool
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->ActivityManager->triggerEvent($id, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         return $this->DBController->deleteDataset($id);
@@ -83,7 +83,7 @@ class DatasetService
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
-     * @return array
+     * @return bool
      */
     public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
