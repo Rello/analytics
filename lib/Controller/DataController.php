@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Controller;
 
+use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\DataSession;
 use OCA\Analytics\Datasource\FileService;
 use OCA\Analytics\Datasource\GithubService;
@@ -36,6 +37,7 @@ class DataController extends Controller
     /** @var DataSession */
     private $DataSession;
     private $ShareController;
+    private $ActivityManager;
 
     public function __construct(
         string $AppName,
@@ -48,7 +50,8 @@ class DataController extends Controller
         DatasetService $DatasetService,
         FileService $FileService,
         ShareController $ShareController,
-        DataSession $DataSession
+        DataSession $DataSession,
+        ActivityManager $ActivityManager
     )
     {
         parent::__construct($AppName, $request);
@@ -61,6 +64,7 @@ class DataController extends Controller
         $this->rootFolder = $rootFolder;
         $this->DataSession = $DataSession;
         $this->ShareController = $ShareController;
+        $this->ActivityManager = $ActivityManager;
     }
 
     /**
@@ -191,6 +195,18 @@ class DataController extends Controller
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
-        return new DataResponse($this->DataService->update($datasetId, $dimension1, $dimension2, $dimension3));
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
+        $action = $this->DataService->update($datasetId, $dimension1, $dimension2, $dimension3);
+
+        $insert = 0;
+        $update = 0;
+        if ($action === 'insert') $insert = 1;
+        elseif ($action === 'update') $update = 1;
+
+        $result = [
+            'insert' => $insert,
+            'update' => $update
+        ];
+        return new DataResponse($result);
     }
 }

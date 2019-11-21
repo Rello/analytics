@@ -87,9 +87,18 @@ class DatasetController extends Controller
      * get dataset details
      * @NoAdminRequired
      * @param int $datasetId
+     * @param $name
+     * @param int $parent
+     * @param int $type
+     * @param $link
+     * @param $visualization
+     * @param $chart
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
      * @return bool
      */
-    public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $name, int $parent, int $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
         return $this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }

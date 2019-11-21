@@ -70,24 +70,14 @@ class DataService
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
-     * @return array
+     * @return string
      */
-    public function update($datasetId, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
-        $insert = 0;
-        $update = 0;
         //$this->logger->error($dimension3);
         $dimension3 = str_replace(',', '.', $dimension3);
         $action = $this->DBController->createData($datasetId, $dimension1, $dimension2, $dimension3);
-        if ($action === 'insert') $insert++;
-        elseif ($action === 'update') $update++;
-
-        $result = [
-            'insert' => $insert,
-            'update' => $update
-        ];
-        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
-        return $result;
+        return $action;
     }
 
     /**

@@ -103,8 +103,13 @@ class DbController extends Controller
 
     /**
      * create data
+     * @param int $datasetId
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return string
      */
-    public function createData($datasetId, $dimension1, $dimension2, $dimension3)
+    public function createData(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
         $SQL = 'SELECT `id` FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
         $stmt = $this->db->prepare($SQL);
