@@ -77,9 +77,9 @@ class DataController extends Controller
     {
 
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
-        if ($datasetMetadata === null) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
+        if (empty($datasetMetadata)) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
 
-        if ($datasetMetadata !== null) {
+        if (!empty($datasetMetadata)) {
             //$this->logger->error('test');
             $result = $this->getData($datasetMetadata, $objectDrilldown, $dateDrilldown);
             return new DataResponse($result);
@@ -103,7 +103,7 @@ class DataController extends Controller
     public function readPublic($token, $objectDrilldown, $dateDrilldown)
     {
         $share = $this->ShareController->getDatasetByToken($token);
-        if ($share === null) {
+        if (empty($share)) {
             // Dataset not shared or wrong token
             return new NotFoundResponse();
         } else {
