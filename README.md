@@ -7,7 +7,7 @@ From datasouce to reporting. Data Analytics provides modular datasources, a real
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Main" width="350" title="Data Analytics">
 
 ## Features
-- Datasources: manual entry, files, imports, API*
+- Datasources: manual entry, files, imports, API
 - 3rd party*: GitHub Statistics
 - Storage: stream or database
 - Visualization: charts, tables

@@ -586,6 +586,9 @@ OCA.Data.Sidebar.Backend = {
 
     updateData: function () {
         let datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        let button = document.getElementById('updateDataButton');
+        button.classList.add('loading');
+        button.disabled = true;
         $.ajax({
             type: 'PUT',
             url: OC.generateUrl('apps/analytics/data/') + datasetId,
@@ -594,8 +597,10 @@ OCA.Data.Sidebar.Backend = {
                 'dimension2': document.getElementById('DataDimension2').value,
                 'dimension3': document.getElementById('DataDimension3').value,
             },
-            success: function () {
-                //document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+            success: function (data) {
+                OCA.Data.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                button.classList.remove('loading');
+                button.disabled = false;
                 OCA.Data.UI.resetContent();
                 OCA.Data.Backend.getData();
             }

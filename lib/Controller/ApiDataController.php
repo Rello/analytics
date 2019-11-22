@@ -23,10 +23,11 @@ use OCP\IUserSession;
 
 class ApiDataController extends ApiController
 {
-    const UNKNOWN = 9999;
-    const MISSING_PARAM = 9001;
-    const NOT_FOUND = 9404;
-    const NOT_ALLOWED = 9405;
+    const UNKNOWN = 9001;
+    const MISSING_PARAM = 9002;
+    const NOT_FOUND = 9003;
+    const NOT_ALLOWED = 9004;
+
     protected $errors = [];
     private $logger;
     private $userSession;
@@ -66,7 +67,7 @@ class ApiDataController extends ApiController
     public function addData(int $datasetId)
     {
         $params = $this->request->getParams();
-        //$this->logger->error($params);
+        $this->logger->error($datasetId);
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
         if (empty($datasetMetadata)) {

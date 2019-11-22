@@ -242,7 +242,8 @@ OCA.Data.UI = {
                 // [0] => name: 'dimension 1', data : [ [0] => dimension 2, dimension 3],
                 // [0] => name: 'dimension 1', data : [ [1] => dimension 2, dimension 3]
                 if (chartType === 'datetime') {
-                    seriesOptions[index]['data'].push([Date.UTC(parseInt(values['dimension2']), 1, 1), parseFloat(values['dimension3'])]);
+                    //seriesOptions[index]['data'].push([Date.UTC(parseInt(values['dimension2']), 1, 1), parseFloat(values['dimension3'])]);
+                    seriesOptions[index]['data'].push([new Date(values['dimension2']).getTime(), parseFloat(values['dimension3'])]);
                 } else {
                     seriesOptions[index]['data'].push([values['dimension2'], parseFloat(values['dimension3'])]);
                     // create array all dimension 2 for the x-axis
@@ -270,6 +271,7 @@ OCA.Data.UI = {
         Highcharts.chart('chartContainer', {
             series: seriesOptions,
             chart: {
+                zoomType: 'x',
                 type: chartType,
                 events: {
                     load: function () {
