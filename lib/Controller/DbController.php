@@ -95,10 +95,14 @@ class DbController extends Controller
     }
 
     /**
-     * create data
+     * delete all data of a dataset
      */
-    public function deleteData()
+    public function deleteDataByDataset(int $datasetId)
     {
+        $SQL = 'DELETE FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, $datasetId));
+        return true;
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Controller;
 
+use OCA\Analytics\Service\DataService;
 use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -24,6 +25,7 @@ class DatasetController extends Controller
     private $logger;
     private $DatasetService;
     private $ShareController;
+    private $DataService;
 
     const DATASET_TYPE_GROUP = 0;
     const DATASET_TYPE_INTERNAL_FILE = 1;
@@ -35,12 +37,14 @@ class DatasetController extends Controller
         IRequest $request,
         ILogger $logger,
         ShareController $ShareController,
+        DataService $DataService,
         DatasetService $DatasetService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->DatasetService = $DatasetService;
+        $this->DataService = $DataService;
         $this->ShareController = $ShareController;
     }
 
@@ -85,6 +89,7 @@ class DatasetController extends Controller
      */
     public function delete(int $datasetId)
     {
+        $this->DataService->deleteDataByDataset($datasetId);
         return $this->DatasetService->delete($datasetId);
     }
 

@@ -312,7 +312,6 @@ OCA.Data.UI = {
     },
 
     resetContent: function () {
-
         if ($.fn.dataTable.isDataTable('#tableContainer')) {
             $('#tableContainer').DataTable().destroy();
         }
@@ -321,6 +320,7 @@ OCA.Data.UI = {
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('tableContainer').style.display = 'none';
         document.getElementById('tableContainer').innerHTML = '';
+        document.getElementById('dataHeader').innerHTML = '';
         document.getElementById('drilldown').style.display = 'none';
     },
 
@@ -362,16 +362,17 @@ OCA.Data.Backend = {
                 'dateDrilldown': dateDrilldown
             },
             success: function (data) {
-                let visualization = data.options.visualization;
-                document.getElementById('dataHeader').innerText = data.options.name;
-                if (visualization === 'chart') {
-                    OCA.Data.UI.buildHighchart(data);
-                } else if (visualization === 'table') {
-                    OCA.Data.UI.buildDataTable(data);
-                }
-                else {
-                    OCA.Data.UI.buildHighchart(data);
-                    OCA.Data.UI.buildDataTable(data);
+                if (data.status !== 'nodata') {
+                    let visualization = data.options.visualization;
+                    document.getElementById('dataHeader').innerText = data.options.name;
+                    if (visualization === 'chart') {
+                        OCA.Data.UI.buildHighchart(data);
+                    } else if (visualization === 'table') {
+                        OCA.Data.UI.buildDataTable(data);
+                    } else {
+                        OCA.Data.UI.buildHighchart(data);
+                        OCA.Data.UI.buildDataTable(data);
+                    }
                 }
             }
         });

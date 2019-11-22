@@ -112,6 +112,18 @@ class DataService
         return $result;
     }
 
+    /**
+     * Delete all deta of a dataset
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @return bool
+     */
+    public function deleteDataByDataset($datasetId)
+    {
+        $this->DBController->deleteDataByDataset($datasetId);
+        return true;
+    }
 
     private function detectDelimiter($data)
     {

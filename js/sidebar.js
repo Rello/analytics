@@ -165,8 +165,18 @@ OCA.Data.Sidebar.Dataset = {
 
     handleDatasetDeleteButton: function () {
         let id = document.getElementById('app-sidebar').dataset.id;
-        OCA.Data.Sidebar.Backend.deleteDataset(id);
-        OCA.Data.Sidebar.hideSidebar();
+        OC.dialogs.confirm(
+            t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
+            t('analytics', 'Delete Report'),
+            function (e) {
+                if (e === true) {
+                    OCA.Data.Sidebar.Backend.deleteDataset(id);
+                    OCA.Data.UI.resetContent();
+                    OCA.Data.Sidebar.hideSidebar();
+                }
+            },
+            true
+        );
     },
 
     handleDatasetUpdateButton: function () {
