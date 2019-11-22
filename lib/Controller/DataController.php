@@ -137,9 +137,9 @@ class DataController extends Controller
     private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
         $datasetMetadata['type'] = (int)$datasetMetadata['type'];
-        if ($datasetMetadata['type'] === 1) $result = $this->FileService->read($datasetMetadata);
-        elseif ($datasetMetadata['type'] === 2) $result = $this->DataService->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
-        elseif ($datasetMetadata['type'] === 3) $result = $this->GithubService->read($datasetMetadata);
+        if ($datasetMetadata['type'] === DatasetController::DATASET_TYPE_INTERNAL_FILE) $result = $this->FileService->read($datasetMetadata);
+        elseif ($datasetMetadata['type'] === DatasetController::DATASET_TYPE_INTERNAL_DB) $result = $this->DataService->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
+        elseif ($datasetMetadata['type'] === DatasetController::DATASET_TYPE_GIT) $result = $this->GithubService->read($datasetMetadata);
 
         unset($datasetMetadata['id']
             , $datasetMetadata['parent']

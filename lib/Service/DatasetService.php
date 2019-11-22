@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Controller\DatasetController;
 use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
@@ -87,6 +88,9 @@ class DatasetService
      */
     public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
+        if ($type === DatasetController::DATASET_TYPE_GROUP) {
+            $parent = 0;
+        }
         return $this->DBController->updateDataset($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }
 }

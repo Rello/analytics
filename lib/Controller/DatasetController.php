@@ -25,6 +25,11 @@ class DatasetController extends Controller
     private $DatasetService;
     private $ShareController;
 
+    const DATASET_TYPE_GROUP = 0;
+    const DATASET_TYPE_INTERNAL_FILE = 1;
+    const DATASET_TYPE_INTERNAL_DB = 2;
+    const DATASET_TYPE_GIT = 3;
+
     public function __construct(
         $appName,
         IRequest $request,
