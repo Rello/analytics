@@ -21,6 +21,12 @@
                 <length>64</length>
             </field>
             <field>
+                <name>subheader</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>256</length>
+            </field>
+            <field>
                 <name>type</name>
                 <type>integer</type>
                 <notnull>false</notnull>

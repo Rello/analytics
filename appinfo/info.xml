@@ -16,7 +16,7 @@ From datasouce to reporting. Data Analytics provides modular datasources, a real
 
 (*work in progress)
 ]]></description>
-    <version>0.1.11</version>
+    <version>0.1.13</version>
 	<licence>agpl</licence>
 	<author>Marcel Scherello</author>
 	<namespace>Analytics</namespace>

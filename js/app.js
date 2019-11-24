@@ -11,11 +11,11 @@
 /** global: OC */
 'use strict';
 
-if (!OCA.Data) {
+if (!OCA.Analytics) {
     /**
      * @namespace
      */
-    OCA.Data = {
+    OCA.Analytics = {
         TYPE_EMPTY_GROUP: 0,
         TYPE_INTERNAL_FILE: 1,
         TYPE_INTERNAL_DB: 2,
@@ -26,34 +26,35 @@ if (!OCA.Data) {
     };
 }
 /**
- * @namespace OCA.Data.Core
+ * @namespace OCA.Analytics.Core
  */
-OCA.Data.Core = {
+OCA.Analytics.Core = {
     initNavigation: function () {
         document.getElementById('navigationDatasets').innerHTML = '';
-        OCA.Data.Backend.getDatasets();
+        OCA.Analytics.Backend.getDatasets();
     },
 
     handleDrilldownChange: function () {
-        OCA.Data.UI.resetContent();
-        OCA.Data.Backend.getData();
+        OCA.Analytics.UI.resetContent();
+        OCA.Analytics.Backend.getData();
     },
 
     handleNewDatasetButton: function () {
-        OCA.Data.Backend.createDataset();
+        OCA.Analytics.Backend.createDataset();
     }
 
 };
 
-OCA.Data.UI = {
+OCA.Analytics.UI = {
+
     buildNavigation: function (data) {
         for (let navigation of data) {
-            OCA.Data.UI.buildNavigationRow(navigation);
+            OCA.Analytics.UI.buildNavigationRow(navigation);
         }
     },
 
     fillSidebarParentDropdown: function (data) {
-        let tableParent = document.querySelector('#templateDataset #tableParent');
+        let tableParent = document.querySelector('#templateDataset #sidebarDatasetParent');
         tableParent.innerHTML = "";
         let option = document.createElement('option');
         option.text = '';
@@ -61,7 +62,7 @@ OCA.Data.UI = {
         tableParent.add(option);
 
         for (let dataset of data) {
-            if (parseInt(dataset.type) === OCA.Data.TYPE_EMPTY_GROUP) {
+            if (parseInt(dataset.type) === OCA.Analytics.TYPE_EMPTY_GROUP) {
                 option = document.createElement('option');
                 option.text = dataset.name;
                 option.value = dataset.id;
@@ -77,15 +78,15 @@ OCA.Data.UI = {
         let a = document.createElement('a');
         a.setAttribute('href', '#');
         data.type = parseInt(data.type);
-        if (data.type === OCA.Data.TYPE_INTERNAL_FILE) {
+        if (data.type === OCA.Analytics.TYPE_INTERNAL_FILE) {
             typeIcon = 'icon-file';
-        } else if (data.type === OCA.Data.TYPE_INTERNAL_DB) {
+        } else if (data.type === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (data.type === OCA.Data.TYPE_GIT) {
+        } else if (data.type === OCA.Analytics.TYPE_GIT) {
             typeIcon = 'icon-external';
-        } else if (data.type === OCA.Data.TYPE_SHARED) {
+        } else if (data.type === OCA.Analytics.TYPE_SHARED) {
             typeIcon = 'icon-shared';
-        } else if (data.type === OCA.Data.TYPE_EMPTY_GROUP) {
+        } else if (data.type === OCA.Analytics.TYPE_EMPTY_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
         } else {
@@ -106,7 +107,7 @@ OCA.Data.UI = {
         let li2 = document.createElement('li');
         li2.classList.add('app-navigation-entry-utils-menu-button');
         let button = document.createElement('button');
-        button.addEventListener('click', OCA.Data.UI.handleOptionsClicked);
+        button.addEventListener('click', OCA.Analytics.UI.handleOptionsClicked);
         button.dataset.id = data.id;
         button.dataset.name = data.name;
         button.dataset.type = data.type;
@@ -115,18 +116,18 @@ OCA.Data.UI = {
         ulSublist.id = 'dataset-' + data.id;
 
         li2.appendChild(button);
-        if (data.type !== OCA.Data.TYPE_SHARED) {
+        if (data.type !== OCA.Analytics.TYPE_SHARED) {
             ul.appendChild(li2);
         }
         div.appendChild(ul);
         li.appendChild(a);
         li.appendChild(div);
 
-        if (data.type === OCA.Data.TYPE_EMPTY_GROUP) {
+        if (data.type === OCA.Analytics.TYPE_EMPTY_GROUP) {
             li.appendChild(ulSublist);
-            a.addEventListener('click', OCA.Data.UI.handleGroupClicked);
+            a.addEventListener('click', OCA.Analytics.UI.handleGroupClicked);
         } else {
-            a.addEventListener('click', OCA.Data.UI.handleNavigationClicked);
+            a.addEventListener('click', OCA.Analytics.UI.handleNavigationClicked);
         }
 
         let categoryList;
@@ -140,20 +141,20 @@ OCA.Data.UI = {
 
     handleNavigationClicked: function (evt) {
 
-        OCA.Data.UI.resetContent();
-        OCA.Data.Sidebar.hideSidebar();
+        OCA.Analytics.UI.resetContent();
+        OCA.Analytics.Sidebar.hideSidebar();
         let activeCategory = document.querySelector('#navigationDatasets .active');
         if (evt) {
             if (activeCategory) {
                 activeCategory.classList.remove('active');
             }
             evt.target.classList.add('active');
-            OCA.Data.Backend.getData();
+            OCA.Analytics.Backend.getData();
         }
     },
 
     handleOptionsClicked: function (evt) {
-        OCA.Data.Sidebar.showSidebar(evt);
+        OCA.Analytics.Sidebar.showSidebar(evt);
         evt.stopPropagation();
     },
 
@@ -172,7 +173,7 @@ OCA.Data.UI = {
         let columns = [];
         let data;
 
-        if (parseInt(jsondata.options.type) === OCA.Data.TYPE_INTERNAL_FILE) {
+        if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
             data = $.csv.toObjects(jsondata.data);
             let csvHeader = jsondata.data.split('\n')[0];
             let singleHeader = csvHeader.split(',');
@@ -222,7 +223,7 @@ OCA.Data.UI = {
         let xAxisOptions = [];
         let xAxisCategories = [];
 
-        if (parseInt(jsondata.options.type) === OCA.Data.TYPE_INTERNAL_FILE) {
+        if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
             dataOptions = {csv: jsondata.data};
         } else {
             document.getElementById('drilldown').style.removeProperty('display');
@@ -263,7 +264,7 @@ OCA.Data.UI = {
                     categories: xAxisCategories,
                 };
             }
-            if (parseInt(jsondata.options.type) === OCA.Data.TYPE_GIT) {
+            if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_GIT) {
                 seriesOptions[0]['showInLegend'] = false;
             }
         }
@@ -293,11 +294,6 @@ OCA.Data.UI = {
                     text: null
                 },
             },
-            plotOptions: {
-                series: {
-                    stacking: 'normal'
-                }
-            },
             legend: {
                 layout: 'vertical',
                 align: 'right',
@@ -321,6 +317,7 @@ OCA.Data.UI = {
         document.getElementById('tableContainer').style.display = 'none';
         document.getElementById('tableContainer').innerHTML = '';
         document.getElementById('dataHeader').innerHTML = '';
+        document.getElementById('dataSubHeader').innerHTML = '';
         document.getElementById('drilldown').style.display = 'none';
     },
 
@@ -339,9 +336,11 @@ OCA.Data.UI = {
     }
 };
 
-OCA.Data.Backend = {
+OCA.Analytics.Backend = {
 
     getData: function () {
+        document.getElementById('analytics-intro').classList.add('hidden');
+        document.getElementById('analytics-content').removeAttribute('hidden');
         let objectDrilldown = document.getElementById('checkBoxObject').checked;
         let dateDrilldown = document.getElementById('checkBoxDate').checked;
         let url;
@@ -365,13 +364,14 @@ OCA.Data.Backend = {
                 if (data.status !== 'nodata') {
                     let visualization = data.options.visualization;
                     document.getElementById('dataHeader').innerText = data.options.name;
+                    document.getElementById('dataSubHeader').innerText = data.options.subheader;
                     if (visualization === 'chart') {
-                        OCA.Data.UI.buildHighchart(data);
+                        OCA.Analytics.UI.buildHighchart(data);
                     } else if (visualization === 'table') {
-                        OCA.Data.UI.buildDataTable(data);
+                        OCA.Analytics.UI.buildDataTable(data);
                     } else {
-                        OCA.Data.UI.buildHighchart(data);
-                        OCA.Data.UI.buildDataTable(data);
+                        OCA.Analytics.UI.buildHighchart(data);
+                        OCA.Analytics.UI.buildDataTable(data);
                     }
                 }
             }
@@ -383,8 +383,8 @@ OCA.Data.Backend = {
             type: "GET",
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
-                OCA.Data.UI.buildNavigation(data);
-                OCA.Data.UI.fillSidebarParentDropdown(data);
+                OCA.Analytics.UI.buildNavigation(data);
+                OCA.Analytics.UI.fillSidebarParentDropdown(data);
             }
         });
     },
@@ -394,7 +394,7 @@ OCA.Data.Backend = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function () {
-                OCA.Data.Core.initNavigation();
+                OCA.Analytics.Core.initNavigation();
 
             }
         });
@@ -404,14 +404,14 @@ OCA.Data.Backend = {
 
 document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('sharingToken').value === '') {
-        OCA.Data.Core.initNavigation();
-        document.getElementById('newDatasetButton').addEventListener('click', OCA.Data.Core.handleNewDatasetButton);
+        OCA.Analytics.Core.initNavigation();
+        document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Core.handleNewDatasetButton);
     } else {
-        OCA.Data.Backend.getData();
+        OCA.Analytics.Backend.getData();
     }
 
-    document.getElementById('checkBoxObject').addEventListener('click', OCA.Data.Core.handleDrilldownChange);
-    document.getElementById('checkBoxDate').addEventListener('click', OCA.Data.Core.handleDrilldownChange);
+    document.getElementById('checkBoxObject').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
+    document.getElementById('checkBoxDate').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
 
     $('#myInput').on('keyup', function () {
         table.search(this.value).draw();

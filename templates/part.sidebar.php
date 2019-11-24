@@ -20,7 +20,7 @@
             </div>
             <div class="file-details-container">
                 <br>
-                <div class="fileName"><h2 id="sidebarTitle"></h2>
+                <div class="fileName"><h3 id="sidebarTitle"></h3>
                     <br>
                 </div>
                 <div class="file-details ellipsis">
@@ -43,21 +43,25 @@
     <div id="templateDataset">
         <div class="table" style="display: table;">
             <div style="display: table-row;">
-                <div id="tableKey1" style="display: table-cell; width: 120px;"><?php p($l->t('Report title')); ?></div>
-                <div style="display: table-cell;"><input id="tableName"></div>
+                <div style="display: table-cell; width: 120px;"><?php p($l->t('Report title')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetName"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;"><?php p($l->t('Subheader')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetSubheader"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Report group')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="tableParent">
+                    <select id="sidebarDatasetParent">
                         <option value="0"></option>
                     </select>
                 </div>
             </div>
             <div style="display: table-row;">
-                <div id="tableKey2" style="display: table-cell;"><?php p($l->t('Datasource')); ?></div>
+                <div style="display: table-cell;"><?php p($l->t('Datasource')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="tableType">
+                    <select id="sidebarDatasetType">
                         <option value="" selected></option>
                         <option value="0"><?php p($l->t('No Data / Group')); ?></option>
                         <option value="1"><?php p($l->t('Local File')); ?></option>
@@ -68,8 +72,8 @@
             </div>
             <div id="datasetLinkRow" style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Options')); ?></div>
-                <div style="display: table-cell;"><input id="datasetLink" disabled>
-                    <button id="datasetLinkButton" type="button" class="icon-rename">
+                <div style="display: table-cell;"><input id="sidebarDatasetLink" disabled>
+                    <button id="sidebarDatasetLinkButton" type="button" class="icon-rename">
                         <?php //p($l->t('Edit')); ?>
                     </button>
                 </div>
@@ -80,24 +84,24 @@
         <div id="datasetDimensionSection" class="table" style="display: table;">
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;1</div>
-                <div style="display: table-cell;"><input id="dimension1"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension1"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;2</div>
-                <div style="display: table-cell;"><input id="dimension2"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension2"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;3</div>
-                <div style="display: table-cell;"><input id="dimension3"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension3"></div>
             </div>
         </div>
         <br>
         <div id="datasetVisualizationSectionHeader"><h3><?php p($l->t('Visualization')); ?></h3></div>
         <div id="datasetVisualizationSection" class="table" style="display: table;">
             <div style="display: table-row;">
-                <div id="tableKey4" style="display: table-cell; width: 120px;"><?php p($l->t('Display')); ?></div>
+                <div style="display: table-cell; width: 120px;"><?php p($l->t('Display')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="tableVisualization">
+                    <select id="sidebarDatasetVisualization">
                         <option value="ct" selected><?php p($l->t('Chart') . ' & ' . $l->t('Table')); ?></option>
                         <option value="table"><?php p($l->t('Table')); ?></option>
                         <option value="chart"><?php p($l->t('Chart')); ?></option>
@@ -105,9 +109,9 @@
                 </div>
             </div>
             <div style="display: table-row;">
-                <div id="tableKey5" style="display: table-cell;"><?php p($l->t('Chart Type')); ?></div>
+                <div style="display: table-cell;"><?php p($l->t('Chart Type')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="tableChart">
+                    <select id="sidebarDatasetChart">
                         <option value="" selected></option>
                         <option value="line"><?php p($l->t('Line')); ?></option>
                         <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
@@ -117,14 +121,15 @@
             </div>
         </div>
         <br>
-        <button id="updateDatasetButton" type="button">
+        <button id="sidebarDatasetUpdateButton" type="button">
             <?php p($l->t('Update Report')); ?>
         </button>
-        <button id="deleteDatasetButton" type="button">
+        <button id="sidebarDatasetDeleteButton" type="button">
             <?php p($l->t('Delete Report')); ?>
         </button>
     </div>
     <div id="templateData">
+        <div><h3><?php p($l->t('Manual entry')); ?></h3></div>
         <div class="table" style="display: table;">
             <div style="display: table-row;">
                 <div id="DataTextDimension1"
@@ -150,8 +155,7 @@
         </button>
         <br>
         <br>
-        <br>
-        <div><h3><?php p($l->t('Data import')); ?></h3></div>
+        <div><h3><?php p($l->t('Import')); ?></h3></div>
         <button id="importDataFileButton" type="button">
             <?php p($l->t('From File')); ?>
         </button>

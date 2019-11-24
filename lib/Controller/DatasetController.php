@@ -100,6 +100,7 @@ class DatasetController extends Controller
      * @NoAdminRequired
      * @param int $datasetId
      * @param $name
+     * @param $subheader
      * @param int $parent
      * @param int $type
      * @param $link
@@ -110,9 +111,9 @@ class DatasetController extends Controller
      * @param $dimension3
      * @return bool
      */
-    public function update(int $datasetId, $name, int $parent, int $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
-        return $this->DatasetService->update($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
+        return $this->DatasetService->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }
 
 }

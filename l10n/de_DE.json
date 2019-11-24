@@ -31,12 +31,12 @@
     "Update Report": "Report speichern",
     "Delete Report": "Report löschen",
     "New": "Neu",
+    "Manual entry": "Manuelle Erfassung",
     "Object": "Objekt",
     "Date": "Datum",
     "Value": "Wert",
     "Save Data": "Daten speichern",
     "Delete Data": "Daten löschen",
-    "Data import": "Datenimport",
     "From File": "Aus Datei",
     "From Clipboard": "Aus Zwischenspeicher",
     "Import": "Importieren",
@@ -46,7 +46,13 @@
     " shared report {report} with you": " hat den Bericht {report} mit Dir geteilt",
     "You have added new data to report {report}": "Du hast neue Daten zum Bericht {report} hinzugefügt",
     " has added new data to report {report}": " hat neue Daten zum Bericht {report} hinzugefügt",
-    "New data was add via API to report {report}": "Es wurden über die API neue Daten zum Bericht {report} hinzugefügt"
+    "New data was add via API to report {report}": "Es wurden über die API neue Daten zum Bericht {report} hinzugefügt",
+    "Quickstart": "Schnellstart",
+    "Template placeholder": "Platzhalter Vorlagen",
+    "Recent": "Kürzlich verwendet",
+    "Recent placeholder": "Platzhalter kürzlich verwendet",
+    "Updates": "Aktualisierungen",
+    "Updates placeholder": "Platzhalter Aktualisierungen"
   },
   "pluralForm": ""
 }

@@ -76,6 +76,7 @@ class DatasetService
      * Get content of linked CSV file
      * @param int $datasetId
      * @param $name
+     * @param $subheader
      * @param $parent
      * @param $type
      * @param $link
@@ -86,11 +87,11 @@ class DatasetService
      * @param $dimension3
      * @return bool
      */
-    public function update(int $datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
         if ($type === DatasetController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
-        return $this->DBController->updateDataset($datasetId, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
+        return $this->DBController->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }
 }

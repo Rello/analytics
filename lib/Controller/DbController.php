@@ -150,6 +150,7 @@ class DbController extends Controller
      * update dataset
      * @param $id
      * @param $name
+     * @param $subheader
      * @param $parent
      * @param $type
      * @param $link
@@ -158,14 +159,14 @@ class DbController extends Controller
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
-     * @return
+     * @return bool
      */
-    public function updateDataset($id, $name, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
+    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
     {
-        $SQL = 'UPDATE `*PREFIX*analytics_dataset` SET `name`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `parent`= ?, `dimension1` = ?, `dimension2` = ?, `dimension3` = ? WHERE `user_id` = ? AND `id` = ?';
+        $SQL = 'UPDATE `*PREFIX*analytics_dataset` SET `name`= ?, `subheader`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `parent`= ?, `dimension1` = ?, `dimension2` = ?, `dimension3` = ? WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $name = $this->truncate($name, 64);
-        $stmt->execute(array($name, $type, $link, $visualization, $chart, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
+        $stmt->execute(array($name, $subheader, $type, $link, $visualization, $chart, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
         return true;
     }
 
