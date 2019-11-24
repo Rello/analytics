@@ -148,6 +148,18 @@ class ShareController extends Controller
     }
 
     /**
+     * delete all shares for a dataset
+     *
+     * @NoAdminRequired
+     * @param $datasetId
+     * @return bool
+     */
+    public function deleteShareByDataset($datasetId)
+    {
+        return $this->DBController->deleteShareByDataset($datasetId);
+    }
+
+    /**
      * generate to token used to authenticate federated shares
      *
      * @return string

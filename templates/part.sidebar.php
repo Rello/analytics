@@ -164,5 +164,7 @@
         <button id="importDataClipboardButtonGo" type="button" hidden>
             <?php p($l->t('Import')); ?>
         </button>
+        <div><h3><?php p($l->t('REST API')); ?></h3></div>
+        <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
     </div>
 </div>

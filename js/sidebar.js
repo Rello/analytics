@@ -267,6 +267,7 @@ OCA.Data.Sidebar.Data = {
                     document.getElementById('deleteDataButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataDeleteButton);
                     document.getElementById('importDataFileButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataImportFileButton);
                     document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Data.Sidebar.Data.handleDataImportClipboardButton);
+                    document.getElementById('apiLink').addEventListener('click', OCA.Data.Sidebar.Data.handleDataApiButton);
 
                     document.getElementById('DataDimension3').addEventListener('keydown', function (event) {
                         if (event.key === 'Enter') {
@@ -302,6 +303,24 @@ OCA.Data.Sidebar.Data = {
         document.getElementById('importDataClipboardButtonGo').attributes.removeNamedItem('hidden');
         document.getElementById('importDataClipboardButtonGo').addEventListener('click', OCA.Data.Sidebar.Backend.importCsvData);
     },
+
+    handleDataApiButton: function () {
+        OC.dialogs.message(
+            t('analytics', 'Use this endpoint to submit data via an API:')
+            + '<br><br>'
+            + OC.generateUrl('/apps/analytics/api/1.0/adddata/')
+            + document.getElementById('app-sidebar').dataset.id
+            + '<br><br>'
+            + t('analytics', 'Detail instructions at:') + '<br>https://github.com/rello/analytics/wiki/API',
+            t('analytics', 'REST API parameters'),
+            'info',
+            OC.dialogs.OK_BUTTON,
+            function (e) {
+            },
+            true,
+            true
+        );
+    }
 };
 
 OCA.Data.Sidebar.Share = {

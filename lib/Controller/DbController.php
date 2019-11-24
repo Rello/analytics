@@ -142,7 +142,7 @@ class DbController extends Controller
         //$this->logger->error($SQL);
 
         $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $this->l10n->t('New'), 2, 0, $this->l10n->t('Objekt'), $this->l10n->t('Date'), $this->l10n->t('Value')));
+        $stmt->execute(array($this->userId, $this->l10n->t('New'), 2, 0, $this->l10n->t('Object'), $this->l10n->t('Date'), $this->l10n->t('Value')));
         return true;
     }
 
@@ -307,6 +307,14 @@ class DbController extends Controller
         $SQL = 'DELETE FROM `*PREFIX*analytics_share` WHERE `uid_initiator` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$this->userId, $shareId]);
+        return true;
+    }
+
+    public function deleteShareByDataset($datasetId)
+    {
+        $SQL = 'DELETE FROM `*PREFIX*analytics_share` WHERE `uid_initiator` = ? AND `dataset` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute([$this->userId, $datasetId]);
         return true;
     }
 

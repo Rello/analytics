@@ -5,6 +5,8 @@ OC.L10N.register(
         'Data': 'Daten',
         'Share': 'Freigaben',
         'No maintenance possible': 'Keine Pflege möglich',
+            'Use this endpoint to submit data via an API:': 'Benutze den folgenden Endpunkt um Daten via API hinzuzufügen:',
+            'Detail instructions at:': 'Genaue Informationen unter:',
         'Select file': 'Datei wählen',
         'Enter GitHub User/Repository. The "/" is important.': 'GitHub User/Repository eingeben. Der "/" ist an dieser Stelle wichtig.',
         'Data maintenance is not possible for this type of report': 'Datenpflege ist für diese Art von Bericht nicht möglich',

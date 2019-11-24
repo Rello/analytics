@@ -28,23 +28,11 @@ Util::addScript('analytics', 'highcharts/modules/data');
             <a href="..."
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
-                <h1 class="header-appname">
+                <h1 class="header-appname" id="header-appname">
                     Data Analytics - Public Share
                 </h1>
             </a>
         </div>
-
-        <!--<div id="header-right" class="header-right">
-			<a href="111" id="download" class="button">
-				<span class="icon icon-public"></span>
-				<span id="download-text"><?php p($l->t('Subscribe')) ?></span>
-			</a>
-			&nbsp;
-			<a href="222" id="download" class="button">
-				<span class="icon icon-download"></span>
-				<span id="download-text"><?php p($l->t('Download')) ?></span>
-			</a>
-		</div>-->
     </div>
 </header>
 <div id="app-content">

@@ -90,7 +90,9 @@ class DatasetController extends Controller
     public function delete(int $datasetId)
     {
         $this->DataService->deleteDataByDataset($datasetId);
-        return $this->DatasetService->delete($datasetId);
+        $this->ShareController->deleteShareByDataset($datasetId);
+        $this->DatasetService->delete($datasetId);
+        return true;
     }
 
     /**

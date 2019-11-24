@@ -395,6 +395,7 @@ OCA.Data.Backend = {
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function () {
                 OCA.Data.Core.initNavigation();
+
             }
         });
     },
