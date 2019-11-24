@@ -27,7 +27,7 @@
     </div>
 </div>
 <div id="analytics-intro" style="width:50%; padding: 50px">
-    <h2><?php p($l->t('Data Analyics')); ?></h2>
+    <h2><?php p($l->t('Data Analytics')); ?></h2>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
     <span>-&nbsp;<?php p($l->t('Template placeholder')); ?></span>
