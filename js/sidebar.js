@@ -221,7 +221,7 @@ OCA.Analytics.Sidebar.Dataset = {
                 t('analytics', 'Enter GitHub User/Repository. The \'/\' is important.'),
                 t('analytics', 'GitHub API'),
                 function (button, val) {
-                    if (button === true) document.getElementById('datasetLink').value = val;
+                    if (button === true) document.getElementById('sidebarDatasetLink').value = val;
                 },
                 true,
                 "user/repo");
@@ -230,7 +230,7 @@ OCA.Analytics.Sidebar.Dataset = {
             OC.dialogs.filepicker(
                 t('analytics', 'Select file'),
                 function (path) {
-                    document.getElementById('datasetLink').value = path;
+                    document.getElementById('sidebarDatasetLink').value = path;
                 },
                 false,
                 mimeparts,

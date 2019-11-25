@@ -74,11 +74,25 @@ class DatasetController extends Controller
     /**
      * create new datasets
      * @NoAdminRequired
+     * @param $file
      * @return bool
      */
-    public function create()
+    public function create($file = '')
     {
-        return $this->DatasetService->create();
+        //$this->logger->error('datasetcontroller 82: '.$file);
+        $datasetId = $this->DatasetService->create();
+
+        if ($file !== '') {
+            $name = explode('.', end(explode('/', $file)))[0];
+            $subheader = $file;
+            $parent = 0;
+            $type = self::DATASET_TYPE_INTERNAL_FILE;
+            $link = $file;
+            $visualization = 'ct';
+            $chart = 'line';
+            $this->DatasetService->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '');
+        }
+        return $datasetId;
     }
 
     /**

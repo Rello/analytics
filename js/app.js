@@ -29,6 +29,16 @@ if (!OCA.Analytics) {
  * @namespace OCA.Analytics.Core
  */
 OCA.Analytics.Core = {
+    initApplication: function () {
+        if (decodeURI(location.hash).length > 1) {
+            let file = decodeURI(location.hash).substring(3);
+            window.location.href = '#';
+            OCA.Analytics.Backend.createDataset(file);
+        } else {
+            OCA.Analytics.Core.initNavigation();
+        }
+    },
+
     initNavigation: function () {
         document.getElementById('navigationDatasets').innerHTML = '';
         OCA.Analytics.Backend.getDatasets();
@@ -225,6 +235,18 @@ OCA.Analytics.UI = {
 
         if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
             dataOptions = {csv: jsondata.data};
+            xAxisOptions = {
+                type: 'category'
+            };
+            if (chartType === 'datetime') {
+                xAxisOptions = {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        day: '%Y'
+                    },
+                };
+                chartType = 'line';
+            }
         } else {
             document.getElementById('drilldown').style.removeProperty('display');
             let lastObject = 0;
@@ -389,10 +411,13 @@ OCA.Analytics.Backend = {
         });
     },
 
-    createDataset: function () {
+    createDataset: function (file = '') {
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataset'),
+            data: {
+                'file': file,
+            },
             success: function () {
                 OCA.Analytics.Core.initNavigation();
 
@@ -404,7 +429,7 @@ OCA.Analytics.Backend = {
 
 document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('sharingToken').value === '') {
-        OCA.Analytics.Core.initNavigation();
+        OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Core.handleNewDatasetButton);
     } else {
         OCA.Analytics.Backend.getData();

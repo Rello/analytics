@@ -21,8 +21,8 @@ Util::addScript('analytics', 'jquery.csv.min');
 Util::addScript('analytics', 'highcharts/highcharts');
 //Util::addScript('analytics', 'highcharts/highcharts-more');
 Util::addScript('analytics', 'highcharts/modules/data');
-//Util::addScript('analytics', 'highcharts/modules/exporting');
-//Util::addScript('analytics', 'highcharts/modules/export-data');
+Util::addScript('analytics', 'highcharts/modules/exporting');
+Util::addScript('analytics', 'highcharts/modules/export-data');
 ?>
 
 <div id="app-navigation">

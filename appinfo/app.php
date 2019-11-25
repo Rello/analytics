@@ -12,6 +12,8 @@
 
 namespace OCA\Analytics\AppInfo;
 
+use OCP\Util;
+
 $navigationEntry = function () {
     return [
         'id' => 'analytics',
@@ -22,3 +24,10 @@ $navigationEntry = function () {
     ];
 };
 \OC::$server->getNavigationManager()->add($navigationEntry);
+
+\OC::$server->getEventDispatcher()->addListener(
+    'OCA\Files::loadAdditionalScripts',
+    function () {
+        Util::addScript('analytics', 'viewer');
+    }
+);

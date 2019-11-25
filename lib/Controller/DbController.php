@@ -143,7 +143,8 @@ class DbController extends Controller
 
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, $this->l10n->t('New'), 2, 0, $this->l10n->t('Object'), $this->l10n->t('Date'), $this->l10n->t('Value')));
-        return true;
+        $insertid = $this->db->lastInsertId('*PREFIX*analytics_dataset');
+        return $insertid;
     }
 
     /**

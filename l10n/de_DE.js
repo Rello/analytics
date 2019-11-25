@@ -31,7 +31,8 @@ OC.L10N.register(
         'Showing _START_ to _END_ of _TOTAL_ entries': 'Zeige _START_ bis _END_ von _TOTAL_ Einträgen',
         'Delete Report': 'Bericht löschen',
         'Are you sure?': 'Bist Du sicher?',
-        'All data will be deleted!': 'Alle Daten werden gelöscht!'
+            'All data will be deleted!': 'Alle Daten werden gelöscht!',
+            'Show in Analytics': 'In Analytics anzeigen'
     },
     '');
 
