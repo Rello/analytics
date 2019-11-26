@@ -11,12 +11,25 @@
 
 namespace OCA\Analytics\AppInfo;
 
+use OCA\Analytics\Notification\Notifier;
 use OCP\AppFramework\App;
+
 
 class Application extends App {
 
-	public function __construct(array $urlParams = array()) {
+    public function __construct(array $urlParams = array()) {
 
         parent::__construct('analytics', $urlParams);
-	}
+    }
+
+    public function register()
+    {
+        $this->registerNotificationNotifier();
+        //$this->registerCommentsEntity();
+    }
+
+    protected function registerNotificationNotifier()
+    {
+        \OC::$server->getNotificationManager()->registerNotifierService(Notifier::class);
+    }
 }
