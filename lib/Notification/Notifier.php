@@ -17,18 +17,15 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
-use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+
 
 class Notifier implements INotifier
 {
 
     /** @var IFactory */
     protected $l10nFactory;
-
-    /** @var INotificationManager */
-    protected $notificationManager;
 
     /** @var IUserManager */
     protected $userManager;
@@ -37,12 +34,10 @@ class Notifier implements INotifier
     protected $urlGenerator;
 
     public function __construct(IFactory $l10nFactory,
-                                INotificationManager $notificationManager,
                                 IUserManager $userManager,
                                 IURLGenerator $urlGenerator)
     {
         $this->l10nFactory = $l10nFactory;
-        $this->notificationManager = $notificationManager;
         $this->userManager = $userManager;
         $this->urlGenerator = $urlGenerator;
     }
@@ -73,9 +68,11 @@ class Notifier implements INotifier
      * @param INotification $notification
      * @param string $languageCode The code of the language that should be used to prepare the notification
      * @return INotification
-     * @throws InvalidArgumentException When the notification was not prepared by a notifier
+     * @throws \InvalidArgumentException When the notification was not prepared by a notifier
+     * @throws AlreadyProcessedException When the notification is not needed anymore and should be deleted
+     * @since 9.0.0
      */
-    public function prepare(INotification $notification, $languageCode)
+    public function prepare(INotification $notification, string $languageCode): INotification
     {
         if ($notification->getApp() !== 'analytics') {
             // Not my app => throw
@@ -85,31 +82,44 @@ class Notifier implements INotifier
         // Read the language from the notification
         $l = $this->l10nFactory->get('analytics', $languageCode);
 
-        $i = $notification->getSubject();
-        if ($i !== 'alert') {
-            // Unknown subject => Unknown notification => throw
-            throw new InvalidArgumentException('Unknown subject');
+        switch ($notification->getSubject()) {
+            case NotificationManager::SUBJECT_THRESHOLD:
+                //$notification->setParsedMessage('parsed message');
+                $notification->setParsedSubject('parsed subject');
+                $parsedSubject = $l->t('Exception in Report {object}. The value of "{subject}" has the exception of "{rule}"');
+                break;
         }
+
 
         $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.main', [
             'analytics' => $notification->getObjectId(),
         ]);
 
-        $notification->setParsedMessage('test message')
-            ->setRichSubject(
-                $l->t('{user} announced '),
-                [
-                    'user' => [
-                        'type' => 'user',
-                        'id' => 1,
-                        'name' => 'testuser',
-                    ]
+        $parameters = $notification->getSubjectParameters();
+        $notification->setRichSubject(
+            $parsedSubject,
+            [
+                'object' => [
+                    'type' => 'highlight',
+                    'id' => $notification->getObjectId(),
+                    'name' => $notification->getObjectId(),
+                    'link' => $link,
+                ],
+                'subject' => [
+                    'type' => 'highlight',
+                    'id' => $notification->getObjectId(),
+                    'name' => $parameters['subject'],
+                ],
+                'rule' => [
+                    'type' => 'highlight',
+                    'id' => $notification->getObjectId(),
+                    'name' => $parameters['rule'],
                 ]
-            )
-            ->setLink($link)
-            ->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
+            ]
+        );
+        $notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
 
-        $notification->setParsedSubject($notification);
+        $notification->setParsedSubject('test');
         return $notification;
     }
 }

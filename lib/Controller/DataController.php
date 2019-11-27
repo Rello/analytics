@@ -15,6 +15,7 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\DataSession;
 use OCA\Analytics\Datasource\FileService;
 use OCA\Analytics\Datasource\GithubService;
+use OCA\Analytics\Notification\NotificationManager;
 use OCA\Analytics\Service\DataService;
 use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\Controller;
@@ -24,7 +25,6 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\ILogger;
 use OCP\IRequest;
-use OCP\Notification\IManager as INotificationManager;
 
 class DataController extends Controller
 {
@@ -39,8 +39,7 @@ class DataController extends Controller
     private $DataSession;
     private $ShareController;
     private $ActivityManager;
-    /** @var INotificationManager */
-    protected $notificationManager;
+    private $NotificationManager;
 
     public function __construct(
         string $AppName,
@@ -55,7 +54,7 @@ class DataController extends Controller
         ShareController $ShareController,
         DataSession $DataSession,
         ActivityManager $ActivityManager,
-        INotificationManager $notificationManager
+        NotificationManager $NotificationManager
     )
     {
         parent::__construct($AppName, $request);
@@ -69,7 +68,7 @@ class DataController extends Controller
         $this->DataSession = $DataSession;
         $this->ShareController = $ShareController;
         $this->ActivityManager = $ActivityManager;
-        $this->notificationManager = $notificationManager;
+        $this->NotificationManager = $NotificationManager;
     }
 
     /**
@@ -197,18 +196,13 @@ class DataController extends Controller
      * @param $dimension2
      * @param $dimension3
      * @return DataResponse
+     * @throws \Exception
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
-
-        $notification = $this->notificationManager->createNotification();
-        $notification->setApp('analytics')
-            ->setDateTime(new \DateTime())
-            ->setObject('report', 1)
-            ->setSubject('alert', ['object' => 'Pflanze'])
-            ->setUser('admin');
-        $this->notificationManager->notify($notification);
+        //$this->NotificationManager->triggerNotification(NotificationManager::OBJECT_DATASET, $datasetId, NotificationManager::SUBJECT_THRESHOLD, ['subject' => 'Pflanze', 'rule' => 'Hum too low']);
+        //disabled for the moment
 
         $action = $this->DataService->update($datasetId, $dimension1, $dimension2, $dimension3);
 

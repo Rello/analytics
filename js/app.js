@@ -39,9 +39,9 @@ OCA.Analytics.Core = {
         }
     },
 
-    initNavigation: function () {
+    initNavigation: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '';
-        OCA.Analytics.Backend.getDatasets();
+        OCA.Analytics.Backend.getDatasets(datasetId);
     },
 
     handleDrilldownChange: function () {
@@ -400,13 +400,14 @@ OCA.Analytics.Backend = {
         });
     },
 
-    getDatasets: function () {
+    getDatasets: function (datasetId) {
         $.ajax({
             type: "GET",
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
                 OCA.Analytics.UI.buildNavigation(data);
                 OCA.Analytics.UI.fillSidebarParentDropdown(data);
+                document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
             }
         });
     },
@@ -418,9 +419,8 @@ OCA.Analytics.Backend = {
             data: {
                 'file': file,
             },
-            success: function () {
-                OCA.Analytics.Core.initNavigation();
-
+            success: function (data) {
+                OCA.Analytics.Core.initNavigation(data);
             }
         });
     },

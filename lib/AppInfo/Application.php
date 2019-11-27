@@ -20,6 +20,7 @@ class Application extends App {
     public function __construct(array $urlParams = array()) {
 
         parent::__construct('analytics', $urlParams);
+        $this->register();
     }
 
     public function register()

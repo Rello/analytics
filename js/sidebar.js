@@ -68,10 +68,18 @@ OCA.Analytics.Sidebar = {
             action: OCA.Analytics.Sidebar.Data.tabContainerData,
         });
 
+        //OCA.Analytics.Sidebar.registerSidebarTab({
+        //    id: 'tabHeaderException',
+        //    class: 'tabContainerException',
+        //    tabindex: '3',
+        //    name: t('analytics', 'Exceptions'),
+        //    action: OCA.Analytics.Sidebar.Exception.tabContainerException,
+        //});
+
         OCA.Analytics.Sidebar.registerSidebarTab({
             id: 'tabHeaderShare',
             class: 'tabContainerShare',
-            tabindex: '3',
+            tabindex: '4',
             name: t('analytics', 'Share'),
             action: OCA.Analytics.Sidebar.Share.tabContainerShare,
         });
@@ -577,8 +585,23 @@ OCA.Analytics.Sidebar.Share = {
             }.bind()
         });
     },
-
 };
+
+OCA.Analytics.Sidebar.Exception = {
+
+    tabContainerException: function () {
+        let datasetId = document.getElementById('app-sidebar').dataset.id;
+
+        OCA.Analytics.Sidebar.resetView();
+        document.getElementById('tabHeaderException').classList.add('selected');
+        document.getElementById('tabContainerException').classList.remove('hidden');
+        //document.getElementById('tabContainerException').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+        let table = document.getElementById('templateException').cloneNode(true);
+        table.id = 'tableException';
+        document.getElementById('tabContainerException').appendChild(table);
+    },
+};
+
 
 OCA.Analytics.Sidebar.Backend = {
 

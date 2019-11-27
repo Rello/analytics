@@ -171,4 +171,7 @@
         <div><h3><?php p($l->t('REST API')); ?></h3></div>
         <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
     </div>
+    <div id="templateException">
+        <div><h1><?php p($l->t('Maintain thresholds to trigger notifications')); ?></h1></div>
+    </div>
 </div>
