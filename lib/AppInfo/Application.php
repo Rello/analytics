@@ -31,6 +31,10 @@ class Application extends App {
 
     protected function registerNotificationNotifier()
     {
-        \OC::$server->getNotificationManager()->registerNotifierService(Notifier::class);
+        $notificationManager = \OC::$server->getNotificationManager();
+        // as of NC17
+        if (method_exists($notificationManager, 'registerNotifierService')) {
+            \OC::$server->getNotificationManager()->registerNotifierService(Notifier::class);
+        }
     }
 }
