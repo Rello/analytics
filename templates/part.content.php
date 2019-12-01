@@ -33,8 +33,8 @@
     <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a>
     <br>
     <h3><?php p($l->t('Recent')); ?></h3>
-    <span>-&nbsp;<?php p($l->t('Recent placeholder')); ?></span>
+    <span>-&nbsp;<?php p($l->t('coming soon')); ?></span>
     <br>
     <h3><?php p($l->t('Updates')); ?></h3>
-    <span>-&nbsp;<?php p($l->t('Updates placeholder')); ?></span>
+    <span>-&nbsp;<?php p($l->t('coming soon')); ?></span>
 </div>

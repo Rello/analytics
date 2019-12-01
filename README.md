@@ -2,16 +2,16 @@
 
 [![Version](https://img.shields.io/github/release/rello/analytics.svg)](https://github.com/rello/analytics/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)&#160;&#160;&#160;[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rello/analytics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rello/analytics/?branch=master)&#160;&#160;&#160;[![Bitcoin](https://img.shields.io/badge/donate-Bitcoin-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)&#160;[![PayPal](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)
 
-From datasouce to reporting. Data Analytics provides modular datasources, a realtime or storage backend and flexibile visualization.
+From data to report. Data Analytics provides modular datasources, a realtime or storage backend and flexibile visualization.
 
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Main" width="350" title="Data Analytics">
 
 ## Features
-- Datasources: manual entry, files, imports, API
+- Datasources: local/remote File, API, imports, manual entry
 - 3rd party*: GitHub Statistics
 - Storage: stream or database
 - Visualization: charts, tables
-- Integration: notifications/alerts (thresholds)* workflows*
+- Integration: Files app, NC Activity, NC Notifications* (thresholds), NC workflows*
 - Shareing: user*, protected, public
 
 (*work in progress)

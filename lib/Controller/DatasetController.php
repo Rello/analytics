@@ -97,7 +97,7 @@ class DatasetController extends Controller
             $parent = 0;
             $type = DataSourceController::DATASET_TYPE_EXTERNAL_FILE;
             $link = 'https://raw.githubusercontent.com/Rello/analytics/master/sample_data/sample1.csv';
-            $visualization = 'table';
+            $visualization = 'ct';
             $chart = 'line';
             $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '');
         } elseif ($file !== '') {
@@ -105,7 +105,8 @@ class DatasetController extends Controller
             $subheader = $file;
             $parent = 0;
             $type = DataSourceController::DATASET_TYPE_INTERNAL_FILE;
-            $visualization = 'ct';
+            $link = $file;
+            $visualization = 'table';
             $chart = 'line';
             $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '');
         }
@@ -124,7 +125,7 @@ class DatasetController extends Controller
         $this->ShareController->deleteShareByDataset($datasetId);
         $this->DBController->deleteDataByDataset($datasetId);
         $this->DBController->deleteDataset($datasetId);
-        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
+        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         return true;
     }
 

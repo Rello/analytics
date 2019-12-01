@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.0.0 - pending
+## 1.0.0 - 2019-12-01
 
 ### Added
-- Initial version of Data & Analytics
+- Initial version of Data Analytics

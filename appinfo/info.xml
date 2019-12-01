@@ -4,36 +4,36 @@
     <name>Data Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-From datasouce to reporting. Data Analytics provides modular datasources, a realtime or storage backend and flexibile visualization.
+From data to report. Data Analytics provides modular datasources, a realtime or storage backend and flexibile visualization.
 
 ## Features:
-- Datasources: manual entry, files, imports, API*
-- 3rd party: e.g. GitHub Statistics
+- Datasources: local/remote Files, API, imports, manual entry
+- 3rd party*: GitHub Statistics
 - Storage: stream or database
 - Visualization: charts, tables
-- Integration: notifications/alerts (thresholds)* workflows*
+- Integration: Files app, NC Activity, NC Notifications* (thresholds), NC workflows*
 - Shareing: user*, protected, public
 
 (*work in progress)
 ]]></description>
-    <version>0.1.13</version>
+    <version>1.0.0</version>
 	<licence>agpl</licence>
 	<author>Marcel Scherello</author>
 	<namespace>Analytics</namespace>
     <category>office</category>
-	<website>https://github.com/rello/data</website>
-	<bugs>https://github.com/rello/data/issues</bugs>
-	<repository type="git">https://github.com/rello/data.git</repository>
-    <discussion>https://help.nextcloud.com/c/apps/data</discussion>
+    <website>https://github.com/rello/analytics</website>
+    <bugs>https://github.com/rello/analytics/issues</bugs>
+    <repository type="git">https://github.com/rello/analytics.git</repository>
+    <discussion>https://help.nextcloud.com/c/apps/analytics</discussion>
     <screenshot>
-        https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png
+        https://raw.githubusercontent.com/rello/analytics/master/screenshots/logo.png
     </screenshot>
     <screenshot>
-        https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png
+        https://raw.githubusercontent.com/rello/analytics/master/screenshots/architecture.png
     </screenshot>
 	<dependencies>
 		<php min-version="7.0" max-version="7.3"/>
-		<nextcloud min-version="16" max-version="17"/>
+        <nextcloud min-version="16" max-version="18"/>
 	</dependencies>
     <activity>
         <settings>
