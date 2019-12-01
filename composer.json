@@ -1,6 +1,8 @@
 {
 	"require": {
-		"php": ">=7.3.0"
+      "php": ">=7.3.0",
+      "ext-curl": "*",
+      "ext-json": "*"
 	},
 	"require-dev": {
 		"christophwurst/nextcloud": "^16.0.0",

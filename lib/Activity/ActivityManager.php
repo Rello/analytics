@@ -26,6 +26,7 @@ class ActivityManager
     const SUBJECT_DATASET_SHARE = 'dataset_share';
     const SUBJECT_DATA_ADD = 'data_add';
     const SUBJECT_DATA_ADD_API = 'data_add_api';
+    const SUBJECT_DATA_ADD_IMPORT = 'data_add_import';
 
     private $manager;
     private $l10n;

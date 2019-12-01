@@ -20,6 +20,7 @@ if (!OCA.Analytics) {
         TYPE_INTERNAL_FILE: 1,
         TYPE_INTERNAL_DB: 2,
         TYPE_GIT: 3,
+        TYPE_EXTERNAL_FILE: 4,
         TYPE_SHARED: 99,
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_LINK: 3
@@ -33,7 +34,7 @@ OCA.Analytics.Core = {
         if (decodeURI(location.hash).length > 1) {
             let file = decodeURI(location.hash).substring(3);
             window.location.href = '#';
-            OCA.Analytics.Backend.createDataset(file);
+            OCA.Analytics.Backend.createDataset(file, file);
         } else {
             OCA.Analytics.Core.initNavigation();
         }
@@ -51,8 +52,11 @@ OCA.Analytics.Core = {
 
     handleNewDatasetButton: function () {
         OCA.Analytics.Backend.createDataset();
-    }
+    },
 
+    createDemoReport: function () {
+        OCA.Analytics.Backend.createDataset('DEMO');
+    }
 };
 
 OCA.Analytics.UI = {
@@ -92,7 +96,7 @@ OCA.Analytics.UI = {
             typeIcon = 'icon-file';
         } else if (data.type === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (data.type === OCA.Analytics.TYPE_GIT) {
+        } else if (data.type === OCA.Analytics.TYPE_GIT || data.type === OCA.Analytics.TYPE_EXTERNAL_FILE) {
             typeIcon = 'icon-external';
         } else if (data.type === OCA.Analytics.TYPE_SHARED) {
             typeIcon = 'icon-shared';
@@ -183,7 +187,7 @@ OCA.Analytics.UI = {
         let columns = [];
         let data;
 
-        if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
+        if (parseInt(jsondata.options.type) === 888) { // obsolete CSV logic
             data = $.csv.toObjects(jsondata.data);
             let csvHeader = jsondata.data.split('\n')[0];
             let singleHeader = csvHeader.split(',');
@@ -228,12 +232,12 @@ OCA.Analytics.UI = {
         document.getElementById('chartContainer').style.removeProperty('display');
         let chartType = jsondata.options.chart;
 
-        let dataOptions = [];
         let seriesOptions = [];
         let xAxisOptions = [];
         let xAxisCategories = [];
 
-        if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
+        if (parseInt(jsondata.options.type) === 888) { // obsolete CSV logic
+            let dataOptions = [];
             dataOptions = {csv: jsondata.data};
             xAxisOptions = {
                 type: 'category'
@@ -324,8 +328,8 @@ OCA.Analytics.UI = {
             title: {
                 text: ''
             },
-            xAxis: xAxisOptions,
-            data: dataOptions
+            xAxis: xAxisOptions
+            //data: dataOptions
         });
     },
 
@@ -407,7 +411,9 @@ OCA.Analytics.Backend = {
             success: function (data) {
                 OCA.Analytics.UI.buildNavigation(data);
                 OCA.Analytics.UI.fillSidebarParentDropdown(data);
-                document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                if (datasetId) {
+                    document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                }
             }
         });
     },
@@ -431,6 +437,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('sharingToken').value === '') {
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Core.handleNewDatasetButton);
+        document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Core.createDemoReport);
     } else {
         OCA.Analytics.Backend.getData();
     }

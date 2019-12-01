@@ -67,6 +67,7 @@
                         <option value="1"><?php p($l->t('Local File')); ?></option>
                         <option value="2"><?php p($l->t('Internal Database')); ?></option>
                         <option value="3"><?php p($l->t('GitHub')); ?></option>
+                        <option value="4"><?php p($l->t('External url (csv)')); ?></option>
                     </select>
                 </div>
             </div>
@@ -150,7 +151,7 @@
         <button id="updateDataButton" type="button">
             <?php p($l->t('Save Data')); ?>
         </button>
-        <button id="deleteDataButton" type="button" disabled>
+        <button id="deleteDataButton" type="button">
             <?php p($l->t('Delete Data')); ?>
         </button>
         <br>

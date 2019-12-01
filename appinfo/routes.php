@@ -26,15 +26,17 @@ return [
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
 
-        // data
-        ['name' => 'data#index', 'url' => '/data', 'verb' => 'GET'],
-        ['name' => 'data#create', 'url' => '/data', 'verb' => 'POST'],
-        ['name' => 'data#read', 'url' => '/data/{datasetId}', 'verb' => 'GET'],
-        ['name' => 'data#update', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
-        ['name' => 'data#delete', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
-        ['name' => 'data#importCSV', 'url' => '/data/importCSV', 'verb' => 'POST'],
-        ['name' => 'data#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
-        ['name' => 'data#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
+        // Data Output
+        ['name' => 'output#index', 'url' => '/data', 'verb' => 'GET'],
+        ['name' => 'output#create', 'url' => '/data', 'verb' => 'POST'],
+        ['name' => 'output#read', 'url' => '/data/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
+
+        // Data Maintenance
+        ['name' => 'dataLoad#update', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
+        ['name' => 'dataLoad#delete', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
+        ['name' => 'dataLoad#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
+        ['name' => 'dataLoad#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
 
         // share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],

@@ -10,6 +10,7 @@
     "Drilldown": "Aufriss/Detail",
     "Settings": "Einstellungen",
     "Report title": "Berichtsname",
+    "Subheader": "Beschreibung",
     "Report group": "Berichtsgruppe",
     "Datasource": "Datenquelle",
     "No Data / Group": "Keine Daten / Gruppe",
@@ -46,13 +47,17 @@
     " shared report {report} with you": " hat den Bericht {report} mit Dir geteilt",
     "You have added new data to report {report}": "Du hast neue Daten zum Bericht {report} hinzugefügt",
     " has added new data to report {report}": " hat neue Daten zum Bericht {report} hinzugefügt",
+    "You have imported data in report {report}": "Du hast Daten in den Bericht {report} importiert",
+    " has importet data in report {report}": " hat Daten in den Bericht {report} importiert",
     "New data was add via API to report {report}": "Es wurden über die API neue Daten zum Bericht {report} hinzugefügt",
     "Quickstart": "Schnellstart",
     "Template placeholder": "Platzhalter Vorlagen",
     "Recent": "Kürzlich verwendet",
     "Recent placeholder": "Platzhalter kürzlich verwendet",
     "Updates": "Aktualisierungen",
-    "Updates placeholder": "Platzhalter Aktualisierungen"
+    "Updates placeholder": "Platzhalter Aktualisierungen",
+    "External url (csv)": "Externe Url (csv)",
+    "Create demo report on external CSV data": "Beispiel Report aus externen CSV Daten erstellen"
   },
   "pluralForm": ""
 }

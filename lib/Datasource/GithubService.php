@@ -11,7 +11,6 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCA\Analytics\Controller\DbController;
 use OCP\ILogger;
 
 class GithubService
@@ -20,12 +19,10 @@ class GithubService
     private $DBController;
 
     public function __construct(
-        ILogger $logger,
-        DbController $DBController
+        ILogger $logger
     )
     {
         $this->logger = $logger;
-        $this->DBController = $DBController;
     }
 
     /**
@@ -53,12 +50,6 @@ class GithubService
 
         $jason_a = json_decode($result, true);
         $i = 0;
-
-        //$tagName = $jason_a[0]['tag_name'];
-        //$tagVariable = 'tag_name';
-        //$tagName = $jason_a[0][$tagVariable];
-        //$count = $jason_a[0] . assets . download_cont;
-        //$this->logger->error($tagName . $count);
 
         $data = array();
         foreach ($jason_a as $item) {

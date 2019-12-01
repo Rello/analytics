@@ -2,6 +2,8 @@
 /** @var $_ array */
 /** @var $l \OCP\IL10N */
 
+use OCP\Util;
+
 Util::addStyle('analytics', 'authenticate');
 Util::addScript('analytics', 'authenticate');
 ?>

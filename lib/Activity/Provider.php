@@ -71,6 +71,13 @@ class Provider implements IProvider
                     $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' has added new data to report {report}');
                 }
                 break;
+            case ActivityManager::SUBJECT_DATA_ADD_IMPORT:
+                if ($ownActivity) {
+                    $parsedSubject = $this->l10n->t('You have imported data in report {report}');
+                } else {
+                    $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' has importet data in report {report}');
+                }
+                break;
             case ActivityManager::SUBJECT_DATA_ADD_API:
                 $parsedSubject = $this->l10n->t('New data was add via API to report {report}');
                 break;

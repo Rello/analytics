@@ -15,7 +15,7 @@
     <h2 id="dataHeader" style="text-align: center;"></h2>
     <h3 id="dataSubHeader" style="text-align: center;"></h3>
     <div style="width:100%; padding: 20px">
-        <div id="drilldown" style="display: none">
+        <div id="drilldown" style="display: none" hidden>
             <?php p($l->t('Drilldown')); ?>
             <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
             <label for="checkBoxObject"><?php p($l->t('Object')); ?></label>
@@ -30,7 +30,7 @@
     <h2><?php p($l->t('Data Analytics')); ?></h2>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
-    <span>-&nbsp;<?php p($l->t('Template placeholder')); ?></span>
+    <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a>
     <br>
     <h3><?php p($l->t('Recent')); ?></h3>
     <span>-&nbsp;<?php p($l->t('Recent placeholder')); ?></span>

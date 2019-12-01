@@ -189,8 +189,7 @@ OCA.Analytics.Sidebar.Dataset = {
     },
 
     handleDatasetUpdateButton: function () {
-        let id = document.getElementById('app-sidebar').dataset.id;
-        OCA.Analytics.Sidebar.Backend.updateDataset(id);
+        OCA.Analytics.Sidebar.Backend.updateDataset();
     },
 
     handleDatasetTypeChange: function () {
@@ -201,13 +200,7 @@ OCA.Analytics.Sidebar.Dataset = {
             document.getElementById('datasetDimensionSectionHeader').style.removeProperty('display');
             document.getElementById('datasetVisualizationSection').style.display = 'table';
             document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
-        } else if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
-            document.getElementById('datasetLinkRow').style.display = 'table-row';
-            document.getElementById('datasetDimensionSection').style.display = 'none';
-            document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
-            document.getElementById('datasetVisualizationSection').style.display = 'table';
-            document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
-        } else if (type === OCA.Analytics.TYPE_GIT) {
+        } else if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_GIT || type === OCA.Analytics.TYPE_EXTERNAL_FILE) {
             document.getElementById('datasetLinkRow').style.display = 'table-row';
             document.getElementById('datasetDimensionSection').style.display = 'none';
             document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
@@ -244,6 +237,15 @@ OCA.Analytics.Sidebar.Dataset = {
                 mimeparts,
                 true,
                 1);
+        } else if (type === OCA.Analytics.TYPE_EXTERNAL_FILE) {
+            OC.dialogs.prompt(
+                t('analytics', 'Enter the URL of external CSV data'),
+                t('analytics', 'External File'),
+                function (button, val) {
+                    if (button === true) document.getElementById('sidebarDatasetLink').value = val;
+                },
+                true,
+                "");
         }
     },
 };
@@ -299,7 +301,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataDeleteButton: function () {
-        //OCA.Analytics.Sidebar.Backend.updateDataset();
+        OCA.Analytics.Sidebar.Backend.deleteData();
     },
 
     handleDataImportFileButton: function () {
@@ -633,7 +635,7 @@ OCA.Analytics.Sidebar.Backend = {
                 'dimension3': document.getElementById('sidebarDatasetDimension3').value
             },
             success: function () {
-                OCA.Analytics.Core.initNavigation();
+                OCA.Analytics.Core.initNavigation(datasetId);
             }.bind()
         });
     },
@@ -653,6 +655,28 @@ OCA.Analytics.Sidebar.Backend = {
             },
             success: function (data) {
                 OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                button.classList.remove('loading');
+                button.disabled = false;
+                OCA.Analytics.UI.resetContent();
+                OCA.Analytics.Backend.getData();
+            }
+        });
+    },
+
+    deleteData: function () {
+        let datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        let button = document.getElementById('deleteDataButton');
+        button.classList.add('loading');
+        button.disabled = true;
+        $.ajax({
+            type: 'DELETE',
+            url: OC.generateUrl('apps/analytics/data/') + datasetId,
+            data: {
+                'dimension1': document.getElementById('DataDimension1').value,
+                'dimension2': document.getElementById('DataDimension2').value,
+            },
+            success: function (data) {
+                //OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
                 OCA.Analytics.UI.resetContent();

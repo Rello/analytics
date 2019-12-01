@@ -17,9 +17,6 @@ use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 
-/**
- * Controller class for main page.
- */
 class DbController extends Controller
 {
 
@@ -88,10 +85,14 @@ class DbController extends Controller
     }
 
     /**
-     * update data
+     * delete data
      */
-    public function updateData()
+    public function deleteData(int $datasetId, $dimension1, $dimension2)
     {
+        $SQL = 'DELETE FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
+        return true;
     }
 
     /**

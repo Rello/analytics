@@ -11,55 +11,45 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCA\Analytics\Controller\DbController;
-use OCP\AppFramework\Http\NotFoundResponse;
-use OCP\Files\IRootFolder;
-use OCP\Files\NotFoundException;
 use OCP\ILogger;
 
-class FileService
+class ExternalFileService
 {
     private $logger;
-    private $DBController;
-    private $rootFolder;
     private $userId;
-
-    //private $StorageController;
 
     public function __construct(
         $userId,
-        ILogger $logger,
-        IRootFolder $rootFolder,
-        DbController $DBController
-        //StorageController $StorageController
+        ILogger $logger
     )
     {
         $this->userId = $userId;
         $this->logger = $logger;
-        $this->DBController = $DBController;
-        $this->rootFolder = $rootFolder;
-        //$this->StorageController = $StorageController;
     }
 
     /**
-     * Get the items for the selected category
+     * Get the content from an external url
      *
      * @NoAdminRequired
      * @param $datasetMetadata
-     * @param null $path
-     * @return array|NotFoundResponse
-     * @throws NotFoundException
+     * @return array
      */
-    public function read($datasetMetadata = null, $path = null)
+    public function read($datasetMetadata)
     {
-        //$this->logger->error('FileService path: ' . $datasetMetadata['link']);
-        if (empty($path)) {
-            $file = $this->rootFolder->getUserFolder($datasetMetadata['user_id'])->get($datasetMetadata['link']);
-        } else {
-            $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
-        }
+        //$this->logger->error('dataset path: ' . $datasetMetadata['link']);
+        $string = $datasetMetadata['link'];
 
-        $data = $file->getContent();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_URL, $string);
+        curl_setopt($ch, CURLOPT_REFERER, $string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        $data = curl_exec($ch);
+        curl_close($ch);
+
         $delimiter = $this->detectDelimiter($data);
         $rows = str_getcsv($data, "\n");
         $data = array();
@@ -74,7 +64,6 @@ class FileService
                 $header['dimension3'] = $row[2];
                 $headerrow = 1;
             } else {
-                $row[2] = str_replace(',', '.', $row[2]);
                 array_push($data, ['dimension1' => $row[0], 'dimension2' => $row[1], 'dimension3' => $row[2]]);
             }
         }

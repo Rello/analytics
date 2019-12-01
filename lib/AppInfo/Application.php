@@ -25,7 +25,7 @@ class Application extends App {
 
     public function register()
     {
-        $this->registerNotificationNotifier();
+        //$this->registerNotificationNotifier();
         //$this->registerCommentsEntity();
     }
 

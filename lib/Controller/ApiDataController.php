@@ -12,8 +12,6 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
-use OCA\Analytics\Service\DataService;
-use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -31,18 +29,18 @@ class ApiDataController extends ApiController
     protected $errors = [];
     private $logger;
     private $userSession;
-    private $DataService;
     private $ActivityManager;
-    private $DatasetService;
+    private $DatasetController;
+    private $StorageController;
 
     public function __construct(
         $appName,
         IRequest $request,
         ILogger $logger,
-        DataService $DataService,
         IUserSession $userSession,
         ActivityManager $ActivityManager,
-        DatasetService $DatasetService
+        DatasetController $DatasetController,
+        StorageController $StorageController
     )
     {
         parent::__construct(
@@ -52,9 +50,9 @@ class ApiDataController extends ApiController
             );
         $this->logger = $logger;
         $this->userSession = $userSession;
-        $this->DataService = $DataService;
         $this->ActivityManager = $ActivityManager;
-        $this->DatasetService = $DatasetService;
+        $this->DatasetController = $DatasetController;
+        $this->StorageController = $StorageController;
     }
 
     /**
@@ -68,7 +66,7 @@ class ApiDataController extends ApiController
     {
         $params = $this->request->getParams();
         $this->logger->error($datasetId);
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
         if (empty($datasetMetadata)) {
             $this->errors[] = 'Unknown report or dataset';
@@ -89,7 +87,7 @@ class ApiDataController extends ApiController
             return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
         }
 
-        $action = $this->DataService->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
+        $action = $this->StorageController->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
 
         return $this->requestResponse(
