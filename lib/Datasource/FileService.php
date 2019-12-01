@@ -46,7 +46,7 @@ class FileService
      *
      * @NoAdminRequired
      * @param $datasetMetadata
-     * @param null $path
+     * @param $path
      * @return array|NotFoundResponse
      * @throws NotFoundException
      */

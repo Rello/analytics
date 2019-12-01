@@ -11,7 +11,7 @@
 
 namespace OCA\Analytics\Controller;
 
-//use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Activity\ActivityManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
@@ -29,15 +29,15 @@ class DatasetController extends Controller
         IRequest $request,
         ILogger $logger,
         ShareController $ShareController,
-        DbController $DBController
-        //ActivityManager $ActivityManager
+        DbController $DBController,
+        ActivityManager $ActivityManager
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ShareController = $ShareController;
         $this->DBController = $DBController;
-        //$this->ActivityManager = $ActivityManager;
+        $this->ActivityManager = $ActivityManager;
     }
 
     /**
@@ -88,7 +88,7 @@ class DatasetController extends Controller
     public function create($file = '', $link = '')
     {
         //$this->logger->error('datasetcontroller 82: '.$file);
-        //$this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
+        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
         $datasetId = $this->DBController->createDataset();
 
         if ($file === 'DEMO') {
@@ -124,7 +124,7 @@ class DatasetController extends Controller
         $this->ShareController->deleteShareByDataset($datasetId);
         $this->DBController->deleteDataByDataset($datasetId);
         $this->DBController->deleteDataset($datasetId);
-        //$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         return true;
     }
 

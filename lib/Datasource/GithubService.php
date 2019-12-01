@@ -16,7 +16,6 @@ use OCP\ILogger;
 class GithubService
 {
     private $logger;
-    private $DBController;
 
     public function __construct(
         ILogger $logger
