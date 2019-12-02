@@ -120,7 +120,7 @@ class DataLoadController extends Controller
 
             foreach ($rows as &$row) {
                 $row = str_getcsv($row, $delimiter);
-                $row[2] = str_replace(',', '.', $row[2]);
+                $row[2] = $this->floatvalue($row[2]);
                 $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
@@ -153,6 +153,14 @@ class DataLoadController extends Controller
             }
         }
         return $delimiter;
+    }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        return floatval($val);
     }
 
     /**

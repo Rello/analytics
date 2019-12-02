@@ -74,7 +74,7 @@ class FileService
                 $header['dimension3'] = $row[2];
                 $headerrow = 1;
             } else {
-                $row[2] = str_replace(',', '.', $row[2]);
+                $row[2] = $this->floatvalue($row[2]);
                 array_push($data, ['dimension1' => $row[0], 'dimension2' => $row[1], 'dimension3' => $row[2]]);
             }
         }
@@ -100,4 +100,13 @@ class FileService
         }
         return $delimiter;
     }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        return floatval($val);
+    }
+
 }

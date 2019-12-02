@@ -202,6 +202,9 @@ OCA.Analytics.UI = {
             let header = jsondata.header;
             while (i < columnKeys.length) {
                 columns[i] = {'data': columnKeys[i], 'title': header[columnKeys[i]]};
+                if (header[columnKeys[i]].length === 1) {
+                    columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, header[columnKeys[i]] + ' ');
+                }
                 i += 1;
             }
             data = jsondata.data;
