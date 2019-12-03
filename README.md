@@ -7,12 +7,12 @@ From data to report. Data Analytics provides modular datasources, a realtime or 
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Main" width="350" title="Data Analytics">
 
 ## Features
-- Datasources: local/remote File, API, imports, manual entry
+- Datasources: local/remote file, API, imports, manual entry
 - 3rd party*: GitHub Statistics
 - Storage: stream or database
 - Visualization: charts, tables
 - Integration: Files app, NC Activity, NC Notifications* (thresholds), NC workflows*
-- Shareing: user*, protected, public
+- Sharing: user*, protected, public
 
 (*work in progress)
 
