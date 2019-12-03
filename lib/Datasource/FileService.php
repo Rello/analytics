@@ -15,6 +15,7 @@ use OCA\Analytics\Controller\DbController;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\IL10N;
 use OCP\ILogger;
 
 class FileService
@@ -23,22 +24,21 @@ class FileService
     private $DBController;
     private $rootFolder;
     private $userId;
-
-    //private $StorageController;
+    private $l10n;
 
     public function __construct(
         $userId,
+        IL10N $l10n,
         ILogger $logger,
         IRootFolder $rootFolder,
         DbController $DBController
-        //StorageController $StorageController
     )
     {
         $this->userId = $userId;
+        $this->l10n = $l10n;
         $this->logger = $logger;
         $this->DBController = $DBController;
         $this->rootFolder = $rootFolder;
-        //$this->StorageController = $StorageController;
     }
 
     /**
@@ -64,7 +64,7 @@ class FileService
         $rows = str_getcsv($data, "\n");
         $data = array();
         $header = array();
-        $headerrow = 0;
+        $headerrow = $errorMessage = 0;
 
         foreach ($rows as &$row) {
             $row = str_getcsv($row, $delimiter);
@@ -75,12 +75,17 @@ class FileService
                 $headerrow = 1;
             } else {
                 $row[2] = $this->floatvalue($row[2]);
-                array_push($data, ['dimension1' => $row[0], 'dimension2' => $row[1], 'dimension3' => $row[2]]);
+                if ($row[2] === false) {
+                    $errorMessage = $this->l10n->t('3rd field must be a valid number');
+                } else {
+                    array_push($data, ['dimension1' => $row[0], 'dimension2' => $row[1], 'dimension3' => $row[2]]);
+                }
             }
         }
         $result = [
             'header' => $header,
-            'data' => $data
+            'data' => $data,
+            'error' => $errorMessage,
         ];
         return $result;
     }
@@ -106,7 +111,11 @@ class FileService
         $val = str_replace(",", ".", $val);
         $val = preg_replace('/\.(?=.*\.)/', '', $val);
         $val = preg_replace('/[^0-9-.]+/', '', $val);
-        return floatval($val);
+        if (is_numeric($val)) {
+            return floatval($val);
+        } else {
+            return false;
+        }
     }
 
 }

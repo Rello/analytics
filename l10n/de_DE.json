@@ -57,7 +57,8 @@
     "Updates": "Aktualisierungen",
     "Updates placeholder": "Platzhalter Aktualisierungen",
     "External url (csv)": "Externe Url (csv)",
-    "Create demo report on external CSV data": "Beispiel Report aus externen CSV Daten erstellen"
+    "Create demo report on external CSV data": "Beispiel Report aus externen CSV Daten erstellen",
+    "3rd field must be a valid number": "Drittes Feld muss eine gültige Zahl sein"
   },
   "pluralForm": ""
 }

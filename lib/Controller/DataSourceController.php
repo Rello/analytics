@@ -58,7 +58,7 @@ class DataSourceController extends Controller
      * @param $datasetMetadata
      * @param $options
      * @return array|NotFoundException
-     * @throws NotFoundExceptions
+     * @throws NotFoundException
      */
     public function read($datasetMetadata, $options = null)
     {

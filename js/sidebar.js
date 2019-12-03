@@ -654,11 +654,15 @@ OCA.Analytics.Sidebar.Backend = {
                 'dimension3': document.getElementById('DataDimension3').value,
             },
             success: function (data) {
-                OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
-                OCA.Analytics.UI.resetContent();
-                OCA.Analytics.Backend.getData();
+                if (data.error === 0) {
+                    OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.UI.resetContent();
+                    OCA.Analytics.Backend.getData();
+                } else {
+                    OCA.Analytics.UI.notification('error', data.error);
+                }
             }
         });
     },
@@ -676,7 +680,6 @@ OCA.Analytics.Sidebar.Backend = {
                 'dimension2': document.getElementById('DataDimension2').value,
             },
             success: function (data) {
-                //OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
                 OCA.Analytics.UI.resetContent();
@@ -698,10 +701,14 @@ OCA.Analytics.Sidebar.Backend = {
                 'import': document.getElementById('importDataClipboardText').value,
             },
             success: function (data) {
-                OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
-                document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                if (data.error === 0) {
+                    OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                } else {
+                    OCA.Analytics.UI.notification('error', data.error);
+                }
             }.bind(),
             error: function () {
                 OCA.Analytics.UI.notification('error', t('analytics', 'Technical error. Please check the logs'));
@@ -725,10 +732,14 @@ OCA.Analytics.Sidebar.Backend = {
                 'path': path,
             },
             success: function (data) {
-                OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                 button.classList.remove('loading');
                 button.disabled = false;
-                document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                if (data.error === 0) {
+                    OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                } else {
+                    OCA.Analytics.UI.notification('error', data.error);
+                }
             }.bind(),
             error: function () {
                 OCA.Analytics.UI.notification('error', t('analytics', 'Technical error. Please check the logs'));
