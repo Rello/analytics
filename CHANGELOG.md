@@ -7,9 +7,11 @@ All notable changes to this project will be documented in this file.
 - 'de' language files
 - currency/unit formatting in datatable column
 - CSV import format validation [#7](https://github.com/rello/analytics/issues/7)
+- Assets blocked by uBlock origin [#8](https://github.com/rello/analytics/issues/8)
 - favicon
-- direct report urls
-- area chart
+- direct url to report
+- chart type: area stacked
+
 
 ## 1.0.0 - 2019-12-01
 
