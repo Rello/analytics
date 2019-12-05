@@ -15,9 +15,9 @@ Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', 'jquery.dataTables.min');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'jquery.dataTables.min');
-Util::addScript('analytics', 'jquery.csv.min');
 Util::addScript('analytics', 'highcharts/highcharts');
-Util::addScript('analytics', 'highcharts/modules/data');
+//Util::addScript('analytics', 'jquery.csv.min');
+//Util::addScript('analytics', 'highcharts/modules/data');
 //Util::addScript('analytics', 'highcharts/modules/exporting');
 //Util::addScript('analytics', 'highcharts/modules/export-data');
 ?>
@@ -29,7 +29,7 @@ Util::addScript('analytics', 'highcharts/modules/data');
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
                 <h1 class="header-appname" id="header-appname">
-                    Data Analytics - Public Share
+                    Data Analytics for Nextcloud - Public Share
                 </h1>
             </a>
         </div>

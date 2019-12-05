@@ -117,6 +117,7 @@
                         <option value="line"><?php p($l->t('Line')); ?></option>
                         <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
                         <option value="column"><?php p($l->t('Columns')); ?></option>
+                        <option value="area"><?php p($l->t('Area')); ?></option>
                     </select>
                 </div>
             </div>

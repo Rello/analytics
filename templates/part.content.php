@@ -26,7 +26,7 @@
         <table id="tableContainer" style="width:100%; height: 50%"></table>
     </div>
 </div>
-<div id="analytics-intro" style="width:50%; padding: 50px">
+<div id="analytics-intro" style="width:50%; padding: 50px" hidden>
     <h2><?php p($l->t('Data Analytics')); ?></h2>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
@@ -37,4 +37,16 @@
     <br>
     <h3><?php p($l->t('Updates')); ?></h3>
     <span>-&nbsp;<?php p($l->t('coming soon')); ?></span>
+</div>
+<div id="analytics-warning" style="width:50%; padding: 50px">
+    <h2><?php p($l->t('Data Analytics')); ?></h2>
+    <br>
+    <h3>Javascript issue</h3>
+    <span>If you see this message, please disable AdBlock/uBlock for this domain (only).</span>
+    <br>
+    <span>The EasyPrivacy list is blocking some scripts because of a wildcard filter for "analytics"</span>
+    <br>
+    <br>
+    <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
+       target="_blank"><?php p($l->t('More Information ...')); ?></a>
 </div>

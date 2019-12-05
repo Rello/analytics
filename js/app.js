@@ -23,7 +23,8 @@ if (!OCA.Analytics) {
         TYPE_EXTERNAL_FILE: 4,
         TYPE_SHARED: 99,
         SHARE_TYPE_USER: 0,
-        SHARE_TYPE_LINK: 3
+        SHARE_TYPE_LINK: 3,
+        initialDocumentTitle: null,
     };
 }
 /**
@@ -31,10 +32,14 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Core = {
     initApplication: function () {
-        if (decodeURI(location.hash).length > 1) {
-            let file = decodeURI(location.hash).substring(3);
-            window.location.href = '#';
-            OCA.Analytics.Backend.createDataset(file, file);
+        let urlHash = decodeURI(location.hash);
+        if (urlHash.length > 1) {
+            if (urlHash.substring(2, 3) === 'f') {
+                window.location.href = '#';
+                OCA.Analytics.Backend.createDataset(urlHash.substring(3));
+            } else if (urlHash.substring(2, 3) === 'r') {
+                OCA.Analytics.Core.initNavigation(urlHash.substring(4));
+            }
         } else {
             OCA.Analytics.Core.initNavigation();
         }
@@ -90,7 +95,7 @@ OCA.Analytics.UI = {
         let typeIcon;
 
         let a = document.createElement('a');
-        a.setAttribute('href', '#');
+        a.setAttribute('href', '#/r/' + data.id);
         data.type = parseInt(data.type);
         if (data.type === OCA.Analytics.TYPE_INTERNAL_FILE) {
             typeIcon = 'icon-file';
@@ -238,6 +243,7 @@ OCA.Analytics.UI = {
         let seriesOptions = [];
         let xAxisOptions = [];
         let xAxisCategories = [];
+        let xplotOptions = [];
 
         if (parseInt(jsondata.options.type) === 888) { // obsolete CSV logic
             let dataOptions = [];
@@ -280,7 +286,9 @@ OCA.Analytics.UI = {
                     xAxisCategories.push(values['dimension2']);
                 }
             }
+
             if (chartType === 'datetime') {
+                xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
                 xAxisOptions = {
                     type: 'datetime',
                     dateTimeLabelFormats: {
@@ -288,7 +296,13 @@ OCA.Analytics.UI = {
                     },
                 };
                 chartType = 'line';
+            } else if (chartType === 'area') {
+                xplotOptions = {area: {stacking: 'normal'}, series: {marker: {enabled: false},},};
+                xAxisOptions = {
+                    categories: xAxisCategories,
+                };
             } else {
+                xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
                 xAxisOptions = {
                     categories: xAxisCategories,
                 };
@@ -331,7 +345,8 @@ OCA.Analytics.UI = {
             title: {
                 text: ''
             },
-            xAxis: xAxisOptions
+            xAxis: xAxisOptions,
+            plotOptions: xplotOptions,
             //data: dataOptions
         });
     },
@@ -394,6 +409,7 @@ OCA.Analytics.Backend = {
                     let visualization = data.options.visualization;
                     document.getElementById('dataHeader').innerText = data.options.name;
                     document.getElementById('dataSubHeader').innerText = data.options.subheader;
+                    document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                     if (visualization === 'chart') {
                         OCA.Analytics.UI.buildHighchart(data);
                     } else if (visualization === 'table') {
@@ -437,7 +453,10 @@ OCA.Analytics.Backend = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+    OCA.Analytics.initialDocumentTitle = document.title;
+    document.getElementById('analytics-warning').classList.add('hidden')
     if (document.getElementById('sharingToken').value === '') {
+        document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Core.handleNewDatasetButton);
         document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Core.createDemoReport);
