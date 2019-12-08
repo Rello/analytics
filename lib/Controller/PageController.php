@@ -64,8 +64,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $response = new TemplateResponse('analytics', 'main');
-        return $response;
+        return new TemplateResponse('analytics', 'main');
     }
 
     /**
@@ -112,8 +111,7 @@ class PageController extends Controller
             }
             $params = array();
             $params['token'] = $token;
-            $response = new TemplateResponse('analytics', 'public', $params);
-            return $response;
+            return new TemplateResponse('analytics', 'public', $params);
         }
     }
 }

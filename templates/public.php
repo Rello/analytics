@@ -25,7 +25,7 @@ Util::addScript('analytics', 'highcharts/highcharts');
 <header>
     <div id="header">
         <div id="header-left">
-            <a href="..."
+            <a href="#"
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
                 <h1 class="header-appname" id="header-appname">

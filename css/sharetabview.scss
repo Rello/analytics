@@ -142,7 +142,7 @@
           position: absolute;
           width: 44px !important;
           height: 44px;
-          bottom: 0px;
+          bottom: 0;
           right: 10px;
           margin: 0;
           background-color: transparent;
@@ -170,7 +170,7 @@
   }
 
   .linkPass .icon-loading-small {
-    margin-right: 0px;
+    margin-right: 0;
   }
 
   .icon {
@@ -199,7 +199,7 @@
       }
     }
 
-    &[type='text'].linkText
+    &[type='text'].linkText,
     &[type='password'].linkPassText,
     &[type='password'].passwordField {
       width: 180px !important;

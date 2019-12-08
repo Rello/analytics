@@ -32,9 +32,9 @@ From data to report. Data Analytics provides modular datasources, a realtime or 
         https://raw.githubusercontent.com/rello/analytics/master/screenshots/architecture.png
     </screenshot>
 	<dependencies>
-		<php min-version="7.0" max-version="7.3"/>
+        <php min-version="7.0" max-version="7.4"/>
         <nextcloud min-version="16" max-version="18"/>
-	</dependencies>
+    </dependencies>
     <activity>
         <settings>
             <setting>OCA\Analytics\Activity\SettingDataset</setting>
