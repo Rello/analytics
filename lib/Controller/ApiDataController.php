@@ -93,7 +93,7 @@ class ApiDataController extends ApiController
         return $this->requestResponse(
             true,
             Http::STATUS_OK,
-            'Data ' . $action . ' successfull');
+            'Data update successfull');
     }
 
     /**
