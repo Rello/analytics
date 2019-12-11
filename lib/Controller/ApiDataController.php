@@ -46,7 +46,7 @@ class ApiDataController extends ApiController
         parent::__construct(
             $appName,
             $request,
-            'POST',
+            'POST'
             );
         $this->logger = $logger;
         $this->userSession = $userSession;
