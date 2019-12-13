@@ -44,16 +44,16 @@
         <div class="table" style="display: table;">
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Report title')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarDatasetName"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetName" class="input150"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Subheader')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarDatasetSubheader"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetSubheader" class="input150"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Report group')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="sidebarDatasetParent">
+                    <select id="sidebarDatasetParent" class="input150">
                         <option value="0"></option>
                     </select>
                 </div>
@@ -61,7 +61,7 @@
             <div style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Datasource')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="sidebarDatasetType">
+                    <select id="sidebarDatasetType" class="input150">
                         <option value="" selected></option>
                         <option value="0"><?php p($l->t('No Data / Group')); ?></option>
                         <option value="1"><?php p($l->t('Local File')); ?></option>
@@ -73,7 +73,7 @@
             </div>
             <div id="datasetLinkRow" style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Options')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarDatasetLink" disabled>
+                <div style="display: table-cell;"><input id="sidebarDatasetLink" disabled class="input150">
                     <button id="sidebarDatasetLinkButton" type="button" class="icon-rename">
                         <?php //p($l->t('Edit')); ?>
                     </button>
@@ -85,15 +85,15 @@
         <div id="datasetDimensionSection" class="table" style="display: table;">
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;1</div>
-                <div style="display: table-cell;"><input id="sidebarDatasetDimension1"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension1" class="input150"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;2</div>
-                <div style="display: table-cell;"><input id="sidebarDatasetDimension2"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="input150"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;3</div>
-                <div style="display: table-cell;"><input id="sidebarDatasetDimension3"></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension3" class="input150"></div>
             </div>
         </div>
         <br>
@@ -102,7 +102,7 @@
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 120px;"><?php p($l->t('Display')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="sidebarDatasetVisualization">
+                    <select id="sidebarDatasetVisualization" class="input150">
                         <option value="ct" selected><?php p($l->t('Chart') . ' & ' . $l->t('Table')); ?></option>
                         <option value="table"><?php p($l->t('Table')); ?></option>
                         <option value="chart"><?php p($l->t('Chart')); ?></option>
@@ -112,7 +112,7 @@
             <div style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Chart Type')); ?></div>
                 <div style="display: table-cell;">
-                    <select id="sidebarDatasetChart">
+                    <select id="sidebarDatasetChart" class="input150">
                         <option value="" selected></option>
                         <option value="line"><?php p($l->t('Line')); ?></option>
                         <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
@@ -173,7 +173,50 @@
         <div><h3><?php p($l->t('REST API')); ?></h3></div>
         <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
     </div>
-    <div id="templateException">
-        <div><h1><?php p($l->t('Maintain thresholds to trigger notifications')); ?></h1></div>
+    <div id="templateThreshold">
+        <div><h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports')); ?></h1>
+        </div>
+        <br>
+        <div class="table" style="display: table;">
+            <div style="display: table-row;">
+                <div id="sidebarThresholdTextDimension1"
+                     style="display: table-cell; width: 120px;"><?php p($l->t('Object')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarThresholdDimension1" class="input150"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell;"><?php p($l->t('Option')); ?></div>
+                <div style="display: table-cell;">
+                    <select id="sidebarThresholdOption" class="input150">
+                        <option value="=" selected><?php p($l->t(' = equal')); ?></option>
+                        <option value=">"><?php p($l->t('> greater')); ?></option>
+                        <option value="<"><?php p($l->t('< less')); ?></option>
+                        <option value="<="><?php p($l->t('<= less equal')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div style="display: table-row;">
+                <div id="sidebarThresholdTextDimension3"
+                     style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarThresholdDimension3" class="input150"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>
+                <div style="display: table-cell;">
+                    <select id="sidebarThresholdSeverity" class="input150">
+                        <option value="1" selected><?php p($l->t('red + Notification')); ?></option>
+                        <option value="2"><?php p($l->t('red')); ?></option>
+                        <option value="3"><?php p($l->t('yellow')); ?></option>
+                        <option value="4"><?php p($l->t('green')); ?></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <br>
+        <button id="createThresholdButton" type="button">
+            <?php p($l->t('Save Threshold')); ?>
+        </button>
+        <br>
+        <br>
+        <div id="sidebarThresholdList"></div>
     </div>
 </div>

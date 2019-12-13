@@ -44,6 +44,11 @@ return [
         ['name' => 'share#update', 'url' => '/share/{shareId}', 'verb' => 'PUT'],
         ['name' => 'share#delete', 'url' => '/share/{shareId}', 'verb' => 'DELETE'],
 
+        // threashold
+        ['name' => 'threshold#create', 'url' => '/threshold', 'verb' => 'POST'],
+        ['name' => 'threshold#read', 'url' => '/threshold/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
+
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#addData', 'url' => '/api/1.0/adddata/{datasetId}', 'verb' => 'POST'],
     ]

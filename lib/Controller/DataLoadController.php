@@ -64,11 +64,11 @@ class DataLoadController extends Controller
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
-        //$this->NotificationManager->triggerNotification(NotificationManager::OBJECT_DATASET, $datasetId, NotificationManager::SUBJECT_THRESHOLD, ['subject' => 'Pflanze', 'rule' => 'Hum too low']);
         //disabled for the moment
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = $errorMessage = 0;
+            $action = array();
             $dimension3 = $this->floatvalue($dimension3);
             if ($dimension3 === false) {
                 $errorMessage = $this->l10n->t('3rd field must be a valid number');
@@ -82,6 +82,7 @@ class DataLoadController extends Controller
                 'insert' => $insert,
                 'update' => $update,
                 'error' => $errorMessage,
+                'validate' => $action['validate'],
             ];
 
             if ($errorMessage !== 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
@@ -219,7 +220,7 @@ class DataLoadController extends Controller
         $val = preg_replace('/\.(?=.*\.)/', '', $val);
         $val = preg_replace('/[^0-9-.]+/', '', $val);
         if (is_numeric($val)) {
-            return floatval($val);
+            return number_format(floatval($val), 2);
         } else {
             return false;
         }

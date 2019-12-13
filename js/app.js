@@ -214,6 +214,7 @@ OCA.Analytics.UI = {
             }
             data = jsondata.data;
         }
+        let Test = "test";
 
         let language = {
             search: t('analytics', 'Search'),
@@ -231,8 +232,40 @@ OCA.Analytics.UI = {
         $('#tableContainer').DataTable({
             data: data,
             columns: columns,
-            language: language
+            language: language,
+            rowCallback: function (row, data, index) {
+                OCA.Analytics.UI.rowCallback(row, data, index, jsondata.thresholds)
+            },
         });
+    },
+
+    rowCallback: function (row, data, index, thresholds) {
+
+        var operators = {
+            '=': function (a, b) {
+                return a = b
+            },
+            '<': function (a, b) {
+                return a < b
+            },
+            '>': function (a, b) {
+                return a > b
+            },
+            '<=': function (a, b) {
+                return a <= b
+            },
+        };
+
+        thresholds = thresholds.filter(p => p.dimension1 === data['dimension1']);
+
+        for (let threshold of thresholds) {
+            let comparison = operators[threshold['option']](data['dimension3'], threshold['dimension3']);
+            if (comparison === true) {
+                if (threshold['severity'] === '1' || threshold['severity'] === '2') $(row).find('td:eq(2)').css('color', 'red');
+                else if (threshold['severity'] === '3') $(row).find('td:eq(2)').css('color', 'orange');
+                else if (threshold['severity'] === '4') $(row).find('td:eq(2)').css('color', 'green');
+            }
+        }
     },
 
     buildHighchart: function (jsondata) {
@@ -245,22 +278,6 @@ OCA.Analytics.UI = {
         let xAxisCategories = [];
         let xplotOptions = [];
 
-        if (parseInt(jsondata.options.type) === 888) { // obsolete CSV logic
-            let dataOptions = [];
-            dataOptions = {csv: jsondata.data};
-            xAxisOptions = {
-                type: 'category'
-            };
-            if (chartType === 'datetime') {
-                xAxisOptions = {
-                    type: 'datetime',
-                    dateTimeLabelFormats: {
-                        day: '%Y'
-                    },
-                };
-                chartType = 'line';
-            }
-        } else {
             document.getElementById('drilldown').style.removeProperty('display');
             let lastObject = 0;
             let index = 0;
@@ -287,7 +304,8 @@ OCA.Analytics.UI = {
                 }
             }
 
-            if (chartType === 'datetime') {
+
+        if (chartType === 'datetime') {
                 xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
                 xAxisOptions = {
                     type: 'datetime',
@@ -310,8 +328,8 @@ OCA.Analytics.UI = {
             if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_GIT) {
                 seriesOptions[0]['showInLegend'] = false;
             }
-        }
 
+        //$('#chartContainer').highcharts()
         Highcharts.chart('chartContainer', {
             series: seriesOptions,
             chart: {
@@ -348,6 +366,7 @@ OCA.Analytics.UI = {
             xAxis: xAxisOptions,
             plotOptions: xplotOptions,
             //data: dataOptions
+
         });
     },
 

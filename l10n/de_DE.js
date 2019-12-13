@@ -2,14 +2,14 @@ OC.L10N.register(
     'analytics',
     {
         'Options': 'Optionen',
-            'Report': 'Bericht',
+        'Report': 'Bericht',
         'Data': 'Daten',
         'Share': 'Freigaben',
         'No maintenance possible': 'Keine Pflege möglich',
-            'Use this endpoint to submit data via an API:': 'Benutze den folgenden Endpunkt um Daten via API hinzuzufügen:',
-            'Detail instructions at:': 'Genaue Informationen unter:',
+        'Use this endpoint to submit data via an API:': 'Benutze den folgenden Endpunkt um Daten via API hinzuzufügen:',
+        'Detail instructions at:': 'Genaue Informationen unter:',
         'Select file': 'Datei wählen',
-            'Reading data': 'Daten laden',
+        'Reading data': 'Daten laden',
         'Enter GitHub User/Repository. The "/" is important.': 'GitHub User/Repository eingeben. Der "/" ist an dieser Stelle wichtig.',
         'Data maintenance is not possible for this type of report': 'Datenpflege ist für diese Art von Bericht nicht möglich',
         'No Shares found': 'keine Freigaben gefunden',
@@ -31,8 +31,9 @@ OC.L10N.register(
         'Showing _START_ to _END_ of _TOTAL_ entries': 'Zeige _START_ bis _END_ von _TOTAL_ Einträgen',
         'Delete Report': 'Bericht löschen',
         'Are you sure?': 'Bist Du sicher?',
-            'All data will be deleted!': 'Alle Daten werden gelöscht!',
-            'Show in Analytics': 'In Analytics anzeigen'
+        'All data will be deleted!': 'Alle Daten werden gelöscht!',
+        'Show in Analytics': 'In Analytics anzeigen',
+        'Thresholds': 'Schwellwerte'
     },
     '');
 

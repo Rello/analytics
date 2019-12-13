@@ -19,17 +19,20 @@ class StorageController extends Controller
 {
     private $logger;
     private $DBController;
+    private $ThresholdController;
 
     public function __construct(
         string $AppName,
         IRequest $request,
         ILogger $logger,
-        DbController $DBController
+        DbController $DBController,
+        ThresholdController $ThresholdController
     )
     {
         parent::__construct($AppName, $request);
         $this->logger = $logger;
         $this->DBController = $DBController;
+        $this->ThresholdController = $ThresholdController;
     }
 
     /**
@@ -49,14 +52,15 @@ class StorageController extends Controller
         $header['dimension3'] = $datasetMetadata['dimension3'];
 
         $data = $this->DBController->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
+        $thresholds = $this->ThresholdController->read($datasetMetadata['id']);
 
-        $result = empty($data) ? [
+        return empty($data) ? [
             'status' => 'nodata'
         ] : [
             'header' => $header,
-            'data' => $data
+            'data' => $data,
+            'thresholds' => $thresholds,
         ];
-        return $result;
     }
 
     /**
@@ -72,17 +76,19 @@ class StorageController extends Controller
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
         $dimension3 = str_replace(',', '.', $dimension3);
+
+        $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $dimension3);
         $action = $this->DBController->createData($datasetId, $dimension1, $dimension2, $dimension3);
 
         $insert = $update = 0;
         if ($action === 'insert') $insert = 1;
         elseif ($action === 'update') $update = 1;
 
-        $result = [
+        return [
             'insert' => $insert,
-            'update' => $update
+            'update' => $update,
+            'validate' => $validate
         ];
-        return $result;
     }
 
     /**
@@ -96,7 +102,6 @@ class StorageController extends Controller
      */
     public function delete(int $datasetId, $dimension1, $dimension2)
     {
-        $result = $this->DBController->deleteData($datasetId, $dimension1, $dimension2);
-        return $result;
+        return $this->DBController->deleteData($datasetId, $dimension1, $dimension2);
     }
 }

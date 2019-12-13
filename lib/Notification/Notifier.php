@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace OCA\Analytics\Notification;
 
 use InvalidArgumentException;
+use OCP\ILogger;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
-
 
 class Notifier implements INotifier
 {
@@ -33,12 +33,16 @@ class Notifier implements INotifier
     /** @var IURLGenerator */
     protected $urlGenerator;
 
+    private $logger;
+
     public function __construct(IFactory $l10nFactory,
                                 IUserManager $userManager,
+                                ILogger $logger,
                                 IURLGenerator $urlGenerator)
     {
         $this->l10nFactory = $l10nFactory;
         $this->userManager = $userManager;
+        $this->logger = $logger;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -68,7 +72,7 @@ class Notifier implements INotifier
      * @param INotification $notification
      * @param string $languageCode The code of the language that should be used to prepare the notification
      * @return INotification
-     * @throws \InvalidArgumentException When the notification was not prepared by a notifier
+     * @throws InvalidArgumentException When the notification was not prepared by a notifier
      * @throws AlreadyProcessedException When the notification is not needed anymore and should be deleted
      * @since 9.0.0
      */
@@ -81,28 +85,26 @@ class Notifier implements INotifier
 
         // Read the language from the notification
         $l = $this->l10nFactory->get('analytics', $languageCode);
+        $parsedSubject = '';
 
+        //$this->logger->error('Notifier 89: '.$notification->getSubject());
         switch ($notification->getSubject()) {
             case NotificationManager::SUBJECT_THRESHOLD:
                 //$notification->setParsedMessage('parsed message');
                 $notification->setParsedSubject('parsed subject');
-                $parsedSubject = $l->t('Exception in Report {object}. The value of "{subject}" has the exception of "{rule}"');
+                $parsedSubject = $l->t("Exception in Report '{report}'. The value of '{subject}' reached the threshold of '{rule} {value}'");
                 break;
         }
-
-
-        $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.main', [
-            'analytics' => $notification->getObjectId(),
-        ]);
+        $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $notification->getObjectId();
 
         $parameters = $notification->getSubjectParameters();
         $notification->setRichSubject(
             $parsedSubject,
             [
-                'object' => [
+                'report' => [
                     'type' => 'highlight',
                     'id' => $notification->getObjectId(),
-                    'name' => $notification->getObjectId(),
+                    'name' => $parameters['report'],
                     'link' => $link,
                 ],
                 'subject' => [
@@ -114,6 +116,11 @@ class Notifier implements INotifier
                     'type' => 'highlight',
                     'id' => $notification->getObjectId(),
                     'name' => $parameters['rule'],
+                ],
+                'value' => [
+                    'type' => 'highlight',
+                    'id' => $notification->getObjectId(),
+                    'name' => $parameters['value'],
                 ]
             ]
         );

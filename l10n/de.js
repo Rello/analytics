@@ -32,6 +32,7 @@ OC.L10N.register(
         'Delete Report': 'Bericht löschen',
         'Are you sure?': 'Bist Du sicher?',
         'All data will be deleted!': 'Alle Daten werden gelöscht!',
-        'Show in Analytics': 'In Analytics anzeigen'
+        'Show in Analytics': 'In Analytics anzeigen',
+        'Thresholds': 'Schwellwerte'
     },
     '');
