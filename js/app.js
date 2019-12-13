@@ -214,7 +214,6 @@ OCA.Analytics.UI = {
             }
             data = jsondata.data;
         }
-        let Test = "test";
 
         let language = {
             search: t('analytics', 'Search'),
@@ -243,7 +242,7 @@ OCA.Analytics.UI = {
 
         var operators = {
             '=': function (a, b) {
-                return a = b
+                return a === b
             },
             '<': function (a, b) {
                 return a < b
@@ -261,9 +260,13 @@ OCA.Analytics.UI = {
         for (let threshold of thresholds) {
             let comparison = operators[threshold['option']](data['dimension3'], threshold['dimension3']);
             if (comparison === true) {
-                if (threshold['severity'] === '1' || threshold['severity'] === '2') $(row).find('td:eq(2)').css('color', 'red');
-                else if (threshold['severity'] === '3') $(row).find('td:eq(2)').css('color', 'orange');
-                else if (threshold['severity'] === '4') $(row).find('td:eq(2)').css('color', 'green');
+                if (threshold['severity'] === '1' || threshold['severity'] === '2') {
+                    $(row).find('td:eq(2)').css('color', 'red');
+                } else if (threshold['severity'] === '3') {
+                    $(row).find('td:eq(2)').css('color', 'orange');
+                } else if (threshold['severity'] === '4') {
+                    $(row).find('td:eq(2)').css('color', 'green');
+                }
             }
         }
     },
@@ -278,56 +281,56 @@ OCA.Analytics.UI = {
         let xAxisCategories = [];
         let xplotOptions = [];
 
-            document.getElementById('drilldown').style.removeProperty('display');
-            let lastObject = 0;
-            let index = 0;
+        document.getElementById('drilldown').style.removeProperty('display');
+        let lastObject = 0;
+        let index = 0;
 
-            for (let values of jsondata.data) {
+        for (let values of jsondata.data) {
 
-                if (lastObject !== values['dimension1']) {
-                    seriesOptions.push({data: [], name: values['dimension1']});
-                    if (lastObject !== 0) {
-                        index++;
-                    }
-                    lastObject = values['dimension1'];
+            if (lastObject !== values['dimension1']) {
+                seriesOptions.push({data: [], name: values['dimension1']});
+                if (lastObject !== 0) {
+                    index++;
                 }
-                // create array per dimension 1 with subarrays per dimension 2 & dimension 3 (value)
-                // [0] => name: 'dimension 1', data : [ [0] => dimension 2, dimension 3],
-                // [0] => name: 'dimension 1', data : [ [1] => dimension 2, dimension 3]
-                if (chartType === 'datetime') {
-                    //seriesOptions[index]['data'].push([Date.UTC(parseInt(values['dimension2']), 1, 1), parseFloat(values['dimension3'])]);
-                    seriesOptions[index]['data'].push([new Date(values['dimension2']).getTime(), parseFloat(values['dimension3'])]);
-                } else {
-                    seriesOptions[index]['data'].push([values['dimension2'], parseFloat(values['dimension3'])]);
-                    // create array all dimension 2 for the x-axis
-                    xAxisCategories.push(values['dimension2']);
-                }
+                lastObject = values['dimension1'];
             }
+            // create array per dimension 1 with subarrays per dimension 2 & dimension 3 (value)
+            // [0] => name: 'dimension 1', data : [ [0] => dimension 2, dimension 3],
+            // [0] => name: 'dimension 1', data : [ [1] => dimension 2, dimension 3]
+            if (chartType === 'datetime') {
+                //seriesOptions[index]['data'].push([Date.UTC(parseInt(values['dimension2']), 1, 1), parseFloat(values['dimension3'])]);
+                seriesOptions[index]['data'].push([new Date(values['dimension2']).getTime(), parseFloat(values['dimension3'])]);
+            } else {
+                seriesOptions[index]['data'].push([values['dimension2'], parseFloat(values['dimension3'])]);
+                // create array all dimension 2 for the x-axis
+                xAxisCategories.push(values['dimension2']);
+            }
+        }
 
 
         if (chartType === 'datetime') {
-                xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
-                xAxisOptions = {
-                    type: 'datetime',
-                    dateTimeLabelFormats: {
-                        day: '%Y'
-                    },
-                };
-                chartType = 'line';
-            } else if (chartType === 'area') {
-                xplotOptions = {area: {stacking: 'normal'}, series: {marker: {enabled: false},},};
-                xAxisOptions = {
-                    categories: xAxisCategories,
-                };
-            } else {
-                xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
-                xAxisOptions = {
-                    categories: xAxisCategories,
-                };
-            }
-            if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_GIT) {
-                seriesOptions[0]['showInLegend'] = false;
-            }
+            xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
+            xAxisOptions = {
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                    day: '%Y'
+                },
+            };
+            chartType = 'line';
+        } else if (chartType === 'area') {
+            xplotOptions = {area: {stacking: 'normal'}, series: {marker: {enabled: false},},};
+            xAxisOptions = {
+                categories: xAxisCategories,
+            };
+        } else {
+            xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
+            xAxisOptions = {
+                categories: xAxisCategories,
+            };
+        }
+        if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_GIT) {
+            seriesOptions[0]['showInLegend'] = false;
+        }
 
         //$('#chartContainer').highcharts()
         Highcharts.chart('chartContainer', {

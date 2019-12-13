@@ -78,19 +78,6 @@ class ThresholdController extends Controller
     }
 
     /**
-     * update threshold
-     *
-     * @NoAdminRequired
-     * @param int $datasetId
-     * @param int $thresholdId
-     * @return bool
-     */
-    public function update(int $datasetId, int $thresholdId)
-    {
-        return $this->DBController->updateDataset($datasetId);
-    }
-
-    /**
      * validate threshold
      *
      * @NoAdminRequired
@@ -103,12 +90,8 @@ class ThresholdController extends Controller
      */
     public function validate(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
-        $thresholds = array();
-        array_push($thresholds, ['dimension1' => 'a', 'option' => '<', 'value' => '10']);
-        array_push($thresholds, ['dimension1' => 'b', 'option' => '<', 'value' => '10']);
-        $thresholds = $this->DBController->getSevOneThresholdsByDataset($datasetId);
-
         $result = '';
+        $thresholds = $this->DBController->getSevOneThresholdsByDataset($datasetId);
         $datasetMetadata = $this->DBController->getOwnDataset($datasetId);
 
         foreach ($thresholds as $threshold) {
@@ -122,5 +105,4 @@ class ThresholdController extends Controller
         }
         return $result;
     }
-
 }
