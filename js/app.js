@@ -264,13 +264,14 @@ OCA.Analytics.UI = {
         thresholds = thresholds.filter(p => p.dimension1 === data['dimension1'] || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            let comparison = operators[threshold['option']](data['dimension3'], threshold['dimension3']);
+            let comparison = operators[threshold['option']](parseFloat(data['dimension3']), parseFloat(threshold['dimension3']));
+            threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
-                if (threshold['severity'] === '2') {
+                if (threshold['severity'] === 2) {
                     $(row).find('td:eq(2)').css('color', 'red');
-                } else if (threshold['severity'] === '3') {
+                } else if (threshold['severity'] === 3) {
                     $(row).find('td:eq(2)').css('color', 'orange');
-                } else if (threshold['severity'] === '4') {
+                } else if (threshold['severity'] === 4) {
                     $(row).find('td:eq(2)').css('color', 'green');
                 }
             }

@@ -29,7 +29,7 @@ Util::addScript('analytics', 'highcharts/highcharts');
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
                 <h1 class="header-appname" id="header-appname">
-                    Data Analytics for Nextcloud - Public Share
+                    Data Analytics<br>for Nextcloud
                 </h1>
             </a>
         </div>

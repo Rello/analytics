@@ -11,7 +11,8 @@ From data to report. Data Analytics provides modular datasources, a realtime or 
 - 3rd party*: GitHub Statistics
 - Storage: stream or database
 - Visualization: charts, tables
-- Integration: Files app, NC Activity, NC Notifications* (thresholds), NC workflows*
+- Thresholds for alerts and color coding
+- Integration: Files app, NC Activity, NC Notifications, NC workflows*
 - Sharing: user*, protected, public
 
 (*work in progress)

@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.0 - 2019-12-14
+
+### Added
+- Thresholds: NC Notification and color coding [#5](https://github.com/rello/analytics/issues/5)
+
 ## 1.1.0 - 2019-12-05
 
 ### Added
