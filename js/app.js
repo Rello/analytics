@@ -253,14 +253,20 @@ OCA.Analytics.UI = {
             '<=': function (a, b) {
                 return a <= b
             },
+            '>=': function (a, b) {
+                return a >= b
+            },
+            '!=': function (a, b) {
+                return a != b
+            },
         };
 
-        thresholds = thresholds.filter(p => p.dimension1 === data['dimension1']);
+        thresholds = thresholds.filter(p => p.dimension1 === data['dimension1'] || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
             let comparison = operators[threshold['option']](data['dimension3'], threshold['dimension3']);
             if (comparison === true) {
-                if (threshold['severity'] === '1' || threshold['severity'] === '2') {
+                if (threshold['severity'] === '2') {
                     $(row).find('td:eq(2)').css('color', 'red');
                 } else if (threshold['severity'] === '3') {
                     $(row).find('td:eq(2)').css('color', 'orange');

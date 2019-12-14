@@ -646,22 +646,28 @@ OCA.Analytics.Sidebar.Threshold = {
 
     buildThresholdRow: function (data) {
 
-        let bulletColor;
+        let bulletColor, bullet;
         data.severity = parseInt(data.severity);
-        if (data.severity === 1 || data.severity === 2) {
+        if (data.severity === 2) {
             bulletColor = 'red';
         } else if (data.severity === 3) {
-            bulletColor = 'yellow';
+            bulletColor = 'orange';
         } else {
             bulletColor = 'green';
         }
 
+        if (data.severity === 1) {
+            bullet = document.createElement('img');
+            bullet.src = '/nextcloud/apps/notifications/img/notifications-dark.svg';
+            bullet.classList.add('thresholdBullet');
+        } else {
+            bullet = document.createElement('div');
+            bullet.style.backgroundColor = bulletColor;
+            bullet.classList.add('thresholdBullet');
+        }
+
         let item = document.createElement('div');
         item.classList.add('thresholdItem');
-
-        let bullet = document.createElement('div');
-        bullet.classList.add('thresholdBullet');
-        bullet.style.backgroundColor = bulletColor;
 
         let text = document.createElement('div');
         text.classList.add('thresholdText');

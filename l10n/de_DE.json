@@ -63,12 +63,18 @@
     "Exception in Report '{report}'. The value of '{subject}' reached the threshold of '{rule} {value}'": "Ausnahme im Bericht '{report}'. Der Wert von '{subject}' hat den Schwellwert von '{rule} {value}' erreicht",
     "Option": "Option",
     "Severity": "Priorität",
-    "red + Notification": "rot + Benachrichtigung",
+    "Notification": "Benachrichtigung",
     "red": "rot",
     "yellow": "gelb",
     "green": "grün",
     "Thresholds can trigger notifications and color coding in reports": "Schwellwerte können Benachrichtigungen und Einfärbungen in Reports auslösen",
-    "Save Threshold": "Schwellwert speichern"
+    "Save Threshold": "Schwellwert speichern",
+    "= equal": "= gleich",
+    "> greater": "> größer",
+    "< less": "< kleiner",
+    "<= less equal": "<= kleiner gleich",
+    ">= greater equal": ">= größer gleich",
+    "!= not equal": "!= ungleich"
   },
   "pluralForm": ""
 }

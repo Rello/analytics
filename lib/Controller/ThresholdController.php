@@ -96,7 +96,7 @@ class ThresholdController extends Controller
 
         foreach ($thresholds as $threshold) {
             //$this->logger->error('ThresholdController 108: ' . json_encode($threshold));
-            if ($threshold['dimension1'] === $dimension1) {
+            if ($threshold['dimension1'] === $dimension1 OR $threshold['dimension1'] === '*') {
                 if (version_compare($dimension3, $threshold['dimension3'], $threshold['option'])) {
                     $this->NotificationManager->triggerNotification(NotificationManager::OBJECT_DATASET, $datasetId, NotificationManager::SUBJECT_THRESHOLD, ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['dimension3']]);
                     $result = 'Threshold value met';

@@ -187,10 +187,12 @@
                 <div style="display: table-cell;"><?php p($l->t('Option')); ?></div>
                 <div style="display: table-cell;">
                     <select id="sidebarThresholdOption" class="input150">
-                        <option value="=" selected><?php p($l->t(' = equal')); ?></option>
+                        <option value="=" selected><?php p($l->t('= equal')); ?></option>
                         <option value=">"><?php p($l->t('> greater')); ?></option>
                         <option value="<"><?php p($l->t('< less')); ?></option>
                         <option value="<="><?php p($l->t('<= less equal')); ?></option>
+                        <option value=">="><?php p($l->t('>= greater equal')); ?></option>
+                        <option value="!="><?php p($l->t('!= not equal')); ?></option>
                     </select>
                 </div>
             </div>
@@ -203,7 +205,7 @@
                 <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>
                 <div style="display: table-cell;">
                     <select id="sidebarThresholdSeverity" class="input150">
-                        <option value="1" selected><?php p($l->t('red + Notification')); ?></option>
+                        <option value="1" selected><?php p($l->t('Notification')); ?></option>
                         <option value="2"><?php p($l->t('red')); ?></option>
                         <option value="3"><?php p($l->t('yellow')); ?></option>
                         <option value="4"><?php p($l->t('green')); ?></option>
