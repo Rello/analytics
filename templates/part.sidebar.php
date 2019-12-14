@@ -181,7 +181,8 @@
             <div style="display: table-row;">
                 <div id="sidebarThresholdTextDimension1"
                      style="display: table-cell; width: 120px;"><?php p($l->t('Object')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarThresholdDimension1" class="input150"></div>
+                <div style="display: table-cell;"><input id="sidebarThresholdDimension1" class="input150"
+                                                         placeholder="<?php p($l->t('single value or *')); ?>"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Option')); ?></div>
