@@ -16,7 +16,6 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
-use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -26,35 +25,34 @@ use OCP\IURLGenerator;
  */
 class PageController extends Controller
 {
+    protected $appName;
     private $userId;
-    private $l10n;
     private $configManager;
     private $logger;
-    private $share;
+    private $ShareController;
     /** @var IURLGenerator */
     private $url;
     /** @var DataSession */
     private $DataSession;
 
     public function __construct(
-        string $AppName,
+        string $appName,
         IRequest $request,
         $userId,
         ILogger $logger,
         IConfig $configManager,
-        IL10N $l10n,
         IURLGenerator $url,
-        ShareController $share,
+        ShareController $ShareController,
         DataSession $DataSession
     )
     {
-        parent::__construct($AppName, $request);
+        parent::__construct($appName, $request);
+        $this->appName = $appName;
         $this->userId = $userId;
         $this->configManager = $configManager;
-        $this->l10n = $l10n;
         $this->logger = $logger;
         $this->url = $url;
-        $this->share = $share;
+        $this->ShareController = $ShareController;
         $this->DataSession = $DataSession;
     }
 
@@ -64,7 +62,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        return new TemplateResponse('analytics', 'main');
+        return new TemplateResponse($this->appName, 'main');
     }
 
     /**
@@ -91,27 +89,27 @@ class PageController extends Controller
      */
     public function indexPublic($token, string $password = '')
     {
-        $share = $this->share->getDatasetByToken($token);
+        $share = $this->ShareController->getDatasetByToken($token);
 
         if (empty($share)) {
             // Dataset not shared or wrong token
             return new RedirectResponse($this->url->linkToRoute('core.login.showLoginForm', [
-                'redirect_url' => $this->url->linkToRoute('analytics.page.index', ['token' => $token]),
+                'redirect_url' => $this->url->linkToRoute($this->appName . '.page.index', ['token' => $token]),
             ]));
         } else {
             if ($share['password'] !== null) {
                 $password = $password !== '' ? $password : (string)$this->DataSession->getPasswordForShare($token);
-                $passwordVerification = $this->share->verifyPassword($password, $share['password']);
+                $passwordVerification = $this->ShareController->verifyPassword($password, $share['password']);
                 if ($passwordVerification === true) {
                     $this->DataSession->setPasswordForShare($token, $password);
                 } else {
                     $this->DataSession->removePasswordForShare($token);
-                    return new TemplateResponse('analytics', 'authenticate', ['wrongpw' => $password !== '',], 'guest');
+                    return new TemplateResponse($this->appName, 'authenticate', ['wrongpw' => $password !== '',], 'guest');
                 }
             }
             $params = array();
             $params['token'] = $token;
-            return new TemplateResponse('analytics', 'public', $params);
+            return new TemplateResponse($this->appName, 'public', $params);
         }
     }
 }

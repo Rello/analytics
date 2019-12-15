@@ -94,12 +94,12 @@ class Provider implements IProvider
         );
 
         $event->setParsedSubject($parsedSubject)
-            ->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
+            ->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'app-dark.svg')));
         return $event;
     }
 
     public function Url($endpoint)
     {
-        return $this->urlGenerator->linkToRouteAbsolute('analytics.page.index');
+        return $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $endpoint;
     }
 }
