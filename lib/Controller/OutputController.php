@@ -30,6 +30,7 @@ class OutputController extends Controller
     private $ShareController;
     private $DataSourceController;
     private $StorageController;
+    private $ThresholdController;
 
     public function __construct(
         string $AppName,
@@ -41,7 +42,8 @@ class OutputController extends Controller
         ShareController $ShareController,
         DataSession $DataSession,
         DataSourceController $DataSourceController,
-        StorageController $StorageController
+        StorageController $StorageController,
+        ThresholdController $ThresholdController
     )
     {
         parent::__construct($AppName, $request);
@@ -53,6 +55,7 @@ class OutputController extends Controller
         $this->ShareController = $ShareController;
         $this->DataSourceController = $DataSourceController;
         $this->StorageController = $StorageController;
+        $this->ThresholdController = $ThresholdController;
     }
 
     /**
@@ -71,7 +74,6 @@ class OutputController extends Controller
         if (empty($datasetMetadata)) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
 
         if (!empty($datasetMetadata)) {
-            //$this->logger->error('test');
             $result = $this->getData($datasetMetadata, $objectDrilldown, $dateDrilldown);
             return new DataResponse($result);
         } else {
@@ -92,12 +94,17 @@ class OutputController extends Controller
      */
     private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
+        //$this->logger->error('dataset csv result: ' . $result);
         $datasetMetadata['type'] = (int)$datasetMetadata['type'];
         if ($datasetMetadata['type'] === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
             $result = $this->StorageController->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
         } else {
             $result = $this->DataSourceController->read($datasetMetadata);
+            unset($result['error']);
         }
+
+        $thresholds = $this->ThresholdController->read($datasetMetadata['id']);
+        $result['thresholds'] = $thresholds;
 
         unset($datasetMetadata['id']
             , $datasetMetadata['parent']
@@ -108,9 +115,9 @@ class OutputController extends Controller
             , $datasetMetadata['dimension3']
             , $datasetMetadata['password']
         );
-        //$this->logger->error('dataset csv result: ' . $result);
-
         $result['options'] = $datasetMetadata;
+
+
         return $result;
     }
 

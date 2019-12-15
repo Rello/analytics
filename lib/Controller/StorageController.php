@@ -52,14 +52,12 @@ class StorageController extends Controller
         $header['dimension3'] = $datasetMetadata['dimension3'];
 
         $data = $this->DBController->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
-        $thresholds = $this->ThresholdController->read($datasetMetadata['id']);
 
         return empty($data) ? [
             'status' => 'nodata'
         ] : [
             'header' => $header,
             'data' => $data,
-            'thresholds' => $thresholds,
         ];
     }
 
