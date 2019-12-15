@@ -61,10 +61,10 @@ class DataLoadController extends Controller
      * @param $dimension2
      * @param $dimension3
      * @return DataResponse|NotFoundResponse
+     * @throws \Exception
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
-        //disabled for the moment
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = $errorMessage = 0;
@@ -85,7 +85,8 @@ class DataLoadController extends Controller
                 'validate' => $action['validate'],
             ];
 
-            if ($errorMessage !== 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
+            //$this->logger->error('DataLoadController 88:'.$errorMessage);
+            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
@@ -119,6 +120,7 @@ class DataLoadController extends Controller
      * @param int $datasetId
      * @param $import
      * @return DataResponse|NotFoundResponse
+     * @throws \Exception
      */
     public function importClipboard($datasetId, $import)
     {
@@ -152,7 +154,7 @@ class DataLoadController extends Controller
                 'error' => $errorMessage,
             ];
 
-            if ($errorMessage !== 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
@@ -167,6 +169,7 @@ class DataLoadController extends Controller
      * @param $path
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
+     * @throws \Exception
      */
     public function importFile(int $datasetId, $path)
     {
@@ -225,5 +228,4 @@ class DataLoadController extends Controller
             return false;
         }
     }
-
 }

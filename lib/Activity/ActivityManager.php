@@ -87,5 +87,7 @@ class ActivityManager
             $event->setAffectedUser($user['uid_owner']);
             $this->manager->publish($event);
         }
+        $event->setAffectedUser($this->userId);
+        $this->manager->publish($event);
     }
 }
