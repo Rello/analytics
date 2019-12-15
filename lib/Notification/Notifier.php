@@ -87,7 +87,7 @@ class Notifier implements INotifier
         $l = $this->l10nFactory->get('analytics', $languageCode);
         $parsedSubject = '';
 
-        //$this->logger->error('Notifier 89: '.$notification->getSubject());
+        //$this->logger->error('Notifier 90: '.$notification->getSubject());
         switch ($notification->getSubject()) {
             case NotificationManager::SUBJECT_THRESHOLD:
                 $parsedSubject = $l->t("Exception in Report '{report}'. The value of '{subject}' reached the threshold of '{rule} {value}'");
@@ -123,6 +123,7 @@ class Notifier implements INotifier
             ]
         );
         $notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
+        $notification->setParsedSubject('analytics');
         return $notification;
     }
 }

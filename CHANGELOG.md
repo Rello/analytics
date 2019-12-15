@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.2 - 2019-12-15
+### Fixed
+- Notification missing setParsedSubject
+
 ## 1.2.1 - 2019-12-15
 ### Fixed
 - Activity not always reported
