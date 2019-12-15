@@ -658,7 +658,7 @@ OCA.Analytics.Sidebar.Threshold = {
 
         if (data.severity === 1) {
             bullet = document.createElement('img');
-            bullet.src = '/nextcloud/apps/notifications/img/notifications-dark.svg';
+            bullet.src = OC.imagePath('notifications', 'notifications-dark.svg');
             bullet.classList.add('thresholdBullet');
         } else {
             bullet = document.createElement('div');

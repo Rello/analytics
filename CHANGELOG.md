@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - Activity not always reported
 - Notification pushed to wrong user
 - Thresholds not read for external report types [#9](https://github.com/rello/analytics/issues/9)
+- Notifications icon path
 
 ## 1.2.0 - 2019-12-14
 ### Added
