@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## 1.2.1 - 2019-12-15
 ### Fixed
 - Activity not always reported
+- Notification pushed to wrong user
 
 ## 1.2.0 - 2019-12-14
 ### Added

@@ -16,16 +16,10 @@ use OCP\IL10N;
 use OCP\ILogger;
 use OCP\Notification\IManager as INotificationManager;
 
-
 class NotificationManager
 {
     const OBJECT_DATASET = 'analytics_dataset';
-    const OBJECT_DATA = 'analytics_data';
     const SUBJECT_THRESHOLD = 'data_threshold';
-    const SUBJECT_DATASET_DELETE = 'dataset_delete';
-    const SUBJECT_DATASET_SHARE = 'dataset_share';
-    const SUBJECT_DATA_ADD = 'data_add';
-    const SUBJECT_DATA_ADD_API = 'data_add_api';
     /** @var INotificationManager */
     protected $notificationManager;
     private $l10n;
@@ -57,14 +51,12 @@ class NotificationManager
      */
     public function triggerNotification($object, $object_id, $subject, $subject_parameter)
     {
-        // $subject_parameter = ['object' => 'Pflanze'];
         $notification = $this->notificationManager->createNotification();
         $notification->setApp('analytics')
             ->setDateTime(new \DateTime())
             ->setObject($object, $object_id)
             ->setSubject($subject, $subject_parameter)
-            ->setUser('admin');
+            ->setUser($this->userId);
         $this->notificationManager->notify($notification);
     }
-
 }

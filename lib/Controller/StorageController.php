@@ -72,6 +72,7 @@ class StorageController extends Controller
      * @param $dimension2
      * @param $dimension3
      * @return array
+     * @throws \Exception
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
     {

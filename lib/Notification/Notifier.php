@@ -90,8 +90,6 @@ class Notifier implements INotifier
         //$this->logger->error('Notifier 89: '.$notification->getSubject());
         switch ($notification->getSubject()) {
             case NotificationManager::SUBJECT_THRESHOLD:
-                //$notification->setParsedMessage('parsed message');
-                $notification->setParsedSubject('parsed subject');
                 $parsedSubject = $l->t("Exception in Report '{report}'. The value of '{subject}' reached the threshold of '{rule} {value}'");
                 break;
         }
@@ -125,8 +123,6 @@ class Notifier implements INotifier
             ]
         );
         $notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
-
-        $notification->setParsedSubject('test');
         return $notification;
     }
 }
