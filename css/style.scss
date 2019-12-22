@@ -60,4 +60,6 @@
   width: 150px;
 }
 
-
+table.dataTable tbody tr {
+  background-color: var(--color-main-background) !important;
+}
