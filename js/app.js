@@ -8,6 +8,7 @@
  * @copyright 2019 Marcel Scherello
  */
 /** global: OCA */
+/** global: OCP */
 /** global: OC */
 'use strict';
 
@@ -32,12 +33,12 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Core = {
     initApplication: function () {
-        let urlHash = decodeURI(location.hash);
+        const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {
-            if (urlHash.substring(2, 3) === 'f') {
+            if (urlHash[2] === 'f') {
                 window.location.href = '#';
                 OCA.Analytics.Backend.createDataset(urlHash.substring(3));
-            } else if (urlHash.substring(2, 3) === 'r') {
+            } else if (urlHash[2] === 'r') {
                 OCA.Analytics.Core.initNavigation(urlHash.substring(4));
             }
         } else {
@@ -74,10 +75,10 @@ OCA.Analytics.UI = {
 
     fillSidebarParentDropdown: function (data) {
         let tableParent = document.querySelector('#templateDataset #sidebarDatasetParent');
-        tableParent.innerHTML = "";
+        tableParent.innerHTML = '';
         let option = document.createElement('option');
         option.text = '';
-        option.value = 0;
+        option.value = '0';
         tableParent.add(option);
 
         for (let dataset of data) {
@@ -96,16 +97,16 @@ OCA.Analytics.UI = {
 
         let a = document.createElement('a');
         a.setAttribute('href', '#/r/' + data.id);
-        data.type = parseInt(data.type);
-        if (data.type === OCA.Analytics.TYPE_INTERNAL_FILE) {
+        let typeINT = parseInt(data.type);
+        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE) {
             typeIcon = 'icon-file';
-        } else if (data.type === OCA.Analytics.TYPE_INTERNAL_DB) {
+        } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (data.type === OCA.Analytics.TYPE_GIT || data.type === OCA.Analytics.TYPE_EXTERNAL_FILE) {
+        } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
             typeIcon = 'icon-external';
-        } else if (data.type === OCA.Analytics.TYPE_SHARED) {
+        } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
             typeIcon = 'icon-shared';
-        } else if (data.type === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        } else if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
         } else {
@@ -188,34 +189,21 @@ OCA.Analytics.UI = {
 
     buildDataTable: function (jsondata) {
         document.getElementById('tableContainer').style.removeProperty('display');
-        let i = 0;
         let columns = [];
         let data;
 
-        if (parseInt(jsondata.options.type) === 888) { // obsolete CSV logic
-            data = $.csv.toObjects(jsondata.data);
-            let csvHeader = jsondata.data.split('\n')[0];
-            let singleHeader = csvHeader.split(',');
-            while (i < singleHeader.length) {
-                let text = singleHeader[i].replace(/[^a-zA-Z0-9 &%.]/g, '').trim();
-                columns[i] = {'title': text, 'data': text};
-                i += 1;
+        document.getElementById('drilldown').style.removeProperty('display');
+        let columnKeys = Object.keys(jsondata.data[0]);
+        let header = jsondata.header;
+        for (let i = 0; i < columnKeys.length; i++) {
+            columns[i] = {'data': columnKeys[i], 'title': header[columnKeys[i]]};
+            if (header[columnKeys[i]].length === 1) {
+                columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, header[columnKeys[i]] + ' ');
             }
-        } else {
-            document.getElementById('drilldown').style.removeProperty('display');
-            let columnKeys = Object.keys(jsondata.data[0]);
-            let header = jsondata.header;
-            while (i < columnKeys.length) {
-                columns[i] = {'data': columnKeys[i], 'title': header[columnKeys[i]]};
-                if (header[columnKeys[i]].length === 1) {
-                    columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, header[columnKeys[i]] + ' ');
-                }
-                i += 1;
-            }
-            data = jsondata.data;
         }
+        data = jsondata.data;
 
-        let language = {
+        const language = {
             search: t('analytics', 'Search'),
             lengthMenu: t('analytics', 'Show _MENU_ entries'),
             info: t('analytics', 'Showing _START_ to _END_ of _TOTAL_ entries'),
@@ -233,14 +221,14 @@ OCA.Analytics.UI = {
             columns: columns,
             language: language,
             rowCallback: function (row, data, index) {
-                OCA.Analytics.UI.rowCallback(row, data, index, jsondata.thresholds)
+                OCA.Analytics.UI.dataTableRowCallback(row, data, index, jsondata.thresholds)
             },
         });
     },
 
-    rowCallback: function (row, data, index, thresholds) {
+    dataTableRowCallback: function (row, data, index, thresholds) {
 
-        var operators = {
+        const operators = {
             '=': function (a, b) {
                 return a === b
             },
@@ -257,14 +245,14 @@ OCA.Analytics.UI = {
                 return a >= b
             },
             '!=': function (a, b) {
-                return a != b
+                return a !== b
             },
         };
 
         thresholds = thresholds.filter(p => p.dimension1 === data['dimension1'] || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            let comparison = operators[threshold['option']](parseFloat(data['dimension3']), parseFloat(threshold['dimension3']));
+            const comparison = operators[threshold['option']](parseFloat(data['dimension3']), parseFloat(threshold['dimension3']));
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
@@ -283,10 +271,7 @@ OCA.Analytics.UI = {
         document.getElementById('chartContainer').style.removeProperty('display');
         let chartType = jsondata.options.chart;
 
-        let seriesOptions = [];
-        let xAxisOptions = [];
-        let xAxisCategories = [];
-        let xplotOptions = [];
+        let seriesOptions = [], xAxisOptions = [], xAxisCategories = [], xplotOptions = [];
 
         document.getElementById('drilldown').style.removeProperty('display');
         let lastObject = 0;
@@ -411,18 +396,18 @@ OCA.Analytics.UI = {
 
 OCA.Analytics.Backend = {
 
-    getData: function () {
+    getData: function (exportData = null) {
         document.getElementById('analytics-intro').classList.add('hidden');
         document.getElementById('analytics-content').removeAttribute('hidden');
-        let objectDrilldown = document.getElementById('checkBoxObject').checked;
-        let dateDrilldown = document.getElementById('checkBoxDate').checked;
+        const objectDrilldown = document.getElementById('checkBoxObject').checked;
+        const dateDrilldown = document.getElementById('checkBoxDate').checked;
         let url;
 
         if (document.getElementById('sharingToken').value === '') {
-            let datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
+            const datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
             url = OC.generateUrl('apps/analytics/data/') + datasetId;
         } else {
-            let token = document.getElementById('sharingToken').value;
+            const token = document.getElementById('sharingToken').value;
             url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
@@ -454,7 +439,7 @@ OCA.Analytics.Backend = {
 
     getDatasets: function (datasetId) {
         $.ajax({
-            type: "GET",
+            type: 'GET',
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
                 OCA.Analytics.UI.buildNavigation(data);
@@ -478,12 +463,11 @@ OCA.Analytics.Backend = {
             }
         });
     },
-
 };
 
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
-    document.getElementById('analytics-warning').classList.add('hidden')
+    document.getElementById('analytics-warning').classList.add('hidden');
     if (document.getElementById('sharingToken').value === '') {
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
