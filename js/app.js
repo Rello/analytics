@@ -39,153 +39,20 @@ OCA.Analytics.Core = {
                 window.location.href = '#';
                 OCA.Analytics.Backend.createDataset(urlHash.substring(3));
             } else if (urlHash[2] === 'r') {
-                OCA.Analytics.Core.initNavigation(urlHash.substring(4));
+                OCA.Analytics.Navigation.init(urlHash.substring(4));
             }
         } else {
-            OCA.Analytics.Core.initNavigation();
+            OCA.Analytics.Navigation.init();
         }
-    },
-
-    initNavigation: function (datasetId) {
-        document.getElementById('navigationDatasets').innerHTML = '';
-        OCA.Analytics.Backend.getDatasets(datasetId);
     },
 
     handleDrilldownChange: function () {
         OCA.Analytics.UI.resetContent();
         OCA.Analytics.Backend.getData();
     },
-
-    handleNewDatasetButton: function () {
-        OCA.Analytics.Backend.createDataset();
-    },
-
-    createDemoReport: function () {
-        OCA.Analytics.Backend.createDataset('DEMO');
-    }
 };
 
 OCA.Analytics.UI = {
-
-    buildNavigation: function (data) {
-        for (let navigation of data) {
-            OCA.Analytics.UI.buildNavigationRow(navigation);
-        }
-    },
-
-    fillSidebarParentDropdown: function (data) {
-        let tableParent = document.querySelector('#templateDataset #sidebarDatasetParent');
-        tableParent.innerHTML = '';
-        let option = document.createElement('option');
-        option.text = '';
-        option.value = '0';
-        tableParent.add(option);
-
-        for (let dataset of data) {
-            if (parseInt(dataset.type) === OCA.Analytics.TYPE_EMPTY_GROUP) {
-                option = document.createElement('option');
-                option.text = dataset.name;
-                option.value = dataset.id;
-                tableParent.add(option);
-            }
-        }
-    },
-
-    buildNavigationRow: function (data) {
-        let li = document.createElement('li');
-        let typeIcon;
-
-        let a = document.createElement('a');
-        a.setAttribute('href', '#/r/' + data.id);
-        let typeINT = parseInt(data.type);
-        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE) {
-            typeIcon = 'icon-file';
-        } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
-            typeIcon = 'icon-projects';
-        } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
-            typeIcon = 'icon-external';
-        } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
-            typeIcon = 'icon-shared';
-        } else if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
-            typeIcon = 'icon-folder';
-            li.classList.add('collapsible');
-        } else {
-            typeIcon = '';
-        }
-
-        if (typeIcon) {
-            a.classList.add(typeIcon);
-        }
-        a.innerText = data.name;
-        a.dataset.id = data.id;
-        a.dataset.type = data.type;
-        a.dataset.name = data.name;
-
-        let div = document.createElement('div');
-        div.classList.add('app-navigation-entry-utils');
-        let ul = document.createElement('ul');
-        let li2 = document.createElement('li');
-        li2.classList.add('app-navigation-entry-utils-menu-button');
-        let button = document.createElement('button');
-        button.addEventListener('click', OCA.Analytics.UI.handleOptionsClicked);
-        button.dataset.id = data.id;
-        button.dataset.name = data.name;
-        button.dataset.type = data.type;
-
-        let ulSublist = document.createElement('ul');
-        ulSublist.id = 'dataset-' + data.id;
-
-        li2.appendChild(button);
-        if (data.type !== OCA.Analytics.TYPE_SHARED) {
-            ul.appendChild(li2);
-        }
-        div.appendChild(ul);
-        li.appendChild(a);
-        li.appendChild(div);
-
-        if (data.type === OCA.Analytics.TYPE_EMPTY_GROUP) {
-            li.appendChild(ulSublist);
-            a.addEventListener('click', OCA.Analytics.UI.handleGroupClicked);
-        } else {
-            a.addEventListener('click', OCA.Analytics.UI.handleNavigationClicked);
-        }
-
-        let categoryList;
-        if (parseInt(data.parent) !== 0) {
-            categoryList = document.getElementById('dataset-' + data.parent);
-        } else {
-            categoryList = document.getElementById('navigationDatasets');
-        }
-        categoryList.appendChild(li);
-    },
-
-    handleNavigationClicked: function (evt) {
-
-        OCA.Analytics.UI.resetContent();
-        OCA.Analytics.Sidebar.hideSidebar();
-        let activeCategory = document.querySelector('#navigationDatasets .active');
-        if (evt) {
-            if (activeCategory) {
-                activeCategory.classList.remove('active');
-            }
-            evt.target.classList.add('active');
-            OCA.Analytics.Backend.getData();
-        }
-    },
-
-    handleOptionsClicked: function (evt) {
-        OCA.Analytics.Sidebar.showSidebar(evt);
-        evt.stopPropagation();
-    },
-
-    handleGroupClicked: function (evt) {
-        if (evt.target.parentNode.classList.contains('open')) {
-            evt.target.parentNode.classList.remove('open');
-        } else {
-            evt.target.parentNode.classList.add('open');
-        }
-        evt.stopPropagation();
-    },
 
     buildDataTable: function (jsondata) {
         document.getElementById('tableContainer').style.removeProperty('display');
@@ -442,8 +309,8 @@ OCA.Analytics.Backend = {
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
-                OCA.Analytics.UI.buildNavigation(data);
-                OCA.Analytics.UI.fillSidebarParentDropdown(data);
+                OCA.Analytics.Navigation.buildNavigation(data);
+                OCA.Analytics.Sidebar.Dataset.fillSidebarParentDropdown(data);
                 if (datasetId) {
                     document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
                 }
@@ -459,7 +326,7 @@ OCA.Analytics.Backend = {
                 'file': file,
             },
             success: function (data) {
-                OCA.Analytics.Core.initNavigation(data);
+                OCA.Analytics.Navigation.init(data);
             }
         });
     },
@@ -471,14 +338,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('sharingToken').value === '') {
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
-        document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Core.handleNewDatasetButton);
-        document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Core.createDemoReport);
+        document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
+        if (document.getElementById('config').value === 'false') {
+            document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
+            document.getElementById('checkBoxObject').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
+            document.getElementById('checkBoxDate').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
+        }
     } else {
         OCA.Analytics.Backend.getData();
     }
-
-    document.getElementById('checkBoxObject').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
-    document.getElementById('checkBoxDate').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
 
     $('#myInput').on('keyup', function () {
         table.search(this.value).draw();

@@ -12,6 +12,7 @@
 <div id="analytics-content" style="width:100%; padding: 10px" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
+    <input type="hidden" name="config" value="false" id="config">
     <h2 id="dataHeader" style="text-align: center;"></h2>
     <h3 id="dataSubHeader" style="text-align: center;"></h3>
     <div style="width:100%; padding: 20px">

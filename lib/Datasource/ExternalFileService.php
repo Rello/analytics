@@ -31,20 +31,19 @@ class ExternalFileService
      * Get the content from an external url
      *
      * @NoAdminRequired
-     * @param $datasetMetadata
+     * @param array $option
      * @return array
      */
-    public function read($datasetMetadata)
+    public function read($option)
     {
         //$this->logger->error('dataset path: ' . $datasetMetadata['link']);
-        $string = $datasetMetadata['link'];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_URL, $string);
-        curl_setopt($ch, CURLOPT_REFERER, $string);
+        curl_setopt($ch, CURLOPT_URL, $option['link']);
+        curl_setopt($ch, CURLOPT_REFERER, $option['link']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
         $data = curl_exec($ch);

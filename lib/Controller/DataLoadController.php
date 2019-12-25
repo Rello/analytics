@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Db\DataloadMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -29,6 +30,7 @@ class DataLoadController extends Controller
     private $ActivityManager;
     private $DatasetController;
     private $l10n;
+    private $DataloadMapper;
 
     public function __construct(
         string $AppName,
@@ -39,7 +41,8 @@ class DataLoadController extends Controller
         ActivityManager $ActivityManager,
         DataSourceController $DataSourceController,
         DatasetController $DatasetController,
-        StorageController $StorageController
+        StorageController $StorageController,
+        DataloadMapper $DataloadMapper
     )
     {
         parent::__construct($AppName, $request);
@@ -50,7 +53,54 @@ class DataLoadController extends Controller
         $this->ActivityManager = $ActivityManager;
         $this->DataSourceController = $DataSourceController;
         $this->DatasetController = $DatasetController;
+        $this->DataloadMapper = $DataloadMapper;
     }
+
+    /**
+     * load data into dataset from datasource
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @param $path
+     * @return DataResponse|NotFoundResponse
+     * @throws NotFoundException
+     * @throws \Exception
+     */
+    public function load(int $dataloadId)
+    {
+        //$this->logger->error('DataLoadController 71:'.$dataloadId);
+        $dataloadId = 1;
+        $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
+        $datasetMetadata = $this->DatasetController->getOwnDataset($dataloadMetadata['dataset']);
+
+        if (!empty($datasetMetadata)) {
+            $insert = $update = 0;
+            $option = json_decode($dataloadMetadata['option'], true);
+            $option['user_id'] = $this->userId;
+
+            //$this->logger->debug('DataLoadController 81:'.$dataloadMetadata['option'].'---'.json_encode($option));
+            $result = $this->DataSourceController->read((int)$dataloadMetadata['datasource'], $option);
+
+            $row = $result['data'][0];
+            $row['dimension1'] = $row['dimension2'];
+            $row['dimension2'] = date("Y-m-d");
+            $action = $this->StorageController->update($dataloadMetadata['dataset'], $row['dimension1'], $row['dimension2'], $row['dimension3']);
+            $insert = $insert + $action['insert'];
+            $update = $update + $action['update'];
+
+            $result = [
+                'insert' => $insert,
+                'update' => $update,
+                'error' => $result['error'],
+            ];
+
+            if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataloadMetadata['dataset'], ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+            return new DataResponse($result);
+        } else {
+            return new NotFoundResponse();
+        }
+    }
+
 
     /**
      * update data from input form
@@ -177,8 +227,10 @@ class DataLoadController extends Controller
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;
-            $datasetMetadata['type'] = DataSourceController::DATASET_TYPE_INTERNAL_FILE;
-            $result = $this->DataSourceController->read($datasetMetadata, $path);
+            $option['user_id'] = $datasetMetadata['user_id'];
+            $option['path'] = $path;
+            $option['link'] = $datasetMetadata['link'];
+            $result = $this->DataSourceController->read(DataSourceController::DATASET_TYPE_INTERNAL_FILE, $option);
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {
@@ -223,7 +275,7 @@ class DataLoadController extends Controller
         $val = preg_replace('/\.(?=.*\.)/', '', $val);
         $val = preg_replace('/[^0-9-.]+/', '', $val);
         if (is_numeric($val)) {
-            return number_format(floatval($val), 2);
+            return number_format(floatval($val), 2, '.', '');
         } else {
             return false;
         }

@@ -12,6 +12,7 @@
 return [
     'routes' => [
         ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+        ['name' => 'page#config', 'url' => '/c/', 'verb' => 'GET'],
         ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
         ['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],
         ['name' => 'PublicDisplay#showShare', 'url' => '/pp/{token}', 'verb' => 'GET'],
@@ -37,6 +38,7 @@ return [
         ['name' => 'dataLoad#delete', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataLoad#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
         ['name' => 'dataLoad#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
+        ['name' => 'dataLoad#load', 'url' => '/load', 'verb' => 'POST'],
 
         // share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],

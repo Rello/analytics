@@ -16,6 +16,7 @@ Util::addStyle('analytics', 'sharetabview');
 Util::addStyle('analytics', 'jquery.dataTables.min');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
+Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'jquery.dataTables.min');
 Util::addScript('analytics', 'highcharts/highcharts');
 Util::addScript('analytics', 'highcharts/modules/exporting');
@@ -30,10 +31,11 @@ Util::addScript('analytics', 'highcharts/modules/export-data');
     <?php print_unescaped($this->inc('part.settings')); ?>
 </div>
 
-<div id="app-content">
-    <div id="loading">
-        <i class="ioc-spinner ioc-spin"></i>
+    <div id="app-content">
+        <div id="loading">
+            <i class="ioc-spinner ioc-spin"></i>
+        </div>
+        <?php print_unescaped($this->inc('part.content')); ?>
     </div>
-    <?php print_unescaped($this->inc('part.content')); ?>
-</div>
-    <?php print_unescaped($this->inc('part.sidebar')); ?>
+<?php print_unescaped($this->inc('part.sidebar')); ?>
+<?php print_unescaped($this->inc('part.templates')); ?>

@@ -45,20 +45,19 @@ class FileService
      * Get the items for the selected category
      *
      * @NoAdminRequired
-     * @param $datasetMetadata
-     * @param $path
+     * @param array $option
      * @return array|NotFoundResponse
      * @throws NotFoundException
      */
-    public function read($datasetMetadata = null, $path = null)
+    public function read($option)
     {
-        //$this->logger->error('FileService path: ' . $datasetMetadata['link']);
-        if (empty($path)) {
-            $file = $this->rootFolder->getUserFolder($datasetMetadata['user_id'])->get($datasetMetadata['link']);
+        if (isset($option['path'])) {
+            $file = $this->rootFolder->getUserFolder($this->userId)->get($option['path']);
         } else {
-            $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
+            $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         }
 
+        //$this->logger->debug('FileService 63 file content:'. $file->getContent());
         $data = $file->getContent();
         $delimiter = $this->detectDelimiter($data);
         $rows = str_getcsv($data, "\n");

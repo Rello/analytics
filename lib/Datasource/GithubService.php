@@ -28,12 +28,12 @@ class GithubService
      * Get the items for the selected category
      *
      * @NoAdminRequired
-     * @param $datasetMetadata
+     * @param array $option
      * @return array
      */
-    public function read($datasetMetadata)
+    public function read($option)
     {
-        $string = 'https://api.github.com/repos/' . $datasetMetadata['link'] . '/releases';
+        $string = 'https://api.github.com/repos/' . $option['link'] . '/releases';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

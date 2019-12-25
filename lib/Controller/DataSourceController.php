@@ -55,18 +55,17 @@ class DataSourceController extends Controller
      * Get the data from a datasource;
      *
      * @NoAdminRequired
-     * @param $datasetMetadata
-     * @param $options
+     * @param int $datasource
+     * @param $option
      * @return array|NotFoundException
      * @throws NotFoundException
      */
-    public function read($datasetMetadata, $options = null)
+    public function read(int $datasource, $option)
     {
-        $datasetMetadata['type'] = (int)$datasetMetadata['type'];
-        //$this->logger->error('DataSourceController 65: '. $datasetMetadata['type']);
-        if ($datasetMetadata['type'] === self::DATASET_TYPE_INTERNAL_FILE) $result = $this->FileService->read($datasetMetadata, $options);
-        elseif ($datasetMetadata['type'] === self::DATASET_TYPE_GIT) $result = $this->GithubService->read($datasetMetadata);
-        elseif ($datasetMetadata['type'] === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($datasetMetadata);
+        $this->logger->debug('DataSourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
+        if ($datasource === self::DATASET_TYPE_INTERNAL_FILE) $result = $this->FileService->read($option);
+        elseif ($datasource === self::DATASET_TYPE_GIT) $result = $this->GithubService->read($option);
+        elseif ($datasource === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($option);
         else $result = new NotFoundException();
 
         return $result;

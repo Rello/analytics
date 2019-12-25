@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.0 - x
+### Added
+- Thresholds for all datasource types (notifications just for database)
+- Advanced configuration page for more options than sidebar [#12](https://github.com/rello/analytics/issues/12)
+- Compatible with nextcloud black theme [#11](https://github.com/rello/analytics/issues/11)
+
+### Changed
+- link report in activity message
+
+### Fixed
+- XSS risk in innerHTML
+
 ## 1.2.2 - 2019-12-15
 ### Fixed
 - Notification missing setParsedSubject

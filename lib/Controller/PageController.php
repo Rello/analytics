@@ -66,6 +66,15 @@ class PageController extends Controller
     }
 
     /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function config()
+    {
+        return new TemplateResponse($this->appName, 'main_config');
+    }
+
+    /**
      * @PublicPage
      * @NoCSRFRequired
      * @UseSession

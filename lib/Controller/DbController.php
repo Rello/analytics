@@ -321,6 +321,10 @@ class DbController extends Controller
         return true;
     }
 
+    // ********** Threshold ************
+    // ********** Threshold ************
+    // ********** Threshold ************
+
     public function createThreshold($datasetId, $dimension1, $dimension3, $option, $serverity)
     {
         $SQL = 'INSERT INTO `*PREFIX*analytics_threshold` (`user_id`,`dataset`,`dimension1`,`dimension3`,`option`,`severity`) VALUES(?,?,?,?,?,?)';

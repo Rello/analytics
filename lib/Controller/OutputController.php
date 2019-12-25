@@ -95,11 +95,13 @@ class OutputController extends Controller
     private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
         //$this->logger->error('dataset csv result: ' . $result);
-        $datasetMetadata['type'] = (int)$datasetMetadata['type'];
-        if ($datasetMetadata['type'] === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
+        $datasource = (int)$datasetMetadata['type'];
+        if ($datasource === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
             $result = $this->StorageController->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
         } else {
-            $result = $this->DataSourceController->read($datasetMetadata);
+            $option['user_id'] = $datasetMetadata['user_id'];
+            $option['link'] = $datasetMetadata['link'];
+            $result = $this->DataSourceController->read($datasource, $option);
             unset($result['error']);
         }
 
@@ -116,7 +118,6 @@ class OutputController extends Controller
             , $datasetMetadata['password']
         );
         $result['options'] = $datasetMetadata;
-
 
         return $result;
     }
