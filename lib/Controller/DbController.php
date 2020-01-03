@@ -42,18 +42,6 @@ class DbController extends Controller
     }
 
 
-    /**
-     * truncates fiels do DB-field size
-     *
-     * @param $string
-     * @param $length
-     * @param $dots
-     * @return string
-     */
-    private function truncate($string, $length, $dots = "...")
-    {
-        return (strlen($string) > $length) ? mb_strcut($string, 0, $length - strlen($dots)) . $dots : $string;
-    }
 
     /**
      * Get file id for single track
@@ -360,6 +348,19 @@ class DbController extends Controller
         $stmt = $this->db->prepare($SQL);
         $stmt->execute([$thresholdId, $this->userId]);
         return true;
+    }
+
+    /**
+     * truncates fiels do DB-field size
+     *
+     * @param $string
+     * @param $length
+     * @param $dots
+     * @return string
+     */
+    private function truncate($string, $length, $dots = "...")
+    {
+        return (strlen($string) > $length) ? mb_strcut($string, 0, $length - strlen($dots)) . $dots : $string;
     }
 
 }

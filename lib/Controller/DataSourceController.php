@@ -62,12 +62,27 @@ class DataSourceController extends Controller
      */
     public function read(int $datasource, $option)
     {
-        $this->logger->debug('DataSourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
+        //$this->logger->debug('DataSourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
         if ($datasource === self::DATASET_TYPE_INTERNAL_FILE) $result = $this->FileService->read($option);
         elseif ($datasource === self::DATASET_TYPE_GIT) $result = $this->GithubService->read($option);
         elseif ($datasource === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($option);
         else $result = new NotFoundException();
 
+        return $result;
+    }
+
+    /**
+     * template for options & settings
+     *
+     * @NoAdminRequired
+     * @param int $datasource
+     * @return array
+     */
+    public function getTemplates()
+    {
+        $result[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService->getTemplate();
+        $result[self::DATASET_TYPE_GIT] = $this->GithubService->getTemplate();
+        $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getTemplate();
         return $result;
     }
 }

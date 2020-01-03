@@ -73,6 +73,19 @@ class ExternalFileService
         return $result;
     }
 
+    /**
+     * template for options & settings
+     *
+     * @NoAdminRequired
+     * @return array
+     */
+    public function getTemplate()
+    {
+        $template = array();
+        array_push($template, ['id' => 'link', 'name' => 'External URL', 'placeholder' => 'url']);
+        return $template;
+    }
+
     private function detectDelimiter($data)
     {
         $delimiters = ["\t", ";", "|", ","];

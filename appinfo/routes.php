@@ -34,11 +34,17 @@ return [
         ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
 
         // Data Maintenance
-        ['name' => 'dataLoad#update', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
-        ['name' => 'dataLoad#delete', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
-        ['name' => 'dataLoad#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
-        ['name' => 'dataLoad#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
-        ['name' => 'dataLoad#load', 'url' => '/load', 'verb' => 'POST'],
+        ['name' => 'dataload#updateData', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
+        ['name' => 'dataload#deleteData', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
+        ['name' => 'dataload#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
+        ['name' => 'dataload#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
+        // Dataloads
+        ['name' => 'dataload#create', 'url' => '/dataload', 'verb' => 'POST'],
+        ['name' => 'dataload#read', 'url' => '/dataload/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'dataload#update', 'url' => '/dataload/{dataloadId}', 'verb' => 'PUT'],
+        ['name' => 'dataload#delete', 'url' => '/dataload/{dataloadId}', 'verb' => 'DELETE'],
+        ['name' => 'dataload#simulate', 'url' => '/dataload/simulate', 'verb' => 'POST'],
+        ['name' => 'dataload#execute', 'url' => '/dataload/execute', 'verb' => 'POST'],
 
         // share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],

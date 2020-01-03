@@ -198,4 +198,60 @@
         <br>
         <div id="sidebarThresholdList"></div>
     </div>
+    <div id="templateDataload">
+        <div style="display: flex;">
+            <div style="width: 30%;">
+                <div class="wizzardHeader">Available Datasources</div>
+                <div id="dataloadList"></div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                        <div id="createDataloadButton" class="icon-add icon" style="padding: 0 0px 0 44px;">
+                        </div>
+                    </div>
+                    <div style="display: table-cell;">
+                        <select id="dataloadType" class="input150">
+                            <option value="1" selected><?php p($l->t('Local File')); ?></option>
+                            <option value="3"><?php p($l->t('GitHub')); ?></option>
+                            <option value="4"><?php p($l->t('External url (csv)')); ?></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 5%;">
+                <div class="wizzardHeader icon-view-next"></div>
+            </div>
+            <div style="width: 30%;">
+                <div class="wizzardHeader">Settings</div>
+                <div id="dataloadDetail">
+                    <div id="dataloadDetailHeader" hidden>
+                        <div class="input150" style="display: inline-flex;">Title</div>
+                        <input class="input150" id="dataloadName" style="display: inline-flex;">
+                    </div>
+                    <br>
+                    <div id="dataloadDetailItems">
+                    </div>
+                    <div id="dataloadDetailButtons" hidden>
+                        <button id="dataloadDeleteButton">Delete</button>
+                        <button id="dataloadUpdateButton">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 5%;">
+                <div class="wizzardHeader icon-view-next"></div>
+            </div>
+            <div style="width: 30%;">
+                <div class="wizzardHeader">Run</div>
+                <div id="dataloadRun" hidden>
+                    <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
+                            for="testrunCheckbox">Testrun</label><br>
+                    <button id="dataloadExecuteButton">Execute now</button>
+                    <br><br>
+                    <button disabled="">Schedule</button>
+                    <br>
+                    <button disabled="">Use in Flow</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

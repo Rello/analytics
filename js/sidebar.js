@@ -71,14 +71,6 @@ OCA.Analytics.Sidebar = {
         });
 
         OCA.Analytics.Sidebar.registerSidebarTab({
-            id: 'tabHeaderThreshold',
-            class: 'tabContainerThreshold',
-            tabindex: '3',
-            name: t('analytics', 'Thresholds'),
-            action: OCA.Analytics.Sidebar.Threshold.tabContainerThreshold,
-        });
-
-        OCA.Analytics.Sidebar.registerSidebarTab({
             id: 'tabHeaderShare',
             class: 'tabContainerShare',
             tabindex: '5',
@@ -356,7 +348,7 @@ OCA.Analytics.Sidebar.Data = {
 
     handleDataAdvancedButton: function () {
         //OCA.Analytics.Sidebar.Backend.testButton();
-        window.location = OC.generateUrl('apps/analytics/c/');
+        window.location = OC.generateUrl('apps/analytics/c/') + '#/r/' + document.getElementById('app-sidebar').dataset.id;
     },
 
 };

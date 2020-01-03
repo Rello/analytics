@@ -33,7 +33,8 @@ class GithubService
      */
     public function read($option)
     {
-        $string = 'https://api.github.com/repos/' . $option['link'] . '/releases';
+        if (isset($option['link'])) $string = 'https://api.github.com/repos/' . $option['link'] . '/releases';
+        else $string = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -52,12 +53,14 @@ class GithubService
 
         $data = array();
         foreach ($jason_a as $item) {
-            if ($i === 15) break;
+            if (isset($option['limit'])) {
+                if ($i === (int)$option['limit']) break;
+            }
             $nc_value = 0;
             foreach ($item['assets'] as $asset) {
                 if (substr($asset['name'], -2) == 'gz') $nc_value = $asset['download_count'];
             }
-            array_push($data, ['dimension2' => $item['tag_name'], 'dimension3' => $nc_value]);
+            array_push($data, ['dimension1' => '', 'dimension2' => $item['tag_name'], 'dimension3' => $nc_value]);
             $i++;
         }
 
@@ -68,9 +71,26 @@ class GithubService
 
         $result = [
             'header' => $header,
-            'data' => $data
+            'data' => $data,
+            'error' => 0,
         ];
 
         return $result;
+    }
+
+    /**
+     * template for options & settings
+     *
+     * @NoAdminRequired
+     * @return array
+     */
+    public function getTemplate()
+    {
+        $template = array();
+        array_push($template, ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user']);
+        array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
+        array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
+        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        return $template;
     }
 }

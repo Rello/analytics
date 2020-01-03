@@ -21,7 +21,7 @@ use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 
-class DataLoadController extends Controller
+class DataloadController extends Controller
 {
     private $logger;
     private $StorageController;
@@ -56,8 +56,81 @@ class DataLoadController extends Controller
         $this->DataloadMapper = $DataloadMapper;
     }
 
+    // Dataloads
+    // Dataloads
+    // Dataloads
+
     /**
-     * load data into dataset from datasource
+     * create a new dataload
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param int $datasourceId
+     * @return DataResponse
+     */
+    public function create(int $datasetId, int $datasourceId)
+    {
+        return new DataResponse($this->DataloadMapper->create($datasetId, $datasourceId));
+    }
+
+    /**
+     * get all dataloads for a dataset
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @return DataResponse
+     */
+    public function read(int $datasetId)
+    {
+        $result['dataloads'] = $this->DataloadMapper->read($datasetId);;
+        $result['templates'] = $this->DataSourceController->getTemplates();
+        return new DataResponse($result);
+    }
+
+    /**
+     * update dataload
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @param $name
+     * @param int $datasource
+     * @param $option
+     * @param int $dataset
+     * @return DataResponse
+     */
+    public function update(int $dataloadId, $name, $option)
+    {
+        return new DataResponse($this->DataloadMapper->update($dataloadId, $name, $option));
+    }
+
+    /**
+     * delete a dataload
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @return bool
+     */
+    public function delete(int $dataloadId)
+    {
+        return $this->DataloadMapper->delete($dataloadId);
+    }
+
+    /**
+     * simulate a dataload and output its data
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @return DataResponse
+     * @throws NotFoundException
+     */
+    public function simulate(int $dataloadId)
+    {
+        $result = $this->getDataFromDatasource($dataloadId);
+        return new DataResponse($result);
+    }
+
+    /**
+     * execute a dataload from datasource and store into dataset
      *
      * @NoAdminRequired
      * @param int $dataloadId
@@ -66,41 +139,101 @@ class DataLoadController extends Controller
      * @throws NotFoundException
      * @throws \Exception
      */
-    public function load(int $dataloadId)
+    public function execute(int $dataloadId)
+    {
+        $result = $this->getDataFromDatasource($dataloadId);
+        $insert = $update = 0;
+        $datasetId = $result['datasetId'];
+
+        if ($result['error'] === 0) {
+            foreach ($result['data'] as &$row) {
+                $action = $this->StorageController->update($datasetId, $row['dimension1'], $row['dimension2'], $row['dimension3']);
+                $insert = $insert + $action['insert'];
+                $update = $update + $action['update'];
+            }
+        }
+
+        $result = [
+            'insert' => $insert,
+            'update' => $update,
+            'error' => $result['error'],
+        ];
+
+        if ($result['error'] === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+
+        return new DataResponse($result);
+    }
+
+    /**
+     * get the data from datasource
+     * to be used in simulation or execution
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @return array
+     * @throws NotFoundException
+     */
+    private function getDataFromDatasource(int $dataloadId)
     {
         //$this->logger->error('DataLoadController 71:'.$dataloadId);
-        $dataloadId = 1;
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
         $datasetMetadata = $this->DatasetController->getOwnDataset($dataloadMetadata['dataset']);
 
         if (!empty($datasetMetadata)) {
-            $insert = $update = 0;
             $option = json_decode($dataloadMetadata['option'], true);
             $option['user_id'] = $this->userId;
 
-            //$this->logger->debug('DataLoadController 81:'.$dataloadMetadata['option'].'---'.json_encode($option));
+            $this->logger->debug('DataLoadController 188:' . $dataloadMetadata['option'] . '---' . json_encode($option));
             $result = $this->DataSourceController->read((int)$dataloadMetadata['datasource'], $option);
+            $result['datasetId'] = $dataloadMetadata['dataset'];
 
-            $row = $result['data'][0];
-            $row['dimension1'] = $row['dimension2'];
-            $row['dimension2'] = date("Y-m-d");
-            $action = $this->StorageController->update($dataloadMetadata['dataset'], $row['dimension1'], $row['dimension2'], $row['dimension3']);
-            $insert = $insert + $action['insert'];
-            $update = $update + $action['update'];
+            if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
+                // if datasource should be timestamped/snapshoted
+                // shift values by one dimension
+                $result['data'] = array_map(function ($tag) {
+                    return array(
+                        'dimension1' => $tag['dimension2'],
+                        'dimension2' => $tag['dimension2'],
+                        'dimension3' => $tag['dimension3']
+                    );
+                }, $result['data']);
+                $result['data'] = $this->replaceDimension($result['data'], 'dimension2', date("Y-m-dTH:i:s"));
+            }
 
-            $result = [
-                'insert' => $insert,
-                'update' => $update,
-                'error' => $result['error'],
-            ];
-
-            if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataloadMetadata['dataset'], ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
-            return new DataResponse($result);
+            return $result;
         } else {
             return new NotFoundResponse();
         }
     }
 
+    /**
+     * replace all values of one dimension
+     *
+     * @NoAdminRequired
+     * @param $Array
+     * @param $Find
+     * @param $Replace
+     * @return array
+     */
+    private function replaceDimension($Array, $Find, $Replace)
+    {
+        if (is_array($Array)) {
+            foreach ($Array as $Key => $Val) {
+                if (is_array($Array[$Key])) {
+                    $Array[$Key] = $this->replaceDimension($Array[$Key], $Find, $Replace);
+                } else {
+                    if ($Key == $Find) {
+                        $Array[$Key] = $Replace;
+                    }
+                }
+            }
+        }
+        return $Array;
+    }
+
+    // Data Manipulation
+    // Data Manipulation
+    // Data Manipulation
 
     /**
      * update data from input form
@@ -113,7 +246,7 @@ class DataLoadController extends Controller
      * @return DataResponse|NotFoundResponse
      * @throws \Exception
      */
-    public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function updateData(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
@@ -152,7 +285,7 @@ class DataLoadController extends Controller
      * @param $dimension2
      * @return DataResponse|NotFoundResponse
      */
-    public function delete(int $datasetId, $dimension1, $dimension2)
+    public function deleteData(int $datasetId, $dimension1, $dimension2)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
