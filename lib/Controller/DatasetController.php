@@ -12,6 +12,8 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Db\DataMapper;
+use OCA\Analytics\Db\DatasetMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
@@ -21,7 +23,8 @@ class DatasetController extends Controller
 {
     private $logger;
     private $ShareController;
-    private $DBController;
+    private $DataMapper;
+    private $DatasetMapper;
     private $ActivityManager;
 
     public function __construct(
@@ -29,14 +32,16 @@ class DatasetController extends Controller
         IRequest $request,
         ILogger $logger,
         ShareController $ShareController,
-        DbController $DBController,
+        DataMapper $DataMapper,
+        DatasetMapper $DatasetMapper,
         ActivityManager $ActivityManager
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ShareController = $ShareController;
-        $this->DBController = $DBController;
+        $this->DataMapper = $DataMapper;
+        $this->DatasetMapper = $DatasetMapper;
         $this->ActivityManager = $ActivityManager;
     }
 
@@ -47,7 +52,7 @@ class DatasetController extends Controller
      */
     public function index()
     {
-        $ownDatasets = $this->DBController->getDatasets();
+        $ownDatasets = $this->DatasetMapper->getDatasets();
         $sharedDatasets = $this->ShareController->getSharedDatasets();
         $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
         return new DataResponse($ownDatasets);
@@ -62,7 +67,7 @@ class DatasetController extends Controller
      */
     public function read(int $datasetId)
     {
-        return $this->DBController->getOwnDataset($datasetId);
+        return $this->getOwnDataset($datasetId);
     }
 
     /**
@@ -70,11 +75,12 @@ class DatasetController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
+     * @param string|null $user_id
      * @return array
      */
-    public function getOwnDataset(int $datasetId)
+    public function getOwnDataset(int $datasetId, string $user_id = null)
     {
-        return $this->read($datasetId);
+        return $this->DatasetMapper->getOwnDataset($datasetId, $user_id);
     }
 
     /**
@@ -89,7 +95,7 @@ class DatasetController extends Controller
     {
         //$this->logger->error('datasetcontroller 82: '.$file);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-        $datasetId = $this->DBController->createDataset();
+        $datasetId = $this->DatasetMapper->createDataset();
 
         if ($file === 'DEMO') {
             $name = 'Demo Report';
@@ -123,8 +129,8 @@ class DatasetController extends Controller
     public function delete(int $datasetId)
     {
         $this->ShareController->deleteShareByDataset($datasetId);
-        $this->DBController->deleteDataByDataset($datasetId);
-        $this->DBController->deleteDataset($datasetId);
+        $this->DataMapper->deleteDataByDataset($datasetId);
+        $this->DatasetMapper->deleteDataset($datasetId);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         return true;
     }
@@ -151,6 +157,6 @@ class DatasetController extends Controller
         if ($type === DataSourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
-        return $this->DBController->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
+        return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
     }
 }

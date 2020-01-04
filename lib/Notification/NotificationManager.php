@@ -11,7 +11,6 @@
 
 namespace OCA\Analytics\Notification;
 
-use OCA\Analytics\Controller\DbController;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\Notification\IManager as INotificationManager;
@@ -24,12 +23,10 @@ class NotificationManager
     protected $notificationManager;
     private $l10n;
     private $userId;
-    private $DBController;
     private $logger;
 
     public function __construct(
         IL10N $l10n,
-        DbController $DBController,
         $userId,
         ILogger $logger,
         INotificationManager $notificationManager
@@ -37,7 +34,6 @@ class NotificationManager
     {
         $this->l10n = $l10n;
         $this->userId = $userId;
-        $this->DBController = $DBController;
         $this->logger = $logger;
         $this->notificationManager = $notificationManager;
     }

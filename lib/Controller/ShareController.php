@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Db\ShareMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
@@ -24,7 +25,7 @@ class ShareController extends Controller
     const SHARE_TYPE_LINK = 3;
 
     private $logger;
-    private $DBController;
+    private $ShareMapper;
     private $secureRandom;
     private $ActivityManager;
 
@@ -32,14 +33,14 @@ class ShareController extends Controller
         $appName,
         IRequest $request,
         ILogger $logger,
-        DbController $DBController,
+        ShareMapper $ShareMapper,
         ActivityManager $ActivityManager,
         ISecureRandom $secureRandom
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
-        $this->DBController = $DBController;
+        $this->ShareMapper = $ShareMapper;
         $this->secureRandom = $secureRandom;
         $this->ActivityManager = $ActivityManager;
     }
@@ -53,7 +54,7 @@ class ShareController extends Controller
      */
     public function getDatasetByToken($token)
     {
-        return $this->DBController->getDatasetByToken($token);
+        return $this->ShareMapper->getDatasetByToken($token);
     }
 
     /**
@@ -76,7 +77,7 @@ class ShareController extends Controller
      */
     public function getSharedDatasets()
     {
-        return $this->DBController->getSharedDatasets();
+        return $this->ShareMapper->getSharedDatasets();
     }
 
     /**
@@ -88,7 +89,7 @@ class ShareController extends Controller
      */
     public function getSharedDataset($id)
     {
-        return $this->DBController->getSharedDataset($id);
+        return $this->ShareMapper->getSharedDataset($id);
     }
 
     /**
@@ -104,7 +105,7 @@ class ShareController extends Controller
         $token = $this->generateToken();
         //$this->logger->error($type . $token);
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
-        return $this->DBController->createShare($datasetId, $type, null, $token);
+        return $this->ShareMapper->createShare($datasetId, $type, null, $token);
     }
 
     /**
@@ -116,7 +117,7 @@ class ShareController extends Controller
      */
     public function read($datasetId)
     {
-        return new DataResponse($this->DBController->getShares($datasetId));
+        return new DataResponse($this->ShareMapper->getShares($datasetId));
     }
 
     /**
@@ -132,7 +133,7 @@ class ShareController extends Controller
         //$this->logger->error($shareId . $password);
         if ($password !== '') $password = password_hash($password, PASSWORD_DEFAULT);
         else $password = null;
-        return $this->DBController->updateShare($shareId, $password);
+        return $this->ShareMapper->updateShare($shareId, $password);
     }
 
     /**
@@ -144,7 +145,7 @@ class ShareController extends Controller
      */
     public function delete($shareId)
     {
-        return $this->DBController->deleteShare($shareId);
+        return $this->ShareMapper->deleteShare($shareId);
     }
 
     /**
@@ -156,7 +157,7 @@ class ShareController extends Controller
      */
     public function deleteShareByDataset($datasetId)
     {
-        return $this->DBController->deleteShareByDataset($datasetId);
+        return $this->ShareMapper->deleteShareByDataset($datasetId);
     }
 
     /**

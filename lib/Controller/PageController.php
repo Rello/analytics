@@ -62,7 +62,9 @@ class PageController extends Controller
      */
     public function index()
     {
-        return new TemplateResponse($this->appName, 'main');
+        $params = array();
+        $params['token'] = '';
+        return new TemplateResponse($this->appName, 'main', $params);
     }
 
     /**

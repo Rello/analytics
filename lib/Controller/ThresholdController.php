@@ -11,6 +11,8 @@
 
 namespace OCA\Analytics\Controller;
 
+use OCA\Analytics\Db\DatasetMapper;
+use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
 use OCP\AppFramework\Controller;
 use OCP\ILogger;
@@ -19,21 +21,24 @@ use OCP\IRequest;
 class ThresholdController extends Controller
 {
     private $logger;
-    private $DBController;
+    private $ThresholdMapper;
+    private $DatasetMapper;
     private $NotificationManager;
 
     public function __construct(
         $appName,
         IRequest $request,
         ILogger $logger,
-        DbController $DBController,
-        NotificationManager $NotificationManager
+        ThresholdMapper $ThresholdMapper,
+        NotificationManager $NotificationManager,
+        DatasetMapper $DatasetMapper
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
-        $this->DBController = $DBController;
+        $this->ThresholdMapper = $ThresholdMapper;
         $this->NotificationManager = $NotificationManager;
+        $this->DatasetMapper = $DatasetMapper;
     }
 
     /**
@@ -45,7 +50,7 @@ class ThresholdController extends Controller
      */
     public function read(int $datasetId)
     {
-        return $this->DBController->getThresholdsByDataset($datasetId);
+        return $this->ThresholdMapper->getThresholdsByDataset($datasetId);
     }
 
     /**
@@ -61,7 +66,7 @@ class ThresholdController extends Controller
      */
     public function create(int $datasetId, $dimension1, $option, $dimension3, int $severity)
     {
-        return $this->DBController->createThreshold($datasetId, $dimension1, $dimension3, $option, $severity);
+        return $this->ThresholdMapper->createThreshold($datasetId, $dimension1, $dimension3, $option, $severity);
     }
 
     /**
@@ -73,7 +78,7 @@ class ThresholdController extends Controller
      */
     public function delete(int $thresholdId)
     {
-        $this->DBController->deleteThreshold($thresholdId);
+        $this->ThresholdMapper->deleteThreshold($thresholdId);
         return true;
     }
 
@@ -91,8 +96,8 @@ class ThresholdController extends Controller
     public function validate(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
         $result = '';
-        $thresholds = $this->DBController->getSevOneThresholdsByDataset($datasetId);
-        $datasetMetadata = $this->DBController->getOwnDataset($datasetId);
+        $thresholds = $this->ThresholdMapper->getSevOneThresholdsByDataset($datasetId);
+        $datasetMetadata = $this->DatasetMapper->getOwnDataset($datasetId);
 
         foreach ($thresholds as $threshold) {
             //$this->logger->error('ThresholdController 108: ' . json_encode($threshold));

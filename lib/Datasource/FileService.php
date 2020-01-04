@@ -11,7 +11,6 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCA\Analytics\Controller\DbController;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -21,7 +20,6 @@ use OCP\ILogger;
 class FileService
 {
     private $logger;
-    private $DBController;
     private $rootFolder;
     private $userId;
     private $l10n;
@@ -30,14 +28,12 @@ class FileService
         $userId,
         IL10N $l10n,
         ILogger $logger,
-        IRootFolder $rootFolder,
-        DbController $DBController
+        IRootFolder $rootFolder
     )
     {
         $this->userId = $userId;
         $this->l10n = $l10n;
         $this->logger = $logger;
-        $this->DBController = $DBController;
         $this->rootFolder = $rootFolder;
     }
 
