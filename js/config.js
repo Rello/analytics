@@ -7,6 +7,9 @@
  * @author Marcel Scherello <audioplayer@scherello.de>
  * @copyright 2019 Marcel Scherello
  */
+/** global: OCA */
+/** global: OCP */
+/** global: OC */
 'use strict';
 
 /**
