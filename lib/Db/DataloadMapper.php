@@ -100,6 +100,21 @@ class DataloadMapper
     }
 
     /**
+     * delete a dataload
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @return bool
+     */
+    public function deleteDataloadByDataset(int $datasetId)
+    {
+        $SQL = 'DELETE FROM `*PREFIX*analytics_dataload` WHERE `dataset` = ? AND `user_id` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute([$datasetId, $this->userId]);
+        return true;
+    }
+
+    /**
      * get Dataload by id
      * @param int $dataloadId
      * @return array

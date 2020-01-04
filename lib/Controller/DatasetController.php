@@ -12,8 +12,10 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
-use OCA\Analytics\Db\DataMapper;
+use OCA\Analytics\Db\DataloadMapper;
 use OCA\Analytics\Db\DatasetMapper;
+use OCA\Analytics\Db\StorageMapper;
+use OCA\Analytics\Db\ThresholdMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
@@ -23,8 +25,10 @@ class DatasetController extends Controller
 {
     private $logger;
     private $ShareController;
-    private $DataMapper;
+    private $StorageMapper;
     private $DatasetMapper;
+    private $ThresholdMapper;
+    private $DataloadMapper;
     private $ActivityManager;
 
     public function __construct(
@@ -32,16 +36,20 @@ class DatasetController extends Controller
         IRequest $request,
         ILogger $logger,
         ShareController $ShareController,
-        DataMapper $DataMapper,
+        StorageMapper $StorageMapper,
         DatasetMapper $DatasetMapper,
+        ThresholdMapper $ThresholdMapper,
+        DataloadMapper $DataloadMapper,
         ActivityManager $ActivityManager
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ShareController = $ShareController;
-        $this->DataMapper = $DataMapper;
+        $this->StorageMapper = $StorageMapper;
         $this->DatasetMapper = $DatasetMapper;
+        $this->ThresholdMapper = $ThresholdMapper;
+        $this->DataloadMapper = $DataloadMapper;
         $this->ActivityManager = $ActivityManager;
     }
 
@@ -129,8 +137,10 @@ class DatasetController extends Controller
     public function delete(int $datasetId)
     {
         $this->ShareController->deleteShareByDataset($datasetId);
-        $this->DataMapper->deleteDataByDataset($datasetId);
+        $this->StorageMapper->deleteDataByDataset($datasetId);
         $this->DatasetMapper->deleteDataset($datasetId);
+        $this->ThresholdMapper->deleteThresholdByDataset($datasetId);
+        $this->DataloadMapper->deleteDataloadByDataset($datasetId);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         return true;
     }

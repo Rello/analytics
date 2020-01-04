@@ -71,4 +71,13 @@ class ThresholdMapper
         $stmt->execute([$thresholdId, $this->userId]);
         return true;
     }
+
+    public function deleteThresholdByDataset($datasetId)
+    {
+        $SQL = 'DELETE FROM `*PREFIX*analytics_threshold` WHERE `dataset` = ? AND `user_id` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute([$datasetId, $this->userId]);
+        return true;
+    }
 }
+
