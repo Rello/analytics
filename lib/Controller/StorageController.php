@@ -11,7 +11,7 @@
 
 namespace OCA\Analytics\Controller;
 
-use OCA\Analytics\Db\DataMapper;
+use OCA\Analytics\Db\StorageMapper;
 use OCP\AppFramework\Controller;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -19,20 +19,20 @@ use OCP\IRequest;
 class StorageController extends Controller
 {
     private $logger;
-    private $DataMapper;
+    private $StorageMapper;
     private $ThresholdController;
 
     public function __construct(
         string $AppName,
         IRequest $request,
         ILogger $logger,
-        DataMapper $DataMapper,
+        StorageMapper $StorageMapper,
         ThresholdController $ThresholdController
     )
     {
         parent::__construct($AppName, $request);
         $this->logger = $logger;
-        $this->DataMapper = $DataMapper;
+        $this->StorageMapper = $StorageMapper;
         $this->ThresholdController = $ThresholdController;
     }
 
@@ -52,7 +52,7 @@ class StorageController extends Controller
         if ($dateDrilldown === 'true') $header['dimension2'] = $datasetMetadata['dimension2'];
         $header['dimension3'] = $datasetMetadata['dimension3'];
 
-        $data = $this->DataMapper->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
+        $data = $this->StorageMapper->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
 
         return empty($data) ? [
             'status' => 'nodata'
@@ -78,7 +78,7 @@ class StorageController extends Controller
         $dimension3 = str_replace(',', '.', $dimension3);
 
         $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $dimension3);
-        $action = $this->DataMapper->createData($datasetId, $dimension1, $dimension2, $dimension3);
+        $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $dimension3);
 
         $insert = $update = 0;
         if ($action === 'insert') $insert = 1;
@@ -102,6 +102,6 @@ class StorageController extends Controller
      */
     public function delete(int $datasetId, $dimension1, $dimension2)
     {
-        return $this->DataMapper->deleteData($datasetId, $dimension1, $dimension2);
+        return $this->StorageMapper->deleteData($datasetId, $dimension1, $dimension2);
     }
 }

@@ -15,7 +15,7 @@ use OCP\IDbConnection;
 use OCP\IL10N;
 use OCP\ILogger;
 
-class DataMapper
+class StorageMapper
 {
     private $userId;
     private $l10n;
