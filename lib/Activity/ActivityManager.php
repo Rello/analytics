@@ -11,7 +11,8 @@
 
 namespace OCA\Analytics\Activity;
 
-use OCA\Analytics\Controller\DbController;
+use OCA\Analytics\Db\DatasetMapper;
+use OCA\Analytics\Db\ShareMapper;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\IL10N;
@@ -31,28 +32,37 @@ class ActivityManager
     private $manager;
     private $l10n;
     private $userId;
-    private $DBController;
+    private $ShareMapper;
     private $logger;
+    private $DatasetMapper;
 
     public function __construct(
         IManager $manager,
         IL10N $l10n,
-        DbController $DBController,
+        ShareMapper $ShareMapper,
         $userId,
+        DatasetMapper $DatasetMapper,
         ILogger $logger
     )
     {
         $this->manager = $manager;
         $this->l10n = $l10n;
         $this->userId = $userId;
-        $this->DBController = $DBController;
+        $this->ShareMapper = $ShareMapper;
+        $this->DatasetMapper = $DatasetMapper;
         $this->logger = $logger;
     }
 
-    public function triggerEvent($datasetId, $eventType, $eventSubject)
+    /**
+     * @param $datasetId
+     * @param $eventType
+     * @param $eventSubject
+     * @param string|null $user_id
+     */
+    public function triggerEvent($datasetId, $eventType, $eventSubject, string $user_id = null)
     {
         try {
-            $event = $this->createEvent($datasetId, $eventType, $eventSubject);
+            $event = $this->createEvent($datasetId, $eventType, $eventSubject, $user_id);
             if ($event !== null) {
                 $this->sendToUsers($event);
             }
@@ -61,9 +71,17 @@ class ActivityManager
         }
     }
 
-    private function createEvent($datasetId, $eventType, $eventSubject)
+    /**
+     * @param $datasetId
+     * @param $eventType
+     * @param $eventSubject
+     * @param string|null $user_id
+     * @return IEvent
+     */
+    private function createEvent($datasetId, $eventType, $eventSubject, string $user_id = null)
     {
-        $datasetName = $datasetId !== 0 ? $this->DBController->getOwnDataset($datasetId)['name'] : '';
+        $datasetName = $datasetId !== 0 ? $this->DatasetMapper->getOwnDataset($datasetId)['name'] : '';
+        if ($user_id) $this->userId = $user_id;
         $event = $this->manager->generateEvent();
         $event->setApp('analytics')
             ->setType($eventType)
@@ -81,7 +99,7 @@ class ActivityManager
      */
     private function sendToUsers(IEvent $event)
     {
-        $users = $this->DBController->getSharedReceiver($event->getObjectId());
+        $users = $this->ShareMapper->getSharedReceiver($event->getObjectId());
         //$this->logger->error($users);
         foreach ($users as $user) {
             $event->setAffectedUser($user['uid_owner']);
