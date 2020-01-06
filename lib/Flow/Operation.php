@@ -14,12 +14,11 @@ namespace OCA\Analytics\Flow;
 
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IL10N;
 use OCP\ILogger;
+use OCP\IURLGenerator;
 use OCP\Util;
-use OCP\WorkflowEngine\EntityContext\IDisplayText;
-use OCP\WorkflowEngine\EntityContext\IUrl;
-use OCP\WorkflowEngine\IEntity;
-use OCP\WorkflowEngine\IManager as FlowManager;
+use OCP\WorkflowEngine\IManager;
 use OCP\WorkflowEngine\IOperation;
 use OCP\WorkflowEngine\IRuleMatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -28,18 +27,26 @@ use UnexpectedValueException;
 class Operation implements IOperation
 {
 
+    /** @var IL10N */
+    private $l;
+    /** @var IURLGenerator */
+    private $urlGenerator;
     private $logger;
 
     public function __construct(
+        IL10N $l,
+        IURLGenerator $urlGenerator,
         ILogger $logger
     )
     {
+        $this->l = $l;
+        $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
     }
 
     public static function register(IEventDispatcher $dispatcher): void
     {
-        $dispatcher->addListener(FlowManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
+        $dispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
             $operation = \OC::$server->query(Operation::class);
             $event->getSubject()->registerOperation($operation);
             Util::addScript('analytics', 'flow');
