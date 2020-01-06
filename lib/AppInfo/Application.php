@@ -11,13 +11,18 @@
 
 namespace OCA\Analytics\AppInfo;
 
+use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Notification\Notifier;
 use OCP\AppFramework\App;
+use OCP\AppFramework\QueryException;
+use OCP\EventDispatcher\IEventDispatcher;
 
 
-class Application extends App {
+class Application extends App
+{
 
-    public function __construct(array $urlParams = array()) {
+    public function __construct(array $urlParams = array())
+    {
 
         parent::__construct('analytics', $urlParams);
         $this->register();
@@ -27,6 +32,14 @@ class Application extends App {
     {
         $this->registerNotificationNotifier();
         //$this->registerCommentsEntity();
+
+        $server = $this->getContainer()->getServer();
+        /** @var IEventDispatcher $dispatcher */
+        try {
+            $dispatcher = $server->query(IEventDispatcher::class);
+        } catch (QueryException $e) {
+        }
+        Operation::register($dispatcher);
     }
 
     protected function registerNotificationNotifier()
