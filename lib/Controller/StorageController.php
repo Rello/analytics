@@ -70,15 +70,16 @@ class StorageController extends Controller
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
+     * @param string|null $user_id
      * @return array
      * @throws \Exception
      */
-    public function update(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $dimension1, $dimension2, $dimension3, string $user_id = null)
     {
         $dimension3 = str_replace(',', '.', $dimension3);
 
         $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $dimension3);
-        $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $dimension3);
+        $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $dimension3, $user_id);
 
         $insert = $update = 0;
         if ($action === 'insert') $insert = 1;

@@ -63,6 +63,15 @@ class DatasetController extends Controller
         $ownDatasets = $this->DatasetMapper->getDatasets();
         $sharedDatasets = $this->ShareController->getSharedDatasets();
         $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
+
+        $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
+        foreach ($dataloads as $dataload) {
+            $key = array_search($dataload['dataset'], array_column($ownDatasets, 'id'));
+            if ($key) {
+                $ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
+                $ownDatasets[$key]['schedules'] = $dataload['schedules'];
+            }
+        }
         return new DataResponse($ownDatasets);
     }
 

@@ -97,7 +97,7 @@ class ThresholdController extends Controller
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByDataset($datasetId);
-        $datasetMetadata = $this->DatasetMapper->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetMapper->getDatasetOptions($datasetId);
 
         foreach ($thresholds as $threshold) {
             //$this->logger->error('ThresholdController 108: ' . json_encode($threshold));

@@ -15,6 +15,12 @@
                 <primary>true</primary>
             </field>
             <field>
+                <name>user_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>64</length>
+            </field>
+            <field>
                 <name>name</name>
                 <type>text</type>
                 <notnull>true</notnull>
@@ -30,12 +36,6 @@
                 <name>type</name>
                 <type>integer</type>
                 <notnull>false</notnull>
-            </field>
-            <field>
-                <name>user_id</name>
-                <type>text</type>
-                <notnull>true</notnull>
-                <length>64</length>
             </field>
             <field>
                 <name>link</name>
@@ -214,12 +214,6 @@
                 <primary>true</primary>
             </field>
             <field>
-                <name>name</name>
-                <type>text</type>
-                <notnull>false</notnull>
-                <length>64</length>
-            </field>
-            <field>
                 <name>user_id</name>
                 <type>text</type>
                 <notnull>true</notnull>
@@ -229,6 +223,12 @@
                 <name>dataset</name>
                 <type>integer</type>
                 <notnull>true</notnull>
+            </field>
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>64</length>
             </field>
             <field>
                 <name>dimension1</name>
@@ -262,6 +262,58 @@
             </field>
             <index>
                 <name>analytics_threshold_dataset_idx</name>
+                <field>
+                    <name>dataset</name>
+                </field>
+            </index>
+        </declaration>
+    </table>
+    <table>
+        <name>*dbprefix*analytics_dataload</name>
+        <declaration>
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <autoincrement>true</autoincrement>
+                <primary>true</primary>
+            </field>
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>64</length>
+            </field>
+            <field>
+                <name>dataset</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+            </field>
+            <field>
+                <name>datasource</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+            </field>
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>64</length>
+            </field>
+            <field>
+                <name>option</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>255</length>
+            </field>
+            <field>
+                <name>schedule</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>1</length>
+            </field>
+            <index>
+                <name>dataload_dataset_idx</name>
                 <field>
                     <name>dataset</name>
                 </field>

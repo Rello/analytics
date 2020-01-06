@@ -93,14 +93,13 @@ class DataloadController extends Controller
      * @NoAdminRequired
      * @param int $dataloadId
      * @param $name
-     * @param int $datasource
      * @param $option
-     * @param int $dataset
+     * @param $schedule
      * @return DataResponse
      */
-    public function update(int $dataloadId, $name, $option)
+    public function update(int $dataloadId, $name, $option, $schedule)
     {
-        return new DataResponse($this->DataloadMapper->update($dataloadId, $name, $option));
+        return new DataResponse($this->DataloadMapper->update($dataloadId, $name, $option, $schedule));
     }
 
     /**
@@ -130,24 +129,45 @@ class DataloadController extends Controller
     }
 
     /**
+     * execute all dataloads depending on their schedule
+     * daily or hourly
+     *
+     * @NoAdminRequired
+     * @param $schedule
+     * @return void
+     * @throws \Exception
+     */
+    public function executeBySchedule($schedule)
+    {
+        $schedules = $this->DataloadMapper->getDataloadBySchedule($schedule);
+        //$this->logger->debug('DataLoadController 143: execute schedule '.$schedule);
+        foreach ($schedules as $dataload) {
+            //$this->logger->debug('DataLoadController 145: execute dataload '.$dataload['id']);
+            $this->execute($dataload['id']);
+        }
+    }
+
+    /**
      * execute a dataload from datasource and store into dataset
      *
      * @NoAdminRequired
      * @param int $dataloadId
-     * @param $path
-     * @return DataResponse|NotFoundResponse
-     * @throws NotFoundException
+     * @return DataResponse
      * @throws \Exception
      */
     public function execute(int $dataloadId)
     {
+        //$this->logger->debug('DataLoadController 143:'.$dataloadId);
+        $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
         $result = $this->getDataFromDatasource($dataloadId);
         $insert = $update = 0;
         $datasetId = $result['datasetId'];
+        //$this->logger->debug('DataLoadController 146: loading into dataset '.$datasetId);
 
         if ($result['error'] === 0) {
+            //$this->logger->debug('DataLoadController 149: OK');
             foreach ($result['data'] as &$row) {
-                $action = $this->StorageController->update($datasetId, $row['dimension1'], $row['dimension2'], $row['dimension3']);
+                $action = $this->StorageController->update($datasetId, $row['dimension1'], $row['dimension2'], $row['dimension3'], $dataloadMetadata['user_id']);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
             }
@@ -159,7 +179,7 @@ class DataloadController extends Controller
             'error' => $result['error'],
         ];
 
-        if ($result['error'] === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+        if ($result['error'] === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
 
         return new DataResponse($result);
     }
@@ -175,15 +195,14 @@ class DataloadController extends Controller
      */
     private function getDataFromDatasource(int $dataloadId)
     {
-        //$this->logger->error('DataLoadController 71:'.$dataloadId);
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
-        $datasetMetadata = $this->DatasetController->getOwnDataset($dataloadMetadata['dataset']);
+        $datasetMetadata = $this->DatasetController->getOwnDataset($dataloadMetadata['dataset'], $dataloadMetadata['user_id']);
 
         if (!empty($datasetMetadata)) {
             $option = json_decode($dataloadMetadata['option'], true);
-            $option['user_id'] = $this->userId;
+            $option['user_id'] = $dataloadMetadata['user_id'];
 
-            $this->logger->debug('DataLoadController 188:' . $dataloadMetadata['option'] . '---' . json_encode($option));
+            //$this->logger->debug('DataLoadController 187: ' . $dataloadMetadata['option'] . '---' . json_encode($option));
             $result = $this->DataSourceController->read((int)$dataloadMetadata['datasource'], $option);
             $result['datasetId'] = $dataloadMetadata['dataset'];
 
@@ -197,7 +216,7 @@ class DataloadController extends Controller
                         'dimension3' => $tag['dimension3']
                     );
                 }, $result['data']);
-                $result['data'] = $this->replaceDimension($result['data'], 'dimension2', date("Y-m-dTH:i:s"));
+                $result['data'] = $this->replaceDimension($result['data'], 'dimension2', date("Y-m-d H:i:s"));
             }
 
             return $result;

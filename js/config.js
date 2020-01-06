@@ -119,6 +119,7 @@ OCA.Analytics.Config.Dataload = {
         document.getElementById('dataloadDetailButtons').hidden = false;
         document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadUpdateButton);
         document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadDeleteButton);
+        document.getElementById('dataloadScheduleButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadUpdateButton);
 
         let item = document.getElementById('dataloadDetailItems');
         item.innerHTML = '';
@@ -183,6 +184,7 @@ OCA.Analytics.Config.Dataload = {
             url: OC.generateUrl('apps/analytics/dataload/') + dataloadId,
             data: {
                 'name': document.getElementById('dataloadName').value,
+                'schedule': document.getElementById('dataloadSchedule').value,
                 'option': option,
             },
             success: function () {

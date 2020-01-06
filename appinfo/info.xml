@@ -17,7 +17,7 @@ From data to report. Data Analytics provides modular datasources, a realtime or 
 
 (*work in progress)
 ]]></description>
-    <version>1.2.2</version>
+    <version>1.2.11</version>
 	<licence>agpl</licence>
 	<author>Marcel Scherello</author>
 	<namespace>Analytics</namespace>
@@ -48,4 +48,8 @@ From data to report. Data Analytics provides modular datasources, a realtime or 
             <filter>OCA\Analytics\Activity\Filter</filter>
         </filters>
     </activity>
+    <background-jobs>
+        <job>OCA\Analytics\BackgroundJob\Hourly</job>
+        <job>OCA\Analytics\BackgroundJob\Daily</job>
+    </background-jobs>
 </info>

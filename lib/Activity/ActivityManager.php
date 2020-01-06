@@ -28,6 +28,7 @@ class ActivityManager
     const SUBJECT_DATA_ADD = 'data_add';
     const SUBJECT_DATA_ADD_API = 'data_add_api';
     const SUBJECT_DATA_ADD_IMPORT = 'data_add_import';
+    const SUBJECT_DATA_ADD_DATALOAD = 'data_add_dataload';
 
     private $manager;
     private $l10n;

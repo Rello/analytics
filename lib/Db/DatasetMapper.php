@@ -124,9 +124,21 @@ class DatasetMapper
     {
         $SQL = 'SELECT `name`, `visualization`, `chart` FROM `*PREFIX*analytics_dataset` WHERE `id` = ?';
         //$this->logger->error($SQL);
-
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($id));
         return $stmt->fetch();
+    }
+
+    /**
+     * truncates fiels do DB-field size
+     *
+     * @param $string
+     * @param $length
+     * @param $dots
+     * @return string
+     */
+    private function truncate($string, $length, $dots = "...")
+    {
+        return (strlen($string) > $length) ? mb_strcut($string, 0, $length - strlen($dots)) . $dots : $string;
     }
 }

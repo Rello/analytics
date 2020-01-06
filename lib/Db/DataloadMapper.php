@@ -67,20 +67,50 @@ class DataloadMapper
     }
 
     /**
+     * get all dataload & schedule metadata
+     *
+     * @NoAdminRequired
+     * @return array
+     */
+    public function getAllDataloadMetadata()
+    {
+        $SQL = 'SELECT `dataset`, COUNT(id) AS `dataloads`, COUNT(schedule) AS `schedules` FROM `*PREFIX*analytics_dataload` WHERE `user_id` = ? GROUP BY dataset';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId));
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * get all dataload & schedule metadata
+     *
+     * @NoAdminRequired
+     * @param $schedule
+     * @return array
+     */
+    public function getDataloadBySchedule($schedule)
+    {
+        $SQL = 'SELECT `id` FROM `*PREFIX*analytics_dataload` WHERE `schedule` = ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($schedule));
+        return $stmt->fetchAll();
+    }
+
+    /**
      * update dataload
      *
      * @NoAdminRequired
      * @param int $dataloadId
      * @param $name
      * @param $option
+     * @param $schedule
      * @return bool
      */
-    public function update(int $dataloadId, $name, $option)
+    public function update(int $dataloadId, $name, $option, $schedule)
     {
-        $SQL = 'UPDATE `*PREFIX*analytics_dataload` SET `name`= ?, `option`= ? WHERE `user_id` = ? AND `id` = ?';
+        $SQL = 'UPDATE `*PREFIX*analytics_dataload` SET `name`= ?, `option`= ?, `schedule` = ? WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $name = $this->truncate($name, 64);
-        $stmt->execute(array($name, $option, $this->userId, $dataloadId));
+        $stmt->execute(array($name, $option, $schedule, $this->userId, $dataloadId));
         return true;
     }
 

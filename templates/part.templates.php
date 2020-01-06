@@ -242,12 +242,20 @@
             <div style="width: 30%;">
                 <div class="wizzardHeader">Run</div>
                 <div id="dataloadRun" hidden>
-                    <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
-                            for="testrunCheckbox">Testrun</label><br>
-                    <button id="dataloadExecuteButton">Execute now</button>
-                    <br><br>
-                    <button disabled="">Schedule</button>
+                    <span><?php p($l->t('Manual dataload')); ?></span>
                     <br>
+                    <button id="dataloadExecuteButton">Execute now</button>
+                    <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
+                            for="testrunCheckbox">Testrun</label>
+                    <br><br>
+                    <span><?php p($l->t('Schedule dataload in background')); ?></span>
+                    <select id="dataloadSchedule" class="input150">
+                        <option value="" selected><?php p($l->t('not scheduled')); ?></option>
+                        <option value="d"><?php p($l->t('daily')); ?></option>
+                        <option value="h"><?php p($l->t('hourly')); ?></option>
+                    </select>
+                    <button id="dataloadScheduleButton">Save</button>
+                    <br><br>
                     <button disabled="">Use in Flow</button>
                 </div>
             </div>

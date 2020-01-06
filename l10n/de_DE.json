@@ -51,6 +51,7 @@
     "You have imported data in report {report}": "Du hast Daten in den Bericht {report} importiert",
     " has importet data in report {report}": " hat Daten in den Bericht {report} importiert",
     "New data was add via API to report {report}": "Es wurden über die API neue Daten zum Bericht {report} hinzugefügt",
+    "New data was add via dataload to report {report}": "Es wurden über eine Datenladung neue Daten zum Bericht {report} hinzugefügt",
     "Quickstart": "Schnellstart",
     "Template placeholder": "Platzhalter Vorlagen",
     "Recent": "Kürzlich verwendet",

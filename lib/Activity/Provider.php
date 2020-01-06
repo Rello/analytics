@@ -81,6 +81,9 @@ class Provider implements IProvider
             case ActivityManager::SUBJECT_DATA_ADD_API:
                 $parsedSubject = $this->l10n->t('New data was add via API to report {report}');
                 break;
+            case ActivityManager::SUBJECT_DATA_ADD_DATALOAD:
+                $parsedSubject = $this->l10n->t('New data was add via dataload to report {report}');
+                break;
         }
 
         $event->setRichSubject(
