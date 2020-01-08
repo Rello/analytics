@@ -6,13 +6,22 @@
         render: function (createElement) {
             var self = this;
             var items = [];
+            var selected;
             for (let navigation of Component.items) {
-                items.push(createElement('option', {
-                    domProps: {
-                        value: navigation.id,
-                        innerText: navigation.name
+                if (parseInt(navigation.type) === 2) {
+                    if (parseInt(self.value) === navigation.id) {
+                        selected = 'selected';
+                    } else {
+                        selected = '';
                     }
-                }))
+                    items.push(createElement('option', {
+                        domProps: {
+                            value: navigation.id,
+                            innerText: navigation.name,
+                            selected
+                        }
+                    }))
+                }
             }
             return createElement('div', {
                 style: {
