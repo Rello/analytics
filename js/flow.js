@@ -10,18 +10,31 @@
                 },
             }, [
                 createElement('select', {
+                        attrs: {
+                            id: 'report'
+                        },
+                        domProps: {
+                            value: self.value,
+                            required: 'true'
+                        },
                         style: {
                             width: '100%'
                         },
+                        on: {
+                            input: function (event) {
+                                self.$emit('input', event.target.value)
+                            }
+                        }
                     }, [
                         createElement('option', {
                             domProps: {
                                 value: '1',
-                                innerText: 'Test Report'
+                                innerText: 'test'
                             },
+
                         })
                     ]
-                ),
+                )
             ])
         },
         props: {
