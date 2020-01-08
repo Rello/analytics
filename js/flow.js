@@ -2,8 +2,18 @@
 
     var Component = {
         name: 'WorkflowScript',
+        items: [],
         render: function (createElement) {
             var self = this;
+            var items = [];
+            for (let navigation of Component.items) {
+                items.push(createElement('option', {
+                    domProps: {
+                        value: navigation.id,
+                        innerText: navigation.name
+                    }
+                }))
+            }
             return createElement('div', {
                 style: {
                     width: '100%'
@@ -25,27 +35,27 @@
                                 self.$emit('input', event.target.value)
                             }
                         }
-                    }, [
-                        createElement('option', {
-                            domProps: {
-                                value: '1',
-                                innerText: 'test'
-                            },
-
-                        })
-                    ]
+                    }, items
                 )
             ])
         },
         props: {
             value: ''
         },
-        data: function () {
-            return {
-                description: t('workflow_script', 'Available placeholder variables are listed in the documentation') + '↗',
-                link: 'https://github.com/nextcloud/workflow_script#placeholders'
-            }
-        }
+        beforeMount() {
+            this.fetchDatasets()
+        },
+        methods: {
+            fetchDatasets() {
+                $.ajax({
+                    type: 'GET',
+                    url: OC.generateUrl('apps/analytics/dataset'),
+                    success: function (data) {
+                        Component.items = data;
+                    }
+                });
+            },
+        },
     };
 
     window.OCA.WorkflowEngine.registerOperator({
