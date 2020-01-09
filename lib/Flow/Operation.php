@@ -61,12 +61,12 @@ class Operation implements IOperation
 
     public function getDisplayName(): string
     {
-        return $this->l->t('Add to Analytics');
+        return $this->l->t('Data Analytics');
     }
 
     public function getDescription(): string
     {
-        return $this->l->t('Read a file and add its data to an existing report');
+        return $this->l->t('Read file and add its data to an existing report');
     }
 
     public function getIcon(): string
@@ -80,9 +80,6 @@ class Operation implements IOperation
     }
 
     /**
-     * Validates whether a configured workflow rule is valid. If it is not,
-     * an `\UnexpectedValueException` is supposed to be thrown.
-     *
      * @param $name
      * @param array $checks
      * @param $operation
@@ -90,7 +87,6 @@ class Operation implements IOperation
      */
     public function validateOperation($name, array $checks, $operation): void
     {
-        $this->logger->debug("validateOperation");
     }
 
     public function onEvent(string $eventName, Event $event, IRuleMatcher $ruleMatcher): void
@@ -98,27 +94,26 @@ class Operation implements IOperation
         $flow = $ruleMatcher->getFlows(true);
         $datasetId = (int)$flow['operation'];
 
+        if ($eventName === '\OCP\Files::postRename') {
+            /** @var Node $oldNode */
+            list(, $node) = $event->getSubject();
+        } else {
+            $node = $event->getSubject();
+        }
+
+        list(, , $folder, $file) = explode('/', $node->getPath(), 4);
+        if ($folder !== 'files' || $node instanceof Folder) {
+            return;
+        }
+        $file = '/' . $file;
+
+        $this->logger->debug("Analytics Flow Operation 115: storing file '" . $file . "' in report " . $datasetId);
         try {
-            if ($eventName === '\OCP\Files::postRename') {
-                /** @var Node $oldNode */
-                list(, $node) = $event->getSubject();
-            } else {
-                $node = $event->getSubject();
-            }
-
-            list(, , $folder, $file) = explode('/', $node->getPath(), 4);
-            if ($folder !== 'files' || $node instanceof Folder) {
-                return;
-            }
-            $file = '/' . $file;
-
-            $this->logger->debug("Flow Operation 119: storing file '" . $file . "' in report " . $datasetId);
-            try {
-                $this->DataloadController->importFile($datasetId, $file);
-            } catch (NotFoundException $e) {
-            } catch (\Exception $e) {
-            }
-        } catch (\OCP\Files\NotFoundException $e) {
+            $this->DataloadController->importFile($datasetId, $file);
+        } catch (NotFoundException $e) {
+            return;
+        } catch (\Exception $e) {
+            return;
         }
     }
 }

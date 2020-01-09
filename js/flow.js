@@ -4,9 +4,9 @@
         name: 'WorkflowScript',
         items: [],
         render: function (createElement) {
-            var self = this;
-            var items = [];
-            var selected;
+            let self = this;
+            let items = [];
+            let selected;
             for (let navigation of Component.items) {
                 if (parseInt(navigation.type) === 2) {
                     if (parseInt(self.value) === navigation.id) {

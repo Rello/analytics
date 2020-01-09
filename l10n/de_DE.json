@@ -76,7 +76,8 @@
     "<= less equal": "<= kleiner gleich",
     ">= greater equal": ">= größer gleich",
     "!= not equal": "!= ungleich",
-    "Single value or *": "Einzelwert oder *"
+    "Single value or *": "Einzelwert oder *",
+    "Read file and add its data to an existing report": "Datei auslesen und den Inhalt einem bestehenden Report hinzufügen"
   },
   "pluralForm": ""
 }
