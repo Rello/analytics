@@ -12,8 +12,12 @@ declare(strict_types=1);
 
 namespace OCA\Analytics\Flow;
 
+use OCA\Analytics\Controller\DataloadController;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\Folder;
+use OCP\Files\Node;
+use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IURLGenerator;
@@ -22,7 +26,6 @@ use OCP\WorkflowEngine\IManager;
 use OCP\WorkflowEngine\IOperation;
 use OCP\WorkflowEngine\IRuleMatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use UnexpectedValueException;
 
 class Operation implements IOperation
 {
@@ -32,16 +35,19 @@ class Operation implements IOperation
     /** @var IURLGenerator */
     private $urlGenerator;
     private $logger;
+    private $DataloadController;
 
     public function __construct(
         IL10N $l,
         IURLGenerator $urlGenerator,
-        ILogger $logger
+        ILogger $logger,
+        DataloadController $DataloadController
     )
     {
         $this->l = $l;
         $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
+        $this->DataloadController = $DataloadController;
     }
 
     public static function register(IEventDispatcher $dispatcher): void
@@ -55,12 +61,12 @@ class Operation implements IOperation
 
     public function getDisplayName(): string
     {
-        return $this->l->t('Write to Analytics');
+        return $this->l->t('Add to Analytics');
     }
 
     public function getDescription(): string
     {
-        return $this->l->t('Writes data to report');
+        return $this->l->t('Read a file and add its data to an existing report');
     }
 
     public function getIcon(): string
@@ -70,22 +76,49 @@ class Operation implements IOperation
 
     public function isAvailableForScope(int $scope): bool
     {
-        return true;
+        return $scope === IManager::SCOPE_USER;
     }
 
     /**
      * Validates whether a configured workflow rule is valid. If it is not,
      * an `\UnexpectedValueException` is supposed to be thrown.
      *
-     * @throws UnexpectedValueException
+     * @param $name
+     * @param array $checks
+     * @param $operation
      * @since 9.1
      */
     public function validateOperation($name, array $checks, $operation): void
     {
+        $this->logger->debug("validateOperation");
     }
 
     public function onEvent(string $eventName, Event $event, IRuleMatcher $ruleMatcher): void
     {
-        $this->logger->debug("Test Flow Operation");
+        $flow = $ruleMatcher->getFlows(true);
+        $datasetId = (int)$flow['operation'];
+
+        try {
+            if ($eventName === '\OCP\Files::postRename') {
+                /** @var Node $oldNode */
+                list(, $node) = $event->getSubject();
+            } else {
+                $node = $event->getSubject();
+            }
+
+            list(, , $folder, $file) = explode('/', $node->getPath(), 4);
+            if ($folder !== 'files' || $node instanceof Folder) {
+                return;
+            }
+            $file = '/' . $file;
+
+            $this->logger->debug("Flow Operation 119: storing file '" . $file . "' in report " . $datasetId);
+            try {
+                $this->DataloadController->importFile($datasetId, $file);
+            } catch (NotFoundException $e) {
+            } catch (\Exception $e) {
+            }
+        } catch (\OCP\Files\NotFoundException $e) {
+        }
     }
 }
