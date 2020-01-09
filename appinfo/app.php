@@ -14,6 +14,9 @@ namespace OCA\Analytics\AppInfo;
 
 use OCP\Util;
 
+$app = \OC::$server->query(\OCA\Analytics\AppInfo\Application::class);
+$app->register();
+
 $navigationEntry = function () {
     return [
         'id' => 'analytics',

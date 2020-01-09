@@ -23,15 +23,12 @@ class Application extends App
 
     public function __construct(array $urlParams = array())
     {
-
         parent::__construct('analytics', $urlParams);
-        $this->register();
     }
 
     public function register()
     {
         $this->registerNotificationNotifier();
-        //$this->registerCommentsEntity();
 
         $server = $this->getContainer()->getServer();
         /** @var IEventDispatcher $dispatcher */
@@ -39,6 +36,7 @@ class Application extends App
             $dispatcher = $server->query(IEventDispatcher::class);
         } catch (QueryException $e) {
         }
+
         Operation::register($dispatcher);
     }
 
