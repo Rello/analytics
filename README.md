@@ -8,11 +8,12 @@ From data to report. Data Analytics provides modular datasources, a realtime or 
 
 ## Features
 - Datasources: local/remote file, API, imports, manual entry
+- Advanced dataloads with scheduling
 - 3rd party*: GitHub Statistics
 - Storage: stream or database
 - Visualization: charts, tables
 - Thresholds for alerts and color coding
-- Integration: Files app, NC Activity, NC Notifications, NC workflows*
+- Integration: Files app, Activity, Notifications, Flow
 - Sharing: user*, protected, public
 
 (*work in progress)
