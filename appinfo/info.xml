@@ -4,15 +4,16 @@
     <name>Data Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-From data to report. Data Analytics provides modular datasources, a realtime or storage backend and flexibile visualization.
+From data to report. This on premise data warehouse solution provides modular datasources, a realtime or storage backend and flexibile visualization.
 
 ## Features:
-- Datasources: local/remote files, API, imports, manual entry
-- 3rd party*: GitHub Statistics
+- Datasources: local/remote file, API, imports, manual entry
+- 3rd party*: GitHub Statistics, Regex grabber
 - Storage: stream or database
+- Advanced dataloads with scheduling
 - Visualization: charts, tables
 - Thresholds for alerts and color coding
-- Integration: Files app, NC Activity, NC Notifications, NC workflows*
+- Integration: Files app, Activity, Notifications, Flow
 - Sharing: user*, protected, public
 
 (*work in progress)
