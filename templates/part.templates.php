@@ -201,7 +201,7 @@
     <div id="templateDataload">
         <div style="display: flex;">
             <div style="width: 30%;">
-                <div class="wizzardHeader">Available Datasources</div>
+                <div class="wizzardHeader"><?php p($l->t('Dataloads')); ?></div>
                 <div id="dataloadList"></div>
                 <div style="display: table-row;">
                     <div style="display: table-cell;">
@@ -213,6 +213,7 @@
                             <option value="1" selected><?php p($l->t('Local File')); ?></option>
                             <option value="3"><?php p($l->t('GitHub')); ?></option>
                             <option value="4"><?php p($l->t('External url (csv)')); ?></option>
+                            <option value="5"><?php p($l->t('HTML Regex')); ?></option>
                         </select>
                     </div>
                 </div>
@@ -221,18 +222,20 @@
                 <div class="wizzardHeader icon-view-next"></div>
             </div>
             <div style="width: 30%;">
-                <div class="wizzardHeader">Settings</div>
+                <div class="wizzardHeader"><?php p($l->t('Settings')); ?></div>
                 <div id="dataloadDetail">
                     <div id="dataloadDetailHeader" hidden>
-                        <div class="input150" style="display: inline-flex;">Title</div>
-                        <input class="input150" id="dataloadName" style="display: inline-flex;">
+                        <div>
+                            <div class="input150" style="display: inline-flex;"><?php p($l->t('Title')); ?></div>
+                            <input class="input150" id="dataloadName" style="display: inline-flex;">
+                        </div>
                     </div>
                     <br>
                     <div id="dataloadDetailItems">
                     </div>
                     <div id="dataloadDetailButtons" hidden>
-                        <button id="dataloadDeleteButton">Delete</button>
-                        <button id="dataloadUpdateButton">Save</button>
+                        <button id="dataloadDeleteButton" style="padding: 15px;" class="icon-delete"></button>
+                        <button id="dataloadUpdateButton" style="padding: 15px;" class="icon-checkmark"></button>
                     </div>
                 </div>
             </div>
@@ -240,13 +243,13 @@
                 <div class="wizzardHeader icon-view-next"></div>
             </div>
             <div style="width: 30%;">
-                <div class="wizzardHeader">Run</div>
+                <div class="wizzardHeader"><?php p($l->t('Run')); ?></div>
                 <div id="dataloadRun" hidden>
                     <span><?php p($l->t('Manual dataload')); ?></span>
                     <br>
-                    <button id="dataloadExecuteButton">Execute now</button>
+                    <button id="dataloadExecuteButton"><?php p($l->t('Load now')); ?></button>
                     <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
-                            for="testrunCheckbox">Testrun</label>
+                        for="testrunCheckbox"><?php p($l->t('Testrun')); ?></label>
                     <br><br>
                     <span><?php p($l->t('Schedule dataload in background')); ?></span>
                     <select id="dataloadSchedule" class="input150">
@@ -254,9 +257,6 @@
                         <option value="d"><?php p($l->t('daily')); ?></option>
                         <option value="h"><?php p($l->t('hourly')); ?></option>
                     </select>
-                    <button id="dataloadScheduleButton">Save</button>
-                    <br><br>
-                    <button disabled="">Use in Flow</button>
                 </div>
             </div>
         </div>

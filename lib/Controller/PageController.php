@@ -71,9 +71,9 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function config()
+    public function advanced()
     {
-        return new TemplateResponse($this->appName, 'main_config');
+        return new TemplateResponse($this->appName, 'main_advanced');
     }
 
     /**

@@ -375,7 +375,7 @@ class DataloadController extends Controller
      */
     public function importFile(int $datasetId, $path)
     {
-        //$this->logger->error('DataLoadController 100:'.$datasetId. $path);
+        $this->logger->error('DataLoadController 378:' . $datasetId . $path);
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;

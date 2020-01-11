@@ -347,8 +347,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataAdvancedButton: function () {
-        //OCA.Analytics.Sidebar.Backend.testButton();
-        window.location = OC.generateUrl('apps/analytics/c/') + '#/r/' + document.getElementById('app-sidebar').dataset.id;
+        window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + document.getElementById('app-sidebar').dataset.id;
     },
 
 };
@@ -608,101 +607,6 @@ OCA.Analytics.Sidebar.Share = {
     },
 };
 
-OCA.Analytics.Sidebar.Threshold = {
-
-    tabContainerThreshold: function () {
-        const datasetId = document.getElementById('app-sidebar').dataset.id;
-
-        OCA.Analytics.Sidebar.resetView();
-        document.getElementById('tabHeaderThreshold').classList.add('selected');
-        document.getElementById('tabContainerThreshold').classList.remove('hidden');
-        document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
-
-
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
-            success: function (data) {
-                let table;
-                table = document.getElementById('templateThreshold').cloneNode(true);
-                table.id = 'tableThreshold';
-                document.getElementById('tabContainerThreshold').innerHTML = '';
-                document.getElementById('tabContainerThreshold').appendChild(table);
-                document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column 1');
-                document.getElementById('sidebarThresholdTextDimension3').innerText = data.dimension3 || t('analytics', 'Column 3');
-                document.getElementById('createThresholdButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
-                if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
-                    document.getElementById('sidebarThresholdSeverity').remove(0);
-                }
-            }
-        });
-
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/threshold/') + datasetId,
-            success: function (data) {
-                if (data !== false) {
-                    document.getElementById('sidebarThresholdList').innerHTML = '';
-                    for (let threshold of data) {
-                        const li = OCA.Analytics.Sidebar.Threshold.buildThresholdRow(threshold);
-                        document.getElementById('sidebarThresholdList').appendChild(li);
-                    }
-                }
-            }
-        });
-    },
-
-    handleThresholdCreateButton: function () {
-        OCA.Analytics.Sidebar.Backend.createThreashold();
-    },
-
-    handleThresholdDeleteButton: function (evt) {
-        const thresholdId = evt.target.dataset.id;
-        OCA.Analytics.Sidebar.Backend.deleteThreshold(thresholdId);
-    },
-
-    buildThresholdRow: function (data) {
-
-        let bulletColor, bullet;
-        data.severity = parseInt(data.severity);
-        if (data.severity === 2) {
-            bulletColor = 'red';
-        } else if (data.severity === 3) {
-            bulletColor = 'orange';
-        } else {
-            bulletColor = 'green';
-        }
-
-        if (data.severity === 1) {
-            bullet = document.createElement('img');
-            bullet.src = OC.imagePath('notifications', 'notifications-dark.svg');
-            bullet.classList.add('thresholdBullet');
-        } else {
-            bullet = document.createElement('div');
-            bullet.style.backgroundColor = bulletColor;
-            bullet.classList.add('thresholdBullet');
-        }
-
-        let item = document.createElement('div');
-        item.classList.add('thresholdItem');
-
-        let text = document.createElement('div');
-        text.classList.add('thresholdText');
-        text.innerText = data.dimension1 + ' ' + data.option + ' ' + data.dimension3;
-
-        let tDelete = document.createElement('div');
-        tDelete.classList.add('icon-close');
-        tDelete.dataset.id = data.id;
-        tDelete.addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdDeleteButton);
-
-        item.appendChild(bullet);
-        item.appendChild(text);
-        item.appendChild(tDelete);
-        return item;
-    },
-
-};
-
 OCA.Analytics.Sidebar.Backend = {
 
     deleteDataset: function (datasetId) {
@@ -847,37 +751,6 @@ OCA.Analytics.Sidebar.Backend = {
         });
     },
 
-    createThreashold: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const url = OC.generateUrl('apps/analytics/threshold');
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: {
-                'datasetId': datasetId,
-                'dimension1': document.getElementById('sidebarThresholdDimension1').value,
-                'option': document.getElementById('sidebarThresholdOption').value,
-                'dimension3': document.getElementById('sidebarThresholdDimension3').value,
-                'severity': document.getElementById('sidebarThresholdSeverity').value,
-            },
-            success: function () {
-                document.querySelector('.tabHeader.selected').click();
-            }
-        });
-    },
-
-    deleteThreshold: function (thresholdId) {
-
-        $.ajax({
-            type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/threshold/') + thresholdId,
-            success: function (data) {
-                document.querySelector('.tabHeader.selected').click();
-            }
-        });
-    },
-
     testButton: function (thresholdId) {
 
         $.ajax({
@@ -890,5 +763,4 @@ OCA.Analytics.Sidebar.Backend = {
             }
         });
     },
-
 };

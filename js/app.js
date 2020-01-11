@@ -22,6 +22,7 @@ if (!OCA.Analytics) {
         TYPE_INTERNAL_DB: 2,
         TYPE_GIT: 3,
         TYPE_EXTERNAL_FILE: 4,
+        TYPE_EXTERNAL_REGEX: 5,
         TYPE_SHARED: 99,
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_LINK: 3,

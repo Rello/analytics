@@ -13,14 +13,14 @@
 'use strict';
 
 /**
- * @namespace OCA.Analytics.Config
+ * @namespace OCA.Analytics.Advanced
  */
-OCA.Analytics.Config = {};
+OCA.Analytics.Advanced = {};
 
 /**
- * @namespace OCA.Analytics.Config.Dataload
+ * @namespace OCA.Analytics.Advanced.Dataload
  */
-OCA.Analytics.Config.Dataload = {
+OCA.Analytics.Advanced.Dataload = {
     datasourceTemplates: [],
     dataloadArray: [],
 
@@ -41,24 +41,24 @@ OCA.Analytics.Config.Dataload = {
                 table.id = 'tableDataload';
                 document.getElementById('tabContainerDataload').innerHTML = '';
                 document.getElementById('tabContainerDataload').appendChild(table);
-                document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadCreateButton);
+                document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadCreateButton);
                 document.getElementById('dataloadList').innerHTML = '';
                 for (let dataload of data['dataloads']) {
-                    const li = OCA.Analytics.Config.Dataload.buildDataloadRow(dataload);
+                    const li = OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload);
                     document.getElementById('dataloadList').appendChild(li);
                 }
-                OCA.Analytics.Config.Dataload.datasourceTemplates = data['templates'];
-                OCA.Analytics.Config.Dataload.dataloadArray = data['dataloads'];
+                OCA.Analytics.Advanced.Dataload.datasourceTemplates = data['templates'];
+                OCA.Analytics.Advanced.Dataload.dataloadArray = data['dataloads'];
             }
         });
     },
 
     handleDataloadCreateButton: function () {
-        OCA.Analytics.Config.Dataload.createDataload();
+        OCA.Analytics.Advanced.Dataload.createDataload();
     },
 
     handleDataloadUpdateButton: function () {
-        OCA.Analytics.Config.Dataload.updateDataload();
+        OCA.Analytics.Advanced.Dataload.updateDataload();
     },
 
     handleDataloadDeleteButton: function () {
@@ -67,7 +67,7 @@ OCA.Analytics.Config.Dataload = {
             t('analytics', 'Delete Dataload'),
             function (e) {
                 if (e === true) {
-                    OCA.Analytics.Config.Dataload.deleteDataload();
+                    OCA.Analytics.Advanced.Dataload.deleteDataload();
                 }
             },
             true
@@ -75,11 +75,11 @@ OCA.Analytics.Config.Dataload = {
     },
 
     handleDataloadEditClick: function (evt) {
-        OCA.Analytics.Config.Dataload.bildDataloadDetails(evt);
+        OCA.Analytics.Advanced.Dataload.bildDataloadDetails(evt);
     },
 
     handleDataloadExecuteButton: function (evt) {
-        OCA.Analytics.Config.Dataload.executeDataload();
+        OCA.Analytics.Advanced.Dataload.executeDataload();
     },
 
     buildDataloadRow: function (dataload) {
@@ -96,7 +96,7 @@ OCA.Analytics.Config.Dataload = {
         } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
             typeIcon = 'icon-external';
         } else {
-            typeIcon = '';
+            typeIcon = 'icon-external';
         }
         let a = document.createElement('a');
         //a.setAttribute('href', '#');
@@ -104,35 +104,36 @@ OCA.Analytics.Config.Dataload = {
         a.innerText = dataload.name;
         a.dataset.id = dataload.id;
         a.dataset.datasourceId = dataload.datasource;
-        a.addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadEditClick);
+        a.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadEditClick);
         item.appendChild(a);
         return item;
     },
 
     bildDataloadDetails: function (evt) {
-        let dataload = OCA.Analytics.Config.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
-        let template = OCA.Analytics.Config.Dataload.datasourceTemplates[evt.target.dataset.datasourceId];
+        let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
+        let template = OCA.Analytics.Advanced.Dataload.datasourceTemplates[evt.target.dataset.datasourceId];
 
         document.getElementById('dataloadDetail').dataset.id = dataload.id;
         document.getElementById('dataloadName').value = dataload.name;
         document.getElementById('dataloadDetailHeader').hidden = false;
         document.getElementById('dataloadDetailButtons').hidden = false;
-        document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadUpdateButton);
-        document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadDeleteButton);
-        document.getElementById('dataloadScheduleButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadUpdateButton);
+        document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadUpdateButton);
+        document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadDeleteButton);
+        document.getElementById('dataloadSchedule').value = dataload.schedule;
+        document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
 
         let item = document.getElementById('dataloadDetailItems');
         item.innerHTML = '';
 
         for (let option of template) {
             let tablerow = document.createElement('div');
-            tablerow.style.display = 'table-row';
+            //tablerow.style.display = 'table-row';
             let label = document.createElement('div');
-            label.style.display = 'table-cell';
+            label.style.display = 'inline-flex';
             label.classList.add('input150');
             label.innerText = option.name;
             let input = document.createElement('input');
-            input.style.display = 'table-cell';
+            input.style.display = 'inline-flex';
             input.classList.add('input150');
             input.placeholder = option.placeholder;
             input.id = option.id;
@@ -147,9 +148,9 @@ OCA.Analytics.Config.Dataload = {
         }
 
         document.getElementById('dataloadRun').hidden = false;
-        document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadExecuteButton);
-        //scheduleButton.addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadExecuteButton);
-        //useButton.addEventListener('click', OCA.Analytics.Config.Dataload.handleDataloadExecuteButton);
+        document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
+        //scheduleButton.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
+        //useButton.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
 
     },
 
@@ -189,6 +190,8 @@ OCA.Analytics.Config.Dataload = {
             },
             success: function () {
                 OCA.Analytics.UI.notification('success', t('analytics', 'Dataload saved'));
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId)).schedule = document.getElementById('dataloadSchedule').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId)).name = document.getElementById('dataloadName').value;
             }
         });
     },
@@ -245,13 +248,138 @@ OCA.Analytics.Config.Dataload = {
 
 };
 
+OCA.Analytics.Advanced.Threshold = {
+
+    tabContainerThreshold: function () {
+        const datasetId = document.getElementById('app-sidebar').dataset.id;
+
+        OCA.Analytics.Sidebar.resetView();
+        document.getElementById('tabHeaderThreshold').classList.add('selected');
+        document.getElementById('tabContainerThreshold').classList.remove('hidden');
+        document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            success: function (data) {
+                let table;
+                table = document.getElementById('templateThreshold').cloneNode(true);
+                table.id = 'tableThreshold';
+                document.getElementById('tabContainerThreshold').innerHTML = '';
+                document.getElementById('tabContainerThreshold').appendChild(table);
+                document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column 1');
+                document.getElementById('sidebarThresholdTextDimension3').innerText = data.dimension3 || t('analytics', 'Column 3');
+                document.getElementById('createThresholdButton').addEventListener('click', OCA.Analytics.Advanced.Threshold.handleThresholdCreateButton);
+                if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
+                    document.getElementById('sidebarThresholdSeverity').remove(0);
+                }
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/analytics/threshold/') + datasetId,
+            success: function (data) {
+                if (data !== false) {
+                    document.getElementById('sidebarThresholdList').innerHTML = '';
+                    for (let threshold of data) {
+                        const li = OCA.Analytics.Advanced.Threshold.buildThresholdRow(threshold);
+                        document.getElementById('sidebarThresholdList').appendChild(li);
+                    }
+                }
+            }
+        });
+    },
+
+    handleThresholdCreateButton: function () {
+        OCA.Analytics.Advanced.Threshold.createThreashold();
+    },
+
+    handleThresholdDeleteButton: function (evt) {
+        const thresholdId = evt.target.dataset.id;
+        OCA.Analytics.Advanced.Threshold.deleteThreshold(thresholdId);
+    },
+
+    buildThresholdRow: function (data) {
+
+        let bulletColor, bullet;
+        data.severity = parseInt(data.severity);
+        if (data.severity === 2) {
+            bulletColor = 'red';
+        } else if (data.severity === 3) {
+            bulletColor = 'orange';
+        } else {
+            bulletColor = 'green';
+        }
+
+        if (data.severity === 1) {
+            bullet = document.createElement('img');
+            bullet.src = OC.imagePath('notifications', 'notifications-dark.svg');
+            bullet.classList.add('thresholdBullet');
+        } else {
+            bullet = document.createElement('div');
+            bullet.style.backgroundColor = bulletColor;
+            bullet.classList.add('thresholdBullet');
+        }
+
+        let item = document.createElement('div');
+        item.classList.add('thresholdItem');
+
+        let text = document.createElement('div');
+        text.classList.add('thresholdText');
+        text.innerText = data.dimension1 + ' ' + data.option + ' ' + data.dimension3;
+
+        let tDelete = document.createElement('div');
+        tDelete.classList.add('icon-close');
+        tDelete.dataset.id = data.id;
+        tDelete.addEventListener('click', OCA.Analytics.Advanced.Threshold.handleThresholdDeleteButton);
+
+        item.appendChild(bullet);
+        item.appendChild(text);
+        item.appendChild(tDelete);
+        return item;
+    },
+
+    createThreashold: function () {
+        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const url = OC.generateUrl('apps/analytics/threshold');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'datasetId': datasetId,
+                'dimension1': document.getElementById('sidebarThresholdDimension1').value,
+                'option': document.getElementById('sidebarThresholdOption').value,
+                'dimension3': document.getElementById('sidebarThresholdDimension3').value,
+                'severity': document.getElementById('sidebarThresholdSeverity').value,
+            },
+            success: function () {
+                document.querySelector('.tabHeader.selected').click();
+            }
+        });
+    },
+
+    deleteThreshold: function (thresholdId) {
+
+        $.ajax({
+            type: 'DELETE',
+            url: OC.generateUrl('apps/analytics/threshold/') + thresholdId,
+            success: function (data) {
+                document.querySelector('.tabHeader.selected').click();
+            }
+        });
+    },
+
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Sidebar.registerSidebarTab({
         id: 'tabHeaderDataload',
         class: 'tabContainerDataload',
         tabindex: '2',
         name: t('analytics', 'Dataload'),
-        action: OCA.Analytics.Config.Dataload.tabContainerDataload,
+        action: OCA.Analytics.Advanced.Dataload.tabContainerDataload,
     });
 
     OCA.Analytics.Sidebar.registerSidebarTab({
@@ -259,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
         class: 'tabContainerThreshold',
         tabindex: '3',
         name: t('analytics', 'Thresholds'),
-        action: OCA.Analytics.Sidebar.Threshold.tabContainerThreshold,
+        action: OCA.Analytics.Advanced.Threshold.tabContainerThreshold,
     });
 
 });

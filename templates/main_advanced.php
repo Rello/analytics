@@ -17,7 +17,7 @@ Util::addStyle('analytics', 'sharetabview');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
-Util::addScript('analytics', 'config');
+Util::addScript('analytics', 'advanced');
 ?>
 
     <div id="app-navigation">
@@ -28,6 +28,6 @@ Util::addScript('analytics', 'config');
         <div id="loading">
             <i class="ioc-spinner ioc-spin"></i>
         </div>
-        <?php print_unescaped($this->inc('part.content_config')); ?>
+        <?php print_unescaped($this->inc('part.content_advanced')); ?>
     </div>
 <?php print_unescaped($this->inc('part.templates')); ?>
