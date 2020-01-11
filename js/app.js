@@ -10,6 +10,7 @@
 /** global: OCA */
 /** global: OCP */
 /** global: OC */
+/** global: table */
 'use strict';
 
 if (!OCA.Analytics) {

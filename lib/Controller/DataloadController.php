@@ -6,11 +6,12 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2019 Marcel Scherello
+ * @copyright 2020 Marcel Scherello
  */
 
 namespace OCA\Analytics\Controller;
 
+use Exception;
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\DataloadMapper;
 use OCP\AppFramework\Controller;
@@ -82,7 +83,8 @@ class DataloadController extends Controller
      */
     public function read(int $datasetId)
     {
-        $result['dataloads'] = $this->DataloadMapper->read($datasetId);;
+        $result = array();
+        $result['dataloads'] = $this->DataloadMapper->read($datasetId);
         $result['templates'] = $this->DataSourceController->getTemplates();
         return new DataResponse($result);
     }
@@ -135,7 +137,7 @@ class DataloadController extends Controller
      * @NoAdminRequired
      * @param $schedule
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function executeBySchedule($schedule)
     {
@@ -153,7 +155,7 @@ class DataloadController extends Controller
      * @NoAdminRequired
      * @param int $dataloadId
      * @return DataResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(int $dataloadId)
     {
@@ -190,7 +192,7 @@ class DataloadController extends Controller
      *
      * @NoAdminRequired
      * @param int $dataloadId
-     * @return array
+     * @return array|NotFoundResponse
      * @throws NotFoundException
      */
     private function getDataFromDatasource(int $dataloadId)
@@ -263,7 +265,7 @@ class DataloadController extends Controller
      * @param $dimension2
      * @param $dimension3
      * @return DataResponse|NotFoundResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateData(int $datasetId, $dimension1, $dimension2, $dimension3)
     {
@@ -322,7 +324,7 @@ class DataloadController extends Controller
      * @param int $datasetId
      * @param $import
      * @return DataResponse|NotFoundResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function importClipboard($datasetId, $import)
     {
@@ -371,7 +373,7 @@ class DataloadController extends Controller
      * @param $path
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function importFile(int $datasetId, $path)
     {
@@ -379,6 +381,7 @@ class DataloadController extends Controller
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;
+            $option = array();
             $option['user_id'] = $datasetMetadata['user_id'];
             $option['path'] = $path;
             $option['link'] = $datasetMetadata['link'];

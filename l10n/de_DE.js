@@ -1,3 +1,4 @@
+/** global: OC */
 OC.L10N.register(
     'analytics',
     {
@@ -23,19 +24,19 @@ OC.L10N.register(
         'Technical error. Please check the logs': 'Technischer Fehler. Bitte die Logs prüfen',
         'Search': 'Suche',
         'first': 'erster',
-            'previous': 'zurück',
-            'next': 'weiter',
-            'last': 'letzter',
-            'Show _MENU_ entries': 'Zeige _MENU_ Einträge',
-            'Showing 0 to 0 of 0 entries': 'Zeige 0 bis 0 von 0 Einträgen',
-            'Showing _START_ to _END_ of _TOTAL_ entries': 'Zeige _START_ bis _END_ von _TOTAL_ Einträgen',
-            'Delete Report': 'Bericht löschen',
-            'Are you sure?': 'Bist Du sicher?',
-            'All data will be deleted!': 'Alle Daten werden gelöscht!',
-            'Show in Analytics': 'In Analytics anzeigen',
-            'Column 1': 'Spalte 1',
-            'Column 3': 'Spalte 3',
-            'Thresholds': 'Schwellwerte'
+        'previous': 'zurück',
+        'next': 'weiter',
+        'last': 'letzter',
+        'Show _MENU_ entries': 'Zeige _MENU_ Einträge',
+        'Showing 0 to 0 of 0 entries': 'Zeige 0 bis 0 von 0 Einträgen',
+        'Showing _START_ to _END_ of _TOTAL_ entries': 'Zeige _START_ bis _END_ von _TOTAL_ Einträgen',
+        'Delete Report': 'Bericht löschen',
+        'Are you sure?': 'Bist Du sicher?',
+        'All data will be deleted!': 'Alle Daten werden gelöscht!',
+        'Show in Analytics': 'In Analytics anzeigen',
+        'Column 1': 'Spalte 1',
+        'Column 3': 'Spalte 3',
+        'Thresholds': 'Schwellwerte'
     },
     '');
 

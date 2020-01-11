@@ -6,7 +6,7 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2019 Marcel Scherello
+ * @copyright 2020 Marcel Scherello
  */
 
 namespace OCA\Analytics\Controller;
@@ -89,7 +89,7 @@ class OutputController extends Controller
      * @param $datasetMetadata
      * @param $objectDrilldown
      * @param $dateDrilldown
-     * @return array
+     * @return array|NotFoundException
      * @throws NotFoundException
      */
     private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
@@ -99,6 +99,7 @@ class OutputController extends Controller
         if ($datasource === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
             $result = $this->StorageController->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
         } else {
+            $option = array();
             $option['user_id'] = $datasetMetadata['user_id'];
             $option['link'] = $datasetMetadata['link'];
             $result = $this->DataSourceController->read($datasource, $option);

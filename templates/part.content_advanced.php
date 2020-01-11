@@ -6,7 +6,7 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2019 Marcel Scherello
+ * @copyright 2020 Marcel Scherello
  */
 ?>
 <h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Data Analytics - Advanced Configuration')); ?></h3>

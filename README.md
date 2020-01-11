@@ -8,7 +8,7 @@ From data to report. This on premise data warehouse solution provides modular da
 
 ## Features
 - Datasources: local/remote file, API, imports, manual entry
-- 3rd party*: GitHub Statistics, Regex grabber
+- 3rd party*: GitHub Statistics, website grabber
 - Storage: stream or database
 - Advanced dataloads with scheduling
 - Visualization: charts, tables

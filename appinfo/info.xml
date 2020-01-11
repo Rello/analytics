@@ -8,7 +8,7 @@ From data to report. This on premise data warehouse solution provides modular da
 
 ## Features:
 - Datasources: local/remote file, API, imports, manual entry
-- 3rd party*: GitHub Statistics, Regex grabber
+- 3rd party*: GitHub Statistics, website grabber
 - Storage: stream or database
 - Advanced dataloads with scheduling
 - Visualization: charts, tables
@@ -19,10 +19,14 @@ From data to report. This on premise data warehouse solution provides modular da
 (*work in progress)
 ]]></description>
     <version>1.2.11</version>
-	<licence>agpl</licence>
-	<author>Marcel Scherello</author>
-	<namespace>Analytics</namespace>
+    <licence>agpl</licence>
+    <author>Marcel Scherello</author>
+    <namespace>Analytics</namespace>
+    <documentation>
+        <user>https://github.com/Rello/analytics/wiki</user>
+    </documentation>
     <category>office</category>
+    <category>workflow</category>
     <website>https://github.com/rello/analytics</website>
     <bugs>https://github.com/rello/analytics/issues</bugs>
     <repository type="git">https://github.com/rello/analytics.git</repository>

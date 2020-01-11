@@ -6,7 +6,7 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2019 Marcel Scherello
+ * @copyright 2020 Marcel Scherello
  */
 
 namespace OCA\Analytics\Datasource;
@@ -47,10 +47,9 @@ class RegexService
         $html = file_get_contents($url);
         preg_match_all($regex, $html, $matches);
 
-        $this->logger->debug('count: ' . count($matches['dimension']));
-
         $data = array();
-        for ($i = 0; $i < count($matches['dimension']); $i++) {
+        $count = count($matches['dimension']);
+        for ($i = 0; $i < $count; $i++) {
             if (isset($option['limit'])) {
                 if ($i === (int)$option['limit'] AND (int)$option['limit'] !== 0) break;
             }

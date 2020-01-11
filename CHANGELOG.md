@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 ## 1.3.0 - 2020-01-1x
 ### Added
 - NC 18 Flow integration #10 [#10](https://github.com/rello/analytics/issues/10)
-- Thresholds for all datasource types (notifications just for database)
 - Enhanced dataloads with scheduling [#13](https://github.com/rello/analytics/issues/13)
 - Advanced configuration page for more options than sidebar [#12](https://github.com/rello/analytics/issues/12)
-- new Datasource: Regex grabber for external html [#14](https://github.com/rello/analytics/issues/14)
+- new datasource: website grabber [#14](https://github.com/rello/analytics/issues/14)
+- Thresholds for all datasource types (notifications just for database)
 - Compatibility dark mode [#11](https://github.com/rello/analytics/issues/11)
+- [Wiki](https://github.com/Rello/analytics/wiki)
 
 ### Changed
 - link report in activity message
