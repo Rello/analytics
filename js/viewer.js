@@ -5,7 +5,7 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2019 Marcel Scherello
+ * @copyright 2020 Marcel Scherello
  */
 'use strict';
 

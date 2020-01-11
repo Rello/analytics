@@ -5,7 +5,7 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <audioplayer@scherello.de>
- * @copyright 2019 Marcel Scherello
+ * @copyright 2020 Marcel Scherello
  */
 /** global: OCA */
 /** global: OCP */
@@ -78,7 +78,7 @@ OCA.Analytics.Advanced.Dataload = {
         OCA.Analytics.Advanced.Dataload.bildDataloadDetails(evt);
     },
 
-    handleDataloadExecuteButton: function (evt) {
+    handleDataloadExecuteButton: function () {
         OCA.Analytics.Advanced.Dataload.executeDataload();
     },
 
@@ -201,7 +201,7 @@ OCA.Analytics.Advanced.Dataload = {
         $.ajax({
             type: 'DELETE',
             url: OC.generateUrl('apps/analytics/dataload/') + dataloadId,
-            success: function (data) {
+            success: function () {
                 document.querySelector('.tabHeader.selected').click();
             }
         });
@@ -229,7 +229,7 @@ OCA.Analytics.Advanced.Dataload = {
                         t('analytics', 'Datasource simulation'),
                         'info',
                         OC.dialogs.OK_BUTTON,
-                        function (e) {
+                        function () {
                         },
                         true,
                         true
@@ -365,7 +365,7 @@ OCA.Analytics.Advanced.Threshold = {
         $.ajax({
             type: 'DELETE',
             url: OC.generateUrl('apps/analytics/threshold/') + thresholdId,
-            success: function (data) {
+            success: function () {
                 document.querySelector('.tabHeader.selected').click();
             }
         });
