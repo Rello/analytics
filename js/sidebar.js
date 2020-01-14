@@ -17,7 +17,8 @@ OCA.Analytics.Sidebar = {
     sidebar_tabs: {},
 
     showSidebar: function (evt) {
-        const navigationItem = evt.target;
+        let navigationItem = evt.target;
+        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.parentNode;
         const datasetId = navigationItem.dataset.id;
         const datasetType = navigationItem.dataset.type;
         let appsidebar = document.getElementById('app-sidebar');
@@ -387,7 +388,7 @@ OCA.Analytics.Sidebar.Share = {
                     for (let share of data) {
 
                         if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
-                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, share.pass);
+                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, parseInt(share.pass));
                             shareWithList.appendChild(li);
                         } else if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_USER) {
                             let li = OCA.Analytics.Sidebar.Share.buildShareeRow(share.id, share.uid_owner);

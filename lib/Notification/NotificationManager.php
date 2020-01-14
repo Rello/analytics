@@ -43,16 +43,17 @@ class NotificationManager
      * @param int $object_id
      * @param $subject
      * @param array $subject_parameter
+     * @param $user_id
      * @throws \Exception
      */
-    public function triggerNotification($object, $object_id, $subject, $subject_parameter)
+    public function triggerNotification($object, $object_id, $subject, $subject_parameter, $user_id)
     {
         $notification = $this->notificationManager->createNotification();
         $notification->setApp('analytics')
             ->setDateTime(new \DateTime())
             ->setObject($object, $object_id)
             ->setSubject($subject, $subject_parameter)
-            ->setUser($this->userId);
+            ->setUser($user_id);
         $this->notificationManager->notify($notification);
     }
 }

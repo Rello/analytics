@@ -1,7 +1,6 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
-## 1.3.0 - 2020-01-1x
+## 2.0.0 - 2020-01-1x
 ### Added
 - NC 18 Flow integration #10 [#10](https://github.com/rello/analytics/issues/10)
 - Enhanced dataloads with scheduling [#13](https://github.com/rello/analytics/issues/13)
@@ -16,6 +15,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - XSS risk in innerHTML
+
+### Removed
+- NC16
 
 ## 1.2.2 - 2019-12-15
 ### Fixed

@@ -122,8 +122,7 @@ class DatasetMapper
      */
     public function getDatasetOptions($id)
     {
-        $SQL = 'SELECT `name`, `visualization`, `chart` FROM `*PREFIX*analytics_dataset` WHERE `id` = ?';
-        //$this->logger->error($SQL);
+        $SQL = 'SELECT `name`, `visualization`, `chart`, `user_id` FROM `*PREFIX*analytics_dataset` WHERE `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($id));
         return $stmt->fetch();

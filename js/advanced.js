@@ -111,6 +111,7 @@ OCA.Analytics.Advanced.Dataload = {
 
     bildDataloadDetails: function (evt) {
         let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
+        if (!dataload) dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === evt.target.dataset.id);
         let template = OCA.Analytics.Advanced.Dataload.datasourceTemplates[evt.target.dataset.datasourceId];
 
         document.getElementById('dataloadDetail').dataset.id = dataload.id;

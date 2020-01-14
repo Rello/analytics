@@ -76,7 +76,7 @@ class StorageController extends Controller
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3, string $user_id = null)
     {
-        $dimension3 = str_replace(',', '.', $dimension3);
+        $dimension3 = $this->floatvalue($dimension3);
 
         $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $dimension3);
         $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $dimension3, $user_id);
@@ -105,4 +105,17 @@ class StorageController extends Controller
     {
         return $this->StorageMapper->deleteData($datasetId, $dimension1, $dimension2);
     }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        if (is_numeric($val)) {
+            return number_format(floatval($val), 2, '.', '');
+        } else {
+            return false;
+        }
+    }
+
 }

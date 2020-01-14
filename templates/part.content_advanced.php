@@ -11,7 +11,7 @@
 ?>
 <h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Data Analytics - Advanced Configuration')); ?></h3>
 <div id="analytics-content" style="width:100%; padding: 10px" hidden>
-    <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
+    <input type="hidden" name="sharingToken" value="" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="config" value="true" id="config">
     <h3 id="sidebarTitle" style="text-align: center;"></h3>

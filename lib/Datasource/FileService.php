@@ -50,6 +50,7 @@ class FileService
         if (isset($option['path'])) {
             $file = $this->rootFolder->getUserFolder($this->userId)->get($option['path']);
         } else {
+            $this->logger->debug('FileService 53 file content:' . $option['user_id'] . $option['link']);
             $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         }
 

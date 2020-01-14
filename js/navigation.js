@@ -82,7 +82,7 @@ OCA.Analytics.Navigation = {
             li.appendChild(divMenu);
         }
 
-        if (data.type === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
             li.appendChild(ulSublist);
             a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
         } else {
@@ -90,7 +90,7 @@ OCA.Analytics.Navigation = {
         }
 
         let categoryList;
-        if (parseInt(data.parent) !== 0) {
+        if (parseInt(data.parent) !== 0 && document.getElementById('dataset-' + data.parent)) {
             categoryList = document.getElementById('dataset-' + data.parent);
         } else {
             categoryList = document.getElementById('navigationDatasets');
@@ -118,7 +118,7 @@ OCA.Analytics.Navigation = {
                 liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
                 let ScheduleButton = document.createElement('button');
                 ScheduleButton.classList.add('icon-category-workflow', 'toolTip');
-                ScheduleButton.setAttribute('title', t('analytics', 'dataload available'));
+                ScheduleButton.setAttribute('title', t('analytics', 'Dataload'));
                 liScheduleButton.appendChild(ScheduleButton);
                 ulUtils.appendChild(liScheduleButton);
             }
@@ -144,24 +144,46 @@ OCA.Analytics.Navigation = {
         let ulMenu = document.createElement('ul');
 
         let liEdit = document.createElement('li');
+        liEdit.addEventListener('click', OCA.Analytics.Navigation.handleBasicClicked);
         let aEdit = document.createElement('a');
         aEdit.href = '#';
+        aEdit.dataset.id = data.id;
+        aEdit.dataset.type = data.type;
+        aEdit.dataset.name = data.name;
         let spanEditIcon = document.createElement('span');
         spanEditIcon.classList.add('icon-rename');
         let spanEditText = document.createElement('span');
-        spanEditText.innerText = 'Edit';
-        aEdit.appendChild(spanEditIcon);
-        aEdit.appendChild(spanEditText);
-        liEdit.appendChild(aEdit);
-        ulMenu.appendChild(liEdit);
+        spanEditText.innerText = t('analytics', 'Basic settings');
+        spanEditText.dataset.id = data.id;
+        spanEditText.dataset.type = data.type;
+        spanEditText.dataset.name = data.name;
 
         let liAdvanced = document.createElement('li');
         let aAdvanced = document.createElement('a');
         aAdvanced.href = '#';
+        aAdvanced.dataset.id = data.id;
+        aAdvanced.dataset.type = data.type;
+        aAdvanced.dataset.name = data.name;
         let spanAdvancedIcon = document.createElement('span');
-        spanAdvancedIcon.classList.add('icon-category-customization');
         let spanAdvancedText = document.createElement('span');
-        spanAdvancedText.innerText = 'Advanced';
+        spanAdvancedText.dataset.id = data.id;
+        spanAdvancedText.dataset.type = data.type;
+        spanAdvancedText.dataset.name = data.name;
+
+        if (document.getElementById('config').value === 'true') {
+            aAdvanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
+            spanAdvancedIcon.classList.add('icon-category-monitoring');
+            spanAdvancedText.innerText = t('analytics', 'Back to report');
+        } else {
+            aEdit.appendChild(spanEditIcon);
+            aEdit.appendChild(spanEditText);
+            liEdit.appendChild(aEdit);
+            ulMenu.appendChild(liEdit);
+            aAdvanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
+            spanAdvancedIcon.classList.add('icon-category-customization');
+            spanAdvancedText.innerText = t('analytics', 'Advanced');
+        }
+
         aAdvanced.appendChild(spanAdvancedIcon);
         aAdvanced.appendChild(spanAdvancedText);
         liAdvanced.appendChild(aAdvanced);
@@ -172,6 +194,9 @@ OCA.Analytics.Navigation = {
     },
 
     handleNavigationClicked: function (evt) {
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
         let activeCategory = document.querySelector('#navigationDatasets .active');
         if (evt) {
             if (activeCategory) {
@@ -190,7 +215,32 @@ OCA.Analytics.Navigation = {
     },
 
     handleOptionsClicked: function (evt) {
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
+        evt.target.parentElement.parentElement.parentElement.nextSibling.classList.add('open');
+    },
+
+    handleBasicClicked: function (evt) {
+        document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        evt.stopPropagation();
         OCA.Analytics.Sidebar.showSidebar(evt);
+    },
+
+    handleAdvancedClicked: function (evt) {
+        document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        let navigationItem = evt.target;
+        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.parentNode;
+        const datasetId = navigationItem.dataset.id;
+        window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
+        evt.stopPropagation();
+    },
+
+    handleReportClicked: function (evt) {
+        let navigationItem = evt.target;
+        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.parentNode;
+        const datasetId = navigationItem.dataset.id;
+        window.location = OC.generateUrl('apps/analytics/') + '#/r/' + datasetId;
         evt.stopPropagation();
     },
 

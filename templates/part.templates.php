@@ -144,7 +144,7 @@
         <div><h3><?php p($l->t('REST API')); ?></h3></div>
         <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
         <br>
-        <div><h3><?php p($l->t('Datasloads')); ?></h3></div>
+        <div><h3><?php p($l->t('Dataload')); ?></h3></div>
         <button id="advancedButton" type="button">
             <?php p($l->t('Advanced Configuration')); ?>
         </button>

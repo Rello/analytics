@@ -123,7 +123,7 @@ class Notifier implements INotifier
             ]
         );
         $notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
-        $notification->setParsedSubject('analytics');
+        $notification->setParsedSubject('Data Analytics');
         return $notification;
     }
 }

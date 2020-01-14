@@ -47,7 +47,7 @@
     "You shared report {report}": "\"Du hast den Bericht {report} geteilt",
     " shared report {report} with you": " hat den Bericht {report} mit Dir geteilt",
     "You have added new data to report {report}": "Du hast neue Daten zum Bericht {report} hinzugefügt",
-    " has added new data to report {report}": " hat neue Daten zum Bericht {report} hinzugefügt",
+    " has added new data to report {report}": " hat neue Daten dem Bericht {report} hinzugefügt",
     "You have imported data in report {report}": "Du hast Daten in den Bericht {report} importiert",
     " has importet data in report {report}": " hat Daten in den Bericht {report} importiert",
     "New data was add via API to report {report}": "Es wurden über die API neue Daten zum Bericht {report} hinzugefügt",
@@ -77,7 +77,19 @@
     ">= greater equal": ">= größer gleich",
     "!= not equal": "!= ungleich",
     "Single value or *": "Einzelwert oder *",
-    "Read file and add its data to an existing report": "Datei auslesen und den Inhalt einem bestehenden Report hinzufügen"
+    "Read file and add its data to an existing report": "Datei auslesen und den Inhalt einem bestehenden Report hinzufügen",
+    "Dataload": "Datenladung",
+    "Dataloads": "Datenladungen",
+    "Advanced Configuration": "Erweiterte Einstellungen",
+    "Title": "Titel",
+    "Run": "Ausführung",
+    "Manual dataload": "Manuelle Ladung",
+    "Load now": "Jetzt laden",
+    "Testrun": "Testlauf",
+    "Schedule dataload in background": "Datenladung im Hintergrund einplanen",
+    "not scheduled": "nicht eingeplant",
+    "daily": "täglich",
+    "hourly": "stündlich"
   },
   "pluralForm": ""
 }
