@@ -52,11 +52,13 @@ class Operation implements IOperation
 
     public static function register(IEventDispatcher $dispatcher): void
     {
-        $dispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
-            $operation = \OC::$server->query(Operation::class);
-            $event->getSubject()->registerOperation($operation);
-            Util::addScript('analytics', 'flow');
-        });
+        if (interface_exists(IRuleMatcher::class)) {
+            $dispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
+                $operation = \OC::$server->query(Operation::class);
+                $event->getSubject()->registerOperation($operation);
+                Util::addScript('analytics', 'flow');
+            });
+        }
     }
 
     public function getDisplayName(): string
