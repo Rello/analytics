@@ -28,6 +28,12 @@
 
 .wizzardHeader {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px;
   min-height: 25px;
+  border-bottom: 1px solid var(--color-border-dark);
+  border-top: 1px solid var(--color-border-dark);
+}
+
+#sidebarTitle {
+  display: none !important;
 }

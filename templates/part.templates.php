@@ -150,8 +150,10 @@
         </button>
     </div>
     <div id="templateThreshold">
-        <div><h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports')); ?></h1>
-        </div>
+        <h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports')); ?></h1>
+        <a href="https://github.com/Rello/analytics/wiki/Thresholds"
+           target="_blank"><?php p($l->t('More information…')); ?></a>
+        <br>
         <br>
         <div class="table" style="display: table;">
             <div style="display: table-row;">
@@ -201,7 +203,7 @@
     <div id="templateDataload">
         <div style="display: flex;">
             <div style="width: 30%;">
-                <div class="wizzardHeader"><?php p($l->t('Dataloads')); ?></div>
+                <div class="wizzardHeader"><?php p($l->t('Selection')); ?></div>
                 <div id="dataloadList"></div>
                 <div style="display: table-row;">
                     <div style="display: table-cell;">
@@ -213,8 +215,18 @@
                             <option value="1" selected><?php p($l->t('Local File')); ?></option>
                             <option value="3"><?php p($l->t('GitHub')); ?></option>
                             <option value="4"><?php p($l->t('External url (csv)')); ?></option>
-                            <option value="5"><?php p($l->t('HTML Regex')); ?></option>
+                            <option value="5"><?php p($l->t('HTML grabber')); ?></option>
                         </select>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                        <div class="icon" style="padding: 0 0px 0 44px;">
+                        </div>
+                    </div>
+                    <div style="display: table-cell;">
+                        <a href="https://github.com/Rello/analytics/wiki/Datasources"
+                           target="_blank"><?php p($l->t('More information…')); ?></a>
                     </div>
                 </div>
             </div>
@@ -222,7 +234,7 @@
                 <div class="wizzardHeader icon-view-next"></div>
             </div>
             <div style="width: 30%;">
-                <div class="wizzardHeader"><?php p($l->t('Settings')); ?></div>
+                <div class="wizzardHeader"><?php p($l->t('Setting')); ?></div>
                 <div id="dataloadDetail">
                     <div id="dataloadDetailHeader" hidden>
                         <div>
@@ -243,20 +255,22 @@
                 <div class="wizzardHeader icon-view-next"></div>
             </div>
             <div style="width: 30%;">
-                <div class="wizzardHeader"><?php p($l->t('Run')); ?></div>
+                <div class="wizzardHeader"><?php p($l->t('Execution')); ?></div>
                 <div id="dataloadRun" hidden>
-                    <span><?php p($l->t('Manual dataload')); ?></span>
-                    <br>
                     <button id="dataloadExecuteButton"><?php p($l->t('Load now')); ?></button>
                     <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
-                        for="testrunCheckbox"><?php p($l->t('Testrun')); ?></label>
+                            for="testrunCheckbox"><?php p($l->t('Testrun')); ?></label>
                     <br><br>
-                    <span><?php p($l->t('Schedule dataload in background')); ?></span>
+                    <span><?php p($l->t('Schedule in background')); ?></span>
+                    <br>
                     <select id="dataloadSchedule" class="input150">
                         <option value="" selected><?php p($l->t('not scheduled')); ?></option>
                         <option value="d"><?php p($l->t('daily')); ?></option>
                         <option value="h"><?php p($l->t('hourly')); ?></option>
                     </select>
+                    <br>
+                    <a href="https://github.com/Rello/analytics/wiki/Scheduled-dataloads"
+                       target="_blank"><?php p($l->t('More information…')); ?></a>
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@
 use OCP\Util;
 
 Util::addStyle('analytics', 'style');
-Util::addStyle('analytics', 'config');
+Util::addStyle('analytics', 'advanced');
 Util::addStyle('analytics', 'sharetabview');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
