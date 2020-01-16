@@ -71,7 +71,7 @@ class DataloadController extends Controller
      */
     public function create(int $datasetId, int $datasourceId)
     {
-        return new DataResponse($this->DataloadMapper->create($datasetId, $datasourceId));
+        return new DataResponse(['id' => $this->DataloadMapper->create($datasetId, $datasourceId)]);
     }
 
     /**
@@ -101,7 +101,7 @@ class DataloadController extends Controller
      */
     public function update(int $dataloadId, $name, $option, $schedule)
     {
-        return new DataResponse($this->DataloadMapper->update($dataloadId, $name, $option, $schedule));
+        return new DataResponse(['update' => $this->DataloadMapper->update($dataloadId, $name, $option, $schedule)]);
     }
 
     /**
@@ -311,7 +311,7 @@ class DataloadController extends Controller
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $result = $this->StorageController->delete($datasetId, $dimension1, $dimension2);
-            return new DataResponse($result);
+            return new DataResponse(['delete' => $result]);
         } else {
             return new NotFoundResponse();
         }

@@ -23,14 +23,14 @@ OCA.Analytics.Sidebar = {
         const datasetType = navigationItem.dataset.type;
         let appsidebar = document.getElementById('app-sidebar');
 
-        if (appsidebar.dataset.id === datasetId && document.getElementById('config').value === 'false') {
+        if (appsidebar.dataset.id === datasetId && document.getElementById('advanced').value === 'false') {
             OCA.Analytics.Sidebar.hideSidebar();
         } else {
             document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
             OCA.Analytics.Sidebar.constructTabs(datasetType);
             document.getElementById('tabHeaderDataset').classList.add('selected');
 
-            if (document.getElementById('config').value === 'false') {
+            if (document.getElementById('advanced').value === 'false') {
                 if (appsidebar.dataset.id === '') {
                     $('#sidebarClose').on('click', OCA.Analytics.Sidebar.hideSidebar);
                     OC.Apps.showAppSidebar();

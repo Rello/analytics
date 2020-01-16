@@ -235,7 +235,11 @@ OCA.Analytics.UI = {
     },
 
     resetContent: function () {
-        if ($.fn.dataTable.isDataTable('#tableContainer')) {
+
+        if (document.getElementById('advanced').value === 'true') {
+            document.getElementById('analytics-intro').classList.remove('hidden');
+            document.getElementById('app-sidebar').classList.add('disappear');
+        } else if ($.fn.dataTable.isDataTable('#tableContainer')) {
             $('#tableContainer').DataTable().destroy();
         }
 
@@ -341,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
-        if (document.getElementById('config').value === 'false') {
+        if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
             document.getElementById('checkBoxObject').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
             document.getElementById('checkBoxDate').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);

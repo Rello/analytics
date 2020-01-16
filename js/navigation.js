@@ -50,7 +50,7 @@ OCA.Analytics.Navigation = {
         } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
             typeIcon = 'icon-external';
         } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
-            if (document.getElementById('config').value === 'true') {
+            if (document.getElementById('advanced').value === 'true') {
                 // don´t show shared reports in advanced config mode as no config is possible
                 return;
             }
@@ -103,7 +103,7 @@ OCA.Analytics.Navigation = {
         divUtils.classList.add('app-navigation-entry-utils');
         let ulUtils = document.createElement('ul');
 
-        if (document.getElementById('config').value === 'true') {
+        if (document.getElementById('advanced').value === 'true') {
             if (data.schedules && parseInt(data.schedules) !== 0) {
                 let liScheduleButton = document.createElement('li');
                 liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
@@ -170,7 +170,7 @@ OCA.Analytics.Navigation = {
         spanAdvancedText.dataset.type = data.type;
         spanAdvancedText.dataset.name = data.name;
 
-        if (document.getElementById('config').value === 'true') {
+        if (document.getElementById('advanced').value === 'true') {
             aAdvanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
             spanAdvancedIcon.classList.add('icon-category-monitoring');
             spanAdvancedText.innerText = t('analytics', 'Back to report');
@@ -204,7 +204,7 @@ OCA.Analytics.Navigation = {
             }
             evt.target.classList.add('active');
         }
-        if (document.getElementById('config').value === 'true') {
+        if (document.getElementById('advanced').value === 'true') {
             OCA.Analytics.Sidebar.showSidebar(evt);
             evt.stopPropagation();
         } else {
