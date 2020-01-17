@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 - 2020-01-1x
+## 2.0.0 - 2020-01-17
 ### Added
 - NC 18 Flow integration #10 [#10](https://github.com/rello/analytics/issues/10)
 - Enhanced dataloads with scheduling [#13](https://github.com/rello/analytics/issues/13)
@@ -12,6 +12,7 @@
 
 ### Changed
 - link report in activity message
+- redesign of backend (controllers; mappers)
 
 ### Fixed
 - XSS risk in innerHTML
