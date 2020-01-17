@@ -145,6 +145,7 @@ OCA.Analytics.UI = {
         document.getElementById('drilldown').style.removeProperty('display');
         let lastObject = 0;
         let index = 0;
+        let timestamp;
 
         for (let values of jsondata.data) {
 
@@ -159,8 +160,12 @@ OCA.Analytics.UI = {
             // [0] => name: 'dimension 1', data : [ [0] => dimension 2, dimension 3],
             // [0] => name: 'dimension 1', data : [ [1] => dimension 2, dimension 3]
             if (chartType === 'datetime') {
-                //seriesOptions[index]['data'].push([Date.UTC(parseInt(values['dimension2']), 1, 1), parseFloat(values['dimension3'])]);
-                seriesOptions[index]['data'].push([new Date(values['dimension2']).getTime(), parseFloat(values['dimension3'])]);
+                // tweak for Safari; other browsers are OK
+                timestamp = values['dimension2'];
+                if (isNaN(new Date(timestamp))) {
+                    timestamp = timestamp.replace(/ /g, "T");
+                }
+                seriesOptions[index]['data'].push([new Date(timestamp).getTime(), parseFloat(values['dimension3'])]);
             } else {
                 seriesOptions[index]['data'].push([values['dimension2'], parseFloat(values['dimension3'])]);
                 // create array all dimension 2 for the x-axis
