@@ -45,6 +45,6 @@ class Load extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dataloadId = $input->getArgument('dataloadId');
-        $this->DataloadController->execute($dataloadId);
+        $this->DataloadController->execute((int)$dataloadId);
     }
 }

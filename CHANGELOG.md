@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.1.0 - 2020-02-xx
+### Added
+- occ command for executing dataloads [#16](https://github.com/rello/analytics/issues/16)
+
 ## 2.0.0 - 2020-01-17
 ### Added
-- NC 18 Flow integration #10 [#10](https://github.com/rello/analytics/issues/10)
+- NC 18 Flow integration [#10](https://github.com/rello/analytics/issues/10)
 - Enhanced dataloads with scheduling [#13](https://github.com/rello/analytics/issues/13)
 - Advanced configuration page for more options than sidebar [#12](https://github.com/rello/analytics/issues/12)
 - new datasource: website grabber [#14](https://github.com/rello/analytics/issues/14)
