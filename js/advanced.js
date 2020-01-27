@@ -122,6 +122,7 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadDeleteButton);
         document.getElementById('dataloadSchedule').value = dataload.schedule;
         document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
+        document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload.id;
 
         let item = document.getElementById('dataloadDetailItems');
         item.innerHTML = '';

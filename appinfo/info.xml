@@ -57,4 +57,7 @@ From data to report. This on premise data warehouse solution provides modular da
         <job>OCA\Analytics\BackgroundJob\Hourly</job>
         <job>OCA\Analytics\BackgroundJob\Daily</job>
     </background-jobs>
+    <commands>
+        <command>OCA\Analytics\Command\Load</command>
+    </commands>
 </info>

@@ -268,6 +268,11 @@
                         <option value="d"><?php p($l->t('daily')); ?></option>
                         <option value="h"><?php p($l->t('hourly')); ?></option>
                     </select>
+                    <br><br>
+                    <span><?php p($l->t('Load via occ command:')); ?></span>
+                    <br>
+                    <span id="dataloadOCC"></span>
+                    <br>
                     <br>
                     <a href="https://github.com/Rello/analytics/wiki/Scheduled-dataloads"
                        target="_blank"><?php p($l->t('More information…')); ?></a>
