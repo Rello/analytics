@@ -37,20 +37,25 @@ class JsonService
         $path = $option['path'];
         $auth = $option['auth'];
         $data = array();
+        $result = '';
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_URL, $string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'OCS-APIRequest: true'
-        ));
-        curl_setopt($ch, CURLOPT_USERPWD, $auth);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        if ($ch) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_URL, $string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'OCS-APIRequest: true'
+            ));
+            curl_setopt($ch, CURLOPT_USERPWD, $auth);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            $jsonResult = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $jsonResult = '';
+        }
 
-        $json = json_decode($result, true);
+        $json = json_decode($jsonResult, true);
         $array = $this->get_nested_array_value($json, $path);
 
         if (is_array($array)) {
@@ -83,7 +88,7 @@ class JsonService
      * @param $array
      * @param $path
      * @param string $delimiter
-     * @return array
+     * @return array|string
      */
     private function get_nested_array_value(&$array, $path, $delimiter = '/')
     {
