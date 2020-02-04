@@ -37,22 +37,25 @@ class GithubService
         else $string = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_URL, $string);
-        curl_setopt($ch, CURLOPT_REFERER, $string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-        $result = curl_exec($ch);
-        curl_close($ch);
-        #echo $result;
+        if ($ch != false) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_URL, $string);
+            curl_setopt($ch, CURLOPT_REFERER, $string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+            $curlResult = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $curlResult = '';
+        }
 
-        $jason_a = json_decode($result, true);
+        $json = json_decode($curlResult, true);
         $i = 0;
 
         $data = array();
-        foreach ($jason_a as $item) {
+        foreach ($json as $item) {
             if (isset($option['limit'])) {
                 if ($i === (int)$option['limit']) break;
             }
@@ -69,13 +72,11 @@ class GithubService
         $header['dimension2'] = 'Version';
         $header['dimension3'] = 'Count';
 
-        $result = [
+        return [
             'header' => $header,
             'data' => $data,
             'error' => 0,
         ];
-
-        return $result;
     }
 
     /**

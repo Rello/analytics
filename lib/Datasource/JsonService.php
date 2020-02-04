@@ -37,10 +37,9 @@ class JsonService
         $path = $option['path'];
         $auth = $option['auth'];
         $data = array();
-        $result = '';
 
         $ch = curl_init();
-        if ($ch) {
+        if ($ch != false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_URL, $string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -49,13 +48,13 @@ class JsonService
             ));
             curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
-            $jsonResult = curl_exec($ch);
+            $curlResult = curl_exec($ch);
             curl_close($ch);
         } else {
-            $jsonResult = '';
+            $curlResult = '';
         }
 
-        $json = json_decode($jsonResult, true);
+        $json = json_decode($curlResult, true);
         $array = $this->get_nested_array_value($json, $path);
 
         if (is_array($array)) {
@@ -72,13 +71,11 @@ class JsonService
         $header['dimension2'] = 'Key';
         $header['dimension3'] = 'Value';
 
-        $result = [
+        return [
             'header' => $header,
             'data' => $data,
             'error' => 0,
         ];
-
-        return $result;
     }
 
     /**
