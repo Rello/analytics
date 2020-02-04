@@ -39,18 +39,22 @@ class ExternalFileService
         //$this->logger->error('dataset path: ' . $datasetMetadata['link']);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_URL, $option['link']);
-        curl_setopt($ch, CURLOPT_REFERER, $option['link']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-        $data = curl_exec($ch);
-        curl_close($ch);
+        if ($ch != false) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_URL, $option['link']);
+            curl_setopt($ch, CURLOPT_REFERER, $option['link']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+            $curlResult = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $curlResult = '';
+        }
 
-        $delimiter = $this->detectDelimiter($data);
-        $rows = str_getcsv($data, "\n");
+        $delimiter = $this->detectDelimiter($curlResult);
+        $rows = str_getcsv($curlResult, "\n");
         $data = array();
         $header = array();
         $headerrow = 0;
