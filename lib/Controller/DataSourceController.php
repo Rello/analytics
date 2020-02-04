@@ -14,6 +14,7 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Datasource\ExternalFileService;
 use OCA\Analytics\Datasource\FileService;
 use OCA\Analytics\Datasource\GithubService;
+use OCA\Analytics\Datasource\JsonService;
 use OCA\Analytics\Datasource\RegexService;
 use OCP\AppFramework\Controller;
 use OCP\Files\NotFoundException;
@@ -27,6 +28,7 @@ class DataSourceController extends Controller
     private $FileService;
     private $ExternalFileService;
     private $RegexService;
+    private $JsonService;
     private $userId;
 
     const DATASET_TYPE_GROUP = 0;
@@ -35,6 +37,7 @@ class DataSourceController extends Controller
     const DATASET_TYPE_GIT = 3;
     const DATASET_TYPE_EXTERNAL_FILE = 4;
     const DATASET_TYPE_REGEX = 5;
+    const DATASET_TYPE_JSON = 6;
 
     public function __construct(
         string $AppName,
@@ -44,6 +47,7 @@ class DataSourceController extends Controller
         GithubService $GithubService,
         FileService $FileService,
         RegexService $RegexService,
+        JsonService $JsonService,
         ExternalFileService $ExternalFileService
     )
     {
@@ -54,6 +58,7 @@ class DataSourceController extends Controller
         $this->GithubService = $GithubService;
         $this->RegexService = $RegexService;
         $this->FileService = $FileService;
+        $this->JsonService = $JsonService;
     }
 
     /**
@@ -72,6 +77,7 @@ class DataSourceController extends Controller
         elseif ($datasource === self::DATASET_TYPE_GIT) $result = $this->GithubService->read($option);
         elseif ($datasource === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($option);
         elseif ($datasource === self::DATASET_TYPE_REGEX) $result = $this->RegexService->read($option);
+        elseif ($datasource === self::DATASET_TYPE_JSON) $result = $this->JsonService->read($option);
         else $result = new NotFoundException();
 
         return $result;
@@ -90,6 +96,7 @@ class DataSourceController extends Controller
         $result[self::DATASET_TYPE_GIT] = $this->GithubService->getTemplate();
         $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getTemplate();
         $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getTemplate();
+        $result[self::DATASET_TYPE_JSON] = $this->JsonService->getTemplate();
         return $result;
     }
 }

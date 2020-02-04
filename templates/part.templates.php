@@ -216,6 +216,7 @@
                             <option value="3"><?php p($l->t('GitHub')); ?></option>
                             <option value="4"><?php p($l->t('External url (csv)')); ?></option>
                             <option value="5"><?php p($l->t('HTML grabber')); ?></option>
+                            <option value="6"><?php p($l->t('JSON')); ?></option>
                         </select>
                     </div>
                 </div>
