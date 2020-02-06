@@ -54,12 +54,14 @@ class JsonService
             $curlResult = '';
         }
 
+        //$this->logger->debug($curlResult);
         $json = json_decode($curlResult, true);
         $array = $this->get_nested_array_value($json, $path);
 
         if (is_array($array)) {
             foreach ($array as $key => $value) {
-                array_push($data, ['dimension1' => '', 'dimension2' => $key, 'dimension3' => $value]);
+                $group = end(explode('/', $path));
+                array_push($data, ['dimension1' => $group, 'dimension2' => $key, 'dimension3' => $value]);
             }
         } else {
             $key = end(explode('/', $path));
