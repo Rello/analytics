@@ -298,7 +298,7 @@ class DataloadController extends Controller
     }
 
     /**
-     * update data from input form
+     * delete data from input form
      *
      * @NoAdminRequired
      * @param int $datasetId
@@ -311,6 +311,27 @@ class DataloadController extends Controller
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $result = $this->StorageController->delete($datasetId, $dimension1, $dimension2);
+            return new DataResponse(['delete' => $result]);
+        } else {
+            return new NotFoundResponse();
+        }
+    }
+
+    /**
+     * Simulate delete data from input form
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return DataResponse|NotFoundResponse
+     */
+    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    {
+        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+        if (!empty($datasetMetadata)) {
+            $result = $this->StorageController->deleteSimulate($datasetId, $dimension1, $dimension2, $dimension3);
             return new DataResponse(['delete' => $result]);
         } else {
             return new NotFoundResponse();

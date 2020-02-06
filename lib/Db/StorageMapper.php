@@ -69,10 +69,30 @@ class StorageMapper
      */
     public function deleteData(int $datasetId, $dimension1, $dimension2)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
+        $dimension1 = str_replace('*', '%', $dimension1);
+        $dimension2 = str_replace('*', '%', $dimension2);
+        $SQL = 'DELETE FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` like ? AND `dimension2` like ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
         return true;
+    }
+
+    /**
+     * Simulate delete data
+     * @param int $datasetId
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return array
+     */
+    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    {
+        $dimension1 = str_replace('*', '%', $dimension1);
+        $dimension2 = str_replace('*', '%', $dimension2);
+        $SQL = 'select count(*) FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` like ? AND `dimension2` like ?';
+        $stmt = $this->db->prepare($SQL);
+        $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
+        return $stmt->fetch();
     }
 
     /**
@@ -97,6 +117,8 @@ class StorageMapper
      */
     public function createData(int $datasetId, $dimension1, $dimension2, $dimension3, string $user_id = null)
     {
+        $dimension1 = str_replace('*', '', $dimension1);
+        $dimension2 = str_replace('*', '', $dimension2);
         if ($user_id) $this->userId = $user_id;
         $SQL = 'SELECT `id` FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
         $stmt = $this->db->prepare($SQL);

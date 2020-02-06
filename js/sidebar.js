@@ -315,7 +315,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataDeleteButton: function () {
-        OCA.Analytics.Sidebar.Backend.deleteData();
+        OCA.Analytics.Sidebar.Backend.deleteDataSimulate();
     },
 
     handleDataImportFileButton: function () {
@@ -666,6 +666,38 @@ OCA.Analytics.Sidebar.Backend = {
                 } else {
                     OCA.Analytics.UI.notification('error', data.error);
                 }
+            }
+        });
+    },
+
+    deleteDataSimulate: function () {
+        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const button = document.getElementById('deleteDataButton');
+        button.classList.add('loading');
+        button.disabled = true;
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/data/deleteDataSimulate'),
+            data: {
+                'datasetId': datasetId,
+                'dimension1': document.getElementById('DataDimension1').value,
+                'dimension2': document.getElementById('DataDimension2').value,
+                'dimension3': document.getElementById('DataDimension3').value,
+            },
+            success: function (data) {
+                OC.dialogs.confirm(
+                    t('analytics', 'Are you sure?') + ' ' + t('analytics', 'Records to be deleted: ') + data.delete.count,
+                    t('analytics', 'Delete Data'),
+                    function (e) {
+                        if (e === true) {
+                            OCA.Analytics.Sidebar.Backend.deleteData();
+                        } else if (e === false) {
+                            button.classList.remove('loading');
+                            button.disabled = false;
+                        }
+                    },
+                    true
+                );
             }
         });
     },

@@ -106,6 +106,21 @@ class StorageController extends Controller
         return $this->StorageMapper->deleteData($datasetId, $dimension1, $dimension2);
     }
 
+    /**
+     * Simulate delete data
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return array
+     */
+    public function deleteSimulate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    {
+        return $this->StorageMapper->deleteDataSimulate($datasetId, $dimension1, $dimension2, $dimension3);
+    }
+
     private function floatvalue($val)
     {
         $val = str_replace(",", ".", $val);

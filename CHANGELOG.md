@@ -4,6 +4,7 @@
 ### Added
 - occ command for executing dataloads [#16](https://github.com/rello/analytics/issues/16)
 - Datasource: JSON [#21](https://github.com/rello/analytics/issues/21)
+- Data deletion with wildcards
 
 ## 2.0.0 - 2020-01-17
 ### Added

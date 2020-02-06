@@ -36,6 +36,7 @@ return [
         // Data Maintenance
         ['name' => 'dataload#updateData', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataload#deleteData', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
+        ['name' => 'dataload#deleteDataSimulate', 'url' => '/data/deleteDataSimulate', 'verb' => 'POST'],
         ['name' => 'dataload#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
         ['name' => 'dataload#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
         // Dataloads
