@@ -132,11 +132,11 @@ OCA.Analytics.Advanced.Dataload = {
             //tablerow.style.display = 'table-row';
             let label = document.createElement('div');
             label.style.display = 'inline-flex';
-            label.classList.add('input150');
+            label.classList.add('input250');
             label.innerText = option.name;
             let input = document.createElement('input');
             input.style.display = 'inline-flex';
-            input.classList.add('input150');
+            input.classList.add('input250');
             input.placeholder = option.placeholder;
             input.id = option.id;
             let fieldValues = JSON.parse(dataload.option);

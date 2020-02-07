@@ -74,7 +74,7 @@ class DataloadMapper
      */
     public function getAllDataloadMetadata()
     {
-        $SQL = 'SELECT `dataset`, COUNT(id) AS `dataloads`, COUNT(schedule) AS `schedules` FROM `*PREFIX*analytics_dataload` WHERE `user_id` = ? GROUP BY dataset';
+        $SQL = 'SELECT `dataset`, COUNT(id) AS `dataloads`, COUNT(NULLIF( schedule, \'\' )) AS `schedules` FROM `*PREFIX*analytics_dataload` WHERE `user_id` = ? GROUP BY dataset';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId));
         return $stmt->fetchAll();

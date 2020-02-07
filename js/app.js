@@ -244,17 +244,18 @@ OCA.Analytics.UI = {
         if (document.getElementById('advanced').value === 'true') {
             document.getElementById('analytics-intro').classList.remove('hidden');
             document.getElementById('app-sidebar').classList.add('disappear');
-        } else if ($.fn.dataTable.isDataTable('#tableContainer')) {
-            $('#tableContainer').DataTable().destroy();
+        } else {
+            if ($.fn.dataTable.isDataTable('#tableContainer')) {
+                $('#tableContainer').DataTable().destroy();
+            }
+            document.getElementById('chartContainer').style.display = 'none';
+            document.getElementById('chartContainer').innerHTML = '';
+            document.getElementById('tableContainer').style.display = 'none';
+            document.getElementById('tableContainer').innerHTML = '';
+            document.getElementById('dataHeader').innerHTML = '';
+            document.getElementById('dataSubHeader').innerHTML = '';
+            document.getElementById('drilldown').style.display = 'none';
         }
-
-        document.getElementById('chartContainer').style.display = 'none';
-        document.getElementById('chartContainer').innerHTML = '';
-        document.getElementById('tableContainer').style.display = 'none';
-        document.getElementById('tableContainer').innerHTML = '';
-        document.getElementById('dataHeader').innerHTML = '';
-        document.getElementById('dataSubHeader').innerHTML = '';
-        document.getElementById('drilldown').style.display = 'none';
     },
 
     notification: function (type, message) {

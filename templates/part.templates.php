@@ -202,7 +202,7 @@
     </div>
     <div id="templateDataload">
         <div style="display: flex;">
-            <div style="width: 30%;">
+            <div style="width: 25%;">
                 <div class="wizzardHeader"><?php p($l->t('Selection')); ?></div>
                 <div id="dataloadList"></div>
                 <div style="display: table-row;">
@@ -234,13 +234,13 @@
             <div style="width: 5%;">
                 <div class="wizzardHeader icon-view-next"></div>
             </div>
-            <div style="width: 30%;">
+            <div style="width: 40%;">
                 <div class="wizzardHeader"><?php p($l->t('Setting')); ?></div>
                 <div id="dataloadDetail">
                     <div id="dataloadDetailHeader" hidden>
                         <div>
-                            <div class="input150" style="display: inline-flex;"><?php p($l->t('Title')); ?></div>
-                            <input class="input150" id="dataloadName" style="display: inline-flex;">
+                            <div class="input250" style="display: inline-flex;"><?php p($l->t('Title')); ?></div>
+                            <input class="input250" id="dataloadName" style="display: inline-flex;">
                         </div>
                     </div>
                     <br>
@@ -255,7 +255,7 @@
             <div style="width: 5%;">
                 <div class="wizzardHeader icon-view-next"></div>
             </div>
-            <div style="width: 30%;">
+            <div style="width: 24%;">
                 <div class="wizzardHeader"><?php p($l->t('Execution')); ?></div>
                 <div id="dataloadRun" hidden>
                     <button id="dataloadExecuteButton"><?php p($l->t('Load now')); ?></button>
