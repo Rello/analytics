@@ -61,11 +61,12 @@ class ApiDataController extends ApiController
      * @NoAdminRequired
      * @param int $datasetId
      * @return DataResponse
+     * @throws \Exception
      */
     public function addData(int $datasetId)
     {
         $params = $this->request->getParams();
-        $this->logger->error($datasetId);
+        //$this->logger->debug($datasetId);
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
         if (empty($datasetMetadata)) {
@@ -87,7 +88,7 @@ class ApiDataController extends ApiController
             return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
         }
 
-        $action = $this->StorageController->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
+        $this->StorageController->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
 
         return $this->requestResponse(
