@@ -123,7 +123,25 @@ class Notifier implements INotifier
             ]
         );
         $notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
-        $notification->setParsedSubject('Data Analytics');
+        $this->setParsedSubjectFromRichSubject($notification);
         return $notification;
     }
+
+    // This is a little helper function which automatically sets the simple parsed subject
+    // based on the rich subject you set.
+    protected function setParsedSubjectFromRichSubject(INotification $notification)
+    {
+        $placeholders = $replacements = [];
+        foreach ($notification->getRichSubjectParameters() as $placeholder => $parameter) {
+            $placeholders[] = '{' . $placeholder . '}';
+            if ($parameter['type'] === 'file') {
+                $replacements[] = $parameter['path'];
+            } else {
+                $replacements[] = $parameter['name'];
+            }
+        }
+
+        $notification->setParsedSubject(str_replace($placeholders, $replacements, $notification->getRichSubject()));
+    }
+
 }
