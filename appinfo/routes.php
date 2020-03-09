@@ -15,12 +15,8 @@ return [
         ['name' => 'page#advanced', 'url' => '/a/', 'verb' => 'GET'],
         ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
         ['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],
-        ['name' => 'PublicDisplay#showShare', 'url' => '/pp/{token}', 'verb' => 'GET'],
-        ['name' => 'PublicDisplay#showShare', 'url' => '/pp/{token}', 'verb' => 'GET'],
-        ['name' => 'PublicDisplay#showAuthenticate', 'url' => '/pp/{token}/authenticate/{redirect}', 'verb' => 'GET'],
-        ['name' => 'publicdisplaycontroller#showAuthenticate', 'url' => '/pp/{token}/authenticate/{redirect}', 'verb' => 'GET'],
 
-        // dataset
+        // Dataset
         ['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
         ['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
         ['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
@@ -39,6 +35,7 @@ return [
         ['name' => 'dataload#deleteDataSimulate', 'url' => '/data/deleteDataSimulate', 'verb' => 'POST'],
         ['name' => 'dataload#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
         ['name' => 'dataload#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
+
         // Dataloads
         ['name' => 'dataload#create', 'url' => '/dataload', 'verb' => 'POST'],
         ['name' => 'dataload#read', 'url' => '/dataload/{datasetId}', 'verb' => 'GET'],
@@ -47,17 +44,18 @@ return [
         ['name' => 'dataload#simulate', 'url' => '/dataload/simulate', 'verb' => 'POST'],
         ['name' => 'dataload#execute', 'url' => '/dataload/execute', 'verb' => 'POST'],
 
-        // share
+        // Share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],
         ['name' => 'share#read', 'url' => '/share/{datasetId}', 'verb' => 'GET'],
         ['name' => 'share#update', 'url' => '/share/{shareId}', 'verb' => 'PUT'],
         ['name' => 'share#delete', 'url' => '/share/{shareId}', 'verb' => 'DELETE'],
 
-        // threashold
+        // Threashold
         ['name' => 'threshold#create', 'url' => '/threshold', 'verb' => 'POST'],
         ['name' => 'threshold#read', 'url' => '/threshold/{datasetId}', 'verb' => 'GET'],
         ['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
 
+        // API
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#addData', 'url' => '/api/1.0/adddata/{datasetId}', 'verb' => 'POST'],
     ]
