@@ -45,17 +45,17 @@ class StorageMapper
     public function getData(int $dataset, $objectDrilldown = null, $dateDrilldown = null)
     {
         $SQL = 'SELECT';
-        if ($objectDrilldown === 'true') $SQL .= ' `dimension1`,';
-        if ($dateDrilldown === 'true') $SQL .= ' `dimension2`,';
-        $SQL .= ' SUM(`dimension3`) AS `dimension3`';
+        if ($objectDrilldown === 'true') $SQL .= ' `dimension1` AS `0`,';
+        if ($dateDrilldown === 'true') $SQL .= ' `dimension2` AS `1`,';
+        $SQL .= ' SUM(`dimension3`) AS `2`';
         $SQL .= ' FROM `*PREFIX*analytics_facts`
                 WHERE `dataset` = ?
                 GROUP BY `dataset`';
-        if ($objectDrilldown === 'true') $SQL .= ', `dimension1`';
-        if ($dateDrilldown === 'true') $SQL .= ', `dimension2`';
+        if ($objectDrilldown === 'true') $SQL .= ', `0`';
+        if ($dateDrilldown === 'true') $SQL .= ', `1`';
         $SQL .= ' ORDER BY';
-        if ($objectDrilldown === 'true') $SQL .= ' `dimension1`,';
-        $SQL .= ' `dimension2` ASC';
+        if ($objectDrilldown === 'true') $SQL .= ' `0`,';
+        $SQL .= ' `1` ASC';
 
         //$this->logger->error($SQL);
 

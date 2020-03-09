@@ -169,7 +169,7 @@ class DataloadController extends Controller
         if ($result['error'] === 0) {
             //$this->logger->debug('DataLoadController 149: OK');
             foreach ($result['data'] as &$row) {
-                $action = $this->StorageController->update($datasetId, $row['dimension1'], $row['dimension2'], $row['dimension3'], $dataloadMetadata['user_id']);
+                $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id']);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
             }
@@ -213,12 +213,12 @@ class DataloadController extends Controller
                 // shift values by one dimension
                 $result['data'] = array_map(function ($tag) {
                     return array(
-                        'dimension1' => $tag['dimension2'],
-                        'dimension2' => $tag['dimension2'],
-                        'dimension3' => $tag['dimension3']
+                        $tag['dimension2'],
+                        $tag['dimension2'],
+                        $tag['dimension3']
                     );
                 }, $result['data']);
-                $result['data'] = $this->replaceDimension($result['data'], 'dimension2', date("Y-m-d H:i:s"));
+                $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s"));
             }
 
             return $result;
@@ -398,7 +398,7 @@ class DataloadController extends Controller
      */
     public function importFile(int $datasetId, $path)
     {
-        $this->logger->error('DataLoadController 378:' . $datasetId . $path);
+        //$this->logger->debug('DataLoadController 378:' . $datasetId . $path);
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;
@@ -410,7 +410,7 @@ class DataloadController extends Controller
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {
-                    $action = $this->StorageController->update($datasetId, $row['dimension1'], $row['dimension2'], $row['dimension3']);
+                    $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
                     $insert = $insert + $action['insert'];
                     $update = $update + $action['update'];
                 }

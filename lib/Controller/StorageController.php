@@ -48,9 +48,9 @@ class StorageController extends Controller
     public function read($datasetMetadata, $objectDrilldown, $dateDrilldown)
     {
         $header = array();
-        if ($objectDrilldown === 'true') $header['dimension1'] = $datasetMetadata['dimension1'];
-        if ($dateDrilldown === 'true') $header['dimension2'] = $datasetMetadata['dimension2'];
-        $header['dimension3'] = $datasetMetadata['dimension3'];
+        if ($objectDrilldown === 'true') $header[0] = $datasetMetadata['dimension1'];
+        if ($dateDrilldown === 'true') $header[1] = $datasetMetadata['dimension2'];
+        $header[2] = $datasetMetadata['dimension3'];
 
         $data = $this->StorageMapper->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
 

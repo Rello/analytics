@@ -63,14 +63,13 @@ class GithubService
             foreach ($item['assets'] as $asset) {
                 if (substr($asset['name'], -2) == 'gz') $nc_value = $asset['download_count'];
             }
-            array_push($data, ['dimension1' => '', 'dimension2' => $item['tag_name'], 'dimension3' => $nc_value]);
+            array_push($data, [$item['tag_name'], $nc_value]);
             $i++;
         }
 
         $header = array();
-        $header['dimension1'] = '';
-        $header['dimension2'] = 'Version';
-        $header['dimension3'] = 'Count';
+        $header[0] = 'Version';
+        $header[1] = 'Count';
 
         return [
             'header' => $header,

@@ -62,12 +62,10 @@ class ExternalFileService
         foreach ($rows as &$row) {
             $row = str_getcsv($row, $delimiter);
             if ($headerrow === 0) {
-                $header['dimension1'] = $row[0];
-                $header['dimension2'] = $row[1];
-                $header['dimension3'] = $row[2];
+                $header = $row;
                 $headerrow = 1;
             } else {
-                array_push($data, ['dimension1' => $row[0], 'dimension2' => $row[1], 'dimension3' => $row[2]]);
+                array_push($data, $row);
             }
         }
         $result = [

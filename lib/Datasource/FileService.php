@@ -65,17 +65,10 @@ class FileService
         foreach ($rows as &$row) {
             $row = str_getcsv($row, $delimiter);
             if ($headerrow === 0) {
-                $header['dimension1'] = $row[0];
-                $header['dimension2'] = $row[1];
-                $header['dimension3'] = $row[2];
+                $header = $row;
                 $headerrow = 1;
             } else {
-                $row[2] = $this->floatvalue($row[2]);
-                if ($row[2] === false) {
-                    $errorMessage = $this->l10n->t('3rd field must be a valid number');
-                } else {
-                    array_push($data, ['dimension1' => $row[0], 'dimension2' => $row[1], 'dimension3' => $row[2]]);
-                }
+                array_push($data, $row);
             }
         }
         $result = [

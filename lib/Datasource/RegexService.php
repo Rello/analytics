@@ -53,13 +53,13 @@ class RegexService
             if (isset($option['limit'])) {
                 if ($i === (int)$option['limit'] AND (int)$option['limit'] !== 0) break;
             }
-            array_push($data, ['dimension1' => '', 'dimension2' => $matches['dimension'][$i], 'dimension3' => $matches['value'][$i]]);
+            array_push($data, ['', $matches['dimension'][$i], $matches['value'][$i]]);
         }
 
         $header = array();
-        $header['dimension1'] = '';
-        $header['dimension2'] = 'Dimension2';
-        $header['dimension3'] = 'Count';
+        $header[0] = '';
+        $header[1] = 'Dimension2';
+        $header[2] = 'Count';
 
         return [
             'header' => $header,
