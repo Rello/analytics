@@ -13,7 +13,7 @@ build:
 
 filter:
     excluded_paths:
-      - 'js/highcharts/*'
+      - 'js/3rdParty/*'
       - 'js/jquery*'
 
 imports:
