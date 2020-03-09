@@ -58,16 +58,17 @@ OCA.Analytics.UI = {
 
     buildDataTable: function (jsondata) {
         document.getElementById('tableContainer').style.removeProperty('display');
+        document.getElementById('drilldown').style.removeProperty('display');
+
         let columns = [];
         let data;
 
-        document.getElementById('drilldown').style.removeProperty('display');
-        let columnKeys = Object.keys(jsondata.data[0]);
         let header = jsondata.header;
-        for (let i = 0; i < columnKeys.length; i++) {
-            columns[i] = {'data': columnKeys[i], 'title': header[columnKeys[i]]};
-            if (header[columnKeys[i]].length === 1) {
-                columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, header[columnKeys[i]] + ' ');
+        let headerKeys = Object.keys(header);
+        for (let i = 0; i < headerKeys.length; i++) {
+            columns[i] = {'title': header[headerKeys[i]]};
+            if (header[headerKeys[i]].length === 1) {
+                columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, header[headerKeys[i]] + ' ');
             }
         }
         data = jsondata.data;
@@ -135,112 +136,114 @@ OCA.Analytics.UI = {
         }
     },
 
-    buildHighchart: function (jsondata) {
+    buildChart: function (jsondata) {
 
         document.getElementById('chartContainer').style.removeProperty('display');
+        let ctx = document.getElementById('myChart').getContext('2d');
+
+        // flexible mapping depending on type requiered by the used chart library
+        let chartTypeMapping = {'datetime': 'line', 'column': 'bar', 'area': 'line', 'line': 'line'};
+
         let chartType = jsondata.options.chart;
+        let datasets = [], xAxisCategories = [], xAxes = [];
+        let lastObject = false;
+        let dataSeries = -1;
+        //let timestamp;
+        let hidden = false, fill = false, stacked = false;
 
-        let seriesOptions = [], xAxisOptions = [], xAxisCategories = [], xplotOptions = [];
-
-        document.getElementById('drilldown').style.removeProperty('display');
-        let lastObject = 0;
-        let index = 0;
-        let timestamp;
+        let header = jsondata.header;
+        let headerKeys = Object.keys(header).length;
+        let dataSeriesColumn = headerKeys - 3; //characteristic is taken from the second last column
+        let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
+        let keyFigureColumn = headerKeys - 1; //key figures is taken from the last column
 
         for (let values of jsondata.data) {
-
-            if (lastObject !== values['dimension1']) {
-                seriesOptions.push({data: [], name: values['dimension1']});
-                if (lastObject !== 0) {
-                    index++;
+            if (dataSeriesColumn >= 0 && lastObject !== values[dataSeriesColumn]) {
+                // create new dataseries for every new lable in dataSeriesColumn
+                datasets.push({label: values[dataSeriesColumn], data: [], hidden: hidden});
+                dataSeries++;
+                // default hide > 4th series for better visibility
+                if (dataSeries === 3) {
+                    hidden = true;
                 }
-                lastObject = values['dimension1'];
+                lastObject = values[dataSeriesColumn];
+            } else if (lastObject === false) {
+                // when only 2 columns are provided, no label will be set
+                datasets.push({label: '', data: [], hidden: hidden});
+                dataSeries++;
+                lastObject = true;
             }
-            // create array per dimension 1 with subarrays per dimension 2 & dimension 3 (value)
-            // [0] => name: 'dimension 1', data : [ [0] => dimension 2, dimension 3],
-            // [0] => name: 'dimension 1', data : [ [1] => dimension 2, dimension 3]
-            if (chartType === 'datetime') {
-                // tweak for Safari; other browsers are OK
-                timestamp = values['dimension2'];
-                if (isNaN(new Date(timestamp))) {
-                    timestamp = timestamp.replace(/ /g, "T");
-                }
-                seriesOptions[index]['data'].push([new Date(timestamp).getTime(), parseFloat(values['dimension3'])]);
-            } else {
-                seriesOptions[index]['data'].push([values['dimension2'], parseFloat(values['dimension3'])]);
-                // create array all dimension 2 for the x-axis
-                xAxisCategories.push(values['dimension2']);
-            }
-        }
 
-
-        if (chartType === 'datetime') {
-            xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
-            xAxisOptions = {
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    day: '%Y'
-                },
-            };
-            chartType = 'line';
-        } else if (chartType === 'area') {
-            xplotOptions = {area: {stacking: 'normal'}, series: {marker: {enabled: false},},};
-            xAxisOptions = {
-                categories: xAxisCategories,
-            };
-        } else {
-            xplotOptions = {area: {stacking: 'undefined'}, series: {marker: {enabled: false},},};
-            xAxisOptions = {
-                categories: xAxisCategories,
-            };
-        }
-        if (parseInt(jsondata.options.type) === OCA.Analytics.TYPE_GIT) {
-            seriesOptions[0]['showInLegend'] = false;
-        }
-
-        //$('#chartContainer').highcharts()
-        Highcharts.chart('chartContainer', {
-            series: seriesOptions,
-            chart: {
-                zoomType: 'x',
-                type: chartType,
-                events: {
-                    load: function () {
-                        // if there are more than 4 series, just select only one for visibility reasons
-                        let theSeries = this.series;
-                        if (theSeries.length > 4) {
-                            $.each(theSeries, function () {
-                                if (this.index > 0) {
-                                    this.setVisible(false);
-                                }
-                            });
-                        }
+            if (chartType === 'datetime' || chartType === 'area') {
+                datasets[dataSeries]['data'].push({
+                    t: values[characteristicColumn],
+                    y: parseFloat(values[keyFigureColumn])
+                });
+                xAxes = [{
+                    type: 'time',
+                    distribution: 'linear',
+                    gridLines: {
+                        display: false
                     }
-                },
-            },
-            yAxis: {
-                allowDecimals: false,
-                title: {
-                    text: null
-                },
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: xAxisOptions,
-            plotOptions: xplotOptions,
-            //data: dataOptions
+                }];
+            } else {
+                datasets[dataSeries]['data'].push(parseFloat(values[keyFigureColumn]));
+                xAxisCategories.push(values[characteristicColumn]);
+                xAxes = [{
+                    gridLines: {
+                        display: false
+                    }
+                }];
+            }
+        }
 
+        if (chartType === 'area') {
+            fill = true;
+            stacked = true;
+        }
+
+        Chart.defaults.global.elements.line.borderWidth = 2;
+        Chart.defaults.global.elements.line.tension = 0.1;
+        Chart.defaults.global.elements.line.fill = fill;
+        Chart.defaults.global.elements.point.radius = 1;
+        Chart.defaults.global.legend.display = false;
+        Chart.defaults.global.legend.position = "bottom";
+
+        let myChart = new Chart(ctx, {
+            type: chartTypeMapping[chartType],
+            data: {
+                labels: xAxisCategories,
+                datasets: datasets
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return value.toLocaleString();
+                            },
+                        },
+                        stacked: stacked,
+                    }],
+                    xAxes: xAxes
+                },
+                plugins: {
+                    colorschemes: {
+                        scheme: 'tableau.ClassicLight10'
+                    }
+                }
+            }
+        });
+
+        document.getElementById('chart-legend').addEventListener('click', function () {
+            myChart.options.legend.display = !myChart.options.legend.display;
+            myChart.update();
         });
     },
 
     resetContent: function () {
-
         if (document.getElementById('advanced').value === 'true') {
             document.getElementById('analytics-intro').classList.remove('hidden');
             document.getElementById('app-sidebar').classList.add('disappear');
@@ -250,6 +253,7 @@ OCA.Analytics.UI = {
             }
             document.getElementById('chartContainer').style.display = 'none';
             document.getElementById('chartContainer').innerHTML = '';
+            document.getElementById('chartContainer').innerHTML = '<canvas id="myChart" ></canvas>';
             document.getElementById('tableContainer').style.display = 'none';
             document.getElementById('tableContainer').innerHTML = '';
             document.getElementById('dataHeader').innerHTML = '';
@@ -275,7 +279,7 @@ OCA.Analytics.UI = {
 
 OCA.Analytics.Backend = {
 
-    getData: function (exportData = null) {
+    getData: function () {
         document.getElementById('analytics-intro').classList.add('hidden');
         document.getElementById('analytics-content').removeAttribute('hidden');
         const objectDrilldown = document.getElementById('checkBoxObject').checked;
@@ -304,11 +308,11 @@ OCA.Analytics.Backend = {
                     document.getElementById('dataSubHeader').innerText = data.options.subheader;
                     document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                     if (visualization === 'chart') {
-                        OCA.Analytics.UI.buildHighchart(data);
+                        OCA.Analytics.UI.buildChart(data);
                     } else if (visualization === 'table') {
                         OCA.Analytics.UI.buildDataTable(data);
                     } else {
-                        OCA.Analytics.UI.buildHighchart(data);
+                        OCA.Analytics.UI.buildChart(data);
                         OCA.Analytics.UI.buildDataTable(data);
                     }
                 }

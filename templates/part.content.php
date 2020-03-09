@@ -22,6 +22,8 @@
             <label for="checkBoxObject"><?php p($l->t('Object')); ?></label>
             <input type="hidden" id="checkBoxDate" class="checkbox" checked>
         </div>
+        <div id="chart-legend">legende an/aus</div>
+        <br>
         <div id="chartContainer" style="min-width: 310px; height: 50%; margin: 0 auto"></div>
         <br>
         <table id="tableContainer" style="width:100%; height: 50%"></table>

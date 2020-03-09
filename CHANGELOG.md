@@ -3,8 +3,15 @@
 ## 2.1.0 - 2020-02-xx
 ### Added
 - occ command for executing dataloads [#16](https://github.com/rello/analytics/issues/16)
-- Datasource: JSON [#21](https://github.com/rello/analytics/issues/21)
+- Datasource: JSON [#21](https://github.com/rello/analytics/issues/21) (e.g. [NC monitoring](https://github.com/Rello/analytics/wiki/Datasource:-JSON))
 - Data deletion with wildcards
+
+### Changed
+- Exchange Highcharts with Charts.js [#23](https://github.com/rello/analytics/issues/23)
+
+### Fixed
+- Removed incorrect error logs in API
+- Notification parsed subject
 
 ## 2.0.0 - 2020-01-17
 ### Added
