@@ -61,17 +61,17 @@ class JsonService
         if (is_array($array)) {
             foreach ($array as $key => $value) {
                 $group = end(explode('/', $path));
-                array_push($data, ['dimension1' => $group, 'dimension2' => $key, 'dimension3' => $value]);
+                array_push($data, [$group, $key, $value]);
             }
         } else {
             $key = end(explode('/', $path));
-            array_push($data, ['dimension1' => '', 'dimension2' => $key, 'dimension3' => $array]);
+            array_push($data, ['', $key, $array]);
         }
 
         $header = array();
-        $header['dimension1'] = '';
-        $header['dimension2'] = 'Key';
-        $header['dimension3'] = 'Value';
+        $header[0] = '';
+        $header[1] = 'Key';
+        $header[2] = 'Value';
 
         return [
             'header' => $header,
