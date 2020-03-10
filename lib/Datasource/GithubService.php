@@ -63,7 +63,7 @@ class GithubService
             foreach ($item['assets'] as $asset) {
                 if (substr($asset['name'], -2) == 'gz') $nc_value = $asset['download_count'];
             }
-            array_push($data, [$item['tag_name'], $nc_value]);
+            array_push($data, [$item['tag_name'], $this->floatvalue($nc_value)]);
             $i++;
         }
 
@@ -92,5 +92,17 @@ class GithubService
         array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
         array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
         return $template;
+    }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        if (is_numeric($val)) {
+            return floatval($val);
+        } else {
+            return false;
+        }
     }
 }
