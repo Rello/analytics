@@ -11,6 +11,7 @@
 /** global: OCP */
 /** global: OC */
 /** global: table */
+/** global: Chart */
 'use strict';
 
 if (!OCA.Analytics) {
@@ -139,6 +140,7 @@ OCA.Analytics.UI = {
     buildChart: function (jsondata) {
 
         document.getElementById('chartContainer').style.removeProperty('display');
+        document.getElementById('chartMenuContainer').style.removeProperty('display');
         let ctx = document.getElementById('myChart').getContext('2d');
 
         // flexible mapping depending on type requiered by the used chart library
@@ -251,6 +253,7 @@ OCA.Analytics.UI = {
             if ($.fn.dataTable.isDataTable('#tableContainer')) {
                 $('#tableContainer').DataTable().destroy();
             }
+            document.getElementById('chartMenuContainer').style.display = 'none';
             document.getElementById('chartContainer').style.display = 'none';
             document.getElementById('chartContainer').innerHTML = '';
             document.getElementById('chartContainer').innerHTML = '<canvas id="myChart" ></canvas>';

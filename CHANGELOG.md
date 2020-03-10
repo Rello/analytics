@@ -5,6 +5,7 @@
 - occ command for executing dataloads [#16](https://github.com/rello/analytics/issues/16)
 - Datasource: JSON [#21](https://github.com/rello/analytics/issues/21) (e.g. [NC monitoring](https://github.com/Rello/analytics/wiki/Datasource:-JSON))
 - Data deletion with wildcards
+- Compatible with dark theme [#11](https://github.com/rello/analytics/issues/11)
 
 ### Changed
 - Exchange Highcharts with Charts.js [#23](https://github.com/rello/analytics/issues/23)

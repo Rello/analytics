@@ -19,14 +19,15 @@
         <div id="drilldown" style="display: none" hidden>
             <?php p($l->t('Drilldown')); ?>
             <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
-            <label for="checkBoxObject"><?php p($l->t('Object')); ?></label>
+            <label for="checkBoxObject"><?php //p($l->t('Object')); ?></label>
             <input type="hidden" id="checkBoxDate" class="checkbox" checked>
         </div>
-        <div id="chart-legend">legende an/aus</div>
-        <br>
-        <div id="chartContainer" style="min-width: 310px; height: 50%; margin: 0 auto"></div>
-        <br>
-        <table id="tableContainer" style="width:100%; height: 50%"></table>
+        <div id="chartMenuContainer" style="height: 16px;">
+            <div id="chart-legend" class="icon icon-menu" style="right: 30px;position: absolute;"></div>
+        </div>
+        <div id="chartContainer"
+             style="position: relative; min-width: 310px; height: 400px; margin-bottom: 30px;"></div>
+        <table id="tableContainer" style="width:100%; height: 50%;"></table>
     </div>
 </div>
 <div id="analytics-intro" style="width:50%; padding: 50px" hidden>
