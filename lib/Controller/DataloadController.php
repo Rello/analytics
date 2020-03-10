@@ -213,9 +213,9 @@ class DataloadController extends Controller
                 // shift values by one dimension
                 $result['data'] = array_map(function ($tag) {
                     return array(
-                        $tag['dimension2'],
-                        $tag['dimension2'],
-                        $tag['dimension3']
+                        $tag[1],
+                        $tag[1],
+                        $tag[2]
                     );
                 }, $result['data']);
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s"));
