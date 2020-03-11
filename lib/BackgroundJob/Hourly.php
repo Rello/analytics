@@ -29,7 +29,7 @@ class Hourly extends TimedJob
     )
     {
         parent::__construct($time);
-        $this->setInterval(60 * 60);
+        $this->setInterval((60 * 60) - 120); // 2 minutes because exact times would drift to the next cron execution
         $this->logger = $logger;
         $this->DataloadController = $DataloadController;
     }
