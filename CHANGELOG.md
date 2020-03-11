@@ -1,9 +1,9 @@
 # Changelog
 
-## 2.1.0 - 2020-02-xx
+## 2.1.0 - 2020-03-11
 ### Added
-- occ command for executing dataloads [#16](https://github.com/rello/analytics/issues/16)
 - Datasource: JSON [#21](https://github.com/rello/analytics/issues/21) (e.g. [NC monitoring](https://github.com/Rello/analytics/wiki/Datasource:-JSON))
+- occ command for executing dataloads [#16](https://github.com/rello/analytics/issues/16)
 - Data deletion with wildcards
 - Compatible with dark theme [#11](https://github.com/rello/analytics/issues/11)
 
