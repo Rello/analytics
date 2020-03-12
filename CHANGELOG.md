@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.1 - 2020-03-12
+### Fixed
+- shorten notification text to fit iOS push-banner
+- double category labels [#28](https://github.com/rello/analytics/issues/28)
+- column mismatch in dataload for git datasource
+
 ## 2.1.0 - 2020-03-11
 ### Added
 - Datasource: JSON [#21](https://github.com/rello/analytics/issues/21) (e.g. [NC monitoring](https://github.com/Rello/analytics/wiki/Datasource:-JSON))
