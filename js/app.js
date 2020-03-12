@@ -150,7 +150,6 @@ OCA.Analytics.UI = {
         let datasets = [], xAxisCategories = [], xAxes = [];
         let lastObject = false;
         let dataSeries = -1;
-        //let timestamp;
         let hidden = false, fill = false, stacked = false;
 
         let header = jsondata.header;
@@ -190,7 +189,11 @@ OCA.Analytics.UI = {
                 }];
             } else {
                 datasets[dataSeries]['data'].push(parseFloat(values[keyFigureColumn]));
-                xAxisCategories.push(values[characteristicColumn]);
+                if (dataSeries === 0) {
+                    // Add category lables only once and not for every data series.
+                    // They have to be unique anyway
+                    xAxisCategories.push(values[characteristicColumn]);
+                }
                 xAxes = [{
                     gridLines: {
                         display: false
