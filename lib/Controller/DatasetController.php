@@ -67,7 +67,7 @@ class DatasetController extends Controller
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
         foreach ($dataloads as $dataload) {
             $key = array_search($dataload['dataset'], array_column($ownDatasets, 'id'));
-            $this->logger->debug($key);
+            //$this->logger->debug($key);
             if ($key !== '') {
                 $ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
                 $ownDatasets[$key]['schedules'] = $dataload['schedules'];
