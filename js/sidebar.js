@@ -661,8 +661,10 @@ OCA.Analytics.Sidebar.Backend = {
                 button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
-                    OCA.Analytics.UI.resetContent();
-                    OCA.Analytics.Backend.getData();
+                    if (document.getElementById('advanced').value === 'false') {
+                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.Backend.getData();
+                    }
                 } else {
                     OCA.Analytics.UI.notification('error', data.error);
                 }
@@ -717,8 +719,10 @@ OCA.Analytics.Sidebar.Backend = {
             success: function (data) {
                 button.classList.remove('loading');
                 button.disabled = false;
-                OCA.Analytics.UI.resetContent();
-                OCA.Analytics.Backend.getData();
+                if (document.getElementById('advanced').value === 'false') {
+                    OCA.Analytics.UI.resetContent();
+                    OCA.Analytics.Backend.getData();
+                }
             }
         });
     },
