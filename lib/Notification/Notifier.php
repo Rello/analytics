@@ -90,7 +90,7 @@ class Notifier implements INotifier
         //$this->logger->error('Notifier 90: '.$notification->getSubject());
         switch ($notification->getSubject()) {
             case NotificationManager::SUBJECT_THRESHOLD:
-                $parsedSubject = $l->t("Exception in Report '{report}'. The value of '{subject}' reached the threshold of '{rule} {value}'");
+                $parsedSubject = $l->t("Report '{report}': '{subject}' reached the threshold of '{rule} {value}'");
                 break;
         }
         $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $notification->getObjectId();

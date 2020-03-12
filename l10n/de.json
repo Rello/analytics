@@ -61,7 +61,7 @@
     "External url (csv)": "Externe Url (csv)",
     "Create demo report on external CSV data": "Beispiel Report aus externen CSV Daten erstellen",
     "3rd field must be a valid number": "Drittes Feld muss eine gültige Zahl sein",
-    "Exception in Report '{report}'. The value of '{subject}' reached the threshold of '{rule} {value}'": "Ausnahme im Bericht '{report}'. Der Wert von '{subject}' hat den Schwellwert von '{rule} {value}' erreicht",
+    "Report '{report}': '{subject}' reached the threshold of '{rule} {value}'": "Bericht '{report}': '{subject}' hat den Schwellwert von '{rule} {value}' erreicht",
     "Option": "Bedingung",
     "Severity": "Priorität",
     "Notification": "Benachrichtigung",
