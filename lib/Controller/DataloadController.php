@@ -212,11 +212,8 @@ class DataloadController extends Controller
                 // if datasource should be timestamped/snapshoted
                 // shift values by one dimension
                 $result['data'] = array_map(function ($tag) {
-                    return array(
-                        $tag[1],
-                        $tag[1],
-                        $tag[2]
-                    );
+                    $columns = count($tag);
+                    return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
                 }, $result['data']);
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s"));
             }
