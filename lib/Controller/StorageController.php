@@ -76,6 +76,7 @@ class StorageController extends Controller
      */
     public function update(int $datasetId, $dimension1, $dimension2, $dimension3, string $user_id = null)
     {
+        $dimension2 = $this->convertGermanDateFormat($dimension2);
         $dimension3 = $this->floatvalue($dimension3);
 
         $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $dimension3);
@@ -133,4 +134,17 @@ class StorageController extends Controller
         }
     }
 
+    private function convertGermanDateFormat($val)
+    {
+        $fullString = explode(' ', $val);
+        $dateLength = strlen($fullString[0]);
+        $dateParts = explode('.', $fullString[0]);
+
+        if ($dateLength >= 6 && $dateLength <= 10 && count($dateParts) === 3) {
+            // is most likely a german date format 20.02.2020
+            $fullString[0] = $dateParts[2] . '-' . sprintf('%02d', $dateParts[1]) . '-' . sprintf('%02d', $dateParts[0]);
+            $val = implode(' ', $fullString);
+        }
+        return $val;
+    }
 }
