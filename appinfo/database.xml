@@ -304,7 +304,7 @@
                 <name>option</name>
                 <type>text</type>
                 <notnull>false</notnull>
-                <length>255</length>
+                <length>500</length>
             </field>
             <field>
                 <name>schedule</name>
