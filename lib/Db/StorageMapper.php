@@ -89,7 +89,7 @@ class StorageMapper
     {
         $dimension1 = str_replace('*', '%', $dimension1);
         $dimension2 = str_replace('*', '%', $dimension2);
-        $SQL = 'select count(*) FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` like ? AND `dimension2` like ?';
+        $SQL = 'select count(*) as `count` FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` like ? AND `dimension2` like ?';
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
         return $stmt->fetch();
