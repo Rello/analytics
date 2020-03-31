@@ -144,19 +144,64 @@ OCA.Analytics.UI = {
         let ctx = document.getElementById('myChart').getContext('2d');
 
         // flexible mapping depending on type requiered by the used chart library
-        let chartTypeMapping = {'datetime': 'line', 'column': 'bar', 'area': 'line', 'line': 'line'};
+        let chartTypeMapping = {
+            'datetime': 'line',
+            'column': 'bar',
+            'area': 'line',
+            'line': 'line',
+            'doughnut': 'doughnut'
+        };
 
         let chartType = jsondata.options.chart;
-        let datasets = [], xAxisCategories = [], xAxes = [];
+        let datasets = [], xAxisCategories = [];
         let lastObject = false;
         let dataSeries = -1;
-        let hidden = false, fill = false, stacked = false;
+        let hidden = false;
 
         let header = jsondata.header;
         let headerKeys = Object.keys(header).length;
         let dataSeriesColumn = headerKeys - 3; //characteristic is taken from the second last column
         let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
         let keyFigureColumn = headerKeys - 1; //key figures is taken from the last column
+
+        Chart.defaults.global.elements.line.borderWidth = 2;
+        Chart.defaults.global.elements.line.tension = 0.1;
+        Chart.defaults.global.elements.line.fill = false;
+        Chart.defaults.global.elements.point.radius = 1;
+        Chart.defaults.global.legend.display = false;
+        Chart.defaults.global.legend.position = "bottom";
+
+        var chartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            return value.toLocaleString();
+                        },
+                    },
+                    stacked: false,
+                    gridLines: {
+                        display: true,
+                    },
+                    display: true,
+                }],
+                xAxes: [{
+                    type: 'category',
+                    distribution: 'linear',
+                    gridLines: {
+                        display: false
+                    },
+                    display: true,
+                }],
+            },
+            plugins: {
+                colorschemes: {
+                    scheme: 'tableau.ClassicLight10'
+                }
+            }
+        };
 
         for (let values of jsondata.data) {
             if (dataSeriesColumn >= 0 && lastObject !== values[dataSeriesColumn]) {
@@ -180,13 +225,6 @@ OCA.Analytics.UI = {
                     t: values[characteristicColumn],
                     y: parseFloat(values[keyFigureColumn])
                 });
-                xAxes = [{
-                    type: 'time',
-                    distribution: 'linear',
-                    gridLines: {
-                        display: false
-                    }
-                }];
             } else {
                 datasets[dataSeries]['data'].push(parseFloat(values[keyFigureColumn]));
                 if (dataSeries === 0) {
@@ -194,25 +232,21 @@ OCA.Analytics.UI = {
                     // They have to be unique anyway
                     xAxisCategories.push(values[characteristicColumn]);
                 }
-                xAxes = [{
-                    gridLines: {
-                        display: false
-                    }
-                }];
             }
         }
-
-        if (chartType === 'area') {
-            fill = true;
-            stacked = true;
+        if (chartType === 'datetime') {
+            chartOptions.scales.xAxes[0].type = 'time';
+            chartOptions.scales.xAxes[0].distribution = 'linear';
+        } else if (chartType === 'area') {
+            chartOptions.scales.xAxes[0].type = 'time';
+            chartOptions.scales.xAxes[0].distribution = 'linear';
+            chartOptions.scales.yAxes[0].stacked = true;
+            Chart.defaults.global.elements.line.fill = true;
+        } else if (chartType === 'doughnut') {
+            chartOptions.scales.xAxes[0].display = false;
+            chartOptions.scales.yAxes[0].display = false;
+            chartOptions.scales.yAxes[0].gridLines.display = false;
         }
-
-        Chart.defaults.global.elements.line.borderWidth = 2;
-        Chart.defaults.global.elements.line.tension = 0.1;
-        Chart.defaults.global.elements.line.fill = fill;
-        Chart.defaults.global.elements.point.radius = 1;
-        Chart.defaults.global.legend.display = false;
-        Chart.defaults.global.legend.position = "bottom";
 
         let myChart = new Chart(ctx, {
             type: chartTypeMapping[chartType],
@@ -220,26 +254,7 @@ OCA.Analytics.UI = {
                 labels: xAxisCategories,
                 datasets: datasets
             },
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            callback: function (value, index, values) {
-                                return value.toLocaleString();
-                            },
-                        },
-                        stacked: stacked,
-                    }],
-                    xAxes: xAxes
-                },
-                plugins: {
-                    colorschemes: {
-                        scheme: 'tableau.ClassicLight10'
-                    }
-                }
-            }
+            options: chartOptions,
         });
 
         document.getElementById('chart-legend').addEventListener('click', function () {

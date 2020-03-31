@@ -1,10 +1,19 @@
 # Changelog
 
+## 2.1.2 - 2020-03-xx
+### Added
+- chart type: doughnut
+
+### Fixed
+- handle German date format in input form
+- regex not working - options field too short [#31](https://github.com/rello/analytics/issues/31)
+
 ## 2.1.1 - 2020-03-12
 ### Fixed
-- shorten notification text to fit iOS push-banner
+- shorten notification text to fit iOS push banner
 - double category labels [#28](https://github.com/rello/analytics/issues/28)
 - column mismatch in dataload for git datasource
+- data deletion simulation display bug
 
 ## 2.1.0 - 2020-03-11
 ### Added

@@ -89,6 +89,7 @@
                         <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
                         <option value="column"><?php p($l->t('Columns')); ?></option>
                         <option value="area"><?php p($l->t('Area')); ?></option>
+                        <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
                     </select>
                 </div>
             </div>
