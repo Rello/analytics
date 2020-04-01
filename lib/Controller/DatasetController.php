@@ -167,16 +167,17 @@ class DatasetController extends Controller
      * @param $link
      * @param $visualization
      * @param $chart
+     * @param $chartoptions
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
      * @return bool
      */
-    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $chartoptions, $dimension1, $dimension2, $dimension3)
     {
         if ($type === DataSourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
-        return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3);
+        return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dimension1, $dimension2, $dimension3);
     }
 }

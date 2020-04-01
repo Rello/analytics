@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell;"><?php p($l->t('Chart Type')); ?></div>
+                <div style="display: table-cell;"><?php p($l->t('Chart type')); ?></div>
                 <div style="display: table-cell;">
                     <select id="sidebarDatasetChart" class="input150">
                         <option value="" selected></option>
@@ -91,6 +91,12 @@
                         <option value="area"><?php p($l->t('Area')); ?></option>
                         <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
                     </select>
+                </div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 120px;"><?php p($l->t('Chart options')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetChartOptions"
+                                                         placeholder="<?php p($l->t('advanced')); ?>" class="input150">
                 </div>
             </div>
         </div>

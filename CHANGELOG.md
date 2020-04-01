@@ -1,8 +1,9 @@
 # Changelog
 
-## 2.1.2 - 2020-03-xx
+## 2.2.0 - 2020-04-xx
 ### Added
 - chart type: doughnut
+- customizable chart options [#30](https://github.com/rello/analytics/issues/30)
 
 ### Fixed
 - handle German date format in input form

@@ -152,6 +152,7 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetLinkButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasetParameterButton);
                     document.getElementById('sidebarDatasetVisualization').value = data.visualization;
                     document.getElementById('sidebarDatasetChart').value = data.chart;
+                    document.getElementById('sidebarDatasetChartOptions').value = data.chartoptions;
                     document.getElementById('sidebarDatasetDimension1').value = data.dimension1;
                     document.getElementById('sidebarDatasetDimension2').value = data.dimension2;
                     document.getElementById('sidebarDatasetDimension3').value = data.dimension3;
@@ -633,6 +634,7 @@ OCA.Analytics.Sidebar.Backend = {
                 'link': document.getElementById('sidebarDatasetLink').value,
                 'visualization': document.getElementById('sidebarDatasetVisualization').value,
                 'chart': document.getElementById('sidebarDatasetChart').value,
+                'chartoptions': document.getElementById('sidebarDatasetChartOptions').value,
                 'dimension1': document.getElementById('sidebarDatasetDimension1').value,
                 'dimension2': document.getElementById('sidebarDatasetDimension2').value,
                 'dimension3': document.getElementById('sidebarDatasetDimension3').value

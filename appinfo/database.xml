@@ -78,6 +78,12 @@
                 <notnull>false</notnull>
                 <length>64</length>
             </field>
+            <field>
+                <name>chartoptions</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>1000</length>
+            </field>
             <index>
                 <name>analytics_dataset_user_id_idx</name>
                 <field>

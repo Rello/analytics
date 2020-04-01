@@ -64,12 +64,12 @@ class DatasetMapper
      * @param $dimension3
      * @return bool
      */
-    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $dimension1, $dimension2, $dimension3)
+    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dimension1, $dimension2, $dimension3)
     {
-        $SQL = 'UPDATE `*PREFIX*analytics_dataset` SET `name`= ?, `subheader`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `parent`= ?, `dimension1` = ?, `dimension2` = ?, `dimension3` = ? WHERE `user_id` = ? AND `id` = ?';
+        $SQL = 'UPDATE `*PREFIX*analytics_dataset` SET `name`= ?, `subheader`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `chartoptions`= ?, `parent`= ?, `dimension1` = ?, `dimension2` = ?, `dimension3` = ? WHERE `user_id` = ? AND `id` = ?';
         $stmt = $this->db->prepare($SQL);
         $name = $this->truncate($name, 64);
-        $stmt->execute(array($name, $subheader, $type, $link, $visualization, $chart, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
+        $stmt->execute(array($name, $subheader, $type, $link, $visualization, $chart, $chartoptions, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
         return true;
     }
 

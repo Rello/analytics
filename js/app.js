@@ -248,6 +248,12 @@ OCA.Analytics.UI = {
             chartOptions.scales.yAxes[0].gridLines.display = false;
         }
 
+        //'{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
+        var userOptions = jsondata.options.chartoptions;
+        if (userOptions !== '' && userOptions !== null) {
+            cloner.deep.merge(chartOptions, JSON.parse(userOptions));
+        }
+
         let myChart = new Chart(ctx, {
             type: chartTypeMapping[chartType],
             data: {
