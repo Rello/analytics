@@ -12,6 +12,8 @@
 /** global: OC */
 /** global: table */
 /** global: Chart */
+/** global: cloner */
+
 'use strict';
 
 if (!OCA.Analytics) {

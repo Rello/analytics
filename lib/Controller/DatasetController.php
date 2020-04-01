@@ -123,7 +123,7 @@ class DatasetController extends Controller
             $link = 'https://raw.githubusercontent.com/Rello/analytics/master/sample_data/sample1.csv';
             $visualization = 'ct';
             $chart = 'line';
-            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '');
+            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '', '');
         } elseif ($file !== '') {
             $name = explode('.', end(explode('/', $file)))[0];
             $subheader = $file;
@@ -132,7 +132,7 @@ class DatasetController extends Controller
             $link = $file;
             $visualization = 'table';
             $chart = 'line';
-            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '');
+            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '', '');
         }
         return $datasetId;
     }
