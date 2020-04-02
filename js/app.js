@@ -170,8 +170,6 @@ OCA.Analytics.UI = {
         Chart.defaults.global.elements.line.tension = 0.1;
         Chart.defaults.global.elements.line.fill = false;
         Chart.defaults.global.elements.point.radius = 1;
-        Chart.defaults.global.legend.display = false;
-        Chart.defaults.global.legend.position = "bottom";
 
         var chartOptions = {
             maintainAspectRatio: false,
@@ -202,6 +200,10 @@ OCA.Analytics.UI = {
                 colorschemes: {
                     scheme: 'tableau.ClassicLight10'
                 }
+            },
+            legend: {
+                display: false,
+                position: 'bottom'
             }
         };
 
@@ -248,6 +250,9 @@ OCA.Analytics.UI = {
             chartOptions.scales.xAxes[0].display = false;
             chartOptions.scales.yAxes[0].display = false;
             chartOptions.scales.yAxes[0].gridLines.display = false;
+            chartOptions.circumference = Math.PI;
+            chartOptions.rotation = -Math.PI;
+            chartOptions.legend.display = true;
         }
 
         //'{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
