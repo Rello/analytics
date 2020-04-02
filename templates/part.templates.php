@@ -98,6 +98,11 @@
                 <div style="display: table-cell;"><input id="sidebarDatasetChartOptions"
                                                          placeholder="<?php p($l->t('advanced')); ?>" class="input150">
                 </div>
+                <div style="display: table-cell;">
+                    <a target="_blank" rel="noreferrer noopener" title="Open documentation"
+                       href="https://github.com/Rello/analytics/wiki/Advanced-chart-options">
+                        <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                    </a></div>
             </div>
         </div>
         <br>
