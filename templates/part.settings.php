@@ -22,7 +22,7 @@
     <div id="app-settings-content">
         <ul id="data-settings">
             <li class="data-settings-item icon-external">
-                <a href="https://github.com/rello/audioplayer/wiki/donate" target="_blank" style="padding: 0 20px;">
+                <a href="https://github.com/rello/analytics/wiki/donate" target="_blank" style="padding: 0 20px;">
                     <?php p($l->t('Do you like this app?')); ?>
                 </a>
             </li>
