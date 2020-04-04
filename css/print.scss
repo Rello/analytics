@@ -1,0 +1,37 @@
+@media print {
+  /* hide stuff */
+  #body-user {
+    #header,
+    div#app-navigation,
+    #app-navigation-toggle,
+    #app-navigation-toggle-custom,
+    #tableContainer_filter,
+    #tableContainer_length,
+    #tableContainer_paginate,
+    #chartMenuContainer {
+      display: none !important;
+    }
+
+    #content {
+      margin: 0;
+      padding: 0;
+    }
+
+    #app-content {
+      margin: 0 !important;
+    }
+  }
+
+  div#app-navigation-toggle.icon-menu {
+    display: block;
+    width: 0px;
+    height: 0px;
+    background: none;
+  }
+
+  /* Layout */
+  @page {
+    size: A4 portrait;
+    margin: 20mm 0 10mm 0;
+  }
+}

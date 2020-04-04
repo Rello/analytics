@@ -204,7 +204,10 @@ OCA.Analytics.UI = {
             legend: {
                 display: false,
                 position: 'bottom'
-            }
+            },
+            animation: {
+                duration: 0 // general animation time
+            },
         };
 
         for (let values of jsondata.data) {
@@ -400,5 +403,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#myInput').on('keyup', function () {
         table.search(this.value).draw();
+    });
+
+    window.addEventListener("beforeprint", function (event) {
+        document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
     });
 });

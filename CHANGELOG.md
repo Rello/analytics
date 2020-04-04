@@ -3,11 +3,13 @@
 ## 2.2.0 - 2020-04-xx
 ### Added
 - chart type: doughnut
-- customizable chart options [#30](https://github.com/rello/analytics/issues/30)
+- advanced chart options [#30](https://github.com/rello/analytics/issues/30)
+- print report css [#34](https://github.com/rello/analytics/issues/34)
 
 ### Fixed
 - handle German date format in input form
 - regex not working - options field too short [#31](https://github.com/rello/analytics/issues/31)
+- frontend doesn't respect the users timezone [#17](https://github.com/rello/analytics/issues/17)
 
 ## 2.1.1 - 2020-03-12
 ### Fixed

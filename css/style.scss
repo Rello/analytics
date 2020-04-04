@@ -64,3 +64,8 @@
 table.dataTable tbody tr {
   background-color: var(--color-main-background) !important;
 }
+
+/**
+ * Print settings, better leave them at the eof
+ */
+@import 'print.scss';

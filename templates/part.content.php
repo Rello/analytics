@@ -9,28 +9,26 @@
  * @copyright 2020 Marcel Scherello
  */
 ?>
-<div id="analytics-content" style="width:100%; padding: 10px" hidden>
+<div id="analytics-content" style="width:100%; padding: 20px 40px;" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
     <h2 id="dataHeader" style="text-align: center;"></h2>
-    <h3 id="dataSubHeader" style="text-align: center;"></h3>
-    <div style="width:100%; padding: 20px">
-        <div id="drilldown" style="display: none" hidden>
-            <?php p($l->t('Drilldown')); ?>
-            <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
-            <label for="checkBoxObject"><?php //p($l->t('Object')); ?></label>
-            <input type="hidden" id="checkBoxDate" class="checkbox" checked>
-        </div>
-        <div id="chartMenuContainer" style="height: 16px;">
-            <div id="chart-legend" class="icon icon-menu" style="right: 30px;position: absolute;"></div>
-        </div>
-        <div id="chartContainer"
-             style="position: relative; min-width: 310px; height: 400px; margin-bottom: 30px;">
-            <canvas id="myChart"></canvas>
-        </div>
-        <table id="tableContainer" style="width:100%; height: 50%;"></table>
+    <h3 id="dataSubHeader" style="text-align: center; padding-bottom: 30px"></h3>
+    <div id="drilldown" style="display: none" hidden>
+        <?php p($l->t('Drilldown')); ?>
+        <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
+        <label for="checkBoxObject"><?php //p($l->t('Object')); ?></label>
+        <input type="hidden" id="checkBoxDate" class="checkbox" checked>
     </div>
+    <div id="chartMenuContainer" style="height: 16px;">
+        <div id="chart-legend" class="icon icon-menu" style="right: 45px;position: absolute;"></div>
+    </div>
+    <div id="chartContainer"
+         style="position: relative; min-width: 310px; height:40vh; width:99%; margin-bottom: 60px;">
+        <canvas id="myChart"></canvas>
+    </div>
+    <table id="tableContainer" style="width:100%; height: 50%;"></table>
 </div>
 <div id="analytics-intro" style="width:50%; padding: 50px" hidden>
     <h2><?php p($l->t('Data Analytics')); ?></h2>
