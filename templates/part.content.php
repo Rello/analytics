@@ -25,7 +25,7 @@
         <div id="chart-legend" class="icon icon-menu" style="right: 45px;position: absolute;"></div>
     </div>
     <div id="chartContainer"
-         style="position: relative; min-width: 310px; height:40vh; width:99%; margin-bottom: 60px;">
+         style="position: relative; min-width: 310px; height:50vh; width:99%; margin-bottom: 60px;">
         <canvas id="myChart"></canvas>
     </div>
     <table id="tableContainer" style="width:100%; height: 50%;"></table>
