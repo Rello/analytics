@@ -18,7 +18,7 @@ From data to report. This on premise data warehouse solution provides modular da
 
 (*work in progress)
 ]]></description>
-    <version>2.1.2</version>
+    <version>2.2.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>

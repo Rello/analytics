@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.0 - 2020-04-xx
+## 2.2.0 - 2020-04-05
 ### Added
 - chart type: doughnut
 - advanced chart options [#30](https://github.com/rello/analytics/issues/30)
