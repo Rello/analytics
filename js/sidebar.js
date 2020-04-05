@@ -389,7 +389,7 @@ OCA.Analytics.Sidebar.Share = {
                     for (let share of data) {
 
                         if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
-                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, parseInt(share.pass));
+                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share.id, share.token, false, (String(share.pass) == "true"));
                             shareWithList.appendChild(li);
                         } else if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_USER) {
                             let li = OCA.Analytics.Sidebar.Share.buildShareeRow(share.id, share.uid_owner);
@@ -538,6 +538,7 @@ OCA.Analytics.Sidebar.Share = {
         aUnshare.addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
         let spanUnshare = document.createElement('span');
         spanUnshare.classList.add('icon', 'icon-delete');
+        spanUnshare.id = 'deleteShare';
         let spanUnshareTxt = document.createElement('span');
         spanUnshareTxt.innerText = t('analytics', 'Delete share link');
         liUnshare.appendChild(aUnshare);

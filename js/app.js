@@ -365,6 +365,7 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.Sidebar.Dataset.fillSidebarParentDropdown(data);
                 if (datasetId) {
+                    OCA.Analytics.Sidebar.hideSidebar();
                     document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
                 }
             }
