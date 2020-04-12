@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.1 - 2020-04-12
+### Fixed
+- advanced settings not showing
+
+### Added
+- NC19
+
 ## 2.2.0 - 2020-04-05
 ### Added
 - chart type: doughnut
