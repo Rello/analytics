@@ -37,8 +37,8 @@ OCA.Analytics.Sidebar = {
                 }
             } else {
                 document.getElementById('analytics-intro').classList.add('hidden');
-                document.getElementById('app-sidebar').classList.remove('disappear');
                 document.getElementById('analytics-content').removeAttribute('hidden');
+                OC.Apps.showAppSidebar();
             }
             appsidebar.dataset.id = datasetId;
             document.querySelector('.tabHeader.selected').click();
