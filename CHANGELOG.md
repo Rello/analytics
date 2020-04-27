@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.3 - 2020-04-27
+### Fixed
+- appstore certificate issue
+
 ## 2.2.2 - 2020-04-27
 ### Fixed
 - appstore certificate issue
