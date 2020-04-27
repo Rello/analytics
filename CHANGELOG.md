@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.2 - 2020-04-27
+### Fixed
+- appstore certificate issue
+
 ## 2.2.1 - 2020-04-12
 ### Fixed
 - advanced settings not showing
