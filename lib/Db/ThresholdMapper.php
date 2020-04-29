@@ -48,7 +48,7 @@ class ThresholdMapper
 
     public function getThresholdsByDataset($datasetId)
     {
-        $SQL = 'SELECT * FROM `*PREFIX*analytics_threshold` WHERE `dataset` = ?';
+        $SQL = 'SELECT `id`, `dimension1`, `dimension2`, `dimension3`, `option`, `severity` FROM `*PREFIX*analytics_threshold` WHERE `dataset` = ?';
         //$this->logger->error($SQL);
         $stmt = $this->db->prepare($SQL);
         $stmt->execute(array($datasetId));

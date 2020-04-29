@@ -122,10 +122,10 @@ OCA.Analytics.UI = {
             },
         };
 
-        thresholds = thresholds.filter(p => p.dimension1 === data['dimension1'] || p.dimension1 === '*');
+        thresholds = thresholds.filter(p => p.dimension1 === data[0] || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(data['dimension3']), parseFloat(threshold['dimension3']));
+            const comparison = operators[threshold['option']](parseFloat(data[2]), parseFloat(threshold['dimension3']));
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
