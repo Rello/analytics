@@ -88,11 +88,14 @@ class Notifier implements INotifier
         $parsedSubject = '';
 
         //$this->logger->error('Notifier 90: '.$notification->getSubject());
-        switch ($notification->getSubject()) {
+        switch ($notification->getObjectType()) {
             case NotificationManager::SUBJECT_THRESHOLD:
                 $parsedSubject = $l->t("Report '{report}': '{subject}' reached the threshold of '{rule} {value}'");
                 break;
+            default: // legacy due to switch to subject field filled with an id for notification removal
+                $parsedSubject = $l->t("Report '{report}': '{subject}' reached the threshold of '{rule} {value}'");
         }
+
         $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $notification->getObjectId();
 
         $parameters = $notification->getSubjectParameters();

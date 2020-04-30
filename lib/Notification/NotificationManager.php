@@ -39,19 +39,25 @@ class NotificationManager
     }
 
     /**
-     * @param $object
+     * @param string $object_type
      * @param int $object_id
      * @param $subject
      * @param array $subject_parameter
      * @param $user_id
-     * @throws \Exception
      */
-    public function triggerNotification($object, $object_id, $subject, $subject_parameter, $user_id)
+    public function triggerNotification($object_type, $object_id, $subject, $subject_parameter, $user_id)
     {
         $notification = $this->notificationManager->createNotification();
         $notification->setApp('analytics')
+            ->setObject($object_type, $object_id)
+            ->setSubject($subject)
+            ->setUser($user_id);
+        $this->notificationManager->markProcessed($notification);
+
+        $notification = $this->notificationManager->createNotification();
+        $notification->setApp('analytics')
             ->setDateTime(new \DateTime())
-            ->setObject($object, $object_id)
+            ->setObject($object_type, $object_id)
             ->setSubject($subject, $subject_parameter)
             ->setUser($user_id);
         $this->notificationManager->notify($notification);
