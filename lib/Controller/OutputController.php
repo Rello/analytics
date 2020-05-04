@@ -63,18 +63,17 @@ class OutputController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @param $objectDrilldown
-     * @param $dateDrilldown
+     * @param array $options
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function read(int $datasetId, $objectDrilldown, $dateDrilldown)
+    public function read(int $datasetId, $options)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (empty($datasetMetadata)) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
 
         if (!empty($datasetMetadata)) {
-            $result = $this->getData($datasetMetadata, $objectDrilldown, $dateDrilldown);
+            $result = $this->getData($datasetMetadata, $options);
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
@@ -87,17 +86,16 @@ class OutputController extends Controller
      *
      * @NoAdminRequired
      * @param $datasetMetadata
-     * @param $objectDrilldown
-     * @param $dateDrilldown
+     * @param $options
      * @return array|NotFoundException
      * @throws NotFoundException
      */
-    private function getData($datasetMetadata, $objectDrilldown, $dateDrilldown)
+    private function getData($datasetMetadata, $options)
     {
         //$this->logger->error('dataset csv result: ' . $result);
         $datasource = (int)$datasetMetadata['type'];
         if ($datasource === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
-            $result = $this->StorageController->read($datasetMetadata, $objectDrilldown, $dateDrilldown);
+            $result = $this->StorageController->read($datasetMetadata, $options);
         } else {
             $option = array();
             $option['user_id'] = $datasetMetadata['user_id'];
@@ -149,6 +147,7 @@ class OutputController extends Controller
                     return new NotFoundResponse();
                 }
             }
+            //TODO: umstellung auf Options
             $result = $this->getData($share, $objectDrilldown, $dateDrilldown);
             return new DataResponse($result);
         }

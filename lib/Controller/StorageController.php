@@ -41,23 +41,36 @@ class StorageController extends Controller
      *
      * @NoAdminRequired
      * @param $datasetMetadata
-     * @param $objectDrilldown
-     * @param $dateDrilldown
+     * @param array $options
      * @return array
      */
-    public function read($datasetMetadata, $objectDrilldown, $dateDrilldown)
+    public function read($datasetMetadata, $options)
     {
         $header = array();
-        if ($objectDrilldown === 'true') $header[0] = $datasetMetadata['dimension1'];
-        if ($dateDrilldown === 'true') $header[1] = $datasetMetadata['dimension2'];
+        $dimensions = array();
+
+        $dimensions['dimension1'] = $datasetMetadata['dimension1'];
+        $dimensions['dimension2'] = $datasetMetadata['dimension2'];
+        //array_push($header_all, ['dimension3' => $datasetMetadata['dimension3']]);
+
+        if ($options['drilldown']['dimension1'] !== 'false') $header[0] = $datasetMetadata['dimension1'];
+        if ($options['drilldown']['dimension2'] !== 'false') $header[1] = $datasetMetadata['dimension2'];
         $header[2] = $datasetMetadata['dimension3'];
 
-        $data = $this->StorageMapper->getData($datasetMetadata['id'], $objectDrilldown, $dateDrilldown);
+        $data = $this->StorageMapper->getData($datasetMetadata['id'], $options);
+        $header = array_values($header);
+        $data = array_values($data);
+
+        foreach ($data as $key => $value) {
+            $data[$key] = array_values($value);
+        }
 
         return empty($data) ? [
+            'dimensions' => $dimensions,
             'status' => 'nodata'
         ] : [
             'header' => $header,
+            'dimensions' => $dimensions,
             'data' => $data,
         ];
     }

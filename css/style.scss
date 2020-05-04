@@ -32,6 +32,22 @@
   opacity: 0.57;
 }
 
+#chartContainer {
+    position: relative;
+    min-width: 310px;
+    height:50vh;
+    width:99%;
+}
+
+#chartMenuContainer {
+    height:16px;
+    margin-bottom: 60px;
+}
+
+#filterContainer {
+    height: 25px;
+}
+
 .thresholdBullet {
   margin: 10px;
   width: 12px;
@@ -63,6 +79,50 @@
 
 table.dataTable tbody tr {
   background-color: var(--color-main-background) !important;
+}
+
+.icon-analytics-filter-add {
+  @include icon-color('filteradd', 'analytics', $color-black, 1);
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  margin-left: 10px;
+  float: right;
+}
+
+.icon-analytics-filter-remove {
+  @include icon-color('filterremove', 'analytics', $color-black, 1);
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.icon-analytics-drilldown {
+  @include icon-color('column', 'analytics', $color-black, 1);
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  background-size: 22px;
+  margin-left: 10px;
+  float: right;
+}
+
+.filterVisualizationItem {
+    background-color: var(--color-background-dark);
+    padding: 5px;
+    border-radius: 15px;
+    padding-left: 34px;
+    background-position: 10px center;
+    background-image: var(--icon-close-000);
+    background-repeat: no-repeat;
+    opacity: .5;
+    font-size: smaller;
+    cursor: pointer;
+}
+
+.filterVisualizationItem:hover {
+    opacity: 1;
 }
 
 /**

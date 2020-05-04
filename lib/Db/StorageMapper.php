@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDbConnection;
 use OCP\IL10N;
 use OCP\ILogger;
@@ -38,30 +39,79 @@ class StorageMapper
     /**
      * Get file id for single track
      * @param int $dataset
-     * @param  $objectDrilldown
-     * @param  $dateDrilldown
+     * @param array $options
      * @return array
      */
-    public function getData(int $dataset, $objectDrilldown = null, $dateDrilldown = null)
+    public function getData(int $dataset, $options)
     {
-        $SQL = 'SELECT';
-        if ($objectDrilldown === 'true') $SQL .= ' `dimension1` AS `0`,';
-        if ($dateDrilldown === 'true') $SQL .= ' `dimension2` AS `1`,';
-        $SQL .= ' SUM(`dimension3`) AS `2`';
-        $SQL .= ' FROM `*PREFIX*analytics_facts`
-                WHERE `dataset` = ?
-                GROUP BY `dataset`';
-        if ($objectDrilldown === 'true') $SQL .= ', `0`';
-        if ($dateDrilldown === 'true') $SQL .= ', `1`';
-        $SQL .= ' ORDER BY';
-        if ($objectDrilldown === 'true') $SQL .= ' `0`,';
-        $SQL .= ' `1` ASC';
+        $sql = $this->db->getQueryBuilder();
+        $sql->from('*PREFIX*analytics_facts');
+        $sql->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)));
+        $sql->addgroupBy('dataset');
 
-        //$this->logger->error($SQL);
+        $drilldownColumns = array('dimension1' => 'true', 'dimension2' => 'true');
+        // derive if a column should be removed from drilldown by user input
+        if (isset($options['drilldown'])) {
+            $drilldownColumns = array_intersect_key($options['drilldown'], $drilldownColumns) + $drilldownColumns;
+        }
 
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($dataset));
-        return $stmt->fetchAll();
+        // Add the colunns to the select statement
+        // $this->logger->debug('StorageMapper 68: '. json_encode($drilldownColumns));
+        // $this->logger->debug('StorageMapper 69: '. json_encode($options['drilldown']));
+        foreach ($drilldownColumns as $key => $value) {
+            if ($value !== 'false') {
+                $sql->addSelect($key);
+                $sql->addGroupBy($key);
+                $sql->addOrderBy($key, 'ASC');
+            }
+        }
+
+        // value column deeds to be at the last position in the select. So it needs to be after the dynamic selects
+        $sql->addSelect($sql->func()->sum('dimension3'));
+
+        // add the where clauses to the select
+        foreach ($options['filter'] as $key => $value) {
+            $columnName = $key;
+            if ($value['enabled'] === 'true') {
+                $this->sqlWhere($sql, $columnName, $value['option'], $value['value']);
+            }
+        }
+
+        $this->logger->debug('StorageMapper 79: ' . $sql->getSQL());
+        $this->logger->debug('StorageMapper 79: ' . json_encode($sql->getParameters()));
+        $statement = $sql->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+
+        // reindex result to get rid of the column headers as the frontend works incremental
+        foreach ($rows as &$row) {
+            $row = array_values($row);
+        }
+        return $rows;
+    }
+
+    /**
+     * Add where statements to a query builder matching the given notification
+     *
+     * @param IQueryBuilder $sql
+     * @param $column
+     * @param $option
+     * @param $value
+     */
+    protected function sqlWhere(IQueryBuilder $sql, $column, $option, $value)
+    {
+        if ($option === 'EQ') {
+            $sql->andWhere($sql->expr()->eq($column, $sql->createNamedParameter($value)));
+        } elseif ($option === 'GT') {
+            $sql->andWhere($sql->expr()->gt($column, $sql->createNamedParameter($value)));
+        } elseif ($option === 'LT') {
+            $sql->andWhere($sql->expr()->lt($column, $sql->createNamedParameter($value)));
+        } elseif ($option === 'IN') {
+            $sql->andWhere($sql->expr()->in($column, $sql->createParameter('inValues')));
+            $sql->setParameter('inValues', explode(',', $value), IQueryBuilder::PARAM_STR_ARRAY);
+        } elseif ($option === 'LIKE') {
+            $sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter('%' . $value . '%')));
+        }
     }
 
     /**

@@ -50,18 +50,12 @@ OCA.Analytics.Core = {
             OCA.Analytics.Navigation.init();
         }
     },
-
-    handleDrilldownChange: function () {
-        OCA.Analytics.UI.resetContent();
-        OCA.Analytics.Backend.getData();
-    },
 };
 
 OCA.Analytics.UI = {
 
     buildDataTable: function (jsondata) {
         document.getElementById('tableContainer').style.removeProperty('display');
-        document.getElementById('drilldown').style.removeProperty('display');
 
         let columns = [];
         let data;
@@ -295,7 +289,7 @@ OCA.Analytics.UI = {
             document.getElementById('tableContainer').innerHTML = '';
             document.getElementById('dataHeader').innerHTML = '';
             document.getElementById('dataSubHeader').innerHTML = '';
-            document.getElementById('drilldown').style.display = 'none';
+            document.getElementById('filterContainer').style.display = 'none';
         }
     },
 
@@ -314,15 +308,217 @@ OCA.Analytics.UI = {
     }
 };
 
+/**
+ * @namespace OCA.Analytics.Filter
+ */
+OCA.Analytics.Filter = {
+    openFilterDialog: function () {
+        $('body').append(
+            '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
+            + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
+            + '<div id="analytics_dialog">'
+            + '</div>'
+        );
+        $('#analytics_dialog').append(
+            '<div class="urledit push-bottom">'
+            + '<a class="oc-dialog-close" id="btnClose"></a>'
+            + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
+            + 'Add Filter'
+            + '</h2>'
+            + '<div class="table" style="display: table;">'
+            + '<div style="display: table-row;">'
+            + '<div style="display: table-cell; width: 50px;"></div>'
+            + '<div style="display: table-cell; width: 80px;"></div>'
+            + '<div style="display: table-cell; width: 100px;">'
+            + '<label for="filterDialogDimension">Filter by</label>'
+            + '</div>'
+            + '<div style="display: table-cell; width: 100px;">'
+            + '<label for="filterDialogOption">Operator</label>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<label for="filterDialogValue">Value</label>'
+            + '</div>'
+            + '</div>'
+            + '<div style="display: table-row;">'
+            + '<div style="display: table-cell;">'
+            + '<img src="img/filteradd.svg" alt="filter">'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<select id="filterDialogType" class="checkbox" disabled>'
+            + '<option value="and">and</option>'
+            + '</select>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<select id="filterDialogDimension" class="checkbox">'
+            + '</select>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<select id="filterDialogOption" class="checkbox">'
+            + '  <option value="EQ">' + t('analytics', 'equal to') + '</option>'
+            + '  <option value="GT">' + t('analytics', 'greater than') + '</option>'
+            + '  <option value="LT">' + t('analytics', 'less than') + '</option>'
+            + '  <option value="LIKE">' + t('analytics', 'contains') + '</option>'
+            + '  <option value="IN">' + t('analytics', 'list of values') + '</option>'
+            + '</select>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<input type="text" id="filterDialogValue">'
+            + '</div></div></div>'
+            + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
+            + '<a class="button primary" id="filterDialogGo">' + t('analytics', 'Add') + '</a>'
+            + '<a class="button primary" id="filterDialogCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '</div>'
+        );
+
+        let selectOptions;
+        let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
+        for (let i = 0; i < Object.keys(filterDimensions).length; i++) {
+            selectOptions = selectOptions + '<option value="' + Object.keys(filterDimensions)[i] + '">' + Object.values(filterDimensions)[i] + '</option>';
+        }
+        document.getElementById('filterDialogDimension').innerHTML = selectOptions;
+
+        document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
+        document.getElementById("filterDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
+        document.getElementById("filterDialogGo").addEventListener("click", OCA.Analytics.Filter.processFilterDialog);
+        document.getElementById('filterDialogValue').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                OCA.Analytics.Filter.processFilterDialog();
+            }
+        });
+
+    },
+
+    openDrilldownDialog: function () {
+        $('body').append(
+            '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
+            + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
+            + '<div id="analytics_dialog">'
+            + '</div>'
+        );
+        $('#analytics_dialog').append(
+            '<div class="urledit push-bottom">'
+            + '<a class="oc-dialog-close" id="btnClose"></a>'
+            + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
+            + 'Change Drilldown'
+            + '</h2>'
+            + '<div class="table" style="display: table;">'
+
+            + '<div style="display: table-row;">'
+            + '<div style="display: table-cell; width: 150px;">'
+            + '</div>'
+            + '<div style="display: table-cell; width: 50px;">'
+            + '<img src="img/column.svg" style="height: 20px;">'
+            + '</div>'
+            + '<div style="display: table-cell; width: 50px;">'
+            + '<img src="img/row.svg" style="height: 20px;">'
+            + '</div>'
+            + '</div>'
+
+            + '<div style="display: table-row;">'
+            + '<div style="display: table-cell;">'
+            + 'Konto'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<input type="checkbox" class="checkbox" id="drilldownColumn1" checked>'
+            + '<label for="drilldownColumn1"> </label>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<input type="checkbox" class="checkbox" id="drilldownRow1" disabled>'
+            + '<label for="drilldownRow1"> </label>'
+            + '</div>'
+            + '</div>'
+
+            + '<div style="display: table-row;">'
+            + '<div style="display: table-cell;">'
+            + 'Jahr'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<input type="checkbox" class="checkbox" id="drilldownColumn2" checked>'
+            + '<label for="drilldownColumn2"> </label>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<input type="checkbox" class="checkbox" id="drilldownRow2" disabled>'
+            + '<label for="drilldownRow2"> </label>'
+            + '</div>'
+            + '</div>'
+
+            + '</div>'
+
+            + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
+            + '<a class="button primary" id="drilldownDialogGo">' + t('analytics', 'Add') + '</a>'
+            + '<a class="button primary" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '</div>'
+        );
+        document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
+        document.getElementById("drilldownDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
+    },
+
+    processFilterDialog: function () {
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+        let filterDimension = document.getElementById('filterDialogDimension').value;
+        filterOptions.filter[filterDimension].enabled = 'true';
+        filterOptions.filter[filterDimension].option = document.getElementById('filterDialogOption').value;
+        filterOptions.filter[filterDimension].value = document.getElementById('filterDialogValue').value;
+        document.getElementById('filterOptions').value = JSON.stringify(filterOptions);
+        OCA.Analytics.Filter.close();
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Filter.refreshFilterVisualisation();
+    },
+
+    refreshFilterVisualisation: function () {
+        document.getElementById('filterVisualisation').innerHTML = '';
+        let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+        let filters = filterOptions.filter;
+        for (let filterDimension of Object.keys(filters)) {
+            if (filterOptions.filter[filterDimension].enabled === 'true') {
+
+                let optionText;
+                if (filterOptions.filter[filterDimension].option === 'EQ') {
+                    optionText = t('analytics', 'equal to');
+                } else if (filterOptions.filter[filterDimension].option === 'GT') {
+                    optionText = t('analytics', 'greater than');
+                } else if (filterOptions.filter[filterDimension].option === 'LT') {
+                    optionText = t('analytics', 'less than');
+                } else if (filterOptions.filter[filterDimension].option === 'LIKE') {
+                    optionText = t('analytics', 'contains');
+                } else if (filterOptions.filter[filterDimension].option === 'IN') {
+                    optionText = t('analytics', 'list of values');
+                }
+
+                let span = document.createElement('span');
+                span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions.filter[filterDimension].value;
+                span.classList.add('filterVisualizationItem');
+                span.id = filterDimension;
+                span.addEventListener('click', OCA.Analytics.Filter.removeFilter)
+                document.getElementById('filterVisualisation').appendChild(span);
+            }
+        }
+    },
+
+    removeFilter: function (evt) {
+        let filterDimension = evt.target.id;
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+        filterOptions.filter[filterDimension] = {};
+        document.getElementById('filterOptions').value = JSON.stringify(filterOptions);
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Filter.refreshFilterVisualisation();
+    },
+
+    close: function () {
+        document.getElementById('analytics_dialog_container').remove();
+        document.getElementById('analytics_dialog_overlay').remove();
+    },
+};
+
 OCA.Analytics.Backend = {
 
     getData: function () {
+        OCA.Analytics.UI.resetContent();
         document.getElementById('analytics-intro').classList.add('hidden');
         document.getElementById('analytics-content').removeAttribute('hidden');
-        const objectDrilldown = document.getElementById('checkBoxObject').checked;
-        const dateDrilldown = document.getElementById('checkBoxDate').checked;
-        let url;
 
+        let url;
         if (document.getElementById('sharingToken').value === '') {
             const datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
             url = OC.generateUrl('apps/analytics/data/') + datasetId;
@@ -331,18 +527,21 @@ OCA.Analytics.Backend = {
             url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
+        const filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+
         $.ajax({
             type: 'GET',
             url: url,
             data: {
-                'objectDrilldown': objectDrilldown,
-                'dateDrilldown': dateDrilldown
+                'options': filterOptions,
             },
             success: function (data) {
+                document.getElementById('dataHeader').innerText = data.options.name;
+                document.getElementById('dataSubHeader').innerText = data.options.subheader;
+                document.getElementById('filterDimensions').value = JSON.stringify(data.dimensions);
+                document.getElementById('filterContainer').style.removeProperty('display');
                 if (data.status !== 'nodata') {
                     let visualization = data.options.visualization;
-                    document.getElementById('dataHeader').innerText = data.options.name;
-                    document.getElementById('dataSubHeader').innerText = data.options.subheader;
                     document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                     if (visualization === 'chart') {
                         OCA.Analytics.UI.buildChart(data);
@@ -393,10 +592,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
+        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('filterOptions').value = JSON.stringify({
+            'drilldown': {},
+            'filter': {'dimension1': {}, 'dimension2': {}}
+        })
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
-            document.getElementById('checkBoxObject').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
-            document.getElementById('checkBoxDate').addEventListener('click', OCA.Analytics.Core.handleDrilldownChange);
         }
     } else {
         OCA.Analytics.Backend.getData();
@@ -409,4 +612,13 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener("beforeprint", function (event) {
         document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
     });
+
+    // document.getElementById('filterOptions').value = JSON.stringify({
+    //     'drilldown': {'dimension1': 'true', 'dimension2': 'true'},
+    //     'filter': {
+    //         'dimension1': {'enabled': 'true', 'option': 'EQ', 'value': 'Verwaltungsbeirat'},
+    //         'dimension2': {'enabled': 'true', 'option': 'GT', 'value': '2011'},
+    //     },
+    // });
+
 });

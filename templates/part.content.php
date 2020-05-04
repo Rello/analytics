@@ -15,18 +15,20 @@
     <input type="hidden" name="advanced" value="false" id="advanced">
     <h2 id="dataHeader" style="text-align: center;"></h2>
     <h3 id="dataSubHeader" style="text-align: center; padding-bottom: 30px"></h3>
-    <div id="drilldown" style="display: none" hidden>
-        <?php p($l->t('Drilldown')); ?>
-        <input type="checkbox" id="checkBoxObject" class="checkbox" checked>
-        <label for="checkBoxObject"><?php //p($l->t('Object')); ?></label>
-        <input type="hidden" id="checkBoxDate" class="checkbox" checked>
+    <div id="filterContainer" style="display: none">
+        <div id="drilldownIcon" class="icon-analytics-drilldown"></div>
+        <div id="addFilterIcon" class="icon-analytics-filter-add"></div>
+        <input id="filterOptions" type="hidden" style="display: inline-block; float: right;">
+        <input id="filterDimensions" type="hidden" style="display: inline-block; float: right;">
+        <div id="filterVisualisation" style="display: inline-block; float: right;">
+        </div>
     </div>
-    <div id="chartMenuContainer" style="height: 16px;">
-        <div id="chart-legend" class="icon icon-menu" style="right: 45px;position: absolute;"></div>
-    </div>
-    <div id="chartContainer"
-         style="position: relative; min-width: 310px; height:50vh; width:99%; margin-bottom: 60px;">
+    <div id="chartContainer">
         <canvas id="myChart"></canvas>
+    </div>
+    <div id="chartMenuContainer">
+        <div id="chart-legend" class="icon icon-menu"
+             style="right: 45px;position: absolute; padding-left: 70px;"><?php p($l->t('Legend')); ?></div>
     </div>
     <table id="tableContainer" style="width:100%; height: 50%;"></table>
 </div>
