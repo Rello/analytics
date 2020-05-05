@@ -1,5 +1,5 @@
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -20,6 +20,14 @@
  * @namespace OCA.Analytics.Filter
  */
 OCA.Analytics.Filter = {
+    optionTextsArray: {
+        'EQ': t('analytics', 'equal to'),
+        'GT': t('analytics', 'greater than'),
+        'LT': t('analytics', 'less than'),
+        'LIKE': t('analytics', 'contains'),
+        'IN': t('analytics', 'list of values'),
+    },
+
     openDrilldownDialog: function () {
         let drilldownRows = '';
         let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
@@ -47,7 +55,7 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + 'Change Drilldown'
+            + t('analytics', 'Change drilldown')
             + '</h2>'
             + '<div class="table" style="display: table;">'
 
@@ -97,20 +105,20 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + 'Add Filter'
+            + t('analytics', 'Add filter')
             + '</h2>'
             + '<div class="table" style="display: table;">'
             + '<div style="display: table-row;">'
             + '<div style="display: table-cell; width: 50px;"></div>'
             + '<div style="display: table-cell; width: 80px;"></div>'
             + '<div style="display: table-cell; width: 100px;">'
-            + '<label for="filterDialogDimension">Filter by</label>'
+            + '<label for="filterDialogDimension">' + t('analytics', 'Filter by') + '</label>'
             + '</div>'
             + '<div style="display: table-cell; width: 100px;">'
-            + '<label for="filterDialogOption">Operator</label>'
+            + '<label for="filterDialogOption">' + t('analytics', 'Operator') + '</label>'
             + '</div>'
             + '<div style="display: table-cell;">'
-            + '<label for="filterDialogValue">Value</label>'
+            + '<label for="filterDialogValue">' + t('analytics', 'Value') + '</label>'
             + '</div>'
             + '</div>'
             + '<div style="display: table-row;">'
@@ -119,7 +127,7 @@ OCA.Analytics.Filter = {
             + '</div>'
             + '<div style="display: table-cell;">'
             + '<select id="filterDialogType" class="checkbox" disabled>'
-            + '<option value="and">and</option>'
+            + '<option value="and">' + t('analytics', 'and') + '</option>'
             + '</select>'
             + '</div>'
             + '<div style="display: table-cell;">'
@@ -147,8 +155,8 @@ OCA.Analytics.Filter = {
         document.getElementById('filterDialogDimension').innerHTML = dimensionSelectOptions;
 
         let optionSelectOptions;
-        for (let i = 0; i < Object.keys(OCA.Analytics.optionTextsArray).length; i++) {
-            optionSelectOptions = optionSelectOptions + '<option value="' + Object.keys(OCA.Analytics.optionTextsArray)[i] + '">' + Object.values(OCA.Analytics.optionTextsArray)[i] + '</option>';
+        for (let i = 0; i < Object.keys(OCA.Analytics.Filter.optionTextsArray).length; i++) {
+            optionSelectOptions = optionSelectOptions + '<option value="' + Object.keys(OCA.Analytics.Filter.optionTextsArray)[i] + '">' + Object.values(OCA.Analytics.Filter.optionTextsArray)[i] + '</option>';
         }
         document.getElementById('filterDialogOption').innerHTML = optionSelectOptions;
 
@@ -182,7 +190,7 @@ OCA.Analytics.Filter = {
         let filters = filterOptions.filter;
         for (let filterDimension of Object.keys(filterOptions.filter)) {
             if (filterOptions.filter[filterDimension].enabled === 'true') {
-                let optionText = OCA.Analytics.optionTextsArray[filterOptions.filter[filterDimension].option];
+                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions.filter[filterDimension].option];
                 let span = document.createElement('span');
                 span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions.filter[filterDimension].value;
                 span.classList.add('filterVisualizationItem');

@@ -1,5 +1,5 @@
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -31,13 +31,6 @@ if (!OCA.Analytics) {
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_LINK: 3,
         initialDocumentTitle: null,
-        optionTextsArray: {
-            'EQ': t('analytics', 'equal to'),
-            'GT': t('analytics', 'greater than'),
-            'LT': t('analytics', 'less than'),
-            'LIKE': t('analytics', 'contains'),
-            'IN': t('analytics', 'list of values'),
-        }
     };
 }
 /**
@@ -348,7 +341,7 @@ OCA.Analytics.Backend = {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
                     document.getElementById('reportSubHeader').style.removeProperty('display');
                 }
-                if (data.options.type === OCA.Analytics.TYPE_INTERNAL_DB) {
+                if (parseInt(data.options.type) === OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('filterDimensions').value = JSON.stringify(data.dimensions);
                     document.getElementById('filterContainer').style.removeProperty('display');
                 }
@@ -402,16 +395,17 @@ OCA.Analytics.Backend = {
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
     document.getElementById('analytics-warning').classList.add('hidden');
+    document.getElementById('filterOptions').value = JSON.stringify({
+        'drilldown': {},
+        'filter': {'dimension1': {}, 'dimension2': {}}
+    })
+
     if (document.getElementById('sharingToken').value === '') {
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-        document.getElementById('filterOptions').value = JSON.stringify({
-            'drilldown': {},
-            'filter': {'dimension1': {}, 'dimension2': {}}
-        })
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
         }

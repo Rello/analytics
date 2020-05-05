@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -9,7 +9,7 @@
  * @copyright 2020 Marcel Scherello
  */
 ?>
-<h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Data Analytics - Advanced Configuration')); ?></h3>
+<h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Analytics - Advanced Configuration')); ?></h3>
 <div id="analytics-content" style="width:100%; padding: 10px" hidden>
     <input type="hidden" name="sharingToken" value="" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
@@ -28,7 +28,7 @@
     <span><?php p($l->t('Please select a report from the navigation')); ?></span>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
-    <h2><?php p($l->t('Data Analytics')); ?></h2>
+    <h2><?php p($l->t('Analytics')); ?></h2>
     <br>
     <h3>Javascript issue</h3>
     <span>If you see this message, please disable AdBlock/uBlock for this domain (only).</span>

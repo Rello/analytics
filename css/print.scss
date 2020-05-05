@@ -7,8 +7,7 @@
     #app-navigation-toggle-custom,
     #tableContainer_filter,
     #tableContainer_length,
-    #tableContainer_paginate,
-    #chartMenuContainer {
+    #tableContainer_paginate{
       display: none !important;
     }
 
@@ -32,6 +31,17 @@
     height: 0px;
     background: none;
   }
+
+.icon-analytics-filter-add,
+ .icon-analytics-drilldown,
+ #chart-legend{
+    display:none;
+}
+
+.filterVisualizationItem {
+    background-image: initial !important;
+    padding-left: 5px !important;
+}
 
   /* Layout */
   @page {

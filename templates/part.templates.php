@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -175,7 +175,7 @@
                                                          placeholder="<?php p($l->t('single value or *')); ?>"></div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell;"><?php p($l->t('Option')); ?></div>
+                <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
                 <div style="display: table-cell;">
                     <select id="sidebarThresholdOption" class="input150">
                         <option value="=" selected><?php p($l->t('= equal')); ?></option>

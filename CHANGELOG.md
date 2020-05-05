@@ -3,8 +3,10 @@
 ## 2.3.0 - 2020-05-xx
 ### Added
 - Enable filters in reports [#41](https://github.com/rello/analytics/issues/41)
+
 ### Changed
 - avoid multiple notifications for same threshold by replacing old ones
+- shorten app name to 'Analytics'
 
 ### Fixed
 - Thresholds not working in table [#39](https://github.com/rello/analytics/issues/39)

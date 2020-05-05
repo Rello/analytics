@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -37,7 +37,7 @@
     </div>
 </div>
 <div id="analytics-intro" style="width:50%; padding: 50px" hidden>
-    <h2><?php p($l->t('Data Analytics')); ?></h2>
+    <h2><?php p($l->t('Analytics')); ?></h2>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
     <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a>
@@ -49,7 +49,7 @@
     <span>-&nbsp;<?php p($l->t('coming soon')); ?></span>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
-    <h2><?php p($l->t('Data Analytics')); ?></h2>
+    <h2><?php p($l->t('Analytics')); ?></h2>
     <br>
     <h3>Javascript issue</h3>
     <span>If you see this message, please disable AdBlock/uBlock for this domain (only).</span>

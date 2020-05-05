@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -44,7 +44,7 @@ class Filter implements \OCP\Activity\IFilter
      */
     public function getName()
     {
-        return $this->l10n->t('Data Analytics');
+        return $this->l10n->t('Analytics');
     }
 
     /**

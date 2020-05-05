@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Analytics
+ * Analytics
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
@@ -27,7 +27,7 @@ Util::addScript('analytics', '3rdParty/cloner');
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
                 <h1 class="header-appname" id="header-appname">
-                    Data Analytics<br>for Nextcloud
+                    Analytics<br>for Nextcloud
                 </h1>
             </a>
         </div>

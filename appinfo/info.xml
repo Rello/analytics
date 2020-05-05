@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>analytics</id>
-    <name>Data Analytics</name>
+    <name>Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
 From data to report. This on premise data warehouse solution provides modular datasources, a realtime or storage backend and flexibile visualization.
@@ -11,7 +11,7 @@ From data to report. This on premise data warehouse solution provides modular da
 - 3rd party*: GitHub Statistics, website grabber, JSON
 - Storage: stream or database
 - Advanced dataloads with scheduling
-- Visualization: charts, tables
+- Visualization: charts, tables, filters
 - Thresholds for alerts and color coding
 - Integration: Files app, Activity, Notifications, Flow
 - Sharing: user*, protected, public
