@@ -49,15 +49,12 @@ class StorageMapper
         $sql->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)));
         $sql->addgroupBy('dataset');
 
+        // derive if a column should be removed from drilldown as by user input
+        // take all possible columns and overwrite with "false" if demanded
         $drilldownColumns = array('dimension1' => 'true', 'dimension2' => 'true');
-        // derive if a column should be removed from drilldown by user input
         if (isset($options['drilldown'])) {
             $drilldownColumns = array_intersect_key($options['drilldown'], $drilldownColumns) + $drilldownColumns;
         }
-
-        // Add the colunns to the select statement
-        // $this->logger->debug('StorageMapper 68: '. json_encode($drilldownColumns));
-        // $this->logger->debug('StorageMapper 69: '. json_encode($options['drilldown']));
         foreach ($drilldownColumns as $key => $value) {
             if ($value !== 'false') {
                 $sql->addSelect($key);
@@ -69,16 +66,15 @@ class StorageMapper
         // value column deeds to be at the last position in the select. So it needs to be after the dynamic selects
         $sql->addSelect($sql->func()->sum('dimension3'));
 
-        // add the where clauses to the select
+        // add the where clauses
         foreach ($options['filter'] as $key => $value) {
-            $columnName = $key;
             if ($value['enabled'] === 'true') {
-                $this->sqlWhere($sql, $columnName, $value['option'], $value['value']);
+                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
             }
         }
 
-        $this->logger->debug('StorageMapper 79: ' . $sql->getSQL());
-        $this->logger->debug('StorageMapper 79: ' . json_encode($sql->getParameters()));
+        //$this->logger->debug('StorageMapper 79: ' . $sql->getSQL());
+        //$this->logger->debug('StorageMapper 79: ' . json_encode($sql->getParameters()));
         $statement = $sql->execute();
         $rows = $statement->fetchAll();
         $statement->closeCursor();
@@ -91,7 +87,7 @@ class StorageMapper
     }
 
     /**
-     * Add where statements to a query builder matching the given notification
+     * Add where statements to a query builder
      *
      * @param IQueryBuilder $sql
      * @param $column
@@ -116,6 +112,10 @@ class StorageMapper
 
     /**
      * delete data
+     * @param int $datasetId
+     * @param $dimension1
+     * @param $dimension2
+     * @return bool
      */
     public function deleteData(int $datasetId, $dimension1, $dimension2)
     {
@@ -147,6 +147,8 @@ class StorageMapper
 
     /**
      * delete all data of a dataset
+     * @param int $datasetId
+     * @return bool
      */
     public function deleteDataByDataset(int $datasetId)
     {

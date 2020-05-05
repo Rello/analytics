@@ -46,21 +46,21 @@ class StorageController extends Controller
      */
     public function read($datasetMetadata, $options)
     {
-        $header = array();
+        // define the available dimensions for filtering of this datasource
+        // this needs to map the technical name to its displayname in the report
         $dimensions = array();
-
         $dimensions['dimension1'] = $datasetMetadata['dimension1'];
         $dimensions['dimension2'] = $datasetMetadata['dimension2'];
-        //array_push($header_all, ['dimension3' => $datasetMetadata['dimension3']]);
 
+        // return the header of the data being transferred according to the current navigational state
+        $header = array();
         if ($options['drilldown']['dimension1'] !== 'false') $header[0] = $datasetMetadata['dimension1'];
         if ($options['drilldown']['dimension2'] !== 'false') $header[1] = $datasetMetadata['dimension2'];
         $header[2] = $datasetMetadata['dimension3'];
+        $header = array_values($header);
 
         $data = $this->StorageMapper->getData($datasetMetadata['id'], $options);
-        $header = array_values($header);
         $data = array_values($data);
-
         foreach ($data as $key => $value) {
             $data[$key] = array_values($value);
         }

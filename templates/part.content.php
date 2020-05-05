@@ -13,8 +13,9 @@
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
-    <h2 id="dataHeader" style="text-align: center;"></h2>
-    <h3 id="dataSubHeader" style="text-align: center; padding-bottom: 30px"></h3>
+    <h2 id="reportHeader"></h2>
+    <h3 id="reportSubHeader" style="display: none"></h3>
+    <div id="reportPlaceholder"></div>
     <div id="filterContainer" style="display: none">
         <div id="drilldownIcon" class="icon-analytics-drilldown"></div>
         <div id="addFilterIcon" class="icon-analytics-filter-add"></div>
@@ -30,7 +31,10 @@
         <div id="chart-legend" class="icon icon-menu"
              style="right: 45px;position: absolute; padding-left: 70px;"><?php p($l->t('Legend')); ?></div>
     </div>
-    <table id="tableContainer" style="width:100%; height: 50%;"></table>
+    <table id="tableContainer"></table>
+    <div id="noDataContainer" style="display: none">
+        <?php p($l->t('No data found')); ?>
+    </div>
 </div>
 <div id="analytics-intro" style="width:50%; padding: 50px" hidden>
     <h2><?php p($l->t('Data Analytics')); ?></h2>
