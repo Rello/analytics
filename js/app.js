@@ -326,7 +326,10 @@ OCA.Analytics.Backend = {
             url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
-        const filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+        let filterOptions = [];
+        if (document.getElementById('sharingToken').value === '') {
+            filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+        }
 
         $.ajax({
             type: 'GET',
@@ -341,7 +344,7 @@ OCA.Analytics.Backend = {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
                     document.getElementById('reportSubHeader').style.removeProperty('display');
                 }
-                if (parseInt(data.options.type) === OCA.Analytics.TYPE_INTERNAL_DB) {
+                if (parseInt(data.options.type) === OCA.Analytics.TYPE_INTERNAL_DB && document.getElementById('sharingToken').value === '') {
                     document.getElementById('filterDimensions').value = JSON.stringify(data.dimensions);
                     document.getElementById('filterContainer').style.removeProperty('display');
                 }
@@ -395,19 +398,19 @@ OCA.Analytics.Backend = {
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
     document.getElementById('analytics-warning').classList.add('hidden');
-    document.getElementById('filterOptions').value = JSON.stringify({
-        'drilldown': {},
-        'filter': {'dimension1': {}, 'dimension2': {}}
-    })
 
     if (document.getElementById('sharingToken').value === '') {
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
-        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
-        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
+            document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+            document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+            document.getElementById('filterOptions').value = JSON.stringify({
+                'drilldown': {},
+                'filter': {'dimension1': {}, 'dimension2': {}}
+            })
         }
     } else {
         OCA.Analytics.Backend.getData();

@@ -66,6 +66,7 @@ class ThresholdController extends Controller
      */
     public function create(int $datasetId, $dimension1, $option, $dimension3, int $severity)
     {
+        $dimension3 = $this->floatvalue($dimension3);
         return $this->ThresholdMapper->createThreshold($datasetId, $dimension1, $dimension3, $option, $severity);
     }
 
@@ -101,7 +102,7 @@ class ThresholdController extends Controller
 
         foreach ($thresholds as $threshold) {
             //$this->logger->error('ThresholdController 104: ' . $threshold['dimension3'].'==='.$threshold['option'].'==='.$dimension3);
-            if ($threshold['dimension1'] === $dimension1 OR $threshold['dimension1'] === '*') {
+            if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
                 if (version_compare($dimension3, $threshold['dimension3'], $threshold['option'])) {
                     $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $datasetId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['dimension3']], $datasetMetadata['user_id']);
                     $result = 'Threshold value met';
@@ -109,5 +110,17 @@ class ThresholdController extends Controller
             }
         }
         return $result;
+    }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        if (is_numeric($val)) {
+            return number_format(floatval($val), 2, '.', '');
+        } else {
+            return false;
+        }
     }
 }

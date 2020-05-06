@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.0 - 2020-05-xx
+## 2.3.0 - 2020-05-06
 ### Added
 - Enable filters in reports [#41](https://github.com/rello/analytics/issues/41)
 
@@ -10,6 +10,7 @@
 
 ### Fixed
 - Thresholds not working in table [#39](https://github.com/rello/analytics/issues/39)
+- Thresholds not accepting commas
 
 ## 2.2.3 - 2020-04-27
 ### Fixed
