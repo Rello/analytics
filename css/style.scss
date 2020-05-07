@@ -41,11 +41,12 @@
 }
 
 #reportPlaceholder {
-    height: 25px;
+    height: 5px;
 }
 
 #filterContainer {
-    height: 25px;
+    width: 99%;
+    height: 20px;
     margin-bottom: 10px;
 }
 
@@ -59,6 +60,18 @@
 #chartMenuContainer {
     height:16px;
     margin-bottom: 60px;
+}
+
+#chartLegend {
+    right: 50px;
+    position: absolute;
+    padding-left: 70px;
+    opacity: 0.5;
+}
+
+#chartLegend:hover {
+    opacity: 1;
+    cursor: pointer;
 }
 
 #tableContainer {
@@ -106,11 +119,13 @@ table.dataTable tbody tr {
 
 .icon-analytics-filter-add {
   @include icon-color('filteradd', 'analytics', $color-black, 1);
-  height: 25px;
-  width: 25px;
+  opacity: 0.5;
+  background-size: 20px;
   display: inline-block;
   margin-left: 10px;
   float: right;
+  height: 22px;
+  width: 22px;
 }
 
 .icon-analytics-filter-remove {
@@ -123,12 +138,19 @@ table.dataTable tbody tr {
 
 .icon-analytics-drilldown {
   @include icon-color('column', 'analytics', $color-black, 1);
-  height: 25px;
-  width: 25px;
   display: inline-block;
-  background-size: 22px;
+  opacity: 0.5;
+  background-size: 18px;
   margin-left: 10px;
   float: right;
+  height: 22px;
+  width: 22px;
+}
+
+.icon-analytics-drilldown:hover,
+.icon-analytics-filter-add:hover {
+    opacity: 1;
+    cursor: pointer;
 }
 
 .filterVisualizationItem {

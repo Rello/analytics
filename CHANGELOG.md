@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1 - 2020-05-07
+### Fixed
+- various css improvements
+
 ## 2.3.0 - 2020-05-06
 ### Added
 - Enable filters in reports [#41](https://github.com/rello/analytics/issues/41)

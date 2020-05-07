@@ -267,7 +267,7 @@ OCA.Analytics.UI = {
             options: chartOptions,
         });
 
-        document.getElementById('chart-legend').addEventListener('click', function () {
+        document.getElementById('chartLegend').addEventListener('click', function () {
             myChart.options.legend.display = !myChart.options.legend.display;
             myChart.update();
         });

@@ -17,8 +17,9 @@
     <h3 id="reportSubHeader" style="display: none"></h3>
     <div id="reportPlaceholder"></div>
     <div id="filterContainer" style="display: none">
-        <div id="drilldownIcon" class="icon-analytics-drilldown"></div>
-        <div id="addFilterIcon" class="icon-analytics-filter-add"></div>
+        <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
+             title="<?php p($l->t('Change drilldown')); ?>"></div>
+        <div id="addFilterIcon" class="icon-analytics-filter-add" title="<?php p($l->t('Add filter')); ?>"></div>
         <input id="filterOptions" type="hidden" style="display: inline-block; float: right;">
         <input id="filterDimensions" type="hidden" style="display: inline-block; float: right;">
         <div id="filterVisualisation" style="display: inline-block; float: right;">
@@ -28,8 +29,7 @@
         <canvas id="myChart"></canvas>
     </div>
     <div id="chartMenuContainer">
-        <div id="chart-legend" class="icon icon-menu"
-             style="right: 45px;position: absolute; padding-left: 70px;"><?php p($l->t('Legend')); ?></div>
+        <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
     </div>
     <table id="tableContainer"></table>
     <div id="noDataContainer" style="display: none">

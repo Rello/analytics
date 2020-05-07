@@ -92,7 +92,9 @@
     "daily": "täglich",
     "hourly": "stündlich",
     "Legend": "Legende",
-    "No data found": "Keine Daten gefunden"
+    "No data found": "Keine Daten gefunden",
+    "Change drilldown": "Aufriss ändern",
+    "Add filter": "Filter hinzufügen"
   },
   "pluralForm": ""
 }

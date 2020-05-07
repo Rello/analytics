@@ -187,7 +187,6 @@ OCA.Analytics.Filter = {
         document.getElementById('filterVisualisation').innerHTML = '';
         let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
         let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
-        let filters = filterOptions.filter;
         for (let filterDimension of Object.keys(filterOptions.filter)) {
             if (filterOptions.filter[filterDimension].enabled === 'true') {
                 let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions.filter[filterDimension].option];
