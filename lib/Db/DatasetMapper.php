@@ -21,6 +21,7 @@ class DatasetMapper
     private $l10n;
     private $db;
     private $logger;
+    const TABLE_NAME = 'analytics_dataset';
 
     public function __construct(
         $userId,
@@ -33,20 +34,28 @@ class DatasetMapper
         $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
+        self::TABLE_NAME;
     }
 
     /**
      * create dataset
+     * @return int
      */
     public function createDataset()
     {
-        $SQL = 'INSERT INTO `*PREFIX*analytics_dataset` (`user_id`,`name`,`type`,`parent`,`dimension1`,`dimension2`,`dimension3`) VALUES(?,?,?,?,?,?,?)';
-        //$this->logger->error($SQL);
-
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $this->l10n->t('New'), 2, 0, $this->l10n->t('Object'), $this->l10n->t('Date'), $this->l10n->t('Value')));
-        $insertid = $this->db->lastInsertId('*PREFIX*analytics_dataset');
-        return $insertid;
+        $sql = $this->db->getQueryBuilder();
+        $sql->insert(self::TABLE_NAME)
+            ->values([
+                'user_id' => $sql->createNamedParameter($this->userId),
+                'name' => $sql->createNamedParameter($this->l10n->t('New')),
+                'type' => $sql->createNamedParameter(2),
+                'parent' => $sql->createNamedParameter(0),
+                'dimension1' => $sql->createNamedParameter($this->l10n->t('Object')),
+                'dimension2' => $sql->createNamedParameter($this->l10n->t('Date')),
+                'dimension3' => $sql->createNamedParameter($this->l10n->t('Value')),
+            ]);
+        $sql->execute();
+        return (int)$this->db->lastInsertId(self::TABLE_NAME);
     }
 
     /**
@@ -59,6 +68,7 @@ class DatasetMapper
      * @param $link
      * @param $visualization
      * @param $chart
+     * @param $chartoptions
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
@@ -66,66 +76,103 @@ class DatasetMapper
      */
     public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dimension1, $dimension2, $dimension3)
     {
-        $SQL = 'UPDATE `*PREFIX*analytics_dataset` SET `name`= ?, `subheader`= ?, `type`= ?, `link`= ?, `visualization`= ?, `chart`= ?, `chartoptions`= ?, `parent`= ?, `dimension1` = ?, `dimension2` = ?, `dimension3` = ? WHERE `user_id` = ? AND `id` = ?';
-        $stmt = $this->db->prepare($SQL);
         $name = $this->truncate($name, 64);
-        $stmt->execute(array($name, $subheader, $type, $link, $visualization, $chart, $chartoptions, $parent, $dimension1, $dimension2, $dimension3, $this->userId, $id));
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('name', $sql->createNamedParameter($name))
+            ->set('subheader', $sql->createNamedParameter($subheader))
+            ->set('type', $sql->createNamedParameter($type))
+            ->set('link', $sql->createNamedParameter($link))
+            ->set('visualization', $sql->createNamedParameter($visualization))
+            ->set('chart', $sql->createNamedParameter($chart))
+            ->set('chartoptions', $sql->createNamedParameter($chartoptions))
+            ->set('parent', $sql->createNamedParameter($parent))
+            ->set('dimension1', $sql->createNamedParameter($dimension1))
+            ->set('dimension2', $sql->createNamedParameter($dimension2))
+            ->set('dimension3', $sql->createNamedParameter($dimension3))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->execute();
         return true;
     }
 
     /**
      * delete dataset
      * @param $id
-     * @return
+     * @return bool
      */
     public function deleteDataset($id)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_dataset` WHERE `user_id` = ? AND `id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $id));
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->execute();
         return true;
     }
 
     /**
      * get datasets
+     * @return array
      */
     public function getDatasets()
     {
-        $SQL = 'SELECT id, name, type, parent FROM `*PREFIX*analytics_dataset` WHERE  `user_id` = ? ORDER BY `parent` ASC, `name` ASC';
-        //$this->logger->error($SQL);
-
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId));
-        return $stmt->fetchAll();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->addSelect('name')
+            ->addSelect('type')
+            ->addSelect('parent')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->orderBy('parent', 'ASC')
+            ->addOrderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
      * get datasets
      * @param int $id
      * @param string $user_id
-     * @return
+     * @return array
      */
     public function getOwnDataset($id, string $user_id = null)
     {
-        $SQL = 'SELECT * FROM `*PREFIX*analytics_dataset` WHERE `id` = ? AND `user_id` = ?';
-        //$this->logger->error($SQL);
-        $stmt = $this->db->prepare($SQL);
         if ($user_id) $this->userId = $user_id;
-        $stmt->execute(array($id, $this->userId));
-        return $stmt->fetch();
+
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->orderBy('parent', 'ASC')
+            ->addOrderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
      * get datasets
      * @param $id
-     * @return
+     * @return array
      */
     public function getDatasetOptions($id)
     {
-        $SQL = 'SELECT `name`, `visualization`, `chart`, `user_id` FROM `*PREFIX*analytics_dataset` WHERE `id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($id));
-        return $stmt->fetch();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('name')
+            ->addSelect('visualization')
+            ->addSelect('chart')
+            ->addSelect('user_id')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
