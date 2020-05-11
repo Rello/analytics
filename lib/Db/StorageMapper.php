@@ -22,6 +22,7 @@ class StorageMapper
     private $l10n;
     private $db;
     private $logger;
+    const TABLE_NAME = 'analytics_facts';
 
     public function __construct(
         $userId,
@@ -34,6 +35,7 @@ class StorageMapper
         $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
+        self::TABLE_NAME;
     }
 
     /**
@@ -45,9 +47,9 @@ class StorageMapper
     public function getData(int $dataset, $options)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->from('*PREFIX*analytics_facts');
-        $sql->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)));
-        $sql->addgroupBy('dataset');
+        $sql->from(self::TABLE_NAME)
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)))
+            ->addgroupBy('dataset');
 
         // derive if a column should be removed from drilldown as by user input
         // take all possible columns and overwrite with "false" if demanded
@@ -57,9 +59,9 @@ class StorageMapper
         }
         foreach ($drilldownColumns as $key => $value) {
             if ($value !== 'false') {
-                $sql->addSelect($key);
-                $sql->addGroupBy($key);
-                $sql->addOrderBy($key, 'ASC');
+                $sql->addSelect($key)
+                    ->addGroupBy($key)
+                    ->addOrderBy($key, 'ASC');
             }
         }
 
@@ -121,9 +123,15 @@ class StorageMapper
     {
         $dimension1 = str_replace('*', '%', $dimension1);
         $dimension2 = str_replace('*', '%', $dimension2);
-        $SQL = 'DELETE FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` like ? AND `dimension2` like ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
+
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->like('dimension1', $sql->createNamedParameter($dimension1)))
+            ->andWhere($sql->expr()->like('dimension2', $sql->createNamedParameter($dimension2)));
+        $sql->execute();
+
         return true;
     }
 
@@ -139,10 +147,19 @@ class StorageMapper
     {
         $dimension1 = str_replace('*', '%', $dimension1);
         $dimension2 = str_replace('*', '%', $dimension2);
-        $SQL = 'select count(*) as `count` FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` like ? AND `dimension2` like ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
-        return $stmt->fetch();
+
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->addSelect($sql->func()->count('*'))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->like('dimension1', $sql->createNamedParameter($dimension1)))
+            ->andWhere($sql->expr()->like('dimension2', $sql->createNamedParameter($dimension2)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -152,9 +169,11 @@ class StorageMapper
      */
     public function deleteDataByDataset(int $datasetId)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $datasetId));
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $sql->execute();
         return true;
     }
 
@@ -172,20 +191,39 @@ class StorageMapper
         $dimension1 = str_replace('*', '', $dimension1);
         $dimension2 = str_replace('*', '', $dimension2);
         if ($user_id) $this->userId = $user_id;
-        $SQL = 'SELECT `id` FROM `*PREFIX*analytics_facts` WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2));
-        $row = $stmt->fetch();
-        if ($row) {
-            $SQL = 'UPDATE `*PREFIX*analytics_facts` SET `dimension3` = ? WHERE `user_id` = ? AND `dataset` = ? AND `dimension1` = ? AND `dimension2` = ?';
-            $stmt = $this->db->prepare($SQL);
-            $stmt->execute(array($dimension3, $this->userId, $datasetId, $dimension1, $dimension2));
-            //$stmt->fetch();
+
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->addSelect('id')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
+            ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+
+        if ($result) {
+            $sql = $this->db->getQueryBuilder();
+            $sql->update(self::TABLE_NAME)
+                ->set('dimension3', $sql->createNamedParameter($dimension3))
+                ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+                ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+                ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
+                ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
+            $sql->execute();
             return 'update';
         } else {
-            $SQL = 'INSERT INTO `*PREFIX*analytics_facts` (`user_id`,`dataset`,`dimension1`,`dimension2`,`dimension3`) VALUES(?,?,?,?,?)';
-            $stmt = $this->db->prepare($SQL);
-            $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension2, $dimension3));
+            $sql = $this->db->getQueryBuilder();
+            $sql->insert(self::TABLE_NAME)
+                ->values([
+                    'user_id' => $sql->createNamedParameter($this->userId),
+                    'dataset' => $sql->createNamedParameter($datasetId),
+                    'dimension1' => $sql->createNamedParameter($dimension1),
+                    'dimension2' => $sql->createNamedParameter($dimension2),
+                    'dimension3' => $sql->createNamedParameter($dimension3),
+                ]);
+            $sql->execute();
             return 'insert';
         }
     }
