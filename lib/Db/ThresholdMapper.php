@@ -21,6 +21,7 @@ class ThresholdMapper
     private $l10n;
     private $db;
     private $logger;
+    const TABLE_NAME = 'analytics_threshold';
 
     public function __construct(
         $userId,
@@ -33,51 +34,73 @@ class ThresholdMapper
         $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
+        self::TABLE_NAME;
     }
 
     public function createThreshold($datasetId, $dimension1, $dimension3, $option, $serverity)
     {
-        $SQL = 'INSERT INTO `*PREFIX*analytics_threshold` (`user_id`,`dataset`,`dimension1`,`dimension3`,`option`,`severity`) VALUES(?,?,?,?,?,?)';
-        //$this->logger->error($SQL);
-
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $datasetId, $dimension1, $dimension3, $option, $serverity));
-        $insertid = $this->db->lastInsertId('*PREFIX*analytics_threashold');
-        return $insertid;
+        $sql = $this->db->getQueryBuilder();
+        $sql->insert(self::TABLE_NAME)
+            ->values([
+                'user_id' => $sql->createNamedParameter($this->userId),
+                'dataset' => $sql->createNamedParameter($datasetId),
+                'dimension1' => $sql->createNamedParameter($dimension1),
+                'dimension3' => $sql->createNamedParameter($dimension3),
+                'option' => $sql->createNamedParameter($option),
+                'severity' => $sql->createNamedParameter($serverity),
+            ]);
+        $sql->execute();
+        return (int)$this->db->lastInsertId(self::TABLE_NAME);
     }
 
     public function getThresholdsByDataset($datasetId)
     {
-        $SQL = 'SELECT `id`, `dimension1`, `dimension2`, `dimension3`, `option`, `severity` FROM `*PREFIX*analytics_threshold` WHERE `dataset` = ?';
-        //$this->logger->error($SQL);
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($datasetId));
-        return $stmt->fetchAll();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->addSelect('dimension1')
+            ->addSelect('dimension2')
+            ->addSelect('dimension3')
+            ->addSelect('option')
+            ->addSelect('severity')
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
     public function getSevOneThresholdsByDataset($datasetId)
     {
-        $SQL = 'SELECT * FROM `*PREFIX*analytics_threshold` WHERE `dataset` = ? AND `severity` = 1';
-        //$this->logger->error($SQL);
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($datasetId));
-        return $stmt->fetchAll();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->eq('severity', $sql->createNamedParameter('1')));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
     public function deleteThreshold($thresholdId)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_threshold` WHERE `id` = ? AND `user_id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$thresholdId, $this->userId]);
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($thresholdId)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
+        $sql->execute();
         return true;
     }
 
     public function deleteThresholdByDataset($datasetId)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_threshold` WHERE `dataset` = ? AND `user_id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$datasetId, $this->userId]);
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
+        $sql->execute();
         return true;
     }
 }
-
