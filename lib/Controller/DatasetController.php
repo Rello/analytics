@@ -69,6 +69,11 @@ class DatasetController extends Controller
             $key = array_search($dataload['dataset'], array_column($ownDatasets, 'id'));
             //$this->logger->debug($key);
             if ($key !== '') {
+                if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
+                    $dataload['schedules'] = 1;
+                } else {
+                    $dataload['schedules'] = 0;
+                }
                 $ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
                 $ownDatasets[$key]['schedules'] = $dataload['schedules'];
             }

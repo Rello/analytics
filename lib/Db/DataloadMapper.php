@@ -21,6 +21,7 @@ class DataloadMapper
     private $l10n;
     private $db;
     private $logger;
+    const TABLE_NAME = 'analytics_dataload';
 
     public function __construct(
         $userId,
@@ -33,6 +34,7 @@ class DataloadMapper
         $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
+        self::TABLE_NAME;
     }
 
     /**
@@ -45,10 +47,17 @@ class DataloadMapper
      */
     public function create(int $datasetId, int $datasourceId)
     {
-        $SQL = 'INSERT INTO `*PREFIX*analytics_dataload` (`user_id`,`name`,`dataset`,`datasource`,`option`) VALUES(?,?,?,?,?)';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, 'New', $datasetId, $datasourceId, '{}'));
-        return $this->db->lastInsertId('*PREFIX*analytics_dataload');
+        $sql = $this->db->getQueryBuilder();
+        $sql->insert(self::TABLE_NAME)
+            ->values([
+                'user_id' => $sql->createNamedParameter($this->userId),
+                'name' => $sql->createNamedParameter('New'),
+                'dataset' => $sql->createNamedParameter($datasetId),
+                'datasource' => $sql->createNamedParameter($datasourceId),
+                'option' => $sql->createNamedParameter('{}'),
+            ]);
+        $sql->execute();
+        return (int)$this->db->lastInsertId(self::TABLE_NAME);
     }
 
     /**
@@ -60,24 +69,30 @@ class DataloadMapper
      */
     public function read(int $datasetId)
     {
-        $SQL = 'SELECT * FROM `*PREFIX*analytics_dataload` WHERE `user_id` = ? AND `dataset` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId, $datasetId));
-        return $stmt->fetchAll();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
-    /**
-     * get all dataload & schedule metadata
-     *
-     * @NoAdminRequired
-     * @return array
-     */
     public function getAllDataloadMetadata()
     {
-        $SQL = 'SELECT `dataset`, COUNT(id) AS `dataloads`, COUNT(NULLIF( schedule, \'\' )) AS `schedules` FROM `*PREFIX*analytics_dataload` WHERE `user_id` = ? GROUP BY dataset';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($this->userId));
-        return $stmt->fetchAll();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('dataset')
+            ->selectAlias($sql->func()->count('id'), 'dataloads')
+            ->selectAlias($sql->func()->max('schedule'), 'schedules')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->addgroupBy('dataset');
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
@@ -89,10 +104,14 @@ class DataloadMapper
      */
     public function getDataloadBySchedule($schedule)
     {
-        $SQL = 'SELECT `id` FROM `*PREFIX*analytics_dataload` WHERE `schedule` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($schedule));
-        return $stmt->fetchAll();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->where($sql->expr()->eq('schedule', $sql->createNamedParameter($schedule)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
@@ -107,10 +126,15 @@ class DataloadMapper
      */
     public function update(int $dataloadId, $name, $option, $schedule)
     {
-        $SQL = 'UPDATE `*PREFIX*analytics_dataload` SET `name`= ?, `option`= ?, `schedule` = ? WHERE `user_id` = ? AND `id` = ?';
-        $stmt = $this->db->prepare($SQL);
         $name = $this->truncate($name, 64);
-        $stmt->execute(array($name, $option, $schedule, $this->userId, $dataloadId));
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('name', $sql->createNamedParameter($name))
+            ->set('option', $sql->createNamedParameter($option))
+            ->set('schedule', $sql->createNamedParameter($schedule))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
+        $sql->execute();
         return true;
     }
 
@@ -123,9 +147,11 @@ class DataloadMapper
      */
     public function delete(int $dataloadId)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_dataload` WHERE `id` = ? AND `user_id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$dataloadId, $this->userId]);
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
+        $sql->execute();
         return true;
     }
 
@@ -133,14 +159,16 @@ class DataloadMapper
      * delete a dataload
      *
      * @NoAdminRequired
-     * @param int $dataloadId
+     * @param int $datasetId
      * @return bool
      */
     public function deleteDataloadByDataset(int $datasetId)
     {
-        $SQL = 'DELETE FROM `*PREFIX*analytics_dataload` WHERE `dataset` = ? AND `user_id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute([$datasetId, $this->userId]);
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $sql->execute();
         return true;
     }
 
@@ -151,10 +179,14 @@ class DataloadMapper
      */
     public function getDataloadById(int $dataloadId)
     {
-        $SQL = 'SELECT * FROM `*PREFIX*analytics_dataload` WHERE `id` = ?';
-        $stmt = $this->db->prepare($SQL);
-        $stmt->execute(array($dataloadId));
-        return $stmt->fetch();
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
