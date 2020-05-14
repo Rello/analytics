@@ -117,7 +117,11 @@ class ShareController extends Controller
      */
     public function read($datasetId)
     {
-        return new DataResponse($this->ShareMapper->getShares($datasetId));
+        $shares = $this->ShareMapper->getShares($datasetId);
+        foreach ($shares as &$share) {
+            $share['pass'] = $share['pass'] !== null;
+        }
+        return new DataResponse($shares);
     }
 
     /**

@@ -69,9 +69,11 @@ class StorageMapper
         $sql->addSelect($sql->func()->sum('dimension3'));
 
         // add the where clauses
-        foreach ($options['filter'] as $key => $value) {
-            if ($value['enabled'] === 'true') {
-                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
+        if ($options['filter']) {
+            foreach ($options['filter'] as $key => $value) {
+                if ($value['enabled'] === 'true') {
+                    $this->sqlWhere($sql, $key, $value['option'], $value['value']);
+                }
             }
         }
 
