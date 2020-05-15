@@ -307,6 +307,86 @@ OCA.Analytics.UI = {
         } else {
             OC.Notification.showTemporary(message);
         }
+    },
+
+    whatsNewSuccess: function (data, statusText, xhr, dismissOptions) {
+        console.debug('querying Whats New data was successful: ' + statusText)
+        console.debug(data)
+
+        if (xhr.status !== 200) {
+            return
+        }
+
+        let item, menuItem, text, icon
+
+        const div = document.createElement('div')
+        div.classList.add('popovermenu', 'open', 'whatsNewPopover', 'menu-left')
+
+        const list = document.createElement('ul')
+
+        // header
+        item = document.createElement('li')
+        menuItem = document.createElement('span')
+        menuItem.className = 'menuitem'
+
+        text = document.createElement('span')
+        text.innerText = t('core', 'New in') + ' ' + data['product']
+        text.className = 'caption'
+        menuItem.appendChild(text)
+
+        icon = document.createElement('span')
+        icon.className = 'icon-close'
+        icon.onclick = function () {
+            OCA.Analytics.Backend.whatsnewDismiss(data['version'])
+        }
+        menuItem.appendChild(icon)
+
+        item.appendChild(menuItem)
+        list.appendChild(item)
+
+        // Highlights
+        for (const i in data['whatsNew']['regular']) {
+            const whatsNewTextItem = data['whatsNew']['regular'][i]
+            item = document.createElement('li')
+
+            menuItem = document.createElement('span')
+            menuItem.className = 'menuitem'
+
+            icon = document.createElement('span')
+            icon.className = 'icon-checkmark'
+            menuItem.appendChild(icon)
+
+            text = document.createElement('p')
+            text.innerHTML = _.escape(whatsNewTextItem)
+            menuItem.appendChild(text)
+
+            item.appendChild(menuItem)
+            list.appendChild(item)
+        }
+
+        // Changelog URL
+        if (!_.isUndefined(data['changelogURL'])) {
+            item = document.createElement('li')
+
+            menuItem = document.createElement('a')
+            menuItem.href = data['changelogURL']
+            menuItem.rel = 'noreferrer noopener'
+            menuItem.target = '_blank'
+
+            icon = document.createElement('span')
+            icon.className = 'icon-link'
+            menuItem.appendChild(icon)
+
+            text = document.createElement('span')
+            text.innerText = t('core', 'View changelog')
+            menuItem.appendChild(text)
+
+            item.appendChild(menuItem)
+            list.appendChild(item)
+        }
+
+        div.appendChild(list)
+        document.body.appendChild(div)
     }
 };
 
@@ -393,6 +473,27 @@ OCA.Analytics.Backend = {
             }
         });
     },
+
+    whatsnew: function (options) {
+        options = options || {}
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/analytics/whatsnew'),
+            data: {'format': 'json'},
+            success: options.success || function (data, statusText, xhr) {
+                OCA.Analytics.UI.whatsNewSuccess(data, statusText, xhr)
+            },
+        });
+    },
+
+    whatsnewDismiss: function dismiss(version) {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/whatsnew'),
+            data: {version: encodeURIComponent(version)}
+        })
+        $('.whatsNewPopover').remove()
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -400,6 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('analytics-warning').classList.add('hidden');
 
     if (document.getElementById('sharingToken').value === '') {
+        OCA.Analytics.Backend.whatsnew();
         document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
         OCA.Analytics.Core.initApplication();
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
