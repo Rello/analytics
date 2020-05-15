@@ -309,10 +309,7 @@ OCA.Analytics.UI = {
         }
     },
 
-    whatsNewSuccess: function (data, statusText, xhr, dismissOptions) {
-        console.debug('querying Whats New data was successful: ' + statusText)
-        console.debug(data)
-
+    whatsNewSuccess: function (data, statusText, xhr) {
         if (xhr.status !== 200) {
             return
         }
