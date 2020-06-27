@@ -107,8 +107,7 @@ class OutputController extends Controller
         $thresholds = $this->ThresholdController->read($datasetMetadata['id']);
         $result['thresholds'] = $thresholds;
 
-        unset($datasetMetadata['id']
-            , $datasetMetadata['parent']
+        unset($datasetMetadata['parent']
             , $datasetMetadata['user_id']
             , $datasetMetadata['link']
             , $datasetMetadata['dimension1']

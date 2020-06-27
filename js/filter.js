@@ -49,7 +49,7 @@ OCA.Analytics.Filter = {
                 + '</div>';
         }
 
-        $('body').append(
+        document.body.insertAdjacentHTML('beforeend',
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
@@ -99,7 +99,7 @@ OCA.Analytics.Filter = {
     },
 
     openFilterDialog: function () {
-        $('body').append(
+        document.body.insertAdjacentHTML('beforeend',
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
@@ -209,8 +209,152 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
+    checkOption: function (array, index, field, check, defaultChartType) {
+        if (Array.isArray(array) && array.length) {
+            if (field in array[index]) {
+                return array[index][field] === check ? 'selected' : '';
+            } else if (check === defaultChartType) {
+                return 'selected';
+            } else {
+                return '';
+            }
+        } else if (check === defaultChartType) {
+            return 'selected';
+        } else {
+            return '';
+        }
+    },
+
+    openChartOptionsDialog: function () {
+        let drilldownRows = '';
+        let dataOptions;
+        try {
+            dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+        } catch (e) {
+            dataOptions = '';
+        }
+        let distinctCategories = OCA.Analytics.dataDistinctCategories;
+
+        // flexible mapping depending on type requiered by the used chart library
+        let chartTypeMapping = {
+            'datetime': 'line',
+            'column': 'bar',
+            'area': 'line',
+            'line': 'line',
+            'doughnut': 'doughnut'
+        };
+        let defaultChartType = chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+
+        for (let i = 0; i < Object.keys(distinctCategories).length; i++) {
+            drilldownRows = drilldownRows + '<div style="display: table-row;">'
+                + '<div style="display: table-cell;">'
+                + Object.values(distinctCategories)[i]
+                + '</div>'
+                + '<div style="display: table-cell;">'
+                + '<select id="optionsYAxis' + [i] + '" name="optionsYAxis">'
+                + '<option value="primary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') + '>Left</option>'
+                + '<option value="secondary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') + '>Right</option>'
+                + '</select>'
+                + '</div>'
+                + '<div style="display: table-cell;">'
+                + '<select id="optionsChartType' + [i] + '" name="optionsChartType">'
+                + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>Line</option>'
+                + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>Bar</option>'
+                + '</select>'
+                + '</div>'
+                + '</div>';
+        }
+
+        document.body.insertAdjacentHTML('beforeend',
+            '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
+            + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
+            + '<div id="analytics_dialog">'
+            + '<a class="oc-dialog-close" id="btnClose"></a>'
+            + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
+            + t('analytics', 'Change Chart Options')
+            + '</h2>'
+            + '<div class="table" style="display: table;">'
+
+            + '<div style="display: table-row;">'
+            + '<div style="display: table-cell; width: 150px;">Dataseries'
+            + '</div>'
+            + '<div style="display: table-cell; width: 150px;">Y-Axis'
+            + '</div>'
+            + '<div style="display: table-cell; width: 150px;">Type'
+            + '</div>'
+            + '</div>'
+            + drilldownRows
+            + '</div>'
+            + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
+            + '<a class="button primary" id="drilldownDialogGo">' + t('analytics', 'OK') + '</a>'
+            + '<a class="button primary" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '</div>'
+        );
+
+        document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
+        document.getElementById("drilldownDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
+        document.getElementById("drilldownDialogGo").addEventListener("click", OCA.Analytics.Filter.processChartOptionsDialog);
+    },
+
+    processChartOptionsDialog: function () {
+        let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+        let userDatasetOptions = [];
+        let nonDefaultValues = false;
+        dataOptions === '' ? dataOptions = [] : dataOptions;
+
+        // flexible mapping depending on type requiered by the used chart library
+        let chartTypeMapping = {
+            'datetime': 'line',
+            'column': 'bar',
+            'area': 'line',
+            'line': 'line',
+            'doughnut': 'doughnut'
+        };
+        let defaultChartType = chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+
+        let optionsYAxis = document.getElementsByName('optionsYAxis')
+        let optionsChartType = document.getElementsByName('optionsChartType')
+        for (let i = 0; i < optionsYAxis.length; i++) {
+            if (optionsYAxis[i].value !== 'primary' || optionsChartType[i].value !== defaultChartType) {
+                nonDefaultValues = true;
+            }
+            userDatasetOptions.push({yAxisID: optionsYAxis[i].value, type: optionsChartType[i].value});
+        }
+
+        if (nonDefaultValues === true) {
+            try {
+                dataOptions = cloner.deep.merge(JSON.parse(dataOptions), userDatasetOptions);
+            } catch (e) {
+                dataOptions = userDatasetOptions;
+            }
+        } else {
+            dataOptions = '';
+        }
+
+        OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
+        OCA.Analytics.Filter.Backend.updateDataset();
+        OCA.Analytics.Filter.close();
+    },
+
     close: function () {
         document.getElementById('analytics_dialog_container').remove();
         document.getElementById('analytics_dialog_overlay').remove();
+    },
+};
+
+OCA.Analytics.Filter.Backend = {
+    updateDataset: function () {
+        const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            data: {
+                'chartoptions': OCA.Analytics.currentReportData.options.chartoptions !== '' ? JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions) : '',
+                'dataoptions': OCA.Analytics.currentReportData.options.dataoptions !== '' ? JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions) : '',
+            },
+            success: function () {
+                OCA.Analytics.Backend.getData();
+            }
+        });
     },
 };

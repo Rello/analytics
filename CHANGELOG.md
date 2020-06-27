@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.4.0 - 2020-05-xx
+### Added
+- WhatsNew popup [#43](https://github.com/rello/analytics/issues/43)
+
+### Changed
+- migration to QueryBuilder
+- migration from database.xml to /Migration
+- cleanup notification messages
+
 ## 2.3.1 - 2020-05-07
 ### Fixed
 - various css improvements

@@ -19,6 +19,8 @@
     <div id="filterContainer" style="display: none">
         <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
              title="<?php p($l->t('Change drilldown')); ?>"></div>
+        <div id="optionsIcon" class="icon-analytics-options has-tooltip"
+             title="<?php p($l->t('Change chart options')); ?>"></div>
         <div id="addFilterIcon" class="icon-analytics-filter-add" title="<?php p($l->t('Add filter')); ?>"></div>
         <input id="filterOptions" type="hidden" style="display: inline-block; float: right;">
         <input id="filterDimensions" type="hidden" style="display: inline-block; float: right;">

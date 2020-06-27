@@ -31,6 +31,8 @@ if (!OCA.Analytics) {
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_LINK: 3,
         initialDocumentTitle: null,
+        dataDistinctCategories: {},
+        currentReportData: {},
     };
 }
 /**
@@ -49,6 +51,18 @@ OCA.Analytics.Core = {
         } else {
             OCA.Analytics.Navigation.init();
         }
+    },
+
+    getDistinctValues: function (array) {
+        let unique = [];
+        let distinct = [];
+        for (let i = 0; i < array.length; i++) {
+            if (!unique[array[i][0]]) {
+                distinct.push(array[i][0]);
+                unique[array[i][0]] = 1;
+            }
+        }
+        return distinct;
     },
 };
 
@@ -170,16 +184,26 @@ OCA.Analytics.UI = {
             responsive: true,
             scales: {
                 yAxes: [{
+                    id: 'primary',
+                    stacked: false,
+                    position: 'left',
+                    display: true,
+                    gridLines: {
+                        display: true,
+                    },
                     ticks: {
                         callback: function (value, index, values) {
                             return value.toLocaleString();
                         },
                     },
+                }, {
+                    id: 'secondary',
                     stacked: false,
-                    gridLines: {
-                        display: true,
-                    },
+                    position: 'right',
                     display: true,
+                    gridLines: {
+                        display: false,
+                    },
                 }],
                 xAxes: [{
                     type: 'category',
@@ -247,15 +271,30 @@ OCA.Analytics.UI = {
             chartOptions.scales.xAxes[0].display = false;
             chartOptions.scales.yAxes[0].display = false;
             chartOptions.scales.yAxes[0].gridLines.display = false;
+            chartOptions.scales.yAxes[1].display = false;
+            chartOptions.scales.yAxes[1].gridLines.display = false;
             chartOptions.circumference = Math.PI;
             chartOptions.rotation = -Math.PI;
             chartOptions.legend.display = true;
         }
 
-        //'{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
-        var userOptions = jsondata.options.chartoptions;
-        if (userOptions !== '' && userOptions !== null) {
-            cloner.deep.merge(chartOptions, JSON.parse(userOptions));
+        // the user can add/overwrite chart options
+        // the user can put the options in array-format into the report definition
+        // these are merged with the standard report settings
+        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
+        // e.g. add a secondary y-axis '{"scales": {"yAxes": [{},{"id":"B","position":"right"}]}}'
+        let userChartOptions = jsondata.options.chartoptions;
+        if (userChartOptions !== '' && userChartOptions !== null) {
+            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
+        }
+
+        // the user can modify dataset/series settings
+        // these are merged with the data array coming from the backend
+        // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
+        //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
+        let userDatasetOptions = jsondata.options.dataoptions;
+        if (userDatasetOptions !== '' && userDatasetOptions !== null) {
+            datasets = cloner.deep.merge(JSON.parse(userDatasetOptions), datasets);
         }
 
         let myChart = new Chart(ctx, {
@@ -415,6 +454,8 @@ OCA.Analytics.Backend = {
                 'options': filterOptions,
             },
             success: function (data) {
+                OCA.Analytics.currentReportData = data;
+
                 document.getElementById('reportHeader').innerText = data.options.name;
 
                 if (data.options.subheader !== '') {
@@ -427,6 +468,9 @@ OCA.Analytics.Backend = {
                 }
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata') {
+
+                    OCA.Analytics.dataDistinctCategories = OCA.Analytics.Core.getDistinctValues(data.data);
+
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {
                         OCA.Analytics.UI.buildChart(data);
@@ -506,6 +550,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+            document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
             document.getElementById('filterOptions').value = JSON.stringify({
                 'drilldown': {},
                 'filter': {'dimension1': {}, 'dimension2': {}}

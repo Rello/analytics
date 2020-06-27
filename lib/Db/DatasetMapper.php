@@ -69,12 +69,13 @@ class DatasetMapper
      * @param $visualization
      * @param $chart
      * @param $chartoptions
+     * @param $dataoptions
      * @param $dimension1
      * @param $dimension2
      * @param $dimension3
      * @return bool
      */
-    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dimension1, $dimension2, $dimension3)
+    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $dimension3)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
@@ -86,10 +87,40 @@ class DatasetMapper
             ->set('visualization', $sql->createNamedParameter($visualization))
             ->set('chart', $sql->createNamedParameter($chart))
             ->set('chartoptions', $sql->createNamedParameter($chartoptions))
+            ->set('dataoptions', $sql->createNamedParameter($dataoptions))
             ->set('parent', $sql->createNamedParameter($parent))
             ->set('dimension1', $sql->createNamedParameter($dimension1))
             ->set('dimension2', $sql->createNamedParameter($dimension2))
             ->set('dimension3', $sql->createNamedParameter($dimension3))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->execute();
+        return true;
+    }
+
+    /**
+     * update dataset
+     * @param $id
+     * @param $name
+     * @param $subheader
+     * @param $parent
+     * @param $type
+     * @param $link
+     * @param $visualization
+     * @param $chart
+     * @param $chartoptions
+     * @param $dataoptions
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
+     * @return bool
+     */
+    public function updateDatasetOptions($id, $chartoptions, $dataoptions)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('chartoptions', $sql->createNamedParameter($chartoptions))
+            ->set('dataoptions', $sql->createNamedParameter($dataoptions))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->execute();

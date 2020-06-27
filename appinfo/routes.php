@@ -21,6 +21,7 @@ return [
         ['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
         ['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
+        ['name' => 'dataset#updateOptions', 'url' => '/dataset/{datasetId}', 'verb' => 'POST'],
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
 
         // Data Output
