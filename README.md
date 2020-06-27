@@ -27,3 +27,7 @@ From data to report. This on premise data warehouse solution provides modular da
 
 ## Maintainers
 - [Marcel Scherello](https://github.com/rello) (author, project leader)
+
+## Support
+Thank you to PhpStorm from [JetBrains](https://www.jetbrains.com/?from=AudioPlayerforNextcloudandownCloud) <br>
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/jetbrains.svg" alt="Main" width="100" title="Analytics">
