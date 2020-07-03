@@ -101,18 +101,26 @@ class DatasetMapper
     /**
      * update  dataset
      * @param $id
+     * @param $name
+     * @param $subheader
+     * @param $parent
+     * @param $type
+     * @param $link
+     * @param $visualization
+     * @param $chart
      * @param $chartoptions
      * @param $dataoptions
-     * @param $filteroptions
+     * @param $dimension1
+     * @param $dimension2
+     * @param $dimension3
      * @return bool
      */
-    public function updateDatasetOptions($id, $chartoptions, $dataoptions, $filteroptions)
+    public function updateDatasetOptions($id, $chartoptions, $dataoptions)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('chartoptions', $sql->createNamedParameter($chartoptions))
             ->set('dataoptions', $sql->createNamedParameter($dataoptions))
-            ->set('filteroptions', $sql->createNamedParameter($filteroptions))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->execute();
