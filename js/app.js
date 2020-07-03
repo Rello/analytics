@@ -33,6 +33,14 @@ if (!OCA.Analytics) {
         initialDocumentTitle: null,
         dataDistinctCategories: {},
         currentReportData: {},
+        // flexible mapping depending on type requiered by the used chart library
+        chartTypeMapping: {
+            'datetime': 'line',
+            'column': 'bar',
+            'area': 'line',
+            'line': 'line',
+            'doughnut': 'doughnut'
+        },
     };
 }
 /**
@@ -152,15 +160,6 @@ OCA.Analytics.UI = {
         document.getElementById('chartContainer').style.removeProperty('display');
         document.getElementById('chartMenuContainer').style.removeProperty('display');
         let ctx = document.getElementById('myChart').getContext('2d');
-
-        // flexible mapping depending on type requiered by the used chart library
-        let chartTypeMapping = {
-            'datetime': 'line',
-            'column': 'bar',
-            'area': 'line',
-            'line': 'line',
-            'doughnut': 'doughnut'
-        };
 
         let chartType = jsondata.options.chart;
         let datasets = [], xAxisCategories = [];
@@ -298,7 +297,7 @@ OCA.Analytics.UI = {
         }
 
         let myChart = new Chart(ctx, {
-            type: chartTypeMapping[chartType],
+            type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
                 datasets: datasets

@@ -209,22 +209,6 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
-    checkOption: function (array, index, field, check, defaultChartType) {
-        if (Array.isArray(array) && array.length) {
-            if (field in array[index]) {
-                return array[index][field] === check ? 'selected' : '';
-            } else if (check === defaultChartType) {
-                return 'selected';
-            } else {
-                return '';
-            }
-        } else if (check === defaultChartType) {
-            return 'selected';
-        } else {
-            return '';
-        }
-    },
-
     openChartOptionsDialog: function () {
         let drilldownRows = '';
         let dataOptions;
@@ -235,15 +219,8 @@ OCA.Analytics.Filter = {
         }
         let distinctCategories = OCA.Analytics.dataDistinctCategories;
 
-        // flexible mapping depending on type requiered by the used chart library
-        let chartTypeMapping = {
-            'datetime': 'line',
-            'column': 'bar',
-            'area': 'line',
-            'line': 'line',
-            'doughnut': 'doughnut'
-        };
-        let defaultChartType = chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+        // get the default chart type to preset the drop downs
+        let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
 
         for (let i = 0; i < Object.keys(distinctCategories).length; i++) {
             drilldownRows = drilldownRows + '<div style="display: table-row;">'
@@ -298,19 +275,11 @@ OCA.Analytics.Filter = {
 
     processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        let userDatasetOptions = [];
-        let nonDefaultValues = false;
         dataOptions === '' ? dataOptions = [] : dataOptions;
-
-        // flexible mapping depending on type requiered by the used chart library
-        let chartTypeMapping = {
-            'datetime': 'line',
-            'column': 'bar',
-            'area': 'line',
-            'line': 'line',
-            'doughnut': 'doughnut'
-        };
-        let defaultChartType = chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+        let userDatasetOptions = [];
+        // get the default chart types to derive if there is any relevant change by the user
+        let nonDefaultValues = false;
+        let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
 
         let optionsYAxis = document.getElementsByName('optionsYAxis')
         let optionsChartType = document.getElementsByName('optionsChartType')
@@ -340,6 +309,23 @@ OCA.Analytics.Filter = {
         document.getElementById('analytics_dialog_container').remove();
         document.getElementById('analytics_dialog_overlay').remove();
     },
+
+    checkOption: function (array, index, field, check, defaultChartType) {
+        if (Array.isArray(array) && array.length) {
+            if (field in array[index]) {
+                return array[index][field] === check ? 'selected' : '';
+            } else if (check === defaultChartType) {
+                return 'selected';
+            } else {
+                return '';
+            }
+        } else if (check === defaultChartType) {
+            return 'selected';
+        } else {
+            return '';
+        }
+    },
+
 };
 
 OCA.Analytics.Filter.Backend = {
