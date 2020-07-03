@@ -329,6 +329,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportSubHeader').innerHTML = '';
             document.getElementById('reportSubHeader').style.display = 'none';
             document.getElementById('filterContainer').style.display = 'none';
+            document.getElementById('optionsIcon').style.removeProperty('display');
             document.getElementById('noDataContainer').style.display = 'none';
         }
     },
@@ -441,16 +442,10 @@ OCA.Analytics.Backend = {
             url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
-        let filterOptions = [];
-        if (document.getElementById('sharingToken').value === '') {
-            filterOptions = JSON.parse(document.getElementById('filterOptions').value);
-        }
-
         $.ajax({
             type: 'GET',
             url: url,
             data: {
-                'options': filterOptions,
             },
             success: function (data) {
                 OCA.Analytics.currentReportData = data;
@@ -462,8 +457,8 @@ OCA.Analytics.Backend = {
                     document.getElementById('reportSubHeader').style.removeProperty('display');
                 }
                 if (parseInt(data.options.type) === OCA.Analytics.TYPE_INTERNAL_DB && document.getElementById('sharingToken').value === '') {
-                    document.getElementById('filterDimensions').value = JSON.stringify(data.dimensions);
                     document.getElementById('filterContainer').style.removeProperty('display');
+                    OCA.Analytics.Filter.refreshFilterVisualisation();
                 }
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata') {
@@ -474,6 +469,7 @@ OCA.Analytics.Backend = {
                     if (visualization === 'chart') {
                         OCA.Analytics.UI.buildChart(data);
                     } else if (visualization === 'table') {
+                        document.getElementById('optionsIcon').style.display = 'none';
                         OCA.Analytics.UI.buildDataTable(data);
                     } else {
                         OCA.Analytics.UI.buildChart(data);
@@ -550,10 +546,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
             document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
-            document.getElementById('filterOptions').value = JSON.stringify({
-                'drilldown': {},
-                'filter': {'dimension1': {}, 'dimension2': {}}
-            })
         }
     } else {
         OCA.Analytics.Backend.getData();
@@ -566,13 +558,4 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener("beforeprint", function (event) {
         document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
     });
-
-    // document.getElementById('filterOptions').value = JSON.stringify({
-    //     'drilldown': {'dimension1': 'true', 'dimension2': 'true'},
-    //     'filter': {
-    //         'dimension1': {'enabled': 'true', 'option': 'EQ', 'value': 'Verwaltungsbeirat'},
-    //         'dimension2': {'enabled': 'true', 'option': 'GT', 'value': '2011'},
-    //     },
-    // });
-
 });

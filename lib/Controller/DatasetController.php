@@ -194,10 +194,11 @@ class DatasetController extends Controller
      * @param int $datasetId
      * @param $chartoptions
      * @param $dataoptions
+     * @param $filteroptions
      * @return bool
      */
-    public function updateOptions(int $datasetId, $chartoptions, $dataoptions)
+    public function updateOptions(int $datasetId, $chartoptions, $dataoptions, $filteroptions)
     {
-        return $this->DatasetMapper->updateDatasetOptions($datasetId, $chartoptions, $dataoptions);
+        return $this->DatasetMapper->updateDatasetOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
     }
 }
