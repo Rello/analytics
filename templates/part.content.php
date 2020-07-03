@@ -22,6 +22,8 @@
         <div id="optionsIcon" class="icon-analytics-options has-tooltip"
              title="<?php p($l->t('Change chart options')); ?>"></div>
         <div id="addFilterIcon" class="icon-analytics-filter-add" title="<?php p($l->t('Add filter')); ?>"></div>
+        <input id="filterOptions" type="hidden" style="display: inline-block; float: right;">
+        <input id="filterDimensions" type="hidden" style="display: inline-block; float: right;">
         <div id="filterVisualisation" style="display: inline-block; float: right;">
         </div>
     </div>

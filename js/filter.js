@@ -30,8 +30,8 @@ OCA.Analytics.Filter = {
 
     openDrilldownDialog: function () {
         let drilldownRows = '';
-        let filterDimensions = JSON.parse(OCA.Analytics.currentReportData.dimensions);
-        let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+        let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
         for (let i = 0; i < Object.keys(filterDimensions).length; i++) {
             let checkboxStatus = filterOptions.drilldown[Object.keys(filterDimensions)[i]] === false ? '' : 'checked';
             drilldownRows = drilldownRows + '<div style="display: table-row;">'
@@ -83,7 +83,7 @@ OCA.Analytics.Filter = {
     },
 
     processDrilldownDialog: function () {
-        let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
         filterOptions.drilldown = {};
 
         let drilldownColumns = document.getElementsByName('drilldownColumn')
@@ -93,9 +93,9 @@ OCA.Analytics.Filter = {
                 filterOptions.drilldown[dimension] = false;
             }
         }
-        OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(filterOptions);
-        OCA.Analytics.Filter.Backend.updateDataset();
+        document.getElementById('filterOptions').value = JSON.stringify(filterOptions);
         OCA.Analytics.Filter.close();
+        OCA.Analytics.Backend.getData();
     },
 
     openFilterDialog: function () {
@@ -148,7 +148,7 @@ OCA.Analytics.Filter = {
         );
 
         let dimensionSelectOptions;
-        let filterDimensions = OCA.Analytics.currentReportData.dimensions;
+        let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
         for (let i = 0; i < Object.keys(filterDimensions).length; i++) {
             dimensionSelectOptions = dimensionSelectOptions + '<option value="' + Object.keys(filterDimensions)[i] + '">' + Object.values(filterDimensions)[i] + '</option>';
         }
@@ -172,52 +172,41 @@ OCA.Analytics.Filter = {
     },
 
     processFilterDialog: function () {
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        filterOptions === '' || filterOptions === null ? filterOptions = '{"drilldown":{},"filter":{"dimension1":{},"dimension2":{}}}' : filterOptions;
-        filterOptions = JSON.parse(filterOptions);
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
         let dimension = document.getElementById('filterDialogDimension').value;
         filterOptions.filter[dimension].enabled = 'true';
         filterOptions.filter[dimension].option = document.getElementById('filterDialogOption').value;
         filterOptions.filter[dimension].value = document.getElementById('filterDialogValue').value;
-
-        OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(filterOptions);
-        OCA.Analytics.Filter.Backend.updateDataset();
+        document.getElementById('filterOptions').value = JSON.stringify(filterOptions);
         OCA.Analytics.Filter.close();
-        //OCA.Analytics.Filter.refreshFilterVisualisation();
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
     refreshFilterVisualisation: function () {
         document.getElementById('filterVisualisation').innerHTML = '';
-        let filterDimensions = OCA.Analytics.currentReportData.dimensions;
-        let filterOptions;
-        try {
-            filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
-            for (let filterDimension of Object.keys(filterOptions.filter)) {
-                if (filterOptions.filter[filterDimension].enabled === 'true') {
-                    let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions.filter[filterDimension].option];
-                    let span = document.createElement('span');
-                    span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions.filter[filterDimension].value;
-                    span.classList.add('filterVisualizationItem');
-                    span.id = filterDimension;
-                    span.addEventListener('click', OCA.Analytics.Filter.removeFilter)
-                    document.getElementById('filterVisualisation').appendChild(span);
-                }
+        let filterDimensions = JSON.parse(document.getElementById('filterDimensions').value);
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
+        for (let filterDimension of Object.keys(filterOptions.filter)) {
+            if (filterOptions.filter[filterDimension].enabled === 'true') {
+                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions.filter[filterDimension].option];
+                let span = document.createElement('span');
+                span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions.filter[filterDimension].value;
+                span.classList.add('filterVisualizationItem');
+                span.id = filterDimension;
+                span.addEventListener('click', OCA.Analytics.Filter.removeFilter)
+                document.getElementById('filterVisualisation').appendChild(span);
             }
-        } catch (e) {
         }
     },
 
     removeFilter: function (evt) {
         let filterDimension = evt.target.id;
-        let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+        let filterOptions = JSON.parse(document.getElementById('filterOptions').value);
         filterOptions.filter[filterDimension] = {};
-        filterOptions = JSON.stringify(filterOptions);
-        if (filterOptions === '{"drilldown":{},"filter":{"dimension1":{},"dimension2":{}}}') {
-            filterOptions = '';
-        }
-        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.Filter.Backend.updateDataset();
-        //OCA.Analytics.Filter.refreshFilterVisualisation();
+        document.getElementById('filterOptions').value = JSON.stringify(filterOptions);
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
     openChartOptionsDialog: function () {
@@ -378,7 +367,6 @@ OCA.Analytics.Filter.Backend = {
             data: {
                 'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
                 'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,
-                'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
             },
             success: function () {
                 OCA.Analytics.Backend.getData();
