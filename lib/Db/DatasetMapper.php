@@ -99,7 +99,7 @@ class DatasetMapper
     }
 
     /**
-     * update dataset
+     * update  dataset
      * @param $id
      * @param $chartoptions
      * @param $dataoptions

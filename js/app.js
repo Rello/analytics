@@ -445,8 +445,7 @@ OCA.Analytics.Backend = {
         $.ajax({
             type: 'GET',
             url: url,
-            data: {
-            },
+            data: {},
             success: function (data) {
                 OCA.Analytics.currentReportData = data;
 

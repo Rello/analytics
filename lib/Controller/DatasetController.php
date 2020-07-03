@@ -188,7 +188,7 @@ class DatasetController extends Controller
     }
 
     /**
-     * get dataset details
+     * get dataset  details
      *
      * @NoAdminRequired
      * @param int $datasetId

@@ -15,7 +15,6 @@
 /** global: cloner */
 
 'use strict';
-
 /**
  * @namespace OCA.Analytics.Filter
  */

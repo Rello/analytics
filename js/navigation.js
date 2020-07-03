@@ -11,7 +11,6 @@
 /** global: OCP */
 /** global: OC */
 'use strict';
-
 /**
  * @namespace OCA.Analytics.Navigation
  */

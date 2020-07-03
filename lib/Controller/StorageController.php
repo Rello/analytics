@@ -37,7 +37,7 @@ class StorageController extends Controller
     }
 
     /**
-     * Get the items for the selected category
+     * Get the items for the selected  category
      *
      * @NoAdminRequired
      * @param $datasetMetadata
