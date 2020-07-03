@@ -199,7 +199,7 @@ OCA.Analytics.UI = {
                     id: 'secondary',
                     stacked: false,
                     position: 'right',
-                    display: true,
+                    display: false,
                     gridLines: {
                         display: false,
                     },

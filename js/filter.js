@@ -276,31 +276,60 @@ OCA.Analytics.Filter = {
     processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' ? dataOptions = [] : dataOptions;
+        let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
+        chartOptions === '' ? chartOptions = {} : chartOptions;
         let userDatasetOptions = [];
-        // get the default chart types to derive if there is any relevant change by the user
-        let nonDefaultValues = false;
+        let nonDefaultValues, seondaryAxisRequired = false;
+        // get the default chart types (e.g. line or bar) to derive if there is any relevant change by the user
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
 
-        let optionsYAxis = document.getElementsByName('optionsYAxis')
-        let optionsChartType = document.getElementsByName('optionsChartType')
+        // loop all selections from the option dialog and add them to an array
+        let optionsYAxis = document.getElementsByName('optionsYAxis');
+        let optionsChartType = document.getElementsByName('optionsChartType');
         for (let i = 0; i < optionsYAxis.length; i++) {
-            if (optionsYAxis[i].value !== 'primary' || optionsChartType[i].value !== defaultChartType) {
-                nonDefaultValues = true;
+            if (optionsYAxis[i].value !== 'primary') {
+                seondaryAxisRequired = nonDefaultValues = true;     // secondary y-axis enabled
+            } else if (optionsChartType[i].value !== defaultChartType) {
+                nonDefaultValues = true;    // just line/bar changed
             }
             userDatasetOptions.push({yAxisID: optionsYAxis[i].value, type: optionsChartType[i].value});
         }
 
+        // decide of the dataseries array is relevant to be saved or not.
+        // if all settings are default, all options can be removed can be removed completely
         if (nonDefaultValues === true) {
             try {
-                dataOptions = cloner.deep.merge(JSON.parse(dataOptions), userDatasetOptions);
+                // if there are existing settings, merge them
+                dataOptions = JSON.stringify(cloner.deep.merge(JSON.parse(dataOptions), userDatasetOptions));
             } catch (e) {
-                dataOptions = userDatasetOptions;
+                dataOptions = JSON.stringify(userDatasetOptions);
             }
         } else {
             dataOptions = '';
         }
 
+        // if any dataseries is tied to the secondary yAxis or not
+        //if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
+        let enableAxis = '{"scales": {"yAxes": [{},{"display":true}]}}';
+        if (seondaryAxisRequired === true) {
+            try {
+                // if there are existing settings, merge them
+                chartOptions = JSON.stringify(cloner.deep.merge(JSON.parse(chartOptions), JSON.parse(enableAxis)));
+            } catch (e) {
+                chartOptions = enableAxis;
+            }
+        } else {
+            if (chartOptions === enableAxis) {
+                // if the secondary axis is not required anymore but was enabled before
+                // the options is cleared all together
+                // this does only apply when ONLY the axis was enabled before
+                // this does not do anything, if the user had own custom settings
+                chartOptions = '';
+            }
+        }
+
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
+        OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
         OCA.Analytics.Filter.Backend.updateDataset();
         OCA.Analytics.Filter.close();
     },
@@ -310,6 +339,7 @@ OCA.Analytics.Filter = {
         document.getElementById('analytics_dialog_overlay').remove();
     },
 
+    // function for shorter coding of the dialog creation
     checkOption: function (array, index, field, check, defaultChartType) {
         if (Array.isArray(array) && array.length) {
             if (field in array[index]) {
@@ -335,8 +365,8 @@ OCA.Analytics.Filter.Backend = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             data: {
-                'chartoptions': OCA.Analytics.currentReportData.options.chartoptions !== '' ? JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions) : '',
-                'dataoptions': OCA.Analytics.currentReportData.options.dataoptions !== '' ? JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions) : '',
+                'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
+                'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,
             },
             success: function () {
                 OCA.Analytics.Backend.getData();
