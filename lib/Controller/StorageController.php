@@ -37,7 +37,7 @@ class StorageController extends Controller
     }
 
     /**
-     * Get the items for the selected  category
+     * Get the items for the selected category
      *
      * @NoAdminRequired
      * @param $datasetMetadata
@@ -52,6 +52,7 @@ class StorageController extends Controller
         $dimensions['dimension1'] = $datasetMetadata['dimension1'];
         $dimensions['dimension2'] = $datasetMetadata['dimension2'];
 
+        $options = json_decode($datasetMetadata['filteroptions'], true);
         // return the header of the data being transferred according to the current navigational state
         $header = array();
         if ($options['drilldown']['dimension1'] !== 'false') $header[0] = $datasetMetadata['dimension1'];

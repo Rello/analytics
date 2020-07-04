@@ -35,7 +35,7 @@ class Version020307Date20200704185352 extends SimpleMigrationStep
 
     /**
      * @param IOutput $output
-     * @param Closure $schemaClosure The `\Closure` returns a  `ISchemaWrapper`
+     * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
      * @param array $options
      * @return null|ISchemaWrapper
      */

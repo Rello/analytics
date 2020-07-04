@@ -207,10 +207,6 @@ OCA.Analytics.Navigation = {
             OCA.Analytics.Sidebar.showSidebar(evt);
             evt.stopPropagation();
         } else {
-            document.getElementById('filterOptions').value = JSON.stringify({
-                'drilldown': {},
-                'filter': {'dimension1': {}, 'dimension2': {}}
-            })
             document.getElementById('filterVisualisation').innerHTML = '';
             OCA.Analytics.Sidebar.hideSidebar();
             OCA.Analytics.Backend.getData();
