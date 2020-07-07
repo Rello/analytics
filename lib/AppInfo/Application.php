@@ -35,6 +35,7 @@ class Application extends App
         try {
             $dispatcher = $server->query(IEventDispatcher::class);
         } catch (QueryException $e) {
+            // no action
         }
 
         Operation::register($dispatcher);

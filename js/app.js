@@ -13,6 +13,7 @@
 /** global: table */
 /** global: Chart */
 /** global: cloner */
+/** global: _ */
 
 'use strict';
 
@@ -191,7 +192,7 @@ OCA.Analytics.UI = {
                         display: true,
                     },
                     ticks: {
-                        callback: function (value, index, values) {
+                        callback: function (value) {
                             return value.toLocaleString();
                         },
                     },
@@ -550,11 +551,7 @@ document.addEventListener('DOMContentLoaded', function () {
         OCA.Analytics.Backend.getData();
     }
 
-    $('#myInput').on('keyup', function () {
-        table.search(this.value).draw();
-    });
-
-    window.addEventListener("beforeprint", function (event) {
+    window.addEventListener("beforeprint", function () {
         document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
     });
 });

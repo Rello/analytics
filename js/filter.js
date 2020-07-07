@@ -212,6 +212,7 @@ OCA.Analytics.Filter = {
                 }
             }
         } catch (e) {
+            // no filter used
         }
     },
 

@@ -1,3 +1,4 @@
+/** global: OC */
 (function () {
 
     var Component = {

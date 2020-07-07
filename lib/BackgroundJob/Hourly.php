@@ -40,6 +40,7 @@ class Hourly extends TimedJob
         try {
             $this->DataloadController->executeBySchedule('h');
         } catch (\Exception $e) {
+            // no action
         }
     }
 

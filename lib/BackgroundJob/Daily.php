@@ -40,6 +40,7 @@ class Daily extends TimedJob
         try {
             $this->DataloadController->executeBySchedule('d');
         } catch (\Exception $e) {
+            // no action
         }
     }
 

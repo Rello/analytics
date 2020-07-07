@@ -107,17 +107,4 @@ class FileService
         }
         return $delimiter;
     }
-
-    private function floatvalue($val)
-    {
-        $val = str_replace(",", ".", $val);
-        $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        $val = preg_replace('/[^0-9-.]+/', '', $val);
-        if (is_numeric($val)) {
-            return floatval($val);
-        } else {
-            return false;
-        }
-    }
-
 }

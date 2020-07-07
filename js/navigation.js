@@ -229,7 +229,9 @@ OCA.Analytics.Navigation = {
     handleAdvancedClicked: function (evt) {
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         let navigationItem = evt.target;
-        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.parentNode;
+        if (navigationItem.dataset.id === undefined) {
+            navigationItem = evt.target.parentNode;
+        }
         const datasetId = navigationItem.dataset.id;
         window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
         evt.stopPropagation();
@@ -237,7 +239,9 @@ OCA.Analytics.Navigation = {
 
     handleReportClicked: function (evt) {
         let navigationItem = evt.target;
-        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.parentNode;
+        if (navigationItem.dataset.id === undefined) {
+            navigationItem = evt.target.parentNode;
+        }
         const datasetId = navigationItem.dataset.id;
         window.location = OC.generateUrl('apps/analytics/') + '#/r/' + datasetId;
         evt.stopPropagation();
