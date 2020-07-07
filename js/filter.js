@@ -26,11 +26,15 @@ OCA.Analytics.Filter = {
         'LIKE': t('analytics', 'contains'),
         'IN': t('analytics', 'list of values'),
     },
+    defaultFilterOptions: '{"drilldown":{},"filter":{"dimension1":{},"dimension2":{}}}',
 
     openDrilldownDialog: function () {
         let drilldownRows = '';
-        let filterDimensions = JSON.parse(OCA.Analytics.currentReportData.dimensions);
-        let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+        let filterDimensions = OCA.Analytics.currentReportData.dimensions;
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        filterOptions === '' || filterOptions === null ? filterOptions = OCA.Analytics.Filter.defaultFilterOptions : filterOptions;
+        filterOptions = JSON.parse(filterOptions);
+
         for (let i = 0; i < Object.keys(filterDimensions).length; i++) {
             let checkboxStatus = filterOptions.drilldown[Object.keys(filterDimensions)[i]] === false ? '' : 'checked';
             drilldownRows = drilldownRows + '<div style="display: table-row;">'
@@ -54,7 +58,7 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + t('analytics', 'Change drilldown')
+            + t('analytics', 'Drilldown')
             + '</h2>'
             + '<div class="table" style="display: table;">'
 
@@ -82,15 +86,21 @@ OCA.Analytics.Filter = {
     },
 
     processDrilldownDialog: function () {
-        let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
-        filterOptions.drilldown = {};
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        filterOptions === '' || filterOptions === null ? filterOptions = OCA.Analytics.Filter.defaultFilterOptions : filterOptions;
+        filterOptions = JSON.parse(filterOptions);
 
         let drilldownColumns = document.getElementsByName('drilldownColumn')
         for (let i = 0; i < drilldownColumns.length; i++) {
             let dimension = drilldownColumns[i].value;
             if (drilldownColumns[i].checked === false) {
                 filterOptions.drilldown[dimension] = false;
+            } else {
+                delete filterOptions.drilldown[dimension];
             }
+        }
+        if (filterOptions === OCA.Analytics.Filter.defaultFilterOptions) {
+            filterOptions = '';
         }
         OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(filterOptions);
         OCA.Analytics.Filter.Backend.updateDataset();
@@ -104,7 +114,7 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + t('analytics', 'Add filter')
+            + t('analytics', 'Filter')
             + '</h2>'
             + '<div class="table" style="display: table;">'
             + '<div style="display: table-row;">'
@@ -172,7 +182,7 @@ OCA.Analytics.Filter = {
 
     processFilterDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        filterOptions === '' || filterOptions === null ? filterOptions = '{"drilldown":{},"filter":{"dimension1":{},"dimension2":{}}}' : filterOptions;
+        filterOptions === '' || filterOptions === null ? filterOptions = OCA.Analytics.Filter.defaultFilterOptions : filterOptions;
         filterOptions = JSON.parse(filterOptions);
         let dimension = document.getElementById('filterDialogDimension').value;
         filterOptions.filter[dimension].enabled = 'true';
@@ -210,14 +220,14 @@ OCA.Analytics.Filter = {
         let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
         filterOptions.filter[filterDimension] = {};
         filterOptions = JSON.stringify(filterOptions);
-        if (filterOptions === '{"drilldown":{},"filter":{"dimension1":{},"dimension2":{}}}') {
+        if (filterOptions === OCA.Analytics.Filter.defaultFilterOptions) {
             filterOptions = '';
         }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.Filter.Backend.updateDataset();
     },
 
-    openChartOptionsDialog: function () {
+    openOptionsDialog: function () {
         let drilldownRows = '';
         let dataOptions;
         try {
@@ -226,6 +236,11 @@ OCA.Analytics.Filter = {
             dataOptions = '';
         }
         let distinctCategories = OCA.Analytics.dataDistinctCategories;
+
+        // check if defined dataoptions don´t match the number of dataseries anymore
+        if (Object.keys(dataOptions).length !== Object.keys(distinctCategories).length) {
+            dataOptions = '';
+        }
 
         // get the default chart type to preset the drop downs
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
@@ -237,14 +252,14 @@ OCA.Analytics.Filter = {
                 + '</div>'
                 + '<div style="display: table-cell;">'
                 + '<select id="optionsYAxis' + [i] + '" name="optionsYAxis">'
-                + '<option value="primary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') + '>Left</option>'
-                + '<option value="secondary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') + '>Right</option>'
+                + '<option value="primary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') + '>' + t('analytics', 'Primary') + '</option>'
+                + '<option value="secondary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') + '>' + t('analytics', 'Secondary') + '</option>'
                 + '</select>'
                 + '</div>'
                 + '<div style="display: table-cell;">'
                 + '<select id="optionsChartType' + [i] + '" name="optionsChartType">'
-                + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>Line</option>'
-                + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>Bar</option>'
+                + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>' + t('analytics', 'Line') + '</option>'
+                + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Column') + '</option>'
                 + '</select>'
                 + '</div>'
                 + '</div>';
@@ -256,16 +271,16 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + t('analytics', 'Change Chart Options')
+            + t('analytics', 'Options')
             + '</h2>'
             + '<div class="table" style="display: table;">'
 
             + '<div style="display: table-row;">'
-            + '<div style="display: table-cell; width: 150px;">Dataseries'
+            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Data series')
             + '</div>'
-            + '<div style="display: table-cell; width: 150px;">Y-Axis'
+            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Vertical axis')
             + '</div>'
-            + '<div style="display: table-cell; width: 150px;">Type'
+            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Chart type')
             + '</div>'
             + '</div>'
             + drilldownRows
@@ -278,10 +293,10 @@ OCA.Analytics.Filter = {
 
         document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("drilldownDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("drilldownDialogGo").addEventListener("click", OCA.Analytics.Filter.processChartOptionsDialog);
+        document.getElementById("drilldownDialogGo").addEventListener("click", OCA.Analytics.Filter.processOptionsDialog);
     },
 
-    processChartOptionsDialog: function () {
+    processOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' ? dataOptions = [] : dataOptions;
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
@@ -329,7 +344,7 @@ OCA.Analytics.Filter = {
         } else {
             if (chartOptions === enableAxis) {
                 // if the secondary axis is not required anymore but was enabled before
-                // the options is cleared all together
+                // the options are cleared all together
                 // this does only apply when ONLY the axis was enabled before
                 // this does not do anything, if the user had own custom settings
                 chartOptions = '';

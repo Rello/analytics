@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-            document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
+            document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openOptionsDialog);
         }
     } else {
         OCA.Analytics.Backend.getData();

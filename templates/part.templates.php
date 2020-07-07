@@ -87,7 +87,7 @@
                         <option value="" selected></option>
                         <option value="line"><?php p($l->t('Line')); ?></option>
                         <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
-                        <option value="column"><?php p($l->t('Columns')); ?></option>
+                        <option value="column"><?php p($l->t('Column')); ?></option>
                         <option value="area"><?php p($l->t('Area')); ?></option>
                         <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
                     </select>
@@ -99,7 +99,7 @@
                                                          placeholder="<?php p($l->t('advanced')); ?>" class="input150">
                 </div>
                 <div style="display: table-cell;">
-                    <a target="_blank" rel="noreferrer noopener" title="Open documentation"
+                    <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
                        href="https://github.com/Rello/analytics/wiki/Advanced-chart-options">
                         <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                     </a></div>
@@ -110,7 +110,7 @@
                                                          placeholder="<?php p($l->t('advanced')); ?>" class="input150">
                 </div>
                 <div style="display: table-cell;">
-                    <a target="_blank" rel="noreferrer noopener" title="Open documentation"
+                    <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
                        href="https://github.com/Rello/analytics/wiki/Advanced-chart-options">
                         <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                     </a></div>

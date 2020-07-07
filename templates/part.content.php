@@ -18,10 +18,11 @@
     <div id="reportPlaceholder"></div>
     <div id="filterContainer" style="display: none">
         <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
-             title="<?php p($l->t('Change drilldown')); ?>"></div>
+             title="<?php p($l->t('Drilldown')); ?>"></div>
         <div id="optionsIcon" class="icon-analytics-options has-tooltip"
-             title="<?php p($l->t('Change chart options')); ?>"></div>
-        <div id="addFilterIcon" class="icon-analytics-filter-add" title="<?php p($l->t('Add filter')); ?>"></div>
+             title="<?php p($l->t('Options')); ?>"></div>
+        <div id="addFilterIcon" class="icon-analytics-filter-add has-tooltip"
+             title="<?php p($l->t('Filter')); ?>"></div>
         <div id="filterVisualisation" style="display: inline-block; float: right;">
         </div>
     </div>
