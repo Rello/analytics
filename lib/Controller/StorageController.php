@@ -46,17 +46,18 @@ class StorageController extends Controller
      */
     public function read($datasetMetadata, $options)
     {
-        // define the available dimensions for filtering of this datasource
-        // this needs to map the technical name to its displayname in the report
-        $dimensions = array();
-        $dimensions['dimension1'] = $datasetMetadata['dimension1'];
-        $dimensions['dimension2'] = $datasetMetadata['dimension2'];
-
-        $options = json_decode($datasetMetadata['filteroptions'], true);
-        // return the header of the data being transferred according to the current navigational state
+        $availableDimensions = array();
         $header = array();
-        if ($options['drilldown']['dimension1'] !== 'false') $header[0] = $datasetMetadata['dimension1'];
-        if ($options['drilldown']['dimension2'] !== 'false') $header[1] = $datasetMetadata['dimension2'];
+
+        // output the dimensions available for filtering of this datasource
+        // this needs to map the technical name to its displayname in the report
+        $availableDimensions['dimension1'] = $datasetMetadata['dimension1'];
+        $availableDimensions['dimension2'] = $datasetMetadata['dimension2'];
+
+        // return the header texts of the data being transferred according to the current drilldown state selected by user
+        $options = json_decode($datasetMetadata['filteroptions'], true);
+        if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
+        if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
         $header[2] = $datasetMetadata['dimension3'];
         $header = array_values($header);
 
@@ -67,11 +68,11 @@ class StorageController extends Controller
         }
 
         return empty($data) ? [
-            'dimensions' => $dimensions,
+            'dimensions' => $availableDimensions,
             'status' => 'nodata'
         ] : [
             'header' => $header,
-            'dimensions' => $dimensions,
+            'dimensions' => $availableDimensions,
             'data' => $data,
         ];
     }

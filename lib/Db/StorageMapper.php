@@ -51,29 +51,24 @@ class StorageMapper
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)))
             ->addgroupBy('dataset');
 
-        // derive if a column should be removed from drilldown as by user input
-        // take all possible columns and overwrite with "false" if demanded
-        $drilldownColumns = array('dimension1' => 'true', 'dimension2' => 'true');
-        if (isset($options['drilldown'])) {
-            $drilldownColumns = array_intersect_key($options['drilldown'], $drilldownColumns) + $drilldownColumns;
-        }
-        foreach ($drilldownColumns as $key => $value) {
-            if ($value !== 'false') {
-                $sql->addSelect($key)
-                    ->addGroupBy($key)
-                    ->addOrderBy($key, 'ASC');
+        // loop the available dimensions and check if any is hidden by the drilldown selection of the user
+        $availableDimensions = array('dimension1', 'dimension2');
+        foreach ($availableDimensions as $dimension) {
+            if (!isset($options['drilldown'][$dimension])) {
+                $sql->addSelect($dimension)
+                    ->addGroupBy($dimension)
+                    ->addOrderBy($dimension, 'ASC');
             }
         }
 
         // value column deeds to be at the last position in the select. So it needs to be after the dynamic selects
         $sql->addSelect($sql->func()->sum('dimension3'));
 
-        // add the where clauses
-        if ($options['filter']) {
+        // add the where clauses depending on the filter selection of the
+        if (isset($options['filter'])) {
             foreach ($options['filter'] as $key => $value) {
-                if ($value['enabled'] === 'true') {
-                    $this->sqlWhere($sql, $key, $value['option'], $value['value']);
-                }
+                $this->logger->debug($key . $value['option'] . $value['value']);
+                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
             }
         }
 

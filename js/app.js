@@ -32,7 +32,6 @@ if (!OCA.Analytics) {
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_LINK: 3,
         initialDocumentTitle: null,
-        dataDistinctCategories: {},
         currentReportData: {},
         // flexible mapping depending on type requiered by the used chart library
         chartTypeMapping: {
@@ -449,6 +448,12 @@ OCA.Analytics.Backend = {
             data: {},
             success: function (data) {
                 OCA.Analytics.currentReportData = data;
+                try {
+                    OCA.Analytics.currentReportData.options.filteroptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+                } catch (e) {
+                    OCA.Analytics.currentReportData.options.filteroptions = {};
+                }
+                if (OCA.Analytics.currentReportData.options.filteroptions === null) OCA.Analytics.currentReportData.options.filteroptions = {};
 
                 document.getElementById('reportHeader').innerText = data.options.name;
 
@@ -462,8 +467,6 @@ OCA.Analytics.Backend = {
                 }
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata') {
-
-                    OCA.Analytics.dataDistinctCategories = OCA.Analytics.Core.getDistinctValues(data.data);
 
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {

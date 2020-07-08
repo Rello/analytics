@@ -26,27 +26,27 @@ OCA.Analytics.Filter = {
         'LIKE': t('analytics', 'contains'),
         'IN': t('analytics', 'list of values'),
     },
-    defaultFilterOptions: '{"drilldown":{},"filter":{"dimension1":{},"dimension2":{}}}',
 
     openDrilldownDialog: function () {
         let drilldownRows = '';
-        let filterDimensions = OCA.Analytics.currentReportData.dimensions;
+        let availableDimensions = OCA.Analytics.currentReportData.dimensions;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        filterOptions === '' || filterOptions === null ? filterOptions = OCA.Analytics.Filter.defaultFilterOptions : filterOptions;
-        filterOptions = JSON.parse(filterOptions);
 
-        for (let i = 0; i < Object.keys(filterDimensions).length; i++) {
-            let checkboxStatus = filterOptions.drilldown[Object.keys(filterDimensions)[i]] === false ? '' : 'checked';
+        for (let i = 0; i < Object.keys(availableDimensions).length; i++) {
+            let checkboxStatus = 'checked';
+            if (filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][Object.keys(availableDimensions)[i]] !== undefined) {
+                checkboxStatus = '';
+            }
             drilldownRows = drilldownRows + '<div style="display: table-row;">'
                 + '<div style="display: table-cell;">'
-                + Object.values(filterDimensions)[i]
+                + Object.values(availableDimensions)[i]
                 + '</div>'
                 + '<div style="display: table-cell;">'
-                + '<input type="checkbox" id="drilldownColumn' + [i] + '" class="checkbox" name="drilldownColumn" value="' + Object.keys(filterDimensions)[i] + '" ' + checkboxStatus + '>'
+                + '<input type="checkbox" id="drilldownColumn' + [i] + '" class="checkbox" name="drilldownColumn" value="' + Object.keys(availableDimensions)[i] + '" ' + checkboxStatus + '>'
                 + '<label for="drilldownColumn' + [i] + '"> </label>'
                 + '</div>'
                 + '<div style="display: table-cell;">'
-                + '<input type="checkbox" id="drilldownRow' + [i] + '" class="checkbox" name="drilldownRow" value="' + Object.keys(filterDimensions)[i] + '" disabled>'
+                + '<input type="checkbox" id="drilldownRow' + [i] + '" class="checkbox" name="drilldownRow" value="' + Object.keys(availableDimensions)[i] + '" disabled>'
                 + '<label for="drilldownRow' + [i] + '"> </label>'
                 + '</div>'
                 + '</div>';
@@ -87,22 +87,26 @@ OCA.Analytics.Filter = {
 
     processDrilldownDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        filterOptions === '' || filterOptions === null ? filterOptions = OCA.Analytics.Filter.defaultFilterOptions : filterOptions;
-        filterOptions = JSON.parse(filterOptions);
+        let drilldownColumns = document.getElementsByName('drilldownColumn');
 
-        let drilldownColumns = document.getElementsByName('drilldownColumn')
         for (let i = 0; i < drilldownColumns.length; i++) {
             let dimension = drilldownColumns[i].value;
             if (drilldownColumns[i].checked === false) {
-                filterOptions.drilldown[dimension] = false;
+                if (filterOptions['drilldown'] === undefined) {
+                    filterOptions['drilldown'] = {};
+                }
+                filterOptions['drilldown'][dimension] = false;
             } else {
-                delete filterOptions.drilldown[dimension];
+                if (filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined) {
+                    delete filterOptions['drilldown'][dimension];
+                }
+                if (filterOptions['drilldown'] !== undefined && Object.keys(filterOptions['drilldown']).length === 0) {
+                    delete filterOptions['drilldown'];
+                }
             }
         }
-        if (filterOptions === OCA.Analytics.Filter.defaultFilterOptions) {
-            filterOptions = '';
-        }
-        OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(filterOptions);
+
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.Filter.Backend.updateDataset();
         OCA.Analytics.Filter.close();
     },
@@ -157,9 +161,9 @@ OCA.Analytics.Filter = {
         );
 
         let dimensionSelectOptions;
-        let filterDimensions = OCA.Analytics.currentReportData.dimensions;
-        for (let i = 0; i < Object.keys(filterDimensions).length; i++) {
-            dimensionSelectOptions = dimensionSelectOptions + '<option value="' + Object.keys(filterDimensions)[i] + '">' + Object.values(filterDimensions)[i] + '</option>';
+        let availableDimensions = OCA.Analytics.currentReportData.dimensions;
+        for (let i = 0; i < Object.keys(availableDimensions).length; i++) {
+            dimensionSelectOptions = dimensionSelectOptions + '<option value="' + Object.keys(availableDimensions)[i] + '">' + Object.values(availableDimensions)[i] + '</option>';
         }
         document.getElementById('filterDialogDimension').innerHTML = dimensionSelectOptions;
 
@@ -177,19 +181,21 @@ OCA.Analytics.Filter = {
                 OCA.Analytics.Filter.processFilterDialog();
             }
         });
-
     },
 
     processFilterDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        filterOptions === '' || filterOptions === null ? filterOptions = OCA.Analytics.Filter.defaultFilterOptions : filterOptions;
-        filterOptions = JSON.parse(filterOptions);
         let dimension = document.getElementById('filterDialogDimension').value;
-        filterOptions.filter[dimension].enabled = 'true';
-        filterOptions.filter[dimension].option = document.getElementById('filterDialogOption').value;
-        filterOptions.filter[dimension].value = document.getElementById('filterDialogValue').value;
+        if (filterOptions['filter'] === undefined) {
+            filterOptions['filter'] = {};
+        }
+        if (filterOptions['filter'][dimension] === undefined) {
+            filterOptions['filter'][dimension] = {};
+        }
+        filterOptions['filter'][dimension]['option'] = document.getElementById('filterDialogOption').value;
+        filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value;
 
-        OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(filterOptions);
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.Filter.Backend.updateDataset();
         OCA.Analytics.Filter.close();
     },
@@ -197,32 +203,26 @@ OCA.Analytics.Filter = {
     refreshFilterVisualisation: function () {
         document.getElementById('filterVisualisation').innerHTML = '';
         let filterDimensions = OCA.Analytics.currentReportData.dimensions;
-        let filterOptions;
-        try {
-            filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
-            for (let filterDimension of Object.keys(filterOptions.filter)) {
-                if (filterOptions.filter[filterDimension].enabled === 'true') {
-                    let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions.filter[filterDimension].option];
-                    let span = document.createElement('span');
-                    span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions.filter[filterDimension].value;
-                    span.classList.add('filterVisualizationItem');
-                    span.id = filterDimension;
-                    span.addEventListener('click', OCA.Analytics.Filter.removeFilter)
-                    document.getElementById('filterVisualisation').appendChild(span);
-                }
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (filterOptions !== null && filterOptions['filter'] !== undefined) {
+            for (let filterDimension of Object.keys(filterOptions['filter'])) {
+                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions['filter'][filterDimension]['option']];
+                let span = document.createElement('span');
+                span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions['filter'][filterDimension]['value'];
+                span.classList.add('filterVisualizationItem');
+                span.id = filterDimension;
+                span.addEventListener('click', OCA.Analytics.Filter.removeFilter)
+                document.getElementById('filterVisualisation').appendChild(span);
             }
-        } catch (e) {
-            // no filter used
         }
     },
 
     removeFilter: function (evt) {
         let filterDimension = evt.target.id;
-        let filterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
-        filterOptions.filter[filterDimension] = {};
-        filterOptions = JSON.stringify(filterOptions);
-        if (filterOptions === OCA.Analytics.Filter.defaultFilterOptions) {
-            filterOptions = '';
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        delete filterOptions['filter'][filterDimension];
+        if (Object.keys(filterOptions['filter']).length === 0) {
+            delete filterOptions['filter'];
         }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.Filter.Backend.updateDataset();
@@ -236,7 +236,7 @@ OCA.Analytics.Filter = {
         } catch (e) {
             dataOptions = '';
         }
-        let distinctCategories = OCA.Analytics.dataDistinctCategories;
+        let distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data);
 
         // check if defined dataoptions don´t match the number of dataseries anymore
         if (Object.keys(dataOptions).length !== Object.keys(distinctCategories).length) {
@@ -385,6 +385,13 @@ OCA.Analytics.Filter = {
 OCA.Analytics.Filter.Backend = {
     updateDataset: function () {
         const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
+
+        if (Object.keys(OCA.Analytics.currentReportData.options.filteroptions).length === 0) {
+            OCA.Analytics.currentReportData.options.filteroptions = '';
+        } else {
+            OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
+        }
+
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
