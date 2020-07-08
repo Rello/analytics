@@ -225,6 +225,14 @@ OCA.Analytics.UI = {
             animation: {
                 duration: 0 // general animation time
             },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                        return datasetLabel + ': ' + parseInt(tooltipItem.yLabel).toLocaleString();
+                    }
+                }
+            },
         };
 
         for (let values of jsondata.data) {

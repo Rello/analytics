@@ -45,10 +45,10 @@ OCA.Analytics.Filter = {
                 + '<input type="checkbox" id="drilldownColumn' + [i] + '" class="checkbox" name="drilldownColumn" value="' + Object.keys(availableDimensions)[i] + '" ' + checkboxStatus + '>'
                 + '<label for="drilldownColumn' + [i] + '"> </label>'
                 + '</div>'
-                + '<div style="display: table-cell;">'
-                + '<input type="checkbox" id="drilldownRow' + [i] + '" class="checkbox" name="drilldownRow" value="' + Object.keys(availableDimensions)[i] + '" disabled>'
-                + '<label for="drilldownRow' + [i] + '"> </label>'
-                + '</div>'
+                //+ '<div style="display: table-cell;">'
+                //+ '<input type="checkbox" id="drilldownRow' + [i] + '" class="checkbox" name="drilldownRow" value="' + Object.keys(availableDimensions)[i] + '" disabled>'
+                //+ '<label for="drilldownRow' + [i] + '"> </label>'
+                //+ '</div>'
                 + '</div>';
         }
 
@@ -68,9 +68,9 @@ OCA.Analytics.Filter = {
             + '<div style="display: table-cell; width: 50px;">'
             + '<img src="img/column.svg" style="height: 20px;" alt="column">'
             + '</div>'
-            + '<div style="display: table-cell; width: 50px;">'
-            + '<img src="img/row.svg" style="height: 20px;" alt="row">'
-            + '</div>'
+            //+ '<div style="display: table-cell; width: 50px;">'
+            //+ '<img src="img/row.svg" style="height: 20px;" alt="row">'
+            //+ '</div>'
             + '</div>'
             + drilldownRows
             + '</div>'
@@ -237,6 +237,7 @@ OCA.Analytics.Filter = {
             dataOptions = '';
         }
         let distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data);
+        if (dataOptions === null) dataOptions = {};
 
         // check if defined dataoptions don´t match the number of dataseries anymore
         if (Object.keys(dataOptions).length !== Object.keys(distinctCategories).length) {
@@ -334,7 +335,7 @@ OCA.Analytics.Filter = {
 
         // if any dataseries is tied to the secondary yAxis or not
         //if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
-        let enableAxis = '{"scales": {"yAxes": [{},{"display":true}]}}';
+        let enableAxis = '{"scales":{"yAxes":[{},{"display":true}]}}';
         if (seondaryAxisRequired === true) {
             try {
                 // if there are existing settings, merge them
