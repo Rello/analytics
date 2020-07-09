@@ -11,7 +11,7 @@ From data to report. This on premise data warehouse solution provides modular da
 - 3rd party*: GitHub Statistics, website grabber, JSON
 - Storage: stream or database
 - Advanced dataloads with scheduling
-- Visualization: charts, tables, filters
+- Visualization: combinded charts, tables, filters
 - Thresholds for alerts and color coding
 - Integration: Files app, Activity, Notifications, Flow
 - Sharing: user*, protected, public

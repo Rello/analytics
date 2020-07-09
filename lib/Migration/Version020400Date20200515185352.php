@@ -283,8 +283,8 @@ class Version020400Date20200515185352 extends SimpleMigrationStep
             ->values([
                 'version' => $query->createNamedParameter('2.4.0'),
                 'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
-"en":{"regular":["Print and export your report","Filter reports or change the column drilldown (internal reports only)","Advanced chart customization","More chart types"],"admin":["New Features apply to users"]},
-"de":{"regular":["Drucke und exportiere deinen Bericht","Filtere Breichte oder ändere die Spalten (nur für interne Berichte)","Fortgeschrittene Chart Einstellungen","Weitere Charttypen"],"admin":["Nur User Features"]}
+"en":{"regular":["Combined charts","Filter reports or change the drilldown (internal reports only)","Changes are persisted with the report","This WhatsNew popup"],"admin":["New Features apply to users"]},
+"de":{"regular":["Kombinierte Diagramme","Filter oder Aufriss ändern (nur interne Berichte)","Änderungen werden im Report gespeichert","Dieses WhatsNew Fenster"],"admin":["Nur User Features"]}
 }}'),
             ])
             ->execute();

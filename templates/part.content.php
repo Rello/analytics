@@ -9,7 +9,7 @@
  * @copyright 2020 Marcel Scherello
  */
 ?>
-<div id="analytics-content" style="width:100%; padding: 20px 40px;" hidden>
+<div id="analytics-content" style="width:100%; padding: 20px 5%;" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
@@ -37,7 +37,7 @@
         <?php p($l->t('No data found')); ?>
     </div>
 </div>
-<div id="analytics-intro" style="width:50%; padding: 50px" hidden>
+<div id="analytics-intro" style="padding: 50px" hidden>
     <h2><?php p($l->t('Analytics')); ?></h2>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>

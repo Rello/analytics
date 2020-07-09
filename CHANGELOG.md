@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.0 - 2020-05-xx
+## 2.4.0 - 2020-07-09
 ### Added
 - WhatsNew popup [#43](https://github.com/rello/analytics/issues/43)
+- Chart: customisation per data-series [#44](https://github.com/rello/analytics/issues/44)
+- Chart: combined charts [#44](https://github.com/rello/analytics/issues/44)
+- Chart: secondary axis [#36](https://github.com/rello/analytics/issues/36)
+- Report: persist filters [#36](https://github.com/rello/analytics/issues/36)
 
 ### Changed
 - migration to QueryBuilder

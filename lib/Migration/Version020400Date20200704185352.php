@@ -13,7 +13,7 @@ use OCP\Migration\SimpleMigrationStep;
 /**
  * Auto-generated migration step: Please modify to your needs!
  */
-class Version020306Date20200623185352 extends SimpleMigrationStep
+class Version020400Date20200704185352 extends SimpleMigrationStep
 {
 
     /** @var IDBConnection */
@@ -46,11 +46,10 @@ class Version020306Date20200623185352 extends SimpleMigrationStep
 
         $table = $schema->getTable('analytics_dataset');
 
-        $table->addColumn('dataoptions', 'string', [
+        $table->addColumn('filteroptions', 'string', [
             'notnull' => false,
             'length' => 1000,
         ]);
-
         return $schema;
     }
 
