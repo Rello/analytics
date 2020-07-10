@@ -201,7 +201,7 @@ class Version020400Date20200515185352 extends SimpleMigrationStep
                 'notnull' => true,
             ]);
             $table->setPrimaryKey(['id']);
-            $table->addIndex(['dataset'], 'analytics_threshold_dataset_idx');
+            $table->addIndex(['dataset'], 'analytics_threshold_dset_idx');
         }
 
         if (!$schema->hasTable('analytics_dataload')) {

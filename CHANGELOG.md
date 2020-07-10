@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1 - 2020-07-10
+### Fixed
+- DB index too long
+
 ## 2.4.0 - 2020-07-09
 ### Added
 - WhatsNew popup [#43](https://github.com/rello/analytics/issues/43)
