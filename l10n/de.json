@@ -95,7 +95,10 @@
     "hourly": "stündlich",
     "Legend": "Legende",
     "No data found": "Keine Daten gefunden",
-    "Filter": "Filter"
+    "Filter": "Filter",
+    "Unshare": "Freigabe aufheben",
+    "Can change filters": "Filter",
+    "Name": "Name"
   },
   "pluralForm": ""
 }

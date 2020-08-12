@@ -30,7 +30,9 @@ if (!OCA.Analytics) {
         TYPE_EXTERNAL_REGEX: 5,
         TYPE_SHARED: 99,
         SHARE_TYPE_USER: 0,
+        SHARE_TYPE_GROUP: 1,
         SHARE_TYPE_LINK: 3,
+        SHARE_TYPE_ROOM: 10,
         initialDocumentTitle: null,
         currentReportData: {},
         // flexible mapping depending on type requiered by the used chart library

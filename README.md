@@ -14,13 +14,16 @@ From data to report. This on premise data warehouse solution provides modular da
 - Visualization: combinded charts, tables, filters
 - Thresholds for alerts and color coding
 - Integration: Files app, Activity, Notifications, Flow
-- Sharing: user*, protected, public
+- Sharing: user, groups, link
 
 (*work in progress)
 
 ## Architecture
 
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Main" width="500" title="Analytics">
+
+## Languages
+- English (en),German (de, de_DE), Russian (ru, ru_RU)
 
 ## Installation
 - [Nextcloud App Store](https://apps.nextcloud.com/apps/analytics)

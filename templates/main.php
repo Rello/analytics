@@ -14,6 +14,7 @@ use OCP\Util;
 Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', 'sharetabview');
 Util::addStyle('analytics', 'jquery.dataTables.min');
+Util::addStyle('files_sharing', 'icons');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');

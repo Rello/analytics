@@ -60,6 +60,50 @@ class ShareMapper
     }
 
     /**
+     * get all shared datasets by group
+     * @param $group
+     * @return array
+     */
+    public function getDatasetsByGroup($group)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME_DATASET, 'DS')
+            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
+            ->select('DS.id', 'DS.name')
+            ->selectAlias($sql->createNamedParameter(99), 'type')
+            ->selectAlias($sql->createNamedParameter(0), 'parrent')
+            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
+            ->andWhere($sql->expr()->eq('SH.type', $sql->createNamedParameter(1)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
+     * get all shared datasets by group
+     * @param $group
+     * @param $id
+     * @return array
+     */
+    public function getDatasetByGroupId($group, $id)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME_DATASET, 'DS')
+            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
+            ->select('DS.*')
+            //->selectAlias($sql->createNamedParameter(99), 'type')
+            ->selectAlias($sql->createNamedParameter(0), 'parrent')
+            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
+            ->andWhere($sql->expr()->eq('SH.type', $sql->createNamedParameter(1)))
+            ->andWhere($sql->expr()->eq('SH.dataset', $sql->createNamedParameter($id)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * get shared datasets for current user
      * @return array
      */
@@ -108,15 +152,31 @@ class ShareMapper
     public function createShare($datasetId, $type, $uid_owner, $token)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->insert(self::TABLE_NAME)
-            ->values([
-                'dataset' => $sql->createNamedParameter($datasetId),
-                'type' => $sql->createNamedParameter($type),
-                'uid_owner' => $sql->createNamedParameter($uid_owner),
-                'uid_initiator' => $sql->createNamedParameter($this->userId),
-                'token' => $sql->createNamedParameter($token),
-            ]);
-        $sql->execute();
+        $sql->from(self::TABLE_NAME)
+            ->Select('id')
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter($type)))
+            ->andWhere($sql->expr()->eq('uid_owner', $sql->createNamedParameter($uid_owner)))
+            ->andWhere($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+
+        if ($result && ($type !== 3)) {
+            // don´t create double shares
+            return false;
+        } else {
+            $sql = $this->db->getQueryBuilder();
+            $sql->insert(self::TABLE_NAME)
+                ->values([
+                    'dataset' => $sql->createNamedParameter($datasetId),
+                    'type' => $sql->createNamedParameter($type),
+                    'uid_owner' => $sql->createNamedParameter($uid_owner),
+                    'uid_initiator' => $sql->createNamedParameter($this->userId),
+                    'token' => $sql->createNamedParameter($token),
+                ]);
+            $sql->execute();
+        }
         return true;
     }
 

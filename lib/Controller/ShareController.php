@@ -15,34 +15,55 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\ShareMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 
 class ShareController extends Controller
 {
     const SHARE_TYPE_USER = 0;
+    const SHARE_TYPE_GROUP = 1;
+    const SHARE_TYPE_USERGROUP = 2;
     const SHARE_TYPE_LINK = 3;
+    const SHARE_TYPE_ROOM = 10;
 
+    private $userId;
     private $logger;
     private $ShareMapper;
     private $secureRandom;
     private $ActivityManager;
+    /** @var IGroupManager */
+    private $groupManager;
+    /** @var IUserSession */
+    private $userSession;
+    /** @var IUserManager */
+    private $userManager;
 
     public function __construct(
+        $userId,
         $appName,
         IRequest $request,
         ILogger $logger,
         ShareMapper $ShareMapper,
         ActivityManager $ActivityManager,
-        ISecureRandom $secureRandom
+        IGroupManager $groupManager,
+        ISecureRandom $secureRandom,
+        IUserSession $userSession,
+        IUserManager $userManager
     )
     {
         parent::__construct($appName, $request);
+        $this->userId = $userId;
         $this->logger = $logger;
         $this->ShareMapper = $ShareMapper;
         $this->secureRandom = $secureRandom;
+        $this->groupManager = $groupManager;
         $this->ActivityManager = $ActivityManager;
+        $this->userSession = $userSession;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -77,7 +98,16 @@ class ShareController extends Controller
      */
     public function getSharedDatasets()
     {
-        return $this->ShareMapper->getSharedDatasets();
+        $sharedDatasetsByGroup = array();
+        $groups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
+
+        foreach ($groups as $group) {
+            $sharedDatasetByGroup = $this->ShareMapper->getDatasetsByGroup($group);
+            $sharedDatasetsByGroup = array_merge($sharedDatasetsByGroup, $sharedDatasetByGroup);
+        }
+
+        $sharedDatasets = $this->ShareMapper->getSharedDatasets();
+        return array_merge($sharedDatasetsByGroup, $sharedDatasets);
     }
 
     /**
@@ -89,7 +119,15 @@ class ShareController extends Controller
      */
     public function getSharedDataset($id)
     {
-        return $this->ShareMapper->getSharedDataset($id);
+        $sharedDataset = $this->ShareMapper->getSharedDataset($id);
+        if (empty($sharedDataset)) {
+            $groups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
+            foreach ($groups as $group) {
+                $sharedDataset = $this->ShareMapper->getDatasetByGroupId($group, $id);
+                break;
+            }
+        }
+        return $sharedDataset;
     }
 
     /**
@@ -98,14 +136,18 @@ class ShareController extends Controller
      * @NoAdminRequired
      * @param $datasetId
      * @param $type
+     * @param $user
      * @return bool
      */
-    public function create($datasetId, $type)
+    public function create($datasetId, $type, $user)
     {
-        $token = $this->generateToken();
-        //$this->logger->error($type . $token);
+        if ($type === self::SHARE_TYPE_LINK) {
+            $token = $this->generateToken();
+        } else {
+            $token = null;
+        }
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
-        return $this->ShareMapper->createShare($datasetId, $type, null, $token);
+        return $this->ShareMapper->createShare($datasetId, $type, $user, $token);
     }
 
     /**
@@ -119,6 +161,10 @@ class ShareController extends Controller
     {
         $shares = $this->ShareMapper->getShares($datasetId);
         foreach ($shares as &$share) {
+            $this->logger->error($share['uid_owner']);
+            if ($share['type'] === 0) {
+                $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
+            }
             $share['pass'] = $share['pass'] !== null;
         }
         return new DataResponse($shares);

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0 - 2020-07-xx
+### Added
+- translation: ru, ru_RU @[AleksovAnry](https://github.com/AleksovAnry)
+- headers for RegEx datasource @[AleksovAnry](https://github.com/AleksovAnry)
+- Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)
+
 ## 2.4.1 - 2020-07-10
 ### Fixed
 - DB index too long
