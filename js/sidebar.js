@@ -157,7 +157,7 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetDataOptions').value = data.dataoptions;
                     document.getElementById('sidebarDatasetDimension1').value = data.dimension1;
                     document.getElementById('sidebarDatasetDimension2').value = data.dimension2;
-                    document.getElementById('sidebarDatasetDimension3').value = data.dimension3;
+                    document.getElementById('sidebarDatasetValue').value = data.value;
                     document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasetDeleteButton);
                     document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasetUpdateButton);
                     OCA.Analytics.Sidebar.Dataset.handleDatasetTypeChange();
@@ -288,8 +288,8 @@ OCA.Analytics.Sidebar.Data = {
                     document.getElementById('tabContainerData').appendChild(table);
                     document.getElementById('DataTextDimension1').innerText = data.dimension1;
                     document.getElementById('DataTextDimension2').innerText = data.dimension2;
-                    document.getElementById('DataTextDimension3').innerText = data.dimension3;
-                    //document.getElementById('DataTextDimension3').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
+                    document.getElementById('DataTextValue').innerText = data.value;
+                    //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
                     document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
                     document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeleteButton);
                     document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
@@ -297,12 +297,12 @@ OCA.Analytics.Sidebar.Data = {
                     document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
                     document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
 
-                    document.getElementById('DataDimension3').addEventListener('keydown', function (event) {
+                    document.getElementById('DataValue').addEventListener('keydown', function (event) {
                         if (event.key === 'Enter') {
                             OCA.Analytics.Sidebar.Backend.updateData();
                             document.getElementById('DataDimension2').focus();
                             document.getElementById('DataDimension2').value = '';
-                            document.getElementById('DataDimension3').value = '';
+                            document.getElementById('DataValue').value = '';
                         }
                     });
                 } else {
@@ -701,7 +701,7 @@ OCA.Analytics.Sidebar.Backend = {
                 'dataoptions': document.getElementById('sidebarDatasetDataOptions').value,
                 'dimension1': document.getElementById('sidebarDatasetDimension1').value,
                 'dimension2': document.getElementById('sidebarDatasetDimension2').value,
-                'dimension3': document.getElementById('sidebarDatasetDimension3').value
+                'value': document.getElementById('sidebarDatasetValue').value
             },
             success: function () {
                 OCA.Analytics.Navigation.init(datasetId);
@@ -720,7 +720,7 @@ OCA.Analytics.Sidebar.Backend = {
             data: {
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
-                'dimension3': document.getElementById('DataDimension3').value,
+                'value': document.getElementById('DataValue').value,
             },
             success: function (data) {
                 button.classList.remove('loading');
@@ -750,7 +750,6 @@ OCA.Analytics.Sidebar.Backend = {
                 'datasetId': datasetId,
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
-                'dimension3': document.getElementById('DataDimension3').value,
             },
             success: function (data) {
                 OC.dialogs.confirm(

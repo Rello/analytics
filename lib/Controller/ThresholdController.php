@@ -60,14 +60,14 @@ class ThresholdController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $option
-     * @param $dimension3
+     * @param $value
      * @param int $severity
      * @return int
      */
-    public function create(int $datasetId, $dimension1, $option, $dimension3, int $severity)
+    public function create(int $datasetId, $dimension1, $option, $value, int $severity)
     {
-        $dimension3 = $this->floatvalue($dimension3);
-        return $this->ThresholdMapper->createThreshold($datasetId, $dimension1, $dimension3, $option, $severity);
+        $value = $this->floatvalue($value);
+        return $this->ThresholdMapper->createThreshold($datasetId, $dimension1, $value, $option, $severity);
     }
 
     /**
@@ -90,21 +90,21 @@ class ThresholdController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @return string
      * @throws \Exception
      */
-    public function validate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function validate(int $datasetId, $dimension1, $dimension2, $value)
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByDataset($datasetId);
         $datasetMetadata = $this->DatasetMapper->getDatasetOptions($datasetId);
 
         foreach ($thresholds as $threshold) {
-            //$this->logger->error('ThresholdController 104: ' . $threshold['dimension3'].'==='.$threshold['option'].'==='.$dimension3);
+            //$this->logger->error('ThresholdController 104: ' . $threshold['value'].'==='.$threshold['option'].'==='.$value);
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
-                if (version_compare($dimension3, $threshold['dimension3'], $threshold['option'])) {
-                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $datasetId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['dimension3']], $datasetMetadata['user_id']);
+                if (version_compare($value, $threshold['value'], $threshold['option'])) {
+                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $datasetId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $datasetMetadata['user_id']);
                     $result = 'Threshold value met';
                 }
             }

@@ -62,7 +62,7 @@ class StorageMapper
         }
 
         // value column deeds to be at the last position in the select. So it needs to be after the dynamic selects
-        $sql->addSelect($sql->func()->sum('dimension3'));
+        $sql->addSelect($sql->func()->sum('value'));
 
         // add the where clauses depending on the filter selection of the
         if (isset($options['filter'])) {
@@ -137,10 +137,9 @@ class StorageMapper
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
      * @return array
      */
-    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2)
     {
         $dimension1 = str_replace('*', '%', $dimension1);
         $dimension2 = str_replace('*', '%', $dimension2);
@@ -179,11 +178,11 @@ class StorageMapper
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @param string|null $user_id
      * @return string
      */
-    public function createData(int $datasetId, $dimension1, $dimension2, $dimension3, string $user_id = null)
+    public function createData(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null)
     {
         $dimension1 = str_replace('*', '', $dimension1);
         $dimension2 = str_replace('*', '', $dimension2);
@@ -203,7 +202,7 @@ class StorageMapper
         if ($result) {
             $sql = $this->db->getQueryBuilder();
             $sql->update(self::TABLE_NAME)
-                ->set('dimension3', $sql->createNamedParameter($dimension3))
+                ->set('value', $sql->createNamedParameter($value))
                 ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
                 ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
                 ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
@@ -218,7 +217,7 @@ class StorageMapper
                     'dataset' => $sql->createNamedParameter($datasetId),
                     'dimension1' => $sql->createNamedParameter($dimension1),
                     'dimension2' => $sql->createNamedParameter($dimension2),
-                    'dimension3' => $sql->createNamedParameter($dimension3),
+                    'value' => $sql->createNamedParameter($value),
                 ]);
             $sql->execute();
             return 'insert';

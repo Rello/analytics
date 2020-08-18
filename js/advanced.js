@@ -270,7 +270,7 @@ OCA.Analytics.Advanced.Threshold = {
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);
                 document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column 1');
-                document.getElementById('sidebarThresholdTextDimension3').innerText = data.dimension3 || t('analytics', 'Column 3');
+                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Column 3');
                 document.getElementById('createThresholdButton').addEventListener('click', OCA.Analytics.Advanced.Threshold.handleThresholdCreateButton);
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);
@@ -329,7 +329,7 @@ OCA.Analytics.Advanced.Threshold = {
 
         let text = document.createElement('div');
         text.classList.add('thresholdText');
-        text.innerText = data.dimension1 + ' ' + data.option + ' ' + data.dimension3;
+        text.innerText = data.dimension1 + ' ' + data.option + ' ' + data.value;
 
         let tDelete = document.createElement('div');
         tDelete.classList.add('icon-close');
@@ -353,7 +353,7 @@ OCA.Analytics.Advanced.Threshold = {
                 'datasetId': datasetId,
                 'dimension1': document.getElementById('sidebarThresholdDimension1').value,
                 'option': document.getElementById('sidebarThresholdOption').value,
-                'dimension3': document.getElementById('sidebarThresholdDimension3').value,
+                'value': document.getElementById('sidebarThresholdValue').value,
                 'severity': document.getElementById('sidebarThresholdSeverity').value,
             },
             success: function () {

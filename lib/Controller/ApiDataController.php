@@ -125,5 +125,6 @@ class ApiDataController extends ApiController
         $response->setData($array)->render();
         return $response;
     }
-    // curl -u admin:bwGnD-tSTPS-mJM7j-6WBFD-M9WxS -d '{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc16/nextcloud/apps/analytics/api/1.0/adddata/10
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/10
+
 }

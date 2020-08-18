@@ -82,14 +82,39 @@ OCA.Analytics.UI = {
         document.getElementById('tableContainer').style.removeProperty('display');
 
         let columns = [];
-        let data;
+        let data, unit = '';
 
         let header = jsondata.header;
+        let allDimensions = jsondata.dimensions;
         let headerKeys = Object.keys(header);
         for (let i = 0; i < headerKeys.length; i++) {
             columns[i] = {'title': header[headerKeys[i]]};
-            if (header[headerKeys[i]].length === 1) {
-                columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, header[headerKeys[i]] + ' ');
+            let columnType = Object.keys(allDimensions).find(key => allDimensions[key] === header[headerKeys[i]]);
+
+            if (i === headerKeys.length - 1) {
+                // prepare for later unit cloumn
+                //columns[i]['render'] = function(data, type, row, meta) {
+                //    return data + ' ' + row[row.length-2];
+                //};
+                if (header[headerKeys[i]].length === 1) {
+                    unit = header[headerKeys[i]];
+                }
+                columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, unit + ' ');
+                columns[i]['className'] = 'dt-right';
+            } else if (columnType === 'timestamp') {
+                columns[i]['render'] = function (data, type, row) {
+                    // If display or filter data is requested, format the date
+                    if (type === 'display' || type === 'filter') {
+                        return new Date(data * 1000).toLocaleString();
+                    }
+                    // Otherwise the data type requested (`type`) is type detection or
+                    // sorting data, for which we want to use the integer, so just return
+                    // that, unaltered
+                    return data;
+                }
+            } else if (columnType === 'unit') {
+                columns[i]['visible'] = false;
+                columns[i]['searchable'] = false;
             }
         }
         data = jsondata.data;
@@ -118,7 +143,6 @@ OCA.Analytics.UI = {
     },
 
     dataTableRowCallback: function (row, data, index, thresholds) {
-
         const operators = {
             '=': function (a, b) {
                 return a === b
@@ -143,7 +167,7 @@ OCA.Analytics.UI = {
         thresholds = thresholds.filter(p => p.dimension1 === data[0] || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(data[2]), parseFloat(threshold['dimension3']));
+            const comparison = operators[threshold['option']](parseFloat(data[2]), parseFloat(threshold['value']));
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {

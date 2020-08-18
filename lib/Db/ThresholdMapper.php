@@ -37,7 +37,7 @@ class ThresholdMapper
         self::TABLE_NAME;
     }
 
-    public function createThreshold($datasetId, $dimension1, $dimension3, $option, $serverity)
+    public function createThreshold($datasetId, $dimension1, $value, $option, $serverity)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
@@ -45,7 +45,7 @@ class ThresholdMapper
                 'user_id' => $sql->createNamedParameter($this->userId),
                 'dataset' => $sql->createNamedParameter($datasetId),
                 'dimension1' => $sql->createNamedParameter($dimension1),
-                'dimension3' => $sql->createNamedParameter($dimension3),
+                'value' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($serverity),
             ]);
@@ -60,7 +60,7 @@ class ThresholdMapper
             ->select('id')
             ->addSelect('dimension1')
             ->addSelect('dimension2')
-            ->addSelect('dimension3')
+            ->addSelect('value')
             ->addSelect('option')
             ->addSelect('severity')
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))

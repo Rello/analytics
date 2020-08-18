@@ -58,7 +58,7 @@ class StorageController extends Controller
         $options = json_decode($datasetMetadata['filteroptions'], true);
         if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
         if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
-        $header[2] = $datasetMetadata['dimension3'];
+        $header[6] = $datasetMetadata['value'];
         $header = array_values($header);
 
         $data = $this->StorageMapper->getData($datasetMetadata['id'], $options);
@@ -84,18 +84,22 @@ class StorageController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @param string|null $user_id
      * @return array
      * @throws \Exception
      */
-    public function update(int $datasetId, $dimension1, $dimension2, $dimension3, string $user_id = null)
+    public function update(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null)
     {
+        TODO:
+        //dates in both columns
         $dimension2 = $this->convertGermanDateFormat($dimension2);
-        $dimension3 = $this->floatvalue($dimension3);
+        //convert date into timestamp
+        //$timestamp = $this->convertGermanDateFormat($timestamp);
+        $value = $this->floatvalue($value);
 
-        $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $dimension3);
-        $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $dimension3, $user_id);
+        $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $value);
+        $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $value, $user_id);
 
         $insert = $update = 0;
         if ($action === 'insert') $insert = 1;
@@ -129,12 +133,12 @@ class StorageController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @return array
      */
-    public function deleteSimulate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function deleteSimulate(int $datasetId, $dimension1, $dimension2, $value)
     {
-        return $this->StorageMapper->deleteDataSimulate($datasetId, $dimension1, $dimension2, $dimension3);
+        return $this->StorageMapper->deleteDataSimulate($datasetId, $dimension1, $dimension2, $value);
     }
 
     private function floatvalue($val)

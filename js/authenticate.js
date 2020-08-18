@@ -1,4 +1,4 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
     $('#password').on('keyup input change', function () {
         if ($('#password').val().length > 0) {
             $('#password-submit').prop('disabled', false);

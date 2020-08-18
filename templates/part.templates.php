@@ -63,8 +63,8 @@
                 <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="input150"></div>
             </div>
             <div style="display: table-row;">
-                <div style="display: table-cell; width: 120px;"><?php p($l->t('Column')); ?>&nbsp;3</div>
-                <div style="display: table-cell;"><input id="sidebarDatasetDimension3" class="input150"></div>
+                <div style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetValue" class="input150"></div>
             </div>
         </div>
         <br>
@@ -137,9 +137,9 @@
                 <div style="display: table-cell;"><input id="DataDimension2"></div>
             </div>
             <div style="display: table-row;">
-                <div id="DataTextDimension3"
+                <div id="DataTextValue"
                      style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-                <div style="display: table-cell;"><input id="DataDimension3"></div>
+                <div style="display: table-cell;"><input id="DataValue"></div>
             </div>
         </div>
         <br>
@@ -199,9 +199,9 @@
                 </div>
             </div>
             <div style="display: table-row;">
-                <div id="sidebarThresholdTextDimension3"
+                <div id="sidebarThresholdTextvalue"
                      style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarThresholdDimension3" class="input150"></div>
+                <div style="display: table-cell;"><input id="sidebarThresholdvalue" class="input150"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>

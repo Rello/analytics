@@ -112,7 +112,7 @@ class OutputController extends Controller
             , $datasetMetadata['link']
             , $datasetMetadata['dimension1']
             , $datasetMetadata['dimension2']
-            , $datasetMetadata['dimension3']
+            , $datasetMetadata['value']
             , $datasetMetadata['password']
         );
         $result['options'] = $datasetMetadata;

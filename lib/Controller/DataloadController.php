@@ -260,21 +260,21 @@ class DataloadController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function updateData(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function updateData(int $datasetId, $dimension1, $dimension2, $value)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = $errorMessage = 0;
             $action = array();
-            $dimension3 = $this->floatvalue($dimension3);
-            if ($dimension3 === false) {
+            $value = $this->floatvalue($value);
+            if ($value === false) {
                 $errorMessage = $this->l10n->t('3rd field must be a valid number');
             } else {
-                $action = $this->StorageController->update($datasetId, $dimension1, $dimension2, $dimension3);
+                $action = $this->StorageController->update($datasetId, $dimension1, $dimension2, $value);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
             }
@@ -321,14 +321,14 @@ class DataloadController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @return DataResponse|NotFoundResponse
      */
-    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2, $dimension3)
+    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2, $value)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
-            $result = $this->StorageController->deleteSimulate($datasetId, $dimension1, $dimension2, $dimension3);
+            $result = $this->StorageController->deleteSimulate($datasetId, $dimension1, $dimension2, $value);
             return new DataResponse(['delete' => $result]);
         } else {
             return new NotFoundResponse();

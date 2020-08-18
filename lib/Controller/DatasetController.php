@@ -128,7 +128,7 @@ class DatasetController extends Controller
             $link = 'https://raw.githubusercontent.com/Rello/analytics/master/sample_data/sample1.csv';
             $visualization = 'ct';
             $chart = 'line';
-            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '', '', '');
+            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '');
         } elseif ($file !== '') {
             $name = explode('.', end(explode('/', $file)))[0];
             $subheader = $file;
@@ -137,7 +137,7 @@ class DatasetController extends Controller
             $link = $file;
             $visualization = 'table';
             $chart = 'line';
-            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '', '', '', '');
+            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '');
         }
         return $datasetId;
     }
@@ -176,15 +176,15 @@ class DatasetController extends Controller
      * @param $dataoptions
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @return bool
      */
-    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $dimension3)
+    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
         if ($type === DataSourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
-        return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $dimension3);
+        return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
     }
 
     /**

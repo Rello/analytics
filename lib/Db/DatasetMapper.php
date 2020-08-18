@@ -52,7 +52,11 @@ class DatasetMapper
                 'parent' => $sql->createNamedParameter(0),
                 'dimension1' => $sql->createNamedParameter($this->l10n->t('Object')),
                 'dimension2' => $sql->createNamedParameter($this->l10n->t('Date')),
-                'dimension3' => $sql->createNamedParameter($this->l10n->t('Value')),
+                //'dimension3' => $sql->createNamedParameter($this->l10n->t('Value')),
+                //'dimension4' => $sql->createNamedParameter($this->l10n->t('Value')),
+                //'timestamp' => $sql->createNamedParameter($this->l10n->t('Date')),
+                //'unit' => $sql->createNamedParameter($this->l10n->t('Value')),
+                'value' => $sql->createNamedParameter($this->l10n->t('Value')),
             ]);
         $sql->execute();
         return (int)$this->db->lastInsertId(self::TABLE_NAME);
@@ -72,10 +76,10 @@ class DatasetMapper
      * @param $dataoptions
      * @param $dimension1
      * @param $dimension2
-     * @param $dimension3
+     * @param $value
      * @return bool
      */
-    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $dimension3)
+    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
@@ -91,7 +95,7 @@ class DatasetMapper
             ->set('parent', $sql->createNamedParameter($parent))
             ->set('dimension1', $sql->createNamedParameter($dimension1))
             ->set('dimension2', $sql->createNamedParameter($dimension2))
-            ->set('dimension3', $sql->createNamedParameter($dimension3))
+            ->set('value', $sql->createNamedParameter($value))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->execute();
