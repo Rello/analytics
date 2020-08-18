@@ -11,19 +11,34 @@
 
 namespace OCA\Analytics\AppInfo;
 
+use OCA\Analytics\Dashboard\Widget;
 use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCP\AppFramework\QueryException;
+use OCP\Dashboard\RegisterPanelEvent;
 use OCP\EventDispatcher\IEventDispatcher;
-
+use OCP\Util;
 
 class Application extends App
 {
 
-    public function __construct(array $urlParams = array())
+    public function __construct(array $urlParams = [])
     {
         parent::__construct('analytics', $urlParams);
+
+        $container = $this->getContainer();
+
+        $version = Util::getVersion()[0];
+        if ($version >= 20) {
+            /** @var IEventDispatcher $dispatcher */
+            $dispatcher = $container->getServer()->query(IEventDispatcher::class);
+            $dispatcher->addListener(RegisterPanelEvent::class, function (RegisterPanelEvent $event) use ($container) {
+                // \OCP\Util::addScript('analytics', 'dashboard');
+                $event->registerPanel(Widget::class);
+            });
+        }
+
     }
 
     public function register()
