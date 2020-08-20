@@ -199,9 +199,9 @@
                 </div>
             </div>
             <div style="display: table-row;">
-                <div id="sidebarThresholdTextvalue"
+                <div id="sidebarThresholdTextValue"
                      style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarThresholdvalue" class="input150"></div>
+                <div style="display: table-cell;"><input id="sidebarThresholdValue" class="input150"></div>
             </div>
             <div style="display: table-row;">
                 <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>

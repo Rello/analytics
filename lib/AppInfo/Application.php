@@ -16,7 +16,7 @@ use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCP\AppFramework\QueryException;
-use OCP\Dashboard\RegisterPanelEvent;
+use OCP\Dashboard\RegisterWidgetEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Util;
 
@@ -33,9 +33,9 @@ class Application extends App
         if ($version >= 20) {
             /** @var IEventDispatcher $dispatcher */
             $dispatcher = $container->getServer()->query(IEventDispatcher::class);
-            $dispatcher->addListener(RegisterPanelEvent::class, function (RegisterPanelEvent $event) use ($container) {
+            $dispatcher->addListener(RegisterWidgetEvent::class, function (RegisterWidgetEvent $event) use ($container) {
                 // \OCP\Util::addScript('analytics', 'dashboard');
-                $event->registerPanel(Widget::class);
+                $event->registerWidget(Widget::class);
             });
         }
 

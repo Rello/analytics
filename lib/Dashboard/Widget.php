@@ -11,21 +11,25 @@
 
 namespace OCA\Analytics\Dashboard;
 
-use OCP\Dashboard\IPanel;
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
+use OCP\IURLGenerator;
 use OCP\Util;
 
-class Widget implements IPanel
+class Widget implements IWidget
 {
 
+    /** @var IURLGenerator */
+    private $url;
     /** @var IL10N */
     private $l10n;
 
     public function __construct(
+        IURLGenerator $url,
         IL10N $l10n
     )
     {
+        $this->url = $url;
         $this->l10n = $l10n;
     }
 
@@ -58,7 +62,7 @@ class Widget implements IPanel
      */
     public function getIconClass(): string
     {
-        return 'icon-github';
+        return 'icon-analytics';
     }
 
     /**
@@ -66,7 +70,7 @@ class Widget implements IPanel
      */
     public function getUrl(): ?string
     {
-        return \OC::$server->getURLGenerator()->linkToRoute('settings.PersonalSettings.index', ['section' => 'linked-accounts']);
+        return $this->url->linkToRouteAbsolute('analytics.Page.main');
     }
 
     /**

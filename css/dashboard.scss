@@ -7,3 +7,35 @@
  * @author Marcel Scherello <audioplayer@scherello.de>
  * @copyright 2020 Marcel Scherello
  */
+
+ .icon-analytics {
+ 	background-image: url(./../../apps/analytics/img/app-dark.svg);
+ }
+
+ body.dark .icon-analytics {
+ 	background-image: url(./../../apps/analyticsimg/app.svg);
+ }
+
+ // Dashboard Widget Section
+
+ .analyticsWidgetItem {
+     padding: 10px;
+     border-radius: 9px;
+     margin-bottom: 10px;
+     background-color: white;
+     height: 60px;
+ }
+
+ .analyticsWidgetReport {
+ }
+
+ .analyticsWidgetSmall {
+    text-align: right;
+    font-size: x-small;
+    line-height: 10px;
+ }
+ .analyticsWidgetValue {
+    text-align: right;
+    line-height: 30px;
+    font-size: x-large;
+ }
