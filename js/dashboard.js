@@ -7,13 +7,14 @@
  * @author Marcel Scherello <audioplayer@scherello.de>
  * @copyright 2020 Marcel Scherello
  */
+/** global: OC */
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
 
     OCA.Dashboard.register('analytics', (el) => {
-        el.innerHTML = '<ul id="ulAnalytics"><li id="ilAnalyticsFavorites">Favorites</li><li id="ilAnalyticsRecent">Recent</li></ul>';
+        el.innerHTML = '<ul id="ulAnalytics"></ul>';
     });
     OCA.Analytics.Dashboard.getData(20);
     OCA.Analytics.Dashboard.getData(155);
@@ -25,7 +26,15 @@ if (!OCA.Analytics) {
     /**
      * @namespace
      */
-    OCA.Analytics = {};
+    OCA.Analytics = {
+        TYPE_EMPTY_GROUP: 0,
+        TYPE_INTERNAL_FILE: 1,
+        TYPE_INTERNAL_DB: 2,
+        TYPE_GIT: 3,
+        TYPE_EXTERNAL_FILE: 4,
+        TYPE_EXTERNAL_REGEX: 5,
+        TYPE_SHARED: 99,
+    };
 }
 /**
  * @namespace OCA.Analytics.Dashboard
@@ -50,29 +59,34 @@ OCA.Analytics.Dashboard = {
 
     createWidgetContent: function (jsondata) {
         let report = jsondata['options']['name'];
-        let subheader = jsondata['options']['subheader'];
+        let reportId = jsondata['options']['id'];
         let data = jsondata['data'][jsondata['data'].length - 1];
+        let type = jsondata['options']['type'];
         let kpi = data[0];
         let value = data[data.length - 1];
 
-        let li = OCA.Analytics.Dashboard.buildWidgetKpiRow(report, kpi, value, jsondata.thresholds);
-        document.getElementById('ilAnalyticsFavorites').insertAdjacentHTML('afterend', li);
+        let li = OCA.Analytics.Dashboard.buildWidgetKpiRow(report, reportId, type, kpi, value, jsondata.thresholds);
+        document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
     },
 
-    buildWidgetKpiRow: function (report, kpi, value, thresholds) {
-        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(kpi, value, thresholds)
+    buildWidgetKpiRow: function (report, reportId, type, kpi, value, thresholds) {
+        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(kpi, value, thresholds);
+        let typeIcon = OCA.Analytics.Dashboard.validateIcon(type);
+        let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
+
         return `<li class="analyticsWidgetItem">
-            <div style="float: left;">
-                <div class="details">
-                    <div class="analyticsWidgetReport">${report}</div>
+            <a href="${href}">
+                <div class="analyticsWidgetIcon ${typeIcon}" class="analyticsWidgetIcon"></div>           
+                <div style="float: left;">
+                    <div><div class="analyticsWidgetReport">${report}</div></div>
+                        <div class="analyticsWidgetSmall">${kpi}</div>
                 </div>
-            </div>
-            <div style="float: right;">
-                <div class="details">
-                    <div ${thresholdColor} class="analyticsWidgetValue">${parseFloat(value)}</div>
-                    <div class="analyticsWidgetSmall">${kpi}</div>
+                <div style="float: right;">
+                    <div>
+                        <div ${thresholdColor} class="analyticsWidgetValue">${parseFloat(value)}</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </li>`;
     },
 
@@ -118,4 +132,18 @@ OCA.Analytics.Dashboard = {
         return thresholdColor;
     },
 
+    validateIcon: function (type) {
+        let typeINT = parseInt(type);
+        let typeIcon;
+        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE) {
+            typeIcon = 'icon-file';
+        } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
+            typeIcon = 'icon-projects';
+        } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
+            typeIcon = 'icon-external';
+        } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
+            typeIcon = 'icon-shared';
+        }
+        return typeIcon;
+    },
 }

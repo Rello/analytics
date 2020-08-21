@@ -19,23 +19,41 @@
  // Dashboard Widget Section
 
  .analyticsWidgetItem {
-     padding: 10px;
-     border-radius: 9px;
-     margin-bottom: 10px;
-     background-color: white;
      height: 60px;
+     max-width: 100%;
+     padding: 8px;
+     margin-right: 0;
+     border-radius: var(--border-radius-large);
  }
 
+.analyticsWidgetItem:hover,
+.analyticsWidgetItem:focus {
+    background: var(--color-background-hover);
+}
+
  .analyticsWidgetReport {
+    color: var(--color-main-text);
  }
 
  .analyticsWidgetSmall {
-    text-align: right;
-    font-size: x-small;
-    line-height: 10px;
+    color: var(--color-text-maxcontrast);
  }
  .analyticsWidgetValue {
     text-align: right;
-    line-height: 30px;
+    line-height: 45px;
     font-size: x-large;
  }
+  .analyticsWidgetSmallBackup {
+     text-align: right;
+     font-size: x-small;
+     line-height: 10px;
+  }
+
+  .analyticsWidgetIcon {
+ float: left;
+     margin-right: 10px;
+     background-size: 20px;
+     width: 20px;
+     height: 44px;
+     }
+

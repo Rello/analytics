@@ -46,7 +46,7 @@ class Widget implements IWidget
      */
     public function getTitle(): string
     {
-        return $this->l10n->t('Analytics Reports');
+        return $this->l10n->t('Reports');
     }
 
     /**
