@@ -138,58 +138,31 @@ OCA.Analytics.Navigation = {
     },
 
     buildNavigationMenu: function (data) {
-        let divMenu = document.createElement('div');
-        divMenu.classList.add('app-navigation-entry-menu');
-        let ulMenu = document.createElement('ul');
+        // clone the DOM template
+        let navigationMenu = document.importNode(document.getElementById('templateNavigationMenu').content, true);
 
-        let liEdit = document.createElement('li');
-        liEdit.addEventListener('click', OCA.Analytics.Navigation.handleBasicClicked);
-        let aEdit = document.createElement('a');
-        aEdit.href = '#';
-        aEdit.dataset.id = data.id;
-        aEdit.dataset.type = data.type;
-        aEdit.dataset.name = data.name;
-        let spanEditIcon = document.createElement('span');
-        spanEditIcon.classList.add('icon-rename');
-        let spanEditText = document.createElement('span');
-        spanEditText.innerText = t('analytics', 'Basic settings');
-        spanEditText.dataset.id = data.id;
-        spanEditText.dataset.type = data.type;
-        spanEditText.dataset.name = data.name;
+        let menu = navigationMenu.getElementById('navigationMenu');
+        menu.dataset.id = data.id;
+        menu.dataset.type = data.type;
+        menu.dataset.name = data.name;
 
-        let liAdvanced = document.createElement('li');
-        let aAdvanced = document.createElement('a');
-        aAdvanced.href = '#';
-        aAdvanced.dataset.id = data.id;
-        aAdvanced.dataset.type = data.type;
-        aAdvanced.dataset.name = data.name;
-        let spanAdvancedIcon = document.createElement('span');
-        let spanAdvancedText = document.createElement('span');
-        spanAdvancedText.dataset.id = data.id;
-        spanAdvancedText.dataset.type = data.type;
-        spanAdvancedText.dataset.name = data.name;
+        let edit = navigationMenu.getElementById('navigationMenuEdit');
+        edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicClicked);
+        edit.children[1].innerText = t('analytics', 'Basic settings');
+
+        navigationMenu.getElementById('navigationMenueFavorite').addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
 
         if (document.getElementById('advanced').value === 'true') {
-            aAdvanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
-            spanAdvancedIcon.classList.add('icon-category-monitoring');
-            spanAdvancedText.innerText = t('analytics', 'Back to report');
+            advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
+            advanced.children[0].classList.add('icon-category-monitoring');
+            advanced.children[1].innerText = t('analytics', 'Back to report');
         } else {
-            aEdit.appendChild(spanEditIcon);
-            aEdit.appendChild(spanEditText);
-            liEdit.appendChild(aEdit);
-            ulMenu.appendChild(liEdit);
-            aAdvanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-            spanAdvancedIcon.classList.add('icon-category-customization');
-            spanAdvancedText.innerText = t('analytics', 'Advanced');
+            let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
+            advanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
+            advanced.children[0].classList.add('icon-category-customization');
+            advanced.children[1].innerText = t('analytics', 'Advanced');
         }
-
-        aAdvanced.appendChild(spanAdvancedIcon);
-        aAdvanced.appendChild(spanAdvancedText);
-        liAdvanced.appendChild(aAdvanced);
-        ulMenu.appendChild(liAdvanced);
-        divMenu.appendChild(ulMenu);
-
-        return divMenu;
+        return navigationMenu;
     },
 
     handleNavigationClicked: function (evt) {
@@ -214,10 +187,14 @@ OCA.Analytics.Navigation = {
     },
 
     handleOptionsClicked: function (evt) {
+        let openMenu;
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            openMenu = document.querySelector('.app-navigation-entry-menu.open').previousElementSibling.firstElementChild.firstElementChild.firstElementChild.dataset.id;
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         }
-        evt.target.parentElement.parentElement.parentElement.nextSibling.classList.add('open');
+        if (openMenu !== evt.target.dataset.id) {
+            evt.target.parentElement.parentElement.parentElement.nextElementSibling.classList.add('open');
+        }
     },
 
     handleBasicClicked: function (evt) {
@@ -228,21 +205,38 @@ OCA.Analytics.Navigation = {
 
     handleAdvancedClicked: function (evt) {
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
-        let navigationItem = evt.target;
-        if (navigationItem.dataset.id === undefined) {
-            navigationItem = evt.target.parentNode;
-        }
-        const datasetId = navigationItem.dataset.id;
+        const datasetId = evt.target.closest('div').dataset.id;
         window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
         evt.stopPropagation();
     },
 
-    handleReportClicked: function (evt) {
-        let navigationItem = evt.target;
-        if (navigationItem.dataset.id === undefined) {
-            navigationItem = evt.target.parentNode;
+    handleFavoriteClicked: function (evt) {
+        let datasetId = evt.target.closest('div').dataset.id;
+        let icon = evt.target.parentNode.firstElementChild;
+        let isFavorite = 'false';
+
+        if (icon.classList.contains('icon-star')) {
+            icon.classList.replace('icon-star', 'icon-starred');
+            isFavorite = 'true';
+        } else {
+            icon.classList.replace('icon-starred', 'icon-star');
         }
-        const datasetId = navigationItem.dataset.id;
+
+        OCA.Analytics.Backend.favoriteUpdate(datasetId, isFavorite);
+    },
+
+    toggleFavorite: function (evt) {
+        if (OCA.Audioplayer.Core.CategorySelectors[1][0] === 'S') {
+            return;
+        }
+        var target = evt.target;
+        var trackId = target.getAttribute('data-trackid');
+        var isFavorite = OCA.Audioplayer.UI.toggleFavorite(target, trackId);
+        OCA.Audioplayer.Backend.favoriteUpdate(trackId, isFavorite);
+    },
+
+    handleReportClicked: function (evt) {
+        const datasetId = evt.target.closest('div').dataset.id;
         window.location = OC.generateUrl('apps/analytics/') + '#/r/' + datasetId;
         evt.stopPropagation();
     },

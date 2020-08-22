@@ -566,7 +566,17 @@ OCA.Analytics.Backend = {
             data: {version: encodeURIComponent(version)}
         })
         $('.whatsNewPopover').remove()
-    }
+    },
+
+    favoriteUpdate: function (datasetId, isFavorite) {
+        let params = 'favorite=' + isFavorite;
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', OC.generateUrl('apps/analytics/favorite/' + datasetId, true), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(params);
+    },
 };
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -18,7 +18,7 @@ OCA.Analytics.Sidebar = {
 
     showSidebar: function (evt) {
         let navigationItem = evt.target;
-        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.parentNode;
+        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.closest('div');
         const datasetId = navigationItem.dataset.id;
         const datasetType = navigationItem.dataset.type;
         let appsidebar = document.getElementById('app-sidebar');
@@ -631,7 +631,7 @@ OCA.Analytics.Sidebar.Share = {
             + '&shareType[]=0&shareType[]=1';
         //    + '&shareType[]=10';
 
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('GET', URL + '?' + params, true);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');

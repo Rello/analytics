@@ -20,10 +20,12 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\ITagManager;
 
 class DatasetController extends Controller
 {
     private $logger;
+    private $tagManager;
     private $ShareController;
     private $StorageMapper;
     private $DatasetMapper;
@@ -35,6 +37,7 @@ class DatasetController extends Controller
         $appName,
         IRequest $request,
         ILogger $logger,
+        ITagManager $tagManager,
         ShareController $ShareController,
         StorageMapper $StorageMapper,
         DatasetMapper $DatasetMapper,
@@ -45,6 +48,7 @@ class DatasetController extends Controller
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
+        $this->tagManager = $tagManager;
         $this->ShareController = $ShareController;
         $this->StorageMapper = $StorageMapper;
         $this->DatasetMapper = $DatasetMapper;
@@ -104,6 +108,35 @@ class DatasetController extends Controller
     public function getOwnDataset(int $datasetId, string $user_id = null)
     {
         return $this->DatasetMapper->getOwnDataset($datasetId, $user_id);
+    }
+
+    /**
+     * get own datasets which are marked as favorites
+     *
+     * @NoAdminRequired
+     * @return array
+     */
+    public function getOwnFavoriteDatasets()
+    {
+        return $this->tagManager->load('analytics')->getFavorites();
+    }
+
+    /**
+     * set/remove the favorite flag for a report
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param string $favorite
+     * @return bool
+     */
+    public function setFavorite(int $datasetId, string $favorite)
+    {
+        if ($favorite === 'true') {
+            $return = $this->tagManager->load('analytics')->addToFavorites($datasetId);
+        } else {
+            $return = $this->tagManager->load('analytics')->removeFromFavorites($datasetId);
+        }
+        return $return;
     }
 
     /**

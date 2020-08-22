@@ -16,9 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Dashboard.register('analytics', (el) => {
         el.innerHTML = '<ul id="ulAnalytics"></ul>';
     });
-    OCA.Analytics.Dashboard.getData(20);
-    OCA.Analytics.Dashboard.getData(155);
-    OCA.Analytics.Dashboard.getData(103);
+    //OCA.Analytics.Dashboard.getData(20);
+    //OCA.Analytics.Dashboard.getData(155);
+    //OCA.Analytics.Dashboard.getData(103);
+    OCA.Analytics.Dashboard.getFavorites();
 
 })
 
@@ -40,6 +41,24 @@ if (!OCA.Analytics) {
  * @namespace OCA.Analytics.Dashboard
  */
 OCA.Analytics.Dashboard = {
+    getFavorites: function () {
+        const url = OC.generateUrl('apps/analytics/favorites', true);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                for (let dataset of JSON.parse(xhr.response)) {
+                    OCA.Analytics.Dashboard.getData(dataset);
+                }
+            }
+        };
+        xhr.send();
+    },
+
     getData: function (datasetId) {
         const url = OC.generateUrl('apps/analytics/data/' + datasetId, true);
 

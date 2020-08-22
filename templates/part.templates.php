@@ -306,3 +306,17 @@
 
     </div>
 </div>
+<template id="templateNavigationMenu">
+    <div id="navigationMenu" class="app-navigation-entry-menu">
+        <ul>
+            <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
+            <li><a href="#" id="navigationMenuAdvanced"><span></span><span></span></a></li>
+            <li>
+                <a href="#" id="navigationMenueFavorite">
+                    <span class="icon icon-star"></span>
+                    <span>Add to favorites</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</template>
