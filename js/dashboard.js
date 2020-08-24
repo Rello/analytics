@@ -16,11 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Dashboard.register('analytics', (el) => {
         el.innerHTML = '<ul id="ulAnalytics"></ul>';
     });
-    //OCA.Analytics.Dashboard.getData(20);
-    //OCA.Analytics.Dashboard.getData(155);
-    //OCA.Analytics.Dashboard.getData(103);
     OCA.Analytics.Dashboard.getFavorites();
-
 })
 
 if (!OCA.Analytics) {
@@ -48,11 +44,16 @@ OCA.Analytics.Dashboard = {
         xhr.open('GET', url);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
-                for (let dataset of JSON.parse(xhr.response)) {
-                    OCA.Analytics.Dashboard.getData(dataset);
+                if (xhr.response !== '[]') {
+                    for (let dataset of JSON.parse(xhr.response)) {
+                        OCA.Analytics.Dashboard.getData(dataset);
+                    }
+                } else {
+                    document.getElementById('ulAnalytics').parentElement.innerHTML = '<div class="empty-content">' + t('analytics', 'Favorites are shown here') + '</div>'
                 }
             }
         };

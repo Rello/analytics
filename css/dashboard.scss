@@ -31,29 +31,35 @@
     background: var(--color-background-hover);
 }
 
- .analyticsWidgetReport {
+.analyticsWidgetReport {
     color: var(--color-main-text);
- }
+}
 
- .analyticsWidgetSmall {
+.analyticsWidgetSmall {
     color: var(--color-text-maxcontrast);
- }
- .analyticsWidgetValue {
+}
+
+.analyticsWidgetValue {
     text-align: right;
     line-height: 45px;
     font-size: x-large;
- }
-  .analyticsWidgetSmallBackup {
+}
+
+.analyticsWidgetSmallBackup {
      text-align: right;
      font-size: x-small;
      line-height: 10px;
-  }
+}
 
-  .analyticsWidgetIcon {
- float: left;
+.analyticsWidgetIcon {
+    float: left;
      margin-right: 10px;
      background-size: 20px;
      width: 20px;
      height: 44px;
-     }
+}
 
+.empty-content {
+ 	text-align: center;
+ 	margin-top: 5vh;
+}
