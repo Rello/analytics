@@ -17,17 +17,6 @@ use OCP\Util;
 $app = \OC::$server->query(\OCA\Analytics\AppInfo\Application::class);
 $app->register();
 
-$navigationEntry = function () {
-    return [
-        'id' => 'analytics',
-        'order' => 6,
-        'name' => \OC::$server->getL10N('analytics')->t('Analytics'),
-        'href' => \OC::$server->getURLGenerator()->linkToRoute('analytics.page.index'),
-        'icon' => \OC::$server->getURLGenerator()->imagePath('analytics', 'app.svg'),
-    ];
-};
-\OC::$server->getNavigationManager()->add($navigationEntry);
-
 \OC::$server->getEventDispatcher()->addListener(
     'OCA\Files::loadAdditionalScripts',
     function () {
