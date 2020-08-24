@@ -18,14 +18,10 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\IServerContainer;
 
 class Application20 extends App implements IBootstrap
 {
     public const APP_ID = 'analytics';
-
-    /** @var IServerContainer */
-    private $server;
 
     public function __construct(array $urlParams = [])
     {
@@ -37,6 +33,11 @@ class Application20 extends App implements IBootstrap
         $context->registerDashboardWidget(Widget::class);
         $this->registerNavigationEntry();
         $this->registerNotifications();
+
+        $context->registerEventListener(
+            LoadAdditionalScriptsEvent::class,
+            LoadAdditionalScripts::class
+        );
     }
 
     public function boot(IBootContext $context): void
@@ -63,5 +64,4 @@ class Application20 extends App implements IBootstrap
         };
         \OC::$server->getNavigationManager()->add($navigationEntry);
     }
-
 }

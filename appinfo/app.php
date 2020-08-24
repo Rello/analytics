@@ -14,7 +14,7 @@ namespace OCA\Analytics\AppInfo;
 
 use OCP\Util;
 
-$app = \OC::$server->query(\OCA\Analytics\AppInfo\Application::class);
+$app = \OC::$server->query(\OCA\Analytics\AppInfo\Application19::class);
 $app->register();
 
 \OC::$server->getEventDispatcher()->addListener(

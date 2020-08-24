@@ -28,9 +28,7 @@ class Application19 extends App
     {
         $this->registerNotifications();
         $this->registerNavigationEntry();
-
         $this->getContainer()->query(Operation::class)->register();
-
     }
 
     protected function registerNotifications(): void
@@ -52,5 +50,4 @@ class Application19 extends App
         };
         \OC::$server->getNavigationManager()->add($navigationEntry);
     }
-
 }

@@ -16,9 +16,11 @@ $version = Util::getVersion()[0];
 if ($version >= 20) {
     class Application extends Application20
     {
+        public const APP_ID = 'analytics';
     }
 } else {
     class Application extends Application19
     {
+        public const APP_ID = 'analytics';
     }
 }
