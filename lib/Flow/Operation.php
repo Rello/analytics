@@ -42,15 +42,15 @@ class Operation implements IOperation
         IL10N $l,
         IURLGenerator $urlGenerator,
         ILogger $logger,
-        DataloadController $DataloadController
-        IEventDispatcher $eventDispatcher;
+        DataloadController $DataloadController,
+        IEventDispatcher $eventDispatcher
     )
     {
         $this->l = $l;
         $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
         $this->DataloadController = $DataloadController;
-        $this->eventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function register(): void

@@ -14,8 +14,6 @@ namespace OCA\Analytics\AppInfo;
 use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Notification\Notifier;
 use OCP\AppFramework\App;
-use OCP\AppFramework\QueryException;
-use OCP\EventDispatcher\IEventDispatcher;
 
 class Application19 extends App
 {
@@ -31,18 +29,11 @@ class Application19 extends App
         $this->registerNotifications();
         $this->registerNavigationEntry();
 
-        $server = $this->getContainer()->getServer();
-        /** @var IEventDispatcher $dispatcher */
-        try {
-            $dispatcher = $server->query(IEventDispatcher::class);
-        } catch (QueryException $e) {
-            // no action
-        }
+        $this->getContainer()->query(Operation::class)->register();
 
-        Operation::register($dispatcher);
     }
 
-    public function registerNotifications(): void
+    protected function registerNotifications(): void
     {
         $notificationManager = \OC::$server->getNotificationManager();
         $notificationManager->registerNotifierService(Notifier::class);

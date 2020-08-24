@@ -18,8 +18,6 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\AppFramework\QueryException;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IServerContainer;
 
 class Application20 extends App implements IBootstrap
@@ -41,6 +39,17 @@ class Application20 extends App implements IBootstrap
         $this->registerNotifications();
     }
 
+    public function boot(IBootContext $context): void
+    {
+        $this->getContainer()->query(Operation::class)->register();
+    }
+
+    protected function registerNotifications(): void
+    {
+        $notificationManager = \OC::$server->getNotificationManager();
+        $notificationManager->registerNotifierService(Notifier::class);
+    }
+
     protected function registerNavigationEntry(): void
     {
         $navigationEntry = function () {
@@ -53,25 +62,6 @@ class Application20 extends App implements IBootstrap
             ];
         };
         \OC::$server->getNavigationManager()->add($navigationEntry);
-    }
-
-    public function registerNotifications(): void
-    {
-        $notificationManager = \OC::$server->getNotificationManager();
-        $notificationManager->registerNotifierService(Notifier::class);
-    }
-
-    public function boot(IBootContext $context): void
-    {
-
-        $server = $this->getContainer()->getServer();
-        /** @var IEventDispatcher $dispatcher */
-        try {
-            $dispatcher = $server->query(IEventDispatcher::class);
-        } catch (QueryException $e) {
-        }
-
-        Operation::register($dispatcher);
     }
 
 }
