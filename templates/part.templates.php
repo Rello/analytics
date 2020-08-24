@@ -314,7 +314,7 @@
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>
-                    <span>Add to favorites</span>
+                    <span></span>
                 </a>
             </li>
         </ul>

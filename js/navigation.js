@@ -69,11 +69,19 @@ OCA.Analytics.Navigation = {
         a.dataset.type = data.type;
         a.dataset.name = data.name;
 
-
         let ulSublist = document.createElement('ul');
         ulSublist.id = 'dataset-' + data.id;
 
         li.appendChild(a);
+
+        if (parseInt(data.favorite) === 1) {
+            let spanFav = document.createElement('span');
+            spanFav.id = 'fav-' + data.id;
+            spanFav.classList.add('icon', 'icon-starred');
+            spanFav.style.opacity = '0.5';
+            li.appendChild(spanFav);
+        }
+
         if (typeINT !== OCA.Analytics.TYPE_SHARED) {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
@@ -150,7 +158,15 @@ OCA.Analytics.Navigation = {
         edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicClicked);
         edit.children[1].innerText = t('analytics', 'Basic settings');
 
-        navigationMenu.getElementById('navigationMenueFavorite').addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
+        let favorite = navigationMenu.getElementById('navigationMenueFavorite');
+        favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
+
+        if (parseInt(data.favorite) === 1) {
+            favorite.firstElementChild.classList.replace('icon-star', 'icon-starred');
+            favorite.children[1].innerHTML = t('analytics', 'Remove from favorites');
+        } else {
+            favorite.children[1].innerHTML = t('analytics', 'Add to favorites');
+        }
 
         if (document.getElementById('advanced').value === 'true') {
             advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
@@ -217,22 +233,14 @@ OCA.Analytics.Navigation = {
 
         if (icon.classList.contains('icon-star')) {
             icon.classList.replace('icon-star', 'icon-starred');
+            evt.target.parentNode.children[1].innerHTML = t('analytics', 'Remove from favorites');
             isFavorite = 'true';
         } else {
             icon.classList.replace('icon-starred', 'icon-star');
+            evt.target.parentNode.children[1].innerHTML = t('analytics', 'Add to favorites');
+            document.getElementById('fav-' + datasetId).remove();
         }
-
         OCA.Analytics.Backend.favoriteUpdate(datasetId, isFavorite);
-    },
-
-    toggleFavorite: function (evt) {
-        if (OCA.Audioplayer.Core.CategorySelectors[1][0] === 'S') {
-            return;
-        }
-        var target = evt.target;
-        var trackId = target.getAttribute('data-trackid');
-        var isFavorite = OCA.Audioplayer.UI.toggleFavorite(target, trackId);
-        OCA.Audioplayer.Backend.favoriteUpdate(trackId, isFavorite);
     },
 
     handleReportClicked: function (evt) {

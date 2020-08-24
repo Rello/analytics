@@ -67,6 +67,7 @@ class DatasetController extends Controller
         $ownDatasets = $this->DatasetMapper->getDatasets();
         $sharedDatasets = $this->ShareController->getSharedDatasets();
         $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
 
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
         foreach ($dataloads as $dataload) {
@@ -82,6 +83,15 @@ class DatasetController extends Controller
                 $ownDatasets[$key]['schedules'] = $dataload['schedules'];
             }
         }
+
+        foreach ($ownDatasets as &$ownDataset) {
+            $hasTag = 0;
+            if (is_array($favorites) and in_array($ownDataset['id'], $favorites)) {
+                $hasTag = 1;
+            }
+            $ownDataset['favorite'] = $hasTag;
+        }
+
         return new DataResponse($ownDatasets);
     }
 
