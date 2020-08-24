@@ -36,24 +36,27 @@ class Operation implements IOperation
     private $urlGenerator;
     private $logger;
     private $DataloadController;
+    private $eventDispatcher;
 
     public function __construct(
         IL10N $l,
         IURLGenerator $urlGenerator,
         ILogger $logger,
         DataloadController $DataloadController
+        IEventDispatcher $eventDispatcher;
     )
     {
         $this->l = $l;
         $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
         $this->DataloadController = $DataloadController;
+        $this->eventDispatcher;
     }
 
-    public static function register(IEventDispatcher $dispatcher): void
+    public function register(): void
     {
         if (interface_exists(IRuleMatcher::class)) {
-            $dispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
+            $this->eventDispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
                 $operation = \OC::$server->query(Operation::class);
                 $event->getSubject()->registerOperation($operation);
                 Util::addScript('analytics', 'flow');
