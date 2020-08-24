@@ -13,7 +13,9 @@ namespace OCA\Analytics\AppInfo;
 
 use OCA\Analytics\Dashboard\Widget;
 use OCA\Analytics\Flow\Operation;
+use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Notification\Notifier;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -31,13 +33,9 @@ class Application20 extends App implements IBootstrap
     public function register(IRegistrationContext $context): void
     {
         $context->registerDashboardWidget(Widget::class);
+        $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
         $this->registerNavigationEntry();
         $this->registerNotifications();
-
-        $context->registerEventListener(
-            LoadAdditionalScriptsEvent::class,
-            LoadAdditionalScripts::class
-        );
     }
 
     public function boot(IBootContext $context): void
