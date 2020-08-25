@@ -61,6 +61,7 @@ return [
         // API
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#addData', 'url' => '/api/1.0/adddata/{datasetId}', 'verb' => 'POST'],
+        ['name' => 'ApiData#addDataV2', 'url' => '/api/2.0/adddata/{datasetId}', 'verb' => 'POST'],
 
         // whatsnew
         ['name' => 'whatsNew#get', 'url' => '/whatsnew', 'verb' => 'GET'],

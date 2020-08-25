@@ -56,6 +56,7 @@ class ApiDataController extends ApiController
     }
 
     /**
+     * add data via there database names
      * @CORS
      * @NoCSRFRequired
      * @NoAdminRequired
@@ -98,6 +99,51 @@ class ApiDataController extends ApiController
     }
 
     /**
+     * add data via there real field names
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function addDataV2(int $datasetId)
+    {
+        $params = $this->request->getParams();
+        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+
+        if (empty($datasetMetadata)) {
+            $this->errors[] = 'Unknown report or dataset';
+            return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
+        } elseif ((int)$datasetMetadata['type'] !== 2) {
+            $this->errors[] = 'Report does not allow data maintenance';
+            return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
+        }
+
+        if (!isset($params[$datasetMetadata['dimension1']])) {
+            $this->errors[] = $datasetMetadata['dimension1'] . ' required';
+        } elseif (!isset($params[$datasetMetadata['dimension2']])) {
+            $this->errors[] = $datasetMetadata['dimension2'] . ' required';
+        } elseif (!isset($params[$datasetMetadata['value']])) {
+            $this->errors[] = $datasetMetadata['value'] . ' required';
+        }
+        if (!empty($this->errors)) {
+            return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
+        }
+
+        $this->StorageController->update($datasetId,
+            $params[$datasetMetadata['dimension1']],
+            $params[$datasetMetadata['dimension2']],
+            $params[$datasetMetadata['value']]);
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
+
+        return $this->requestResponse(
+            true,
+            Http::STATUS_OK,
+            'Data update successfull');
+    }
+
+    /**
      * @param bool $success
      * @param int|null $code
      * @param string|null $message
@@ -125,6 +171,6 @@ class ApiDataController extends ApiController
         $response->setData($array)->render();
         return $response;
     }
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/10
-
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "simension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
 }
