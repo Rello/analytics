@@ -110,7 +110,7 @@ class ApiDataController extends ApiController
     public function addDataV2(int $datasetId)
     {
         $params = $this->request->getParams();
-        //$this->logger->debug('array: ' . json_encode($params));
+        $this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
         if (empty($datasetMetadata)) {
@@ -121,29 +121,27 @@ class ApiDataController extends ApiController
             return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
         }
 
-        // remove headers to have only the data array left
-        unset($params['datasetId']);
-        unset($params['_route']);
+        foreach ($params['data'] as $dataArray) {
+            $this->logger->debug('array: ' . json_encode($dataArray));
 
-        foreach ($params as $dataArray) {
-            if (isset($params['dimension1'])) {
-                $dimension1 = $params['dimension1'];
+            if (isset($dataArray['dimension1'])) {
+                $dimension1 = $dataArray['dimension1'];
             } elseif (isset($dataArray[$datasetMetadata['dimension1']])) {
                 $dimension1 = $dataArray[$datasetMetadata['dimension1']];
             } else {
                 $this->errors[] = 'Dimension 1 required';
             }
 
-            if (isset($params['dimension2'])) {
-                $dimension2 = $params['dimension2'];
+            if (isset($dataArray['dimension2'])) {
+                $dimension2 = $dataArray['dimension2'];
             } elseif (isset($dataArray[$datasetMetadata['dimension2']])) {
                 $dimension2 = $dataArray[$datasetMetadata['dimension2']];
             } else {
                 $this->errors[] = 'Dimension 2 required';
             }
 
-            if (isset($params['value'])) {
-                $value = $params['value'];
+            if (isset($dataArray['value'])) {
+                $value = $dataArray['value'];
             } elseif (isset($dataArray[$datasetMetadata['value']])) {
                 $value = $dataArray[$datasetMetadata['value']];
             } else {
@@ -194,5 +192,6 @@ class ApiDataController extends ApiController
     }
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "simension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}, {"Spalte 1": "y", "Spalte 2": "y", "toller wert": "555,5"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"data":[{"Spalte 1": "a", "Spalte 2": "a", "toller wert": "1"}, {"dimension1": "b", "dimension2": "b", "value": "2"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
+
 }
