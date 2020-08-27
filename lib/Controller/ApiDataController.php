@@ -70,13 +70,7 @@ class ApiDataController extends ApiController
         //$this->logger->debug($datasetId);
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
-        if (empty($datasetMetadata)) {
-            $this->errors[] = 'Unknown report or dataset';
-            return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
-        } elseif ((int)$datasetMetadata['type'] !== 2) {
-            $this->errors[] = 'Report does not allow data maintenance';
-            return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
-        }
+        $this->deriveMaintenancePossible($datasetMetadata);
 
         if (!isset($params['dimension1'])) {
             $this->errors[] = 'Dimension 1 required';
@@ -109,44 +103,19 @@ class ApiDataController extends ApiController
      */
     public function addDataV2(int $datasetId)
     {
+        $message = 'No -data- parameter';
         $params = $this->request->getParams();
         $this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
-        if (empty($datasetMetadata)) {
-            $this->errors[] = 'Unknown report or dataset';
-            return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
-        } elseif ((int)$datasetMetadata['type'] !== 2) {
-            $this->errors[] = 'Report does not allow data maintenance';
-            return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
-        }
+        $this->deriveMaintenancePossible($datasetMetadata);
 
         foreach ($params['data'] as $dataArray) {
             $this->logger->debug('array: ' . json_encode($dataArray));
 
-            if (isset($dataArray['dimension1'])) {
-                $dimension1 = $dataArray['dimension1'];
-            } elseif (isset($dataArray[$datasetMetadata['dimension1']])) {
-                $dimension1 = $dataArray[$datasetMetadata['dimension1']];
-            } else {
-                $this->errors[] = 'Dimension 1 required';
-            }
-
-            if (isset($dataArray['dimension2'])) {
-                $dimension2 = $dataArray['dimension2'];
-            } elseif (isset($dataArray[$datasetMetadata['dimension2']])) {
-                $dimension2 = $dataArray[$datasetMetadata['dimension2']];
-            } else {
-                $this->errors[] = 'Dimension 2 required';
-            }
-
-            if (isset($dataArray['value'])) {
-                $value = $dataArray['value'];
-            } elseif (isset($dataArray[$datasetMetadata['value']])) {
-                $value = $dataArray[$datasetMetadata['value']];
-            } else {
-                $this->errors[] = 'Value required';
-            }
+            $dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
+            $dimension2 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension2');
+            $value = $this->deriveParameterNames($dataArray, $datasetMetadata, 'value');
 
             if (!empty($this->errors)) {
                 return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
@@ -154,12 +123,85 @@ class ApiDataController extends ApiController
 
             $this->StorageController->update($datasetId, $dimension1, $dimension2, $value);
             $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
+            $message = 'Data update successfull';
         }
 
         return $this->requestResponse(
             true,
             Http::STATUS_OK,
-            'Data update successfull');
+            $message);
+    }
+
+    /**
+     * delete data
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function deleteDataV2(int $datasetId)
+    {
+        $message = 'No -delete- parameter';
+        $params = $this->request->getParams();
+        $this->logger->debug('array: ' . json_encode($params));
+        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+
+        $this->deriveMaintenancePossible($datasetMetadata);
+
+        foreach ($params['delete'] as $dataArray) {
+            $dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
+            $dimension2 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension2');
+
+            if (!empty($this->errors)) {
+                return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
+            }
+
+            $this->StorageController->delete($datasetId, $dimension1, $dimension2);
+            $message = 'Data deleted';
+        }
+
+        return $this->requestResponse(
+            true,
+            Http::STATUS_OK,
+            $message);
+    }
+
+    /**
+     * derive if the parameter is technical or the free text description from the report
+     * @param $data
+     * @param $datasetMetadata
+     * @param $dimension
+     * @return array | bool
+     */
+    protected function deriveParameterNames($data, $datasetMetadata, $dimension)
+    {
+        if (isset($data[$dimension])) {
+            return $data[$dimension];
+        } elseif (isset($data[$datasetMetadata[$dimension]])) {
+            return $data[$datasetMetadata[$dimension]];
+        } else {
+            $this->errors[] = $dimension . ' required';
+            return false;
+        }
+    }
+
+    /**
+     * derive if maintenance is possible
+     * @param $datasetMetadata
+     * @return DataResponse | bool
+     */
+    protected function deriveMaintenancePossible($datasetMetadata)
+    {
+        if (empty($datasetMetadata)) {
+            $this->errors[] = 'Unknown report or dataset';
+            return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
+        } elseif ((int)$datasetMetadata['type'] !== 2) {
+            $this->errors[] = 'Report does not allow data maintenance';
+            return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
+        }
+        return true;
     }
 
     /**
@@ -190,8 +232,11 @@ class ApiDataController extends ApiController
         $response->setData($array)->render();
         return $response;
     }
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "simension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"data":[{"Spalte 1": "a", "Spalte 2": "a", "toller wert": "1"}, {"dimension1": "b", "dimension2": "b", "value": "2"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
+
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"delete":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/deletedata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"del":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/deletedata/158
 
 }
