@@ -113,6 +113,7 @@ class JsonService
         array_push($template, ['id' => 'auth', 'name' => 'Authentication', 'placeholder' => 'User:Password']);
         array_push($template, ['id' => 'path', 'name' => 'JSON path', 'placeholder' => 'x/y/z']);
         array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
         return $template;
     }
 }

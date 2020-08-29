@@ -89,6 +89,7 @@ class RegexService
 		array_push($template, ['id' => 'regex', 'name' => 'valid regex', 'placeholder' => '//']);
 		array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
 		array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
 		return $template;
 	}
 

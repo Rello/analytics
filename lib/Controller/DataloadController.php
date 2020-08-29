@@ -159,15 +159,16 @@ class DataloadController extends Controller
      */
     public function execute(int $dataloadId)
     {
-        //$this->logger->debug('DataLoadController 143:'.$dataloadId);
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
         $result = $this->getDataFromDatasource($dataloadId);
         $insert = $update = 0;
         $datasetId = $result['datasetId'];
-        //$this->logger->debug('DataLoadController 146: loading into dataset '.$datasetId);
 
+        $option = json_decode($dataloadMetadata['option'], true);
+        if (isset($option['delete']) and $option['delete'] === 'true') {
+            $this->StorageController->delete($datasetId, '*', '*');
+        }
         if ($result['error'] === 0) {
-            //$this->logger->debug('DataLoadController 149: OK');
             foreach ($result['data'] as &$row) {
                 $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id']);
                 $insert = $insert + $action['insert'];

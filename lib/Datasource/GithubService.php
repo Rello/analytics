@@ -53,10 +53,9 @@ class GithubService
 
         $json = json_decode($curlResult, true);
         $i = 0;
-
         $data = array();
         foreach ($json as $item) {
-            if (isset($option['limit'])) {
+            if (isset($option['limit']) and $option['limit'] !== '') {
                 if ($i === (int)$option['limit']) break;
             }
             $nc_value = 0;
@@ -95,6 +94,7 @@ class GithubService
         array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
         array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
         array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
         return $template;
     }
 
