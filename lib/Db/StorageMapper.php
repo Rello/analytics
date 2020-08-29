@@ -180,12 +180,15 @@ class StorageMapper
      * @param $dimension2
      * @param $value
      * @param string|null $user_id
+     * @param int|null $timestamp
      * @return string
      */
-    public function createData(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null)
+    public function createData(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null)
     {
         $dimension1 = str_replace('*', '', $dimension1);
         $dimension2 = str_replace('*', '', $dimension2);
+        $timestamp = $timestamp ?? time();
+
         if ($user_id) $this->userId = $user_id;
 
         $sql = $this->db->getQueryBuilder();
@@ -203,6 +206,7 @@ class StorageMapper
             $sql = $this->db->getQueryBuilder();
             $sql->update(self::TABLE_NAME)
                 ->set('value', $sql->createNamedParameter($value))
+                ->set('timestamp', $sql->createNamedParameter($timestamp))
                 ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
                 ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
                 ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
@@ -218,6 +222,7 @@ class StorageMapper
                     'dimension1' => $sql->createNamedParameter($dimension1),
                     'dimension2' => $sql->createNamedParameter($dimension2),
                     'value' => $sql->createNamedParameter($value),
+                    'timestamp' => $sql->createNamedParameter($timestamp),
                 ]);
             $sql->execute();
             return 'insert';
