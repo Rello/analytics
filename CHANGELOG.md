@@ -2,9 +2,21 @@
 
 ## 2.5.0 - 2020-07-xx
 ### Added
+- NC20 Dashboard Widget [#61](https://github.com/rello/analytics/issues/61)
+- Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)
+- API: use display names for upload [#58](https://github.com/rello/analytics/issues/58)
+- API: accepting arrays [#55](https://github.com/rello/analytics/issues/55)
+- API: delete data [#56](https://github.com/rello/analytics/issues/56)
+- Report: mark reports as favorite [#63](https://github.com/rello/analytics/issues/63)
 - translation: ru, ru_RU @[AleksovAnry](https://github.com/AleksovAnry)
 - headers for RegEx datasource @[AleksovAnry](https://github.com/AleksovAnry)
-- Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)
+- Dataload: Purge Dataset [#47](https://github.com/rello/analytics/issues/47)
+
+### Changed
+- Enhanced datamodel [#59](https://github.com/rello/analytics/issues/59)
+
+### Fixed
+- Floating point numbers rounded off in Rest API calls [#57](https://github.com/rello/analytics/issues/57)
 
 ## 2.4.1 - 2020-07-10
 ### Fixed

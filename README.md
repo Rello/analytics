@@ -13,7 +13,7 @@ From data to report. This on premise data warehouse solution provides modular da
 - Advanced dataloads with scheduling
 - Visualization: combinded charts, tables, filters
 - Thresholds for alerts and color coding
-- Integration: Files app, Activity, Notifications, Flow
+- Integration: Files app, Activity, Notifications, Flow, Dashboard (NC20)
 - Sharing: user, groups, link
 
 (*work in progress)

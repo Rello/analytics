@@ -168,12 +168,12 @@ OCA.Analytics.Navigation = {
             favorite.children[1].innerHTML = t('analytics', 'Add to favorites');
         }
 
+        let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
         if (document.getElementById('advanced').value === 'true') {
             advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
             advanced.children[0].classList.add('icon-category-monitoring');
             advanced.children[1].innerText = t('analytics', 'Back to report');
         } else {
-            let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
             advanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
             advanced.children[0].classList.add('icon-category-customization');
             advanced.children[1].innerText = t('analytics', 'Advanced');

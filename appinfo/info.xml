@@ -13,8 +13,8 @@ From data to report. This on premise data warehouse solution provides modular da
 - Advanced dataloads with scheduling
 - Visualization: combined charts, tables, filters
 - Thresholds for alerts and color coding
-- Integration: Files app, Activity, Notifications, Flow
-- Sharing: user*, protected, public
+- Integration: Files app, Activity, Notifications, Flow, Dashboard (NC20)
+- Sharing: user, groups, link
 
 (*work in progress)
 ]]></description>
@@ -27,6 +27,7 @@ From data to report. This on premise data warehouse solution provides modular da
     </documentation>
     <category>office</category>
     <category>workflow</category>
+    <category>dashboard</category>
     <website>https://github.com/rello/analytics</website>
     <bugs>https://github.com/rello/analytics/issues</bugs>
     <repository type="git">https://github.com/rello/analytics.git</repository>

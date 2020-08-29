@@ -124,7 +124,7 @@ class DatasetController extends Controller
      * get own datasets which are marked as favorites
      *
      * @NoAdminRequired
-     * @return array
+     * @return array|bool
      */
     public function getOwnFavoriteDatasets()
     {
