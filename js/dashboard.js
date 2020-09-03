@@ -83,7 +83,7 @@ OCA.Analytics.Dashboard = {
         let data = jsondata['data'][jsondata['data'].length - 1];
         let type = jsondata['options']['type'];
         let kpi = data[0];
-        let value = data[data.length - 1];
+        let value = data[data.length - 1].toLocaleString();
 
         let li = OCA.Analytics.Dashboard.buildWidgetKpiRow(report, reportId, type, kpi, value, jsondata.thresholds);
         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);

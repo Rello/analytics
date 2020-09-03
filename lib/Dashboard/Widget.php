@@ -70,7 +70,7 @@ class Widget implements IWidget
      */
     public function getUrl(): ?string
     {
-        return $this->url->linkToRouteAbsolute('analytics.Page.main');
+        return null;
     }
 
     /**
