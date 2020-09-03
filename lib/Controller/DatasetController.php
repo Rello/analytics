@@ -108,6 +108,18 @@ class DatasetController extends Controller
     }
 
     /**
+     * search for datasets
+     *
+     * @NoAdminRequired
+     * @param string $searchString
+     * @return array
+     */
+    public function search(string $searchString)
+    {
+        return $this->DatasetMapper->search($searchString);
+    }
+
+    /**
      * get own dataset details
      *
      * @NoAdminRequired

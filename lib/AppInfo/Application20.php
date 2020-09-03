@@ -15,6 +15,7 @@ use OCA\Analytics\Dashboard\Widget;
 use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Notification\Notifier;
+use OCA\Analytics\Search\Provider;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -34,6 +35,7 @@ class Application20 extends App implements IBootstrap
     {
         $context->registerDashboardWidget(Widget::class);
         $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
+        $context->registerSearchProvider(Provider::class);
         $this->registerNavigationEntry();
         $this->registerNotifications();
     }

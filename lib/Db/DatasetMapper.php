@@ -160,6 +160,27 @@ class DatasetMapper
     }
 
     /**
+     * search datasets by searchstring
+     * @param $searchString
+     * @return array
+     */
+    public function search($searchString)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->addSelect('name')
+            ->addSelect('type')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->like('name', $sql->createNamedParameter('%' . $searchString . '%')))
+            ->orderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * get datasets
      * @param int $id
      * @param string $user_id
