@@ -70,10 +70,10 @@ class GithubService
         $header[0] = 'Version';
         $header[1] = 'Count';
 
-
         usort($data, function ($a, $b) {
-            return $a[0] <=> $b[0];
+            return strnatcmp($a[0], $b[0]);
         });
+
         return [
             'header' => $header,
             'data' => $data,
