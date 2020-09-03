@@ -486,6 +486,7 @@ OCA.Analytics.Sidebar.Share = {
 
         let moreIcon = document.createElement('a');
         moreIcon.classList.add('icon', 'icon-more');
+        moreIcon.id = 'moreIcon';
         moreIcon.addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
         shareMenu.appendChild(moreIcon);
 

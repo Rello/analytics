@@ -86,6 +86,7 @@ OCA.Analytics.UI = {
 
         let header = jsondata.header;
         let allDimensions = jsondata.dimensions;
+        (jsondata.dimensions) ? allDimensions = jsondata.dimensions : allDimensions = jsondata.header;
         let headerKeys = Object.keys(header);
         for (let i = 0; i < headerKeys.length; i++) {
             columns[i] = {'title': header[headerKeys[i]]};

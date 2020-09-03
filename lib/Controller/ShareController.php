@@ -161,7 +161,6 @@ class ShareController extends Controller
     {
         $shares = $this->ShareMapper->getShares($datasetId);
         foreach ($shares as &$share) {
-            $this->logger->error($share['uid_owner']);
             if ($share['type'] === 0) {
                 $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
             }

@@ -79,6 +79,7 @@ OCA.Analytics.Navigation = {
             spanFav.id = 'fav-' + data.id;
             spanFav.classList.add('icon', 'icon-starred');
             spanFav.style.opacity = '0.5';
+            spanFav.dataset.testing = 'favI' + data.name;
             li.appendChild(spanFav);
         }
 
@@ -157,9 +158,25 @@ OCA.Analytics.Navigation = {
         let edit = navigationMenu.getElementById('navigationMenuEdit');
         edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicClicked);
         edit.children[1].innerText = t('analytics', 'Basic settings');
+        edit.dataset.testing = 'basic' + data.name;
 
         let favorite = navigationMenu.getElementById('navigationMenueFavorite');
         favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
+        favorite.dataset.testing = 'fav' + data.name;
+
+        let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
+        if (document.getElementById('advanced').value === 'true') {
+            edit.remove();
+            advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
+            advanced.children[0].classList.add('icon-category-monitoring');
+            advanced.children[1].innerText = t('analytics', 'Back to report');
+            advanced.dataset.testing = 'back' + data.name;
+        } else {
+            advanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
+            advanced.children[0].classList.add('icon-category-customization');
+            advanced.children[1].innerText = t('analytics', 'Advanced');
+            advanced.dataset.testing = 'adv' + data.name;
+        }
 
         if (parseInt(data.favorite) === 1) {
             favorite.firstElementChild.classList.replace('icon-star', 'icon-starred');
@@ -168,16 +185,6 @@ OCA.Analytics.Navigation = {
             favorite.children[1].innerHTML = t('analytics', 'Add to favorites');
         }
 
-        let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
-        if (document.getElementById('advanced').value === 'true') {
-            advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
-            advanced.children[0].classList.add('icon-category-monitoring');
-            advanced.children[1].innerText = t('analytics', 'Back to report');
-        } else {
-            advanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-            advanced.children[0].classList.add('icon-category-customization');
-            advanced.children[1].innerText = t('analytics', 'Advanced');
-        }
         return navigationMenu;
     },
 
