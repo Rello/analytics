@@ -172,7 +172,7 @@ class DatasetMapper
             ->addSelect('name')
             ->addSelect('type')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->like('name', $sql->createNamedParameter('%' . $searchString . '%')))
+            ->andWhere($sql->expr()->iLike('name', $sql->createNamedParameter('%' . $this->db->escapeLikeParameter($searchString) . '%')))
             ->orderBy('name', 'ASC');
         $statement = $sql->execute();
         $result = $statement->fetchAll();
