@@ -83,7 +83,7 @@ OCA.Analytics.Dashboard = {
         let data = jsondata['data'][jsondata['data'].length - 1];
         let type = jsondata['options']['type'];
         let kpi = data[0];
-        let value = data[data.length - 1].toLocaleString();
+        let value = parseFloat(data[data.length - 1]).toLocaleString();
 
         let li = OCA.Analytics.Dashboard.buildWidgetKpiRow(report, reportId, type, kpi, value, jsondata.thresholds);
         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
@@ -103,7 +103,7 @@ OCA.Analytics.Dashboard = {
                 </div>
                 <div style="float: right;">
                     <div>
-                        <div ${thresholdColor} class="analyticsWidgetValue">${parseFloat(value)}</div>
+                        <div ${thresholdColor} class="analyticsWidgetValue">${value}</div>
                     </div>
                 </div>
             </a>
