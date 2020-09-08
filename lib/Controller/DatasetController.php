@@ -174,6 +174,7 @@ class DatasetController extends Controller
         //$this->logger->error('datasetcontroller 82: '.$file);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
         $datasetId = $this->DatasetMapper->createDataset();
+        $this->setFavorite($datasetId, 'true');
 
         if ($file === 'DEMO') {
             $name = 'Demo Report';
