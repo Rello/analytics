@@ -13,7 +13,7 @@ From data to report. This on premise data warehouse solution provides modular da
 - Advanced dataloads with scheduling
 - Visualization: combinded charts, tables, filters
 - Thresholds for alerts and color coding
-- Integration: Files app, Activity, Notifications, Flow, Dashboard (NC20)
+- Integration: Files, Activity, Notifications, Flow, Dashboard (NC20), Search
 - Sharing: user, groups, link
 
 (*work in progress)
@@ -23,7 +23,7 @@ From data to report. This on premise data warehouse solution provides modular da
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Main" width="500" title="Analytics">
 
 ## Languages
-- English (en),German (de, de_DE), Russian (ru, ru_RU)
+- English (en),German (de, de_DE), Russian (ru, ru_RU), French (fr)
 
 ## Installation
 - [Nextcloud App Store](https://apps.nextcloud.com/apps/analytics)
