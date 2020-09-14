@@ -65,7 +65,7 @@ OC.L10N.register(
         'Secondary': 'Sekundär',
         'Line': 'Linie',
         'Column': 'Spalte',
-        'Favorites are shown here': 'Favoriten werden hier angezeigt',
+        'Add a report to the favorites to be shown here': 'Füge einen Report den Favoriten hinzu, um ihn hier zu sehen',
         'Remove from favorites': 'Aus Favoriten entfernen',
         'Add to favorites': 'Zu Favoriten hinzufügen',
     },

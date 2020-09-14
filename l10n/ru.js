@@ -65,7 +65,7 @@ OC.L10N.register(
         'Secondary': 'Второстепенный',
         'Line': 'Строка',
         'Column': 'Столбец',
-        'Favorites are shown here': 'Favorites are shown here',
+        'Add a report to the favorites to be shown here': 'Add a report to the favorites to be shown here',
         'Remove from favorites': 'Remove from favorites',
         'Add to favorites': 'Add to favorites',
     },
