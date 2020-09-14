@@ -37,17 +37,16 @@
         <?php p($l->t('No data found')); ?>
     </div>
 </div>
-<div id="analytics-intro" style="padding: 50px" hidden>
+<div id="analytics-intro" style="padding: 30px" hidden>
     <h2><?php p($l->t('Analytics')); ?></h2>
+    <br>
+    <h3><?php p($l->t('Favorites')); ?></h3>
+    <div>
+        <ul id="ulAnalytics" style="width: 100%;"></ul>
+    </div>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
     <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a>
-    <br>
-    <h3><?php p($l->t('Recent')); ?></h3>
-    <span>-&nbsp;<?php p($l->t('coming soon')); ?></span>
-    <br>
-    <h3><?php p($l->t('Updates')); ?></h3>
-    <span>-&nbsp;<?php p($l->t('coming soon')); ?></span>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>

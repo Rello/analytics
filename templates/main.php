@@ -15,6 +15,7 @@ Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', 'sharetabview');
 Util::addStyle('analytics', 'jquery.dataTables.min');
 Util::addStyle('files_sharing', 'icons');
+Util::addStyle('analytics', 'dashboard');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
@@ -23,6 +24,8 @@ Util::addScript('analytics', 'jquery.dataTables.min');
 Util::addScript('analytics', '3rdParty/Chart.bundle.min');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-colorschemes.min');
 Util::addScript('analytics', '3rdParty/cloner');
+Util::addScript('analytics', 'dashboard');
+
 ?>
 
     <div id="app-navigation">
