@@ -16,6 +16,7 @@
 
 ### Changed
 - Enhanced datamodel [#59](https://github.com/rello/analytics/issues/59)
+- new app icon
 
 ### Fixed
 - Floating point numbers rounded off in Rest API calls [#57](https://github.com/rello/analytics/issues/57)
