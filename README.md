@@ -4,7 +4,7 @@
 
 From data to report. This on premise data warehouse provides modular datasources, flexibile visualization and full Nextcloud integration.
 
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Main" width="350" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="350" title="Analytics">
 
 ## Features
 - Datasources: local/remote file, API, imports, manual entry
