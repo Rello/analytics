@@ -2,21 +2,21 @@
 
 [![Version](https://img.shields.io/github/release/rello/analytics.svg)](https://github.com/rello/analytics/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)&#160;&#160;&#160;[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rello/analytics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rello/analytics/?branch=master)&#160;&#160;&#160;[![Bitcoin](https://img.shields.io/badge/donate-Bitcoin-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)&#160;[![PayPal](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)
 
-From data to report. This on premise data warehouse provides modular datasources, flexibile visualization and full Nextcloud integration.
+From data to report. On-Premise data warehouse with modular datasources, flexibile visualization and full Nextcloud integration.
 
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="350" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="400" title="Analytics">
 
 ## Features
-- Datasources: local/remote file, API, imports, manual entry
-- 3rd party: GitHub Statistics, website grabber, JSON
+- Datasources: local/remote file, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
+- 3rd party: GitHub Statistics, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber), [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
 - Storage: realtime or database
-- Advanced dataloads with scheduling
-- Visualization: combined charts, tables, filters
-- Thresholds for alerts and color coding
-- Integration: Files, Activity, Notifications, Flow, Dashboard (NC20), Search
+- Advanced dataloads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
+- Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables, filters
+- [Thresholds](https://github.com/Rello/analytics/wiki/Thresholds) for alerts and color coding
+- Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), Dashboard (NC20), Search
 - Sharing: user, groups, link
 
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="350" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="400" title="Analytics">
 
 ## Architecture
 
