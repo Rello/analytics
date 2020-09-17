@@ -46,7 +46,8 @@
     </div>
     <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
-    <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a>
+    <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a><br>
+    <a href="#" id="createDemoGithubReport">-&nbsp;<?php p($l->t('Monitor your downloads in GitHub')); ?></a>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>

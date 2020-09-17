@@ -15,6 +15,8 @@
  * @namespace OCA.Analytics.Navigation
  */
 OCA.Analytics.Navigation = {
+    quickstartValue: '',
+    quickstartId: 0,
 
     init: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '';
@@ -29,6 +31,51 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Backend.createDataset('DEMO');
     },
 
+    createDemoGithubReport: function () {
+        OC.dialogs.prompt(
+            t('analytics', 'Crate a report which to monitor the realtime download count of your GitHub repository. Enter the GitHub User/Repository. The \'/\' is important.'),
+            t('analytics', 'Quickstart: GitHub download statistics'),
+            function (button, val) {
+                if (button === true) {
+                    OCA.Analytics.Navigation.quickstartTemp = val;
+                    $.ajax({
+                        type: 'POST',
+                        url: OC.generateUrl('apps/analytics/dataset'),
+                        data: {
+                            'file': 'DEMO',
+                        },
+                        success: function (data) {
+                            OCA.Analytics.Navigation.quickstartId = data;
+                            let datasetName = OCA.Analytics.Navigation.quickstartTemp.split("/")[1];
+                            $.ajax({
+                                type: 'PUT',
+                                url: OC.generateUrl('apps/analytics/dataset/') + data,
+                                data: {
+                                    'name': datasetName[0].toUpperCase() + datasetName.substring(1),
+                                    'subheader': 'GitHub download statistics',
+                                    'parent': 0,
+                                    'type': OCA.Analytics.TYPE_GIT,
+                                    'link': OCA.Analytics.Navigation.quickstartTemp,
+                                    'visualization': 'ct',
+                                    'chart': 'column',
+                                    'chartoptions': '',
+                                    'dataoptions': '',
+                                    'dimension1': '',
+                                    'dimension2': '',
+                                    'value': ''
+                                },
+                                success: function () {
+                                    OCA.Analytics.Navigation.init(OCA.Analytics.Navigation.quickstartId);
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            true,
+            "user/repo");
+    },
+
     buildNavigation: function (data) {
         for (let navigation of data) {
             OCA.Analytics.Navigation.buildNavigationRow(navigation);
@@ -40,8 +87,8 @@ OCA.Analytics.Navigation = {
         let typeIcon;
 
         let a = document.createElement('a');
-        a.setAttribute('href', '#/r/' + data.id);
-        let typeINT = parseInt(data.type);
+        a.setAttribute('href', '#/r/' + data['id']);
+        let typeINT = parseInt(data['type']);
         if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE) {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
@@ -64,22 +111,22 @@ OCA.Analytics.Navigation = {
         if (typeIcon) {
             a.classList.add(typeIcon);
         }
-        a.innerText = data.name;
-        a.dataset.id = data.id;
-        a.dataset.type = data.type;
-        a.dataset.name = data.name;
+        a.innerText = data['name'];
+        a.dataset.id = data['id'];
+        a.dataset.type = data['type'];
+        a.dataset.name = data['name'];
 
         let ulSublist = document.createElement('ul');
-        ulSublist.id = 'dataset-' + data.id;
+        ulSublist.id = 'dataset-' + data['id'];
 
         li.appendChild(a);
 
-        if (parseInt(data.favorite) === 1) {
+        if (parseInt(data['favorite']) === 1 && typeINT !== OCA.Analytics.TYPE_SHARED) {
             let spanFav = document.createElement('span');
-            spanFav.id = 'fav-' + data.id;
+            spanFav.id = 'fav-' + data['id'];
             spanFav.classList.add('icon', 'icon-starred');
             spanFav.style.opacity = '0.5';
-            spanFav.dataset.testing = 'favI' + data.name;
+            spanFav.dataset.testing = 'favI' + data['name'];
             li.appendChild(spanFav);
         }
 
@@ -98,8 +145,8 @@ OCA.Analytics.Navigation = {
         }
 
         let categoryList;
-        if (parseInt(data.parent) !== 0 && document.getElementById('dataset-' + data.parent)) {
-            categoryList = document.getElementById('dataset-' + data.parent);
+        if (parseInt(data['parent']) !== 0 && document.getElementById('dataset-' + data['parent'])) {
+            categoryList = document.getElementById('dataset-' + data['parent']);
         } else {
             categoryList = document.getElementById('navigationDatasets');
         }

@@ -591,6 +591,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
+            document.getElementById('createDemoGithubReport').addEventListener('click', OCA.Analytics.Navigation.createDemoGithubReport);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
             document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openOptionsDialog);
