@@ -348,7 +348,7 @@ OCA.Analytics.UI = {
 
     resetContent: function () {
         if (document.getElementById('advanced').value === 'true') {
-            document.getElementById('analytics-intro').classList.remove('hidden');
+            document.getElementById('analytics-intro').removeAttribute('hidden');
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
             if ($.fn.dataTable.isDataTable('#tableContainer')) {
@@ -465,12 +465,12 @@ OCA.Analytics.Backend = {
 
     getData: function () {
         OCA.Analytics.UI.resetContent();
-        document.getElementById('analytics-intro').classList.add('hidden');
+        document.getElementById('analytics-intro').hidden = true;
         document.getElementById('analytics-content').removeAttribute('hidden');
 
         let url;
         if (document.getElementById('sharingToken').value === '') {
-            const datasetId = document.querySelector('#navigationDatasets .active').dataset.id;
+            const datasetId = document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
             url = OC.generateUrl('apps/analytics/data/') + datasetId;
         } else {
             const token = document.getElementById('sharingToken').value;
@@ -586,9 +586,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (document.getElementById('sharingToken').value === '') {
         OCA.Analytics.Backend.whatsnew();
-        document.getElementById('analytics-intro').attributes.removeNamedItem('hidden');
+        document.getElementById('analytics-intro').removeAttribute('hidden');
         OCA.Analytics.Core.initApplication();
-        document.getElementById('newDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
             document.getElementById('createDemoGithubReport').addEventListener('click', OCA.Analytics.Navigation.createDemoGithubReport);

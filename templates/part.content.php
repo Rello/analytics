@@ -45,9 +45,9 @@
         <ul id="ulAnalytics" style="width: 100%;"></ul>
     </div>
     <br>
-    <h3><?php p($l->t('Quickstart')); ?></h3>
-    <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('Create demo report on external CSV data')); ?></a><br>
-    <a href="#" id="createDemoGithubReport">-&nbsp;<?php p($l->t('Monitor your downloads in GitHub')); ?></a>
+    <h3><?php p($l->t('Templates')); ?></h3>
+    <a href="#" id="createDemoReport">-&nbsp;<?php p($l->t('German population from external datasource')); ?></a><br>
+    <a href="#" id="createDemoGithubReport">-&nbsp;<?php p($l->t('Monitor GitHub downloads in realtime')); ?></a>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>

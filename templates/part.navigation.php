@@ -8,13 +8,7 @@
  * @author Marcel Scherello <audioplayer@scherello.de>
  * @copyright 2020 Marcel Scherello
  */
- ?>
+?>
 
-<div class="app-navigation-new">
-    <button id="newDatasetButton" type="button" class="icon-add">
-        <?php p($l->t('New Report')); ?>
-    </button>
-</div>
-
-    <ul id="navigationDatasets">
-    </ul>
+<ul id="navigationDatasets">
+</ul>

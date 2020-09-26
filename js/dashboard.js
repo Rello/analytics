@@ -12,14 +12,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (typeof OCA.Dashboard === 'object') {
-        OCA.Dashboard.register('analytics', (el) => {
-            el.innerHTML = '<ul id="ulAnalytics"></ul>';
-        });
-    } else {
-
-    }
-    OCA.Analytics.Dashboard.getFavorites();
+    OCA.Analytics.Dashboard.init();
 })
 
 if (!OCA.Analytics) {
@@ -47,6 +40,15 @@ if (!OCA.Analytics) {
  * @namespace OCA.Analytics.Dashboard
  */
 OCA.Analytics.Dashboard = {
+    init: function () {
+        if (typeof OCA.Dashboard === 'object') {
+            OCA.Dashboard.register('analytics', (el) => {
+                el.innerHTML = '<ul id="ulAnalytics"></ul>';
+            });
+        }
+        OCA.Analytics.Dashboard.getFavorites();
+    },
+
     getFavorites: function () {
         const url = OC.generateUrl('apps/analytics/favorites', true);
 

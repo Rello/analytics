@@ -4,7 +4,7 @@
     <name>Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-From data to report. This on premise data warehouse provides modular datasources, flexibile visualization and full Nextcloud integration.
+From data to report. On-Premise data warehouse with modular datasources, flexibile visualization and full Nextcloud integration.
 
 ## Features:
 - Datasources: local/remote file, API, imports, manual entry
@@ -27,18 +27,18 @@ From data to report. This on premise data warehouse provides modular datasources
     <category>office</category>
     <category>workflow</category>
     <category>dashboard</category>
-    <website>https://github.com/rello/analytics</website>
-    <bugs>https://github.com/rello/analytics/issues</bugs>
-    <repository type="git">https://github.com/rello/analytics.git</repository>
+    <website>https://github.com/Rello/analytics</website>
+    <bugs>https://github.com/Rello/analytics/issues</bugs>
+    <repository type="git">https://github.com/Rello/analytics.git</repository>
     <discussion>https://help.nextcloud.com/c/apps/analytics</discussion>
     <screenshot>
-        https://raw.githubusercontent.com/rello/analytics/master/screenshots/logo25.png
+        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/logo25.png
     </screenshot>
     <screenshot>
-        https://raw.githubusercontent.com/rello/analytics/master/screenshots/charts25.png
+        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/charts25.png
     </screenshot>
     <screenshot>
-        https://raw.githubusercontent.com/rello/analytics/master/screenshots/architecture25.png
+        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/architecture25.png
     </screenshot>
     <dependencies>
         <php min-version="7.0" max-version="7.4"/>

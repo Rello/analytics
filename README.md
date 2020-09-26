@@ -4,6 +4,8 @@
 
 From data to report. On-Premise data warehouse with modular datasources, flexibile visualization and full Nextcloud integration.
 
+Visualize anything: from financial analysis to IoT logs.
+
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="400" title="Analytics">
 
 ## Features
@@ -19,7 +21,6 @@ From data to report. On-Premise data warehouse with modular datasources, flexibi
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="400" title="Analytics">
 
 ## Architecture
-
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="500" title="Analytics">
 
 ## Languages

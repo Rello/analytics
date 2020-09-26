@@ -23,10 +23,6 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Backend.getDatasets(datasetId);
     },
 
-    handleNewDatasetButton: function () {
-        OCA.Analytics.Backend.createDataset();
-    },
-
     createDemoReport: function () {
         OCA.Analytics.Backend.createDataset('DEMO');
     },
@@ -77,6 +73,22 @@ OCA.Analytics.Navigation = {
     },
 
     buildNavigation: function (data) {
+        let li = document.createElement('li');
+        let a = document.createElement('a');
+        a.classList.add('icon-toggle-pictures');
+        a.innerText = t('analytics', 'Overview');
+        a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
+        li.appendChild(a);
+        document.getElementById('navigationDatasets').appendChild(li);
+
+        let li2 = document.createElement('li');
+        let a2 = document.createElement('a');
+        a2.classList.add('icon-add');
+        a2.innerText = t('analytics', 'New Report');
+        a2.addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
+        li2.appendChild(a2);
+        document.getElementById('navigationDatasets').appendChild(li2);
+
         for (let navigation of data) {
             OCA.Analytics.Navigation.buildNavigationRow(navigation);
         }
@@ -235,6 +247,18 @@ OCA.Analytics.Navigation = {
         return navigationMenu;
     },
 
+    handleNewDatasetButton: function () {
+        OCA.Analytics.Backend.createDataset();
+    },
+    handleOverviewButton: function () {
+        document.querySelector('#navigationDatasets .active').classList.remove('active');
+        document.getElementById('analytics-content').hidden = true;
+        document.getElementById('analytics-intro').removeAttribute('hidden');
+        document.getElementById('ulAnalytics').innerHTML = '';
+        window.location.href = '#'
+        OCA.Analytics.Dashboard.init()
+    },
+
     handleNavigationClicked: function (evt) {
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
@@ -244,7 +268,7 @@ OCA.Analytics.Navigation = {
             if (activeCategory) {
                 activeCategory.classList.remove('active');
             }
-            evt.target.classList.add('active');
+            evt.target.parentElement.classList.add('active');
         }
         if (document.getElementById('advanced').value === 'true') {
             OCA.Analytics.Sidebar.showSidebar(evt);
