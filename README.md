@@ -1,12 +1,12 @@
-# Analytics
-
 [![Version](https://img.shields.io/github/release/rello/analytics.svg)](https://github.com/rello/analytics/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)&#160;&#160;&#160;[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rello/analytics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rello/analytics/?branch=master)&#160;&#160;&#160;[![Bitcoin](https://img.shields.io/badge/donate-Bitcoin-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)&#160;[![PayPal](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)
 
-From data to report. On-Premise data warehouse with modular datasources, flexibile visualization and full Nextcloud integration.
+---
+Connect data from different sources in one place. <br>
+Enable flexibile reports and enjoy seamless Nextcloud integration.
 
-Visualize anything: from financial analysis to IoT logs.
+Visualize and share anything, from financial analysis to IoT logs.
 
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="400" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="500" title="Analytics">
 
 ## Features
 - Datasources: local/remote file, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
@@ -18,7 +18,7 @@ Visualize anything: from financial analysis to IoT logs.
 - Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), Dashboard (NC20), Search
 - Sharing: user, groups, link
 
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="400" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="500" title="Analytics">
 
 ## Architecture
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="500" title="Analytics">
