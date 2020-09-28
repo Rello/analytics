@@ -1,6 +1,5 @@
-Connect data from different sources in one place. <br>
-Enable flexibile reports and enjoy seamless Nextcloud integration.
-
+Connect data from different sources in one place.<br>
+Enable flexibile reports and enjoy seamless Nextcloud integration.<br>
 Visualize and share anything, from financial analysis to IoT logs.
 
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="500" title="Analytics">
