@@ -1,8 +1,9 @@
 Connect data from different sources in one place.<br>
 Enable flexibile reports and enjoy seamless Nextcloud integration.<br>
 Visualize and share anything, from financial analysis to IoT logs.
-
+<p align="center">
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="300" title="Analytics"> <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="300" title="Analytics">
+</p>
 
 ## Features
 - Datasources: local/remote file, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
@@ -16,7 +17,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 
 
 ## Architecture
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="610" title="Analytics">
+<p align="center"><img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="610" title="Analytics"></p>
 
 ## Languages
 - English (en),German (de, de_DE), Russian (ru, ru_RU), French (fr)
