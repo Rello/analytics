@@ -1,6 +1,6 @@
 # Jekyll configuration
 repository: rello/analytics
-theme: jekyll-theme-cayman
+theme: jekyll-theme-minimal
 timezone: Europe/Berlin
 name: "Analytics"
 title: "Analytics"
