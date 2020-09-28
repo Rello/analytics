@@ -1,8 +1,6 @@
-<p align="center">
 Connect data from different sources in one place.<br>
 Enable flexibile reports and enjoy seamless Nextcloud integration.<br>
 Visualize and share anything, from financial analysis to IoT logs.
-</p>
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="300" title="Analytics"> <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="300" title="Analytics">
