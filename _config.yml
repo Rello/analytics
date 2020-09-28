@@ -4,6 +4,6 @@ theme: jekyll-theme-minimal
 timezone: Europe/Berlin
 name: "Analytics"
 title: "Analytics"
-description: "Open source data warehouse and reporting solution for Nextcloud"
+description: "Open source data warehouse and reporting for Nextcloud"
 url: "https://rello.github.io/audioplayer"
 author: "Marcel Scherello"
