@@ -1,5 +1,5 @@
 Connect data from different sources in one place.<br>
-Enable flexibile reports and enjoy seamless Nextcloud integration.<br>
+Enable flexible reports and enjoy seamless Nextcloud integration.<br>
 Visualize and share anything, from financial analysis to IoT logs.
 
 <p align="center">
