@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.0.0 - 2020-10-01
+### Added
+- NC20 Dashboard Widget [#61](https://github.com/rello/analytics/issues/61)
+- NC20 Search integration [#66](https://github.com/rello/analytics/issues/66)
+- Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)
+- API: use display names for upload [#58](https://github.com/rello/analytics/issues/58)
+- API: accepting arrays [#55](https://github.com/rello/analytics/issues/55)
+- API: delete data [#56](https://github.com/rello/analytics/issues/56)
+- Report: mark reports as favorite [#63](https://github.com/rello/analytics/issues/63)
+- translation: ru, ru_RU @[AleksovAnry](https://github.com/AleksovAnry)
+- translations: fr [#67](https://github.com/rello/analytics/issues/67) @[simmstein](https://github.com/simmstein)
+- headers for RegEx datasource @[AleksovAnry](https://github.com/AleksovAnry)
+- Dataload: Purge Dataset [#47](https://github.com/rello/analytics/issues/47)
+
+### Changed
+- Enhanced datamodel [#59](https://github.com/rello/analytics/issues/59)
+- new app icon
+
+### Fixed
+- Floating point numbers rounded off in Rest API calls [#57](https://github.com/rello/analytics/issues/57)
+
 ## 2.5.0 - 2020-10-01
 ### Added
 - Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)

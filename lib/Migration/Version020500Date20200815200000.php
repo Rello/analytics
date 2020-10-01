@@ -53,7 +53,7 @@ class Version020500Date20200815200000 extends SimpleMigrationStep
         $query = $this->connection->getQueryBuilder();
         $query->insert('analytics_whats_new')
             ->values([
-                'version' => $query->createNamedParameter('2.5.0'),
+                'version' => $query->createNamedParameter('3.0.0'),
                 'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
 "en":{"regular":["Display your favorite reports in the new Dashboard (NC20)","Share reports with users or groups","More flexibility with the API (e.g. deletion of data)","Search integration (NC20)"],"admin":["New Features apply to users"]},
 "de":{"regular":["Zeite Deine favorisierten Berichte im neuen Dashboard (NC20)","Teile Berichte mit User oder Gruppen","Flediblere API (z.B. Löschung von Daten)","Integration in Suche (NC20"],"admin":["Nur User Features"]}
