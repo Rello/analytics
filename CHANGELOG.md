@@ -1,9 +1,7 @@
 # Changelog
 
-## 2.5.0 - 2020-09-xx
+## 2.5.0 - 2020-10-01
 ### Added
-- NC20 Dashboard Widget [#61](https://github.com/rello/analytics/issues/61)
-- NC20 Search integration [#66](https://github.com/rello/analytics/issues/66)
 - Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)
 - API: use display names for upload [#58](https://github.com/rello/analytics/issues/58)
 - API: accepting arrays [#55](https://github.com/rello/analytics/issues/55)

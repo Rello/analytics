@@ -4,9 +4,11 @@
     <name>Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-From data to report. On-Premise data warehouse with modular datasources, flexibile visualization and full Nextcloud integration.
+Connect data from different sources in one place.
+Enable flexible reports and enjoy seamless Nextcloud integration.
+Visualize and share anything, from financial analysis to IoT logs.
 
-## Features:
+##### Features:
 - Datasources: local/remote file, API, imports, manual entry
 - 3rd party: GitHub Statistics, website grabber, JSON
 - Storage: realtime or database
@@ -17,7 +19,7 @@ From data to report. On-Premise data warehouse with modular datasources, flexibi
 - Sharing: user, groups, link
 
 ]]></description>
-    <version>2.4.1</version>
+    <version>2.5.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>
@@ -27,8 +29,7 @@ From data to report. On-Premise data warehouse with modular datasources, flexibi
     <category>office</category>
     <category>workflow</category>
     <category>dashboard</category>
-    <website>https://github.com/Rello/analytics</website>
-    <bugs>https://github.com/Rello/analytics/issues</bugs>
+    <website>https://rello.github.io/analytics/</website>
     <repository type="git">https://github.com/Rello/analytics.git</repository>
     <discussion>https://help.nextcloud.com/c/apps/analytics</discussion>
     <screenshot>
@@ -42,7 +43,7 @@ From data to report. On-Premise data warehouse with modular datasources, flexibi
     </screenshot>
     <dependencies>
         <php min-version="7.0" max-version="7.4"/>
-        <nextcloud min-version="18" max-version="20"/>
+        <nextcloud min-version="18" max-version="19"/>
     </dependencies>
     <activity>
         <settings>
