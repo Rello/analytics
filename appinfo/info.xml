@@ -30,8 +30,8 @@ Visualize and share anything, from financial analysis to IoT logs.
     <category>workflow</category>
     <category>dashboard</category>
     <website>https://rello.github.io/analytics/</website>
-    <bugs>https://github.com/Rello/analytics/issues</bugs>
     <discussion>https://help.nextcloud.com/c/apps/analytics</discussion>
+    <bugs>https://github.com/Rello/analytics/issues</bugs>
     <screenshot>
         https://raw.githubusercontent.com/Rello/analytics/master/screenshots/logo25.png
     </screenshot>

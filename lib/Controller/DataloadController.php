@@ -241,7 +241,7 @@ class DataloadController extends Controller
                 if (is_array($Array[$Key])) {
                     $Array[$Key] = $this->replaceDimension($Array[$Key], $Find, $Replace);
                 } else {
-                    if ($Key == $Find) {
+                    if ($Key === $Find) {
                         $Array[$Key] = $Replace;
                     }
                 }

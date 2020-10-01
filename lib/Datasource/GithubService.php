@@ -37,7 +37,7 @@ class GithubService
         else $string = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
 
         $ch = curl_init();
-        if ($ch != false) {
+        if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -60,7 +60,7 @@ class GithubService
             }
             $nc_value = 0;
             foreach ($item['assets'] as $asset) {
-                if (substr($asset['name'], -2) == 'gz') $nc_value = $asset['download_count'];
+                if (substr($asset['name'], -2) === 'gz') $nc_value = $asset['download_count'];
             }
             array_push($data, [$item['tag_name'], $this->floatvalue($nc_value)]);
             $i++;

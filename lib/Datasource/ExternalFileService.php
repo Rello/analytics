@@ -39,7 +39,7 @@ class ExternalFileService
         //$this->logger->error('dataset path: ' . $datasetMetadata['link']);
 
         $ch = curl_init();
-        if ($ch != false) {
+        if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);

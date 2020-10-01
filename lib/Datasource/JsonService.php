@@ -39,7 +39,7 @@ class JsonService
         $data = array();
 
         $ch = curl_init();
-        if ($ch != false) {
+        if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_URL, $string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
