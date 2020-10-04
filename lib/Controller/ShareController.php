@@ -141,7 +141,7 @@ class ShareController extends Controller
      */
     public function create($datasetId, $type, $user)
     {
-        if ($type === self::SHARE_TYPE_LINK) {
+        if ((int)$type === self::SHARE_TYPE_LINK) {
             $token = $this->generateToken();
         } else {
             $token = null;

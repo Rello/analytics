@@ -1,7 +1,12 @@
 # Changelog
 
+## 3.0.1 - 2020-10-04
+### Fixed
+- share token not generated
+
 ## 3.0.0 - 2020-10-01
 ### Added
+- NC20 
 - NC20 Dashboard Widget [#61](https://github.com/rello/analytics/issues/61)
 - NC20 Search integration [#66](https://github.com/rello/analytics/issues/66)
 - Sharing: user + groups [#60](https://github.com/rello/analytics/issues/60)
