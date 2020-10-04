@@ -77,8 +77,6 @@ class WhatsNewController extends Controller
             $iterator = $this->langFactory->getLanguageIterator();
             $whatsNew = $this->whatsNewService->getChangesForVersion($currentVersion);
 
-            $this->logger->debug(json_encode($whatsNew));
-
             $resultData = [
                 'changelogURL' => $whatsNew['changelogURL'],
                 'product' => 'Analytics',
