@@ -204,6 +204,7 @@ OCA.Analytics.UI = {
         Chart.defaults.global.elements.line.tension = 0.1;
         Chart.defaults.global.elements.line.fill = false;
         Chart.defaults.global.elements.point.radius = 1;
+        Chart.defaults.global.tooltips.enabled = true;
 
         var chartOptions = {
             maintainAspectRatio: false,

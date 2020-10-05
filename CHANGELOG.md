@@ -3,6 +3,7 @@
 ## 3.0.1 - 2020-10-04
 ### Fixed
 - share token not generated
+- Chart: tooltips not showing
 
 ## 3.0.0 - 2020-10-01
 ### Added
