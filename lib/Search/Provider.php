@@ -50,6 +50,7 @@ class Provider implements IProvider
     public function search(IUser $user, ISearchQuery $query): SearchResult
     {
         $datasets = $this->datasetController->search($query->getTerm());
+        $result = [];
 
         foreach ($datasets as $dataset) {
             $result[] = new SearchResultEntry(
