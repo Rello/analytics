@@ -11,7 +11,6 @@ use OCP\EventDispatcher\Event;
  */
 class DatasourceEvent extends Event
 {
-    public const EVENT_ENTITY = 'OCA\Analytics\Datasource\ICommentsManager::registerEntity';
 
     /** @var string */
     protected $event;
@@ -31,28 +30,19 @@ class DatasourceEvent extends Event
     }
 
     /**
-     * @param string $name
-     * @param \Closure $entityExistsFunction The closure should take one
-     *                 argument, which is the id of the entity, that comments
-     *                 should be handled for. The return should then be bool,
-     *                 depending on whether comments are allowed (true) or not.
-     * @throws \OutOfBoundsException when the entity name is already taken
+     * @param OCA\Analytics\Datasource\IDatasource $datasource
      * @since 9.1.0
      */
-    public function addEntityCollection($name, \Closure $entityExistsFunction)
+    public function registerDatasource(OCA\Analytics\Datasource\IDatasource $datasource)
     {
-        if (isset($this->collections[$name])) {
-            throw new \OutOfBoundsException('Duplicate entity name "' . $name . '"');
-        }
-
-        $this->collections[$name] = $entityExistsFunction;
+        //
     }
 
     /**
      * @return \Closure[]
      * @since 9.1.0
      */
-    public function getEntityCollections()
+    public function getDataSources()
     {
         return $this->collections;
     }

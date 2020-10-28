@@ -11,15 +11,18 @@
 
 namespace OCA\Analytics\Controller;
 
+use OCA\Analytics\Datasource\DatasourceEvent;
 use OCA\Analytics\Datasource\ExternalFileService;
 use OCA\Analytics\Datasource\FileService;
 use OCA\Analytics\Datasource\GithubService;
 use OCA\Analytics\Datasource\JsonService;
 use OCA\Analytics\Datasource\RegexService;
+use OCA\Analytics\Datasource\SurveyService;
 use OCP\AppFramework\Controller;
 use OCP\Files\NotFoundException;
 use OCP\ILogger;
 use OCP\IRequest;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class DataSourceController extends Controller
 {
@@ -29,7 +32,10 @@ class DataSourceController extends Controller
     private $ExternalFileService;
     private $RegexService;
     private $JsonService;
+    private $SurveyService;
     private $userId;
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
 
     const DATASET_TYPE_GROUP = 0;
     const DATASET_TYPE_INTERNAL_FILE = 1;
@@ -38,6 +44,7 @@ class DataSourceController extends Controller
     const DATASET_TYPE_EXTERNAL_FILE = 4;
     const DATASET_TYPE_REGEX = 5;
     const DATASET_TYPE_JSON = 6;
+    const DATASET_TYPE_SURVEY = 7;
 
     public function __construct(
         string $AppName,
@@ -48,7 +55,9 @@ class DataSourceController extends Controller
         FileService $FileService,
         RegexService $RegexService,
         JsonService $JsonService,
-        ExternalFileService $ExternalFileService
+        SurveyService $SurveyService,
+        ExternalFileService $ExternalFileService,
+        EventDispatcherInterface $dispatcher
     )
     {
         parent::__construct($AppName, $request);
@@ -59,6 +68,8 @@ class DataSourceController extends Controller
         $this->RegexService = $RegexService;
         $this->FileService = $FileService;
         $this->JsonService = $JsonService;
+        $this->SurveyService = $SurveyService;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -78,6 +89,7 @@ class DataSourceController extends Controller
         elseif ($datasource === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($option);
         elseif ($datasource === self::DATASET_TYPE_REGEX) $result = $this->RegexService->read($option);
         elseif ($datasource === self::DATASET_TYPE_JSON) $result = $this->JsonService->read($option);
+        elseif ($datasource === self::DATASET_TYPE_SURVEY) $result = $this->SurveyService->read($option);
         else $result = new NotFoundException();
 
         return $result;
@@ -97,6 +109,18 @@ class DataSourceController extends Controller
         $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getTemplate();
         $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getTemplate();
         $result[self::DATASET_TYPE_JSON] = $this->JsonService->getTemplate();
+        $result[self::DATASET_TYPE_SURVEY] = $this->SurveyService->getTemplate();
         return $result;
+    }
+
+    public function EventTest()
+    {
+        $event = new DatasourceEvent(DatasourceEvent::class);
+        $this->dispatcher->dispatch(DatasourceEvent::class, $event);
+
+        $datasources = [];
+        foreach ($event->getDataSources() as $datasource) {
+            $datasource->getName();
+        }
     }
 }
