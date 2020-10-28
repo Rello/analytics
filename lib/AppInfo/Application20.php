@@ -12,6 +12,8 @@
 namespace OCA\Analytics\AppInfo;
 
 use OCA\Analytics\Dashboard\Widget;
+use OCA\Analytics\Datasource\DatasourceEvent;
+use OCA\Analytics\Datasource\FunnyData;
 use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Notification\Notifier;
@@ -38,6 +40,7 @@ class Application20 extends App implements IBootstrap
         $context->registerSearchProvider(Provider::class);
         $this->registerNavigationEntry();
         $this->registerNotifications();
+        $context->registerEventListener(DatasourceEvent::class, FunnyData::class);
     }
 
     public function boot(IBootContext $context): void
@@ -64,4 +67,5 @@ class Application20 extends App implements IBootstrap
         };
         \OC::$server->getNavigationManager()->add($navigationEntry);
     }
+
 }
