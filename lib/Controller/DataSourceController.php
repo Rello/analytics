@@ -19,10 +19,10 @@ use OCA\Analytics\Datasource\JsonService;
 use OCA\Analytics\Datasource\RegexService;
 use OCA\Analytics\Datasource\SurveyService;
 use OCP\AppFramework\Controller;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
 use OCP\ILogger;
 use OCP\IRequest;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class DataSourceController extends Controller
 {
@@ -34,7 +34,7 @@ class DataSourceController extends Controller
     private $JsonService;
     private $SurveyService;
     private $userId;
-    /** @var EventDispatcherInterface */
+    /** @var IEventDispatcher */
     protected $dispatcher;
 
     const DATASET_TYPE_GROUP = 0;
@@ -57,7 +57,7 @@ class DataSourceController extends Controller
         JsonService $JsonService,
         SurveyService $SurveyService,
         ExternalFileService $ExternalFileService,
-        EventDispatcherInterface $dispatcher
+        IEventDispatcher $dispatcher
     )
     {
         parent::__construct($AppName, $request);
@@ -116,7 +116,7 @@ class DataSourceController extends Controller
     public function EventTest()
     {
         $event = new DatasourceEvent(DatasourceEvent::class);
-        $this->dispatcher->dispatch(DatasourceEvent::class, $event);
+        $this->dispatcher->dispatchTyped($event);
 
         $datasources = [];
         foreach ($event->getDataSources() as $datasource) {

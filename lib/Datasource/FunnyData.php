@@ -4,8 +4,19 @@ declare(strict_types=1);
 
 namespace OCA\Analytics\Datasource;
 
+use OCP\EventDispatcher\Event;
+
 class FunnyData implements IDatasource
 {
+
+    public function handle(Event $event): void
+    {
+        if (!($event instanceof DatasourceEvent)) {
+            // Unrelated
+            return;
+        }
+        $event->registerDatasource($this->getName(), ***FunnyDataObjectHere ?***);
+    }
 
     public function getName(): string
     {

@@ -30,12 +30,13 @@ class DatasourceEvent extends Event
     }
 
     /**
-     * @param OCA\Analytics\Datasource\IDatasource $datasource
+     * @param $name
+     * @param IDatasource $datasource
      * @since 9.1.0
      */
-    public function registerDatasource(OCA\Analytics\Datasource\IDatasource $datasource)
+    public function registerDatasource($name, IDatasource $datasource)
     {
-        //
+        $this->collections[$name] = $datasource;
     }
 
     /**
