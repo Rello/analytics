@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDbConnection;
 use OCP\IL10N;
 use OCP\ILogger;
@@ -70,8 +71,8 @@ class ShareMapper
         $sql->from(self::TABLE_NAME_DATASET, 'DS')
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.id', 'DS.name')
-            ->selectAlias($sql->createNamedParameter(99), 'type')
-            ->selectAlias($sql->createNamedParameter(0), 'parrent')
+            ->selectAlias($sql->createNamedParameter(99, IQueryBuilder::PARAM_INT), 'type')
+            ->selectAlias($sql->createNamedParameter(0, IQueryBuilder::PARAM_INT), 'parrent')
             ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
             ->andWhere($sql->expr()->eq('SH.type', $sql->createNamedParameter(1)));
         $statement = $sql->execute();
@@ -93,7 +94,7 @@ class ShareMapper
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.*')
             //->selectAlias($sql->createNamedParameter(99), 'type')
-            ->selectAlias($sql->createNamedParameter(0), 'parrent')
+            ->selectAlias($sql->createNamedParameter(0, IQueryBuilder::PARAM_INT), 'parrent')
             ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
             ->andWhere($sql->expr()->eq('SH.type', $sql->createNamedParameter(1)))
             ->andWhere($sql->expr()->eq('SH.dataset', $sql->createNamedParameter($id)));
@@ -113,8 +114,8 @@ class ShareMapper
         $sql->from(self::TABLE_NAME_DATASET, 'DS')
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.id', 'DS.name')
-            ->selectAlias($sql->createNamedParameter(99), 'type')
-            ->selectAlias($sql->createNamedParameter(0), 'parrent')
+            ->selectAlias($sql->createNamedParameter(99, IQueryBuilder::PARAM_INT), 'type')
+            ->selectAlias($sql->createNamedParameter(0, IQueryBuilder::PARAM_INT), 'parrent')
             ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userId)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
