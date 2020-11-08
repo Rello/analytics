@@ -11,17 +11,26 @@
 
 namespace OCA\Analytics\Datasource;
 
+use OCP\IL10N;
 use OCP\ILogger;
 
 class GithubService
 {
     private $logger;
+    private $l10n;
 
     public function __construct(
+        IL10N $l10n,
         ILogger $logger
     )
     {
+        $this->l10n = $l10n;
         $this->logger = $logger;
+    }
+
+    public function getName(): string
+    {
+        return $this->l10n->t('GitHub');
     }
 
     /**

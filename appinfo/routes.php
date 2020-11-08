@@ -47,6 +47,9 @@ return [
         ['name' => 'dataload#simulate', 'url' => '/dataload/simulate', 'verb' => 'POST'],
         ['name' => 'dataload#execute', 'url' => '/dataload/execute', 'verb' => 'POST'],
 
+        // Datasource
+        ['name' => 'datasource#index', 'url' => '/datasource', 'verb' => 'GET'],
+
         // Share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],
         ['name' => 'share#read', 'url' => '/share/{datasetId}', 'verb' => 'GET'],

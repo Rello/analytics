@@ -1,31 +1,48 @@
 <?php
+/**
+ * Analytics
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the LICENSE.md file.
+ *
+ * @author Marcel Scherello <audioplayer@scherello.de>
+ * @copyright 2020 Marcel Scherello
+ */
 
 declare(strict_types=1);
 
 namespace OCA\Analytics\Datasource;
 /**
- * Interface IWidget
+ * Interface IDatasource
  *
- * @since 20.0.0
+ * @since 3.1.0
  */
 interface IDatasource
 {
 
     /**
-     * @return string Name
-     * @since 20.0.0
+     * @return string Display Name of the datasource
+     * @since 3.1.0
      */
     public function getName(): string;
 
     /**
-     * @return array available options of the datasoure
-     * @since 20.0.0
+     * @return int 2 digit unique datasource id
+     * @since 3.1.0
      */
-    public function getTemplates(): array;
+    public function getId(): int;
+
+    /**
+     * @return array available options of the datasoure
+     * @since 3.1.0
+     */
+    public function getTemplate(): array;
 
     /**
      * Read the Data
-     * @since 20.0.0
+     * @param array $option
+     * @return array available options of the datasoure
+     * @since 3.1.0
      */
-    public function readData(): string;
+    public function readData($option): array;
 }

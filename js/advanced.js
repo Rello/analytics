@@ -47,6 +47,14 @@ OCA.Analytics.Advanced.Dataload = {
                     const li = OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload);
                     document.getElementById('dataloadList').appendChild(li);
                 }
+                for (let key in data['datasources']) {
+                    let value = data['datasources'][key];
+                    let option = document.createElement('option');
+                    option.value = key;
+                    option.innerText = value;
+                    document.getElementById('dataloadType').appendChild(option);
+                }
+
                 OCA.Analytics.Advanced.Dataload.datasourceTemplates = data['templates'];
                 OCA.Analytics.Advanced.Dataload.dataloadArray = data['dataloads'];
             }
@@ -134,16 +142,13 @@ OCA.Analytics.Advanced.Dataload = {
             label.style.display = 'inline-flex';
             label.classList.add('input250');
             label.innerText = option.name;
-            let input = document.createElement('input');
-            input.style.display = 'inline-flex';
-            input.classList.add('input250');
-            input.placeholder = option.placeholder;
-            input.id = option.id;
-            let fieldValues = JSON.parse(dataload.option);
-            if (option.id in fieldValues) {
-                input.value = fieldValues[option.id];
-            }
 
+            let input;
+            if (option.type && option.type === 'tf') {
+                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailSelect(option, dataload);
+            } else {
+                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailInput(option, dataload);
+            }
             item.appendChild(tablerow);
             tablerow.appendChild(label);
             tablerow.appendChild(input);
@@ -154,6 +159,35 @@ OCA.Analytics.Advanced.Dataload = {
         //scheduleButton.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
         //useButton.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
 
+    },
+
+    buildDataloadDetailInput: function (option, dataload) {
+        let input = document.createElement('input');
+        input.style.display = 'inline-flex';
+        input.classList.add('input250');
+        input.placeholder = option.placeholder;
+        input.id = option.id;
+        let fieldValues = JSON.parse(dataload.option);
+        if (option.id in fieldValues) {
+            input.value = fieldValues[option.id];
+        }
+        return input;
+    },
+
+    buildDataloadDetailSelect: function (datasourceOptions, dataload) {
+        let input = document.createElement('select');
+        input.style.display = 'inline-flex';
+        input.classList.add('input250');
+        input.id = datasourceOptions.id;
+
+        let selectOptions = datasourceOptions.placeholder.split("/")
+        for (let selectOption of selectOptions) {
+            let option = document.createElement('option');
+            option.value = selectOption;
+            option.innerText = selectOption;
+            input.appendChild(option);
+        }
+        return input;
     },
 
     createDataload: function () {
@@ -176,7 +210,7 @@ OCA.Analytics.Advanced.Dataload = {
         const dataloadId = document.getElementById('dataloadDetail').dataset.id;
         let option = {};
 
-        let inputFields = document.querySelectorAll('#dataloadDetailItems input');
+        let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select');
         for (let inputField of inputFields) {
             option[inputField.id] = inputField.value;
         }

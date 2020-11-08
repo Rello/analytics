@@ -86,6 +86,7 @@ class DataloadController extends Controller
         $result = array();
         $result['dataloads'] = $this->DataloadMapper->read($datasetId);
         $result['templates'] = $this->DataSourceController->getTemplates();
+        $result['datasources'] = $this->DataSourceController->index();
         return new DataResponse($result);
     }
 

@@ -1,4 +1,13 @@
 <?php
+/**
+ * Analytics
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the LICENSE.md file.
+ *
+ * @author Marcel Scherello <audioplayer@scherello.de>
+ * @copyright 2020 Marcel Scherello
+ */
 
 namespace OCA\Analytics\Datasource;
 
@@ -15,28 +24,16 @@ class DatasourceEvent extends Event
     /** @var string */
     protected $event;
     /** @var \Closure[] */
-    protected $collections;
+    protected $collections = [];
 
     /**
-     * DispatcherEvent constructor.
-     *
-     * @param string $event
+     * @param string $name
+     * @param string $datasource
      * @since 9.1.0
      */
-    public function __construct($event)
+    public function registerDatasource(string $datasource)
     {
-        $this->event = $event;
-        $this->collections = [];
-    }
-
-    /**
-     * @param $name
-     * @param IDatasource $datasource
-     * @since 9.1.0
-     */
-    public function registerDatasource($name, IDatasource $datasource)
-    {
-        $this->collections[$name] = $datasource;
+        $this->collections[] = $datasource;
     }
 
     /**

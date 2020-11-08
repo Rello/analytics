@@ -11,20 +11,29 @@
 
 namespace OCA\Analytics\Datasource;
 
+use OCP\IL10N;
 use OCP\ILogger;
 
 class ExternalFileService
 {
     private $logger;
     private $userId;
+    private $l10n;
 
     public function __construct(
         $userId,
+        IL10N $l10n,
         ILogger $logger
     )
     {
         $this->userId = $userId;
+        $this->l10n = $l10n;
         $this->logger = $logger;
+    }
+
+    public function getName(): string
+    {
+        return $this->l10n->t('External url (csv)');
     }
 
     /**

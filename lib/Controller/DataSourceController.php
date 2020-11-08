@@ -17,10 +17,10 @@ use OCA\Analytics\Datasource\FileService;
 use OCA\Analytics\Datasource\GithubService;
 use OCA\Analytics\Datasource\JsonService;
 use OCA\Analytics\Datasource\RegexService;
-use OCA\Analytics\Datasource\SurveyService;
 use OCP\AppFramework\Controller;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
+use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 
@@ -32,10 +32,10 @@ class DataSourceController extends Controller
     private $ExternalFileService;
     private $RegexService;
     private $JsonService;
-    private $SurveyService;
     private $userId;
     /** @var IEventDispatcher */
     protected $dispatcher;
+    private $l10n;
 
     const DATASET_TYPE_GROUP = 0;
     const DATASET_TYPE_INTERNAL_FILE = 1;
@@ -44,7 +44,6 @@ class DataSourceController extends Controller
     const DATASET_TYPE_EXTERNAL_FILE = 4;
     const DATASET_TYPE_REGEX = 5;
     const DATASET_TYPE_JSON = 6;
-    const DATASET_TYPE_SURVEY = 7;
 
     public function __construct(
         string $AppName,
@@ -55,8 +54,8 @@ class DataSourceController extends Controller
         FileService $FileService,
         RegexService $RegexService,
         JsonService $JsonService,
-        SurveyService $SurveyService,
         ExternalFileService $ExternalFileService,
+        IL10N $l10n,
         IEventDispatcher $dispatcher
     )
     {
@@ -68,8 +67,44 @@ class DataSourceController extends Controller
         $this->RegexService = $RegexService;
         $this->FileService = $FileService;
         $this->JsonService = $JsonService;
-        $this->SurveyService = $SurveyService;
         $this->dispatcher = $dispatcher;
+        $this->l10n = $l10n;
+    }
+
+    /**
+     * get all datasets
+     *
+     * @NoAdminRequired
+     */
+    public function index()
+    {
+        //$result[self::DATASET_TYPE_GROUP] = $this->l10n->t('No Data / Group');
+        //$result[self::DATASET_TYPE_INTERNAL_DB] = $this->l10n->t('Internal Database');
+        $result[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService->getName();
+        $result[self::DATASET_TYPE_GIT] = $this->GithubService->getName();
+        $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getName();
+        $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getName();
+        $result[self::DATASET_TYPE_JSON] = $this->JsonService->getName();
+
+        $result = $result + $this->getRegisteredDatasourceNames();
+        return $result;
+    }
+
+    /**
+     * template for options & settings
+     *
+     * @NoAdminRequired
+     * @return array
+     */
+    public function getTemplates()
+    {
+        $result[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService->getTemplate();
+        $result[self::DATASET_TYPE_GIT] = $this->GithubService->getTemplate();
+        $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getTemplate();
+        $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getTemplate();
+        $result[self::DATASET_TYPE_JSON] = $this->JsonService->getTemplate();
+        $result = $result + $this->getRegisteredDatasourceTemplates();
+        return $result;
     }
 
     /**
@@ -89,38 +124,45 @@ class DataSourceController extends Controller
         elseif ($datasource === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($option);
         elseif ($datasource === self::DATASET_TYPE_REGEX) $result = $this->RegexService->read($option);
         elseif ($datasource === self::DATASET_TYPE_JSON) $result = $this->JsonService->read($option);
-        elseif ($datasource === self::DATASET_TYPE_SURVEY) $result = $this->SurveyService->read($option);
         else $result = new NotFoundException();
 
         return $result;
     }
 
-    /**
-     * template for options & settings
-     *
-     * @NoAdminRequired
-     * @param int $datasource
-     * @return array
-     */
-    public function getTemplates()
+    private function getRegisteredDatasourceTemplates()
     {
-        $result[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService->getTemplate();
-        $result[self::DATASET_TYPE_GIT] = $this->GithubService->getTemplate();
-        $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getTemplate();
-        $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getTemplate();
-        $result[self::DATASET_TYPE_JSON] = $this->JsonService->getTemplate();
-        $result[self::DATASET_TYPE_SURVEY] = $this->SurveyService->getTemplate();
-        return $result;
-    }
-
-    public function EventTest()
-    {
-        $event = new DatasourceEvent(DatasourceEvent::class);
+        $event = new DatasourceEvent();
         $this->dispatcher->dispatchTyped($event);
 
         $datasources = [];
-        foreach ($event->getDataSources() as $datasource) {
-            $datasource->getName();
+        foreach ($event->getDataSources() as $class) {
+            $uniqueId = $this->uniqueId(\OC::$server->get($class)->getId());
+
+            if (isset($datasources[$uniqueId])) {
+                $this->logger->logException(new \InvalidArgumentException('Datasource with the same ID already registered: ' . \OC::$server->get($class)->getName()), ['level' => ILogger::INFO]);
+                continue;
+            }
+
+            $datasources[$uniqueId] = \OC::$server->get($class)->getTemplate();
         }
+        return $datasources;
+    }
+
+    private function getRegisteredDatasourceNames()
+    {
+        $event = new DatasourceEvent();
+        $this->dispatcher->dispatchTyped($event);
+
+        $datasources = [];
+        foreach ($event->getDataSources() as $class) {
+            $uniqueId = $this->uniqueId(\OC::$server->get($class)->getId());
+            $datasources[$uniqueId] = \OC::$server->get($class)->getName();
+        }
+        return $datasources;
+    }
+
+    private function uniqueId($id)
+    {
+        return '99' . $id;
     }
 }

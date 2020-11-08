@@ -37,6 +37,11 @@ class FileService
         $this->rootFolder = $rootFolder;
     }
 
+    public function getName(): string
+    {
+        return $this->l10n->t('Local File');
+    }
+
     /**
      * Get the items for the selected category
      *
