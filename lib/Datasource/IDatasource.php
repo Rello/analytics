@@ -33,14 +33,32 @@ interface IDatasource
     public function getId(): int;
 
     /**
-     * @return array available options of the datasoure
+     * get the available options of the datasoure
+     *
+     * return needs to be an array
+     *  id      = name of the option for the readData
+     *  name    = displayed name of the inputfield in the UI
+     *  type    = 'tf' to create a dropdown if placeholder holds values separated with /
+     *  placeholder = helptext for the inputfield in the UI
+     *
+     *  ['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'tf', 'placeholder' => 'adaptation/absolute']
+     *
+     * @return array
      * @since 3.1.0
      */
     public function getTemplate(): array;
 
     /**
      * Read the Data
-     * @param array $option
+     *
+     * return needs to be an array
+     *  [
+     *      'header' => $header,
+     *      'data' => $data,
+     *      'error' => 0,
+     *  ]
+     *
+     * @param array
      * @return array available options of the datasoure
      * @since 3.1.0
      */

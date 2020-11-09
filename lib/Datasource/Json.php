@@ -14,7 +14,7 @@ namespace OCA\Analytics\Datasource;
 use OCP\IL10N;
 use OCP\ILogger;
 
-class JsonService
+class Json implements IDatasource
 {
     private $logger;
     private $l10n;
@@ -28,19 +28,42 @@ class JsonService
         $this->logger = $logger;
     }
 
+    /**
+     * @return string Display Name of the datasource
+     */
     public function getName(): string
     {
         return $this->l10n->t('JSON');
     }
 
     /**
-     * Get the items for the selected category
-     *
-     * @NoAdminRequired
-     * @param array $option
-     * @return array
+     * @return int digit unique datasource id
      */
-    public function read($option)
+    public function getId(): int
+    {
+        return 6;
+    }
+
+    /**
+     * @return array available options of the datasoure
+     */
+    public function getTemplate(): array
+    {
+        $template = array();
+        array_push($template, ['id' => 'url', 'name' => 'JSON Url', 'placeholder' => 'url']);
+        array_push($template, ['id' => 'auth', 'name' => 'Authentication', 'placeholder' => 'User:Password']);
+        array_push($template, ['id' => 'path', 'name' => 'JSON path', 'placeholder' => 'x/y/z']);
+        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
+        return $template;
+    }
+
+    /**
+     * Read the Data
+     * @param $option
+     * @return array available options of the datasoure
+     */
+    public function readData($option): array
     {
         $string = $option['url'];
         $path = $option['path'];
@@ -69,11 +92,13 @@ class JsonService
 
         if (is_array($array)) {
             foreach ($array as $key => $value) {
-                $group = end(explode('/', $path));
+                $pathArray = explode('/', $path);
+                $group = end($pathArray);
                 array_push($data, [$group, $key, $value]);
             }
         } else {
-            $key = end(explode('/', $path));
+            $pathArray = explode('/', $path);
+            $key = end($pathArray);
             array_push($data, ['', $key, $array]);
         }
 
@@ -109,20 +134,4 @@ class JsonService
         return $current;
     }
 
-    /**
-     * template for options & settings
-     *
-     * @NoAdminRequired
-     * @return array
-     */
-    public function getTemplate()
-    {
-        $template = array();
-        array_push($template, ['id' => 'url', 'name' => 'JSON Url', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'auth', 'name' => 'Authentication', 'placeholder' => 'User:Password']);
-        array_push($template, ['id' => 'path', 'name' => 'JSON path', 'placeholder' => 'x/y/z']);
-        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
-        return $template;
-    }
 }

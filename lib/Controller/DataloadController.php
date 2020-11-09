@@ -195,7 +195,7 @@ class DataloadController extends Controller
      * @NoAdminRequired
      * @param int $dataloadId
      * @return array|NotFoundResponse
-     * @throws NotFoundException
+     * @throws NotFoundResponse|NotFoundException
      */
     private function getDataFromDatasource(int $dataloadId)
     {

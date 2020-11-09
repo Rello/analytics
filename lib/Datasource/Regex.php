@@ -14,7 +14,7 @@ namespace OCA\Analytics\Datasource;
 use OCP\IL10N;
 use OCP\ILogger;
 
-class RegexService
+class Regex implements IDatasource
 {
     private $logger;
     private $l10n;
@@ -28,19 +28,42 @@ class RegexService
         $this->logger = $logger;
     }
 
+    /**
+     * @return string Display Name of the datasource
+     */
     public function getName(): string
     {
         return $this->l10n->t('HTML grabber');
     }
 
     /**
-     * Grab data from external html via regex
-     *
-     * @NoAdminRequired
-     * @param array $option
-     * @return array
+     * @return int digit unique datasource id
      */
-    public function read($option)
+    public function getId(): int
+    {
+        return 5;
+    }
+
+    /**
+     * @return array available options of the datasoure
+     */
+    public function getTemplate(): array
+    {
+        $template = array();
+        array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
+        array_push($template, ['id' => 'regex', 'name' => 'valid regex', 'placeholder' => '//']);
+        array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
+        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
+        return $template;
+    }
+
+    /**
+     * Read the Data
+     * @param $option
+     * @return array available options of the datasoure
+     */
+    public function readData($option): array
     {
         // http headers for requests
         $headers = array(
@@ -83,23 +106,6 @@ class RegexService
             'data' => $data,
             'error' => 0,
         ];
-    }
-
-    /**
-     * template for options & settings
-     *
-     * @NoAdminRequired
-     * @return array
-     */
-    public function getTemplate()
-    {
-        $template = array();
-        array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'regex', 'name' => 'valid regex', 'placeholder' => '//']);
-        array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
-        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
-        return $template;
     }
 
     private function backup()

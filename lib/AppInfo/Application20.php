@@ -12,7 +12,6 @@
 namespace OCA\Analytics\AppInfo;
 
 use OCA\Analytics\Dashboard\Widget;
-use OCA\Analytics\Datasource\FunnyDataListener;
 use OCA\Analytics\Flow\Operation;
 use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Notification\Notifier;

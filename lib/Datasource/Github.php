@@ -14,7 +14,7 @@ namespace OCA\Analytics\Datasource;
 use OCP\IL10N;
 use OCP\ILogger;
 
-class GithubService
+class Github implements IDatasource
 {
     private $logger;
     private $l10n;
@@ -28,19 +28,42 @@ class GithubService
         $this->logger = $logger;
     }
 
+    /**
+     * @return string Display Name of the datasource
+     */
     public function getName(): string
     {
         return $this->l10n->t('GitHub');
     }
 
     /**
-     * Get the items for the selected category
-     *
-     * @NoAdminRequired
-     * @param array $option
-     * @return array
+     * @return int digit unique datasource id
      */
-    public function read($option)
+    public function getId(): int
+    {
+        return 3;
+    }
+
+    /**
+     * @return array available options of the datasoure
+     */
+    public function getTemplate(): array
+    {
+        $template = array();
+        array_push($template, ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user']);
+        array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
+        array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
+        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
+        return $template;
+    }
+
+    /**
+     * Read the Data
+     * @param $option
+     * @return array available options of the datasoure
+     */
+    public function readData($option): array
     {
         if (isset($option['link'])) $string = 'https://api.github.com/repos/' . $option['link'] . '/releases';
         else $string = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
@@ -88,23 +111,6 @@ class GithubService
             'data' => $data,
             'error' => 0,
         ];
-    }
-
-    /**
-     * template for options & settings
-     *
-     * @NoAdminRequired
-     * @return array
-     */
-    public function getTemplate()
-    {
-        $template = array();
-        array_push($template, ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user']);
-        array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
-        array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
-        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
-        return $template;
     }
 
     private function floatvalue($val)

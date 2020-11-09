@@ -14,7 +14,7 @@ namespace OCA\Analytics\Datasource;
 use OCP\IL10N;
 use OCP\ILogger;
 
-class ExternalFileService
+class ExternalFile implements IDatasource
 {
     private $logger;
     private $userId;
@@ -31,19 +31,39 @@ class ExternalFileService
         $this->logger = $logger;
     }
 
+    /**
+     * @return string Display Name of the datasource
+     */
     public function getName(): string
     {
         return $this->l10n->t('External url (csv)');
     }
 
     /**
-     * Get the content from an external url
-     *
-     * @NoAdminRequired
-     * @param array $option
-     * @return array
+     * @return int digit unique datasource id
      */
-    public function read($option)
+    public function getId(): int
+    {
+        return 4;
+    }
+
+    /**
+     * @return array available options of the datasoure
+     */
+    public function getTemplate(): array
+    {
+        $template = array();
+        array_push($template, ['id' => 'link', 'name' => 'External URL', 'placeholder' => 'url']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
+        return $template;
+    }
+
+    /**
+     * Read the Data
+     * @param $option
+     * @return array available options of the datasoure
+     */
+    public function readData($option): array
     {
         //$this->logger->error('dataset path: ' . $datasetMetadata['link']);
 
@@ -77,25 +97,10 @@ class ExternalFileService
                 array_push($data, $row);
             }
         }
-        $result = [
+        return [
             'header' => $header,
             'data' => $data
         ];
-        return $result;
-    }
-
-    /**
-     * template for options & settings
-     *
-     * @NoAdminRequired
-     * @return array
-     */
-    public function getTemplate()
-    {
-        $template = array();
-        array_push($template, ['id' => 'link', 'name' => 'External URL', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
-        return $template;
     }
 
     private function detectDelimiter($data)

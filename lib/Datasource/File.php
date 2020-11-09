@@ -11,13 +11,12 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use OCP\ILogger;
 
-class FileService
+class File implements IDatasource
 {
     private $logger;
     private $rootFolder;
@@ -37,20 +36,41 @@ class FileService
         $this->rootFolder = $rootFolder;
     }
 
+    /**
+     * @return string Display Name of the datasource
+     */
     public function getName(): string
     {
         return $this->l10n->t('Local File');
     }
 
     /**
-     * Get the items for the selected category
-     *
-     * @NoAdminRequired
-     * @param array $option
-     * @return array|NotFoundResponse
-     * @throws NotFoundException
+     * @return int digit unique datasource id
      */
-    public function read($option)
+    public function getId(): int
+    {
+        return 1;
+    }
+
+    /**
+     * @return array available options of the datasoure
+     */
+    public function getTemplate(): array
+    {
+        $template = array();
+        array_push($template, ['id' => 'link', 'name' => 'Filelink', 'placeholder' => 'filelink']);
+        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
+        return $template;
+    }
+
+    /**
+     * Read the Data
+     * @param $option
+     * @return array available options of the datasoure
+     * @throws NotFoundException
+     * @throws \OCP\Files\NotPermittedException
+     */
+    public function readData($option): array
     {
         if (isset($option['path'])) {
             $file = $this->rootFolder->getUserFolder($this->userId)->get($option['path']);
@@ -76,26 +96,11 @@ class FileService
                 array_push($data, $row);
             }
         }
-        $result = [
+        return [
             'header' => $header,
             'data' => $data,
             'error' => $errorMessage,
         ];
-        return $result;
-    }
-
-    /**
-     * template for options & settings
-     *
-     * @NoAdminRequired
-     * @return array
-     */
-    public function getTemplate()
-    {
-        $template = array();
-        array_push($template, ['id' => 'link', 'name' => 'Filelink', 'placeholder' => 'filelink']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
-        return $template;
     }
 
     private function detectDelimiter($data)

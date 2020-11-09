@@ -12,11 +12,11 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Datasource\DatasourceEvent;
-use OCA\Analytics\Datasource\ExternalFileService;
-use OCA\Analytics\Datasource\FileService;
-use OCA\Analytics\Datasource\GithubService;
-use OCA\Analytics\Datasource\JsonService;
-use OCA\Analytics\Datasource\RegexService;
+use OCA\Analytics\Datasource\ExternalFile;
+use OCA\Analytics\Datasource\File;
+use OCA\Analytics\Datasource\Github;
+use OCA\Analytics\Datasource\Json;
+use OCA\Analytics\Datasource\Regex;
 use OCP\AppFramework\Controller;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
@@ -50,11 +50,11 @@ class DataSourceController extends Controller
         IRequest $request,
         $userId,
         ILogger $logger,
-        GithubService $GithubService,
-        FileService $FileService,
-        RegexService $RegexService,
-        JsonService $JsonService,
-        ExternalFileService $ExternalFileService,
+        Github $GithubService,
+        File $FileService,
+        Regex $RegexService,
+        Json $JsonService,
+        ExternalFile $ExternalFileService,
         IL10N $l10n,
         IEventDispatcher $dispatcher
     )
@@ -72,38 +72,31 @@ class DataSourceController extends Controller
     }
 
     /**
-     * get all datasets
+     * get all datasource ids + names
      *
      * @NoAdminRequired
      */
     public function index()
     {
-        //$result[self::DATASET_TYPE_GROUP] = $this->l10n->t('No Data / Group');
-        //$result[self::DATASET_TYPE_INTERNAL_DB] = $this->l10n->t('Internal Database');
-        $result[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService->getName();
-        $result[self::DATASET_TYPE_GIT] = $this->GithubService->getName();
-        $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getName();
-        $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getName();
-        $result[self::DATASET_TYPE_JSON] = $this->JsonService->getName();
-
-        $result = $result + $this->getRegisteredDatasourceNames();
+        $result = array();
+        foreach ($this->getDatasources() as $key => $class) {
+            $result[$key] = $class->getName();
+        }
         return $result;
     }
 
     /**
-     * template for options & settings
+     * get all datasource templates
      *
      * @NoAdminRequired
      * @return array
      */
     public function getTemplates()
     {
-        $result[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService->getTemplate();
-        $result[self::DATASET_TYPE_GIT] = $this->GithubService->getTemplate();
-        $result[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService->getTemplate();
-        $result[self::DATASET_TYPE_REGEX] = $this->RegexService->getTemplate();
-        $result[self::DATASET_TYPE_JSON] = $this->JsonService->getTemplate();
-        $result = $result + $this->getRegisteredDatasourceTemplates();
+        $result = array();
+        foreach ($this->getDatasources() as $key => $class) {
+            $result[$key] = $class->getTemplate();
+        }
         return $result;
     }
 
@@ -114,55 +107,56 @@ class DataSourceController extends Controller
      * @param int $datasource
      * @param $option
      * @return array|NotFoundException
-     * @throws NotFoundException
      */
     public function read(int $datasource, $option)
     {
         //$this->logger->debug('DataSourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
-        if ($datasource === self::DATASET_TYPE_INTERNAL_FILE) $result = $this->FileService->read($option);
-        elseif ($datasource === self::DATASET_TYPE_GIT) $result = $this->GithubService->read($option);
-        elseif ($datasource === self::DATASET_TYPE_EXTERNAL_FILE) $result = $this->ExternalFileService->read($option);
-        elseif ($datasource === self::DATASET_TYPE_REGEX) $result = $this->RegexService->read($option);
-        elseif ($datasource === self::DATASET_TYPE_JSON) $result = $this->JsonService->read($option);
-        else $result = new NotFoundException();
-
-        return $result;
+        return $this->getDatasources()[$datasource]->readData($option);
     }
 
-    private function getRegisteredDatasourceTemplates()
+    /**
+     * combine internal and registered datasources
+     * @return array
+     */
+    private function getDatasources()
     {
+        return $this->getOwnDatasources() + $this->getRegisteredDatasources();
+    }
+
+    /**
+     * map all internal datasources to their IDs
+     * @return array
+     */
+    private function getOwnDatasources()
+    {
+        $datasources = [];
+        $datasources[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService;
+        $datasources[self::DATASET_TYPE_GIT] = $this->GithubService;
+        $datasources[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService;
+        $datasources[self::DATASET_TYPE_REGEX] = $this->RegexService;
+        $datasources[self::DATASET_TYPE_JSON] = $this->JsonService;
+        return $datasources;
+    }
+
+    /**
+     * map all registered datasources to their IDs
+     * @return array
+     */
+    private function getRegisteredDatasources()
+    {
+        $datasources = [];
         $event = new DatasourceEvent();
         $this->dispatcher->dispatchTyped($event);
 
-        $datasources = [];
         foreach ($event->getDataSources() as $class) {
-            $uniqueId = $this->uniqueId(\OC::$server->get($class)->getId());
+            $uniqueId = '99' . \OC::$server->get($class)->getId();
 
             if (isset($datasources[$uniqueId])) {
                 $this->logger->logException(new \InvalidArgumentException('Datasource with the same ID already registered: ' . \OC::$server->get($class)->getName()), ['level' => ILogger::INFO]);
                 continue;
             }
-
-            $datasources[$uniqueId] = \OC::$server->get($class)->getTemplate();
+            $datasources[$uniqueId] = \OC::$server->get($class);
         }
         return $datasources;
-    }
-
-    private function getRegisteredDatasourceNames()
-    {
-        $event = new DatasourceEvent();
-        $this->dispatcher->dispatchTyped($event);
-
-        $datasources = [];
-        foreach ($event->getDataSources() as $class) {
-            $uniqueId = $this->uniqueId(\OC::$server->get($class)->getId());
-            $datasources[$uniqueId] = \OC::$server->get($class)->getName();
-        }
-        return $datasources;
-    }
-
-    private function uniqueId($id)
-    {
-        return '99' . $id;
     }
 }
