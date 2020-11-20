@@ -44,9 +44,9 @@ OCA.Analytics.Dashboard = {
         if (typeof OCA.Dashboard === 'object') {
             OCA.Dashboard.register('analytics', (el) => {
                 el.innerHTML = '<ul id="ulAnalytics"></ul>';
+                OCA.Analytics.Dashboard.getFavorites();
             });
         }
-        OCA.Analytics.Dashboard.getFavorites();
     },
 
     getFavorites: function () {
