@@ -135,19 +135,19 @@ OCA.Analytics.Advanced.Dataload = {
         let item = document.getElementById('dataloadDetailItems');
         item.innerHTML = '';
 
-        for (let option of template) {
+        for (let templateOption of template) {
+            // loop all options of the datasourcetemplate and create the input form
             let tablerow = document.createElement('div');
-            //tablerow.style.display = 'table-row';
             let label = document.createElement('div');
             label.style.display = 'inline-flex';
             label.classList.add('input250');
-            label.innerText = option.name;
+            label.innerText = templateOption.name;
 
             let input;
-            if (option.type && option.type === 'tf') {
-                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailSelect(option, dataload);
+            if (templateOption.type && templateOption.type === 'tf') {
+                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailSelect(templateOption, dataload);
             } else {
-                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailInput(option, dataload);
+                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailInput(templateOption, dataload);
             }
             item.appendChild(tablerow);
             tablerow.appendChild(label);
@@ -161,30 +161,34 @@ OCA.Analytics.Advanced.Dataload = {
 
     },
 
-    buildDataloadDetailInput: function (option, dataload) {
+    buildDataloadDetailInput: function (templateOption, dataload) {
         let input = document.createElement('input');
         input.style.display = 'inline-flex';
         input.classList.add('input250');
-        input.placeholder = option.placeholder;
-        input.id = option.id;
+        input.placeholder = templateOption.placeholder;
+        input.id = templateOption.id;
         let fieldValues = JSON.parse(dataload.option);
-        if (option.id in fieldValues) {
-            input.value = fieldValues[option.id];
+        if (templateOption.id in fieldValues) {
+            input.value = fieldValues[templateOption.id];
         }
         return input;
     },
 
-    buildDataloadDetailSelect: function (datasourceOptions, dataload) {
+    buildDataloadDetailSelect: function (templateOption, dataload) {
         let input = document.createElement('select');
         input.style.display = 'inline-flex';
         input.classList.add('input250');
-        input.id = datasourceOptions.id;
+        input.id = templateOption.id;
+        let fieldValues = JSON.parse(dataload.option);
 
-        let selectOptions = datasourceOptions.placeholder.split("/")
+        let selectOptions = templateOption.placeholder.split("/")
         for (let selectOption of selectOptions) {
             let option = document.createElement('option');
             option.value = selectOption;
             option.innerText = selectOption;
+            if (templateOption.id in fieldValues && fieldValues[templateOption.id] === selectOption) {
+                option.selected = true;
+            }
             input.appendChild(option);
         }
         return input;
