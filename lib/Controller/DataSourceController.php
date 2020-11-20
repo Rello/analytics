@@ -104,14 +104,14 @@ class DataSourceController extends Controller
      * Get the data from a datasource;
      *
      * @NoAdminRequired
-     * @param int $datasource
+     * @param int $datasourceId
      * @param $option
      * @return array|NotFoundException
      */
-    public function read(int $datasource, $option)
+    public function read(int $datasourceId, $option)
     {
         //$this->logger->debug('DataSourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
-        return $this->getDatasources()[$datasource]->readData($option);
+        return $this->getDatasources()[$datasourceId]->readData($option);
     }
 
     /**

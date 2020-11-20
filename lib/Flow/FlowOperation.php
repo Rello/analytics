@@ -27,7 +27,7 @@ use OCP\WorkflowEngine\IOperation;
 use OCP\WorkflowEngine\IRuleMatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-class Operation implements IOperation
+class FlowOperation implements IOperation
 {
 
     /** @var IL10N */
@@ -57,7 +57,7 @@ class Operation implements IOperation
     {
         if (interface_exists(IRuleMatcher::class)) {
             $this->eventDispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
-                $operation = \OC::$server->query(Operation::class);
+                $operation = \OC::$server->query(FlowOperation::class);
                 $event->getSubject()->registerOperation($operation);
                 Util::addScript('analytics', 'flow');
             });

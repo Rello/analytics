@@ -93,14 +93,14 @@ class OutputController extends Controller
     private function getData($datasetMetadata, $options)
     {
         //$this->logger->error('dataset csv result: ' . $result);
-        $datasource = (int)$datasetMetadata['type'];
-        if ($datasource === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
+        $datasourceId = (int)$datasetMetadata['type'];
+        if ($datasourceId === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
             $result = $this->StorageController->read($datasetMetadata, $options);
         } else {
             $option = array();
             $option['user_id'] = $datasetMetadata['user_id'];
             $option['link'] = $datasetMetadata['link'];
-            $result = $this->DataSourceController->read($datasource, $option);
+            $result = $this->DataSourceController->read($datasourceId, $option);
             unset($result['error']);
         }
 

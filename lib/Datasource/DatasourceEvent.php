@@ -27,7 +27,6 @@ class DatasourceEvent extends Event
     protected $collections = [];
 
     /**
-     * @param string $name
      * @param string $datasource
      * @since 9.1.0
      */
