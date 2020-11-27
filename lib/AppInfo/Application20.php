@@ -12,7 +12,7 @@
 namespace OCA\Analytics\AppInfo;
 
 use OCA\Analytics\Dashboard\Widget;
-use OCA\Analytics\Flow\Operation;
+use OCA\Analytics\Flow\FlowOperation;
 use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Notification\Notifier;
 use OCA\Analytics\Search\Provider;
@@ -42,7 +42,7 @@ class Application20 extends App implements IBootstrap
 
     public function boot(IBootContext $context): void
     {
-        $this->getContainer()->query(Operation::class)->register();
+        $this->getContainer()->query(FlowOperation::class)->register();
     }
 
     protected function registerNotifications(): void

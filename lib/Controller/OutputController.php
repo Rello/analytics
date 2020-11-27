@@ -63,7 +63,7 @@ class OutputController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @param array $options
+     * @param $options
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
@@ -98,14 +98,19 @@ class OutputController extends Controller
             $result = $this->StorageController->read($datasetMetadata, $options);
         } else {
             $option = array();
+            // before 3.1.0, the options were in another format. as of 3.1.0 the standard option array is used
+            if ($datasetMetadata['link'][0] !== '{') {
+                $option['link'] = $datasetMetadata['link'];
+            } else {
+                $option = json_decode($datasetMetadata['link'], true);
+            }
             $option['user_id'] = $datasetMetadata['user_id'];
-            $option['link'] = $datasetMetadata['link'];
+
             $result = $this->DataSourceController->read($datasourceId, $option);
             unset($result['error']);
         }
 
-        $thresholds = $this->ThresholdController->read($datasetMetadata['id']);
-        $result['thresholds'] = $thresholds;
+        $result['thresholds'] = $this->ThresholdController->read($datasetMetadata['id']);
 
         unset($datasetMetadata['parent']
             , $datasetMetadata['user_id']

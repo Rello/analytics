@@ -28,7 +28,6 @@ if (!OCA.Analytics) {
         TYPE_GIT: 3,
         TYPE_EXTERNAL_FILE: 4,
         TYPE_EXTERNAL_REGEX: 5,
-        TYPE_EXTERNAL_SURVEY: 7,
         TYPE_SHARED: 99,
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_GROUP: 1,
@@ -44,6 +43,9 @@ if (!OCA.Analytics) {
             'line': 'line',
             'doughnut': 'doughnut'
         },
+        datasources: [],
+        datasourceOptions: [],
+        datasets: [],
     };
 }
 /**
@@ -51,6 +53,8 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Core = {
     initApplication: function () {
+        OCA.Analytics.Backend.getDatasourceDefinitions();
+
         const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {
             if (urlHash[2] === 'f') {
@@ -528,11 +532,22 @@ OCA.Analytics.Backend = {
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
                 OCA.Analytics.Navigation.buildNavigation(data);
-                OCA.Analytics.Sidebar.Dataset.fillSidebarParentDropdown(data);
+                OCA.Analytics.datasets = data;
                 if (datasetId) {
                     OCA.Analytics.Sidebar.hideSidebar();
                     document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
                 }
+            }
+        });
+    },
+
+    getDatasourceDefinitions: function () {
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/analytics/datasource'),
+            success: function (data) {
+                OCA.Analytics.datasourceOptions = data['options'];
+                OCA.Analytics.datasources = data['datasources'];
             }
         });
     },

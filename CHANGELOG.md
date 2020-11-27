@@ -1,9 +1,16 @@
 # Changelog
 
-## 3.0.1 - 2020-10-04
+## 3.1.0 - 2020-10-04
+### Added
+- event to register external datasources #71 [#71](https://github.com/rello/analytics/issues/71)
+- better dataload config using dropdowns
+
 ### Fixed
 - share token not generated
 - Chart: tooltips not showing
+- an error occurred while using NC search [#70](https://github.com/rello/analytics/issues/70)
+- database issue for shared reports [#69](https://github.com/rello/analytics/issues/69)
+- dashboard error when widget not enabled
 
 ## 3.0.0 - 2020-10-01
 ### Added

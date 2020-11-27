@@ -11,7 +11,7 @@
 
 namespace OCA\Analytics\AppInfo;
 
-use OCA\Analytics\Flow\Operation;
+use OCA\Analytics\Flow\FlowOperation;
 use OCA\Analytics\Notification\Notifier;
 use OCP\AppFramework\App;
 
@@ -28,7 +28,7 @@ class Application19 extends App
     {
         $this->registerNotifications();
         $this->registerNavigationEntry();
-        $this->getContainer()->query(Operation::class)->register();
+        $this->getContainer()->query(FlowOperation::class)->register();
     }
 
     protected function registerNotifications(): void

@@ -21,7 +21,6 @@ OCA.Analytics.Advanced = {};
  * @namespace OCA.Analytics.Advanced.Dataload
  */
 OCA.Analytics.Advanced.Dataload = {
-    datasourceTemplates: [],
     dataloadArray: [],
 
     tabContainerDataload: function () {
@@ -36,8 +35,8 @@ OCA.Analytics.Advanced.Dataload = {
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataload/') + datasetId,
             success: function (data) {
-                let table;
-                table = document.getElementById('templateDataload').cloneNode(true);
+                // clone the DOM template
+                let table = document.importNode(document.getElementById('templateDataload').content, true);
                 table.id = 'tableDataload';
                 document.getElementById('tabContainerDataload').innerHTML = '';
                 document.getElementById('tabContainerDataload').appendChild(table);
@@ -47,15 +46,14 @@ OCA.Analytics.Advanced.Dataload = {
                     const li = OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload);
                     document.getElementById('dataloadList').appendChild(li);
                 }
-                for (let key in data['datasources']) {
-                    let value = data['datasources'][key];
+                for (let key in OCA.Analytics.datasources) {
+                    let value = OCA.Analytics.datasources[key];
                     let option = document.createElement('option');
                     option.value = key;
                     option.innerText = value;
-                    document.getElementById('dataloadType').appendChild(option);
+                    document.getElementById('datasourceSelect').appendChild(option);
                 }
 
-                OCA.Analytics.Advanced.Dataload.datasourceTemplates = data['templates'];
                 OCA.Analytics.Advanced.Dataload.dataloadArray = data['dataloads'];
             }
         });
@@ -120,7 +118,7 @@ OCA.Analytics.Advanced.Dataload = {
     bildDataloadDetails: function (evt) {
         let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
         if (!dataload) dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === evt.target.dataset.id);
-        let template = OCA.Analytics.Advanced.Dataload.datasourceTemplates[evt.target.dataset.datasourceId];
+        let template = OCA.Analytics.datasourceOptions[evt.target.dataset.datasourceId];
 
         document.getElementById('dataloadDetail').dataset.id = dataload.id;
         document.getElementById('dataloadName').value = dataload.name;
@@ -202,7 +200,7 @@ OCA.Analytics.Advanced.Dataload = {
             url: OC.generateUrl('apps/analytics/dataload'),
             data: {
                 'datasetId': datasetId,
-                'datasourceId': document.getElementById('dataloadType').value,
+                'datasourceId': document.getElementById('datasourceSelect').value,
             },
             success: function () {
                 document.querySelector('.tabHeader.selected').click();
@@ -302,8 +300,8 @@ OCA.Analytics.Advanced.Threshold = {
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
-                let table;
-                table = document.getElementById('templateThreshold').cloneNode(true);
+                // clone the DOM template
+                let table = document.importNode(document.getElementById('templateThreshold').content, true);
                 table.id = 'tableThreshold';
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);

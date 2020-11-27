@@ -78,10 +78,18 @@ class DataSourceController extends Controller
      */
     public function index()
     {
-        $result = array();
+        $datasources = array();
         foreach ($this->getDatasources() as $key => $class) {
-            $result[$key] = $class->getName();
+            $datasources[$key] = $class->getName();
         }
+        $result['datasources'] = $datasources;
+
+        $options = array();
+        foreach ($this->getDatasources() as $key => $class) {
+            $options[$key] = $class->getTemplate();
+        }
+        $result['options'] = $options;
+
         return $result;
     }
 

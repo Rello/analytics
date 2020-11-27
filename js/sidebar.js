@@ -113,7 +113,12 @@ OCA.Analytics.Sidebar = {
 
     resetView: function () {
         document.querySelector('.tabHeader.selected').classList.remove('selected');
-        $('.tab').addClass('hidden');
+        let tabs = document.querySelectorAll('.tabsContainer .tab');
+        for (let i = 0; i < tabs.length; i++) {
+            tabs[i].classList.add('hidden');
+            tabs[i].innerHTML = '';
+        }
+
     },
 
     sortByName: function (a, b) {
@@ -139,17 +144,22 @@ OCA.Analytics.Sidebar.Dataset = {
             success: function (data) {
                 let table;
                 if (data !== false) {
-                    table = document.getElementById('templateDataset').cloneNode(true);
+                    // clone the DOM template
+                    table = document.importNode(document.getElementById('templateDataset').content, true);
                     table.id = 'sidebarDataset';
                     document.getElementById('tabContainerDataset').innerHTML = '';
                     document.getElementById('tabContainerDataset').appendChild(table);
+
+                    OCA.Analytics.Sidebar.Dataset.buildDatasourceDropdown();
+                    OCA.Analytics.Sidebar.Dataset.buildGroupingDropdown();
+
                     document.getElementById('sidebarDatasetName').value = data.name;
                     document.getElementById('sidebarDatasetSubheader').value = data.subheader;
                     document.getElementById('sidebarDatasetParent').value = data.parent;
-                    document.getElementById('sidebarDatasetType').value = data.type;
-                    document.getElementById('sidebarDatasetType').addEventListener('change', OCA.Analytics.Sidebar.Dataset.handleDatasetTypeChange);
+                    document.getElementById('sidebarDatasetDatasource').value = data.type;
+                    document.getElementById('sidebarDatasetDatasource').addEventListener('change', OCA.Analytics.Sidebar.Dataset.handleDatasourceChange);
                     document.getElementById('sidebarDatasetLink').value = data.link;
-                    document.getElementById('sidebarDatasetLinkButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasetParameterButton);
+                    document.getElementById('sidebarDatasetLinkButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasourceOptionsButton);
                     document.getElementById('sidebarDatasetVisualization').value = data.visualization;
                     document.getElementById('sidebarDatasetChart').value = data.chart;
                     document.getElementById('sidebarDatasetChartOptions').value = data.chartoptions;
@@ -157,9 +167,20 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetDimension1').value = data.dimension1;
                     document.getElementById('sidebarDatasetDimension2').value = data.dimension2;
                     document.getElementById('sidebarDatasetValue').value = data.value;
-                    document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasetDeleteButton);
-                    document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDatasetUpdateButton);
-                    OCA.Analytics.Sidebar.Dataset.handleDatasetTypeChange();
+                    document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
+                    document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleUpdateButton);
+
+                    OCA.Analytics.Sidebar.Dataset.handleDatasourceChange();
+
+                    if (data.link.substring(0, 1) === '{') {
+                        let options = JSON.parse(data.link);
+                        for (let option in options) {
+                            document.getElementById(option) ? document.getElementById(option).value = options[option] : null;
+                        }
+                    } else {
+
+                    }
+
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -169,7 +190,7 @@ OCA.Analytics.Sidebar.Dataset = {
 
     },
 
-    handleDatasetDeleteButton: function () {
+    handleDeleteButton: function () {
         const id = document.getElementById('app-sidebar').dataset.id;
         OC.dialogs.confirm(
             t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
@@ -185,35 +206,52 @@ OCA.Analytics.Sidebar.Dataset = {
         );
     },
 
-    handleDatasetUpdateButton: function () {
+    handleUpdateButton: function () {
         OCA.Analytics.Sidebar.Backend.updateDataset();
     },
 
-    handleDatasetTypeChange: function () {
-        const type = parseInt(document.getElementById('sidebarDatasetType').value);
+    handleDatasourceChange: function () {
+        const type = parseInt(document.getElementById('sidebarDatasetDatasource').value);
+        document.getElementById('datasetDatasourceSection').innerHTML = '';
+
         if (type === OCA.Analytics.TYPE_INTERNAL_DB) {
             document.getElementById('datasetLinkRow').style.display = 'none';
             document.getElementById('datasetDimensionSection').style.display = 'table';
             document.getElementById('datasetDimensionSectionHeader').style.removeProperty('display');
+            document.getElementById('datasetDatasourceSection').style.display = 'none';
+            document.getElementById('datasetDatasourceSectionHeader').style.display = 'none';
             document.getElementById('datasetVisualizationSection').style.display = 'table';
             document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
-        } else if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_GIT || type === OCA.Analytics.TYPE_EXTERNAL_FILE) {
-            document.getElementById('datasetLinkRow').style.display = 'table-row';
+        } else if (type === OCA.Analytics.TYPE_EMPTY_GROUP) {
+            document.getElementById('datasetLinkRow').style.display = 'none';
             document.getElementById('datasetDimensionSection').style.display = 'none';
             document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
-            document.getElementById('datasetVisualizationSection').style.display = 'table';
-            document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+            document.getElementById('datasetDatasourceSection').style.display = 'none';
+            document.getElementById('datasetDatasourceSectionHeader').style.display = 'none';
+            document.getElementById('datasetVisualizationSection').style.display = 'none';
+            document.getElementById('datasetVisualizationSectionHeader').style.display = 'none';
         } else {
             document.getElementById('datasetLinkRow').style.display = 'none';
             document.getElementById('datasetDimensionSection').style.display = 'none';
             document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
-            document.getElementById('datasetVisualizationSection').style.display = 'none';
-            document.getElementById('datasetVisualizationSectionHeader').style.display = 'none';
+            document.getElementById('datasetDatasourceSection').style.display = 'table';
+            document.getElementById('datasetDatasourceSectionHeader').style.removeProperty('display');
+            document.getElementById('datasetVisualizationSection').style.display = 'table';
+            document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+
+            document.getElementById('datasetDatasourceSection').appendChild(OCA.Analytics.Sidebar.Datasource.buildOptionsForm(type));
         }
     },
 
-    handleDatasetParameterButton: function () {
-        const type = parseInt(document.getElementById('sidebarDatasetType').value);
+    handleDatasourceOptionsButton: function () {
+        const type = parseInt(document.getElementById('sidebarDatasetDatasource').value);
+
+        //let tmp = OC.dialogs.message(null, 'Datasource Options', 'custom', 0, null, true);
+        //document.querySelector('.oc-dialog-content').innerHTML = '';
+
+        document.getElementById('datasetDatasourceSection').innerHTML = '';
+        document.getElementById('datasetDatasourceSection').appendChild(OCA.Analytics.Sidebar.Datasource.buildOptionsForm(type));
+
         if (type === OCA.Analytics.TYPE_GIT) {
             OC.dialogs.prompt(
                 t('analytics', 'Enter GitHub User/Repository. The \'/\' is important.'),
@@ -246,15 +284,26 @@ OCA.Analytics.Sidebar.Dataset = {
         }
     },
 
-    fillSidebarParentDropdown: function (data) {
-        let tableParent = document.querySelector('#templateDataset #sidebarDatasetParent');
+    buildDatasourceDropdown: function () {
+        for (let key in OCA.Analytics.datasources) {
+            let value = OCA.Analytics.datasources[key];
+            let option = document.createElement('option');
+            option.value = key;
+            option.innerText = value;
+            document.getElementById('sidebarDatasetDatasource').appendChild(option);
+        }
+        return true;
+    },
+
+    buildGroupingDropdown: function () {
+        let tableParent = document.getElementById('sidebarDatasetParent');
         tableParent.innerHTML = '';
         let option = document.createElement('option');
         option.text = '';
         option.value = '0';
         tableParent.add(option);
 
-        for (let dataset of data) {
+        for (let dataset of OCA.Analytics.datasets) {
             if (parseInt(dataset.type) === OCA.Analytics.TYPE_EMPTY_GROUP) {
                 option = document.createElement('option');
                 option.text = dataset.name;
@@ -262,7 +311,63 @@ OCA.Analytics.Sidebar.Dataset = {
                 tableParent.add(option);
             }
         }
+        return true;
     },
+};
+
+OCA.Analytics.Sidebar.Datasource = {
+    buildOptionsForm: function (datasource) {
+        let template = OCA.Analytics.datasourceOptions[datasource];
+        let item = document.createDocumentFragment();
+
+        for (let templateOption of template) {
+            // loop all options of the datasourcetemplate and create the input form
+            let tablerow = document.createElement('div');
+            tablerow.style.display = 'table-row';
+            let label = document.createElement('div');
+            label.style.display = 'table-cell';
+            label.style.width = '100%';
+            label.innerText = templateOption.name;
+
+            let input;
+            if (templateOption.type && templateOption.type === 'tf') {
+                input = OCA.Analytics.Sidebar.Datasource.buildOptionsSelect(templateOption, null);
+            } else {
+                input = OCA.Analytics.Sidebar.Datasource.buildOptionsInput(templateOption, null);
+            }
+            input.style.display = 'table-cell';
+            item.appendChild(tablerow);
+            tablerow.appendChild(label);
+            tablerow.appendChild(input);
+        }
+        return item;
+    },
+
+    buildOptionsInput: function (templateOption, dataload) {
+        let input = document.createElement('input');
+        input.style.display = 'inline-flex';
+        input.classList.add('input150');
+        input.placeholder = templateOption.placeholder;
+        input.id = templateOption.id;
+        return input;
+    },
+
+    buildOptionsSelect: function (templateOption, dataload) {
+        let input = document.createElement('select');
+        input.style.display = 'inline-flex';
+        input.classList.add('input150');
+        input.id = templateOption.id;
+
+        let selectOptions = templateOption.placeholder.split("/")
+        for (let selectOption of selectOptions) {
+            let option = document.createElement('option');
+            option.value = selectOption;
+            option.innerText = selectOption;
+            input.appendChild(option);
+        }
+        return input;
+    },
+
 };
 
 OCA.Analytics.Sidebar.Data = {
@@ -281,7 +386,8 @@ OCA.Analytics.Sidebar.Data = {
             success: function (data) {
                 let table;
                 if (data !== false && parseInt(data.type) === OCA.Analytics.TYPE_INTERNAL_DB) {
-                    table = document.getElementById('templateData').cloneNode(true);
+                    // clone the DOM template
+                    table = document.importNode(document.getElementById('templateData').content, true);
                     table.id = 'tableData';
                     document.getElementById('tabContainerData').innerHTML = '';
                     document.getElementById('tabContainerData').appendChild(table);
@@ -686,6 +792,14 @@ OCA.Analytics.Sidebar.Backend = {
 
     updateDataset: function () {
         const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+
+        let option = {};
+        let inputFields = document.querySelectorAll('#datasetDatasourceSection input, #datasetDatasourceSection select');
+        for (let inputField of inputFields) {
+            option[inputField.id] = inputField.value;
+        }
+        option = JSON.stringify(option);
+
         $.ajax({
             type: 'PUT',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
@@ -693,8 +807,8 @@ OCA.Analytics.Sidebar.Backend = {
                 'name': document.getElementById('sidebarDatasetName').value,
                 'subheader': document.getElementById('sidebarDatasetSubheader').value,
                 'parent': document.getElementById('sidebarDatasetParent').value,
-                'type': document.getElementById('sidebarDatasetType').value,
-                'link': document.getElementById('sidebarDatasetLink').value,
+                'type': document.getElementById('sidebarDatasetDatasource').value,
+                'link': option,
                 'visualization': document.getElementById('sidebarDatasetVisualization').value,
                 'chart': document.getElementById('sidebarDatasetChart').value,
                 'chartoptions': document.getElementById('sidebarDatasetChartOptions').value,

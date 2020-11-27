@@ -85,8 +85,6 @@ class DataloadController extends Controller
     {
         $result = array();
         $result['dataloads'] = $this->DataloadMapper->read($datasetId);
-        $result['templates'] = $this->DataSourceController->getTemplates();
-        $result['datasources'] = $this->DataSourceController->index();
         return new DataResponse($result);
     }
 
@@ -212,7 +210,7 @@ class DataloadController extends Controller
 
             if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
                 // if datasource should be timestamped/snapshoted
-                // shift values by one dimension
+                // shift values by one dimension and stores date in second column
                 $result['data'] = array_map(function ($tag) {
                     $columns = count($tag);
                     return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
