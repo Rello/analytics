@@ -321,14 +321,13 @@ class DataloadController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $value
      * @return DataResponse|NotFoundResponse
      */
-    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2, $value)
+    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
-            $result = $this->StorageController->deleteSimulate($datasetId, $dimension1, $dimension2, $value);
+            $result = $this->StorageController->deleteSimulate($datasetId, $dimension1, $dimension2);
             return new DataResponse(['delete' => $result]);
         } else {
             return new NotFoundResponse();

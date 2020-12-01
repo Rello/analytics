@@ -41,10 +41,9 @@ class StorageController extends Controller
      *
      * @NoAdminRequired
      * @param $datasetMetadata
-     * @param array $options
      * @return array
      */
-    public function read($datasetMetadata, $options)
+    public function read($datasetMetadata)
     {
         $availableDimensions = array();
         $header = array();
@@ -133,12 +132,11 @@ class StorageController extends Controller
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
-     * @param $value
      * @return array
      */
-    public function deleteSimulate(int $datasetId, $dimension1, $dimension2, $value)
+    public function deleteSimulate(int $datasetId, $dimension1, $dimension2)
     {
-        return $this->StorageMapper->deleteDataSimulate($datasetId, $dimension1, $dimension2, $value);
+        return $this->StorageMapper->deleteDataSimulate($datasetId, $dimension1, $dimension2);
     }
 
     private function floatvalue($val)

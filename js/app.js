@@ -561,7 +561,9 @@ OCA.Analytics.Backend = {
                 } catch (e) {
                     OCA.Analytics.currentReportData.options.filteroptions = {};
                 }
-                if (OCA.Analytics.currentReportData.options.filteroptions === null) OCA.Analytics.currentReportData.options.filteroptions = {};
+                if (OCA.Analytics.currentReportData.options.filteroptions === null) {
+                    OCA.Analytics.currentReportData.options.filteroptions = {};
+                }
 
                 document.getElementById('reportHeader').innerText = data.options.name;
 
@@ -639,7 +641,7 @@ OCA.Analytics.Backend = {
             url: OC.generateUrl('apps/analytics/whatsnew'),
             data: {'format': 'json'},
             success: options.success || function (data, statusText, xhr) {
-                OCA.Analytics.UI.whatsNewSuccess(data, statusText, xhr)
+                OCA.Analytics.UI.whatsNewSuccess(data, statusText, xhr);
             },
         });
     },
@@ -650,7 +652,7 @@ OCA.Analytics.Backend = {
             url: OC.generateUrl('apps/analytics/whatsnew'),
             data: {version: encodeURIComponent(version)}
         })
-        $('.whatsNewPopover').remove()
+        $('.whatsNewPopover').remove();
     },
 
     favoriteUpdate: function (datasetId, isFavorite) {

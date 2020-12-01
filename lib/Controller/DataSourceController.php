@@ -79,6 +79,7 @@ class DataSourceController extends Controller
     public function index()
     {
         $datasources = array();
+        $result = array();
         foreach ($this->getDatasources() as $key => $class) {
             $datasources[$key] = $class->getName();
         }

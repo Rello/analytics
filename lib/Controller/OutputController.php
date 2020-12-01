@@ -95,7 +95,7 @@ class OutputController extends Controller
         //$this->logger->error('dataset csv result: ' . $result);
         $datasourceId = (int)$datasetMetadata['type'];
         if ($datasourceId === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
-            $result = $this->StorageController->read($datasetMetadata, $options);
+            $result = $this->StorageController->read($datasetMetadata);
         } else {
             $option = array();
             // before 3.1.0, the options were in another format. as of 3.1.0 the standard option array is used
