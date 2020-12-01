@@ -162,8 +162,8 @@ class DataloadController extends Controller
         $result = $this->getDataFromDatasource($dataloadId);
         $insert = $update = 0;
         $datasetId = $result['datasetId'];
-
         $option = json_decode($dataloadMetadata['option'], true);
+
         if (isset($option['delete']) and $option['delete'] === 'true') {
             $this->StorageController->delete($datasetId, '*', '*');
         }

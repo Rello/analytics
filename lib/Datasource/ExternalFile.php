@@ -54,7 +54,6 @@ class ExternalFile implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'link', 'name' => 'External URL', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
         return $template;
     }
 

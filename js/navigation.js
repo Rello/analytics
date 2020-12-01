@@ -85,6 +85,7 @@ OCA.Analytics.Navigation = {
         let a2 = document.createElement('a');
         a2.classList.add('icon-add');
         a2.innerText = t('analytics', 'New Report');
+        a2.id = 'newDatasetButton';
         a2.addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
         li2.appendChild(a2);
         document.getElementById('navigationDatasets').appendChild(li2);
@@ -105,8 +106,6 @@ OCA.Analytics.Navigation = {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
-            typeIcon = 'icon-external';
         } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
             if (document.getElementById('advanced').value === 'true') {
                 // don´t show shared reports in advanced config mode as no config is possible
@@ -117,7 +116,7 @@ OCA.Analytics.Navigation = {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
         } else {
-            typeIcon = '';
+            typeIcon = 'icon-external';
         }
 
         if (typeIcon) {

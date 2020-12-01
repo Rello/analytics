@@ -59,7 +59,6 @@ class File implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'link', 'name' => 'Filelink', 'placeholder' => 'filelink']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'true/false']);
         return $template;
     }
 

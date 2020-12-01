@@ -54,7 +54,6 @@ class Github implements IDatasource
         array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
         array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
         array_push($template, ['id' => 'timestamp', 'name' => 'Add current timestamp', 'placeholder' => 'false/true', 'type' => 'tf']);
-        array_push($template, ['id' => 'delete', 'name' => 'Delete all data before load', 'placeholder' => 'false/true', 'type' => 'tf']);
         return $template;
     }
 

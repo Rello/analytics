@@ -35,171 +35,96 @@ OCA.Analytics.Advanced.Dataload = {
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataload/') + datasetId,
             success: function (data) {
+                // store reulable array
+                OCA.Analytics.Advanced.Dataload.dataloadArray = data['dataloads'];
+
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateDataload').content, true);
                 table.id = 'tableDataload';
                 document.getElementById('tabContainerDataload').innerHTML = '';
                 document.getElementById('tabContainerDataload').appendChild(table);
-                document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadCreateButton);
+                document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCreateButton);
                 document.getElementById('dataloadList').innerHTML = '';
+
+                // list all available dataloads for dataset
                 for (let dataload of data['dataloads']) {
-                    const li = OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload);
-                    document.getElementById('dataloadList').appendChild(li);
-                }
-                for (let key in OCA.Analytics.datasources) {
-                    let value = OCA.Analytics.datasources[key];
-                    let option = document.createElement('option');
-                    option.value = key;
-                    option.innerText = value;
-                    document.getElementById('datasourceSelect').appendChild(option);
+                    document.getElementById('dataloadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
                 }
 
-                OCA.Analytics.Advanced.Dataload.dataloadArray = data['dataloads'];
+                // list all available datasources
+                document.getElementById('datasourceSelect').appendChild(OCA.Analytics.Datasource.buildDropdown());
             }
         });
     },
 
-    handleDataloadCreateButton: function () {
-        OCA.Analytics.Advanced.Dataload.createDataload();
-    },
-
-    handleDataloadUpdateButton: function () {
-        OCA.Analytics.Advanced.Dataload.updateDataload();
-    },
-
-    handleDataloadDeleteButton: function () {
-        OC.dialogs.confirm(
-            t('analytics', 'Are you sure?'),
-            t('analytics', 'Delete Dataload'),
-            function (e) {
-                if (e === true) {
-                    OCA.Analytics.Advanced.Dataload.deleteDataload();
-                }
-            },
-            true
-        );
-    },
-
-    handleDataloadEditClick: function (evt) {
-        OCA.Analytics.Advanced.Dataload.bildDataloadDetails(evt);
-    },
-
-    handleDataloadExecuteButton: function () {
-        OCA.Analytics.Advanced.Dataload.executeDataload();
-    },
-
     buildDataloadRow: function (dataload) {
-
         let item = document.createElement('div');
         item.classList.add('dataloadItem');
 
-        let typeINT = parseInt(dataload.datasource);
+        let typeINT = parseInt(dataload['datasource']);
         let typeIcon;
         if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE) {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (typeINT === OCA.Analytics.TYPE_GIT || typeINT === OCA.Analytics.TYPE_EXTERNAL_FILE) {
-            typeIcon = 'icon-external';
         } else {
             typeIcon = 'icon-external';
         }
         let a = document.createElement('a');
-        //a.setAttribute('href', '#');
         a.classList.add(typeIcon);
-        a.innerText = dataload.name;
-        a.dataset.id = dataload.id;
-        a.dataset.datasourceId = dataload.datasource;
-        a.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadEditClick);
+        a.innerText = dataload['name'];
+        a.dataset.id = dataload['id'];
+        a.dataset.datasourceId = dataload['datasource'];
+        a.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadSelect);
         item.appendChild(a);
         return item;
     },
 
-    bildDataloadDetails: function (evt) {
-        let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
-        if (!dataload) dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === evt.target.dataset.id);
-        let template = OCA.Analytics.datasourceOptions[evt.target.dataset.datasourceId];
+    handleDataloadSelect: function (evt) {
+        OCA.Analytics.Advanced.Dataload.buildDataloadOptions(evt);
+    },
 
-        document.getElementById('dataloadDetail').dataset.id = dataload.id;
-        document.getElementById('dataloadName').value = dataload.name;
+    buildDataloadOptions: function (evt) {
+        let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
+
+        document.getElementById('dataloadDetail').dataset.id = dataload['id'];
+        document.getElementById('dataloadName').value = dataload['name'];
         document.getElementById('dataloadDetailHeader').hidden = false;
         document.getElementById('dataloadDetailButtons').hidden = false;
-        document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadUpdateButton);
-        document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadDeleteButton);
-        document.getElementById('dataloadSchedule').value = dataload.schedule;
+        document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleUpdateButton);
+        document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDeleteButton);
+        document.getElementById('dataloadSchedule').value = dataload['schedule'];
         document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
-        document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload.id;
+        document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload['id'];
 
-        let item = document.getElementById('dataloadDetailItems');
-        item.innerHTML = '';
+        // get all the options for a datasource
+        document.getElementById('dataloadDetailItems').innerHTML = '';
+        document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildOptionsForm(dataload['datasource']));
 
-        for (let templateOption of template) {
-            // loop all options of the datasourcetemplate and create the input form
-            let tablerow = document.createElement('div');
-            let label = document.createElement('div');
-            label.style.display = 'inline-flex';
-            label.classList.add('input250');
-            label.innerText = templateOption.name;
+        // set  the options for a datasource
+        let fieldValues = JSON.parse(dataload['option']);
+        for (let fieldValue in fieldValues) {
+            document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = fieldValues[fieldValue] : null;
+        }
 
-            let input;
-            if (templateOption.type && templateOption.type === 'tf') {
-                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailSelect(templateOption, dataload);
-            } else {
-                input = OCA.Analytics.Advanced.Dataload.buildDataloadDetailInput(templateOption, dataload);
-            }
-            item.appendChild(tablerow);
-            tablerow.appendChild(label);
-            tablerow.appendChild(input);
+        if (dataload['datasource'] === OCA.Analytics.TYPE_INTERNAL_FILE) {
+            document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleFilepicker);
         }
 
         document.getElementById('dataloadRun').hidden = false;
-        document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
-        //scheduleButton.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
-        //useButton.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadExecuteButton);
-
+        document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleExecuteButton);
     },
 
-    buildDataloadDetailInput: function (templateOption, dataload) {
-        let input = document.createElement('input');
-        input.style.display = 'inline-flex';
-        input.classList.add('input250');
-        input.placeholder = templateOption.placeholder;
-        input.id = templateOption.id;
-        let fieldValues = JSON.parse(dataload.option);
-        if (templateOption.id in fieldValues) {
-            input.value = fieldValues[templateOption.id];
-        }
-        return input;
-    },
-
-    buildDataloadDetailSelect: function (templateOption, dataload) {
-        let input = document.createElement('select');
-        input.style.display = 'inline-flex';
-        input.classList.add('input250');
-        input.id = templateOption.id;
-        let fieldValues = JSON.parse(dataload.option);
-
-        let selectOptions = templateOption.placeholder.split("/")
-        for (let selectOption of selectOptions) {
-            let option = document.createElement('option');
-            option.value = selectOption;
-            option.innerText = selectOption;
-            if (templateOption.id in fieldValues && fieldValues[templateOption.id] === selectOption) {
-                option.selected = true;
-            }
-            input.appendChild(option);
-        }
-        return input;
+    handleCreateButton: function () {
+        OCA.Analytics.Advanced.Dataload.createDataload();
     },
 
     createDataload: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
-
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataload'),
             data: {
-                'datasetId': datasetId,
+                'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
                 'datasourceId': document.getElementById('datasourceSelect').value,
             },
             success: function () {
@@ -208,13 +133,18 @@ OCA.Analytics.Advanced.Dataload = {
         });
     },
 
+    handleUpdateButton: function () {
+        OCA.Analytics.Advanced.Dataload.updateDataload();
+    },
+
     updateDataload: function () {
         const dataloadId = document.getElementById('dataloadDetail').dataset.id;
         let option = {};
 
-        let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select');
+        // loop all dynamic options of the selected datasource
+        let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select, #dataloadDetailDelete select');
         for (let inputField of inputFields) {
-            option[inputField.id] = inputField.value;
+            option[inputField['id']] = inputField['value'];
         }
         option = JSON.stringify(option);
 
@@ -228,25 +158,41 @@ OCA.Analytics.Advanced.Dataload = {
             },
             success: function () {
                 OCA.Analytics.UI.notification('success', t('analytics', 'Dataload saved'));
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId)).schedule = document.getElementById('dataloadSchedule').value;
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId)).name = document.getElementById('dataloadName').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['schedule'] = document.getElementById('dataloadSchedule').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['name'] = document.getElementById('dataloadName').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['option'] = option;
             }
         });
     },
 
+    handleDeleteButton: function () {
+        OC.dialogs.confirm(
+            t('analytics', 'Are you sure?'),
+            t('analytics', 'Delete Dataload'),
+            function (e) {
+                if (e === true) {
+                    OCA.Analytics.Advanced.Dataload.deleteDataload();
+                }
+            },
+            true
+        );
+    },
+
     deleteDataload: function () {
-        const dataloadId = document.getElementById('dataloadDetail').dataset.id;
         $.ajax({
             type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/dataload/') + dataloadId,
+            url: OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.id,
             success: function () {
                 document.querySelector('.tabHeader.selected').click();
             }
         });
     },
 
+    handleExecuteButton: function () {
+        OCA.Analytics.Advanced.Dataload.executeDataload();
+    },
+
     executeDataload: function () {
-        const dataloadId = document.getElementById('dataloadDetail').dataset.id;
         let mode;
         if (document.getElementById('testrunCheckbox').checked) {
             mode = 'simulate';
@@ -258,7 +204,7 @@ OCA.Analytics.Advanced.Dataload = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataload/') + mode,
             data: {
-                'dataloadId': dataloadId,
+                'dataloadId': document.getElementById('dataloadDetail').dataset.id,
             },
             success: function (data) {
                 if (mode === 'simulate') {
@@ -311,20 +257,20 @@ OCA.Analytics.Advanced.Threshold = {
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);
                 }
-            }
-        });
 
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/threshold/') + datasetId,
-            success: function (data) {
-                if (data !== false) {
-                    document.getElementById('sidebarThresholdList').innerHTML = '';
-                    for (let threshold of data) {
-                        const li = OCA.Analytics.Advanced.Threshold.buildThresholdRow(threshold);
-                        document.getElementById('sidebarThresholdList').appendChild(li);
+                $.ajax({
+                    type: 'GET',
+                    url: OC.generateUrl('apps/analytics/threshold/') + datasetId,
+                    success: function (data) {
+                        if (data !== false) {
+                            document.getElementById('sidebarThresholdList').innerHTML = '';
+                            for (let threshold of data) {
+                                const li = OCA.Analytics.Advanced.Threshold.buildThresholdRow(threshold);
+                                document.getElementById('sidebarThresholdList').appendChild(li);
+                            }
+                        }
                     }
-                }
+                });
             }
         });
     },

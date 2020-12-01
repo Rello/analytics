@@ -467,6 +467,73 @@ OCA.Analytics.UI = {
     }
 };
 
+OCA.Analytics.Datasource = {
+    buildDropdown: function () {
+        let options = document.createDocumentFragment();
+        for (let key in OCA.Analytics.datasources) {
+            let value = OCA.Analytics.datasources[key];
+            let option = document.createElement('option');
+            option.value = key;
+            option.innerText = value;
+            options.appendChild(option);
+        }
+        return options;
+    },
+
+    buildOptionsForm: function (datasource) {
+        let template = OCA.Analytics.datasourceOptions[datasource];
+        let form = document.createDocumentFragment();
+
+        for (let templateOption of template) {
+            // loop all options of the datasourcetemplate and create the input form
+            let tablerow = document.createElement('div');
+            tablerow.style.display = 'table-row';
+            let label = document.createElement('div');
+            label.style.display = 'table-cell';
+            label.style.width = '100%';
+            label.innerText = templateOption.name;
+
+            let input;
+            if (templateOption.type && templateOption.type === 'tf') {
+                input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
+            } else {
+                input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
+            }
+            input.style.display = 'table-cell';
+            form.appendChild(tablerow);
+            tablerow.appendChild(label);
+            tablerow.appendChild(input);
+        }
+        return form;
+    },
+
+    buildOptionsInput: function (templateOption) {
+        let input = document.createElement('input');
+        input.style.display = 'inline-flex';
+        input.classList.add('sidebarInput');
+        input.placeholder = templateOption.placeholder;
+        input.id = templateOption.id;
+        return input;
+    },
+
+    buildOptionsSelect: function (templateOption) {
+        let input = document.createElement('select');
+        input.style.display = 'inline-flex';
+        input.classList.add('sidebarInput');
+        input.id = templateOption.id;
+
+        let selectOptions = templateOption.placeholder.split("/")
+        for (let selectOption of selectOptions) {
+            let option = document.createElement('option');
+            option.value = selectOption;
+            option.innerText = selectOption;
+            input.appendChild(option);
+        }
+        return input;
+    },
+
+};
+
 OCA.Analytics.Backend = {
 
     getData: function () {
