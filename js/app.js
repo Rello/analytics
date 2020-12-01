@@ -646,7 +646,7 @@ OCA.Analytics.Backend = {
         });
     },
 
-    whatsnewDismiss: function dismiss(version) {
+    whatsnewDismiss: function (version) {
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/whatsnew'),
