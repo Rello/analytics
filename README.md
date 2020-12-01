@@ -9,6 +9,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 ## Features
 - Datasources: local/remote file, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
 - 3rd party: GitHub Statistics, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber), [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
+- Register external datasources
 - Storage: realtime or database
 - Advanced dataloads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
 - Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables, filters
@@ -19,6 +20,10 @@ Visualize and share anything, from financial analysis to IoT logs.
 
 ## Architecture
 <p align="center"><img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="610" title="Analytics"></p>
+
+## Register datasource
+Apps can register own, external datasources via an event listener
+[How-To](https://github.com/Rello/analytics/wiki/Register-external-datasource)
 
 ## Languages
 - English (en),German (de, de_DE), Russian (ru, ru_RU), French (fr)

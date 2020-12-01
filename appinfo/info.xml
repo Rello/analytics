@@ -11,6 +11,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 ##### Features:
 - Datasources: local/remote file, API, imports, manual entry
 - 3rd party: GitHub Statistics, website grabber, JSON
+- Register external datasources
 - Storage: realtime or database
 - Advanced dataloads with scheduling
 - Visualization: combined charts, tables, filters

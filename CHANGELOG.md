@@ -3,7 +3,7 @@
 ## 3.1.0 - 2020-10-04
 ### Added
 - event to register external datasources #71 [#71](https://github.com/rello/analytics/issues/71)
-- better dataload config using dropdowns
+- better datasource config using dropdowns
 
 ### Fixed
 - share token not generated
