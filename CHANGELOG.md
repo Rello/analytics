@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.0 - 2020-10-04
+## 3.1.0 - 2020-12-02
 ### Added
 - event to register external datasources #71 [#71](https://github.com/rello/analytics/issues/71)
 - better datasource config using dropdowns
