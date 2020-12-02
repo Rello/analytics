@@ -53,7 +53,7 @@ class Regex implements IDatasource
         array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
         array_push($template, ['id' => 'regex', 'name' => 'valid regex', 'placeholder' => '//']);
         array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
-        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false']);
+        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'true/false', 'type' => 'tf']);
         return $template;
     }
 
