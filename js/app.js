@@ -261,8 +261,13 @@ OCA.Analytics.UI = {
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
-                        return datasetLabel + ': ' + parseInt(tooltipItem.yLabel).toLocaleString();
+//                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
+                        if (tooltipItem.yLabel !== '') {
+                            return datasetLabel + ': ' + parseInt(tooltipItem.yLabel).toLocaleString();
+                        } else {
+                            return datasetLabel;
+                        }
                     }
                 }
             },
