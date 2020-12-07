@@ -169,6 +169,11 @@ class DataloadController extends Controller
         }
         if ($result['error'] === 0) {
             foreach ($result['data'] as &$row) {
+                if (count($row) === 2) {
+                    // if datasource only delivers 2 colums, the value needs to be in the last one
+                    $row[2] = $row[1];
+                    $row[1] = null;
+                }
                 $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id']);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
