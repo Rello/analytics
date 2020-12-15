@@ -53,15 +53,13 @@ class FlowOperation implements IOperation
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function register(): void
+    public static function register(IEventDispatcher $dispatcher): void
     {
-        if (interface_exists(IRuleMatcher::class)) {
-            $this->eventDispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
-                $operation = \OC::$server->query(FlowOperation::class);
-                $event->getSubject()->registerOperation($operation);
-                Util::addScript('analytics', 'flow');
-            });
-        }
+        $dispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
+            $operation = \OC::$server->query(FlowOperation::class);
+            $event->getSubject()->registerOperation($operation);
+            Util::addScript('analytics', 'flow');
+        });
     }
 
     public function getDisplayName(): string

@@ -21,6 +21,7 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\EventDispatcher\IEventDispatcher;
 
 class Application extends App implements IBootstrap
 {
@@ -42,7 +43,11 @@ class Application extends App implements IBootstrap
 
     public function boot(IBootContext $context): void
     {
-        $this->getContainer()->query(FlowOperation::class)->register();
+        $server = $context->getServerContainer();
+
+        /** @var IEventDispatcher $dispatcher */
+        $dispatcher = $server->query(IEventDispatcher::class);
+        FlowOperation::register($dispatcher);
     }
 
     protected function registerNotifications(): void
