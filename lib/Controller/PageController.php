@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\DataSession;
+use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -27,7 +28,8 @@ class PageController extends Controller
 {
     private $configManager;
     private $logger;
-    private $ShareController;
+    /** @var ShareService */
+    private $ShareService;
     /** @var IURLGenerator */
     private $url;
     /** @var DataSession */
@@ -39,7 +41,7 @@ class PageController extends Controller
         ILogger $logger,
         IConfig $configManager,
         IURLGenerator $url,
-        ShareController $ShareController,
+        ShareService $ShareService,
         DataSession $DataSession
     )
     {
@@ -47,7 +49,7 @@ class PageController extends Controller
         $this->configManager = $configManager;
         $this->logger = $logger;
         $this->url = $url;
-        $this->ShareController = $ShareController;
+        $this->ShareService = $ShareService;
         $this->DataSession = $DataSession;
     }
 
@@ -95,7 +97,7 @@ class PageController extends Controller
      */
     public function indexPublic($token, string $password = '')
     {
-        $share = $this->ShareController->getDatasetByToken($token);
+        $share = $this->ShareService->getDatasetByToken($token);
 
         if (empty($share)) {
             // Dataset not shared or wrong token
@@ -105,7 +107,7 @@ class PageController extends Controller
         } else {
             if ($share['password'] !== null) {
                 $password = $password !== '' ? $password : (string)$this->DataSession->getPasswordForShare($token);
-                $passwordVerification = $this->ShareController->verifyPassword($password, $share['password']);
+                $passwordVerification = $this->ShareService->verifyPassword($password, $share['password']);
                 if ($passwordVerification === true) {
                     $this->DataSession->setPasswordForShare($token, $password);
                 } else {
