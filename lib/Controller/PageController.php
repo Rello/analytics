@@ -25,8 +25,6 @@ use OCP\IURLGenerator;
  */
 class PageController extends Controller
 {
-    protected $appName;
-    private $userId;
     private $configManager;
     private $logger;
     private $ShareController;
@@ -38,7 +36,6 @@ class PageController extends Controller
     public function __construct(
         string $appName,
         IRequest $request,
-        $userId,
         ILogger $logger,
         IConfig $configManager,
         IURLGenerator $url,
@@ -47,8 +44,6 @@ class PageController extends Controller
     )
     {
         parent::__construct($appName, $request);
-        $this->appName = $appName;
-        $this->userId = $userId;
         $this->configManager = $configManager;
         $this->logger = $logger;
         $this->url = $url;
