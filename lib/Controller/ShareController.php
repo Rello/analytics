@@ -30,7 +30,6 @@ class ShareController extends Controller
     const SHARE_TYPE_LINK = 3;
     const SHARE_TYPE_ROOM = 10;
 
-    private $userId;
     private $logger;
     private $ShareMapper;
     private $secureRandom;
@@ -43,7 +42,6 @@ class ShareController extends Controller
     private $userManager;
 
     public function __construct(
-        $userId,
         $appName,
         IRequest $request,
         ILogger $logger,
@@ -56,7 +54,6 @@ class ShareController extends Controller
     )
     {
         parent::__construct($appName, $request);
-        $this->userId = $userId;
         $this->logger = $logger;
         $this->ShareMapper = $ShareMapper;
         $this->secureRandom = $secureRandom;
