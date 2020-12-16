@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\DataSession;
+use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -27,8 +28,8 @@ class OutputController extends Controller
     private $rootFolder;
     private $userId;
     private $DataSession;
-    private $ShareController;
-    private $DataSourceController;
+    private $ShareService;
+    private $DatasourceController;
     private $StorageController;
     private $ThresholdController;
 
@@ -39,9 +40,9 @@ class OutputController extends Controller
         ILogger $logger,
         IRootFolder $rootFolder,
         DatasetController $DatasetController,
-        ShareController $ShareController,
+        ShareService $ShareService,
         DataSession $DataSession,
-        DataSourceController $DataSourceController,
+        DatasourceController $DatasourceController,
         StorageController $StorageController,
         ThresholdController $ThresholdController
     )
@@ -52,8 +53,8 @@ class OutputController extends Controller
         $this->DatasetController = $DatasetController;
         $this->rootFolder = $rootFolder;
         $this->DataSession = $DataSession;
-        $this->ShareController = $ShareController;
-        $this->DataSourceController = $DataSourceController;
+        $this->ShareService = $ShareService;
+        $this->DatasourceController = $DatasourceController;
         $this->StorageController = $StorageController;
         $this->ThresholdController = $ThresholdController;
     }
@@ -63,17 +64,18 @@ class OutputController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @param $options
+     * @param $filteroptions
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function read(int $datasetId, $options)
+    public function read(int $datasetId, $filteroptions)
     {
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
-        if (empty($datasetMetadata)) $datasetMetadata = $this->ShareController->getSharedDataset($datasetId);
+        if (empty($datasetMetadata)) $datasetMetadata = $this->ShareService->getSharedDataset($datasetId);
 
         if (!empty($datasetMetadata)) {
-            $result = $this->getData($datasetMetadata, $options);
+            $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions);
+            $result = $this->getData($datasetMetadata);
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
@@ -86,15 +88,14 @@ class OutputController extends Controller
      *
      * @NoAdminRequired
      * @param $datasetMetadata
-     * @param $options
      * @return array|NotFoundException
      * @throws NotFoundException
      */
-    private function getData($datasetMetadata, $options)
+    private function getData($datasetMetadata)
     {
-        //$this->logger->error('dataset csv result: ' . $result);
         $datasourceId = (int)$datasetMetadata['type'];
-        if ($datasourceId === DataSourceController::DATASET_TYPE_INTERNAL_DB) {
+
+        if ($datasourceId === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             $result = $this->StorageController->read($datasetMetadata);
         } else {
             $option = array();
@@ -106,7 +107,7 @@ class OutputController extends Controller
             }
             $option['user_id'] = $datasetMetadata['user_id'];
 
-            $result = $this->DataSourceController->read($datasourceId, $option);
+            $result = $this->DatasourceController->read($datasourceId, $option);
             unset($result['error']);
         }
 
@@ -117,6 +118,7 @@ class OutputController extends Controller
             , $datasetMetadata['link']
             , $datasetMetadata['dimension1']
             , $datasetMetadata['dimension2']
+            , $datasetMetadata['dimension3']
             , $datasetMetadata['value']
             , $datasetMetadata['password']
         );
@@ -132,28 +134,46 @@ class OutputController extends Controller
      * @PublicPage
      * @UseSession
      * @param $token
-     * @param $objectDrilldown
-     * @param $dateDrilldown
+     * @param $filteroptions
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function readPublic($token, $objectDrilldown, $dateDrilldown)
+    public function readPublic($token, $filteroptions)
     {
-        $share = $this->ShareController->getDatasetByToken($token);
+        $share = $this->ShareService->getDatasetByToken($token);
         if (empty($share)) {
             // Dataset not shared or wrong token
             return new NotFoundResponse();
         } else {
             if ($share['password'] !== null) {
                 $password = $this->DataSession->getPasswordForShare($token);
-                $passwordVerification = $this->ShareController->verifyPassword($password, $share['password']);
+                $passwordVerification = $this->ShareService->verifyPassword($password, $share['password']);
                 if ($passwordVerification === false) {
                     return new NotFoundResponse();
                 }
             }
+            $share = $this->evaluateCanFilter($share, $filteroptions);
             //TODO: umstellung auf Options
-            $result = $this->getData($share, $objectDrilldown, $dateDrilldown);
+            $result = $this->getData($share);
             return new DataResponse($result);
         }
+    }
+
+    /**
+     * evaluate if the user did filter in the report and if he is allowed to filter (shared reports)
+     *
+     * @param $metadata
+     * @param $filteroptions
+     * @return mixed
+     */
+    private function evaluateCanFilter($metadata, $filteroptions)
+    {
+        if ($filteroptions and $filteroptions !== '{}' and $metadata['permissions'] !== \OCP\Constants::PERMISSION_READ) {
+            // send current user filteroptions to the datarequest
+            // only if the shared report has update-permissions
+            // if nothing is changed by the user, the filter which is stored for the report, will be used
+            $metadata['filteroptions'] = $filteroptions;
+        }
+        return $metadata;
     }
 }

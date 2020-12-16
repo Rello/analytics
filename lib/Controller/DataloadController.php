@@ -26,8 +26,7 @@ class DataloadController extends Controller
 {
     private $logger;
     private $StorageController;
-    private $DataSourceController;
-    private $userId;
+    private $DatasourceController;
     private $ActivityManager;
     private $DatasetController;
     private $l10n;
@@ -37,10 +36,9 @@ class DataloadController extends Controller
         string $AppName,
         IRequest $request,
         IL10N $l10n,
-        $userId,
         ILogger $logger,
         ActivityManager $ActivityManager,
-        DataSourceController $DataSourceController,
+        DatasourceController $DatasourceController,
         DatasetController $DatasetController,
         StorageController $StorageController,
         DataloadMapper $DataloadMapper
@@ -48,11 +46,10 @@ class DataloadController extends Controller
     {
         parent::__construct($AppName, $request);
         $this->l10n = $l10n;
-        $this->userId = $userId;
         $this->logger = $logger;
         $this->StorageController = $StorageController;
         $this->ActivityManager = $ActivityManager;
-        $this->DataSourceController = $DataSourceController;
+        $this->DatasourceController = $DatasourceController;
         $this->DatasetController = $DatasetController;
         $this->DataloadMapper = $DataloadMapper;
     }
@@ -210,7 +207,7 @@ class DataloadController extends Controller
             $option['user_id'] = $dataloadMetadata['user_id'];
 
             //$this->logger->debug('DataLoadController 187: ' . $dataloadMetadata['option'] . '---' . json_encode($option));
-            $result = $this->DataSourceController->read((int)$dataloadMetadata['datasource'], $option);
+            $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $option);
             $result['datasetId'] = $dataloadMetadata['dataset'];
 
             if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
@@ -407,7 +404,7 @@ class DataloadController extends Controller
             $option['user_id'] = $datasetMetadata['user_id'];
             $option['path'] = $path;
             $option['link'] = $datasetMetadata['link'];
-            $result = $this->DataSourceController->read(DataSourceController::DATASET_TYPE_INTERNAL_FILE, $option);
+            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_INTERNAL_FILE, $option);
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {

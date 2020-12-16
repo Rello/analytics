@@ -24,7 +24,7 @@ use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 
-class DataSourceController extends Controller
+class DatasourceController extends Controller
 {
     private $logger;
     private $GithubService;
@@ -32,9 +32,8 @@ class DataSourceController extends Controller
     private $ExternalFileService;
     private $RegexService;
     private $JsonService;
-    private $userId;
     /** @var IEventDispatcher */
-    protected $dispatcher;
+    private $dispatcher;
     private $l10n;
 
     const DATASET_TYPE_GROUP = 0;
@@ -48,7 +47,6 @@ class DataSourceController extends Controller
     public function __construct(
         string $AppName,
         IRequest $request,
-        $userId,
         ILogger $logger,
         Github $GithubService,
         File $FileService,
@@ -60,7 +58,6 @@ class DataSourceController extends Controller
     )
     {
         parent::__construct($AppName, $request);
-        $this->userId = $userId;
         $this->logger = $logger;
         $this->ExternalFileService = $ExternalFileService;
         $this->GithubService = $GithubService;
@@ -119,7 +116,7 @@ class DataSourceController extends Controller
      */
     public function read(int $datasourceId, $option)
     {
-        //$this->logger->debug('DataSourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
+        //$this->logger->debug('DatasourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
         return $this->getDatasources()[$datasourceId]->readData($option);
     }
 

@@ -16,6 +16,7 @@ use OCA\Analytics\Db\DataloadMapper;
 use OCA\Analytics\Db\DatasetMapper;
 use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Db\ThresholdMapper;
+use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\ILogger;
@@ -26,7 +27,7 @@ class DatasetController extends Controller
 {
     private $logger;
     private $tagManager;
-    private $ShareController;
+    private $ShareService;
     private $StorageMapper;
     private $DatasetMapper;
     private $ThresholdMapper;
@@ -38,7 +39,7 @@ class DatasetController extends Controller
         IRequest $request,
         ILogger $logger,
         ITagManager $tagManager,
-        ShareController $ShareController,
+        ShareService $ShareService,
         StorageMapper $StorageMapper,
         DatasetMapper $DatasetMapper,
         ThresholdMapper $ThresholdMapper,
@@ -49,7 +50,7 @@ class DatasetController extends Controller
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->tagManager = $tagManager;
-        $this->ShareController = $ShareController;
+        $this->ShareService = $ShareService;
         $this->StorageMapper = $StorageMapper;
         $this->DatasetMapper = $DatasetMapper;
         $this->ThresholdMapper = $ThresholdMapper;
@@ -65,7 +66,7 @@ class DatasetController extends Controller
     public function index()
     {
         $ownDatasets = $this->DatasetMapper->getDatasets();
-        $sharedDatasets = $this->ShareController->getSharedDatasets();
+        $sharedDatasets = $this->ShareService->getSharedDatasets();
         $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
         $favorites = $this->tagManager->load('analytics')->getFavorites();
 
@@ -179,7 +180,7 @@ class DatasetController extends Controller
             $name = 'Demo Report';
             $subheader = 'CSV Demo Data from GitHub';
             $parent = 0;
-            $type = DataSourceController::DATASET_TYPE_EXTERNAL_FILE;
+            $type = DatasourceController::DATASET_TYPE_EXTERNAL_FILE;
             $link = 'https://raw.githubusercontent.com/Rello/analytics/master/sample_data/sample1.csv';
             $visualization = 'ct';
             $chart = 'line';
@@ -189,7 +190,7 @@ class DatasetController extends Controller
             $name = explode('.', end(explode('/', $file)))[0];
             $subheader = $file;
             $parent = 0;
-            $type = DataSourceController::DATASET_TYPE_INTERNAL_FILE;
+            $type = DatasourceController::DATASET_TYPE_INTERNAL_FILE;
             $link = $file;
             $visualization = 'table';
             $chart = 'line';
@@ -207,7 +208,7 @@ class DatasetController extends Controller
      */
     public function delete(int $datasetId)
     {
-        $this->ShareController->deleteShareByDataset($datasetId);
+        $this->ShareService->deleteShareByDataset($datasetId);
         $this->StorageMapper->deleteDataByDataset($datasetId);
         $this->DatasetMapper->deleteDataset($datasetId);
         $this->ThresholdMapper->deleteThresholdByDataset($datasetId);
@@ -238,7 +239,7 @@ class DatasetController extends Controller
      */
     public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
-        if ($type === DataSourceController::DATASET_TYPE_GROUP) {
+        if ($type === DatasourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
         return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
