@@ -28,12 +28,12 @@ class PageController extends Controller
 {
     private $configManager;
     private $logger;
-    /** @var ShareService */
-    private $ShareService;
     /** @var IURLGenerator */
     private $url;
     /** @var DataSession */
     private $DataSession;
+    /** @var ShareService */
+    private $ShareService;
 
     public function __construct(
         string $appName,

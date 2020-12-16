@@ -64,70 +64,6 @@ class ShareController extends Controller
     }
 
     /**
-     * get all dataset by token
-     *
-     * @NoAdminRequired
-     * @param $token
-     * @return array
-     */
-    public function getDatasetByToken($token)
-    {
-        return $this->ShareMapper->getDatasetByToken($token);
-    }
-
-    /**
-     * verify password hahes
-     *
-     * @NoAdminRequired
-     * @param $password
-     * @param $sharePassword
-     * @return bool
-     */
-    public function verifyPassword($password, $sharePassword)
-    {
-        return password_verify($password, $sharePassword);
-    }
-
-    /**
-     * get all datasets shared with user
-     *
-     * @NoAdminRequired
-     */
-    public function getSharedDatasets()
-    {
-        $sharedDatasetsByGroup = array();
-        $groups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
-
-        foreach ($groups as $group) {
-            $sharedDatasetByGroup = $this->ShareMapper->getDatasetsByGroup($group);
-            $sharedDatasetsByGroup = array_merge($sharedDatasetsByGroup, $sharedDatasetByGroup);
-        }
-
-        $sharedDatasets = $this->ShareMapper->getSharedDatasets();
-        return array_merge($sharedDatasetsByGroup, $sharedDatasets);
-    }
-
-    /**
-     * get metadata of a dataset, shared with current user
-     *
-     * @NoAdminRequired
-     * @param $id
-     * @return array
-     */
-    public function getSharedDataset($id)
-    {
-        $sharedDataset = $this->ShareMapper->getSharedDataset($id);
-        if (empty($sharedDataset)) {
-            $groups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
-            foreach ($groups as $group) {
-                $sharedDataset = $this->ShareMapper->getDatasetByGroupId($group, $id);
-                break;
-            }
-        }
-        return $sharedDataset;
-    }
-
-    /**
      * create a new share
      *
      * @NoAdminRequired
@@ -192,18 +128,6 @@ class ShareController extends Controller
     public function delete($shareId)
     {
         return $this->ShareMapper->deleteShare($shareId);
-    }
-
-    /**
-     * delete all shares for a dataset
-     *
-     * @NoAdminRequired
-     * @param $datasetId
-     * @return bool
-     */
-    public function deleteShareByDataset($datasetId)
-    {
-        return $this->ShareMapper->deleteShareByDataset($datasetId);
     }
 
     /**
