@@ -15,10 +15,12 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDbConnection;
 use OCP\IL10N;
 use OCP\ILogger;
+use OCP\IUserSession;
 
 class ShareMapper
 {
-    private $userId;
+    /** @var IUserSession */
+    private $userSession;
     private $l10n;
     private $db;
     private $logger;
@@ -26,13 +28,13 @@ class ShareMapper
     const TABLE_NAME_DATASET = 'analytics_dataset';
 
     public function __construct(
-        $userId,
         IL10N $l10n,
         IDbConnection $db,
+        IUserSession $userSession,
         ILogger $logger
     )
     {
-        $this->userId = $userId;
+        $this->userSession = $userSession;
         $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
@@ -52,6 +54,7 @@ class ShareMapper
         $sql->from(self::TABLE_NAME_DATASET, 'DS')
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.*')
+            ->addSelect('SH.permissions')
             ->selectAlias('SH.password', 'password')
             ->where($sql->expr()->eq('SH.token', $sql->createNamedParameter($token)));
         $statement = $sql->execute();
@@ -93,6 +96,7 @@ class ShareMapper
         $sql->from(self::TABLE_NAME_DATASET, 'DS')
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.*')
+            ->addSelect('SH.permissions')
             //->selectAlias($sql->createNamedParameter(99), 'type')
             ->selectAlias($sql->createNamedParameter(0, IQueryBuilder::PARAM_INT), 'parrent')
             ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
@@ -116,7 +120,7 @@ class ShareMapper
             ->select('DS.id', 'DS.name')
             ->selectAlias($sql->createNamedParameter(99, IQueryBuilder::PARAM_INT), 'type')
             ->selectAlias($sql->createNamedParameter(0, IQueryBuilder::PARAM_INT), 'parrent')
-            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userId)));
+            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID())));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -134,7 +138,8 @@ class ShareMapper
         $sql->from(self::TABLE_NAME_DATASET, 'DS')
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.*')
-            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userId)))
+            ->addSelect('SH.permissions')
+            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('DS.id', $sql->createNamedParameter($id)));
         $statement = $sql->execute();
         $result = $statement->fetch();
@@ -158,7 +163,7 @@ class ShareMapper
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter($type)))
             ->andWhere($sql->expr()->eq('uid_owner', $sql->createNamedParameter($uid_owner)))
-            ->andWhere($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)));
+            ->andWhere($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -173,7 +178,7 @@ class ShareMapper
                     'dataset' => $sql->createNamedParameter($datasetId),
                     'type' => $sql->createNamedParameter($type),
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
-                    'uid_initiator' => $sql->createNamedParameter($this->userId),
+                    'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
                     'token' => $sql->createNamedParameter($token),
                 ]);
             $sql->execute();
@@ -192,7 +197,7 @@ class ShareMapper
         $sql->from(self::TABLE_NAME)
             ->select('id', 'type', 'uid_owner', 'token')
             ->selectAlias('password', 'pass')
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
@@ -211,7 +216,7 @@ class ShareMapper
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('uid_owner')
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter(0)));
         $statement = $sql->execute();
@@ -231,7 +236,7 @@ class ShareMapper
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('password', $sql->createNamedParameter($password))
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
         $sql->execute();
         return true;
@@ -246,7 +251,7 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
         $sql->execute();
         return true;
@@ -262,7 +267,7 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userId)))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
         $sql->execute();
         return true;
