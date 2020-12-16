@@ -12,7 +12,7 @@
 namespace OCA\Analytics\Db;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDbConnection;
+use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IUserSession;
@@ -29,7 +29,7 @@ class ShareMapper
 
     public function __construct(
         IL10N $l10n,
-        IDbConnection $db,
+        IDBConnection $db,
         IUserSession $userSession,
         ILogger $logger
     )

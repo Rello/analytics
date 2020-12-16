@@ -12,7 +12,7 @@
 namespace OCA\Analytics\Db;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDbConnection;
+use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\ILogger;
 
@@ -27,7 +27,7 @@ class StorageMapper
     public function __construct(
         $userId,
         IL10N $l10n,
-        IDbConnection $db,
+        IDBConnection $db,
         ILogger $logger
     )
     {
