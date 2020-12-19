@@ -107,7 +107,7 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.Filter.Backend.updateDataset();
+        OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();
     },
 
@@ -196,7 +196,7 @@ OCA.Analytics.Filter = {
         filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value;
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.Filter.Backend.updateDataset();
+        OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();
     },
 
@@ -225,7 +225,7 @@ OCA.Analytics.Filter = {
             delete filterOptions['filter'];
         }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.Filter.Backend.updateDataset();
+        OCA.Analytics.Backend.getData();
     },
 
     openOptionsDialog: function () {
@@ -387,8 +387,8 @@ OCA.Analytics.Filter.Backend = {
     updateDataset: function () {
         const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
 
-        if (Object.keys(OCA.Analytics.currentReportData.options.filteroptions).length === 0) {
-            OCA.Analytics.currentReportData.options.filteroptions = '';
+        if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
+            OCA.Analytics.currentReportData.options.filteroptions = {};
         } else {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
@@ -402,6 +402,7 @@ OCA.Analytics.Filter.Backend = {
                 'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
             },
             success: function () {
+                delete OCA.Analytics.currentReportData.options.filteroptions;
                 OCA.Analytics.Backend.getData();
             }
         });

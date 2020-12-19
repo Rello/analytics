@@ -14,6 +14,7 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\DataSession;
 use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
@@ -76,7 +77,10 @@ class OutputController extends Controller
         if (!empty($datasetMetadata)) {
             $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions);
             $result = $this->getData($datasetMetadata);
-            return new DataResponse($result);
+
+            $response = new DataResponse($result, HTTP::STATUS_OK);
+            //$response->setETag(md5('123'));
+            return $response;
         } else {
             return new NotFoundResponse();
         }
@@ -153,7 +157,6 @@ class OutputController extends Controller
                 }
             }
             $share = $this->evaluateCanFilter($share, $filteroptions);
-            //TODO: umstellung auf Options
             $result = $this->getData($share);
             return new DataResponse($result);
         }
@@ -168,9 +171,9 @@ class OutputController extends Controller
      */
     private function evaluateCanFilter($metadata, $filteroptions)
     {
-        if ($filteroptions and $filteroptions !== '{}' and $metadata['permissions'] !== \OCP\Constants::PERMISSION_READ) {
+        if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             // send current user filteroptions to the datarequest
-            // only if the shared report has update-permissions
+            // only if the report has update-permissions
             // if nothing is changed by the user, the filter which is stored for the report, will be used
             $metadata['filteroptions'] = $filteroptions;
         }

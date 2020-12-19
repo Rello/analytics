@@ -375,7 +375,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportSubHeader').innerHTML = '';
             document.getElementById('reportSubHeader').style.display = 'none';
             document.getElementById('filterContainer').style.display = 'none';
-            document.getElementById('optionsIcon').style.removeProperty('display');
+            document.getElementById('optionContainer').style.display = 'none';
             document.getElementById('noDataContainer').style.display = 'none';
         }
     },
@@ -555,10 +555,17 @@ OCA.Analytics.Backend = {
             url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
+        // send user current filteroptions to the datarequest;
+        // if nothing is changed by the user, the filter which is stored for the report, will be used
+        let ajaxData = {};
+        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.filteroptions) !== 'undefined') {
+            ajaxData = {'filteroptions': JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions)};
+        }
+
         $.ajax({
             type: 'GET',
             url: url,
-            data: {},
+            data: ajaxData,
             success: function (data) {
                 OCA.Analytics.currentReportData = data;
                 try {
@@ -576,10 +583,15 @@ OCA.Analytics.Backend = {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
                     document.getElementById('reportSubHeader').style.removeProperty('display');
                 }
-                if (parseInt(data.options.type) === OCA.Analytics.TYPE_INTERNAL_DB && document.getElementById('sharingToken').value === '') {
+
+                if (parseInt(data.options.permissions) === OC.PERMISSION_UPDATE) {
                     document.getElementById('filterContainer').style.removeProperty('display');
                     OCA.Analytics.Filter.refreshFilterVisualisation();
                 }
+                if (document.getElementById('sharingToken').value === '' && data.options.isShare === undefined) {
+                    document.getElementById('optionContainer').style.removeProperty('display');
+                }
+
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata') {
 
@@ -587,7 +599,7 @@ OCA.Analytics.Backend = {
                     if (visualization === 'chart') {
                         OCA.Analytics.UI.buildChart(data);
                     } else if (visualization === 'table') {
-                        document.getElementById('optionsIcon').style.display = 'none';
+                        document.getElementById('optionContainer').style.display = 'none';
                         OCA.Analytics.UI.buildDataTable(data);
                     } else {
                         OCA.Analytics.UI.buildChart(data);
@@ -682,11 +694,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
             document.getElementById('createDemoGithubReport').addEventListener('click', OCA.Analytics.Navigation.createDemoGithubReport);
+            document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openOptionsDialog);
+            document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-            document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openOptionsDialog);
         }
     } else {
+        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         OCA.Analytics.Backend.getData();
     }
 

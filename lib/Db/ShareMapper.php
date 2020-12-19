@@ -139,6 +139,7 @@ class ShareMapper
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.*')
             ->addSelect('SH.permissions')
+            ->selectAlias($sql->createNamedParameter(true, IQueryBuilder::PARAM_BOOL), 'isShare')
             ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('DS.id', $sql->createNamedParameter($id)));
         $statement = $sql->execute();
@@ -195,7 +196,7 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
-            ->select('id', 'type', 'uid_owner', 'token')
+            ->select('id', 'type', 'uid_owner', 'token', 'permissions')
             ->selectAlias('password', 'pass')
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
@@ -231,11 +232,28 @@ class ShareMapper
      * @param $password
      * @return bool
      */
-    public function updateShare($shareId, $password)
+    public function updateSharePassword($shareId, $password)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('password', $sql->createNamedParameter($password))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
+        $sql->execute();
+        return true;
+    }
+
+    /**
+     * Update the permissions of a share
+     * @param $shareId
+     * @param $password
+     * @return bool
+     */
+    public function updateSharePermissions($shareId, $permissions)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('permissions', $sql->createNamedParameter($permissions))
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
         $sql->execute();

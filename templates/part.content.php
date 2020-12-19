@@ -16,14 +16,20 @@
     <h2 id="reportHeader"></h2>
     <h3 id="reportSubHeader" style="display: none"></h3>
     <div id="reportPlaceholder"></div>
-    <div id="filterContainer" style="display: none">
-        <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
-             title="<?php p($l->t('Drilldown')); ?>"></div>
-        <div id="optionsIcon" class="icon-analytics-options has-tooltip"
-             title="<?php p($l->t('Options')); ?>"></div>
-        <div id="addFilterIcon" class="icon-analytics-filter-add has-tooltip"
-             title="<?php p($l->t('Filter')); ?>"></div>
-        <div id="filterVisualisation" style="display: inline-block; float: right;">
+    <div id="filterBar" style="">
+        <div id="optionContainer" style="display: none">
+            <div id="saveIcon" class="icon-analytics-save has-tooltip"
+                 title="<?php p($l->t('Save filter')); ?>"></div>
+            <div id="optionsIcon" class="icon-analytics-options has-tooltip"
+                 title="<?php p($l->t('Options')); ?>"></div>
+        </div>
+        <div id="filterContainer" style="display: none">
+            <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
+                 title="<?php p($l->t('Drilldown')); ?>"></div>
+            <div id="addFilterIcon" class="icon-analytics-filter-add has-tooltip"
+                 title="<?php p($l->t('Filter')); ?>"></div>
+            <div id="filterVisualisation" style="display: inline-block; float: right;">
+            </div>
         </div>
     </div>
     <div id="chartContainer">

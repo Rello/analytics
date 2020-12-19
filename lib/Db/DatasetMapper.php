@@ -183,10 +183,10 @@ class DatasetMapper
     /**
      * get datasets
      * @param int $id
-     * @param string $user_id
+     * @param string|null $user_id
      * @return array
      */
-    public function getOwnDataset($id, string $user_id = null)
+    public function getOwnDataset(int $id, string $user_id = null)
     {
         if ($user_id) $this->userId = $user_id;
 

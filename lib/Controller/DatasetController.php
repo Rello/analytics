@@ -62,18 +62,26 @@ class DatasetController extends Controller
      * get all datasets
      *
      * @NoAdminRequired
+     * @return DataResponse
      */
     public function index()
     {
         $ownDatasets = $this->DatasetMapper->getDatasets();
-        $sharedDatasets = $this->ShareService->getSharedDatasets();
-        $ownDatasets = array_merge($ownDatasets, $sharedDatasets);
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
 
+        // process favorite check only on own datasets - not shared ones
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
+        foreach ($ownDatasets as &$ownDataset) {
+            $hasTag = 0;
+            if (is_array($favorites) and in_array($ownDataset['id'], $favorites)) {
+                $hasTag = 1;
+            }
+            $ownDataset['favorite'] = $hasTag;
+        }
+
+        // get dataload indicators for icons shown in the advanced screen
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
         foreach ($dataloads as $dataload) {
             $key = array_search($dataload['dataset'], array_column($ownDatasets, 'id'));
-            //$this->logger->debug($key);
             if ($key !== '') {
                 if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
                     $dataload['schedules'] = 1;
@@ -85,12 +93,12 @@ class DatasetController extends Controller
             }
         }
 
-        foreach ($ownDatasets as &$ownDataset) {
-            $hasTag = 0;
-            if (is_array($favorites) and in_array($ownDataset['id'], $favorites)) {
-                $hasTag = 1;
+        // get shared datasets and remove doublicates
+        $sharedDatasets = $this->ShareService->getSharedDatasets();
+        foreach ($sharedDatasets as $sharedDataset) {
+            if (!array_search($sharedDataset['id'], array_column($ownDatasets, 'id'))) {
+                array_push($ownDatasets, $sharedDataset);
             }
-            $ownDataset['favorite'] = $hasTag;
         }
 
         return new DataResponse($ownDatasets);
@@ -130,7 +138,14 @@ class DatasetController extends Controller
      */
     public function getOwnDataset(int $datasetId, string $user_id = null)
     {
-        return $this->DatasetMapper->getOwnDataset($datasetId, $user_id);
+        // default permission UPDATE only for internal reports; all others can not change filters
+        $ownDataset = $this->DatasetMapper->getOwnDataset($datasetId, $user_id);
+        if ($ownDataset && $ownDataset['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+            $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+        } elseif ($ownDataset) {
+            $ownDataset['permissions'] = \OCP\Constants::PERMISSION_READ;
+        }
+        return $ownDataset;
     }
 
     /**

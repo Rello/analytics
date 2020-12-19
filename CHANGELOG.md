@@ -1,11 +1,28 @@
 # Changelog
 
-## 3.1.0 - 2020-12-02
+## 3.2.0 - 2020-12-02
+
 ### Added
-- event to register external datasources #71 [#71](https://github.com/rello/analytics/issues/71)
+
+- Allow filter-permissions on shared reports [#77](https://github.com/rello/analytics/issues/77)
+
+### Changed
+
+- Filter changes are not persisted automatically (can to be saved when desired)
+
+### Fixed
+
+- shared reports showing multiple times
+
+## 3.1.0 - 2020-12-02
+
+### Added
+
+- event to register external datasources [#71](https://github.com/rello/analytics/issues/71)
 - better datasource config using dropdowns
 
 ### Fixed
+
 - share token not generated
 - Chart: tooltips not showing
 - an error occurred while using NC search [#70](https://github.com/rello/analytics/issues/70)

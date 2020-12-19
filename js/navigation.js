@@ -274,6 +274,10 @@ OCA.Analytics.Navigation = {
             evt.stopPropagation();
         } else {
             document.getElementById('filterVisualisation').innerHTML = '';
+            if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
+                // reset any user-filters and display the filters stored for the report
+                delete OCA.Analytics.currentReportData.options.filteroptions;
+            }
             OCA.Analytics.Sidebar.hideSidebar();
             OCA.Analytics.Backend.getData();
         }

@@ -393,13 +393,13 @@ OCA.Analytics.Sidebar.Share = {
                 if (data !== false) {
                     for (let share of data) {
                         if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
-                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share['id'], share['token'], false, (String(share['pass']) === "true"));
+                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share['id'], share['token'], false, (String(share['pass']) === "true"), share['permissions']);
                             template.getElementById('linkShareList').appendChild(li);
                         } else {
                             if (!share['displayName']) {
                                 share['displayName'] = share['uid_owner'];
                             }
-                            let li = OCA.Analytics.Sidebar.Share.buildShareeRow(share['id'], share['uid_owner'], share['displayName'], share['type']);
+                            let li = OCA.Analytics.Sidebar.Share.buildShareeRow(share['id'], share['uid_owner'], share['displayName'], share['type'], false, share['permissions']);
                             template.getElementById('shareeList').appendChild(li);
                         }
                     }
@@ -416,48 +416,47 @@ OCA.Analytics.Sidebar.Share = {
 
     },
 
-    buildShareLinkRow: function (id, token, add = false, pw = false) {
+    buildShareLinkRow: function (id, token, add = false, pw = false, permissions = OC.PERMISSION_READ) {
 
-        let li = document.createElement('li');
-        li.dataset.id = id;
+        // clone the DOM template
+        let linkRow = document.getElementById('templateSidebarShareLinkRow').content;
+        linkRow = document.importNode(linkRow, true);
 
-        let avatar = document.createElement('div');
-        avatar.classList.add('avatar', 'icon-public-white');
-
-        let name = document.createElement('span');
-        name.classList.add('username');
-        if (add) name.innerText = t('analytics', 'Add Share Link');
-        else name.innerText = t('analytics', 'Share Link');
-
-        let moreIcon = document.createElement('a');
-        moreIcon.classList.add('icon', 'icon-more');
-
-        let ShareOptionsGroup = document.createElement('span');
-        ShareOptionsGroup.classList.add('sharingOptionsGroup');
-
-        let clipboardIcon = document.createElement('a');
+        linkRow.getElementById('row').dataset.id = id;
+        if (add) linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Add Share Link');
+        else linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Share Link');
 
         if (add) {
-            clipboardIcon.classList.add('icon-add', 'icon', 'new-share');
-            clipboardIcon.href = '#';
-            clipboardIcon.dataset.shareType = OCA.Analytics.SHARE_TYPE_LINK;
-            clipboardIcon.addEventListener('click', OCA.Analytics.Sidebar.Share.createShare);
-            ShareOptionsGroup.appendChild(clipboardIcon);
+            linkRow.getElementById('sharingOptionsGroupMenu').remove();
+            linkRow.getElementById('newLinkShare').addEventListener('click', OCA.Analytics.Sidebar.Share.createShare);
         } else {
-            clipboardIcon.classList.add('clipboard-button', 'icon', 'icon-clippy');
-            clipboardIcon.href = OC.generateUrl('/apps/analytics/p/') + token;
-            clipboardIcon.target = '_blank';
-            ShareOptionsGroup.appendChild(clipboardIcon);
-            ShareOptionsGroup.appendChild(OCA.Analytics.Sidebar.Share.buildShareMenu(id, pw));
-        }
+            linkRow.getElementById('sharingOptionsGroupNew').remove();
+            linkRow.getElementById('linkShareMenu').href = OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('moreIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
+            linkRow.getElementById('showPassword').addEventListener('click', OCA.Analytics.Sidebar.Share.showPassMenu);
+            linkRow.getElementById('showPassword').nextElementSibling.htmlFor = 'showPassword' + id;
+            linkRow.getElementById('showPassword').id = 'showPassword' + id;
+            linkRow.getElementById('linkPassSubmit').addEventListener('click', OCA.Analytics.Sidebar.Share.updateSharePassword);
+            linkRow.getElementById('linkPassSubmit').dataset.id = id;
+            linkRow.getElementById('deleteShareIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
+            linkRow.getElementById('deleteShare').dataset.id = id;
+            if (pw) {
+                linkRow.getElementById('linkPassMenu').classList.remove('hidden');
+                linkRow.getElementById('showPassword' + id).checked = true;
+            }
+            linkRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Sidebar.Share.updateShareCanEdit);
+            linkRow.getElementById('shareEditing').dataset.id = id;
+            linkRow.getElementById('shareEditing').nextElementSibling.htmlFor = 'shareEditing' + id;
+            linkRow.getElementById('shareEditing').id = 'shareEditing' + id;
+            if (permissions === OC.PERMISSION_UPDATE) {
+                linkRow.getElementById('shareEditing' + id).checked = true;
+            }
 
-        li.appendChild(avatar);
-        li.appendChild(name);
-        li.appendChild(ShareOptionsGroup);
-        return li;
+        }
+        return linkRow;
     },
 
-    buildShareeRow: function (id, uid_owner, user_label, shareType = null, isSearch = false) {
+    buildShareeRow: function (id, uid_owner, user_label, shareType = null, isSearch = false, permissions = OC.PERMISSION_READ) {
 
         // clone the DOM template
         let shareeRow = document.getElementById('templateSidebarShareShareeRow').content;
@@ -470,6 +469,11 @@ OCA.Analytics.Sidebar.Share = {
         shareeRow.getElementById('icon-more').addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
         shareeRow.getElementById('deleteShareIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
         shareeRow.getElementById('deleteShare').dataset.id = id;
+        shareeRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Sidebar.Share.updateShareCanEdit);
+        shareeRow.getElementById('shareEditing').dataset.id = id;
+        if (permissions === OC.PERMISSION_UPDATE) {
+            shareeRow.getElementById('shareEditing').checked = true;
+        }
 
         if (isSearch) {
             shareeRow.getElementById('username').addEventListener('click', OCA.Analytics.Sidebar.Share.createShare);
@@ -494,86 +498,6 @@ OCA.Analytics.Sidebar.Share = {
         return shareeRow;
     },
 
-    buildShareMenu: function (id, pw) {
-        let shareMenu = document.createElement('div');
-        shareMenu.classList.add('share-menu');
-
-        let moreIcon = document.createElement('a');
-        moreIcon.classList.add('icon', 'icon-more');
-        moreIcon.id = 'moreIcon';
-        moreIcon.addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
-        shareMenu.appendChild(moreIcon);
-
-        let popoverMenue = document.createElement('div');
-        popoverMenue.classList.add('popovermenu', 'menu');
-        popoverMenue.style.display = 'none';
-        shareMenu.appendChild(popoverMenue);
-
-        let ul = document.createElement('ul');
-        popoverMenue.appendChild(ul);
-
-        let liShowPassword = document.createElement('li');
-        let spanShowPassword = document.createElement('span');
-        spanShowPassword.classList.add('menuitem');
-        let inputShowPassword = document.createElement('input');
-        inputShowPassword.type = 'checkbox';
-        inputShowPassword.name = 'showPassword';
-        inputShowPassword.id = 'showPassword-' + id;
-        inputShowPassword.classList.add('checkbox', 'showPasswordCheckbox');
-        inputShowPassword.addEventListener('click', OCA.Analytics.Sidebar.Share.showPassMenu);
-        let labelShowPassword = document.createElement('label');
-        labelShowPassword.setAttribute('for', 'showPassword-' + id);
-        labelShowPassword.innerText = t('analytics', 'Password protect');
-        liShowPassword.appendChild(spanShowPassword);
-        spanShowPassword.appendChild(inputShowPassword);
-        spanShowPassword.appendChild(labelShowPassword);
-
-        let liPassMenu = document.createElement('li');
-        liPassMenu.classList.add('linkPassMenu', 'hidden');
-        let spanPassMenu = document.createElement('span');
-        spanPassMenu.classList.add('menuitem', 'icon-share-pass');
-        let inputPassMenu = document.createElement('input');
-        inputPassMenu.type = 'password';
-        inputPassMenu.placeholder = t('analytics', 'Password for public link');
-        inputPassMenu.id = 'linkPassText-' + id;
-        inputPassMenu.classList.add('linkPassText');
-        let inputPassConfirm = document.createElement('input');
-        inputPassConfirm.type = 'submit';
-        inputPassConfirm.dataset.id = id;
-        inputPassConfirm.value = '';
-        inputPassConfirm.classList.add('icon-confirm', 'share-pass-submit');
-        inputPassConfirm.setAttribute('style', 'width: auto !important');
-        inputPassConfirm.addEventListener('click', OCA.Analytics.Sidebar.Share.updateShare);
-        liPassMenu.appendChild(spanPassMenu);
-        spanPassMenu.appendChild(inputPassMenu);
-        spanPassMenu.appendChild(inputPassConfirm);
-
-        let liUnshare = document.createElement('li');
-        let aUnshare = document.createElement('a');
-        aUnshare.href = '#';
-        aUnshare.classList.add('unshare');
-        aUnshare.dataset.id = id;
-        aUnshare.addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
-        let spanUnshare = document.createElement('span');
-        spanUnshare.classList.add('icon', 'icon-delete');
-        spanUnshare.id = 'deleteShare';
-        let spanUnshareTxt = document.createElement('span');
-        spanUnshareTxt.innerText = t('analytics', 'Delete share link');
-        liUnshare.appendChild(aUnshare);
-        aUnshare.appendChild(spanUnshare);
-        aUnshare.appendChild(spanUnshareTxt);
-
-        ul.appendChild(liShowPassword);
-        ul.appendChild(liPassMenu);
-        ul.appendChild(liUnshare);
-
-        if (pw) {
-            liPassMenu.classList.remove('hidden');
-            inputShowPassword.checked = true;
-        }
-        return shareMenu;
-    },
-
     showShareMenu: function (evt) {
         const toggleState = evt.target.nextElementSibling.style.display;
         if (toggleState === 'none') evt.target.nextElementSibling.style.display = 'block';
@@ -582,8 +506,8 @@ OCA.Analytics.Sidebar.Share = {
 
     showPassMenu: function (evt) {
         const toggleState = evt.target.checked;
-        if (toggleState === true) evt.target.parentNode.parentNode.nextSibling.classList.remove('hidden');
-        else evt.target.parentNode.parentNode.nextSibling.classList.add('hidden');
+        if (toggleState === true) evt.target.parentNode.parentNode.nextElementSibling.classList.remove('hidden');
+        else evt.target.parentNode.parentNode.nextElementSibling.classList.add('hidden');
     },
 
     createShare: function (evt) {
@@ -615,14 +539,29 @@ OCA.Analytics.Sidebar.Share = {
         });
     },
 
-    updateShare: function (evt) {
+    updateSharePassword: function (evt) {
         const shareId = evt.target.dataset.id;
-        const password = evt.target.previousSibling.value;
+        const password = evt.target.previousElementSibling.value;
         $.ajax({
             type: 'PUT',
             url: OC.generateUrl('apps/analytics/share/') + shareId,
             data: {
                 'password': password
+            },
+            success: function () {
+                document.querySelector('.tabHeader.selected').click();
+            }
+        });
+    },
+
+    updateShareCanEdit: function (evt) {
+        const shareId = evt.target.dataset.id;
+        const canEdit = evt.target.checked;
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/analytics/share/') + shareId,
+            data: {
+                'canEdit': canEdit
             },
             success: function () {
                 document.querySelector('.tabHeader.selected').click();

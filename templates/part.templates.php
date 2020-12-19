@@ -326,6 +326,7 @@
     <div class="shareeListView subView">
         <div id="shareeList" class="shareWithList"></div>
     </div>
+    <div style="height: 150px"></div>
 </template>
 
 <template id="templateSidebarShareShareeRow">
@@ -341,12 +342,59 @@
                     <ul>
                         <li>
                             <span class="menuitem">
-                                <input disabled type="checkbox" name="shareEditing" id="shareEditing"
+                                <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('Can change filters')); ?></label>
+                                <label for="shareEditing"><?php p($l->t('Can change filter')); ?></label>
                             </span>
                         </li>
                         <li>
+                            <a href="#" class="unshare" id="deleteShare">
+                                <span class="icon icon-close" id="deleteShareIcon"></span>
+                                <span><?php p($l->t('Unshare')); ?></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </span>
+    </li>
+</template>
+
+<template id="templateSidebarShareLinkRow">
+    <li id="row">
+        <div class="avatar icon-public-white"></div>
+        <span id="shareLinkTitle" class="username"></span>
+        <span id="sharingOptionsGroupNew" class="sharingOptionsGroup">
+            <a id="newLinkShare" class="icon-add icon new-share" href="#" data-share-type="3"></a>
+        </span>
+        <span id="sharingOptionsGroupMenu" class="sharingOptionsGroup">
+           <a id="linkShareMenu" class="clipboard-button icon icon-clippy" target="_blank"></a>
+            <div class="share-menu">
+                <a class="icon icon-more" id="moreIcon"></a>
+                <div class="popovermenu menu" style="display: none;">
+                    <ul>
+                        <li>
+                            <span class="menuitem">
+                                <input type="checkbox" name="showPassword" id="showPassword"
+                                       class="checkbox showPasswordCheckbox">
+                                <label for="showPassword"><?php p($l->t('Password')); ?></label>
+                            </span>
+                        </li>
+                        <li id="linkPassMenu" class="linkPassMenu hidden">
+                            <span class="menuitem icon-share-pass">
+                                <input type="password" placeholder="<?php p($l->t('Password')); ?>"
+                                       class="linkPassText">
+                                <input id="linkPassSubmit" type="submit" value="" class="icon-confirm share-pass-submit"
+                                       style="width: auto !important">
+                            </span>
+                        </li>
+                        <li>
+                            <span class="menuitem">
+                                <input type="checkbox" name="shareEditing" id="shareEditing"
+                                       class="checkbox showPasswordCheckbox">
+                                <label for="shareEditing"><?php p($l->t('Allow filtering')); ?></label>
+                            </span></li>
+                       <li>
                             <a href="#" class="unshare" id="deleteShare">
                                 <span class="icon icon-close" id="deleteShareIcon"></span>
                                 <span><?php p($l->t('Unshare')); ?></span>

@@ -108,14 +108,19 @@ class ShareController extends Controller
      * @NoAdminRequired
      * @param $shareId
      * @param $password
+     * @param $canEdit
      * @return bool
      */
-    public function update($shareId, $password)
+    public function update($shareId, $password = null, $canEdit = null)
     {
-        //$this->logger->error($shareId . $password);
-        if ($password !== '') $password = password_hash($password, PASSWORD_DEFAULT);
-        else $password = null;
-        return $this->ShareMapper->updateShare($shareId, $password);
+        if ($password !== null) {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            return $this->ShareMapper->updateSharePassword($shareId, $password);
+        }
+        if ($canEdit !== null) {
+            $canEdit === 'true' ? $canEdit = \OCP\Constants::PERMISSION_UPDATE : $canEdit = \OCP\Constants::PERMISSION_READ;
+            return $this->ShareMapper->updateSharePermissions($shareId, $canEdit);
+        }
     }
 
     /**
