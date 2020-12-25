@@ -7,6 +7,7 @@
 
 ### Changed
 - Filter changes are not persisted automatically (can to be saved when desired)
+- more flexible clipboard import
 
 ### Fixed
 

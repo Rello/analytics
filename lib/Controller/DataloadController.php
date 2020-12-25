@@ -355,10 +355,13 @@ class DataloadController extends Controller
 
             foreach ($rows as &$row) {
                 $row = str_getcsv($row, $delimiter);
-                $row[2] = $this->floatvalue($row[2]);
+                $numberOfColumns = count($row);
+                // last column needs to be a float
+                $row[2] = $this->floatvalue($row[$numberOfColumns - 1]);
                 if ($row[2] === false) {
                     $errorCounter++;
                 } else {
+                    if ($numberOfColumns << 3) $row[1] = null;
                     $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
                     $insert = $insert + $action['insert'];
                     $update = $update + $action['update'];
