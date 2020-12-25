@@ -140,9 +140,9 @@ class DatasetController extends Controller
     {
         // default permission UPDATE only for internal reports; all others can not change filters
         $ownDataset = $this->DatasetMapper->getOwnDataset($datasetId, $user_id);
-        if ($ownDataset && $ownDataset['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+        if (!empty($ownDataset) && (int)$ownDataset['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
-        } elseif ($ownDataset) {
+        } elseif (!empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_READ;
         }
         return $ownDataset;

@@ -45,10 +45,6 @@ OCA.Analytics.Filter = {
                 + '<input type="checkbox" id="drilldownColumn' + [i] + '" class="checkbox" name="drilldownColumn" value="' + Object.keys(availableDimensions)[i] + '" ' + checkboxStatus + '>'
                 + '<label for="drilldownColumn' + [i] + '"> </label>'
                 + '</div>'
-                //+ '<div style="display: table-cell;">'
-                //+ '<input type="checkbox" id="drilldownRow' + [i] + '" class="checkbox" name="drilldownRow" value="' + Object.keys(availableDimensions)[i] + '" disabled>'
-                //+ '<label for="drilldownRow' + [i] + '"> </label>'
-                //+ '</div>'
                 + '</div>';
         }
 
@@ -66,11 +62,8 @@ OCA.Analytics.Filter = {
             + '<div style="display: table-cell; width: 150px;">'
             + '</div>'
             + '<div style="display: table-cell; width: 50px;">'
-            + '<img src="img/column.svg" style="height: 20px;" alt="column">'
+            + '<img src="' + OC.imagePath('analytics', 'column') + '" style="height: 20px;" alt="column">'
             + '</div>'
-            //+ '<div style="display: table-cell; width: 50px;">'
-            //+ '<img src="img/row.svg" style="height: 20px;" alt="row">'
-            //+ '</div>'
             + '</div>'
             + drilldownRows
             + '</div>'
@@ -136,7 +129,7 @@ OCA.Analytics.Filter = {
             + '</div>'
             + '<div style="display: table-row;">'
             + '<div style="display: table-cell;">'
-            + '<img src="img/filteradd.svg" alt="filter">'
+            + '<img src="' + OC.imagePath('analytics', 'filteradd') + '" alt="filter">'
             + '</div>'
             + '<div style="display: table-cell;">'
             + '<select id="filterDialogType" class="checkbox" disabled>'

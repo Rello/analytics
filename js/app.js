@@ -71,6 +71,7 @@ OCA.Analytics.Core = {
     getDistinctValues: function (array) {
         let unique = [];
         let distinct = [];
+        if (array === undefined) return;
         for (let i = 0; i < array.length; i++) {
             if (!unique[array[i][0]]) {
                 distinct.push(array[i][0]);
@@ -376,6 +377,8 @@ OCA.Analytics.UI = {
             document.getElementById('reportSubHeader').style.display = 'none';
             document.getElementById('filterContainer').style.display = 'none';
             document.getElementById('optionContainer').style.display = 'none';
+            // table only report can hide this icon specifically
+            document.getElementById('optionsIcon').style.removeProperty('display');
             document.getElementById('noDataContainer').style.display = 'none';
         }
     },
@@ -584,12 +587,16 @@ OCA.Analytics.Backend = {
                     document.getElementById('reportSubHeader').style.removeProperty('display');
                 }
 
-                if (parseInt(data.options.permissions) === OC.PERMISSION_UPDATE) {
+                let canUpdate = parseInt(data.options.permissions) === OC.PERMISSION_UPDATE;
+                let isInternalShare = data.options.isShare !== undefined;
+                let isExternalShare = document.getElementById('sharingToken').value !== '';
+
+                if (canUpdate) {
                     document.getElementById('filterContainer').style.removeProperty('display');
                     OCA.Analytics.Filter.refreshFilterVisualisation();
-                }
-                if (document.getElementById('sharingToken').value === '' && data.options.isShare === undefined) {
-                    document.getElementById('optionContainer').style.removeProperty('display');
+                    if (!isInternalShare && !isExternalShare) {
+                        document.getElementById('optionContainer').style.removeProperty('display');
+                    }
                 }
 
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
@@ -599,7 +606,7 @@ OCA.Analytics.Backend = {
                     if (visualization === 'chart') {
                         OCA.Analytics.UI.buildChart(data);
                     } else if (visualization === 'table') {
-                        document.getElementById('optionContainer').style.display = 'none';
+                        document.getElementById('optionsIcon').style.display = 'none';
                         OCA.Analytics.UI.buildDataTable(data);
                     } else {
                         OCA.Analytics.UI.buildChart(data);
