@@ -223,6 +223,12 @@ table.dataTable tbody tr {
   content: none;
 }
 
+.userGuidance {
+    color: var(--color-text-lighter);
+    font-style: italic;
+    text-align: center;
+}
+
 /**
  * Print settings, better leave them at the eof
  */

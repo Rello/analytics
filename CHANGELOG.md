@@ -1,23 +1,22 @@
 # Changelog
 
 ## 3.2.0 - 2020-12-02
-
 ### Added
-
 - Allow filter-permissions on shared reports [#77](https://github.com/rello/analytics/issues/77)
+- NC21
 
 ### Changed
-
 - Filter changes are not persisted automatically (can to be saved when desired)
 
 ### Fixed
 
 - shared reports showing multiple times
+- image path for alternative app folder
+- Advanced Configuration - Dataload tab does not load [#79](https://github.com/rello/analytics/issues/79)
 
 ## 3.1.0 - 2020-12-02
 
 ### Added
-
 - event to register external datasources [#71](https://github.com/rello/analytics/issues/71)
 - better datasource config using dropdowns
 

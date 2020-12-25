@@ -218,7 +218,7 @@
     <div style="display: flex;">
         <div style="width: 25%;">
             <div class="wizzardHeader"><?php p($l->t('Selection')); ?></div>
-            <div id="dataloadList"></div>
+            <div id="dataloadList">No dataload created yet</div>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
                     <div id="createDataloadButton" class="icon-add icon" style="padding: 0 0px 0 44px;">
@@ -255,13 +255,14 @@
                 <br>
                 <div id="dataloadDetailItems">
                 </div>
-                <div id="dataloadDetailDelete" style="display: table-row;">
-                    <div style="display: table-cell; width: 100%;"><?php p($l->t('Delete data before load')); ?></div>
+                <div id="dataloadDetailDelete" hidden>
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; width: 100%;"><?php p($l->t('Delete data before load')); ?></div>
                     <select class="sidebarInput" id="delete" style="display: table-cell;">
                         <option value="false"><?php p($l->t('No')); ?></option>
                         <option value="true"><?php p($l->t('Yes')); ?></option>
                     </select></div>
-
+                </div>
                 <div id="dataloadDetailButtons" hidden>
                     <button id="dataloadDeleteButton" style="padding: 15px;" class="icon-delete"></button>
                     <button id="dataloadUpdateButton" style="padding: 15px;" class="icon-checkmark"></button>
@@ -344,7 +345,7 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('Can change filter')); ?></label>
+                                <label for="shareEditing"><?php p($l->t('Grant navigation')); ?></label>
                             </span>
                         </li>
                         <li>
@@ -392,7 +393,7 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('Allow filtering')); ?></label>
+                                <label for="shareEditing"><?php p($l->t('Grant navigation')); ?></label>
                             </span></li>
                        <li>
                             <a href="#" class="unshare" id="deleteShare">

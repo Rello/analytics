@@ -35,9 +35,6 @@ OCA.Analytics.Advanced.Dataload = {
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataload/') + datasetId,
             success: function (data) {
-                // store reulable array
-                OCA.Analytics.Advanced.Dataload.dataloadArray = data['dataloads'];
-
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateDataload').content, true);
                 table.id = 'tableDataload';
@@ -49,6 +46,21 @@ OCA.Analytics.Advanced.Dataload = {
                 // list all available dataloads for dataset
                 for (let dataload of data['dataloads']) {
                     document.getElementById('dataloadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
+                    // keys need to be int; some instances deliver strings from the backend
+                    dataload['dataset'] = parseInt(dataload['dataset']);
+                    dataload['datasource'] = parseInt(dataload['datasource']);
+                    dataload['id'] = parseInt(dataload['id']);
+                    // store reulable array
+                    OCA.Analytics.Advanced.Dataload.dataloadArray.push(dataload);
+                }
+                if (OCA.Analytics.Advanced.Dataload.dataloadArray.length === 0) {
+                    document.getElementById('dataloadList').innerHTML = '<span class="userGuidance">'
+                        + t('analytics', 'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"')
+                        + '</span><br><br>';
+                } else {
+                    document.getElementById('dataloadDetailItems').innerHTML = '<span class="userGuidance">'
+                        + t('analytics', 'Choose a dataload from the list to change its settings')
+                        + '</span>';
                 }
 
                 // list all available datasources
@@ -73,8 +85,8 @@ OCA.Analytics.Advanced.Dataload = {
         let a = document.createElement('a');
         a.classList.add(typeIcon);
         a.innerText = dataload['name'];
-        a.dataset.id = dataload['id'];
-        a.dataset.datasourceId = dataload['datasource'];
+        a.dataset.id = parseInt(dataload['id']);
+        a.dataset.datasourceId = parseInt(dataload['datasource']);
         a.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadSelect);
         item.appendChild(a);
         return item;
@@ -91,6 +103,7 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('dataloadName').value = dataload['name'];
         document.getElementById('dataloadDetailHeader').hidden = false;
         document.getElementById('dataloadDetailButtons').hidden = false;
+        document.getElementById('dataloadDetailDelete').hidden = false;
         document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleUpdateButton);
         document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDeleteButton);
         document.getElementById('dataloadSchedule').value = dataload['schedule'];
