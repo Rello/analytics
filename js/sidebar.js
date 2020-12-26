@@ -172,17 +172,17 @@ OCA.Analytics.Sidebar.Dataset = {
                     OCA.Analytics.Sidebar.Dataset.handleDatasourceChange();
 
                     // set the options for a datasource
-                    if (data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
+                    if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
                         let options = JSON.parse(data['link']);
                         for (let option in options) {
                             document.getElementById(option) ? document.getElementById(option).value = options[option] : null;
                         }
-                    } else if ((parseInt(data['link']) === OCA.Analytics.TYPE_GIT)) { // Old format before 3.1.0
+                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_GIT)) { // Old format before 3.1.0
                         document.getElementById('user').value = data['link'].split('/')[0];
                         document.getElementById('repository').value = data['link'].split('/')[1];
-                    } else if ((parseInt(data['link']) === OCA.Analytics.TYPE_EXTERNAL_FILE)) { // Old format before 3.1.0
+                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_EXTERNAL_FILE)) { // Old format before 3.1.0
                         document.getElementById('link').value = data['link'];
-                    } else if ((parseInt(data['link']) === OCA.Analytics.TYPE_INTERNAL_FILE)) { // Old format before 3.1.0
+                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_FILE)) { // Old format before 3.1.0
                         document.getElementById('link').value = data['link'];
                     }
                 } else {
