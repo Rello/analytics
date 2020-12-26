@@ -31,7 +31,7 @@
             <div style="display: table-cell;">
                 <select style="display: table-cell;" id="sidebarDatasetDatasource" class="sidebarInput">
                     <option value="" selected></option>
-                    <option value="0"><?php p($l->t('No Data / Group')); ?></option>
+                    <option value="0"><?php p($l->t('Report folder (no data)')); ?></option>
                     <option value="2"><?php p($l->t('Internal Database')); ?></option>
                 </select>
             </div>

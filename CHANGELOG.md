@@ -10,10 +10,10 @@
 - more flexible clipboard import
 
 ### Fixed
-
+- translations
 - shared reports showing multiple times
 - image path for alternative app folder
-- Advanced Configuration - Dataload tab does not load [#79](https://github.com/rello/analytics/issues/79)
+- Advanced: Dataload tab does not load [#79](https://github.com/rello/analytics/issues/79)
 
 ## 3.1.0 - 2020-12-02
 

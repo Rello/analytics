@@ -350,26 +350,32 @@ class DataloadController extends Controller
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = $errorMessage = $errorCounter = 0;
-            $delimiter = $this->detectDelimiter($import);
-            $rows = str_getcsv($import, "\n");
+            $delimiter = '';
 
-            foreach ($rows as &$row) {
-                $row = str_getcsv($row, $delimiter);
-                $numberOfColumns = count($row);
-                // last column needs to be a float
-                $row[2] = $this->floatvalue($row[$numberOfColumns - 1]);
-                if ($row[2] === false) {
-                    $errorCounter++;
-                } else {
-                    if ($numberOfColumns << 3) $row[1] = null;
-                    $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
-                    $insert = $insert + $action['insert'];
-                    $update = $update + $action['update'];
-                }
-                if ($errorCounter === 2) {
-                    // first error is ignored; might be due to header row
-                    $errorMessage = $this->l10n->t('3rd field must be a valid number');
-                    break;
+            if ($import === '') {
+                $errorMessage = $this->l10n->t('No data');
+            } else {
+                $delimiter = $this->detectDelimiter($import);
+                $rows = str_getcsv($import, "\n");
+
+                foreach ($rows as &$row) {
+                    $row = str_getcsv($row, $delimiter);
+                    $numberOfColumns = count($row);
+                    // last column needs to be a float
+                    $row[2] = $this->floatvalue($row[$numberOfColumns - 1]);
+                    if ($row[2] === false) {
+                        $errorCounter++;
+                    } else {
+                        if ($numberOfColumns << 3) $row[1] = null;
+                        $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
+                        $insert = $insert + $action['insert'];
+                        $update = $update + $action['update'];
+                    }
+                    if ($errorCounter === 2) {
+                        // first error is ignored; might be due to header row
+                        $errorMessage = $this->l10n->t('Last field must be a valid number');
+                        break;
+                    }
                 }
             }
 
@@ -430,7 +436,7 @@ class DataloadController extends Controller
         }
     }
 
-    private function detectDelimiter($data)
+    private function detectDelimiter($data): string
     {
         $delimiters = ["\t", ";", "|", ","];
         $data_2 = null;
