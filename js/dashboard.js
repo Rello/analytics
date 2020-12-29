@@ -46,6 +46,9 @@ OCA.Analytics.Dashboard = {
                 el.innerHTML = '<ul id="ulAnalytics"></ul>';
                 OCA.Analytics.Dashboard.getFavorites();
             });
+        } else if (typeof OCA.Analytics.Navigation === 'object') {
+            // show favorites when the Analytics app itself is loaded
+            OCA.Analytics.Dashboard.getFavorites();
         }
     },
 

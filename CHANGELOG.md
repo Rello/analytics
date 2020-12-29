@@ -11,7 +11,7 @@
 - more flexible clipboard import
 
 ### Fixed
-
+- Favorites dashboard not showing in app startscreen
 - translations @[AleksovAnry](https://github.com/AleksovAnry)
 - shared reports showing multiple times
 - image path for alternative app folder
