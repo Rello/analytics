@@ -97,7 +97,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     buildDataloadOptions: function (evt) {
-        let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(evt.target.dataset.id));
+        let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
 
         document.getElementById('dataloadDetail').dataset.id = dataload['id'];
         document.getElementById('dataloadName').value = dataload['name'];
