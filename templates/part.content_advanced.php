@@ -9,7 +9,7 @@
  * @copyright 2020 Marcel Scherello
  */
 ?>
-<h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Analytics - Advanced Configuration')); ?></h3>
+<h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Analytics - Advanced configuration')); ?></h3>
 <div id="analytics-content" style="width:100%; padding: 10px" hidden>
     <input type="hidden" name="sharingToken" value="" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">

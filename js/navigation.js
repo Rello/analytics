@@ -84,7 +84,8 @@ OCA.Analytics.Navigation = {
         let li2 = document.createElement('li');
         let a2 = document.createElement('a');
         a2.classList.add('icon-add');
-        a2.innerText = t('analytics', 'New Report');
+        a2.innerText = t('analytics', 'New report');
+
         a2.id = 'newDatasetButton';
         a2.addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
         li2.appendChild(a2);
@@ -246,6 +247,12 @@ OCA.Analytics.Navigation = {
         let deleteReport = navigationMenu.getElementById('navigationMenuDelete');
         deleteReport.dataset.id = data.id;
         deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
+
+        if (parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP) {
+            favorite.remove();
+            deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
+            advanced.remove();
+        }
 
         return navigationMenu;
     },

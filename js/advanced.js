@@ -43,6 +43,8 @@ OCA.Analytics.Advanced.Dataload = {
                 document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCreateButton);
                 document.getElementById('dataloadList').innerHTML = '';
 
+                OCA.Analytics.Advanced.Dataload.dataloadArray = [];
+
                 // list all available dataloads for dataset
                 for (let dataload of data['dataloads']) {
                     document.getElementById('dataloadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
@@ -181,7 +183,7 @@ OCA.Analytics.Advanced.Dataload = {
     handleDeleteButton: function () {
         OC.dialogs.confirm(
             t('analytics', 'Are you sure?'),
-            t('analytics', 'Delete Dataload'),
+            t('analytics', 'Delete dataload'),
             function (e) {
                 if (e === true) {
                     OCA.Analytics.Advanced.Dataload.deleteDataload();
@@ -298,7 +300,6 @@ OCA.Analytics.Advanced.Threshold = {
     },
 
     buildThresholdRow: function (data) {
-
         let bulletColor, bullet;
         data.severity = parseInt(data.severity);
         if (data.severity === 2) {
@@ -367,7 +368,6 @@ OCA.Analytics.Advanced.Threshold = {
             }
         });
     },
-
 };
 
 document.addEventListener('DOMContentLoaded', function () {

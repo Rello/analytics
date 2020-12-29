@@ -185,6 +185,10 @@ OCA.Analytics.Sidebar.Dataset = {
                     } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_FILE)) { // Old format before 3.1.0
                         document.getElementById('link').value = data['link'];
                     }
+
+                    if ((parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP)) {
+
+                    }
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -199,7 +203,7 @@ OCA.Analytics.Sidebar.Dataset = {
 
         OC.dialogs.confirm(
             t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
-            t('analytics', 'Delete Report'),
+            t('analytics', 'Delete report'),
             function (e) {
                 if (e === true) {
                     OCA.Analytics.Sidebar.Backend.deleteDataset(id);
@@ -409,7 +413,7 @@ OCA.Analytics.Sidebar.Share = {
                     document.getElementById('tabContainerShare').innerHTML = '';
                     document.getElementById('tabContainerShare').appendChild(template);
                 } else {
-                    const table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No Shares found') + '</p></div>';
+                    const table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No shares found') + '</p></div>';
                     document.getElementById('tabContainerData').innerHTML = table;
                 }
 
@@ -425,8 +429,8 @@ OCA.Analytics.Sidebar.Share = {
         linkRow = document.importNode(linkRow, true);
 
         linkRow.getElementById('row').dataset.id = id;
-        if (add) linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Add Share Link');
-        else linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Share Link');
+        if (add) linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Add share link');
+        else linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Share link');
 
         if (add) {
             linkRow.getElementById('sharingOptionsGroupMenu').remove();
@@ -717,7 +721,7 @@ OCA.Analytics.Sidebar.Backend = {
             success: function (data) {
                 OC.dialogs.confirm(
                     t('analytics', 'Are you sure?') + ' ' + t('analytics', 'Records to be deleted: ') + data.delete.count,
-                    t('analytics', 'Delete Data'),
+                    t('analytics', 'Delete data'),
                     function (e) {
                         if (e === true) {
                             OCA.Analytics.Sidebar.Backend.deleteData();

@@ -4,13 +4,15 @@
 ### Added
 - Allow filter-permissions on shared reports [#77](https://github.com/rello/analytics/issues/77)
 - NC21
+- delete option in report menu
 
 ### Changed
 - Filter changes are not persisted automatically (can to be saved when desired)
 - more flexible clipboard import
 
 ### Fixed
-- translations
+- Favorites dashboard not showing in app startscreen
+- translations @[AleksovAnry](https://github.com/AleksovAnry)
 - shared reports showing multiple times
 - image path for alternative app folder
 - Advanced: Dataload tab does not load [#79](https://github.com/rello/analytics/issues/79)
