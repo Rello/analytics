@@ -193,8 +193,10 @@ OCA.Analytics.Sidebar.Dataset = {
         });
     },
 
-    handleDeleteButton: function () {
-        const id = document.getElementById('app-sidebar').dataset.id;
+    handleDeleteButton: function (evt) {
+        let id = evt.target.parentNode.dataset.id;
+        if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
+
         OC.dialogs.confirm(
             t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
             t('analytics', 'Delete Report'),

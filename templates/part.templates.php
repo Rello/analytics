@@ -258,10 +258,10 @@
                 <div id="dataloadDetailDelete" hidden>
                     <div style="display: table-row;">
                         <div style="display: table-cell; width: 100%;"><?php p($l->t('Delete data before load')); ?></div>
-                    <select class="sidebarInput" id="delete" style="display: table-cell;">
-                        <option value="false"><?php p($l->t('No')); ?></option>
-                        <option value="true"><?php p($l->t('Yes')); ?></option>
-                    </select></div>
+                        <select class="sidebarInput" id="delete" style="display: table-cell;">
+                            <option value="false"><?php p($l->t('No')); ?></option>
+                            <option value="true"><?php p($l->t('Yes')); ?></option>
+                        </select></div>
                 </div>
                 <div id="dataloadDetailButtons" hidden>
                     <button id="dataloadDeleteButton" style="padding: 15px;" class="icon-delete"></button>
@@ -303,14 +303,17 @@
 <template id="templateNavigationMenu">
     <div id="navigationMenu" class="app-navigation-entry-menu">
         <ul>
-            <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
-            <li><a href="#" id="navigationMenuAdvanced"><span></span><span></span></a></li>
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>
                     <span></span>
                 </a>
             </li>
+            <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
+            <li><a href="#" id="navigationMenuAdvanced"><span></span><span></span></a></li>
+            <li class="action-separator"></li>
+            <li><a href="#" id="navigationMenuDelete"><span
+                            class="icon-delete"></span><span><?php p($l->t('Delete Report')); ?></span></a></li>
         </ul>
     </div>
 </template>
@@ -348,7 +351,8 @@
                                 <label for="shareEditing"><?php p($l->t('Grant navigation')); ?></label>
                             </span>
                         </li>
-                        <li>
+                        <li class="action-separator"></li>
+                       <li>
                             <a href="#" class="unshare" id="deleteShare">
                                 <span class="icon icon-close" id="deleteShareIcon"></span>
                                 <span><?php p($l->t('Unshare')); ?></span>
@@ -395,6 +399,7 @@
                                        class="checkbox showPasswordCheckbox">
                                 <label for="shareEditing"><?php p($l->t('Grant navigation')); ?></label>
                             </span></li>
+                        <li class="action-separator"></li>
                        <li>
                             <a href="#" class="unshare" id="deleteShare">
                                 <span class="icon icon-close" id="deleteShareIcon"></span>

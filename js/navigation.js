@@ -243,6 +243,10 @@ OCA.Analytics.Navigation = {
             favorite.children[1].innerHTML = t('analytics', 'Add to favorites');
         }
 
+        let deleteReport = navigationMenu.getElementById('navigationMenuDelete');
+        deleteReport.dataset.id = data.id;
+        deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
+
         return navigationMenu;
     },
 
@@ -278,6 +282,7 @@ OCA.Analytics.Navigation = {
                 // reset any user-filters and display the filters stored for the report
                 delete OCA.Analytics.currentReportData.options.filteroptions;
             }
+            OCA.Analytics.unsavedFilters = false;
             OCA.Analytics.Sidebar.hideSidebar();
             OCA.Analytics.Backend.getData();
         }
