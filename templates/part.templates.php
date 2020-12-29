@@ -32,7 +32,7 @@
                 <select style="display: table-cell;" id="sidebarDatasetDatasource" class="sidebarInput">
                     <option value="" selected></option>
                     <option value="0"><?php p($l->t('Report folder (no data)')); ?></option>
-                    <option value="2"><?php p($l->t('Internal Database')); ?></option>
+                    <option value="2"><?php p($l->t('Internal database')); ?></option>
                 </select>
             </div>
         </div>
@@ -106,10 +106,10 @@
     </div>
     <br>
     <button id="sidebarDatasetUpdateButton" type="button">
-        <?php p($l->t('Update Report')); ?>
+        <?php p($l->t('Update report')); ?>
     </button>
     <button id="sidebarDatasetDeleteButton" type="button">
-        <?php p($l->t('Delete Report')); ?>
+        <?php p($l->t('Delete report')); ?>
     </button>
 </template>
 
@@ -133,19 +133,19 @@
     </div>
     <br>
     <button id="updateDataButton" type="button">
-        <?php p($l->t('Save Data')); ?>
+        <?php p($l->t('Save data')); ?>
     </button>
     <button id="deleteDataButton" type="button">
-        <?php p($l->t('Delete Data')); ?>
+        <?php p($l->t('Delete data')); ?>
     </button>
     <br>
     <br>
     <div><h3><?php p($l->t('Import')); ?></h3></div>
     <button id="importDataFileButton" type="button">
-        <?php p($l->t('From File')); ?>
+        <?php p($l->t('From file')); ?>
     </button>
     <button id="importDataClipboardButton" type="button">
-        <?php p($l->t('From Clipboard')); ?>
+        <?php p($l->t('From clipboard')); ?>
     </button>
     <br>
     <textarea id="importDataClipboardText" rows="5" cols="50" hidden></textarea>
@@ -158,7 +158,7 @@
     <br>
     <div><h3><?php p($l->t('Dataload')); ?></h3></div>
     <button id="advancedButton" type="button">
-        <?php p($l->t('Advanced Configuration')); ?>
+        <?php p($l->t('Advanced configuration')); ?>
     </button>
 </template>
 
@@ -207,7 +207,7 @@
     </div>
     <br>
     <button id="createThresholdButton" type="button">
-        <?php p($l->t('Save Threshold')); ?>
+        <?php p($l->t('Save threshold')); ?>
     </button>
     <br>
     <br>
@@ -313,7 +313,7 @@
             <li><a href="#" id="navigationMenuAdvanced"><span></span><span></span></a></li>
             <li class="action-separator"></li>
             <li><a href="#" id="navigationMenuDelete"><span
-                            class="icon-delete"></span><span><?php p($l->t('Delete Report')); ?></span></a></li>
+                            class="icon-delete"></span><span><?php p($l->t('Delete report')); ?></span></a></li>
         </ul>
     </div>
 </template>
