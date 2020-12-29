@@ -298,7 +298,6 @@ OCA.Analytics.Advanced.Threshold = {
     },
 
     buildThresholdRow: function (data) {
-
         let bulletColor, bullet;
         data.severity = parseInt(data.severity);
         if (data.severity === 2) {
@@ -367,7 +366,6 @@ OCA.Analytics.Advanced.Threshold = {
             }
         });
     },
-
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -386,5 +384,4 @@ document.addEventListener('DOMContentLoaded', function () {
         name: t('analytics', 'Thresholds'),
         action: OCA.Analytics.Advanced.Threshold.tabContainerThreshold,
     });
-
 });

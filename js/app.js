@@ -46,6 +46,7 @@ if (!OCA.Analytics) {
         datasources: [],
         datasourceOptions: [],
         datasets: [],
+        unsavedFilters: null,
     };
 }
 /**
@@ -377,8 +378,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportSubHeader').style.display = 'none';
             document.getElementById('filterContainer').style.display = 'none';
             document.getElementById('optionContainer').style.display = 'none';
-            // table only report can hide this icon specifically
-            document.getElementById('optionsIcon').style.removeProperty('display');
+            document.getElementById('optionsIcon').style.display = 'none';
             document.getElementById('noDataContainer').style.display = 'none';
         }
     },
@@ -604,11 +604,12 @@ OCA.Analytics.Backend = {
 
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {
+                        document.getElementById('optionsIcon').style.removeProperty('display');
                         OCA.Analytics.UI.buildChart(data);
                     } else if (visualization === 'table') {
-                        document.getElementById('optionsIcon').style.display = 'none';
                         OCA.Analytics.UI.buildDataTable(data);
                     } else {
+                        document.getElementById('optionsIcon').style.removeProperty('display');
                         OCA.Analytics.UI.buildChart(data);
                         OCA.Analytics.UI.buildDataTable(data);
                     }

@@ -100,6 +100,7 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();
     },
@@ -189,6 +190,7 @@ OCA.Analytics.Filter = {
         filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value;
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();
     },
@@ -208,6 +210,13 @@ OCA.Analytics.Filter = {
                 document.getElementById('filterVisualisation').appendChild(span);
             }
         }
+        if (OCA.Analytics.unsavedFilters === true) {
+            document.getElementById('saveIcon').style.removeProperty('display');
+
+        } else {
+            document.getElementById('saveIcon').style.display = 'none';
+        }
+
     },
 
     removeFilter: function (evt) {
@@ -218,6 +227,7 @@ OCA.Analytics.Filter = {
             delete filterOptions['filter'];
         }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
     },
 
@@ -385,6 +395,8 @@ OCA.Analytics.Filter.Backend = {
         } else {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
+
+        OCA.Analytics.unsavedFilters = false;
 
         $.ajax({
             type: 'POST',

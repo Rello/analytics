@@ -155,7 +155,7 @@ table.dataTable tbody tr {
 }
 
 .icon-analytics-save-warning {
-  @include icon-color('save', 'analytics', $color-error, 1);
+  @include icon-color('warning', 'analytics', $color-warning, 1);
   opacity: 0.5;
   background-size: 20px;
   display: inline-block;
