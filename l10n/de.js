@@ -16,7 +16,6 @@ OC.L10N.register(
         'No Shares found': 'keine Freigaben gefunden',
         'Add Share Link': 'Neue Freigabe mit Link',
         'Share Link': 'Freigabe Link',
-        'Password protect': 'Passwortschutz',
         'Password for public link': 'Passwort für öffentlichen link',
         'Delete share link': 'Freigabe Link löschen',
         ' records inserted, ': ' Datensätze hinzugefügt, ',

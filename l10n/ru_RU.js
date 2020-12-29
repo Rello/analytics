@@ -16,7 +16,6 @@ OC.L10N.register(
         'No Shares found': 'Ссылки не найдены',
         'Add Share Link': 'Добавить ссылку',
         'Share Link': 'Поделиться ссылкой',
-        'Password protect': 'Защищено паролем',
         'Password for public link': 'Пароль для публичной ссылки',
         'Delete share link': 'Удалить ссылку',
         ' records inserted, ': ' записей добавлено, ',

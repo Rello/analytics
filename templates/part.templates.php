@@ -348,7 +348,7 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('Grant navigation')); ?></label>
+                                <label for="shareEditing"><?php p($l->t('can navigate')); ?></label>
                             </span>
                         </li>
                         <li class="action-separator"></li>
@@ -382,11 +382,11 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="showPassword" id="showPassword"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="showPassword"><?php p($l->t('Password')); ?></label>
+                                <label for="showPassword"><?php p($l->t('Password protection')); ?></label>
                             </span>
                         </li>
                         <li id="linkPassMenu" class="linkPassMenu hidden">
-                            <span class="menuitem icon-share-pass">
+                            <span class="menuitem icon-password">
                                 <input type="password" placeholder="<?php p($l->t('Password')); ?>"
                                        class="linkPassText">
                                 <input id="linkPassSubmit" type="submit" value="" class="icon-confirm share-pass-submit"
@@ -397,7 +397,7 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('Grant navigation')); ?></label>
+                                <label for="shareEditing"><?php p($l->t('can navigate')); ?></label>
                             </span></li>
                         <li class="action-separator"></li>
                        <li>

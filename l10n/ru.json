@@ -7,6 +7,7 @@
     "This report is password-protected": "Это отчёт защищён паролем",
     "The password is wrong. Try again.": "Не верный пароль. Попробуйте ещё раз.",
     "Password": "Пароль",
+    "Password protection": "Защищено паролем",
     "Drilldown": "Раскрыть",
     "Settings": "Настройки",
     "Report title": "Заголовок отчёта",
@@ -99,7 +100,7 @@
     "No data found": "Данные не найдены",
     "Filter": "Фильтр",
     "Unshare": "Не делиться",
-    "Grant navigation": "Grant navigation",
+    "can navigate": "can navigate",
     "Name": "Имя",
     "Reports": "Отчёты"
   },

@@ -18,8 +18,8 @@
     <div id="reportPlaceholder"></div>
     <div id="filterBar" style="">
         <div id="optionContainer" style="display: none">
-            <div id="saveIcon" class="icon-analytics-save has-tooltip"
-                 title="<?php p($l->t('Save filter')); ?>"></div>
+            <div id="saveIcon" class="icon-analytics-save-warning has-tooltip"
+                 title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
             <div id="optionsIcon" class="icon-analytics-options has-tooltip"
                  title="<?php p($l->t('Options')); ?>"></div>
         </div>

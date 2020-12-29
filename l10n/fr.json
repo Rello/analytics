@@ -8,6 +8,7 @@
     "This report is password-protected": "Ce rapport est protégé par un mot de passe",
     "The password is wrong. Try again.": "Mot de passe incorrect. Essayez à nouveau",
     "Password": "Mot de passe",
+    "Password protection": "Protection par mot de passe",
     "Drilldown": "Exploration",
     "Settings": "Paramètres",
     "Report title": "Titre du rapport",
@@ -100,7 +101,7 @@
     "No data found": "Aucun donnée trouvée",
     "Filter": "Filtre",
     "Unshare": "Ne plus partager",
-    "Grant navigation": "Peut modifier les filtres",
+    "can navigate": "Peut modifier les filtres",
     "Name": "Nom"
   },
   "pluralForm": ""

@@ -16,7 +16,6 @@ OC.L10N.register(
         'No Shares found': 'Aucun partagé trouvé',
         'Add Share Link': 'Ajouter un lien de partage',
         'Share Link': 'Lien de partage',
-        'Password protect': 'Protection par mot de passe',
         'Password for public link': 'Mot de passe du lien public',
         'Delete share link': 'Supprimer le lien de partage',
         ' records inserted, ': ' enregistrements ajoutés, ',
