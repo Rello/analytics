@@ -98,10 +98,10 @@
     "Legend": "Легенда",
     "No data found": "Данные не найдены",
     "Filter": "Фильтр",
-    "Unshare": "Unshare",
+    "Unshare": "Не делиться",
     "Grant navigation": "Grant navigation",
-    "Name": "Name",
-    "Reports": "Reports"
+    "Name": "Имя",
+    "Reports": "Отчёты"
   },
   "pluralForm": ""
 }
