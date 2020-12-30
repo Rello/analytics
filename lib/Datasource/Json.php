@@ -51,9 +51,9 @@ class Json implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'url', 'name' => 'JSON Url', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'auth', 'name' => 'Authentication', 'placeholder' => 'User:Password']);
-        array_push($template, ['id' => 'path', 'name' => 'JSON path', 'placeholder' => 'x/y/z']);
-        array_push($template, ['id' => 'timestamp', 'name' => 'Timestamp of dataload', 'placeholder' => 'false/true', 'type' => 'tf']);
+        array_push($template, ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password']);
+        array_push($template, ['id' => 'path', 'name' => $this->l10n->t('JSON path'), 'placeholder' => 'x/y/z']);
+        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => 'false/true', 'type' => 'tf']);
         return $template;
     }
 

@@ -52,8 +52,8 @@ class Github implements IDatasource
         $template = array();
         array_push($template, ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user']);
         array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
-        array_push($template, ['id' => 'limit', 'name' => 'Limit', 'placeholder' => 'Number of records']);
-        array_push($template, ['id' => 'timestamp', 'name' => 'Add current timestamp', 'placeholder' => 'false/true', 'type' => 'tf']);
+        array_push($template, ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => 'Number of records']);
+        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => 'false/true', 'type' => 'tf']);
         return $template;
     }
 

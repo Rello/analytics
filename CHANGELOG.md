@@ -13,18 +13,17 @@
 ### Fixed
 - Favorites dashboard not showing in app startscreen
 - translations @[AleksovAnry](https://github.com/AleksovAnry)
+- wording corrections
 - shared reports showing multiple times
 - image path for alternative app folder
 - Advanced: Dataload tab does not load [#79](https://github.com/rello/analytics/issues/79)
 
 ## 3.1.0 - 2020-12-02
-
 ### Added
 - event to register external datasources [#71](https://github.com/rello/analytics/issues/71)
 - better datasource config using dropdowns
 
 ### Fixed
-
 - share token not generated
 - Chart: tooltips not showing
 - an error occurred while using NC search [#70](https://github.com/rello/analytics/issues/70)

@@ -101,7 +101,14 @@
     "Unshare": "Не делиться",
     "can navigate": "can navigate",
     "Name": "Имя",
-    "Reports": "Отчёты"
+    "Reports": "Отчёты",
+    "Load via occ command:": "Загрузить с помощью команды occ",
+    "Timestamp of dataload": "Временной штамп загрузки",
+    "valid regex": "Регулярное выражение",
+    "Limit": "Лимит",
+    "Delete data before load": "Удалить данные перед загрузкой",
+    "Favorites": "Избранное",
+    "Analytics - Advanced configuration": "Аналитика - Расширенные настройки"
   },
   "pluralForm": ""
 }

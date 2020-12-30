@@ -261,7 +261,9 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Backend.createDataset();
     },
     handleOverviewButton: function () {
-        document.querySelector('#navigationDatasets .active').classList.remove('active');
+        if (document.querySelector('#navigationDatasets .active')) {
+            document.querySelector('#navigationDatasets .active').classList.remove('active');
+        }
         document.getElementById('analytics-content').hidden = true;
         document.getElementById('analytics-intro').removeAttribute('hidden');
         document.getElementById('ulAnalytics').innerHTML = '';

@@ -1,7 +1,6 @@
 {
   "translations": {
     "Analytics": "Analytics",
-    "Reports": "Berichte",
     "New report": "Neuer Bericht",
     "Do you like this app?": "Gefällt Dir diese App?",
     "More information…": "Weitere Informationen…",
@@ -100,7 +99,15 @@
     "Filter": "Filter",
     "Unshare": "Freigabe aufheben",
     "can navigate": "kann navigieren",
-    "Name": "Name"
+    "Name": "Name",
+    "Reports": "Berichte",
+    "Load via occ command:": "Ladung mittels occ Befehl",
+    "Timestamp of dataload": "Timestamp der Datenladung",
+    "valid regex": "gültiger regex",
+    "Limit": "Limit",
+    "Delete data before load": "Daten vor der Ladung löschen",
+    "Favorites": "Favoriten",
+    "Analytics - Advanced configuration": "Analytics - Advanced Konfiguration"
   },
   "pluralForm": ""
 }
