@@ -71,5 +71,7 @@ OC.L10N.register(
             'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"': 'Dieser Bericht hat keine Datenladungen. <br>Wähle eine Datenquelle aus dem Dropdown und drücke "+"',
             'Choose a dataload from the list to change its settings': 'Wähle eine Datenladung aus der Liste um die Einstellungen zu ändern',
             'Overview': 'Überblick',
+            'Drilldown': 'Aufriss',
+            'Datasource simulation': 'Datasource simulieren'
     },
     '');
