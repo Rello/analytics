@@ -7,8 +7,8 @@
 - delete option in report menu
 
 ### Changed
-
 - Filter changes are not persisted automatically [#94](https://github.com/rello/analytics/issues/94)
+- Disable dataload for non-internal reports [#74](https://github.com/rello/analytics/issues/74)
 - more flexible clipboard import
 - don´t load dashboard when accessing report directly
 

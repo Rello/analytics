@@ -31,6 +31,12 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('tabContainerDataload').classList.remove('hidden');
         document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
 
+        if (document.getElementById('app-sidebar').dataset.type !== OCA.Analytics.TYPE_INTERNAL_DB) {
+            let message = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
+            document.getElementById('tabContainerDataload').innerHTML = message;
+            return;
+        }
+
         $.ajax({
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataload/') + datasetId,

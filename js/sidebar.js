@@ -41,6 +41,7 @@ OCA.Analytics.Sidebar = {
                 OC.Apps.showAppSidebar();
             }
             appsidebar.dataset.id = datasetId;
+            appsidebar.dataset.type = datasetType;
             document.querySelector('.tabHeader.selected').click();
         }
     },
@@ -294,40 +295,41 @@ OCA.Analytics.Sidebar.Data = {
         document.getElementById('tabContainerData').classList.remove('hidden');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
 
+        if (document.getElementById('app-sidebar').dataset.type !== OCA.Analytics.TYPE_INTERNAL_DB) {
+            let message = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
+            document.getElementById('tabContainerData').innerHTML = message;
+            return;
+        }
+
         $.ajax({
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
                 let table;
-                if (data !== false && parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_DB) {
-                    // clone the DOM template
-                    table = document.importNode(document.getElementById('templateData').content, true);
-                    table.id = 'tableData';
-                    document.getElementById('tabContainerData').innerHTML = '';
-                    document.getElementById('tabContainerData').appendChild(table);
-                    document.getElementById('DataTextDimension1').innerText = data['dimension1'];
-                    document.getElementById('DataTextDimension2').innerText = data['dimension2'];
-                    document.getElementById('DataTextValue').innerText = data['value'];
-                    //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
-                    document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
-                    document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeleteButton);
-                    document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
-                    document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportClipboardButton);
-                    document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
-                    document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
+                // clone the DOM template
+                table = document.importNode(document.getElementById('templateData').content, true);
+                table.id = 'tableData';
+                document.getElementById('tabContainerData').innerHTML = '';
+                document.getElementById('tabContainerData').appendChild(table);
+                document.getElementById('DataTextDimension1').innerText = data['dimension1'];
+                document.getElementById('DataTextDimension2').innerText = data['dimension2'];
+                document.getElementById('DataTextValue').innerText = data['value'];
+                //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
+                document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
+                document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeleteButton);
+                document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
+                document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportClipboardButton);
+                document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
+                document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
 
-                    document.getElementById('DataValue').addEventListener('keydown', function (event) {
-                        if (event.key === 'Enter') {
-                            OCA.Analytics.Sidebar.Backend.updateData();
-                            document.getElementById('DataDimension2').focus();
-                            document.getElementById('DataDimension2').value = '';
-                            document.getElementById('DataValue').value = '';
-                        }
-                    });
-                } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
-                    document.getElementById('tabContainerData').innerHTML = table;
-                }
+                document.getElementById('DataValue').addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        OCA.Analytics.Sidebar.Backend.updateData();
+                        document.getElementById('DataDimension2').focus();
+                        document.getElementById('DataDimension2').value = '';
+                        document.getElementById('DataValue').value = '';
+                    }
+                });
             }
         });
     },

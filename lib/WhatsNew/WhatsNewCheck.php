@@ -132,9 +132,9 @@ class WhatsNewCheck
             return self::RESPONSE_HAS_CONTENT;
         }
         //$this->logger->debug('Unexpected return code {code} from changelog server', [
-            'app' => 'core',
-            'code' => $response->getStatusCode(),
-        ]);
+        //    'app' => 'core',
+        //    'code' => $response->getStatusCode(),
+        //]);
         return self::RESPONSE_NO_CONTENT;
     }
 
