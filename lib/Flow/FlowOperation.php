@@ -110,7 +110,7 @@ class FlowOperation implements IOperation
         }
         $file = '/' . $file;
 
-        $this->logger->debug("Analytics Flow Operation 115: storing file '" . $file . "' in report " . $datasetId);
+        //$this->logger->debug("Analytics Flow Operation 115: storing file '" . $file . "' in report " . $datasetId);
         try {
             $this->DataloadController->importFile($datasetId, $file);
         } catch (NotFoundException $e) {

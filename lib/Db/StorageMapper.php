@@ -67,7 +67,7 @@ class StorageMapper
         // add the where clauses depending on the filter selection of the
         if (isset($options['filter'])) {
             foreach ($options['filter'] as $key => $value) {
-                $this->logger->debug($key . $value['option'] . $value['value']);
+                //$this->logger->debug($key . $value['option'] . $value['value']);
                 $this->sqlWhere($sql, $key, $value['option'], $value['value']);
             }
         }

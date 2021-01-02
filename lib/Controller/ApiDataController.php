@@ -105,13 +105,13 @@ class ApiDataController extends ApiController
     {
         $message = 'No -data- parameter';
         $params = $this->request->getParams();
-        $this->logger->debug('array: ' . json_encode($params));
+        //$this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
         foreach ($params['data'] as $dataArray) {
-            $this->logger->debug('array: ' . json_encode($dataArray));
+            //$this->logger->debug('array: ' . json_encode($dataArray));
 
             $dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
             $dimension2 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension2');
@@ -145,7 +145,7 @@ class ApiDataController extends ApiController
     {
         $message = 'No -delete- parameter';
         $params = $this->request->getParams();
-        $this->logger->debug('array: ' . json_encode($params));
+        //$this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);

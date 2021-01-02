@@ -131,7 +131,7 @@ class WhatsNewCheck
         } elseif ($response->getStatusCode() === 200) {
             return self::RESPONSE_HAS_CONTENT;
         }
-        $this->logger->debug('Unexpected return code {code} from changelog server', [
+        //$this->logger->debug('Unexpected return code {code} from changelog server', [
             'app' => 'core',
             'code' => $response->getStatusCode(),
         ]);
