@@ -1,7 +1,6 @@
 {
   "translations": {
     "Analytics": "Analytics",
-    "New report": "Neuer Bericht",
     "Do you like this app?": "Gefällt Dir diese App?",
     "More information…": "Weitere Informationen…",
     "This report is password-protected": "Dieser Bericht ist mit einem Passwort geschützt",
@@ -107,7 +106,8 @@
     "Limit": "Limit",
     "Delete data before load": "Daten vor der Ladung löschen",
     "Favorites": "Favoriten",
-    "Analytics - Advanced configuration": "Analytics - Advanced Konfiguration"
+    "Analytics - Advanced configuration": "Analytics - Erweiterte Einstellungen",
+    "Report was changed - Press here to save the current state": "Bericht wurde geändert - Hier klicken um zu speichern"
   },
   "pluralForm": ""
 }

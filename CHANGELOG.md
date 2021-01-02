@@ -12,7 +12,8 @@
 
 ### Fixed
 - Favorites dashboard not showing in app startscreen
-- translations @[AleksovAnry](https://github.com/AleksovAnry)
+- Missing language keys [#86](https://github.com/rello/analytics/issues/86)
+  @[AleksovAnry](https://github.com/AleksovAnry)
 - wording corrections
 - shared reports showing multiple times
 - image path for alternative app folder

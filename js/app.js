@@ -597,6 +597,8 @@ OCA.Analytics.Backend = {
                     if (!isInternalShare && !isExternalShare) {
                         document.getElementById('optionContainer').style.removeProperty('display');
                     }
+                } else if (isExternalShare) {
+                    document.getElementById('filterBar').remove();
                 }
 
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;

@@ -1,7 +1,6 @@
 {
   "translations": {
     "Analytics": "Аналитика",
-    "New report": "Новый отчёт",
     "Do you like this app?": "Нравится это приложеение?",
     "More information…": "Дополнительная информация…",
     "This report is password-protected": "Это отчёт защищён паролем",
@@ -108,7 +107,8 @@
     "Limit": "Лимит",
     "Delete data before load": "Удалить данные перед загрузкой",
     "Favorites": "Избранное",
-    "Analytics - Advanced configuration": "Аналитика - Расширенные настройки"
+    "Analytics - Advanced configuration": "Аналитика - Расширенные настройки",
+    "Report was changed - Press here to save the current state": "Report was changed - Press here to save the current state"
   },
   "pluralForm": ""
 }

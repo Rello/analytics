@@ -4,6 +4,7 @@ OC.L10N.register(
     {
         'Options': 'Options',
         'Report': 'Rapport',
+        'New report': 'Nouveau rapport',
         'Data': 'Données',
         'Share': 'Partager',
         'No maintenance possible': 'Aucune maintenance possible',
