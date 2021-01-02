@@ -16,11 +16,11 @@ use OCA\Analytics\Db\ShareMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IGroupManager;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
 
 class ShareController extends Controller
 {
@@ -30,6 +30,7 @@ class ShareController extends Controller
     const SHARE_TYPE_LINK = 3;
     const SHARE_TYPE_ROOM = 10;
 
+    /** @var LoggerInterface */
     private $logger;
     private $ShareMapper;
     private $secureRandom;
@@ -44,7 +45,7 @@ class ShareController extends Controller
     public function __construct(
         $appName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         ShareMapper $ShareMapper,
         ActivityManager $ActivityManager,
         IGroupManager $groupManager,

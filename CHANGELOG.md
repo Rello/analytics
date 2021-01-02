@@ -1,14 +1,16 @@
 # Changelog
 
-## 3.2.0 - 2020-12-02
+## 3.2.0 - 2021-01-02
 ### Added
 - Allow filter-permissions on shared reports [#77](https://github.com/rello/analytics/issues/77)
 - NC21
 - delete option in report menu
 
 ### Changed
-- Filter changes are not persisted automatically (can to be saved when desired)
+
+- Filter changes are not persisted automatically [#94](https://github.com/rello/analytics/issues/94)
 - more flexible clipboard import
+- don´t load dashboard when accessing report directly
 
 ### Fixed
 - Favorites dashboard not showing in app startscreen

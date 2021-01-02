@@ -399,13 +399,13 @@ OCA.Analytics.Sidebar.Share = {
                 if (data !== false) {
                     for (let share of data) {
                         if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
-                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(share['id'], share['token'], false, (String(share['pass']) === "true"), share['permissions']);
+                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(parseInt(share['id']), share['token'], false, (String(share['pass']) === "true"), parseInt(share['permissions']));
                             template.getElementById('linkShareList').appendChild(li);
                         } else {
                             if (!share['displayName']) {
                                 share['displayName'] = share['uid_owner'];
                             }
-                            let li = OCA.Analytics.Sidebar.Share.buildShareeRow(share['id'], share['uid_owner'], share['displayName'], share['type'], false, share['permissions']);
+                            let li = OCA.Analytics.Sidebar.Share.buildShareeRow(parseInt(share['id']), share['uid_owner'], share['displayName'], parseInt(share['type']), false, parseInt(share['permissions']));
                             template.getElementById('shareeList').appendChild(li);
                         }
                     }
