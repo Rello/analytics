@@ -48,7 +48,9 @@ OCA.Analytics.Dashboard = {
             });
         } else if (typeof OCA.Analytics.Navigation === 'object') {
             // show favorites when the Analytics app itself is loaded
-            OCA.Analytics.Dashboard.getFavorites();
+            if (decodeURI(location.hash).length === 0) {
+                OCA.Analytics.Dashboard.getFavorites();
+            }
         }
     },
 
@@ -88,7 +90,7 @@ OCA.Analytics.Dashboard = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 let jsondata = JSON.parse(xhr.response);
-                if (jsondata['data'].length > 20) {
+                if (jsondata['status'] !== 'nodata' && jsondata['data'].length > 20) {
                     jsondata['data'].slice(jsondata['data'].length - 20); //just the last 20 records for the micro charts
                 }
                 OCA.Analytics.Dashboard.createWidgetContent(jsondata);
