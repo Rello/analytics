@@ -101,14 +101,16 @@
     "can navigate": "Peut modifier les filtres",
     "Name": "Nom",
     "Reports": "Rapports",
-    "Load via occ command:": "Load via occ command",
-    "Timestamp of dataload": "Timestamp of dataload",
-    "valid regex": "valid regex",
-    "Limit": "Limit",
-    "Delete data before load": "Delete data before load",
-    "Favorites": "Favorites",
-    "Analytics - Advanced configuration": "Analytics - Advanced configuration",
-    "Report was changed - Press here to save the current state": "Report was changed - Press here to save the current state"
+    "Load via occ command:": "Charger depuis une commande occ",
+    "Timestamp of dataload": "Horodatage du chargeur de données",
+    "valid regex": "Valide l'expression régulière",
+    "Limit": "Limite",
+    "Delete data before load": "Supprimer les données avant le chargement",
+    "Favorites": "Favoris",
+    "Analytics - Advanced configuration": "Analytics - Configuration avancée",
+    "Report was changed - Press here to save the current state": "Le rapport a été modifié - Cliquez ici pour sauvegarder l'état actuel",
+    "Datasource options": "Options de la source de données",
+    "External URL": "URL externe"
   },
   "pluralForm": ""
 }
