@@ -197,7 +197,7 @@ class ApiDataController extends ApiController
         if (empty($datasetMetadata)) {
             $this->errors[] = 'Unknown report or dataset';
             return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
-        } elseif ((int)$datasetMetadata['type'] !== 2) {
+        } elseif ((int)$datasetMetadata['type'] !== DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             $this->errors[] = 'Report does not allow data maintenance';
             return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
         }
