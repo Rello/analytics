@@ -69,10 +69,12 @@ OC.L10N.register(
             'Favorites are shown here': 'Les favoris sont affichés ici',
             'Remove from favorites': 'Supprimer des favoris',
             'Add to favorites': 'Ajouter aux favoris',
-            'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"': 'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"',
-            'Choose a dataload from the list to change its settings': 'Choose a dataload from the list to change its settings',
-            'Overview': 'Überblick',
+            'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"': 'Ce rapport n\'a pas de source de données. <br>Choisir une source de données depuis le menu déroulant et cliquer sur "+"',
+            'Choose a dataload from the list to change its settings': 'Choisir une source de données depuis la afin de modifier ce paramètre',
+            'Overview': 'Vue d\'ensemble',
             'Drilldown': 'Exploration',
-            'Datasource simulation': 'Datasource simulation'
+            'Datasource simulation': 'Simulation d\'une source de données',
+            'Datasource options': 'Options de la source de données',
+            'External URL': 'URL externe'
     },
     '');
