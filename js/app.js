@@ -72,7 +72,9 @@ OCA.Analytics.Core = {
     getDistinctValues: function (array) {
         let unique = [];
         let distinct = [];
-        if (array === undefined) return;
+        if (array === undefined) {
+            return distinct;
+        }
         for (let i = 0; i < array.length; i++) {
             if (!unique[array[i][0]]) {
                 distinct.push(array[i][0]);

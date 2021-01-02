@@ -17,10 +17,10 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Visualization: combined charts, tables, filters
 - Thresholds for alerts and color coding
 - Integration: Files, Activity, Notifications, Flow, Dashboard (NC20), Search
-- Sharing: user, groups, link.
+- Sharing: user, groups, link
 
 ]]></description>
-    <version>3.1.0</version>
+    <version>3.2.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>
