@@ -16,6 +16,8 @@
 - Favorites dashboard not showing in app startscreen
 - Missing language keys [#86](https://github.com/rello/analytics/issues/86)
   @[AleksovAnry](https://github.com/AleksovAnry)
+- fr translations [#92](https://github.com/rello/analytics/issues/92)
+  @[simmstein](https://github.com/simmstein)
 - wording corrections
 - shared reports showing multiple times
 - image path for alternative app folder
@@ -63,7 +65,7 @@
 - API: delete data [#56](https://github.com/rello/analytics/issues/56)
 - Report: mark reports as favorite [#63](https://github.com/rello/analytics/issues/63)
 - translation: ru, ru_RU @[AleksovAnry](https://github.com/AleksovAnry)
-- translations: fr [#67](https://github.com/rello/analytics/issues/67) @[simmstein](https://github.com/simmstein)
+- translation: fr [#67](https://github.com/rello/analytics/issues/67) @[simmstein](https://github.com/simmstein)
 - headers for RegEx datasource @[AleksovAnry](https://github.com/AleksovAnry)
 - Dataload: Purge Dataset [#47](https://github.com/rello/analytics/issues/47)
 
