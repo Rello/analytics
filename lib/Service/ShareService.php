@@ -96,9 +96,15 @@ class ShareService
             $sharedDatasetByGroup = $this->ShareMapper->getDatasetsByGroup($group);
             $sharedDatasetsByGroup = array_merge($sharedDatasetsByGroup, $sharedDatasetByGroup);
         }
-
         $sharedDatasets = $this->ShareMapper->getSharedDatasets();
-        return array_merge($sharedDatasetsByGroup, $sharedDatasets);
+
+        $sharedDatasetsCombined = array_merge($sharedDatasetsByGroup, $sharedDatasets);
+        foreach ($sharedDatasetsCombined as &$sharedDataset) {
+            $sharedDataset['type'] = '99';
+            $sharedDataset['parrent'] = '0';
+        }
+
+        return $sharedDatasetsCombined;
     }
 
     /**
@@ -118,6 +124,8 @@ class ShareService
                 break;
             }
         }
+        $sharedDataset['type'] = '99';
+        $sharedDataset['parrent'] = '0';
         return $sharedDataset;
     }
 
