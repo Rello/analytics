@@ -197,7 +197,8 @@ OCA.Analytics.UI = {
         document.getElementById('chartMenuContainer').style.removeProperty('display');
         let ctx = document.getElementById('myChart').getContext('2d');
 
-        let chartType = jsondata.options.chart;
+        let chartType;
+        jsondata.options.chart === '' ? chartType = 'column' : chartType = jsondata.options.chart;
         let datasets = [], xAxisCategories = [];
         let lastObject = false;
         let dataSeries = -1;
@@ -633,7 +634,11 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.datasets = data;
                 if (datasetId) {
                     OCA.Analytics.Sidebar.hideSidebar();
-                    document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
+                    if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
+                        navigationItem.parentElement.parentElement.parentElement.classList.add('open');
+                    }
+                    navigationItem.click();
                 }
             }
         });

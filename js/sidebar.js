@@ -161,8 +161,8 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetParent').value = data['parent'];
                     document.getElementById('sidebarDatasetDatasource').value = data['type'];
                     document.getElementById('sidebarDatasetDatasource').addEventListener('change', OCA.Analytics.Sidebar.Dataset.handleDatasourceChange);
-                    document.getElementById('sidebarDatasetVisualization').value = data['visualization'];
                     document.getElementById('sidebarDatasetChart').value = data['chart'];
+                    document.getElementById('sidebarDatasetVisualization').value = data['visualization'];
                     document.getElementById('sidebarDatasetChartOptions').value = data['chartoptions'];
                     document.getElementById('sidebarDatasetDataOptions').value = data['dataoptions'];
                     document.getElementById('sidebarDatasetDimension1').value = data['dimension1'];
