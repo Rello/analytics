@@ -44,7 +44,7 @@ OC.L10N.register(
         'Back to report': 'Вернуться к отчёту',
         'scheduled dataload': 'запланированная загрузка данных',
         'Dataload': 'Загрузка данных',
-        'Dataload saved': 'Загрузка данных сохранена',
+        'Saved': 'Сохранено',
         'Records to be deleted: ': 'Записи на удаления: ',
         'Change drilldown': 'Изменить детализацию',
         'Cancel': 'Отмена',

@@ -130,9 +130,11 @@ OCA.Analytics.Sidebar = {
 
 };
 OCA.Analytics.Sidebar.Dataset = {
+    metadataChanged: false,
 
     tabContainerDataset: function () {
         const datasetId = document.getElementById('app-sidebar').dataset.id;
+        OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderDataset').classList.add('selected');
@@ -169,6 +171,9 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
                     document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleUpdateButton);
 
+                    document.getElementById('sidebarDatasetName').addEventListener('change', OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged);
+                    document.getElementById('sidebarDatasetParent').addEventListener('change', OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged);
+
                     // get all the options for a datasource
                     OCA.Analytics.Sidebar.Dataset.handleDatasourceChange();
 
@@ -198,6 +203,10 @@ OCA.Analytics.Sidebar.Dataset = {
         });
     },
 
+    indicateMetadataChanged: function () {
+        OCA.Analytics.Sidebar.Dataset.metadataChanged = true;
+    },
+
     handleDeleteButton: function (evt) {
         let id = evt.target.parentNode.dataset.id;
         if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
@@ -223,6 +232,7 @@ OCA.Analytics.Sidebar.Dataset = {
     handleDatasourceChange: function () {
         const type = parseInt(document.getElementById('sidebarDatasetDatasource').value);
         document.getElementById('datasetDatasourceSection').innerHTML = '';
+        //OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged();
 
         if (type === OCA.Analytics.TYPE_INTERNAL_DB) {
             document.getElementById('datasetDimensionSection').style.display = 'table';
@@ -673,7 +683,17 @@ OCA.Analytics.Sidebar.Backend = {
                 'value': document.getElementById('sidebarDatasetValue').value
             },
             success: function () {
-                OCA.Analytics.Navigation.init(datasetId);
+                if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {
+                    OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
+                    OCA.Analytics.Navigation.init(datasetId);
+                } else {
+                    if (document.getElementById('advanced').value === 'false') {
+                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.Backend.getData();
+                    } else {
+                        OCA.Analytics.UI.notification('success', t('analytics', 'Saved'));
+                    }
+                }
             }
         });
     },

@@ -178,7 +178,7 @@ OCA.Analytics.Advanced.Dataload = {
                 'option': option,
             },
             success: function () {
-                OCA.Analytics.UI.notification('success', t('analytics', 'Dataload saved'));
+                OCA.Analytics.UI.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['option'] = option;
