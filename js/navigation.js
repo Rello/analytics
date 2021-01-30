@@ -19,8 +19,8 @@ OCA.Analytics.Navigation = {
     quickstartId: 0,
 
     init: function (datasetId) {
-        document.getElementById('navigationDatasets').innerHTML = '';
-        OCA.Analytics.Backend.getDatasets(datasetId);
+        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" className="get-metadata icon-loading"></div>';
+        OCA.Analytics.Navigation.getDatasets(datasetId);
     },
 
     createDemoReport: function () {
@@ -73,6 +73,7 @@ OCA.Analytics.Navigation = {
     },
 
     buildNavigation: function (data) {
+        document.getElementById('navigationDatasets').innerHTML = '';
         let li = document.createElement('li');
         let a = document.createElement('a');
         a.classList.add('icon-toggle-pictures');
@@ -352,4 +353,24 @@ OCA.Analytics.Navigation = {
         }
         evt.stopPropagation();
     },
+
+    getDatasets: function (datasetId) {
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/analytics/dataset'),
+            success: function (data) {
+                OCA.Analytics.Navigation.buildNavigation(data);
+                OCA.Analytics.datasets = data;
+                if (datasetId) {
+                    OCA.Analytics.Sidebar.hideSidebar();
+                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
+                    if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
+                        navigationItem.parentElement.parentElement.parentElement.classList.add('open');
+                    }
+                    navigationItem.click();
+                }
+            }
+        });
+    },
+
 };

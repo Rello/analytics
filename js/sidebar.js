@@ -139,7 +139,7 @@ OCA.Analytics.Sidebar.Dataset = {
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderDataset').classList.add('selected');
         document.getElementById('tabContainerDataset').classList.remove('hidden');
-        document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+        document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         $.ajax({
             type: 'GET',
@@ -303,7 +303,7 @@ OCA.Analytics.Sidebar.Data = {
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderData').classList.add('selected');
         document.getElementById('tabContainerData').classList.remove('hidden');
-        document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+        document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         if (parseInt(document.getElementById('app-sidebar').dataset.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
             let message = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
@@ -395,7 +395,7 @@ OCA.Analytics.Sidebar.Share = {
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderShare').classList.add('selected');
         document.getElementById('tabContainerShare').classList.remove('hidden');
-        document.getElementById('tabContainerShare').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+        document.getElementById('tabContainerShare').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         // clone the DOM template
         let template = document.getElementById('templateSidebarShare').content;

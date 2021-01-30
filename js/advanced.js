@@ -29,7 +29,7 @@ OCA.Analytics.Advanced.Dataload = {
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderDataload').classList.add('selected');
         document.getElementById('tabContainerDataload').classList.remove('hidden');
-        document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+        document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         if (parseInt(document.getElementById('app-sidebar').dataset.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
             let message = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
@@ -261,7 +261,7 @@ OCA.Analytics.Advanced.Threshold = {
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderThreshold').classList.add('selected');
         document.getElementById('tabContainerThreshold').classList.remove('hidden');
-        document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; word-wrap:break-word;" class="get-metadata"><p><img src="' + OC.imagePath('core', 'loading.gif') + '"><br><br></p><p>' + t('analytics', 'Reading data') + '</p></div>';
+        document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         $.ajax({
             type: 'GET',

@@ -67,3 +67,8 @@
     <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
        target="_blank"><?php p($l->t('More Information ...')); ?></a>
 </div>
+<div id="analytics-loading" style="width:100%; padding: 100px 5%;" hidden>
+    <div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>
+</div>
+
+

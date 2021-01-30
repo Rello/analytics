@@ -1,12 +1,27 @@
 # Changelog
 
-## 3.2.0 - 2021-01-02
+## 3.3.0 - 2021-02-xx
+
 ### Added
+
+- Parameter to skip header rows in csv and file datasource [#97](https://github.com/rello/analytics/issues/97)
+- Unified loading indicator
+
+### Fixed
+
+- SQL error for shared reports [#98](https://github.com/rello/analytics/issues/98)
+- Datasource options field in DB too short [#78](https://github.com/rello/analytics/issues/78)
+
+## 3.2.0 - 2021-01-02
+
+### Added
+
 - Allow filter-permissions on shared reports [#77](https://github.com/rello/analytics/issues/77)
 - NC21
 - delete option in report menu
 
 ### Changed
+
 - Filter changes are not persisted automatically [#94](https://github.com/rello/analytics/issues/94)
 - Disable dataload for non-internal reports [#74](https://github.com/rello/analytics/issues/74)
 - more flexible clipboard import

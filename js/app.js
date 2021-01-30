@@ -550,7 +550,8 @@ OCA.Analytics.Backend = {
     getData: function () {
         OCA.Analytics.UI.resetContent();
         document.getElementById('analytics-intro').hidden = true;
-        document.getElementById('analytics-content').removeAttribute('hidden');
+        document.getElementById('analytics-content').hidden = true;
+        document.getElementById('analytics-loading').hidden = false;
 
         let url;
         if (document.getElementById('sharingToken').value === '') {
@@ -573,6 +574,8 @@ OCA.Analytics.Backend = {
             url: url,
             data: ajaxData,
             success: function (data) {
+                document.getElementById('analytics-loading').hidden = true;
+                document.getElementById('analytics-content').hidden = false;
                 OCA.Analytics.currentReportData = data;
                 try {
                     OCA.Analytics.currentReportData.options.filteroptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
@@ -620,25 +623,6 @@ OCA.Analytics.Backend = {
                     }
                 } else {
                     document.getElementById('noDataContainer').style.removeProperty('display');
-                }
-            }
-        });
-    },
-
-    getDatasets: function (datasetId) {
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset'),
-            success: function (data) {
-                OCA.Analytics.Navigation.buildNavigation(data);
-                OCA.Analytics.datasets = data;
-                if (datasetId) {
-                    OCA.Analytics.Sidebar.hideSidebar();
-                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
-                    if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
-                        navigationItem.parentElement.parentElement.parentElement.classList.add('open');
-                    }
-                    navigationItem.click();
                 }
             }
         });
