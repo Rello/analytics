@@ -59,6 +59,8 @@ class File implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'link', 'name' => 'Filelink', 'placeholder' => 'filelink']);
+        array_push($template, ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty')]);
+        array_push($template, ['id' => 'offset', 'name' => $this->l10n->t('Ignore leading rows'), 'placeholder' => $this->l10n->t('Number of rows')]);
         return $template;
     }
 
@@ -71,6 +73,11 @@ class File implements IDatasource
      */
     public function readData($option): array
     {
+        $data = array();
+        $header = array();
+        $headerrow = $errorMessage = 0;
+        $selectedColumns = array();
+
         if (isset($option['path'])) {
             $file = $this->rootFolder->getUserFolder($this->userId)->get($option['path']);
         } else {
@@ -78,21 +85,44 @@ class File implements IDatasource
             $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         }
 
-        //$this->logger->debug('FileService 63 file content:'. $file->getContent());
-        $data = $file->getContent();
-        $delimiter = $this->detectDelimiter($data);
-        $rows = str_getcsv($data, "\n");
-        $data = array();
-        $header = array();
-        $headerrow = $errorMessage = 0;
+        $rows = str_getcsv($file->getContent(), "\n");
+
+        // remove x number of rows from the beginning
+        if (isset($option['offset']) and is_numeric($option['offset'])) {
+            $rows = array_slice($rows, $option['offset']);
+        }
+
+        // ensure that all values are integers
+        if (isset($option['columns'])) {
+            $new = array();
+            $selectedColumns = str_getcsv($option['columns'], ',');
+            foreach ($selectedColumns as $value) {
+                if (is_numeric($value)) {
+                    array_push($new, $value);
+                }
+            }
+            $selectedColumns = $new;
+        }
+
+        $delimiter = $this->detectDelimiter($rows[0]);
 
         foreach ($rows as &$row) {
             $row = str_getcsv($row, $delimiter);
+            $rowMinimized = array();
+
+            if (count($selectedColumns) !== 0) {
+                foreach ($selectedColumns as $selectedColumn) {
+                    array_push($rowMinimized, $row[$selectedColumn - 1]);
+                }
+            } else {
+                $rowMinimized = $row;
+            }
+
             if ($headerrow === 0) {
-                $header = $row;
+                $header = $rowMinimized;
                 $headerrow = 1;
             } else {
-                array_push($data, $row);
+                array_push($data, $rowMinimized);
             }
         }
         return [
@@ -108,8 +138,8 @@ class File implements IDatasource
         $data_2 = array();
         $delimiter = $delimiters[0];
         foreach ($delimiters as $d) {
-            $firstRow = str_getcsv($data, "\n")[0];
-            $data_1 = str_getcsv($firstRow, $d);
+            //$firstRow = str_getcsv($data, "\n")[0];
+            $data_1 = str_getcsv($data, $d);
             if (sizeof($data_1) > sizeof($data_2)) {
                 $delimiter = $d;
                 $data_2 = $data_1;

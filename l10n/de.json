@@ -108,7 +108,11 @@
     "Delete data before load": "Daten vor der Ladung löschen",
     "Favorites": "Favoriten",
     "Analytics - Advanced configuration": "Analytics - Erweiterte Einstellungen",
-    "Report was changed - Press here to save the current state": "Bericht wurde geändert - Hier klicken um zu speichern"
+    "Report was changed - Press here to save the current state": "Bericht wurde geändert - Hier klicken um zu speichern",
+    "Select columns": "Spalten wählen",
+    "e.g. 1,2,4 or leave empty": "z.B 1,2,4 oder leer lassen",
+    "Ignore leading rows": "Führende Zeilen ignorieren",
+    "Number of rows": "Anzahl Zeilen"
   },
   "pluralForm": ""
 }
