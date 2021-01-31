@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Db\StorageMapper;
+use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -20,20 +21,20 @@ class StorageController extends Controller
 {
     private $logger;
     private $StorageMapper;
-    private $ThresholdController;
+    private $ThresholdService;
 
     public function __construct(
         string $AppName,
         IRequest $request,
         ILogger $logger,
         StorageMapper $StorageMapper,
-        ThresholdController $ThresholdController
+        ThresholdService $ThresholdService
     )
     {
         parent::__construct($AppName, $request);
         $this->logger = $logger;
         $this->StorageMapper = $StorageMapper;
-        $this->ThresholdController = $ThresholdController;
+        $this->ThresholdService = $ThresholdService;
     }
 
     /**
@@ -97,7 +98,7 @@ class StorageController extends Controller
         //$timestamp = $this->convertGermanDateFormat($timestamp);
         $value = $this->floatvalue($value);
 
-        $validate = $this->ThresholdController->validate($datasetId, $dimension1, $dimension2, $value);
+        $validate = $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
         $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $value, $user_id);
 
         $insert = $update = 0;

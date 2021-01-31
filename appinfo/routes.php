@@ -19,12 +19,15 @@ return [
         // Dataset
         ['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
         ['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
+        ['name' => 'dataset#import', 'url' => '/dataset/import/', 'verb' => 'POST'],
         ['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataset#updateOptions', 'url' => '/dataset/{datasetId}', 'verb' => 'POST'],
-        ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#getOwnFavoriteDatasets', 'url' => '/favorites', 'verb' => 'GET'],
         ['name' => 'dataset#setFavorite', 'url' => '/favorite/{datasetId}', 'verb' => 'POST'],
+        ['name' => 'dataset#export', 'url' => '/dataset/export/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'dataset#import', 'url' => '/dataset/import/', 'verb' => 'POST'],
 
         // Data Output
         ['name' => 'output#index', 'url' => '/data', 'verb' => 'GET'],

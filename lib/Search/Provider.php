@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace OCA\Analytics\Search;
 
-use OCA\Analytics\Controller\DatasetController;
+use OCA\Analytics\Service\DatasetService;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -27,19 +27,17 @@ class Provider implements IProvider
 
     /** @var IL10N */
     private $l10n;
-
     /** @var IURLGenerator */
     private $urlGenerator;
-
-    private $datasetController;
+    private $DatasetService;
 
     public function __construct(IL10N $l10n,
                                 IURLGenerator $urlGenerator,
-                                DatasetController $datasetController)
+                                DatasetService $DatasetService)
     {
         $this->l10n = $l10n;
         $this->urlGenerator = $urlGenerator;
-        $this->datasetController = $datasetController;
+        $this->DatasetService = $DatasetService;
     }
 
     public function getId(): string
@@ -49,7 +47,7 @@ class Provider implements IProvider
 
     public function search(IUser $user, ISearchQuery $query): SearchResult
     {
-        $datasets = $this->datasetController->search($query->getTerm());
+        $datasets = $this->DatasetService->search($query->getTerm());
         $result = [];
 
         foreach ($datasets as $dataset) {

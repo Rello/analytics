@@ -354,6 +354,25 @@ OCA.Analytics.Navigation = {
         evt.stopPropagation();
     },
 
+    handleImportButton: function () {
+        const mimeparts = ['text/csv', 'text/plain'];
+        OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Navigation.importDataset.bind(this), false, mimeparts, true, 1);
+    },
+
+    importDataset: function (path) {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/dataset/import/'),
+            data: {
+                'path': path,
+            },
+            success: function () {
+                OCA.Analytics.Navigation.init();
+            }
+        });
+
+    },
+
     getDatasets: function (datasetId) {
         $.ajax({
             type: 'GET',
@@ -372,5 +391,8 @@ OCA.Analytics.Navigation = {
             }
         });
     },
-
 };
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
+});

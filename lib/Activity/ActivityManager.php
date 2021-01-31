@@ -81,7 +81,7 @@ class ActivityManager
      */
     private function createEvent($datasetId, $eventType, $eventSubject, string $user_id = null)
     {
-        $datasetName = $datasetId !== 0 ? $this->DatasetMapper->getOwnDataset($datasetId)['name'] : '';
+        $datasetName = $datasetId !== 0 ? $this->DatasetMapper->read($datasetId)['name'] : '';
         if ($user_id) $this->userId = $user_id;
         $event = $this->manager->generateEvent();
         $event->setApp('analytics')

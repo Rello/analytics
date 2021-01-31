@@ -12,8 +12,8 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Db\DatasetMapper;
-use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
+use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -21,7 +21,7 @@ use OCP\IRequest;
 class ThresholdController extends Controller
 {
     private $logger;
-    private $ThresholdMapper;
+    private $ThresholdService;
     private $DatasetMapper;
     private $NotificationManager;
 
@@ -29,14 +29,14 @@ class ThresholdController extends Controller
         $appName,
         IRequest $request,
         ILogger $logger,
-        ThresholdMapper $ThresholdMapper,
+        ThresholdService $ThresholdService,
         NotificationManager $NotificationManager,
         DatasetMapper $DatasetMapper
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
-        $this->ThresholdMapper = $ThresholdMapper;
+        $this->ThresholdService = $ThresholdService;
         $this->NotificationManager = $NotificationManager;
         $this->DatasetMapper = $DatasetMapper;
     }
@@ -50,7 +50,7 @@ class ThresholdController extends Controller
      */
     public function read(int $datasetId)
     {
-        return $this->ThresholdMapper->getThresholdsByDataset($datasetId);
+        return $this->ThresholdService->read($datasetId);
     }
 
     /**
@@ -66,8 +66,7 @@ class ThresholdController extends Controller
      */
     public function create(int $datasetId, $dimension1, $option, $value, int $severity)
     {
-        $value = $this->floatvalue($value);
-        return $this->ThresholdMapper->createThreshold($datasetId, $dimension1, $value, $option, $severity);
+        return $this->ThresholdService->create($datasetId, $dimension1, $value, $option, $severity);
     }
 
     /**
@@ -79,7 +78,7 @@ class ThresholdController extends Controller
      */
     public function delete(int $thresholdId)
     {
-        $this->ThresholdMapper->deleteThreshold($thresholdId);
+        $this->ThresholdService->delete($thresholdId);
         return true;
     }
 
@@ -96,31 +95,6 @@ class ThresholdController extends Controller
      */
     public function validate(int $datasetId, $dimension1, $dimension2, $value)
     {
-        $result = '';
-        $thresholds = $this->ThresholdMapper->getSevOneThresholdsByDataset($datasetId);
-        $datasetMetadata = $this->DatasetMapper->getDatasetOptions($datasetId);
-
-        foreach ($thresholds as $threshold) {
-            //$this->logger->error('ThresholdController 104: ' . $threshold['value'].'==='.$threshold['option'].'==='.$value);
-            if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
-                if (version_compare($value, $threshold['value'], $threshold['option'])) {
-                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $datasetId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $datasetMetadata['user_id']);
-                    $result = 'Threshold value met';
-                }
-            }
-        }
-        return $result;
-    }
-
-    private function floatvalue($val)
-    {
-        $val = str_replace(",", ".", $val);
-        $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        $val = preg_replace('/[^0-9-.]+/', '', $val);
-        if (is_numeric($val)) {
-            return number_format(floatval($val), 2, '.', '');
-        } else {
-            return false;
-        }
+        return $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
     }
 }

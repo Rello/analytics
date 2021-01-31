@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -30,7 +31,7 @@ class ApiDataController extends ApiController
     private $logger;
     private $userSession;
     private $ActivityManager;
-    private $DatasetController;
+    private $DatasetService;
     private $StorageController;
 
     public function __construct(
@@ -39,7 +40,7 @@ class ApiDataController extends ApiController
         ILogger $logger,
         IUserSession $userSession,
         ActivityManager $ActivityManager,
-        DatasetController $DatasetController,
+        DatasetService $DatasetService,
         StorageController $StorageController
     )
     {
@@ -51,7 +52,7 @@ class ApiDataController extends ApiController
         $this->logger = $logger;
         $this->userSession = $userSession;
         $this->ActivityManager = $ActivityManager;
-        $this->DatasetController = $DatasetController;
+        $this->DatasetService = $DatasetService;
         $this->StorageController = $StorageController;
     }
 
@@ -68,7 +69,7 @@ class ApiDataController extends ApiController
     {
         $params = $this->request->getParams();
         //$this->logger->debug($datasetId);
-        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -106,7 +107,7 @@ class ApiDataController extends ApiController
         $message = 'No -data- parameter';
         $params = $this->request->getParams();
         //$this->logger->debug('array: ' . json_encode($params));
-        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -146,7 +147,7 @@ class ApiDataController extends ApiController
         $message = 'No -delete- parameter';
         $params = $this->request->getParams();
         //$this->logger->debug('array: ' . json_encode($params));
-        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 

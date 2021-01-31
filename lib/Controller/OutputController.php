@@ -12,7 +12,9 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\DataSession;
+use OCA\Analytics\Service\DatasetService;
 use OCA\Analytics\Service\ShareService;
+use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -25,14 +27,14 @@ use OCP\IRequest;
 class OutputController extends Controller
 {
     private $logger;
-    private $DatasetController;
+    private $DatasetService;
     private $rootFolder;
     private $userId;
     private $DataSession;
     private $ShareService;
     private $DatasourceController;
     private $StorageController;
-    private $ThresholdController;
+    private $ThresholdService;
 
     public function __construct(
         string $AppName,
@@ -40,24 +42,24 @@ class OutputController extends Controller
         $userId,
         ILogger $logger,
         IRootFolder $rootFolder,
-        DatasetController $DatasetController,
+        DatasetService $DatasetService,
         ShareService $ShareService,
         DataSession $DataSession,
         DatasourceController $DatasourceController,
         StorageController $StorageController,
-        ThresholdController $ThresholdController
+        ThresholdService $ThresholdService
     )
     {
         parent::__construct($AppName, $request);
         $this->userId = $userId;
         $this->logger = $logger;
-        $this->DatasetController = $DatasetController;
+        $this->DatasetService = $DatasetService;
         $this->rootFolder = $rootFolder;
         $this->DataSession = $DataSession;
         $this->ShareService = $ShareService;
         $this->DatasourceController = $DatasourceController;
         $this->StorageController = $StorageController;
-        $this->ThresholdController = $ThresholdController;
+        $this->ThresholdService = $ThresholdService;
     }
 
     /**
@@ -71,7 +73,7 @@ class OutputController extends Controller
      */
     public function read(int $datasetId, $filteroptions)
     {
-        $datasetMetadata = $this->DatasetController->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (empty($datasetMetadata)) $datasetMetadata = $this->ShareService->getSharedDataset($datasetId);
 
         if (!empty($datasetMetadata)) {
@@ -115,7 +117,7 @@ class OutputController extends Controller
             unset($result['error']);
         }
 
-        $result['thresholds'] = $this->ThresholdController->read($datasetMetadata['id']);
+        $result['thresholds'] = $this->ThresholdService->read($datasetMetadata['id']);
 
         unset($datasetMetadata['parent']
             , $datasetMetadata['user_id']

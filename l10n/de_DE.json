@@ -112,7 +112,9 @@
     "Select columns": "Spalten wählen",
     "e.g. 1,2,4 or leave empty": "z.B 1,2,4 oder leer lassen",
     "Ignore leading rows": "Führende Zeilen ignorieren",
-    "Number of rows": "Anzahl Zeilen"
+    "Number of rows": "Anzahl Zeilen",
+    "Import report": "Bericht importieren",
+    "Export report": "Bericht exportieren"
   },
   "pluralForm": ""
 }

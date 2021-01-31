@@ -44,7 +44,7 @@ class StorageMapper
      * @param array $options
      * @return array
      */
-    public function getData(int $dataset, $options)
+    public function getData(int $dataset, $options = '')
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)

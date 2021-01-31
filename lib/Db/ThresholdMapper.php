@@ -93,14 +93,4 @@ class ThresholdMapper
         $sql->execute();
         return true;
     }
-
-    public function deleteThresholdByDataset($datasetId)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
-        $sql->execute();
-        return true;
-    }
 }

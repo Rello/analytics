@@ -170,6 +170,7 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetValue').value = data['value'];
                     document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
                     document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleUpdateButton);
+                    document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleExportButton);
 
                     document.getElementById('sidebarDatasetName').addEventListener('change', OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged);
                     document.getElementById('sidebarDatasetParent').addEventListener('change', OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged);
@@ -227,6 +228,10 @@ OCA.Analytics.Sidebar.Dataset = {
 
     handleUpdateButton: function () {
         OCA.Analytics.Sidebar.Backend.updateDataset();
+    },
+
+    handleExportButton: function () {
+        OCA.Analytics.Sidebar.Backend.exporteDataset();
     },
 
     handleDatasourceChange: function () {
@@ -644,6 +649,11 @@ OCA.Analytics.Sidebar.Share = {
 };
 
 OCA.Analytics.Sidebar.Backend = {
+
+    exporteDataset: function () {
+        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        window.open(OC.generateUrl('apps/analytics/dataset/export/') + datasetId, '_blank')
+    },
 
     deleteDataset: function (datasetId) {
         $.ajax({

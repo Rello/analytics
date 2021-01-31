@@ -11,7 +11,7 @@
 
 namespace OCA\Analytics\Command;
 
-use OCA\Analytics\Controller\DataloadController;
+use OCA\Analytics\Service\DataloadService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,13 +20,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Load extends Command
 {
 
-    private $DataloadController;
+    private $DataloadService;
 
     public function __construct(
-        DataloadController $DataloadController
+        DataloadService $DataloadService
     )
     {
-        $this->DataloadController = $DataloadController;
+        $this->DataloadService = $DataloadService;
         parent::__construct();
     }
 
@@ -45,6 +45,6 @@ class Load extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dataloadId = $input->getArgument('dataloadId');
-        $this->DataloadController->execute((int)$dataloadId);
+        $this->DataloadService->execute((int)$dataloadId);
     }
 }

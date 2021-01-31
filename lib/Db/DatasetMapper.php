@@ -186,7 +186,7 @@ class DatasetMapper
      * @param string|null $user_id
      * @return array
      */
-    public function getOwnDataset(int $id, string $user_id = null)
+    public function read(int $id, string $user_id = null)
     {
         if ($user_id) $this->userId = $user_id;
 

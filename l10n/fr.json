@@ -114,7 +114,9 @@
     "Select columns": "Select columns",
     "e.g. 1,2,4 or leave empty": "e.g. 1,2,4 or leave empty",
     "Ignore leading rows": "Ignore leading rows",
-    "Number of rows": "Number of rows"
+    "Number of rows": "Number of rows",
+    "Import report": "Import report",
+    "Export report": "Export report"
   },
   "pluralForm": ""
 }
