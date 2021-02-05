@@ -50,12 +50,11 @@ class DatasetController extends Controller
      *
      * @NoAdminRequired
      * @param string $file
-     * @param string $link
      * @return int
      */
-    public function create($file = '', $link = '')
+    public function create($file = '')
     {
-        return $this->DatasetService->create($file, $link);
+        return $this->DatasetService->create($file);
     }
 
     /**
@@ -162,13 +161,16 @@ class DatasetController extends Controller
      * Import Dataset
      *
      * @NoAdminRequired
-     * @param string $path
+     * @param string|null $path
+     * @param string|null $raw
      * @return DataResponse
+     * @throws \OCP\Files\NotFoundException
+     * @throws \OCP\Files\NotPermittedException
      */
-    public function import(string $path)
+    public function import(string $path = null, string $raw = null)
     {
-        $this->logger->error('DatasetController: import ' . $path);
-        return new DataResponse($this->DatasetService->import($path));
+        //$this->logger->error('DatasetController: import ' . $path);
+        return new DataResponse($this->DatasetService->import($path, $raw));
     }
 
 }

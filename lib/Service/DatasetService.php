@@ -149,26 +149,15 @@ class DatasetService
      * create new dataset
      *
      * @param string $file
-     * @param string $link
      * @return int
      */
-    public function create($file = '', $link = '')
+    public function create($file = '')
     {
         //$this->logger->error('datasetcontroller 82: '.$file);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
         $datasetId = $this->DatasetMapper->createDataset();
 
-        if ($file === 'DEMO') {
-            $name = 'Demo Report';
-            $subheader = 'CSV Demo Data from GitHub';
-            $parent = 0;
-            $type = DatasourceController::DATASET_TYPE_EXTERNAL_FILE;
-            $link = 'https://raw.githubusercontent.com/Rello/analytics/master/sample_data/sample1.csv';
-            $visualization = 'ct';
-            $chart = 'line';
-            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '');
-            $this->setFavorite($datasetId, 'true');
-        } elseif ($file !== '') {
+        if ($file !== '') {
             $name = explode('.', end(explode('/', $file)))[0];
             $subheader = $file;
             $parent = 0;
@@ -227,15 +216,22 @@ class DatasetService
     /**
      * Import Dataset from File
      *
-     * @param string $path
+     * @param string|null $path
+     * @param string|null $raw
      * @return int
      * @throws \OCP\Files\NotFoundException
      * @throws \OCP\Files\NotPermittedException
      */
-    public function import(string $path = '')
+    public function import(string $path = null, string $raw = null)
     {
-        $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
-        $data = $file->getContent();
+        if ($path !== '') {
+            $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
+            $data = $file->getContent();
+        } else if ($raw !== null) {
+            $data = $raw;
+        } else {
+            return false;
+        }
         $data = json_decode($data, true);
 
         $dataset = $data['dataset'];
@@ -277,9 +273,11 @@ class DatasetService
             isset($dData[0]) ? $dimension1 = $dData[0] : $dimension1 = null;
             isset($dData[1]) ? $dimension2 = $dData[1] : $dimension2 = null;
             isset($dData[2]) ? $value = $dData[2] : $value = null;
-            $this->logger->error('DatasetService : data:' . $datasetId . $dimension1 . $dimension2 . $value);
-
             $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $value);
+        }
+
+        if (isset($data['favorite'])) {
+            $this->setFavorite($datasetId, $data['favorite']);
         }
 
         return $datasetId;
@@ -293,9 +291,11 @@ class DatasetService
      */
     public function export(int $datasetId)
     {
+        $result = array();
         $result['dataset'] = $this->DatasetMapper->read($datasetId);
         $result['dataload'] = $this->DataloadMapper->read($datasetId);
         $result['threshold'] = $this->ThresholdService->read($datasetId);
+        $result['favorite'] = '';
 
         if ($result['dataset']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             $result['data'] = $this->StorageMapper->getData($datasetId);

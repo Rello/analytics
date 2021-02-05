@@ -16,7 +16,6 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DatasourceController;
 use OCA\Analytics\Controller\StorageController;
 use OCA\Analytics\Db\DataloadMapper;
-use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
@@ -125,7 +124,7 @@ class DataloadService
      * execute a dataload from datasource and store into dataset
      *
      * @param int $dataloadId
-     * @return DataResponse
+     * @return array
      * @throws Exception
      */
     public function execute(int $dataloadId)
