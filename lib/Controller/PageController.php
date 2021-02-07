@@ -20,13 +20,17 @@ use OCP\IConfig;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUserSession;
 
 /**
  * Controller class for main page.
  */
 class PageController extends Controller
 {
-    private $configManager;
+    /** @var IConfig */
+    protected $config;
+    /** @var IUserSession */
+    private $userSession;
     private $logger;
     /** @var IURLGenerator */
     private $url;
@@ -39,17 +43,19 @@ class PageController extends Controller
         string $appName,
         IRequest $request,
         ILogger $logger,
-        IConfig $configManager,
         IURLGenerator $url,
         ShareService $ShareService,
+        IUserSession $userSession,
+        IConfig $config,
         DataSession $DataSession
     )
     {
         parent::__construct($appName, $request);
-        $this->configManager = $configManager;
         $this->logger = $logger;
         $this->url = $url;
         $this->ShareService = $ShareService;
+        $this->config = $config;
+        $this->userSession = $userSession;
         $this->DataSession = $DataSession;
     }
 
@@ -61,6 +67,8 @@ class PageController extends Controller
     {
         $params = array();
         $params['token'] = '';
+        $user = $this->userSession->getUser();
+        $params['wizzard'] = $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0);
         return new TemplateResponse($this->appName, 'main', $params);
     }
 

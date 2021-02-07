@@ -23,55 +23,6 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Navigation.getDatasets(datasetId);
     },
 
-    createDemoReport: function () {
-        OCA.Analytics.Backend.createDataset('DEMO');
-    },
-
-    createDemoGithubReport: function () {
-        OC.dialogs.prompt(
-            t('analytics', 'Crate a report which to monitor the realtime download count of your GitHub repository. Enter the GitHub User/Repository. The \'/\' is important.'),
-            t('analytics', 'Quickstart: GitHub download statistics'),
-            function (button, val) {
-                if (button === true) {
-                    OCA.Analytics.Navigation.quickstartTemp = val;
-                    $.ajax({
-                        type: 'POST',
-                        url: OC.generateUrl('apps/analytics/dataset'),
-                        data: {
-                            'file': 'DEMO',
-                        },
-                        success: function (data) {
-                            OCA.Analytics.Navigation.quickstartId = data;
-                            let datasetName = OCA.Analytics.Navigation.quickstartTemp.split("/")[1];
-                            $.ajax({
-                                type: 'PUT',
-                                url: OC.generateUrl('apps/analytics/dataset/') + data,
-                                data: {
-                                    'name': datasetName[0].toUpperCase() + datasetName.substring(1),
-                                    'subheader': 'GitHub download statistics',
-                                    'parent': 0,
-                                    'type': OCA.Analytics.TYPE_GIT,
-                                    'link': OCA.Analytics.Navigation.quickstartTemp,
-                                    'visualization': 'ct',
-                                    'chart': 'column',
-                                    'chartoptions': '',
-                                    'dataoptions': '',
-                                    'dimension1': '',
-                                    'dimension2': '',
-                                    'value': ''
-                                },
-                                success: function () {
-                                    OCA.Analytics.Navigation.init(OCA.Analytics.Navigation.quickstartId);
-                                }
-                            });
-                        }
-                    });
-                }
-            },
-            true,
-            "user/repo");
-    },
-
     buildNavigation: function (data) {
         document.getElementById('navigationDatasets').innerHTML = '';
         let li = document.createElement('li');
@@ -259,8 +210,9 @@ OCA.Analytics.Navigation = {
     },
 
     handleNewDatasetButton: function () {
-        OCA.Analytics.Backend.createDataset();
+        OCA.Analytics.Navigation.createDataset();
     },
+
     handleOverviewButton: function () {
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
@@ -336,7 +288,7 @@ OCA.Analytics.Navigation = {
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Add to favorites');
             document.getElementById('fav-' + datasetId).remove();
         }
-        OCA.Analytics.Backend.favoriteUpdate(datasetId, isFavorite);
+        OCA.Analytics.Navigation.favoriteUpdate(datasetId, isFavorite);
     },
 
     handleReportClicked: function (evt) {
@@ -359,18 +311,32 @@ OCA.Analytics.Navigation = {
         OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Navigation.importDataset.bind(this), false, mimeparts, true, 1);
     },
 
-    importDataset: function (path) {
+    importDataset: function (path, raw) {
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataset/import/'),
             data: {
                 'path': path,
+                'raw': raw
             },
             success: function () {
                 OCA.Analytics.Navigation.init();
             }
         });
 
+    },
+
+    createDataset: function (file = '') {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/dataset'),
+            data: {
+                'file': file,
+            },
+            success: function (data) {
+                OCA.Analytics.Navigation.init(data);
+            }
+        });
     },
 
     getDatasets: function (datasetId) {
@@ -391,8 +357,24 @@ OCA.Analytics.Navigation = {
             }
         });
     },
+
+    favoriteUpdate: function (datasetId, isFavorite) {
+        let params = 'favorite=' + isFavorite;
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', OC.generateUrl('apps/analytics/favorite/' + datasetId, true), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(params);
+    },
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+    OCA.Analytics.WhatsNew.whatsnew();
+
     document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
+    document.getElementById('wizzartStart').addEventListener('click', OCA.Analytics.Wizzard.show);
+    if (parseInt(document.getElementById('analyticsWizzard').value) === 0) {
+        OCA.Analytics.Wizzard.show();
+    }
 });

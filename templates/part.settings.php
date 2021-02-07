@@ -20,19 +20,24 @@
     </div>
 
     <div id="app-settings-content">
-        <ul id="data-settings">
-            <li class="data-settings-item icon-external">
-                <button id="importDatasetButton" style="padding: 0 20px;">
+        <ul id="analytics-settings">
+            <li class="analytics-settings-item icon-external">
+                <button id="importDatasetButton" style="padding: 0 25px;">
                     <?php p($l->t('Import report')); ?>
                 </button>
             </li>
-            <li class="data-settings-item icon-external">
-                <a href="https://github.com/rello/analytics/wiki/donate" target="_blank" style="padding: 0 20px;">
+            <li class="analytics-settings-item icon-external">
+                <a href="https://github.com/rello/analytics/wiki/donate" target="_blank" style="padding: 0 25px;">
                     <?php p($l->t('Do you like this app?')); ?>
                 </a>
             </li>
-            <li class="data-settings-item icon-info">
-                <a href="https://github.com/rello/analytics/wiki" target="_blank" style="padding: 0 20px;">
+            <li class="analytics-settings-item icon-info">
+                <a id="wizzartStart" style="padding: 0 25px;">
+                    <?php p($l->t('About')); ?>
+                </a>
+            </li>
+            <li class="analytics-settings-item icon-info">
+                <a href="https://github.com/rello/analytics/wiki" target="_blank" style="padding: 0 25px;">
                     <?php p($l->t('More information…')); ?>
                 </a>
             </li>

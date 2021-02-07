@@ -19,7 +19,6 @@ return [
         // Dataset
         ['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
         ['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
-        ['name' => 'dataset#import', 'url' => '/dataset/import/', 'verb' => 'POST'],
         ['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
@@ -71,6 +70,9 @@ return [
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/2.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#addDataV2', 'url' => '/api/2.0/adddata/{datasetId}', 'verb' => 'POST'],
         ['name' => 'ApiData#deleteDataV2', 'url' => '/api/2.0/deletedata/{datasetId}', 'verb' => 'POST'],
+
+        // wizzard
+        ['name' => 'wizzard#dismiss', 'url' => '/wizzard', 'verb' => 'POST'],
 
         // whatsnew
         ['name' => 'whatsNew#get', 'url' => '/whatsnew', 'verb' => 'GET'],

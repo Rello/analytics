@@ -21,15 +21,13 @@
   margin-left: 20px;
 }
 
-#data-settings li > a {
-  line-height: 30px;
-  min-height: 30px;
-}
+#analytics-settings li.analytics-settings-item {
+    background-size: 15px 15px;
+    background-position: 0 center;
+    opacity: 0.8;
+    line-height: 30px;
+    min-height: 30px;
 
-#data-settings li.data-settings-item {
-  background-size: 15px 15px;
-  background-position: 0 center;
-  opacity: 0.57;
 }
 
 #reportHeader {

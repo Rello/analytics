@@ -60,7 +60,7 @@ OCA.Analytics.Core = {
         if (urlHash.length > 1) {
             if (urlHash[2] === 'f') {
                 window.location.href = '#';
-                OCA.Analytics.Backend.createDataset(urlHash.substring(3));
+                OCA.Analytics.Navigation.createDataset(urlHash.substring(3));
             } else if (urlHash[2] === 'r') {
                 OCA.Analytics.Navigation.init(urlHash.substring(4));
             }
@@ -241,6 +241,11 @@ OCA.Analytics.UI = {
                     gridLines: {
                         display: false,
                     },
+                    ticks: {
+                        callback: function (value) {
+                            return value.toLocaleString();
+                        },
+                    },
                 }],
                 xAxes: [{
                     type: 'category',
@@ -399,83 +404,6 @@ OCA.Analytics.UI = {
             OC.Notification.showTemporary(message);
         }
     },
-
-    whatsNewSuccess: function (data, statusText, xhr) {
-        if (xhr.status !== 200) {
-            return
-        }
-
-        let item, menuItem, text, icon
-
-        const div = document.createElement('div')
-        div.classList.add('popovermenu', 'open', 'whatsNewPopover', 'menu-left')
-
-        const list = document.createElement('ul')
-
-        // header
-        item = document.createElement('li')
-        menuItem = document.createElement('span')
-        menuItem.className = 'menuitem'
-
-        text = document.createElement('span')
-        text.innerText = t('core', 'New in') + ' ' + data['product']
-        text.className = 'caption'
-        menuItem.appendChild(text)
-
-        icon = document.createElement('span')
-        icon.className = 'icon-close'
-        icon.onclick = function () {
-            OCA.Analytics.Backend.whatsnewDismiss(data['version'])
-        }
-        menuItem.appendChild(icon)
-
-        item.appendChild(menuItem)
-        list.appendChild(item)
-
-        // Highlights
-        for (const i in data['whatsNew']['regular']) {
-            const whatsNewTextItem = data['whatsNew']['regular'][i]
-            item = document.createElement('li')
-
-            menuItem = document.createElement('span')
-            menuItem.className = 'menuitem'
-
-            icon = document.createElement('span')
-            icon.className = 'icon-checkmark'
-            menuItem.appendChild(icon)
-
-            text = document.createElement('p')
-            text.innerHTML = _.escape(whatsNewTextItem)
-            menuItem.appendChild(text)
-
-            item.appendChild(menuItem)
-            list.appendChild(item)
-        }
-
-        // Changelog URL
-        if (!_.isUndefined(data['changelogURL'])) {
-            item = document.createElement('li')
-
-            menuItem = document.createElement('a')
-            menuItem.href = data['changelogURL']
-            menuItem.rel = 'noreferrer noopener'
-            menuItem.target = '_blank'
-
-            icon = document.createElement('span')
-            icon.className = 'icon-link'
-            menuItem.appendChild(icon)
-
-            text = document.createElement('span')
-            text.innerText = t('core', 'View changelog')
-            menuItem.appendChild(text)
-
-            item.appendChild(menuItem)
-            list.appendChild(item)
-        }
-
-        div.appendChild(list)
-        document.body.appendChild(div)
-    }
 };
 
 OCA.Analytics.Datasource = {
@@ -638,50 +566,6 @@ OCA.Analytics.Backend = {
             }
         });
     },
-
-    createDataset: function (file = '') {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset'),
-            data: {
-                'file': file,
-            },
-            success: function (data) {
-                OCA.Analytics.Navigation.init(data);
-            }
-        });
-    },
-
-    whatsnew: function (options) {
-        options = options || {}
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/whatsnew'),
-            data: {'format': 'json'},
-            success: options.success || function (data, statusText, xhr) {
-                OCA.Analytics.UI.whatsNewSuccess(data, statusText, xhr);
-            },
-        });
-    },
-
-    whatsnewDismiss: function (version) {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/whatsnew'),
-            data: {version: encodeURIComponent(version)}
-        })
-        $('.whatsNewPopover').remove();
-    },
-
-    favoriteUpdate: function (datasetId, isFavorite) {
-        let params = 'favorite=' + isFavorite;
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', OC.generateUrl('apps/analytics/favorite/' + datasetId, true), true);
-        xhr.setRequestHeader('requesttoken', OC.requestToken);
-        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send(params);
-    },
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -689,12 +573,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('analytics-warning').classList.add('hidden');
 
     if (document.getElementById('sharingToken').value === '') {
-        OCA.Analytics.Backend.whatsnew();
         document.getElementById('analytics-intro').removeAttribute('hidden');
         OCA.Analytics.Core.initApplication();
         if (document.getElementById('advanced').value === 'false') {
-            document.getElementById('createDemoReport').addEventListener('click', OCA.Analytics.Navigation.createDemoReport);
-            document.getElementById('createDemoGithubReport').addEventListener('click', OCA.Analytics.Navigation.createDemoGithubReport);
             document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openOptionsDialog);
             document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
