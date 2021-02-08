@@ -87,18 +87,22 @@ class Json implements IDatasource
 
         //$this->logger->debug($curlResult);
         $json = json_decode($curlResult, true);
-        $array = $this->get_nested_array_value($json, $path);
+        $paths = explode(',', $path);
 
-        if (is_array($array)) {
-            foreach ($array as $key => $value) {
-                $pathArray = explode('/', $path);
-                $group = end($pathArray);
-                array_push($data, [$group, $key, $value]);
+        foreach ($paths as $singlePath) {
+            $array = $this->get_nested_array_value($json, $singlePath);
+
+            if (is_array($array)) {
+                foreach ($array as $key => $value) {
+                    $pathArray = explode('/', $singlePath);
+                    $group = end($pathArray);
+                    array_push($data, [$group, $key, $value]);
+                }
+            } else {
+                $pathArray = explode('/', $singlePath);
+                $key = end($pathArray);
+                array_push($data, ['', $key, $array]);
             }
-        } else {
-            $pathArray = explode('/', $path);
-            $key = end($pathArray);
-            array_push($data, ['', $key, $array]);
         }
 
         $header = array();
