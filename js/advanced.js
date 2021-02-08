@@ -217,8 +217,20 @@ OCA.Analytics.Advanced.Dataload = {
         let mode;
         if (document.getElementById('testrunCheckbox').checked) {
             mode = 'simulate';
+            OC.dialogs.message(
+                '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>',
+                t('analytics', 'Datasource simulation'),
+                'info',
+                OC.dialogs.OK_BUTTON,
+                function () {
+
+                },
+                true,
+                true
+            );
         } else {
             mode = 'execute';
+            OCA.Analytics.UI.notification('success', t('analytics', 'Load started'));
         }
 
         $.ajax({
@@ -229,16 +241,7 @@ OCA.Analytics.Advanced.Dataload = {
             },
             success: function (data) {
                 if (mode === 'simulate') {
-                    OC.dialogs.message(
-                        JSON.stringify(data.data),
-                        t('analytics', 'Datasource simulation'),
-                        'info',
-                        OC.dialogs.OK_BUTTON,
-                        function () {
-                        },
-                        true,
-                        true
-                    );
+                    document.querySelector("[id*=oc-dialog-]").innerHTML = JSON.stringify(data.data);
                 } else {
                     if (data.error === 0) {
                         OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));

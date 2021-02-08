@@ -117,7 +117,18 @@ class DatasourceController extends Controller
     public function read(int $datasourceId, $option)
     {
         //$this->logger->debug('DatasourceController 66: Datasource Id: ' . $datasource . ', Option: ' . json_encode($option));
-        return $this->getDatasources()[$datasourceId]->readData($option);
+        $result = $this->getDatasources()[$datasourceId]->readData($option);
+
+        if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
+            // if datasource should be timestamped/snapshoted
+            // shift values by one dimension and stores date in second column
+            $result['data'] = array_map(function ($tag) {
+                $columns = count($tag);
+                return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
+            }, $result['data']);
+            $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s"));
+        }
+        return $result;
     }
 
     /**
@@ -164,5 +175,30 @@ class DatasourceController extends Controller
             $datasources[$uniqueId] = \OC::$server->get($class);
         }
         return $datasources;
+    }
+
+    /**
+     * replace all values of one dimension
+     *
+     * @NoAdminRequired
+     * @param $Array
+     * @param $Find
+     * @param $Replace
+     * @return array
+     */
+    private function replaceDimension($Array, $Find, $Replace)
+    {
+        if (is_array($Array)) {
+            foreach ($Array as $Key => $Val) {
+                if (is_array($Array[$Key])) {
+                    $Array[$Key] = $this->replaceDimension($Array[$Key], $Find, $Replace);
+                } else {
+                    if ($Key === $Find) {
+                        $Array[$Key] = $Replace;
+                    }
+                }
+            }
+        }
+        return $Array;
     }
 }
