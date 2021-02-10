@@ -61,7 +61,7 @@ OCA.Analytics.Navigation = {
             typeIcon = 'icon-projects';
         } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
             if (document.getElementById('advanced').value === 'true') {
-                // don´t show shared reports in advanced config mode as no config is possible
+                // don´t show shared reports in advanced config mode at all as no config is possible
                 return;
             }
             typeIcon = 'icon-shared';
@@ -71,21 +71,18 @@ OCA.Analytics.Navigation = {
         } else {
             typeIcon = 'icon-external';
         }
+        a.classList.add(typeIcon);
 
-        if (typeIcon) {
-            a.classList.add(typeIcon);
-        }
         a.innerText = data['name'];
         a.dataset.id = data['id'];
         a.dataset.type = data['type'];
         a.dataset.name = data['name'];
+        li.appendChild(a);
 
         let ulSublist = document.createElement('ul');
         ulSublist.id = 'dataset-' + data['id'];
 
-        li.appendChild(a);
-
-        if (parseInt(data['favorite']) === 1 && typeINT !== OCA.Analytics.TYPE_SHARED) {
+        if (parseInt(data['favorite']) === 1) {
             let spanFav = document.createElement('span');
             spanFav.id = 'fav-' + data['id'];
             spanFav.classList.add('icon', 'icon-starred');
@@ -94,12 +91,10 @@ OCA.Analytics.Navigation = {
             li.appendChild(spanFav);
         }
 
-        if (typeINT !== OCA.Analytics.TYPE_SHARED) {
-            let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
-            let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
-            li.appendChild(divUtils);
-            li.appendChild(divMenu);
-        }
+        let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
+        let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
+        li.appendChild(divUtils);
+        li.appendChild(divMenu);
 
         if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
             li.appendChild(ulSublist);
@@ -108,6 +103,7 @@ OCA.Analytics.Navigation = {
             a.addEventListener('click', OCA.Analytics.Navigation.handleNavigationClicked);
         }
 
+        // add navigation row to navigation list or to an existing parent node
         let categoryList;
         if (parseInt(data['parent']) !== 0 && document.getElementById('dataset-' + data['parent'])) {
             categoryList = document.getElementById('dataset-' + data['parent']);
@@ -122,6 +118,7 @@ OCA.Analytics.Navigation = {
         divUtils.classList.add('app-navigation-entry-utils');
         let ulUtils = document.createElement('ul');
 
+        // add indicators when a dataload or schedule is existing
         if (document.getElementById('advanced').value === 'true') {
             if (data.schedules && parseInt(data.schedules) !== 0) {
                 let liScheduleButton = document.createElement('li');
@@ -150,6 +147,7 @@ OCA.Analytics.Navigation = {
         button.dataset.id = data.id;
         button.dataset.name = data.name;
         button.dataset.type = data.type;
+        button.classList.add('menuButton');
         liMenuButton.appendChild(button);
         ulUtils.appendChild(liMenuButton);
         divUtils.appendChild(ulUtils);
@@ -204,6 +202,10 @@ OCA.Analytics.Navigation = {
             favorite.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
             advanced.remove();
+        } else if (parseInt(data['type']) === OCA.Analytics.TYPE_SHARED) {
+            advanced.remove();
+            deleteReport.remove();
+            edit.remove();
         }
 
         return navigationMenu;
@@ -289,6 +291,7 @@ OCA.Analytics.Navigation = {
             document.getElementById('fav-' + datasetId).remove();
         }
         OCA.Analytics.Navigation.favoriteUpdate(datasetId, isFavorite);
+        document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
     },
 
     handleReportClicked: function (evt) {

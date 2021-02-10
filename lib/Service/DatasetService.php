@@ -69,16 +69,6 @@ class DatasetService
     {
         $ownDatasets = $this->DatasetMapper->getDatasets();
 
-        // process favorite check only on own datasets - not shared ones
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
-        foreach ($ownDatasets as &$ownDataset) {
-            $hasTag = 0;
-            if (is_array($favorites) and in_array($ownDataset['id'], $favorites)) {
-                $hasTag = 1;
-            }
-            $ownDataset['favorite'] = $hasTag;
-        }
-
         // get dataload indicators for icons shown in the advanced screen
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
         foreach ($dataloads as $dataload) {
@@ -98,8 +88,19 @@ class DatasetService
         $sharedDatasets = $this->ShareService->getSharedDatasets();
         foreach ($sharedDatasets as $sharedDataset) {
             if (!array_search($sharedDataset['id'], array_column($ownDatasets, 'id'))) {
+                $sharedDataset['type'] = '99';
+                $sharedDataset['parrent'] = '0';
                 array_push($ownDatasets, $sharedDataset);
             }
+        }
+
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
+        foreach ($ownDatasets as &$ownDataset) {
+            $hasTag = 0;
+            if (is_array($favorites) and in_array($ownDataset['id'], $favorites)) {
+                $hasTag = 1;
+            }
+            $ownDataset['favorite'] = $hasTag;
         }
 
         return new DataResponse($ownDatasets);

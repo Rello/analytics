@@ -2,14 +2,17 @@
 
 ## 3.3.0 - 2021-02-xx
 ### Added
+- First Start Wizzard [#103](https://github.com/rello/analytics/issues/103)
+- Export / import reports (incl data) [#100](https://github.com/rello/analytics/issues/100)
 - Parameter to skip header rows in csv and file datasource [#97](https://github.com/rello/analytics/issues/97)
-- Export / import reports (definition, dataloads, thresholds,
-  data) [#100](https://github.com/rello/analytics/issues/100)
-- Unified loading indicator
+- Allow multiple paths in one JSON load [wiki](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
+- Favorite also for shared reports [#107](https://github.com/rello/analytics/issues/107)
+- Unified loading indicator across app
 
 ### Fixed
 - SQL error for shared reports [#98](https://github.com/rello/analytics/issues/98)
 - Datasource options field in DB too short [#78](https://github.com/rello/analytics/issues/78)
+- JSON source not adding timestamp [#106](https://github.com/rello/analytics/issues/106)
 
 ## 3.2.0 - 2021-01-02
 ### Added

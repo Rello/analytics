@@ -124,8 +124,6 @@ class ShareService
                 break;
             }
         }
-        $sharedDataset['type'] = '99';
-        $sharedDataset['parrent'] = '0';
         return $sharedDataset;
     }
 
