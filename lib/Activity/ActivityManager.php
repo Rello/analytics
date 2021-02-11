@@ -101,7 +101,6 @@ class ActivityManager
     private function sendToUsers(IEvent $event)
     {
         $users = $this->ShareMapper->getSharedReceiver($event->getObjectId());
-        //$this->logger->error($users);
         foreach ($users as $user) {
             $event->setAffectedUser($user['uid_owner']);
             $this->manager->publish($event);

@@ -211,8 +211,7 @@ class ShareMapper
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('uid_owner')
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter(0)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
