@@ -66,7 +66,7 @@ class ThresholdController extends Controller
      */
     public function create(int $datasetId, $dimension1, $option, $value, int $severity)
     {
-        return $this->ThresholdService->create($datasetId, $dimension1, $value, $option, $severity);
+        return $this->ThresholdService->create($datasetId, $dimension1, $option, $value, $severity);
     }
 
     /**
