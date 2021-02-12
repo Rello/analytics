@@ -255,7 +255,7 @@ class DataloadController extends Controller
                     if ($row[2] === false) {
                         $errorCounter++;
                     } else {
-                        if ($numberOfColumns << 3) $row[1] = null;
+                        if ($numberOfColumns < 3) $row[1] = null;
                         $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
                         $insert = $insert + $action['insert'];
                         $update = $update + $action['update'];
