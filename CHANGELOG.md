@@ -14,6 +14,7 @@
 - Datasource options field in DB too short [#78](https://github.com/rello/analytics/issues/78)
 - JSON source not adding timestamp [#106](https://github.com/rello/analytics/issues/106)
 - Error in occ- and scheduled load [#109](https://github.com/rello/analytics/issues/109)
+- hide table information when not necessary
 
 ## 3.2.0 - 2021-01-02
 ### Added
