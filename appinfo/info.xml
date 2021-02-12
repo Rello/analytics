@@ -20,7 +20,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Sharing: user, groups, link
 
 ]]></description>
-    <version>3.2.0</version>
+    <version>3.2.1</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>
@@ -43,7 +43,7 @@ Visualize and share anything, from financial analysis to IoT logs.
         https://raw.githubusercontent.com/Rello/analytics/master/screenshots/architecture25.png
     </screenshot>
     <dependencies>
-        <php min-version="7.0" max-version="7.4"/>
+        <php min-version="7.0" max-version="8.0"/>
         <nextcloud min-version="20" max-version="21"/>
     </dependencies>
     <activity>

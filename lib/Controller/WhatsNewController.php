@@ -5,10 +5,10 @@
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the LICENSE.md file.
  *
- * @author Marcel Scherello <audioplayer@scherello.de>
+ * @author Marcel Scherello <analytics@scherello.de>
  * @author Arthur Schiwon <blizzz@arthur-schiwon.de>
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
- * @copyright 2020 Marcel Scherello
+ * @copyright 2021 Marcel Scherello
  */
 
 namespace OCA\Analytics\Controller;
