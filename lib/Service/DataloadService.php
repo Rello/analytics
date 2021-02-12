@@ -113,9 +113,7 @@ class DataloadService
     public function executeBySchedule($schedule)
     {
         $schedules = $this->DataloadMapper->getDataloadBySchedule($schedule);
-        //$this->logger->debug('DataLoadController 145: execute schedule '.$schedule);
         foreach ($schedules as $dataload) {
-            //$this->logger->debug('DataLoadController 147: execute dataload '.$dataload['id']);
             $this->execute($dataload['id']);
         }
     }
@@ -179,7 +177,6 @@ class DataloadService
             $option = json_decode($dataloadMetadata['option'], true);
             $option['user_id'] = $dataloadMetadata['user_id'];
 
-            //$this->logger->debug('DataLoadController 187: ' . $dataloadMetadata['option'] . '---' . json_encode($option));
             $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $option);
             $result['datasetId'] = $dataloadMetadata['dataset'];
 

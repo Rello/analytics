@@ -35,7 +35,6 @@ class Daily extends TimedJob
 
     public function run($arguments)
     {
-        //$this->logger->debug('Cron 38: Job started');
         try {
             $this->DataloadService->executeBySchedule('d');
         } catch (\Exception $e) {

@@ -116,7 +116,6 @@ class DatasourceController extends Controller
      */
     public function read(int $datasourceId, $option)
     {
-        //$this->logger->debug('DatasourceController 66: Datasource Id: ' . $datasourceId . ', Option: ' . json_encode($option));
         $result = $this->getDatasources()[$datasourceId]->readData($option);
 
         if (isset($option['timestamp']) and $option['timestamp'] === 'true') {

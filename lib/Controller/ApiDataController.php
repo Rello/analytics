@@ -68,7 +68,6 @@ class ApiDataController extends ApiController
     public function addData(int $datasetId)
     {
         $params = $this->request->getParams();
-        //$this->logger->debug($datasetId);
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
@@ -106,13 +105,11 @@ class ApiDataController extends ApiController
     {
         $message = 'No -data- parameter';
         $params = $this->request->getParams();
-        //$this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
         foreach ($params['data'] as $dataArray) {
-            //$this->logger->debug('array: ' . json_encode($dataArray));
 
             $dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
             $dimension2 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension2');

@@ -169,7 +169,6 @@ class DatasetController extends Controller
      */
     public function import(string $path = null, string $raw = null)
     {
-        //$this->logger->error('DatasetController: import ' . $path);
         return new DataResponse($this->DatasetService->import($path, $raw));
     }
 

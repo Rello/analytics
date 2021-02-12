@@ -119,7 +119,6 @@ class ThresholdService
         $datasetMetadata = $this->DatasetMapper->getDatasetOptions($datasetId);
 
         foreach ($thresholds as $threshold) {
-            //$this->logger->error('ThresholdController 104: ' . $threshold['value'].'==='.$threshold['option'].'==='.$value);
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
                 if (version_compare($value, $threshold['value'], $threshold['option'])) {
                     $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $datasetId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $datasetMetadata['user_id']);

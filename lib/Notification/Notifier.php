@@ -87,7 +87,6 @@ class Notifier implements INotifier
         $l = $this->l10nFactory->get('analytics', $languageCode);
         $parsedSubject = '';
 
-        //$this->logger->error('Notifier 90: '.$notification->getSubject());
         switch ($notification->getObjectType()) {
             case NotificationManager::SUBJECT_THRESHOLD:
                 $parsedSubject = $l->t("Report '{report}': {subject} reached the threshold of {rule} {value}");

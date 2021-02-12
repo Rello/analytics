@@ -7,14 +7,13 @@
 - Parameter to skip header rows in csv and file datasource [#97](https://github.com/rello/analytics/issues/97)
 - Allow multiple paths in one JSON load [wiki](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
 - Favorite also for shared reports [#107](https://github.com/rello/analytics/issues/107)
-- Unified loading indicator across app
+- Various UI cleanups and performance enhancements
 
 ### Fixed
 - SQL error for shared reports [#98](https://github.com/rello/analytics/issues/98)
 - Datasource options field in DB too short [#78](https://github.com/rello/analytics/issues/78)
 - JSON source not adding timestamp [#106](https://github.com/rello/analytics/issues/106)
 - Error in occ- and scheduled load [#109](https://github.com/rello/analytics/issues/109)
-- hide table information when not necessary
 
 ## 3.2.0 - 2021-01-02
 ### Added

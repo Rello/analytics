@@ -66,8 +66,6 @@ class ExternalFile implements IDatasource
      */
     public function readData($option): array
     {
-        //$this->logger->error('dataset path: ' . $datasetMetadata['link']);
-
         $data = array();
         $header = array();
         $headerrow = 0;

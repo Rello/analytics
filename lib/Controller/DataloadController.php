@@ -177,7 +177,6 @@ class DataloadController extends Controller
                 'validate' => $action['validate'],
             ];
 
-            //$this->logger->error('DataLoadController 88:'.$errorMessage);
             if ($errorMessage === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
             return new DataResponse($result);
         } else {
@@ -294,7 +293,6 @@ class DataloadController extends Controller
      */
     public function importFile(int $datasetId, $path)
     {
-        //$this->logger->debug('DataLoadController 378:' . $datasetId . $path);
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;

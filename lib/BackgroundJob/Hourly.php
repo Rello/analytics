@@ -36,7 +36,6 @@ class Hourly extends TimedJob
 
     public function run($arguments)
     {
-        //$this->logger->debug('Cron 38: Job started');
         try {
             $this->DataloadService->executeBySchedule('h');
         } catch (\Exception $e) {

@@ -85,7 +85,6 @@ class Json implements IDatasource
             $curlResult = '';
         }
 
-        //$this->logger->debug($curlResult);
         $json = json_decode($curlResult, true);
         $paths = explode(',', $path);
 
