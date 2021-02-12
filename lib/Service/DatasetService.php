@@ -245,12 +245,13 @@ class DatasetService
         isset($dataset['chart']) ? $chart = $dataset['chart'] : $chart = null;
         isset($dataset['chartoptions']) ? $chartoptions = $dataset['chartoptions'] : $chartoptions = null;
         isset($dataset['dataoptions']) ? $dataoptions = $dataset['dataoptions'] : $dataoptions = null;
+        isset($dataset['filteroptions']) ? $filteroptions = $dataset['filteroptions'] : $filteroptions = null;
         isset($dataset['dimension1']) ? $dimension1 = $dataset['dimension1'] : $dimension1 = null;
         isset($dataset['dimension2']) ? $dimension2 = $dataset['dimension2'] : $dimension2 = null;
         isset($dataset['value']) ? $value = $dataset['value'] : $value = null;
 
         $datasetId = $this->DatasetMapper->createDataset();
-        $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+        $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions);
 
         foreach ($data['dataload'] as $dataload) {
             isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;

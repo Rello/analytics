@@ -77,9 +77,10 @@ class DatasetMapper
      * @param $dimension1
      * @param $dimension2
      * @param $value
+     * @param null $filteroptions
      * @return bool
      */
-    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value)
+    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
@@ -98,6 +99,7 @@ class DatasetMapper
             ->set('value', $sql->createNamedParameter($value))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        if ($filteroptions !== null) $sql->set('filteroptions', $sql->createNamedParameter($filteroptions));
         $sql->execute();
         return true;
     }

@@ -42,12 +42,12 @@
 <template id="wizzard-start">
     <div class="page">
         <div class="content content-values">
-            <h3>Nextcloud Analytics makes your data visible and helps you to understand it. From financial data to IoT
-                logs.<br>Give your numbers a meaning</h3>
+            <h3>Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT
+                logs<br>Give your numbers a meaning</h3>
             <ul id="wizard-values">
                 <li>
                     <span class="icon-timezone"></span>
-                    <h3>Your data is processed inside Nextcloud</h3>
+                    <h3>Data is processed inside Nextcloud</h3>
                 </li>
                 <li>
                     <span class="icon-shared"></span>
@@ -70,13 +70,13 @@
         <div class="page">
             <div class="image"><img src="/nextcloud/own_apps20/analytics/img/wizzard_charts.png"></div>
             <div class="description">
-                <h3>Visualize almost any data with easy to use reports</h3>
+                <h3>Visualize any data with easy to use reports</h3>
                 <ul>
-                    <li>Different chart types like lines, bars or doughnuts</li>
-                    <li>Fully customize the chart layout by using advanced scripting</li>
-                    <li>Interactive tables for any data</li>
-                    <li>Use thresholds to mark exceptions and receive Nextcloud notifications</li>
+                    <li>Different chart types like lines, columns or doughnuts</li>
+                    <li>Customize further chart options by using advanced scripting</li>
                     <li>Show your most important insights in the Nextcloud Dashboard</li>
+                    <li>Interactive tables</li>
+                    <li>Use thresholds to mark exceptions or receive Nextcloud notifications</li>
                 </ul>
             </div>
         </div>
@@ -93,7 +93,7 @@
                     <li>Change drilldowns by removing columns</li>
                     <li>Customize chats by assigning primary or secondary axis</li>
                     <li>Use different chart types per data series</li>
-                    <li>Save filters and reuse them next time</li>
+                    <li>Save filters as default</li>
                 </ul>
             </div>
         </div>
@@ -125,11 +125,12 @@
             <div class="description">
                 <h3>Advanced configuration: Dataloads</h3>
                 <ul>
-                    <li>Any datasource can be persisted in nextcloud</li>
-                    <li>Use the timestamp feature to keep a history</li>
-                    <li>Full (deletion of old data) or delta loads are possible</li>
-                    <li>Schedule loads in the background daily or hourly</li>
-                    <li>Use the REST API to push data into reports</li>
+                    <li>Any datasource can be persisted in Nextcloud</li>
+                    <li>Use timestamps to historize data</li>
+                    <li>Full (deletion of old data) or delta loads</li>
+                    <li>Schedule dataloads in the background daily or hourly</li>
+                    <li>Trigger dataloads via scripts using the occ command</li>
+                    <li>Use the REST API to push data into Analytics</li>
                 </ul>
             </div>
         </div>
@@ -142,7 +143,6 @@
             <div class="description-wide">
                 <div class="description-block">
                     <h3 class="icon-info">Get more information</h3>
-                    <p>More information is available here:</p>
                     <ul>
                         <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener">Wiki</a>
                         </li>
@@ -152,7 +152,7 @@
                 </div>
                 <br>
                 <div class="description-block">
-                    <p>This wizzard can be opened again by selecting "About" in the Analytics settings section.</p>
+                    <p>You can open this introduction again by selecting "About" in the Analytics settings section</p>
                 </div>
             </div>
             <div class="description-wide">
