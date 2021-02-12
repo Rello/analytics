@@ -372,7 +372,7 @@ OCA.Analytics.Sidebar.Data = {
         OC.dialogs.message(
             t('analytics', 'Use this endpoint to submit data via an API:')
             + '<br><br>'
-            + OC.generateUrl('/apps/analytics/api/1.0/adddata/')
+            + OC.generateUrl('/apps/analytics/api/2.0/adddata/')
             + document.getElementById('app-sidebar').dataset.id
             + '<br><br>'
             + t('analytics', 'Detail instructions at:') + '<br>https://github.com/rello/analytics/wiki/API',
@@ -808,7 +808,10 @@ OCA.Analytics.Sidebar.Backend = {
                 button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
-                    document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                    if (document.getElementById('advanced').value === 'false') {
+                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.Backend.getData();
+                    }
                 } else {
                     OCA.Analytics.UI.notification('error', data.error);
                 }
@@ -839,7 +842,10 @@ OCA.Analytics.Sidebar.Backend = {
                 button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
-                    document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                    if (document.getElementById('advanced').value === 'false') {
+                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.Backend.getData();
+                    }
                 } else {
                     OCA.Analytics.UI.notification('error', data.error);
                 }
