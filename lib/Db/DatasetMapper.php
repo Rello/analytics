@@ -77,7 +77,7 @@ class DatasetMapper
      * @param $dimension1
      * @param $dimension2
      * @param $value
-     * @param null $filteroptions
+     * @param $filteroptions
      * @return bool
      */
     public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
