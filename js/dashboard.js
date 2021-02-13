@@ -88,7 +88,7 @@ OCA.Analytics.Dashboard = {
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
+            if (xhr.readyState === 4 && document.getElementById('analytics-intro').hidden === false) {
                 let jsondata = JSON.parse(xhr.response);
                 if (jsondata['status'] !== 'nodata' && jsondata['data'].length > 20) {
                     jsondata['data'].slice(jsondata['data'].length - 20); //just the last 20 records for the micro charts

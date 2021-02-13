@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.0 - 2021-02-xx
+## 3.3.0 - 2021-02-13
 ### Added
 - First Start Wizzard [#103](https://github.com/rello/analytics/issues/103)
 - Export / import reports (incl data) [#100](https://github.com/rello/analytics/issues/100)

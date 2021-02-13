@@ -285,6 +285,13 @@ OCA.Analytics.Navigation = {
             icon.classList.replace('icon-star', 'icon-starred');
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Remove from favorites');
             isFavorite = 'true';
+
+            let spanFav = document.createElement('span');
+            spanFav.id = 'fav-' + datasetId;
+            spanFav.classList.add('icon', 'icon-starred');
+            spanFav.style.opacity = '0.5';
+            evt.target.closest('div').parentElement.firstElementChild.insertAdjacentElement("afterend", spanFav);
+
         } else {
             icon.classList.replace('icon-starred', 'icon-star');
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Add to favorites');
