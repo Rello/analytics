@@ -68,7 +68,9 @@
 <template id="wizzard-charts">
     <div>
         <div class="page">
-            <div class="image"><img src="/nextcloud/own_apps20/analytics/img/wizzard_charts.png"></div>
+            <div class="image"><img
+                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
+            </div>
             <div class="description">
                 <h3>Visualize any data with easy to use reports</h3>
                 <ul>
@@ -85,7 +87,9 @@
 <template id="wizzard-filter">
     <div>
         <div class="page">
-            <div class="image"><img src="/nextcloud/own_apps20/analytics/img/wizzard_filter.gif"></div>
+            <div class="image"><img
+                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
+            </div>
             <div class="description">
                 <h3>Slice and dice your data</h3>
                 <ul>
@@ -102,7 +106,9 @@
 <template id="wizzard-datasource">
     <div>
         <div class="page">
-            <div class="image"><img src="/nextcloud/own_apps20/analytics/img/wizzard_datasources.gif"></div>
+            <div class="image"><img
+                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
+            </div>
             <div class="description">
                 <h3>Use data from various datasources</h3>
                 <ul>
@@ -121,7 +127,9 @@
 <template id="wizzard-dataload">
     <div>
         <div class="page">
-            <div class="image"><img src="/nextcloud/own_apps20/analytics/img/wizzard_dataload.gif"></div>
+            <div class="image"><img
+                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
+            </div>
             <div class="description">
                 <h3>Advanced configuration: Dataloads</h3>
                 <ul>

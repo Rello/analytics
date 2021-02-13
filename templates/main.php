@@ -27,7 +27,6 @@ Util::addScript('analytics', '3rdParty/chartjs-plugin-colorschemes.min');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'dashboard');
 Util::addScript('analytics', 'userGuidance');
-
 ?>
 <input type="hidden" id="analyticsWizzard" value="<?php p($_['wizzard']); ?>">
 <div id="app-navigation">
