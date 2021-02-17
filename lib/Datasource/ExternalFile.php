@@ -128,7 +128,8 @@ class ExternalFile implements IDatasource
         }
         return [
             'header' => $header,
-            'data' => $data
+            'data' => $data,
+            'error' => 0,
         ];
     }
 
