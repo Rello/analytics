@@ -1,7 +1,15 @@
 # Changelog
 
+## 3.3.2 - 2021-02-17
+
+### Fixed
+
+- Dataload issue with "External file" [#110](https://github.com/rello/analytics/issues/110)
+
 ## 3.3.0 - 2021-02-13
+
 ### Added
+
 - First Start Wizzard [#103](https://github.com/rello/analytics/issues/103)
 - Export / import reports (incl data) [#100](https://github.com/rello/analytics/issues/100)
 - Parameter to skip header rows in csv and file datasource [#97](https://github.com/rello/analytics/issues/97)
