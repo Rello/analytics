@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.3 - 2021-02-24
+
+### Fixed
+
+- Database issue on NC21 installation [#113](https://github.com/rello/analytics/issues/113)
+
 ## 3.3.2 - 2021-02-17
 
 ### Fixed
