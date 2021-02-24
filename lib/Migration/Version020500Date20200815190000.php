@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OCA\Analytics\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -47,7 +46,7 @@ class Version020500Date20200815190000 extends SimpleMigrationStep
         $schema = $schemaClosure();
         $table = $schema->getTable('analytics_threshold');
 
-        $table->addColumn('value', Type::DECIMAL, [
+        $table->addColumn('value', 'decimal', [
             'notnull' => false,
             'precision' => 15,
             'scale' => 2,

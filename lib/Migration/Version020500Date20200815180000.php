@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OCA\Analytics\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -47,14 +46,14 @@ class Version020500Date20200815180000 extends SimpleMigrationStep
         $schema = $schemaClosure();
         $table = $schema->getTable('analytics_facts');
 
-        $table->addColumn('value', Type::DECIMAL, [
+        $table->addColumn('value', 'decimal', [
             'notnull' => false,
             'precision' => 15,
             'scale' => 2,
             'default' => 0,
         ]);
 
-        $table->addColumn('timestamp', Type::INTEGER, [
+        $table->addColumn('timestamp', 'integer', [
             'notnull' => false,
             'default' => 0,
         ]);
@@ -62,7 +61,7 @@ class Version020500Date20200815180000 extends SimpleMigrationStep
 
         $table = $schema->getTable('analytics_dataset');
 
-        $table->addColumn('value', Type::STRING, [
+        $table->addColumn('value', 'string', [
             'notnull' => false,
             'length' => 64,
         ]);
