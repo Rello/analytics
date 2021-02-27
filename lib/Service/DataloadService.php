@@ -180,10 +180,8 @@ class DataloadService
         if (!empty($datasetMetadata)) {
             $option = json_decode($dataloadMetadata['option'], true);
             $option['user_id'] = $dataloadMetadata['user_id'];
-
             $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $option);
             $result['datasetId'] = $dataloadMetadata['dataset'];
-
             return $result;
         } else {
             return new NotFoundResponse();

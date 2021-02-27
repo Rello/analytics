@@ -55,7 +55,7 @@ OCA.Analytics.Navigation = {
         let a = document.createElement('a');
         a.setAttribute('href', '#/r/' + data['id']);
         let typeINT = parseInt(data['type']);
-        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE) {
+        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE || typeINT === OCA.Analytics.TYPE_EXCEL) {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
@@ -363,6 +363,8 @@ OCA.Analytics.Navigation = {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
                     navigationItem.click();
+                    //todo open the exit dialog for a new data set
+                    //document.querySelector('#navigationMenu[data-id="292"] #navigationMenuEdit').click()
                 }
             }
         });

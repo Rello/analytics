@@ -263,20 +263,36 @@ OCA.Analytics.Sidebar.Dataset = {
 
             document.getElementById('datasetDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
 
-            if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
+            if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_EXCEL) {
                 document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleFilepicker);
             }
         }
     },
 
     handleFilepicker: function () {
+        let type;
+        if (document.getElementById('dataloadDetail') !== null) {
+            let dataloadId = document.getElementById('dataloadDetail').dataset.id;
+            type = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId));
+        } else {
+            type = parseInt(document.getElementById('app-sidebar').dataset.type);
+        }
+
+        let mime;
+        if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
+            mime = ['text/csv', 'text/plain'];
+        } else if (type === OCA.Analytics.TYPE_EXCEL) {
+            mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.oasis.opendocument.spreadsheet',
+                'application/vnd.ms-excel'];
+        }
         OC.dialogs.filepicker(
             t('analytics', 'Select file'),
             function (path) {
                 document.getElementById('link').value = path;
             },
             false,
-            ['text/csv', 'text/plain'],
+            mime,
             true,
             1);
     },

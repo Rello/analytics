@@ -114,7 +114,7 @@ class OutputController extends Controller
             $option['user_id'] = $datasetMetadata['user_id'];
 
             $result = $this->DatasourceController->read($datasourceId, $option);
-            unset($result['error']);
+            //unset($result['error']);
         }
 
         $result['thresholds'] = $this->ThresholdService->read($datasetMetadata['id']);

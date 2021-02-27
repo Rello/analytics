@@ -128,7 +128,7 @@ OCA.Analytics.Advanced.Dataload = {
             document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = fieldValues[fieldValue] : null;
         }
 
-        if (dataload['datasource'] === OCA.Analytics.TYPE_INTERNAL_FILE) {
+        if (dataload['datasource'] === OCA.Analytics.TYPE_INTERNAL_FILE || dataload['datasource'] === OCA.Analytics.TYPE_EXCEL) {
             document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleFilepicker);
         }
 
@@ -223,7 +223,6 @@ OCA.Analytics.Advanced.Dataload = {
                 'info',
                 OC.dialogs.OK_BUTTON,
                 function () {
-
                 },
                 true,
                 true
@@ -241,14 +240,19 @@ OCA.Analytics.Advanced.Dataload = {
             },
             success: function (data) {
                 if (mode === 'simulate') {
-                    document.querySelector("[id*=oc-dialog-]").innerHTML = JSON.stringify(data.data);
-                } else {
-                    if (data.error === 0) {
-                        OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
-                        //document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]').click();
+                    if (parseInt(data.error) === 0) {
+                        document.querySelector("[id*=oc-dialog-]").innerHTML = JSON.stringify(data.data);
                     } else {
-                        OCA.Analytics.UI.notification('error', data.error);
+                        document.querySelector("[id*=oc-dialog-]").innerHTML = 'Error: ' + data.error;
                     }
+                } else {
+                    let messageType;
+                    if (parseInt(data.error) === 0) {
+                        messageType = 'success';
+                    } else {
+                        messageType = 'error';
+                    }
+                    OCA.Analytics.UI.notification(messageType, data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated, ') + data.error + t('analytics', ' errors'));
                 }
             }
         });

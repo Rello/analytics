@@ -28,6 +28,7 @@ if (!OCA.Analytics) {
         TYPE_GIT: 3,
         TYPE_EXTERNAL_FILE: 4,
         TYPE_EXTERNAL_REGEX: 5,
+        TYPE_EXCEL: 7,
         TYPE_SHARED: 99,
         SHARE_TYPE_USER: 0,
         SHARE_TYPE_GROUP: 1,
@@ -542,8 +543,7 @@ OCA.Analytics.Backend = {
                 }
 
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
-                if (data.status !== 'nodata') {
-
+                if (data.status !== 'nodata' && parseInt(data.error) === 0) {
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {
                         document.getElementById('optionsIcon').style.removeProperty('display');
@@ -557,6 +557,9 @@ OCA.Analytics.Backend = {
                     }
                 } else {
                     document.getElementById('noDataContainer').style.removeProperty('display');
+                    if (parseInt(data.error) !== 0) {
+                        OCA.Analytics.UI.notification('error', data.error);
+                    }
                 }
             }
         });

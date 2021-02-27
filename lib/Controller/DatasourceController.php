@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Datasource\DatasourceEvent;
+use OCA\Analytics\Datasource\Excel;
 use OCA\Analytics\Datasource\ExternalFile;
 use OCA\Analytics\Datasource\File;
 use OCA\Analytics\Datasource\Github;
@@ -32,6 +33,7 @@ class DatasourceController extends Controller
     private $ExternalFileService;
     private $RegexService;
     private $JsonService;
+    private $ExcelService;
     /** @var IEventDispatcher */
     private $dispatcher;
     private $l10n;
@@ -43,6 +45,7 @@ class DatasourceController extends Controller
     const DATASET_TYPE_EXTERNAL_FILE = 4;
     const DATASET_TYPE_REGEX = 5;
     const DATASET_TYPE_JSON = 6;
+    const DATASET_TYPE_EXCEL = 7;
 
     public function __construct(
         string $AppName,
@@ -53,6 +56,7 @@ class DatasourceController extends Controller
         Regex $RegexService,
         Json $JsonService,
         ExternalFile $ExternalFileService,
+        Excel $ExcelService,
         IL10N $l10n,
         IEventDispatcher $dispatcher
     )
@@ -64,6 +68,7 @@ class DatasourceController extends Controller
         $this->RegexService = $RegexService;
         $this->FileService = $FileService;
         $this->JsonService = $JsonService;
+        $this->ExcelService = $ExcelService;
         $this->dispatcher = $dispatcher;
         $this->l10n = $l10n;
     }
@@ -116,16 +121,20 @@ class DatasourceController extends Controller
      */
     public function read(int $datasourceId, $option)
     {
-        $result = $this->getDatasources()[$datasourceId]->readData($option);
+        try {
+            $result = $this->getDatasources()[$datasourceId]->readData($option);
 
-        if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
-            // if datasource should be timestamped/snapshoted
-            // shift values by one dimension and stores date in second column
-            $result['data'] = array_map(function ($tag) {
-                $columns = count($tag);
-                return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
-            }, $result['data']);
-            $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s"));
+            if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
+                // if datasource should be timestamped/snapshoted
+                // shift values by one dimension and stores date in second column
+                $result['data'] = array_map(function ($tag) {
+                    $columns = count($tag);
+                    return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
+                }, $result['data']);
+                $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s"));
+            }
+        } catch (\Error $e) {
+            $result['error'] = $e->getMessage();
         }
         return $result;
     }
@@ -147,6 +156,7 @@ class DatasourceController extends Controller
     {
         $datasources = [];
         $datasources[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService;
+        $datasources[self::DATASET_TYPE_EXCEL] = $this->ExcelService;
         $datasources[self::DATASET_TYPE_GIT] = $this->GithubService;
         $datasources[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService;
         $datasources[self::DATASET_TYPE_REGEX] = $this->RegexService;

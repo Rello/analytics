@@ -116,7 +116,7 @@ class ThresholdService
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByDataset($datasetId);
-        $datasetMetadata = $this->DatasetMapper->getDatasetOptions($datasetId);
+        $datasetMetadata = $this->DatasetMapper->readOptions($datasetId);
 
         foreach ($thresholds as $threshold) {
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
