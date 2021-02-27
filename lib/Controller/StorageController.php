@@ -61,7 +61,7 @@ class StorageController extends Controller
         $header[6] = $datasetMetadata['value'];
         $header = array_values($header);
 
-        $data = $this->StorageMapper->getData($datasetMetadata['id'], $options);
+        $data = $this->StorageMapper->read($datasetMetadata['id'], $options);
         $data = array_values($data);
         foreach ($data as $key => $value) {
             $data[$key] = array_values($value);
@@ -69,11 +69,13 @@ class StorageController extends Controller
 
         return empty($data) ? [
             'dimensions' => $availableDimensions,
-            'status' => 'nodata'
+            'status' => 'nodata',
+            'error' => 0
         ] : [
             'header' => $header,
             'dimensions' => $availableDimensions,
             'data' => $data,
+            'error' => 0
         ];
     }
 
@@ -99,7 +101,7 @@ class StorageController extends Controller
         $value = $this->floatvalue($value);
 
         $validate = $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
-        $action = $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $value, $user_id);
+        $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id);
 
         $insert = $update = 0;
         if ($action === 'insert') $insert = 1;
@@ -123,7 +125,7 @@ class StorageController extends Controller
      */
     public function delete(int $datasetId, $dimension1, $dimension2)
     {
-        return $this->StorageMapper->deleteData($datasetId, $dimension1, $dimension2);
+        return $this->StorageMapper->delete($datasetId, $dimension1, $dimension2);
     }
 
     /**
@@ -137,7 +139,7 @@ class StorageController extends Controller
      */
     public function deleteSimulate(int $datasetId, $dimension1, $dimension2)
     {
-        return $this->StorageMapper->deleteDataSimulate($datasetId, $dimension1, $dimension2);
+        return $this->StorageMapper->deleteSimulate($datasetId, $dimension1, $dimension2);
     }
 
     private function floatvalue($val)
