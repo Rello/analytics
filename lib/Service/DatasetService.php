@@ -67,7 +67,7 @@ class DatasetService
      */
     public function index()
     {
-        $ownDatasets = $this->DatasetMapper->getDatasets();
+        $ownDatasets = $this->DatasetMapper->index();
 
         // get dataload indicators for icons shown in the advanced screen
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
@@ -155,7 +155,7 @@ class DatasetService
     public function create($file = '')
     {
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-        $datasetId = $this->DatasetMapper->createDataset();
+        $datasetId = $this->DatasetMapper->create();
 
         if ($file !== '') {
             $name = explode('.', end(explode('/', $file)))[0];
@@ -193,7 +193,7 @@ class DatasetService
         if ($type === DatasourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
-        return $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+        return $this->DatasetMapper->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
     }
 
     /**
@@ -249,8 +249,8 @@ class DatasetService
         isset($dataset['dimension2']) ? $dimension2 = $dataset['dimension2'] : $dimension2 = null;
         isset($dataset['value']) ? $value = $dataset['value'] : $value = null;
 
-        $datasetId = $this->DatasetMapper->createDataset();
-        $this->DatasetMapper->updateDataset($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions);
+        $datasetId = $this->DatasetMapper->create();
+        $this->DatasetMapper->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions);
 
         foreach ($data['dataload'] as $dataload) {
             isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;
@@ -274,7 +274,7 @@ class DatasetService
             isset($dData[0]) ? $dimension1 = $dData[0] : $dimension1 = null;
             isset($dData[1]) ? $dimension2 = $dData[1] : $dimension2 = null;
             isset($dData[2]) ? $value = $dData[2] : $value = null;
-            $this->StorageMapper->createData($datasetId, $dimension1, $dimension2, $value);
+            $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value);
         }
 
         if (isset($data['favorite'])) {
@@ -299,7 +299,7 @@ class DatasetService
         $result['favorite'] = '';
 
         if ($result['dataset']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-            $result['data'] = $this->StorageMapper->getData($datasetId);
+            $result['data'] = $this->StorageMapper->read($datasetId);
         }
 
         unset($result['dataset']['id'], $result['dataset']['user_id'], $result['dataset']['user_id'], $result['dataset']['parent']);
@@ -316,8 +316,8 @@ class DatasetService
     public function delete(int $datasetId)
     {
         $this->ShareService->deleteShareByDataset($datasetId);
-        $this->StorageMapper->deleteDataByDataset($datasetId);
-        $this->DatasetMapper->deleteDataset($datasetId);
+        $this->StorageMapper->deleteByDataset($datasetId);
+        $this->DatasetMapper->delete($datasetId);
         $this->ThresholdService->deleteThresholdByDataset($datasetId);
         $this->DataloadMapper->deleteDataloadByDataset($datasetId);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
@@ -336,7 +336,7 @@ class DatasetService
      */
     public function updateOptions(int $datasetId, $chartoptions, $dataoptions, $filteroptions)
     {
-        return $this->DatasetMapper->updateDatasetOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
+        return $this->DatasetMapper->updateOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
     }
 
     /**
