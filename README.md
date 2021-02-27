@@ -7,9 +7,10 @@ Visualize and share anything, from financial analysis to IoT logs.
 </p>
 
 ## Features
-- Datasources: local/remote file, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
-- 3rd party: GitHub Statistics, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber), [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
-- Register external datasources
+- Datasources: csv, spreadsheet, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
+- 3rd party: GitHub Statistics, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber)
+  , [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
+- [Register](https://github.com/Rello/analytics/wiki/Register-external-datasource) external datasources from other apps
 - Storage: realtime or database
 - Advanced dataloads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
 - Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables, filters

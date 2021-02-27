@@ -41,7 +41,7 @@ class File implements IDatasource
      */
     public function getName(): string
     {
-        return $this->l10n->t('Local file: CSV');
+        return $this->l10n->t('Local file') . ': csv';
     }
 
     /**

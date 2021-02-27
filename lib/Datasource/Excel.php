@@ -43,7 +43,7 @@ class Excel implements IDatasource
      */
     public function getName(): string
     {
-        return $this->l10n->t('Local file: Excel');
+        return $this->l10n->t('Local file') . ': Spreadsheet';
     }
 
     /**
