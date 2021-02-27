@@ -38,10 +38,31 @@ class DatasetMapper
     }
 
     /**
+     * get datasets
+     * @return array
+     */
+    public function index()
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->addSelect('name')
+            ->addSelect('type')
+            ->addSelect('parent')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->orderBy('parent', 'ASC')
+            ->addOrderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * create dataset
      * @return int
      */
-    public function createDataset()
+    public function create()
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
@@ -63,6 +84,29 @@ class DatasetMapper
     }
 
     /**
+     * get single dataset
+     * @param int $id
+     * @param string|null $user_id
+     * @return array
+     */
+    public function read(int $id, string $user_id = null)
+    {
+        if ($user_id) $this->userId = $user_id;
+
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->orderBy('parent', 'ASC')
+            ->addOrderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * update dataset
      * @param $id
      * @param $name
@@ -80,7 +124,7 @@ class DatasetMapper
      * @param $filteroptions
      * @return bool
      */
-    public function updateDataset($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
+    public function update($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
@@ -105,14 +149,14 @@ class DatasetMapper
     }
 
     /**
-     * update dataset
+     * update dataset options
      * @param $id
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
      * @return bool
      */
-    public function updateDatasetOptions($id, $chartoptions, $dataoptions, $filteroptions)
+    public function updateOptions($id, $chartoptions, $dataoptions, $filteroptions)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
@@ -126,11 +170,31 @@ class DatasetMapper
     }
 
     /**
+     * read dataset options
+     * @param $id
+     * @return array
+     */
+    public function readOptions($id)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('name')
+            ->addSelect('visualization')
+            ->addSelect('chart')
+            ->addSelect('user_id')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * delete dataset
      * @param $id
      * @return bool
      */
-    public function deleteDataset($id)
+    public function delete($id)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
@@ -138,27 +202,6 @@ class DatasetMapper
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->execute();
         return true;
-    }
-
-    /**
-     * get datasets
-     * @return array
-     */
-    public function getDatasets()
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME)
-            ->select('id')
-            ->addSelect('name')
-            ->addSelect('type')
-            ->addSelect('parent')
-            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->orderBy('parent', 'ASC')
-            ->addOrderBy('name', 'ASC');
-        $statement = $sql->execute();
-        $result = $statement->fetchAll();
-        $statement->closeCursor();
-        return $result;
     }
 
     /**
@@ -178,49 +221,6 @@ class DatasetMapper
             ->orderBy('name', 'ASC');
         $statement = $sql->execute();
         $result = $statement->fetchAll();
-        $statement->closeCursor();
-        return $result;
-    }
-
-    /**
-     * get datasets
-     * @param int $id
-     * @param string|null $user_id
-     * @return array
-     */
-    public function read(int $id, string $user_id = null)
-    {
-        if ($user_id) $this->userId = $user_id;
-
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME)
-            ->select('*')
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
-            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->orderBy('parent', 'ASC')
-            ->addOrderBy('name', 'ASC');
-        $statement = $sql->execute();
-        $result = $statement->fetch();
-        $statement->closeCursor();
-        return $result;
-    }
-
-    /**
-     * get datasets
-     * @param $id
-     * @return array
-     */
-    public function getDatasetOptions($id)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME)
-            ->select('name')
-            ->addSelect('visualization')
-            ->addSelect('chart')
-            ->addSelect('user_id')
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $statement = $sql->execute();
-        $result = $statement->fetch();
         $statement->closeCursor();
         return $result;
     }
