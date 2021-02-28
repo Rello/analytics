@@ -29,11 +29,6 @@ class ComposerAutoloaderInit524e760e56b0620cb9bc3d8d9ad8543d
 
             call_user_func(\Composer\Autoload\ComposerStaticInit524e760e56b0620cb9bc3d8d9ad8543d::getInitializer($loader));
         } else {
-            $map = require __DIR__ . '/autoload_namespaces.php';
-            foreach ($map as $namespace => $path) {
-                $loader->set($namespace, $path);
-            }
-
             $map = require __DIR__ . '/autoload_psr4.php';
             foreach ($map as $namespace => $path) {
                 $loader->setPsr4($namespace, $path);
