@@ -416,14 +416,28 @@ OCA.Analytics.UI = {
 OCA.Analytics.Datasource = {
     buildDropdown: function () {
         let options = document.createDocumentFragment();
-        for (let key in OCA.Analytics.datasources) {
-            let value = OCA.Analytics.datasources[key];
+        let sortedOptions = OCA.Analytics.Datasource.sortOptions(OCA.Analytics.datasources);
+        sortedOptions.forEach((entry) => {
+            let value = entry[1];
             let option = document.createElement('option');
-            option.value = key;
+            option.value = entry[0];
             option.innerText = value;
             options.appendChild(option);
-        }
+        });
         return options;
+    },
+
+    sortOptions: function (obj) {
+        var sortable = [];
+        for (var key in obj)
+            if (obj.hasOwnProperty(key))
+                sortable.push([key, obj[key]]);
+        sortable.sort(function (a, b) {
+            var x = a[1].toLowerCase(),
+                y = b[1].toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+        });
+        return sortable;
     },
 
     buildOptionsForm: function (datasource) {
