@@ -558,6 +558,8 @@ OCA.Analytics.Backend = {
 
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata' && parseInt(data.error) === 0) {
+
+                    data.data = OCA.Analytics.Backend.formatDates(data.data);
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {
                         document.getElementById('optionsIcon').style.removeProperty('display');
@@ -577,6 +579,32 @@ OCA.Analytics.Backend = {
                 }
             }
         });
+    },
+
+    formatDates: function (data) {
+        let firstrow = data[0];
+        let now;
+        for (let i = 0; i < firstrow.length; i++) {
+            // loop columns and check for a valid date
+            if (!isNaN(new Date(firstrow[i]).valueOf()) && firstrow[i].length >= 19) {
+                // column contains a valid date
+                // then loop all rows for this column and convert to local time
+                for (let j = 0; j < data.length; j++) {
+                    if (data[j][i].length === 19) {
+                        // values are assumed to have a timezone or are used as UTC
+                        data[j][i] = data[j][i] + 'Z';
+                    }
+                    now = new Date(data[j][i]);
+                    data[j][i] = now.getFullYear()
+                        + "-" + (now.getMonth() < 10 ? '0' : '') + (now.getMonth() + 1)
+                        + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
+                        + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
+                        + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+                        + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds()
+                }
+            }
+        }
+        return data;
     },
 
     getDatasourceDefinitions: function () {
