@@ -65,4 +65,13 @@ Visualize and share anything, from financial analysis to IoT logs.
     <commands>
         <command>OCA\Analytics\Command\Load</command>
     </commands>
+    <navigations>
+        <navigation>
+            <id>analytics</id>
+            <name>Analytics</name>
+            <route>analytics.page.index</route>
+            <icon>app.svg</icon>
+            <order>6</order>
+        </navigation>
+    </navigations>
 </info>

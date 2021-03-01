@@ -37,7 +37,6 @@ class Application extends App implements IBootstrap
         $context->registerDashboardWidget(Widget::class);
         $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
         $context->registerSearchProvider(Provider::class);
-        $this->registerNavigationEntry();
         $this->registerNotifications();
     }
 
@@ -55,19 +54,4 @@ class Application extends App implements IBootstrap
         $notificationManager = \OC::$server->getNotificationManager();
         $notificationManager->registerNotifierService(Notifier::class);
     }
-
-    protected function registerNavigationEntry(): void
-    {
-        $navigationEntry = function () {
-            return [
-                'id' => 'analytics',
-                'order' => 6,
-                'name' => \OC::$server->getL10N('analytics')->t('Analytics'),
-                'href' => \OC::$server->getURLGenerator()->linkToRoute('analytics.page.index'),
-                'icon' => \OC::$server->getURLGenerator()->imagePath('analytics', 'app.svg'),
-            ];
-        };
-        \OC::$server->getNavigationManager()->add($navigationEntry);
-    }
-
 }
