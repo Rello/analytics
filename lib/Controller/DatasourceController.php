@@ -131,6 +131,7 @@ class DatasourceController extends Controller
                     $columns = count($tag);
                     return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
                 }, $result['data']);
+                date_default_timezone_set('UTC');
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s") . 'Z');
             }
         } catch (\Error $e) {
