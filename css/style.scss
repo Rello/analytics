@@ -246,6 +246,9 @@ table.dataTable tbody tr {
     cursor: default;
 }
 
+.indicateImportantField {
+    border: 1px solid var(--color-warning) !important;
+}
 /**
  * Print settings, better leave them at the eof
  */

@@ -128,6 +128,17 @@ OCA.Analytics.Sidebar = {
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
 
+    indicateImportantField: function (element) {
+        document.getElementById(element).classList.add('indicateImportantField');
+    },
+
+    resetImportantFields: function () {
+        let fields = document.querySelectorAll('.indicateImportantField');
+        for (let i = 0; i < fields.length; i++) {
+            fields[i].classList.remove('indicateImportantField');
+        }
+    },
+
 };
 OCA.Analytics.Sidebar.Dataset = {
     metadataChanged: false,
@@ -193,9 +204,11 @@ OCA.Analytics.Sidebar.Dataset = {
                         document.getElementById('link').value = data['link'];
                     }
 
-                    if ((parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP)) {
-
+                    if (OCA.Analytics.Navigation.newReportId === data['id']) {
+                        OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetDatasource');
+                        OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetName');
                     }
+
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -207,6 +220,7 @@ OCA.Analytics.Sidebar.Dataset = {
     indicateMetadataChanged: function () {
         OCA.Analytics.Sidebar.Dataset.metadataChanged = true;
     },
+
 
     handleDeleteButton: function (evt) {
         let id = evt.target.parentNode.dataset.id;
@@ -709,6 +723,8 @@ OCA.Analytics.Sidebar.Backend = {
                 'value': document.getElementById('sidebarDatasetValue').value
             },
             success: function () {
+                OCA.Analytics.Navigation.newReportId = 0;
+                OCA.Analytics.Sidebar.resetImportantFields();
                 if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
                     OCA.Analytics.Navigation.init(datasetId);

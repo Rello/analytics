@@ -17,6 +17,7 @@
 OCA.Analytics.Navigation = {
     quickstartValue: '',
     quickstartId: 0,
+    newReportId: 0,
 
     init: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" className="get-metadata icon-loading"></div>';
@@ -265,7 +266,9 @@ OCA.Analytics.Navigation = {
     },
 
     handleBasicClicked: function (evt) {
-        document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
         evt.stopPropagation();
         OCA.Analytics.Sidebar.showSidebar(evt);
     },
@@ -345,6 +348,7 @@ OCA.Analytics.Navigation = {
                 'file': file,
             },
             success: function (data) {
+                OCA.Analytics.Navigation.newReportId = data;
                 OCA.Analytics.Navigation.init(data);
             }
         });
@@ -364,8 +368,9 @@ OCA.Analytics.Navigation = {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
                     navigationItem.click();
-                    //todo open the exit dialog for a new data set
-                    //document.querySelector('#navigationMenu[data-id="292"] #navigationMenuEdit').click()
+                    if (datasetId === OCA.Analytics.Navigation.newReportId && document.getElementById('advanced').value !== 'true') {
+                        document.querySelector('#navigationMenu[data-id="' + datasetId + '"] #navigationMenuEdit').click();
+                    }
                 }
             }
         });
@@ -383,11 +388,12 @@ OCA.Analytics.Navigation = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    OCA.Analytics.WhatsNew.whatsnew();
-
-    document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
-    document.getElementById('wizzartStart').addEventListener('click', OCA.Analytics.Wizzard.show);
-    if (parseInt(document.getElementById('analyticsWizzard').value) === 0) {
-        OCA.Analytics.Wizzard.show();
+    if (document.getElementById('advanced').value !== 'true') {
+        OCA.Analytics.WhatsNew.whatsnew();
+        document.getElementById('wizzartStart').addEventListener('click', OCA.Analytics.Wizzard.show);
+        if (parseInt(document.getElementById('analyticsWizzard').value) === 0) {
+            OCA.Analytics.Wizzard.show();
+        }
     }
+    document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
 });

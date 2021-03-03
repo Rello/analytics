@@ -78,6 +78,8 @@ class DatasetMapper
                 //'timestamp' => $sql->createNamedParameter($this->l10n->t('Date')),
                 //'unit' => $sql->createNamedParameter($this->l10n->t('Value')),
                 'value' => $sql->createNamedParameter($this->l10n->t('Value')),
+                'chart' => $sql->createNamedParameter('column'),
+                'visualization' => $sql->createNamedParameter('ct'),
             ]);
         $sql->execute();
         return (int)$this->db->lastInsertId(self::TABLE_NAME);
