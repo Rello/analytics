@@ -29,6 +29,7 @@ OCA.Analytics.Navigation = {
         let a = document.createElement('a');
         a.classList.add('icon-toggle-pictures');
         a.innerText = t('analytics', 'Overview');
+        a.id = 'overviewButton'
         a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
         li.appendChild(a);
         document.getElementById('navigationDatasets').appendChild(li);

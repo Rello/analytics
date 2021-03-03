@@ -10,13 +10,20 @@
  */
 ?>
 
-<template id="wizzardDialog">
+<template id="wizardDialog">
     <div class="modal-mask" id="firstrunwizard"
          style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
          hidden>
+
+        <div class="modal-header-top">
+            <div class="icons-menu">
+                <button id="wizardClose" class="action-item action-item--single icon-close">
+                </button>
+            </div>
+        </div>
         <div class="modal-wrapper modal-wrapper--normal" style="">
             <a class="prev" style="">
-                <div id="wizzardPrevious" class="icon icon-view-previous icon-white">
+                <div id="wizardPrevious" class="icon icon-view-previous icon-white">
                     <span class="hidden-visually">Previous</span>
                 </div>
             </a>
@@ -29,17 +36,26 @@
                 </div>
                 <div id="pageBody" class="modal-body">
                 </div>
+                <div class="modal-footer"
+                ">
+                <div id="wizardDot1" class="dot active"></div>
+                <div id="wizardDot2" class="dot"></div>
+                <div id="wizardDot3" class="dot"></div>
+                <div id="wizardDot4" class="dot"></div>
+                <div id="wizardDot5" class="dot"></div>
+                <div id="wizardDot6" class="dot"></div>
             </div>
-            <a class="next" style="">
-                <div id="wizzardNext" class="icon icon-view-next icon-white">
-                    <span class="hidden-visually">Next</span>
-                </div>
-            </a>
         </div>
+        <a class="next" style="">
+            <div id="wizardNext" class="icon icon-view-next icon-white">
+                <span class="hidden-visually">Next</span>
+            </div>
+        </a>
+    </div>
     </div>
 </template>
 
-<template id="wizzard-start">
+<template id="wizard-start">
     <div class="page">
         <div class="content content-values">
             <h3>Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT
@@ -65,7 +81,7 @@
         </div>
     </div>
 </template>
-<template id="wizzard-charts">
+<template id="wizard-charts">
     <div>
         <div class="page">
             <div class="image"><img
@@ -84,7 +100,7 @@
         </div>
     </div>
 </template>
-<template id="wizzard-filter">
+<template id="wizard-filter">
     <div>
         <div class="page">
             <div class="image"><img
@@ -103,7 +119,7 @@
         </div>
     </div>
 </template>
-<template id="wizzard-datasource">
+<template id="wizard-datasource">
     <div>
         <div class="page">
             <div class="image"><img
@@ -123,8 +139,7 @@
         </div>
     </div>
 </template>
-
-<template id="wizzard-dataload">
+<template id="wizard-dataload">
     <div>
         <div class="page">
             <div class="image"><img
@@ -144,8 +159,7 @@
         </div>
     </div>
 </template>
-
-<template id="wizzard-final">
+<template id="wizard-final">
     <div>
         <div class="page content-final">
             <div class="description-wide">
@@ -167,13 +181,13 @@
                 <div class="description-block">
                     <h3 class="icon-link">Quickstart</h3>
                     <p>Activate a set of demo report to show how Analytics works</p>
-                    <button id="wizzardDemo">
+                    <button id="wizardDemo">
                         Create Demo
                     </button>
                 </div>
                 <br><br>
                 <div class="description-block">
-                    <button id="wizzardEnd" class="primary modal-default-button">
+                    <button id="wizardEnd" class="primary modal-default-button">
                         Start using Analytics
                     </button>
                 </div>

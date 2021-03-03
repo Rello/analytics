@@ -105,7 +105,7 @@
         </div>
     </div>
     <br>
-    <button id="sidebarDatasetUpdateButton" type="button">
+    <button id="sidebarDatasetUpdateButton" type="button" class="primary">
         <?php p($l->t('Update report')); ?>
     </button>
     <button id="sidebarDatasetDeleteButton" type="button">
@@ -136,7 +136,7 @@
         </div>
     </div>
     <br>
-    <button id="updateDataButton" type="button">
+    <button id="updateDataButton" type="button" class="primary">
         <?php p($l->t('Save data')); ?>
     </button>
     <button id="deleteDataButton" type="button">
@@ -210,7 +210,7 @@
         </div>
     </div>
     <br>
-    <button id="createThresholdButton" type="button">
+    <button id="createThresholdButton" type="button" class="primary">
         <?php p($l->t('Save threshold')); ?>
     </button>
     <br>
@@ -221,7 +221,7 @@
 <template id="templateDataload">
     <div style="display: flex;">
         <div style="width: 25%;">
-            <div class="wizzardHeader"><?php p($l->t('Selection')); ?></div>
+            <div class="wizardHeader"><?php p($l->t('Selection')); ?></div>
             <div id="dataloadList">No dataload created yet</div>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
@@ -245,10 +245,10 @@
             </div>
         </div>
         <div style="width: 5%;">
-            <div class="wizzardHeader icon-view-next"></div>
+            <div class="wizardHeader icon-view-next"></div>
         </div>
         <div style="width: 40%;">
-            <div class="wizzardHeader"><?php p($l->t('Setting')); ?></div>
+            <div class="wizardHeader"><?php p($l->t('Setting')); ?></div>
             <div id="dataloadDetail">
                 <div id="dataloadDetailHeader" hidden>
                     <div style="display: table-row;">
@@ -274,10 +274,10 @@
             </div>
         </div>
         <div style="width: 5%;">
-            <div class="wizzardHeader icon-view-next"></div>
+            <div class="wizardHeader icon-view-next"></div>
         </div>
         <div style="width: 24%;">
-            <div class="wizzardHeader"><?php p($l->t('Execution')); ?></div>
+            <div class="wizardHeader"><?php p($l->t('Execution')); ?></div>
             <div id="dataloadRun" hidden>
                 <button id="dataloadExecuteButton"><?php p($l->t('Load now')); ?></button>
                 <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label

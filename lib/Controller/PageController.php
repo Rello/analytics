@@ -68,7 +68,7 @@ class PageController extends Controller
         $params = array();
         $params['token'] = '';
         $user = $this->userSession->getUser();
-        $params['wizzard'] = $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0);
+        $params['wizard'] = $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0);
         return new TemplateResponse($this->appName, 'main', $params);
     }
 

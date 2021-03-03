@@ -71,8 +71,8 @@ return [
         ['name' => 'ApiData#addDataV2', 'url' => '/api/2.0/adddata/{datasetId}', 'verb' => 'POST'],
         ['name' => 'ApiData#deleteDataV2', 'url' => '/api/2.0/deletedata/{datasetId}', 'verb' => 'POST'],
 
-        // wizzard
-        ['name' => 'wizzard#dismiss', 'url' => '/wizzard', 'verb' => 'POST'],
+        // wizard
+        ['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],
 
         // whatsnew
         ['name' => 'whatsNew#get', 'url' => '/whatsnew', 'verb' => 'GET'],
