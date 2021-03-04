@@ -85,12 +85,8 @@ OCA.Analytics.Navigation = {
         ulSublist.id = 'dataset-' + data['id'];
 
         if (parseInt(data['favorite']) === 1) {
-            let spanFav = document.createElement('span');
-            spanFav.id = 'fav-' + data['id'];
-            spanFav.classList.add('icon', 'icon-starred');
-            spanFav.style.opacity = '0.5';
-            spanFav.dataset.testing = 'favI' + data['name'];
-            li.appendChild(spanFav);
+            let divFav = OCA.Analytics.Navigation.buildFavoriteIcon(data['id'], data['name'])
+            a.appendChild(divFav);
         }
 
         let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
@@ -113,6 +109,17 @@ OCA.Analytics.Navigation = {
             categoryList = document.getElementById('navigationDatasets');
         }
         categoryList.appendChild(li);
+    },
+
+    buildFavoriteIcon: function (id, name) {
+        let divFav = document.createElement('div');
+        divFav.classList.add('favorite-mark');
+        divFav.id = 'fav-' + id;
+        let spanFav = document.createElement('span');
+        spanFav.classList.add('icon', 'icon-starred', 'favorite-star');
+        spanFav.dataset.testing = 'favI' + name;
+        divFav.appendChild(spanFav)
+        return divFav;
     },
 
     buildNavigationUtils: function (data) {
@@ -290,11 +297,8 @@ OCA.Analytics.Navigation = {
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Remove from favorites');
             isFavorite = 'true';
 
-            let spanFav = document.createElement('span');
-            spanFav.id = 'fav-' + datasetId;
-            spanFav.classList.add('icon', 'icon-starred');
-            spanFav.style.opacity = '0.5';
-            evt.target.closest('div').parentElement.firstElementChild.insertAdjacentElement("afterend", spanFav);
+            let divFav = OCA.Analytics.Navigation.buildFavoriteIcon(datasetId, '');
+            evt.target.closest('div').parentElement.firstElementChild.appendChild(divFav);
 
         } else {
             icon.classList.replace('icon-starred', 'icon-star');

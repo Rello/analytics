@@ -249,6 +249,19 @@ table.dataTable tbody tr {
 .indicateImportantField {
     border: 1px solid var(--color-warning) !important;
 }
+
+.favorite-mark {
+    position: absolute;
+    top: 5px;
+    left: 25px;
+    line-height: 100%;
+}
+
+.favorite-star {
+    display: inline-block;
+    opacity: 0.5;
+}
+
 /**
  * Print settings, better leave them at the eof
  */
