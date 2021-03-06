@@ -484,7 +484,8 @@ OCA.Analytics.Sidebar.Share = {
             linkRow.getElementById('newLinkShare').addEventListener('click', OCA.Analytics.Sidebar.Share.createShare);
         } else {
             linkRow.getElementById('sharingOptionsGroupNew').remove();
-            linkRow.getElementById('linkShareMenu').href = OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('shareClipboardLink').value = OC.getProtocol() + '://' + OC.getHostName() + OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('shareClipboard').addEventListener('click', OCA.Analytics.Sidebar.Share.handleShareClipboard)
             linkRow.getElementById('moreIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
             linkRow.getElementById('showPassword').addEventListener('click', OCA.Analytics.Sidebar.Share.showPassMenu);
             linkRow.getElementById('showPassword').nextElementSibling.htmlFor = 'showPassword' + id;
@@ -549,6 +550,17 @@ OCA.Analytics.Sidebar.Share = {
 
         //shareType !== null ? li.appendChild(ShareIconGroup) : li.appendChild(ShareOptionsGroup);
         return shareeRow;
+    },
+
+    handleShareClipboard: function (evt) {
+        let link = evt.target.nextElementSibling.value;
+        evt.target.classList.replace('icon-clippy', 'icon-checkmark-color');
+        let textArea = document.createElement('textArea');
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
     },
 
     showShareMenu: function (evt) {

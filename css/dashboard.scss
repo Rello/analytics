@@ -9,15 +9,15 @@
  */
 
  .icon-analytics {
- 	background-image: url(./../../apps/analytics/img/app-dark.svg);
+    @include icon-color('app-dark', 'analytics', $color-black, 1);
  }
 
- body.dark .icon-analytics {
- 	background-image: url(./../../apps/analyticsimg/app.svg);
+ body.dark .icon-analytics,
+ body.theme--dark .icon-analytics {
+    @include icon-color('app', 'analytics', $color-black, 1);
  }
 
- // Dashboard Widget Section
-
+// Dashboard Widget Section
 .panel--content .analyticsWidgetItem {
      height: 60px;
      width: 100%;

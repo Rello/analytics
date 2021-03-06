@@ -377,7 +377,8 @@
             <a id="newLinkShare" class="icon-add icon new-share" href="#" data-share-type="3"></a>
         </span>
         <span id="sharingOptionsGroupMenu" class="sharingOptionsGroup">
-           <a id="linkShareMenu" class="clipboard-button icon icon-clippy" target="_blank"></a>
+           <a id="shareClipboard" class="clipboard-button icon icon-clippy" target="_blank"></a>
+           <textarea id="shareClipboardLink" hidden></textarea>
             <div class="share-menu">
                 <a class="icon icon-more" id="moreIcon"></a>
                 <div class="popovermenu menu" style="display: none;">
