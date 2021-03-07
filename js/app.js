@@ -217,11 +217,15 @@ OCA.Analytics.UI = {
         let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
         let keyFigureColumn = headerKeys - 1; //key figures is taken from the last column
 
+        // Chart.defaults.elements.line.borderWidth = 2;
+        // Chart.defaults.elements.line.tension = 0.1;
+        // Chart.defaults.elements.line.fill = false;
+        // Chart.defaults.elements.point.radius = 1;
+        //Chart.defaults.global.tooltips.enabled = true;
         Chart.defaults.global.elements.line.borderWidth = 2;
         Chart.defaults.global.elements.line.tension = 0.1;
         Chart.defaults.global.elements.line.fill = false;
         Chart.defaults.global.elements.point.radius = 1;
-        Chart.defaults.global.tooltips.enabled = true;
 
         var chartOptions = {
             maintainAspectRatio: false,
@@ -281,7 +285,7 @@ OCA.Analytics.UI = {
 //                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
                         let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
                         if (tooltipItem.yLabel !== '') {
-                            return datasetLabel + ': ' + parseInt(tooltipItem.yLabel).toLocaleString();
+                            return datasetLabel + ': ' + parseFloat(tooltipItem.yLabel).toLocaleString();
                         } else {
                             return datasetLabel;
                         }
