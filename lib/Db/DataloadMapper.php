@@ -37,6 +37,21 @@ class DataloadMapper
         self::TABLE_NAME;
     }
 
+    public function beginTransaction()
+    {
+        $this->db->beginTransaction();
+    }
+
+    public function commit()
+    {
+        $this->db->commit();
+    }
+
+    public function rollBack()
+    {
+        $this->db->rollBack();
+    }
+
     /**
      * create a new dataload
      *

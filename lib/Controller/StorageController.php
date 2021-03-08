@@ -88,10 +88,11 @@ class StorageController extends Controller
      * @param $dimension2
      * @param $value
      * @param string|null $user_id
+     * @param null $bulkInsert
      * @return array
      * @throws \Exception
      */
-    public function update(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null)
+    public function update(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $bulkInsert = null)
     {
         TODO:
         //dates in both columns
@@ -101,7 +102,7 @@ class StorageController extends Controller
         $value = $this->floatvalue($value);
 
         $validate = $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
-        $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id);
+        $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert);
 
         $insert = $update = 0;
         if ($action === 'insert') $insert = 1;

@@ -127,16 +127,22 @@ class DataloadService
      */
     public function execute(int $dataloadId)
     {
+        $bulkSize = 500;
+        $insert = $update = 0;
+
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
         $option = json_decode($dataloadMetadata['option'], true);
         $result = $this->getDataFromDatasource($dataloadId);
-        $insert = $update = 0;
         $datasetId = $result['datasetId'];
 
         if (isset($option['delete']) and $option['delete'] === 'true') {
             $this->StorageController->delete($datasetId, '*', '*');
         }
+
+        $this->DataloadMapper->beginTransaction();
+
         if ($result['error'] === 0) {
+            $currentCount = 0;
             foreach ($result['data'] as $row) {
                 if (count($row) === 2) {
                     // if datasource only delivers 2 colums, the value needs to be in the last one
@@ -144,14 +150,21 @@ class DataloadService
                     $row[1] = null;
                 }
                 try {
-                    $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id']);
+                    $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], true);
                     $insert = $insert + $action['insert'];
                     $update = $update + $action['update'];
                 } catch (\Exception $e) {
                     $result['error']++;
                 }
+
+                if ($currentCount % $bulkSize === 0) {
+                    $this->DataloadMapper->commit();
+                    $this->DataloadMapper->beginTransaction();
+                }
+                $currentCount++;
             }
         }
+        $this->DataloadMapper->commit();
 
         $result = [
             'insert' => $insert,

@@ -46,26 +46,30 @@ class StorageMapper
      * @param $value
      * @param string|null $user_id
      * @param int|null $timestamp
+     * @param null $bulkInsert
      * @return string
      */
-    public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null)
+    public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null, $bulkInsert = null)
     {
         $dimension1 = str_replace('*', '', $dimension1);
         $dimension2 = str_replace('*', '', $dimension2);
         $timestamp = $timestamp ?? time();
+        $result = '';
 
         if ($user_id) $this->userId = $user_id;
 
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME)
-            ->addSelect('id')
-            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-            ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
-            ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
-        $statement = $sql->execute();
-        $result = $statement->fetch();
-        $statement->closeCursor();
+        if ($bulkInsert === null) {
+            $sql = $this->db->getQueryBuilder();
+            $sql->from(self::TABLE_NAME)
+                ->addSelect('id')
+                ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+                ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+                ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
+                ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
+            $statement = $sql->execute();
+            $result = $statement->fetch();
+            $statement->closeCursor();
+        }
 
         if ($result) {
             $sql = $this->db->getQueryBuilder();
