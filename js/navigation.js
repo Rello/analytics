@@ -56,6 +56,7 @@ OCA.Analytics.Navigation = {
 
         let a = document.createElement('a');
         a.setAttribute('href', '#/r/' + data['id']);
+        a.style.position = 'relative';
         let typeINT = parseInt(data['type']);
         if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE || typeINT === OCA.Analytics.TYPE_EXCEL) {
             typeIcon = 'icon-file';
@@ -105,10 +106,16 @@ OCA.Analytics.Navigation = {
         let categoryList;
         if (parseInt(data['parent']) !== 0 && document.getElementById('dataset-' + data['parent'])) {
             categoryList = document.getElementById('dataset-' + data['parent']);
+            categoryList.appendChild(li);
         } else {
             categoryList = document.getElementById('navigationDatasets');
+            if (parseInt(data['favorite']) === 1) {
+                categoryList.insertBefore(li, categoryList.children[2]);
+            } else {
+                categoryList.appendChild(li);
+            }
         }
-        categoryList.appendChild(li);
+
     },
 
     buildFavoriteIcon: function (id, name) {
@@ -228,8 +235,8 @@ OCA.Analytics.Navigation = {
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
         }
-        document.getElementById('analytics-content').hidden = true;
-        document.getElementById('analytics-intro').removeAttribute('hidden');
+        OCA.Analytics.UI.hideElement('analytics-content');
+        OCA.Analytics.UI.showElement('analytics-intro');
         document.getElementById('ulAnalytics').innerHTML = '';
         window.location.href = '#'
         OCA.Analytics.Dashboard.init()

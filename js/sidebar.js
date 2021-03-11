@@ -36,8 +36,8 @@ OCA.Analytics.Sidebar = {
                     OC.Apps.showAppSidebar();
                 }
             } else {
-                document.getElementById('analytics-intro').classList.add('hidden');
-                document.getElementById('analytics-content').removeAttribute('hidden');
+                OCA.Analytics.UI.hideElement('analytics-intro');
+                OCA.Analytics.UI.showElement('analytics-content');
                 OC.Apps.showAppSidebar();
             }
             appsidebar.dataset.id = datasetId;
@@ -116,7 +116,7 @@ OCA.Analytics.Sidebar = {
         document.querySelector('.tabHeader.selected').classList.remove('selected');
         let tabs = document.querySelectorAll('.tabsContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
-            tabs[i].classList.add('hidden');
+            tabs[i].hidden = true;
             tabs[i].innerHTML = '';
         }
 
@@ -149,7 +149,7 @@ OCA.Analytics.Sidebar.Dataset = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderDataset').classList.add('selected');
-        document.getElementById('tabContainerDataset').classList.remove('hidden');
+        OCA.Analytics.UI.showElement('tabContainerDataset');
         document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         $.ajax({
@@ -337,7 +337,7 @@ OCA.Analytics.Sidebar.Data = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderData').classList.add('selected');
-        document.getElementById('tabContainerData').classList.remove('hidden');
+        OCA.Analytics.UI.showElement('tabContainerData');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         if (parseInt(document.getElementById('app-sidebar').dataset.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
@@ -393,8 +393,8 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataImportClipboardButton: function () {
-        document.getElementById('importDataClipboardText').attributes.removeNamedItem('hidden');
-        document.getElementById('importDataClipboardButtonGo').attributes.removeNamedItem('hidden');
+        OCA.Analytics.UI.showElement('importDataClipboardText');
+        OCA.Analytics.UI.showElement('importDataClipboardButtonGo');
         document.getElementById('importDataClipboardButtonGo').addEventListener('click', OCA.Analytics.Sidebar.Backend.importCsvData);
     },
 
@@ -429,7 +429,7 @@ OCA.Analytics.Sidebar.Share = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderShare').classList.add('selected');
-        document.getElementById('tabContainerShare').classList.remove('hidden');
+        OCA.Analytics.UI.showElement('tabContainerShare');
         document.getElementById('tabContainerShare').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         // clone the DOM template

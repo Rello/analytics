@@ -28,7 +28,7 @@ OCA.Analytics.Advanced.Dataload = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderDataload').classList.add('selected');
-        document.getElementById('tabContainerDataload').classList.remove('hidden');
+        OCA.Analytics.UI.showElement('tabContainerDataload');
         document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         if (parseInt(document.getElementById('app-sidebar').dataset.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
@@ -109,9 +109,9 @@ OCA.Analytics.Advanced.Dataload = {
 
         document.getElementById('dataloadDetail').dataset.id = dataload['id'];
         document.getElementById('dataloadName').value = dataload['name'];
-        document.getElementById('dataloadDetailHeader').hidden = false;
-        document.getElementById('dataloadDetailButtons').hidden = false;
-        document.getElementById('dataloadDetailDelete').hidden = false;
+        OCA.Analytics.UI.showElement('dataloadDetailHeader');
+        OCA.Analytics.UI.showElement('dataloadDetailButtons');
+        OCA.Analytics.UI.showElement('dataloadDetailDelete');
         document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleUpdateButton);
         document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDeleteButton);
         document.getElementById('dataloadSchedule').value = dataload['schedule'];
@@ -132,7 +132,7 @@ OCA.Analytics.Advanced.Dataload = {
             document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleFilepicker);
         }
 
-        document.getElementById('dataloadRun').hidden = false;
+        OCA.Analytics.UI.showElement('dataloadRun');
         document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleExecuteButton);
     },
 
@@ -267,7 +267,7 @@ OCA.Analytics.Advanced.Threshold = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderThreshold').classList.add('selected');
-        document.getElementById('tabContainerThreshold').classList.remove('hidden');
+        OCA.Analytics.UI.showElement('tabContainerThreshold');
         document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         $.ajax({
