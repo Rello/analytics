@@ -14,16 +14,16 @@
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
     <h2 id="reportHeader"></h2>
-    <h3 id="reportSubHeader" style="display: none"></h3>
+    <h3 id="reportSubHeader" hidden></h3>
     <div id="reportPlaceholder"></div>
     <div id="filterBar" style="">
-        <div id="optionContainer" style="display: none">
+        <div id="optionContainer" hidden>
             <div id="saveIcon" class="icon-analytics-save-warning has-tooltip"
                  title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
             <div id="optionsIcon" class="icon-analytics-options has-tooltip"
                  title="<?php p($l->t('Options')); ?>"></div>
         </div>
-        <div id="filterContainer" style="display: none">
+        <div id="filterContainer" hidden>
             <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
                  title="<?php p($l->t('Drilldown')); ?>"></div>
             <div id="addFilterIcon" class="icon-analytics-filter-add has-tooltip"
@@ -39,7 +39,7 @@
         <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
     </div>
     <table id="tableContainer"></table>
-    <div id="noDataContainer" style="display: none">
+    <div id="noDataContainer" hidden>
         <?php p($l->t('No data found')); ?>
     </div>
 </div>

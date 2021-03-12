@@ -484,6 +484,7 @@ OCA.Analytics.Sidebar.Share = {
             linkRow.getElementById('newLinkShare').addEventListener('click', OCA.Analytics.Sidebar.Share.createShare);
         } else {
             linkRow.getElementById('sharingOptionsGroupNew').remove();
+            linkRow.getElementById('shareOpenDirect').href = OC.generateUrl('/apps/analytics/p/') + token;
             linkRow.getElementById('shareClipboardLink').value = OC.getProtocol() + '://' + OC.getHostName() + OC.generateUrl('/apps/analytics/p/') + token;
             linkRow.getElementById('shareClipboard').addEventListener('click', OCA.Analytics.Sidebar.Share.handleShareClipboard)
             linkRow.getElementById('moreIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
@@ -561,6 +562,7 @@ OCA.Analytics.Sidebar.Share = {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
+        OCA.Analytics.UI.notification('success', t('analytics', 'Link copied'));
     },
 
     showShareMenu: function (evt) {
