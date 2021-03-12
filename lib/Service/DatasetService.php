@@ -143,7 +143,19 @@ class DatasetService
      */
     public function getOwnFavoriteDatasets()
     {
-        return $this->tagManager->load('analytics')->getFavorites();
+        $ownDatasets = $this->DatasetMapper->index();
+        $favorits = $this->tagManager->load('analytics')->getFavorites();
+        $sharedDatasets = $this->ShareService->getSharedDatasets();
+
+        foreach ($favorits as $favorite) {
+            if (!array_search($favorite, array_column($ownDatasets, 'id'))
+                && !array_search($favorite, array_column($sharedDatasets, 'id'))) {
+                unset($favorits[$favorite]);
+                $this->tagManager->load('analytics')->removeFromFavorites($favorite);
+            }
+        }
+
+        return $favorits;
     }
 
     /**
