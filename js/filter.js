@@ -154,6 +154,7 @@ OCA.Analytics.Filter = {
             + '</div>'
         );
 
+        // fill Dimension dropdown
         let dimensionSelectOptions;
         let availableDimensions = OCA.Analytics.currentReportData.dimensions;
         for (let i = 0; i < Object.keys(availableDimensions).length; i++) {
@@ -161,11 +162,25 @@ OCA.Analytics.Filter = {
         }
         document.getElementById('filterDialogDimension').innerHTML = dimensionSelectOptions;
 
+        // fill Options dropdown
         let optionSelectOptions;
         for (let i = 0; i < Object.keys(OCA.Analytics.Filter.optionTextsArray).length; i++) {
             optionSelectOptions = optionSelectOptions + '<option value="' + Object.keys(OCA.Analytics.Filter.optionTextsArray)[i] + '">' + Object.values(OCA.Analytics.Filter.optionTextsArray)[i] + '</option>';
         }
         document.getElementById('filterDialogOption').innerHTML = optionSelectOptions;
+
+        // preselect existing filter
+        // TODO: currently only one filter preset
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (filterOptions !== null && filterOptions['filter'] !== undefined) {
+            for (let filterDimension of Object.keys(filterOptions['filter'])) {
+                let filterOption = filterOptions['filter'][filterDimension]['option'];
+                let filterValue = filterOptions['filter'][filterDimension]['value']
+                document.getElementById('filterDialogValue').value = filterValue;
+                document.getElementById('filterDialogOption').value = filterOption;
+                document.getElementById('filterDialogDimension').value = filterDimension;
+            }
+        }
 
         document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("filterDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
