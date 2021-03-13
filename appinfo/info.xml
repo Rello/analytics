@@ -20,7 +20,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Sharing: user, groups, link
 
 ]]></description>
-    <version>3.3.3</version>
+    <version>3.4.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>
@@ -44,7 +44,7 @@ Visualize and share anything, from financial analysis to IoT logs.
     </screenshot>
     <dependencies>
         <php min-version="7.0" max-version="8.0"/>
-        <nextcloud min-version="20" max-version="21"/>
+        <nextcloud min-version="20" max-version="22"/>
     </dependencies>
     <activity>
         <settings>

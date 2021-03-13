@@ -73,6 +73,7 @@ OC.L10N.register(
         'Choose a dataload from the list to change its settings': 'Wähle eine Datenladung aus der Liste um die Einstellungen zu ändern',
         'Overview': 'Überblick',
         'Drilldown': 'Aufriss',
-        'Datasource simulation': 'Datasource simulieren'
+        'Datasource simulation': 'Datasource simulieren',
+        'Link copied': 'Link kopiert'
     },
     '');

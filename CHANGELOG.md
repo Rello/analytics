@@ -1,24 +1,25 @@
 # Changelog
 
-## 3.4.0 - 2021-03-xx
-
+## 3.4.0 - 2021-03-13
 ### Added
-
 - Datasource: Spreadsheet (xls, xlsx, ods) [#115](https://github.com/rello/analytics/issues/115)
 
 ### Changed
-
 - Displayed date & time in UTC [#54](https://github.com/rello/analytics/issues/54)
 - Improve robustness of data load (empty data) [#112](https://github.com/rello/analytics/issues/112)
-- Better usability when creating new reports
+- Usability when creating new reports
 - UI improvements
 - Share link to clipboard and not new window
+- Filter usability enhancements [#122](https://github.com/rello/analytics/issues/122)
 
 ### Fixed
 
+- Sharing link not working [#121](https://github.com/rello/analytics/issues/121)
 - "Limit to groups" not working [#73](https://github.com/rello/analytics/issues/73)
 - Dashboard icon missing
 - Float numbers in graph tooltips [#117](https://github.com/rello/analytics/issues/117)
+- High CPU load during dataloads [#118](https://github.com/rello/analytics/issues/118)
+- sharing "can modify" does not show the current status. [#125](https://github.com/rello/analytics/issues/125)
 
 ## 3.3.3 - 2021-02-24
 

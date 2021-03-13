@@ -28,7 +28,6 @@ OCA.Analytics.Sidebar = {
         } else {
             document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
             OCA.Analytics.Sidebar.constructTabs(datasetType);
-            document.getElementById('tabHeaderDataset').classList.add('selected');
 
             if (document.getElementById('advanced').value === 'false') {
                 if (appsidebar.dataset.id === '') {
@@ -42,6 +41,8 @@ OCA.Analytics.Sidebar = {
             }
             appsidebar.dataset.id = datasetId;
             appsidebar.dataset.type = datasetType;
+
+            document.getElementById('tabHeaderDataset').classList.add('selected');
             document.querySelector('.tabHeader.selected').click();
         }
     },
