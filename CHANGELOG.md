@@ -1,10 +1,19 @@
 # Changelog
 
+## 3.4.1 - 2021-03-14
+
+### Fixed
+
+-First start wizard showing every time #132
+
 ## 3.4.0 - 2021-03-13
+
 ### Added
+
 - Datasource: Spreadsheet (xls, xlsx, ods) [#115](https://github.com/rello/analytics/issues/115)
 
 ### Changed
+
 - Displayed date & time in UTC [#54](https://github.com/rello/analytics/issues/54)
 - Improve robustness of data load (empty data) [#112](https://github.com/rello/analytics/issues/112)
 - Usability when creating new reports
@@ -13,7 +22,6 @@
 - Filter usability enhancements [#122](https://github.com/rello/analytics/issues/122)
 
 ### Fixed
-
 - Sharing link not working [#121](https://github.com/rello/analytics/issues/121)
 - "Limit to groups" not working [#73](https://github.com/rello/analytics/issues/73)
 - Dashboard icon missing
