@@ -19,7 +19,7 @@ use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
 
-class WizzardController extends Controller
+class WizardController extends Controller
 {
 
     /** @var IConfig */
