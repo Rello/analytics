@@ -128,7 +128,8 @@ class DataloadService
     public function execute(int $dataloadId)
     {
         $bulkSize = 500;
-        $insert = $update = 0;
+        $insert = $update = $error = 0;
+        $bulkInsert = null;
 
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
         $option = json_decode($dataloadMetadata['option'], true);
@@ -137,6 +138,7 @@ class DataloadService
 
         if (isset($option['delete']) and $option['delete'] === 'true') {
             $this->StorageController->delete($datasetId, '*', '*');
+            $bulkInsert = true;
         }
 
         $this->DataloadMapper->beginTransaction();
@@ -149,19 +151,16 @@ class DataloadService
                     $row[2] = $row[1];
                     $row[1] = null;
                 }
-                try {
-                    $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], true);
-                    $insert = $insert + $action['insert'];
-                    $update = $update + $action['update'];
-                } catch (\Exception $e) {
-                    $result['error']++;
-                }
+                $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert);
+                $insert = $insert + $action['insert'];
+                $update = $update + $action['update'];
+                $error = $error + $action['error'];
 
                 if ($currentCount % $bulkSize === 0) {
                     $this->DataloadMapper->commit();
                     $this->DataloadMapper->beginTransaction();
                 }
-                $currentCount++;
+                if ($action['error'] === 0) $currentCount++;
             }
         }
         $this->DataloadMapper->commit();
@@ -169,11 +168,10 @@ class DataloadService
         $result = [
             'insert' => $insert,
             'update' => $update,
-            'error' => $result['error'],
+            'error' => $error,
         ];
 
-        if ($result['error'] === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
-
+        if ($error === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
         return $result;
     }
 
