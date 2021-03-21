@@ -202,7 +202,7 @@ OCA.Analytics.Filter = {
             filterOptions['filter'][dimension] = {};
         }
         filterOptions['filter'][dimension]['option'] = document.getElementById('filterDialogOption').value;
-        filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value;
+        filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value.replace(', ', ',');
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
