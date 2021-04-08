@@ -1,10 +1,21 @@
 # Changelog
 
+## 3.5.0 - 2021-04-xx
+
+### Added
+
+- UI cleanups #138
+
+### Fixed
+
+- handle spaces in filters
+- Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
+
 ## 3.4.1 - 2021-03-14
 
 ### Fixed
 
--First start wizard showing every time #132
+- First start wizard showing every time #132
 
 ## 3.4.0 - 2021-03-13
 
@@ -13,7 +24,6 @@
 - Datasource: Spreadsheet (xls, xlsx, ods) [#115](https://github.com/rello/analytics/issues/115)
 
 ### Changed
-
 - Displayed date & time in UTC [#54](https://github.com/rello/analytics/issues/54)
 - Improve robustness of data load (empty data) [#112](https://github.com/rello/analytics/issues/112)
 - Usability when creating new reports

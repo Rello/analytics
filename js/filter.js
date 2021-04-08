@@ -246,7 +246,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Backend.getData();
     },
 
-    openOptionsDialog: function () {
+    openChartOptionsDialog: function () {
         let drilldownRows = '';
         let dataOptions;
         try {
@@ -291,7 +291,7 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + t('analytics', 'Options')
+            + t('analytics', 'Chart options')
             + '</h2>'
             + '<div class="table" style="display: table;">'
 

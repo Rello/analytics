@@ -119,48 +119,34 @@ table.dataTable tbody tr {
   background-color: var(--color-main-background) !important;
 }
 
-.icon-analytics-filter-add {
-  @include icon-color('filteradd', 'analytics', $color-black, 1);
+.analytics-options {
   opacity: 0.5;
   background-size: 20px;
-  display: inline-block;
   margin-left: 10px;
   float: right;
   height: 22px;
   width: 22px;
+}
+
+.analytics-options:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.icon-analytics-filter-add {
+  @include icon-color('filteradd', 'analytics', $color-black, 1);
 }
 
 .icon-analytics-options {
   @include icon-color('options', 'analytics', $color-black, 1);
-  opacity: 0.5;
-  background-size: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
 }
 
 .icon-analytics-save {
   @include icon-color('save', 'analytics', $color-black, 1);
-  opacity: 0.5;
-  background-size: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
 }
 
 .icon-analytics-save-warning {
   @include icon-color('save', 'analytics', $color-warning, 1);
-  opacity: 1;
-  background-size: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
 }
 
 .icon-analytics-filter-remove {
@@ -173,22 +159,6 @@ table.dataTable tbody tr {
 
 .icon-analytics-drilldown {
   @include icon-color('column', 'analytics', $color-black, 1);
-  display: inline-block;
-  opacity: 0.5;
-  background-size: 18px;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
-}
-
-.icon-analytics-drilldown:hover,
-.icon-analytics-options:hover,
-.icon-analytics-filter-add:hover,
-.icon-analytics-save:hover,
-.icon-analytics-save-warning:hover {
-    opacity: 1;
-    cursor: pointer;
 }
 
 .filterVisualizationItem {

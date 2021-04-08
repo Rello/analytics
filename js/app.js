@@ -378,7 +378,7 @@ OCA.Analytics.UI = {
         });
     },
 
-    resetContent: function () {
+    resetContentArea: function () {
         if (document.getElementById('advanced').value === 'true') {
             OCA.Analytics.UI.showElement('analytics-intro');
             document.getElementById('app-sidebar').classList.add('disappear');
@@ -395,10 +395,44 @@ OCA.Analytics.UI = {
             document.getElementById('reportHeader').innerHTML = '';
             document.getElementById('reportSubHeader').innerHTML = '';
             OCA.Analytics.UI.hideElement('reportSubHeader');
-            OCA.Analytics.UI.hideElement('filterContainer');
-            OCA.Analytics.UI.hideElement('optionContainer');
-            OCA.Analytics.UI.hideElement('optionsIcon');
             OCA.Analytics.UI.hideElement('noDataContainer');
+
+            OCA.Analytics.UI.showElement('reportMenu');
+            document.getElementById('chartOptionsIcon').disabled = false;
+            document.getElementById('forecastIcon').disabled = false;
+
+        }
+    },
+
+    buildReportOptions: function () {
+        let currentReport = OCA.Analytics.currentReportData;
+        let canUpdate = parseInt(currentReport.options.permissions) === OC.PERMISSION_UPDATE;
+        let isInternalShare = currentReport.options.isShare !== undefined;
+        let isExternalShare = document.getElementById('sharingToken').value !== '';
+
+        if (isExternalShare) {
+            if (canUpdate) {
+                OCA.Analytics.UI.hideElement('reportMenuIcon');
+                OCA.Analytics.Filter.refreshFilterVisualisation();
+            } else {
+                document.getElementById('reportMenu').remove();
+            }
+            return;
+        }
+
+        if (!canUpdate) {
+            OCA.Analytics.UI.hideElement('reportMenu');
+        }
+
+        if (isInternalShare) {
+            OCA.Analytics.UI.showElement('reportMenuIcon');
+        }
+        OCA.Analytics.Filter.refreshFilterVisualisation();
+
+        let visualization = currentReport.options.visualization;
+        if (visualization === 'table') {
+            document.getElementById('chartOptionsIcon').disabled = true;
+            document.getElementById('forecastIcon').disabled = true;
         }
     },
 
@@ -428,8 +462,46 @@ OCA.Analytics.UI = {
             document.getElementById(element).hidden = true;
             //document.getElementById(element).style.display = 'none';
         }
-    }
+    },
 
+    showReportMenu: function (evt) {
+        const toggleState = evt.target.nextElementSibling.classList.toggle('open');
+    },
+
+    showReportMenuForecast: function () {
+        document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuForecast').style.removeProperty('display');
+    },
+
+    showReportMenuMain: function () {
+        document.getElementById('reportMenuForecast').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuMain').style.removeProperty('display');
+    },
+
+    regression: function (x, y) {
+        const n = y.length;
+        let sx = 0;
+        let sy = 0;
+        let sxy = 0;
+        let sxx = 0;
+        let syy = 0;
+        for (let i = 0; i < n; i++) {
+            sx += x[i];
+            sy += y[i];
+            sxy += x[i] * y[i];
+            sxx += x[i] * x[i];
+            syy += y[i] * y[i];
+        }
+        const mx = sx / n;
+        const my = sy / n;
+        const yy = n * syy - sy * sy;
+        const xx = n * sxx - sx * sx;
+        const xy = n * sxy - sx * sy;
+        const slope = xy / xx;
+        const intercept = my - slope * mx;
+
+        return {slope, intercept};
+    }
 };
 
 OCA.Analytics.Datasource = {
@@ -516,7 +588,7 @@ OCA.Analytics.Datasource = {
 OCA.Analytics.Backend = {
 
     getData: function () {
-        OCA.Analytics.UI.resetContent();
+        OCA.Analytics.UI.resetContentArea();
         OCA.Analytics.UI.hideElement('analytics-intro');
         OCA.Analytics.UI.hideElement('analytics-content');
         OCA.Analytics.UI.hideElement('analytics-loading');
@@ -555,38 +627,20 @@ OCA.Analytics.Backend = {
                 }
 
                 document.getElementById('reportHeader').innerText = data.options.name;
-
                 if (data.options.subheader !== '') {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
                     OCA.Analytics.UI.showElement('reportSubHeader');
                 }
 
-                let canUpdate = parseInt(data.options.permissions) === OC.PERMISSION_UPDATE;
-                let isInternalShare = data.options.isShare !== undefined;
-                let isExternalShare = document.getElementById('sharingToken').value !== '';
-
-                if (canUpdate) {
-                    OCA.Analytics.UI.showElement('filterContainer');
-                    OCA.Analytics.Filter.refreshFilterVisualisation();
-                    if (!isInternalShare && !isExternalShare) {
-                        OCA.Analytics.UI.showElement('optionContainer');
-                    }
-                } else if (isExternalShare) {
-                    document.getElementById('filterBar').remove();
-                }
-
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata' && parseInt(data.error) === 0) {
-
                     data.data = OCA.Analytics.Backend.formatDates(data.data);
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {
-                        OCA.Analytics.UI.showElement('optionsIcon');
                         OCA.Analytics.UI.buildChart(data);
                     } else if (visualization === 'table') {
                         OCA.Analytics.UI.buildDataTable(data);
                     } else {
-                        OCA.Analytics.UI.showElement('optionsIcon');
                         OCA.Analytics.UI.buildChart(data);
                         OCA.Analytics.UI.buildDataTable(data);
                     }
@@ -596,6 +650,7 @@ OCA.Analytics.Backend = {
                         OCA.Analytics.UI.notification('error', data.error);
                     }
                 }
+                OCA.Analytics.UI.buildReportOptions();
             }
         });
     },
@@ -646,14 +701,20 @@ document.addEventListener('DOMContentLoaded', function () {
         OCA.Analytics.UI.showElement('analytics-intro');
         OCA.Analytics.Core.initApplication();
         if (document.getElementById('advanced').value === 'false') {
-            document.getElementById('optionsIcon').addEventListener('click', OCA.Analytics.Filter.openOptionsDialog);
+            document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
+            document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.showReportMenu);
             document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+
+            document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuForecast);
+            document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
+
         }
     } else {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.showReportMenu);
         OCA.Analytics.Backend.getData();
     }
 

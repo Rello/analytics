@@ -16,20 +16,68 @@
     <h2 id="reportHeader"></h2>
     <h3 id="reportSubHeader" hidden></h3>
     <div id="reportPlaceholder"></div>
-    <div id="filterBar" style="">
+    <div id="reportMenu" style="position: relative; height: 24px;">
+        <span id="reportMenuIcon" class="analytics-options icon-more has-tooltip"
+              title="<?php p($l->t('Options')); ?>"></span>
+        <div class="popovermenu" style="top: 33px; right: -5px;">
+            <ul id="reportMenuMain">
+                <li id="saveIcon">
+                    <button>
+                        <span class="icon-analytics-save-warning"
+                              title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></span>
+                        <span><?php p($l->t('Save')); ?></span>
+                    </button>
+                </li>
+                <li>
+                    <button id="drilldownIcon">
+                        <span class="icon-analytics-drilldown"></span>
+                        <span><?php p($l->t('Drilldown')); ?></span>
+                    </button>
+                </li>
+                <li>
+                    <button id="chartOptionsIcon">
+                        <span class="icon-analytics-options"></span>
+                        <span><?php p($l->t('Chart options')); ?></span>
+                    </button>
+                </li>
+                <li>
+                    <button id="forecastIcon">
+                        <span class="icon-category-monitoring"></span>
+                        <span><?php p($l->t('Forecast')); ?></span>
+                    </button>
+                </li>
+            </ul>
+            <ul id="reportMenuForecast" style="display: none !important;">
+                <li id="backIcon">
+                    <button>
+                        <span class="icon-view-previous"></span>
+                        <span><?php p($l->t('Back to the menu')); ?></span>
+                    </button>
+                </li>
+                <li>
+                    <span class="menuitem">
+                       <input id="check1" type="checkbox" class="checkbox"/>
+                       <label for="check1"><?php p($l->t('Linear Regression')); ?></label>
+                   </span>
+                </li>
+            </ul>
+        </div>
+        <div id="addFilterIcon" class="analytics-options icon-analytics-filter-add has-tooltip"
+             title="<?php p($l->t('Filter')); ?>"></div>
+        <div id="filterVisualisation" style="display: inline-block; float: right;"></div>
+    </div>
+    <div id="filterBar" style="" hidden>
         <div id="optionContainer" hidden>
-            <div id="saveIcon" class="icon-analytics-save-warning has-tooltip"
+            <div class="analytics-optoins icon-analytics-save-warning has-tooltip"
                  title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
-            <div id="optionsIcon" class="icon-analytics-options has-tooltip"
+            <div v-tooltip="'You have new messages.'" class="analytics-options icon-analytics-options has-tooltip"
                  title="<?php p($l->t('Options')); ?>"></div>
         </div>
         <div id="filterContainer" hidden>
-            <div id="drilldownIcon" class="icon-analytics-drilldown has-tooltip"
+            <div class="analytics-options icon-analytics-drilldown has-tooltip"
                  title="<?php p($l->t('Drilldown')); ?>"></div>
-            <div id="addFilterIcon" class="icon-analytics-filter-add has-tooltip"
+            <div class="analytics-options icon-analytics-filter-add has-tooltip"
                  title="<?php p($l->t('Filter')); ?>"></div>
-            <div id="filterVisualisation" style="display: inline-block; float: right;">
-            </div>
         </div>
     </div>
     <div id="chartContainer">
