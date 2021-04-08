@@ -427,13 +427,14 @@ OCA.Analytics.UI = {
         if (isInternalShare) {
             OCA.Analytics.UI.showElement('reportMenuIcon');
         }
-        OCA.Analytics.Filter.refreshFilterVisualisation();
 
         let visualization = currentReport.options.visualization;
         if (visualization === 'table') {
             document.getElementById('chartOptionsIcon').disabled = true;
             document.getElementById('forecastIcon').disabled = true;
         }
+
+        OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
     notification: function (type, message) {
@@ -606,7 +607,11 @@ OCA.Analytics.Backend = {
         // if nothing is changed by the user, the filter which is stored for the report, will be used
         let ajaxData = {};
         if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.filteroptions) !== 'undefined') {
-            ajaxData = {'filteroptions': JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions)};
+            ajaxData.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
+        }
+
+        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.dataoptions) !== 'undefined') {
+            ajaxData.dataoptions = OCA.Analytics.currentReportData.options.dataoptions;
         }
 
         $.ajax({

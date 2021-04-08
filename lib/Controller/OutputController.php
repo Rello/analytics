@@ -68,16 +68,17 @@ class OutputController extends Controller
      * @NoAdminRequired
      * @param int $datasetId
      * @param $filteroptions
+     * @param $dataoptions
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function read(int $datasetId, $filteroptions)
+    public function read(int $datasetId, $filteroptions, $dataoptions)
     {
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (empty($datasetMetadata)) $datasetMetadata = $this->ShareService->getSharedDataset($datasetId);
 
         if (!empty($datasetMetadata)) {
-            $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions);
+            $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions, $dataoptions);
             $result = $this->getData($datasetMetadata);
 
             $response = new DataResponse($result, HTTP::STATUS_OK);
@@ -141,10 +142,11 @@ class OutputController extends Controller
      * @UseSession
      * @param $token
      * @param $filteroptions
+     * @param $dataoptions
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function readPublic($token, $filteroptions)
+    public function readPublic($token, $filteroptions, $dataoptions)
     {
         $share = $this->ShareService->getDatasetByToken($token);
         if (empty($share)) {
@@ -158,7 +160,7 @@ class OutputController extends Controller
                     return new NotFoundResponse();
                 }
             }
-            $share = $this->evaluateCanFilter($share, $filteroptions);
+            $share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions);
             $result = $this->getData($share);
             return new DataResponse($result);
         }
@@ -169,15 +171,17 @@ class OutputController extends Controller
      *
      * @param $metadata
      * @param $filteroptions
+     * @param $dataoptions
      * @return mixed
      */
-    private function evaluateCanFilter($metadata, $filteroptions)
+    private function evaluateCanFilter($metadata, $filteroptions, $dataoptions)
     {
         if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             // send current user filteroptions to the datarequest
             // only if the report has update-permissions
             // if nothing is changed by the user, the filter which is stored for the report, will be used
             $metadata['filteroptions'] = $filteroptions;
+            $metadata['dataoptions'] = $dataoptions;
         }
         return $metadata;
     }

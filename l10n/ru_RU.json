@@ -115,7 +115,8 @@
     "Ignore leading rows": "Ignore leading rows",
     "Number of rows": "Number of rows",
     "Import report": "Import report",
-    "Export report": "Export report"
+    "Export report": "Export report",
+    "Save view": "Save view"
   },
   "pluralForm": ""
 }

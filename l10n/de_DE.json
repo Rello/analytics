@@ -114,7 +114,8 @@
     "Ignore leading rows": "Führende Zeilen ignorieren",
     "Number of rows": "Anzahl Zeilen",
     "Import report": "Bericht importieren",
-    "Export report": "Bericht exportieren"
+    "Export report": "Bericht exportieren",
+    "Save view": "Ansicht speichern"
   },
   "pluralForm": ""
 }

@@ -25,7 +25,7 @@
                     <button>
                         <span class="icon-analytics-save-warning"
                               title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></span>
-                        <span><?php p($l->t('Save')); ?></span>
+                        <span><?php p($l->t('Save view')); ?></span>
                     </button>
                 </li>
                 <li>

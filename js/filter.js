@@ -372,8 +372,8 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
-        OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
-        OCA.Analytics.Filter.Backend.updateDataset();
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();
     },
 
@@ -422,7 +422,7 @@ OCA.Analytics.Filter.Backend = {
                 'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
             },
             success: function () {
-                delete OCA.Analytics.currentReportData.options.filteroptions;
+                delete OCA.Analytics.currentReportData.options;
                 OCA.Analytics.Backend.getData();
             }
         });

@@ -5,9 +5,9 @@
 ### Added
 
 - UI cleanups #138
+- Filter save logic also for chart options #123
 
 ### Fixed
-
 - handle spaces in filters
 - Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
 

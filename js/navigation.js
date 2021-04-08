@@ -260,7 +260,7 @@ OCA.Analytics.Navigation = {
             document.getElementById('filterVisualisation').innerHTML = '';
             if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
                 // reset any user-filters and display the filters stored for the report
-                delete OCA.Analytics.currentReportData.options.filteroptions;
+                delete OCA.Analytics.currentReportData.options;
             }
             OCA.Analytics.unsavedFilters = false;
             OCA.Analytics.Sidebar.hideSidebar();
