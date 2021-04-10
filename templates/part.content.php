@@ -36,13 +36,13 @@
                 </li>
                 <li>
                     <button id="chartOptionsIcon">
-                        <span class="icon-analytics-options"></span>
+                        <span class="icon-analytics-chart-options"></span>
                         <span><?php p($l->t('Chart options')); ?></span>
                     </button>
                 </li>
                 <li>
                     <button id="forecastIcon">
-                        <span class="icon-category-monitoring"></span>
+                        <span class="icon-analytics-forecast"></span>
                         <span><?php p($l->t('Forecast')); ?></span>
                     </button>
                 </li>

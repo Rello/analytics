@@ -78,12 +78,7 @@ class File implements IDatasource
         $headerrow = $errorMessage = 0;
         $selectedColumns = array();
 
-        if (isset($option['path'])) {
-            $file = $this->rootFolder->getUserFolder($this->userId)->get($option['path']);
-        } else {
-            $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
-        }
-
+        $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         $rows = str_getcsv($file->getContent(), "\n");
 
         // remove x number of rows from the beginning
@@ -126,6 +121,7 @@ class File implements IDatasource
         }
         return [
             'header' => $header,
+            'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => $errorMessage,
         ];

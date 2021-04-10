@@ -131,6 +131,7 @@ class Excel implements IDatasource
 
         return [
             'header' => $header,
+            'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $dataClean,
             'error' => $errorMessage,
         ];

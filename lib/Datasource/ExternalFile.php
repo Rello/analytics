@@ -126,8 +126,10 @@ class ExternalFile implements IDatasource
                 array_push($data, $rowMinimized);
             }
         }
+
         return [
             'header' => $header,
+            'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => 0,
         ];

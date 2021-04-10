@@ -189,9 +189,8 @@ class DataloadService
         $datasetMetadata = $this->DatasetService->getOwnDataset($dataloadMetadata['dataset'], $dataloadMetadata['user_id']);
 
         if (!empty($datasetMetadata)) {
-            $option = json_decode($dataloadMetadata['option'], true);
-            $option['user_id'] = $dataloadMetadata['user_id'];
-            $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $option);
+            $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until datasource table is renamed link=>option
+            $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
             $result['datasetId'] = $dataloadMetadata['dataset'];
             return $result;
         } else {

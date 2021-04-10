@@ -3,9 +3,9 @@
 ## 3.5.0 - 2021-04-xx
 
 ### Added
-
 - UI cleanups #138
-- Filter save logic also for chart options #123
+- Save logic also for chart options #123
+- Same filter logic for all data sources #139
 
 ### Fixed
 - handle spaces in filters

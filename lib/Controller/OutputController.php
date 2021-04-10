@@ -114,7 +114,7 @@ class OutputController extends Controller
             }
             $option['user_id'] = $datasetMetadata['user_id'];
 
-            $result = $this->DatasourceController->read($datasourceId, $option);
+            $result = $this->DatasourceController->read($datasourceId, $datasetMetadata);
             //unset($result['error']);
         }
 

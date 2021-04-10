@@ -39,7 +39,7 @@ class DatasourceController extends Controller
     private $l10n;
 
     const DATASET_TYPE_GROUP = 0;
-    const DATASET_TYPE_INTERNAL_FILE = 1;
+    const DATASET_TYPE_FILE = 1;
     const DATASET_TYPE_INTERNAL_DB = 2;
     const DATASET_TYPE_GIT = 3;
     const DATASET_TYPE_EXTERNAL_FILE = 4;
@@ -116,11 +116,20 @@ class DatasourceController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasourceId
-     * @param $option
+     * @param $datasetMetadata
      * @return array|NotFoundException
      */
-    public function read(int $datasourceId, $option)
+    public function read(int $datasourceId, $datasetMetadata)
     {
+        $option = array();
+        // before 3.1.0, the options were in another format. as of 3.1.0 the standard option array is used
+        if ($datasetMetadata['link'][0] !== '{') {
+            $option['link'] = $datasetMetadata['link'];
+        } else {
+            $option = json_decode($datasetMetadata['link'], true);
+        }
+        $option['user_id'] = $datasetMetadata['user_id'];
+
         try {
             $result = $this->getDatasources()[$datasourceId]->readData($option);
 
@@ -134,8 +143,18 @@ class DatasourceController extends Controller
                 date_default_timezone_set('UTC');
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s") . 'Z');
             }
+
+            // filter resultset if required
+            if (isset($datasetMetadata['filteroptions']) && strlen($datasetMetadata['filteroptions']) >> 2) {
+                $result['data'] = $this->filterData($result['data'], $datasetMetadata['filteroptions']);
+            }
+
         } catch (\Error $e) {
             $result['error'] = $e->getMessage();
+        }
+
+        if (empty($result['data'])) {
+            $result['status'] = 'nodata';
         }
         return $result;
     }
@@ -156,7 +175,7 @@ class DatasourceController extends Controller
     private function getOwnDatasources()
     {
         $datasources = [];
-        $datasources[self::DATASET_TYPE_INTERNAL_FILE] = $this->FileService;
+        $datasources[self::DATASET_TYPE_FILE] = $this->FileService;
         $datasources[self::DATASET_TYPE_EXCEL] = $this->ExcelService;
         $datasources[self::DATASET_TYPE_GIT] = $this->GithubService;
         $datasources[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService;
@@ -210,5 +229,40 @@ class DatasourceController extends Controller
             }
         }
         return $Array;
+    }
+
+    /**
+     * apply the fiven filters to the hole result set
+     *
+     * @NoAdminRequired
+     * @param $data
+     * @param $filter
+     * @return array
+     */
+    private function filterData($data, $filter)
+    {
+        $options = json_decode($filter, true);
+        if (isset($options['filter'])) {
+
+            foreach ($options['filter'] as $key => $value) {
+
+                $filterValue = $value['value'];
+                $filterOption = $value['option'];
+                $filtered = array();
+
+                foreach ($data as $record) {
+                    if (
+                        ($filterOption === 'EQ' && $record[$key] === $filterValue)
+                        || ($filterOption === 'GT' && $record[$key] > $filterValue)
+                        || ($filterOption === 'LT' && $record[$key] < $filterValue)
+                        || ($filterOption === 'LIKE' && strpos($record[$key], $filterValue) !== FALSE)
+                    ) {
+                        array_push($filtered, $record);
+                    }
+                }
+                $data = $filtered;
+            }
+        }
+        return $data;
     }
 }
