@@ -93,18 +93,7 @@ class ExternalFile implements IDatasource
             $rows = array_slice($rows, $option['offset']);
         }
 
-        // ensure that all values are integers
-        if (isset($option['columns'])) {
-            $new = array();
-            $selectedColumns = str_getcsv($option['columns'], ',');
-            foreach ($selectedColumns as $value) {
-                if (is_numeric($value)) {
-                    array_push($new, $value);
-                }
-            }
-            $selectedColumns = $new;
-        }
-
+        $selectedColumns = str_getcsv($option['columns'], ',');
         $delimiter = $this->detectDelimiter($rows[0]);
 
         foreach ($rows as &$row) {
@@ -113,7 +102,11 @@ class ExternalFile implements IDatasource
 
             if (count($selectedColumns) !== 0) {
                 foreach ($selectedColumns as $selectedColumn) {
-                    array_push($rowMinimized, $row[$selectedColumn - 1]);
+                    if (is_numeric($selectedColumn)) {
+                        array_push($rowMinimized, $row[$selectedColumn - 1]);
+                    } else {
+                        array_push($rowMinimized, $selectedColumn);
+                    }
                 }
             } else {
                 $rowMinimized = $row;

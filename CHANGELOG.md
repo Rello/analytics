@@ -6,6 +6,7 @@
 - UI cleanups #138
 - Save logic also for chart options #123
 - Same filter logic for all data sources #139
+- Datasource: overwrite column with custom text #131
 
 ### Fixed
 - handle spaces in filters
