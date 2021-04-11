@@ -397,10 +397,11 @@ OCA.Analytics.UI = {
             OCA.Analytics.UI.hideElement('reportSubHeader');
             OCA.Analytics.UI.hideElement('noDataContainer');
 
-            OCA.Analytics.UI.showElement('reportMenu');
+            OCA.Analytics.UI.showElement('reportMenuBar');
+            OCA.Analytics.UI.hideReportMenu();
             document.getElementById('chartOptionsIcon').disabled = false;
             document.getElementById('forecastIcon').disabled = false;
-
+            document.getElementById('drilldownIcon').disabled = false;
         }
     },
 
@@ -415,17 +416,21 @@ OCA.Analytics.UI = {
                 OCA.Analytics.UI.hideElement('reportMenuIcon');
                 OCA.Analytics.Filter.refreshFilterVisualisation();
             } else {
-                document.getElementById('reportMenu').remove();
+                document.getElementById('reportMenuBar').remove();
             }
             return;
         }
 
         if (!canUpdate) {
-            OCA.Analytics.UI.hideElement('reportMenu');
+            OCA.Analytics.UI.hideElement('reportMenuBar');
         }
 
         if (isInternalShare) {
             OCA.Analytics.UI.showElement('reportMenuIcon');
+        }
+
+        if (parseInt(currentReport.options.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
+            document.getElementById('drilldownIcon').disabled = true;
         }
 
         let visualization = currentReport.options.visualization;
@@ -465,8 +470,12 @@ OCA.Analytics.UI = {
         }
     },
 
-    showReportMenu: function (evt) {
-        const toggleState = evt.target.nextElementSibling.classList.toggle('open');
+    hideReportMenu: function () {
+        document.getElementById('reportMenu').classList.remove('open');
+    },
+
+    toggleReportMenu: function () {
+        document.getElementById('reportMenu').classList.toggle('open');
     },
 
     showReportMenuForecast: function () {
@@ -707,7 +716,7 @@ document.addEventListener('DOMContentLoaded', function () {
         OCA.Analytics.Core.initApplication();
         if (document.getElementById('advanced').value === 'false') {
             document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
-            document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.showReportMenu);
+            document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
             document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
@@ -719,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.showReportMenu);
+        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
         OCA.Analytics.Backend.getData();
     }
 

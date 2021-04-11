@@ -149,6 +149,14 @@ table.dataTable tbody tr {
   @include icon-color('save', 'analytics', $color-warning, 1);
 }
 
+.icon-analytics-chart-options {
+  @include icon-color('chartoptions', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-forecast {
+  @include icon-color('forecast', 'analytics', $color-black, 1);
+}
+
 .icon-analytics-filter-remove {
   @include icon-color('filterremove', 'analytics', $color-black, 1);
   height: 25px;

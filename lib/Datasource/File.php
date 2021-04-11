@@ -86,7 +86,9 @@ class File implements IDatasource
             $rows = array_slice($rows, $option['offset']);
         }
 
-        $selectedColumns = str_getcsv($option['columns'], ',');
+        if (isset($option['columns']) && strlen($option['columns']) > 0) {
+            $selectedColumns = str_getcsv($option['columns'], ',');
+        }
         $delimiter = $this->detectDelimiter($rows[0]);
 
         foreach ($rows as &$row) {

@@ -16,10 +16,10 @@
     <h2 id="reportHeader"></h2>
     <h3 id="reportSubHeader" hidden></h3>
     <div id="reportPlaceholder"></div>
-    <div id="reportMenu" style="position: relative; height: 24px;">
+    <div id="reportMenuBar" style="position: relative; height: 24px;">
         <span id="reportMenuIcon" class="analytics-options icon-more has-tooltip"
               title="<?php p($l->t('Options')); ?>"></span>
-        <div class="popovermenu" style="top: 33px; right: -5px;">
+        <div id="reportMenu" class="popovermenu" style="top: 33px; right: -5px;">
             <ul id="reportMenuMain">
                 <li id="saveIcon">
                     <button>

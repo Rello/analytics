@@ -28,6 +28,7 @@ OCA.Analytics.Filter = {
     },
 
     openDrilldownDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
         let drilldownRows = '';
         let availableDimensions = OCA.Analytics.currentReportData.dimensions;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
@@ -106,6 +107,7 @@ OCA.Analytics.Filter = {
     },
 
     openFilterDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
@@ -247,6 +249,7 @@ OCA.Analytics.Filter = {
     },
 
     openChartOptionsDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
         let drilldownRows = '';
         let dataOptions;
         try {

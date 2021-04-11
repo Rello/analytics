@@ -269,6 +269,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleOptionsClicked: function (evt) {
+        OCA.Analytics.UI.hideReportMenu();
         let openMenu;
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             openMenu = document.querySelector('.app-navigation-entry-menu.open').previousElementSibling.firstElementChild.firstElementChild.firstElementChild.dataset.id;
