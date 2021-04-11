@@ -258,6 +258,11 @@ class DatasourceController extends Controller
                         || ($filterOption === 'LIKE' && strpos($record[$key], $filterValue) !== FALSE)
                     ) {
                         array_push($filtered, $record);
+                    } else if ($filterOption === 'IN') {
+                        $filterValues = explode(',', $filterValue);
+                        if (in_array($record[$key], $filterValues)) {
+                            array_push($filtered, $record);
+                        }
                     }
                 }
                 $data = $filtered;
