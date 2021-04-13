@@ -7,6 +7,39 @@
  * @author Marcel Scherello <analytics@scherello.de>
  * @copyright 2021 Marcel Scherello
  */
+
+#app-navigation:not(.vue) .app-navigation-entry-utils {
+    opacity: 0;
+}
+
+#app-navigation:not(.vue)>ul>li.active>.app-navigation-entry-utils:hover,
+#app-navigation:not(.vue)>ul>li.active>a:hover+.app-navigation-entry-utils,
+#app-navigation:not(.vue)>ul>li.active>.app-navigation-entry-utils:hover,
+#app-navigation:not(.vue)>ul>li.active>a:hover +.app-navigation-entry-utils:hover,
+{
+    background-color: var(--color-primary-light);
+}
+
+#app-navigation:not(.vue)>ul>li>a:hover +.app-navigation-entry-utils,
+{
+  opacity: 1;
+  background-color: var(--color-background-hover)
+}
+#app-navigation:not(.vue)>ul>li>ul>li>a:hover +.app-navigation-entry-utils,
+{
+  opacity: 1;
+}
+
+#app-navigation:not(.vue)>ul>li>.app-navigation-entry-utils:hover,
+#app-navigation:not(.vue)>ul>li>ul>li>.app-navigation-entry-utils:hover,
+{
+  opacity: 1;
+}
+
+#app-navigation:not(.vue) .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button, #app-navigation:not(.vue) .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+    opacity: remove;
+}
+
 #app-sidebar .close {
   position: absolute;
   top: 0;
