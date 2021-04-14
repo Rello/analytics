@@ -83,9 +83,10 @@
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
     </div>
-    <div id="chartMenuContainer">
+    <div id="chartLegendContainer">
         <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
     </div>
+    <div id="tableSeparatorContainer"></div>
     <table id="tableContainer"></table>
     <div id="noDataContainer" hidden>
         <?php p($l->t('No data found')); ?>

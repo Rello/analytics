@@ -356,7 +356,7 @@ OCA.Analytics.Filter = {
 
         // if any dataseries is tied to the secondary yAxis or not
         //if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
-        let enableAxis = '{"scales":{"yAxes":[{},{"display":true}]}}';
+        let enableAxis = '{"scales":{"secondary":{"display":true}}}';
         if (seondaryAxisRequired === true) {
             try {
                 // if there are existing settings, merge them
@@ -375,6 +375,7 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
+        OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();

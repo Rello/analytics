@@ -67,6 +67,10 @@
     text-align: center;
 }
 
+#reportMenuBar {
+    margin-bottom: 20px;
+}
+
 #reportSubHeader {
     text-align: center;
 }
@@ -88,9 +92,12 @@
     width:99%;
 }
 
-#chartMenuContainer {
+#chartLegendContainer {
     height:16px;
-    margin-bottom: 60px;
+}
+
+#tableSeparatorContainer {
+    margin-bottom: 40px;
 }
 
 #chartLegend {

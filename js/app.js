@@ -155,6 +155,10 @@ OCA.Analytics.UI = {
                 pagination.toggle(this.api().page.info().pages > 1);
                 var info = $(this).closest('.dataTables_wrapper').find('.dataTables_info');
                 info.toggle(this.api().page.info().pages > 1);
+                var length = $(this).closest('.dataTables_wrapper').find('.dataTables_length');
+                length.toggle(this.api().page.info().pages > 1);
+                var filter = $(this).closest('.dataTables_wrapper').find('.dataTables_filter');
+                filter.toggle(this.api().page.info().pages > 1);
             },
         });
     },
@@ -200,8 +204,8 @@ OCA.Analytics.UI = {
 
     buildChart: function (jsondata) {
 
+        OCA.Analytics.UI.showElement('tableSeparatorContainer');
         OCA.Analytics.UI.showElement('chartContainer');
-        OCA.Analytics.UI.showElement('chartMenuContainer');
         let ctx = document.getElementById('myChart').getContext('2d');
 
         let chartType;
@@ -217,26 +221,29 @@ OCA.Analytics.UI = {
         let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
         let keyFigureColumn = headerKeys - 1; //key figures is taken from the last column
 
-        // Chart.defaults.elements.line.borderWidth = 2;
-        // Chart.defaults.elements.line.tension = 0.1;
-        // Chart.defaults.elements.line.fill = false;
-        // Chart.defaults.elements.point.radius = 1;
+        Chart.defaults.elements.line.borderWidth = 2;
+        Chart.defaults.elements.line.tension = 0.1;
+        Chart.defaults.elements.line.fill = false;
+        Chart.defaults.elements.point.radius = 1;
+        Chart.defaults.plugins.legend.display = false;
+        Chart.defaults.plugins.legend.position = 'bottom';
+
         //Chart.defaults.global.tooltips.enabled = true;
-        Chart.defaults.global.elements.line.borderWidth = 2;
-        Chart.defaults.global.elements.line.tension = 0.1;
-        Chart.defaults.global.elements.line.fill = false;
-        Chart.defaults.global.elements.point.radius = 1;
+        //Chart.defaults.global.elements.line.borderWidth = 2;
+        //Chart.defaults.global.elements.line.tension = 0.1;
+        //Chart.defaults.global.elements.line.fill = false;
+        //Chart.defaults.global.elements.point.radius = 1;
 
         var chartOptions = {
             maintainAspectRatio: false,
             responsive: true,
             scales: {
-                yAxes: [{
-                    id: 'primary',
+                'primary': {
+                    type: 'linear',
                     stacked: false,
                     position: 'left',
                     display: true,
-                    gridLines: {
+                    grid: {
                         display: true,
                     },
                     ticks: {
@@ -244,12 +251,13 @@ OCA.Analytics.UI = {
                             return value.toLocaleString();
                         },
                     },
-                }, {
-                    id: 'secondary',
+                },
+                'secondary': {
+                    type: 'linear',
                     stacked: false,
                     position: 'right',
                     display: false,
-                    gridLines: {
+                    grid: {
                         display: false,
                     },
                     ticks: {
@@ -257,28 +265,30 @@ OCA.Analytics.UI = {
                             return value.toLocaleString();
                         },
                     },
-                }],
-                xAxes: [{
+                },
+                'xAxes': {
                     type: 'category',
+                    time: {
+                        parser: 'YYYY-MM-DD HH:mm',
+                        tooltipFormat: 'LL',
+                    },
                     distribution: 'linear',
-                    gridLines: {
+                    grid: {
                         display: false
                     },
                     display: true,
-                }],
-            },
-            plugins: {
-                colorschemes: {
-                    scheme: 'tableau.ClassicLight10'
-                }
-            },
-            legend: {
-                display: false,
-                position: 'bottom'
+                },
             },
             animation: {
                 duration: 0 // general animation time
             },
+
+            plugins: {
+                autocolors: {
+                    mode: 'dataset',
+                }
+            },
+
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, data) {
@@ -313,8 +323,9 @@ OCA.Analytics.UI = {
 
             if (chartType === 'datetime' || chartType === 'area') {
                 datasets[dataSeries]['data'].push({
-                    t: values[characteristicColumn],
-                    y: parseFloat(values[keyFigureColumn])
+                    y: parseFloat(values[keyFigureColumn]),
+                    x: values[characteristicColumn]
+
                 });
             } else {
                 datasets[dataSeries]['data'].push(parseFloat(values[keyFigureColumn]));
@@ -325,23 +336,28 @@ OCA.Analytics.UI = {
                 }
             }
         }
+
+        if (datasets.length > 1) {
+            OCA.Analytics.UI.showElement('chartLegendContainer');
+        }
+
         if (chartType === 'datetime') {
-            chartOptions.scales.xAxes[0].type = 'time';
-            chartOptions.scales.xAxes[0].distribution = 'linear';
+            chartOptions.scales['xAxes'].type = 'time';
+            chartOptions.scales['xAxes'].distribution = 'linear';
         } else if (chartType === 'area') {
-            chartOptions.scales.xAxes[0].type = 'time';
-            chartOptions.scales.xAxes[0].distribution = 'linear';
-            chartOptions.scales.yAxes[0].stacked = true;
-            Chart.defaults.global.elements.line.fill = true;
+            chartOptions.scales['xAxes'].type = 'time';
+            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['primary'].stacked = true;
+            Chart.defaults.elements.line.fill = true;
         } else if (chartType === 'doughnut') {
-            chartOptions.scales.xAxes[0].display = false;
-            chartOptions.scales.yAxes[0].display = false;
-            chartOptions.scales.yAxes[0].gridLines.display = false;
-            chartOptions.scales.yAxes[1].display = false;
-            chartOptions.scales.yAxes[1].gridLines.display = false;
-            chartOptions.circumference = Math.PI;
-            chartOptions.rotation = -Math.PI;
-            chartOptions.legend.display = true;
+            chartOptions.scales['xAxes'].display = false;
+            chartOptions.scales['primary'].display = false;
+            chartOptions.scales['primary'].grid.display = false;
+            chartOptions.scales['secondary'].display = false;
+            chartOptions.scales['secondary'].grid.display = false;
+            chartOptions.circumference = 180;
+            chartOptions.rotation = -90;
+            Chart.defaults.plugins.legend.display = true;
         }
 
         // the user can add/overwrite chart options
@@ -370,10 +386,14 @@ OCA.Analytics.UI = {
                 datasets: datasets
             },
             options: chartOptions,
+            plugins: [
+                window['chartjs-plugin-autocolors']
+            ]
         });
 
         document.getElementById('chartLegend').addEventListener('click', function () {
-            myChart.options.legend.display = !myChart.options.legend.display;
+            //myChart.options.legend.display = !myChart.options.legend.display;
+            myChart.legend.options.display = !myChart.legend.options.display
             myChart.update();
         });
     },
@@ -386,11 +406,12 @@ OCA.Analytics.UI = {
             if ($.fn.dataTable.isDataTable('#tableContainer')) {
                 $('#tableContainer').DataTable().destroy();
             }
-            OCA.Analytics.UI.hideElement('chartMenuContainer');
             OCA.Analytics.UI.hideElement('chartContainer');
+            OCA.Analytics.UI.hideElement('chartLegendContainer');
             document.getElementById('chartContainer').innerHTML = '';
             document.getElementById('chartContainer').innerHTML = '<canvas id="myChart" ></canvas>';
             OCA.Analytics.UI.hideElement('tableContainer');
+            OCA.Analytics.UI.hideElement('tableSeparatorContainer');
             document.getElementById('tableContainer').innerHTML = '';
             document.getElementById('reportHeader').innerHTML = '';
             document.getElementById('reportSubHeader').innerHTML = '';
@@ -621,6 +642,10 @@ OCA.Analytics.Backend = {
 
         if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.dataoptions) !== 'undefined') {
             ajaxData.dataoptions = OCA.Analytics.currentReportData.options.dataoptions;
+        }
+
+        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.chartoptions) !== 'undefined') {
+            ajaxData.chartoptions = OCA.Analytics.currentReportData.options.chartoptions;
         }
 
         $.ajax({

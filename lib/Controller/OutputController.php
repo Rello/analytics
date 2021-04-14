@@ -72,13 +72,13 @@ class OutputController extends Controller
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function read(int $datasetId, $filteroptions, $dataoptions)
+    public function read(int $datasetId, $filteroptions, $dataoptions, $chartoptions)
     {
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (empty($datasetMetadata)) $datasetMetadata = $this->ShareService->getSharedDataset($datasetId);
 
         if (!empty($datasetMetadata)) {
-            $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions, $dataoptions);
+            $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions, $dataoptions, $chartoptions);
             $result = $this->getData($datasetMetadata);
 
             $response = new DataResponse($result, HTTP::STATUS_OK);
@@ -146,7 +146,7 @@ class OutputController extends Controller
      * @return DataResponse|NotFoundResponse
      * @throws NotFoundException
      */
-    public function readPublic($token, $filteroptions, $dataoptions)
+    public function readPublic($token, $filteroptions, $dataoptions, $chartoptions)
     {
         $share = $this->ShareService->getDatasetByToken($token);
         if (empty($share)) {
@@ -160,7 +160,7 @@ class OutputController extends Controller
                     return new NotFoundResponse();
                 }
             }
-            $share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions);
+            $share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions, $chartoptions);
             $result = $this->getData($share);
             return new DataResponse($result);
         }
@@ -174,7 +174,7 @@ class OutputController extends Controller
      * @param $dataoptions
      * @return mixed
      */
-    private function evaluateCanFilter($metadata, $filteroptions, $dataoptions)
+    private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions)
     {
         if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             // send current user filteroptions to the datarequest
@@ -182,6 +182,7 @@ class OutputController extends Controller
             // if nothing is changed by the user, the filter which is stored for the report, will be used
             $metadata['filteroptions'] = $filteroptions;
             $metadata['dataoptions'] = $dataoptions;
+            $metadata['chartoptions'] = $chartoptions;
         }
         return $metadata;
     }
