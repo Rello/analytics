@@ -1,7 +1,34 @@
 # Changelog
 
-## 3.4.0 - 2021-03-13
+## 3.5.0 - 2021-04-xx
+
 ### Added
+
+- UI cleanups #138
+- Save logic also for chart options #123
+- Same filter logic for all data sources #139
+- Datasource: overwrite column with custom text #131
+
+### Changed
+
+- Migration to Chart.js V.3.1 #140
+
+### Fixed
+
+- handle spaces in filters
+- Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
+- occ command error #130
+
+## 3.4.1 - 2021-03-14
+
+### Fixed
+
+- First start wizard showing every time #132
+
+## 3.4.0 - 2021-03-13
+
+### Added
+
 - Datasource: Spreadsheet (xls, xlsx, ods) [#115](https://github.com/rello/analytics/issues/115)
 
 ### Changed
@@ -13,7 +40,6 @@
 - Filter usability enhancements [#122](https://github.com/rello/analytics/issues/122)
 
 ### Fixed
-
 - Sharing link not working [#121](https://github.com/rello/analytics/issues/121)
 - "Limit to groups" not working [#73](https://github.com/rello/analytics/issues/73)
 - Dashboard icon missing

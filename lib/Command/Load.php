@@ -46,6 +46,6 @@ class Load extends Command
     {
         $dataloadId = $input->getArgument('dataloadId');
         $this->DataloadService->execute((int)$dataloadId);
-        return Command::SUCCESS;
+        return 0;
     }
 }

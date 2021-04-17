@@ -109,13 +109,14 @@
     "Favorites": "Избранное",
     "Analytics - Advanced configuration": "Аналитика - Расширенные настройки",
     "Report was changed - Press here to save the current state": "Отчет был изменен - чтобы сохранить текущее состояние, нажмите здесь",
-    "External URL": "External URL",
-    "Select columns": "Select columns",
-    "e.g. 1,2,4 or leave empty": "e.g. 1,2,4 or leave empty",
-    "Ignore leading rows": "Ignore leading rows",
-    "Number of rows": "Number of rows",
-    "Import report": "Import report",
-    "Export report": "Export report"
+    "External URL": "Внешний URL",
+    "Select columns": "Выбрать столбцы",
+    "e.g. 1,2,4 or leave empty": "К примеру 1,2,4 или оставить пустым",
+    "Ignore leading rows": "Игнорировать ведущие строки",
+    "Number of rows": "Количествово строк",
+    "Import report": "Импортировать отчёт",
+    "Export report": "Экспортировать отчёт",
+    "Save view": "Save view"
   },
   "pluralForm": ""
 }

@@ -24,7 +24,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 
 ## Register datasource
 Apps can register own, external datasources via an event listener
-[How-To](https://github.com/Rello/analytics/wiki/Register-external-datasource)
+[How-To](https://github.com/Rello/analytics/wiki/Register-own-datasource)
 
 ## Languages
 - English (en),German (de, de_DE), Russian (ru, ru_RU), French (fr)

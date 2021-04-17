@@ -100,17 +100,27 @@ class StorageController extends Controller
         //convert date into timestamp
         //$timestamp = $this->convertGermanDateFormat($timestamp);
         $value = $this->floatvalue($value);
+        $validate = '';
+        $insert = $update = $error = $action = 0;
 
-        $validate = $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
-        $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert);
+        if ($value !== false) {
+            try {
+                $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert);
+            } catch (\Exception $e) {
+                $error = 1;
+            }
+            if ($action === 'insert') $insert = 1;
+            elseif ($action === 'update') $update = 1;
+        } else {
+            $error = 1;
+        }
 
-        $insert = $update = 0;
-        if ($action === 'insert') $insert = 1;
-        elseif ($action === 'update') $update = 1;
+        if ($error === 0) $validate = $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
 
         return [
             'insert' => $insert,
             'update' => $update,
+            'error' => $error,
             'validate' => $validate
         ];
     }

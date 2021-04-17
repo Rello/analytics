@@ -233,7 +233,7 @@ OCA.Analytics.Sidebar.Dataset = {
             function (e) {
                 if (e === true) {
                     OCA.Analytics.Sidebar.Backend.deleteDataset(id);
-                    OCA.Analytics.UI.resetContent();
+                    OCA.Analytics.UI.resetContentArea();
                     OCA.Analytics.Sidebar.hideSidebar();
                 }
             },
@@ -745,7 +745,7 @@ OCA.Analytics.Sidebar.Backend = {
                     OCA.Analytics.Navigation.init(datasetId);
                 } else {
                     if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     } else {
                         OCA.Analytics.UI.notification('success', t('analytics', 'Saved'));
@@ -774,7 +774,7 @@ OCA.Analytics.Sidebar.Backend = {
                 if (data.error === 0) {
                     OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                     if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
                 } else {
@@ -831,7 +831,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (document.getElementById('advanced').value === 'false') {
-                    OCA.Analytics.UI.resetContent();
+                    OCA.Analytics.UI.resetContentArea();
                     OCA.Analytics.Backend.getData();
                 }
             }
@@ -856,7 +856,7 @@ OCA.Analytics.Sidebar.Backend = {
                 if (data.error === 0) {
                     OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                     if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
                 } else {
@@ -890,7 +890,7 @@ OCA.Analytics.Sidebar.Backend = {
                 if (data.error === 0) {
                     OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                     if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContent();
+                        OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
                 } else {
