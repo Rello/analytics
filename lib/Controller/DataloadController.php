@@ -296,11 +296,8 @@ class DataloadController extends Controller
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;
-            $option = array();
-            $option['user_id'] = $datasetMetadata['user_id'];
-            $option['path'] = $path;
-            $option['link'] = $datasetMetadata['link'];
-            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_INTERNAL_FILE, $option);
+            $datasetMetadata['link'] = $path;
+            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_FILE, $datasetMetadata);
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {

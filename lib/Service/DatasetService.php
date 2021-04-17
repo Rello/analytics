@@ -126,12 +126,9 @@ class DatasetService
      */
     public function getOwnDataset(int $datasetId, string $user_id = null)
     {
-        // default permission UPDATE only for internal reports; all others can not change filters
         $ownDataset = $this->DatasetMapper->read($datasetId, $user_id);
-        if (!empty($ownDataset) && (int)$ownDataset['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+        if (!empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
-        } elseif (!empty($ownDataset)) {
-            $ownDataset['permissions'] = \OCP\Constants::PERMISSION_READ;
         }
         return $ownDataset;
     }
@@ -173,7 +170,7 @@ class DatasetService
             $name = explode('.', end(explode('/', $file)))[0];
             $subheader = $file;
             $parent = 0;
-            $type = DatasourceController::DATASET_TYPE_INTERNAL_FILE;
+            $type = DatasourceController::DATASET_TYPE_FILE;
             $link = $file;
             $visualization = 'table';
             $chart = 'line';

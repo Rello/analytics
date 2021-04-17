@@ -111,6 +111,7 @@ class Json implements IDatasource
 
         return [
             'header' => $header,
+            'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => 0,
         ];

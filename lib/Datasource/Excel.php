@@ -81,7 +81,7 @@ class Excel implements IDatasource
         $header = $dataClean = $data = array();
         $headerrow = $errorMessage = 0;
 
-        $file = $this->rootFolder->getUserFolder($this->userId)->get($option['link']);
+        $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         $filePath = explode('/', ltrim($file->getPath(), '/'));
         // remove leading username
         array_shift($filePath);
@@ -131,6 +131,7 @@ class Excel implements IDatasource
 
         return [
             'header' => $header,
+            'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $dataClean,
             'error' => $errorMessage,
         ];

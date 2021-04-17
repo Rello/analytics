@@ -28,6 +28,7 @@ OCA.Analytics.Filter = {
     },
 
     openDrilldownDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
         let drilldownRows = '';
         let availableDimensions = OCA.Analytics.currentReportData.dimensions;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
@@ -106,6 +107,7 @@ OCA.Analytics.Filter = {
     },
 
     openFilterDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
@@ -202,7 +204,7 @@ OCA.Analytics.Filter = {
             filterOptions['filter'][dimension] = {};
         }
         filterOptions['filter'][dimension]['option'] = document.getElementById('filterDialogOption').value;
-        filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value;
+        filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value.replace(', ', ',');
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
@@ -246,7 +248,8 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Backend.getData();
     },
 
-    openOptionsDialog: function () {
+    openChartOptionsDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
         let drilldownRows = '';
         let dataOptions;
         try {
@@ -291,7 +294,7 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog">'
             + '<a class="oc-dialog-close" id="btnClose"></a>'
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
-            + t('analytics', 'Options')
+            + t('analytics', 'Chart options')
             + '</h2>'
             + '<div class="table" style="display: table;">'
 
@@ -353,7 +356,7 @@ OCA.Analytics.Filter = {
 
         // if any dataseries is tied to the secondary yAxis or not
         //if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
-        let enableAxis = '{"scales":{"yAxes":[{},{"display":true}]}}';
+        let enableAxis = '{"scales":{"secondary":{"display":true}}}';
         if (seondaryAxisRequired === true) {
             try {
                 // if there are existing settings, merge them
@@ -373,7 +376,8 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
         OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
-        OCA.Analytics.Filter.Backend.updateDataset();
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
         OCA.Analytics.Filter.close();
     },
 
@@ -422,7 +426,7 @@ OCA.Analytics.Filter.Backend = {
                 'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
             },
             success: function () {
-                delete OCA.Analytics.currentReportData.options.filteroptions;
+                delete OCA.Analytics.currentReportData.options;
                 OCA.Analytics.Backend.getData();
             }
         });

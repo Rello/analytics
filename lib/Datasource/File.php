@@ -78,12 +78,7 @@ class File implements IDatasource
         $headerrow = $errorMessage = 0;
         $selectedColumns = array();
 
-        if (isset($option['path'])) {
-            $file = $this->rootFolder->getUserFolder($this->userId)->get($option['path']);
-        } else {
-            $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
-        }
-
+        $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         $rows = str_getcsv($file->getContent(), "\n");
 
         // remove x number of rows from the beginning
@@ -91,18 +86,9 @@ class File implements IDatasource
             $rows = array_slice($rows, $option['offset']);
         }
 
-        // ensure that all values are integers
-        if (isset($option['columns'])) {
-            $new = array();
+        if (isset($option['columns']) && strlen($option['columns']) > 0) {
             $selectedColumns = str_getcsv($option['columns'], ',');
-            foreach ($selectedColumns as $value) {
-                if (is_numeric($value)) {
-                    array_push($new, $value);
-                }
-            }
-            $selectedColumns = $new;
         }
-
         $delimiter = $this->detectDelimiter($rows[0]);
 
         foreach ($rows as &$row) {
@@ -111,7 +97,11 @@ class File implements IDatasource
 
             if (count($selectedColumns) !== 0) {
                 foreach ($selectedColumns as $selectedColumn) {
-                    array_push($rowMinimized, $row[$selectedColumn - 1]);
+                    if (is_numeric($selectedColumn)) {
+                        array_push($rowMinimized, $row[$selectedColumn - 1]);
+                    } else {
+                        array_push($rowMinimized, $selectedColumn);
+                    }
                 }
             } else {
                 $rowMinimized = $row;
@@ -126,6 +116,7 @@ class File implements IDatasource
         }
         return [
             'header' => $header,
+            'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => $errorMessage,
         ];

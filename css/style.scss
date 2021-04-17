@@ -7,6 +7,39 @@
  * @author Marcel Scherello <analytics@scherello.de>
  * @copyright 2021 Marcel Scherello
  */
+
+#app-navigation:not(.vue) .app-navigation-entry-utils {
+    opacity: 0;
+}
+
+#app-navigation:not(.vue)>ul>li.active>.app-navigation-entry-utils:hover,
+#app-navigation:not(.vue)>ul>li.active>a:hover+.app-navigation-entry-utils,
+#app-navigation:not(.vue)>ul>li.active>.app-navigation-entry-utils:hover,
+#app-navigation:not(.vue)>ul>li.active>a:hover +.app-navigation-entry-utils:hover,
+{
+    background-color: var(--color-primary-light);
+}
+
+#app-navigation:not(.vue)>ul>li>a:hover +.app-navigation-entry-utils,
+{
+  opacity: 1;
+  background-color: var(--color-background-hover)
+}
+#app-navigation:not(.vue)>ul>li>ul>li>a:hover +.app-navigation-entry-utils,
+{
+  opacity: 1;
+}
+
+#app-navigation:not(.vue)>ul>li>.app-navigation-entry-utils:hover,
+#app-navigation:not(.vue)>ul>li>ul>li>.app-navigation-entry-utils:hover,
+{
+  opacity: 1;
+}
+
+#app-navigation:not(.vue) .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button, #app-navigation:not(.vue) .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+    opacity: remove;
+}
+
 #app-sidebar .close {
   position: absolute;
   top: 0;
@@ -34,6 +67,10 @@
     text-align: center;
 }
 
+#reportMenuBar {
+    margin-bottom: 20px;
+}
+
 #reportSubHeader {
     text-align: center;
 }
@@ -55,9 +92,12 @@
     width:99%;
 }
 
-#chartMenuContainer {
+#chartLegendContainer {
     height:16px;
-    margin-bottom: 60px;
+}
+
+#tableSeparatorContainer {
+    margin-bottom: 40px;
 }
 
 #chartLegend {
@@ -119,48 +159,42 @@ table.dataTable tbody tr {
   background-color: var(--color-main-background) !important;
 }
 
-.icon-analytics-filter-add {
-  @include icon-color('filteradd', 'analytics', $color-black, 1);
+.analytics-options {
   opacity: 0.5;
   background-size: 20px;
-  display: inline-block;
   margin-left: 10px;
   float: right;
   height: 22px;
   width: 22px;
+}
+
+.analytics-options:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.icon-analytics-filter-add {
+  @include icon-color('filteradd', 'analytics', $color-black, 1);
 }
 
 .icon-analytics-options {
   @include icon-color('options', 'analytics', $color-black, 1);
-  opacity: 0.5;
-  background-size: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
 }
 
 .icon-analytics-save {
   @include icon-color('save', 'analytics', $color-black, 1);
-  opacity: 0.5;
-  background-size: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
 }
 
 .icon-analytics-save-warning {
   @include icon-color('save', 'analytics', $color-warning, 1);
-  opacity: 1;
-  background-size: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
+}
+
+.icon-analytics-chart-options {
+  @include icon-color('chartoptions', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-forecast {
+  @include icon-color('forecast', 'analytics', $color-black, 1);
 }
 
 .icon-analytics-filter-remove {
@@ -173,22 +207,6 @@ table.dataTable tbody tr {
 
 .icon-analytics-drilldown {
   @include icon-color('column', 'analytics', $color-black, 1);
-  display: inline-block;
-  opacity: 0.5;
-  background-size: 18px;
-  margin-left: 10px;
-  float: right;
-  height: 22px;
-  width: 22px;
-}
-
-.icon-analytics-drilldown:hover,
-.icon-analytics-options:hover,
-.icon-analytics-filter-add:hover,
-.icon-analytics-save:hover,
-.icon-analytics-save-warning:hover {
-    opacity: 1;
-    cursor: pointer;
 }
 
 .filterVisualizationItem {

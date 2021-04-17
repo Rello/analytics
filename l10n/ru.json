@@ -115,7 +115,8 @@
     "Ignore leading rows": "Игнорировать ведущие строки",
     "Number of rows": "Количествово строк",
     "Import report": "Импортировать отчёт",
-    "Export report": "Экспортировать отчёт"
+    "Export report": "Экспортировать отчёт",
+    "Save view": "Save view"
   },
   "pluralForm": ""
 }
