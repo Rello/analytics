@@ -80,8 +80,9 @@ class Widget implements IWidget
     {
         Util::addScript('analytics', 'dashboard');
         Util::addStyle('analytics', 'dashboard');
-        Util::addScript('analytics', '3rdParty/Chart.bundle.min');
-        Util::addScript('analytics', '3rdParty/chartjs-plugin-colorschemes.min');
+        Util::addScript('analytics', '3rdParty/chart.min');
+        Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
+        Util::addScript('analytics', '3rdParty/moment');
         Util::addScript('analytics', '3rdParty/cloner');
     }
 }

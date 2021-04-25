@@ -26,6 +26,7 @@ if (!OCA.Analytics) {
         TYPE_GIT: 3,
         TYPE_EXTERNAL_FILE: 4,
         TYPE_EXTERNAL_REGEX: 5,
+        TYPE_EXCEL: 7,
         TYPE_SHARED: 99,
         chartTypeMapping: {
             'datetime': 'line',
@@ -195,11 +196,11 @@ OCA.Analytics.Dashboard = {
         let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
         let keyFigureColumn = headerKeys - 1; //key figures is taken from the last column
 
-        Chart.defaults.global.elements.line.borderWidth = 2;
-        Chart.defaults.global.elements.line.tension = 0.1;
-        Chart.defaults.global.elements.line.fill = true;
-        Chart.defaults.global.elements.point.radius = 0;
-        Chart.defaults.global.tooltips.enabled = document.getElementById('myChart' + jsondata['options']['id']).clientHeight > 50;
+        Chart.defaults.elements.line.borderWidth = 2;
+        Chart.defaults.elements.line.tension = 0.1;
+        Chart.defaults.elements.point.radius = 0;
+        Chart.defaults.plugins.tooltip.enabled = document.getElementById('myChart' + jsondata['options']['id']).clientHeight > 50;
+        Chart.defaults.plugins.legend.display = false;
 
         let chartOptions = {
             bezierCurve: false, //remove curves from your plot
@@ -210,36 +211,30 @@ OCA.Analytics.Dashboard = {
             maintainAspectRatio: false,
             responsive: true,
             scales: {
-                yAxes: [{
-                    id: 'primary',
+                'primary': {
                     stacked: false,
                     position: 'left',
                     display: false,
-                    gridLines: {
+                    grid: {
                         display: false,
                     },
-                }, {
-                    id: 'secondary',
+                },
+                'secondary': {
                     stacked: false,
                     position: 'right',
                     display: false,
-                    gridLines: {
+                    grid: {
                         display: false,
                     },
-                }],
-                xAxes: [{
+                },
+                'xAxes': {
                     type: 'category',
                     distribution: 'linear',
-                    gridLines: {
+                    grid: {
                         display: false
                     },
                     display: false,
-                }],
-            },
-            plugins: {
-                colorschemes: {
-                    scheme: 'tableau.ClassicMedium10'
-                }
+                },
             },
             legend: {
                 display: false,
@@ -268,8 +263,8 @@ OCA.Analytics.Dashboard = {
 
             if (chartType === 'datetime' || chartType === 'area') {
                 datasets[dataSeries]['data'].push({
-                    t: values[characteristicColumn],
-                    y: parseFloat(values[keyFigureColumn])
+                    y: parseFloat(values[keyFigureColumn]),
+                    x: values[characteristicColumn]
                 });
             } else {
                 datasets[dataSeries]['data'].push(parseFloat(values[keyFigureColumn]));
@@ -281,32 +276,60 @@ OCA.Analytics.Dashboard = {
             }
         }
 
+
         if (chartType === 'datetime') {
-            chartOptions.scales.xAxes[0].type = 'time';
-            chartOptions.scales.xAxes[0].distribution = 'linear';
+            chartOptions.scales['xAxes'].type = 'time';
+            chartOptions.scales['xAxes'].distribution = 'linear';
         } else if (chartType === 'area') {
-            chartOptions.scales.xAxes[0].type = 'time';
-            chartOptions.scales.xAxes[0].distribution = 'linear';
-            chartOptions.scales.yAxes[0].stacked = true;
-            Chart.defaults.global.elements.line.fill = true;
+            chartOptions.scales['xAxes'].type = 'time';
+            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['primary'].stacked = true;
+            Chart.defaults.elements.line.fill = true;
         } else if (chartType === 'doughnut') {
-            chartOptions.scales.xAxes[0].display = false;
-            chartOptions.scales.yAxes[0].display = false;
-            chartOptions.scales.yAxes[0].gridLines.display = false;
-            chartOptions.scales.yAxes[1].display = false;
-            chartOptions.scales.yAxes[1].gridLines.display = false;
-            chartOptions.circumference = Math.PI;
-            chartOptions.rotation = -Math.PI;
-            chartOptions.legend.display = false;
+            chartOptions.scales['xAxes'].display = false;
+            chartOptions.scales['primary'].display = false;
+            chartOptions.scales['primary'].grid.display = false;
+            chartOptions.scales['secondary'].display = false;
+            chartOptions.scales['secondary'].grid.display = false;
+            chartOptions.circumference = 180;
+            chartOptions.rotation = -90;
             datasets[0]['borderWidth'] = 0;
         }
 
-        if (chartType !== 'column' && chartType !== 'doughnut') {
-            let height = document.getElementById('myChart' + jsondata['options']['id']).clientHeight;
-            let gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, 'rgb(174,199,232)'); // '#aec7e8'
-            gradient.addColorStop(1, 'rgb(174,199,232,0)');
-            datasets[0]['backgroundColor'] = gradient;
+
+        // do the color magic
+        // a predefined color array is used
+        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        for (let i = 0; i < datasets.length; ++i) {
+            let j = i - (Math.floor(i / colors.length) * colors.length)
+
+            // in only one dataset is being shown, create a fancy gadient fill
+            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
+                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
+                    .substring(1).match(/.{2}/g)
+                    .map(x => parseInt(x, 16));
+
+                datasets[0].backgroundColor = function (context) {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
+                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
+                    return gradient;
+                }
+                datasets[i].borderColor = colors[j];
+                Chart.defaults.elements.line.fill = true;
+            } else if (chartType === 'doughnut') {
+                // special array handling for dougnuts
+                datasets[i].backgroundColor = colors;
+                datasets[i].borderColor = colors;
+                Chart.defaults.elements.line.fill = false;
+            } else {
+                datasets[i].backgroundColor = colors[j];
+                Chart.defaults.elements.line.fill = false;
+                datasets[i].borderColor = colors[j];
+            }
         }
 
         // the user can add/overwrite chart options
@@ -318,6 +341,10 @@ OCA.Analytics.Dashboard = {
         if (userChartOptions !== '' && userChartOptions !== null) {
             chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
         }
+
+        // never show any axis in the dashboard
+        chartOptions.scales['secondary'].display = false;
+        chartOptions.scales['primary'].display = false;
 
         // the user can modify dataset/series settings
         // these are merged with the data array coming from the backend

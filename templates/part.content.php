@@ -54,7 +54,7 @@
                         <span><?php p($l->t('Back to the menu')); ?></span>
                     </button>
                 </li>
-                <li>
+                <li id="linearRegressionIcon">
                     <span class="menuitem">
                        <input id="check1" type="checkbox" class="checkbox"/>
                        <label for="check1"><?php p($l->t('Linear Regression')); ?></label>

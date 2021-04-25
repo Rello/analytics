@@ -175,7 +175,10 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetDatasource').addEventListener('change', OCA.Analytics.Sidebar.Dataset.handleDatasourceChange);
                     document.getElementById('sidebarDatasetChart').value = data['chart'];
                     document.getElementById('sidebarDatasetVisualization').value = data['visualization'];
-                    document.getElementById('sidebarDatasetChartOptions').value = data['chartoptions'];
+                    // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
+                    if (data['chartoptions'] !== null) {
+                        document.getElementById('sidebarDatasetChartOptions').value = data['chartoptions'].replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
+                    }
                     document.getElementById('sidebarDatasetDataOptions').value = data['dataoptions'];
                     document.getElementById('sidebarDatasetDimension1').value = data['dimension1'];
                     document.getElementById('sidebarDatasetDimension2').value = data['dimension2'];

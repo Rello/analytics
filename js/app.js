@@ -36,6 +36,7 @@ if (!OCA.Analytics) {
         SHARE_TYPE_ROOM: 10,
         initialDocumentTitle: null,
         currentReportData: {},
+        chartObject: null,
         // flexible mapping depending on type requiered by the used chart library
         chartTypeMapping: {
             'datetime': 'line',
@@ -228,12 +229,6 @@ OCA.Analytics.UI = {
         Chart.defaults.plugins.legend.display = false;
         Chart.defaults.plugins.legend.position = 'bottom';
 
-        //Chart.defaults.global.tooltips.enabled = true;
-        //Chart.defaults.global.elements.line.borderWidth = 2;
-        //Chart.defaults.global.elements.line.tension = 0.1;
-        //Chart.defaults.global.elements.line.fill = false;
-        //Chart.defaults.global.elements.point.radius = 1;
-
         var chartOptions = {
             maintainAspectRatio: false,
             responsive: true,
@@ -281,12 +276,6 @@ OCA.Analytics.UI = {
             },
             animation: {
                 duration: 0 // general animation time
-            },
-
-            plugins: {
-                autocolors: {
-                    mode: 'dataset',
-                }
             },
 
             tooltips: {
@@ -338,7 +327,43 @@ OCA.Analytics.UI = {
         }
 
         if (datasets.length > 1) {
+            // show legend button only when usefull with >1 dataset
             OCA.Analytics.UI.showElement('chartLegendContainer');
+        }
+
+        // do the color magic
+        // a predefined color array is used
+        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        for (let i = 0; i < datasets.length; ++i) {
+            let j = i - (Math.floor(i / colors.length) * colors.length)
+
+            // in only one dataset is being shown, create a fancy gadient fill
+            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
+                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
+                    .substring(1).match(/.{2}/g)
+                    .map(x => parseInt(x, 16));
+
+                datasets[0].backgroundColor = function (context) {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
+                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
+                    return gradient;
+                }
+                datasets[i].borderColor = colors[j];
+                Chart.defaults.elements.line.fill = true;
+            } else if (chartType === 'doughnut') {
+                // special array handling for dougnuts
+                datasets[i].backgroundColor = colors;
+                datasets[i].borderColor = colors;
+                Chart.defaults.elements.line.fill = false;
+            } else {
+                datasets[i].backgroundColor = colors[j];
+                Chart.defaults.elements.line.fill = false;
+                datasets[i].borderColor = colors[j];
+            }
         }
 
         if (chartType === 'datetime') {
@@ -365,6 +390,11 @@ OCA.Analytics.UI = {
         // these are merged with the standard report settings
         // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
         // e.g. add a secondary y-axis '{"scales": {"yAxes": [{},{"id":"B","position":"right"}]}}'
+
+        // replace old settings from Chart.js 2
+        // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
+        jsondata.options.chartoptions = jsondata.options.chartoptions.replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
+        OCA.Analytics.currentReportData.options.chartoptions = jsondata.options.chartoptions;
         let userChartOptions = jsondata.options.chartoptions;
         if (userChartOptions !== '' && userChartOptions !== null) {
             chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
@@ -379,22 +409,19 @@ OCA.Analytics.UI = {
             datasets = cloner.deep.merge(JSON.parse(userDatasetOptions), datasets);
         }
 
-        let myChart = new Chart(ctx, {
+        OCA.Analytics.chartObject = new Chart(ctx, {
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
                 datasets: datasets
             },
             options: chartOptions,
-            plugins: [
-                window['chartjs-plugin-autocolors']
-            ]
         });
 
         document.getElementById('chartLegend').addEventListener('click', function () {
             //myChart.options.legend.display = !myChart.options.legend.display;
-            myChart.legend.options.display = !myChart.legend.options.display
-            myChart.update();
+            OCA.Analytics.chartObject.legend.options.display = !OCA.Analytics.chartObject.legend.options.display
+            OCA.Analytics.chartObject.update();
         });
     },
 
@@ -509,6 +536,47 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuMain').style.removeProperty('display');
     },
 
+
+};
+
+OCA.Analytics.Functions = {
+
+    linearRegression: function () {
+        let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
+        for (let y = 0; y < numberDatasets; y++) {
+            let dataset = OCA.Analytics.chartObject.data.datasets[y];
+            let yValues = [];
+            for (let i = 0; i < dataset.data.length; i++) {
+                yValues.push(parseInt(dataset.data[i]["y"]));
+            }
+            let xValues = [];
+            for (let i = 1; i <= dataset.data.length; i++) {
+                xValues.push(i);
+            }
+
+            let regression = OCA.Analytics.Functions.regression(xValues, yValues);
+            let yNext = ((dataset.data.length) * regression["slope"]) + regression["intercept"];
+
+            let newDataset = {
+                label: dataset.label + " Forecast",
+                backgroundColor: dataset.backgroundColor,
+                borderColor: dataset.borderColor,
+                borderDash: [5, 5],
+                type: 'line',
+                yAxisID: dataset.yAxisID,
+                data: [
+                    {x: dataset.data[0]["x"], y: regression["intercept"]},
+                    {x: dataset.data[dataset.data.length - 1]["x"], y: yNext},
+                ]
+            };
+            OCA.Analytics.chartObject.data.datasets.push(newDataset);
+
+        }
+        //OCA.Analytics.chartObject.data.datasets[0].data.push(xNext);
+        //OCA.Analytics.chartObject.data.labels.push(OCA.Analytics.currentReportData.data.length + 1);
+        OCA.Analytics.chartObject.update();
+    },
+
     regression: function (x, y) {
         const n = y.length;
         let sx = 0;
@@ -533,6 +601,7 @@ OCA.Analytics.UI = {
 
         return {slope, intercept};
     }
+
 };
 
 OCA.Analytics.Datasource = {
@@ -746,7 +815,9 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
             document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
 
-            document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuForecast);
+            //document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuForecast);
+            document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
+            document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
             document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
 
         }

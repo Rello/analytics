@@ -1,17 +1,15 @@
 # Changelog
 
 ## 3.5.0 - 2021-04-xx
-
 ### Added
-
 - UI cleanups #138
 - Save logic also for chart options #123
 - Same filter logic for all data sources #139
 - Datasource: overwrite column with custom text #131
 
 ### Changed
-
-- Migration to Chart.js V.3.1 #140
+- Migration to Chart.js V.3 #140
+- Update ru language @[sibergad](https://github.com/sibergad) @[AleksovAnry](https://github.com/AleksovAnry)
 
 ### Fixed
 
