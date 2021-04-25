@@ -24,7 +24,7 @@ OC.L10N.register(
         'Technical error. Please check the logs': 'Техническая ошибка. Пожалуйста, проверьте журналы',
         'Search': 'Поиск',
         'first': 'первый',
-        'previous': 'предидущий',
+        'previous': 'предыдущий',
         'next': 'следующий',
         'last': 'последний',
         'Show _MENU_ entries': 'Отображать _MENU_ записей',
