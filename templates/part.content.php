@@ -46,6 +46,14 @@
                         <span><?php p($l->t('Forecast')); ?></span>
                     </button>
                 </li>
+                <li>
+                    <button id="downlaodChartIcon">
+                        <span class="icon-download"></span>
+                        <span><?php p($l->t('Download Chart')); ?></span>
+                        <a id="downlaodChartLink" href='' download="Chart.png" hidden>-</a>
+                    </button>
+                </li>
+
             </ul>
             <ul id="reportMenuForecast" style="display: none !important;">
                 <li id="backIcon">

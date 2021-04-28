@@ -425,6 +425,13 @@ OCA.Analytics.UI = {
         });
     },
 
+    downloadChart: function () {
+        OCA.Analytics.UI.hideReportMenu();
+        document.getElementById('downlaodChartLink').href = OCA.Analytics.chartObject.toBase64Image();
+        document.getElementById('downlaodChartLink').setAttribute('download', OCA.Analytics.currentReportData.options.name + '.png');
+        document.getElementById('downlaodChartLink').click();
+    },
+
     resetContentArea: function () {
         if (document.getElementById('advanced').value === 'true') {
             OCA.Analytics.UI.showElement('analytics-intro');
@@ -819,12 +826,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
             document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
             document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-
+            document.getElementById('exportIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
         }
     } else {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
+        document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
+
         OCA.Analytics.Backend.getData();
     }
 

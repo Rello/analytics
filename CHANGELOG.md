@@ -6,6 +6,7 @@
 - Save logic also for chart options #123
 - Same filter logic for all data sources #139
 - Datasource: overwrite column with custom text #131
+- Download chart as image #143
 
 ### Changed
 - Migration to Chart.js V.3 #140
@@ -13,6 +14,7 @@
 
 ### Fixed
 
+- workflow not working
 - handle spaces in filters
 - Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
 - occ command error #130
