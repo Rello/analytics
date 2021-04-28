@@ -78,7 +78,7 @@
     };
 
     window.OCA.WorkflowEngine.registerOperator({
-        id: 'OCA\\Analytics\\Flow\\Operation',
+        id: 'OCA\\Analytics\\Flow\\FlowOperation',
         color: 'var(--color-primary-element-light)',
         operation: '',
         options: Component,
