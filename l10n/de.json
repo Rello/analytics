@@ -116,7 +116,11 @@
     "Number of rows": "Anzahl Zeilen",
     "Import report": "Bericht importieren",
     "Export report": "Bericht exportieren",
-    "Save view": "Ansicht speichern"
+    "Save view": "Ansicht speichern",
+    "Analysis": "Analysen",
+    "Download chart": "Diagramm runterladen",
+    "Trend": "Trend",
+    "back": "zurück"
   },
   "pluralForm": ""
 }

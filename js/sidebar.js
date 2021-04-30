@@ -211,6 +211,7 @@ OCA.Analytics.Sidebar.Dataset = {
                     if (OCA.Analytics.Navigation.newReportId === data['id']) {
                         OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetDatasource');
                         OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetName');
+                        document.getElementById('sidebarDatasetDatasource').disabled = false;
                     }
 
                 } else {
@@ -224,7 +225,6 @@ OCA.Analytics.Sidebar.Dataset = {
     indicateMetadataChanged: function () {
         OCA.Analytics.Sidebar.Dataset.metadataChanged = true;
     },
-
 
     handleDeleteButton: function (evt) {
         let id = evt.target.parentNode.dataset.id;

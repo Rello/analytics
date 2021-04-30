@@ -117,7 +117,11 @@
     "Number of rows": "Number of rows",
     "Import report": "Import report",
     "Export report": "Export report",
-    "Save view": "Save view"
+    "Save view": "Save view",
+    "Analysis": "Analysis",
+    "Download chart": "Download chart",
+    "Trend": "Trend",
+    "back": "back"
   },
   "pluralForm": ""
 }

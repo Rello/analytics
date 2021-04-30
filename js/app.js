@@ -417,12 +417,11 @@ OCA.Analytics.UI = {
             },
             options: chartOptions,
         });
+    },
 
-        document.getElementById('chartLegend').addEventListener('click', function () {
-            //myChart.options.legend.display = !myChart.options.legend.display;
-            OCA.Analytics.chartObject.legend.options.display = !OCA.Analytics.chartObject.legend.options.display
-            OCA.Analytics.chartObject.update();
-        });
+    toggleChartLegend: function () {
+        OCA.Analytics.chartObject.legend.options.display = !OCA.Analytics.chartObject.legend.options.display
+        OCA.Analytics.chartObject.update();
     },
 
     downloadChart: function () {
@@ -455,8 +454,10 @@ OCA.Analytics.UI = {
             OCA.Analytics.UI.showElement('reportMenuBar');
             OCA.Analytics.UI.hideReportMenu();
             document.getElementById('chartOptionsIcon').disabled = false;
-            document.getElementById('forecastIcon').disabled = false;
+            document.getElementById('analysisIcon').disabled = false;
             document.getElementById('drilldownIcon').disabled = false;
+            document.getElementById('downlaodChartIcon').disabled = false;
+            document.getElementById('analysisIcon').disabled = false;
         }
     },
 
@@ -471,7 +472,8 @@ OCA.Analytics.UI = {
                 OCA.Analytics.UI.hideElement('reportMenuIcon');
                 OCA.Analytics.Filter.refreshFilterVisualisation();
             } else {
-                document.getElementById('reportMenuBar').remove();
+                //document.getElementById('reportMenuBar').remove();
+                OCA.Analytics.UI.hideElement('reportMenuBar');
             }
             return;
         }
@@ -488,10 +490,15 @@ OCA.Analytics.UI = {
             document.getElementById('drilldownIcon').disabled = true;
         }
 
+        if (currentReport.options.chart === 'doughnut') {
+            document.getElementById('analysisIcon').disabled = true;
+        }
+
         let visualization = currentReport.options.visualization;
         if (visualization === 'table') {
             document.getElementById('chartOptionsIcon').disabled = true;
-            document.getElementById('forecastIcon').disabled = true;
+            document.getElementById('analysisIcon').disabled = true;
+            document.getElementById('downlaodChartIcon').disabled = true;
         }
 
         OCA.Analytics.Filter.refreshFilterVisualisation();
@@ -533,13 +540,13 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenu').classList.toggle('open');
     },
 
-    showReportMenuForecast: function () {
+    showReportMenuAnalysis: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuForecast').style.removeProperty('display');
+        document.getElementById('reportMenuAnalysis').style.removeProperty('display');
     },
 
     showReportMenuMain: function () {
-        document.getElementById('reportMenuForecast').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuAnalysis').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuMain').style.removeProperty('display');
     },
 
@@ -548,13 +555,23 @@ OCA.Analytics.UI = {
 
 OCA.Analytics.Functions = {
 
-    linearRegression: function () {
+    trend: function () {
+        OCA.Analytics.UI.showElement('chartLegendContainer');
+        OCA.Analytics.UI.showReportMenuMain();
+        OCA.Analytics.UI.hideReportMenu();
+
         let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
+        let datasetType = 'time';
         for (let y = 0; y < numberDatasets; y++) {
             let dataset = OCA.Analytics.chartObject.data.datasets[y];
             let yValues = [];
             for (let i = 0; i < dataset.data.length; i++) {
-                yValues.push(parseInt(dataset.data[i]["y"]));
+                if (typeof (dataset.data[i]) === 'number') {
+                    datasetType = 'bar';
+                    yValues.push(parseInt(dataset.data[i]));
+                } else {
+                    yValues.push(parseInt(dataset.data[i]["y"]));
+                }
             }
             let xValues = [];
             for (let i = 1; i <= dataset.data.length; i++) {
@@ -562,25 +579,31 @@ OCA.Analytics.Functions = {
             }
 
             let regression = OCA.Analytics.Functions.regression(xValues, yValues);
-            let yNext = ((dataset.data.length) * regression["slope"]) + regression["intercept"];
+            let ylast = ((dataset.data.length) * regression["slope"]) + regression["intercept"];
 
+            let data = [];
+            if (datasetType === 'time') {
+                data = [
+                    {x: dataset.data[0]["x"], y: regression["intercept"]},
+                    {x: dataset.data[dataset.data.length - 1]["x"], y: ylast},
+                ]
+            } else {
+                for (let i = 1; i < dataset.data.length + 1; i++) {
+                    data.push(((i) * regression["slope"]) + regression["intercept"]);
+                }
+            }
             let newDataset = {
-                label: dataset.label + " Forecast",
+                label: dataset.label + " Trend",
                 backgroundColor: dataset.backgroundColor,
                 borderColor: dataset.borderColor,
                 borderDash: [5, 5],
                 type: 'line',
                 yAxisID: dataset.yAxisID,
-                data: [
-                    {x: dataset.data[0]["x"], y: regression["intercept"]},
-                    {x: dataset.data[dataset.data.length - 1]["x"], y: yNext},
-                ]
+                data: data
             };
             OCA.Analytics.chartObject.data.datasets.push(newDataset);
 
         }
-        //OCA.Analytics.chartObject.data.datasets[0].data.push(xNext);
-        //OCA.Analytics.chartObject.data.labels.push(OCA.Analytics.currentReportData.data.length + 1);
         OCA.Analytics.chartObject.update();
     },
 
@@ -815,26 +838,22 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('sharingToken').value === '') {
         OCA.Analytics.UI.showElement('analytics-intro');
         OCA.Analytics.Core.initApplication();
-        if (document.getElementById('advanced').value === 'false') {
-            document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
-            document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
-            document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
-            document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
-            document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-
-            //document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuForecast);
-            document.getElementById('forecastIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
-            document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
-            document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-            document.getElementById('exportIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
-        }
     } else {
-        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
-        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
-        document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
-
         OCA.Analytics.Backend.getData();
+    }
+    if (document.getElementById('advanced').value === 'false') {
+        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
+        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
+        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
+
+        document.getElementById('analysisIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
+        document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
+        //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
+        document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
+        document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
+        document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
     }
 
     window.addEventListener("beforeprint", function () {

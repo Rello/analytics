@@ -29,7 +29,7 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Datasource')); ?></div>
             <div style="display: table-cell;">
-                <select style="display: table-cell;" id="sidebarDatasetDatasource" class="sidebarInput">
+                <select style="display: table-cell;" id="sidebarDatasetDatasource" class="sidebarInput" disabled>
                     <option value="" selected></option>
                     <option value="0"><?php p($l->t('Report folder (no data)')); ?></option>
                     <option value="2"><?php p($l->t('Internal database')); ?></option>

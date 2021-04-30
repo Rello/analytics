@@ -41,52 +41,42 @@
                     </button>
                 </li>
                 <li>
-                    <button id="forecastIcon">
+                    <button id="analysisIcon">
                         <span class="icon-analytics-forecast"></span>
-                        <span><?php p($l->t('Forecast')); ?></span>
+                        <span><?php p($l->t('Analysis')); ?></span>
                     </button>
                 </li>
                 <li>
                     <button id="downlaodChartIcon">
                         <span class="icon-download"></span>
-                        <span><?php p($l->t('Download Chart')); ?></span>
+                        <span><?php p($l->t('Download chart')); ?></span>
                         <a id="downlaodChartLink" href='' download="Chart.png" hidden>-</a>
                     </button>
                 </li>
 
             </ul>
-            <ul id="reportMenuForecast" style="display: none !important;">
+            <ul id="reportMenuAnalysis" style="display: none !important;">
                 <li id="backIcon">
                     <button>
                         <span class="icon-view-previous"></span>
-                        <span><?php p($l->t('Back to the menu')); ?></span>
+                        <span><?php p($l->t('back')); ?></span>
                     </button>
                 </li>
-                <li id="linearRegressionIcon">
-                    <span class="menuitem">
-                       <input id="check1" type="checkbox" class="checkbox"/>
-                       <label for="check1"><?php p($l->t('Linear Regression')); ?></label>
-                   </span>
+                <li>
+                    <button id="trendIcon">
+                        <span><?php p($l->t('Trend')); ?></span>
+                    </button>
+                </li>
+                <li>
+                    <button id="linearRegressionIcon" class="menuitem" disabled>
+                        <span><?php p($l->t('Linear Regression')); ?></span>
+                    </button>
                 </li>
             </ul>
         </div>
         <div id="addFilterIcon" class="analytics-options icon-analytics-filter-add has-tooltip"
              title="<?php p($l->t('Filter')); ?>"></div>
         <div id="filterVisualisation" style="display: inline-block; float: right;"></div>
-    </div>
-    <div id="filterBar" style="" hidden>
-        <div id="optionContainer" hidden>
-            <div class="analytics-optoins icon-analytics-save-warning has-tooltip"
-                 title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
-            <div v-tooltip="'You have new messages.'" class="analytics-options icon-analytics-options has-tooltip"
-                 title="<?php p($l->t('Options')); ?>"></div>
-        </div>
-        <div id="filterContainer" hidden>
-            <div class="analytics-options icon-analytics-drilldown has-tooltip"
-                 title="<?php p($l->t('Drilldown')); ?>"></div>
-            <div class="analytics-options icon-analytics-filter-add has-tooltip"
-                 title="<?php p($l->t('Filter')); ?>"></div>
-        </div>
     </div>
     <div id="chartContainer">
         <canvas id="myChart"></canvas>
