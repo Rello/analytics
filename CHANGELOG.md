@@ -1,23 +1,27 @@
 # Changelog
 
-## 3.5.0 - 2021-04-xx
+## 3.5.0 - 2021-05-xx
 ### Added
-- UI cleanups #138
-- Save logic also for chart options #123
-- Same filter logic for all data sources #139
-- Datasource: overwrite column with custom text #131
-- Download chart as image #143
+
+- UI cleanups [#138](https://github.com/rello/analytics/issues/138)
+- Report: Save logic also for chart options [#123](https://github.com/rello/analytics/issues/123)
+- Report: Same filter logic for all data sources [#139](https://github.com/rello/analytics/issues/139)
+- Report: Download chart as image [#143](https://github.com/rello/analytics/issues/143)
+- Datasource: overwrite column with custom text [#131](https://github.com/rello/analytics/issues/131)
 
 ### Changed
-- Migration to Chart.js V.3 #140
+
+- Migration to Chart.js V.3 [#140](https://github.com/rello/analytics/issues/140)
 - Update ru language @[sibergad](https://github.com/sibergad) @[AleksovAnry](https://github.com/AleksovAnry)
+- New key in l10n [#129](https://github.com/rello/analytics/issues/129)
 
 ### Fixed
 
 - workflow not working
-- handle spaces in filters
+- Report: handle spaces in filters
 - Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
-- occ command error #130
+- occ command error [#130](https://github.com/rello/analytics/issues/130)
+- Error when sharing xlsx report [#133](https://github.com/rello/analytics/issues/133)
 
 ## 3.4.1 - 2021-03-14
 
