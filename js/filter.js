@@ -282,7 +282,7 @@ OCA.Analytics.Filter = {
                 + '<div style="display: table-cell;">'
                 + '<select id="optionsChartType' + [i] + '" name="optionsChartType">'
                 + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>' + t('analytics', 'Line') + '</option>'
-                + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Column') + '</option>'
+                + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Bar') + '</option>'
                 + '</select>'
                 + '</div>'
                 + '</div>';

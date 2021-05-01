@@ -50,10 +50,10 @@ class Json implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-        array_push($template, ['id' => 'url', 'name' => 'JSON Url', 'placeholder' => 'url']);
+        array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
         array_push($template, ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password']);
-        array_push($template, ['id' => 'path', 'name' => $this->l10n->t('JSON path'), 'placeholder' => 'x/y/z']);
-        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => 'false/true', 'type' => 'tf']);
+        array_push($template, ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z']);
+        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
         return $template;
     }
 

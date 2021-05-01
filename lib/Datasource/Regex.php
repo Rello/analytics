@@ -52,8 +52,8 @@ class Regex implements IDatasource
         $template = array();
         array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
         array_push($template, ['id' => 'regex', 'name' => $this->l10n->t('valid regex'), 'placeholder' => '//']);
-        array_push($template, ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => 'Number of records']);
-        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => 'true/false', 'type' => 'tf']);
+        array_push($template, ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')]);
+        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
         return $template;
     }
 

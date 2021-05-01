@@ -30,7 +30,7 @@ OC.L10N.register(
         'Show _MENU_ entries': 'Отображать _MENU_ записей',
         'Showing 0 to 0 of 0 entries': 'Отображать от 0 до 0 из 0 записей',
         'Showing _START_ to _END_ of _TOTAL_ entries': 'Отображать от _START_ до _END_ из _TOTAL_ записей',
-        'Delete report': 'Удалить Отчёт',
+        'Delete': 'Удалить',
         'Delete folder': 'Удалить папку',
         'Delete dataload': 'Удалить Загрузку данных',
         'Are you sure?': 'Вы уверены?',

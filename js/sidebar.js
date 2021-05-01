@@ -208,7 +208,7 @@ OCA.Analytics.Sidebar.Dataset = {
                         document.getElementById('link').value = data['link'];
                     }
 
-                    if (OCA.Analytics.Navigation.newReportId === data['id']) {
+                    if (OCA.Analytics.Navigation.newReportId === parseInt(data['id'])) {
                         OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetDatasource');
                         OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetName');
                         document.getElementById('sidebarDatasetDatasource').disabled = false;
@@ -232,7 +232,7 @@ OCA.Analytics.Sidebar.Dataset = {
 
         OC.dialogs.confirm(
             t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
-            t('analytics', 'Delete report'),
+            t('analytics', 'Delete'),
             function (e) {
                 if (e === true) {
                     OCA.Analytics.Sidebar.Backend.deleteDataset(id);

@@ -75,7 +75,7 @@
                     <option value="" selected></option>
                     <option value="line"><?php p($l->t('Line')); ?></option>
                     <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
-                    <option value="column"><?php p($l->t('Column')); ?></option>
+                    <option value="column"><?php p($l->t('Bar')); ?></option>
                     <option value="area"><?php p($l->t('Area')); ?></option>
                     <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
                 </select>
@@ -106,13 +106,13 @@
     </div>
     <br>
     <button id="sidebarDatasetUpdateButton" type="button" class="primary">
-        <?php p($l->t('Update report')); ?>
+        <?php p($l->t('Update')); ?>
     </button>
     <button id="sidebarDatasetDeleteButton" type="button">
-        <?php p($l->t('Delete report')); ?>
+        <?php p($l->t('Delete')); ?>
     </button>
     <button id="sidebarDatasetExportButton" type="button">
-        <?php p($l->t('Export report')); ?>
+        <?php p($l->t('Export')); ?>
     </button>
 
 </template>
@@ -317,7 +317,7 @@
             </li>
             <li class="action-separator"></li>
             <li><a href="#" id="navigationMenuDelete"><span
-                            class="icon-delete"></span><span><?php p($l->t('Delete report')); ?></span></a></li>
+                            class="icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a></li>
         </ul>
     </div>
 </template>
