@@ -12,8 +12,9 @@ use OCP\Migration\SimpleMigrationStep;
 
 /**
  * Auto-generated migration step: Please modify to your needs!
+ * sudo -u www-data php /var/www/nextcloud/occ migrations:execute analytics 3005Date20210508180000
  */
-class Version020400Date20200623185352 extends SimpleMigrationStep
+class Version3005Date20210508180000 extends SimpleMigrationStep
 {
 
     /** @var IDBConnection */
@@ -41,18 +42,48 @@ class Version020400Date20200623185352 extends SimpleMigrationStep
      */
     public function changeSchema(IOutput $output, Closure $schemaClosure, array $options)
     {
-        /** @var ISchemaWrapper $schema */
+        /** @var Schema $schema */
         $schema = $schemaClosure();
 
-        $table = $schema->getTable('analytics_dataset');
-        if (!$table->hasColumn('dataoptions')) {
-            $table->addColumn('dataoptions', 'string', [
+        $table = $schema->getTable('analytics_facts');
+        if (!$table->hasColumn('value')) {
+            $table->addColumn('value', 'decimal', [
                 'notnull' => false,
-                'length' => 1000,
+                'precision' => 15,
+                'scale' => 2,
+                'default' => 0,
             ]);
-            return $schema;
         }
-        return null;
+        if (!$table->hasColumn('timestamp')) {
+            $table->addColumn('timestamp', 'integer', [
+                'notnull' => false,
+                'default' => 0,
+            ]);
+        }
+
+        $table = $schema->getTable('analytics_dataset');
+        if (!$table->hasColumn('value')) {
+            $table->addColumn('value', 'string', [
+                'notnull' => false,
+                'length' => 64,
+            ]);
+        }
+        $column = $table->getColumn('link');
+        if ($column->getLength() !== 500) {
+            $column->setLength(500);
+        }
+
+        $table = $schema->getTable('analytics_threshold');
+        if (!$table->hasColumn('value')) {
+            $table->addColumn('value', 'decimal', [
+                'notnull' => false,
+                'precision' => 15,
+                'scale' => 2,
+                'default' => 0,
+            ]);
+        }
+
+        return $schema;
     }
 
     /**

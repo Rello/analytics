@@ -44,28 +44,31 @@ class Version020500Date20200815180000 extends SimpleMigrationStep
     {
         /** @var Schema $schema */
         $schema = $schemaClosure();
+
         $table = $schema->getTable('analytics_facts');
+        if (!$table->hasColumn('value')) {
+            $table->addColumn('value', 'decimal', [
+                'notnull' => false,
+                'precision' => 15,
+                'scale' => 2,
+                'default' => 0,
+            ]);
+        }
 
-        $table->addColumn('value', 'decimal', [
-            'notnull' => false,
-            'precision' => 15,
-            'scale' => 2,
-            'default' => 0,
-        ]);
-
-        $table->addColumn('timestamp', 'integer', [
-            'notnull' => false,
-            'default' => 0,
-        ]);
-
+        if (!$table->hasColumn('timestamp')) {
+            $table->addColumn('timestamp', 'integer', [
+                'notnull' => false,
+                'default' => 0,
+            ]);
+        }
 
         $table = $schema->getTable('analytics_dataset');
-
-        $table->addColumn('value', 'string', [
-            'notnull' => false,
-            'length' => 64,
-        ]);
-
+        if (!$table->hasColumn('value')) {
+            $table->addColumn('value', 'string', [
+                'notnull' => false,
+                'length' => 64,
+            ]);
+        }
         return $schema;
     }
 

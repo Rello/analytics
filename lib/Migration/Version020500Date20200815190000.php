@@ -44,16 +44,18 @@ class Version020500Date20200815190000 extends SimpleMigrationStep
     {
         /** @var Schema $schema */
         $schema = $schemaClosure();
+
         $table = $schema->getTable('analytics_threshold');
-
-        $table->addColumn('value', 'decimal', [
-            'notnull' => false,
-            'precision' => 15,
-            'scale' => 2,
-            'default' => 0,
-        ]);
-
-        return $schema;
+        if (!$table->hasColumn('value')) {
+            $table->addColumn('value', 'decimal', [
+                'notnull' => false,
+                'precision' => 15,
+                'scale' => 2,
+                'default' => 0,
+            ]);
+            return $schema;
+        }
+        return null;
     }
 
     /**

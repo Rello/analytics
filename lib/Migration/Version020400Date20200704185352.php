@@ -45,12 +45,14 @@ class Version020400Date20200704185352 extends SimpleMigrationStep
         $schema = $schemaClosure();
 
         $table = $schema->getTable('analytics_dataset');
-
-        $table->addColumn('filteroptions', 'string', [
-            'notnull' => false,
-            'length' => 1000,
-        ]);
-        return $schema;
+        if (!$table->hasColumn('filteroptions')) {
+            $table->addColumn('filteroptions', 'string', [
+                'notnull' => false,
+                'length' => 1000,
+            ]);
+            return $schema;
+        }
+        return null;
     }
 
     /**
