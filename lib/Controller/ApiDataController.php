@@ -166,6 +166,47 @@ class ApiDataController extends ApiController
             $message);
     }
 
+	/**
+	 * list datasets
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @return DataResponse
+	 * @throws \Exception
+	 */
+	public function index() {
+		return $this->DatasetService->index();
+	}
+
+	/**
+	 * read data of a dataset with additional information for table and series
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @return DataResponse
+	 * @throws \Exception
+	 */
+	public function detail(int $datasetId)
+	{
+		$datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+
+		if (!empty($datasetMetadata)) {
+			$allData = $this->StorageController->read($datasetMetadata);
+			$series = array_values(array_unique(array_map('array_shift', $allData['data'])));
+
+			return new DataResponse([
+				'metadata' => $datasetMetadata,
+				'header' => $allData['header'],
+				'dimensions' => $allData['dimensions'],
+				'series' => $series,
+			], HTTP::STATUS_OK);
+		} else {
+			return new DataResponse([
+				'message' => 'No metadata available for given $datasetId',
+			], HTTP::STATUS_OK);
+		}
+	}
+
     /**
      * derive if the parameter is technical or the free text description from the report
      * @param $data
