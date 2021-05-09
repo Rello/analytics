@@ -72,6 +72,7 @@ return [
         ['name' => 'ApiData#deleteDataV2', 'url' => '/api/2.0/deletedata/{datasetId}', 'verb' => 'POST'],
         ['name' => 'ApiData#index', 'url' => '/api/2.0/dataset/list', 'verb' => 'GET'],
         ['name' => 'ApiData#detail', 'url' => '/api/2.0/dataset/{datasetId}/detail', 'verb' => 'GET'],
+        ['name' => 'ApiData#data', 'url' => '/api/2.0/dataset/{datasetId}/data', 'verb' => 'GET'],
 
         // wizard
         ['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],

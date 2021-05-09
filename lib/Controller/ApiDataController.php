@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Activity\ActivityManager;
+use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
@@ -33,6 +34,7 @@ class ApiDataController extends ApiController
     private $ActivityManager;
     private $DatasetService;
     private $StorageController;
+	private $StorageMapper;
 
     public function __construct(
         $appName,
@@ -41,7 +43,8 @@ class ApiDataController extends ApiController
         IUserSession $userSession,
         ActivityManager $ActivityManager,
         DatasetService $DatasetService,
-        StorageController $StorageController
+        StorageController $StorageController,
+		StorageMapper $StorageMapper
     )
     {
         parent::__construct(
@@ -54,6 +57,7 @@ class ApiDataController extends ApiController
         $this->ActivityManager = $ActivityManager;
         $this->DatasetService = $DatasetService;
         $this->StorageController = $StorageController;
+        $this->StorageMapper = $StorageMapper;
     }
 
     /**
@@ -195,7 +199,6 @@ class ApiDataController extends ApiController
 			$series = array_values(array_unique(array_map('array_shift', $allData['data'])));
 
 			return new DataResponse([
-				'metadata' => $datasetMetadata,
 				'header' => $allData['header'],
 				'dimensions' => $allData['dimensions'],
 				'series' => $series,
@@ -203,6 +206,31 @@ class ApiDataController extends ApiController
 		} else {
 			return new DataResponse([
 				'message' => 'No metadata available for given $datasetId',
+			], HTTP::STATUS_OK);
+		}
+	}
+
+	/**
+	 * get all data of a dataset and respect filter options
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @return DataResponse
+	 * @throws \Exception
+	 */
+	public function data(int $datasetId)
+	{
+		$params = $this->request->getParams();
+		$datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+
+		if (!empty($datasetMetadata)) {
+			$options = json_decode($params['filteroptions'], true);
+			$allData = $this->StorageMapper->read($datasetMetadata['id'], $options);
+
+			return new DataResponse($allData, HTTP::STATUS_OK);
+		} else {
+			return new DataResponse([
+				'message' => 'No data available for given $datasetId',
 			], HTTP::STATUS_OK);
 		}
 	}
