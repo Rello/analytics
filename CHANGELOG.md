@@ -8,6 +8,8 @@
 - Report: Same filter logic for all data sources [#139](https://github.com/rello/analytics/issues/139)
 - Report: Download chart as image [#143](https://github.com/rello/analytics/issues/143)
 - Datasource: overwrite column with custom text [#131](https://github.com/rello/analytics/issues/131)
+- REST API: get report list, details & data [#151](https://github.com/Rello/analytics/pull/151)
+  @[ochorocho](https://github.com/ochorocho)
 
 ### Changed
 
@@ -22,6 +24,7 @@
 - Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
 - occ command error [#130](https://github.com/rello/analytics/issues/130)
 - Error when sharing xlsx report [#133](https://github.com/rello/analytics/issues/133)
+- handle db migration issues [#148](https://github.com/rello/analytics/issues/148)
 
 ## 3.4.1 - 2021-03-14
 
