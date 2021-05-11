@@ -170,70 +170,105 @@ class ApiDataController extends ApiController
             $message);
     }
 
-	/**
-	 * list datasets
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 * @return DataResponse
-	 * @throws \Exception
-	 */
-	public function index() {
-		return $this->DatasetService->index();
-	}
 
-	/**
-	 * read data of a dataset with additional information for table and series
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 * @return DataResponse
-	 * @throws \Exception
-	 */
-	public function detail(int $datasetId)
-	{
-		$datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+    ///
+    /// API V3
+    ///
 
-		if (!empty($datasetMetadata)) {
-			$allData = $this->StorageController->read($datasetMetadata);
-			$series = array_values(array_unique(array_map('array_shift', $allData['data'])));
+    /**
+     * get all data of a dataset and respect filter options
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function dataGetV3(int $datasetId)
+    {
+        $params = $this->request->getParams();
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
 
-			return new DataResponse([
-				'header' => $allData['header'],
-				'dimensions' => $allData['dimensions'],
-				'series' => $series,
-			], HTTP::STATUS_OK);
-		} else {
-			return new DataResponse([
-				'message' => 'No metadata available for given $datasetId',
-			], HTTP::STATUS_OK);
-		}
-	}
+        if (!empty($datasetMetadata)) {
+            $options = json_decode($params['filteroptions'], true);
+            $allData = $this->StorageMapper->read($datasetMetadata['id'], $options);
 
-	/**
-	 * get all data of a dataset and respect filter options
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 * @return DataResponse
-	 * @throws \Exception
-	 */
-	public function data(int $datasetId)
-	{
-		$params = $this->request->getParams();
-		$datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+            return new DataResponse($allData, HTTP::STATUS_OK);
+        } else {
+            return new DataResponse([
+                'message' => 'No data available for given $datasetId',
+            ], HTTP::STATUS_OK);
+        }
+    }
 
-		if (!empty($datasetMetadata)) {
-			$options = json_decode($params['filteroptions'], true);
-			$allData = $this->StorageMapper->read($datasetMetadata['id'], $options);
+    /**
+     * delete data
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function dataDeleteV3(int $datasetId)
+    {
+        return $this->deleteDataV2($datasetId);
+    }
 
-			return new DataResponse($allData, HTTP::STATUS_OK);
-		} else {
-			return new DataResponse([
-				'message' => 'No data available for given $datasetId',
-			], HTTP::STATUS_OK);
-		}
-	}
+    /**
+     * add data via there real field names
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function dataAddV3(int $datasetId)
+    {
+        return $this->addDataV2($datasetId);
+    }
+
+    /**
+     * list datasets
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function datasetsIndexV3()
+    {
+        return $this->DatasetService->index();
+    }
+
+    /**
+     * read data of a dataset with additional information for table and series
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function datasetsDetailV3(int $datasetId)
+    {
+        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+
+        if (!empty($datasetMetadata)) {
+            $allData = $this->StorageController->read($datasetMetadata);
+            $series = array_values(array_unique(array_map('array_shift', $allData['data'])));
+
+            return new DataResponse([
+                'header' => $allData['header'],
+                'dimensions' => $allData['dimensions'],
+                'series' => $series,
+            ], HTTP::STATUS_OK);
+        } else {
+            return new DataResponse([
+                'message' => 'No metadata available for given $datasetId',
+            ], HTTP::STATUS_OK);
+        }
+    }
+
 
     /**
      * derive if the parameter is technical or the free text description from the report

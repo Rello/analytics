@@ -64,15 +64,22 @@ return [
         ['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
 
         // API
+        // V1
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#addData', 'url' => '/api/1.0/adddata/{datasetId}', 'verb' => 'POST'],
 
+        // V2
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/2.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#addDataV2', 'url' => '/api/2.0/adddata/{datasetId}', 'verb' => 'POST'],
         ['name' => 'ApiData#deleteDataV2', 'url' => '/api/2.0/deletedata/{datasetId}', 'verb' => 'POST'],
-        ['name' => 'ApiData#index', 'url' => '/api/2.0/dataset/list', 'verb' => 'GET'],
-        ['name' => 'ApiData#detail', 'url' => '/api/2.0/dataset/{datasetId}/detail', 'verb' => 'GET'],
-        ['name' => 'ApiData#data', 'url' => '/api/2.0/dataset/{datasetId}/data', 'verb' => 'GET'],
+
+        // V3
+        ['name' => 'ApiData#preflighted_cors', 'url' => '/api/3.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+        ['name' => 'ApiData#dataAddV3', 'url' => '/api/3.0/data/{datasetId}/add', 'verb' => 'POST'],
+        ['name' => 'ApiData#dataDeleteV3', 'url' => '/api/3.0/data/{datasetId}/delete', 'verb' => 'POST'],
+        ['name' => 'ApiData#dataGetV3', 'url' => '/api/3.0/data/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'ApiData#datasetsIndexV3', 'url' => '/api/3.0/datasets', 'verb' => 'GET'],
+        ['name' => 'ApiData#datasetsDetailV3', 'url' => '/api/3.0/datasets/{datasetId}', 'verb' => 'GET'],
 
         // wizard
         ['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],
