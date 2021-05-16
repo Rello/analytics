@@ -4,6 +4,7 @@
 ### Added
 
 - UI cleanups [#138](https://github.com/rello/analytics/issues/138)
+- Analysis functions (trend) [#144](https://github.com/rello/analytics/issues/144)
 - Report: Save logic also for chart options [#123](https://github.com/rello/analytics/issues/123)
 - Report: Same filter logic for all data sources [#139](https://github.com/rello/analytics/issues/139)
 - Report: Download chart as image [#143](https://github.com/rello/analytics/issues/143)

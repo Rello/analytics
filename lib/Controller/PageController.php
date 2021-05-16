@@ -14,6 +14,7 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\DataSession;
 use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
@@ -69,7 +70,18 @@ class PageController extends Controller
         $params['token'] = '';
         $user = $this->userSession->getUser();
         $params['wizard'] = $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0);
-        return new TemplateResponse($this->appName, 'main', $params);
+        // return new TemplateResponse($this->appName, 'main', $params);
+
+        $response = new TemplateResponse($this->appName, 'main', $params);
+        $csp = new ContentSecurityPolicy();
+        $csp->addAllowedScriptDomain('*')
+            ->addAllowedConnectDomain('*')
+            ->addAllowedStyleDomain('*')
+            ->addAllowedFontDomain('*')
+            ->allowEvalScript(true);
+        $response->setContentSecurityPolicy($csp);
+        return $response;
+
     }
 
     /**

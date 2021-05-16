@@ -742,12 +742,12 @@ OCA.Analytics.Sidebar.Backend = {
             success: function () {
                 OCA.Analytics.Navigation.newReportId = 0;
                 OCA.Analytics.Sidebar.resetImportantFields();
-                OCA.Analytics.currentReportData.options.chartoptions = '';
                 if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
                     OCA.Analytics.Navigation.init(datasetId);
                 } else {
                     if (document.getElementById('advanced').value === 'false') {
+                        OCA.Analytics.currentReportData.options.chartoptions = '';
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     } else {

@@ -218,7 +218,7 @@ OCA.Analytics.Advanced.Dataload = {
         if (document.getElementById('testrunCheckbox').checked) {
             mode = 'simulate';
             OC.dialogs.message(
-                '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>',
+                '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading" id="dataloadLoadingIndicator">Loading</div>',
                 t('analytics', 'Datasource simulation'),
                 'info',
                 OC.dialogs.OK_BUTTON,
@@ -241,7 +241,7 @@ OCA.Analytics.Advanced.Dataload = {
             success: function (data) {
                 if (mode === 'simulate') {
                     if (parseInt(data.error) === 0) {
-                        document.querySelector("[id*=oc-dialog-]").innerHTML = JSON.stringify(data.data);
+                        document.querySelector("[id*=oc-dialog-]").innerHTML = '<div id="simulationData">' + JSON.stringify(data.data) + '</div>';
                     } else {
                         document.querySelector("[id*=oc-dialog-]").innerHTML = 'Error: ' + data.error;
                     }
@@ -342,6 +342,7 @@ OCA.Analytics.Advanced.Threshold = {
 
         let tDelete = document.createElement('div');
         tDelete.classList.add('icon-close');
+        tDelete.classList.add('analyticsTesting');
         tDelete.dataset.id = data.id;
         tDelete.addEventListener('click', OCA.Analytics.Advanced.Threshold.handleThresholdDeleteButton);
 

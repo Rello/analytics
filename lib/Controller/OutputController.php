@@ -181,11 +181,7 @@ class OutputController extends Controller
         // if nothing is changed by the user, the filter which is stored for the report, will be used
         if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             $metadata['filteroptions'] = $filteroptions;
-        }
-        if ($dataoptions and $dataoptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             $metadata['dataoptions'] = $dataoptions;
-        }
-        if ($chartoptions and $chartoptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             $metadata['chartoptions'] = $chartoptions;
         }
         return $metadata;

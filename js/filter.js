@@ -355,7 +355,8 @@ OCA.Analytics.Filter = {
         }
 
         // if any dataseries is tied to the secondary yAxis or not
-        //if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
+        // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
+        let enableAxisV2 = '{"scales":{"yAxes":[{},{"display":true}]}}';
         let enableAxis = '{"scales":{"secondary":{"display":true}}}';
         if (seondaryAxisRequired === true) {
             try {
@@ -365,7 +366,7 @@ OCA.Analytics.Filter = {
                 chartOptions = enableAxis;
             }
         } else {
-            if (chartOptions === enableAxis) {
+            if (chartOptions === enableAxis || chartOptions === enableAxisV2) {
                 // if the secondary axis is not required anymore but was enabled before
                 // the options are cleared all together
                 // this does only apply when ONLY the axis was enabled before

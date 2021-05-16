@@ -108,7 +108,7 @@ OCA.Analytics.UI = {
                 //columns[i]['render'] = function(data, type, row, meta) {
                 //    return data + ' ' + row[row.length-2];
                 //};
-                if (header[headerKeys[i]].length === 1) {
+                if (header[headerKeys[i]] !== null && header[headerKeys[i]].length === 1) {
                     unit = header[headerKeys[i]];
                 }
                 columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, unit + ' ');
@@ -476,6 +476,7 @@ OCA.Analytics.UI = {
             } else {
                 //document.getElementById('reportMenuBar').remove();
                 OCA.Analytics.UI.hideElement('reportMenuBar');
+                document.getElementById('reportMenuBar').id = 'reportMenuBarHidden';
             }
             return;
         }
@@ -725,7 +726,7 @@ OCA.Analytics.Backend = {
         OCA.Analytics.UI.resetContentArea();
         OCA.Analytics.UI.hideElement('analytics-intro');
         OCA.Analytics.UI.hideElement('analytics-content');
-        OCA.Analytics.UI.hideElement('analytics-loading');
+        OCA.Analytics.UI.showElement('analytics-loading');
 
         let url;
         if (document.getElementById('sharingToken').value === '') {
