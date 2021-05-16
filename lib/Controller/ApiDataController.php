@@ -252,23 +252,28 @@ class ApiDataController extends ApiController
     public function datasetsDetailV3(int $datasetId)
     {
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        unset($datasetMetadata['user_id']
+            , $datasetMetadata['link']
+            , $datasetMetadata['dimension3']
+        );
 
         if (!empty($datasetMetadata)) {
             $allData = $this->StorageController->read($datasetMetadata);
             $series = array_values(array_unique(array_map('array_shift', $allData['data'])));
 
             return new DataResponse([
+                'options' => $datasetMetadata,
                 'header' => $allData['header'],
                 'dimensions' => $allData['dimensions'],
                 'series' => $series,
             ], HTTP::STATUS_OK);
+
         } else {
             return new DataResponse([
                 'message' => 'No metadata available for given $datasetId',
             ], HTTP::STATUS_OK);
         }
     }
-
 
     /**
      * derive if the parameter is technical or the free text description from the report
@@ -334,7 +339,7 @@ class ApiDataController extends ApiController
         $response->setData($array)->render();
         return $response;
     }
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/1.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc20/nextcloud/apps/analytics/api/1.0/adddata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"data":[{"Spalte 1": "a", "Spalte 2": "a", "toller wert": "1"}, {"dimension1": "b", "dimension2": "b", "value": "2"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
 
