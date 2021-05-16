@@ -721,7 +721,6 @@ OCA.Analytics.Sidebar.Backend = {
         for (let inputField of inputFields) {
             option[inputField.id] = inputField.value;
         }
-        option = JSON.stringify(option);
 
         $.ajax({
             type: 'PUT',
@@ -731,7 +730,7 @@ OCA.Analytics.Sidebar.Backend = {
                 'subheader': document.getElementById('sidebarDatasetSubheader').value,
                 'parent': document.getElementById('sidebarDatasetParent').value,
                 'type': document.getElementById('sidebarDatasetDatasource').value,
-                'link': option,
+                'link': JSON.stringify(option),
                 'visualization': document.getElementById('sidebarDatasetVisualization').value,
                 'chart': document.getElementById('sidebarDatasetChart').value,
                 'chartoptions': document.getElementById('sidebarDatasetChartOptions').value,
@@ -743,6 +742,7 @@ OCA.Analytics.Sidebar.Backend = {
             success: function () {
                 OCA.Analytics.Navigation.newReportId = 0;
                 OCA.Analytics.Sidebar.resetImportantFields();
+                OCA.Analytics.currentReportData.options.chartoptions = '';
                 if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
                     OCA.Analytics.Navigation.init(datasetId);

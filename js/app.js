@@ -388,12 +388,14 @@ OCA.Analytics.UI = {
         // the user can add/overwrite chart options
         // the user can put the options in array-format into the report definition
         // these are merged with the standard report settings
-        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
-        // e.g. add a secondary y-axis '{"scales": {"yAxes": [{},{"id":"B","position":"right"}]}}'
+        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": {"time": {"unit" : "month"}}}}'
+        // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
 
         // replace old settings from Chart.js 2
         // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
-        jsondata.options.chartoptions = jsondata.options.chartoptions.replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
+        if (jsondata.options.chartoptions !== null) {
+            jsondata.options.chartoptions = jsondata.options.chartoptions.replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
+        }
         OCA.Analytics.currentReportData.options.chartoptions = jsondata.options.chartoptions;
         let userChartOptions = jsondata.options.chartoptions;
         if (userChartOptions !== '' && userChartOptions !== null) {
@@ -533,7 +535,9 @@ OCA.Analytics.UI = {
     },
 
     hideReportMenu: function () {
-        document.getElementById('reportMenu').classList.remove('open');
+        if (document.getElementById('reportMenu') !== null) {
+            document.getElementById('reportMenu').classList.remove('open');
+        }
     },
 
     toggleReportMenu: function () {
@@ -798,7 +802,7 @@ OCA.Analytics.Backend = {
         let now;
         for (let i = 0; i < firstrow.length; i++) {
             // loop columns and check for a valid date
-            if (!isNaN(new Date(firstrow[i]).valueOf()) && firstrow[i].length >= 19) {
+            if (!isNaN(new Date(firstrow[i]).valueOf()) && firstrow[i] !== null && firstrow[i].length >= 19) {
                 // column contains a valid date
                 // then loop all rows for this column and convert to local time
                 for (let j = 0; j < data.length; j++) {

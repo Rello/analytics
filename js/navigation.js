@@ -25,6 +25,7 @@ OCA.Analytics.Navigation = {
     },
 
     buildNavigation: function (data) {
+        OCA.Analytics.Sidebar.hideSidebar();
         document.getElementById('navigationDatasets').innerHTML = '';
         let li = document.createElement('li');
         let a = document.createElement('a');
