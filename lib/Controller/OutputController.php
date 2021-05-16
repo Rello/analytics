@@ -176,12 +176,16 @@ class OutputController extends Controller
      */
     private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions)
     {
+        // send current user filteroptions to the datarequest
+        // only if the report has update-permissions
+        // if nothing is changed by the user, the filter which is stored for the report, will be used
         if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
-            // send current user filteroptions to the datarequest
-            // only if the report has update-permissions
-            // if nothing is changed by the user, the filter which is stored for the report, will be used
             $metadata['filteroptions'] = $filteroptions;
+        }
+        if ($dataoptions and $dataoptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             $metadata['dataoptions'] = $dataoptions;
+        }
+        if ($chartoptions and $chartoptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
             $metadata['chartoptions'] = $chartoptions;
         }
         return $metadata;

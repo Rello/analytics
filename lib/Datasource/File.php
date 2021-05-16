@@ -59,8 +59,8 @@ class File implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File')]);
-        array_push($template, ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty')]);
         array_push($template, ['id' => 'offset', 'name' => $this->l10n->t('Ignore leading rows'), 'placeholder' => $this->l10n->t('Number of rows')]);
+        array_push($template, ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty')]);
         return $template;
     }
 
@@ -98,7 +98,9 @@ class File implements IDatasource
             if (count($selectedColumns) !== 0) {
                 foreach ($selectedColumns as $selectedColumn) {
                     if (is_numeric($selectedColumn)) {
-                        array_push($rowMinimized, $row[$selectedColumn - 1]);
+                        if (count($row) >= $selectedColumn) {
+                            array_push($rowMinimized, $row[$selectedColumn - 1]);
+                        }
                     } else {
                         array_push($rowMinimized, $selectedColumn);
                     }

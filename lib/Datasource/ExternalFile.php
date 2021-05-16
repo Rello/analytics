@@ -54,8 +54,8 @@ class ExternalFile implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'link', 'name' => $this->l10n->t('External URL'), 'placeholder' => 'url']);
-        array_push($template, ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty')]);
         array_push($template, ['id' => 'offset', 'name' => $this->l10n->t('Ignore leading rows'), 'placeholder' => $this->l10n->t('Number of rows')]);
+        array_push($template, ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty')]);
         return $template;
     }
 
