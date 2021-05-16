@@ -82,11 +82,7 @@ class Excel implements IDatasource
         $headerrow = $errorMessage = 0;
 
         $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
-        $filePath = explode('/', ltrim($file->getPath(), '/'));
-        // remove leading username
-        array_shift($filePath);
-        $filePath = implode('/', $filePath);
-        $fileName = $file->getStorage()->getLocalFile($filePath);
+        $fileName = $file->getStorage()->getLocalFile($file->getInternalPath());
 
         $inputFileType = IOFactory::identify($fileName);
         $reader = IOFactory::createReader($inputFileType);
