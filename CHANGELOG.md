@@ -1,10 +1,10 @@
 # Changelog
 
-## 3.5.0 - 2021-05-xx
+## 3.5.0 - 2021-05-18
 ### Added
 
 - UI cleanups [#138](https://github.com/rello/analytics/issues/138)
-- Analysis functions (trend) [#144](https://github.com/rello/analytics/issues/144)
+- Analysis functions: trend [#144](https://github.com/rello/analytics/issues/144)
 - Report: Save logic also for chart options [#123](https://github.com/rello/analytics/issues/123)
 - Report: Same filter logic for all data sources [#139](https://github.com/rello/analytics/issues/139)
 - Report: Download chart as image [#143](https://github.com/rello/analytics/issues/143)
@@ -13,13 +13,11 @@
   @[ochorocho](https://github.com/ochorocho)
 
 ### Changed
-
 - Migration to Chart.js V.3 [#140](https://github.com/rello/analytics/issues/140)
 - Update ru language @[sibergad](https://github.com/sibergad) @[AleksovAnry](https://github.com/AleksovAnry)
 - New key in l10n [#129](https://github.com/rello/analytics/issues/129)
 
 ### Fixed
-
 - workflow not working
 - Report: handle spaces in filters
 - Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)

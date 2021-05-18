@@ -13,7 +13,9 @@ Visualize and share anything, from financial analysis to IoT logs.
 - [Register](https://github.com/Rello/analytics/wiki/Register-external-datasource) external datasources from other apps
 - Storage: realtime or database
 - Advanced dataloads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
-- Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables, filters
+- Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables,
+  filters
+- Analysis functions: trend
 - [Thresholds](https://github.com/Rello/analytics/wiki/Thresholds) for alerts and color coding
 - Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), Dashboard (NC20), Search
 - Sharing: user, groups, link

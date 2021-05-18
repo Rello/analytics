@@ -15,12 +15,13 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Storage: realtime or database
 - Advanced dataloads with scheduling
 - Visualization: combined charts, tables, filters
+- Analysis functions: trend
 - Thresholds for alerts and color coding
 - Integration: Files, Activity, Notifications, Flow, Dashboard (NC20), Search
 - Sharing: user, groups, link
 
 ]]></description>
-    <version>3.4.1</version>
+    <version>3.5.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>
