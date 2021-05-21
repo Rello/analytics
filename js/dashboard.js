@@ -107,7 +107,7 @@ OCA.Analytics.Dashboard = {
         let kpi = data[0];
         let value = parseFloat(data[data.length - 1]).toLocaleString();
 
-        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, kpi, value, jsondata.thresholds);
+        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, kpi, data[data.length - 1], jsondata.thresholds);
         document.getElementById('analyticsWidgetItem' + reportId).insertAdjacentHTML('beforeend', widgetRow);
         document.getElementById('analyticsWidgetItem' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
