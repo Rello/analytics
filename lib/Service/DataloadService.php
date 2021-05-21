@@ -137,8 +137,7 @@ class DataloadService
         $datasetId = $result['datasetId'];
 
         if (isset($option['delete']) and $option['delete'] === 'true') {
-            $this->StorageController->delete($datasetId, '*', '*');
-            $bulkInsert = true;
+            $bulkInsert = $this->StorageController->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
         }
 
         $this->DataloadMapper->beginTransaction();

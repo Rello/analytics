@@ -134,9 +134,9 @@ class StorageController extends Controller
      * @param $dimension2
      * @return bool
      */
-    public function delete(int $datasetId, $dimension1, $dimension2)
+    public function delete(int $datasetId, $dimension1, $dimension2, string $user_id = null)
     {
-        return $this->StorageMapper->delete($datasetId, $dimension1, $dimension2);
+        return $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
     }
 
     /**

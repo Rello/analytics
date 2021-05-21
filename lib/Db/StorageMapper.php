@@ -149,10 +149,11 @@ class StorageMapper
      * @param $dimension2
      * @return bool
      */
-    public function delete(int $datasetId, $dimension1, $dimension2)
+    public function delete(int $datasetId, $dimension1, $dimension2, string $user_id = null)
     {
         $dimension1 = str_replace('*', '%', $dimension1);
         $dimension2 = str_replace('*', '%', $dimension2);
+        if ($user_id) $this->userId = $user_id;
 
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
