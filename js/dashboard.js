@@ -105,9 +105,9 @@ OCA.Analytics.Dashboard = {
         let reportId = jsondata['options']['id'];
         let data = jsondata['data'][jsondata['data'].length - 1];
         let kpi = data[0];
-        let value = parseFloat(data[data.length - 1]).toLocaleString();
+        let value = data[data.length - 1];
 
-        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, kpi, data[data.length - 1], jsondata.thresholds);
+        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, kpi, value, jsondata.thresholds);
         document.getElementById('analyticsWidgetItem' + reportId).insertAdjacentHTML('beforeend', widgetRow);
         document.getElementById('analyticsWidgetItem' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
@@ -121,6 +121,7 @@ OCA.Analytics.Dashboard = {
 
     buildWidgetRow: function (report, reportId, kpi, value, thresholds) {
         let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(kpi, value, thresholds);
+        value = parseFloat(value).toLocaleString();
         let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
 
         return `<a href="${href}">
