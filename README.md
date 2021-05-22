@@ -17,7 +17,8 @@ Visualize and share anything, from financial analysis to IoT logs.
   filters
 - Analysis functions: trend
 - [Thresholds](https://github.com/Rello/analytics/wiki/Thresholds) for alerts and color coding
-- Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), Dashboard (NC20), Search
+- Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration),
+  Dashboard, Search
 - Sharing: user, groups, link
 
 
