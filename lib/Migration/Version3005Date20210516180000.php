@@ -54,7 +54,7 @@ class Version3005Date20210516180000 extends SimpleMigrationStep
         $query = $this->connection->getQueryBuilder();
         $query->insert('analytics_whats_new')
             ->values([
-                'version' => $query->createNamedParameter('3.5.0'),
+                'version' => $query->createNamedParameter('3.5.1'),
                 'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
 "en":{"regular":["More features behind the new chart menu (...)","First analysis function: trend lines in charts","Filter also for external data sources","Download charts"],"admin":["New Features apply to users"]},
 "de":{"regular":["Mehr Funktionen hinter dem neuen Chartmenü (...)","Erste Analyse Funktion: Trendlinien in Diagrammen","Filter auch für externe Datenquellen","Charts herunterladen"],"admin":["Nur User Features"]}
