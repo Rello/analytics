@@ -1,10 +1,10 @@
 {
   "translations": {
     "Analytics": "Аналитика",
-    "Do you like this app?": "Нравится это приложеение?",
+    "Do you like this app?": "Вам нравится это приложение?",
     "More information…": "Дополнительная информация…",
     "This report is password-protected": "Это отчёт защищён паролем",
-    "The password is wrong. Try again.": "Не верный пароль. Попробуйте ещё раз.",
+    "The password is wrong. Try again.": "Неверный пароль. Попробуйте ещё раз.",
     "Password": "Пароль",
     "Password protection": "Защищено паролем",
     "Drilldown": "Детализация",
@@ -72,8 +72,8 @@
     "red": "красный",
     "yellow": "жёлтый",
     "green": "зелёный",
-    "Thresholds can trigger notifications and color coding in reports": "Пороги могут вызывать уведомления и цветовое кодирование в отчетах",
-    "Save threshold": "Сохранить порог",
+    "Thresholds can trigger notifications and color coding in reports": "Пределы могут вызывать уведомления и цветовое кодирование в отчетах",
+    "Save threshold": "Сохранить предел",
     "= equal": "= равно",
     "> greater": "> больше",
     "< less": "< меньше",
@@ -121,6 +121,13 @@
     "Download chart": "Скачать диаграмму",
     "Trend": "Тенденция",
     "back": "назад"
+    "sheet name": "имя листа",
+    "File": "Файл",
+    "Sheet": "Лист",
+    "Cell range": "Диапазон ячеек",
+    "Authentication": "Идентификация",
+    "Object path": "Путь к объекту",
+    "Bar": "Столбец"
   },
   "pluralForm": ""
 }
