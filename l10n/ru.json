@@ -116,11 +116,11 @@
     "Number of rows": "Количествово строк",
     "Import report": "Импортировать отчёт",
     "Export": "Экспортировать",
-    "Save view": "Save view",
-    "Analysis": "Analysis",
-    "Download chart": "Download chart",
-    "Trend": "Trend",
-    "back": "back"
+    "Save view": "Сохранить вид",
+    "Analysis": "Анализ",
+    "Download chart": "Скачать диаграмму",
+    "Trend": "Тенденция",
+    "back": "назад"
   },
   "pluralForm": ""
 }
