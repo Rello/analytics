@@ -2,8 +2,8 @@ name: PHPUnit
 
 on:
   workflow_dispatch:
-  pull_request:
-  push:
+  #pull_request:
+  #push:
 
 env:
   APP_NAME: analytics
@@ -16,7 +16,7 @@ jobs:
       # do not stop on another job's failure
       fail-fast: false
       matrix:
-        php-versions: [ '7.4' ]
+        php-versions: [ '7.4', '8.0' ]
         databases: [ 'sqlite' ]
         server-versions: [ 'master' ]
 
@@ -78,7 +78,7 @@ jobs:
       # do not stop on another job's failure
       fail-fast: false
       matrix:
-        php-versions: [ '7.3', '7.4' ]
+        php-versions: [ '7.4' ]
         databases: [ 'mysql' ]
         server-versions: [ 'master' ]
 

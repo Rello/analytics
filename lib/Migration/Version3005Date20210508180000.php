@@ -138,7 +138,7 @@ class Version3005Date20210508180000 extends SimpleMigrationStep
             }
         }
 
-        if (!$schema->hasTable('analytics_facts')) {
+        if ($schema->hasTable('analytics_facts')) {
             $table = $schema->createTable('analytics_facts');
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
