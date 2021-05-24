@@ -63,9 +63,9 @@ jobs:
           ./occ app:enable --force ${{ env.APP_NAME }}
       #          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/php
-        run: phpunit -c phpunit.xml
+  #    - name: PHPUnit
+  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
+  #      run: phpunit -c phpunit.xml
 
   #      - name: PHPUnit integration
   #        working-directory: apps/${{ env.APP_NAME }}
@@ -134,9 +134,9 @@ jobs:
           ./occ app:enable --force ${{ env.APP_NAME }}
       #          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/php
-        run: phpunit -c phpunit.xml
+  #    - name: PHPUnit
+  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
+  #      run: phpunit -c phpunit.xml
 
   #      - name: PHPUnit integration
   #        working-directory: apps/${{ env.APP_NAME }}
@@ -207,9 +207,9 @@ jobs:
           ./occ app:enable --force ${{ env.APP_NAME }}
       #          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/php
-        run: phpunit -c phpunit.xml
+  #    - name: PHPUnit
+  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
+  #      run: phpunit -c phpunit.xml
 
   #      - name: PHPUnit integration
   #        working-directory: apps/${{ env.APP_NAME }}
@@ -273,9 +273,9 @@ jobs:
           ./occ app:enable --force ${{ env.APP_NAME }}
       #          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/php
-        run: phpunit -c phpunit.xml
+  #    - name: PHPUnit
+  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
+  #      run: phpunit -c phpunit.xml
 
 #      - name: PHPUnit integration
 #        working-directory: apps/${{ env.APP_NAME }}
