@@ -1,10 +1,9 @@
 name: PHPUnit
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
-    branches:
-      - master
 
 env:
   APP_NAME: analytics
