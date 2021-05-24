@@ -1,8 +1,11 @@
 # Changelog
 
+## 3.6.0 - 2021-06-xx
+
 ## 3.5.1 - 2021-05-22
 
 ### Fixed
+
 - threshold colors wrong in dashboard [#159](https://github.com/rello/analytics/issues/159)
 - Issues with bulk data upload [#136](https://github.com/rello/analytics/issues/136)
 - Database issue on NC21 installation [#113](https://github.com/rello/analytics/issues/113)
