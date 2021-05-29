@@ -569,6 +569,15 @@ OCA.Analytics.Functions = {
         let datasetType = 'time';
         for (let y = 0; y < numberDatasets; y++) {
             let dataset = OCA.Analytics.chartObject.data.datasets[y];
+            let newLabel = dataset.label + " Trend";
+
+            // generate trend only for visible data series
+            if (OCA.Analytics.chartObject.isDatasetVisible(y) === false) continue;
+            // dont add trend twice
+            if (OCA.Analytics.chartObject.data.datasets.find(o => o.label === newLabel) !== undefined) continue;
+            // dont add trend for a trend
+            if (dataset.label.substr(dataset.label.length - 6) === " Trend") continue;
+
             let yValues = [];
             for (let i = 0; i < dataset.data.length; i++) {
                 if (typeof (dataset.data[i]) === 'number') {
@@ -598,7 +607,7 @@ OCA.Analytics.Functions = {
                 }
             }
             let newDataset = {
-                label: dataset.label + " Trend",
+                label: newLabel,
                 backgroundColor: dataset.backgroundColor,
                 borderColor: dataset.borderColor,
                 borderDash: [5, 5],
