@@ -5,6 +5,7 @@
 ### Added
 
 - Enable receiver of share to unshare #171
+- sorting of external/unstructured data #175
 
 ### Changed
 

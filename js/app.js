@@ -294,7 +294,10 @@ OCA.Analytics.UI = {
         };
 
         for (let values of jsondata.data) {
-            if (dataSeriesColumn >= 0 && lastObject !== values[dataSeriesColumn]) {
+            // indexOf will search, if an exiting dataset existists already for that lable (first column)
+            // internal data comes sorted from the database and the dataSeries can increment
+            // external data like csv can be unsorted
+            if (dataSeriesColumn >= 0 && datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn])) === -1) {
                 // create new dataseries for every new lable in dataSeriesColumn
                 datasets.push({label: values[dataSeriesColumn], data: [], hidden: hidden});
                 dataSeries++;
@@ -310,15 +313,19 @@ OCA.Analytics.UI = {
                 lastObject = true;
             }
 
+            // find the correct dataset, where the data needs to be added to
+            let targetDataseries = datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn]));
+            targetDataseries = (targetDataseries === -1) ? 0 : targetDataseries;
+
             if (chartType === 'datetime' || chartType === 'area') {
-                datasets[dataSeries]['data'].push({
+                datasets[targetDataseries]['data'].push({
                     y: parseFloat(values[keyFigureColumn]),
                     x: values[characteristicColumn]
 
                 });
             } else {
-                datasets[dataSeries]['data'].push(parseFloat(values[keyFigureColumn]));
-                if (dataSeries === 0) {
+                datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
+                if (targetDataseries === 0) {
                     // Add category lables only once and not for every data series.
                     // They have to be unique anyway
                     xAxisCategories.push(values[characteristicColumn]);
