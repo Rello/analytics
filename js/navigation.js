@@ -215,7 +215,10 @@ OCA.Analytics.Navigation = {
         deleteReport.dataset.id = data.id;
         deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
 
+        let unshareReport = navigationMenu.getElementById('navigationMenuUnshare');
+
         if (parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP) {
+            unshareReport.remove();
             favorite.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
             advanced.remove();
@@ -223,6 +226,10 @@ OCA.Analytics.Navigation = {
             advanced.remove();
             deleteReport.remove();
             edit.remove();
+            unshareReport.dataset.shareId = data.shareId;
+            unshareReport.addEventListener('click', OCA.Analytics.Navigation.handleUnshareButton);
+        } else {
+            unshareReport.remove();
         }
 
         return navigationMenu;
@@ -336,6 +343,24 @@ OCA.Analytics.Navigation = {
     handleImportButton: function () {
         const mimeparts = ['text/csv', 'text/plain'];
         OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Navigation.importDataset.bind(this), false, mimeparts, true, 1);
+    },
+
+    handleUnshareButton: function (evt) {
+        let shareId = evt.target.parentNode.dataset.shareId;
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('DELETE', OC.generateUrl('apps/analytics/share/' + shareId, true), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                OCA.Analytics.Navigation.init();
+            }
+        };
+
+        xhr.send();
     },
 
     importDataset: function (path, raw) {
