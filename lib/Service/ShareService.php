@@ -14,10 +14,9 @@ namespace OCA\Analytics\Service;
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\ShareMapper;
 use OCP\IGroupManager;
-use OCP\ILogger;
 use OCP\IUserManager;
-use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
 
 class ShareService
 {
@@ -27,7 +26,7 @@ class ShareService
     const SHARE_TYPE_LINK = 3;
     const SHARE_TYPE_ROOM = 10;
 
-    /** @var ILogger */
+    /** @var LoggerInterface */
     private $logger;
     /** @var ShareMapper */
     private $ShareMapper;
@@ -35,26 +34,75 @@ class ShareService
     private $ActivityManager;
     /** @var IGroupManager */
     private $groupManager;
-    /** @var IUserSession */
-    private $userSession;
     /** @var IUserManager */
     private $userManager;
 
     public function __construct(
+        LoggerInterface $logger,
         ShareMapper $ShareMapper,
         ActivityManager $ActivityManager,
         IGroupManager $groupManager,
         ISecureRandom $secureRandom,
-        IUserSession $userSession,
         IUserManager $userManager
     )
     {
+        $this->logger = $logger;
         $this->ShareMapper = $ShareMapper;
         $this->secureRandom = $secureRandom;
         $this->groupManager = $groupManager;
         $this->ActivityManager = $ActivityManager;
-        $this->userSession = $userSession;
         $this->userManager = $userManager;
+    }
+
+    /**
+     * create a new share
+     *
+     * @NoAdminRequired
+     * @param $datasetId
+     * @param $type
+     * @param $user
+     * @return bool
+     * @throws \OCP\DB\Exception
+     */
+    public function create($datasetId, $type, $user)
+    {
+        if ((int)$type === self::SHARE_TYPE_LINK) {
+            $token = $this->generateToken();
+            $this->ShareMapper->createShare($datasetId, $type, $user, $token);
+        } elseif ((int)$type === self::SHARE_TYPE_USER) {
+            $this->ShareMapper->createShare($datasetId, $type, $user, null);
+        } elseif ((int)$type === self::SHARE_TYPE_GROUP) {
+            // add the entry for the group
+            $parent = $this->ShareMapper->createShare($datasetId, self::SHARE_TYPE_GROUP, $user, null);
+
+            // add entries for every user of the group
+            $usersInGroup = $this->groupManager->displayNamesInGroup($user);
+            foreach ($usersInGroup as $userId => $displayName) {
+                $this->ShareMapper->createShare($datasetId, self::SHARE_TYPE_USERGROUP, $userId, null, $parent);
+            }
+        }
+
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
+        return true;
+    }
+
+    /**
+     * get all shares for a dataset
+     *
+     * @NoAdminRequired
+     * @param $datasetId
+     * @return array
+     */
+    public function read($datasetId)
+    {
+        $shares = $this->ShareMapper->getShares($datasetId);
+        foreach ($shares as &$share) {
+            if ($share['type'] === 0) {
+                $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
+            }
+            $share['pass'] = $share['pass'] !== null;
+        }
+        return $shares;
     }
 
     /**
@@ -89,22 +137,12 @@ class ShareService
      */
     public function getSharedDatasets()
     {
-        $sharedDatasetsByGroup = array();
-        $groups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
-
-        foreach ($groups as $group) {
-            $sharedDatasetByGroup = $this->ShareMapper->getDatasetsByGroup($group);
-            $sharedDatasetsByGroup = array_merge($sharedDatasetsByGroup, $sharedDatasetByGroup);
-        }
         $sharedDatasets = $this->ShareMapper->getSharedDatasets();
-
-        $sharedDatasetsCombined = array_merge($sharedDatasetsByGroup, $sharedDatasets);
-        foreach ($sharedDatasetsCombined as &$sharedDataset) {
+        foreach ($sharedDatasets as &$sharedDataset) {
             $sharedDataset['type'] = '99';
             $sharedDataset['parrent'] = '0';
         }
-
-        return $sharedDatasetsCombined;
+        return $sharedDatasets;
     }
 
     /**
@@ -116,15 +154,32 @@ class ShareService
      */
     public function getSharedDataset($id)
     {
-        $sharedDataset = $this->ShareMapper->getSharedDataset($id);
-        if (empty($sharedDataset)) {
-            $groups = $this->groupManager->getUserGroupIds($this->userSession->getUser());
-            foreach ($groups as $group) {
-                $sharedDataset = $this->ShareMapper->getDatasetByGroupId($group, $id);
-                break;
-            }
+        return $this->ShareMapper->getSharedDataset($id);
+    }
+
+    /**
+     * delete a share
+     *
+     * @NoAdminRequired
+     * @param $shareId
+     * @return bool
+     */
+    public function delete($shareId)
+    {
+        $share = $this->ShareMapper->getShare($shareId);
+        $type = $share['type'];
+        $this->logger->error('share type: ' . $type);
+        if ((int)$type === self::SHARE_TYPE_LINK) {
+            $this->ShareMapper->deleteShare($shareId);
+        } elseif ((int)$type === self::SHARE_TYPE_USER) {
+            $this->ShareMapper->deleteShare($shareId);
+        } elseif ((int)$type === self::SHARE_TYPE_USERGROUP) {
+            $this->ShareMapper->deleteShare($shareId);
+        } elseif ((int)$type === self::SHARE_TYPE_GROUP) {
+            $this->ShareMapper->deleteShare($shareId);
+            $this->ShareMapper->deleteShareByParent($shareId);
         }
-        return $sharedDataset;
+        return true;
     }
 
     /**
@@ -138,4 +193,39 @@ class ShareService
     {
         return $this->ShareMapper->deleteShareByDataset($datasetId);
     }
+
+    /**
+     * update/set share password
+     *
+     * @NoAdminRequired
+     * @param $shareId
+     * @param $password
+     * @param $canEdit
+     * @return bool
+     */
+    public function update($shareId, $password = null, $canEdit = null)
+    {
+        if ($password !== null) {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            return $this->ShareMapper->updateSharePassword($shareId, $password);
+        }
+        if ($canEdit !== null) {
+            $canEdit === 'true' ? $canEdit = \OCP\Constants::PERMISSION_UPDATE : $canEdit = \OCP\Constants::PERMISSION_READ;
+            return $this->ShareMapper->updateSharePermissions($shareId, $canEdit);
+        }
+    }
+
+    /**
+     * generate to token used to authenticate federated shares
+     *
+     * @return string
+     */
+    private function generateToken()
+    {
+        $token = $this->secureRandom->generate(
+            15,
+            ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_DIGITS);
+        return $token;
+    }
+
 }

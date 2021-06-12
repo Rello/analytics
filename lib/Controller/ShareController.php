@@ -11,15 +11,10 @@
 
 namespace OCA\Analytics\Controller;
 
-use OCA\Analytics\Activity\ActivityManager;
-use OCA\Analytics\Db\ShareMapper;
+use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\IUserManager;
-use OCP\IUserSession;
-use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class ShareController extends Controller
@@ -32,36 +27,18 @@ class ShareController extends Controller
 
     /** @var LoggerInterface */
     private $logger;
-    private $ShareMapper;
-    private $secureRandom;
-    private $ActivityManager;
-    /** @var IGroupManager */
-    private $groupManager;
-    /** @var IUserSession */
-    private $userSession;
-    /** @var IUserManager */
-    private $userManager;
+    private $ShareService;
 
     public function __construct(
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        ShareMapper $ShareMapper,
-        ActivityManager $ActivityManager,
-        IGroupManager $groupManager,
-        ISecureRandom $secureRandom,
-        IUserSession $userSession,
-        IUserManager $userManager
+        ShareService $ShareService,
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
-        $this->ShareMapper = $ShareMapper;
-        $this->secureRandom = $secureRandom;
-        $this->groupManager = $groupManager;
-        $this->ActivityManager = $ActivityManager;
-        $this->userSession = $userSession;
-        $this->userManager = $userManager;
+        $this->ShareService = $ShareService;
     }
 
     /**
@@ -71,17 +48,11 @@ class ShareController extends Controller
      * @param $datasetId
      * @param $type
      * @param $user
-     * @return bool
+     * @return DataResponse
      */
     public function create($datasetId, $type, $user)
     {
-        if ((int)$type === self::SHARE_TYPE_LINK) {
-            $token = $this->generateToken();
-        } else {
-            $token = null;
-        }
-        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
-        return $this->ShareMapper->createShare($datasetId, $type, $user, $token);
+        return new DataResponse($this->ShareService->create($datasetId, $type, $user));
     }
 
     /**
@@ -93,14 +64,7 @@ class ShareController extends Controller
      */
     public function read($datasetId)
     {
-        $shares = $this->ShareMapper->getShares($datasetId);
-        foreach ($shares as &$share) {
-            if ($share['type'] === 0) {
-                $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
-            }
-            $share['pass'] = $share['pass'] !== null;
-        }
-        return new DataResponse($shares);
+        return new DataResponse($this->ShareService->read($datasetId));
     }
 
     /**
@@ -110,18 +74,11 @@ class ShareController extends Controller
      * @param $shareId
      * @param $password
      * @param $canEdit
-     * @return bool
+     * @return DataResponse
      */
     public function update($shareId, $password = null, $canEdit = null)
     {
-        if ($password !== null) {
-            $password = password_hash($password, PASSWORD_DEFAULT);
-            return $this->ShareMapper->updateSharePassword($shareId, $password);
-        }
-        if ($canEdit !== null) {
-            $canEdit === 'true' ? $canEdit = \OCP\Constants::PERMISSION_UPDATE : $canEdit = \OCP\Constants::PERMISSION_READ;
-            return $this->ShareMapper->updateSharePermissions($shareId, $canEdit);
-        }
+        return new DataResponse($this->ShareService->update($shareId, $password, $canEdit));
     }
 
     /**
@@ -129,23 +86,10 @@ class ShareController extends Controller
      *
      * @NoAdminRequired
      * @param $shareId
-     * @return bool
+     * @return DataResponse
      */
     public function delete($shareId)
     {
-        return $this->ShareMapper->deleteShare($shareId);
-    }
-
-    /**
-     * generate to token used to authenticate federated shares
-     *
-     * @return string
-     */
-    private function generateToken()
-    {
-        $token = $this->secureRandom->generate(
-            15,
-            ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_DIGITS);
-        return $token;
+        return new DataResponse($this->ShareService->delete($shareId));
     }
 }

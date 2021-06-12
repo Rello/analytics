@@ -14,8 +14,8 @@ namespace OCA\Analytics\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class ShareMapper
 {
@@ -31,7 +31,7 @@ class ShareMapper
         IL10N $l10n,
         IDBConnection $db,
         IUserSession $userSession,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->userSession = $userSession;
@@ -114,7 +114,9 @@ class ShareMapper
         $sql->from(self::TABLE_NAME_DATASET, 'DS')
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
             ->select('DS.id', 'DS.name')
-            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID())));
+            ->selectAlias('SH.id', 'shareId')
+            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
+            ->andWhere($sql->expr()->neq('SH.type', $sql->createNamedParameter(1))); // don´t find groups with the same name
         $statement = $sql->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -148,9 +150,11 @@ class ShareMapper
      * @param $type
      * @param $uid_owner
      * @param $token
+     * @param $parent
      * @return bool
+     * @throws \OCP\DB\Exception
      */
-    public function createShare($datasetId, $type, $uid_owner, $token)
+    public function createShare($datasetId, $type, $uid_owner, $token, $parent = null)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
@@ -165,6 +169,7 @@ class ShareMapper
 
         if ($result && ($type !== 3)) {
             // don´t create double shares
+            // multiple link shares (3) are possible
             return false;
         } else {
             $sql = $this->db->getQueryBuilder();
@@ -175,10 +180,28 @@ class ShareMapper
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
                     'token' => $sql->createNamedParameter($token),
+                    'parent' => $sql->createNamedParameter($parent),
                 ]);
             $sql->execute();
         }
-        return true;
+        return $sql->getLastInsertId();
+    }
+
+    /**
+     * Get single shares metadata
+     * @param $shareId
+     * @return array
+     */
+    public function getShare($shareId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id', 'type', 'parent')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
@@ -193,7 +216,8 @@ class ShareMapper
             ->select('id', 'type', 'uid_owner', 'token', 'permissions')
             ->selectAlias('password', 'pass')
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->neq('type', $sql->createNamedParameter(2)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -257,13 +281,32 @@ class ShareMapper
      * Delete a share
      * @param $shareId
      * @return bool
+     * @throws \OCP\DB\Exception
      */
     public function deleteShare($shareId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($shareId)))
+            ->andWhere($sql->expr()->orX(
+                $sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())),
+                $sql->expr()->eq('uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID()))
+            ));
+        $sql->execute();
+        return true;
+    }
+
+    /**
+     * Delete all shares by parent ID (users of a group share)
+     * @param $parent
+     * @return bool
+     */
+    public function deleteShareByParent($parent)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
+            ->andWhere($sql->expr()->eq('parent', $sql->createNamedParameter($parent)));
         $sql->execute();
         return true;
     }

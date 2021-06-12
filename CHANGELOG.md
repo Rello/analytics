@@ -2,6 +2,14 @@
 
 ## 3.6.0 - 2021-06-xx
 
+### Added
+
+- Enable receiver of share to unshare #171
+
+### Changed
+
+- Trend only for visible data series #172
+
 ## 3.5.1 - 2021-05-22
 
 ### Fixed
