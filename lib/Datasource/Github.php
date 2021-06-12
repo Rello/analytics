@@ -12,7 +12,7 @@
 namespace OCA\Analytics\Datasource;
 
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class Github implements IDatasource
 {
@@ -21,7 +21,7 @@ class Github implements IDatasource
 
     public function __construct(
         IL10N $l10n,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->l10n = $l10n;

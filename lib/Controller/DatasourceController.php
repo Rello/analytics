@@ -22,8 +22,8 @@ use OCP\AppFramework\Controller;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class DatasourceController extends Controller
 {
@@ -50,7 +50,7 @@ class DatasourceController extends Controller
     public function __construct(
         string $AppName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         Github $GithubService,
         File $FileService,
         Regex $RegexService,
@@ -198,7 +198,7 @@ class DatasourceController extends Controller
             $uniqueId = '99' . \OC::$server->get($class)->getId();
 
             if (isset($datasources[$uniqueId])) {
-                $this->logger->logException(new \InvalidArgumentException('Datasource with the same ID already registered: ' . \OC::$server->get($class)->getName()), ['level' => ILogger::INFO]);
+                $this->logger->error(new \InvalidArgumentException('Datasource with the same ID already registered: ' . \OC::$server->get($class)->getName()));
                 continue;
             }
             $datasources[$uniqueId] = \OC::$server->get($class);

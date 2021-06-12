@@ -15,8 +15,8 @@ use OCA\Analytics\Db\DatasetMapper;
 use OCA\Analytics\Notification\NotificationManager;
 use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class ThresholdController extends Controller
 {
@@ -28,7 +28,7 @@ class ThresholdController extends Controller
     public function __construct(
         $appName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         ThresholdService $ThresholdService,
         NotificationManager $NotificationManager,
         DatasetMapper $DatasetMapper

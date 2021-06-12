@@ -13,7 +13,7 @@ namespace OCA\Analytics\Db;
 
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class DatasetMapper
 {
@@ -27,7 +27,7 @@ class DatasetMapper
         $userId,
         IL10N $l10n,
         IDBConnection $db,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->userId = $userId;
@@ -82,7 +82,7 @@ class DatasetMapper
                 'visualization' => $sql->createNamedParameter('ct'),
             ]);
         $sql->execute();
-        return (int)$this->db->lastInsertId(self::TABLE_NAME);
+        return (int)$sql->getLastInsertId();
     }
 
     /**

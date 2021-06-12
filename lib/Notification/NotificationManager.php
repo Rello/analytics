@@ -12,8 +12,8 @@
 namespace OCA\Analytics\Notification;
 
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\Notification\IManager as INotificationManager;
+use Psr\Log\LoggerInterface;
 
 class NotificationManager
 {
@@ -28,7 +28,7 @@ class NotificationManager
     public function __construct(
         IL10N $l10n,
         $userId,
-        ILogger $logger,
+        LoggerInterface $logger,
         INotificationManager $notificationManager
     )
     {

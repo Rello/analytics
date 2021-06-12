@@ -14,7 +14,7 @@ namespace OCA\Analytics\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class StorageMapper
 {
@@ -28,7 +28,7 @@ class StorageMapper
         $userId,
         IL10N $l10n,
         IDBConnection $db,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->userId = $userId;
@@ -46,7 +46,7 @@ class StorageMapper
      * @param $value
      * @param string|null $user_id
      * @param int|null $timestamp
-     * @param null $bulkInsert
+     * @param $bulkInsert
      * @return string
      */
     public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null, $bulkInsert = null)

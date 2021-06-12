@@ -21,8 +21,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class OutputController extends Controller
 {
@@ -40,7 +40,7 @@ class OutputController extends Controller
         string $AppName,
         IRequest $request,
         $userId,
-        ILogger $logger,
+        LoggerInterface $logger,
         IRootFolder $rootFolder,
         DatasetService $DatasetService,
         ShareService $ShareService,

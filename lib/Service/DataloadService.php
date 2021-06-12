@@ -19,7 +19,7 @@ use OCA\Analytics\Db\DataloadMapper;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class DataloadService
 {
@@ -33,7 +33,7 @@ class DataloadService
 
     public function __construct(
         IL10N $l10n,
-        ILogger $logger,
+        LoggerInterface $logger,
         ActivityManager $ActivityManager,
         DatasourceController $DatasourceController,
         DatasetService $DatasetService,

@@ -9,6 +9,7 @@
 ### Changed
 
 - Trend only for visible data series #172
+- move to \Psr\Log\LoggerInterface
 
 ## 3.5.1 - 2021-05-22
 

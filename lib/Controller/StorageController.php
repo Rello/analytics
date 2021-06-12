@@ -14,8 +14,8 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class StorageController extends Controller
 {
@@ -26,7 +26,7 @@ class StorageController extends Controller
     public function __construct(
         string $AppName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         StorageMapper $StorageMapper,
         ThresholdService $ThresholdService
     )
@@ -88,7 +88,7 @@ class StorageController extends Controller
      * @param $dimension2
      * @param $value
      * @param string|null $user_id
-     * @param null $bulkInsert
+     * @param $bulkInsert
      * @return array
      * @throws \Exception
      */

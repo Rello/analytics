@@ -19,12 +19,12 @@ use OCP\Files\Folder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IURLGenerator;
 use OCP\Util;
 use OCP\WorkflowEngine\IManager;
 use OCP\WorkflowEngine\IOperation;
 use OCP\WorkflowEngine\IRuleMatcher;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class FlowOperation implements IOperation
@@ -41,7 +41,7 @@ class FlowOperation implements IOperation
     public function __construct(
         IL10N $l,
         IURLGenerator $urlGenerator,
-        ILogger $logger,
+        LoggerInterface $logger,
         DataloadController $DataloadController,
         IEventDispatcher $eventDispatcher
     )

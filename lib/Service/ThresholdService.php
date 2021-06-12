@@ -14,7 +14,7 @@ namespace OCA\Analytics\Service;
 use OCA\Analytics\Db\DatasetMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class ThresholdService
 {
@@ -24,7 +24,7 @@ class ThresholdService
     private $NotificationManager;
 
     public function __construct(
-        ILogger $logger,
+        LoggerInterface $logger,
         ThresholdMapper $ThresholdMapper,
         NotificationManager $NotificationManager,
         DatasetMapper $DatasetMapper

@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace OCA\Analytics\Notification;
 
 use InvalidArgumentException;
-use OCP\ILogger;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+use Psr\Log\LoggerInterface;
 
 class Notifier implements INotifier
 {
@@ -37,7 +37,7 @@ class Notifier implements INotifier
 
     public function __construct(IFactory $l10nFactory,
                                 IUserManager $userManager,
-                                ILogger $logger,
+                                LoggerInterface $logger,
                                 IURLGenerator $urlGenerator)
     {
         $this->l10nFactory = $l10nFactory;

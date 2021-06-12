@@ -12,7 +12,7 @@
 namespace OCA\Analytics\Datasource;
 
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class ExternalFile implements IDatasource
 {
@@ -23,7 +23,7 @@ class ExternalFile implements IDatasource
     public function __construct(
         $userId,
         IL10N $l10n,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->userId = $userId;

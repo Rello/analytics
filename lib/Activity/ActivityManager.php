@@ -16,7 +16,7 @@ use OCA\Analytics\Db\ShareMapper;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class ActivityManager
 {
@@ -43,7 +43,7 @@ class ActivityManager
         ShareMapper $ShareMapper,
         $userId,
         DatasetMapper $DatasetMapper,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->manager = $manager;

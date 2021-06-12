@@ -52,7 +52,6 @@
             </div>
         </a>
     </div>
-    </div>
 </template>
 
 <template id="wizard-start">

@@ -17,9 +17,9 @@ use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class ApiDataController extends ApiController
 {
@@ -39,7 +39,7 @@ class ApiDataController extends ApiController
     public function __construct(
         $appName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         IUserSession $userSession,
         ActivityManager $ActivityManager,
         DatasetService $DatasetService,

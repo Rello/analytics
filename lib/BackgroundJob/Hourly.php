@@ -14,7 +14,7 @@ namespace OCA\Analytics\BackgroundJob;
 use OCA\Analytics\Service\DataloadService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class Hourly extends TimedJob
 {
@@ -24,7 +24,7 @@ class Hourly extends TimedJob
 
     public function __construct(
         ITimeFactory $time,
-        ILogger $logger,
+        LoggerInterface $logger,
         DataloadService $DataloadService
     )
     {

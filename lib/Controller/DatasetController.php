@@ -14,8 +14,8 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Service\DatasetService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class DatasetController extends Controller
 {
@@ -25,7 +25,7 @@ class DatasetController extends Controller
     public function __construct(
         $appName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         DatasetService $DatasetService
     )
     {

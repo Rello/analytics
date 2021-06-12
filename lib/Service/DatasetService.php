@@ -19,8 +19,8 @@ use OCA\Analytics\Db\StorageMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Files\IRootFolder;
-use OCP\ILogger;
 use OCP\ITagManager;
+use Psr\Log\LoggerInterface;
 
 class DatasetService
 {
@@ -37,7 +37,7 @@ class DatasetService
 
     public function __construct(
         $userId,
-        ILogger $logger,
+        LoggerInterface $logger,
         ITagManager $tagManager,
         ShareService $ShareService,
         StorageMapper $StorageMapper,

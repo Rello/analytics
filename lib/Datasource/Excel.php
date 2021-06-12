@@ -14,9 +14,9 @@ namespace OCA\Analytics\Datasource;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
-use OCP\ILogger;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use Psr\Log\LoggerInterface;
 
 class Excel implements IDatasource
 {
@@ -28,7 +28,7 @@ class Excel implements IDatasource
     public function __construct(
         $userId,
         IL10N $l10n,
-        ILogger $logger,
+        LoggerInterface $logger,
         IRootFolder $rootFolder
     )
     {

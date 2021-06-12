@@ -21,8 +21,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class DataloadController extends Controller
 {
@@ -39,7 +39,7 @@ class DataloadController extends Controller
         string $AppName,
         IRequest $request,
         IL10N $l10n,
-        ILogger $logger,
+        LoggerInterface $logger,
         ActivityManager $ActivityManager,
         DatasourceController $DatasourceController,
         DatasetService $DatasetService,

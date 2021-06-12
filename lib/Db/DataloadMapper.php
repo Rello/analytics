@@ -12,26 +12,22 @@
 namespace OCA\Analytics\Db;
 
 use OCP\IDBConnection;
-use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class DataloadMapper
 {
     private $userId;
-    private $l10n;
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_dataload';
 
     public function __construct(
         $userId,
-        IL10N $l10n,
         IDBConnection $db,
-        ILogger $logger
+        LoggerInterface $logger
     )
     {
         $this->userId = $userId;
-        $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
         self::TABLE_NAME;
@@ -59,6 +55,7 @@ class DataloadMapper
      * @param int $datasetId
      * @param int $datasourceId
      * @return integer
+     * @throws \OCP\DB\Exception
      */
     public function create(int $datasetId, int $datasourceId)
     {
@@ -72,7 +69,7 @@ class DataloadMapper
                 'option' => $sql->createNamedParameter('{}'),
             ]);
         $sql->execute();
-        return (int)$this->db->lastInsertId(self::TABLE_NAME);
+        return (int)$sql->getLastInsertId();
     }
 
     /**

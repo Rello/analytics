@@ -318,6 +318,8 @@
             <li class="action-separator"></li>
             <li><a href="#" id="navigationMenuDelete"><span
                             class="icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuUnshare"><span
+                            class="icon-close"></span><span><?php p($l->t('Unshare')); ?></span></a></li>
         </ul>
     </div>
 </template>

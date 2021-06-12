@@ -18,10 +18,10 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 /**
  * Controller class for main page.
@@ -43,7 +43,7 @@ class PageController extends Controller
     public function __construct(
         string $appName,
         IRequest $request,
-        ILogger $logger,
+        LoggerInterface $logger,
         IURLGenerator $url,
         ShareService $ShareService,
         IUserSession $userSession,
