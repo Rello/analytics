@@ -214,6 +214,7 @@ OCA.Analytics.UI = {
         let datasets = [], xAxisCategories = [];
         let lastObject = false;
         let dataSeries = -1;
+        let targetDataseries = 0;
         let hidden = false;
 
         let header = jsondata.header;
@@ -306,16 +307,21 @@ OCA.Analytics.UI = {
                     hidden = true;
                 }
                 lastObject = values[dataSeriesColumn];
+                targetDataseries = dataSeries;
             } else if (lastObject === false) {
                 // when only 2 columns are provided, no label will be set
                 datasets.push({label: '', data: [], hidden: hidden});
                 dataSeries++;
+                targetDataseries = dataSeries;
                 lastObject = true;
+            } else if (lastObject !== values[dataSeriesColumn] && lastObject !== true) {
+                // find the correct dataset, where the data needs to be added to
+                targetDataseries = datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn]));
+                if (targetDataseries === -1) {
+                    targetDataseries = 0;
+                }
+                lastObject = values[dataSeriesColumn];
             }
-
-            // find the correct dataset, where the data needs to be added to
-            let targetDataseries = datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn]));
-            targetDataseries = (targetDataseries === -1) ? 0 : targetDataseries;
 
             if (chartType === 'datetime' || chartType === 'area') {
                 datasets[targetDataseries]['data'].push({
