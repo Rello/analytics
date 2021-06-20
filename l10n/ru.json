@@ -108,6 +108,8 @@
     "Delete data before load": "Удалить данные перед загрузкой",
     "Favorites": "Избранное",
     "Analytics - Advanced configuration": "Аналитика - Расширенные настройки",
+    "This section is used for advanced report and dataload configurations.": "This section is used for advanced report and dataload configurations.",
+    "Please select a report": "Please select a report",
     "Report was changed - Press here to save the current state": "Отчет был изменен - чтобы сохранить текущее состояние, нажмите здесь",
     "External URL": "Внешний URL",
     "Select columns": "Выбрать столбцы",

@@ -22,10 +22,10 @@
         </div>
     </div>
 </div>
-<div id="analytics-intro" style="width:50%; padding: 50px" hidden>
+<div id="analytics-intro" style="padding: 50px" hidden>
     <span><?php p($l->t('This section is used for advanced report and dataload configurations.')); ?></span>
     <br>
-    <span><?php p($l->t('Please select a report from the navigation')); ?></span>
+    <span><?php p($l->t('Please select a report')); ?></span>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>

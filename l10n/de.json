@@ -108,6 +108,8 @@
     "Delete data before load": "Daten vor der Ladung löschen",
     "Favorites": "Favoriten",
     "Analytics - Advanced configuration": "Analytics - Erweiterte Einstellungen",
+    "This section is used for advanced report and dataload configurations.": "Dieser Bereich steht für erweiterte Einstellungen und Datenladungen zur Verfügung",
+    "Please select a report": "Bitte wähle einen Bericht",
     "Report was changed - Press here to save the current state": "Bericht wurde geändert - Hier klicken um zu speichern",
     "External URL": "Externe URL",
     "Select columns": "Spalten wählen",
