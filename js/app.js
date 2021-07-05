@@ -421,7 +421,7 @@ OCA.Analytics.UI = {
         //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
         let userDatasetOptions = jsondata.options.dataoptions;
         if (userDatasetOptions !== '' && userDatasetOptions !== null) {
-            datasets = cloner.deep.merge(JSON.parse(userDatasetOptions), datasets);
+            datasets = cloner.deep.merge(datasets, JSON.parse(userDatasetOptions));
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
