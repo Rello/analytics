@@ -1,16 +1,22 @@
 # Changelog
 
-## 3.6.0 - 2021-06-xx
+## 3.6.0 - 2021-07-xx
 
 ### Added
 
-- Enable receiver of share to unshare #171
-- sorting of external/unstructured data #175
+- Enable receiver of share to unshare [#171](https://github.com/rello/analytics/issues/171)
+- sorting of external/unstructured data [#175](https://github.com/rello/analytics/issues/175)
 
 ### Changed
 
-- Trend only for visible data series #172
+- Update ru language @[sibergad](https://github.com/sibergad)
+- Trend only for visible data series [#172](https://github.com/rello/analytics/issues/172)
 - move to \Psr\Log\LoggerInterface
+
+### Fixed
+
+- dataset options not merged [#178](https://github.com/rello/analytics/issues/178)
+- dataset options not merged on dashboard [#179](https://github.com/rello/analytics/issues/179)
 
 ## 3.5.1 - 2021-05-22
 
