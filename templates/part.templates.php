@@ -15,10 +15,18 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Report title')); ?></div>
             <input style="display: table-cell;" id="sidebarDatasetName" class="sidebarInput">
+            <div style="display: table-cell;">
+                <a id="sidebarDatasetNameHint" title="<?php p($l->t('Variables')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Subheader')); ?></div>
             <input style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput">
+            <div style="display: table-cell;">
+                <a id="sidebarDatasetSubheaderHint" title="<?php p($l->t('Variables')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Report group')); ?></div>

@@ -18,6 +18,7 @@ Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'advanced');
+Util::addScript('analytics', 'userGuidance');
 ?>
 
     <div id="app-navigation">

@@ -206,6 +206,37 @@ OCA.Analytics.WhatsNew = {
 
         div.appendChild(list)
         document.body.appendChild(div)
-    }
+    },
+}
+/**
+ * @namespace OCA.Analytics.Notification
+ */
+OCA.Analytics.Notification = {
+    dialog: function (title, text, type) {
+        OC.dialogs.message(
+            text,
+            title,
+            type,
+            OC.dialogs.OK_BUTTON,
+            function () {
+            },
+            true,
+            true
+        );
+    },
+
+    notification: function (type, message) {
+        if (parseInt(OC.config.versionstring.substr(0, 2)) >= 17) {
+            if (type === 'success') {
+                OCP.Toast.success(message)
+            } else if (type === 'error') {
+                OCP.Toast.error(message)
+            } else {
+                OCP.Toast.info(message)
+            }
+        } else {
+            OC.Notification.showTemporary(message);
+        }
+    },
 
 }

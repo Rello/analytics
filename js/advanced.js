@@ -178,7 +178,7 @@ OCA.Analytics.Advanced.Dataload = {
                 'option': option,
             },
             success: function () {
-                OCA.Analytics.UI.notification('success', t('analytics', 'Saved'));
+                OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['option'] = option;
@@ -229,7 +229,7 @@ OCA.Analytics.Advanced.Dataload = {
             );
         } else {
             mode = 'execute';
-            OCA.Analytics.UI.notification('success', t('analytics', 'Load started'));
+            OCA.Analytics.Notification.notification('success', t('analytics', 'Load started'));
         }
 
         $.ajax({
@@ -252,7 +252,7 @@ OCA.Analytics.Advanced.Dataload = {
                     } else {
                         messageType = 'error';
                     }
-                    OCA.Analytics.UI.notification(messageType, data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated, ') + data.error + t('analytics', ' errors'));
+                    OCA.Analytics.Notification.notification(messageType, data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated, ') + data.error + t('analytics', ' errors'));
                 }
             }
         });

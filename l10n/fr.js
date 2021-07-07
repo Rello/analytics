@@ -76,6 +76,9 @@ OC.L10N.register(
         'Datasource simulation': 'Simulation d\'une source de données',
         'Datasource options': 'Options de la source de données',
         'External URL': 'URL externe',
-        'Link copied': 'Lien copié'
+        'Link copied': 'Lien copié',
+        'Bar': 'Bar',
+        'Text variables': 'Text variables',
+        'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.'
     },
     '');

@@ -34,6 +34,7 @@ class DatasetService
     private $DataloadMapper;
     private $ActivityManager;
     private $rootFolder;
+    private $VariableService;
 
     public function __construct(
         $userId,
@@ -45,7 +46,8 @@ class DatasetService
         ThresholdService $ThresholdService,
         DataloadMapper $DataloadMapper,
         ActivityManager $ActivityManager,
-        IRootFolder $rootFolder
+        IRootFolder $rootFolder,
+        VariableService $VariableService
     )
     {
         $this->userId = $userId;
@@ -58,6 +60,7 @@ class DatasetService
         $this->DataloadMapper = $DataloadMapper;
         $this->ActivityManager = $ActivityManager;
         $this->rootFolder = $rootFolder;
+        $this->VariableService = $VariableService;
     }
 
     /**
@@ -101,6 +104,7 @@ class DatasetService
                 $hasTag = 1;
             }
             $ownDataset['favorite'] = $hasTag;
+            $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
         }
 
         return new DataResponse($ownDatasets);
@@ -114,7 +118,11 @@ class DatasetService
      */
     public function read(int $datasetId)
     {
-        return $this->getOwnDataset($datasetId);
+        $ownDataset = $this->DatasetMapper->read($datasetId);
+        if (!empty($ownDataset)) {
+            $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+        }
+        return $ownDataset;
     }
 
     /**
@@ -129,6 +137,7 @@ class DatasetService
         $ownDataset = $this->DatasetMapper->read($datasetId, $user_id);
         if (!empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+            $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
         }
         return $ownDataset;
     }

@@ -520,20 +520,6 @@ OCA.Analytics.UI = {
         OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
-    notification: function (type, message) {
-        if (parseInt(OC.config.versionstring.substr(0, 2)) >= 17) {
-            if (type === 'success') {
-                OCP.Toast.success(message)
-            } else if (type === 'error') {
-                OCP.Toast.error(message)
-            } else {
-                OCP.Toast.info(message)
-            }
-        } else {
-            OC.Notification.showTemporary(message);
-        }
-    },
-
     showElement: function (element) {
         if (document.getElementById(element)) {
             document.getElementById(element).hidden = false;
@@ -812,7 +798,7 @@ OCA.Analytics.Backend = {
                 } else {
                     OCA.Analytics.UI.showElement('noDataContainer');
                     if (parseInt(data.error) !== 0) {
-                        OCA.Analytics.UI.notification('error', data.error);
+                        OCA.Analytics.Notification.notification('error', data.error);
                     }
                 }
                 OCA.Analytics.UI.buildReportOptions();

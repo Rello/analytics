@@ -228,6 +228,36 @@ class DatasetMapper
     }
 
     /**
+     * get the newest timestamp of the data of a dataset
+     * @param $datasetId
+     * @return int
+     */
+    public function getLastUpdate($datasetId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from('analytics_facts')
+            ->select($sql->func()->max('timestamp'))
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $result = (int)$sql->execute()->fetchOne();
+        return $result;
+    }
+
+    /**
+     * get the report owner
+     * @param $datasetId
+     * @return int
+     */
+    public function getOwner($datasetId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('user_id')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($datasetId)));
+        $result = (string)$sql->execute()->fetchOne();
+        return $result;
+    }
+
+    /**
      * truncates fiels do DB-field size
      *
      * @param $string

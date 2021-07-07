@@ -3,7 +3,7 @@
 ## 3.6.0 - 2021-07-xx
 
 ### Added
-
+- text variables in report header (e.g. %lastUpdate%) [#145](https://github.com/rello/analytics/issues/145)
 - Enable receiver of share to unshare [#171](https://github.com/rello/analytics/issues/171)
 - sorting of external/unstructured data [#175](https://github.com/rello/analytics/issues/175)
 

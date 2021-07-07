@@ -74,6 +74,9 @@ OC.L10N.register(
         'Overview': 'Обзор',
         'Drilldown': 'Детализация',
         'Datasource simulation': 'Симуляция источника данных',
-        'Link copied': 'Ссылка скопирована'
+        'Link copied': 'Ссылка скопирована',
+        'Bar': 'Bar',
+        'Text variables': 'Text variables',
+        'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.'
     },
     '');

@@ -190,6 +190,9 @@ OCA.Analytics.Sidebar.Dataset = {
                     document.getElementById('sidebarDatasetName').addEventListener('change', OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged);
                     document.getElementById('sidebarDatasetParent').addEventListener('change', OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged);
 
+                    document.getElementById('sidebarDatasetNameHint').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleNameHint);
+                    document.getElementById('sidebarDatasetSubheaderHint').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleNameHint);
+
                     // get all the options for a datasource
                     OCA.Analytics.Sidebar.Dataset.handleDatasourceChange();
 
@@ -313,6 +316,15 @@ OCA.Analytics.Sidebar.Dataset = {
             mime,
             true,
             1);
+    },
+
+    handleNameHint: function () {
+        let text = t('analytics', 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.') +
+            '<br><br>' +
+            '%lastUpdate%<br>' +
+            '%currentDate%<br>' +
+            '%owner%';
+        OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
     },
 
     buildGroupingDropdown: function () {
@@ -566,7 +578,7 @@ OCA.Analytics.Sidebar.Share = {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-        OCA.Analytics.UI.notification('success', t('analytics', 'Link copied'));
+        OCA.Analytics.Notification.notification('success', t('analytics', 'Link copied'));
     },
 
     showShareMenu: function (evt) {
@@ -751,7 +763,7 @@ OCA.Analytics.Sidebar.Backend = {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     } else {
-                        OCA.Analytics.UI.notification('success', t('analytics', 'Saved'));
+                        OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                     }
                 }
             }
@@ -775,13 +787,13 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
                 } else {
-                    OCA.Analytics.UI.notification('error', data.error);
+                    OCA.Analytics.Notification.notification('error', data.error);
                 }
             }
         });
@@ -857,17 +869,17 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
                 } else {
-                    OCA.Analytics.UI.notification('error', data.error);
+                    OCA.Analytics.Notification.notification('error', data.error);
                 }
             },
             error: function () {
-                OCA.Analytics.UI.notification('error', t('analytics', 'Technical error. Please check the logs'));
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }
@@ -891,17 +903,17 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.UI.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
                 } else {
-                    OCA.Analytics.UI.notification('error', data.error);
+                    OCA.Analytics.Notification.notification('error', data.error);
                 }
             },
             error: function () {
-                OCA.Analytics.UI.notification('error', t('analytics', 'Technical error. Please check the logs'));
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }

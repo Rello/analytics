@@ -66,7 +66,7 @@ class DatasetController extends Controller
      */
     public function read(int $datasetId)
     {
-        return $this->DatasetService->getOwnDataset($datasetId);
+        return $this->DatasetService->read($datasetId);
     }
 
     /**
