@@ -716,10 +716,15 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     deleteDataset: function (datasetId) {
+        const button = document.getElementById('sidebarDatasetDeleteButton');
+        button.classList.add('loading');
+        button.disabled = true;
         $.ajax({
             type: 'DELETE',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
+                button.classList.remove('loading');
+                button.disabled = false;
                 OCA.Analytics.Navigation.init();
             }
         });
@@ -727,6 +732,9 @@ OCA.Analytics.Sidebar.Backend = {
 
     updateDataset: function () {
         const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const button = document.getElementById('sidebarDatasetUpdateButton');
+        button.classList.add('loading');
+        button.disabled = true;
 
         let option = {};
         let inputFields = document.querySelectorAll('#datasetDatasourceSection input, #datasetDatasourceSection select');
@@ -752,6 +760,9 @@ OCA.Analytics.Sidebar.Backend = {
                 'value': document.getElementById('sidebarDatasetValue').value
             },
             success: function () {
+                button.classList.remove('loading');
+                button.disabled = false;
+
                 OCA.Analytics.Navigation.newReportId = 0;
                 OCA.Analytics.Sidebar.resetImportantFields();
                 if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {

@@ -11,4 +11,5 @@
 ?>
 
 <ul id="navigationDatasets">
+    <div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>
 </ul>

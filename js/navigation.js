@@ -20,7 +20,7 @@ OCA.Analytics.Navigation = {
     newReportId: 0,
 
     init: function (datasetId) {
-        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" className="get-metadata icon-loading"></div>';
+        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getDatasets(datasetId);
     },
 
