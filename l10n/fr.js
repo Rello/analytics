@@ -79,6 +79,7 @@ OC.L10N.register(
         'Link copied': 'Lien copié',
         'Bar': 'Bar',
         'Text variables': 'Text variables',
-        'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.'
+        'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.',
+        'Color': 'Color'
     },
     '');

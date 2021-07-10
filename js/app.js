@@ -421,7 +421,10 @@ OCA.Analytics.UI = {
         //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
         let userDatasetOptions = jsondata.options.dataoptions;
         if (userDatasetOptions !== '' && userDatasetOptions !== null) {
+            datasets = cloner.deep.merge({}, datasets);
             datasets = cloner.deep.merge(datasets, JSON.parse(userDatasetOptions));
+            datasets = Object.values(datasets);
+            //datasets = cloner.deep.merge(datasets, JSON.parse(userDatasetOptions));
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
@@ -518,6 +521,21 @@ OCA.Analytics.UI = {
         }
 
         OCA.Analytics.Filter.refreshFilterVisualisation();
+    },
+
+    reportOptionsEventlisteners: function () {
+        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
+        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
+        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
+
+        document.getElementById('analysisIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
+        document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
+        //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
+        document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
+        document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
+        document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
     },
 
     showElement: function (element) {
@@ -855,18 +873,7 @@ document.addEventListener('DOMContentLoaded', function () {
         OCA.Analytics.Backend.getData();
     }
     if (document.getElementById('advanced').value === 'false') {
-        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
-        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
-        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
-        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-        document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
-
-        document.getElementById('analysisIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
-        document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
-        //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
-        document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-        document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
-        document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
+        OCA.Analytics.UI.reportOptionsEventlisteners();
     }
 
     window.addEventListener("beforeprint", function () {

@@ -120,13 +120,13 @@ OCA.Analytics.Filter = {
             + '<div style="display: table-row;">'
             + '<div style="display: table-cell; width: 50px;"></div>'
             + '<div style="display: table-cell; width: 80px;"></div>'
-            + '<div style="display: table-cell; width: 100px;">'
+            + '<div style="display: table-cell; width: 150px;">'
             + '<label for="filterDialogDimension">' + t('analytics', 'Filter by') + '</label>'
             + '</div>'
-            + '<div style="display: table-cell; width: 100px;">'
+            + '<div style="display: table-cell; width: 150px;">'
             + '<label for="filterDialogOption">' + t('analytics', 'Operator') + '</label>'
             + '</div>'
-            + '<div style="display: table-cell;">'
+            + '<div style="display: table-cell; width: 150px;">'
             + '<label for="filterDialogValue">' + t('analytics', 'Value') + '</label>'
             + '</div>'
             + '</div>'
@@ -140,15 +140,15 @@ OCA.Analytics.Filter = {
             + '</select>'
             + '</div>'
             + '<div style="display: table-cell;">'
-            + '<select id="filterDialogDimension" class="checkbox">'
+            + '<select id="filterDialogDimension" class="checkbox optionsInput">'
             + '</select>'
             + '</div>'
             + '<div style="display: table-cell;">'
-            + '<select id="filterDialogOption" class="checkbox">'
+            + '<select id="filterDialogOption" class="checkbox optionsInput">'
             + '</select>'
             + '</div>'
             + '<div style="display: table-cell;">'
-            + '<input type="text" id="filterDialogValue">'
+            + '<input type="text" id="filterDialogValue" class="optionsInput">'
             + '</div></div></div>'
             + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
             + '<a class="button primary" id="filterDialogGo">' + t('analytics', 'Add') + '</a>'
@@ -262,28 +262,32 @@ OCA.Analytics.Filter = {
 
         // check if defined dataoptions don´t match the number of dataseries anymore
         if (Object.keys(dataOptions).length !== Object.keys(distinctCategories).length) {
-            dataOptions = '';
+            //dataOptions = '';
         }
 
         // get the default chart type to preset the drop downs
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
 
         for (let i = 0; i < Object.keys(distinctCategories).length; i++) {
+            let color = OCA.Analytics.Filter.checkColor(dataOptions, i);
             drilldownRows = drilldownRows + '<div style="display: table-row;">'
                 + '<div style="display: table-cell;">'
                 + Object.values(distinctCategories)[i]
                 + '</div>'
                 + '<div style="display: table-cell;">'
-                + '<select id="optionsYAxis' + [i] + '" name="optionsYAxis">'
+                + '<select id="optionsYAxis' + [i] + '" name="optionsYAxis" class="optionsInput">'
                 + '<option value="primary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') + '>' + t('analytics', 'Primary') + '</option>'
                 + '<option value="secondary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') + '>' + t('analytics', 'Secondary') + '</option>'
                 + '</select>'
                 + '</div>'
                 + '<div style="display: table-cell;">'
-                + '<select id="optionsChartType' + [i] + '" name="optionsChartType">'
+                + '<select id="optionsChartType' + [i] + '" name="optionsChartType" class="optionsInput">'
                 + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>' + t('analytics', 'Line') + '</option>'
                 + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Bar') + '</option>'
                 + '</select>'
+                + '</div>'
+                + '<div style="display: table-cell;">'
+                + '<input id="optionsColor' + [i] + '" name="optionsColor" value=' + color + ' style="background-color:' + color + ';" class="optionsInput">'
                 + '</div>'
                 + '</div>';
         }
@@ -305,6 +309,8 @@ OCA.Analytics.Filter = {
             + '</div>'
             + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Chart type')
             + '</div>'
+            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Color')
+            + '</div>'
             + '</div>'
             + drilldownRows
             + '</div>'
@@ -313,6 +319,11 @@ OCA.Analytics.Filter = {
             + '<a class="button primary" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
             + '</div>'
         );
+
+        let optionsColor = document.getElementsByName('optionsColor');
+        for (let i = 0; i < optionsColor.length; i++) {
+            optionsColor[i].addEventListener('keyup', OCA.Analytics.Filter.updateColor);
+        }
 
         document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("drilldownDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
@@ -326,30 +337,48 @@ OCA.Analytics.Filter = {
         chartOptions === '' ? chartOptions = {} : chartOptions;
         let userDatasetOptions = [];
         let nonDefaultValues, seondaryAxisRequired = false;
-        // get the default chart types (e.g. line or bar) to derive if there is any relevant change by the user
+        let optionObject = {};
+
+        // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+        let defaultYAxis = 'primary';
+        let defaultColors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
 
         // loop all selections from the option dialog and add them to an array
         let optionsYAxis = document.getElementsByName('optionsYAxis');
         let optionsChartType = document.getElementsByName('optionsChartType');
+        let optionsColor = document.getElementsByName('optionsColor');
+
         for (let i = 0; i < optionsYAxis.length; i++) {
-            if (optionsYAxis[i].value !== 'primary') {
-                seondaryAxisRequired = nonDefaultValues = true;     // secondary y-axis enabled
-            } else if (optionsChartType[i].value !== defaultChartType) {
-                nonDefaultValues = true;    // just line/bar changed
+            let j = i - (Math.floor(i / defaultColors.length) * defaultColors.length)
+            optionObject = {};
+            if (optionsYAxis[i].value !== defaultYAxis) {
+                optionObject['yAxisID'] = optionsYAxis[i].value;
+                seondaryAxisRequired = true;
             }
-            userDatasetOptions.push({yAxisID: optionsYAxis[i].value, type: optionsChartType[i].value});
+            if (optionsChartType[i].value !== defaultChartType) {
+                optionObject['type'] = optionsChartType[i].value;
+            }
+            if (optionsColor[i].value !== defaultColors[j] && optionsColor[i].value !== '') {
+                if (optionsColor[i].value.length === 7 && optionsColor[i].value.charAt(0) === '#') {
+                    optionObject['backgroundColor'] = optionsColor[i].value;
+                    optionObject['borderColor'] = optionsColor[i].value;
+                }
+            }
+            if (Object.keys(dataOptions).length) nonDefaultValues = true;
+            userDatasetOptions.push(optionObject);
         }
 
         // decide of the dataseries array is relevant to be saved or not.
         // if all settings are default, all options can be removed can be removed completely
+        // to keep the array clean, it will overwrite any existing settings.
         if (nonDefaultValues === true) {
-            try {
-                // if there are existing settings, merge them
-                dataOptions = JSON.stringify(cloner.deep.merge(JSON.parse(dataOptions), userDatasetOptions));
-            } catch (e) {
-                dataOptions = JSON.stringify(userDatasetOptions);
-            }
+            //try {
+            //    // if there are existing settings, merge them
+            //    dataOptions = JSON.stringify(cloner.deep.merge(JSON.parse(dataOptions), userDatasetOptions));
+            //} catch (e) {
+            dataOptions = JSON.stringify(userDatasetOptions);
+            //}
         } else {
             dataOptions = '';
         }
@@ -389,7 +418,7 @@ OCA.Analytics.Filter = {
 
     // function for shorter coding of the dialog creation
     checkOption: function (array, index, field, check, defaultChartType) {
-        if (Array.isArray(array) && array.length) {
+        if (Array.isArray(array) && array.length && array[index]) {
             if (field in array[index]) {
                 return array[index][field] === check ? 'selected' : '';
             } else if (check === defaultChartType) {
@@ -404,6 +433,29 @@ OCA.Analytics.Filter = {
         }
     },
 
+    // function to define the color for a data series
+    checkColor: function (array, index) {
+        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        let j = index - (Math.floor(index / colors.length) * colors.length)
+        let field = 'backgroundColor';
+        if (Array.isArray(array) && array.length && array[index]) {
+            if (field in array[index]) {
+                return array[index][field];
+            } else {
+                return colors[j];
+            }
+        } else {
+            return colors[j];
+        }
+    },
+
+    // live update the background color of the input boxes
+    updateColor: function (evt) {
+        let field = evt.target;
+        if (field.value.length === 7 && field.value.charAt(0) === '#') {
+            field.style.backgroundColor = field.value;
+        }
+    }
 };
 
 OCA.Analytics.Filter.Backend = {
