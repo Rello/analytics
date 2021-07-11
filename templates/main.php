@@ -27,7 +27,6 @@ Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
 Util::addScript('analytics', '3rdParty/moment');
 Util::addScript('analytics', '3rdParty/cloner');
-Util::addScript('analytics', '3rdParty/deepmerge');
 Util::addScript('analytics', 'dashboard');
 Util::addScript('analytics', 'userGuidance');
 ?>

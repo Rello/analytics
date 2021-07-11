@@ -10,7 +10,7 @@
 - various loading indicators #157
 
 ### Changed
-
+- Chart.js 3.4.1
 - Update ru language @[sibergad](https://github.com/sibergad)
 - Trend only for visible data series [#172](https://github.com/rello/analytics/issues/172)
 - move to \Psr\Log\LoggerInterface
