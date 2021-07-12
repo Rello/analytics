@@ -154,8 +154,9 @@ class DatasetService
         $sharedDatasets = $this->ShareService->getSharedDatasets();
 
         foreach ($favorits as $favorite) {
-            if (!array_search($favorite, array_column($ownDatasets, 'id'))
-                && !array_search($favorite, array_column($sharedDatasets, 'id'))) {
+            $this->logger->error($favorite . array_search($favorite, array_column($ownDatasets, 'id')));
+            if (array_search($favorite, array_column($ownDatasets, 'id')) === false
+                && array_search($favorite, array_column($sharedDatasets, 'id')) === false) {
                 unset($favorits[$favorite]);
                 $this->tagManager->load('analytics')->removeFromFavorites($favorite);
             }

@@ -16,7 +16,7 @@
 - move to \Psr\Log\LoggerInterface
 
 ### Fixed
-
+- DatasetService removes first favorite #185
 - dataset options not merged [#178](https://github.com/rello/analytics/issues/178)
 - dataset options not merged on dashboard [#179](https://github.com/rello/analytics/issues/179)
 
