@@ -33,7 +33,7 @@ class ShareController extends Controller
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        ShareService $ShareService,
+        ShareService $ShareService
     )
     {
         parent::__construct($appName, $request);

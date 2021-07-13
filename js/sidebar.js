@@ -321,8 +321,10 @@ OCA.Analytics.Sidebar.Dataset = {
     handleNameHint: function () {
         let text = t('analytics', 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.') +
             '<br><br>' +
-            '%lastUpdate%<br>' +
+            '%lastUpdateDate%<br>' +
+            '%lastUpdateTime%<br>' +
             '%currentDate%<br>' +
+            '%currentTime%<br>' +
             '%owner%';
         OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
     },
@@ -716,16 +718,13 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     deleteDataset: function (datasetId) {
-        const button = document.getElementById('sidebarDatasetDeleteButton');
-        button.classList.add('loading');
-        button.disabled = true;
+        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         $.ajax({
             type: 'DELETE',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
             success: function (data) {
-                button.classList.remove('loading');
-                button.disabled = false;
                 OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.handleOverviewButton();
             }
         });
     },

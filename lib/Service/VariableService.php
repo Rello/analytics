@@ -12,20 +12,24 @@
 namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Db\DatasetMapper;
+use OCP\IDateTimeFormatter;
 use Psr\Log\LoggerInterface;
 
 class VariableService
 {
     private $logger;
     private $DatasetMapper;
+    private $IDateTimeFormatter;
 
     public function __construct(
         LoggerInterface $logger,
-        DatasetMapper $DatasetMapper
+        DatasetMapper $DatasetMapper,
+        IDateTimeFormatter $IDateTimeFormatter
     )
     {
         $this->logger = $logger;
         $this->DatasetMapper = $DatasetMapper;
+        $this->IDateTimeFormatter = $IDateTimeFormatter;
     }
 
     /**
@@ -38,16 +42,21 @@ class VariableService
     {
         $fields = ['name', 'subheader'];
         foreach ($fields as $field) {
-            $name = $datasetMetadata[$field];
+            isset($datasetMetadata[$field]) ? $name = $datasetMetadata[$field] : $name = '';
 
             preg_match_all("/%.*?%/", $name, $matches);
             if (count($matches[0]) > 0) {
                 foreach ($matches[0] as $match) {
                     if ($match === '%currentDate%') {
-                        $replace = date("m.d.y");
-                    } elseif ($match === '%lastUpdate%') {
+                        $replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
+                    } elseif ($match === '%currentTime%') {
+                        $replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
+                    } elseif ($match === '%lastUpdateDate%') {
                         $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['id']);
-                        $replace = date('d.m.Y', $timestamp);
+                        $replace = $this->IDateTimeFormatter->formatDate($timestamp, 'short');
+                    } elseif ($match === '%lastUpdateTime%') {
+                        $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['id']);
+                        $replace = $this->IDateTimeFormatter->formatTime($timestamp, 'short');
                     } elseif ($match === '%owner%') {
                         $owner = $this->DatasetMapper->getOwner($datasetMetadata['id']);
                         $replace = $owner;

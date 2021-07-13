@@ -36,6 +36,7 @@ class ShareService
     private $groupManager;
     /** @var IUserManager */
     private $userManager;
+    private $VariableService;
 
     public function __construct(
         LoggerInterface $logger,
@@ -43,7 +44,8 @@ class ShareService
         ActivityManager $ActivityManager,
         IGroupManager $groupManager,
         ISecureRandom $secureRandom,
-        IUserManager $userManager
+        IUserManager $userManager,
+        VariableService $VariableService
     )
     {
         $this->logger = $logger;
@@ -52,6 +54,7 @@ class ShareService
         $this->groupManager = $groupManager;
         $this->ActivityManager = $ActivityManager;
         $this->userManager = $userManager;
+        $this->VariableService = $VariableService;
     }
 
     /**
@@ -114,7 +117,10 @@ class ShareService
      */
     public function getDatasetByToken($token)
     {
-        return $this->ShareMapper->getDatasetByToken($token);
+        $dataset = $this->ShareMapper->getDatasetByToken($token);
+        $dataset = $this->VariableService->replaceTextVariables($dataset);
+
+        return $dataset;
     }
 
     /**
