@@ -240,6 +240,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleOverviewButton: function () {
+        OCA.Analytics.Sidebar.hideSidebar();
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
         }

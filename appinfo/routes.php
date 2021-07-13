@@ -23,6 +23,7 @@ return [
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataset#updateOptions', 'url' => '/dataset/{datasetId}', 'verb' => 'POST'],
+        ['name' => 'dataset#updateRefresh', 'url' => '/dataset/{datasetId}/refresh', 'verb' => 'POST'],
         ['name' => 'dataset#getOwnFavoriteDatasets', 'url' => '/favorites', 'verb' => 'GET'],
         ['name' => 'dataset#setFavorite', 'url' => '/favorite/{datasetId}', 'verb' => 'POST'],
         ['name' => 'dataset#export', 'url' => '/dataset/export/{datasetId}', 'verb' => 'GET'],

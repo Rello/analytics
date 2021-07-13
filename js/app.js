@@ -49,6 +49,7 @@ if (!OCA.Analytics) {
         datasourceOptions: [],
         datasets: [],
         unsavedFilters: null,
+        refreshTimer: null,
     };
 }
 /**
@@ -114,7 +115,7 @@ OCA.Analytics.UI = {
                 columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, unit + ' ');
                 columns[i]['className'] = 'dt-right';
             } else if (columnType === 'timestamp') {
-                columns[i]['render'] = function (data, type, row) {
+                columns[i]['render'] = function (data, type) {
                     // If display or filter data is requested, format the date
                     if (type === 'display' || type === 'filter') {
                         return new Date(data * 1000).toLocaleString();
@@ -151,7 +152,7 @@ OCA.Analytics.UI = {
             rowCallback: function (row, data, index) {
                 OCA.Analytics.UI.dataTableRowCallback(row, data, index, jsondata.thresholds)
             },
-            drawCallback: function (settings) {
+            drawCallback: function () {
                 var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
                 pagination.toggle(this.api().page.info().pages > 1);
                 var info = $(this).closest('.dataTables_wrapper').find('.dataTables_info');
@@ -492,7 +493,7 @@ OCA.Analytics.UI = {
             } else {
                 //document.getElementById('reportMenuBar').remove();
                 OCA.Analytics.UI.hideElement('reportMenuBar');
-                document.getElementById('reportMenuBar').id = 'reportMenuBarHidden';
+                //document.getElementById('reportMenuBar').id = 'reportMenuBarHidden';
             }
             return;
         }
@@ -520,6 +521,10 @@ OCA.Analytics.UI = {
             document.getElementById('downlaodChartIcon').disabled = true;
         }
 
+        let refresh = parseInt(currentReport.options.refresh);
+        isNaN(refresh) ? refresh = 0 : refresh = refresh;
+        document.getElementById('refresh' + refresh).checked = true;
+
         OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
@@ -531,11 +536,18 @@ OCA.Analytics.UI = {
         document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
 
         document.getElementById('analysisIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
+        document.getElementById('refreshIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuRefresh);
         document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
         //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
         document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
+        document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
+
+        let refresh = document.getElementsByName('refresh');
+        for (let i = 0; i < refresh.length; i++) {
+            refresh[i].addEventListener('change', OCA.Analytics.Backend.saveRefresh);
+        }
     },
 
     showElement: function (element) {
@@ -560,6 +572,9 @@ OCA.Analytics.UI = {
 
     toggleReportMenu: function () {
         document.getElementById('reportMenu').classList.toggle('open');
+        document.getElementById('reportMenuMain').style.removeProperty('display');
+        document.getElementById('reportMenuAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuRefresh').style.setProperty('display', 'none', 'important');
     },
 
     showReportMenuAnalysis: function () {
@@ -567,8 +582,14 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuAnalysis').style.removeProperty('display');
     },
 
+    showReportMenuRefresh: function () {
+        document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuRefresh').style.removeProperty('display');
+    },
+
     showReportMenuMain: function () {
         document.getElementById('reportMenuAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuRefresh').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuMain').style.removeProperty('display');
     },
 
@@ -579,7 +600,6 @@ OCA.Analytics.Functions = {
 
     trend: function () {
         OCA.Analytics.UI.showElement('chartLegendContainer');
-        OCA.Analytics.UI.showReportMenuMain();
         OCA.Analytics.UI.hideReportMenu();
 
         let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
@@ -820,6 +840,9 @@ OCA.Analytics.Backend = {
                     }
                 }
                 OCA.Analytics.UI.buildReportOptions();
+
+                let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
+                OCA.Analytics.Backend.startRefreshTimer(refresh);
             }
         });
     },
@@ -859,6 +882,42 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.datasources = data['datasources'];
             }
         });
+    },
+
+    saveRefresh: function (evt) {
+        OCA.Analytics.UI.hideReportMenu();
+        let refresh = evt.target.id;
+        refresh = parseInt(refresh.substring(7));
+        const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
+
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/dataset/') + datasetId + '/refresh',
+            data: {
+                'refresh': refresh,
+            },
+            success: function () {
+                OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
+                OCA.Analytics.Backend.startRefreshTimer(refresh);
+            }
+        });
+    },
+
+    startRefreshTimer(minutes) {
+        if (minutes !== 0 && !isNaN(minutes)) {
+            if (OCA.Analytics.refreshTimer === null) {
+                OCA.Analytics.refreshTimer = setTimeout(OCA.Analytics.Backend.getData, minutes * 60 * 1000)
+            } else {
+                clearTimeout(OCA.Analytics.refreshTimer)
+                OCA.Analytics.refreshTimer = null
+                OCA.Analytics.Backend.startRefreshTimer(minutes);
+            }
+        } else {
+            if (OCA.Analytics.refreshTimer !== null) {
+                clearTimeout(OCA.Analytics.refreshTimer)
+                OCA.Analytics.refreshTimer = null
+            }
+        }
     },
 };
 

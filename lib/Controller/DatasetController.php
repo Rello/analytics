@@ -121,6 +121,19 @@ class DatasetController extends Controller
     }
 
     /**
+     * get dataset details
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $refresh
+     * @return bool
+     */
+    public function updateRefresh(int $datasetId, $refresh)
+    {
+        return $this->DatasetService->updateRefresh($datasetId, $refresh);
+    }
+
+    /**
      * get own datasets which are marked as favorites
      *
      * @NoAdminRequired

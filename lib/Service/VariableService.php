@@ -47,6 +47,7 @@ class VariableService
             preg_match_all("/%.*?%/", $name, $matches);
             if (count($matches[0]) > 0) {
                 foreach ($matches[0] as $match) {
+                    $replace = null;
                     if ($match === '%currentDate%') {
                         $replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
                     } elseif ($match === '%currentTime%') {
@@ -61,7 +62,9 @@ class VariableService
                         $owner = $this->DatasetMapper->getOwner($datasetMetadata['id']);
                         $replace = $owner;
                     }
-                    $datasetMetadata[$field] = preg_replace('/' . $match . '/', $replace, $datasetMetadata[$field]);
+                    if ($replace !== null) {
+                        $datasetMetadata[$field] = preg_replace('/' . $match . '/', $replace, $datasetMetadata[$field]);
+                    }
                 }
             }
         }

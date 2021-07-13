@@ -5,6 +5,7 @@
 ### Added
 - Report: text variables in header (e.g. %lastUpdate%) [#145](https://github.com/rello/analytics/issues/145)
 - Charts: customize colors #119
+- automatic refresh of report #182
 - Enable receiver of share to unshare [#171](https://github.com/rello/analytics/issues/171)
 - sorting of external/unstructured data [#175](https://github.com/rello/analytics/issues/175)
 - various loading indicators #157

@@ -29,7 +29,7 @@ Util::addScript('analytics', '3rdParty/cloner');
                title="" id="nextcloud">
                 <div class="logo logo-icon"></div>
                 <h1 class="header-appname" id="header-appname">
-                    Analytics<br>for Nextcloud
+                    Analytics for Nextcloud
                 </h1>
             </a>
         </div>

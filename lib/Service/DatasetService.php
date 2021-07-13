@@ -154,7 +154,6 @@ class DatasetService
         $sharedDatasets = $this->ShareService->getSharedDatasets();
 
         foreach ($favorits as $favorite) {
-            $this->logger->error($favorite . array_search($favorite, array_column($ownDatasets, 'id')));
             if (array_search($favorite, array_column($ownDatasets, 'id')) === false
                 && array_search($favorite, array_column($sharedDatasets, 'id')) === false) {
                 unset($favorits[$favorite]);
@@ -356,6 +355,19 @@ class DatasetService
     public function updateOptions(int $datasetId, $chartoptions, $dataoptions, $filteroptions)
     {
         return $this->DatasetMapper->updateOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
+    }
+
+    /**
+     * get dataset details
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $refresh
+     * @return bool
+     */
+    public function updateRefresh(int $datasetId, $refresh)
+    {
+        return $this->DatasetMapper->updateRefresh($datasetId, $refresh);
     }
 
     /**

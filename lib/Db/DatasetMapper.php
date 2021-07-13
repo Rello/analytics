@@ -172,6 +172,25 @@ class DatasetMapper
     }
 
     /**
+     * update dataset options
+     * @param $id
+     * @param $chartoptions
+     * @param $dataoptions
+     * @param $filteroptions
+     * @return bool
+     */
+    public function updateRefresh($id, $refresh)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('refresh', $sql->createNamedParameter($refresh))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->execute();
+        return true;
+    }
+
+    /**
      * read dataset options
      * @param $id
      * @return array
