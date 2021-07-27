@@ -3,17 +3,20 @@
 ## 3.6.0 - 2021-07-xx
 
 ### Added
-- Report: text variables in header (e.g. %lastUpdate%) [#145](https://github.com/rello/analytics/issues/145)
+- Report: text variables(e.g. %lastUpdate%) [#145](https://github.com/rello/analytics/issues/145)
 - Charts: customize colors #119
+- Charts: datalabels in doughnuts
 - automatic refresh of report #182
 - Enable receiver of share to unshare [#171](https://github.com/rello/analytics/issues/171)
 - sorting of external/unstructured data [#175](https://github.com/rello/analytics/issues/175)
 - various loading indicators #157
 
 ### Changed
-- Chart.js 3.4.1
+
+- Chart.js 3.5
 - Update ru language @[sibergad](https://github.com/sibergad)
 - Trend only for visible data series [#172](https://github.com/rello/analytics/issues/172)
+- Dashboard subheader #180
 - move to \Psr\Log\LoggerInterface
 
 ### Fixed

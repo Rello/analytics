@@ -293,6 +293,25 @@ OCA.Analytics.UI = {
                     }
                 }
             },
+
+            plugins: {
+                datalabels: {
+                    display: false,
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        value = (value * 100 / sum).toFixed(0);
+                        if (value > 5) {
+                            return value + "%";
+                        } else {
+                            return '';
+                        }
+                    },
+                }
+            },
         };
 
         for (let values of jsondata.data) {
@@ -397,6 +416,7 @@ OCA.Analytics.UI = {
             chartOptions.circumference = 180;
             chartOptions.rotation = -90;
             Chart.defaults.plugins.legend.display = true;
+            chartOptions.plugins.datalabels.display = true;
         }
 
         // the user can add/overwrite chart options
@@ -425,10 +445,10 @@ OCA.Analytics.UI = {
             datasets = cloner.deep.merge({}, datasets);
             datasets = cloner.deep.merge(datasets, JSON.parse(userDatasetOptions));
             datasets = Object.values(datasets);
-            //datasets = cloner.deep.merge(datasets, JSON.parse(userDatasetOptions));
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
+            plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
