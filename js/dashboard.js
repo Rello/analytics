@@ -103,15 +103,28 @@ OCA.Analytics.Dashboard = {
     createWidgetContent: function (jsondata) {
         let report = jsondata['options']['name'];
         let reportId = jsondata['options']['id'];
-        let data = jsondata['data'][jsondata['data'].length - 1];
-        let kpi = data[0];
-        let value = data[data.length - 1];
+        let type = jsondata['options']['visualization'];
+        let value, data, subheader;
 
-        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, kpi, value, jsondata.thresholds);
+        if (jsondata['data'] && type === 'table') {
+            data = jsondata['data'][jsondata['data'].length - 1];
+            subheader = data[0];
+            value = data[data.length - 1];
+        } else if (jsondata['data']) {
+            data = jsondata['data'][jsondata['data'].length - 1];
+            subheader = jsondata['options']['subheader'];
+            value = data[data.length - 1];
+        } else {
+            subheader = 'no data';
+            value = 0;
+            type = 'table';
+        }
+
+        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds);
         document.getElementById('analyticsWidgetItem' + reportId).insertAdjacentHTML('beforeend', widgetRow);
         document.getElementById('analyticsWidgetItem' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
-        if (jsondata['options']['visualization'] !== 'table') {
+        if (type !== 'table') {
             document.getElementById('kpi' + reportId).remove();
             OCA.Analytics.Dashboard.buildChart(jsondata);
         } else {
@@ -119,15 +132,15 @@ OCA.Analytics.Dashboard = {
         }
     },
 
-    buildWidgetRow: function (report, reportId, kpi, value, thresholds) {
-        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(kpi, value, thresholds);
+    buildWidgetRow: function (report, reportId, subheader, value, thresholds) {
+        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(subheader, value, thresholds);
         value = parseFloat(value).toLocaleString();
         let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
 
         return `<a href="${href}">
                 <div class="analyticsWidgetContent1">
                     <div class="analyticsWidgetReport">${report}</div>
-                    <div class="analyticsWidgetSmall">${kpi}</div>
+                    <div class="analyticsWidgetSmall">${subheader}</div>
                 </div>
                 <div class="analyticsWidgetContent2">
                      <div id="kpi${reportId}">
@@ -243,6 +256,24 @@ OCA.Analytics.Dashboard = {
             animation: {
                 duration: 1500 // general animation time
             },
+            plugins: {
+                datalabels: {
+                    display: false,
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        value = (value * 100 / sum).toFixed(0);
+                        if (value > 5) {
+                            return value + "%";
+                        } else {
+                            return '';
+                        }
+                    },
+                }
+            },
         };
 
         for (let values of jsondata.data) {
@@ -326,6 +357,7 @@ OCA.Analytics.Dashboard = {
                 datasets[i].backgroundColor = colors;
                 datasets[i].borderColor = colors;
                 Chart.defaults.elements.line.fill = false;
+                chartOptions.plugins.datalabels.display = true;
             } else {
                 datasets[i].backgroundColor = colors[j];
                 Chart.defaults.elements.line.fill = false;
@@ -357,6 +389,7 @@ OCA.Analytics.Dashboard = {
         }
 
         let myChart = new Chart(ctx, {
+            plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
