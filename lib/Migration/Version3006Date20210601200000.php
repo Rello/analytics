@@ -69,6 +69,15 @@ class Version3006Date20210601200000 extends SimpleMigrationStep
      */
     public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options)
     {
-
+        $query = $this->connection->getQueryBuilder();
+        $query->insert('analytics_whats_new')
+            ->values([
+                'version' => $query->createNamedParameter('3.6.0'),
+                'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
+"en":{"regular":["Text variables in reports","Customize chart colors","Automatic refresh","Data labels"],"admin":["New Features apply to users"]},
+"de":{"regular":["Textvariablen in Berichten","Grafik-Farben anpassen","Automatischer refresh","Daten Beschriftungen"],"admin":["Nur User Features"]}
+}}'),
+            ])
+            ->execute();
     }
 }
