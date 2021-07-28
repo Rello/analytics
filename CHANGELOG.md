@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.0 - 2021-07-xx
+## 3.6.0 - 2021-07-28
 
 ### Added
 - Report: text variables(e.g. %lastUpdate%) [#145](https://github.com/rello/analytics/issues/145)
