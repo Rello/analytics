@@ -13,6 +13,7 @@ use OCP\Migration\SimpleMigrationStep;
 /**
  * Auto-generated migration step: Please modify to your needs!
  * sudo -u www-data php /var/www/nextcloud/occ migrations:execute analytics 3006Date20210601200000
+ *
  */
 class Version3006Date20210601200000 extends SimpleMigrationStep
 {
