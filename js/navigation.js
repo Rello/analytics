@@ -29,7 +29,7 @@ OCA.Analytics.Navigation = {
         document.getElementById('navigationDatasets').innerHTML = '';
         let li = document.createElement('li');
         let a = document.createElement('a');
-        a.classList.add('icon-toggle-pictures');
+        a.classList.add('icon-toggle-pictures', 'svg');
         a.innerText = t('analytics', 'Overview');
         a.id = 'overviewButton'
         a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
@@ -38,7 +38,7 @@ OCA.Analytics.Navigation = {
 
         let li2 = document.createElement('li');
         let a2 = document.createElement('a');
-        a2.classList.add('icon-add');
+        a2.classList.add('icon-add', 'svg');
         a2.innerText = t('analytics', 'New report');
 
         a2.id = 'newDatasetButton';
@@ -76,6 +76,7 @@ OCA.Analytics.Navigation = {
             typeIcon = 'icon-external';
         }
         a.classList.add(typeIcon);
+        a.classList.add('svg');
 
         a.innerText = data['name'];
         a.dataset.id = data['id'];
