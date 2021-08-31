@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.1 - 2021-0831
+### Fixed
+- Navigation layout issue #190
+
 ## 3.6.0 - 2021-07-28
 
 ### Added
