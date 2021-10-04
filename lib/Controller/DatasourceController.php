@@ -144,7 +144,7 @@ class DatasourceController extends Controller
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s") . 'Z');
             }
 
-            // filter resultset if required
+            // filter result set if required
             if (isset($datasetMetadata['filteroptions']) && strlen($datasetMetadata['filteroptions']) >> 2) {
                 $result['data'] = $this->filterData($result['data'], $datasetMetadata['filteroptions']);
             }

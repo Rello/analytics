@@ -48,6 +48,7 @@ if (!OCA.Analytics) {
         datasources: [],
         datasourceOptions: [],
         datasets: [],
+        reports: [],
         unsavedFilters: null,
         refreshTimer: null,
     };
@@ -58,6 +59,7 @@ if (!OCA.Analytics) {
 OCA.Analytics.Core = {
     initApplication: function () {
         OCA.Analytics.Backend.getDatasourceDefinitions();
+        OCA.Analytics.Backend.getDatasetDefinitions();
 
         const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {
@@ -904,6 +906,16 @@ OCA.Analytics.Backend = {
         });
     },
 
+    getDatasetDefinitions: function () {
+        $.ajax({
+            type: 'GET',
+            url: OC.generateUrl('apps/analytics/dataset'),
+            success: function (data) {
+                OCA.Analytics.datasets = data;
+            }
+        });
+    },
+
     saveRefresh: function (evt) {
         OCA.Analytics.UI.hideReportMenu();
         let refresh = evt.target.id;
@@ -912,7 +924,7 @@ OCA.Analytics.Backend = {
 
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId + '/refresh',
+            url: OC.generateUrl('apps/analytics/report/') + datasetId + '/refresh',
             data: {
                 'refresh': refresh,
             },

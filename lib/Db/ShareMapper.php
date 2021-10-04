@@ -25,7 +25,7 @@ class ShareMapper
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_share';
-    const TABLE_NAME_DATASET = 'analytics_dataset';
+    const TABLE_NAME_REPORT = 'analytics_report';
 
     public function __construct(
         IL10N $l10n,
@@ -39,20 +39,20 @@ class ShareMapper
         $this->db = $db;
         $this->logger = $logger;
         self::TABLE_NAME;
-        self::TABLE_NAME_DATASET;
+        self::TABLE_NAME_REPORT;
     }
 
     /**
-     * get all shared datasets by token
+     * get all shared reports by token
      * uses for public pages
      * @param $token
      * @return array
      */
-    public function getDatasetByToken($token)
+    public function getReportByToken($token)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME_DATASET, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
+        $sql->from(self::TABLE_NAME_REPORT, 'DS')
+            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.repot'))
             ->select('DS.*')
             ->addSelect('SH.permissions')
             ->selectAlias('SH.password', 'password')
@@ -64,55 +64,14 @@ class ShareMapper
     }
 
     /**
-     * get all shared datasets by group
-     * @param $group
+     * get shared reports for current user
      * @return array
      */
-    public function getDatasetsByGroup($group)
+    public function getSharedReports()
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME_DATASET, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
-            ->select('DS.id', 'DS.name')
-            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
-            ->andWhere($sql->expr()->eq('SH.type', $sql->createNamedParameter(1)));
-        $statement = $sql->execute();
-        $result = $statement->fetchAll();
-        $statement->closeCursor();
-        return $result;
-    }
-
-    /**
-     * get all shared datasets by group
-     * @param $group
-     * @param $id
-     * @return array
-     */
-    public function getDatasetByGroupId($group, $id)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME_DATASET, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
-            ->select('DS.*')
-            ->addSelect('SH.permissions')
-            ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($group)))
-            ->andWhere($sql->expr()->eq('SH.type', $sql->createNamedParameter(1)))
-            ->andWhere($sql->expr()->eq('SH.dataset', $sql->createNamedParameter($id)));
-        $statement = $sql->execute();
-        $result = $statement->fetch();
-        $statement->closeCursor();
-        return $result;
-    }
-
-    /**
-     * get shared datasets for current user
-     * @return array
-     */
-    public function getSharedDatasets()
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME_DATASET, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
+        $sql->from(self::TABLE_NAME_REPORT, 'DS')
+            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.report'))
             ->select('DS.id', 'DS.name')
             ->selectAlias('SH.id', 'shareId')
             ->where($sql->expr()->eq('SH.uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
@@ -124,15 +83,15 @@ class ShareMapper
     }
 
     /**
-     * get single shared dataset for current user
+     * get single shared report for current user
      * @param $id
      * @return array
      */
-    public function getSharedDataset($id)
+    public function getSharedReport($id)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME_DATASET, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.dataset'))
+        $sql->from(self::TABLE_NAME_REPORT, 'DS')
+            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.report'))
             ->select('DS.*')
             ->addSelect('SH.permissions')
             ->selectAlias($sql->createNamedParameter(true, IQueryBuilder::PARAM_BOOL), 'isShare')
@@ -146,7 +105,7 @@ class ShareMapper
 
     /**
      * Create a new share
-     * @param $datasetId
+     * @param $reportId
      * @param $type
      * @param $uid_owner
      * @param $token
@@ -154,12 +113,12 @@ class ShareMapper
      * @return bool
      * @throws \OCP\DB\Exception
      */
-    public function createShare($datasetId, $type, $uid_owner, $token, $parent = null)
+    public function createShare($reportId, $type, $uid_owner, $token, $parent = null)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->Select('id')
-            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter($type)))
             ->andWhere($sql->expr()->eq('uid_owner', $sql->createNamedParameter($uid_owner)))
             ->andWhere($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())));
@@ -175,7 +134,7 @@ class ShareMapper
             $sql = $this->db->getQueryBuilder();
             $sql->insert(self::TABLE_NAME)
                 ->values([
-                    'dataset' => $sql->createNamedParameter($datasetId),
+                    'report' => $sql->createNamedParameter($reportId),
                     'type' => $sql->createNamedParameter($type),
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
@@ -205,18 +164,18 @@ class ShareMapper
     }
 
     /**
-     * Get all shares of a dataset
-     * @param $datasetId
+     * Get all shares of a report
+     * @param $reportId
      * @return array
      */
-    public function getShares($datasetId)
+    public function getShares($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('id', 'type', 'uid_owner', 'token', 'permissions')
             ->selectAlias('password', 'pass')
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->andWhere($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->neq('type', $sql->createNamedParameter(2)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
@@ -225,17 +184,17 @@ class ShareMapper
     }
 
     /**
-     * Get the all receivers of shares of a dataset
-     * Used to derive who has to receive activites when a dataset changes
-     * @param $datasetId
+     * Get the all receivers of shares of a report
+     * Used to derive who has to receive activities when a report changes
+     * @param $reportId
      * @return array
      */
-    public function getSharedReceiver($datasetId)
+    public function getSharedReceiver($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('uid_owner')
-            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter(0)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
@@ -312,17 +271,17 @@ class ShareMapper
     }
 
     /**
-     * Delete all shares of a dataset
-     * Used during dataset deletion
-     * @param $datasetId
+     * Delete all shares of a report
+     * Used during report deletion
+     * @param $reportId
      * @return bool
      */
-    public function deleteShareByDataset($datasetId)
+    public function deleteShareByReport($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+            ->andWhere($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
         $sql->execute();
         return true;
     }

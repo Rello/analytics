@@ -87,23 +87,7 @@ class DatasetService
             }
         }
 
-        // get shared datasets and remove doublicates
-        $sharedDatasets = $this->ShareService->getSharedDatasets();
-        foreach ($sharedDatasets as $sharedDataset) {
-            if (!array_search($sharedDataset['id'], array_column($ownDatasets, 'id'))) {
-                $sharedDataset['type'] = '99';
-                $sharedDataset['parrent'] = '0';
-                array_push($ownDatasets, $sharedDataset);
-            }
-        }
-
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
         foreach ($ownDatasets as &$ownDataset) {
-            $hasTag = 0;
-            if (is_array($favorites) and in_array($ownDataset['id'], $favorites)) {
-                $hasTag = 1;
-            }
-            $ownDataset['favorite'] = $hasTag;
             $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
         }
 
@@ -143,49 +127,19 @@ class DatasetService
     }
 
     /**
-     * get own datasets which are marked as favorites
-     *
-     * @return array|bool
-     */
-    public function getOwnFavoriteDatasets()
-    {
-        $ownDatasets = $this->DatasetMapper->index();
-        $favorits = $this->tagManager->load('analytics')->getFavorites();
-        $sharedDatasets = $this->ShareService->getSharedDatasets();
-
-        foreach ($favorits as $favorite) {
-            if (array_search($favorite, array_column($ownDatasets, 'id')) === false
-                && array_search($favorite, array_column($sharedDatasets, 'id')) === false) {
-                unset($favorits[$favorite]);
-                $this->tagManager->load('analytics')->removeFromFavorites($favorite);
-            }
-        }
-
-        return $favorits;
-    }
-
-    /**
      * create new dataset
      *
-     * @param string $file
+     * @param $name
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return int
+     * @throws \OCP\DB\Exception
      */
-    public function create($file = '')
+    public function create($name, $dimension1, $dimension2, $value)
     {
-        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-        $datasetId = $this->DatasetMapper->create();
-
-        if ($file !== '') {
-            $name = explode('.', end(explode('/', $file)))[0];
-            $subheader = $file;
-            $parent = 0;
-            $type = DatasourceController::DATASET_TYPE_FILE;
-            $link = $file;
-            $visualization = 'table';
-            $chart = 'line';
-            $this->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '');
-        }
-        return $datasetId;
+        //$this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
+        return $this->DatasetMapper->create($name, $dimension1, $dimension2, $value);
     }
 
     /**
@@ -212,23 +166,6 @@ class DatasetService
             $parent = 0;
         }
         return $this->DatasetMapper->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
-    }
-
-    /**
-     * set/remove the favorite flag for a report
-     *
-     * @param int $datasetId
-     * @param string $favorite
-     * @return bool
-     */
-    public function setFavorite(int $datasetId, string $favorite)
-    {
-        if ($favorite === 'true') {
-            $return = $this->tagManager->load('analytics')->addToFavorites($datasetId);
-        } else {
-            $return = $this->tagManager->load('analytics')->removeFromFavorites($datasetId);
-        }
-        return $return;
     }
 
     /**
@@ -333,10 +270,10 @@ class DatasetService
      */
     public function delete(int $datasetId)
     {
-        $this->ShareService->deleteShareByDataset($datasetId);
+        $this->ShareService->deleteShareByReport($datasetId);
         $this->StorageMapper->deleteByDataset($datasetId);
         $this->DatasetMapper->delete($datasetId);
-        $this->ThresholdService->deleteThresholdByDataset($datasetId);
+        $this->ThresholdService->deleteThresholdByReport($datasetId);
         $this->DataloadMapper->deleteDataloadByDataset($datasetId);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         $this->setFavorite($datasetId, 'false');
@@ -356,29 +293,4 @@ class DatasetService
     {
         return $this->DatasetMapper->updateOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
     }
-
-    /**
-     * get dataset details
-     *
-     * @NoAdminRequired
-     * @param int $datasetId
-     * @param $refresh
-     * @return bool
-     */
-    public function updateRefresh(int $datasetId, $refresh)
-    {
-        return $this->DatasetMapper->updateRefresh($datasetId, $refresh);
-    }
-
-    /**
-     * search for datasets
-     *
-     * @param string $searchString
-     * @return array
-     */
-    public function search(string $searchString)
-    {
-        return $this->DatasetMapper->search($searchString);
-    }
-
 }

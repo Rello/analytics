@@ -39,28 +39,28 @@ class ThresholdService
     /**
      * read all thresholds for a dataset
      *
-     * @param int $datasetId
+     * @param int $reportId
      * @return array
      */
-    public function read(int $datasetId)
+    public function read(int $reportId)
     {
-        return $this->ThresholdMapper->getThresholdsByDataset($datasetId);
+        return $this->ThresholdMapper->getThresholdsByReport($reportId);
     }
 
     /**
      * create new threshold for dataset
      *
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $option
      * @param $value
      * @param int $severity
      * @return int
      */
-    public function create(int $datasetId, $dimension1, $option, $value, int $severity)
+    public function create(int $reportId, $dimension1, $option, $value, int $severity)
     {
         $value = $this->floatvalue($value);
-        return $this->ThresholdMapper->createThreshold($datasetId, $dimension1, $value, $option, $severity);
+        return $this->ThresholdMapper->createThreshold($reportId, $dimension1, $value, $option, $severity);
     }
 
     private function floatvalue($val)
@@ -90,12 +90,12 @@ class ThresholdService
     /**
      * Delete threshold for dataset
      *
-     * @param int $datasetId
+     * @param int $reportId
      * @return bool
      */
-    public function deleteThresholdByDataset(int $datasetId)
+    public function deleteThresholdByReport(int $reportId)
     {
-        $thresholds = $this->ThresholdMapper->getThresholdsByDataset($datasetId);
+        $thresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
         foreach ($thresholds as $threshold) {
             $this->ThresholdMapper->deleteThreshold($threshold['id']);
         }
@@ -105,23 +105,23 @@ class ThresholdService
     /**
      * validate threshold
      *
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @param $value
      * @return string
      * @throws \Exception
      */
-    public function validate(int $datasetId, $dimension1, $dimension2, $value)
+    public function validate(int $reportId, $dimension1, $dimension2, $value)
     {
         $result = '';
-        $thresholds = $this->ThresholdMapper->getSevOneThresholdsByDataset($datasetId);
-        $datasetMetadata = $this->DatasetMapper->readOptions($datasetId);
+        $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
+        $datasetMetadata = $this->DatasetMapper->readOptions($reportId);
 
         foreach ($thresholds as $threshold) {
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
                 if (version_compare($value, $threshold['value'], $threshold['option'])) {
-                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $datasetId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $datasetMetadata['user_id']);
+                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $datasetMetadata['user_id']);
                     $result = 'Threshold value met';
                 }
             }

@@ -16,23 +16,30 @@ return [
         ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
         ['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],
 
+        // Report
+        ['name' => 'report#index', 'url' => '/report', 'verb' => 'GET'],
+        ['name' => 'report#create', 'url' => '/report', 'verb' => 'POST'],
+        ['name' => 'report#read', 'url' => '/report/{reportId}', 'verb' => 'GET'],
+        ['name' => 'report#delete', 'url' => '/report/{reportId}', 'verb' => 'DELETE'],
+        ['name' => 'report#update', 'url' => '/report/{reportId}', 'verb' => 'PUT'],
+        ['name' => 'report#updateOptions', 'url' => '/report/{reportId}', 'verb' => 'POST'],
+        ['name' => 'report#updateRefresh', 'url' => '/report/{reportId}/refresh', 'verb' => 'POST'],
+        ['name' => 'report#getOwnFavoriteReports', 'url' => '/favorites', 'verb' => 'GET'],
+        ['name' => 'report#setFavorite', 'url' => '/favorite/{reportId}', 'verb' => 'POST'],
+        ['name' => 'report#export', 'url' => '/report/export/{reportId}', 'verb' => 'GET'],
+        ['name' => 'report#import', 'url' => '/report/import/', 'verb' => 'POST'],
+
         // Dataset
         ['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
         ['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
         ['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
-        ['name' => 'dataset#updateOptions', 'url' => '/dataset/{datasetId}', 'verb' => 'POST'],
-        ['name' => 'dataset#updateRefresh', 'url' => '/dataset/{datasetId}/refresh', 'verb' => 'POST'],
-        ['name' => 'dataset#getOwnFavoriteDatasets', 'url' => '/favorites', 'verb' => 'GET'],
-        ['name' => 'dataset#setFavorite', 'url' => '/favorite/{datasetId}', 'verb' => 'POST'],
-        ['name' => 'dataset#export', 'url' => '/dataset/export/{datasetId}', 'verb' => 'GET'],
-        ['name' => 'dataset#import', 'url' => '/dataset/import/', 'verb' => 'POST'],
 
         // Data Output
         ['name' => 'output#index', 'url' => '/data', 'verb' => 'GET'],
         ['name' => 'output#create', 'url' => '/data', 'verb' => 'POST'],
-        ['name' => 'output#read', 'url' => '/data/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'output#read', 'url' => '/data/{reportId}', 'verb' => 'GET'],
         ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
 
         // Data Maintenance
@@ -55,13 +62,13 @@ return [
 
         // Share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],
-        ['name' => 'share#read', 'url' => '/share/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'share#read', 'url' => '/share/{reportId}', 'verb' => 'GET'],
         ['name' => 'share#update', 'url' => '/share/{shareId}', 'verb' => 'PUT'],
         ['name' => 'share#delete', 'url' => '/share/{shareId}', 'verb' => 'DELETE'],
 
-        // Threashold
+        // Threshold
         ['name' => 'threshold#create', 'url' => '/threshold', 'verb' => 'POST'],
-        ['name' => 'threshold#read', 'url' => '/threshold/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'threshold#read', 'url' => '/threshold/{reportId}', 'verb' => 'GET'],
         ['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
 
         // API

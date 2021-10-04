@@ -14,7 +14,7 @@ namespace OCA\Analytics\Service;
 use Exception;
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DatasourceController;
-use OCA\Analytics\Controller\StorageController;
+use OCA\Analytics\Controller\StorageService;
 use OCA\Analytics\Db\DataloadMapper;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 class DataloadService
 {
     private $logger;
-    private $StorageController;
+    private $StorageService;
     private $DatasourceController;
     private $ActivityManager;
     private $DatasetService;
@@ -37,13 +37,13 @@ class DataloadService
         ActivityManager $ActivityManager,
         DatasourceController $DatasourceController,
         DatasetService $DatasetService,
-        StorageController $StorageController,
+        StorageService $StorageService,
         DataloadMapper $DataloadMapper
     )
     {
         $this->l10n = $l10n;
         $this->logger = $logger;
-        $this->StorageController = $StorageController;
+        $this->StorageService = $StorageService;
         $this->ActivityManager = $ActivityManager;
         $this->DatasourceController = $DatasourceController;
         $this->DatasetService = $DatasetService;
@@ -137,7 +137,7 @@ class DataloadService
         $datasetId = $result['datasetId'];
 
         if (isset($option['delete']) and $option['delete'] === 'true') {
-            $bulkInsert = $this->StorageController->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
+            $bulkInsert = $this->StorageService->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
         }
 
         $this->DataloadMapper->beginTransaction();
@@ -150,7 +150,7 @@ class DataloadService
                     $row[2] = $row[1];
                     $row[1] = null;
                 }
-                $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert);
+                $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
                 $error = $error + $action['error'];

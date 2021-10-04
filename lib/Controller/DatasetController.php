@@ -121,43 +121,6 @@ class DatasetController extends Controller
     }
 
     /**
-     * get dataset details
-     *
-     * @NoAdminRequired
-     * @param int $datasetId
-     * @param $refresh
-     * @return bool
-     */
-    public function updateRefresh(int $datasetId, $refresh)
-    {
-        return $this->DatasetService->updateRefresh($datasetId, $refresh);
-    }
-
-    /**
-     * get own datasets which are marked as favorites
-     *
-     * @NoAdminRequired
-     * @return array|bool
-     */
-    public function getOwnFavoriteDatasets()
-    {
-        return $this->DatasetService->getOwnFavoriteDatasets();
-    }
-
-    /**
-     * set/remove the favorite flag for a report
-     *
-     * @NoAdminRequired
-     * @param int $datasetId
-     * @param string $favorite
-     * @return bool
-     */
-    public function setFavorite(int $datasetId, string $favorite)
-    {
-        return $this->DatasetService->setFavorite($datasetId, $favorite);
-    }
-
-    /**
      * Export Dataset
      *
      * @NoCSRFRequired

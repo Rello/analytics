@@ -14,6 +14,7 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Service\DatasetService;
+use OCA\Analytics\Service\StorageService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -33,7 +34,7 @@ class ApiDataController extends ApiController
     private $userSession;
     private $ActivityManager;
     private $DatasetService;
-    private $StorageController;
+    private $StorageService;
 	private $StorageMapper;
 
     public function __construct(
@@ -43,7 +44,7 @@ class ApiDataController extends ApiController
         IUserSession $userSession,
         ActivityManager $ActivityManager,
         DatasetService $DatasetService,
-        StorageController $StorageController,
+        StorageService $StorageService,
 		StorageMapper $StorageMapper
     )
     {
@@ -56,7 +57,7 @@ class ApiDataController extends ApiController
         $this->userSession = $userSession;
         $this->ActivityManager = $ActivityManager;
         $this->DatasetService = $DatasetService;
-        $this->StorageController = $StorageController;
+        $this->StorageService = $StorageService;
         $this->StorageMapper = $StorageMapper;
     }
 
@@ -87,7 +88,7 @@ class ApiDataController extends ApiController
             return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
         }
 
-        $this->StorageController->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
+        $this->StorageService->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
         $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
 
         return $this->requestResponse(
@@ -123,7 +124,7 @@ class ApiDataController extends ApiController
                 return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
             }
 
-            $this->StorageController->update($datasetId, $dimension1, $dimension2, $value);
+            $this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
             $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
             $message = 'Data update successfull';
         }
@@ -160,7 +161,7 @@ class ApiDataController extends ApiController
                 return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
             }
 
-            $this->StorageController->delete($datasetId, $dimension1, $dimension2);
+            $this->StorageService->delete($datasetId, $dimension1, $dimension2);
             $message = 'Data deleted';
         }
 
@@ -258,7 +259,10 @@ class ApiDataController extends ApiController
         );
 
         if (!empty($datasetMetadata)) {
-            $allData = $this->StorageController->read($datasetMetadata);
+            /*** todo **/
+            /**(int)$reportMetadata['dataset'] **/
+
+            $allData = $this->StorageService->read($datasetMetadata);
             $series = array_values(array_unique(array_map('array_shift', $allData['data'])));
 
             return new DataResponse([

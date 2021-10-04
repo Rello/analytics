@@ -37,23 +37,23 @@ class ThresholdMapper
         self::TABLE_NAME;
     }
 
-    public function createThreshold($datasetId, $dimension1, $value, $option, $serverity)
+    public function createThreshold($reportId, $dimension1, $value, $option, $severity)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
-                'dataset' => $sql->createNamedParameter($datasetId),
+                'report' => $sql->createNamedParameter($reportId),
                 'dimension1' => $sql->createNamedParameter($dimension1),
                 'value' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
-                'severity' => $sql->createNamedParameter($serverity),
+                'severity' => $sql->createNamedParameter($severity),
             ]);
         $sql->execute();
         return (int)$sql->getLastInsertId();
     }
 
-    public function getThresholdsByDataset($datasetId)
+    public function getThresholdsByReport($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
@@ -63,20 +63,19 @@ class ThresholdMapper
             ->addSelect('value')
             ->addSelect('option')
             ->addSelect('severity')
-            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
     }
 
-    public function getSevOneThresholdsByDataset($datasetId)
+    public function getSevOneThresholdsByReport($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('*')
-            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->eq('severity', $sql->createNamedParameter('1')));
         $statement = $sql->execute();
         $result = $statement->fetchAll();

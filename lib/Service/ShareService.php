@@ -61,44 +61,44 @@ class ShareService
      * create a new share
      *
      * @NoAdminRequired
-     * @param $datasetId
+     * @param $reportId
      * @param $type
      * @param $user
      * @return bool
      * @throws \OCP\DB\Exception
      */
-    public function create($datasetId, $type, $user)
+    public function create($reportId, $type, $user)
     {
         if ((int)$type === self::SHARE_TYPE_LINK) {
             $token = $this->generateToken();
-            $this->ShareMapper->createShare($datasetId, $type, $user, $token);
+            $this->ShareMapper->createShare($reportId, $type, $user, $token);
         } elseif ((int)$type === self::SHARE_TYPE_USER) {
-            $this->ShareMapper->createShare($datasetId, $type, $user, null);
+            $this->ShareMapper->createShare($reportId, $type, $user, null);
         } elseif ((int)$type === self::SHARE_TYPE_GROUP) {
             // add the entry for the group
-            $parent = $this->ShareMapper->createShare($datasetId, self::SHARE_TYPE_GROUP, $user, null);
+            $parent = $this->ShareMapper->createShare($reportId, self::SHARE_TYPE_GROUP, $user, null);
 
             // add entries for every user of the group
             $usersInGroup = $this->groupManager->displayNamesInGroup($user);
             foreach ($usersInGroup as $userId => $displayName) {
-                $this->ShareMapper->createShare($datasetId, self::SHARE_TYPE_USERGROUP, $userId, null, $parent);
+                $this->ShareMapper->createShare($reportId, self::SHARE_TYPE_USERGROUP, $userId, null, $parent);
             }
         }
 
-        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
+        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
         return true;
     }
 
     /**
-     * get all shares for a dataset
+     * get all shares for a report
      *
      * @NoAdminRequired
-     * @param $datasetId
+     * @param $reportId
      * @return array
      */
-    public function read($datasetId)
+    public function read($reportId)
     {
-        $shares = $this->ShareMapper->getShares($datasetId);
+        $shares = $this->ShareMapper->getShares($reportId);
         foreach ($shares as &$share) {
             if ($share['type'] === 0) {
                 $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
@@ -109,18 +109,18 @@ class ShareService
     }
 
     /**
-     * get all dataset by token
+     * get all report by token
      *
      * @NoAdminRequired
      * @param $token
      * @return array
      */
-    public function getDatasetByToken($token)
+    public function getReportByToken($token)
     {
-        $dataset = $this->ShareMapper->getDatasetByToken($token);
-        $dataset = $this->VariableService->replaceTextVariables($dataset);
+        $reportId = $this->ShareMapper->getReportByToken($token);
+        $reportId = $this->VariableService->replaceTextVariables($reportId);
 
-        return $dataset;
+        return $reportId;
     }
 
     /**
@@ -137,30 +137,30 @@ class ShareService
     }
 
     /**
-     * get all datasets shared with user
+     * get all reports shared with user
      *
      * @NoAdminRequired
      */
-    public function getSharedDatasets()
+    public function getSharedReports()
     {
-        $sharedDatasets = $this->ShareMapper->getSharedDatasets();
-        foreach ($sharedDatasets as &$sharedDataset) {
-            $sharedDataset['type'] = '99';
-            $sharedDataset['parrent'] = '0';
+        $sharedReports = $this->ShareMapper->getSharedReports();
+        foreach ($sharedReports as &$sharedReport) {
+            $sharedReport['type'] = '99';
+            $sharedReport['parrent'] = '0';
         }
-        return $sharedDatasets;
+        return $sharedReports;
     }
 
     /**
-     * get metadata of a dataset, shared with current user
+     * get metadata of a report, shared with current user
      *
      * @NoAdminRequired
-     * @param $id
+     * @param $reportId
      * @return array
      */
-    public function getSharedDataset($id)
+    public function getSharedReport($reportId)
     {
-        return $this->ShareMapper->getSharedDataset($id);
+        return $this->ShareMapper->getSharedReport($reportId);
     }
 
     /**
@@ -189,15 +189,15 @@ class ShareService
     }
 
     /**
-     * delete all shares for a dataset
+     * delete all shares for a report
      *
      * @NoAdminRequired
-     * @param $datasetId
+     * @param $reportId
      * @return bool
      */
-    public function deleteShareByDataset($datasetId)
+    public function deleteShareByReport($reportId)
     {
-        return $this->ShareMapper->deleteShareByDataset($datasetId);
+        return $this->ShareMapper->deleteShareByReport($reportId);
     }
 
     /**

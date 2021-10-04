@@ -272,7 +272,7 @@ OCA.Analytics.Advanced.Threshold = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + datasetId,
             success: function (data) {
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateThreshold').content, true);
@@ -360,7 +360,7 @@ OCA.Analytics.Advanced.Threshold = {
             type: 'POST',
             url: url,
             data: {
-                'datasetId': datasetId,
+                'reportId': datasetId,
                 'dimension1': document.getElementById('sidebarThresholdDimension1').value,
                 'option': document.getElementById('sidebarThresholdOption').value,
                 'value': document.getElementById('sidebarThresholdValue').value,

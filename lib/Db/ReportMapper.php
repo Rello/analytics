@@ -15,13 +15,13 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
-class DatasetMapper
+class ReportMapper
 {
     private $userId;
     private $l10n;
     private $db;
     private $logger;
-    const TABLE_NAME = 'analytics_dataset';
+    const TABLE_NAME = 'analytics_report';
 
     public function __construct(
         $userId,
@@ -34,11 +34,10 @@ class DatasetMapper
         $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
-        self::TABLE_NAME;
     }
 
     /**
-     * get datasets
+     * get reports
      * @return array
      */
     public function index()
@@ -47,11 +46,10 @@ class DatasetMapper
         $sql->from(self::TABLE_NAME)
             ->select('id')
             ->addSelect('name')
-            ->addSelect('dimension1')
-            ->addSelect('dimension2')
-            ->addSelect('value')
+            ->addSelect('type')
+            ->addSelect('parent')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter('2')))
+            ->orderBy('parent', 'ASC')
             ->addOrderBy('name', 'ASC');
         $statement = $sql->execute();
         $result = $statement->fetchAll();
@@ -60,32 +58,35 @@ class DatasetMapper
     }
 
     /**
-     * create dataset
-     * @param $name
-     * @param $dimension1
-     * @param $dimension2
-     * @param $value
+     * create report
      * @return int
-     * @throws \OCP\DB\Exception
      */
-    public function create($name, $dimension1, $dimension2, $value)
+    public function create()
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
-                'name' => $sql->createNamedParameter($name),
-                'dimension1' => $sql->createNamedParameter($dimension1),
-                'dimension2' => $sql->createNamedParameter($dimension2),
-                'value' => $sql->createNamedParameter($value),
-                'type' => $sql->createNamedParameter('2'),
+                'name' => $sql->createNamedParameter($this->l10n->t('New')),
+                'type' => $sql->createNamedParameter(2),
+                'parent' => $sql->createNamedParameter(0),
+                'dimension1' => $sql->createNamedParameter($this->l10n->t('Object')),
+                'dimension2' => $sql->createNamedParameter($this->l10n->t('Date')),
+                //'dimension3' => $sql->createNamedParameter($this->l10n->t('Value')),
+                //'dimension4' => $sql->createNamedParameter($this->l10n->t('Value')),
+                //'timestamp' => $sql->createNamedParameter($this->l10n->t('Date')),
+                //'unit' => $sql->createNamedParameter($this->l10n->t('Value')),
+                'value' => $sql->createNamedParameter($this->l10n->t('Value')),
+                'chart' => $sql->createNamedParameter('column'),
+                'visualization' => $sql->createNamedParameter('ct'),
+                'dataset' => $sql->createNamedParameter('0'),
             ]);
         $sql->execute();
         return (int)$sql->getLastInsertId();
     }
 
     /**
-     * get single dataset
+     * get single report
      * @param int $id
      * @param string|null $user_id
      * @return array
@@ -108,7 +109,7 @@ class DatasetMapper
     }
 
     /**
-     * update dataset
+     * update report
      * @param $id
      * @param $name
      * @param $subheader
@@ -125,7 +126,7 @@ class DatasetMapper
      * @param $filteroptions
      * @return bool
      */
-    public function update($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
+    public function update($id, $name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
@@ -142,6 +143,7 @@ class DatasetMapper
             ->set('dimension1', $sql->createNamedParameter($dimension1))
             ->set('dimension2', $sql->createNamedParameter($dimension2))
             ->set('value', $sql->createNamedParameter($value))
+            ->set('dataset', $sql->createNamedParameter($dataset))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         if ($filteroptions !== null) $sql->set('filteroptions', $sql->createNamedParameter($filteroptions));
@@ -150,7 +152,7 @@ class DatasetMapper
     }
 
     /**
-     * update dataset options
+     * update report options
      * @param $id
      * @param $chartoptions
      * @param $dataoptions
@@ -171,7 +173,26 @@ class DatasetMapper
     }
 
     /**
-     * read dataset options
+     * update report refresh interval
+     * @param $id
+     * @param $chartoptions
+     * @param $dataoptions
+     * @param $filteroptions
+     * @return bool
+     */
+    public function updateRefresh($id, $refresh)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('refresh', $sql->createNamedParameter($refresh))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->execute();
+        return true;
+    }
+
+    /**
+     * read report options
      * @param $id
      * @return array
      */
@@ -191,7 +212,7 @@ class DatasetMapper
     }
 
     /**
-     * delete dataset
+     * delete report
      * @param $id
      * @return bool
      */
@@ -206,31 +227,37 @@ class DatasetMapper
     }
 
     /**
-     * get the newest timestamp of the data of a dataset
-     * @param $datasetId
-     * @return int
+     * search reports by searchstring
+     * @param $searchString
+     * @return array
      */
-    public function getLastUpdate($datasetId)
+    public function search($searchString)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->from('analytics_facts')
-            ->select($sql->func()->max('timestamp'))
-            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $result = (int)$sql->execute()->fetchOne();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->addSelect('name')
+            ->addSelect('type')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->iLike('name', $sql->createNamedParameter('%' . $this->db->escapeLikeParameter($searchString) . '%')))
+            ->orderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
         return $result;
     }
 
     /**
      * get the report owner
-     * @param $datasetId
+     * @param $reportId
      * @return int
      */
-    public function getOwner($datasetId)
+    public function getOwner($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('user_id')
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($datasetId)));
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($reportId)));
         $result = (string)$sql->execute()->fetchOne();
         return $result;
     }

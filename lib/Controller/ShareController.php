@@ -59,12 +59,12 @@ class ShareController extends Controller
      * get all shares for a dataset
      *
      * @NoAdminRequired
-     * @param $datasetId
+     * @param $reportId
      * @return DataResponse
      */
-    public function read($datasetId)
+    public function read($reportId)
     {
-        return new DataResponse($this->ShareService->read($datasetId));
+        return new DataResponse($this->ShareService->read($reportId));
     }
 
     /**

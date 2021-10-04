@@ -44,6 +44,14 @@
                 </select>
             </div>
         </div>
+        <div style="display: table-row;" id="datasetDatasetRow">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Dataset')); ?></div>
+            <div style="display: table-cell;">
+                <select style="display: table-cell;" id="sidebarDatasetDataset" class="sidebarInput" disabled>
+                </select>
+            </div>
+        </div>
+
     </div>
     <br>
     <div id="datasetDatasourceSectionHeader"><h3><?php p($l->t('Datasource options')); ?></h3></div>

@@ -155,7 +155,7 @@ OCA.Analytics.Sidebar.Dataset = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + datasetId,
             success: function (data) {
                 let table;
                 if (data !== false) {
@@ -167,12 +167,15 @@ OCA.Analytics.Sidebar.Dataset = {
 
                     document.getElementById('sidebarDatasetDatasource').appendChild(OCA.Analytics.Datasource.buildDropdown());
                     OCA.Analytics.Sidebar.Dataset.buildGroupingDropdown();
+                    OCA.Analytics.Sidebar.Dataset.buildDatasetDropdown();
 
                     document.getElementById('sidebarDatasetName').value = data['name'];
                     document.getElementById('sidebarDatasetSubheader').value = data['subheader'];
                     document.getElementById('sidebarDatasetParent').value = data['parent'];
                     document.getElementById('sidebarDatasetDatasource').value = data['type'];
                     document.getElementById('sidebarDatasetDatasource').addEventListener('change', OCA.Analytics.Sidebar.Dataset.handleDatasourceChange);
+                    document.getElementById('sidebarDatasetDataset').value = data['dataset'];
+                    document.getElementById('sidebarDatasetDataset').addEventListener('change', OCA.Analytics.Sidebar.Dataset.handleDatasetChange);
                     document.getElementById('sidebarDatasetChart').value = data['chart'];
                     document.getElementById('sidebarDatasetVisualization').value = data['visualization'];
                     // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
@@ -215,6 +218,7 @@ OCA.Analytics.Sidebar.Dataset = {
                         OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetDatasource');
                         OCA.Analytics.Sidebar.indicateImportantField('sidebarDatasetName');
                         document.getElementById('sidebarDatasetDatasource').disabled = false;
+                        document.getElementById('sidebarDatasetDataset').disabled = false;
                     }
 
                 } else {
@@ -267,6 +271,7 @@ OCA.Analytics.Sidebar.Dataset = {
             document.getElementById('datasetDatasourceSectionHeader').style.display = 'none';
             document.getElementById('datasetVisualizationSection').style.display = 'table';
             document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+            document.getElementById('datasetDatasetRow').style.display = 'table-row';
         } else if (type === OCA.Analytics.TYPE_EMPTY_GROUP) {
             document.getElementById('datasetDimensionSection').style.display = 'none';
             document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
@@ -274,6 +279,7 @@ OCA.Analytics.Sidebar.Dataset = {
             document.getElementById('datasetDatasourceSectionHeader').style.display = 'none';
             document.getElementById('datasetVisualizationSection').style.display = 'none';
             document.getElementById('datasetVisualizationSectionHeader').style.display = 'none';
+            document.getElementById('datasetDatasetRow').style.display = 'none';
         } else {
             document.getElementById('datasetDimensionSection').style.display = 'none';
             document.getElementById('datasetDimensionSectionHeader').style.display = 'none';
@@ -281,12 +287,33 @@ OCA.Analytics.Sidebar.Dataset = {
             document.getElementById('datasetDatasourceSectionHeader').style.removeProperty('display');
             document.getElementById('datasetVisualizationSection').style.display = 'table';
             document.getElementById('datasetVisualizationSectionHeader').style.removeProperty('display');
+            document.getElementById('datasetDatasetRow').style.display = 'none';
 
             document.getElementById('datasetDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
 
             if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_EXCEL) {
                 document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleFilepicker);
             }
+        }
+    },
+
+    handleDatasetChange: function () {
+        const dataset = parseInt(document.getElementById('sidebarDatasetDataset').value);
+
+        if (dataset === 0) {
+            document.getElementById('sidebarDatasetDimension1').disabled = false;
+            document.getElementById('sidebarDatasetDimension2').disabled = false;
+            document.getElementById('sidebarDatasetValue').disabled = false;
+        } else {
+            let dim1 = OCA.Analytics.datasets.find(x => parseInt(x.id) === dataset)['dimension1'];
+            document.getElementById('sidebarDatasetDimension1').value = dim1;
+            document.getElementById('sidebarDatasetDimension1').disabled = true;
+            let dim2 = OCA.Analytics.datasets.find(x => parseInt(x.id) === dataset)['dimension2'];
+            document.getElementById('sidebarDatasetDimension2').value = dim2;
+            document.getElementById('sidebarDatasetDimension2').disabled = true;
+            let value = OCA.Analytics.datasets.find(x => parseInt(x.id) === dataset)['value'];
+            document.getElementById('sidebarDatasetValue').value = value;
+            document.getElementById('sidebarDatasetValue').disabled = true;
         }
     },
 
@@ -337,7 +364,7 @@ OCA.Analytics.Sidebar.Dataset = {
         option.value = '0';
         tableParent.add(option);
 
-        for (let dataset of OCA.Analytics.datasets) {
+        for (let dataset of OCA.Analytics.reports) {
             if (parseInt(dataset.type) === OCA.Analytics.TYPE_EMPTY_GROUP) {
                 option = document.createElement('option');
                 option.text = dataset.name;
@@ -346,6 +373,23 @@ OCA.Analytics.Sidebar.Dataset = {
             }
         }
     },
+
+    buildDatasetDropdown: function () {
+        let tableParent = document.getElementById('sidebarDatasetDataset');
+        tableParent.innerHTML = '';
+        let option = document.createElement('option');
+        option.text = t('analytics', 'New table');
+        option.value = '0';
+        tableParent.add(option);
+
+        for (let dataset of OCA.Analytics.datasets) {
+            option = document.createElement('option');
+            option.text = dataset.name;
+            option.value = dataset.id;
+            tableParent.add(option);
+        }
+    },
+
 };
 
 OCA.Analytics.Sidebar.Data = {
@@ -366,7 +410,7 @@ OCA.Analytics.Sidebar.Data = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + datasetId,
             success: function (data) {
                 let table;
                 // clone the DOM template
@@ -603,7 +647,7 @@ OCA.Analytics.Sidebar.Share = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/share'),
             data: {
-                'datasetId': datasetId,
+                'reportId': datasetId,
                 'type': shareType,
                 'user': shareUser,
             },
@@ -714,14 +758,14 @@ OCA.Analytics.Sidebar.Backend = {
 
     exporteDataset: function () {
         const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        window.open(OC.generateUrl('apps/analytics/dataset/export/') + datasetId, '_blank')
+        window.open(OC.generateUrl('apps/analytics/report/export/') + datasetId, '_blank')
     },
 
     deleteDataset: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         $.ajax({
             type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + datasetId,
             success: function (data) {
                 OCA.Analytics.Navigation.init();
                 OCA.Analytics.Navigation.handleOverviewButton();
@@ -743,12 +787,13 @@ OCA.Analytics.Sidebar.Backend = {
 
         $.ajax({
             type: 'PUT',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + datasetId,
             data: {
                 'name': document.getElementById('sidebarDatasetName').value,
                 'subheader': document.getElementById('sidebarDatasetSubheader').value,
                 'parent': document.getElementById('sidebarDatasetParent').value,
                 'type': document.getElementById('sidebarDatasetDatasource').value,
+                'dataset': document.getElementById('sidebarDatasetDataset').value,
                 'link': JSON.stringify(option),
                 'visualization': document.getElementById('sidebarDatasetVisualization').value,
                 'chart': document.getElementById('sidebarDatasetChart').value,

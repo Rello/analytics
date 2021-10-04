@@ -368,7 +368,7 @@ OCA.Analytics.Navigation = {
     importDataset: function (path, raw) {
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset/import/'),
+            url: OC.generateUrl('apps/analytics/report/import/'),
             data: {
                 'path': path,
                 'raw': raw
@@ -383,7 +383,7 @@ OCA.Analytics.Navigation = {
     createDataset: function (file = '') {
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset'),
+            url: OC.generateUrl('apps/analytics/report'),
             data: {
                 'file': file,
             },
@@ -397,10 +397,10 @@ OCA.Analytics.Navigation = {
     getDatasets: function (datasetId) {
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset'),
+            url: OC.generateUrl('apps/analytics/report'),
             success: function (data) {
                 OCA.Analytics.Navigation.buildNavigation(data);
-                OCA.Analytics.datasets = data;
+                OCA.Analytics.reports = data;
                 if (datasetId) {
                     OCA.Analytics.Sidebar.hideSidebar();
                     let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');

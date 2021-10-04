@@ -68,7 +68,7 @@
             fetchDatasets() {
                 $.ajax({
                     type: 'GET',
-                    url: OC.generateUrl('apps/analytics/dataset'),
+                    url: OC.generateUrl('apps/analytics/report'),
                     success: function (data) {
                         Component.items = data;
                     }

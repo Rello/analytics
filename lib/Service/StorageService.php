@@ -9,31 +9,31 @@
  * @copyright 2021 Marcel Scherello
  */
 
-namespace OCA\Analytics\Controller;
+namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Db\StorageMapper;
-use OCA\Analytics\Service\ThresholdService;
-use OCP\AppFramework\Controller;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
-class StorageController extends Controller
+class StorageService
 {
     private $logger;
     private $StorageMapper;
     private $ThresholdService;
+    private $DatasetService;
 
     public function __construct(
         string $AppName,
         IRequest $request,
         LoggerInterface $logger,
         StorageMapper $StorageMapper,
+        DatasetService $DatasetService,
         ThresholdService $ThresholdService
     )
     {
-        parent::__construct($AppName, $request);
         $this->logger = $logger;
         $this->StorageMapper = $StorageMapper;
+        $this->DatasetService = $DatasetService;
         $this->ThresholdService = $ThresholdService;
     }
 
@@ -41,21 +41,24 @@ class StorageController extends Controller
      * Get the items for the selected category
      *
      * @NoAdminRequired
-     * @param $datasetMetadata
+     * @param $datasetId
+     * @param $options
      * @return array
      */
-    public function read($datasetMetadata)
+    public function read($datasetId, $options)
     {
         $availableDimensions = array();
         $header = array();
 
-        // output the dimensions available for filtering of this datasource
-        // this needs to map the technical name to its displayname in the report
+        $datasetMetadata = $this->DatasetService->read($datasetId);
+
+        // output the dimensions available for filtering of this dataset
+        // this needs to map the technical name to its display name in the report
         $availableDimensions['dimension1'] = $datasetMetadata['dimension1'];
         $availableDimensions['dimension2'] = $datasetMetadata['dimension2'];
 
         // return the header texts of the data being transferred according to the current drilldown state selected by user
-        $options = json_decode($datasetMetadata['filteroptions'], true);
+        $options = json_decode($options, true);
         if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
         if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
         $header[6] = $datasetMetadata['value'];

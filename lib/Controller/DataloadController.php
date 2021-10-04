@@ -16,6 +16,7 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\DataloadMapper;
 use OCA\Analytics\Service\DataloadService;
 use OCA\Analytics\Service\DatasetService;
+use OCA\Analytics\Service\StorageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -27,7 +28,7 @@ use Psr\Log\LoggerInterface;
 class DataloadController extends Controller
 {
     private $logger;
-    private $StorageController;
+    private $StorageService;
     private $DatasourceController;
     private $ActivityManager;
     private $DatasetService;
@@ -44,14 +45,14 @@ class DataloadController extends Controller
         DatasourceController $DatasourceController,
         DatasetService $DatasetService,
         DataloadService $DataloadService,
-        StorageController $StorageController,
+        StorageService $StorageService,
         DataloadMapper $DataloadMapper
     )
     {
         parent::__construct($AppName, $request);
         $this->l10n = $l10n;
         $this->logger = $logger;
-        $this->StorageController = $StorageController;
+        $this->StorageService = $StorageService;
         $this->ActivityManager = $ActivityManager;
         $this->DatasourceController = $DatasourceController;
         $this->DatasetService = $DatasetService;
@@ -165,7 +166,7 @@ class DataloadController extends Controller
             if ($value === false) {
                 $errorMessage = $this->l10n->t('3rd field must be a valid number');
             } else {
-                $action = $this->StorageController->update($datasetId, $dimension1, $dimension2, $value);
+                $action = $this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
             }
@@ -197,7 +198,7 @@ class DataloadController extends Controller
     {
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
-            $result = $this->StorageController->delete($datasetId, $dimension1, $dimension2);
+            $result = $this->StorageService->delete($datasetId, $dimension1, $dimension2);
             return new DataResponse(['delete' => $result]);
         } else {
             return new NotFoundResponse();
@@ -217,7 +218,7 @@ class DataloadController extends Controller
     {
         $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
         if (!empty($datasetMetadata)) {
-            $result = $this->StorageController->deleteSimulate($datasetId, $dimension1, $dimension2);
+            $result = $this->StorageService->deleteSimulate($datasetId, $dimension1, $dimension2);
             return new DataResponse(['delete' => $result]);
         } else {
             return new NotFoundResponse();
@@ -255,7 +256,7 @@ class DataloadController extends Controller
                         $errorCounter++;
                     } else {
                         if ($numberOfColumns < 3) $row[1] = null;
-                        $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
+                        $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2]);
                         $insert = $insert + $action['insert'];
                         $update = $update + $action['update'];
                     }
@@ -301,7 +302,7 @@ class DataloadController extends Controller
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {
-                    $action = $this->StorageController->update($datasetId, $row[0], $row[1], $row[2]);
+                    $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2]);
                     $insert = $insert + $action['insert'];
                     $update = $update + $action['update'];
                 }

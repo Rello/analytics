@@ -12,14 +12,14 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\DataSession;
-use OCA\Analytics\Service\DatasetService;
+use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\ThresholdService;
+use OCA\Analytics\Service\StorageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
-use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
@@ -27,38 +27,32 @@ use Psr\Log\LoggerInterface;
 class OutputController extends Controller
 {
     private $logger;
-    private $DatasetService;
-    private $rootFolder;
-    private $userId;
+    private $ReportService;
     private $DataSession;
     private $ShareService;
     private $DatasourceController;
-    private $StorageController;
+    private $StorageService;
     private $ThresholdService;
 
     public function __construct(
         string $AppName,
         IRequest $request,
-        $userId,
         LoggerInterface $logger,
-        IRootFolder $rootFolder,
-        DatasetService $DatasetService,
+        ReportService $ReportService,
         ShareService $ShareService,
         DataSession $DataSession,
         DatasourceController $DatasourceController,
-        StorageController $StorageController,
+        StorageService $StorageService,
         ThresholdService $ThresholdService
     )
     {
         parent::__construct($AppName, $request);
-        $this->userId = $userId;
         $this->logger = $logger;
-        $this->DatasetService = $DatasetService;
-        $this->rootFolder = $rootFolder;
+        $this->ReportService = $ReportService;
         $this->DataSession = $DataSession;
         $this->ShareService = $ShareService;
         $this->DatasourceController = $DatasourceController;
-        $this->StorageController = $StorageController;
+        $this->StorageService = $StorageService;
         $this->ThresholdService = $ThresholdService;
     }
 
@@ -66,24 +60,21 @@ class OutputController extends Controller
      * get the data when requested from internal page
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $filteroptions
      * @param $dataoptions
+     * @param $chartoptions
      * @return DataResponse|NotFoundResponse
-     * @throws NotFoundException
      */
-    public function read(int $datasetId, $filteroptions, $dataoptions, $chartoptions)
+    public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
-        if (empty($datasetMetadata)) $datasetMetadata = $this->ShareService->getSharedDataset($datasetId);
+        $reportMetadata = $this->ReportService->getOwnReport($reportId);
+        if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedReport($reportId);
 
-        if (!empty($datasetMetadata)) {
-            $datasetMetadata = $this->evaluateCanFilter($datasetMetadata, $filteroptions, $dataoptions, $chartoptions);
-            $result = $this->getData($datasetMetadata);
-
-            $response = new DataResponse($result, HTTP::STATUS_OK);
-            //$response->setETag(md5('123'));
-            return $response;
+        if (!empty($reportMetadata)) {
+            $reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions);
+            $result = $this->getData($reportMetadata);
+            return new DataResponse($result, HTTP::STATUS_OK);
         } else {
             return new NotFoundResponse();
         }
@@ -94,42 +85,32 @@ class OutputController extends Controller
      * pre-evaluation of valid datasetId within read & readPublic is trusted here
      *
      * @NoAdminRequired
-     * @param $datasetMetadata
+     * @param $reportMetadata
      * @return array|NotFoundException
-     * @throws NotFoundException
      */
-    private function getData($datasetMetadata)
+    private function getData($reportMetadata)
     {
-        $datasourceId = (int)$datasetMetadata['type'];
+        $datasource = (int)$reportMetadata['type'];
 
-        if ($datasourceId === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-            $result = $this->StorageController->read($datasetMetadata);
+        if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+            // Internal data
+            $result = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata['filteroptions']);
         } else {
-            $option = array();
-            // before 3.1.0, the options were in another format. as of 3.1.0 the standard option array is used
-            if ($datasetMetadata['link'][0] !== '{') {
-                $option['link'] = $datasetMetadata['link'];
-            } else {
-                $option = json_decode($datasetMetadata['link'], true);
-            }
-            $option['user_id'] = $datasetMetadata['user_id'];
-
-            $result = $this->DatasourceController->read($datasourceId, $datasetMetadata);
-            //unset($result['error']);
+            // Realtime data
+            $result = $this->DatasourceController->read($datasource, $reportMetadata);
         }
 
-        $result['thresholds'] = $this->ThresholdService->read($datasetMetadata['id']);
-
-        unset($datasetMetadata['parent']
-            , $datasetMetadata['user_id']
-            , $datasetMetadata['link']
-            , $datasetMetadata['dimension1']
-            , $datasetMetadata['dimension2']
-            , $datasetMetadata['dimension3']
-            , $datasetMetadata['value']
-            , $datasetMetadata['password']
+        unset($reportMetadata['parent']
+            , $reportMetadata['user_id']
+            , $reportMetadata['link']
+            , $reportMetadata['dimension1']
+            , $reportMetadata['dimension2']
+            , $reportMetadata['dimension3']
+            , $reportMetadata['value']
+            , $reportMetadata['password']
         );
-        $result['options'] = $datasetMetadata;
+        $result['options'] = $reportMetadata;
+        $result['thresholds'] = $this->ThresholdService->read($reportMetadata['id']);
 
         return $result;
     }
@@ -148,7 +129,7 @@ class OutputController extends Controller
      */
     public function readPublic($token, $filteroptions, $dataoptions, $chartoptions)
     {
-        $share = $this->ShareService->getDatasetByToken($token);
+        $share = $this->ShareService->getReportByToken($token);
         if (empty($share)) {
             // Dataset not shared or wrong token
             return new NotFoundResponse();
@@ -162,7 +143,7 @@ class OutputController extends Controller
             }
             $share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions, $chartoptions);
             $result = $this->getData($share);
-            return new DataResponse($result);
+            return new DataResponse($result, HTTP::STATUS_OK);
         }
     }
 
@@ -176,7 +157,7 @@ class OutputController extends Controller
      */
     private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions)
     {
-        // send current user filteroptions to the datarequest
+        // send current user filter options to the data request
         // only if the report has update-permissions
         // if nothing is changed by the user, the filter which is stored for the report, will be used
         if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {

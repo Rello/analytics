@@ -472,7 +472,7 @@ OCA.Analytics.Filter.Backend = {
 
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + datasetId,
             data: {
                 'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
                 'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,

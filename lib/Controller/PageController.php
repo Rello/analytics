@@ -117,7 +117,7 @@ class PageController extends Controller
      */
     public function indexPublic($token, string $password = '')
     {
-        $share = $this->ShareService->getDatasetByToken($token);
+        $share = $this->ShareService->getReportByToken($token);
 
         if (empty($share)) {
             // Dataset not shared or wrong token

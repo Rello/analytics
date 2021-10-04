@@ -11,8 +11,6 @@
 
 namespace OCA\Analytics\Controller;
 
-use OCA\Analytics\Db\DatasetMapper;
-use OCA\Analytics\Notification\NotificationManager;
 use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
@@ -22,51 +20,45 @@ class ThresholdController extends Controller
 {
     private $logger;
     private $ThresholdService;
-    private $DatasetMapper;
-    private $NotificationManager;
 
     public function __construct(
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        ThresholdService $ThresholdService,
-        NotificationManager $NotificationManager,
-        DatasetMapper $DatasetMapper
+        ThresholdService $ThresholdService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ThresholdService = $ThresholdService;
-        $this->NotificationManager = $NotificationManager;
-        $this->DatasetMapper = $DatasetMapper;
     }
 
     /**
      * read all thresholds for a dataset
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @return array
      */
-    public function read(int $datasetId)
+    public function read(int $reportId)
     {
-        return $this->ThresholdService->read($datasetId);
+        return $this->ThresholdService->read($reportId);
     }
 
     /**
      * create new threshold for dataset
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $option
      * @param $value
      * @param int $severity
      * @return int
      */
-    public function create(int $datasetId, $dimension1, $option, $value, int $severity)
+    public function create(int $reportId, $dimension1, $option, $value, int $severity)
     {
-        return $this->ThresholdService->create($datasetId, $dimension1, $option, $value, $severity);
+        return $this->ThresholdService->create($reportId, $dimension1, $option, $value, $severity);
     }
 
     /**
@@ -86,15 +78,15 @@ class ThresholdController extends Controller
      * validate threshold
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @param $value
      * @return string
      * @throws \Exception
      */
-    public function validate(int $datasetId, $dimension1, $dimension2, $value)
+    public function validate(int $reportId, $dimension1, $dimension2, $value)
     {
-        return $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
+        return $this->ThresholdService->validate($reportId, $dimension1, $dimension2, $value);
     }
 }
