@@ -14,6 +14,10 @@ use OCP\Migration\SimpleMigrationStep;
 /**
  * Auto-generated migration step: Please modify to your needs!
  * sudo -u www-data php /var/www/nextcloud/occ migrations:execute analytics 3007Date20211003180000
+ *
+ * Deletions
+ * dataset:
+ * subheader, link, visual, chart*, *options, parent, type
  */
 class Version3007Date20211003180000 extends SimpleMigrationStep
 {
@@ -148,6 +152,8 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
         $this->fixShares($reportIdMap);
         $this->fixThreshold($reportIdMap);
         $this->fixParents($reportIdMap);
+        /**todo**/
+        // fix favorites
     }
 
     /**

@@ -11,37 +11,34 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\Exception;
 use OCP\IDBConnection;
-use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
 class DatasetMapper
 {
     private $userId;
-    private $l10n;
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_dataset';
 
     public function __construct(
         $userId,
-        IL10N $l10n,
         IDBConnection $db,
         LoggerInterface $logger
     )
     {
         $this->userId = $userId;
-        $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
-        self::TABLE_NAME;
     }
 
     /**
      * get datasets
      * @return array
+     * @throws Exception
      */
-    public function index()
+    public function index(): array
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
@@ -66,9 +63,9 @@ class DatasetMapper
      * @param $dimension2
      * @param $value
      * @return int
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
-    public function create($name, $dimension1, $dimension2, $value)
+    public function create($name, $dimension1, $dimension2, $value): int
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
@@ -81,7 +78,7 @@ class DatasetMapper
                 'type' => $sql->createNamedParameter('2'),
             ]);
         $sql->execute();
-        return (int)$sql->getLastInsertId();
+        return $sql->getLastInsertId();
     }
 
     /**
@@ -89,8 +86,9 @@ class DatasetMapper
      * @param int $id
      * @param string|null $user_id
      * @return array
+     * @throws Exception
      */
-    public function read(int $id, string $user_id = null)
+    public function read(int $id, string $user_id = null): array
     {
         if ($user_id) $this->userId = $user_id;
 
@@ -111,91 +109,34 @@ class DatasetMapper
      * update dataset
      * @param $id
      * @param $name
-     * @param $subheader
-     * @param $parent
-     * @param $type
-     * @param $link
-     * @param $visualization
-     * @param $chart
-     * @param $chartoptions
-     * @param $dataoptions
      * @param $dimension1
      * @param $dimension2
      * @param $value
-     * @param $filteroptions
      * @return bool
+     * @throws Exception
      */
-    public function update($id, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
+    public function update($id, $name, $dimension1, $dimension2, $value): bool
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('name', $sql->createNamedParameter($name))
-            ->set('subheader', $sql->createNamedParameter($subheader))
-            ->set('type', $sql->createNamedParameter($type))
-            ->set('link', $sql->createNamedParameter($link))
-            ->set('visualization', $sql->createNamedParameter($visualization))
-            ->set('chart', $sql->createNamedParameter($chart))
-            ->set('chartoptions', $sql->createNamedParameter($chartoptions))
-            ->set('dataoptions', $sql->createNamedParameter($dataoptions))
-            ->set('parent', $sql->createNamedParameter($parent))
             ->set('dimension1', $sql->createNamedParameter($dimension1))
             ->set('dimension2', $sql->createNamedParameter($dimension2))
             ->set('value', $sql->createNamedParameter($value))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        if ($filteroptions !== null) $sql->set('filteroptions', $sql->createNamedParameter($filteroptions));
         $sql->execute();
         return true;
-    }
-
-    /**
-     * update dataset options
-     * @param $id
-     * @param $chartoptions
-     * @param $dataoptions
-     * @param $filteroptions
-     * @return bool
-     */
-    public function updateOptions($id, $chartoptions, $dataoptions, $filteroptions)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->update(self::TABLE_NAME)
-            ->set('chartoptions', $sql->createNamedParameter($chartoptions))
-            ->set('dataoptions', $sql->createNamedParameter($dataoptions))
-            ->set('filteroptions', $sql->createNamedParameter($filteroptions))
-            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $sql->execute();
-        return true;
-    }
-
-    /**
-     * read dataset options
-     * @param $id
-     * @return array
-     */
-    public function readOptions($id)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME)
-            ->select('name')
-            ->addSelect('visualization')
-            ->addSelect('chart')
-            ->addSelect('user_id')
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $statement = $sql->execute();
-        $result = $statement->fetch();
-        $statement->closeCursor();
-        return $result;
     }
 
     /**
      * delete dataset
      * @param $id
      * @return bool
+     * @throws Exception
      */
-    public function delete($id)
+    public function delete($id): bool
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
@@ -209,41 +150,41 @@ class DatasetMapper
      * get the newest timestamp of the data of a dataset
      * @param $datasetId
      * @return int
+     * @throws Exception
      */
-    public function getLastUpdate($datasetId)
+    public function getLastUpdate($datasetId): int
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from('analytics_facts')
             ->select($sql->func()->max('timestamp'))
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $result = (int)$sql->execute()->fetchOne();
-        return $result;
+        return (int)$sql->execute()->fetchOne();
     }
 
     /**
      * get the report owner
      * @param $datasetId
-     * @return int
+     * @return string
+     * @throws Exception
      */
-    public function getOwner($datasetId)
+    public function getOwner($datasetId): string
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('user_id')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($datasetId)));
-        $result = (string)$sql->execute()->fetchOne();
-        return $result;
+        return (string)$sql->execute()->fetchOne();
     }
 
     /**
-     * truncates fiels do DB-field size
+     * truncates fields do DB-field size
      *
      * @param $string
-     * @param $length
-     * @param $dots
+     * @param int $length
+     * @param string $dots
      * @return string
      */
-    private function truncate($string, $length, $dots = "...")
+    private function truncate($string, int $length, string $dots = "..."): string
     {
         return (strlen($string) > $length) ? mb_strcut($string, 0, $length - strlen($dots)) . $dots : $string;
     }

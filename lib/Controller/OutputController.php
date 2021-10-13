@@ -20,6 +20,8 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
+use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\Files\NotFoundException;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
@@ -65,10 +67,11 @@ class OutputController extends Controller
      * @param $dataoptions
      * @param $chartoptions
      * @return DataResponse|NotFoundResponse
+     * @throws Exception
      */
     public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions)
     {
-        $reportMetadata = $this->ReportService->getOwnReport($reportId);
+        $reportMetadata = $this->ReportService->read($reportId);
         if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedReport($reportId);
 
         if (!empty($reportMetadata)) {
@@ -87,11 +90,11 @@ class OutputController extends Controller
      * @NoAdminRequired
      * @param $reportMetadata
      * @return array|NotFoundException
+     * @throws Exception
      */
     private function getData($reportMetadata)
     {
         $datasource = (int)$reportMetadata['type'];
-
         if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             // Internal data
             $result = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata['filteroptions']);
@@ -99,7 +102,6 @@ class OutputController extends Controller
             // Realtime data
             $result = $this->DatasourceController->read($datasource, $reportMetadata);
         }
-
         unset($reportMetadata['parent']
             , $reportMetadata['user_id']
             , $reportMetadata['link']
@@ -108,10 +110,10 @@ class OutputController extends Controller
             , $reportMetadata['dimension3']
             , $reportMetadata['value']
             , $reportMetadata['password']
+            , $reportMetadata['dataset']
         );
         $result['options'] = $reportMetadata;
         $result['thresholds'] = $this->ThresholdService->read($reportMetadata['id']);
-
         return $result;
     }
 
@@ -124,8 +126,9 @@ class OutputController extends Controller
      * @param $token
      * @param $filteroptions
      * @param $dataoptions
+     * @param $chartoptions
      * @return DataResponse|NotFoundResponse
-     * @throws NotFoundException
+     * @throws Exception
      */
     public function readPublic($token, $filteroptions, $dataoptions, $chartoptions)
     {
@@ -153,6 +156,7 @@ class OutputController extends Controller
      * @param $metadata
      * @param $filteroptions
      * @param $dataoptions
+     * @param $chartoptions
      * @return mixed
      */
     private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions)
@@ -160,7 +164,7 @@ class OutputController extends Controller
         // send current user filter options to the data request
         // only if the report has update-permissions
         // if nothing is changed by the user, the filter which is stored for the report, will be used
-        if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === \OCP\Constants::PERMISSION_UPDATE) {
+        if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === Constants::PERMISSION_UPDATE) {
             $metadata['filteroptions'] = $filteroptions;
             $metadata['dataoptions'] = $dataoptions;
             $metadata['chartoptions'] = $chartoptions;

@@ -46,14 +46,42 @@ class ReportController extends Controller
     }
 
     /**
-     * create new report
+     * create new blank report
+     *
+     * @NoAdminRequired
+     * @return int
+     */
+    public function create()
+    {
+        return $this->ReportService->create();
+    }
+
+    /**
+     * copy an existing report with the current navigation status
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param $chartoptions
+     * @param $dataoptions
+     * @param $filteroptions
+     * @return int
+     */
+    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
+    {
+        return $this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions);
+    }
+
+    /**
+     * create new report from file
      *
      * @NoAdminRequired
      * @param string $file
      * @return int
      */
-    public function create($file = '')
+    public function createFromFile($file = '')
     {
+        //**todo**//
+        //still needed?
         return $this->ReportService->create($file);
     }
 
@@ -100,6 +128,7 @@ class ReportController extends Controller
      * @param null $dimension2
      * @param null $value
      * @return bool
+     * @throws \OCP\DB\Exception
      */
     public function update(int $reportId, $name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {

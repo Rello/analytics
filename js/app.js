@@ -553,7 +553,8 @@ OCA.Analytics.UI = {
     reportOptionsEventlisteners: function () {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
-        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateDataset);
+        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateReport);
+        document.getElementById('saveIconNew').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
 
@@ -568,7 +569,7 @@ OCA.Analytics.UI = {
 
         let refresh = document.getElementsByName('refresh');
         for (let i = 0; i < refresh.length; i++) {
-            refresh[i].addEventListener('change', OCA.Analytics.Backend.saveRefresh);
+            refresh[i].addEventListener('change', OCA.Analytics.Filter.Backend.saveRefresh);
         }
     },
 
@@ -912,25 +913,6 @@ OCA.Analytics.Backend = {
             url: OC.generateUrl('apps/analytics/dataset'),
             success: function (data) {
                 OCA.Analytics.datasets = data;
-            }
-        });
-    },
-
-    saveRefresh: function (evt) {
-        OCA.Analytics.UI.hideReportMenu();
-        let refresh = evt.target.id;
-        refresh = parseInt(refresh.substring(7));
-        const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
-
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/') + datasetId + '/refresh',
-            data: {
-                'refresh': refresh,
-            },
-            success: function () {
-                OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-                OCA.Analytics.Backend.startRefreshTimer(refresh);
             }
         });
     },

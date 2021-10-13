@@ -124,22 +124,6 @@ class ReportService
         $ownReport = $this->ReportMapper->read($reportId);
         if (!empty($ownReport)) {
             $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
-        }
-        return $ownReport;
-    }
-
-    /**
-     * get own report details
-     *
-     * @param int $reportId
-     * @param string|null $user_id
-     * @return array
-     */
-    public function getOwnReport(int $reportId, string $user_id = null)
-    {
-        $ownReport = $this->ReportMapper->read($reportId, $user_id);
-        if (!empty($ownReport)) {
-            $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
             $ownReport = $this->VariableService->replaceTextVariables($ownReport);
         }
         return $ownReport;
@@ -168,12 +152,56 @@ class ReportService
     }
 
     /**
+     * create new blank report
+     *
+     * @return int
+     */
+    public function create(): int
+    {
+        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
+        return $this->ReportMapper->create();
+    }
+
+    /**
+     * copy an existing report with the current navigation status
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param $chartoptions
+     * @param $dataoptions
+     * @param $filteroptions
+     * @return int
+     */
+    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
+    {
+
+        $newId = $this->ReportMapper->create();
+        $template = $this->ReportMapper->read($reportId);
+        $this->ReportMapper->update($newId,
+            $template['name'] . ' copy',
+            $template['subheader'],
+            $template['parent'],
+            $template['type'],
+            $template['dataset'],
+            $template['link'],
+            $template['visualization'],
+            $template['chart'],
+            $template['chartoptions'],
+            $template['dataoptions'],
+            $template['dimension1'],
+            $template['dimension2'],
+            $template['value']);
+        $this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions);
+        return $newId;
+    }
+
+    /**
      * create new report
      *
      * @param string $file
      * @return int
      */
-    public function create($file = '')
+    public function createFromFile($file = '')
     {
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
         $reportId = $this->ReportMapper->create();
@@ -216,7 +244,7 @@ class ReportService
         if ($type === DatasourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
-        if ($dataset === 0) { // New dataset
+        if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
             $dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
         }
         return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
@@ -341,11 +369,12 @@ class ReportService
      * @param int $reportId
      * @return bool
      */
-    public function delete(int $reportId)
+    public function delete(int $reportId): bool
     {
         $this->ShareService->deleteShareByReport($reportId);
         $this->StorageMapper->deleteByDataset($reportId);
         /**todo**/
+        // delete dataset when last report
         $this->ReportMapper->delete($reportId);
         $this->ThresholdService->deleteThresholdByReport($reportId);
         $this->DataloadMapper->deleteDataloadByDataset($reportId);

@@ -87,65 +87,15 @@ class DatasetController extends Controller
      * @NoAdminRequired
      * @param int $datasetId
      * @param $name
-     * @param $subheader
-     * @param int $parent
-     * @param int $type
-     * @param $link
-     * @param $visualization
-     * @param $chart
-     * @param $chartoptions
-     * @param $dataoptions
-     * @param $dimension1
-     * @param $dimension2
-     * @param $value
+     * @param null $dimension1
+     * @param null $dimension2
+     * @param null $value
      * @return bool
+     * @throws \OCP\DB\Exception
      */
-    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
+    public function update(int $datasetId, $name, $dimension1 = null, $dimension2 = null, $value = null)
     {
-        return $this->DatasetService->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
-    }
-
-    /**
-     * get dataset details
-     *
-     * @NoAdminRequired
-     * @param int $datasetId
-     * @param $chartoptions
-     * @param $dataoptions
-     * @param $filteroptions
-     * @return bool
-     */
-    public function updateOptions(int $datasetId, $chartoptions, $dataoptions, $filteroptions)
-    {
-        return $this->DatasetService->updateOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
-    }
-
-    /**
-     * Export Dataset
-     *
-     * @NoCSRFRequired
-     * @NoAdminRequired
-     * @param int $datasetId
-     * @return \OCP\AppFramework\Http\DataDownloadResponse
-     */
-    public function export(int $datasetId)
-    {
-        return $this->DatasetService->export($datasetId);
-    }
-
-    /**
-     * Import Dataset
-     *
-     * @NoAdminRequired
-     * @param string|null $path
-     * @param string|null $raw
-     * @return DataResponse
-     * @throws \OCP\Files\NotFoundException
-     * @throws \OCP\Files\NotPermittedException
-     */
-    public function import(string $path = null, string $raw = null)
-    {
-        return new DataResponse($this->DatasetService->import($path, $raw));
+        return $this->DatasetService->update($datasetId, $name, $dimension1, $dimension2, $value);
     }
 
 }

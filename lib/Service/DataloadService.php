@@ -185,7 +185,7 @@ class DataloadService
     public function getDataFromDatasource(int $dataloadId)
     {
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
-        $datasetMetadata = $this->DatasetService->getOwnDataset($dataloadMetadata['dataset'], $dataloadMetadata['user_id']);
+        $datasetMetadata = $this->DatasetService->read($dataloadMetadata['dataset'], $dataloadMetadata['user_id']);
 
         if (!empty($datasetMetadata)) {
             $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until datasource table is renamed link=>option

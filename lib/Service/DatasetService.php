@@ -19,6 +19,7 @@ use OCA\Analytics\Db\StorageMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\ITagManager;
 use Psr\Log\LoggerInterface;
 
@@ -98,30 +99,15 @@ class DatasetService
      * get own dataset details
      *
      * @param int $datasetId
-     * @return array
-     */
-    public function read(int $datasetId)
-    {
-        $ownDataset = $this->DatasetMapper->read($datasetId);
-        if (!empty($ownDataset)) {
-            $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
-        }
-        return $ownDataset;
-    }
-
-    /**
-     * get own dataset details
-     *
-     * @param int $datasetId
      * @param string|null $user_id
      * @return array
+     * @throws \OCP\DB\Exception
      */
-    public function getOwnDataset(int $datasetId, string $user_id = null)
+    public function read(int $datasetId, string $user_id = null): array
     {
         $ownDataset = $this->DatasetMapper->read($datasetId, $user_id);
         if (!empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
-            $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
         }
         return $ownDataset;
     }
@@ -147,25 +133,15 @@ class DatasetService
      *
      * @param int $datasetId
      * @param $name
-     * @param $subheader
-     * @param int $parent
-     * @param int $type
-     * @param $link
-     * @param $visualization
-     * @param $chart
-     * @param $chartoptions
-     * @param $dataoptions
-     * @param $dimension1
-     * @param $dimension2
-     * @param $value
+     * @param null $dimension1
+     * @param null $dimension2
+     * @param null $value
      * @return bool
+     * @throws \OCP\DB\Exception
      */
-    public function update(int $datasetId, $name, $subheader, int $parent, int $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
+    public function update(int $datasetId, $name,$dimension1 = null, $dimension2 = null, $value = null)
     {
-        if ($type === DatasourceController::DATASET_TYPE_GROUP) {
-            $parent = 0;
-        }
-        return $this->DatasetMapper->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+        return $this->DatasetMapper->update($datasetId, $name, $dimension1, $dimension2, $value);
     }
 
     /**
@@ -174,7 +150,8 @@ class DatasetService
      * @param string|null $path
      * @param string|null $raw
      * @return int
-     * @throws \OCP\Files\NotFoundException
+     * @throws NotFoundException
+     * @throws \OCP\DB\Exception
      * @throws \OCP\Files\NotPermittedException
      */
     public function import(string $path = null, string $raw = null)
@@ -244,6 +221,7 @@ class DatasetService
      *
      * @param int $datasetId
      * @return DataDownloadResponse
+     * @throws \OCP\DB\Exception
      */
     public function export(int $datasetId)
     {
@@ -267,17 +245,11 @@ class DatasetService
      *
      * @param int $datasetId
      * @return bool
+     * @throws \OCP\DB\Exception
      */
     public function delete(int $datasetId)
     {
-        $this->ShareService->deleteShareByReport($datasetId);
-        $this->StorageMapper->deleteByDataset($datasetId);
-        $this->DatasetMapper->delete($datasetId);
-        $this->ThresholdService->deleteThresholdByReport($datasetId);
-        $this->DataloadMapper->deleteDataloadByDataset($datasetId);
-        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
-        $this->setFavorite($datasetId, 'false');
-        return true;
+        return $this->DatasetMapper->delete($datasetId);
     }
 
     /**

@@ -73,7 +73,7 @@ class ApiDataController extends ApiController
     public function addData(int $datasetId)
     {
         $params = $this->request->getParams();
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -110,7 +110,7 @@ class ApiDataController extends ApiController
     {
         $message = 'No -data- parameter';
         $params = $this->request->getParams();
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -149,7 +149,7 @@ class ApiDataController extends ApiController
         $message = 'No -delete- parameter';
         $params = $this->request->getParams();
         //$this->logger->debug('array: ' . json_encode($params));
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -187,7 +187,7 @@ class ApiDataController extends ApiController
     public function dataGetV3(int $datasetId)
     {
         $params = $this->request->getParams();
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
 
         if (!empty($datasetMetadata)) {
             $options = json_decode($params['filteroptions'], true);
@@ -252,7 +252,7 @@ class ApiDataController extends ApiController
      */
     public function datasetsDetailV3(int $datasetId)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
         unset($datasetMetadata['user_id']
             , $datasetMetadata['link']
             , $datasetMetadata['dimension3']

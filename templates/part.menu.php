@@ -14,13 +14,6 @@
               title="<?php p($l->t('Options')); ?>"></span>
     <div id="reportMenu" class="popovermenu" style="top: 33px; right: -5px;">
         <ul id="reportMenuMain">
-            <li id="saveIcon">
-                <button>
-                        <span class="icon-analytics-save-warning"
-                              title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></span>
-                    <span><?php p($l->t('Save view')); ?></span>
-                </button>
-            </li>
             <li>
                 <button id="drilldownIcon">
                     <span class="icon-analytics-drilldown"></span>
@@ -52,7 +45,20 @@
                     <a id="downlaodChartLink" href='' download="Chart.png" hidden>-</a>
                 </button>
             </li>
-
+            <li class="action-separator"></li>
+            <li id="saveIcon">
+                <button>
+                    <span class="icon-analytics-save-warning"
+                          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></span>
+                    <span><?php p($l->t('Save changes')); ?></span>
+                </button>
+            </li>
+            <li id="saveIconNew">
+                <button>
+                    <span class="icon-add" title="<?php p($l->t('Save as new report')); ?>"></span>
+                    <span><?php p($l->t('Save as new report')); ?></span>
+                </button>
+            </li>
         </ul>
         <ul id="reportMenuAnalysis" style="display: none !important;">
             <li id="backIcon">

@@ -459,8 +459,8 @@ OCA.Analytics.Filter = {
 };
 
 OCA.Analytics.Filter.Backend = {
-    updateDataset: function () {
-        const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
+    newReport: function () {
+        const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
 
         if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
             OCA.Analytics.currentReportData.options.filteroptions = {};
@@ -472,7 +472,34 @@ OCA.Analytics.Filter.Backend = {
 
         $.ajax({
             type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/copy'),
+            data: {
+                'reportId': reportId,
+                'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
+                'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,
+                'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
+            },
+            success: function (data) {
+                OCA.Analytics.Navigation.init(data);
+            }
+        });
+
+    },
+
+    updateReport: function () {
+        const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
+
+        if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
+            OCA.Analytics.currentReportData.options.filteroptions = {};
+        } else {
+            OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
+        }
+
+        OCA.Analytics.unsavedFilters = false;
+
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/report/') + reportId + '/options',
             data: {
                 'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
                 'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,
@@ -484,4 +511,24 @@ OCA.Analytics.Filter.Backend = {
             }
         });
     },
+
+    saveRefresh: function (evt) {
+        OCA.Analytics.UI.hideReportMenu();
+        let refresh = evt.target.id;
+        refresh = parseInt(refresh.substring(7));
+        const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
+
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/report/') + datasetId + '/refresh',
+            data: {
+                'refresh': refresh,
+            },
+            success: function () {
+                OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
+                OCA.Analytics.Backend.startRefreshTimer(refresh);
+            }
+        });
+    },
+
 };

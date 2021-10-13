@@ -381,6 +381,7 @@ OCA.Analytics.Navigation = {
     },
 
     createDataset: function (file = '') {
+        //ToDo: create separate one for creation from file
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/report'),

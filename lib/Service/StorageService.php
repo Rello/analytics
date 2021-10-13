@@ -44,6 +44,7 @@ class StorageService
      * @param $datasetId
      * @param $options
      * @return array
+     * @throws \OCP\DB\Exception
      */
     public function read($datasetId, $options)
     {

@@ -158,7 +158,7 @@ class DataloadController extends Controller
      */
     public function updateData(int $datasetId, $dimension1, $dimension2, $value)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = $errorMessage = 0;
             $action = array();
@@ -196,7 +196,7 @@ class DataloadController extends Controller
      */
     public function deleteData(int $datasetId, $dimension1, $dimension2)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
         if (!empty($datasetMetadata)) {
             $result = $this->StorageService->delete($datasetId, $dimension1, $dimension2);
             return new DataResponse(['delete' => $result]);
@@ -216,7 +216,7 @@ class DataloadController extends Controller
      */
     public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
         if (!empty($datasetMetadata)) {
             $result = $this->StorageService->deleteSimulate($datasetId, $dimension1, $dimension2);
             return new DataResponse(['delete' => $result]);
@@ -236,7 +236,7 @@ class DataloadController extends Controller
      */
     public function importClipboard($datasetId, $import)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = $errorMessage = $errorCounter = 0;
             $delimiter = '';
@@ -294,7 +294,7 @@ class DataloadController extends Controller
      */
     public function importFile(int $datasetId, $path)
     {
-        $datasetMetadata = $this->DatasetService->getOwnDataset($datasetId);
+        $datasetMetadata = $this->DatasetService->read($datasetId);
         if (!empty($datasetMetadata)) {
             $insert = $update = 0;
             $datasetMetadata['link'] = $path;
