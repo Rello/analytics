@@ -237,6 +237,8 @@ OCA.Analytics.Navigation = {
     },
 
     handleNewDatasetButton: function () {
+        const button = document.getElementById('newDatasetButton');
+        button.classList.add('loading');
         OCA.Analytics.Navigation.createDataset();
     },
 

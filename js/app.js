@@ -799,8 +799,9 @@ OCA.Analytics.Backend = {
 
         let url;
         if (document.getElementById('sharingToken').value === '') {
-            const datasetId = document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
-            url = OC.generateUrl('apps/analytics/data/') + datasetId;
+            const reportId = document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
+            if (parseInt(reportId) === OCA.Analytics.Navigation.newReportId) return; //don´t load for new reports
+            url = OC.generateUrl('apps/analytics/data/') + reportId;
         } else {
             const token = document.getElementById('sharingToken').value;
             url = OC.generateUrl('apps/analytics/data/public/') + token;

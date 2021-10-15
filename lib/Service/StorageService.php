@@ -50,7 +50,6 @@ class StorageService
     {
         $availableDimensions = array();
         $header = array();
-
         $datasetMetadata = $this->DatasetService->read($datasetId);
 
         // output the dimensions available for filtering of this dataset

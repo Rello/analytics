@@ -100,13 +100,13 @@ class DatasetService
      *
      * @param int $datasetId
      * @param string|null $user_id
-     * @return array
+     * @return array|bool
      * @throws \OCP\DB\Exception
      */
     public function read(int $datasetId, string $user_id = null): array
     {
         $ownDataset = $this->DatasetMapper->read($datasetId, $user_id);
-        if (!empty($ownDataset)) {
+        if ($ownDataset) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
         }
         return $ownDataset;

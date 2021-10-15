@@ -942,7 +942,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     importFileData: function (path) {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('importDataFileButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -951,7 +951,7 @@ OCA.Analytics.Sidebar.Backend = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/data/importFile'),
             data: {
-                'datasetId': datasetId,
+                'reportId': reportId,
                 'path': path,
             },
             success: function (data) {

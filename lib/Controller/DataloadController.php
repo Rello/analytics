@@ -149,36 +149,17 @@ class DataloadController extends Controller
      * update data from input form
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @param $value
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function updateData(int $datasetId, $dimension1, $dimension2, $value)
+    public function updateData(int $reportId, $dimension1, $dimension2, $value)
     {
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        if (!empty($datasetMetadata)) {
-            $insert = $update = $errorMessage = 0;
-            $action = array();
-            $value = $this->floatvalue($value);
-            if ($value === false) {
-                $errorMessage = $this->l10n->t('3rd field must be a valid number');
-            } else {
-                $action = $this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
-                $insert = $insert + $action['insert'];
-                $update = $update + $action['update'];
-            }
-
-            $result = [
-                'insert' => $insert,
-                'update' => $update,
-                'error' => $errorMessage,
-                'validate' => $action['validate'],
-            ];
-
-            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
+        $result = $this->DataloadService->updateData($reportId, $dimension1, $dimension2, $value);
+        if ($result) {
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
@@ -189,17 +170,16 @@ class DataloadController extends Controller
      * delete data from input form
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @return DataResponse|NotFoundResponse
      */
-    public function deleteData(int $datasetId, $dimension1, $dimension2)
+    public function deleteData(int $reportId, $dimension1, $dimension2)
     {
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        if (!empty($datasetMetadata)) {
-            $result = $this->StorageService->delete($datasetId, $dimension1, $dimension2);
-            return new DataResponse(['delete' => $result]);
+        $result = $this->DataloadService->deleteData($reportId, $dimension1, $dimension2);
+        if ($result) {
+            return new DataResponse($result);
         } else {
             return new NotFoundResponse();
         }
@@ -209,17 +189,16 @@ class DataloadController extends Controller
      * Simulate delete data from input form
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @return DataResponse|NotFoundResponse
      */
-    public function deleteDataSimulate(int $datasetId, $dimension1, $dimension2)
+    public function deleteDataSimulate(int $reportId, $dimension1, $dimension2)
     {
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        if (!empty($datasetMetadata)) {
-            $result = $this->StorageService->deleteSimulate($datasetId, $dimension1, $dimension2);
-            return new DataResponse(['delete' => $result]);
+        $result = $this->DataloadService->deleteDataSimulate($reportId, $dimension1, $dimension2);
+        if ($result) {
+            return new DataResponse($result);
         } else {
             return new NotFoundResponse();
         }
@@ -229,53 +208,15 @@ class DataloadController extends Controller
      * Import clipboard data
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $import
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function importClipboard($datasetId, $import)
+    public function importClipboard($reportId, $import)
     {
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        if (!empty($datasetMetadata)) {
-            $insert = $update = $errorMessage = $errorCounter = 0;
-            $delimiter = '';
-
-            if ($import === '') {
-                $errorMessage = $this->l10n->t('No data');
-            } else {
-                $delimiter = $this->detectDelimiter($import);
-                $rows = str_getcsv($import, "\n");
-
-                foreach ($rows as &$row) {
-                    $row = str_getcsv($row, $delimiter);
-                    $numberOfColumns = count($row);
-                    // last column needs to be a float
-                    $row[2] = $this->floatvalue($row[$numberOfColumns - 1]);
-                    if ($row[2] === false) {
-                        $errorCounter++;
-                    } else {
-                        if ($numberOfColumns < 3) $row[1] = null;
-                        $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2]);
-                        $insert = $insert + $action['insert'];
-                        $update = $update + $action['update'];
-                    }
-                    if ($errorCounter === 2) {
-                        // first error is ignored; might be due to header row
-                        $errorMessage = $this->l10n->t('Last field must be a valid number');
-                        break;
-                    }
-                }
-            }
-
-            $result = [
-                'insert' => $insert,
-                'update' => $update,
-                'delimiter' => $delimiter,
-                'error' => $errorMessage,
-            ];
-
-            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+        $result = $this->DataloadService->importClipboard($reportId, $import);
+        if ($result) {
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
@@ -286,66 +227,18 @@ class DataloadController extends Controller
      * Import data into dataset from an internal or external file
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $reportId
      * @param $path
      * @return DataResponse|NotFoundResponse
-     * @throws NotFoundException
      * @throws Exception
      */
-    public function importFile(int $datasetId, $path)
+    public function importFile(int $reportId, $path)
     {
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        if (!empty($datasetMetadata)) {
-            $insert = $update = 0;
-            $datasetMetadata['link'] = $path;
-            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_FILE, $datasetMetadata);
-
-            if ($result['error'] === 0) {
-                foreach ($result['data'] as &$row) {
-                    $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2]);
-                    $insert = $insert + $action['insert'];
-                    $update = $update + $action['update'];
-                }
-            }
-
-            $result = [
-                'insert' => $insert,
-                'update' => $update,
-                'error' => $result['error'],
-            ];
-
-            if ($result['error'] === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+        $result = $this->DataloadService->importFile($reportId, $path);
+        if ($result) {
             return new DataResponse($result);
         } else {
             return new NotFoundResponse();
-        }
-    }
-
-    private function detectDelimiter($data): string
-    {
-        $delimiters = ["\t", ";", "|", ","];
-        $data_2 = null;
-        $delimiter = $delimiters[0];
-        foreach ($delimiters as $d) {
-            $firstRow = str_getcsv($data, "\n")[0];
-            $data_1 = str_getcsv($firstRow, $d);
-            if (sizeof($data_1) > sizeof($data_2)) {
-                $delimiter = $d;
-                $data_2 = $data_1;
-            }
-        }
-        return $delimiter;
-    }
-
-    private function floatvalue($val)
-    {
-        $val = str_replace(",", ".", $val);
-        $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        $val = preg_replace('/[^0-9-.]+/', '', $val);
-        if (is_numeric($val)) {
-            return number_format(floatval($val), 2, '.', '');
-        } else {
-            return false;
         }
     }
 }

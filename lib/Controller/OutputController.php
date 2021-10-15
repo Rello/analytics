@@ -89,7 +89,7 @@ class OutputController extends Controller
      *
      * @NoAdminRequired
      * @param $reportMetadata
-     * @return array|NotFoundException
+     * @return array
      * @throws Exception
      */
     private function getData($reportMetadata)
@@ -97,7 +97,11 @@ class OutputController extends Controller
         $datasource = (int)$reportMetadata['type'];
         if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             // Internal data
-            $result = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata['filteroptions']);
+            if ((int)$reportMetadata['dataset'] !== 0) {
+                $result = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata['filteroptions']);
+            } else {
+                $result['error'] = 'inconsistent report';
+            }
         } else {
             // Realtime data
             $result = $this->DatasourceController->read($datasource, $reportMetadata);

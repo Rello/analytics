@@ -118,11 +118,12 @@ class ReportService
      * get own report details
      *
      * @param int $reportId
+     * @param string|null $user_id
      * @return array
      */
-    public function read(int $reportId)
+    public function read(int $reportId, string $user_id = null)
     {
-        $ownReport = $this->ReportMapper->read($reportId);
+        $ownReport = $this->ReportMapper->read($reportId, $user_id);
         if (!empty($ownReport)) {
             $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
             $ownReport = $this->VariableService->replaceTextVariables($ownReport);
