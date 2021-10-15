@@ -353,14 +353,14 @@ OCA.Analytics.Advanced.Threshold = {
     },
 
     createThreashold: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const url = OC.generateUrl('apps/analytics/threshold');
 
         $.ajax({
             type: 'POST',
             url: url,
             data: {
-                'reportId': datasetId,
+                'reportId': reportId,
                 'dimension1': document.getElementById('sidebarThresholdDimension1').value,
                 'option': document.getElementById('sidebarThresholdOption').value,
                 'value': document.getElementById('sidebarThresholdValue').value,

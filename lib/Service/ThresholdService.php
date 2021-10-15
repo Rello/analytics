@@ -11,7 +11,7 @@
 
 namespace OCA\Analytics\Service;
 
-use OCA\Analytics\Db\DatasetMapper;
+use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
 use Psr\Log\LoggerInterface;
@@ -20,20 +20,20 @@ class ThresholdService
 {
     private $logger;
     private $ThresholdMapper;
-    private $DatasetMapper;
+    private $ReportMapper;
     private $NotificationManager;
 
     public function __construct(
         LoggerInterface $logger,
         ThresholdMapper $ThresholdMapper,
         NotificationManager $NotificationManager,
-        DatasetMapper $DatasetMapper
+        ReportMapper $ReportMapper
     )
     {
         $this->logger = $logger;
         $this->ThresholdMapper = $ThresholdMapper;
         $this->NotificationManager = $NotificationManager;
-        $this->DatasetMapper = $DatasetMapper;
+        $this->ReportMapper = $ReportMapper;
     }
 
     /**
@@ -88,21 +88,6 @@ class ThresholdService
     }
 
     /**
-     * Delete threshold for dataset
-     *
-     * @param int $reportId
-     * @return bool
-     */
-    public function deleteThresholdByReport(int $reportId)
-    {
-        $thresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
-        foreach ($thresholds as $threshold) {
-            $this->ThresholdMapper->deleteThreshold($threshold['id']);
-        }
-        return true;
-    }
-
-    /**
      * validate threshold
      *
      * @param int $reportId
@@ -116,7 +101,7 @@ class ThresholdService
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
-        $datasetMetadata = $this->DatasetMapper->readOptions($reportId);
+        $datasetMetadata = $this->ReportMapper->read($reportId);
 
         foreach ($thresholds as $threshold) {
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {

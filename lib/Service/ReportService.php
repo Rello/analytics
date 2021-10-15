@@ -16,6 +16,7 @@ use OCA\Analytics\Controller\DatasourceController;
 use OCA\Analytics\Db\DataloadMapper;
 use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\StorageMapper;
+use OCA\Analytics\Db\ThresholdMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Files\IRootFolder;
@@ -31,7 +32,7 @@ class ReportService
     private $DatasetService;
     private $StorageMapper;
     private $ReportMapper;
-    private $ThresholdService;
+    private $ThresholdMapper;
     private $DataloadMapper;
     private $ActivityManager;
     private $rootFolder;
@@ -45,7 +46,7 @@ class ReportService
         DatasetService $DatasetService,
         StorageMapper $StorageMapper,
         ReportMapper $ReportMapper,
-        ThresholdService $ThresholdService,
+        ThresholdMapper $ThresholdMapper,
         DataloadMapper $DataloadMapper,
         ActivityManager $ActivityManager,
         IRootFolder $rootFolder,
@@ -57,7 +58,7 @@ class ReportService
         $this->tagManager = $tagManager;
         $this->ShareService = $ShareService;
         $this->DatasetService = $DatasetService;
-        $this->ThresholdService = $ThresholdService;
+        $this->ThresholdMapper = $ThresholdMapper;
         $this->StorageMapper = $StorageMapper;
         $this->ReportMapper = $ReportMapper;
         $this->DataloadMapper = $DataloadMapper;
@@ -376,7 +377,7 @@ class ReportService
         /**todo**/
         // delete dataset when last report
         $this->ReportMapper->delete($reportId);
-        $this->ThresholdService->deleteThresholdByReport($reportId);
+        $this->ThresholdMapper->deleteThresholdByReport($reportId);
         $this->DataloadMapper->deleteDataloadByDataset($reportId);
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         $this->setFavorite($reportId, 'false');

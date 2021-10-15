@@ -12,29 +12,24 @@
 namespace OCA\Analytics\Db;
 
 use OCP\IDBConnection;
-use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
 class ThresholdMapper
 {
     private $userId;
-    private $l10n;
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_threshold';
 
     public function __construct(
         $userId,
-        IL10N $l10n,
         IDBConnection $db,
         LoggerInterface $logger
     )
     {
         $this->userId = $userId;
-        $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
-        self::TABLE_NAME;
     }
 
     public function createThreshold($reportId, $dimension1, $value, $option, $severity)
@@ -48,6 +43,7 @@ class ThresholdMapper
                 'value' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($severity),
+                'dataset' => $sql->createNamedParameter($reportId),
             ]);
         $sql->execute();
         return (int)$sql->getLastInsertId();
@@ -88,6 +84,16 @@ class ThresholdMapper
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($thresholdId)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
+        $sql->execute();
+        return true;
+    }
+
+    public function deleteThresholdByReport($reportId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
         $sql->execute();
         return true;

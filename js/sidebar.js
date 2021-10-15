@@ -757,15 +757,15 @@ OCA.Analytics.Sidebar.Share = {
 OCA.Analytics.Sidebar.Backend = {
 
     exporteDataset: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        window.open(OC.generateUrl('apps/analytics/report/export/') + datasetId, '_blank')
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
     },
 
-    deleteDataset: function (datasetId) {
+    deleteDataset: function (reportId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         $.ajax({
             type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/report/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + reportId,
             success: function (data) {
                 OCA.Analytics.Navigation.init();
                 OCA.Analytics.Navigation.handleOverviewButton();
@@ -774,7 +774,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     updateDataset: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('sidebarDatasetUpdateButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -787,7 +787,7 @@ OCA.Analytics.Sidebar.Backend = {
 
         $.ajax({
             type: 'PUT',
-            url: OC.generateUrl('apps/analytics/report/') + datasetId,
+            url: OC.generateUrl('apps/analytics/report/') + reportId,
             data: {
                 'name': document.getElementById('sidebarDatasetName').value,
                 'subheader': document.getElementById('sidebarDatasetSubheader').value,
@@ -811,7 +811,7 @@ OCA.Analytics.Sidebar.Backend = {
                 OCA.Analytics.Sidebar.resetImportantFields();
                 if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
-                    OCA.Analytics.Navigation.init(datasetId);
+                    OCA.Analytics.Navigation.init(reportId);
                 } else {
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.currentReportData.options.chartoptions = '';
@@ -826,13 +826,13 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     updateData: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('updateDataButton');
         button.classList.add('loading');
         button.disabled = true;
         $.ajax({
             type: 'PUT',
-            url: OC.generateUrl('apps/analytics/data/') + datasetId,
+            url: OC.generateUrl('apps/analytics/data/') + reportId,
             data: {
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
@@ -855,7 +855,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     deleteDataSimulate: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('deleteDataButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -863,7 +863,7 @@ OCA.Analytics.Sidebar.Backend = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/data/deleteDataSimulate'),
             data: {
-                'datasetId': datasetId,
+                'reportId': reportId,
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
             },
@@ -886,13 +886,13 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     deleteData: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('deleteDataButton');
         button.classList.add('loading');
         button.disabled = true;
         $.ajax({
             type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/data/') + datasetId,
+            url: OC.generateUrl('apps/analytics/data/') + reportId,
             data: {
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
@@ -909,7 +909,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     importCsvData: function () {
-        const datasetId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('importDataClipboardButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -917,7 +917,7 @@ OCA.Analytics.Sidebar.Backend = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/data/importCSV'),
             data: {
-                'datasetId': datasetId,
+                'reportId': reportId,
                 'import': document.getElementById('importDataClipboardText').value,
             },
             success: function (data) {
@@ -971,19 +971,6 @@ OCA.Analytics.Sidebar.Backend = {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
                 button.classList.remove('loading');
                 button.disabled = false;
-            }
-        });
-    },
-
-    testButton: function (thresholdId) {
-
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/load'),
-            data: {
-                'dataloadId': 1,
-            },
-            success: function (data) {
             }
         });
     },

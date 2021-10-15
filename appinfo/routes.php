@@ -22,7 +22,8 @@ return [
         ['name' => 'report#read', 'url' => '/report/{reportId}', 'verb' => 'GET'],
         ['name' => 'report#delete', 'url' => '/report/{reportId}', 'verb' => 'DELETE'],
         ['name' => 'report#update', 'url' => '/report/{reportId}', 'verb' => 'PUT'],
-        ['name' => 'report#updateOptions', 'url' => '/report/{reportId}', 'verb' => 'POST'],
+        ['name' => 'report#createCopy', 'url' => '/report/copy', 'verb' => 'POST'],
+        ['name' => 'report#updateOptions', 'url' => '/report/{reportId}/options', 'verb' => 'POST'],
         ['name' => 'report#updateRefresh', 'url' => '/report/{reportId}/refresh', 'verb' => 'POST'],
         ['name' => 'report#getOwnFavoriteReports', 'url' => '/favorites', 'verb' => 'GET'],
         ['name' => 'report#setFavorite', 'url' => '/favorite/{reportId}', 'verb' => 'POST'],
@@ -43,8 +44,8 @@ return [
         ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
 
         // Data Maintenance
-        ['name' => 'dataload#updateData', 'url' => '/data/{datasetId}', 'verb' => 'PUT'],
-        ['name' => 'dataload#deleteData', 'url' => '/data/{datasetId}', 'verb' => 'DELETE'],
+        ['name' => 'dataload#updateData', 'url' => '/data/{reportId}', 'verb' => 'PUT'],
+        ['name' => 'dataload#deleteData', 'url' => '/data/{reportId}', 'verb' => 'DELETE'],
         ['name' => 'dataload#deleteDataSimulate', 'url' => '/data/deleteDataSimulate', 'verb' => 'POST'],
         ['name' => 'dataload#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
         ['name' => 'dataload#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
