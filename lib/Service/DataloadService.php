@@ -56,24 +56,33 @@ class DataloadService
     /**
      * create a new dataload
      *
-     * @param int $datasetId
+     * @param $datasetId
+     * @param $reportId
      * @param int $datasourceId
      * @return int
+     * @throws \OCP\DB\Exception
      */
-    public function create(int $datasetId, int $datasourceId)
+    public function create($datasetId, $reportId, int $datasourceId)
     {
-        return $this->DataloadMapper->create($datasetId, $datasourceId);
+        if ($datasetId === null) {
+            $datasetId = $this->ReportService->read($reportId)['dataset'];
+        }
+        return $this->DataloadMapper->create((int)$datasetId, $datasourceId);
     }
 
     /**
-     * get all dataloads for a dataset
+     * get all dataloads for a dataset or report
      *
      * @param int $datasetId
+     * @param $reportId
      * @return array
      */
-    public function read(int $datasetId)
+    public function read($datasetId, $reportId)
     {
-        return $this->DataloadMapper->read($datasetId);
+        if ($datasetId === null) {
+            $datasetId = $this->ReportService->read($reportId)['dataset'];
+        }
+        return $this->DataloadMapper->read((int)$datasetId);
     }
 
     /**

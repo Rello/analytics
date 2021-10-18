@@ -52,7 +52,7 @@ return [
 
         // Dataloads
         ['name' => 'dataload#create', 'url' => '/dataload', 'verb' => 'POST'],
-        ['name' => 'dataload#read', 'url' => '/dataload/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'dataload#read', 'url' => '/dataload', 'verb' => 'GET'],
         ['name' => 'dataload#update', 'url' => '/dataload/{dataloadId}', 'verb' => 'PUT'],
         ['name' => 'dataload#delete', 'url' => '/dataload/{dataloadId}', 'verb' => 'DELETE'],
         ['name' => 'dataload#simulate', 'url' => '/dataload/simulate', 'verb' => 'POST'],

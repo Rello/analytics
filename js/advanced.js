@@ -24,7 +24,7 @@ OCA.Analytics.Advanced.Dataload = {
     dataloadArray: [],
 
     tabContainerDataload: function () {
-        const datasetId = document.getElementById('app-sidebar').dataset.id;
+        const reportId = document.getElementById('app-sidebar').dataset.id;
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderDataload').classList.add('selected');
@@ -39,7 +39,11 @@ OCA.Analytics.Advanced.Dataload = {
 
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataload/') + datasetId,
+            url: OC.generateUrl('apps/analytics/dataload'),
+            data: {
+                'datasetId': null,
+                'reportId': reportId,
+            },
             success: function (data) {
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateDataload').content, true);
@@ -145,7 +149,8 @@ OCA.Analytics.Advanced.Dataload = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataload'),
             data: {
-                'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
+                'datasetId': null,
+                'reportId': parseInt(document.getElementById('app-sidebar').dataset.id),
                 'datasourceId': document.getElementById('datasourceSelect').value,
             },
             success: function () {
