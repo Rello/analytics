@@ -14,10 +14,12 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Service\DatasetService;
+use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\StorageService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\Constants;
 use OCP\IRequest;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
@@ -34,6 +36,7 @@ class ApiDataController extends ApiController
     private $userSession;
     private $ActivityManager;
     private $DatasetService;
+    private $ReportService;
     private $StorageService;
 	private $StorageMapper;
 
@@ -44,6 +47,7 @@ class ApiDataController extends ApiController
         IUserSession $userSession,
         ActivityManager $ActivityManager,
         DatasetService $DatasetService,
+        ReportService $ReportService,
         StorageService $StorageService,
 		StorageMapper $StorageMapper
     )
@@ -57,6 +61,7 @@ class ApiDataController extends ApiController
         $this->userSession = $userSession;
         $this->ActivityManager = $ActivityManager;
         $this->DatasetService = $DatasetService;
+        $this->ReportService = $ReportService;
         $this->StorageService = $StorageService;
         $this->StorageMapper = $StorageMapper;
     }
@@ -177,26 +182,26 @@ class ApiDataController extends ApiController
     ///
 
     /**
-     * get all data of a dataset and respect filter options
+     * get all data of a report and respect filter options
      * @CORS
      * @NoCSRFRequired
      * @NoAdminRequired
      * @return DataResponse
      * @throws \Exception
      */
-    public function dataGetV3(int $datasetId)
+    public function dataGetV3(int $reportId)
     {
         $params = $this->request->getParams();
-        $datasetMetadata = $this->DatasetService->read($datasetId);
+        $reportMetadata = $this->ReportService->read($reportId);
 
-        if (!empty($datasetMetadata)) {
-            $options = json_decode($params['filteroptions'], true);
-            $allData = $this->StorageMapper->read($datasetMetadata['id'], $options);
+        if (!empty($reportMetadata)) {
+            $options = json_decode($reportMetadata['filteroptions'], true);
+            $allData = $this->StorageMapper->read((int)$reportMetadata['dataset'], $options);
 
             return new DataResponse($allData, HTTP::STATUS_OK);
         } else {
             return new DataResponse([
-                'message' => 'No data available for given $datasetId',
+                'message' => 'No data available for given report id',
             ], HTTP::STATUS_OK);
         }
     }
@@ -237,9 +242,22 @@ class ApiDataController extends ApiController
      * @return DataResponse
      * @throws \Exception
      */
-    public function datasetsIndexV3()
+    public function datasetIndexV3()
     {
         return $this->DatasetService->index();
+    }
+
+    /**
+     * list reports
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     * @return DataResponse
+     * @throws \Exception
+     */
+    public function reportIndexV3()
+    {
+        return $this->ReportService->index();
     }
 
     /**
@@ -343,11 +361,13 @@ class ApiDataController extends ApiController
         $response->setData($array)->render();
         return $response;
     }
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://nc20/nextcloud/apps/analytics/api/1.0/adddata/158
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}]' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"data":[{"Spalte 1": "a", "Spalte 2": "a", "toller wert": "1"}, {"dimension1": "b", "dimension2": "b", "value": "2"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"dimension1": "x", "dimension2": "x", "dimension3": "333,3"}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/1.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '[{"Spalte 1": "x", "Spalte 2": "x", "toller wert": "333,3"}]' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/adddata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"data":[{"Spalte 1": "a", "Spalte 2": "a", "toller wert": "1"}, {"dimension1": "b", "dimension2": "b", "value": "2"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/adddata/158
 
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"delete":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/deletedata/158
-    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"del":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://nc18/nextcloud/apps/analytics/api/2.0/deletedata/158
-
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"delete":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/deletedata/158
+    // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"del":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/deletedata/158
+    // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/data/52 --insecure
+    // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/datasets --insecure
+    // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/reports --insecure
 }

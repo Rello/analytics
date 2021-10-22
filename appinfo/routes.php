@@ -86,8 +86,9 @@ return [
         ['name' => 'ApiData#preflighted_cors', 'url' => '/api/3.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         ['name' => 'ApiData#dataAddV3', 'url' => '/api/3.0/data/{datasetId}/add', 'verb' => 'POST'],
         ['name' => 'ApiData#dataDeleteV3', 'url' => '/api/3.0/data/{datasetId}/delete', 'verb' => 'POST'],
-        ['name' => 'ApiData#dataGetV3', 'url' => '/api/3.0/data/{datasetId}', 'verb' => 'GET'],
-        ['name' => 'ApiData#datasetsIndexV3', 'url' => '/api/3.0/datasets', 'verb' => 'GET'],
+        ['name' => 'ApiData#dataGetV3', 'url' => '/api/3.0/data/{reportId}', 'verb' => 'GET'],
+        ['name' => 'ApiData#datasetIndexV3', 'url' => '/api/3.0/datasets', 'verb' => 'GET'],
+        ['name' => 'ApiData#reportIndexV3', 'url' => '/api/3.0/reports', 'verb' => 'GET'],
         ['name' => 'ApiData#datasetsDetailV3', 'url' => '/api/3.0/datasets/{datasetId}', 'verb' => 'GET'],
 
         // wizard

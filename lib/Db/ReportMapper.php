@@ -48,6 +48,7 @@ class ReportMapper
             ->addSelect('name')
             ->addSelect('type')
             ->addSelect('parent')
+            ->addSelect('dataset')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->orderBy('parent', 'ASC')
             ->addOrderBy('name', 'ASC');
