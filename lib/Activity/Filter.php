@@ -74,7 +74,7 @@ class Filter implements \OCP\Activity\IFilter
      */
     public function filterTypes(array $types)
     {
-        return array_merge($types, ['analytics_dataset'], ['analytics_data']);
+        return array_merge($types, ['analytics_report'], ['analytics_dataset'], ['analytics_data']);
     }
 
     /**

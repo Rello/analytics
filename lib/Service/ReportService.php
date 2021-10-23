@@ -192,8 +192,9 @@ class ReportService
      */
     public function create(): int
     {
-        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-        return $this->ReportMapper->create();
+        $reportId = $this->ReportMapper->create();
+        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
+        return $reportId;
     }
 
     /**
@@ -237,7 +238,7 @@ class ReportService
      */
     public function createFromFile($file = '')
     {
-        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
+        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
         $reportId = $this->ReportMapper->create();
 
         if ($file !== '') {
@@ -405,6 +406,7 @@ class ReportService
      */
     public function delete(int $reportId): bool
     {
+        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
         $this->ShareService->deleteShareByReport($reportId);
         $this->StorageMapper->deleteByDataset($reportId);
         /**todo**/
@@ -412,7 +414,6 @@ class ReportService
         $this->ReportMapper->delete($reportId);
         $this->ThresholdMapper->deleteThresholdByReport($reportId);
         $this->DataloadMapper->deleteDataloadByDataset($reportId);
-        $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
         $this->setFavorite($reportId, 'false');
         return true;
     }

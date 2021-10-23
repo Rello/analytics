@@ -11,45 +11,49 @@
 
 namespace OCA\Analytics\Activity;
 
+use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\DatasetMapper;
 use OCA\Analytics\Db\ShareMapper;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
-use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
 class ActivityManager
 {
-    const OBJECT_DATASET = 'analytics_dataset';
+    const OBJECT_REPORT = 'analytics_report';
     const OBJECT_DATA = 'analytics_data';
-    const SUBJECT_DATASET_ADD = 'dataset_add';
-    const SUBJECT_DATASET_DELETE = 'dataset_delete';
-    const SUBJECT_DATASET_SHARE = 'dataset_share';
+    const SUBJECT_REPORT_ADD = 'report_add';
+    const SUBJECT_REPORT_DELETE = 'report_delete';
+    const SUBJECT_REPORT_SHARE = 'report_share';
     const SUBJECT_DATA_ADD = 'data_add';
     const SUBJECT_DATA_ADD_API = 'data_add_api';
     const SUBJECT_DATA_ADD_IMPORT = 'data_add_import';
     const SUBJECT_DATA_ADD_DATALOAD = 'data_add_dataload';
 
+    const SUBJECT_REPORT_ADD_depr = 'dataset_add';
+    const SUBJECT_REPORT_DELETE_depr = 'dataset_delete';
+    const SUBJECT_REPORT_SHARE_depr = 'dataset_share';
+
     private $manager;
-    private $l10n;
     private $userId;
     private $ShareMapper;
     private $logger;
+    private $ReportMapper;
     private $DatasetMapper;
 
     public function __construct(
         IManager $manager,
-        IL10N $l10n,
         ShareMapper $ShareMapper,
         $userId,
+        ReportMapper $ReportMapper,
         DatasetMapper $DatasetMapper,
         LoggerInterface $logger
     )
     {
         $this->manager = $manager;
-        $this->l10n = $l10n;
         $this->userId = $userId;
         $this->ShareMapper = $ShareMapper;
+        $this->ReportMapper = $ReportMapper;
         $this->DatasetMapper = $DatasetMapper;
         $this->logger = $logger;
     }
@@ -73,21 +77,28 @@ class ActivityManager
     }
 
     /**
-     * @param $datasetId
+     * @param $reportId
      * @param $eventType
      * @param $eventSubject
      * @param string|null $user_id
      * @return IEvent
+     * @throws \OCP\DB\Exception
      */
-    private function createEvent($datasetId, $eventType, $eventSubject, string $user_id = null)
+    private function createEvent($objectId, $eventType, $eventSubject, string $user_id = null)
     {
-        $datasetName = $datasetId !== 0 ? $this->DatasetMapper->read($datasetId)['name'] : '';
+        if ($eventSubject === ActivityManager::SUBJECT_REPORT_ADD || $eventSubject === ActivityManager::SUBJECT_REPORT_DELETE || $eventSubject === ActivityManager::SUBJECT_REPORT_SHARE) {
+            $name = $objectId !== 0 ? $this->ReportMapper->read($objectId)['name'] : '';
+        } else {
+            $name = $objectId !== 0 ? $this->DatasetMapper->read($objectId)['name'] : '';
+            $objectId = 0;
+        }
+
         if ($user_id) $this->userId = $user_id;
         $event = $this->manager->generateEvent();
         $event->setApp('analytics')
             ->setType($eventType)
             ->setAuthor($this->userId)
-            ->setObject('report', (int)$datasetId, $datasetName)
+            ->setObject('report', (int)$objectId, $name)
             ->setSubject($eventSubject, ['author' => $this->userId])
             ->setTimestamp(time());
         return $event;

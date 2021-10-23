@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 
 class NotificationManager
 {
-    const OBJECT_DATASET = 'analytics_dataset';
+    const OBJECT_REPORT = 'analytics_report';
     const SUBJECT_THRESHOLD = 'data_threshold';
     /** @var INotificationManager */
     protected $notificationManager;

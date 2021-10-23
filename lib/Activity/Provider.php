@@ -51,13 +51,16 @@ class Provider implements IProvider
         $ownActivity = ($event->getAuthor() === $this->userId);
 
         switch ($event->getSubject()) {
-            case ActivityManager::SUBJECT_DATASET_ADD:
-                $parsedSubject = $this->l10n->t('You created a new report');
+            case ActivityManager::SUBJECT_REPORT_ADD:
+            case ActivityManager::SUBJECT_REPORT_ADD_depr:
+                $parsedSubject = $this->l10n->t('You created a new report: {report}');
                 break;
-            case ActivityManager::SUBJECT_DATASET_DELETE:
+            case ActivityManager::SUBJECT_REPORT_DELETE:
+            case ActivityManager::SUBJECT_REPORT_DELETE_depr:
                 $parsedSubject = $this->l10n->t('You deleted report {report}');
                 break;
-            case ActivityManager::SUBJECT_DATASET_SHARE:
+            case ActivityManager::SUBJECT_REPORT_SHARE:
+            case ActivityManager::SUBJECT_REPORT_SHARE_depr:
                 if ($ownActivity) {
                     $parsedSubject = $this->l10n->t('You shared report {report}');
                 } else {
@@ -66,23 +69,23 @@ class Provider implements IProvider
                 break;
             case ActivityManager::SUBJECT_DATA_ADD:
                 if ($ownActivity) {
-                    $parsedSubject = $this->l10n->t('You have added new data to report {report}');
+                    $parsedSubject = $this->l10n->t('You have added new data to dataset {report}');
                 } else {
-                    $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' has added new data to report {report}');
+                    $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' has added new data to dataset {report}');
                 }
                 break;
             case ActivityManager::SUBJECT_DATA_ADD_IMPORT:
                 if ($ownActivity) {
-                    $parsedSubject = $this->l10n->t('You have imported data in report {report}');
+                    $parsedSubject = $this->l10n->t('You have imported data in dataset {report}');
                 } else {
-                    $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' has importet data in report {report}');
+                    $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' has importet data in dataset {report}');
                 }
                 break;
             case ActivityManager::SUBJECT_DATA_ADD_API:
-                $parsedSubject = $this->l10n->t('New data was add via API to report {report}');
+                $parsedSubject = $this->l10n->t('New data was add via API to dataset {report}');
                 break;
             case ActivityManager::SUBJECT_DATA_ADD_DATALOAD:
-                $parsedSubject = $this->l10n->t('New data was add via dataload to report {report}');
+                $parsedSubject = $this->l10n->t('New data was add via dataload to dataset {report}');
                 break;
         }
 
@@ -91,7 +94,7 @@ class Provider implements IProvider
             ['report' => [
                 'type' => 'highlight',
                 'id' => $event->getObjectId(),
-                'name' => basename($event->getObjectName()),
+                'name' => '"'.basename($event->getObjectName()).'"',
                 'link' => $this->Url($event->getObjectId()),
             ]]
         );

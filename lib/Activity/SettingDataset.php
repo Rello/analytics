@@ -34,7 +34,7 @@ class SettingDataset implements \OCP\Activity\ISetting
      */
     public function getIdentifier()
     {
-        return 'analytics_dataset';
+        return 'analytics_report';
     }
 
     /**

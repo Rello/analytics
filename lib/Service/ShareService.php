@@ -85,7 +85,7 @@ class ShareService
             }
         }
 
-        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
+        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_SHARE);
         return true;
     }
 

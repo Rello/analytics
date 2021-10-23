@@ -262,7 +262,7 @@ OCA.Analytics.Sidebar.Dataset = {
     handleDatasourceChange: function () {
         const type = parseInt(document.getElementById('sidebarDatasetDatasource').value);
         document.getElementById('datasetDatasourceSection').innerHTML = '';
-        //OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged();
+        OCA.Analytics.Sidebar.Dataset.indicateMetadataChanged();
 
         if (type === OCA.Analytics.TYPE_INTERNAL_DB) {
             document.getElementById('datasetDimensionSection').style.display = 'table';
@@ -812,6 +812,7 @@ OCA.Analytics.Sidebar.Backend = {
                 if (OCA.Analytics.Sidebar.Dataset.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Dataset.metadataChanged = false;
                     OCA.Analytics.Navigation.init(reportId);
+                    OCA.Analytics.Backend.getDatasetDefinitions();
                 } else {
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.currentReportData.options.chartoptions = '';
