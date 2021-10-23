@@ -70,18 +70,18 @@ class PageController extends Controller
         $params['token'] = '';
         $user = $this->userSession->getUser();
         $params['wizard'] = $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0);
-        // return new TemplateResponse($this->appName, 'main', $params);
 
-        $response = new TemplateResponse($this->appName, 'main', $params);
-        $csp = new ContentSecurityPolicy();
-        $csp->addAllowedScriptDomain('*')
-            ->addAllowedConnectDomain('*')
-            ->addAllowedStyleDomain('*')
-            ->addAllowedFontDomain('*')
-            ->allowEvalScript(true);
-        $response->setContentSecurityPolicy($csp);
-        return $response;
+        return new TemplateResponse($this->appName, 'main', $params);
 
+        //$response = new TemplateResponse($this->appName, 'main', $params);
+        //$csp = new ContentSecurityPolicy();
+        //$csp->addAllowedScriptDomain('*')
+        //    ->addAllowedConnectDomain('*')
+        //    ->addAllowedStyleDomain('*')
+        //    ->addAllowedFontDomain('*')
+        //    ->allowEvalScript(true);
+        //$response->setContentSecurityPolicy($csp);
+        //return $response;
     }
 
     /**

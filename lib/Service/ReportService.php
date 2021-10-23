@@ -21,10 +21,13 @@ use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Files\IRootFolder;
 use OCP\ITagManager;
+use OCP\IConfig;
 use Psr\Log\LoggerInterface;
 
 class ReportService
 {
+    /** @var IConfig */
+    protected $config;
     private $userId;
     private $logger;
     private $tagManager;
@@ -50,6 +53,7 @@ class ReportService
         DataloadMapper $DataloadMapper,
         ActivityManager $ActivityManager,
         IRootFolder $rootFolder,
+        IConfig $config,
         VariableService $VariableService
     )
     {
@@ -65,12 +69,14 @@ class ReportService
         $this->ActivityManager = $ActivityManager;
         $this->rootFolder = $rootFolder;
         $this->VariableService = $VariableService;
+        $this->config = $config;
     }
 
     /**
      * get all reports
      *
      * @return DataResponse
+     * @throws \OCP\PreConditionNotMetException
      */
     public function index()
     {
@@ -101,6 +107,13 @@ class ReportService
             }
         }
 
+        $favoriteMigration = $this->config->getUserValue($this->userId, 'analytics', 'favMig', '0');
+        if ($favoriteMigration === '0') {
+            $this->logger->info('Favorite migration being performed');
+            $this->favoriteMigration($ownReports);
+            $this->config->setUserValue($this->userId, 'analytics', 'favMig', 3.7);
+        }
+
         $favorites = $this->tagManager->load('analytics')->getFavorites();
         foreach ($ownReports as &$ownReport) {
             $hasTag = 0;
@@ -112,6 +125,25 @@ class ReportService
         }
 
         return new DataResponse($ownReports);
+    }
+
+    /**
+     * migrate old favorite ids
+     *
+     * @param $ownReports
+     * @return bool
+     */
+    private function favoriteMigration($ownReports) {
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
+        foreach ($favorites as $favorite) {
+            $key = array_search($favorite, array_column($ownReports, 'dataset'));
+            if ($key) {
+                $this->logger->info('Favorite was migrated from '. $ownReports[$key]['dataset'] . ' to new report ' . $ownReports[$key]['id']);
+                $this->tagManager->load('analytics')->removeFromFavorites($ownReports[$key]['dataset']);
+                $this->tagManager->load('analytics')->addToFavorites($ownReports[$key]['id']);
+            }
+        }
+        return true;
     }
 
     /**
@@ -139,18 +171,18 @@ class ReportService
     public function getOwnFavoriteReports()
     {
         $ownReports = $this->ReportMapper->index();
-        $favorits = $this->tagManager->load('analytics')->getFavorites();
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
         $sharedReports = $this->ShareService->getSharedReports();
 
-        foreach ($favorits as $favorite) {
+        foreach ($favorites as $favorite) {
             if (array_search($favorite, array_column($ownReports, 'id')) === false
                 && array_search($favorite, array_column($sharedReports, 'id')) === false) {
-                unset($favorits[$favorite]);
+                unset($favorites[$favorite]);
                 $this->tagManager->load('analytics')->removeFromFavorites($favorite);
             }
         }
 
-        return $favorits;
+        return $favorites;
     }
 
     /**
