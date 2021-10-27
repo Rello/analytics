@@ -13,10 +13,12 @@ namespace OCA\Analytics\Db;
 
 use OCP\DB\Exception;
 use OCP\IDBConnection;
+use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
 class DatasetMapper
 {
+    private $l10n;
     private $userId;
     private $db;
     private $logger;
@@ -24,11 +26,13 @@ class DatasetMapper
 
     public function __construct(
         $userId,
+        IL10N $l10n,
         IDBConnection $db,
         LoggerInterface $logger
     )
     {
         $this->userId = $userId;
+        $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
     }
@@ -65,16 +69,16 @@ class DatasetMapper
      * @return int
      * @throws Exception
      */
-    public function create($name, $dimension1, $dimension2, $value): int
+    public function create(): int
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
-                'name' => $sql->createNamedParameter($name),
-                'dimension1' => $sql->createNamedParameter($dimension1),
-                'dimension2' => $sql->createNamedParameter($dimension2),
-                'value' => $sql->createNamedParameter($value),
+                'name' => $sql->createNamedParameter($this->l10n->t('New')),
+                'dimension1' => $sql->createNamedParameter($this->l10n->t('Object')),
+                'dimension2' => $sql->createNamedParameter($this->l10n->t('Date')),
+                'value' => $sql->createNamedParameter($this->l10n->t('Value')),
                 'type' => $sql->createNamedParameter('2'),
             ]);
         $sql->execute();

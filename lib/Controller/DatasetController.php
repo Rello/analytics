@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Service\DatasetService;
+use OCA\Analytics\Service\ReportService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
@@ -21,17 +22,20 @@ class DatasetController extends Controller
 {
     private $logger;
     private $DatasetService;
+    private $ReportService;
 
     public function __construct(
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        DatasetService $DatasetService
+        DatasetService $DatasetService,
+        ReportService $ReportService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->DatasetService = $DatasetService;
+        $this->ReportService = $ReportService;
     }
 
     /**
@@ -52,9 +56,9 @@ class DatasetController extends Controller
      * @param string $file
      * @return int
      */
-    public function create($file = '')
+    public function create()
     {
-        return $this->DatasetService->create($file);
+        return $this->DatasetService->create();
     }
 
     /**
@@ -75,10 +79,21 @@ class DatasetController extends Controller
      * @NoAdminRequired
      * @param int $datasetId
      * @return bool
+     * @throws \OCP\DB\Exception
      */
     public function delete(int $datasetId)
     {
-        return $this->DatasetService->delete($datasetId);
+        $own = $this->read($datasetId);
+        if ($own) {
+            $reports = $this->ReportService->reportsForDataset($datasetId);
+            foreach ($reports as $report) {
+                $this->logger->error('report id: '.$report['id']);
+                $this->ReportService->delete($report['id']);
+            }
+            $this->DatasetService->delete($datasetId);
+        }
+
+        return true;
     }
 
     /**
@@ -96,6 +111,18 @@ class DatasetController extends Controller
     public function update(int $datasetId, $name, $dimension1 = null, $dimension2 = null, $value = null)
     {
         return $this->DatasetService->update($datasetId, $name, $dimension1, $dimension2, $value);
+    }
+
+    /**
+     * get status of the dataset
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @throws \OCP\DB\Exception
+     */
+    public function status(int $datasetId)
+    {
+        return $this->DatasetService->status($datasetId);
     }
 
 }

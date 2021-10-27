@@ -37,12 +37,17 @@ OCA.Analytics.Navigation = {
         document.getElementById('navigationDatasets').appendChild(li);
 
         let li2 = document.createElement('li');
+        li2.classList.add('pinned', 'first-pinned');
         let a2 = document.createElement('a');
         a2.classList.add('icon-add', 'svg');
-        a2.innerText = t('analytics', 'New report');
+        if (OCA.Analytics.isAdvanced) {
+            a2.innerText = t('analytics', 'New Dataset');
+        } else {
+            a2.innerText = t('analytics', 'New report');
+        }
 
         a2.id = 'newDatasetButton';
-        a2.addEventListener('click', OCA.Analytics.Navigation.handleNewDatasetButton);
+        a2.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         li2.appendChild(a2);
         document.getElementById('navigationDatasets').appendChild(li2);
 
@@ -64,7 +69,7 @@ OCA.Analytics.Navigation = {
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
         } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
-            if (document.getElementById('advanced').value === 'true') {
+            if (OCA.Analytics.isAdvanced) {
                 // don´t show shared reports in advanced config mode at all as no config is possible
                 return;
             }
@@ -137,7 +142,7 @@ OCA.Analytics.Navigation = {
         let ulUtils = document.createElement('ul');
 
         // add indicators when a dataload or schedule is existing
-        if (document.getElementById('advanced').value === 'true') {
+        if (OCA.Analytics.isAdvanced) {
             if (data.schedules && parseInt(data.schedules) !== 0) {
                 let liScheduleButton = document.createElement('li');
                 liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
@@ -192,7 +197,7 @@ OCA.Analytics.Navigation = {
         favorite.dataset.testing = 'fav' + data.name;
 
         let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
-        if (document.getElementById('advanced').value === 'true') {
+        if (OCA.Analytics.isAdvanced) {
             edit.remove();
             advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
             advanced.children[0].classList.add('icon-category-monitoring');
@@ -214,7 +219,7 @@ OCA.Analytics.Navigation = {
 
         let deleteReport = navigationMenu.getElementById('navigationMenuDelete');
         deleteReport.dataset.id = data.id;
-        deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Dataset.handleDeleteButton);
+        deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
 
         let unshareReport = navigationMenu.getElementById('navigationMenuUnshare');
 
@@ -236,10 +241,14 @@ OCA.Analytics.Navigation = {
         return navigationMenu;
     },
 
-    handleNewDatasetButton: function () {
+    handleNewButton: function () {
         const button = document.getElementById('newDatasetButton');
         button.classList.add('loading');
-        OCA.Analytics.Navigation.createDataset();
+        if (OCA.Analytics.isAdvanced) {
+            OCA.Analytics.Advanced.Backend.createDataset();
+        } else {
+            OCA.Analytics.Sidebar.Report.createReport();
+        }
     },
 
     handleOverviewButton: function () {
@@ -265,8 +274,8 @@ OCA.Analytics.Navigation = {
             }
             evt.target.parentElement.classList.add('active');
         }
-        if (document.getElementById('advanced').value === 'true') {
-            OCA.Analytics.Sidebar.showSidebar(evt);
+        if (OCA.Analytics.isAdvanced) {
+            OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
         } else {
             document.getElementById('filterVisualisation').innerHTML = '';
@@ -384,6 +393,8 @@ OCA.Analytics.Navigation = {
 
     createDataset: function (file = '') {
         //ToDo: create separate one for creation from file
+        //decom this one. one is in sidebar=>report
+        // one in advanced => dataset
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/report'),
@@ -398,9 +409,15 @@ OCA.Analytics.Navigation = {
     },
 
     getDatasets: function (datasetId) {
+        let datatype;
+        if (OCA.Analytics.isAdvanced) {
+            datatype = 'dataset';
+        } else {
+            datatype = 'report';
+        }
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/report'),
+            url: OC.generateUrl('apps/analytics/' + datatype),
             success: function (data) {
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.reports = data;
@@ -411,7 +428,7 @@ OCA.Analytics.Navigation = {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
                     navigationItem.click();
-                    if (datasetId === OCA.Analytics.Navigation.newReportId && document.getElementById('advanced').value !== 'true') {
+                    if (datasetId === OCA.Analytics.Navigation.newReportId && !OCA.Analytics.isAdvanced) {
                         document.querySelector('#navigationMenu[data-id="' + datasetId + '"] #navigationMenuEdit').click();
                     }
                 }
@@ -431,7 +448,7 @@ OCA.Analytics.Navigation = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (document.getElementById('advanced').value !== 'true') {
+    if (!OCA.Analytics.isAdvanced) {
         OCA.Analytics.WhatsNew.whatsnew();
         document.getElementById('wizzartStart').addEventListener('click', OCA.Analytics.Wizzard.show);
         if (parseInt(document.getElementById('analyticsWizzard').value) === 0) {

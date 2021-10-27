@@ -77,11 +77,8 @@ class DataloadService
      * @param $reportId
      * @return array
      */
-    public function read($datasetId, $reportId)
+    public function read($datasetId)
     {
-        if ($datasetId === null) {
-            $datasetId = $this->ReportService->read($reportId)['dataset'];
-        }
         return $this->DataloadMapper->read((int)$datasetId);
     }
 

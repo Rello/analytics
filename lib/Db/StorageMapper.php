@@ -208,6 +208,24 @@ class StorageMapper
     }
 
     /**
+     * Simulate delete data
+     * @param int $datasetId
+     * @return array
+     */
+    public function getRecordCount(int $datasetId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->addSelect($sql->func()->count('*'))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * Add where statements to a query builder
      *
      * @param IQueryBuilder $sql

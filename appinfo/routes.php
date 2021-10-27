@@ -36,6 +36,7 @@ return [
         ['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
+        ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
 
         // Data Output
         ['name' => 'output#index', 'url' => '/data', 'verb' => 'GET'],

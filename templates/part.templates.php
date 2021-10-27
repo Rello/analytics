@@ -10,74 +10,74 @@
  */
 ?>
 
-<template id="templateDataset">
+<template id="templateReport">
     <div class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Report title')); ?></div>
-            <input style="display: table-cell;" id="sidebarDatasetName" class="sidebarInput">
+            <input style="display: table-cell;" id="sidebarReportName" class="sidebarInput">
             <div style="display: table-cell;">
-                <a id="sidebarDatasetNameHint" title="<?php p($l->t('Variables')); ?>">
+                <a id="sidebarReportNameHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Subheader')); ?></div>
-            <input style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput">
+            <input style="display: table-cell;" id="sidebarReportSubheader" class="sidebarInput">
             <div style="display: table-cell;">
-                <a id="sidebarDatasetSubheaderHint" title="<?php p($l->t('Variables')); ?>">
+                <a id="sidebarReportSubheaderHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Report group')); ?></div>
-            <select style="display: table-cell;" id="sidebarDatasetParent" class="sidebarInput">
+            <select style="display: table-cell;" id="sidebarReportParent" class="sidebarInput">
                 <option value="0"></option>
             </select>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Datasource')); ?></div>
             <div style="display: table-cell;">
-                <select style="display: table-cell;" id="sidebarDatasetDatasource" class="sidebarInput" disabled>
+                <select style="display: table-cell;" id="sidebarReportDatasource" class="sidebarInput" disabled>
                     <option value="" selected></option>
                     <option value="0"><?php p($l->t('Report folder (no data)')); ?></option>
                     <option value="2"><?php p($l->t('Internal database')); ?></option>
                 </select>
             </div>
         </div>
-        <div style="display: table-row;" id="datasetDatasetRow">
+        <div style="display: table-row;" id="sidebarReportDatasetRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Dataset')); ?></div>
             <div style="display: table-cell;">
-                <select style="display: table-cell;" id="sidebarDatasetDataset" class="sidebarInput" disabled>
+                <select style="display: table-cell;" id="sidebarReportDataset" class="sidebarInput" disabled>
                 </select>
             </div>
         </div>
 
     </div>
     <br>
-    <div id="datasetDatasourceSectionHeader"><h3><?php p($l->t('Datasource options')); ?></h3></div>
-    <div id="datasetDatasourceSection" class="table" style="display: table; width: 100%; max-width: 500px;"></div>
-    <div id="datasetDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
-    <div id="datasetDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+    <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Datasource options')); ?></h3></div>
+    <div id="reportDatasourceSection" class="table" style="display: table; width: 100%; max-width: 500px;"></div>
+    <div id="reportDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
+    <div id="reportDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
-            <div style="display: table-cell;"><input id="sidebarDatasetDimension1" class="sidebarInput"></div>
+            <div style="display: table-cell;"><input id="sidebarReportDimension1" class="sidebarInput"></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
-            <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="sidebarInput"></div>
+            <div style="display: table-cell;"><input id="sidebarReportDimension2" class="sidebarInput"></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarDatasetValue" class="sidebarInput"></div>
+            <div style="display: table-cell;"><input id="sidebarReportValue" class="sidebarInput"></div>
         </div>
     </div>
     <br>
-    <div id="datasetVisualizationSectionHeader"><h3><?php p($l->t('Visualization')); ?></h3></div>
-    <div id="datasetVisualizationSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+    <div id="reportVisualizationSectionHeader"><h3><?php p($l->t('Visualization')); ?></h3></div>
+    <div id="reportVisualizationSection" class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Display')); ?></div>
             <div style="display: table-cell;">
-                <select id="sidebarDatasetVisualization" class="sidebarInput">
+                <select id="sidebarReportVisualization" class="sidebarInput">
                     <option value="ct" selected><?php p($l->t('Chart') . ' & ' . $l->t('Table')); ?></option>
                     <option value="table"><?php p($l->t('Table')); ?></option>
                     <option value="chart"><?php p($l->t('Chart')); ?></option>
@@ -87,7 +87,7 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Chart type')); ?></div>
             <div style="display: table-cell;">
-                <select id="sidebarDatasetChart" class="sidebarInput">
+                <select id="sidebarReportChart" class="sidebarInput">
                     <option value="" selected></option>
                     <option value="line"><?php p($l->t('Line')); ?></option>
                     <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
@@ -99,7 +99,7 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Chart options')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarDatasetChartOptions"
+            <div style="display: table-cell;"><input id="sidebarReportChartOptions"
                                                      placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput">
             </div>
             <div style="display: table-cell;">
@@ -110,7 +110,7 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Data options')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarDatasetDataOptions"
+            <div style="display: table-cell;"><input id="sidebarReportDataOptions"
                                                      placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput">
             </div>
             <div style="display: table-cell;">
@@ -121,16 +121,74 @@
         </div>
     </div>
     <br>
-    <button id="sidebarDatasetUpdateButton" type="button" class="primary">
+    <button id="sidebarReportUpdateButton" type="button" class="primary">
         <?php p($l->t('Update')); ?>
     </button>
-    <button id="sidebarDatasetDeleteButton" type="button">
+    <button id="sidebarReportDeleteButton" type="button">
         <?php p($l->t('Delete')); ?>
     </button>
-    <button id="sidebarDatasetExportButton" type="button">
+    <button id="sidebarReportExportButton" type="button">
         <?php p($l->t('Export')); ?>
     </button>
 
+</template>
+
+<template id="templateDataset">
+    <div style="width:50%; float: left;">
+        <div class="table" style="display: table; width: 100%; max-width: 500px;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 100%;"><?php p($l->t('Dataset title')); ?></div>
+                <input style="display: table-cell;" id="sidebarDatasetName" class="sidebarInput">
+            </div>
+        </div>
+        <br>
+        <div id="datasetDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
+        <div id="datasetDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension1" class="sidebarInput"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
+                <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="sidebarInput"></div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
+                <div style="display: table-cell;"><input id="sidebarDatasetValue" class="sidebarInput"></div>
+            </div>
+        </div>
+    </div>
+    <div style="width:50%; float: right;">
+        <br>
+        <br>
+        <div id="datasetStatusSectionHeader"><h3><?php p($l->t('Dataset usage')); ?></h3></div>
+        <div id="datasetStatusSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 50%;"><?php p($l->t('Reports')); ?></div>
+                <div style="display: table-cell;">
+                    <div id="sidebarDatasetStatusReports"></div>
+                </div>
+            </div>
+            <br>
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 50%;"><?php p($l->t('Number of records')); ?></div>
+                <div style="display: table-cell;"><span id="sidebarDatasetStatusRecords"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width:100%; float: left;">
+        <br>
+        <button id="sidebarDatasetUpdateButton" type="button" class="primary">
+            <?php p($l->t('Update')); ?>
+        </button>
+        <button id="sidebarDatasetDeleteButton" type="button">
+            <?php p($l->t('Delete')); ?>
+        </button>
+        <button id="sidebarDatasetExportButton" type="button">
+            <?php p($l->t('Export')); ?>
+        </button>
+    </div>
 </template>
 
 <template id="templateData">
@@ -175,6 +233,7 @@
     </button>
     <div><h3><?php p($l->t('REST API')); ?></h3></div>
     <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
+    <input type="hidden" id="DataApiDataset">
     <br>
     <div><h3><?php p($l->t('Dataload')); ?></h3></div>
     <button id="advancedButton" type="button">

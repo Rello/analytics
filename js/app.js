@@ -35,6 +35,7 @@ if (!OCA.Analytics) {
         SHARE_TYPE_LINK: 3,
         SHARE_TYPE_ROOM: 10,
         initialDocumentTitle: null,
+        isAdvanced: false,
         currentReportData: {},
         chartObject: null,
         // flexible mapping depending on type requiered by the used chart library
@@ -473,7 +474,7 @@ OCA.Analytics.UI = {
     },
 
     resetContentArea: function () {
-        if (document.getElementById('advanced').value === 'true') {
+        if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.UI.showElement('analytics-intro');
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
@@ -937,6 +938,9 @@ OCA.Analytics.Backend = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('advanced').value === 'true') {
+        OCA.Analytics.isAdvanced = true;
+    }
     OCA.Analytics.initialDocumentTitle = document.title;
     OCA.Analytics.UI.hideElement('analytics-warning');
 
@@ -946,7 +950,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         OCA.Analytics.Backend.getData();
     }
-    if (document.getElementById('advanced').value === 'false') {
+    if (!OCA.Analytics.isAdvanced) {
         OCA.Analytics.UI.reportOptionsEventlisteners();
     }
 

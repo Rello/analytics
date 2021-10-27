@@ -60,9 +60,9 @@ class DataloadController extends Controller
      * @param $reportId
      * @return DataResponse
      */
-    public function read($datasetId, $reportId): DataResponse
+    public function read($datasetId): DataResponse
     {
-        return new DataResponse(['dataloads' => $this->DataloadService->read($datasetId, $reportId)]);
+        return new DataResponse(['dataloads' => $this->DataloadService->read($datasetId)]);
     }
 
     /**

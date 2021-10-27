@@ -408,13 +408,11 @@ class ReportService
     {
         $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
         $this->ShareService->deleteShareByReport($reportId);
-        $this->StorageMapper->deleteByDataset($reportId);
         /**todo**/
         // delete dataset when last report
-        $this->ReportMapper->delete($reportId);
         $this->ThresholdMapper->deleteThresholdByReport($reportId);
-        $this->DataloadMapper->deleteDataloadByDataset($reportId);
         $this->setFavorite($reportId, 'false');
+        $this->ReportMapper->delete($reportId);
         return true;
     }
 
@@ -456,4 +454,10 @@ class ReportService
         return $this->ReportMapper->search($searchString);
     }
 
+    /**
+     * @throws \OCP\DB\Exception
+     */
+    public function reportsForDataset($datasetId) {
+        return $this->ReportMapper->reportsForDataset($datasetId);
+    }
 }

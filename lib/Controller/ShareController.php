@@ -45,14 +45,14 @@ class ShareController extends Controller
      * create a new share
      *
      * @NoAdminRequired
-     * @param $datasetId
+     * @param $reportId
      * @param $type
      * @param $user
      * @return DataResponse
      */
-    public function create($datasetId, $type, $user)
+    public function create($reportId, $type, $user)
     {
-        return new DataResponse($this->ShareService->create($datasetId, $type, $user));
+        return new DataResponse($this->ShareService->create($reportId, $type, $user));
     }
 
     /**

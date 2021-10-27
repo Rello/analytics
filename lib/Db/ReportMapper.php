@@ -264,6 +264,26 @@ class ReportMapper
     }
 
     /**
+     * reports for a dataset
+     * @param $datasetId
+     * @return array
+     * @throws \OCP\DB\Exception
+     */
+    public function reportsForDataset($datasetId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->addSelect('name')
+            ->addSelect('user_id')
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * truncates fiels do DB-field size
      *
      * @param $string

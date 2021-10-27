@@ -15,6 +15,7 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DatasourceController;
 use OCA\Analytics\Db\DataloadMapper;
 use OCA\Analytics\Db\DatasetMapper;
+use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\StorageMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
@@ -36,6 +37,7 @@ class DatasetService
     private $ActivityManager;
     private $rootFolder;
     private $VariableService;
+    private $ReportMapper;
 
     public function __construct(
         $userId,
@@ -48,7 +50,8 @@ class DatasetService
         DataloadMapper $DataloadMapper,
         ActivityManager $ActivityManager,
         IRootFolder $rootFolder,
-        VariableService $VariableService
+        VariableService $VariableService,
+        ReportMapper $ReportMapper
     )
     {
         $this->userId = $userId;
@@ -62,6 +65,7 @@ class DatasetService
         $this->ActivityManager = $ActivityManager;
         $this->rootFolder = $rootFolder;
         $this->VariableService = $VariableService;
+        $this->ReportMapper = $ReportMapper;
     }
 
     /**
@@ -89,6 +93,7 @@ class DatasetService
         }
 
         foreach ($ownDatasets as &$ownDataset) {
+            $ownDataset['type'] = DatasourceController::DATASET_TYPE_INTERNAL_DB;
             $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
         }
 
@@ -113,6 +118,20 @@ class DatasetService
     }
 
     /**
+     * get dataset status
+     *
+     * @param int $datasetId
+     * @return array|bool
+     * @throws \OCP\DB\Exception
+     */
+    public function status(int $datasetId): array
+    {
+        $status['reports'] = $this->ReportMapper->reportsForDataset($datasetId);
+        $status['data'] = $this->StorageMapper->getRecordCount($datasetId);
+        return $status;
+    }
+
+    /**
      * create new dataset
      *
      * @param $name
@@ -122,10 +141,10 @@ class DatasetService
      * @return int
      * @throws \OCP\DB\Exception
      */
-    public function create($name, $dimension1, $dimension2, $value)
+    public function create()
     {
         //$this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-        return $this->DatasetMapper->create($name, $dimension1, $dimension2, $value);
+        return $this->DatasetMapper->create();
     }
 
     /**
@@ -249,7 +268,10 @@ class DatasetService
      */
     public function delete(int $datasetId)
     {
-        return $this->DatasetMapper->delete($datasetId);
+        $this->DatasetMapper->delete($datasetId);
+        $this->DataloadMapper->deleteDataloadByDataset($datasetId);
+        $this->StorageMapper->deleteByDataset($datasetId);
+        return true;
     }
 
     /**

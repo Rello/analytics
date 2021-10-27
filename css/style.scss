@@ -197,6 +197,10 @@ table.dataTable tbody tr {
   @include icon-color('chartoptions', 'analytics', $color-black, 1);
 }
 
+.icon-analytics-refresh {
+  @include icon-color('refresh', 'analytics', $color-black, 1);
+}
+
 .icon-analytics-forecast {
   @include icon-color('forecast', 'analytics', $color-black, 1);
 }

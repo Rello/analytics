@@ -13,7 +13,6 @@ namespace OCA\Analytics\Db;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\IL10N;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
@@ -21,25 +20,20 @@ class ShareMapper
 {
     /** @var IUserSession */
     private $userSession;
-    private $l10n;
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_share';
     const TABLE_NAME_REPORT = 'analytics_report';
 
     public function __construct(
-        IL10N $l10n,
         IDBConnection $db,
         IUserSession $userSession,
         LoggerInterface $logger
     )
     {
         $this->userSession = $userSession;
-        $this->l10n = $l10n;
         $this->db = $db;
         $this->logger = $logger;
-        self::TABLE_NAME;
-        self::TABLE_NAME_REPORT;
     }
 
     /**
@@ -131,10 +125,12 @@ class ShareMapper
             // multiple link shares (3) are possible
             return false;
         } else {
+            $this->logger->error("test: ".$reportId);
             $sql = $this->db->getQueryBuilder();
             $sql->insert(self::TABLE_NAME)
                 ->values([
                     'report' => $sql->createNamedParameter($reportId),
+                    'dataset' => $sql->createNamedParameter($reportId),
                     'type' => $sql->createNamedParameter($type),
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
