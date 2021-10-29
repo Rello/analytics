@@ -51,6 +51,7 @@ class Json implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
+        array_push($template, ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => $this->l10n->t('GET/POST'), 'type' => 'tf']);
         array_push($template, ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password']);
         array_push($template, ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z']);
         array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
@@ -67,12 +68,14 @@ class Json implements IDatasource
         $string = $option['url'];
         $path = $option['path'];
         $auth = $option['auth'];
+        $post = ($option['method'] === 'POST') ? true : false;
         $data = array();
 
         $ch = curl_init();
         if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_URL, $string);
+            curl_setopt($ch, CURLOPT_POST, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'OCS-APIRequest: true'
@@ -113,6 +116,7 @@ class Json implements IDatasource
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
+            'rawdata' => $curlResult,
             'error' => 0,
         ];
     }

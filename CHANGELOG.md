@@ -1,6 +1,9 @@
 # Changelog
 
 ## 3.6.1 - 2021-0831
+### Added
+- GET/POST for json datasource
+
 ### Fixed
 - Navigation layout issue #190
 
