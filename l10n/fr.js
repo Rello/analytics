@@ -79,7 +79,17 @@ OC.L10N.register(
         'Link copied': 'Lien copié',
         'Bar': 'Bar',
         'Text variables': 'Text variables',
-        'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.',
-        'Color': 'Color'
+        'Text variables can be used in the name or subheader.<br>They are replaced when the report is executed.': 'Text variables can be used in the name or subheader.<br>They are replaced when the report is executed.',
+        'Color': 'Color',
+        'Reports can be grouped into a folder structure': 'Reports can be grouped into a folder structure',
+        'If you want to create a folder to group reports, select the first entry.': 'If you want to create a folder to group reports, select the first entry.',
+        'Reports can get their data either from saved data within the Nextcloud database or from realtime datasources': 'Reports can get their data either from saved data within the Nextcloud database or from realtime datasources',
+        'Report group': 'Report group',
+        'Datasource': 'Datasource',
+        'Dataset': 'Dataset',
+        'New dataset': 'New dataset',
+        'Existing datasets can be changed in a separate maintenance': 'Existing datasets can be changed in a separate maintenance',
+        'Column descriptions are used from the dataset and can not be changed on a report level': 'Column descriptions are used from the dataset and can not be changed on a report level',
+        'Switch to the dataset maintenance from here?': 'Switch to the dataset maintenance from here?'
     },
     '');

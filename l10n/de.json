@@ -15,7 +15,7 @@
     "Datasource": "Datenquelle",
     "Report folder (no data)": "Berichts Ordner (keine Daten)",
     "Local file": "Lokale Datei",
-    "Internal database": "Interne Datenbank",
+    "Saved Data": "Gespeicherte Daten",
     "GitHub": "GitHub",
     "Options": "Optionen",
     "Edit": "Ändern",
@@ -108,8 +108,8 @@
     "Delete data before load": "Daten vor der Ladung löschen",
     "Favorites": "Favoriten",
     "Analytics - Advanced configuration": "Analytics - Erweiterte Einstellungen",
-    "This section is used for advanced report and dataload configurations.": "Dieser Bereich steht für erweiterte Einstellungen und Datenladungen zur Verfügung",
-    "Please select a report": "Bitte wähle einen Bericht",
+    "This section is used for dataset maintenance and dataload configurations": "Dieser Bereich steht für die Pflege von Datensätzen und Datenladungen zur Verfügung",
+    "Please select a dataset": "Bitte wähle einen Datensatz",
     "Report was changed - Press here to save the current state": "Bericht wurde geändert - Hier klicken um zu speichern",
     "External URL": "Externe URL",
     "Select columns": "Spalten wählen",
@@ -129,7 +129,8 @@
     "Cell range": "Zellbereich",
     "Authentication": "Authentifizierung",
     "Object path": "Objekt Pfad",
-    "Bar": "Balken"
+    "Bar": "Balken",
+    "Dataset": "Datensatz"
   },
   "pluralForm": ""
 }

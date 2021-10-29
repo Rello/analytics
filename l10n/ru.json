@@ -15,7 +15,7 @@
     "Datasource": "Источник данных",
     "Report folder (no data)": "Группы (Без данных)",
     "Local file": "Локальный Файл",
-    "Internal database": "Внутренняя БД",
+    "Saved Data": "Cохраненные данные",
     "GitHub": "GitHub",
     "Options": "Параметры",
     "Edit": "Изменить",
@@ -108,8 +108,8 @@
     "Delete data before load": "Удалить данные перед загрузкой",
     "Favorites": "Избранное",
     "Analytics - Advanced configuration": "Аналитика - Расширенные настройки",
-    "This section is used for advanced report and dataload configurations.": "This section is used for advanced report and dataload configurations.",
-    "Please select a report": "Please select a report",
+    "This section is used for dataset maintenance and dataload configurations": "This section is used for dataset maintenance and dataload configurations",
+    "Please select a dataset": "Please select a dataset",
     "Report was changed - Press here to save the current state": "Отчет был изменен - чтобы сохранить текущее состояние, нажмите здесь",
     "External URL": "Внешний URL",
     "Select columns": "Выбрать столбцы",
@@ -129,7 +129,8 @@
     "Cell range": "Диапазон ячеек",
     "Authentication": "Идентификация",
     "Object path": "Путь к объекту",
-    "Bar": "Столбец"
+    "Bar": "Столбец",
+    "Dataset": "Dataset"
   },
   "pluralForm": ""
 }

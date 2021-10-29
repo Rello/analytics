@@ -567,11 +567,11 @@ OCA.Analytics.Advanced.Dataset = {
             type: 'GET',
             url: OC.generateUrl('apps/analytics/dataset/') + datasetId + '/status',
             success: function (data) {
-                document.getElementById('sidebarDatasetStatusRecords').innerText = data['data']['count'];
+                document.getElementById('sidebarDatasetStatusRecords').innerText = parseInt(data['data']['count']).toLocaleString();
 
                 let text = '';
                 for (let report of data['reports']) {
-                    text = text + report['name']+ '<br>';
+                    text = text + '- ' +report['name']+ '<br>';
                 }
                 if (text === '') text = t('analytics', '! This dataset is not used !');
                 document.getElementById('sidebarDatasetStatusReports').innerHTML = text;

@@ -27,33 +27,55 @@ OCA.Analytics.Navigation = {
     buildNavigation: function (data) {
         OCA.Analytics.Sidebar.hideSidebar();
         document.getElementById('navigationDatasets').innerHTML = '';
-        let li = document.createElement('li');
-        let a = document.createElement('a');
-        a.classList.add('icon-toggle-pictures', 'svg');
-        a.innerText = t('analytics', 'Overview');
-        a.id = 'overviewButton'
-        a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
-        li.appendChild(a);
+
+        let li = OCA.Analytics.Navigation.buildOverviewButton();
         document.getElementById('navigationDatasets').appendChild(li);
 
         let li2 = document.createElement('li');
         li2.classList.add('pinned', 'first-pinned');
         let a2 = document.createElement('a');
         a2.classList.add('icon-add', 'svg');
+        a2.id = 'newDatasetButton';
+        a2.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         if (OCA.Analytics.isAdvanced) {
-            a2.innerText = t('analytics', 'New Dataset');
+            a2.innerText = t('analytics', 'New dataset');
         } else {
             a2.innerText = t('analytics', 'New report');
         }
-
-        a2.id = 'newDatasetButton';
-        a2.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         li2.appendChild(a2);
         document.getElementById('navigationDatasets').appendChild(li2);
+
+        if (!OCA.Analytics.isAdvanced) {
+            let li3 = document.createElement('li');
+            li3.classList.add('pinned', 'second-pinned');
+            let a3 = document.createElement('a');
+            a3.classList.add('icon-category-customization', 'svg');
+            a3.innerText = t('analytics', 'Dataset maintenance');
+            a3.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
+            li3.appendChild(a3);
+            document.getElementById('navigationDatasets').appendChild(li3);
+        }
 
         for (let navigation of data) {
             OCA.Analytics.Navigation.buildNavigationRow(navigation);
         }
+    },
+
+    buildOverviewButton: function () {
+        let li = document.createElement('li');
+        let a = document.createElement('a');
+        a.id = 'overviewButton'
+        if (OCA.Analytics.isAdvanced) {
+            a.classList.add('icon-view-previous', 'svg');
+            a.innerText = t('analytics', 'Back to reports');
+            a.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
+        } else {
+            a.classList.add('icon-toggle-pictures', 'svg');
+            a.innerText = t('analytics', 'Overview');
+            a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
+        }
+        li.appendChild(a);
+        return li;
     },
 
     buildNavigationRow: function (data) {
@@ -97,10 +119,12 @@ OCA.Analytics.Navigation = {
             a.appendChild(divFav);
         }
 
-        let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
-        let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
-        li.appendChild(divUtils);
-        li.appendChild(divMenu);
+        if (!OCA.Analytics.isAdvanced) {
+            let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
+            let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
+            li.appendChild(divUtils);
+            li.appendChild(divMenu);
+        }
 
         if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
             li.appendChild(ulSublist);
@@ -259,8 +283,8 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.UI.hideElement('analytics-content');
         OCA.Analytics.UI.showElement('analytics-intro');
         document.getElementById('ulAnalytics').innerHTML = '';
-        window.location.href = '#'
         OCA.Analytics.Dashboard.init()
+        window.location.href = '#'
     },
 
     handleNavigationClicked: function (evt) {
@@ -310,9 +334,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleAdvancedClicked: function (evt) {
-        document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
-        const datasetId = evt.target.closest('div').dataset.id;
-        window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
+        window.location = OC.generateUrl('apps/analytics/a/#');
         evt.stopPropagation();
     },
 
@@ -451,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!OCA.Analytics.isAdvanced) {
         OCA.Analytics.WhatsNew.whatsnew();
         document.getElementById('wizzartStart').addEventListener('click', OCA.Analytics.Wizzard.show);
-        if (parseInt(document.getElementById('analyticsWizzard').value) === 0) {
+        if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
             OCA.Analytics.Wizzard.show();
         }
     }

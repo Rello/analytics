@@ -204,6 +204,10 @@ OCA.Analytics.Sidebar.Report = {
 
                     document.getElementById('sidebarReportNameHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
                     document.getElementById('sidebarReportSubheaderHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
+                    document.getElementById('sidebarReportGroupHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleGroupHint);
+                    document.getElementById('sidebarReportDatasourceHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDatasourceHint);
+                    document.getElementById('sidebarReportDatasetHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDatasetHint);
+                    document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDatasetHint);
 
                     // get all the options for a datasource
                     OCA.Analytics.Sidebar.Report.handleDatasourceChange();
@@ -358,7 +362,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleNameHint: function () {
-        let text = t('analytics', 'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.') +
+        let text = t('analytics', 'Text variables can be used in the name or subheader.<br>They are replaced when the report is executed.') +
             '<br><br>' +
             '%lastUpdateDate%<br>' +
             '%lastUpdateTime%<br>' +
@@ -366,6 +370,28 @@ OCA.Analytics.Sidebar.Report = {
             '%currentTime%<br>' +
             '%owner%';
         OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
+    },
+
+    handleGroupHint: function () {
+        let text = t('analytics', 'Reports can be grouped into a folder structure');
+        OCA.Analytics.Notification.dialog(t('analytics', 'Report group'), text, 'info');
+    },
+
+    handleDatasourceHint: function () {
+        let text = t('analytics', 'If you want to create a folder to group reports, select the first entry.') +
+            '<br><br>' +
+            t('analytics', 'Reports can get their data either from saved data within the Nextcloud database' +
+            ' or from realtime datasources');
+        OCA.Analytics.Notification.dialog(t('analytics', 'Datasource'), text, 'info');
+    },
+
+    handleDatasetHint: function () {
+        let text = t('analytics', 'Column descriptions are used from the dataset and can not be changed on a report level') +
+            '<br><br><br>' +
+            t('analytics', 'Datasets can be changed in a separate maintenance') +
+            '<br><br>' +
+            t('analytics', 'Switch to the dataset maintenance from here?');
+        OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {window.location = OC.generateUrl('apps/analytics/a/') + '#/r/';});
     },
 
     buildGroupingDropdown: function () {
@@ -390,9 +416,12 @@ OCA.Analytics.Sidebar.Report = {
         let tableParent = document.getElementById('sidebarReportDataset');
         tableParent.innerHTML = '';
         let option = document.createElement('option');
-        option.text = t('analytics', 'New table');
+        option.text = t('analytics', 'New dataset');
         option.value = '0';
         tableParent.add(option);
+
+        let option2 = document.createElement('option');
+        tableParent.add(option2);
 
         OCA.Analytics.Backend.getDatasetDefinitions();
         for (let dataset of OCA.Analytics.datasets) {

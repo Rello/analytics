@@ -13,7 +13,7 @@
 <template id="templateReport">
     <div class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Report title')); ?></div>
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Name')); ?></div>
             <input style="display: table-cell;" id="sidebarReportName" class="sidebarInput">
             <div style="display: table-cell;">
                 <a id="sidebarReportNameHint" title="<?php p($l->t('Variables')); ?>">
@@ -33,23 +33,32 @@
             <select style="display: table-cell;" id="sidebarReportParent" class="sidebarInput">
                 <option value="0"></option>
             </select>
+            <div style="display: table-cell;">
+                <a id="sidebarReportGroupHint" title="<?php p($l->t('Report group')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Datasource')); ?></div>
+            <select style="display: table-cell;" id="sidebarReportDatasource" class="sidebarInput" disabled>
+                <option value="0"><?php p($l->t('Report group')); ?></option>
+                <option value=""></option>
+                <option value="2"><?php p($l->t('Saved Data')); ?></option>
+                <option value=""></option>
+            </select>
             <div style="display: table-cell;">
-                <select style="display: table-cell;" id="sidebarReportDatasource" class="sidebarInput" disabled>
-                    <option value="" selected></option>
-                    <option value="0"><?php p($l->t('Report folder (no data)')); ?></option>
-                    <option value="2"><?php p($l->t('Internal database')); ?></option>
-                </select>
-            </div>
+                <a id="sidebarReportDatasourceHint" title="<?php p($l->t('Datasource')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;" id="sidebarReportDatasetRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Dataset')); ?></div>
+            <select style="display: table-cell;" id="sidebarReportDataset" class="sidebarInput" disabled>
+            </select>
             <div style="display: table-cell;">
-                <select style="display: table-cell;" id="sidebarReportDataset" class="sidebarInput" disabled>
-                </select>
-            </div>
+                <a id="sidebarReportDatasetHint" title="<?php p($l->t('Dataset')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
 
     </div>
@@ -61,6 +70,10 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
             <div style="display: table-cell;"><input id="sidebarReportDimension1" class="sidebarInput"></div>
+            <div style="display: table-cell;">
+                <a id="sidebarReportDimensionHint" title="<?php p($l->t('Dataset')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
@@ -134,46 +147,40 @@
 </template>
 
 <template id="templateDataset">
-    <div style="width:50%; float: left;">
-        <div class="table" style="display: table; width: 100%; max-width: 500px;">
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 100%;"><?php p($l->t('Dataset title')); ?></div>
-                <input style="display: table-cell;" id="sidebarDatasetName" class="sidebarInput">
-            </div>
-        </div>
-        <br>
-        <div id="datasetDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
-        <div id="datasetDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
-                <div style="display: table-cell;"><input id="sidebarDatasetDimension1" class="sidebarInput"></div>
-            </div>
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
-                <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="sidebarInput"></div>
-            </div>
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
-                <div style="display: table-cell;"><input id="sidebarDatasetValue" class="sidebarInput"></div>
-            </div>
+    <div class="table" style="display: table; width: 100%; max-width: 500px;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Name')); ?></div>
+            <input style="display: table-cell;" id="sidebarDatasetName" class="sidebarInput">
         </div>
     </div>
-    <div style="width:50%; float: right;">
-        <br>
-        <br>
-        <div id="datasetStatusSectionHeader"><h3><?php p($l->t('Dataset usage')); ?></h3></div>
-        <div id="datasetStatusSection" class="table" style="display: table; width: 100%; max-width: 500px;">
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 50%;"><?php p($l->t('Reports')); ?></div>
-                <div style="display: table-cell;">
-                    <div id="sidebarDatasetStatusReports"></div>
-                </div>
+    <br>
+    <div id="datasetDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
+    <div id="datasetDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
+            <div style="display: table-cell;"><input id="sidebarDatasetDimension1" class="sidebarInput"></div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
+            <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="sidebarInput"></div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
+            <div style="display: table-cell;"><input id="sidebarDatasetValue" class="sidebarInput"></div>
+        </div>
+    </div>
+    <br>
+    <div id="datasetStatusSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Reports')); ?></div>
+            <div style="display: table-cell;">
+                <div id="sidebarDatasetStatusReports" class="sidebarInput"></div>
             </div>
-            <br>
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 50%;"><?php p($l->t('Number of records')); ?></div>
-                <div style="display: table-cell;"><span id="sidebarDatasetStatusRecords"></span>
-                </div>
+        </div>
+        <br>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Number of records')); ?></div>
+            <div style="display: table-cell;"><span id="sidebarDatasetStatusRecords" class="sidebarInput"></span>
             </div>
         </div>
     </div>

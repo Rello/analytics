@@ -225,6 +225,21 @@ OCA.Analytics.Notification = {
         );
     },
 
+    confirm: function (title, text, callback) {
+        OC.dialogs.confirmHtml(
+            text,
+            title,
+            function (e) {
+                if (e === true) {
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }
+            },
+            true
+        );
+    },
+
     notification: function (type, message) {
         if (parseInt(OC.config.versionstring.substr(0, 2)) >= 17) {
             if (type === 'success') {

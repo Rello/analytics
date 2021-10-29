@@ -31,7 +31,7 @@ Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'dashboard');
 Util::addScript('analytics', 'userGuidance');
 ?>
-<input type="hidden" id="analyticsWizzard" value="<?php p($_['wizard']); ?>">
+
 <div id="app-navigation">
     <?php print_unescaped($this->inc('part.navigation')); ?>
     <?php print_unescaped($this->inc('part.settings')); ?>

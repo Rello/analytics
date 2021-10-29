@@ -15,6 +15,7 @@ use OCA\Analytics\DataSession;
 use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
@@ -39,6 +40,8 @@ class PageController extends Controller
     private $DataSession;
     /** @var ShareService */
     private $ShareService;
+    /** @var IInitialState */
+    protected $initialState;
 
     public function __construct(
         string $appName,
@@ -48,7 +51,8 @@ class PageController extends Controller
         ShareService $ShareService,
         IUserSession $userSession,
         IConfig $config,
-        DataSession $DataSession
+        DataSession $DataSession,
+        IInitialState $initialState
     )
     {
         parent::__construct($appName, $request);
@@ -58,6 +62,7 @@ class PageController extends Controller
         $this->config = $config;
         $this->userSession = $userSession;
         $this->DataSession = $DataSession;
+        $this->initialState = $initialState;
     }
 
     /**
@@ -69,7 +74,11 @@ class PageController extends Controller
         $params = array();
         $params['token'] = '';
         $user = $this->userSession->getUser();
-        $params['wizard'] = $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0);
+
+        $this->initialState->provideInitialState(
+            'wizard',
+            $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0)
+        );
 
         return new TemplateResponse($this->appName, 'main', $params);
 

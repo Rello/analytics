@@ -15,7 +15,7 @@
     "Datasource": "Source de données",
     "Report folder (no data)": "Groupe (aucun(e) donnée)",
     "Local file": "Fichier local",
-    "Internal database": "Base de données interne",
+    "Saved Data": "Données enregistrées",
     "GitHub": "Github",
     "Options": "Options",
     "Edit": "Éditer",
@@ -87,8 +87,8 @@
     "Setting": "Paramètres",
     "Execution": "Exécution",
     "Advanced configuration": "Configuration avancée",
-    "This section is used for advanced report and dataload configurations.": "This section is used for advanced report and dataload configurations.",
-    "Please select a report": "Please select a report",
+    "This section is used for dataset maintenance and dataload configurations": "This section is used for dataset maintenance and dataload configurations",
+    "Please select a dataset": "Please select a dataset",
     "Title": "Titre",
     "Load now": "Charger maintenant",
     "Testrun": "",
@@ -123,7 +123,15 @@
     "Analysis": "Analysis",
     "Download chart": "Download chart",
     "Trend": "Trend",
-    "back": "back"
+    "back": "back",
+    "sheet name": "sheet name",
+    "File": "File",
+    "Sheet": "Sheet",
+    "Cell range": "Cell range",
+    "Authentication": "Authentication",
+    "Object path": "Object path",
+    "Bar": "Bar",
+    "Dataset": "Dataset"
   },
   "pluralForm": ""
 }

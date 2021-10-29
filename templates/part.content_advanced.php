@@ -23,9 +23,10 @@
     </div>
 </div>
 <div id="analytics-intro" style="padding: 50px" hidden>
-    <span><?php p($l->t('This section is used for advanced report and dataload configurations.')); ?></span>
+    <span><?php p($l->t('This section is used for dataset maintenance and dataload configurations')); ?></span>
     <br>
-    <span><?php p($l->t('Please select a report')); ?></span>
+    <br>
+    <span><?php p($l->t('Please select a dataset')); ?></span>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>

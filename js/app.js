@@ -89,6 +89,15 @@ OCA.Analytics.Core = {
         }
         return distinct;
     },
+
+    getInitialState: function (key) {
+        const app = 'analytics';
+        const elem = document.querySelector(`#initial-state-${app}-${key}`)
+        if (elem === null) {
+            return false;
+        }
+        return JSON.parse(atob(elem.value))
+    }
 };
 
 OCA.Analytics.UI = {

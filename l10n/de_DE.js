@@ -77,7 +77,17 @@ OC.L10N.register(
         'Link copied': 'Link kopiert',
         'Bar': 'Balken',
         'Text variables': 'Text Variablen',
-        'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Text Variablen können im Berichtsnamen oder der Beschreibung verwendet werden.<br>Sie werden ersetzt, wenn der Bericht ausgeführt wird.',
-        'Color': 'Farbe'
+        'Text variables can be used in the name or subheader.<br>They are replaced when the report is executed.': 'Text Variablen können im Namen oder der Beschreibung verwendet werden.<br>Sie werden ersetzt, wenn der Bericht ausgeführt wird.',
+        'Color': 'Farbe',
+        'Reports can be grouped into a folder structure': 'Berichte können in einer Ordnerstruktur gruppiert werden',
+        'If you want to create a folder to group reports, select the first entry.': 'Um eine Ordner zur Gruppierung von Berichten zu erstellen, wähle den ersten Eintrag.',
+            'Reports can get their data either from saved data within the Nextcloud database or from realtime datasources': 'Berichte können die Daten entweder von gespeicherten Daten innerhalb der Nextcloud Datenbank oder von Echtzeit-Datenquellen verwenden',
+            'Report group': 'Berichtsgruppe',
+            'Datasource': 'Datenquelle',
+            'Dataset': 'Datensatz',
+            'New dataset': 'Neuer Datensatz',
+            'Existing datasets can be changed in a separate maintenance': 'Datensätze können in einem eigenen Bereich geändert werden',
+            'Column descriptions are used from the dataset and can not be changed on a report level': 'Spaltenbezeichnungen werden vom Datensatz übernommen und können im Bericht nicht geändert werden',
+            'Switch to the dataset maintenance from here?': 'Von hier zur Datensatzpflege wechseln?'
     },
     '');
