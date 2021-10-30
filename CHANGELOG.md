@@ -3,7 +3,8 @@
 ## 3.6.1 - 2021-0831
 ### Added
 - GET/POST for json datasource
-
+- Error texts for datasources #196
+- 
 ### Fixed
 - Navigation layout issue #190
 

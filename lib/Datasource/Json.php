@@ -83,6 +83,7 @@ class Json implements IDatasource
             curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
             $curlResult = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
         } else {
             $curlResult = '';
@@ -117,7 +118,7 @@ class Json implements IDatasource
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'rawdata' => $curlResult,
-            'error' => 0,
+            'error' => ($http_code>=200 && $http_code<300) ? 0 : 'HTTP response code: '.$http_code,
         ];
     }
 

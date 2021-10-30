@@ -274,8 +274,7 @@ OCA.Analytics.Advanced.Dataload = {
             type: 'POST',
             url: OC.generateUrl('apps/analytics/dataload'),
             data: {
-                'datasetId': null,
-                'reportId': parseInt(document.getElementById('app-sidebar').dataset.id),
+                'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
                 'datasourceId': document.getElementById('datasourceSelect').value,
             },
             success: function () {
@@ -373,7 +372,12 @@ OCA.Analytics.Advanced.Dataload = {
                     if (parseInt(data.error) === 0) {
                         document.querySelector("[id*=oc-dialog-]").innerHTML = '<div id="simulationData">' + JSON.stringify(data.data) + '</div>';
                     } else {
-                        document.querySelector("[id*=oc-dialog-]").innerHTML = 'Error: ' + data.error;
+                        document.querySelector("[id*=oc-dialog-]").innerHTML = 'Error: '
+                            + data.error
+                            + '<br><br><textarea style="width: 500px;" cols="200" rows="15">'
+                            + new Option(data.rawdata).innerHTML
+                            + '</textarea>';
+
                     }
                 } else {
                     let messageType;
