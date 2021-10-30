@@ -896,7 +896,7 @@ OCA.Analytics.Backend = {
                     }
                     now = new Date(data[j][i]);
                     data[j][i] = now.getFullYear()
-                        + "-" + (now.getMonth() < 10 ? '0' : '') + (now.getMonth() + 1)
+                        + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1) //getMonth will start with Jan = 0
                         + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
                         + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
                         + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
