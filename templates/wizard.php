@@ -181,11 +181,11 @@
 <template id="wizardNewGeneral">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h2>General information</h2><br>
+            <h2><?php p($l->t('General information')); ?></h2><br>
             <div class="table" style="display: table; width: 100%;">
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
-                        <?php p($l->t('Name for the report')); ?>
+                        <?php p($l->t('Report title')); ?>
                         <br>
                         <input style="display: table-cell; width: 400px;" id="wizardNewName">
                         <br><br>
@@ -198,7 +198,7 @@
                         <br>
                         <?php p($l->t('Text variables can be used in the name or subheader. They are replaced when the report is executed.')); ?>
                         <br><br>
-                        The following variables are available:<br>
+                        <?php p($l->t('The following variables are available:')); ?><br>
                         %lastUpdateDate%, %lastUpdateTime%, %currentDate%, %currentTime%, %owner%
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        Reports can be grouped into a folder structure
+                        <?php p($l->t('Reports can be grouped into a folder structure')); ?>
                     </div>
                 </div>
             </div>
@@ -222,16 +222,16 @@
 <template id="wizardNewType">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h2>Type of report</h2><br>
+            <h2><?php p($l->t('Type of report')); ?></h2><br>
             <div class="table" style="display: table; width: 100%;">
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
-                        <button id="wizardNewTypeRealtime">Realtime Data</button>
-                        <button id="wizardNewTypeStored">Stored Data</button>
+                        <button id="wizardNewTypeRealtime"><?php p($l->t('Realtime Data')); ?></button>
+                        <button id="wizardNewTypeStored"><?php p($l->t('Stored Data')); ?></button>
                         <br>
                     </div>
                     <div style="display: table-cell;">
-                        Reports can get their data either from realtime data sources or from saved datasets within the Nextcloud database.
+                        <?php p($l->t('Reports can read their data either from realtime data sources or from saved datasets within the Nextcloud database.')); ?>
                         <br>
                     </div>
                 </div>
@@ -245,7 +245,7 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        Different data sources are available. The data is read on the fly when the report is being executed.
+                        <?php p($l->t('Different data sources are available. The data is read in realtime when the report is being executed.')); ?>
                         <br>
                     </div>
                 </div>
@@ -255,21 +255,20 @@
                         <br>
                     </div>
                     <div style="display: table-cell;">
-                        Every datasource as specific options.<br>
-                        Please enter the information.
+                        <?php p($l->t('Every datasource requires specific parameter. Please enter the information.')); ?>
                         <br>
                     </div>
                 </div>
                 <div id="wizardNewTypeStoredRow" style="display: none;">
                     <div style="display: table-cell; width: 50%;">
                         <br>
-                        <button id="wizardNewTypeStoredNew">New dataset</button>
-                        <button id="wizardNewTypeStoredOld">Existing dataset</button>
+                        <button id="wizardNewTypeStoredNew"><?php p($l->t('New dataset')); ?></button>
+                        <button id="wizardNewTypeStoredOld"><?php p($l->t('Existing dataset')); ?></button>
                         <br>
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        The report can be based on a new dataset or read existing data that was created already.
+                        <?php p($l->t('The report can be based on a new dataset or read existing data that is available already.')); ?>
                         <br>
                     </div>
                 </div>
@@ -283,7 +282,7 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        Many reports can be based on the same data, but every report has its own visualization, threshold and sharing settings.
+                        <?php p($l->t('Many reports can be based on the same data, but every report has its own visualization, threshold and sharing settings.')); ?>
                         <br>
                         <br>
                     </div>
@@ -304,10 +303,9 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        Datasets can store data from scheduled data loads, the REST API or manual data entry. This can
-                        be configured via the "Dataset maintenance".
+                        <?php p($l->t('Datasets can store data from scheduled data loads, the REST API or manual data entry. This can be configured via the Dataset maintenance')); ?>
                         <br><br>
-                        Choose the names of the columns of the new dataset.
+                        <?php p($l->t('Choose the names of the columns for the new dataset')); ?>
                         <br>
                     </div>
                 </div>
@@ -319,8 +317,8 @@
 <template id="wizardNewVisual">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h2>Visualization of the report</h2>
-            <h3>All settings can be changed afterwards</h3>
+            <h2><?php p($l->t('Visualization of the report')); ?></h2>
+            <h3><?php p($l->t('All settings can be changed afterwards')); ?></h3>
             <div class="table" style="display: table; width: 100%;">
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
@@ -381,7 +379,7 @@
                         </div>
                     </div>
                     <div style="display: table-cell;">
-                        Press "Create" to save the new report
+                        <?php p($l->t('The report can now be created')); ?>
                     </div>
                 </div>
                 <div style="display: table-row;">
