@@ -205,6 +205,42 @@ table.dataTable tbody tr {
   @include icon-color('forecast', 'analytics', $color-black, 1);
 }
 
+.icon-analytics-chartTable {
+  @include icon-color('chartTable', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-chartArea {
+  @include icon-color('chartArea', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-chartBar {
+  @include icon-color('chartBar', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-chartDonut {
+  @include icon-color('chartDonut', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-chartTime {
+  @include icon-color('chartTime', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-chartLine {
+  @include icon-color('chartLine', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-chartNone {
+  @include icon-color('chartNone', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-charts-wizard {
+    opacity: 0.5;
+    background-size: 50px;
+    height: 50px;
+    width: 70px;
+    float: left;
+}
+
 .icon-analytics-filter-remove {
   @include icon-color('filterremove', 'analytics', $color-black, 1);
   height: 25px;

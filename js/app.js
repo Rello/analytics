@@ -721,10 +721,15 @@ OCA.Analytics.Functions = {
 OCA.Analytics.Datasource = {
     buildDropdown: function () {
         let options = document.createDocumentFragment();
+        let option = document.createElement('option');
+        option.value = '';
+        option.innerText = '';
+        options.appendChild(option);
+
         let sortedOptions = OCA.Analytics.Datasource.sortOptions(OCA.Analytics.datasources);
         sortedOptions.forEach((entry) => {
             let value = entry[1];
-            let option = document.createElement('option');
+            option = document.createElement('option');
             option.value = entry[0];
             option.innerText = value;
             options.appendChild(option);
@@ -810,7 +815,6 @@ OCA.Analytics.Backend = {
         let url;
         if (document.getElementById('sharingToken').value === '') {
             const reportId = document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
-            if (parseInt(reportId) === OCA.Analytics.Navigation.newReportId) return; //don´t load for new reports
             url = OC.generateUrl('apps/analytics/data/') + reportId;
         } else {
             const token = document.getElementById('sharingToken').value;

@@ -20,7 +20,7 @@
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
-        <div style="display: table-row;">
+        <div style="display: table-row;" id="sidebarReportSubheaderRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Subheader')); ?></div>
             <input style="display: table-cell;" id="sidebarReportSubheader" class="sidebarInput">
             <div style="display: table-cell;">
@@ -28,14 +28,14 @@
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
-        <div style="display: table-row;">
+        <div style="display: table-row;" id="sidebarReportParentRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Report group')); ?></div>
             <select style="display: table-cell;" id="sidebarReportParent" class="sidebarInput">
                 <option value="0"></option>
             </select>
             <div style="display: table-cell;">
                 <a id="sidebarReportGroupHint" title="<?php p($l->t('Report group')); ?>">
-                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                    <div class="icon-add" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
         <div style="display: table-row;">
@@ -46,21 +46,12 @@
                 <option value="2"><?php p($l->t('Saved Data')); ?></option>
                 <option value=""></option>
             </select>
-            <div style="display: table-cell;">
-                <a id="sidebarReportDatasourceHint" title="<?php p($l->t('Datasource')); ?>">
-                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
-                </a></div>
         </div>
         <div style="display: table-row;" id="sidebarReportDatasetRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Dataset')); ?></div>
             <select style="display: table-cell;" id="sidebarReportDataset" class="sidebarInput" disabled>
             </select>
-            <div style="display: table-cell;">
-                <a id="sidebarReportDatasetHint" title="<?php p($l->t('Dataset')); ?>">
-                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
-                </a></div>
         </div>
-
     </div>
     <br>
     <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Datasource options')); ?></h3></div>
@@ -140,10 +131,10 @@
     <button id="sidebarReportDeleteButton" type="button">
         <?php p($l->t('Delete')); ?>
     </button>
-    <button id="sidebarReportExportButton" type="button">
-        <?php p($l->t('Export')); ?>
+<!--    <button id="sidebarReportExportButton" type="button">
+        <?php /*p($l->t('Export')); */?>
     </button>
-
+-->
 </template>
 
 <template id="templateDataset">
@@ -390,7 +381,7 @@
     <div id="navigationMenu" class="app-navigation-entry-menu">
         <ul>
             <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
-            <li><a href="#" id="navigationMenuAdvanced"><span></span><span></span></a></li>
+<!--            <li><a href="#" id="navigationMenuAdvanced"><span></span><span></span></a></li>-->
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>

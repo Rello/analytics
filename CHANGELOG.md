@@ -4,7 +4,8 @@
 ### Added
 - GET/POST for json datasource
 - Error texts for datasources #196
-- 
+- "New report" Wizard #197
+
 ### Fixed
 - Navigation layout issue #190
 - Ads a 0 in front of 2 digit month #191
@@ -111,7 +112,7 @@
 
 ## 3.3.0 - 2021-02-13
 ### Added
-- First Start Wizzard [#103](https://github.com/rello/analytics/issues/103)
+- First Start Wizard [#103](https://github.com/rello/analytics/issues/103)
 - Export / import reports (incl data) [#100](https://github.com/rello/analytics/issues/100)
 - Parameter to skip header rows in csv and file datasource [#97](https://github.com/rello/analytics/issues/97)
 - Allow multiple paths in one JSON load [wiki](https://github.com/Rello/analytics/wiki/Datasource:-JSON)

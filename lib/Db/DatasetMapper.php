@@ -69,16 +69,16 @@ class DatasetMapper
      * @return int
      * @throws Exception
      */
-    public function create(): int
+    public function create($name, $dimension1, $dimension2, $value): int
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
-                'name' => $sql->createNamedParameter($this->l10n->t('New')),
-                'dimension1' => $sql->createNamedParameter($this->l10n->t('Object')),
-                'dimension2' => $sql->createNamedParameter($this->l10n->t('Date')),
-                'value' => $sql->createNamedParameter($this->l10n->t('Value')),
+                'name' => $sql->createNamedParameter($name),
+                'dimension1' => $sql->createNamedParameter($dimension1),
+                'dimension2' => $sql->createNamedParameter($dimension2),
+                'value' => $sql->createNamedParameter($value),
                 'type' => $sql->createNamedParameter('2'),
             ]);
         $sql->execute();

@@ -60,27 +60,41 @@ class ReportMapper
 
     /**
      * create report
+     * @param $name
+     * @param $subheader
+     * @param $parent
+     * @param $type
+     * @param $dataset
+     * @param $link
+     * @param $visualization
+     * @param $chart
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return int
+     * @throws \OCP\DB\Exception
      */
-    public function create()
+    public function create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
-                'name' => $sql->createNamedParameter($this->l10n->t('New')),
-                'type' => $sql->createNamedParameter(2),
-                'parent' => $sql->createNamedParameter(0),
-                'dimension1' => $sql->createNamedParameter($this->l10n->t('Object')),
-                'dimension2' => $sql->createNamedParameter($this->l10n->t('Date')),
+                'dataset' => $sql->createNamedParameter($dataset),
+                'name' => $sql->createNamedParameter($name),
+                'subheader' => $sql->createNamedParameter($subheader),
+                'link' => $sql->createNamedParameter($link),
+                'type' => $sql->createNamedParameter($type),
+                'parent' => $sql->createNamedParameter($parent),
+                'dimension1' => $sql->createNamedParameter($dimension1),
+                'dimension2' => $sql->createNamedParameter($dimension2),
                 //'dimension3' => $sql->createNamedParameter($this->l10n->t('Value')),
                 //'dimension4' => $sql->createNamedParameter($this->l10n->t('Value')),
                 //'timestamp' => $sql->createNamedParameter($this->l10n->t('Date')),
                 //'unit' => $sql->createNamedParameter($this->l10n->t('Value')),
-                'value' => $sql->createNamedParameter($this->l10n->t('Value')),
-                'chart' => $sql->createNamedParameter('column'),
-                'visualization' => $sql->createNamedParameter('ct'),
-                'dataset' => $sql->createNamedParameter('0'),
+                'value' => $sql->createNamedParameter($value),
+                'chart' => $sql->createNamedParameter($chart),
+                'visualization' => $sql->createNamedParameter($visualization),
             ]);
         $sql->execute();
         return (int)$sql->getLastInsertId();
@@ -115,7 +129,6 @@ class ReportMapper
      * @param $name
      * @param $subheader
      * @param $parent
-     * @param $type
      * @param $link
      * @param $visualization
      * @param $chart
@@ -127,14 +140,13 @@ class ReportMapper
      * @param $filteroptions
      * @return bool
      */
-    public function update($id, $name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
+    public function update($id, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('name', $sql->createNamedParameter($name))
             ->set('subheader', $sql->createNamedParameter($subheader))
-            ->set('type', $sql->createNamedParameter($type))
             ->set('link', $sql->createNamedParameter($link))
             ->set('visualization', $sql->createNamedParameter($visualization))
             ->set('chart', $sql->createNamedParameter($chart))
@@ -144,7 +156,6 @@ class ReportMapper
             ->set('dimension1', $sql->createNamedParameter($dimension1))
             ->set('dimension2', $sql->createNamedParameter($dimension2))
             ->set('value', $sql->createNamedParameter($value))
-            ->set('dataset', $sql->createNamedParameter($dataset))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         if ($filteroptions !== null) $sql->set('filteroptions', $sql->createNamedParameter($filteroptions));

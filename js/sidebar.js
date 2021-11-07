@@ -137,17 +137,6 @@ OCA.Analytics.Sidebar = {
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
 
-    indicateImportantField: function (element) {
-        document.getElementById(element).classList.add('indicateImportantField');
-    },
-
-    resetImportantFields: function () {
-        let fields = document.querySelectorAll('.indicateImportantField');
-        for (let i = 0; i < fields.length; i++) {
-            fields[i].classList.remove('indicateImportantField');
-        }
-    },
-
 };
 
 OCA.Analytics.Sidebar.Report = {
@@ -175,8 +164,8 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('tabContainerReport').appendChild(table);
 
                     document.getElementById('sidebarReportDatasource').appendChild(OCA.Analytics.Datasource.buildDropdown());
-                    OCA.Analytics.Sidebar.Report.buildGroupingDropdown();
-                    OCA.Analytics.Sidebar.Report.buildDatasetDropdown();
+                    OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
+                    OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
 
                     document.getElementById('sidebarReportName').value = data['name'];
                     document.getElementById('sidebarReportSubheader').value = data['subheader'];
@@ -197,7 +186,7 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('sidebarReportValue').value = data['value'];
                     document.getElementById('sidebarReportDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
                     document.getElementById('sidebarReportUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleUpdateButton);
-                    document.getElementById('sidebarReportExportButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleExportButton);
+                    //document.getElementById('sidebarReportExportButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleExportButton);
 
                     document.getElementById('sidebarReportName').addEventListener('change', OCA.Analytics.Sidebar.Report.indicateMetadataChanged);
                     document.getElementById('sidebarReportParent').addEventListener('change', OCA.Analytics.Sidebar.Report.indicateMetadataChanged);
@@ -205,12 +194,13 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('sidebarReportNameHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
                     document.getElementById('sidebarReportSubheaderHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
                     document.getElementById('sidebarReportGroupHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleGroupHint);
-                    document.getElementById('sidebarReportDatasourceHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDatasourceHint);
-                    document.getElementById('sidebarReportDatasetHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDatasetHint);
-                    document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDatasetHint);
+                    document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDimensionHint);
 
                     // get all the options for a datasource
-                    OCA.Analytics.Sidebar.Report.handleDatasourceChange();
+                    if ((parseInt(data['type']) !== OCA.Analytics.TYPE_EMPTY_GROUP)) {
+                        OCA.Analytics.Sidebar.Report.handleDatasourceChange();
+                        OCA.Analytics.Sidebar.Report.handleDatasetChange();
+                    }
 
                     // set the options for a datasource
                     if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
@@ -227,13 +217,6 @@ OCA.Analytics.Sidebar.Report = {
                         document.getElementById('link').value = data['link'];
                     }
 
-                    if (OCA.Analytics.Navigation.newReportId === parseInt(data['id'])) {
-                        OCA.Analytics.Sidebar.indicateImportantField('sidebarReportDatasource');
-                        OCA.Analytics.Sidebar.indicateImportantField('sidebarReportName');
-                        document.getElementById('sidebarReportDatasource').disabled = false;
-                        document.getElementById('sidebarReportDataset').disabled = false;
-                    }
-
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerReport').innerHTML = table;
@@ -248,6 +231,7 @@ OCA.Analytics.Sidebar.Report = {
 
     handleDeleteButton: function (evt) {
         let id = evt.target.parentNode.dataset.id;
+        if (id === undefined) id = evt.target.dataset.id;
         if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
 
         OC.dialogs.confirm(
@@ -255,7 +239,7 @@ OCA.Analytics.Sidebar.Report = {
             t('analytics', 'Delete'),
             function (e) {
                 if (e === true) {
-                    OCA.Analytics.Sidebar.Backend.deleteReport(id);
+                    OCA.Analytics.Sidebar.Report.deleteReport(id);
                     OCA.Analytics.UI.resetContentArea();
                     OCA.Analytics.Sidebar.hideSidebar();
                 }
@@ -265,11 +249,11 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleUpdateButton: function () {
-        OCA.Analytics.Sidebar.Backend.updateReport();
+        OCA.Analytics.Sidebar.Report.updateReport();
     },
 
     handleExportButton: function () {
-        OCA.Analytics.Sidebar.Backend.exporteReport();
+        OCA.Analytics.Sidebar.Report.exportReport();
     },
 
     handleDatasourceChange: function () {
@@ -285,6 +269,8 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('reportVisualizationSection').style.display = 'table';
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
             document.getElementById('sidebarReportDatasetRow').style.display = 'table-row';
+            document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
+            document.getElementById('sidebarReportParentRow').style.display = 'table-row';
         } else if (type === OCA.Analytics.TYPE_EMPTY_GROUP) {
             document.getElementById('reportDimensionSection').style.display = 'none';
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
@@ -293,6 +279,8 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('reportVisualizationSection').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.display = 'none';
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
+            document.getElementById('sidebarReportSubheaderRow').style.display = 'none';
+            document.getElementById('sidebarReportParentRow').style.display = 'none';
         } else {
             document.getElementById('reportDimensionSection').style.display = 'none';
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
@@ -301,12 +289,24 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('reportVisualizationSection').style.display = 'table';
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
+            document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
+            document.getElementById('sidebarReportParentRow').style.display = 'table-row';
 
             document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
 
             if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_EXCEL) {
                 document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Report.handleFilepicker);
             }
+        }
+    },
+    handleDatasourceChangeWizard: function () {
+        const type = parseInt(document.getElementById('wizardNewDatasource').value);
+        document.getElementById('wizardNewTypeOptionsRow').style.display = 'table-row';
+        document.getElementById('wizardNewDatasourceSection').innerHTML = '';
+        document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
+
+        if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_EXCEL) {
+            document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Report.handleFilepicker);
         }
     },
 
@@ -373,55 +373,44 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleGroupHint: function () {
-        let text = t('analytics', 'Reports can be grouped into a folder structure');
-        OCA.Analytics.Notification.dialog(t('analytics', 'Report group'), text, 'info');
-    },
-
-    handleDatasourceHint: function () {
-        let text = t('analytics', 'If you want to create a folder to group reports, select the first entry.') +
+        let text = t('analytics', 'Reports can be grouped into a folder structure')+
             '<br><br>' +
-            t('analytics', 'Reports can get their data either from saved data within the Nextcloud database' +
-            ' or from realtime datasources');
-        OCA.Analytics.Notification.dialog(t('analytics', 'Datasource'), text, 'info');
+            t('analytics', 'Do you want to create a new group folder?');
+        OCA.Analytics.Notification.confirm(t('analytics', 'Report group'), text, function () {OCA.Analytics.Sidebar.Report.createGroup();});
     },
 
-    handleDatasetHint: function () {
+    handleDimensionHint: function () {
         let text = t('analytics', 'Column descriptions are used from the dataset and can not be changed on a report level') +
-            '<br><br><br>' +
-            t('analytics', 'Datasets can be changed in a separate maintenance') +
             '<br><br>' +
+            t('analytics', 'Datasets can be changed in a separate maintenance') +
+            '<br>' +
             t('analytics', 'Switch to the dataset maintenance from here?');
         OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {window.location = OC.generateUrl('apps/analytics/a/') + '#/r/';});
     },
 
-    buildGroupingDropdown: function () {
-        let tableParent = document.getElementById('sidebarReportParent');
+    buildGroupingDropdown: function (element) {
+        let tableParent = document.getElementById(element);
         tableParent.innerHTML = '';
         let option = document.createElement('option');
         option.text = '';
         option.value = '0';
-        tableParent.add(option);
+        tableParent.appendChild(option);
 
         for (let dataset of OCA.Analytics.reports) {
             if (parseInt(dataset.type) === OCA.Analytics.TYPE_EMPTY_GROUP) {
                 option = document.createElement('option');
                 option.text = dataset.name;
                 option.value = dataset.id;
-                tableParent.add(option);
+                tableParent.appendChild(option);
             }
         }
     },
 
-    buildDatasetDropdown: function () {
-        let tableParent = document.getElementById('sidebarReportDataset');
+    buildDatasetDropdown: function (element, wizard) {
+        let tableParent = document.getElementById(element);
         tableParent.innerHTML = '';
         let option = document.createElement('option');
-        option.text = t('analytics', 'New dataset');
-        option.value = '0';
         tableParent.add(option);
-
-        let option2 = document.createElement('option');
-        tableParent.add(option2);
 
         OCA.Analytics.Backend.getDatasetDefinitions();
         for (let dataset of OCA.Analytics.datasets) {
@@ -432,19 +421,204 @@ OCA.Analytics.Sidebar.Report = {
         }
     },
 
-    createReport: function (file = '') {
-        //ToDo: create separate one for creation from file
+    createGroup: function () {
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/report'),
             data: {
-                'file': file,
+                'name': t('analytics', 'New'),
+                'parent': 0,
+                'type': OCA.Analytics.TYPE_EMPTY_GROUP,
+                'dataset': 0,
             },
-            success: function (data) {
-                OCA.Analytics.Navigation.newReportId = data;
-                OCA.Analytics.Navigation.init(data);
+            success: function () {
+                OCA.Analytics.Navigation.init();
             }
         });
+    },
+
+    createReport: function () {
+        //ToDo: create separate one for creation from file
+
+        let error = '';
+        let name = document.getElementById('wizardNewName').value;
+        let subheader = document.getElementById('wizardNewSubheader').value;
+        let grouping = document.getElementById('wizardNewGrouping').value;
+        let type = document.getElementById('wizardNewDatasource').value;
+        let dataset = document.getElementById('wizardNewDataset').value;
+        let dimension1 = document.getElementById('wizardNewDimension1').value;
+        let dimension2 = document.getElementById('wizardNewDimension2').value;
+        let value = document.getElementById('wizardNewValue').value;
+        let visualization = 'table';
+        let chart = document.querySelector('input[name="chart"]:checked').value;
+
+        let option = {};
+        let inputFields = document.querySelectorAll('#wizardNewDatasourceSection input, #wizardNewDatasourceSection select');
+        for (let inputField of inputFields) {
+            option[inputField.id] = inputField.value;
+        }
+        let link = JSON.stringify(option);
+
+        if (document.getElementById('wizardNewTypeStored').classList.contains('primary')) {
+            type = OCA.Analytics.TYPE_INTERNAL_DB;
+        }
+        if (document.getElementById('wizardNewTypeStoredNew').classList.contains('primary')) {
+            dataset = 0;
+        }
+
+        if (!document.getElementById('chartNone').checked && !document.getElementById('chartTableNone').checked) {
+            // both are not "none"
+            visualization = 'ct';
+        } else if (!document.getElementById('chartNone').checked) {
+            // both are not "none"
+            visualization = 'chart';
+        }
+
+        if (name === '') {
+            error = 'Report name missing';
+        } else if (type === '' || (type === 2 && dataset === '')) {
+            error = 'Type of report missing';
+        } else if (document.getElementById('chartNone').checked && document.getElementById('chartTableNone').checked) {
+            error = 'At least one visualization is required';
+        }
+
+        if (error !== '') {
+            OCA.Analytics.Notification.notification('error', error);
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/report'),
+            data: {
+                'name': name,
+                'subheader': subheader,
+                'parent': grouping,
+                'type': type,
+                'dataset': dataset,
+                'link': link,
+                'visualization': visualization,
+                'chart': chart,
+                'dimension1': dimension1,
+                'dimension2': dimension2,
+                'value': value
+            },
+            success: function () {
+                OCA.Analytics.Wizard.close();
+                OCA.Analytics.Navigation.init();
+            }
+        });
+    },
+
+    updateReport: function () {
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const button = document.getElementById('sidebarReportUpdateButton');
+        button.classList.add('loading');
+        button.disabled = true;
+
+        let option = {};
+        let inputFields = document.querySelectorAll('#reportDatasourceSection input, #reportDatasourceSection select');
+        for (let inputField of inputFields) {
+            option[inputField.id] = inputField.value;
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/analytics/report/') + reportId,
+            data: {
+                'name': document.getElementById('sidebarReportName').value,
+                'subheader': document.getElementById('sidebarReportSubheader').value,
+                'parent': document.getElementById('sidebarReportParent').value,
+                'link': JSON.stringify(option),
+                'visualization': document.getElementById('sidebarReportVisualization').value,
+                'chart': document.getElementById('sidebarReportChart').value,
+                'chartoptions': document.getElementById('sidebarReportChartOptions').value,
+                'dataoptions': document.getElementById('sidebarReportDataOptions').value,
+                'dimension1': document.getElementById('sidebarReportDimension1').value,
+                'dimension2': document.getElementById('sidebarReportDimension2').value,
+                'value': document.getElementById('sidebarReportValue').value
+            },
+            success: function () {
+                button.classList.remove('loading');
+                button.disabled = false;
+
+                if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {
+                    OCA.Analytics.Sidebar.Report.metadataChanged = false;
+                    OCA.Analytics.Navigation.init(reportId);
+                    OCA.Analytics.Backend.getDatasetDefinitions();
+                } else {
+                    if (!OCA.Analytics.isAdvanced) {
+                        OCA.Analytics.currentReportData.options.chartoptions = '';
+                        OCA.Analytics.UI.resetContentArea();
+                        OCA.Analytics.Backend.getData();
+                    } else {
+                        OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
+                    }
+                }
+            }
+        });
+    },
+
+    deleteReport: function (reportId) {
+        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
+        $.ajax({
+            type: 'DELETE',
+            url: OC.generateUrl('apps/analytics/report/') + reportId,
+            success: function (data) {
+                if (data === false) {
+                    OCA.Analytics.Notification.dialog(t('analytics', 'Dataset'),'This was the last report on the dataset. Don´t forget to clean up the dataset.')
+                }
+                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.handleOverviewButton();
+            }
+        });
+    },
+
+    exportReport: function () {
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
+    },
+
+    wizardNewGeneral: function () {
+        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.createReport);
+        document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
+
+        document.getElementById('wizardNewTypeRealtime').addEventListener('click', function () {
+            document.getElementById('wizardNewTypeDatasourceRow').style.display = 'table-row';
+            document.getElementById('wizardNewTypeDatasetRow').style.display = 'none';
+            document.getElementById('wizardNewTypeStoredRow').style.display = 'none';
+            document.getElementById('wizardNewTypeRealtime').classList.add('primary');
+            document.getElementById('wizardNewTypeStored').classList.remove('primary');
+        });
+        document.getElementById('wizardNewTypeStored').addEventListener('click', function () {
+            document.getElementById('wizardNewTypeDatasourceRow').style.display = 'none';
+            document.getElementById('wizardNewTypeOptionsRow').style.display = 'none';
+            document.getElementById('wizardNewTypeStoredRow').style.display = 'table-row';
+            document.getElementById('wizardNewTypeDatasetRow').style.display = 'none';
+            document.getElementById('wizardNewTypeStored').classList.add('primary');
+            document.getElementById('wizardNewTypeRealtime').classList.remove('primary');
+        })
+
+        document.getElementById('wizardNewTypeStoredNew').addEventListener('click', function () {
+            document.getElementById('wizardNewTypeDatasetRow').style.display = 'none';
+            document.getElementById('wizardNewTypeDimensionRow').style.display = 'table-row';
+            document.getElementById('wizardNewTypeStoredNew').classList.add('primary');
+            document.getElementById('wizardNewTypeStoredOld').classList.remove('primary');
+        })
+
+        document.getElementById('wizardNewTypeStoredOld').addEventListener('click', function () {
+            document.getElementById('wizardNewTypeDatasetRow').style.display = 'table-row';
+            document.getElementById('wizardNewTypeDimensionRow').style.display = 'none';
+            document.getElementById('wizardNewTypeStoredNew').classList.remove('primary');
+            document.getElementById('wizardNewTypeStoredOld').classList.add('primary');
+        })
+
+        document.getElementById('wizardNewDatasource').innerHTML = '';
+        document.getElementById('wizardNewDatasource').appendChild(OCA.Analytics.Datasource.buildDropdown());
+        document.getElementById('wizardNewDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChangeWizard);
+
+        OCA.Analytics.Sidebar.Report.buildGroupingDropdown('wizardNewGrouping');
+        OCA.Analytics.Sidebar.Report.buildDatasetDropdown('wizardNewDataset', true);
     },
 
 };
@@ -937,76 +1111,6 @@ OCA.Analytics.Sidebar.Threshold = {
 };
 
 OCA.Analytics.Sidebar.Backend = {
-
-    exporteReport: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
-    },
-
-    deleteReport: function (reportId) {
-        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-        $.ajax({
-            type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/report/') + reportId,
-            success: function (data) {
-                OCA.Analytics.Navigation.init();
-                OCA.Analytics.Navigation.handleOverviewButton();
-            }
-        });
-    },
-
-    updateReport: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const button = document.getElementById('sidebarReportUpdateButton');
-        button.classList.add('loading');
-        button.disabled = true;
-
-        let option = {};
-        let inputFields = document.querySelectorAll('#reportDatasourceSection input, #reportDatasourceSection select');
-        for (let inputField of inputFields) {
-            option[inputField.id] = inputField.value;
-        }
-
-        $.ajax({
-            type: 'PUT',
-            url: OC.generateUrl('apps/analytics/report/') + reportId,
-            data: {
-                'name': document.getElementById('sidebarReportName').value,
-                'subheader': document.getElementById('sidebarReportSubheader').value,
-                'parent': document.getElementById('sidebarReportParent').value,
-                'type': document.getElementById('sidebarReportDatasource').value,
-                'dataset': document.getElementById('sidebarReportDataset').value,
-                'link': JSON.stringify(option),
-                'visualization': document.getElementById('sidebarReportVisualization').value,
-                'chart': document.getElementById('sidebarReportChart').value,
-                'chartoptions': document.getElementById('sidebarReportChartOptions').value,
-                'dataoptions': document.getElementById('sidebarReportDataOptions').value,
-                'dimension1': document.getElementById('sidebarReportDimension1').value,
-                'dimension2': document.getElementById('sidebarReportDimension2').value,
-                'value': document.getElementById('sidebarReportValue').value
-            },
-            success: function () {
-                button.classList.remove('loading');
-                button.disabled = false;
-
-                OCA.Analytics.Navigation.newReportId = 0;
-                OCA.Analytics.Sidebar.resetImportantFields();
-                if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {
-                    OCA.Analytics.Sidebar.Report.metadataChanged = false;
-                    OCA.Analytics.Navigation.init(reportId);
-                    OCA.Analytics.Backend.getDatasetDefinitions();
-                } else {
-                    if (!OCA.Analytics.isAdvanced) {
-                        OCA.Analytics.currentReportData.options.chartoptions = '';
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
-                    } else {
-                        OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-                    }
-                }
-            }
-        });
-    },
 
     updateData: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);

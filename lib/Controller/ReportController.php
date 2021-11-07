@@ -42,18 +42,29 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return $this->ReportService->index();
+        return new DataResponse($this->ReportService->index());
     }
 
     /**
      * create new blank report
      *
      * @NoAdminRequired
-     * @return int
+     * @param $name
+     * @param $subheader
+     * @param int $parent
+     * @param int $type
+     * @param int $dataset
+     * @param $link
+     * @param $visualization
+     * @param $chart
+     * @param null $dimension1
+     * @param null $dimension2
+     * @param null $value
+     * @return DataResponse
      */
-    public function create()
+    public function create($name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value)
     {
-        return $this->ReportService->create();
+        return new DataResponse($this->ReportService->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value));
     }
 
     /**
@@ -64,11 +75,11 @@ class ReportController extends Controller
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
-     * @return int
+     * @return DataResponse
      */
     public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
     {
-        return $this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions);
+        return new DataResponse($this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions));
     }
 
     /**
@@ -76,13 +87,13 @@ class ReportController extends Controller
      *
      * @NoAdminRequired
      * @param string $file
-     * @return int
+     * @return DataResponse
      */
     public function createFromFile($file = '')
     {
         //**todo**//
         //still needed?
-        return $this->ReportService->create($file);
+        return new DataResponse($this->ReportService->create($file));
     }
 
     /**
@@ -90,11 +101,11 @@ class ReportController extends Controller
      *
      * @NoAdminRequired
      * @param int $reportId
-     * @return array
+     * @return DataResponse
      */
     public function read(int $reportId)
     {
-        return $this->ReportService->read($reportId);
+        return new DataResponse($this->ReportService->read($reportId));
     }
 
     /**
@@ -102,11 +113,11 @@ class ReportController extends Controller
      *
      * @NoAdminRequired
      * @param int $reportId
-     * @return bool
+     * @return DataResponse
      */
     public function delete(int $reportId)
     {
-        return $this->ReportService->delete($reportId);
+        return new DataResponse($this->ReportService->delete($reportId));
     }
 
     /**
@@ -117,8 +128,6 @@ class ReportController extends Controller
      * @param $name
      * @param $subheader
      * @param int $parent
-     * @param int $type
-     * @param int $dataset
      * @param $link
      * @param $visualization
      * @param $chart
@@ -127,12 +136,12 @@ class ReportController extends Controller
      * @param null $dimension1
      * @param null $dimension2
      * @param null $value
-     * @return bool
+     * @return DataResponse
      * @throws \OCP\DB\Exception
      */
-    public function update(int $reportId, $name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
+    public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
-        return $this->ReportService->update($reportId, $name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+        return new DataResponse($this->ReportService->update($reportId, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value));
     }
 
     /**
@@ -143,11 +152,11 @@ class ReportController extends Controller
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
-     * @return bool
+     * @return DataResponse
      */
     public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions)
     {
-        return $this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions);
+        return new DataResponse($this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions));
     }
 
     /**
@@ -156,22 +165,22 @@ class ReportController extends Controller
      * @NoAdminRequired
      * @param int $reportId
      * @param $refresh
-     * @return bool
+     * @return DataResponse
      */
     public function updateRefresh(int $reportId, $refresh)
     {
-        return $this->ReportService->updateRefresh($reportId, $refresh);
+        return new DataResponse($this->ReportService->updateRefresh($reportId, $refresh));
     }
 
     /**
      * get own reports which are marked as favorites
      *
      * @NoAdminRequired
-     * @return array|bool
+     * @return DataResponse
      */
     public function getOwnFavoriteReports()
     {
-        return $this->ReportService->getOwnFavoriteReports();
+        return new DataResponse($this->ReportService->getOwnFavoriteReports());
     }
 
     /**
@@ -180,11 +189,11 @@ class ReportController extends Controller
      * @NoAdminRequired
      * @param int $reportId
      * @param string $favorite
-     * @return bool
+     * @return DataResponse
      */
     public function setFavorite(int $reportId, string $favorite)
     {
-        return $this->ReportService->setFavorite($reportId, $favorite);
+        return new DataResponse($this->ReportService->setFavorite($reportId, $favorite));
     }
 
     /**
@@ -193,11 +202,12 @@ class ReportController extends Controller
      * @NoCSRFRequired
      * @NoAdminRequired
      * @param int $reportId
-     * @return \OCP\AppFramework\Http\DataDownloadResponse
+     * @return DataResponse
      */
     public function export(int $reportId)
     {
-        return $this->ReportService->export($reportId);
+        //todo
+        return new DataResponse($this->ReportService->export($reportId));
     }
 
     /**
@@ -212,6 +222,7 @@ class ReportController extends Controller
      */
     public function import(string $path = null, string $raw = null)
     {
+        //Todo
         return new DataResponse($this->ReportService->import($path, $raw));
     }
 

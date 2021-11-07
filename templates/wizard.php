@@ -11,7 +11,7 @@
 ?>
 
 <template id="wizardDialog">
-    <div class="modal-mask" id="firstrunwizard"
+    <div class="modal-mask" id="analyticsWizard"
          style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
          hidden>
 
@@ -32,30 +32,23 @@
                     <div class="firstrunwizard-header">
                         <div class="logo"><p class="hidden-visually">NC20</p></div>
                         <h2></h2>
-                        <p></p></div>
+                        <p></p>
+                    </div>
                 </div>
-                <div id="pageBody" class="modal-body">
+                <div id="pageBody" class="modal-body"></div>
+                <div class="modal-footer" id="wizardFooter">
                 </div>
-                <div class="modal-footer"
-                ">
-                <div id="wizardDot1" class="dot active"></div>
-                <div id="wizardDot2" class="dot"></div>
-                <div id="wizardDot3" class="dot"></div>
-                <div id="wizardDot4" class="dot"></div>
-                <div id="wizardDot5" class="dot"></div>
-                <div id="wizardDot6" class="dot"></div>
             </div>
+            <a class="next" style="">
+                <div id="wizardNext" class="icon icon-view-next icon-white">
+                    <span class="hidden-visually">Next</span>
+                </div>
+            </a>
         </div>
-        <a class="next" style="">
-            <div id="wizardNext" class="icon icon-view-next icon-white">
-                <span class="hidden-visually">Next</span>
-            </div>
-        </a>
-    </div>
 </template>
 
 <template id="wizard-start">
-    <div class="page">
+    <div class="page" style="display: none;">
         <div class="content content-values">
             <h3>Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT
                 logs<br>Give your numbers a meaning</h3>
@@ -81,8 +74,7 @@
     </div>
 </template>
 <template id="wizard-charts">
-    <div>
-        <div class="page">
+        <div class="page" style="display: none;">
             <div class="image"><img
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
             </div>
@@ -97,11 +89,9 @@
                 </ul>
             </div>
         </div>
-    </div>
 </template>
 <template id="wizard-filter">
-    <div>
-        <div class="page">
+        <div class="page" style="display: none;">
             <div class="image"><img
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
             </div>
@@ -116,11 +106,9 @@
                 </ul>
             </div>
         </div>
-    </div>
 </template>
 <template id="wizard-datasource">
-    <div>
-        <div class="page">
+        <div class="page" style="display: none;">
             <div class="image"><img
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
             </div>
@@ -136,11 +124,9 @@
                 </ul>
             </div>
         </div>
-    </div>
 </template>
 <template id="wizard-dataload">
-    <div>
-        <div class="page">
+        <div class="page" style="display: none;">
             <div class="image"><img
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
@@ -156,11 +142,9 @@
                 </ul>
             </div>
         </div>
-    </div>
 </template>
-<template id="wizard-final">
-    <div>
-        <div class="page content-final">
+<template id="wizardFinal">
+        <div class="page content-final" style="display: none;">
             <div class="description-wide">
                 <div class="description-block">
                     <h3 class="icon-info">Get more information</h3>
@@ -189,6 +173,235 @@
                     <button id="wizardEnd" class="primary modal-default-button">
                         Start using Analytics
                     </button>
+                </div>
+            </div>
+        </div>
+</template>
+
+<template id="wizardNewGeneral">
+    <div class="page" style="display: none;">
+        <div class="content content-values">
+            <h2>General information</h2><br>
+            <div class="table" style="display: table; width: 100%;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 50%;">
+                        <?php p($l->t('Name for the report')); ?>
+                        <br>
+                        <input style="display: table-cell; width: 400px;" id="wizardNewName">
+                        <br><br>
+                        <?php p($l->t('Subheader')); ?>
+                        <br>
+                        <input style="display: table-cell; width: 400px;" id="wizardNewSubheader">
+                        <br><br>
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        <?php p($l->t('Text variables can be used in the name or subheader. They are replaced when the report is executed.')); ?>
+                        <br><br>
+                        The following variables are available:<br>
+                        %lastUpdateDate%, %lastUpdateTime%, %currentDate%, %currentTime%, %owner%
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 50%;">
+                        <?php p($l->t('Report group')); ?>
+                        <br>
+                        <select style="display: table-cell;" id="wizardNewGrouping" class="sidebarInput">
+                            <option value="0"></option>
+                        </select>
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        Reports can be grouped into a folder structure
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<template id="wizardNewType">
+    <div class="page" style="display: none;">
+        <div class="content content-values">
+            <h2>Type of report</h2><br>
+            <div class="table" style="display: table; width: 100%;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 50%;">
+                        <button id="wizardNewTypeRealtime">Realtime Data</button>
+                        <button id="wizardNewTypeStored">Stored Data</button>
+                        <br>
+                    </div>
+                    <div style="display: table-cell;">
+                        Reports can get their data either from realtime data sources or from saved datasets within the Nextcloud database.
+                        <br>
+                    </div>
+                </div>
+                <div id="wizardNewTypeDatasourceRow" style="display: none;">
+                    <div style="display: table-cell; width: 50%;">
+                        <?php p($l->t('Datasource')); ?>
+                        <br>
+                        <select style="display: table-cell;" id="wizardNewDatasource" class="sidebarInput">
+                        </select>
+                        <br>
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        Different data sources are available. The data is read on the fly when the report is being executed.
+                        <br>
+                    </div>
+                </div>
+                <div id="wizardNewTypeOptionsRow" style="display: none;">
+                    <div style="display: table-cell; width: 50%;">
+                        <div id="wizardNewDatasourceSection" style="margin-right: 20px;"></div>
+                        <br>
+                    </div>
+                    <div style="display: table-cell;">
+                        Every datasource as specific options.<br>
+                        Please enter the information.
+                        <br>
+                    </div>
+                </div>
+                <div id="wizardNewTypeStoredRow" style="display: none;">
+                    <div style="display: table-cell; width: 50%;">
+                        <br>
+                        <button id="wizardNewTypeStoredNew">New dataset</button>
+                        <button id="wizardNewTypeStoredOld">Existing dataset</button>
+                        <br>
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        The report can be based on a new dataset or read existing data that was created already.
+                        <br>
+                    </div>
+                </div>
+                <div id="wizardNewTypeDatasetRow" style="display: none;">
+                    <div style="display: table-cell; width: 50%;">
+                        <br>
+                        <select id="wizardNewDataset">
+                        </select>
+                        <br>
+                        <br>
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        Many reports can be based on the same data, but every report has its own visualization, threshold and sharing settings.
+                        <br>
+                        <br>
+                    </div>
+                </div>
+                <div id="wizardNewTypeDimensionRow" style="display: none;">
+                    <div style="display: table-cell; width: 50%;">
+                        <?php p($l->t('Column')); ?>&nbsp;1
+                        <br>
+                        <input id="wizardNewDimension1" class="sidebarInput" value="<?php p($l->t('Object')); ?>">
+                        <br>
+                        <?php p($l->t('Column')); ?>&nbsp;2
+                        <br>
+                        <input id="wizardNewDimension2" class="sidebarInput" value="<?php p($l->t('Date')); ?>">
+                        <br>
+                        <?php p($l->t('Value')); ?>
+                        <br>
+                        <input id="wizardNewValue" class="sidebarInput" value="<?php p($l->t('Value')); ?>">
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        Datasets can store data from scheduled data loads, the REST API or manual data entry. This can
+                        be configured via the "Dataset maintenance".
+                        <br><br>
+                        Choose the names of the columns of the new dataset.
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+<template id="wizardNewVisual">
+    <div class="page" style="display: none;">
+        <div class="content content-values">
+            <h2>Visualization of the report</h2>
+            <h3>All settings can be changed afterwards</h3>
+            <div class="table" style="display: table; width: 100%;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 50%;">
+                        <div class="icon-analytics-chartNone icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                            <input type="radio" id="chartNone" class="radio" checked="checked" name="chart">
+                            <label for="chartNone"><?php p($l->t('No Chart')); ?></label>
+                        </div>
+                    </div>
+                    <div style="display: table-cell;">
+                        <div class="icon-analytics-chartNone icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                            <input type="radio" id="chartTableNone" class="radio" checked="checked" name="table">
+                            <label for="chartTableNone"><?php p($l->t('No Table')); ?></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell; ">
+                        <div class="icon-analytics-chartLine icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                        <input type="radio" id="chartTime" class="radio" name="chart" value="datetime">
+                        <label for="chartTime"><?php p($l->t('Timeline (Date in column 2)')); ?></label>
+                        </div>
+                    </div>
+                    <div style="display: table-cell;">
+                        <div class="icon-analytics-chartTable icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                            <input type="radio" id="chartTable" class="radio" name="table">
+                            <label for="chartTable"><?php p($l->t('Table')); ?></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell; ">
+                        <div class="icon-analytics-chartTime icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                        <input type="radio" id="chartLine" class="radio" name="chart" value="line">
+                        <label for="chartLine"><?php p($l->t('Line')); ?></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell; ">
+                        <div class="icon-analytics-chartArea icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                            <input type="radio" id="chartArea" class="radio" name="chart" value="area">
+                            <label for="chartArea"><?php p($l->t('Area')); ?></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                        <div class="icon-analytics-chartBar icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                        <input type="radio" id="chartBar" class="radio" name="chart" value="column">
+                        <label for="chartBar"><?php p($l->t('Bar')); ?></label>
+                        </div>
+                    </div>
+                    <div style="display: table-cell;">
+                        Press "Create" to save the new report
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                        <div class="icon-analytics-chartDonut icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 17px;">
+                        <input type="radio" id="chartDonut" class="radio" name="chart" value="doughnut">
+                        <label for="chartBar"><?php p($l->t('Doughnut')); ?></label>
+                        </div>
+                    </div>
+                    <div style="display: table-cell;">
+                        <button id="wizardNewCreate" type="button" class="primary">
+                            <?php p($l->t('Create')); ?>
+                        </button>
+                    </div>
+                    <div style="display: table-cell;">
+                        <button id="wizardNewCancel" type="button">
+                            <?php p($l->t('Cancel')); ?>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

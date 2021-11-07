@@ -42,14 +42,13 @@ class DataloadController extends Controller
      *
      * @NoAdminRequired
      * @param $datasetId
-     * @param $reportId
      * @param int $datasourceId
      * @return DataResponse
      * @throws \OCP\DB\Exception
      */
-    public function create($datasetId, $reportId, int $datasourceId): DataResponse
+    public function create($datasetId, int $datasourceId): DataResponse
     {
-        return new DataResponse(['id' => $this->DataloadService->create($datasetId, $reportId, $datasourceId)]);
+        return new DataResponse(['id' => $this->DataloadService->create($datasetId, $datasourceId)]);
     }
 
     /**

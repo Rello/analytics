@@ -62,11 +62,8 @@ class DataloadService
      * @return int
      * @throws \OCP\DB\Exception
      */
-    public function create($datasetId, $reportId, int $datasourceId)
+    public function create($datasetId, int $datasourceId)
     {
-        if ($datasetId === null) {
-            $datasetId = $this->ReportService->read($reportId)['dataset'];
-        }
         return $this->DataloadMapper->create((int)$datasetId, $datasourceId);
     }
 
@@ -190,9 +187,8 @@ class DataloadService
     public function getDataFromDatasource(int $dataloadId)
     {
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
-        $reportMetadata = $this->ReportService->read($dataloadMetadata['dataset'], $dataloadMetadata['user_id']);
 
-        if (!empty($reportMetadata)) {
+        if (!empty($dataloadMetadata)) {
             $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until datasource table is renamed link=>option
             $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
             $result['datasetId'] = $dataloadMetadata['dataset'];

@@ -134,7 +134,8 @@ OCA.Analytics.Dashboard = {
 
     buildWidgetRow: function (report, reportId, subheader, value, thresholds) {
         let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(subheader, value, thresholds);
-        value = parseFloat(value).toLocaleString();
+        //value = parseFloat(value).toLocaleString();
+        value = OCA.Analytics.Dashboard.nFormatter(value);
         let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
 
         return `<a href="${href}">
@@ -151,6 +152,19 @@ OCA.Analytics.Dashboard = {
                     </div>
                 </div>
             </a>`;
+    },
+
+    nFormatter: function (num) {
+        if (num >= 1000000000) {
+            return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+        }
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        }
+        if (num >= 1000) {
+            return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+        }
+        return num;
     },
 
     validateThreshold: function (kpi, value, thresholds) {

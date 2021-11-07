@@ -22,6 +22,7 @@ OCA.Analytics.Navigation = {
     init: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getDatasets(datasetId);
+        OCA.Analytics.Backend.getDatasetDefinitions();
     },
 
     buildNavigation: function (data) {
@@ -220,6 +221,7 @@ OCA.Analytics.Navigation = {
         favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
         favorite.dataset.testing = 'fav' + data.name;
 
+/*
         let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
         if (OCA.Analytics.isAdvanced) {
             edit.remove();
@@ -233,6 +235,7 @@ OCA.Analytics.Navigation = {
             advanced.children[1].innerText = t('analytics', 'Advanced');
             advanced.dataset.testing = 'adv' + data.name;
         }
+*/
 
         if (parseInt(data.favorite) === 1) {
             favorite.firstElementChild.classList.replace('icon-star', 'icon-starred');
@@ -251,7 +254,7 @@ OCA.Analytics.Navigation = {
             unshareReport.remove();
             favorite.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
-            advanced.remove();
+            //advanced.remove();
         } else if (parseInt(data['type']) === OCA.Analytics.TYPE_SHARED) {
             advanced.remove();
             deleteReport.remove();
@@ -266,12 +269,16 @@ OCA.Analytics.Navigation = {
     },
 
     handleNewButton: function () {
-        const button = document.getElementById('newDatasetButton');
-        button.classList.add('loading');
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Advanced.Backend.createDataset();
         } else {
-            OCA.Analytics.Sidebar.Report.createReport();
+            OCA.Analytics.Wizard.sildeArray = [
+                ['',''],
+                ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizardNewGeneral],
+                ['wizardNewType',''],
+                ['wizardNewVisual','']
+            ];
+            OCA.Analytics.Wizard.show();
         }
     },
 
@@ -424,7 +431,6 @@ OCA.Analytics.Navigation = {
                 'file': file,
             },
             success: function (data) {
-                OCA.Analytics.Navigation.newReportId = data;
                 OCA.Analytics.Navigation.init(data);
             }
         });
@@ -450,9 +456,6 @@ OCA.Analytics.Navigation = {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
                     navigationItem.click();
-                    if (datasetId === OCA.Analytics.Navigation.newReportId && !OCA.Analytics.isAdvanced) {
-                        document.querySelector('#navigationMenu[data-id="' + datasetId + '"] #navigationMenuEdit').click();
-                    }
                 }
             }
         });
@@ -472,9 +475,9 @@ OCA.Analytics.Navigation = {
 document.addEventListener('DOMContentLoaded', function () {
     if (!OCA.Analytics.isAdvanced) {
         OCA.Analytics.WhatsNew.whatsnew();
-        document.getElementById('wizzartStart').addEventListener('click', OCA.Analytics.Wizzard.show);
+        document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
         if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
-            OCA.Analytics.Wizzard.show();
+            OCA.Analytics.Wizard.showFirstStart();
         }
     }
     document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);

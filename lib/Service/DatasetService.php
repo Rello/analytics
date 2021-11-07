@@ -141,10 +141,10 @@ class DatasetService
      * @return int
      * @throws \OCP\DB\Exception
      */
-    public function create()
+    public function create($name, $dimension1, $dimension2, $value)
     {
         //$this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-        return $this->DatasetMapper->create();
+        return $this->DatasetMapper->create($name, $dimension1, $dimension2, $value);
     }
 
     /**

@@ -124,7 +124,7 @@ class ReportService
             $ownReport = $this->VariableService->replaceTextVariables($ownReport);
         }
 
-        return new DataResponse($ownReports);
+        return $ownReports;
     }
 
     /**
@@ -159,6 +159,14 @@ class ReportService
         if (!empty($ownReport)) {
             $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
             $ownReport = $this->VariableService->replaceTextVariables($ownReport);
+
+            if ($ownReport['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $ownReport['dataset'] !== 0) {
+                $dataset = $this->DatasetService->read($ownReport['dataset'],  $user_id);
+                $ownReport['dimension1'] = $dataset['dimension1'];
+                $ownReport['dimension2'] = $dataset['dimension2'];
+                $ownReport['value'] = $dataset['value'];
+            }
+
         }
         return $ownReport;
     }
@@ -190,9 +198,15 @@ class ReportService
      *
      * @return int
      */
-    public function create(): int
+    public function create($name, $subheader, $parent, $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value): int
     {
-        $reportId = $this->ReportMapper->create();
+        if ($type === DatasourceController::DATASET_TYPE_GROUP) {
+            $parent = 0;
+        }
+        if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
+            $dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
+        }
+        $reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
         $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
         return $reportId;
     }
@@ -261,8 +275,6 @@ class ReportService
      * @param $name
      * @param $subheader
      * @param int $parent
-     * @param int $type
-     * @param int $dataset
      * @param $link
      * @param $visualization
      * @param $chart
@@ -274,15 +286,9 @@ class ReportService
      * @return bool
      * @throws \OCP\DB\Exception
      */
-    public function update(int $reportId, $name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
+    public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
-        if ($type === DatasourceController::DATASET_TYPE_GROUP) {
-            $parent = 0;
-        }
-        if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
-            $dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
-        }
-        return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+        return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
     }
 
     /**
@@ -406,14 +412,18 @@ class ReportService
      */
     public function delete(int $reportId): bool
     {
+        $metadata = $this->read($reportId);
         $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
         $this->ShareService->deleteShareByReport($reportId);
-        /**todo**/
-        // delete dataset when last report
         $this->ThresholdMapper->deleteThresholdByReport($reportId);
         $this->setFavorite($reportId, 'false');
         $this->ReportMapper->delete($reportId);
-        return true;
+
+        if (empty($this->reportsForDataset($metadata['dataset'])) && $metadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

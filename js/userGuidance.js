@@ -19,47 +19,72 @@ if (!OCA.Analytics) {
     OCA.Analytics = {};
 }
 /**
- * @namespace OCA.Analytics.Wizzard
+ * @namespace OCA.Analytics.Wizard
  */
-OCA.Analytics.Wizzard = {
-    sildeArray: [
-        '',
-        'wizard-start',
-        'wizard-charts',
-        'wizard-filter',
-        'wizard-datasource',
-        'wizard-dataload',
-        'wizard-final'
-    ],
+OCA.Analytics.Wizard = {
+    sildeArray: [],
     currentSlide: 0,
+    previousSlide: 0,
+
+    showFirstStart: function () {
+        OCA.Analytics.Wizard.sildeArray = [
+            ['', ''],
+            ['wizard-start', ''],
+            ['wizard-charts', ''],
+            ['wizard-filter', ''],
+            ['wizard-datasource', ''],
+            ['wizard-dataload', ''],
+            ['wizardFinal', '']
+        ];
+        OCA.Analytics.Wizard.show();
+    },
 
     show: function () {
-        OCA.Analytics.Wizzard.currentSlide = 0;
+        OCA.Analytics.Wizard.currentSlide = 0;
         let wizard = document.importNode(document.getElementById('wizardDialog').content, true);
         document.getElementById('content').appendChild(wizard);
-        document.getElementById('wizardNext').addEventListener('click', OCA.Analytics.Wizzard.next);
-        document.getElementById('wizardPrevious').addEventListener('click', OCA.Analytics.Wizzard.previous);
-        document.getElementById('wizardClose').addEventListener('click', OCA.Analytics.Wizzard.close);
-        OCA.Analytics.Wizzard.next();
+        document.getElementById('wizardNext').addEventListener('click', OCA.Analytics.Wizard.next);
+        document.getElementById('wizardPrevious').addEventListener('click', OCA.Analytics.Wizard.previous);
+        document.getElementById('wizardClose').addEventListener('click', OCA.Analytics.Wizard.close);
+
+        // load all pages in the background
+        for (let i = 1; i < OCA.Analytics.Wizard.sildeArray.length; i++) {
+            let newpage = document.importNode(document.getElementById(OCA.Analytics.Wizard.sildeArray[i][0]).content, true);
+            newpage.firstElementChild.id = OCA.Analytics.Wizard.sildeArray[i][0] + 'Page';
+            document.getElementById('pageBody').appendChild(newpage);
+
+        }
+
+        // create the dots
+        for (let i = 1; i < OCA.Analytics.Wizard.sildeArray.length; i++) {
+            let dot = document.createElement('div');
+            dot.id = 'wizardDot' + i;
+            dot.classList.add('dot');
+            if (i===1) dot.classList.add('active');
+            document.getElementById('wizardFooter').appendChild(dot);
+        }
+
+        OCA.Analytics.Wizard.next();
     },
 
     next: function () {
-        if (OCA.Analytics.Wizzard.currentSlide < OCA.Analytics.Wizzard.sildeArray.length - 1) {
-            OCA.Analytics.Wizzard.currentSlide++;
-            OCA.Analytics.Wizzard.showPage();
+        if (OCA.Analytics.Wizard.currentSlide < OCA.Analytics.Wizard.sildeArray.length - 1) {
+            OCA.Analytics.Wizard.previousSlide = OCA.Analytics.Wizard.currentSlide;
+            OCA.Analytics.Wizard.currentSlide++;
+            OCA.Analytics.Wizard.showPage();
         }
     },
 
     previous: function () {
-        if (OCA.Analytics.Wizzard.currentSlide !== 1) {
-            OCA.Analytics.Wizzard.currentSlide--;
-            OCA.Analytics.Wizzard.showPage();
+        if (OCA.Analytics.Wizard.currentSlide !== 1) {
+            OCA.Analytics.Wizard.previousSlide = OCA.Analytics.Wizard.currentSlide;
+            OCA.Analytics.Wizard.currentSlide--;
+            OCA.Analytics.Wizard.showPage();
         }
     },
 
     close: function () {
-        OCA.Analytics.Wizzard.dismiss();
-        document.getElementById('firstrunwizard').remove();
+        document.getElementById('analyticsWizard').remove();
         document.getElementById('overviewButton').click();
     },
 
@@ -78,35 +103,38 @@ OCA.Analytics.Wizzard = {
     },
 
     showPage: function () {
-        let nextSlide = OCA.Analytics.Wizzard.sildeArray[OCA.Analytics.Wizzard.currentSlide];
-        let newpage = document.importNode(document.getElementById(nextSlide).content, true);
+        let nextSlide = OCA.Analytics.Wizard.sildeArray[OCA.Analytics.Wizard.currentSlide][0];
+        let prevSlide = OCA.Analytics.Wizard.sildeArray[OCA.Analytics.Wizard.previousSlide][0];
+        let callback = OCA.Analytics.Wizard.sildeArray[OCA.Analytics.Wizard.currentSlide][1];
         let prev = document.getElementById('wizardPrevious');
         let next = document.getElementById('wizardNext');
 
-        document.getElementById('pageBody').innerHTML = '';
-        document.getElementById('pageBody').appendChild(newpage);
-        document.querySelector('.dot.active').classList.remove('active');
-        document.getElementById('wizardDot' + OCA.Analytics.Wizzard.currentSlide).classList.add('active');
+        if (prevSlide !== '') document.getElementById(prevSlide + 'Page').style.display = 'none';
+        document.getElementById(nextSlide + 'Page').style.display = '';
 
-        if (OCA.Analytics.Wizzard.currentSlide === OCA.Analytics.Wizzard.sildeArray.length - 1) {
-            document.getElementById('wizardEnd').addEventListener('click', OCA.Analytics.Wizzard.close);
-            document.getElementById('wizardDemo').addEventListener('click', OCA.Analytics.Wizzard.demo);
+        document.querySelector('.dot.active').classList.remove('active');
+        document.getElementById('wizardDot' + OCA.Analytics.Wizard.currentSlide).classList.add('active');
+
+        if (typeof callback === 'function') {
+            callback();
         }
 
-        OCA.Analytics.Wizzard.currentSlide === 1 ? prev.hidden = true : prev.hidden = false;
-        OCA.Analytics.Wizzard.currentSlide === OCA.Analytics.Wizzard.sildeArray.length - 1 ? next.hidden = true : next.hidden = false;
+        OCA.Analytics.Wizard.currentSlide === 1 ? prev.hidden = true : prev.hidden = false;
+        OCA.Analytics.Wizard.currentSlide === OCA.Analytics.Wizard.sildeArray.length - 1 ? next.hidden = true : next.hidden = false;
     },
 
-    dismiss: function () {
+    wizardFinal: function () {
+        document.getElementById('wizardEnd').addEventListener('click', OCA.Analytics.Wizard.close);
+        document.getElementById('wizardDemo').addEventListener('click', OCA.Analytics.Wizard.demo);
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/wizard'),
         })
-    },
+    }
 }
 
 /**
- * @namespace OCA.Analytics.Wizzard
+ * @namespace OCA.Analytics.Wizard
  */
 OCA.Analytics.WhatsNew = {
 
