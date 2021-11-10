@@ -18,6 +18,7 @@ Util::addScript('analytics', 'filter');
 Util::addScript('analytics', 'jquery.dataTables.min');
 Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
+Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
 Util::addScript('analytics', '3rdParty/moment');
 Util::addScript('analytics', '3rdParty/cloner');
 ?>
