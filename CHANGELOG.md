@@ -10,6 +10,7 @@
 - Navigation layout issue #190
 - Ads a 0 in front of 2 digit month #191
 - Report shared by link no chart is displayed #192
+- Chart axis assignment not working #189
 
 ## 3.6.0 - 2021-07-28
 

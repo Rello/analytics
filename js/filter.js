@@ -332,9 +332,9 @@ OCA.Analytics.Filter = {
 
     processOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        dataOptions === '' ? dataOptions = [] : dataOptions;
+        dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions;
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
-        chartOptions === '' ? chartOptions = {} : chartOptions;
+        chartOptions === '' || chartOptions === null ? chartOptions = {} : chartOptions;
         let userDatasetOptions = [];
         let nonDefaultValues, seondaryAxisRequired = false;
         let optionObject = {};
@@ -365,7 +365,7 @@ OCA.Analytics.Filter = {
                     optionObject['borderColor'] = optionsColor[i].value;
                 }
             }
-            if (Object.keys(dataOptions).length) nonDefaultValues = true;
+            if (Object.keys(optionObject).length) nonDefaultValues = true;
             userDatasetOptions.push(optionObject);
         }
 
@@ -373,12 +373,7 @@ OCA.Analytics.Filter = {
         // if all settings are default, all options can be removed can be removed completely
         // to keep the array clean, it will overwrite any existing settings.
         if (nonDefaultValues === true) {
-            //try {
-            //    // if there are existing settings, merge them
-            //    dataOptions = JSON.stringify(cloner.deep.merge(JSON.parse(dataOptions), userDatasetOptions));
-            //} catch (e) {
             dataOptions = JSON.stringify(userDatasetOptions);
-            //}
         } else {
             dataOptions = '';
         }
