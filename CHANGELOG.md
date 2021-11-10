@@ -6,6 +6,10 @@
 - Error texts for datasources #196
 - "New report" Wizard #197
 
+### Changed
+- Dashboard Size/Format of displayed numbers #187
+- Chart.js 3.6
+
 ### Fixed
 - Navigation layout issue #190
 - Ads a 0 in front of 2 digit month #191
