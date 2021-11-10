@@ -46,7 +46,7 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME_REPORT, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.repot'))
+            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.report'))
             ->select('DS.*')
             ->addSelect('SH.permissions')
             ->selectAlias('SH.password', 'password')
@@ -125,7 +125,6 @@ class ShareMapper
             // multiple link shares (3) are possible
             return false;
         } else {
-            $this->logger->error("test: ".$reportId);
             $sql = $this->db->getQueryBuilder();
             $sql->insert(self::TABLE_NAME)
                 ->values([
