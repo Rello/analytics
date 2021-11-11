@@ -85,7 +85,7 @@ OCA.Analytics.Wizard = {
 
     close: function () {
         document.getElementById('analyticsWizard').remove();
-        document.getElementById('overviewButton').click();
+        if (!OCA.Analytics.isAdvanced) document.getElementById('overviewButton').click();
     },
 
     demo: function () {

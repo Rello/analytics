@@ -579,7 +579,7 @@ OCA.Analytics.Sidebar.Report = {
         window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
     },
 
-    wizardNewGeneral: function () {
+    wizard: function () {
         document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.createReport);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
 

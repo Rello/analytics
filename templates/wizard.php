@@ -9,7 +9,6 @@
  * @copyright 2021 Marcel Scherello
  */
 ?>
-
 <template id="wizardDialog">
     <div class="modal-mask" id="analyticsWizard"
          style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
@@ -399,6 +398,55 @@
                         <button id="wizardNewCancel" type="button">
                             <?php p($l->t('Cancel')); ?>
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="wizardDatasetGeneral">
+    <div class="page" style="display: none;">
+        <div class="content content-values">
+            <h2><?php p($l->t('General information')); ?></h2><br>
+            <div class="table" style="display: table; width: 100%;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 50%;">
+                        <?php p($l->t('Dataset'));?> <?php p($l->t('Title'));?>
+                        <br>
+                        <input style="display: table-cell; width: 400px;" id="wizardDatasetName">
+                        <br><br>
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        <button id="wizardNewCreate" type="button" class="primary">
+                            <?php p($l->t('Create')); ?>
+                        </button>
+                        <button id="wizardNewCancel" type="button">
+                            <?php p($l->t('Cancel')); ?>
+                        </button>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell; width: 50%;">
+                        <?php p($l->t('Column')); ?>&nbsp;1
+                        <br>
+                        <input id="wizardDatasetDimension1" class="sidebarInput" value="<?php p($l->t('Object')); ?>">
+                        <br>
+                        <?php p($l->t('Column')); ?>&nbsp;2
+                        <br>
+                        <input id="wizardDatasetDimension2" class="sidebarInput" value="<?php p($l->t('Date')); ?>">
+                        <br>
+                        <?php p($l->t('Value')); ?>
+                        <br>
+                        <input id="wizardDatasetValue" class="sidebarInput" value="<?php p($l->t('Value')); ?>">
+                    </div>
+                    <div style="display: table-cell;">
+                        <br>
+                        <?php p($l->t('Datasets can store data from scheduled data loads, the REST API or manual data entry. This can be configured via the Dataset maintenance')); ?>
+                        <br><br>
+                        <?php p($l->t('Choose the names of the columns for the new dataset')); ?>
+                        <br>
                     </div>
                 </div>
             </div>

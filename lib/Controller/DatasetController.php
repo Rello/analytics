@@ -53,12 +53,16 @@ class DatasetController extends Controller
      * create new dataset
      *
      * @NoAdminRequired
-     * @param string $file
+     * @param $name
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return int
+     * @throws \OCP\DB\Exception
      */
-    public function create()
+    public function create($name, $dimension1, $dimension2, $value)
     {
-        return $this->DatasetService->create();
+        return $this->DatasetService->create($name, $dimension1, $dimension2, $value);
     }
 
     /**

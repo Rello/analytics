@@ -130,17 +130,6 @@ OCA.Analytics.Advanced = {
         const bName = b.tabindex;
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
-
-    indicateImportantField: function (element) {
-        document.getElementById(element).classList.add('indicateImportantField');
-    },
-
-    resetImportantFields: function () {
-        let fields = document.querySelectorAll('.indicateImportantField');
-        for (let i = 0; i < fields.length; i++) {
-            fields[i].classList.remove('indicateImportantField');
-        }
-    },
 };
 
 /**
@@ -551,11 +540,6 @@ OCA.Analytics.Advanced.Dataset = {
                     document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleExportButton);
 
                     OCA.Analytics.Advanced.Dataset.getStatus();
-
-                    if (OCA.Analytics.Navigation.newReportId === parseInt(data['id'])) {
-                        OCA.Analytics.Advanced.indicateImportantField('sidebarDatasetName');
-                    }
-
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -593,7 +577,7 @@ OCA.Analytics.Advanced.Dataset = {
             t('analytics', 'Delete'),
             function (e) {
                 if (e === true) {
-                    OCA.Analytics.Advanced.Backend.deleteDataset(id);
+                    OCA.Analytics.Advanced.Dataset.delete(id);
                     OCA.Analytics.Advanced.hideSidebar();
                 }
             },
@@ -602,34 +586,64 @@ OCA.Analytics.Advanced.Dataset = {
     },
 
     handleUpdateButton: function () {
-        OCA.Analytics.Advanced.Backend.updateDataset();
+        OCA.Analytics.Advanced.Dataset.update();
     },
 
     handleExportButton: function () {
-        OCA.Analytics.Advanced.Backend.exporteDataset();
-    },
-};
-
-OCA.Analytics.Advanced.Backend = {
-
-    exportDataset: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        window.open(OC.generateUrl('apps/analytics/report/dataset/') + reportId, '_blank')
+        OCA.Analytics.Advanced.Dataset.export();
     },
 
-    deleteDataset: function (reportId) {
+    wizard: function () {
+        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Advanced.Dataset.create);
+        document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
+    },
+
+    create: function () {
+        let name = document.getElementById('wizardDatasetName').value;
+        let dimension1 = document.getElementById('wizardDatasetDimension1').value;
+        let dimension2 = document.getElementById('wizardDatasetDimension2').value;
+        let value = document.getElementById('wizardDatasetValue').value;
+        let error;
+
+        if (name === '') {
+            error = 'Report name missing';
+            OCA.Analytics.Notification.notification('error', error);
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/dataset'),
+            data: {
+                'name': name,
+                'dimension1': dimension1,
+                'dimension2': dimension2,
+                'value': value
+            },
+            success: function () {
+                OCA.Analytics.Wizard.close();
+                OCA.Analytics.Navigation.init();
+            }
+        });
+    },
+
+    delete: function (reportId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         $.ajax({
             type: 'DELETE',
             url: OC.generateUrl('apps/analytics/dataset/') + reportId,
             success: function (data) {
                 OCA.Analytics.Navigation.init();
-                OCA.Analytics.Navigation.handleOverviewButton();
             }
         });
     },
 
-    updateDataset: function () {
+    export: function () {
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        window.open(OC.generateUrl('apps/analytics/report/dataset/') + reportId, '_blank')
+    },
+
+    update: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('sidebarDatasetUpdateButton');
         button.classList.add('loading');
@@ -649,26 +663,15 @@ OCA.Analytics.Advanced.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
 
-                OCA.Analytics.Navigation.newReportId = 0;
                 OCA.Analytics.Navigation.init(reportId);
                 OCA.Analytics.Backend.getDatasetDefinitions();
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
             }
         });
     },
+};
 
-    createDataset: function () {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset'),
-            data: {
-            },
-            success: function (data) {
-                OCA.Analytics.Navigation.newReportId = data;
-                OCA.Analytics.Navigation.init(data);
-            }
-        });
-    },
+OCA.Analytics.Advanced.Backend = {
 
     updateData: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);

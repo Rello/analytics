@@ -13,6 +13,7 @@ use OCP\Util;
 
 Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', 'advanced');
+Util::addStyle('analytics', 'wizard');
 //Util::addStyle('analytics', 'sharetabview');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
@@ -21,15 +22,18 @@ Util::addScript('analytics', 'advanced');
 Util::addScript('analytics', 'userGuidance');
 ?>
 
-    <div id="app-navigation">
-        <?php print_unescaped($this->inc('part.navigation')); ?>
-        <?php print_unescaped($this->inc('part.settings')); ?>
-    </div>
+<div id="app-navigation">
+    <?php print_unescaped($this->inc('part.navigation')); ?>
+    <?php print_unescaped($this->inc('part.settings')); ?>
+</div>
 
-    <div id="app-content">
-        <div id="loading">
-            <i class="ioc-spinner ioc-spin"></i>
-        </div>
-        <?php print_unescaped($this->inc('part.content_advanced')); ?>
+<div id="app-content">
+    <div id="loading">
+        <i class="ioc-spinner ioc-spin"></i>
     </div>
-<?php print_unescaped($this->inc('part.templates')); ?>
+    <?php print_unescaped($this->inc('part.content_advanced')); ?>
+</div>
+<div>
+    <?php print_unescaped($this->inc('wizard')); ?>
+    <?php print_unescaped($this->inc('part.templates')); ?>
+</div>

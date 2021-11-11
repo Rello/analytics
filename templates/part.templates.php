@@ -183,10 +183,10 @@
         <button id="sidebarDatasetDeleteButton" type="button">
             <?php p($l->t('Delete')); ?>
         </button>
-        <button id="sidebarDatasetExportButton" type="button">
-            <?php p($l->t('Export')); ?>
+<!--        <button id="sidebarDatasetExportButton" type="button">
+            <?php /*p($l->t('Export')); */?>
         </button>
-    </div>
+-->    </div>
 </template>
 
 <template id="templateData">

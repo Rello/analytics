@@ -4,7 +4,7 @@
 ### Added
 - GET/POST for json datasource
 - Error texts for datasources #196
-- "New report" Wizard #197
+- "New report" & "New Dataset" Wizard #197
 - HU translation #199
 
 ### Changed

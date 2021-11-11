@@ -17,7 +17,6 @@
 OCA.Analytics.Navigation = {
     quickstartValue: '',
     quickstartId: 0,
-    newReportId: 0,
 
     init: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
@@ -270,11 +269,15 @@ OCA.Analytics.Navigation = {
 
     handleNewButton: function () {
         if (OCA.Analytics.isAdvanced) {
-            OCA.Analytics.Advanced.Backend.createDataset();
+            OCA.Analytics.Wizard.sildeArray = [
+                ['',''],
+                ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
+            ];
+            OCA.Analytics.Wizard.show();
         } else {
             OCA.Analytics.Wizard.sildeArray = [
                 ['',''],
-                ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizardNewGeneral],
+                ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizard],
                 ['wizardNewType',''],
                 ['wizardNewVisual','']
             ];
