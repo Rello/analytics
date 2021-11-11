@@ -861,6 +861,10 @@ OCA.Analytics.Backend = {
 
                 document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata' && parseInt(data.error) === 0) {
+
+                    // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+                    data.data = OCA.Analytics.Backend.sortDates(data.data);
+
                     data.data = OCA.Analytics.Backend.formatDates(data.data);
                     let visualization = data.options.visualization;
                     if (visualization === 'chart') {
@@ -883,6 +887,23 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.Backend.startRefreshTimer(refresh);
             }
         });
+    },
+
+    sortDates: function (data) {
+        if (OCA.Analytics.currentReportData.options.chartoptions !== '') {
+            if (JSON.parse(OCA.Analytics.currentReportData.options.chartoptions)?.scales?.xAxes?.time?.parser !== undefined) {
+                let parser = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions)["scales"]["xAxes"]["time"]["parser"];
+                data.sort(function (a, b) {
+                    let sortColumn = a.length - 2;
+                    if (sortColumn === 0) {
+                        return moment(a[sortColumn], parser).toDate() - moment(b[sortColumn], parser).toDate();
+                    } else {
+                        return a[0] - b[0] || moment(a[sortColumn], parser).toDate() - moment(b[sortColumn], parser).toDate();
+                    }
+                });
+            }
+        }
+        return data;
     },
 
     formatDates: function (data) {

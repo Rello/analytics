@@ -9,6 +9,7 @@
 ### Changed
 - Dashboard Size/Format of displayed numbers #187
 - Chart.js 3.6
+- Data with only day/month #184
 
 ### Fixed
 - Navigation layout issue #190
