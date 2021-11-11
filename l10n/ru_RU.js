@@ -83,5 +83,7 @@ OC.L10N.register(
             'Column descriptions are used from the dataset and can not be changed on a report level': 'Column descriptions are used from the dataset and can not be changed on a report level',
             'Switch to the dataset maintenance from here?': 'Switch to the dataset maintenance from here?',
             'Dataset maintenance': 'Dataset maintenance',
+            'Back to reports': 'Back to reports',
+            'New dataset': 'New dataset'
     },
     '');

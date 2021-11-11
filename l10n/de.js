@@ -82,6 +82,8 @@ OC.L10N.register(
         'Datasets can be changed in a separate maintenance': 'Datensätze können in einem eigenen Bereich angepasst werden',
         'Column descriptions are used from the dataset and can not be changed on a report level': 'Spaltenbezeichnungen werden vom Datensatz übernommen und können im Bericht nicht geändert werden',
         'Switch to the dataset maintenance from here?': 'Von hier zur Datensatzpflege wechseln?',
-        'Dataset maintenance': 'Datensätze pflegen'
+        'Dataset maintenance': 'Datensätze pflegen',
+        'Back to reports': 'Zurück zu Berichten',
+        'New dataset': 'Neuer Datensatz'
     },
     '');

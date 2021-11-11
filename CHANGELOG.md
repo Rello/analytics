@@ -5,6 +5,7 @@
 - GET/POST for json datasource
 - Error texts for datasources #196
 - "New report" Wizard #197
+- HU translation #199
 
 ### Changed
 - Dashboard Size/Format of displayed numbers #187
