@@ -12,10 +12,10 @@
 use OCP\Util;
 
 Util::addStyle('analytics', 'style');
-Util::addStyle('analytics', 'jquery.dataTables.min');
+Util::addStyle('analytics', '3rdParty/jquery.dataTables.min');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'filter');
-Util::addScript('analytics', 'jquery.dataTables.min');
+Util::addScript('analytics', '3rdParty/jquery.dataTables.min');
 Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
