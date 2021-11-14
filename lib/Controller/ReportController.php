@@ -89,11 +89,11 @@ class ReportController extends Controller
      * @param string $file
      * @return DataResponse
      */
-    public function createFromFile($file = '')
+    public function createFromDataFile($file = '')
     {
         //**todo**//
         //still needed?
-        return new DataResponse($this->ReportService->create($file));
+        return new DataResponse($this->ReportService->createFromDataFile($file));
     }
 
     /**
@@ -202,12 +202,10 @@ class ReportController extends Controller
      * @NoCSRFRequired
      * @NoAdminRequired
      * @param int $reportId
-     * @return DataResponse
      */
     public function export(int $reportId)
     {
-        //todo
-        return new DataResponse($this->ReportService->export($reportId));
+        return $this->ReportService->export($reportId);
     }
 
     /**
@@ -222,7 +220,6 @@ class ReportController extends Controller
      */
     public function import(string $path = null, string $raw = null)
     {
-        //Todo
         return new DataResponse($this->ReportService->import($path, $raw));
     }
 

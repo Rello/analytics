@@ -537,7 +537,7 @@ OCA.Analytics.Advanced.Dataset = {
                     document.getElementById('sidebarDatasetValue').value = data['value'];
                     document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleDeleteButton);
                     document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleUpdateButton);
-                    document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleExportButton);
+                    //document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleExportButton);
 
                     OCA.Analytics.Advanced.Dataset.getStatus();
                 } else {

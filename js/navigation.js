@@ -293,8 +293,8 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.UI.hideElement('analytics-content');
         OCA.Analytics.UI.showElement('analytics-intro');
         document.getElementById('ulAnalytics').innerHTML = '';
-        OCA.Analytics.Dashboard.init()
         window.location.href = '#'
+        OCA.Analytics.Dashboard.init()
     },
 
     handleNavigationClicked: function (evt) {
@@ -386,8 +386,8 @@ OCA.Analytics.Navigation = {
     },
 
     handleImportButton: function () {
-        const mimeparts = ['text/csv', 'text/plain'];
-        OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Navigation.importDataset.bind(this), false, mimeparts, true, 1);
+        const mimeparts = ['text/plain'];
+        OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Sidebar.Report.import.bind(this), false, mimeparts, true, 1);
     },
 
     handleUnshareButton: function (evt) {
@@ -406,37 +406,6 @@ OCA.Analytics.Navigation = {
         };
 
         xhr.send();
-    },
-
-    importDataset: function (path, raw) {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/import/'),
-            data: {
-                'path': path,
-                'raw': raw
-            },
-            success: function () {
-                OCA.Analytics.Navigation.init();
-            }
-        });
-
-    },
-
-    createDataset: function (file = '') {
-        //ToDo: create separate one for creation from file
-        //decom this one. one is in sidebar=>report
-        // one in advanced => dataset
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report'),
-            data: {
-                'file': file,
-            },
-            success: function (data) {
-                OCA.Analytics.Navigation.init(data);
-            }
-        });
     },
 
     getDatasets: function (datasetId) {

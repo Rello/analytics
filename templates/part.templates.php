@@ -131,10 +131,10 @@
     <button id="sidebarReportDeleteButton" type="button">
         <?php p($l->t('Delete')); ?>
     </button>
-<!--    <button id="sidebarReportExportButton" type="button">
-        <?php /*p($l->t('Export')); */?>
+    <button id="sidebarReportExportButton" type="button">
+        <?php p($l->t('Export'));?>
     </button>
--->
+
 </template>
 
 <template id="templateDataset">

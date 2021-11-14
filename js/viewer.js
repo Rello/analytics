@@ -24,7 +24,7 @@ if (!OCA.Analytics) {
 OCA.Analytics.Viewer = {
 
     registerFileActions: function () {
-        let mime_array = ['text/csv', 'text/plain'];
+        let mime_array = ['text/csv'];
         let icon_url = OC.imagePath('analytics', 'app-dark');
 
         for (let i = 0; i < mime_array.length; i++) {

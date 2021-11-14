@@ -186,7 +186,7 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('sidebarReportValue').value = data['value'];
                     document.getElementById('sidebarReportDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
                     document.getElementById('sidebarReportUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleUpdateButton);
-                    //document.getElementById('sidebarReportExportButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleExportButton);
+                    document.getElementById('sidebarReportExportButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleExportButton);
 
                     document.getElementById('sidebarReportName').addEventListener('change', OCA.Analytics.Sidebar.Report.indicateMetadataChanged);
                     document.getElementById('sidebarReportParent').addEventListener('change', OCA.Analytics.Sidebar.Report.indicateMetadataChanged);
@@ -239,7 +239,7 @@ OCA.Analytics.Sidebar.Report = {
             t('analytics', 'Delete'),
             function (e) {
                 if (e === true) {
-                    OCA.Analytics.Sidebar.Report.deleteReport(id);
+                    OCA.Analytics.Sidebar.Report.delete(id);
                     OCA.Analytics.UI.resetContentArea();
                     OCA.Analytics.Sidebar.hideSidebar();
                 }
@@ -249,11 +249,11 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleUpdateButton: function () {
-        OCA.Analytics.Sidebar.Report.updateReport();
+        OCA.Analytics.Sidebar.Report.update();
     },
 
     handleExportButton: function () {
-        OCA.Analytics.Sidebar.Report.exportReport();
+        OCA.Analytics.Sidebar.Report.export();
     },
 
     handleDatasourceChange: function () {
@@ -318,18 +318,16 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportDimension1').disabled = false;
             document.getElementById('sidebarReportDimension2').disabled = false;
             document.getElementById('sidebarReportValue').disabled = false;
-        } else {
+        } else if (datasource === OCA.Analytics.TYPE_INTERNAL_DB) {
             let dim1 = OCA.Analytics.datasets.find(x => parseInt(x.id) === dataset)['dimension1'];
             document.getElementById('sidebarReportDimension1').value = dim1;
             let dim2 = OCA.Analytics.datasets.find(x => parseInt(x.id) === dataset)['dimension2'];
             document.getElementById('sidebarReportDimension2').value = dim2;
             let value = OCA.Analytics.datasets.find(x => parseInt(x.id) === dataset)['value'];
             document.getElementById('sidebarReportValue').value = value;
-            if (datasource === 2) {
-                document.getElementById('sidebarReportValue').disabled = true;
-                document.getElementById('sidebarReportDimension2').disabled = true;
-                document.getElementById('sidebarReportDimension1').disabled = true;
-            }
+            document.getElementById('sidebarReportValue').disabled = true;
+            document.getElementById('sidebarReportDimension2').disabled = true;
+            document.getElementById('sidebarReportDimension1').disabled = true;
         }
     },
 
@@ -437,9 +435,7 @@ OCA.Analytics.Sidebar.Report = {
         });
     },
 
-    createReport: function () {
-        //ToDo: create separate one for creation from file
-
+    create: function () {
         let error = '';
         let name = document.getElementById('wizardNewName').value;
         let subheader = document.getElementById('wizardNewSubheader').value;
@@ -510,7 +506,20 @@ OCA.Analytics.Sidebar.Report = {
         });
     },
 
-    updateReport: function () {
+    createFromDataFile: function (file = '') {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/report/file'),
+            data: {
+                'file': file,
+            },
+            success: function (data) {
+                OCA.Analytics.Navigation.init(data);
+            }
+        });
+    },
+
+    update: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('sidebarReportUpdateButton');
         button.classList.add('loading');
@@ -559,7 +568,7 @@ OCA.Analytics.Sidebar.Report = {
         });
     },
 
-    deleteReport: function (reportId) {
+    delete: function (reportId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         $.ajax({
             type: 'DELETE',
@@ -574,13 +583,28 @@ OCA.Analytics.Sidebar.Report = {
         });
     },
 
-    exportReport: function () {
+    export: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
     },
 
+    import: function (path, raw) {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/report/import/'),
+            data: {
+                'path': path,
+                'raw': raw
+            },
+            success: function () {
+                OCA.Analytics.Navigation.init();
+            }
+        });
+
+    },
+
     wizard: function () {
-        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.createReport);
+        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.create);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
 
         document.getElementById('wizardNewTypeRealtime').addEventListener('click', function () {

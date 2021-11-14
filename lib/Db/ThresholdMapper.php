@@ -32,7 +32,7 @@ class ThresholdMapper
         $this->logger = $logger;
     }
 
-    public function createThreshold($reportId, $dimension1, $value, $option, $severity)
+    public function create($reportId, $dimension1, $value, $option, $severity)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)

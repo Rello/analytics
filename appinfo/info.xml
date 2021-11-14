@@ -45,7 +45,7 @@ Visualize and share anything, from financial analysis to IoT logs.
     </screenshot>
     <dependencies>
         <php min-version="7.0" max-version="8.0"/>
-        <nextcloud min-version="20" max-version="23"/>
+        <nextcloud min-version="20" max-version="25"/>
     </dependencies>
     <activity>
         <settings>

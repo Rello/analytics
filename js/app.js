@@ -66,7 +66,7 @@ OCA.Analytics.Core = {
         if (urlHash.length > 1) {
             if (urlHash[2] === 'f') {
                 window.location.href = '#';
-                OCA.Analytics.Navigation.createDataset(urlHash.substring(3));
+                OCA.Analytics.Sidebar.Report.createFromDataFile(urlHash.substring(3));
             } else if (urlHash[2] === 'r') {
                 OCA.Analytics.Navigation.init(urlHash.substring(4));
             }

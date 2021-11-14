@@ -164,78 +164,6 @@ class DatasetService
     }
 
     /**
-     * Import Dataset from File
-     *
-     * @param string|null $path
-     * @param string|null $raw
-     * @return int
-     * @throws NotFoundException
-     * @throws \OCP\DB\Exception
-     * @throws \OCP\Files\NotPermittedException
-     */
-    public function import(string $path = null, string $raw = null)
-    {
-        if ($path !== '') {
-            $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
-            $data = $file->getContent();
-        } else if ($raw !== null) {
-            $data = $raw;
-        } else {
-            return false;
-        }
-        $data = json_decode($data, true);
-
-        $dataset = $data['dataset'];
-        isset($dataset['name']) ? $name = $dataset['name'] : $name = '';
-        isset($dataset['subheader']) ? $subheader = $dataset['subheader'] : $subheader = '';
-        $parent = 0;
-        isset($dataset['type']) ? $type = $dataset['type'] : $type = null;
-        isset($dataset['link']) ? $link = $dataset['link'] : $link = null;
-        isset($dataset['visualization']) ? $visualization = $dataset['visualization'] : $visualization = null;
-        isset($dataset['chart']) ? $chart = $dataset['chart'] : $chart = null;
-        isset($dataset['chartoptions']) ? $chartoptions = $dataset['chartoptions'] : $chartoptions = null;
-        isset($dataset['dataoptions']) ? $dataoptions = $dataset['dataoptions'] : $dataoptions = null;
-        isset($dataset['filteroptions']) ? $filteroptions = $dataset['filteroptions'] : $filteroptions = null;
-        isset($dataset['dimension1']) ? $dimension1 = $dataset['dimension1'] : $dimension1 = null;
-        isset($dataset['dimension2']) ? $dimension2 = $dataset['dimension2'] : $dimension2 = null;
-        isset($dataset['value']) ? $value = $dataset['value'] : $value = null;
-
-        $datasetId = $this->DatasetMapper->create();
-        $this->DatasetMapper->update($datasetId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions);
-
-        foreach ($data['dataload'] as $dataload) {
-            isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;
-            isset($dataload['name']) ? $name = $dataload['name'] : $name = null;
-            isset($dataload['option']) ? $option = $dataload['option'] : $option = null;
-            $schedule = null;
-
-            $dataloadId = $this->DataloadMapper->create($datasetId, $datasource);
-            $this->DataloadMapper->update($dataloadId, $name, $option, $schedule);
-        }
-
-        foreach ($data['threshold'] as $threshold) {
-            isset($threshold['dimension1']) ? $dimension1 = $threshold['dimension1'] : $dimension1 = null;
-            isset($threshold['value']) ? $value = $threshold['value'] : $value = null;
-            isset($threshold['option']) ? $option = $threshold['option'] : $option = null;
-            isset($threshold['severity']) ? $severity = $threshold['severity'] : $severity = null;
-            $this->ThresholdService->create($datasetId, $dimension1, $option, $value, $severity);
-        }
-
-        foreach ($data['data'] as $dData) {
-            isset($dData[0]) ? $dimension1 = $dData[0] : $dimension1 = null;
-            isset($dData[1]) ? $dimension2 = $dData[1] : $dimension2 = null;
-            isset($dData[2]) ? $value = $dData[2] : $value = null;
-            $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value);
-        }
-
-        if (isset($data['favorite'])) {
-            $this->setFavorite($datasetId, $data['favorite']);
-        }
-
-        return $datasetId;
-    }
-
-    /**
      * Export Dataset
      *
      * @param int $datasetId
@@ -272,19 +200,5 @@ class DatasetService
         $this->DataloadMapper->deleteDataloadByDataset($datasetId);
         $this->StorageMapper->deleteByDataset($datasetId);
         return true;
-    }
-
-    /**
-     * get dataset details
-     *
-     * @param int $datasetId
-     * @param $chartoptions
-     * @param $dataoptions
-     * @param $filteroptions
-     * @return bool
-     */
-    public function updateOptions(int $datasetId, $chartoptions, $dataoptions, $filteroptions)
-    {
-        return $this->DatasetMapper->updateOptions($datasetId, $chartoptions, $dataoptions, $filteroptions);
     }
 }

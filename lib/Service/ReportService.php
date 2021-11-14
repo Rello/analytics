@@ -250,20 +250,20 @@ class ReportService
      * @param string $file
      * @return int
      */
-    public function createFromFile($file = '')
+    public function createFromDataFile($file = '')
     {
         $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
-        $reportId = $this->ReportMapper->create();
 
         if ($file !== '') {
             $name = explode('.', end(explode('/', $file)))[0];
             $subheader = $file;
             $parent = 0;
+            $dataset = 0;
             $type = DatasourceController::DATASET_TYPE_FILE;
             $link = $file;
             $visualization = 'table';
             $chart = 'line';
-            $this->update($reportId, $name, $subheader, $parent, $type, $link, $visualization, $chart, '', '');
+            $reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, '', '', '');
         }
         return $reportId;
     }
@@ -329,23 +329,26 @@ class ReportService
         }
         $data = json_decode($data, true);
 
-        $dataset = $data['dataset'];
-        isset($dataset['name']) ? $name = $dataset['name'] : $name = '';
-        isset($dataset['subheader']) ? $subheader = $dataset['subheader'] : $subheader = '';
+        $report = $data['report'];
+        isset($report['name']) ? $name = $report['name'] : $name = '';
+        isset($report['subheader']) ? $subheader = $report['subheader'] : $subheader = '';
         $parent = 0;
-        isset($dataset['type']) ? $type = $dataset['type'] : $type = null;
-        isset($dataset['link']) ? $link = $dataset['link'] : $link = null;
-        isset($dataset['visualization']) ? $visualization = $dataset['visualization'] : $visualization = null;
-        isset($dataset['chart']) ? $chart = $dataset['chart'] : $chart = null;
-        isset($dataset['chartoptions']) ? $chartoptions = $dataset['chartoptions'] : $chartoptions = null;
-        isset($dataset['dataoptions']) ? $dataoptions = $dataset['dataoptions'] : $dataoptions = null;
-        isset($dataset['filteroptions']) ? $filteroptions = $dataset['filteroptions'] : $filteroptions = null;
-        isset($dataset['dimension1']) ? $dimension1 = $dataset['dimension1'] : $dimension1 = null;
-        isset($dataset['dimension2']) ? $dimension2 = $dataset['dimension2'] : $dimension2 = null;
-        isset($dataset['value']) ? $value = $dataset['value'] : $value = null;
+        $dataset = 0;
+        isset($report['type']) ? $type = $report['type'] : $type = null;
+        isset($report['link']) ? $link = $report['link'] : $link = null;
+        isset($report['visualization']) ? $visualization = $report['visualization'] : $visualization = null;
+        isset($report['chart']) ? $chart = $report['chart'] : $chart = null;
+        isset($report['chartoptions']) ? $chartoptions = $report['chartoptions'] : $chartoptions = null;
+        isset($report['dataoptions']) ? $dataoptions = $report['dataoptions'] : $dataoptions = null;
+        isset($report['filteroptions']) ? $filteroptions = $report['filteroptions'] : $filteroptions = null;
+        isset($report['dimension1']) ? $dimension1 = $report['dimension1'] : $dimension1 = null;
+        isset($report['dimension2']) ? $dimension2 = $report['dimension2'] : $dimension2 = null;
+        isset($report['value']) ? $value = $report['value'] : $value = null;
 
-        $reportId = $this->ReportMapper->create();
-        $this->ReportMapper->update($reportId, $name, $subheader, $parent, $type, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions);
+        $reportId = $this->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
+        $this->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions);
+        $report = $this->ReportMapper->read($reportId);
+        $datasetId = $report['dataset'];
 
         foreach ($data['dataload'] as $dataload) {
             isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;
@@ -353,8 +356,7 @@ class ReportService
             isset($dataload['option']) ? $option = $dataload['option'] : $option = null;
             $schedule = null;
 
-            /**todo**/
-            $dataloadId = $this->DataloadMapper->create($reportId, $datasource);
+            $dataloadId = $this->DataloadMapper->create($datasetId, $datasource);
             $this->DataloadMapper->update($dataloadId, $name, $option, $schedule);
         }
 
@@ -363,14 +365,15 @@ class ReportService
             isset($threshold['value']) ? $value = $threshold['value'] : $value = null;
             isset($threshold['option']) ? $option = $threshold['option'] : $option = null;
             isset($threshold['severity']) ? $severity = $threshold['severity'] : $severity = null;
-            $this->ThresholdService->create($reportId, $dimension1, $option, $value, $severity);
+            $value = $this->floatvalue($value);
+            $this->ThresholdMapper->create($reportId, $dimension1, $value, $option, $severity);
         }
 
         foreach ($data['data'] as $dData) {
             isset($dData[0]) ? $dimension1 = $dData[0] : $dimension1 = null;
             isset($dData[1]) ? $dimension2 = $dData[1] : $dimension2 = null;
             isset($dData[2]) ? $value = $dData[2] : $value = null;
-            $this->StorageMapper->create($reportId, $dimension1, $dimension2, $value);
+            $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value);
         }
 
         if (isset($data['favorite'])) {
@@ -378,6 +381,18 @@ class ReportService
         }
 
         return $reportId;
+    }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        if (is_numeric($val)) {
+            return number_format(floatval($val), 2, '.', '');
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -388,20 +403,20 @@ class ReportService
      */
     public function export(int $reportId)
     {
-        /**todo**/
         $result = array();
-        $result['dataset'] = $this->ReportMapper->read($reportId);
+        $result['report'] = $this->ReportMapper->read($reportId);
+        $datasetId = $result['report']['dataset'];
         $result['dataload'] = $this->DataloadMapper->read($datasetId);
-        $result['threshold'] = $this->ThresholdService->read($reportId);
+        $result['threshold'] = $this->ThresholdMapper->getThresholdsByReport($reportId);
         $result['favorite'] = '';
 
-        if ($result['dataset']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+        if ($result['report']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             $result['data'] = $this->StorageMapper->read($datasetId);
         }
 
-        unset($result['dataset']['id'], $result['dataset']['user_id'], $result['dataset']['user_id'], $result['dataset']['parent']);
+        unset($result['report']['id'], $result['report']['user_id'], $result['report']['user_id'], $result['report']['parent'], $result['report']['dataset']);
         $data = json_encode($result);
-        return new DataDownloadResponse($data, $result['dataset']['name'] . '.export.txt', 'text/plain; charset=utf-8');
+        return new DataDownloadResponse($data, $result['report']['name'] . '.export.txt', 'text/plain; charset=utf-8');
     }
 
     /**

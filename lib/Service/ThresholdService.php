@@ -60,7 +60,7 @@ class ThresholdService
     public function create(int $reportId, $dimension1, $option, $value, int $severity)
     {
         $value = $this->floatvalue($value);
-        return $this->ThresholdMapper->createThreshold($reportId, $dimension1, $value, $option, $severity);
+        return $this->ThresholdMapper->create($reportId, $dimension1, $value, $option, $severity);
     }
 
     private function floatvalue($val)
