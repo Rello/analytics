@@ -14,7 +14,9 @@ build:
 filter:
     excluded_paths:
       - 'js/3rdParty/*'
-      - 'js/jquery*'
+      - 'vendor/*'
+      - 'sample_data/*'
+      - 'translationfiles/*'
 
 imports:
     - javascript
