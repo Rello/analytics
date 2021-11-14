@@ -220,22 +220,6 @@ OCA.Analytics.Navigation = {
         favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
         favorite.dataset.testing = 'fav' + data.name;
 
-/*
-        let advanced = navigationMenu.getElementById('navigationMenuAdvanced');
-        if (OCA.Analytics.isAdvanced) {
-            edit.remove();
-            advanced.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
-            advanced.children[0].classList.add('icon-category-monitoring');
-            advanced.children[1].innerText = t('analytics', 'Back to report');
-            advanced.dataset.testing = 'back' + data.name;
-        } else {
-            advanced.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-            advanced.children[0].classList.add('icon-category-customization');
-            advanced.children[1].innerText = t('analytics', 'Advanced');
-            advanced.dataset.testing = 'adv' + data.name;
-        }
-*/
-
         if (parseInt(data.favorite) === 1) {
             favorite.firstElementChild.classList.replace('icon-star', 'icon-starred');
             favorite.children[1].innerHTML = t('analytics', 'Remove from favorites');
@@ -253,9 +237,7 @@ OCA.Analytics.Navigation = {
             unshareReport.remove();
             favorite.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
-            //advanced.remove();
         } else if (parseInt(data['type']) === OCA.Analytics.TYPE_SHARED) {
-            advanced.remove();
             deleteReport.remove();
             edit.remove();
             unshareReport.dataset.shareId = data.shareId;

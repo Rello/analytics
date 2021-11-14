@@ -72,7 +72,7 @@ class DatasetService
     /**
      * get all datasets
      *
-     * @return DataResponse
+     * @return array
      */
     public function index()
     {
@@ -98,23 +98,35 @@ class DatasetService
             $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
         }
 
-        return new DataResponse($ownDatasets);
+        return $ownDatasets;
     }
 
     /**
      * get own dataset details
      *
      * @param int $datasetId
-     * @param string|null $user_id
      * @return array|bool
      * @throws Exception
      */
-    public function read(int $datasetId, string $user_id = null): array
+    public function readOwn(int $datasetId)
     {
-        $ownDataset = $this->DatasetMapper->read($datasetId, $user_id);
+        $ownDataset = $this->DatasetMapper->readOwn($datasetId);
         if (! empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
         }
+        return $ownDataset;
+    }
+
+    /**
+     * get  dataset details
+     *
+     * @param int $datasetId
+     * @return array|bool
+     * @throws Exception
+     */
+    public function read(int $datasetId)
+    {
+        $ownDataset = $this->DatasetMapper->read($datasetId);
         return $ownDataset;
     }
 

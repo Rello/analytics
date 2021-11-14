@@ -91,8 +91,6 @@ class ReportController extends Controller
      */
     public function createFromDataFile($file = '')
     {
-        //**todo**//
-        //still needed?
         return new DataResponse($this->ReportService->createFromDataFile($file));
     }
 

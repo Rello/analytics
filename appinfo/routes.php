@@ -91,7 +91,7 @@ return [
         ['name' => 'ApiData#dataGetV3', 'url' => '/api/3.0/data/{reportId}', 'verb' => 'GET'],
         ['name' => 'ApiData#datasetIndexV3', 'url' => '/api/3.0/datasets', 'verb' => 'GET'],
         ['name' => 'ApiData#reportIndexV3', 'url' => '/api/3.0/reports', 'verb' => 'GET'],
-        ['name' => 'ApiData#datasetsDetailV3', 'url' => '/api/3.0/datasets/{datasetId}', 'verb' => 'GET'],
+        ['name' => 'ApiData#reportDetailV3', 'url' => '/api/3.0/report/{reportId}', 'verb' => 'GET'],
 
         // wizard
         ['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],

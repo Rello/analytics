@@ -88,19 +88,36 @@ class DatasetMapper
     /**
      * get single dataset
      * @param int $id
-     * @param string|null $user_id
-     * @return array
+     * @return array|bool
      * @throws Exception
      */
-    public function read(int $id, string $user_id = null): array
+    public function readOwn(int $id)
     {
-        if ($user_id) $this->userId = $user_id;
-
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('*')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->orderBy('parent', 'ASC')
+            ->addOrderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
+     * get single dataset
+     * @param int $id
+     * @return array|bool
+     * @throws Exception
+     */
+    public function read(int $id)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
             ->orderBy('parent', 'ASC')
             ->addOrderBy('name', 'ASC');
         $statement = $sql->execute();

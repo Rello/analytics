@@ -95,6 +95,7 @@ class OutputController extends Controller
     private function getData($reportMetadata)
     {
         $datasource = (int)$reportMetadata['type'];
+        $this->logger->error('owner: '. $reportMetadata['uid_initiator']);
         if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             // Internal data
             if ((int)$reportMetadata['dataset'] !== 0) {

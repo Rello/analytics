@@ -152,19 +152,18 @@ class ReportService
      * get own report details
      *
      * @param int $reportId
-     * @param string|null $user_id
      * @return array
      * @throws Exception
      */
-    public function read(int $reportId, string $user_id = null)
+    public function read(int $reportId)
     {
-        $ownReport = $this->ReportMapper->read($reportId, $user_id);
+        $ownReport = $this->ReportMapper->read($reportId);
         if (!empty($ownReport)) {
             $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
             $ownReport = $this->VariableService->replaceTextVariables($ownReport);
 
             if ($ownReport['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $ownReport['dataset'] !== 0) {
-                $dataset = $this->DatasetService->read($ownReport['dataset'],  $user_id);
+                $dataset = $this->DatasetService->readOwn($ownReport['dataset']);
                 $ownReport['dimension1'] = $dataset['dimension1'];
                 $ownReport['dimension2'] = $dataset['dimension2'];
                 $ownReport['value'] = $dataset['value'];

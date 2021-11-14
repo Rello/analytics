@@ -103,13 +103,10 @@ class ReportMapper
     /**
      * get single report
      * @param int $id
-     * @param string|null $user_id
      * @return array
      */
-    public function read(int $id, string $user_id = null)
+    public function read(int $id)
     {
-        if ($user_id) $this->userId = $user_id;
-
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('*')

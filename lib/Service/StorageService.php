@@ -50,22 +50,26 @@ class StorageService
         $header = array();
         $datasetMetadata = $this->DatasetService->read($datasetId);
 
-        // output the dimensions available for filtering of this dataset
-        // this needs to map the technical name to its display name in the report
-        $availableDimensions['dimension1'] = $datasetMetadata['dimension1'];
-        $availableDimensions['dimension2'] = $datasetMetadata['dimension2'];
+        if (!empty($datasetMetadata)) {
+            $this->logger->error('dataset: '.$datasetMetadata);
 
-        // return the header texts of the data being transferred according to the current drilldown state selected by user
-        $options = json_decode($options, true);
-        if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
-        if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
-        $header[6] = $datasetMetadata['value'];
-        $header = array_values($header);
+            // output the dimensions available for filtering of this dataset
+            // this needs to map the technical name to its display name in the report
+            $availableDimensions['dimension1'] = $datasetMetadata['dimension1'];
+            $availableDimensions['dimension2'] = $datasetMetadata['dimension2'];
 
-        $data = $this->StorageMapper->read($datasetMetadata['id'], $options);
-        $data = array_values($data);
-        foreach ($data as $key => $value) {
-            $data[$key] = array_values($value);
+            // return the header texts of the data being transferred according to the current drilldown state selected by user
+            $options = json_decode($options, true);
+            if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
+            if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
+            $header[6] = $datasetMetadata['value'];
+            $header = array_values($header);
+
+            $data = $this->StorageMapper->read($datasetMetadata['id'], $options);
+            $data = array_values($data);
+            foreach ($data as $key => $value) {
+                $data[$key] = array_values($value);
+            }
         }
 
         return empty($data) ? [

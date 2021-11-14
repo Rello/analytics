@@ -78,7 +78,7 @@ class ApiDataController extends ApiController
     public function addData(int $datasetId)
     {
         $params = $this->request->getParams();
-        $datasetMetadata = $this->DatasetService->read($datasetId);
+        $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -115,7 +115,7 @@ class ApiDataController extends ApiController
     {
         $message = 'No -data- parameter';
         $params = $this->request->getParams();
-        $datasetMetadata = $this->DatasetService->read($datasetId);
+        $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -154,7 +154,7 @@ class ApiDataController extends ApiController
         $message = 'No -delete- parameter';
         $params = $this->request->getParams();
         //$this->logger->debug('array: ' . json_encode($params));
-        $datasetMetadata = $this->DatasetService->read($datasetId);
+        $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
         $this->deriveMaintenancePossible($datasetMetadata);
 
@@ -239,7 +239,7 @@ class ApiDataController extends ApiController
      * @CORS
      * @NoCSRFRequired
      * @NoAdminRequired
-     * @return DataResponse
+     * @return array
      * @throws \Exception
      */
     public function datasetIndexV3()
@@ -252,7 +252,7 @@ class ApiDataController extends ApiController
      * @CORS
      * @NoCSRFRequired
      * @NoAdminRequired
-     * @return DataResponse
+     * @return array
      * @throws \Exception
      */
     public function reportIndexV3()
@@ -268,31 +268,23 @@ class ApiDataController extends ApiController
      * @return DataResponse
      * @throws \Exception
      */
-    public function datasetsDetailV3(int $datasetId)
+    public function reportDetailV3(int $reportId)
     {
-        $datasetMetadata = $this->DatasetService->read($datasetId);
-        unset($datasetMetadata['user_id']
-            , $datasetMetadata['link']
-            , $datasetMetadata['dimension3']
+        $reportMetadata = $this->ReportService->read($reportId);
+        unset($reportMetadata['user_id']
+            , $reportMetadata['link']
+            , $reportMetadata['permissions']
+            , $reportMetadata['dimension3']
         );
 
-        if (!empty($datasetMetadata)) {
-            /*** todo **/
-            /**(int)$reportMetadata['dataset'] **/
-
-            $allData = $this->StorageService->read($datasetMetadata);
-            $series = array_values(array_unique(array_map('array_shift', $allData['data'])));
-
+        if (!empty($reportMetadata)) {
             return new DataResponse([
-                'options' => $datasetMetadata,
-                'header' => $allData['header'],
-                'dimensions' => $allData['dimensions'],
-                'series' => $series,
+                $reportMetadata
             ], HTTP::STATUS_OK);
 
         } else {
             return new DataResponse([
-                'message' => 'No metadata available for given $datasetId',
+                'message' => 'No metadata available for given $reportId',
             ], HTTP::STATUS_OK);
         }
     }
@@ -368,6 +360,6 @@ class ApiDataController extends ApiController
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"delete":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/deletedata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"del":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/deletedata/158
     // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/data/52 --insecure
-    // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/datasets --insecure
+    // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://nc21/nextcloud/apps/analytics/api/3.0/report/121 --insecure
     // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/reports --insecure
 }

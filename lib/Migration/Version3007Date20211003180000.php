@@ -152,8 +152,6 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
         $this->fixShares($reportIdMap);
         $this->fixThreshold($reportIdMap);
         $this->fixParents($reportIdMap);
-        /**todo**/
-        // fix favorites
     }
 
     /**

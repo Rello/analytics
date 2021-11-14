@@ -68,7 +68,7 @@ OC.L10N.register(
         'Column': 'Oszlop',
         'Add a report to the favorites to be shown here': 'Add hozzá a riportot a kedvencekhez, hogy itt látszódjon',
         'Remove from favorites': 'Eltávolítás a kedvencekből',
-        'Add to favorites': 'Zu Favoriten hinzufügen',
+        'Add to favorites': 'Hozzáadás a kedvencekhez',
         'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"': 'Ennek a riportnak nincsenek adatsorai. <br>Válasszon adatforrást a válastómenüből és nyomja meg a "+"',
         'Choose a dataload from the list to change its settings': 'Válasszon egy adatbetöltési lehetőséget a listából hogy megváltoztathassa a beállításait',
         'Overview': 'Áttekintés',
@@ -79,11 +79,11 @@ OC.L10N.register(
         'Text variables': 'Szövegváltozók',
         'Text variables can be used in title and subheader.<br>They are replaced when the report is executed.': 'Szöveges változók használhatók a jelentés nevében vagy leírásában.<br>A jelentés futtatásakor lecserélődnek.',
         'Color': 'Színek',
-        'Datasets can be changed in a separate maintenance': 'Datasets can be changed in a separate maintenance',
-        'Column descriptions are used from the dataset and can not be changed on a report level': 'Column descriptions are used from the dataset and can not be changed on a report level',
-        'Switch to the dataset maintenance from here?': 'Switch to the dataset maintenance from here?',
-        'Dataset maintenance': 'Dataset maintenance',
-        'Back to reports': 'Back to reports',
-        'New dataset': 'New dataset'
+        'Datasets can be changed in a separate maintenance': 'Az adatlapok egy külön karbantartás során módosíthatók',
+        'Column descriptions are used from the dataset and can not be changed on a report level': 'Az oszlopleírások az adatkészletből kerülnek felhasználásra, és riport szinten nem módosíthatók',
+        'Switch to the dataset maintenance from here?': 'Innen átvált az adatlap-karbantartásra?',
+        'Dataset maintenance': 'Adatlap karbantartás',
+        'Back to reports': 'Vissza a riportokhoz',
+        'New dataset': 'Új adatlap'
     },
     '');

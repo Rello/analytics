@@ -46,7 +46,7 @@ class DatasetController extends Controller
      */
     public function index()
     {
-        return $this->DatasetService->index();
+        return new DataResponse($this->DatasetService->index());
     }
 
     /**
@@ -74,7 +74,7 @@ class DatasetController extends Controller
      */
     public function read(int $datasetId)
     {
-        return $this->DatasetService->read($datasetId);
+        return $this->DatasetService->readOwn($datasetId);
     }
 
     /**
