@@ -7,7 +7,6 @@
 	"require-dev": {
       "christophwurst/nextcloud": "^v22.1.1",
       "symfony/symfony": "^4.4.19",
-      "guzzlehttp/guzzle": "^6.3.0",
-      "phpoffice/phpspreadsheet": "^v1.19.0"
+      "guzzlehttp/guzzle": "^6.3.0"
     }
 }
