@@ -23,8 +23,6 @@ class StorageService
     private $DatasetService;
 
     public function __construct(
-        string $AppName,
-        IRequest $request,
         LoggerInterface $logger,
         StorageMapper $StorageMapper,
         DatasetService $DatasetService,

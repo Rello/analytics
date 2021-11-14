@@ -22,6 +22,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\EventDispatcher\IEventDispatcher;
+use Psr\Container\ContainerInterface;
 
 class Application extends App implements IBootstrap
 {
@@ -45,7 +46,7 @@ class Application extends App implements IBootstrap
         $server = $context->getServerContainer();
 
         /** @var IEventDispatcher $dispatcher */
-        $dispatcher = $server->query(IEventDispatcher::class);
+        $dispatcher = $server->get(IEventDispatcher::class);
         FlowOperation::register($dispatcher);
     }
 

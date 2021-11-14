@@ -19,6 +19,7 @@ use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\StorageMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\ITagManager;
@@ -106,12 +107,12 @@ class DatasetService
      * @param int $datasetId
      * @param string|null $user_id
      * @return array|bool
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function read(int $datasetId, string $user_id = null): array
     {
         $ownDataset = $this->DatasetMapper->read($datasetId, $user_id);
-        if ($ownDataset) {
+        if (! empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
         }
         return $ownDataset;
@@ -122,10 +123,11 @@ class DatasetService
      *
      * @param int $datasetId
      * @return array|bool
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function status(int $datasetId): array
     {
+        $status = array();
         $status['reports'] = $this->ReportMapper->reportsForDataset($datasetId);
         $status['data'] = $this->StorageMapper->getRecordCount($datasetId);
         return $status;
@@ -139,7 +141,7 @@ class DatasetService
      * @param $dimension2
      * @param $value
      * @return int
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function create($name, $dimension1, $dimension2, $value)
     {
@@ -152,11 +154,11 @@ class DatasetService
      *
      * @param int $datasetId
      * @param $name
-     * @param null $dimension1
-     * @param null $dimension2
-     * @param null $value
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return bool
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function update(int $datasetId, $name,$dimension1 = null, $dimension2 = null, $value = null)
     {
@@ -168,7 +170,7 @@ class DatasetService
      *
      * @param int $datasetId
      * @return DataDownloadResponse
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function export(int $datasetId)
     {
@@ -192,7 +194,7 @@ class DatasetService
      *
      * @param int $datasetId
      * @return bool
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function delete(int $datasetId)
     {

@@ -57,9 +57,9 @@ class ReportController extends Controller
      * @param $link
      * @param $visualization
      * @param $chart
-     * @param null $dimension1
-     * @param null $dimension2
-     * @param null $value
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return DataResponse
      */
     public function create($name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value)
@@ -133,9 +133,9 @@ class ReportController extends Controller
      * @param $chart
      * @param $chartoptions
      * @param $dataoptions
-     * @param null $dimension1
-     * @param null $dimension2
-     * @param null $value
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return DataResponse
      * @throws \OCP\DB\Exception
      */

@@ -20,6 +20,7 @@ class ShareMapper
 {
     /** @var IUserSession */
     private $userSession;
+    /** @var IDBConnection */
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_share';

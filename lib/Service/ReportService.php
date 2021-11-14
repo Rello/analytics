@@ -19,9 +19,11 @@ use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
 use OCP\ITagManager;
 use OCP\IConfig;
+use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
 
 class ReportService
@@ -75,10 +77,10 @@ class ReportService
     /**
      * get all reports
      *
-     * @return DataResponse
-     * @throws \OCP\PreConditionNotMetException
+     * @return array
+     * @throws PreConditionNotMetException
      */
-    public function index()
+    public function index(): array
     {
         $ownReports = $this->ReportMapper->index();
 
@@ -152,6 +154,7 @@ class ReportService
      * @param int $reportId
      * @param string|null $user_id
      * @return array
+     * @throws Exception
      */
     public function read(int $reportId, string $user_id = null)
     {
@@ -220,13 +223,13 @@ class ReportService
      * @param $dataoptions
      * @param $filteroptions
      * @return int
+     * @throws Exception
      */
     public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
     {
 
-        $newId = $this->ReportMapper->create();
         $template = $this->ReportMapper->read($reportId);
-        $this->ReportMapper->update($newId,
+        $newId = $this->ReportMapper->create(
             $template['name'] . ' copy',
             $template['subheader'],
             $template['parent'],
@@ -235,8 +238,6 @@ class ReportService
             $template['link'],
             $template['visualization'],
             $template['chart'],
-            $template['chartoptions'],
-            $template['dataoptions'],
             $template['dimension1'],
             $template['dimension2'],
             $template['value']);
@@ -280,11 +281,10 @@ class ReportService
      * @param $chart
      * @param $chartoptions
      * @param $dataoptions
-     * @param null $dimension1
-     * @param null $dimension2
-     * @param null $value
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return bool
-     * @throws \OCP\DB\Exception
      */
     public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
@@ -480,7 +480,7 @@ class ReportService
     }
 
     /**
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function reportsForDataset($datasetId) {
         return $this->ReportMapper->reportsForDataset($datasetId);
