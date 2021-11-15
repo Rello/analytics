@@ -9,11 +9,11 @@ Enable flexible reports and enjoy seamless Nextcloud integration.
 Visualize and share anything, from financial analysis to IoT logs.
 
 ##### Features:
-- Datasources: csv, spreadsheet, API, imports, manual entry
+- Data sources: csv, spreadsheet, API, imports, manual entry
 - 3rd party: GitHub Statistics, website grabber, JSON
-- Register external datasources from other apps
+- Register external data sources from other apps
 - Storage: realtime or database
-- Advanced dataloads with scheduling
+- Advanced data loads with scheduling
 - Visualization: combined charts, tables, filters
 - Analysis functions: trend
 - Thresholds for alerts and color coding
@@ -21,7 +21,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Sharing: user, groups, link
 
 ]]></description>
-    <version>3.6.6</version>
+    <version>4.0.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>

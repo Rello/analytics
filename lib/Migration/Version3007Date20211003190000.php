@@ -12,8 +12,9 @@ use OCP\Migration\SimpleMigrationStep;
 
 /**
  * Auto-generated migration step: Please modify to your needs!
+ * sudo -u www-data php /var/www/nextcloud/occ migrations:execute analytics 3007Date20211003190000
  */
-class Version020400Date20200623185352 extends SimpleMigrationStep
+class Version3007Date20211003190000 extends SimpleMigrationStep
 {
 
     /** @var IDBConnection */
@@ -41,18 +42,6 @@ class Version020400Date20200623185352 extends SimpleMigrationStep
      */
     public function changeSchema(IOutput $output, Closure $schemaClosure, array $options)
     {
-        /** @var ISchemaWrapper $schema */
-        $schema = $schemaClosure();
-
-        $table = $schema->getTable('analytics_dataset');
-        if (!$table->hasColumn('dataoptions')) {
-            $table->addColumn('dataoptions', 'string', [
-                'notnull' => false,
-                'length' => 1000,
-            ]);
-            return $schema;
-        }
-        return null;
     }
 
     /**
@@ -62,5 +51,15 @@ class Version020400Date20200623185352 extends SimpleMigrationStep
      */
     public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options)
     {
+        $query = $this->connection->getQueryBuilder();
+        $query->insert('analytics_whats_new')
+            ->values([
+                'version' => $query->createNamedParameter('4.0.0'),
+                'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
+"en":{"regular":["Multiple reports per dataset","Wizards for reports and datasets","Better external Datasource handling"],"admin":["New Features apply to users"]},
+"de":{"regular":["Mehrfache Berichte pro Datensatz","Wizards für Berichte und Datensätze","Verbesserte externe Datenquellen"],"admin":["Nur User Features"]}
+}}'),
+            ])
+            ->execute();
     }
 }

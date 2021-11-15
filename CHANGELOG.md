@@ -1,11 +1,13 @@
 # Changelog
 
-## 3.6.1 - 2021-0831
+## 4.0.0 - 2021-11-15
 ### Added
+- Multiple reports per dataset #193
 - GET/POST for json datasource
 - Error texts for datasources #196
 - "New report" & "New Dataset" Wizard #197
 - HU translation #199
+- enable Transifex #202
 
 ### Changed
 - Dashboard Size/Format of displayed numbers #187
