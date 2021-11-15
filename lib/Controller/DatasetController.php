@@ -91,7 +91,6 @@ class DatasetController extends Controller
         if ($own) {
             $reports = $this->ReportService->reportsForDataset($datasetId);
             foreach ($reports as $report) {
-                $this->logger->error('report id: '.$report['id']);
                 $this->ReportService->delete($report['id']);
             }
             $this->DatasetService->delete($datasetId);

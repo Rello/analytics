@@ -78,7 +78,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
             </div>
             <div class="description">
-                <h3>Visualize any data with easy to use reports</h3>
+                <h3 id="wizardNewHeader1">Visualize any data with easy to use reports</h3>
                 <ul>
                     <li>Different chart types like lines, columns or doughnuts</li>
                     <li>Customize further chart options by using advanced scripting</li>
@@ -95,7 +95,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
             </div>
             <div class="description">
-                <h3>Slice and dice your data</h3>
+                <h3 id="wizardNewHeader2">Slice and dice your data</h3>
                 <ul>
                     <li>Different filter types like "equal", "list of values" or "contains"</li>
                     <li>Change drilldowns by removing columns</li>
@@ -112,7 +112,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
             </div>
             <div class="description">
-                <h3>Use data from various datasources</h3>
+                <h3 id="wizardNewHeader3">Use data from various datasources</h3>
                 <ul>
                     <li>Internal data is persisted in the database and delivers the most flexibility and performance
                     </li>
@@ -130,7 +130,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
             <div class="description">
-                <h3>Advanced configuration: Dataloads</h3>
+                <h3 id="wizardNewHeader4">Advanced configuration: Dataloads</h3>
                 <ul>
                     <li>Any datasource can be persisted in Nextcloud</li>
                     <li>Use timestamps to historize data</li>
@@ -340,7 +340,7 @@
                         <div class="icon-analytics-chartLine icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 17px;">
                         <input type="radio" id="chartTime" class="radio" name="chart" value="datetime">
-                        <label for="chartTime"><?php p($l->t('Timeline (Date in column 2)')); ?></label>
+                        <label for="chartTime"><?php p($l->t('Timeline (date in column 2)')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">

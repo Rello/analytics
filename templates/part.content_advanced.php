@@ -38,5 +38,5 @@
     <br>
     <br>
     <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
-       target="_blank"><?php p($l->t('More Information ...')); ?></a>
+       target="_blank"><?php p($l->t('More Information …')); ?></a>
 </div>

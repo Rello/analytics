@@ -94,7 +94,7 @@
                 <select id="sidebarReportChart" class="sidebarInput">
                     <option value="" selected></option>
                     <option value="line"><?php p($l->t('Line')); ?></option>
-                    <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
+                    <option value="datetime"><?php p($l->t('Timeline (date in column 2)')); ?></option>
                     <option value="column"><?php p($l->t('Bar')); ?></option>
                     <option value="area"><?php p($l->t('Area')); ?></option>
                     <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
@@ -216,7 +216,8 @@
     </button>
     <br>
     <br>
-    <div><h3><?php p($l->t('Import')); ?></h3></div>
+    <div><h3><?php // TRANSLATORS Noun shown in a button
+            p($l->t('Import')); ?></h3></div>
     <button id="importDataFileButton" type="button">
         <?php p($l->t('From file')); ?>
     </button>
@@ -227,7 +228,8 @@
     <textarea id="importDataClipboardText" rows="5" cols="50" hidden></textarea>
     <br>
     <button id="importDataClipboardButtonGo" type="button" hidden>
-        <?php p($l->t('Import')); ?>
+        <?php // TRANSLATORS Noun shown in a button
+        p($l->t('Import')); ?>
     </button>
     <div><h3><?php p($l->t('REST API')); ?></h3></div>
     <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
@@ -242,7 +244,7 @@
 <template id="templateThreshold">
     <h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports')); ?></h1>
     <a href="https://github.com/Rello/analytics/wiki/Thresholds"
-       target="_blank"><?php p($l->t('More information…')); ?></a>
+       target="_blank"><?php p($l->t('More information …')); ?></a>
     <br>
     <br>
     <div class="table" style="display: table;">
@@ -256,12 +258,18 @@
             <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
             <div style="display: table-cell;">
                 <select id="sidebarThresholdOption" class="input150">
-                    <option value="=" selected><?php p($l->t('= equal')); ?></option>
-                    <option value=">"><?php p($l->t('> greater')); ?></option>
-                    <option value="<"><?php p($l->t('< less')); ?></option>
-                    <option value="<="><?php p($l->t('<= less equal')); ?></option>
-                    <option value=">="><?php p($l->t('>= greater equal')); ?></option>
-                    <option value="!="><?php p($l->t('!= not equal')); ?></option>
+                    <option value="=" selected><?php  // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('= equal')); ?></option>
+                    <option value=">"><?php  // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('> greater')); ?></option>
+                    <option value="<"><?php  // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('< less')); ?></option>
+                    <option value="<="><?php  // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('<= less equal')); ?></option>
+                    <option value=">="><?php // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('>= greater equal')); ?></option>
+                    <option value="!="><?php  // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('!= not equal')); ?></option>
                 </select>
             </div>
         </div>
@@ -313,7 +321,7 @@
                 </div>
                 <div style="display: table-cell;">
                     <a href="https://github.com/Rello/analytics/wiki/Datasources"
-                       target="_blank"><?php p($l->t('More information…')); ?></a>
+                       target="_blank"><?php p($l->t('More information …')); ?></a>
                 </div>
             </div>
         </div>
@@ -354,9 +362,10 @@
             <div id="dataloadRun" hidden>
                 <button id="dataloadExecuteButton"><?php p($l->t('Load now')); ?></button>
                 <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
-                        for="testrunCheckbox"><?php p($l->t('Testrun')); ?></label>
+                        for="testrunCheckbox"><?php p($l->t('Test run')); ?></label>
                 <br><br>
-                <span><?php p($l->t('Schedule in background')); ?></span>
+                <span><?php // TRANSLATORS description of a textbox
+                    p($l->t('Schedule in background')); ?></span>
                 <br>
                 <select id="dataloadSchedule" class="input150">
                     <option value="" selected><?php p($l->t('not scheduled')); ?></option>
@@ -370,7 +379,7 @@
                 <br>
                 <br>
                 <a href="https://github.com/Rello/analytics/wiki/Scheduled-dataloads"
-                   target="_blank"><?php p($l->t('More information…')); ?></a>
+                   target="_blank"><?php p($l->t('More information …')); ?></a>
             </div>
         </div>
     </div>

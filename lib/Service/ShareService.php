@@ -174,7 +174,6 @@ class ShareService
     {
         $share = $this->ShareMapper->getShare($shareId);
         $type = $share['type'];
-        $this->logger->error('share type: ' . $type);
         if ((int)$type === self::SHARE_TYPE_LINK) {
             $this->ShareMapper->deleteShare($shareId);
         } elseif ((int)$type === self::SHARE_TYPE_USER) {
