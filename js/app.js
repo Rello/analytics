@@ -60,7 +60,6 @@ if (!OCA.Analytics) {
 OCA.Analytics.Core = {
     initApplication: function () {
         OCA.Analytics.Backend.getDatasourceDefinitions();
-        OCA.Analytics.Backend.getDatasetDefinitions();
 
         const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {

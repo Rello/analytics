@@ -664,7 +664,6 @@ OCA.Analytics.Advanced.Dataset = {
                 button.disabled = false;
 
                 OCA.Analytics.Navigation.init(reportId);
-                OCA.Analytics.Backend.getDatasetDefinitions();
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
             }
         });
