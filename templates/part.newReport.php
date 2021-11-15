@@ -108,7 +108,7 @@
                 <select id="sidebarReportChart" class="sidebarInput">
                     <option value="" selected></option>
                     <option value="line"><?php p($l->t('Line')); ?></option>
-                    <option value="datetime"><?php p($l->t('Timeline (Date in column 2)')); ?></option>
+                    <option value="datetime"><?php p($l->t('Timeline (date in column 2)')); ?></option>
                     <option value="column"><?php p($l->t('Bar')); ?></option>
                     <option value="area"><?php p($l->t('Area')); ?></option>
                     <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>

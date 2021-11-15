@@ -103,7 +103,7 @@ class ReportController extends Controller
      */
     public function read(int $reportId)
     {
-        return new DataResponse($this->ReportService->read($reportId));
+        return new DataResponse($this->ReportService->read($reportId, false));
     }
 
     /**

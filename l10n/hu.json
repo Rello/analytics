@@ -2,7 +2,7 @@
   "translations": {
     "Analytics": "Analytics",
     "Do you like this app?": "Tetszik neked ez az App?",
-    "More information…": "További információk…",
+    "More information …": "További információk…",
     "This report is password-protected": "Ez a riport jelszóvédett",
     "The password is wrong. Try again.": "Rossz jelszó. Próbáld újra.",
     "Password": "Jelszó",
@@ -32,7 +32,7 @@
     "Open documentation": "Dokumentáció megnyitása",
     "Line": "Vonal",
     "Area": "Terület",
-    "Timeline (Date in column 2)": "Idővonal (dátum a 2. oszlopban)"
+    "Timeline (date in column 2)": "Idővonal (dátum a 2. oszlopban)"
     "Update": "Frissítés",
     "Delete": "Törlés",
     "New": "Új",
@@ -89,7 +89,7 @@
     "Advanced configuration": "Haladó beállítások",
     "Title": "Cím",
     "Load now": "Betöltés most",
-    "Testrun": "Próba",
+    "Test run": "Próba",
     "Schedule in background": "Időzítve háttérben",
     "not scheduled": "nincs időzítve",
     "daily": "napi",

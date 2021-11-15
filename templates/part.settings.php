@@ -38,7 +38,7 @@
             </li>
             <li class="analytics-settings-item icon-info">
                 <a href="https://github.com/rello/analytics/wiki" target="_blank" style="padding: 0 25px;">
-                    <?php p($l->t('More information…')); ?>
+                    <?php p($l->t('More information …')); ?>
                 </a>
             </li>
         </ul>

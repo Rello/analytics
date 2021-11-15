@@ -51,8 +51,6 @@ class StorageService
         $datasetMetadata = $this->DatasetService->read($datasetId);
 
         if (!empty($datasetMetadata)) {
-            $this->logger->error('dataset: '.$datasetMetadata);
-
             // output the dimensions available for filtering of this dataset
             // this needs to map the technical name to its display name in the report
             $availableDimensions['dimension1'] = $datasetMetadata['dimension1'];

@@ -145,14 +145,19 @@ OCA.Analytics.UI = {
         data = jsondata.data;
 
         const language = {
+            // TRANSLATORS Noun
             search: t('analytics', 'Search'),
             lengthMenu: t('analytics', 'Show _MENU_ entries'),
             info: t('analytics', 'Showing _START_ to _END_ of _TOTAL_ entries'),
             infoEmpty: t('analytics', 'Showing 0 to 0 of 0 entries'),
             paginate: {
+                // TRANSLATORS pagination description non-capital
                 first: t('analytics', 'first'),
+                // TRANSLATORS pagination description non-capital
                 previous: t('analytics', 'previous'),
+                // TRANSLATORS pagination description non-capital
                 next: t('analytics', 'next'),
+                // TRANSLATORS pagination description non-capital
                 last: t('analytics', 'last')
             },
         };

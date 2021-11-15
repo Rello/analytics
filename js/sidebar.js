@@ -85,6 +85,7 @@ OCA.Analytics.Sidebar = {
             id: 'tabHeaderShare',
             class: 'tabContainerShare',
             tabindex: '5',
+            // TRANSLATORS Noun; headline in sidebar
             name: t('analytics', 'Share'),
             action: OCA.Analytics.Sidebar.Share.tabContainerShare,
         });
@@ -378,7 +379,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleDimensionHint: function () {
-        let text = t('analytics', 'Column descriptions are used from the dataset and can not be changed on a report level') +
+        let text = t('analytics', 'Column descriptions are derived from the dataset and can not be changed on a report level') +
             '<br><br>' +
             t('analytics', 'Datasets can be changed in a separate maintenance') +
             '<br>' +
@@ -1153,7 +1154,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isAdvanced) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
@@ -1235,7 +1236,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isAdvanced) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
@@ -1245,7 +1246,7 @@ OCA.Analytics.Sidebar.Backend = {
                 }
             },
             error: function () {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }
@@ -1269,7 +1270,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isAdvanced) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
@@ -1279,7 +1280,7 @@ OCA.Analytics.Sidebar.Backend = {
                 }
             },
             error: function () {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }

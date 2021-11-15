@@ -375,7 +375,7 @@ OCA.Analytics.Advanced.Dataload = {
                     } else {
                         messageType = 'error';
                     }
-                    OCA.Analytics.Notification.notification(messageType, data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated, ') + data.error + t('analytics', ' errors'));
+                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' '  + t('analytics', 'records updated') + ', '  + data.error+ ' '  + t('analytics', 'errors'));
                 }
             }
         });
@@ -690,7 +690,7 @@ OCA.Analytics.Advanced.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
@@ -772,7 +772,7 @@ OCA.Analytics.Advanced.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
@@ -782,7 +782,7 @@ OCA.Analytics.Advanced.Backend = {
                 }
             },
             error: function () {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }
@@ -806,7 +806,7 @@ OCA.Analytics.Advanced.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + t('analytics', ' records inserted, ') + data.update + t('analytics', ' records updated'));
+                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (document.getElementById('advanced').value === 'false') {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
@@ -816,7 +816,7 @@ OCA.Analytics.Advanced.Backend = {
                 }
             },
             error: function () {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs'));
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
                 button.classList.remove('loading');
                 button.disabled = false;
             }

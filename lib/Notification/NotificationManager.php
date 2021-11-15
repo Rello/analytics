@@ -11,7 +11,6 @@
 
 namespace OCA\Analytics\Notification;
 
-use OCP\IL10N;
 use OCP\Notification\IManager as INotificationManager;
 use Psr\Log\LoggerInterface;
 
@@ -21,19 +20,13 @@ class NotificationManager
     const SUBJECT_THRESHOLD = 'data_threshold';
     /** @var INotificationManager */
     protected $notificationManager;
-    private $l10n;
-    private $userId;
     private $logger;
 
     public function __construct(
-        IL10N $l10n,
-        $userId,
         LoggerInterface $logger,
         INotificationManager $notificationManager
     )
     {
-        $this->l10n = $l10n;
-        $this->userId = $userId;
         $this->logger = $logger;
         $this->notificationManager = $notificationManager;
     }

@@ -155,12 +155,12 @@ class ReportService
      * @return array
      * @throws Exception
      */
-    public function read(int $reportId)
+    public function read(int $reportId, $replace = true)
     {
         $ownReport = $this->ReportMapper->read($reportId);
         if (!empty($ownReport)) {
             $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
-            $ownReport = $this->VariableService->replaceTextVariables($ownReport);
+            if ($replace) $ownReport = $this->VariableService->replaceTextVariables($ownReport);
 
             if ($ownReport['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $ownReport['dataset'] !== 0) {
                 $dataset = $this->DatasetService->readOwn($ownReport['dataset']);
