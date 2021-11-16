@@ -11,7 +11,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - 3rd party: GitHub Statistics, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber)
   , [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
 - [Register](https://github.com/Rello/analytics/wiki/Register-external-datasource) external datasources from other apps
-- Storage: realtime or database
+- Storage: real-time or database
 - Advanced dataloads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
 - Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables,
   filters
