@@ -12,7 +12,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Data sources: csv, spreadsheet, API, imports, manual entry
 - 3rd party: GitHub Statistics, website grabber, JSON
 - Register external data sources from other apps
-- Storage: realtime or database
+- Storage: real-time or database
 - Advanced data loads with scheduling
 - Visualization: combined charts, tables, filters
 - Analysis functions: trend
