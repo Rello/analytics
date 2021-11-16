@@ -53,13 +53,13 @@ class VariableService
                     } elseif ($match === '%currentTime%') {
                         $replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
                     } elseif ($match === '%lastUpdateDate%') {
-                        $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['id']);
+                        $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['dataset']);
                         $replace = $this->IDateTimeFormatter->formatDate($timestamp, 'short');
                     } elseif ($match === '%lastUpdateTime%') {
-                        $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['id']);
+                        $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['dataset']);
                         $replace = $this->IDateTimeFormatter->formatTime($timestamp, 'short');
                     } elseif ($match === '%owner%') {
-                        $owner = $this->DatasetMapper->getOwner($datasetMetadata['id']);
+                        $owner = $this->DatasetMapper->getOwner($datasetMetadata['dataset']);
                         $replace = $owner;
                     }
                     if ($replace !== null) {
