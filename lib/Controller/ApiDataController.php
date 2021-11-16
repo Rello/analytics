@@ -278,10 +278,7 @@ class ApiDataController extends ApiController
         );
 
         if (!empty($reportMetadata)) {
-            return new DataResponse([
-                $reportMetadata
-            ], HTTP::STATUS_OK);
-
+            return new DataResponse($reportMetadata, HTTP::STATUS_OK);
         } else {
             return new DataResponse([
                 'message' => 'No metadata available for given $reportId',
@@ -360,6 +357,6 @@ class ApiDataController extends ApiController
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"delete":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/deletedata/158
     // curl -u Admin:2sroW-SxRcK-AmdsF-RYMJ5-CKSyf -d '{"del":[{"dimension1": "a", "dimension2": "a"}]}' -X POST -H "Content-Type: application/json" http://ncxx/nextcloud/apps/analytics/api/2.0/deletedata/158
     // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/data/52 --insecure
-    // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://nc21/nextcloud/apps/analytics/api/3.0/report/121 --insecure
+    // curl -u admin:i6iX2-DdLX6-TT7T7-GFi9c-GfSec -X GET -H "Content-Type: application/json" https://nc22/nextcloud/apps/analytics/api/3.0/data/21 --insecure
     // curl -u admin:cZMLJ-DTpYA-Ci5QM-M4ZRy-KBcTp -X GET -H "Content-Type: application/json" https://ncxx/nextcloud/apps/analytics/api/3.0/reports --insecure
 }

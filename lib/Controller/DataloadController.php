@@ -22,8 +22,8 @@ use Psr\Log\LoggerInterface;
 
 class DataloadController extends Controller
 {
-    private LoggerInterface $logger;
-    private DataloadService $DataloadService;
+    private $logger;
+    private $DataloadService;
 
     public function __construct(
         string $AppName,
