@@ -64,7 +64,7 @@ class Provider implements IProvider
                 if ($ownActivity) {
                     $parsedSubject = $this->l10n->t('You shared report {report}');
                 } else {
-                    $parsedSubject = $event->getSubjectParameters()['author'] . $this->l10n->t(' shared report {report} with you');
+                    $parsedSubject = $event->getSubjectParameters()['author'] . ' ' .$this->l10n->t('shared report {report} with you');
                 }
                 break;
             case ActivityManager::SUBJECT_DATA_ADD:
