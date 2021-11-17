@@ -168,7 +168,7 @@ class OutputController extends Controller
         // send current user filter options to the data request
         // only if the report has update-permissions
         // if nothing is changed by the user, the filter which is stored for the report, will be used
-        if ($filteroptions and $filteroptions !== '' and $metadata['permissions'] === Constants::PERMISSION_UPDATE) {
+        if ($filteroptions and $filteroptions !== '' and (int)$metadata['permissions'] === Constants::PERMISSION_UPDATE) {
             $metadata['filteroptions'] = $filteroptions;
             $metadata['dataoptions'] = $dataoptions;
             $metadata['chartoptions'] = $chartoptions;
