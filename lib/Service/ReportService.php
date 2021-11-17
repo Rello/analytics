@@ -18,13 +18,13 @@ use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
-use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
 use OCP\ITagManager;
 use OCP\IConfig;
 use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
+use OCP\IL10N;
 
 class ReportService
 {
@@ -42,9 +42,11 @@ class ReportService
     private $ActivityManager;
     private $rootFolder;
     private $VariableService;
+    private $l10n;
 
     public function __construct(
         $userId,
+        IL10N $l10n,
         LoggerInterface $logger,
         ITagManager $tagManager,
         ShareService $ShareService,
@@ -72,6 +74,7 @@ class ReportService
         $this->rootFolder = $rootFolder;
         $this->VariableService = $VariableService;
         $this->config = $config;
+        $this->l10n = $l10n;
     }
 
     /**
@@ -229,7 +232,7 @@ class ReportService
 
         $template = $this->ReportMapper->read($reportId);
         $newId = $this->ReportMapper->create(
-            $template['name'] . ' copy',
+            $template['name'] . ' ' . $this->l10n->t('copy'),
             $template['subheader'],
             $template['parent'],
             $template['type'],
