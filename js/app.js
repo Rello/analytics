@@ -727,7 +727,7 @@ OCA.Analytics.Datasource = {
         let options = document.createDocumentFragment();
         let option = document.createElement('option');
         option.value = '';
-        option.innerText = '';
+        option.innerText = t('analytics', 'Please select');
         options.appendChild(option);
 
         let sortedOptions = OCA.Analytics.Datasource.sortOptions(OCA.Analytics.datasources);

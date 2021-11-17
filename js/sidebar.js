@@ -409,6 +409,7 @@ OCA.Analytics.Sidebar.Report = {
         let tableParent = document.getElementById(element);
         tableParent.innerHTML = '';
         let option = document.createElement('option');
+        option.innerText = t('analytics', 'Please select');
         tableParent.add(option);
 
         OCA.Analytics.Backend.getDatasetDefinitions();

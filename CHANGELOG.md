@@ -3,6 +3,8 @@
 ## 4.0.1 - 2021-11-17
 ### Fixed
 - php7.3 incompatibility #209
+- text variable issue
+- No default text in dropdown #226
 
 ## 4.0.0 - 2021-11-15
 ### Added
