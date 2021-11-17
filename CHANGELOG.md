@@ -6,6 +6,7 @@
 - text variable issue
 - No default text in dropdown #226
 - No text string to translate for "copy" #228
+- Color of closure icon #225
 
 ## 4.0.0 - 2021-11-15
 ### Added
