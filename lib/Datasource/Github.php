@@ -33,7 +33,7 @@ class Github implements IDatasource
      */
     public function getName(): string
     {
-        return $this->l10n->t('GitHub');
+        return 'GitHub';
     }
 
     /**
