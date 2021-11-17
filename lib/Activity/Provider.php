@@ -82,7 +82,7 @@ class Provider implements IProvider
                 }
                 break;
             case ActivityManager::SUBJECT_DATA_ADD_API:
-                $parsedSubject = $this->l10n->t('New data was add via API to dataset {report}');
+                $parsedSubject = $this->l10n->t('New data has been added to dataset {report} via API');
                 break;
             case ActivityManager::SUBJECT_DATA_ADD_DATALOAD:
                 $parsedSubject = $this->l10n->t('New data has been added to dataset {report} via dataload');
