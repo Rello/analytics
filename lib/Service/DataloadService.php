@@ -106,7 +106,7 @@ class DataloadService
 
     /**
      * execute all dataloads depending on their schedule
-     * daily or hourly
+     * Daily or Hourly
      *
      * @param $schedule
      * @return void

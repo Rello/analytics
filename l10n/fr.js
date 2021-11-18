@@ -42,7 +42,7 @@ OC.L10N.register(
         'Basic settings': 'Paramètres de base',
         'Advanced': 'Suivant',
         'Back to report': 'Retour au rapport',
-        'scheduled dataload': 'Chargement des données planifié',
+        'Scheduled dataload': 'Chargement des données planifié',
         'Dataload': 'Chargement des données',
         'Saved': 'Enregistré',
         'Records to be deleted: ': 'Enregistrements à supprimer : ',

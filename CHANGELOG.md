@@ -8,6 +8,7 @@
 - No text string to translate for "copy" #228
 - Color of closure icon #225
 - Filter does not work on the graph shared by link #224
+- ru translations @[AleksovAnry](https://github.com/AleksovAnry)
 
 ## 4.0.0 - 2021-11-15
 ### Added

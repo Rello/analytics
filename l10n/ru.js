@@ -42,7 +42,7 @@ OC.L10N.register(
         'Basic settings': 'Основные настройки',
         'Advanced': 'Расширенные настройки',
         'Back to report': 'Вернуться к отчёту',
-        'scheduled dataload': 'Запланированная загрузка данных',
+        'Scheduled dataload': 'Запланированная загрузка данных',
         'Dataload': 'Загрузка данных',
         'Saved': 'Сохранено',
         'Records to be deleted: ': 'Записи на удаление: ',

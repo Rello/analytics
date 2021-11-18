@@ -124,6 +124,9 @@ OCA.Analytics.Navigation = {
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
             li.appendChild(divUtils);
             li.appendChild(divMenu);
+        } else {
+            let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
+            li.appendChild(divUtils);
         }
 
         if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
@@ -160,32 +163,39 @@ OCA.Analytics.Navigation = {
         return divFav;
     },
 
-    buildNavigationUtils: function (data) {
+    buildNavigationUtilsDataset: function (data) {
         let divUtils = document.createElement('div');
         divUtils.classList.add('app-navigation-entry-utils');
         let ulUtils = document.createElement('ul');
 
         // add indicators when a dataload or schedule is existing
-        if (OCA.Analytics.isAdvanced) {
-            if (data.schedules && parseInt(data.schedules) !== 0) {
-                let liScheduleButton = document.createElement('li');
-                liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
-                let ScheduleButton = document.createElement('button');
-                ScheduleButton.classList.add('icon-history', 'toolTip');
-                ScheduleButton.setAttribute('title', t('analytics', 'scheduled dataload'));
-                liScheduleButton.appendChild(ScheduleButton);
-                ulUtils.appendChild(liScheduleButton);
-            }
-            if (data.dataloads && parseInt(data.dataloads) !== 0) {
-                let liScheduleButton = document.createElement('li');
-                liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
-                let ScheduleButton = document.createElement('button');
-                ScheduleButton.classList.add('icon-category-workflow', 'toolTip');
-                ScheduleButton.setAttribute('title', t('analytics', 'Dataload'));
-                liScheduleButton.appendChild(ScheduleButton);
-                ulUtils.appendChild(liScheduleButton);
-            }
+        if (data.schedules && parseInt(data.schedules) !== 0) {
+            let liScheduleButton = document.createElement('li');
+            liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
+            let ScheduleButton = document.createElement('button');
+            ScheduleButton.classList.add('icon-history', 'toolTip');
+            ScheduleButton.setAttribute('title', t('analytics', 'Scheduled dataload'));
+            liScheduleButton.appendChild(ScheduleButton);
+            ulUtils.appendChild(liScheduleButton);
         }
+        if (data.dataloads && parseInt(data.dataloads) !== 0) {
+            let liScheduleButton = document.createElement('li');
+            liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
+            let ScheduleButton = document.createElement('button');
+            ScheduleButton.classList.add('icon-category-workflow', 'toolTip');
+            ScheduleButton.setAttribute('title', t('analytics', 'Dataload'));
+            liScheduleButton.appendChild(ScheduleButton);
+            ulUtils.appendChild(liScheduleButton);
+        }
+        divUtils.appendChild(ulUtils);
+
+        return divUtils;
+    },
+
+    buildNavigationUtils: function (data) {
+        let divUtils = document.createElement('div');
+        divUtils.classList.add('app-navigation-entry-utils');
+        let ulUtils = document.createElement('ul');
 
         let liMenuButton = document.createElement('li');
         liMenuButton.classList.add('app-navigation-entry-utils-menu-button');

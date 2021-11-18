@@ -42,7 +42,7 @@ OC.L10N.register(
         'Basic settings': 'Alapbeállítások',
         'Advanced': 'Haladó',
         'Back to report': 'Vissza a riporthoz',
-        'scheduled dataload': 'ütemezett betöltés',
+        'Scheduled dataload': 'ütemezett betöltés',
         'Dataload': 'Adat betöltés',
         'Saved': 'Mentve',
         'Records to be deleted: ': 'Törlendő adatsorok: ',

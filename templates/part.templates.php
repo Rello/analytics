@@ -283,9 +283,9 @@
             <div style="display: table-cell;">
                 <select id="sidebarThresholdSeverity" class="input150">
                     <option value="1" selected><?php p($l->t('Notification')); ?></option>
-                    <option value="2"><?php p($l->t('red')); ?></option>
-                    <option value="3"><?php p($l->t('yellow')); ?></option>
-                    <option value="4"><?php p($l->t('green')); ?></option>
+                    <option value="2"><?php p($l->t('Red')); ?></option>
+                    <option value="3"><?php p($l->t('Yellow')); ?></option>
+                    <option value="4"><?php p($l->t('Green')); ?></option>
                 </select>
             </div>
         </div>
@@ -368,12 +368,12 @@
                     p($l->t('Schedule in background')); ?></span>
                 <br>
                 <select id="dataloadSchedule" class="input150">
-                    <option value="" selected><?php p($l->t('not scheduled')); ?></option>
-                    <option value="d"><?php p($l->t('daily')); ?></option>
-                    <option value="h"><?php p($l->t('hourly')); ?></option>
+                    <option value="" selected><?php p($l->t('Not scheduled')); ?></option>
+                    <option value="d"><?php p($l->t('Daily')); ?></option>
+                    <option value="h"><?php p($l->t('Hourly')); ?></option>
                 </select>
                 <br><br>
-                <span><?php p($l->t('Load via occ command:')); ?></span>
+                <span><?php p($l->t('Load via OCC command:')); ?></span>
                 <br>
                 <span id="dataloadOCC"></span>
                 <br>
