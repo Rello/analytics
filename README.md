@@ -30,7 +30,7 @@ Apps can register own, external datasources via an event listener
 [How-To](https://github.com/Rello/analytics/wiki/Register-own-datasource)
 
 ## Languages
-- English (en),German (de, de_DE), Russian (ru, ru_RU), French (fr)
+- Please support with your language translation on [Transifex](https://www.transifex.com/nextcloud/nextcloud/nextcloud-analytics/)
 
 ## Installation
 - [Nextcloud App Store](https://apps.nextcloud.com/apps/analytics)
