@@ -206,24 +206,26 @@ class DataloadService
      * update data from input form
      *
      * @NoAdminRequired
-     * @param int $reportId
+     * @param int $objectId
      * @param $dimension1
      * @param $dimension2
      * @param $value
+     * @param bool $isDataset
      * @return array|false
-     * @throws Exception
+     * @throws \OCP\DB\Exception
      */
-    public function updateData(int $reportId, $dimension1, $dimension2, $value)
+    public function updateData(int $objectId, $dimension1, $dimension2, $value, bool $isDataset)
     {
-        $reportMetadata = $this->ReportService->read($reportId);
-        if (!empty($reportMetadata)) {
+        $dataset = $this->getDatasetId($objectId, $isDataset);
+
+        if ($dataset != '') {
             $insert = $update = $errorMessage = 0;
             $action = array();
             $value = $this->floatvalue($value);
             if ($value === false) {
                 $errorMessage = $this->l10n->t('3rd field must be a valid number');
             } else {
-                $action = $this->StorageService->update((int)$reportMetadata['dataset'], $dimension1, $dimension2, $value);
+                $action = $this->StorageService->update($dataset, $dimension1, $dimension2, $value);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
             }
@@ -235,7 +237,7 @@ class DataloadService
                 'validate' => $action['validate'],
             ];
 
-            if ($errorMessage === 0) $this->ActivityManager->triggerEvent((int)$reportMetadata['dataset'], ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
+            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
             return $result;
         } else {
             return false;
@@ -246,16 +248,18 @@ class DataloadService
      * Simulate delete data from input form
      *
      * @NoAdminRequired
-     * @param int $datasetId
+     * @param int $objectId
      * @param $dimension1
      * @param $dimension2
+     * @param bool $isDataset
      * @return array|false
+     * @throws \OCP\DB\Exception
      */
-    public function deleteDataSimulate(int $reportId, $dimension1, $dimension2)
+    public function deleteDataSimulate(int $objectId, $dimension1, $dimension2, bool $isDataset)
     {
-        $reportMetadata = $this->ReportService->read($reportId);
-        if (!empty($reportMetadata)) {
-            $result = $this->StorageService->deleteSimulate((int)$reportMetadata['dataset'], $dimension1, $dimension2);
+        $dataset = $this->getDatasetId($objectId, $isDataset);
+        if ($dataset != '') {
+            $result = $this->StorageService->deleteSimulate($dataset, $dimension1, $dimension2);
             return ['delete' => $result];
         } else {
             return false;
@@ -266,16 +270,18 @@ class DataloadService
      * delete data from input form
      *
      * @NoAdminRequired
-     * @param int $reportId
+     * @param int $objectId
      * @param $dimension1
      * @param $dimension2
+     * @param bool $isDataset
      * @return array|false
+     * @throws \OCP\DB\Exception
      */
-    public function deleteData(int $reportId, $dimension1, $dimension2)
+    public function deleteData(int $objectId, $dimension1, $dimension2, bool $isDataset)
     {
-        $reportMetadata = $this->ReportService->read($reportId);
-        if (!empty($reportMetadata)) {
-            $result = $this->StorageService->delete((int)$reportMetadata['dataset'], $dimension1, $dimension2);
+        $dataset = $this->getDatasetId($objectId, $isDataset);
+        if ($dataset != '') {
+            $result = $this->StorageService->delete($dataset, $dimension1, $dimension2);
             return ['delete' => $result];
         } else {
             return false;
@@ -286,15 +292,16 @@ class DataloadService
      * Import clipboard data
      *
      * @NoAdminRequired
-     * @param int $reportId
+     * @param int $objectId
      * @param $import
+     * @param bool $isDataset
      * @return array|false
-     * @throws Exception
+     * @throws \OCP\DB\Exception
      */
-    public function importClipboard($reportId, $import)
+    public function importClipboard($objectId, $import, bool $isDataset)
     {
-        $reportMetadata = $this->ReportService->read($reportId);
-        if (!empty($reportMetadata)) {
+        $dataset = $this->getDatasetId($objectId, $isDataset);
+        if ($dataset != '') {
             $insert = $update = $errorMessage = $errorCounter = 0;
             $delimiter = '';
 
@@ -313,7 +320,7 @@ class DataloadService
                         $errorCounter++;
                     } else {
                         if ($numberOfColumns < 3) $row[1] = null;
-                        $action = $this->StorageService->update((int)$reportMetadata['dataset'], $row[0], $row[1], $row[2]);
+                        $action = $this->StorageService->update($dataset, $row[0], $row[1], $row[2]);
                         $insert = $insert + $action['insert'];
                         $update = $update + $action['update'];
                     }
@@ -332,7 +339,7 @@ class DataloadService
                 'error' => $errorMessage,
             ];
 
-            if ($errorMessage === 0) $this->ActivityManager->triggerEvent((int)$reportMetadata['dataset'], ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return $result;
         } else {
             return false;
@@ -343,22 +350,23 @@ class DataloadService
      * Import data into dataset from an internal or external file
      *
      * @NoAdminRequired
-     * @param int $reportId
+     * @param int $objectId
      * @param $path
+     * @param bool $isDataset
      * @return array|false
-     * @throws Exception
+     * @throws \OCP\DB\Exception
      */
-    public function importFile(int $reportId, $path)
+    public function importFile(int $objectId, $path, bool $isDataset)
     {
-        $reportMetadata = $this->ReportService->read($reportId);
-        if (!empty($reportMetadata)) {
+        $dataset = $this->getDatasetId($objectId, $isDataset);
+        if ($dataset != '') {
             $insert = $update = 0;
             $reportMetadata['link'] = $path;
             $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_FILE, $reportMetadata);
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {
-                    $action = $this->StorageService->update((int)$reportMetadata['dataset'], $row[0], $row[1], $row[2]);
+                    $action = $this->StorageService->update($dataset, $row[0], $row[1], $row[2]);
                     $insert = $insert + $action['insert'];
                     $update = $update + $action['update'];
                 }
@@ -370,11 +378,22 @@ class DataloadService
                 'error' => $result['error'],
             ];
 
-            if ($result['error'] === 0) $this->ActivityManager->triggerEvent((int)$reportMetadata['dataset'], ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+            if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return $result;
         } else {
             return false;
         }
+    }
+
+    private function getDatasetId($objectId, bool $isDataset)
+    {
+        if ($isDataset) {
+            $dataset = $objectId;
+        } else {
+            $reportMetadata = $this->ReportService->read($objectId);
+            $dataset = (int)$reportMetadata['dataset'];
+        }
+        return $dataset;
     }
 
     private function detectDelimiter($data): string

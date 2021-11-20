@@ -130,12 +130,13 @@ class DataloadController extends Controller
      * @param $dimension1
      * @param $dimension2
      * @param $value
+     * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function updateData(int $reportId, $dimension1, $dimension2, $value)
+    public function updateData(int $reportId, $dimension1, $dimension2, $value, bool $isDataset)
     {
-        $result = $this->DataloadService->updateData($reportId, $dimension1, $dimension2, $value);
+        $result = $this->DataloadService->updateData($reportId, $dimension1, $dimension2, $value, $isDataset);
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -150,11 +151,12 @@ class DataloadController extends Controller
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
+     * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      */
-    public function deleteData(int $reportId, $dimension1, $dimension2)
+    public function deleteData(int $reportId, $dimension1, $dimension2, bool $isDataset)
     {
-        $result = $this->DataloadService->deleteData($reportId, $dimension1, $dimension2);
+        $result = $this->DataloadService->deleteData($reportId, $dimension1, $dimension2, $isDataset);
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -169,11 +171,12 @@ class DataloadController extends Controller
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
+     * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      */
-    public function deleteDataSimulate(int $reportId, $dimension1, $dimension2)
+    public function deleteDataSimulate(int $reportId, $dimension1, $dimension2, bool $isDataset)
     {
-        $result = $this->DataloadService->deleteDataSimulate($reportId, $dimension1, $dimension2);
+        $result = $this->DataloadService->deleteDataSimulate($reportId, $dimension1, $dimension2, $isDataset);
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -187,12 +190,13 @@ class DataloadController extends Controller
      * @NoAdminRequired
      * @param int $reportId
      * @param $import
+     * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function importClipboard(int $reportId, $import)
+    public function importClipboard(int $reportId, $import, bool $isDataset)
     {
-        $result = $this->DataloadService->importClipboard($reportId, $import);
+        $result = $this->DataloadService->importClipboard($reportId, $import, $isDataset);
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -206,12 +210,13 @@ class DataloadController extends Controller
      * @NoAdminRequired
      * @param int $reportId
      * @param $path
+     * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function importFile(int $reportId, $path)
+    public function importFile(int $reportId, $path, bool $isDataset)
     {
-        $result = $this->DataloadService->importFile($reportId, $path);
+        $result = $this->DataloadService->importFile($reportId, $path, $isDataset);
         if ($result) {
             return new DataResponse($result);
         } else {

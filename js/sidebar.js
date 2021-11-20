@@ -665,9 +665,13 @@ OCA.Analytics.Sidebar.Data = {
             return;
         }
 
+        let type = 'report';
+        if (OCA.Analytics.isAdvanced) {
+            type = 'dataset';
+        }
         $.ajax({
             type: 'GET',
-            url: OC.generateUrl('apps/analytics/report/') + reportId,
+            url: OC.generateUrl('apps/analytics/' + type + '/') + reportId,
             success: function (data) {
                 let table;
                 // clone the DOM template
@@ -1150,6 +1154,7 @@ OCA.Analytics.Sidebar.Backend = {
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
                 'value': document.getElementById('DataValue').value,
+                'isDataset': OCA.Analytics.isAdvanced,
             },
             success: function (data) {
                 button.classList.remove('loading');
@@ -1179,6 +1184,7 @@ OCA.Analytics.Sidebar.Backend = {
                 'reportId': reportId,
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
+                'isDataset': OCA.Analytics.isAdvanced,
             },
             success: function (data) {
                 OC.dialogs.confirm(
@@ -1209,6 +1215,7 @@ OCA.Analytics.Sidebar.Backend = {
             data: {
                 'dimension1': document.getElementById('DataDimension1').value,
                 'dimension2': document.getElementById('DataDimension2').value,
+                'isDataset': OCA.Analytics.isAdvanced,
             },
             success: function (data) {
                 button.classList.remove('loading');
@@ -1232,6 +1239,7 @@ OCA.Analytics.Sidebar.Backend = {
             data: {
                 'reportId': reportId,
                 'import': document.getElementById('importDataClipboardText').value,
+                'isDataset': OCA.Analytics.isAdvanced,
             },
             success: function (data) {
                 button.classList.remove('loading');
@@ -1266,6 +1274,7 @@ OCA.Analytics.Sidebar.Backend = {
             data: {
                 'reportId': reportId,
                 'path': path,
+                'isDataset': OCA.Analytics.isAdvanced,
             },
             success: function (data) {
                 button.classList.remove('loading');
