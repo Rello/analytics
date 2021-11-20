@@ -146,6 +146,7 @@
         display: flex;
         overflow-x: hidden;
         overflow-y: auto;
+        user-select: text !important;
     }
    .modal-body > div {
           display: flex;
