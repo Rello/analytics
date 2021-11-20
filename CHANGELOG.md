@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.1 - 2021-11-17
+## 4.0.1 - 2021-11-20
 ### Fixed
 - php7.3 incompatibility #209
 - text variable issue
@@ -9,6 +9,7 @@
 - Color of closure icon #225
 - Filter does not work on the graph shared by link #224
 - ru translations @[AleksovAnry](https://github.com/AleksovAnry)
+- make wizard text selectable
 
 ## 4.0.0 - 2021-11-15
 ### Added
