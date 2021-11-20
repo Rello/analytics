@@ -69,7 +69,7 @@ class FlowOperation implements IOperation
 
     public function getDescription(): string
     {
-        return $this->l->t('Read file and add its data to an existing report');
+        return $this->l->t('Read file and add its data to an existing dataset');
     }
 
     public function getIcon(): string
@@ -111,7 +111,7 @@ class FlowOperation implements IOperation
         $file = '/' . $file;
 
         try {
-            $this->DataloadController->importFile($datasetId, $file);
+            $this->DataloadController->importFile($datasetId, $file, true);
         } catch (NotFoundException $e) {
             return;
         } catch (\Exception $e) {
