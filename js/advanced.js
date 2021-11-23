@@ -561,7 +561,7 @@ OCA.Analytics.Advanced.Dataset = {
                 for (let report of data['reports']) {
                     text = text + '- ' +report['name']+ '<br>';
                 }
-                if (text === '') text = t('analytics', '! This dataset is not used !');
+                if (text === '') text = t('analytics', 'This dataset is not used!');
                 document.getElementById('sidebarDatasetStatusReports').innerHTML = text;
             }
         });
