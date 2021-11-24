@@ -13,7 +13,6 @@ OC.L10N.register(
     "Datasource simulation" : "Simulace zdroje dat",
     "Load started" : "Načítání zahájeno",
     "No maintenance possible" : "Bez možnosti údržby",
-    "! This dataset is not used !" : "! Tento soubor dat není použit !",
     "All data including all reports will be deleted!" : "Veškerá data, včetně všech výkazů budou smazána!",
     "Delete" : "Smazat",
     "Records to be deleted: " : "Záznamy pro smazání:",

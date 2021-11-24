@@ -1,11 +1,11 @@
 { "translations": {
     "Dataset" : "Podatkovna zbirka",
     "Data" : "Podatki",
+    "Data maintenance is not possible for this type of report" : "Pri tovrstnih poročilih urejanje podatkov ni mogoče",
     "Saved" : "Shranjeno",
     "Are you sure?" : "Ali ste prepričani?",
     "Datasource simulation" : "Simulacija podatkovnega vira",
     "No maintenance possible" : "Upravljanje ni mogoče",
-    "! This dataset is not used !" : "! Ta podatkovna zbirka ni v uporabi !",
     "All data including all reports will be deleted!" : "Vsi podatki in vsa poročila bodo izbrisana!",
     "Delete" : "Izbriši",
     "Delete data" : "Izbriši podatke",

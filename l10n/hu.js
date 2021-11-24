@@ -13,7 +13,6 @@ OC.L10N.register(
     "Datasource simulation" : "Adatforrás szimuláció",
     "Load started" : "Betöltés elindult",
     "No maintenance possible" : "Karbantartás nem lehetsséges",
-    "! This dataset is not used !" : "! Ezt az adatkészletet nem használják!",
     "All data including all reports will be deleted!" : "Minden adat, beleértve az összes riportot, törlésre kerül!",
     "Delete" : "Törlés",
     "Records to be deleted: " : "Törlendő rekordok:",

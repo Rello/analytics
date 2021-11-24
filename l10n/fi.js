@@ -5,7 +5,6 @@ OC.L10N.register(
     "Saved" : "Tallennettu",
     "Are you sure?" : "Oletko varma?",
     "Datasource simulation" : "Datalähteen simulaatio",
-    "! This dataset is not used !" : "! Tätä datajoukkoa ei käytetä !",
     "All data including all reports will be deleted!" : "Kaikki data mukaan lukien raportit poistetaan!",
     "Delete" : "Poista",
     "Records to be deleted: " : "Poistettavat tietueet:",

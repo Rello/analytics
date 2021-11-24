@@ -13,7 +13,6 @@ OC.L10N.register(
     "Datasource simulation" : "Моделирование источника данных",
     "Load started" : "Загрузка началась",
     "No maintenance possible" : "Техническое обслуживание невозможно",
-    "! This dataset is not used !" : "! Этот набор данных не используется !",
     "All data including all reports will be deleted!" : "Все данные, включая все отчеты, будут удалены!",
     "Delete" : "Удалить",
     "Records to be deleted: " : "Удаляемые записи:",

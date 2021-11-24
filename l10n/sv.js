@@ -13,7 +13,6 @@ OC.L10N.register(
     "Datasource simulation" : "Datakällssimulering",
     "Load started" : "Inläsning startad",
     "No maintenance possible" : "Inget underhåll möjligt",
-    "! This dataset is not used !" : "Datauppsättningen används inte!",
     "All data including all reports will be deleted!" : "All data, inklusive rapporter, kommer att raderas!",
     "Delete" : "Radera",
     "Records to be deleted: " : "Poster att radera: ",
