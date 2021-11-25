@@ -14,6 +14,7 @@
     "records updated" : "個記錄已更新",
     "errors" : "錯誤",
     "No maintenance possible" : "無法維護",
+    "This dataset is not used!" : "此數據集未被使用！",
     "All data including all reports will be deleted!" : "包括所有報告在內的所有數據都將被刪除！",
     "Delete" : "刪除",
     "Records to be deleted: " : "要刪除的記錄：",

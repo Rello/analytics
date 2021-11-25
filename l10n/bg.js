@@ -16,6 +16,7 @@ OC.L10N.register(
     "records updated" : "записите са актуализирани",
     "errors" : "грешки",
     "No maintenance possible" : "Не е възможна поддръжка",
+    "This dataset is not used!" : "Този набор от данни не е използван!",
     "All data including all reports will be deleted!" : "Всички данни, включително всички отчети, ще бъдат изтрити!",
     "Delete" : "Изтриване",
     "Records to be deleted: " : "Записи за изтриване:",

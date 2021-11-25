@@ -16,6 +16,7 @@ OC.L10N.register(
     "records updated" : "Datensätze aktualisiert",
     "errors" : "Fehler",
     "No maintenance possible" : "Keine Pflege möglich",
+    "This dataset is not used!" : "Dieser Datensatz wird nicht benutzt!",
     "All data including all reports will be deleted!" : "Alle Daten inklusive aller Berichte werden gelöscht!",
     "Delete" : "Löschen",
     "Records to be deleted: " : "Zu löschende Datensätze:",
