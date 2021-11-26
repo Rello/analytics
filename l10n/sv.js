@@ -12,6 +12,8 @@ OC.L10N.register(
     "Delete dataload" : "Radera data",
     "Datasource simulation" : "Datakällssimulering",
     "Load started" : "Inläsning startad",
+    "records updated" : "poster uppdaterade, ",
+    "errors" : "fel",
     "No maintenance possible" : "Inget underhåll möjligt",
     "All data including all reports will be deleted!" : "All data, inklusive rapporter, kommer att raderas!",
     "Delete" : "Radera",
@@ -46,6 +48,14 @@ OC.L10N.register(
     "Data series" : "Dataserie",
     "Vertical axis" : "Vertikalaxel",
     "Chart type" : "Diagramtyp",
-    "Color" : "Färg"
+    "Color" : "Färg",
+    "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analyser</strong>: Nya data har införts i en rapport",
+    "<strong>Analytics</strong>: New reports" : "<strong>Analyser</strong>: Nya rapporter",
+    "Reports" : "Rapporter",
+    "Local file" : "Lokal fil",
+    "File" : "Fil",
+    "Sheet" : "Blad",
+    "sheet name" : "bladnamn",
+    "Cell range" : "Cellområde"
 },
 "nplurals=2; plural=(n != 1);");
