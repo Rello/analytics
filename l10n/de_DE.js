@@ -99,7 +99,7 @@ OC.L10N.register(
     "has added new data to dataset {report}" : "hat neue Daten zum Datensatz {report} hinzugefügt",
     "You have imported data in dataset {report}" : "Sie haben Daten in den Datensatz {report} importiert",
     "has imported data in dataset {report}" : "hat Daten in den Datensatz {report} importiert",
-    "New data has been added to dataset {report} via API" : "Neue Daten wurden dem Datensatz {report} über API hinzugefügt",
+    "New data has been added to dataset {report} via API" : "Neue Daten wurden dem Datensatz {report} über die API hinzugefügt",
     "New data has been added to dataset {report} via dataload" : "Neue Daten wurden dem Datensatz {report} über Datenladung hinzugefügt",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analytics</strong>: Neue Daten wurden einem Bericht hinzugefügt",
     "<strong>Analytics</strong>: New reports" : "<strong>Analytics</strong>: Neue Berichte",
