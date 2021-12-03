@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.0.2 - 2021-12-03
+- Search error #234
+
 ## 4.0.1 - 2021-11-20
 ### Fixed
 - php7.3 incompatibility #209
