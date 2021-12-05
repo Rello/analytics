@@ -88,7 +88,7 @@ OC.L10N.register(
     "Column 1" : "Spalte 1",
     "Column 3" : "Spalte 3",
     "New in" : "Neu in",
-    "View changelog" : "Liste der Veränderungen ansehen",
+    "View changelog" : "Liste der Änderungen ansehen",
     "Show in Analytics" : "In Analytics zeigen",
     "Analytics" : "Analytics",
     "You created a new report: {report}" : "Sie haben einen neuen Bericht erstellt: {report}",
