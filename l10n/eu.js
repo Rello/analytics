@@ -38,7 +38,7 @@ OC.L10N.register(
     "list of values" : "balio-zerrenda",
     "Drilldown" : "Diagrama xehatua",
     "OK" : "Ados",
-    "Cancel" : "Ezeztatu",
+    "Cancel" : "Utzi",
     "Filter" : "Iragazi",
     "Filter by" : "Iragazi...",
     "Operator" : "Eragilea",
