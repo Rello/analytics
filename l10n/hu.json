@@ -107,7 +107,7 @@
     "Sheet" : "oldal",
     "sheet name" : "oldal neve",
     "Cell range" : "Cellatartomány",
-    "e.g. A1:C3,A5:C5" : "pl. 1,2,4 vagy hagyd üresen",
+    "e.g. A1:C3,A5:C5" : "pl.: A1:C3,A5:C5",
     "External file" : "Külső fájl",
     "External URL" : "Külső URL",
     "Ignore leading rows" : "Figyelmen kívül hagyja a vezető sorokat",
