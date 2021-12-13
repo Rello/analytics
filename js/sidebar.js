@@ -334,17 +334,16 @@ OCA.Analytics.Sidebar.Report = {
 
     handleFilepicker: function () {
         let type;
-        if (document.getElementById('dataloadDetail') !== null) {
-            let dataloadId = document.getElementById('dataloadDetail').dataset.id;
-            type = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId));
+        if (document.getElementById('wizardNewDatasource') !== null) {
+            type = document.getElementById('wizardNewDatasource').value;
         } else {
             type = parseInt(document.getElementById('app-sidebar').dataset.type);
         }
 
         let mime;
-        if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
+        if (parseInt(type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
             mime = ['text/csv', 'text/plain'];
-        } else if (type === OCA.Analytics.TYPE_EXCEL) {
+        } else if (parseInt(type) === OCA.Analytics.TYPE_EXCEL) {
             mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'application/vnd.oasis.opendocument.spreadsheet',
                 'application/vnd.ms-excel'];

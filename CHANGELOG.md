@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.3 - 2021-12-14
+### Fixed
+- file picker not working #239
+
 ## 4.0.2 - 2021-12-03
 ### Fixed
 - Search error #234
