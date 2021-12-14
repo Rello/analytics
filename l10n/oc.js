@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Enregistrat",
     "Are you sure?" : "Ne sètz segur ?",
+    "Select file" : "Seleccionar fichièr",
     "Delete" : "Suprimir",
     "Delete data" : "Suprimir donada",
     "Search" : "Recercar",
@@ -18,7 +19,6 @@ OC.L10N.register(
     "Overview" : "Vista d’ensemble",
     "Basic settings" : "Paramètres de basa",
     "Delete folder" : "Suprimir dossièr",
-    "Select file" : "Seleccionar fichièr",
     "Share" : "Partejar",
     "New" : "Nòu",
     "Column 1" : "Colomna 1",
