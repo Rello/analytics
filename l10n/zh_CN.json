@@ -133,6 +133,7 @@
     "Last field must be a valid number" : "最后一个字段必须是一个有效的数字",
     "copy" : "复制",
     "extract / store / visualize" : "提取/存储/可视化",
+    "Connect data from different sources in one place.\nEnable flexible reports and enjoy seamless Nextcloud integration.\nVisualize and share anything, from financial analysis to IoT logs.\n\n##### Features:\n- Data sources: csv, spreadsheet, API, imports, manual entry\n- 3rd party: GitHub Statistics, website grabber, JSON\n- Register external data sources from other apps\n- Storage: real-time or database\n- Advanced data loads with scheduling\n- Visualization: combined charts, tables, filters\n- Analysis functions: trend\n- Thresholds for alerts and color coding\n- Integration: Files, Activity, Notifications, Flow, Dashboard, Search\n- Sharing: user, groups, link" : "在一个地方连接来自不同来源的数据。\n启用灵活的报表，享受无缝的Nextcloud集成。\n可视化和共享任何东西，从财务分析到物联网日志。\n\n#####功能：\n-数据源：csv，电子表格，API，导入，手动录入\n-第三方：GitHub统计，网站抓取器，JSON-注册来自其他应用程序的外部数据源\n-存储：实时或数据库\n-有时间安排的高级数据加载\n-可视化：组合图表，表格，过滤器-\n分析功能：趋势\n-阈值警报和颜色编码\n-集成：文件，活动，通知，流程，仪表板，搜索\n-共享：用户，组，链接",
     "This report is password protected" : "此报告受密码保护",
     "The password is wrong. Try again." : "密码错误。请重试。",
     "Password" : "密码",
