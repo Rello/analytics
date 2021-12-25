@@ -1,0 +1,24 @@
+{ "translations": {
+    "Data" : "データ",
+    "Saved" : "保存しました",
+    "Are you sure?" : "本当に？",
+    "Select file" : "ファイルを選択",
+    "errors" : "エラー",
+    "Delete" : "削除",
+    "Delete data" : "データを削除",
+    "Search" : "検索",
+    "next" : "次",
+    "last" : "最後",
+    "OK" : "OK",
+    "Cancel" : "キャンセル",
+    "Filter" : "フィルター",
+    "Value" : "値",
+    "and" : "かつ",
+    "Add" : "追加",
+    "Color" : "色",
+    "Add to favorites" : "お気に入りに追加",
+    "Delete folder" : "フォルダーを削除",
+    "Report" : "報告",
+    "Share" : "共有"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
