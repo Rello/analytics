@@ -37,6 +37,7 @@ OC.L10N.register(
     "less than" : "menor que",
     "contains" : "contiene",
     "list of values" : "lista de valores",
+    "Drilldown" : "Profundizar",
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
