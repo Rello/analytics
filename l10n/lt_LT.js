@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Įrašyta",
     "Are you sure?" : "Ar esate tikri?",
     "Delete" : "Ištrinti",
+    "More Information …" : "Daugiau informacijos…",
     "Settings" : "Nustatymai",
     "Do you like this app?" : "Ar jums patinka ši programėlė?",
     "About" : "Apie",
