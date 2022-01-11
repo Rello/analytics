@@ -386,7 +386,7 @@
                         <div class="icon-analytics-chartDonut icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 17px;">
                         <input type="radio" id="chartDonut" class="radio" name="chart" value="doughnut">
-                        <label for="chartBar"><?php p($l->t('Doughnut')); ?></label>
+                        <label for="chartDonut"><?php p($l->t('Doughnut')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
