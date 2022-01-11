@@ -849,8 +849,10 @@ OCA.Analytics.Sidebar.Share = {
         shareeRow.getElementById('deleteShare').dataset.id = id;
         shareeRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Sidebar.Share.updateShareCanEdit);
         shareeRow.getElementById('shareEditing').dataset.id = id;
+        shareeRow.getElementById('shareEditing').nextElementSibling.htmlFor = 'shareEditing' + id;
+        shareeRow.getElementById('shareEditing').id = 'shareEditing' + id;
         if (permissions === OC.PERMISSION_UPDATE) {
-            shareeRow.getElementById('shareEditing').checked = true;
+            shareeRow.getElementById('shareEditing' + id).checked = true;
         }
 
         if (isSearch) {
