@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 
 class DataloadService
 {
+    private $userId;
     private $logger;
     private $StorageService;
     private $DatasourceController;
@@ -31,6 +32,7 @@ class DataloadService
     private $DataloadMapper;
 
     public function __construct(
+        $userId,
         IL10N $l10n,
         LoggerInterface $logger,
         ActivityManager $ActivityManager,
@@ -40,6 +42,7 @@ class DataloadService
         DataloadMapper $DataloadMapper
     )
     {
+        $this->userId = $userId;
         $this->l10n = $l10n;
         $this->logger = $logger;
         $this->StorageService = $StorageService;
@@ -362,6 +365,7 @@ class DataloadService
         if ($dataset != '') {
             $insert = $update = 0;
             $reportMetadata['link'] = $path;
+            $reportMetadata['user_id'] = $this->userId;
             $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_FILE, $reportMetadata);
 
             if ($result['error'] === 0) {
