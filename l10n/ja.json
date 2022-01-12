@@ -24,14 +24,18 @@
     "Share" : "共有",
     "Add share link" : "共有リンクを追加",
     "Share link" : "リンクを共有",
+    "Reports" : "報告",
     "Local file" : "ローカルファイル",
     "File" : "ファイル",
+    "GET/POST" : "GET/POST",
     "No data" : "データなし",
     "copy" : "コピーする",
     "Password" : "パスワード",
     "No data found" : "ダーターが見つかりません",
     "Save changes" : "変更を保存",
     "none" : "なし",
+    "1 min" : "1分",
+    "30 min" : "30分",
     "Settings" : "設定",
     "Name" : "名前",
     "Date" : "日付",
@@ -45,6 +49,7 @@
     "Title" : "タイトル",
     "No" : "いいえ",
     "Yes" : "はい",
+    "Daily" : "毎日",
     "Create" : "作成"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
