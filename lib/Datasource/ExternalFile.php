@@ -66,11 +66,6 @@ class ExternalFile implements IDatasource
      */
     public function readData($option): array
     {
-        $data = array();
-        $header = array();
-        $headerrow = 0;
-        $selectedColumns = array();
-
         $ch = curl_init();
         if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -94,6 +89,7 @@ class ExternalFile implements IDatasource
             $rows = array_slice($rows, $option['offset']);
         }
 
+        $selectedColumns = array();
         if (isset($option['columns']) && strlen($option['columns']) > 0) {
             $selectedColumns = str_getcsv($option['columns'], ',');
         }
@@ -102,6 +98,7 @@ class ExternalFile implements IDatasource
         $header = str_getcsv($rows[0], $delimiter);
         $rows = array_slice($rows, 1);
 
+        $data = array();
         if (count($selectedColumns) !== 0) {
             $header = $this->minimizeRow($selectedColumns, $header);
 
@@ -113,7 +110,8 @@ class ExternalFile implements IDatasource
                 $data[] = str_getcsv($row, $delimiter);
             }
         }
-
+        unset($rows);
+        
         return [
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),

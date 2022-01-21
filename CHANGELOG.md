@@ -6,6 +6,7 @@
 - Fix donut chart selection in wizard #242 @[connium](https://github.com/connium)
 - Cannot set "can navigate" for other than the very first user in the list #238
 - Datasource Undefined array key \"user_id\" #240
+- Make dataload faster #236
 
 ## 4.0.2 - 2021-12-03
 ### Fixed

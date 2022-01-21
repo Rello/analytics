@@ -91,37 +91,42 @@ class File implements IDatasource
         }
         $delimiter = $this->detectDelimiter($rows[0]);
 
-        foreach ($rows as &$row) {
-            $row = str_getcsv($row, $delimiter);
-            $rowMinimized = array();
+        $header = str_getcsv($rows[0], $delimiter);
+        $rows = array_slice($rows, 1);
 
-            if (count($selectedColumns) !== 0) {
-                foreach ($selectedColumns as $selectedColumn) {
-                    if (is_numeric($selectedColumn)) {
-                        if (count($row) >= $selectedColumn) {
-                            array_push($rowMinimized, $row[$selectedColumn - 1]);
-                        }
-                    } else {
-                        array_push($rowMinimized, $selectedColumn);
-                    }
-                }
-            } else {
-                $rowMinimized = $row;
+        $data = array();
+        if (count($selectedColumns) !== 0) {
+            $header = $this->minimizeRow($selectedColumns, $header);
+
+            foreach ($rows as $row) {
+                $data[] = $this->minimizeRow($selectedColumns, str_getcsv($row, $delimiter));
             }
-
-            if ($headerrow === 0) {
-                $header = $rowMinimized;
-                $headerrow = 1;
-            } else {
-                array_push($data, $rowMinimized);
+        } else {
+            foreach ($rows as $row) {
+                $data[] = str_getcsv($row, $delimiter);
             }
         }
+        unset($rows);
+
         return [
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => $errorMessage,
         ];
+    }
+
+    private function minimizeRow($selectedColumns, $row)
+    {
+        $rowMinimized = array();
+        foreach ($selectedColumns as $selectedColumn) {
+            if (is_numeric($selectedColumn)) {
+                $rowMinimized[] = $row[$selectedColumn - 1];
+            } else {
+                $rowMinimized[] = $selectedColumn;
+            }
+        }
+        return $rowMinimized;
     }
 
     private function detectDelimiter($data)
