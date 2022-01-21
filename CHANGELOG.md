@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.3 - 2021-12-14
+## 4.0.3 - 2022-01-21
 ### Fixed
 - file picker not working #239
 - Fix donut chart selection in wizard #242 @[connium](https://github.com/connium)
