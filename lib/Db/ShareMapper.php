@@ -172,7 +172,8 @@ class ShareMapper
             ->selectAlias('password', 'pass')
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
-            ->andWhere($sql->expr()->neq('type', $sql->createNamedParameter(2)));
+            ->andWhere($sql->expr()->neq('type', $sql->createNamedParameter(2)))
+            ->orderBy('id', 'ASC');
         $statement = $sql->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();
