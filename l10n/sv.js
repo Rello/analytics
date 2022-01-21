@@ -10,6 +10,7 @@ OC.L10N.register(
     "Saved" : "Sparat",
     "Are you sure?" : "Är du säker?",
     "Delete dataload" : "Radera data",
+    "Select file" : "Välj fil",
     "Datasource simulation" : "Datakällssimulering",
     "Load started" : "Inläsning startad",
     "records inserted" : "poster införda, ",
