@@ -241,6 +241,7 @@ OC.L10N.register(
     "Existing dataset" : "Dagoen datu-sorta",
     "The report can be based on a new dataset or read existing data that is available already." : "Txostena datu-sorta berrian edo eskuragarri dauden datuetan oinarritu daiteke.",
     "Many reports can be based on the same data, but every report has its own visualization, threshold and sharing settings." : "Txosten ugari datu berdinetan oinarritu daitezke, baina txosten bakoitzak bere bistaratze, atalase eta partekatze ezarpenak ditu.",
+    "Datasets can store data from scheduled data loads, the REST API or manual data entry. This can be configured via the Dataset maintenance" : "Datu-sortek antolatutako datu-kargen datu, REST API  eta eskuzko datu-sartzeak gorde ditzakete.",
     "Choose the names of the columns for the new dataset" : "Aukeratu datu-sorta berriaren zutabeen izenak",
     "Visualization of the report" : "Txostenaren bistaratzea",
     "All settings can be changed afterwards" : "Ezarpen guztiak aldatu daitezke gero",
