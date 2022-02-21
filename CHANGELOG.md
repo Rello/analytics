@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0 - 2022-0x-xx
+### Added
+- Dynamic text variables for filter #186
+
 ## 4.0.3 - 2022-01-21
 ### Fixed
 - file picker not working #239

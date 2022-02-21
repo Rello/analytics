@@ -16,6 +16,7 @@ use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Service\StorageService;
+use OCA\Analytics\Service\VariableService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -35,6 +36,7 @@ class OutputController extends Controller
     private $DatasourceController;
     private $StorageService;
     private $ThresholdService;
+    private $VariableService;
 
     public function __construct(
         string $AppName,
@@ -45,7 +47,8 @@ class OutputController extends Controller
         DataSession $DataSession,
         DatasourceController $DatasourceController,
         StorageService $StorageService,
-        ThresholdService $ThresholdService
+        ThresholdService $ThresholdService,
+        VariableService $VariableService
     )
     {
         parent::__construct($AppName, $request);
@@ -56,6 +59,7 @@ class OutputController extends Controller
         $this->DatasourceController = $DatasourceController;
         $this->StorageService = $StorageService;
         $this->ThresholdService = $ThresholdService;
+        $this->VariableService = $VariableService;
     }
 
     /**
@@ -95,10 +99,15 @@ class OutputController extends Controller
     private function getData($reportMetadata)
     {
         $datasource = (int)$reportMetadata['type'];
+        $datasetId = (int)$reportMetadata['dataset'];
+
+        $filterWithVariables = $reportMetadata['filteroptions']; // need to remember the filter with original text variables
+        $reportMetadata = $this->VariableService->replaceFilterVariables($reportMetadata); // replace %xx% dynamic variables
+
         if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             // Internal data
-            if ((int)$reportMetadata['dataset'] !== 0) {
-                $result = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata['filteroptions']);
+            if ($datasetId !== 0) {
+                $result = $this->StorageService->read($datasetId, $reportMetadata);
             } else {
                 $result['error'] = 'inconsistent report';
             }
@@ -106,6 +115,7 @@ class OutputController extends Controller
             // Realtime data
             $result = $this->DatasourceController->read($datasource, $reportMetadata);
         }
+
         unset($reportMetadata['parent']
             , $reportMetadata['user_id']
             , $reportMetadata['link']
@@ -116,6 +126,8 @@ class OutputController extends Controller
             , $reportMetadata['password']
             , $reportMetadata['dataset']
         );
+        $result['filterApplied'] = $reportMetadata['filteroptions'];
+        $reportMetadata['filteroptions'] = $filterWithVariables; // keep the original filters
         $result['options'] = $reportMetadata;
         $result['thresholds'] = $this->ThresholdService->read($reportMetadata['id']);
         return $result;

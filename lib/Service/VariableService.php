@@ -70,4 +70,116 @@ class VariableService
         }
         return $datasetMetadata;
     }
+
+    /**
+     * replace variables in filters and apply format
+     *
+     * @param $reportMetadata
+     * @return array
+     */
+    public function replaceFilterVariables($reportMetadata)
+    {
+        $filteroptions = json_decode($reportMetadata['filteroptions'], true);
+        if (isset($filteroptions['filter'])) {
+            foreach ($filteroptions['filter'] as $key => $value) {
+                $parsed = $this->parseFilter($value['value'], $value['option']);
+                $format = $this->parseFormat($value['value']);
+
+                if (!$parsed) break;
+                $filteroptions['filter'][$key]['option'] = $parsed['option'];
+                $filteroptions['filter'][$key]['value'] = date($format, $parsed['value']);
+            }
+        }
+        $reportMetadata['filteroptions'] = json_encode($filteroptions);
+        return $reportMetadata;
+    }
+
+    /**
+     * parsing of %*% variables
+     *
+     * @param $filter
+     * @param $option
+     * @return array|bool
+     */
+    private function parseFilter($filter, $option) {
+        preg_match_all("/(?<=%).*(?=%)/", $filter, $matches);
+        if (count($matches[0]) > 0) {
+            $filter = $matches[0][0];
+            preg_match('/(last|next|current|to|yester)?/', $filter, $directionMatch);
+            preg_match('/[0-9]+/', $filter, $offsetMatch);
+            preg_match('/(day|days|week|weeks|month|months|year|years)$/', $filter, $unitMatch);
+
+            if (!$directionMatch[0] || !$unitMatch[0]) {
+                return false;
+            }
+
+            !$offsetMatch[0] ? $offset = 1: $offset = $offsetMatch[0];
+
+            // remove s to unify e.g. weeks => week
+            $unit = rtrim($unitMatch[0], 's');
+
+            if ($directionMatch[0] === "last" || $directionMatch[0] === "yester") {
+                $direction = '-';
+                //$directionWord = $directionMatch[0];
+            } elseif ($directionMatch[0] === "next") {
+                $direction = '+';
+                //$directionWord = $directionMatch[0];
+            } else { // current
+                $direction = '+';
+                $offset = 0;
+                //$directionWord = 'this';
+            }
+
+            $timestring = $direction . $offset . ' ' . $unit;
+            $baseDate = strtotime($timestring);
+
+            if ($unit === 'day') {
+                $startString = 'today';
+                //$endString = 'yesterday';
+            } else {
+                $startString = 'first day of this ' . $unit;
+                //$endString = 'last day of ' . $directionWord . ' ' . $unit;
+            }
+            $startTS = strtotime($startString, $baseDate);
+            $start = date("Y-m-d", $startTS);
+            //$endTS = strtotime($endString);
+            //$end = date("Y-m-d", $endTS);
+
+            $return = [
+                'value' => $startTS,
+                'option' => 'GT',
+                '1$filter' => $filter,
+                '2$timestring' => $timestring,
+                '3$target' => $baseDate,
+                '4$target_clean' => date("Y-m-d", $baseDate),
+                '5$startString' => $startString,
+                '6$startDate' => $start,
+                '7$startTS' => $startTS,
+                //'8$endString' => $endString,
+                //'9$endDate' => $end,
+                //'9$endTS' => $endTS,
+           ];
+        } else {
+            $return = [
+                'value' => $filter,
+                'option' => $option
+            ];
+        }
+        return $return;
+    }
+
+    /**
+     * parsing of ( ) format instructions
+     *
+     * @param $filter
+     * @return string
+     */
+    private function parseFormat($filter) {
+        preg_match_all("/(?<=\().*(?=\))/", $filter, $matches);
+        if (count($matches[0]) > 0) {
+            return $matches[0][0];
+        } else {
+            return 'Y-m-d H:m:s';
+        }
+    }
 }

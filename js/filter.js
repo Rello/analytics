@@ -148,7 +148,7 @@ OCA.Analytics.Filter = {
             + '</select>'
             + '</div>'
             + '<div style="display: table-cell;">'
-            + '<input type="text" id="filterDialogValue" class="optionsInput">'
+            + '<input type="text" id="filterDialogValue" class="optionsInputValue">'
             + '</div></div></div>'
             + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
             + '<a class="button primary" id="filterDialogGo">' + t('analytics', 'Add') + '</a>'
@@ -220,7 +220,14 @@ OCA.Analytics.Filter = {
             for (let filterDimension of Object.keys(filterOptions['filter'])) {
                 let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions['filter'][filterDimension]['option']];
                 let span = document.createElement('span');
-                span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterOptions['filter'][filterDimension]['value'];
+                let filterValue = filterOptions['filter'][filterDimension]['value'];
+
+                if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
+                    // text variable used
+                    optionText = '';
+                    filterValue = filterValue.replace(/%/g,'');
+                }
+                span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterValue;
                 span.classList.add('filterVisualizationItem');
                 span.id = filterDimension;
                 span.addEventListener('click', OCA.Analytics.Filter.removeFilter)

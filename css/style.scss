@@ -155,6 +155,9 @@
   width: 130px;
 }
 
+.optionsInputValue {
+  width: 200px;
+}
 .sidebarInput {
   width: 200px;
 }
@@ -175,6 +178,11 @@ table.dataTable tbody tr {
 .analytics-options:hover {
     opacity: 1;
     cursor: pointer;
+}
+
+.icon-spreadsheet {
+  @include icon-color('icon-spreadsheet', 'analytics', $color-black, 1);
+    //background-image: url(./img/core/filetypes/text.svg?v=0)
 }
 
 .icon-analytics-filter-add {

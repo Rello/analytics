@@ -131,16 +131,17 @@ class DatasourceController extends Controller
         $option['user_id'] = $datasetMetadata['user_id'];
 
         try {
+            // read the data from the source
             $result = $this->getDatasources()[$datasourceId]->readData($option);
 
+            // if datasource should be timestamped/snapshoted
             if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
-                // if datasource should be timestamped/snapshoted
-                // shift values by one dimension and stores date in second column
                 $result['data'] = array_map(function ($tag) {
                     $columns = count($tag);
                     return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
                 }, $result['data']);
                 date_default_timezone_set('UTC');
+                // shift values by one dimension and stores date in second column
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s") . 'Z');
             }
 
@@ -148,7 +149,6 @@ class DatasourceController extends Controller
             if (isset($datasetMetadata['filteroptions']) && strlen($datasetMetadata['filteroptions']) >> 2) {
                 $result['data'] = $this->filterData($result['data'], $datasetMetadata['filteroptions']);
             }
-
         } catch (\Error $e) {
             $result['error'] = $e->getMessage();
         }
