@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "データセット",
     "Data" : "データ",
     "Saved" : "保存しました",
     "Are you sure?" : "本当に？",
@@ -9,6 +10,8 @@ OC.L10N.register(
     "Delete" : "削除",
     "Delete data" : "データを削除",
     "Search" : "検索",
+    "first" : "最初",
+    "previous" : "前",
     "next" : "次",
     "last" : "最後",
     "Please select" : "選択してください",
@@ -42,6 +45,8 @@ OC.L10N.register(
     "Name" : "名前",
     "Date" : "日付",
     "Save data" : "データを保存",
+    "REST API" : "REST API",
+    "Advanced configuration" : "高度な設定",
     "Notification" : "通知",
     "Red" : "赤",
     "Yellow" : "黄",
