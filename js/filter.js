@@ -116,9 +116,14 @@ OCA.Analytics.Filter = {
             + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
             + t('analytics', 'Filter')
             + '</h2>'
+            + '<span hidden id="filterDialogHintText" class="userGuidance">'
+            // TRANSLATORS sentence ends with the word "wiki", which is linked to an external page
+            + t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the')
+            + '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter" target="_blank"> ' +  t('analytics', 'wiki') + '</a>'
+            + '<br><br></span>'
             + '<div class="table" style="display: table;">'
             + '<div style="display: table-row;">'
-            + '<div style="display: table-cell; width: 50px;"></div>'
+            //+ '<div style="display: table-cell; width: 50px;"></div>'
             + '<div style="display: table-cell; width: 80px;"></div>'
             + '<div style="display: table-cell; width: 150px;">'
             + '<label for="filterDialogDimension">' + t('analytics', 'Filter by') + '</label>'
@@ -129,16 +134,17 @@ OCA.Analytics.Filter = {
             + '<div style="display: table-cell; width: 150px;">'
             + '<label for="filterDialogValue">' + t('analytics', 'Value') + '</label>'
             + '</div>'
+            + '<div style="display: table-cell; width: 20px;"></div>'
             + '</div>'
             + '<div style="display: table-row;">'
             + '<div style="display: table-cell;">'
             + '<img src="' + OC.imagePath('analytics', 'filteradd') + '" alt="filter">'
             + '</div>'
-            + '<div style="display: table-cell;">'
-            + '<select id="filterDialogType" class="checkbox" disabled>'
-            + '<option value="and">' + t('analytics', 'and') + '</option>'
-            + '</select>'
-            + '</div>'
+            //+ '<div style="display: table-cell;">'
+            //+ '<select id="filterDialogType" class="checkbox" disabled>'
+            //+ '<option value="and">' + t('analytics', 'and') + '</option>'
+            //+ '</select>'
+            //+ '</div>'
             + '<div style="display: table-cell;">'
             + '<select id="filterDialogDimension" class="checkbox optionsInput">'
             + '</select>'
@@ -149,7 +155,13 @@ OCA.Analytics.Filter = {
             + '</div>'
             + '<div style="display: table-cell;">'
             + '<input type="text" id="filterDialogValue" class="optionsInputValue">'
-            + '</div></div></div>'
+            + '</div>'
+            + '<div style="display: table-cell;">'
+            + '<a id="filterDialogHint" title ="' + t('analytics', 'Variables') + '">'
+            + '<div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>'
+            + '</a></div>'
+            + '</div></div>'
+            + '<br>'
             + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
             + '<a class="button primary" id="filterDialogGo">' + t('analytics', 'Add') + '</a>'
             + '<a class="button primary" id="filterDialogCancel">' + t('analytics', 'Cancel') + '</a>'
@@ -184,6 +196,7 @@ OCA.Analytics.Filter = {
             }
         }
 
+        document.getElementById('filterDialogHint').addEventListener('click', OCA.Analytics.Filter.handleVariableHint);
         document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("filterDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("filterDialogGo").addEventListener("click", OCA.Analytics.Filter.processFilterDialog);
@@ -192,6 +205,10 @@ OCA.Analytics.Filter = {
                 OCA.Analytics.Filter.processFilterDialog();
             }
         });
+    },
+
+    handleVariableHint: function () {
+        OCA.Analytics.UI.showElement('filterDialogHintText');
     },
 
     processFilterDialog: function () {
@@ -226,6 +243,7 @@ OCA.Analytics.Filter = {
                     // text variable used
                     optionText = '';
                     filterValue = filterValue.replace(/%/g,'');
+                    filterValue = filterValue.replace (/\(.*?\)/g, '');
                 }
                 span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterValue;
                 span.classList.add('filterVisualizationItem');

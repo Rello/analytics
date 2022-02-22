@@ -2,7 +2,7 @@
 
 ## 4.1.0 - 2022-0x-xx
 ### Added
-- Dynamic text variables for filter #186
+- Dynamic text variables for filter #186 => [wiki](https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter) for details
 
 ## 4.0.3 - 2022-01-21
 ### Fixed
