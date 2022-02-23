@@ -19,7 +19,6 @@ OC.L10N.register(
     "Cancel" : "キャンセル",
     "Filter" : "フィルター",
     "Value" : "値",
-    "and" : "かつ",
     "Add" : "追加",
     "Color" : "色",
     "Basic settings" : "基本設定",

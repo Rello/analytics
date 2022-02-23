@@ -44,7 +44,6 @@ OC.L10N.register(
     "Filter by" : "Filter med",
     "Operator" : "Operatør",
     "Value" : "Værdi",
-    "and" : "og",
     "Add" : "Tilføj",
     "Primary" : "Primær",
     "Secondary" : "Sekundær",
