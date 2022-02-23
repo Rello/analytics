@@ -472,11 +472,11 @@ OCA.Analytics.Sidebar.Report = {
         }
 
         if (name === '') {
-            error = 'Report name missing';
+            error = t('analytics', 'The report name is missing');
         } else if (type === '' || (type === 2 && dataset === '')) {
-            error = 'Type of report missing';
+            error = t('analytics', 'The report type selection is missing');
         } else if (document.getElementById('chartNone').checked && document.getElementById('chartTableNone').checked) {
-            error = 'At least one visualization is required';
+            error = t('analytics', 'At least one visualization selection is required');
         }
 
         if (error !== '') {

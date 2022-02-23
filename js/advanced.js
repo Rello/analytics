@@ -503,7 +503,7 @@ OCA.Analytics.Advanced.Dataset = {
         let error;
 
         if (name === '') {
-            error = 'Report name missing';
+            error = t('analytics', 'The dataset name is missing');
             OCA.Analytics.Notification.notification('error', error);
             return;
         }

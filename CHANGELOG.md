@@ -4,6 +4,9 @@
 ### Added
 - Dynamic text variables for filter #186 => [wiki](https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter) for details
 
+### Fixed
+- l10n: Untranslated messages #255
+
 ## 4.0.3 - 2022-01-21
 ### Fixed
 - file picker not working #239
