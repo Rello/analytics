@@ -52,6 +52,7 @@ if (!OCA.Analytics) {
         reports: [],
         unsavedFilters: null,
         refreshTimer: null,
+        currentXhrRequest: null,
     };
 }
 /**
@@ -810,7 +811,17 @@ OCA.Analytics.Datasource = {
 
 OCA.Analytics.Backend = {
 
+    formatParams: function( params ){
+    return "?" + Object
+        .keys(params)
+        .map(function(key){
+            return key+"="+encodeURIComponent(params[key])
+        })
+        .join("&")
+    },
+
     getData: function () {
+        if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
         OCA.Analytics.UI.resetContentArea();
         OCA.Analytics.UI.hideElement('analytics-intro');
         OCA.Analytics.UI.hideElement('analytics-content');
@@ -840,7 +851,20 @@ OCA.Analytics.Backend = {
             ajaxData.chartoptions = OCA.Analytics.currentReportData.options.chartoptions;
         }
 
-        $.ajax({
+/*
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url + '?' + OCA.Analytics.Backend.formatParams(ajaxData));
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                let a = 1;
+            }
+        }
+*/
+
+        OCA.Analytics.currentXhrRequest = $.ajax({
             type: 'GET',
             url: url,
             data: ajaxData,
