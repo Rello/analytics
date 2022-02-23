@@ -117,7 +117,7 @@
                     <li>Internal data is persisted in the database and delivers the most flexibility and performance
                     </li>
                     <li>Use data from Github to monitor download statistics in real-time</li>
-                    <li>The JSON datasoruce can read data from external services</li>
+                    <li>The JSON datasource can read data from external services</li>
                     <li>With the HTML-Grabber, almost any website data can be extracted</li>
                     <li>Read data from internal Nextcloud files to visualize them in realtime</li>
                 </ul>
