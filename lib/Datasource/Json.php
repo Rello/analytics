@@ -51,9 +51,11 @@ class Json implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => $this->l10n->t('GET/POST'), 'type' => 'tf']);
         array_push($template, ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password']);
         array_push($template, ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z']);
+        array_push($template, ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf']);
+        array_push($template, ['id' => 'body', 'name' => $this->l10n->t('Request body'), 'placeholder' => '']);
+        array_push($template, ['id' => 'content-type', 'name' => $this->l10n->t('Header Content-Type'), 'placeholder' => 'application/json']);
         array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
         return $template;
     }
@@ -69,6 +71,7 @@ class Json implements IDatasource
         $path = $option['path'];
         $auth = $option['auth'];
         $post = ($option['method'] === 'POST') ? true : false;
+        $contentType = ($option['content-type'] && $option['content-type'] !== '') ? $option['content-type'] : 'application/json';
         $data = array();
 
         $ch = curl_init();
@@ -78,10 +81,14 @@ class Json implements IDatasource
             curl_setopt($ch, CURLOPT_POST, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'OCS-APIRequest: true'
+                'OCS-APIRequest: true',
+                'Content-Type: ' . $contentType
             ));
             curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
+            if ($option['body'] && $option['body'] !== '') {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $option['body']);
+            }
             $curlResult = curl_exec($ch);
             $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
@@ -90,23 +97,38 @@ class Json implements IDatasource
         }
 
         $json = json_decode($curlResult, true);
-        $paths = explode(',', $path);
 
-        foreach ($paths as $singlePath) {
-            $array = $this->get_nested_array_value($json, $singlePath);
+        // check if an array of values should be extracted
+        preg_match_all("/(?<={).*(?=})/", $path, $matches);
+        if (count($matches[0]) > 0) {
+            // array extraction
+            $paths = explode(',', $matches[0][0]);
+            foreach ($json as $rowArray) {
+                $dim1 = $rowArray[$paths[0]] ?: $paths[0];
+                $dim2 = $rowArray[$paths[1]] ?: $paths[1];
+                $val = $rowArray[$paths[2]] ?: $paths[2];
+                array_push($data, [$dim1, $dim2, $val]);
+            }
+        } else {
+            // single value extraction
+            $paths = explode(',', $path);
+            foreach ($paths as $singlePath) {
+                $array = $this->get_nested_array_value($json, $singlePath);
 
-            if (is_array($array)) {
-                foreach ($array as $key => $value) {
+                if (is_array($array)) {
+                    foreach ($array as $key => $value) {
+                        $pathArray = explode('/', $singlePath);
+                        $group = end($pathArray);
+                        array_push($data, [$group, $key, $value]);
+                    }
+                } else {
                     $pathArray = explode('/', $singlePath);
-                    $group = end($pathArray);
-                    array_push($data, [$group, $key, $value]);
+                    $key = end($pathArray);
+                    array_push($data, ['', $key, $array]);
                 }
-            } else {
-                $pathArray = explode('/', $singlePath);
-                $key = end($pathArray);
-                array_push($data, ['', $key, $array]);
             }
         }
+
 
         $header = array();
         $header[0] = '';
@@ -134,12 +156,10 @@ class Json implements IDatasource
     private function get_nested_array_value(&$array, $path, $delimiter = '/')
     {
         $pathParts = explode($delimiter, $path);
-
         $current = &$array;
         foreach ($pathParts as $key) {
             $current = &$current[$key];
         }
         return $current;
     }
-
 }
