@@ -68,7 +68,7 @@ OCA.Analytics.Core = {
                 window.location.href = '#';
                 OCA.Analytics.Sidebar.Report.createFromDataFile(urlHash.substring(3));
             } else if (urlHash[2] === 'r') {
-                OCA.Analytics.Navigation.init(urlHash.substring(4));
+                OCA.Analytics.Navigation.init((parseInt(urlHash.substring(4))));
             }
         } else {
             OCA.Analytics.Navigation.init();

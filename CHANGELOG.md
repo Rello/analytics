@@ -11,6 +11,7 @@
 ### Fixed
 - l10n: Untranslated messages #255
 - l10n: Text strings in demo #254
+- open report from url #248
 
 ## 4.0.3 - 2022-01-21
 ### Fixed

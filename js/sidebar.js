@@ -383,7 +383,8 @@ OCA.Analytics.Sidebar.Report = {
             t('analytics', 'Datasets can be changed in a separate maintenance') +
             '<br>' +
             t('analytics', 'Switch to the dataset maintenance from here?');
-        OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {window.location = OC.generateUrl('apps/analytics/a/') + '#/r/';});
+        const datasetId = parseInt(document.getElementById('sidebarReportDataset').value);
+        OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;});
     },
 
     buildGroupingDropdown: function (element) {
