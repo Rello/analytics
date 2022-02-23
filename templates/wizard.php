@@ -29,7 +29,7 @@
             <div class="modal-container">
                 <div class="modal-header">
                     <div class="firstrunwizard-header">
-                        <div class="logo"><p class="hidden-visually">NC20</p></div>
+                        <div class="logo"><p class="hidden-visually">Analytics</p></div>
                         <h2></h2>
                         <p></p>
                     </div>
@@ -49,24 +49,23 @@
 <template id="wizard-start">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h3>Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT
-                logs<br>Give your numbers a meaning</h3>
+            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs')); ?><br><?php p($l->t('Give your numbers a meaning')); ?></h3>
             <ul id="wizard-values">
                 <li>
                     <span class="icon-timezone"></span>
-                    <h3>Data is processed inside Nextcloud</h3>
+                    <h3><?php p($l->t('Data is processed inside Nextcloud')); ?></h3>
                 </li>
                 <li>
                     <span class="icon-shared"></span>
-                    <h3>Share your reports and insights</h3>
+                    <h3><?php p($l->t('Share your reports and insights')); ?></h3>
                 </li>
                 <li>
                     <span class="icon-projects"></span>
-                    <h3>Fully integrated into Nextcloud</h3>
+                    <h3><?php p($l->t('Fully integrated into Nextcloud')); ?></h3>
                 </li>
                 <li>
                     <span class="icon-user"></span>
-                    <h3>100% Open Source</h3>
+                    <h3>100% <?php p($l->t('Open Source')); ?></h3>
                 </li>
             </ul>
         </div>
@@ -78,13 +77,13 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader1">Visualize any data with easy to use reports</h3>
+                <h3 id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></h3>
                 <ul>
-                    <li>Different chart types like lines, columns or doughnuts</li>
-                    <li>Customize further chart options by using advanced scripting</li>
-                    <li>Show your most important insights in the Nextcloud Dashboard</li>
-                    <li>Interactive tables</li>
-                    <li>Use thresholds to mark exceptions or receive Nextcloud notifications</li>
+                    <li><?php p($l->t('Different chart types like lines, columns or doughnuts')); ?></li>
+                    <li><?php p($l->t('Customize further chart options by using advanced scripting')); ?></li>
+                    <li><?php p($l->t('Show your most important insights in the Nextcloud Dashboard')); ?></li>
+                    <li><?php p($l->t('Interactive tables')); ?></li>
+                    <li><?php p($l->t('Use thresholds to mark exceptions or receive Nextcloud notifications')); ?></li>
                 </ul>
             </div>
         </div>
@@ -95,13 +94,13 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader2">Slice and dice your data</h3>
+                <h3 id="wizardNewHeader2"><?php p($l->t('Slice and dice your data')); ?></h3>
                 <ul>
-                    <li>Different filter types like "equal", "list of values" or "contains"</li>
-                    <li>Change drilldowns by removing columns</li>
-                    <li>Customize chats by assigning primary or secondary axis</li>
-                    <li>Use different chart types per data series</li>
-                    <li>Save filters as default</li>
+                    <li><?php p($l->t('Flexible filters including dynamic date variables')); ?></li>
+                    <li><?php p($l->t('Change drill down by removing columns')); ?></li>
+                    <li><?php p($l->t('Customize chats with primary or secondary axis')); ?></li>
+                    <li><?php p($l->t('Use different chart types per data series')); ?></li>
+                    <li><?php p($l->t('Save default filters')); ?></li>
                 </ul>
             </div>
         </div>
@@ -112,14 +111,13 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader3">Use data from various datasources</h3>
+                <h3 id="wizardNewHeader3"><?php p($l->t('Use data from various datasources')); ?></h3>
                 <ul>
-                    <li>Internal data is persisted in the database and delivers the most flexibility and performance
-                    </li>
-                    <li>Use data from Github to monitor download statistics in real-time</li>
-                    <li>The JSON datasource can read data from external services</li>
-                    <li>With the HTML-Grabber, almost any website data can be extracted</li>
-                    <li>Read data from internal Nextcloud files to visualize them in realtime</li>
+                    <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
+                    <li><?php p($l->t('Use data from Github to monitor download statistics in real-time')); ?></li>
+                    <li><?php p($l->t('The JSON datasource can read data from external services')); ?></li>
+                    <li><?php p($l->t('With the HTML-Grabber, almost any website data can be extracted')); ?></li>
+                    <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in realtime')); ?></li>
                 </ul>
             </div>
         </div>
@@ -130,14 +128,14 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader4">Advanced configuration: Dataloads</h3>
+                <h3 id="wizardNewHeader4"><?php p($l->t('Advanced configuration: Dataloads')); ?></h3>
                 <ul>
-                    <li>Any datasource can be persisted in Nextcloud</li>
-                    <li>Use timestamps to historize data</li>
-                    <li>Full (deletion of old data) or delta loads</li>
-                    <li>Schedule dataloads in the background daily or hourly</li>
-                    <li>Trigger dataloads via scripts using the occ command</li>
-                    <li>Use the REST API to push data into Analytics</li>
+                    <li><?php p($l->t('Any datasource can be persisted in Nextcloud')); ?></li>
+                    <li><?php p($l->t('Use timestamps to historize data')); ?></li>
+                    <li><?php p($l->t('Full (deletion of old data) or delta loads')); ?></li>
+                    <li><?php p($l->t('Schedule dataloads in the background daily or hourly')); ?></li>
+                    <li><?php p($l->t('Trigger dataloads via scripts using the occ command')); ?></li>
+                    <li><?php p($l->t('Use the REST API to push data into Analytics')); ?></li>
                 </ul>
             </div>
         </div>
@@ -146,7 +144,7 @@
         <div class="page content-final" style="display: none;">
             <div class="description-wide">
                 <div class="description-block">
-                    <h3 class="icon-info">Get more information</h3>
+                    <h3 class="icon-info"><?php p($l->t('Get more information')); ?></h3>
                     <ul>
                         <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener">Wiki</a>
                         </li>
@@ -156,21 +154,21 @@
                 </div>
                 <br>
                 <div class="description-block">
-                    <p>You can open this introduction again by selecting "About" in the Analytics settings section</p>
+                    <p><?php p($l->t('You can open this introduction again by selecting "Introduction" in the Analytics settings section')); ?></p>
                 </div>
             </div>
             <div class="description-wide">
                 <div class="description-block">
-                    <h3 class="icon-link">Quickstart</h3>
-                    <p>Activate a set of demo report to show how Analytics works</p>
+                    <h3 class="icon-link"><?php p($l->t('Quickstart')); ?></h3>
+                    <p><?php p($l->t('Activate a set of demo report to show how Analytics works')); ?></p>
                     <button id="wizardDemo">
-                        Create Demo
+                        <?php p($l->t('Create Demo')); ?>
                     </button>
                 </div>
                 <br><br>
                 <div class="description-block">
                     <button id="wizardEnd" class="primary modal-default-button">
-                        Start using Analytics
+                        <?php p($l->t('Start using Analytics')); ?>
                     </button>
                 </div>
             </div>

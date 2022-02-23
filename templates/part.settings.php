@@ -33,7 +33,7 @@
             </li>
             <li class="analytics-settings-item icon-info">
                 <a id="wizardStart" style="padding: 0 25px;">
-                    <?php p($l->t('About')); ?>
+                    <?php p($l->t('Introduction')); ?>
                 </a>
             </li>
             <li class="analytics-settings-item icon-info">
