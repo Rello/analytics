@@ -118,10 +118,9 @@ OC.L10N.register(
     "Timestamp of dataload" : "Tidsstempel for dataindlæsning",
     "false/true" : "falsk/sand",
     "JSON" : "JSON",
-    "HTTP method" : "HTTP metode",
-    "GET/POST" : "GET/POST",
     "Authentication" : "Godkendelse",
     "Object path" : "Objekt sti",
+    "HTTP method" : "HTTP metode",
     "true/false" : "sand/falsk",
     "HTML grabber" : "HTML-grabber",
     "valid regex" : "gyldig regex"
