@@ -14,7 +14,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Register external data sources from other apps
 - Storage: real-time or database
 - Advanced data loads with scheduling
-- Visualization: combined charts, tables, filters
+- Visualization: combined charts, zoom, tables, filters
 - Analysis functions: trend
 - Thresholds for alerts and color coding
 - Integration: Files, Activity, Notifications, Flow, Dashboard, Search

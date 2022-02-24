@@ -327,6 +327,20 @@ OCA.Analytics.UI = {
                             return '';
                         }
                     },
+                },
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'x',
+                        modifierKey: 'ctrl',
+                    },
+                    zoom: {
+                        drag: {
+                            enabled: true
+                        },
+                        mode: 'x',
+                        onZoom: this.toggleZoomResetButton,
+                    },
                 }
             },
         };
@@ -465,7 +479,7 @@ OCA.Analytics.UI = {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
-            plugins: [ChartDataLabels],
+            plugins: [ChartDataLabels,ChartZoom],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
@@ -473,6 +487,15 @@ OCA.Analytics.UI = {
             },
             options: chartOptions,
         });
+    },
+
+    toggleZoomResetButton: function () {
+        OCA.Analytics.UI.showElement('chartZoomReset');
+    },
+
+    handleZoomResetButton: function () {
+        OCA.Analytics.chartObject.resetZoom();
+        OCA.Analytics.UI.hideElement('chartZoomReset');
     },
 
     toggleChartLegend: function () {
@@ -498,7 +521,8 @@ OCA.Analytics.UI = {
             OCA.Analytics.UI.hideElement('chartContainer');
             OCA.Analytics.UI.hideElement('chartLegendContainer');
             document.getElementById('chartContainer').innerHTML = '';
-            document.getElementById('chartContainer').innerHTML = '<canvas id="myChart" ></canvas>';
+            document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
+            document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.UI.handleZoomResetButton);
             OCA.Analytics.UI.hideElement('tableContainer');
             OCA.Analytics.UI.hideElement('tableSeparatorContainer');
             document.getElementById('tableContainer').innerHTML = '';

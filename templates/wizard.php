@@ -111,11 +111,11 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader3"><?php p($l->t('Use data from various datasources')); ?></h3>
+                <h3 id="wizardNewHeader3"><?php p($l->t('Use data from various data sources')); ?></h3>
                 <ul>
                     <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
                     <li><?php p($l->t('Use data from GitHub to monitor download statistics in real-time')); ?></li>
-                    <li><?php p($l->t('The JSON datasource can read data from external services')); ?></li>
+                    <li><?php p($l->t('The JSON data source can read data from external services')); ?></li>
                     <li><?php p($l->t('With the HTML-Grabber, almost any website data can be extracted')); ?></li>
                     <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in real-time')); ?></li>
                 </ul>
@@ -128,13 +128,13 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader4"><?php p($l->t('Advanced configuration: Dataloads')); ?></h3>
+                <h3 id="wizardNewHeader4"><?php p($l->t('Advanced configuration: Data loads')); ?></h3>
                 <ul>
-                    <li><?php p($l->t('Any datasource can be persisted in Nextcloud')); ?></li>
+                    <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
                     <li><?php p($l->t('Use timestamps to historize data')); ?></li>
                     <li><?php p($l->t('Full (deletion of old data) or delta loads')); ?></li>
-                    <li><?php p($l->t('Schedule dataloads in the background daily or hourly')); ?></li>
-                    <li><?php p($l->t('Trigger dataloads via scripts using the occ command')); ?></li>
+                    <li><?php p($l->t('Schedule data loads in the background daily or hourly')); ?></li>
+                    <li><?php p($l->t('Trigger data loads via scripts using the occ command')); ?></li>
                     <li><?php p($l->t('Use the REST API to push data into Analytics')); ?></li>
                 </ul>
             </div>

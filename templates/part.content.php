@@ -18,7 +18,6 @@
     <div id="reportPlaceholder"></div>
     <?php print_unescaped($this->inc('part.menu')); ?>
     <div id="chartContainer">
-        <canvas id="myChart"></canvas>
     </div>
     <div id="chartLegendContainer">
         <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>

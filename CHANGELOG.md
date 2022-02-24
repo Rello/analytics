@@ -4,6 +4,7 @@
 ### Added
 - Dynamic text variables for filter #186 => [wiki](https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter) for details
 - JSON data source: POST body; reading arrays #233 => [wiki](https://github.com/Rello/analytics/wiki/Datasource:-JSON) for details
+- Zoom in charts #246
 
 ### Changed
 - Cancel report load when another report is selected #249
