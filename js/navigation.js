@@ -35,7 +35,7 @@ OCA.Analytics.Navigation = {
         li2.classList.add('pinned', 'first-pinned');
         let a2 = document.createElement('a');
         a2.classList.add('icon-add', 'svg');
-        a2.id = 'newDatasetButton';
+        a2.id = 'newReportButton';
         a2.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         if (OCA.Analytics.isAdvanced) {
             a2.innerText = t('analytics', 'New dataset');
@@ -262,16 +262,16 @@ OCA.Analytics.Navigation = {
     handleNewButton: function () {
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Wizard.sildeArray = [
-                ['',''],
+                ['', ''],
                 ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
             ];
             OCA.Analytics.Wizard.show();
         } else {
             OCA.Analytics.Wizard.sildeArray = [
-                ['',''],
+                ['', ''],
                 ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizard],
-                ['wizardNewType',''],
-                ['wizardNewVisual','']
+                ['wizardNewType', ''],
+                ['wizardNewVisual', '']
             ];
             OCA.Analytics.Wizard.show();
         }
@@ -407,10 +407,15 @@ OCA.Analytics.Navigation = {
         } else {
             datatype = 'report';
         }
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/' + datatype),
-            success: function (data) {
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', OC.generateUrl('apps/analytics/' + datatype, true));
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                let data = JSON.parse(xhr.response);
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.reports = data;
                 if (datasetId && data.indexOf(data.find(o => o.id === datasetId)) !== -1) {
@@ -422,7 +427,8 @@ OCA.Analytics.Navigation = {
                     navigationItem.click();
                 }
             }
-        });
+        };
+        xhr.send();
     },
 
     favoriteUpdate: function (datasetId, isFavorite) {

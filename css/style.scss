@@ -187,11 +187,6 @@ table.dataTable tbody tr {
     cursor: pointer;
 }
 
-.icon-spreadsheet {
-  @include icon-color('icon-spreadsheet', 'analytics', $color-black, 1);
-    //background-image: url(./img/core/filetypes/text.svg?v=0)
-}
-
 .icon-analytics-filter-add {
   @include icon-color('filteradd', 'analytics', $color-black, 1);
 }

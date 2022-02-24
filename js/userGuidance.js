@@ -140,6 +140,21 @@ OCA.Analytics.WhatsNew = {
 
     whatsnew: function (options) {
         options = options || {}
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', OC.generateUrl('apps/analytics/whatsnew?format=json'), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                let data = JSON.parse(xhr.response);
+                OCA.Analytics.WhatsNew.show(data, xhr);
+            }
+        };
+        xhr.send();
+
+/*
         $.ajax({
             type: 'GET',
             url: OC.generateUrl('apps/analytics/whatsnew'),
@@ -148,18 +163,21 @@ OCA.Analytics.WhatsNew = {
                 OCA.Analytics.WhatsNew.show(data, statusText, xhr);
             },
         });
+*/
     },
 
     dismiss: function (version) {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/whatsnew'),
-            data: {version: encodeURIComponent(version)}
-        })
+        let params = 'version=' + encodeURIComponent(version);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', OC.generateUrl('apps/analytics/whatsnew'), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(params);
         $('.whatsNewPopover').remove();
     },
 
-    show: function (data, statusText, xhr) {
+    show: function (data, xhr) {
         if (xhr.status !== 200) {
             return
         }
