@@ -133,25 +133,6 @@ class ReportService
     }
 
     /**
-     * migrate old favorite ids
-     *
-     * @param $ownReports
-     * @return bool
-     */
-    private function favoriteMigration($ownReports) {
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
-        foreach ($favorites as $favorite) {
-            $key = array_search($favorite, array_column($ownReports, 'dataset'));
-            if ($key) {
-                $this->logger->info('Favorite was migrated from '. $ownReports[$key]['dataset'] . ' to new report ' . $ownReports[$key]['id']);
-                $this->tagManager->load('analytics')->removeFromFavorites($ownReports[$key]['dataset']);
-                $this->tagManager->load('analytics')->addToFavorites($ownReports[$key]['id']);
-            }
-        }
-        return true;
-    }
-
-    /**
      * get own report details
      *
      * @param int $reportId
@@ -174,28 +155,6 @@ class ReportService
 
         }
         return $ownReport;
-    }
-
-    /**
-     * get own reports which are marked as favorites
-     *
-     * @return array|bool
-     */
-    public function getOwnFavoriteReports()
-    {
-        $ownReports = $this->ReportMapper->index();
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
-        $sharedReports = $this->ShareService->getSharedReports();
-
-        foreach ($favorites as $favorite) {
-            if (array_search($favorite, array_column($ownReports, 'id')) === false
-                && array_search($favorite, array_column($sharedReports, 'id')) === false) {
-                unset($favorites[$favorite]);
-                $this->tagManager->load('analytics')->removeFromFavorites($favorite);
-            }
-        }
-
-        return $favorites;
     }
 
     /**
@@ -232,7 +191,7 @@ class ReportService
 
         $template = $this->ReportMapper->read($reportId);
         $newId = $this->ReportMapper->create(
-            // TRANSLATORS Noun
+        // TRANSLATORS Noun
             $template['name'] . ' ' . $this->l10n->t('copy'),
             $template['subheader'],
             $template['parent'],
@@ -292,6 +251,50 @@ class ReportService
     public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
         return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+    }
+
+    /**
+     * Delete Dataset and all depending objects
+     *
+     * @param int $reportId
+     * @return string
+     */
+    public function delete(int $reportId)
+    {
+        $metadata = $this->read($reportId);
+        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
+        $this->ShareService->deleteShareByReport($reportId);
+        $this->ThresholdMapper->deleteThresholdByReport($reportId);
+        $this->setFavorite($reportId, 'false');
+        $this->ReportMapper->delete($reportId);
+
+        if (empty($this->reportsForDataset($metadata['dataset'])) && $metadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+            return $metadata['dataset'];
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * get own reports which are marked as favorites
+     *
+     * @return array|bool
+     */
+    public function getOwnFavoriteReports()
+    {
+        $ownReports = $this->ReportMapper->index();
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
+        $sharedReports = $this->ShareService->getSharedReports();
+
+        foreach ($favorites as $favorite) {
+            if (array_search($favorite, array_column($ownReports, 'id')) === false
+                && array_search($favorite, array_column($sharedReports, 'id')) === false) {
+                unset($favorites[$favorite]);
+                $this->tagManager->load('analytics')->removeFromFavorites($favorite);
+            }
+        }
+
+        return $favorites;
     }
 
     /**
@@ -386,18 +389,6 @@ class ReportService
         return $reportId;
     }
 
-    private function floatvalue($val)
-    {
-        $val = str_replace(",", ".", $val);
-        $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        $val = preg_replace('/[^0-9-.]+/', '', $val);
-        if (is_numeric($val)) {
-            return number_format(floatval($val), 2, '.', '');
-        } else {
-            return false;
-        }
-    }
-
     /**
      * Export Report
      *
@@ -420,28 +411,6 @@ class ReportService
         unset($result['report']['id'], $result['report']['user_id'], $result['report']['user_id'], $result['report']['parent'], $result['report']['dataset']);
         $data = json_encode($result);
         return new DataDownloadResponse($data, $result['report']['name'] . '.export.txt', 'text/plain; charset=utf-8');
-    }
-
-    /**
-     * Delete Dataset and all depending objects
-     *
-     * @param int $reportId
-     * @return bool
-     */
-    public function delete(int $reportId): bool
-    {
-        $metadata = $this->read($reportId);
-        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
-        $this->ShareService->deleteShareByReport($reportId);
-        $this->ThresholdMapper->deleteThresholdByReport($reportId);
-        $this->setFavorite($reportId, 'false');
-        $this->ReportMapper->delete($reportId);
-
-        if (empty($this->reportsForDataset($metadata['dataset'])) && $metadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**
@@ -488,4 +457,36 @@ class ReportService
     public function reportsForDataset($datasetId) {
         return $this->ReportMapper->reportsForDataset($datasetId);
     }
+
+    /**
+     * migrate old favorite ids
+     *
+     * @param $ownReports
+     * @return bool
+     */
+    private function favoriteMigration($ownReports) {
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
+        foreach ($favorites as $favorite) {
+            $key = array_search($favorite, array_column($ownReports, 'dataset'));
+            if ($key) {
+                $this->logger->info('Favorite was migrated from '. $ownReports[$key]['dataset'] . ' to new report ' . $ownReports[$key]['id']);
+                $this->tagManager->load('analytics')->removeFromFavorites($ownReports[$key]['dataset']);
+                $this->tagManager->load('analytics')->addToFavorites($ownReports[$key]['id']);
+            }
+        }
+        return true;
+    }
+
+    private function floatvalue($val)
+    {
+        $val = str_replace(",", ".", $val);
+        $val = preg_replace('/\.(?=.*\.)/', '', $val);
+        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        if (is_numeric($val)) {
+            return number_format(floatval($val), 2, '.', '');
+        } else {
+            return false;
+        }
+    }
+
 }

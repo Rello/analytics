@@ -572,12 +572,28 @@ OCA.Analytics.Sidebar.Report = {
 
     delete: function (reportId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
+
         $.ajax({
             type: 'DELETE',
             url: OC.generateUrl('apps/analytics/report/') + reportId,
             success: function (data) {
-                if (data === false) {
-                    OCA.Analytics.Notification.dialog(t('analytics', 'Dataset'),'This was the last report on the dataset. Don´t forget to clean up the dataset.')
+                if (data !== true) {
+
+                    OCA.Analytics.Notification.confirm(
+                        t('analytics', 'Dataset'),
+                        t('analytics', 'This was the last report on the dataset. Do you want to delete the dataset including all data?'),
+                        function () {
+                                $.ajax({
+                                    type: 'DELETE',
+                                    url: OC.generateUrl('apps/analytics/dataset/') + data,
+                                    success: function () {
+                                        OCA.Analytics.Navigation.getDatasets(datasetId);
+                                    }
+                                });
+                        },
+                        true
+                    );
+
                 }
                 OCA.Analytics.Navigation.init();
                 OCA.Analytics.Navigation.handleOverviewButton();
