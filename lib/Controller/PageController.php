@@ -14,7 +14,6 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\DataSession;
 use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;

@@ -98,7 +98,7 @@
                 <ul>
                     <li><?php p($l->t('Flexible filters including dynamic date variables')); ?></li>
                     <li><?php p($l->t('Change drill down by removing columns')); ?></li>
-                    <li><?php p($l->t('Customize chats with primary or secondary axis')); ?></li>
+                    <li><?php p($l->t('Customize charts with primary or secondary axis')); ?></li>
                     <li><?php p($l->t('Use different chart types per data series')); ?></li>
                     <li><?php p($l->t('Save default filters')); ?></li>
                 </ul>
@@ -114,10 +114,10 @@
                 <h3 id="wizardNewHeader3"><?php p($l->t('Use data from various datasources')); ?></h3>
                 <ul>
                     <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
-                    <li><?php p($l->t('Use data from Github to monitor download statistics in real-time')); ?></li>
+                    <li><?php p($l->t('Use data from GitHub to monitor download statistics in real-time')); ?></li>
                     <li><?php p($l->t('The JSON datasource can read data from external services')); ?></li>
                     <li><?php p($l->t('With the HTML-Grabber, almost any website data can be extracted')); ?></li>
-                    <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in realtime')); ?></li>
+                    <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in real-time')); ?></li>
                 </ul>
             </div>
         </div>
@@ -223,12 +223,12 @@
             <div class="table" style="display: table; width: 100%;">
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
-                        <button id="wizardNewTypeRealtime"><?php p($l->t('Realtime Data')); ?></button>
+                        <button id="wizardNewTypeRealtime"><?php p($l->t('Real-time Data')); ?></button>
                         <button id="wizardNewTypeStored"><?php p($l->t('Stored Data')); ?></button>
                         <br>
                     </div>
                     <div style="display: table-cell;">
-                        <?php p($l->t('Reports can read their data either from realtime data sources or from saved datasets within the Nextcloud database.')); ?>
+                        <?php p($l->t('Reports can read their data either from real-time data sources or from saved datasets within the Nextcloud database.')); ?>
                         <br>
                     </div>
                 </div>
@@ -242,7 +242,7 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        <?php p($l->t('Different data sources are available. The data is read in realtime when the report is being executed.')); ?>
+                        <?php p($l->t('Different data sources are available. The data is read in real-time when the report is being executed.')); ?>
                         <br>
                     </div>
                 </div>
