@@ -117,7 +117,7 @@ OCA.Analytics.Filter = {
             + t('analytics', 'Filter')
             + '</h2>'
             + '<span hidden id="filterDialogHintText" class="userGuidance">'
-            + t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}')
+            + t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
                 .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter" target="_blank">')
                 .replace('{linkend}', '</a>')
             + '<br><br></span>'
