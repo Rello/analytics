@@ -73,6 +73,16 @@
                 </button>
             </li>
             <li>
+                <button id="aggregateIcon">
+                    <span><?php p($l->t('Aggregate values (beta)')); ?></span>
+                </button>
+            </li>
+            <li>
+                <button id="disAggregateIcon">
+                    <span><?php p($l->t('Disaggregate values (beta)')); ?></span>
+                </button>
+            </li>
+            <li>
                 <button id="linearRegressionIcon" class="menuitem" disabled>
                     <span><?php p($l->t('Linear Regression')); ?></span>
                 </button>

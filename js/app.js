@@ -346,11 +346,11 @@ OCA.Analytics.UI = {
         };
 
         for (let values of jsondata.data) {
-            // indexOf will search, if an exiting dataset existists already for that lable (first column)
+            // indexOf will search, if an exiting dataset exists already for that label (first column)
             // internal data comes sorted from the database and the dataSeries can increment
             // external data like csv can be unsorted
             if (dataSeriesColumn >= 0 && datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn])) === -1) {
-                // create new dataseries for every new lable in dataSeriesColumn
+                // create new data series for every new label in dataSeriesColumn
                 datasets.push({label: values[dataSeriesColumn], data: [], hidden: hidden});
                 dataSeries++;
                 // default hide > 4th series for better visibility
@@ -383,7 +383,7 @@ OCA.Analytics.UI = {
             } else {
                 datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
                 if (targetDataseries === 0) {
-                    // Add category lables only once and not for every data series.
+                    // Add category labels only once and not for every data series.
                     // They have to be unique anyway
                     xAxisCategories.push(values[characteristicColumn]);
                 }
@@ -600,6 +600,8 @@ OCA.Analytics.UI = {
         document.getElementById('analysisIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
         document.getElementById('refreshIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuRefresh);
         document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
+        document.getElementById('disAggregateIcon').addEventListener('click', OCA.Analytics.Functions.disAggregate);
+        document.getElementById('aggregateIcon').addEventListener('click', OCA.Analytics.Functions.aggregate);
         //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
         document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
@@ -668,14 +670,14 @@ OCA.Analytics.Functions = {
         let datasetType = 'time';
         for (let y = 0; y < numberDatasets; y++) {
             let dataset = OCA.Analytics.chartObject.data.datasets[y];
-            let newLabel = dataset.label + " Trend";
+            let newLabel = dataset.label + " " + t('analytics', 'Trend');
 
             // generate trend only for visible data series
             if (OCA.Analytics.chartObject.isDatasetVisible(y) === false) continue;
             // dont add trend twice
             if (OCA.Analytics.chartObject.data.datasets.find(o => o.label === newLabel) !== undefined) continue;
             // dont add trend for a trend
-            if (dataset.label.substr(dataset.label.length - 6) === " Trend") continue;
+            if (dataset.label.substr(dataset.label.length - 5) === t('analytics', 'Trend')) continue;
 
             let yValues = [];
             for (let i = 0; i < dataset.data.length; i++) {
@@ -691,7 +693,7 @@ OCA.Analytics.Functions = {
                 xValues.push(i);
             }
 
-            let regression = OCA.Analytics.Functions.regression(xValues, yValues);
+            let regression = OCA.Analytics.Functions.regressionFunction(xValues, yValues);
             let ylast = ((dataset.data.length) * regression["slope"]) + regression["intercept"];
 
             let data = [];
@@ -720,7 +722,7 @@ OCA.Analytics.Functions = {
         OCA.Analytics.chartObject.update();
     },
 
-    regression: function (x, y) {
+    regressionFunction: function (x, y) {
         const n = y.length;
         let sx = 0;
         let sy = 0;
@@ -743,7 +745,79 @@ OCA.Analytics.Functions = {
         const intercept = my - slope * mx;
 
         return {slope, intercept};
-    }
+    },
+
+    aggregate: function () {
+        OCA.Analytics.Functions.aggregationFunction('aggregate');
+        // const cumulativeSum = (sum => value => sum += value)(0);
+        // datasets[0]['data'] = datasets[0]['data'].map(cumulativeSum)
+    },
+
+    disAggregate: function () {
+        OCA.Analytics.Functions.aggregationFunction('disaggregate');
+    },
+
+    aggregationFunction: function (mode) {
+        OCA.Analytics.UI.showElement('chartLegendContainer');
+        OCA.Analytics.UI.hideReportMenu();
+
+        let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
+        let newLabel;
+        for (let y = 0; y < numberDatasets; y++) {
+            let dataset = OCA.Analytics.chartObject.data.datasets[y];
+            if (mode === 'aggregate') {
+                newLabel = dataset.label + " " + t('analytics', 'Aggregation');
+            } else {
+                newLabel = dataset.label + " " + t('analytics', 'Disaggregation');
+            }
+
+            // generate trend only for visible data series
+            if (OCA.Analytics.chartObject.isDatasetVisible(y) === false) continue;
+            // dont add trend twice
+            if (OCA.Analytics.chartObject.data.datasets.find(o => o.label === newLabel) !== undefined) continue;
+            // dont add trend for a trend
+            if (dataset.label.substr(dataset.label.length - 5) === "Trend") continue;
+            if (dataset.label.substr(dataset.label.length - 11) === t('analytics', 'Aggregation')) continue;
+            if (dataset.label.substr(dataset.label.length - 14) === t('analytics', 'Disaggregation')) continue;
+
+            let lastValue = 0;
+            let newValue;
+            let newData = OCA.Analytics.chartObject.data.datasets[y]['data'].map(function(currentValue, index, arr) {
+                if (mode === 'aggregate') {
+                    if (typeof (currentValue) === 'number') {
+                        newValue = currentValue + lastValue;
+                        lastValue = newValue;
+                    } else {
+                        newValue = {x: currentValue["x"], y: parseInt(currentValue["y"]) + lastValue};
+                        lastValue = parseInt(currentValue["y"]) + lastValue;
+                    }
+                } else {
+                    if (typeof (currentValue) === 'number') {
+                        newValue = currentValue - lastValue;
+                        lastValue = currentValue;
+                    } else {
+                        newValue = {x: currentValue["x"], y: parseInt(currentValue["y"]) - lastValue};
+                        lastValue = parseInt(currentValue["y"]);
+                    }
+                    return newValue;
+                }
+                return newValue;
+            })
+
+            let newDataset = {
+                label: newLabel,
+                backgroundColor: dataset.backgroundColor,
+                borderColor: dataset.borderColor,
+                borderDash: [5, 5],
+                type: 'line',
+                yAxisID: 'secondary',
+                data: newData
+            };
+            OCA.Analytics.chartObject.data.datasets.push(newDataset);
+
+        }
+        OCA.Analytics.chartObject.update();
+    },
 
 };
 
