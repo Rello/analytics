@@ -258,6 +258,7 @@ class ReportService
      *
      * @param int $reportId
      * @return string
+     * @throws Exception
      */
     public function delete(int $reportId)
     {
@@ -268,7 +269,8 @@ class ReportService
         $this->setFavorite($reportId, 'false');
         $this->ReportMapper->delete($reportId);
 
-        if (empty($this->reportsForDataset($metadata['dataset'])) && $metadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+        $report = $this->reportsForDataset((int)$metadata['dataset']);
+        if (empty($report) && (int)$metadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             return $metadata['dataset'];
         } else {
             return true;
