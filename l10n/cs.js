@@ -108,6 +108,7 @@ OC.L10N.register(
     "Red" : "Červená",
     "Yellow" : "Žlutá",
     "Demo: Population Data" : "Demo: Údaje o populaci",
+    "Real-time CSV data from GitHub via the *External URL* datasource" : "CSV data v reálném čase z GitHub prostřednictvím datového zdroje *externí URL*",
     "Demo: Analytics Downloads" : "Demo: Analýzy stahování",
     "Object" : "Objekt",
     "Date" : "Datum",

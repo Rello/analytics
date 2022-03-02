@@ -108,6 +108,7 @@ OC.L10N.register(
     "Red" : "Kırmızı",
     "Yellow" : "Sarı",
     "Demo: Population Data" : "Tanıtım: Topluluk verileri",
+    "Real-time CSV data from GitHub via the *External URL* datasource" : "*Extrernal URL* üzerinden gerçek zamanlı GitHub CSV verileri",
     "Demo: Analytics Downloads" : "Tanıtım: Analytics indirmeler",
     "Object" : "Nesne",
     "Date" : "Tarih",

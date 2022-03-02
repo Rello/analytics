@@ -108,6 +108,7 @@ OC.L10N.register(
     "Red" : "Rot",
     "Yellow" : "Gelb",
     "Demo: Population Data" : "Demo: Einwohnerzahlen",
+    "Real-time CSV data from GitHub via the *External URL* datasource" : "Echtzeit-CSV-Daten von GitHub über die *External URL* Datenquelle",
     "Demo: Analytics Downloads" : "Demo: Analytics Downloads",
     "Object" : "Objekt",
     "Date" : "Datum",
