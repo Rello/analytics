@@ -13,6 +13,8 @@ use OCP\Util;
 
 Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', '3rdParty/jquery.dataTables.min');
+Util::addScript('analytics', '3rdParty/moment');
+Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'filter');
 Util::addScript('analytics', '3rdParty/jquery.dataTables.min');
@@ -20,8 +22,6 @@ Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-zoom.min');
-Util::addScript('analytics', '3rdParty/moment');
-Util::addScript('analytics', '3rdParty/cloner');
 ?>
 
 <header>

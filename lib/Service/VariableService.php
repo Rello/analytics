@@ -160,10 +160,7 @@ class VariableService
                 //'9$endTS' => $endTS,
            ];
         } else {
-            $return = [
-                'value' => $filter,
-                'option' => $option
-            ];
+            $return = false;
         }
         return $return;
     }

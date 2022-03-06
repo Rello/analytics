@@ -9,6 +9,7 @@
 
 ### Changed
 - Cancel report load when another report is selected #249
+- Chart.js v3.7
 
 ### Fixed
 - l10n: Untranslated messages #255

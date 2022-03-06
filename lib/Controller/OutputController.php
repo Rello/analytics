@@ -96,7 +96,7 @@ class OutputController extends Controller
      * @return array
      * @throws Exception
      */
-    private function getData($reportMetadata)
+    public function getData($reportMetadata)
     {
         $datasource = (int)$reportMetadata['type'];
         $datasetId = (int)$reportMetadata['dataset'];
