@@ -68,7 +68,7 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isAdvanced) {
             a.classList.add('icon-view-previous', 'svg');
             a.innerText = t('analytics', 'Back to reports');
-            a.addEventListener('click', OCA.Analytics.Navigation.handleReportClicked);
+            a.addEventListener('click', OCA.Analytics.Navigation.handleBackToReportClicked);
         } else {
             a.classList.add('icon-toggle-pictures', 'svg');
             a.innerText = t('analytics', 'Overview');
@@ -226,6 +226,12 @@ OCA.Analytics.Navigation = {
         edit.children[1].innerText = t('analytics', 'Basic settings');
         edit.dataset.testing = 'basic' + data.name;
 
+        let dataset = navigationMenu.getElementById('navigationMenuAdvanced');
+        dataset.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
+        dataset.children[1].innerText = t('analytics', 'Dataset maintenance');
+        dataset.dataset.testing = 'advanced' + data.name;
+        dataset.dataset.dataset = data.dataset;
+
         let favorite = navigationMenu.getElementById('navigationMenueFavorite');
         favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
         favorite.dataset.testing = 'fav' + data.name;
@@ -246,12 +252,16 @@ OCA.Analytics.Navigation = {
         if (parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP) {
             unshareReport.remove();
             favorite.remove();
+            dataset.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
         } else if (parseInt(data['type']) === OCA.Analytics.TYPE_SHARED) {
             deleteReport.remove();
+            dataset.remove();
             edit.remove();
             unshareReport.dataset.shareId = data.shareId;
             unshareReport.addEventListener('click', OCA.Analytics.Navigation.handleUnshareButton);
+        } else if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
+            dataset.remove();
         } else {
             unshareReport.remove();
         }
@@ -336,7 +346,10 @@ OCA.Analytics.Navigation = {
     },
 
     handleAdvancedClicked: function (evt) {
-        window.location = OC.generateUrl('apps/analytics/a/#');
+        let datasetId = evt.target.parentNode.dataset.dataset;
+        let datasetUrl = '';
+        if (datasetId !== undefined) datasetUrl = '#/r/' + datasetId
+        window.location = OC.generateUrl('apps/analytics/a/') + datasetUrl;
         evt.stopPropagation();
     },
 
@@ -362,9 +375,11 @@ OCA.Analytics.Navigation = {
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
     },
 
-    handleReportClicked: function (evt) {
-        const datasetId = evt.target.closest('div').dataset.id;
-        window.location = OC.generateUrl('apps/analytics/') + '#/r/' + datasetId;
+    handleBackToReportClicked: function (evt) {
+        let reportId = evt.target.closest('div').dataset.id;
+        let reportUrl = '';
+        if (reportId !== undefined) reportUrl = '#/r/' + reportId
+        window.location = OC.generateUrl('apps/analytics/') + reportUrl;
         evt.stopPropagation();
     },
 
