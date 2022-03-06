@@ -46,14 +46,14 @@
                 </button>
             </li>
             <li class="action-separator"></li>
-            <li id="saveIcon">
+<!--            <li id="saveIconOld">
                 <button>
                     <span class="icon-analytics-save-warning"
-                          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></span>
-                    <span><?php p($l->t('Save changes')); ?></span>
+                          title="<?php /*p($l->t('Report was changed - Press here to save the current state')); */?>"></span>
+                    <span><?php /*p($l->t('Save changes')); */?></span>
                 </button>
             </li>
-            <li id="saveIconNew">
+-->            <li id="saveIconNew">
                 <button>
                     <span class="icon-add" title="<?php p($l->t('Save as new report')); ?>"></span>
                     <span><?php p($l->t('Save as new report')); ?></span>
@@ -125,6 +125,8 @@
             </li>
         </ul>
     </div>
+    <div id="saveIcon" class="analytics-options icon-analytics-save-warning has-tooltip" title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
+
     <div id="addFilterIcon" class="analytics-options icon-analytics-filter-add has-tooltip"
          title="<?php p($l->t('Filter')); ?>"></div>
     <div id="filterVisualisation" style="display: inline-block; float: right;"></div>

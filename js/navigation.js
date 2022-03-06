@@ -433,7 +433,7 @@ OCA.Analytics.Navigation = {
                 let data = JSON.parse(xhr.response);
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.reports = data;
-                if (datasetId && data.indexOf(data.find(o => o.id === datasetId)) !== -1) {
+                if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === datasetId)) !== -1) {
                     OCA.Analytics.Sidebar.hideSidebar();
                     let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
                     if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
