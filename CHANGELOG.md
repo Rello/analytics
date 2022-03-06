@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.1.0 - 2022-0x-xx
+## 4.1.0 - 2022-03-06
 ### Added
 - Dynamic text variables for filter #186 => [wiki](https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter) for details
 - Zoom in charts #246
