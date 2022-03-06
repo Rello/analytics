@@ -54,7 +54,7 @@ class Version4001Date20220306190000 extends SimpleMigrationStep
         $query = $this->connection->getQueryBuilder();
         $query->insert('analytics_whats_new')
             ->values([
-                'version' => $query->createNamedParameter('4.1.0'),
+                'version' => $query->createNamedParameter('4.1.1'),
                 'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
 "en":{"regular":["Dynamic text variables for filter","Zoom in charts","More JSON data soruce options"],"admin":["New Features apply to users"]},
 "de":{"regular":["Dynamische Text Filter Variablen","Zoomen in Grafiken","Weitere Optionen in JSON Datenquellen"],"admin":["Nur User Features"]}
