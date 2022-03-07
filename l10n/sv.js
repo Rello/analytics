@@ -146,7 +146,6 @@ OC.L10N.register(
     "Analysis" : "Analys",
     "Auto refresh" : "Automatisk uppdatering",
     "Download chart" : "Ladda ner diagram",
-    "Save changes" : "Spara ändringar",
     "Save as new report" : "Spara som en ny rapport",
     "back" : "tillbaka",
     "Linear Regression" : "Linjär regression",

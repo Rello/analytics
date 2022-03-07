@@ -41,7 +41,6 @@ OC.L10N.register(
     "copy" : "コピーする",
     "Password" : "パスワード",
     "No data found" : "ダーターが見つかりません",
-    "Save changes" : "変更を保存",
     "1 min" : "1分",
     "30 min" : "30分",
     "Settings" : "設定",
