@@ -56,7 +56,7 @@ class Json implements IDatasource
         array_push($template, ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf']);
         array_push($template, ['id' => 'body', 'name' => 'Request body', 'placeholder' => '']);
         array_push($template, ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json']);
-        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of dataload'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
+        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
         return $template;
     }
 

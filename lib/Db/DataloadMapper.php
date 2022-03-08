@@ -73,7 +73,7 @@ class DataloadMapper
     }
 
     /**
-     * get all dataloads for a dataset
+     * get all data loads for a dataset
      *
      * @NoAdminRequired
      * @param int $datasetId
@@ -108,7 +108,7 @@ class DataloadMapper
     }
 
     /**
-     * get all dataload & schedule metadata
+     * get all data load & schedule metadata
      *
      * @NoAdminRequired
      * @param $schedule
@@ -185,7 +185,7 @@ class DataloadMapper
     }
 
     /**
-     * get Dataload by id
+     * get data load by id
      * @param int $dataloadId
      * @return array
      */

@@ -53,7 +53,7 @@ return [
         ['name' => 'dataload#importClipboard', 'url' => '/data/importCSV', 'verb' => 'POST'],
         ['name' => 'dataload#importFile', 'url' => '/data/importFile', 'verb' => 'POST'],
 
-        // Dataloads
+        // Data loads
         ['name' => 'dataload#create', 'url' => '/dataload', 'verb' => 'POST'],
         ['name' => 'dataload#read', 'url' => '/dataload', 'verb' => 'GET'],
         ['name' => 'dataload#update', 'url' => '/dataload/{dataloadId}', 'verb' => 'PUT'],

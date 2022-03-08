@@ -68,7 +68,7 @@
 
     </div>
     <br>
-    <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Datasource options')); ?></h3></div>
+    <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Data source options')); ?></h3></div>
     <div id="reportDatasourceSection" class="table" style="display: table; width: 100%; max-width: 500px;"></div>
     <div id="reportDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
     <div id="reportDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">

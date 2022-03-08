@@ -168,13 +168,13 @@ OCA.Analytics.Navigation = {
         divUtils.classList.add('app-navigation-entry-utils');
         let ulUtils = document.createElement('ul');
 
-        // add indicators when a dataload or schedule is existing
+        // add indicators when a data load or schedule is existing
         if (data.schedules && parseInt(data.schedules) !== 0) {
             let liScheduleButton = document.createElement('li');
             liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
             let ScheduleButton = document.createElement('button');
             ScheduleButton.classList.add('icon-history', 'toolTip');
-            ScheduleButton.setAttribute('title', t('analytics', 'Scheduled dataload'));
+            ScheduleButton.setAttribute('title', t('analytics', 'Scheduled data load'));
             liScheduleButton.appendChild(ScheduleButton);
             ulUtils.appendChild(liScheduleButton);
         }
@@ -183,7 +183,7 @@ OCA.Analytics.Navigation = {
             liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
             let ScheduleButton = document.createElement('button');
             ScheduleButton.classList.add('icon-category-workflow', 'toolTip');
-            ScheduleButton.setAttribute('title', t('analytics', 'Dataload'));
+            ScheduleButton.setAttribute('title', t('analytics', 'Data load'));
             liScheduleButton.appendChild(ScheduleButton);
             ulUtils.appendChild(liScheduleButton);
         }

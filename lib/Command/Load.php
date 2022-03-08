@@ -38,7 +38,7 @@ class Load extends Command
             ->addArgument(
                 'dataloadId',
                 InputArgument::REQUIRED,
-                'dataload to be executed'
+                'data load to be executed'
             );
     }
 

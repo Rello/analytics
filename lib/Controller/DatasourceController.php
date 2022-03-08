@@ -74,7 +74,7 @@ class DatasourceController extends Controller
     }
 
     /**
-     * get all datasource ids + names
+     * get all data source ids + names
      *
      * @NoAdminRequired
      */
@@ -97,7 +97,7 @@ class DatasourceController extends Controller
     }
 
     /**
-     * get all datasource templates
+     * get all data source templates
      *
      * @NoAdminRequired
      * @return array
@@ -134,7 +134,7 @@ class DatasourceController extends Controller
             // read the data from the source
             $result = $this->getDatasources()[$datasourceId]->readData($option);
 
-            // if datasource should be timestamped/snapshoted
+            // if data source should be timestamped/snapshoted
             if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
                 $result['data'] = array_map(function ($tag) {
                     $columns = count($tag);
@@ -169,7 +169,7 @@ class DatasourceController extends Controller
     }
 
     /**
-     * map all internal datasources to their IDs
+     * map all internal data sources to their IDs
      * @return array
      */
     private function getOwnDatasources()
@@ -185,7 +185,7 @@ class DatasourceController extends Controller
     }
 
     /**
-     * map all registered datasources to their IDs
+     * map all registered data sources to their IDs
      * @return array
      */
     private function getRegisteredDatasources()
@@ -198,7 +198,7 @@ class DatasourceController extends Controller
             $uniqueId = '99' . \OC::$server->get($class)->getId();
 
             if (isset($datasources[$uniqueId])) {
-                $this->logger->error(new \InvalidArgumentException('Datasource with the same ID already registered: ' . \OC::$server->get($class)->getName()));
+                $this->logger->error(new \InvalidArgumentException('Data source with the same ID already registered: ' . \OC::$server->get($class)->getName()));
                 continue;
             }
             $datasources[$uniqueId] = \OC::$server->get($class);

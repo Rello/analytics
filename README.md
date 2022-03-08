@@ -10,9 +10,9 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Datasources: csv, spreadsheet, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
 - 3rd party: GitHub Statistics, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber)
   , [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
-- [Register](https://github.com/Rello/analytics/wiki/Register-external-datasource) external datasources from other apps
+- [Register](https://github.com/Rello/analytics/wiki/Register-external-datasource) external data sources from other apps
 - Storage: real-time or database
-- Advanced dataloads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
+- Advanced data loads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
 - Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), zoom, tables,
   filters
 - Analysis functions: trend
@@ -26,7 +26,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 <p align="center"><img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="610" title="Analytics"></p>
 
 ## Register datasource
-Apps can register own, external datasources via an event listener
+Apps can register own, external data sources via an event listener
 [How-To](https://github.com/Rello/analytics/wiki/Register-own-datasource)
 
 ## Languages

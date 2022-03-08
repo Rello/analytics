@@ -52,12 +52,12 @@ class DataloadService
         $this->DataloadMapper = $DataloadMapper;
     }
 
-    // Dataloads
-    // Dataloads
-    // Dataloads
+    // Data loads
+    // Data loads
+    // Data loads
 
     /**
-     * create a new dataload
+     * create a new data load
      *
      * @param $datasetId
      * @param $reportId
@@ -71,7 +71,7 @@ class DataloadService
     }
 
     /**
-     * get all dataloads for a dataset or report
+     * get all data loads for a dataset or report
      *
      * @param int $datasetId
      * @param $reportId
@@ -83,7 +83,7 @@ class DataloadService
     }
 
     /**
-     * update dataload
+     * update data load
      *
      * @param int $dataloadId
      * @param $name
@@ -97,7 +97,7 @@ class DataloadService
     }
 
     /**
-     * delete a dataload
+     * delete a data load
      *
      * @param int $dataloadId
      * @return bool
@@ -108,7 +108,7 @@ class DataloadService
     }
 
     /**
-     * execute all dataloads depending on their schedule
+     * execute all data loads depending on their schedule
      * Daily or Hourly
      *
      * @param $schedule
@@ -124,7 +124,7 @@ class DataloadService
     }
 
     /**
-     * execute a dataload from datasource and store into dataset
+     * execute a data load from datas ource and store into dataset
      *
      * @param int $dataloadId
      * @return array
@@ -151,7 +151,7 @@ class DataloadService
             $currentCount = 0;
             foreach ($result['data'] as $row) {
                 if (count($row) === 2) {
-                    // if datasource only delivers 2 colums, the value needs to be in the last one
+                    // if data source only delivers 2 colums, the value needs to be in the last one
                     $row[2] = $row[1];
                     $row[1] = null;
                 }
@@ -192,7 +192,7 @@ class DataloadService
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
 
         if (!empty($dataloadMetadata)) {
-            $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until datasource table is renamed link=>option
+            $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
             $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
             $result['datasetId'] = $dataloadMetadata['dataset'];
             return $result;

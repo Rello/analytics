@@ -45,7 +45,7 @@ class File implements IDatasource
     }
 
     /**
-     * @return int digit unique datasource id
+     * @return int digit unique data source id
      */
     public function getId(): int
     {

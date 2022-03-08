@@ -39,7 +39,7 @@
                 </a></div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Datasource')); ?></div>
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Data source')); ?></div>
             <select style="display: table-cell;" id="sidebarReportDatasource" class="sidebarInput" disabled>
                 <option value="0"><?php p($l->t('Report group')); ?></option>
                 <option value=""></option>
@@ -54,7 +54,7 @@
         </div>
     </div>
     <br>
-    <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Datasource options')); ?></h3></div>
+    <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Data source options')); ?></h3></div>
     <div id="reportDatasourceSection" class="table" style="display: table; width: 100%; max-width: 500px;"></div>
     <div id="reportDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
     <div id="reportDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
@@ -235,7 +235,7 @@
     <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
     <input type="hidden" id="DataApiDataset">
     <br>
-    <div><h3><?php p($l->t('Dataload')); ?></h3></div>
+    <div><h3><?php p($l->t('Data load')); ?></h3></div>
     <button id="advancedButton" type="button">
         <?php p($l->t('Advanced configuration')); ?>
     </button>
@@ -303,7 +303,7 @@
     <div style="display: flex;">
         <div style="width: 25%;">
             <div class="wizardHeader"><?php p($l->t('Selection')); ?></div>
-            <div id="dataloadList">No dataload created yet</div>
+            <div id="dataloadList"><?php p($l->t('No data load created yet')); ?></div>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
                     <div id="createDataloadButton" class="icon-add icon" style="padding: 0 0px 0 44px;">

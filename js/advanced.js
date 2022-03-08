@@ -79,7 +79,7 @@ OCA.Analytics.Advanced = {
             id: 'tabHeaderDataload',
             class: 'tabContainerDataload',
             tabindex: '2',
-            name: t('analytics', 'Dataload'),
+            name: t('analytics', 'Data load'),
             action: OCA.Analytics.Advanced.Dataload.tabContainerDataload,
         });
 
@@ -169,7 +169,7 @@ OCA.Analytics.Advanced.Dataload = {
 
                 OCA.Analytics.Advanced.Dataload.dataloadArray = [];
 
-                // list all available dataloads for dataset
+                // list all available data loads for dataset
                 for (let dataload of data['dataloads']) {
                     document.getElementById('dataloadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
                     // keys need to be int; some instances deliver strings from the backend
@@ -181,11 +181,11 @@ OCA.Analytics.Advanced.Dataload = {
                 }
                 if (OCA.Analytics.Advanced.Dataload.dataloadArray.length === 0) {
                     document.getElementById('dataloadList').innerHTML = '<span class="userGuidance">'
-                        + t('analytics', 'This report does not have any dataloads. <br>Choose a datasource from the dropdown and press "+"')
+                        + t('analytics', 'This report does not have any data loads. <br>Choose a data source from the dropdown and press "+"')
                         + '</span><br><br>';
                 } else {
                     document.getElementById('dataloadDetailItems').innerHTML = '<span class="userGuidance">'
-                        + t('analytics', 'Choose a dataload from the list to change its settings')
+                        + t('analytics', 'Choose a data load from the list to change its settings')
                         + '</span>';
                 }
 
@@ -307,7 +307,7 @@ OCA.Analytics.Advanced.Dataload = {
     handleDeleteButton: function () {
         OC.dialogs.confirm(
             t('analytics', 'Are you sure?'),
-            t('analytics', 'Delete dataload'),
+            t('analytics', 'Delete data load'),
             function (e) {
                 if (e === true) {
                     OCA.Analytics.Advanced.Dataload.deleteDataload();
@@ -360,7 +360,7 @@ OCA.Analytics.Advanced.Dataload = {
             mode = 'simulate';
             OC.dialogs.message(
                 '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading" id="dataloadLoadingIndicator">Loading</div>',
-                t('analytics', 'Datasource simulation'),
+                t('analytics', 'Data source simulation'),
                 'info',
                 OC.dialogs.OK_BUTTON,
                 function () {

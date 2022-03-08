@@ -371,7 +371,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleGroupHint: function () {
-        let text = t('analytics', 'Reports can be grouped into a folder structure')+
+        let text = t('analytics', 'Reports can be grouped into a folder structure.')+
             '<br><br>' +
             t('analytics', 'Do you want to create a new group folder?');
         OCA.Analytics.Notification.confirm(t('analytics', 'Report group'), text, function () {OCA.Analytics.Sidebar.Report.createGroup();});

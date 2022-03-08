@@ -73,7 +73,7 @@ OCA.Analytics.Dashboard = {
                         OCA.Analytics.Dashboard.getData(dataset);
                     }
                 } else {
-                    document.getElementById('ulAnalytics').innerHTML = '<div>' + t('analytics', 'Add a report to the favorites to be shown here') + '</div>'
+                    document.getElementById('ulAnalytics').innerHTML = '<div>' + t('analytics', 'Add a report to the favorites to be shown here.') + '</div>'
                 }
             }
         };

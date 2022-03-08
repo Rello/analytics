@@ -87,7 +87,7 @@ class ReportService
     {
         $ownReports = $this->ReportMapper->index();
 
-        // get dataload indicators for icons shown in the advanced screen
+        // get data load indicators for icons shown in the advanced screen
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
         foreach ($dataloads as $dataload) {
             $key = array_search($dataload['dataset'], array_column($ownReports, 'dataset'));

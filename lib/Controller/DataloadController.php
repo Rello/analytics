@@ -52,7 +52,7 @@ class DataloadController extends Controller
     }
 
     /**
-     * get all dataloads for a dataset or report
+     * get all data loads for a dataset or report
      *
      * @NoAdminRequired
      * @param $datasetId

@@ -146,10 +146,10 @@
                 <div class="description-block">
                     <h3 class="icon-info"><?php p($l->t('Get more information')); ?></h3>
                     <ul>
-                        <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener">Wiki</a>
+                        <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener"><?php p($l->t('WiKi')); ?></a>
                         </li>
                         <li><a href="https://help.nextcloud.com/c/apps/analytics/159" target="_blank"
-                               rel="noreferrer noopener">Nextcloud forum</a></li>
+                               rel="noreferrer noopener"><?php p($l->t('Nextcloud forum')); ?></a></li>
                     </ul>
                 </div>
                 <br>
@@ -209,7 +209,7 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        <?php p($l->t('Reports can be grouped into a folder structure')); ?>
+                        <?php p($l->t('Reports can be grouped into a folder structure.')); ?>
                     </div>
                 </div>
             </div>
@@ -252,7 +252,7 @@
                         <br>
                     </div>
                     <div style="display: table-cell;">
-                        <?php p($l->t('Every datasource requires specific parameter. Please enter the information.')); ?>
+                        <?php p($l->t('Every data source requires specific parameter. Please enter the information.')); ?>
                         <br>
                     </div>
                 </div>

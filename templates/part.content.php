@@ -40,10 +40,10 @@
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>
     <br>
-    <h3>Javascript issue</h3>
-    <span>If you see this message, please disable AdBlock/uBlock for this domain (only).</span>
+    <h3><?php p($l->t('Javascript issue')); ?></h3>
+    <span><?php p($l->t('If you see this message, please disable AdBlock/uBlock for this domain (only).')); ?></span>
     <br>
-    <span>The EasyPrivacy list is blocking some scripts because of a wildcard filter for "analytics"</span>
+    <span><?php p($l->t('The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*.')); ?></span>
     <br>
     <br>
     <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
