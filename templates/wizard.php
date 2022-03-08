@@ -49,11 +49,11 @@
 <template id="wizard-start">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs')); ?><br><?php p($l->t('Give your numbers a meaning')); ?></h3>
+            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.')); ?><br><?php p($l->t('Give your numbers a meaning')); ?></h3>
             <ul id="wizard-values">
                 <li>
                     <span class="icon-timezone"></span>
-                    <h3><?php p($l->t('Data is processed inside Nextcloud')); ?></h3>
+                    <h3><?php p($l->t('Data is processed inside Nextcloud.')); ?></h3>
                 </li>
                 <li>
                     <span class="icon-shared"></span>
@@ -144,7 +144,7 @@
         <div class="page content-final" style="display: none;">
             <div class="description-wide">
                 <div class="description-block">
-                    <h3 class="icon-info"><?php p($l->t('Get more information')); ?></h3>
+                    <h3 class="icon-info"><?php p($l->t('Get more information:')); ?></h3>
                     <ul>
                         <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener">Wiki</a>
                         </li>
@@ -154,13 +154,13 @@
                 </div>
                 <br>
                 <div class="description-block">
-                    <p><?php p($l->t('You can open this introduction again by selecting "Introduction" in the Analytics settings section')); ?></p>
+                    <p><?php p($l->t('You can open this introduction again by selecting "Introduction" in the Analytics settings section.')); ?></p>
                 </div>
             </div>
             <div class="description-wide">
                 <div class="description-block">
                     <h3 class="icon-link"><?php p($l->t('Quickstart')); ?></h3>
-                    <p><?php p($l->t('Activate a set of demo report to show how Analytics works')); ?></p>
+                    <p><?php p($l->t('Activate a set of demo report to show how Analytics works.')); ?></p>
                     <button id="wizardDemo">
                         <?php p($l->t('Create Demo')); ?>
                     </button>
