@@ -49,7 +49,7 @@
 <template id="wizard-start">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.')); ?><br><?php p($l->t('Give your numbers a meaning')); ?></h3>
+            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.')); ?><br><?php p($l->t('Give your numbers a meaning.')); ?></h3>
             <ul id="wizard-values">
                 <li>
                     <span class="icon-timezone"></span>
@@ -128,7 +128,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader4"><?php p($l->t('Advanced configuration: Data loads')); ?></h3>
+                <h3 id="wizardNewHeader4"><?php p($l->t('Advanced configuration - Data loads')); ?></h3>
                 <ul>
                     <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
                     <li><?php p($l->t('Use timestamps to historize data')); ?></li>
