@@ -1,10 +1,8 @@
 { "translations": {
     "Dataset" : "데이터셋",
     "Data" : "데이터",
-    "Dataload" : "데이터 로드",
     "Saved" : "저장됨",
     "Are you sure?" : "확실합니까?",
-    "Delete dataload" : "데이터 로드 지우기",
     "Select file" : "파일 선택",
     "Load started" : "로드 시작됨",
     "errors" : "오류",
