@@ -460,10 +460,10 @@ OCA.Analytics.Navigation = {
 document.addEventListener('DOMContentLoaded', function () {
     if (!OCA.Analytics.isAdvanced) {
         OCA.Analytics.WhatsNew.whatsnew();
-        document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
         if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
             OCA.Analytics.Wizard.showFirstStart();
         }
     }
+    document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
     document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
 });
