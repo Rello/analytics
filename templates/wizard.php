@@ -234,7 +234,7 @@
                 </div>
                 <div id="wizardNewTypeDatasourceRow" style="display: none;">
                     <div style="display: table-cell; width: 50%;">
-                        <?php p($l->t('Datasource')); ?>
+                        <?php p($l->t('Data source')); ?>
                         <br>
                         <select style="display: table-cell;" id="wizardNewDatasource" class="sidebarInput">
                         </select>

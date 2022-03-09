@@ -242,7 +242,7 @@
 </template>
 
 <template id="templateThreshold">
-    <h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports')); ?></h1>
+    <h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports.')); ?></h1>
     <a href="https://github.com/Rello/analytics/wiki/Thresholds"
        target="_blank"><?php p($l->t('More information …')); ?></a>
     <br>

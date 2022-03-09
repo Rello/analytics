@@ -44,7 +44,7 @@
                 </a></div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Datasource')); ?></div>
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Data source')); ?></div>
             <select style="display: table-cell;" id="sidebarReportDatasource" class="sidebarInput" disabled>
                 <option value="0"><?php p($l->t('Report group')); ?></option>
                 <option value=""></option>
@@ -52,7 +52,7 @@
                 <option value=""></option>
             </select>
             <div style="display: table-cell;">
-                <a id="sidebarReportDatasourceHint" title="<?php p($l->t('Datasource')); ?>">
+                <a id="sidebarReportDatasourceHint" title="<?php p($l->t('Data source')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
