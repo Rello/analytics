@@ -82,7 +82,7 @@
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Display')); ?></div>
             <div style="display: table-cell;">
                 <select id="sidebarReportVisualization" class="sidebarInput">
-                    <option value="ct" selected><?php p($l->t('Chart') . ' & ' . $l->t('Table')); ?></option>
+                    <option value="ct" selected><?php p($l->t('Chart & Table')); ?></option>
                     <option value="table"><?php p($l->t('Table')); ?></option>
                     <option value="chart"><?php p($l->t('Chart')); ?></option>
                 </select>
