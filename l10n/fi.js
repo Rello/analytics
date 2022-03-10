@@ -94,7 +94,6 @@ OC.L10N.register(
     "Report was changed - Press here to save the current state" : "Raporttia muutettiin - Paina tästä tallentaaksesi nykyisen tilan",
     "Choose a name for the report" : "Valitse nimi raportille",
     "Subheader" : "Alaotsikko",
-    "Datasource" : "Datalähde",
     "Column headers" : "Sarakkeiden otsikot",
     "Column" : "Sarake",
     "Visualization" : "Visualisointi",
