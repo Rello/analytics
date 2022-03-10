@@ -42,6 +42,7 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Dashboard = {
     init: function () {
+        let txTest = t('analytics', 'Test for Transifex; Do not translate');
         if (typeof OCA.Dashboard === 'object') {
             OCA.Dashboard.register('analytics', (el) => {
                 el.innerHTML = '<ul id="ulAnalytics"></ul>';
