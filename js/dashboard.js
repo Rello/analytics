@@ -42,7 +42,6 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Dashboard = {
     init: function () {
-        let txTest = t('analytics', 'Test for Transifex; Do not translate');
         if (typeof OCA.Dashboard === 'object') {
             OCA.Dashboard.register('analytics', (el) => {
                 el.innerHTML = '<ul id="ulAnalytics"></ul>';
@@ -74,7 +73,9 @@ OCA.Analytics.Dashboard = {
                         OCA.Analytics.Dashboard.getData(dataset);
                     }
                 } else {
-                    document.getElementById('ulAnalytics').innerHTML = '<div>' + t('analytics', 'Add a report to the favorites to be shown here.') + '</div>'
+                    document.getElementById('ulAnalytics').innerHTML = '<div>'
+                        + t('analytics', 'Add a report to the favorites to be shown here.')
+                        + '</div>';
                 }
             }
         };
