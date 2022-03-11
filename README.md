@@ -15,7 +15,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Advanced data loads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
 - Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), zoom, tables,
   filters
-- Analysis functions: trend
+- Functions: trend, dis-/aggregation
 - [Thresholds](https://github.com/Rello/analytics/wiki/Thresholds) for alerts and color coding
 - Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration),
   Dashboard, Search
@@ -40,8 +40,8 @@ Apps can register own, external data sources via an event listener
 
 ## Support
 Thank you to PhpStorm from [JetBrains](https://www.jetbrains.com/?from=AudioPlayerforNextcloudandownCloud) <br>
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/jetbrains.svg" alt="Main" width="100" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/analytics/master/screenshots/jetbrains.svg" alt="Main" width="100" title="Analytics">
 
 ---
 
-[![Version](https://img.shields.io/github/release/rello/analytics.svg)](https://github.com/rello/analytics/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)&#160;&#160;&#160;[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rello/analytics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rello/analytics/?branch=master)&#160;&#160;&#160;[![Bitcoin](https://img.shields.io/badge/donate-Bitcoin-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)&#160;[![PayPal](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)
+[![Version](https://img.shields.io/github/release/rello/analytics.svg)](https://github.com/rello/analytics/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)&#160;&#160;&#160;[![Bitcoin](https://img.shields.io/badge/donate-Bitcoin-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)&#160;[![PayPal](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://github.com/rello/audioplayer/wiki/donate)

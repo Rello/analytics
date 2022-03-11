@@ -100,7 +100,7 @@ class Github implements IDatasource
 
         $header = array();
         $header[0] = $this->l10n->t('Version');
-        $header[1] = $this->l10n->t('Count');
+        $header[1] = $this->l10n->t('Download count');
 
         usort($data, function ($a, $b) {
             return strnatcmp($a[0], $b[0]);
