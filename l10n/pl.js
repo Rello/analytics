@@ -149,6 +149,7 @@ OC.L10N.register(
     "Limit" : "Limit",
     "Timestamp of data load" : "Znacznik czasu ładowania danych",
     "false/true" : "nieprawdziwe/prawdziwe",
+    "Version" : "Wersja",
     "JSON" : "JSON",
     "Authentication" : "Uwierzytelnienie",
     "Object path" : "Ścieżka obiektu",

@@ -149,6 +149,7 @@ OC.L10N.register(
     "Limit" : "Sınır",
     "Timestamp of data load" : "Veri yüklemesinin zaman damgası",
     "false/true" : "doğru/yanlış",
+    "Version" : "Sürüm",
     "JSON" : "JSON",
     "Authentication" : "Kimlik doğrulama",
     "Object path" : "Nesne yolu",

@@ -149,6 +149,7 @@ OC.L10N.register(
     "Limit" : "Limit",
     "Timestamp of data load" : "Zeitpunkt der Datenladung",
     "false/true" : "falsch/wahr",
+    "Version" : "Version",
     "JSON" : "JSON",
     "Authentication" : "Authentifizierung",
     "Object path" : "Objekt-Pfad",
