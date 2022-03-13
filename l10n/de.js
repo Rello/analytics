@@ -150,6 +150,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Zeitpunkt der Datenladung",
     "false/true" : "falsch/wahr",
     "Version" : "Version",
+    "Download count" : "Anzahl der Downloads",
     "JSON" : "JSON",
     "Authentication" : "Authentifizierung",
     "Object path" : "Objekt-Pfad",
