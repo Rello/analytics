@@ -149,6 +149,8 @@ OC.L10N.register(
     "Limit" : "限制",
     "Timestamp of data load" : "數據加載時間戳",
     "false/true" : "假/真",
+    "Version" : "版本",
+    "Download count" : "下載次數",
     "JSON" : "JSON",
     "Authentication" : "驗證",
     "Object path" : "對象路徑",
