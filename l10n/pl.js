@@ -150,6 +150,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Znacznik czasu ładowania danych",
     "false/true" : "nieprawdziwe/prawdziwe",
     "Version" : "Wersja",
+    "Download count" : "Ilość pobrań",
     "JSON" : "JSON",
     "Authentication" : "Uwierzytelnienie",
     "Object path" : "Ścieżka obiektu",
