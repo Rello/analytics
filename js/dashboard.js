@@ -68,7 +68,7 @@ OCA.Analytics.Dashboard = {
             if (xhr.readyState === 4) {
                 if (xhr.response !== '[]') {
                     for (let dataset of JSON.parse(xhr.response)) {
-                        let li = `<li id="analyticsWidgetItem${dataset}" class="analyticsWidgetItem"></li>`
+                        let li = '<li id="analyticsWidgetItem' + dataset + '" class="analyticsWidgetItem"></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
                         OCA.Analytics.Dashboard.getData(dataset);
                     }
