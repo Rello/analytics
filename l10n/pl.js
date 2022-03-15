@@ -37,6 +37,7 @@ OC.L10N.register(
     "Aggregation" : "Agregacja",
     "Disaggregation" : "Dezagregacja",
     "Please select" : "Wybierz",
+    "Add a report to the favorites to be shown here." : "Dodaj raport do ulubionych, które będą tutaj wyświetlane.",
     "equal to" : "równy",
     "greater than" : "większy niż",
     "less than" : "mniej niż",

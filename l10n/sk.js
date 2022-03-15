@@ -149,6 +149,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Časové razítko načítaných údajov",
     "false/true" : "false/true",
     "Version" : "Verzia",
+    "Download count" : "Počet stiahnutí",
     "JSON" : "JSON",
     "Authentication" : "Autentifikácia",
     "Object path" : "Cesta k objektu",
