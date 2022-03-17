@@ -204,15 +204,19 @@ class ShareService
      *
      * @NoAdminRequired
      * @param $shareId
-     * @param $password
-     * @param $canEdit
+     * @param null $password
+     * @param null $canEdit
+     * @param null $domain
      * @return bool
      */
-    public function update($shareId, $password = null, $canEdit = null)
+    public function update($shareId, $password = null, $canEdit = null, $domain = null)
     {
         if ($password !== null) {
             $password = password_hash($password, PASSWORD_DEFAULT);
             return $this->ShareMapper->updateSharePassword($shareId, $password);
+        }
+        if ($domain !== null) {
+            return $this->ShareMapper->updateShareDomain($shareId, $domain);
         }
         if ($canEdit !== null) {
             $canEdit === 'true' ? $canEdit = \OCP\Constants::PERMISSION_UPDATE : $canEdit = \OCP\Constants::PERMISSION_READ;

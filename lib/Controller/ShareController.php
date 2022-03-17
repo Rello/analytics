@@ -72,13 +72,14 @@ class ShareController extends Controller
      *
      * @NoAdminRequired
      * @param $shareId
-     * @param $password
-     * @param $canEdit
+     * @param null $password
+     * @param null $canEdit
+     * @param null $domain
      * @return DataResponse
      */
-    public function update($shareId, $password = null, $canEdit = null)
+    public function update($shareId, $password = null, $canEdit = null, $domain = null)
     {
-        return new DataResponse($this->ShareService->update($shareId, $password, $canEdit));
+        return new DataResponse($this->ShareService->update($shareId, $password, $canEdit, $domain));
     }
 
     /**

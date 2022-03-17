@@ -132,7 +132,7 @@
         <?php p($l->t('Delete')); ?>
     </button>
     <button id="sidebarReportExportButton" type="button">
-        <?php p($l->t('Export'));?>
+        <?php p($l->t('Export')); ?>
     </button>
 
 </template>
@@ -183,8 +183,8 @@
         <button id="sidebarDatasetDeleteButton" type="button">
             <?php p($l->t('Delete')); ?>
         </button>
-<!--        <button id="sidebarDatasetExportButton" type="button">
-            <?php /*p($l->t('Export')); */?>
+        <!--        <button id="sidebarDatasetExportButton" type="button">
+            <?php /*p($l->t('Export')); */ ?>
         </button>
 -->    </div>
 </template>
@@ -258,17 +258,17 @@
             <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
             <div style="display: table-cell;">
                 <select id="sidebarThresholdOption" class="input150">
-                    <option value="=" selected><?php  // TRANSLATORS description in a dropdown; limited space
+                    <option value="=" selected><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('= equal')); ?></option>
-                    <option value=">"><?php  // TRANSLATORS description in a dropdown; limited space
+                    <option value=">"><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('> greater')); ?></option>
-                    <option value="<"><?php  // TRANSLATORS description in a dropdown; limited space
+                    <option value="<"><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('< less')); ?></option>
-                    <option value="<="><?php  // TRANSLATORS description in a dropdown; limited space
+                    <option value="<="><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('<= less equal')); ?></option>
                     <option value=">="><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('>= greater equal')); ?></option>
-                    <option value="!="><?php  // TRANSLATORS description in a dropdown; limited space
+                    <option value="!="><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('!= not equal')); ?></option>
                 </select>
             </div>
@@ -390,7 +390,8 @@
     <div id="navigationMenu" class="app-navigation-entry-menu">
         <ul>
             <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
-            <li><a href="#" id="navigationMenuAdvanced"><span class="icon-category-customization"></span><span></span></a></li>
+            <li><a href="#" id="navigationMenuAdvanced"><span
+                            class="icon-category-customization"></span><span></span></a></li>
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>
@@ -489,8 +490,33 @@
                                        class="checkbox showPasswordCheckbox">
                                 <label for="shareEditing"><?php p($l->t('can navigate')); ?></label>
                             </span></li>
+                        <li>
+                            <span class="menuitem">
+                                <input type="checkbox" name="shareChart" id="shareChart"
+                                       class="checkbox showPasswordCheckbox">
+                                <label for="shareChart"><?php p($l->t('share chart for external website')); ?></label>
+                            </span></li>
+                         <li id="shareChartMenuHint" class="linkPassMenu hidden">
+                            <span class="menuitem icon-info" style="white-space: initial;line-height: 20px;">
+                                When including a chart in an external website, that domain needs to be allowed (CSP policy)
+                            </span></li>
+                          <li id="shareChartMenuCopy" class="linkPassMenu hidden">
+                             <span class="menuitem icon-clippy">
+                                 <a id="shareChartClipboard" target="_blank">copy link</a>
+                                  <textarea id="shareChartLink" hidden></textarea>
+                             </span>
+                         </li>
+                      <li id="shareChartMenuDomain" class="linkPassMenu hidden">
+                            <span class="menuitem icon-timezone">
+                                <input id="shareChartDomain" type="input" placeholder="<?php p($l->t('Domain of external site')); ?>"
+                                       class="linkPassText">
+                                <input id="shareChartSubmit" type="submit" value=""
+                                       class="icon-confirm share-pass-submit"
+                                       style="width: auto !important">
+                            </span>
+                        </li>
                         <li class="action-separator"></li>
-                       <li>
+                        <li>
                             <a href="#" class="unshare" id="deleteShare">
                                 <span class="icon icon-close" id="deleteShareIcon"></span>
                                 <span><?php p($l->t('Unshare')); ?></span>

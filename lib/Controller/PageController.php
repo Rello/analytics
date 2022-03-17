@@ -190,6 +190,7 @@ class PageController extends Controller
             $response = new StandaloneTemplateResponse($this->appName, 'publicMin', $params, '');
             $csp = new ContentSecurityPolicy();
             $csp->addAllowedScriptDomain('*');
+            $csp->addAllowedFrameAncestorDomain($share['domain']);
             $response->setContentSecurityPolicy($csp);
             return $response;
 

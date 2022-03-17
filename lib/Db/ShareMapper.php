@@ -50,6 +50,7 @@ class ShareMapper
             ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.report'))
             ->select('DS.*')
             ->addSelect('SH.permissions')
+            ->selectAlias('SH.domain', 'domain')
             ->selectAlias('SH.password', 'password')
             ->where($sql->expr()->eq('SH.token', $sql->createNamedParameter($token)));
         $statement = $sql->execute();
@@ -168,7 +169,7 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
-            ->select('id', 'type', 'uid_owner', 'token', 'permissions')
+            ->select('id', 'type', 'uid_owner', 'token', 'permissions', 'domain')
             ->selectAlias('password', 'pass')
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
@@ -210,6 +211,24 @@ class ShareMapper
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('password', $sql->createNamedParameter($password))
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
+        $sql->execute();
+        return true;
+    }
+
+    /**
+     * Update the password of a share
+     * @param $shareId
+     * @param $domain
+     * @return bool
+     * @throws \OCP\DB\Exception
+     */
+    public function updateShareDomain($shareId, $domain)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('domain', $sql->createNamedParameter($domain))
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
         $sql->execute();

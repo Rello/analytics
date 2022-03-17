@@ -786,7 +786,7 @@ OCA.Analytics.Sidebar.Share = {
                 if (data !== false) {
                     for (let share of data) {
                         if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
-                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(parseInt(share['id']), share['token'], false, (String(share['pass']) === "true"), parseInt(share['permissions']));
+                            let li = OCA.Analytics.Sidebar.Share.buildShareLinkRow(parseInt(share['id']), share['token'], false, (String(share['pass']) === "true"), parseInt(share['permissions']), share['domain']);
                             template.getElementById('linkShareList').appendChild(li);
                         } else {
                             if (!share['displayName']) {
@@ -809,7 +809,7 @@ OCA.Analytics.Sidebar.Share = {
 
     },
 
-    buildShareLinkRow: function (id, token, add = false, pw = false, permissions = OC.PERMISSION_READ) {
+    buildShareLinkRow: function (id, token, add = false, pw = false, permissions = OC.PERMISSION_READ, domain = false) {
 
         // clone the DOM template
         let linkRow = document.getElementById('templateSidebarShareLinkRow').content;
@@ -831,13 +831,27 @@ OCA.Analytics.Sidebar.Share = {
             linkRow.getElementById('showPassword').addEventListener('click', OCA.Analytics.Sidebar.Share.showPassMenu);
             linkRow.getElementById('showPassword').nextElementSibling.htmlFor = 'showPassword' + id;
             linkRow.getElementById('showPassword').id = 'showPassword' + id;
+
+            linkRow.getElementById('shareChart').addEventListener('click', OCA.Analytics.Sidebar.Share.showChartMenu);
+            linkRow.getElementById('shareChart').nextElementSibling.htmlFor = 'shareChart' + id;
+            linkRow.getElementById('shareChart').id = 'shareChart' + id;
+            linkRow.getElementById('shareChartDomain').id = 'shareChartDomain' + id;
+            linkRow.getElementById('shareChartLink').value = OC.getProtocol() + '://' + OC.getHostName() + OC.generateUrl('/apps/analytics/pm/') + token;
+            linkRow.getElementById('shareChartClipboard').addEventListener('click', OCA.Analytics.Sidebar.Share.handleShareChartClipboard)
+
             linkRow.getElementById('linkPassSubmit').addEventListener('click', OCA.Analytics.Sidebar.Share.updateSharePassword);
             linkRow.getElementById('linkPassSubmit').dataset.id = id;
+            linkRow.getElementById('shareChartSubmit').addEventListener('click', OCA.Analytics.Sidebar.Share.updateShareDomain);
+            linkRow.getElementById('shareChartSubmit').dataset.id = id;
             linkRow.getElementById('deleteShareIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
             linkRow.getElementById('deleteShare').dataset.id = id;
             if (pw) {
                 linkRow.getElementById('linkPassMenu').classList.remove('hidden');
                 linkRow.getElementById('showPassword' + id).checked = true;
+            }
+            if (domain) {
+                linkRow.getElementById('shareChart' + id).click();
+                linkRow.getElementById('shareChartDomain' + id).value = domain;
             }
             linkRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Sidebar.Share.updateShareCanEdit);
             linkRow.getElementById('shareEditing').dataset.id = id;
@@ -907,6 +921,17 @@ OCA.Analytics.Sidebar.Share = {
         OCA.Analytics.Notification.notification('success', t('analytics', 'Link copied'));
     },
 
+    handleShareChartClipboard: function (evt) {
+        let link = evt.target.nextElementSibling.value;
+        let textArea = document.createElement('textArea');
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        OCA.Analytics.Notification.notification('success', t('analytics', 'Link copied'));
+    },
+
     showShareMenu: function (evt) {
         const toggleState = evt.target.nextElementSibling.style.display;
         if (toggleState === 'none') evt.target.nextElementSibling.style.display = 'block';
@@ -917,6 +942,19 @@ OCA.Analytics.Sidebar.Share = {
         const toggleState = evt.target.checked;
         if (toggleState === true) evt.target.parentNode.parentNode.nextElementSibling.classList.remove('hidden');
         else evt.target.parentNode.parentNode.nextElementSibling.classList.add('hidden');
+    },
+
+    showChartMenu: function (evt) {
+        const toggleState = evt.target.checked;
+        if (toggleState === true) {
+            evt.target.parentNode.parentNode.nextElementSibling.classList.remove('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.classList.remove('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.classList.remove('hidden');
+        } else {
+            evt.target.parentNode.parentNode.nextElementSibling.classList.add('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.classList.add('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.classList.add('hidden');
+        }
     },
 
     createShare: function (evt) {
@@ -956,6 +994,21 @@ OCA.Analytics.Sidebar.Share = {
             url: OC.generateUrl('apps/analytics/share/') + shareId,
             data: {
                 'password': password
+            },
+            success: function () {
+                document.querySelector('.tabHeader.selected').click();
+            }
+        });
+    },
+
+    updateShareDomain: function (evt) {
+        const shareId = evt.target.dataset.id;
+        const domain = evt.target.previousElementSibling.value;
+        $.ajax({
+            type: 'PUT',
+            url: OC.generateUrl('apps/analytics/share/') + shareId,
+            data: {
+                'domain': domain
             },
             success: function () {
                 document.querySelector('.tabHeader.selected').click();
