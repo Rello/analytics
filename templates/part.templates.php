@@ -494,15 +494,15 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareChart" id="shareChart"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareChart"><?php p($l->t('share chart for external website')); ?></label>
+                                <label for="shareChart"><?php p($l->t('Share chart for external website')); ?></label>
                             </span></li>
                          <li id="shareChartMenuHint" class="linkPassMenu hidden">
                             <span class="menuitem icon-info" style="white-space: initial;line-height: 20px;">
-                                When including a chart in an external website, that domain needs to be allowed (CSP policy)
+                                <?php p($l->t('To including a chart in an external website, that domain needs to be allowed (CSP policy)')); ?>
                             </span></li>
                           <li id="shareChartMenuCopy" class="linkPassMenu hidden">
                              <span class="menuitem icon-clippy">
-                                 <a id="shareChartClipboard" target="_blank">copy link</a>
+                                 <a id="shareChartClipboard" target="_blank"><?php p($l->t('Copy link')); ?></a>
                                   <textarea id="shareChartLink" hidden></textarea>
                              </span>
                          </li>
