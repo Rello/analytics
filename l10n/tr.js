@@ -37,6 +37,7 @@ OC.L10N.register(
     "Aggregation" : "Birleştirme",
     "Disaggregation" : "Ayırma",
     "Please select" : "Lütfen seçin",
+    "Add a report to the favorites to be shown here." : "Burada görüntülenen sık kullanılanlara bir rapor ekler.",
     "equal to" : "şuna eşit olan",
     "greater than" : "şundan büyük olan",
     "less than" : "şundan küçük olan",

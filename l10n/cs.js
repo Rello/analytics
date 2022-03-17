@@ -37,6 +37,7 @@ OC.L10N.register(
     "Aggregation" : "Agregace",
     "Disaggregation" : "Rozdělování",
     "Please select" : "Vyberte",
+    "Add a report to the favorites to be shown here." : "Pokud chcete, aby byl zobrazován zde, přidejte výkaz mezi oblíbené.",
     "equal to" : "rovno",
     "greater than" : "větší než",
     "less than" : "méně než",
