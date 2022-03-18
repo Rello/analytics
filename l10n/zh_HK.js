@@ -37,6 +37,7 @@ OC.L10N.register(
     "Aggregation" : "集成",
     "Disaggregation" : "解集",
     "Please select" : "請選擇",
+    "Add a report to the favorites to be shown here." : "將報告添加到要在此處顯示的收藏夾。",
     "equal to" : "等於",
     "greater than" : "大於",
     "less than" : "少於",
