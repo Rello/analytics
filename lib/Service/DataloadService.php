@@ -93,6 +93,12 @@ class DataloadService
      */
     public function update(int $dataloadId, $name, $option, $schedule)
     {
+        $array = json_decode($option, true);
+        foreach ($array as $key => $value) {
+            $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+        $option = json_encode($array);
+
         return $this->DataloadMapper->update($dataloadId, $name, $option, $schedule);
     }
 

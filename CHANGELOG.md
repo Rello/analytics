@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.2 - 
+### Fixed
+- XSS protection (Jafar Abo Nada; https://twitter.com/jafar_abo_nada; UpdateLap)
+
 ## 4.1.0 - 2022-03-06
 ### Added
 - Dynamic text variables for filter #186 => [wiki](https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#filter) for details

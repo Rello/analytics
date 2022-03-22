@@ -164,6 +164,12 @@ class ReportService
      */
     public function create($name, $subheader, $parent, $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value): int
     {
+        $array = json_decode($link, true);
+        foreach ($array as $key => $value) {
+            $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+        $link = json_encode($array);
+
         if ($type === DatasourceController::DATASET_TYPE_GROUP) {
             $parent = 0;
         }
@@ -250,6 +256,12 @@ class ReportService
      */
     public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
+        $array = json_decode($link, true);
+        foreach ($array as $key => $value) {
+            $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+        $link = json_encode($array);
+
         return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
     }
 
