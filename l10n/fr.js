@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Dataset" : "Jeu de données",
     "Data" : "Donnée",
+    "Data load" : "Chargement de données",
     "Data maintenance is not possible for this type of report" : "La gestion des données n'est pas possible pour ce type de rapport",
     "Saved" : "Enregistré",
     "Are you sure?" : "Êtes-vous sûr ?",
