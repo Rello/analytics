@@ -3,6 +3,7 @@
 ## 4.1.2 - 
 ### Fixed
 - XSS protection (Jafar Abo Nada; https://twitter.com/jafar_abo_nada; UpdateLap)
+- notification threshold not working
 
 ## 4.1.0 - 2022-03-06
 ### Added

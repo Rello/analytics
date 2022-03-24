@@ -21,18 +21,21 @@ class StorageService
     private $StorageMapper;
     private $ThresholdService;
     private $DatasetService;
+    private $ReportService;
 
     public function __construct(
         LoggerInterface $logger,
         StorageMapper $StorageMapper,
         DatasetService $DatasetService,
-        ThresholdService $ThresholdService
+        ThresholdService $ThresholdService,
+        ReportService $ReportService
     )
     {
         $this->logger = $logger;
         $this->StorageMapper = $StorageMapper;
         $this->DatasetService = $DatasetService;
         $this->ThresholdService = $ThresholdService;
+        $this->ReportService = $ReportService;
     }
 
     /**
@@ -118,7 +121,13 @@ class StorageService
             $error = 1;
         }
 
-        if ($error === 0) $validate = $this->ThresholdService->validate($datasetId, $dimension1, $dimension2, $value);
+        // get all reports for the dataset and evaluate if thresholds are maintained
+        if ($error === 0) {
+            foreach ($this->ReportService->reportsForDataset($datasetId) as $report) {
+                $validateResult = $this->ThresholdService->validate($report['id'], $dimension1, $dimension2, $value);
+                if ($validateResult !== '') $validate = $validateResult;
+            }
+        }
 
         return [
             'insert' => $insert,

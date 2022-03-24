@@ -88,7 +88,7 @@ class ThresholdService
     }
 
     /**
-     * validate threshold
+     * validate threshold per report
      *
      * @param int $reportId
      * @param $dimension1
