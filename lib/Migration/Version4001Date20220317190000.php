@@ -13,7 +13,7 @@ use OCP\Migration\SimpleMigrationStep;
 
 /**
  * Auto-generated migration step: Please modify to your needs!
- * sudo -u www-data php /var/www/nextcloud/occ migrations:execute analytics 3007Date20211003180000
+ * sudo -u www-data php /var/www/nextcloud/occ migrations:execute analytics 4001Date20220317190000
  *
  * Deletions
  * dataset:
@@ -56,6 +56,16 @@ class Version4001Date20220317190000 extends SimpleMigrationStep
                 'notnull' => false,
                 'length' => 256,
             ]);
+        }
+
+        $table = $schema->getTable('analytics_share');
+        if ($table->hasColumn('dataset')) {
+            $table->dropColumn('dataset');
+        }
+
+        $table = $schema->getTable('analytics_threshold');
+        if ($table->hasColumn('dataset')) {
+            $table->dropColumn('dataset');
         }
         return $schema;
     }

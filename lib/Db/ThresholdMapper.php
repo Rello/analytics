@@ -43,7 +43,6 @@ class ThresholdMapper
                 'value' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($severity),
-                'dataset' => $sql->createNamedParameter($reportId),
             ]);
         $sql->execute();
         return (int)$sql->getLastInsertId();

@@ -131,7 +131,6 @@ class ShareMapper
             $sql->insert(self::TABLE_NAME)
                 ->values([
                     'report' => $sql->createNamedParameter($reportId),
-                    'dataset' => $sql->createNamedParameter($reportId),
                     'type' => $sql->createNamedParameter($type),
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
