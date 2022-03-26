@@ -184,7 +184,6 @@ class PageController extends Controller
                 }
             }
             $params = array();
-            $params['token'] = $token;
             $params['data'] = $this->outputController->getData($share);
             $params['baseurl'] = str_replace('/img/app.svg', '', $this->urlGenerator->imagePath('analytics', 'app.svg'));
             $response = new StandaloneTemplateResponse($this->appName, 'publicMin', $params, '');
@@ -193,8 +192,6 @@ class PageController extends Controller
             $csp->addAllowedFrameAncestorDomain($share['domain']);
             $response->setContentSecurityPolicy($csp);
             return $response;
-
         }
     }
-
 }

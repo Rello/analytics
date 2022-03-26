@@ -18,7 +18,7 @@
     <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-adapter-moment.js"></script>
     <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-plugin-datalabels.min.js"></script>
 </head>
-<input type="hidden" name="sharingToken" value="<?php p(json_encode($_['data'])); ?>" id="data">
+<input type="hidden" name="data" value="<?php p(json_encode($_['data'])); ?>" id="data">
 <div id="app-content">
 
     <div id="chartContainer" style="min-width: 310px; height: 99%; width: 99%;"></div>

@@ -168,6 +168,22 @@ OCA.Analytics.UI = {
             },
 
             plugins: {
+                datalabels: {
+                    display: false,
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        value = (value * 100 / sum).toFixed(0);
+                        if (value > 5) {
+                            return value + "%";
+                        } else {
+                            return '';
+                        }
+                    },
+                },
             },
         };
 
@@ -305,6 +321,7 @@ OCA.Analytics.UI = {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
+            plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,

@@ -1,9 +1,14 @@
 # Changelog
 
-## 4.1.2 - 
+## 4.2.0 - 2022-03-26
+### Added
+- Public API to get plain chart for external website inclusion #259  => [wiki](https://github.com/Rello/analytics/wiki/Sharing) for details
+
 ### Fixed
-- XSS protection (Jafar Abo Nada; https://twitter.com/jafar_abo_nada; UpdateLap)
+- XSS protection (credit to: Jafar Abo Nada; https://twitter.com/jafar_abo_nada; UpdateLap)
 - notification threshold not working
+- Quick start in data maintenance #267
+- Quick start closure #264
 
 ## 4.1.0 - 2022-03-06
 ### Added
