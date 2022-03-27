@@ -57,13 +57,17 @@ class Version4001Date20220317190000 extends SimpleMigrationStep
                 'length' => 256,
             ]);
         }
-
-        $table = $schema->getTable('analytics_share');
+        if ($table->hasIndex('analytics_share_dataset_idx')) {
+            $table->dropIndex('analytics_share_dataset_idx');
+        }
         if ($table->hasColumn('dataset')) {
             $table->dropColumn('dataset');
         }
 
         $table = $schema->getTable('analytics_threshold');
+        if ($table->hasIndex('analytics_threshold_dset_idx')) {
+            $table->dropIndex('analytics_threshold_dset_idx');
+        }
         if ($table->hasColumn('dataset')) {
             $table->dropColumn('dataset');
         }
