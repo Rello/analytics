@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.1 - 2022-03-27
+### Fixed
+- Database error during fresh install
+
 ## 4.2.0 - 2022-03-26
 ### Added
 - Public API to get plain chart for external website inclusion #259  => [wiki](https://github.com/Rello/analytics/wiki/Sharing) for details
