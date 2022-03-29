@@ -213,6 +213,7 @@ OC.L10N.register(
     "Unshare" : "Ez partekatu",
     "can navigate" : "nabigatu daiteke",
     "Password protection" : "Pasahitz bidezko babesa",
+    "Copy link" : "Kopiatu esteka",
     "Get more information" : "Lortu informazio gehiago",
     "Nextcloud forum" : "Nextcloud foroa",
     "General information" : "Informazio orokorra",
