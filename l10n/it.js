@@ -266,6 +266,7 @@ OC.L10N.register(
     "Trigger data loads via scripts using the occ command" : "Attivare il caricamento dei dati mediante script usando il comando occ",
     "Use the REST API to push data into Analytics" : "Usare la REST API per inviare dati al sistema di Analisi",
     "Get more information" : "Ottieni altre informazioni",
+    "Nextcloud forum" : "Forum di Nextcloud",
     "Quickstart" : "Avvio rapido",
     "Create Demo" : "Crea Demo",
     "Start using Analytics" : "Inizia a utilizzare Analytics",
