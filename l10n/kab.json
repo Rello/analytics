@@ -1,0 +1,27 @@
+{ "translations": {
+    "Delete" : "Kkes",
+    "Search" : "Nadi",
+    "OK" : "IH",
+    "Cancel" : "Sefsex",
+    "Add" : "Rnu",
+    "Add to favorites" : "Rnu ismal",
+    "Report" : "Aneqqis",
+    "Share" : "Bḍu",
+    "Share link" : "Fren aseɣwen",
+    "Link copied" : "Aseɣwen yettwanɣel",
+    "Type" : "Anaw",
+    "File" : "Afaylu",
+    "Announcements" : "Ilɣa",
+    "Password" : "Awal uffir",
+    "Favorites" : "Imenyafen",
+    "Settings" : "Iɣewwaṛen",
+    "Name" : "Nom",
+    "Title" : "Azwel",
+    "No" : "Uhu",
+    "Yes" : "Oui",
+    "Daily" : "S wass",
+    "Hourly" : "S usrag",
+    "Copy link" : "Nɣel aseɣwen",
+    "Create" : "Snulfu-d"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
