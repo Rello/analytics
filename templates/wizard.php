@@ -146,7 +146,7 @@
                 <div class="description-block">
                     <h3 class="icon-info"><?php p($l->t('Get more information')); ?></h3>
                     <ul>
-                        <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener"><?php p($l->t('WiKi')); ?></a>
+                        <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener"><?php p($l->t('Wiki')); ?></a>
                         </li>
                         <li><a href="https://help.nextcloud.com/c/apps/analytics/159" target="_blank"
                                rel="noreferrer noopener"><?php p($l->t('Nextcloud forum')); ?></a></li>
