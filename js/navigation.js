@@ -56,9 +56,22 @@ OCA.Analytics.Navigation = {
             document.getElementById('navigationDatasets').appendChild(li3);
         }
 
-        for (let navigation of data) {
-            OCA.Analytics.Navigation.buildNavigationRow(navigation);
+        if (data.length === 0) {
+            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
+        } else {
+            for (let navigation of data) {
+                OCA.Analytics.Navigation.buildNavigationRow(navigation);
+            }
         }
+    },
+
+    buildIntroRow: function () {
+        let li = document.createElement('li');
+        li.innerHTML = '<div class="infoBox" style="margin-top: 50px;">' +
+            '<img src="/nextcloud/own_apps20/analytics/img/infoReport.svg" alt="info">\n' +
+            '<div class="infoBoxHeader">' + t('analytics', 'No reports yet') + '</div>\n' +
+            '<div class="infoBoxText">' + t('analytics', 'To get started, create your first report') + '</div>';
+        return li;
     },
 
     buildOverviewButton: function () {

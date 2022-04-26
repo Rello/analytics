@@ -623,7 +623,7 @@ OCA.Analytics.Sidebar.Report = {
 
     wizard: function () {
         document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.create);
-        document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
+        document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.cancel);
 
         document.getElementById('wizardNewTypeRealtime').addEventListener('click', function () {
             document.getElementById('wizardNewTypeDatasourceRow').style.display = 'table-row';

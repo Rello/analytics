@@ -90,24 +90,25 @@
 }
 
 #analytics-intro .analyticsWidgetItem  {
-    height: 150px;
-    width: 150px;
+    height: 170px;
+    width: 170px;
     padding: 8px;
-    margin-right: 0;
     border-radius: var(--border-radius-large);
+    box-shadow: 2px 2px 5px var(--color-background-darker);
     background-color: var(--color-primary-light);
-    margin: 5px;
+    margin: 10px;
     display: inline-block;
     vertical-align: top;
 }
 
 #analytics-intro .analyticsWidgetContent1 {
+    height: 50px;
 }
 
 #analytics-intro .analyticsWidgetContent2 {
 }
 
 #analytics-intro .chartContainer {
-    width: 135px;
-    height:90px
+    width: 150px;
+    height:100px
 }

@@ -45,7 +45,7 @@ OCA.Analytics.Wizard = {
         document.getElementById('content').appendChild(wizard);
         document.getElementById('wizardNext').addEventListener('click', OCA.Analytics.Wizard.next);
         document.getElementById('wizardPrevious').addEventListener('click', OCA.Analytics.Wizard.previous);
-        document.getElementById('wizardClose').addEventListener('click', OCA.Analytics.Wizard.close);
+        document.getElementById('wizardClose').addEventListener('click', OCA.Analytics.Wizard.cancel);
 
         // load all pages in the background
         for (let i = 1; i < OCA.Analytics.Wizard.sildeArray.length; i++) {
@@ -86,6 +86,10 @@ OCA.Analytics.Wizard = {
     close: function () {
         document.getElementById('analyticsWizard').remove();
         if (!OCA.Analytics.isAdvanced) document.getElementById('overviewButton').click();
+    },
+
+    cancel: function () {
+        document.getElementById('analyticsWizard').remove();
     },
 
     demo: function () {

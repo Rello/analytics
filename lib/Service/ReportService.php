@@ -86,6 +86,7 @@ class ReportService
     public function index(): array
     {
         $ownReports = $this->ReportMapper->index();
+        if (count($ownReports) === 0) return $ownReports;
 
         // get data load indicators for icons shown in the advanced screen
         $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
@@ -102,7 +103,7 @@ class ReportService
             }
         }
 
-        // get shared reports and remove doublicates
+        // get shared reports and remove duplicates
         $sharedReports = $this->ShareService->getSharedReports();
         foreach ($sharedReports as $sharedReport) {
             if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {

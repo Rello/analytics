@@ -334,6 +334,44 @@ table.dataTable tbody tr {
     opacity: 0.5;
 }
 
+.infoBox {
+    padding: 5px;
+    //border: 1px solid grey;
+    box-shadow: 2px 2px 5px var(--color-background-darker);
+    border-radius: var(--border-radius-large);
+    width: 170px;
+    margin: 0 auto;
+}
+
+.infoBox:hover{
+    background: var(--color-background-hover);
+    cursor: pointer;
+}
+
+.infoBox>img {
+    height: 80px;
+    margin: 0 auto;
+    display: block;
+    cursor: pointer;
+}
+.infoBox>.infoBoxHeader {
+    vertical-align: middle;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-text-lighter);
+    cursor: pointer;
+}
+
+.infoBox>.infoBoxText {
+    width: 100%;
+    color: var(--color-text-lighter);
+    font-style: italic;
+    text-align: center;
+    cursor: pointer;
+}
+
 /**
  * Print settings, better leave them at the eof
  */

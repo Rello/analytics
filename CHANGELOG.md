@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.3.0 - 2022-04-xx
+### Added
+- new application start page #276
+
+### Fixed
+- issue when datasets exist without reports #273
+
 ## 4.2.1 - 2022-03-27
 ### Fixed
 - Database error during fresh install

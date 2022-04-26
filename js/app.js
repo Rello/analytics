@@ -97,6 +97,10 @@ OCA.Analytics.Core = {
             return false;
         }
         return JSON.parse(atob(elem.value))
+    },
+
+    openWiki: function () {
+        window.open('https://github.com/rello/analytics/wiki','_blank');
     }
 };
 
@@ -1112,6 +1116,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (!OCA.Analytics.isAdvanced) {
         OCA.Analytics.UI.reportOptionsEventlisteners();
+        document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
+        document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
+        document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
     }
 
     window.addEventListener("beforeprint", function () {

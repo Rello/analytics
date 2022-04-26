@@ -36,6 +36,48 @@
         <ul id="ulAnalytics" style="width: 100%;"></ul>
     </div>
     <br>
+    <!--<h3><?php /*p($l->t('Recent Reports')); */ ?></h3>
+    <div>
+        <ul id="ulRecentReports" style="width: 100%;">
+            <li>- Report a</li>
+            <li>- Report b</li>
+            <li>- Report c</li>
+        </ul>
+    </div>
+    <br>-->
+    <h3><?php p($l->t('Quickstart')); ?></h3>
+    <div>
+        <ul id="ulQuickstart" style="width: 100%;">
+            <li style="display: inline-block; margin: 10px;">
+                <div class="infoBox" id="infoBoxReport"><img
+                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
+                            alt="infoReport">
+                    <div class="infoBoxHeader"><?php p($l->t('New Report')); ?></div>
+                    <div class="infoBoxText"><?php // TRANSLATORS space is critical here. please stay within 40 letters
+                        p($l->t('Create a report with the wizard')); ?></div>
+                </div>
+            </li>
+            <li style="display: inline-block; margin: 10px;">
+                <div class="infoBox" id="infoBoxIntro"><img
+                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoIntro.svg') ?>"
+                            alt="infoIntro">
+                    <div class="infoBoxHeader"><?php p($l->t('Intro')); ?></div>
+                    <div class="infoBoxText"><?php // TRANSLATORS space is critical here. please stay within 40 letters
+                        p($l->t('See the introduction again')); ?></div>
+                </div>
+            </li>
+            <li style="display: inline-block; margin: 10px;">
+                <div class="infoBox" id="infoBoxWiki"><img
+                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoWiki.svg') ?>"
+                            alt="infoWiki">
+                    <div class="infoBoxHeader"><?php p($l->t('Wiki')); ?></div>
+                    <div class="infoBoxText"><?php // TRANSLATORS space is critical here. please stay within 40 letters
+                        p($l->t('Find more information in the Wiki')); ?></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <br>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>
