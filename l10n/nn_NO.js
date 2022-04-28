@@ -20,6 +20,7 @@ OC.L10N.register(
     "Variables" : "Variablar",
     "Add" : "Legg til",
     "Color" : "Farge",
+    "Overview" : "Oversyn",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Legg til i favorittar",
     "Delete folder" : "Slett mappe",
