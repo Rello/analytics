@@ -6,6 +6,7 @@
 
 ### Fixed
 - issue when datasets exist without reports #273
+- unhandled error in data load #274
 
 ## 4.2.1 - 2022-03-27
 ### Fixed

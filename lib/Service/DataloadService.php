@@ -156,8 +156,14 @@ class DataloadService
         if ($result['error'] === 0) {
             $currentCount = 0;
             foreach ($result['data'] as $row) {
+                if (count($row) === 1) {
+                    // only one column is not possible
+                    $this->logger->info('loading data with only one column is not possible. This is a data load for the dataset: ' . $datasetId);
+                    $error = $error + 1;
+                    continue;
+                }
                 if (count($row) === 2) {
-                    // if data source only delivers 2 colums, the value needs to be in the last one
+                    // if data source only delivers 2 columns, the value needs to be in the last one
                     $row[2] = $row[1];
                     $row[1] = null;
                 }
