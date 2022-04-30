@@ -237,7 +237,6 @@ OC.L10N.register(
     "Copy link" : "Copier le lien",
     "Save default filters" : "Sauver les filtres par défaut",
     "Get more information" : "Obtenir d'avantage d'informations",
-    "WiKi" : "Wiki",
     "Nextcloud forum" : "Forum Nextcloud",
     "Start using Analytics" : "Commencez à utiliser Analytics",
     "General information" : "Informations générales",

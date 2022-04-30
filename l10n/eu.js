@@ -215,7 +215,6 @@ OC.L10N.register(
     "Password protection" : "Pasahitz bidezko babesa",
     "Copy link" : "Kopiatu esteka",
     "Get more information" : "Lortu informazio gehiago",
-    "WiKi" : "WiKi",
     "Nextcloud forum" : "Nextcloud foroa",
     "General information" : "Informazio orokorra",
     "Report title" : "Txostenaren izenburua",
