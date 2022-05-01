@@ -28,6 +28,7 @@ OC.L10N.register(
     "Date" : "Data",
     "New in" : "Novo em",
     "View changelog" : "Ver registo de alterações",
+    "Local file" : "Ficheiro local",
     "File" : "Ficheiro",
     "Version" : "Versão",
     "Authentication" : "Autenticação",
