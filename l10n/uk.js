@@ -2,6 +2,8 @@ OC.L10N.register(
     "analytics",
     {
     "Saved" : "Збережено",
+    "Are you sure?" : "Ви впевнені?",
+    "Load started" : "Розпочато завантаження",
     "Delete" : "Вилучити",
     "Search" : "Пошук",
     "first" : "перший",
