@@ -1,4 +1,9 @@
 { "translations": {
+    "Dataset" : "Набір даних",
+    "Data" : "Дані",
+    "Data load" : "Завантажити дані",
+    "Data maintenance is not possible for this type of report" : "Обробка даних неможлива для звіту цього типу",
+    "This report does not have any data loads. <br>Choose a data source from the dropdown and press \"+\"" : "Цей звіт не містить дані для завантаження. <br>Оберіть джерело даних з випадаючого списку та натисніть \"+\"",
     "Saved" : "Збережено",
     "Are you sure?" : "Ви впевнені?",
     "Load started" : "Розпочато завантаження",
