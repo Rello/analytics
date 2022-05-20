@@ -378,7 +378,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleDimensionHint: function () {
-        let text = t('analytics', 'Column descriptions are derived from the dataset and can not be changed on a report level') +
+        let text = t('analytics', 'Column descriptions are derived from the dataset and cannot be changed on a report level') +
             '<br><br>' +
             t('analytics', 'Datasets can be changed in a separate maintenance') +
             '<br>' +
