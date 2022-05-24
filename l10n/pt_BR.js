@@ -329,4 +329,4 @@ OC.L10N.register(
     "The report can now be created" : "O relatório agora pode ser criado",
     "Create" : "Criar"
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
