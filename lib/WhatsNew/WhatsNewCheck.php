@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @author Marcel Scherello <analytics@scherello.de>
  * @author Arthur Schiwon <blizzz@arthur-schiwon.de>
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
- * @copyright 2021 Marcel Scherello
+ * @copyright 2019-2022 Marcel Scherello
  */
 
 namespace OCA\Analytics\WhatsNew;

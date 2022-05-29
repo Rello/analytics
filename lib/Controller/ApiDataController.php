@@ -6,7 +6,7 @@
  * later. See the LICENSE.md file.
  *
  * @author Marcel Scherello <analytics@scherello.de>
- * @copyright 2021 Marcel Scherello
+ * @copyright 2019-2022 Marcel Scherello
  */
 
 namespace OCA\Analytics\Controller;
