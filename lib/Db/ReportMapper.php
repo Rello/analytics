@@ -59,6 +59,23 @@ class ReportMapper
     }
 
     /**
+     * get reports for user
+     * @param $userId
+     * @return array
+     */
+    public function indexByUser($userId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($userId)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
      * create report
      * @param $name
      * @param $subheader
@@ -105,7 +122,7 @@ class ReportMapper
      * @param int $id
      * @return array
      */
-    public function read(int $id)
+    public function readOwn(int $id)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
@@ -229,8 +246,7 @@ class ReportMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->execute();
         return true;
     }

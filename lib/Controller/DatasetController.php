@@ -82,21 +82,21 @@ class DatasetController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @return bool
+     * @return DataResponse
      * @throws \OCP\DB\Exception
      */
     public function delete(int $datasetId)
     {
-        $own = $this->read($datasetId);
-        if ($own) {
+        if ($this->DatasetService->isOwn($datasetId)) {
             $reports = $this->ReportService->reportsForDataset($datasetId);
             foreach ($reports as $report) {
                 $this->ReportService->delete((int)$report['id']);
             }
             $this->DatasetService->delete($datasetId);
+            return new DataResponse('true');
+        } else {
+            return new DataResponse('false');
         }
-
-        return true;
     }
 
     /**

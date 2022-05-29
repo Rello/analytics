@@ -131,6 +131,22 @@ class DatasetService
     }
 
     /**
+     * check if own report
+     *
+     * @param int $reportId
+     * @return bool
+     */
+    public function isOwn(int $datasetId)
+    {
+        $ownDataset = $this->DatasetMapper->readOwn($datasetId);
+        if (!empty($ownDataset)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * get dataset status
      *
      * @param int $datasetId
@@ -211,8 +227,27 @@ class DatasetService
     public function delete(int $datasetId)
     {
         $this->DatasetMapper->delete($datasetId);
-        $this->DataloadMapper->deleteDataloadByDataset($datasetId);
+        $this->DataloadMapper->deleteByDataset($datasetId);
         $this->StorageMapper->deleteByDataset($datasetId);
         return true;
     }
+
+    /**
+     * get dataset by user
+     *
+     * @param string $userId
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteByUser(string $userId)
+    {
+        $datasets = $this->DatasetMapper->indexByUser($userId);
+        foreach ($datasets as $dataset) {
+            $this->DatasetMapper->delete($dataset['id']);
+            $this->DataloadMapper->deleteByDataset($dataset['id']);
+            $this->StorageMapper->deleteByDataset($dataset['id']);
+        }
+        return true;
+    }
+
 }

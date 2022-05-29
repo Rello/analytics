@@ -174,12 +174,11 @@ class DataloadMapper
      * @param int $datasetId
      * @return bool
      */
-    public function deleteDataloadByDataset(int $datasetId)
+    public function deleteByDataset(int $datasetId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
         $sql->execute();
         return true;
     }

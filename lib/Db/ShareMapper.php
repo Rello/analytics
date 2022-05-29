@@ -295,8 +295,7 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
         $sql->execute();
         return true;
     }

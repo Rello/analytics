@@ -92,8 +92,7 @@ class ThresholdMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
-            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
         $sql->execute();
         return true;
     }

@@ -61,6 +61,24 @@ class DatasetMapper
     }
 
     /**
+     * get datasets
+     * @param $userId
+     * @return array
+     * @throws Exception
+     */
+    public function indexByUser($userId): array
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('id')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($userId)));
+        $statement = $sql->execute();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
+        /**
      * create dataset
      * @param $name
      * @param $dimension1
@@ -161,8 +179,7 @@ class DatasetMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->execute();
         return true;
     }

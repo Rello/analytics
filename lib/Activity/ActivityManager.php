@@ -87,7 +87,7 @@ class ActivityManager
     private function createEvent($objectId, $eventType, $eventSubject, string $user_id = null)
     {
         if ($eventSubject === ActivityManager::SUBJECT_REPORT_ADD || $eventSubject === ActivityManager::SUBJECT_REPORT_DELETE || $eventSubject === ActivityManager::SUBJECT_REPORT_SHARE) {
-            $name = $objectId !== 0 ? $this->ReportMapper->read($objectId)['name'] : '';
+            $name = $objectId !== 0 ? $this->ReportMapper->readOwn($objectId)['name'] : '';
         } else {
             $name = $objectId !== 0 ? $this->DatasetMapper->read($objectId)['name'] : '';
             $objectId = 0;

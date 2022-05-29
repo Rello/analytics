@@ -142,7 +142,7 @@ class ReportService
      */
     public function read(int $reportId, $replace = true)
     {
-        $ownReport = $this->ReportMapper->read($reportId);
+        $ownReport = $this->ReportMapper->readOwn($reportId);
         if (!empty($ownReport)) {
             $ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
             if ($replace) $ownReport = $this->VariableService->replaceTextVariables($ownReport);
@@ -159,6 +159,22 @@ class ReportService
     }
 
     /**
+     * check if own report
+     *
+     * @param int $reportId
+     * @return bool
+     */
+    public function isOwn(int $reportId)
+    {
+        $ownReport = $this->ReportMapper->readOwn($reportId);
+        if (!empty($ownReport)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+        /**
      * create new blank report
      *
      * @return int
@@ -196,7 +212,7 @@ class ReportService
     public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
     {
 
-        $template = $this->ReportMapper->read($reportId);
+        $template = $this->ReportMapper->readOwn($reportId);
         $newId = $this->ReportMapper->create(
         // TRANSLATORS Noun
             $template['name'] . ' ' . $this->l10n->t('copy'),
@@ -276,7 +292,7 @@ class ReportService
     public function delete(int $reportId)
     {
         $metadata = $this->read($reportId);
-        $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
+        //$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
         $this->ShareService->deleteShareByReport($reportId);
         $this->ThresholdMapper->deleteThresholdByReport($reportId);
         $this->setFavorite($reportId, 'false');
@@ -288,6 +304,25 @@ class ReportService
         } else {
             return true;
         }
+    }
+
+    /**
+     * get dataset by user
+     *
+     * @param string $userId
+     * @return array|bool
+     * @throws Exception
+     */
+    public function deleteByUser(string $userId)
+    {
+        $reports = $this->ReportMapper->indexByUser($userId);
+        foreach ($reports as $report) {
+            $this->ShareService->deleteShareByReport($report['id']);
+            $this->ThresholdMapper->deleteThresholdByReport($report['id']);
+            $this->setFavorite($report['id'], 'false');
+            $this->ReportMapper->delete($report['id']);
+        }
+        return true;
     }
 
     /**
@@ -368,7 +403,7 @@ class ReportService
 
         $reportId = $this->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
         $this->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions);
-        $report = $this->ReportMapper->read($reportId);
+        $report = $this->ReportMapper->readOwn($reportId);
         $datasetId = $report['dataset'];
 
         foreach ($data['dataload'] as $dataload) {
@@ -413,7 +448,7 @@ class ReportService
     public function export(int $reportId)
     {
         $result = array();
-        $result['report'] = $this->ReportMapper->read($reportId);
+        $result['report'] = $this->ReportMapper->readOwn($reportId);
         $datasetId = $result['report']['dataset'];
         $result['dataload'] = $this->DataloadMapper->read($datasetId);
         $result['threshold'] = $this->ThresholdMapper->getThresholdsByReport($reportId);

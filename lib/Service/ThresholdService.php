@@ -101,7 +101,7 @@ class ThresholdService
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
-        $datasetMetadata = $this->ReportMapper->read($reportId);
+        $datasetMetadata = $this->ReportMapper->readOwn($reportId);
 
         foreach ($thresholds as $threshold) {
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {

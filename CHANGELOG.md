@@ -3,6 +3,7 @@
 ## 4.3.0 - 2022-04-xx
 ### Added
 - new application start page #276
+- remove data when user is deleted #280
 
 ### Fixed
 - issue when datasets exist without reports #273
