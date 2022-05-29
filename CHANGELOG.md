@@ -4,6 +4,8 @@
 ### Added
 - new application start page #276
 - remove data when user is deleted #280
+- Chart.js v3.8
+- chartjs-plugin-zoom v1.2.1
 
 ### Fixed
 - issue when datasets exist without reports #273
