@@ -69,8 +69,8 @@ OCA.Analytics.Navigation = {
         let li = document.createElement('li');
         li.innerHTML = '<div class="infoBox" style="margin-top: 50px;">' +
             '<img src="/nextcloud/own_apps20/analytics/img/infoReport.svg" alt="info">\n' +
-            '<div class="infoBoxHeader">' + t('analytics', 'No reports yet') + '</div>\n' +
-            '<div class="infoBoxText">' + t('analytics', 'To get started, create your first report') + '</div>';
+            '<div class="infoBoxHeader">' + t('analytics', 'No reports yet') + '</div>\n';
+            //'<div class="infoBoxText">' + t('analytics', 'To get started, create your first report') + '</div>';
         return li;
     },
 
