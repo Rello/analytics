@@ -28,6 +28,7 @@ OC.L10N.register(
     "Date" : "Data",
     "New in" : "Novo em",
     "View changelog" : "Ver registo de alterações",
+    "Local file" : "Ficheiro local",
     "File" : "Ficheiro",
     "Version" : "Versão",
     "Authentication" : "Autenticação",
@@ -57,4 +58,4 @@ OC.L10N.register(
     "Get more information" : "Obter mais informação",
     "Create" : "Criar"
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

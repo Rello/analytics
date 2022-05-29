@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Salvestatud",
     "Delete" : "Kustuta",
+    "Delete data" : "Kustuta andmed",
     "Search" : "Otsi",
     "OK" : "OK",
     "Cancel" : "Loobu",
