@@ -38,7 +38,6 @@ OC.L10N.register(
     "Color" : "ព័ណ៌",
     "New report" : "បង្កើតរបាយការណ៍ថ្មី",
     "No reports yet" : "មិនទាន់មានរបាយការណ៍",
-    "To get started, create your first report" : "ដើម្បីចាប់ផ្តើម, សូមបង្កើតរបាយការណ៍ដំបូងរបស់អ្នក",
     "Back to reports" : "ត្រឡប់ទៅបញ្ជីរបាយការណ៍",
     "Basic settings" : "ការកំណត់ទូទៅ",
     "Remove from favorites" : "Remove from favorites",
