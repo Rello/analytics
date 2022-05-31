@@ -13,6 +13,7 @@ OC.L10N.register(
     "Type" : "Type",
     "Date" : "Date",
     "File" : "File",
+    "copy" : "капіяваць",
     "Password" : "Password",
     "Favorites" : "Favorites",
     "Settings" : "Налады",
