@@ -291,7 +291,7 @@ class ReportService
      */
     public function delete(int $reportId)
     {
-        $metadata = $this->read($reportId);
+        $metadata = $this->ReportMapper->readOwn($reportId);
         //$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
         $this->ShareService->deleteShareByReport($reportId);
         $this->ThresholdMapper->deleteThresholdByReport($reportId);

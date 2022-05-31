@@ -275,6 +275,7 @@ OCA.Analytics.Navigation = {
             unshareReport.addEventListener('click', OCA.Analytics.Navigation.handleUnshareButton);
         } else if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
             dataset.remove();
+            unshareReport.remove();
         } else {
             unshareReport.remove();
         }

@@ -116,11 +116,10 @@ class ReportController extends Controller
     public function delete(int $reportId)
     {
         if ($this->ReportService->isOwn($reportId)) {
-            $return = true;
+            return new DataResponse($this->ReportService->delete($reportId));
         } else {
-            $return = false;
+            return new DataResponse(false,400);
         }
-        return new DataResponse($return);
     }
 
     /**

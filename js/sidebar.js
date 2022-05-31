@@ -571,7 +571,6 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     delete: function (reportId) {
-        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         $.ajax({
             type: 'DELETE',
@@ -595,8 +594,12 @@ OCA.Analytics.Sidebar.Report = {
                     );
 
                 }
+                document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
                 OCA.Analytics.Navigation.init();
                 OCA.Analytics.Navigation.handleOverviewButton();
+            },
+            error: function () {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'))
             }
         });
     },
