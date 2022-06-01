@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Dataset" : "Zbiór danych",
     "Data" : "Dane",
-    "Data load" : "Ładowanie danych",
+    "Data load" : "Obciążenie danych",
     "Data maintenance is not possible for this type of report" : "Konserwacja danych nie jest możliwa dla tego typu raportu",
     "This report does not have any data loads. <br>Choose a data source from the dropdown and press \"+\"" : "Ten raport nie zawiera żadnych załadowanych danych. <br>Wybierz źródło danych z menu i naciśnij \"+\"",
     "Choose a data load from the list to change its settings" : "Wybierz załadowane dane z listy, aby zmienić ich ustawienia",
@@ -46,7 +46,7 @@ OC.L10N.register(
     "Drilldown" : "Drążyć",
     "OK" : "OK",
     "Cancel" : "Anuluj",
-    "Filter" : "Filtr",
+    "Filter" : "Filtruj",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Do wyboru dat można użyć zmiennych tekstu dynamicznego.<br>Wybór jest zapisany pomiędzy dwoma % (np. %last2months%).<br>Informacje o dostępnych filtrach i alternatywnych formatach dat są dostępne na {linkstart}Wiki{linkend}.",
     "Filter by" : "Filtruj według",
     "Operator" : "Operator",
