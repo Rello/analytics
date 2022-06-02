@@ -90,6 +90,7 @@ OC.L10N.register(
     "The report type selection is missing" : "Chybí výběr typu výkazu",
     "At least one visualization selection is required" : "Je třeba zadat alespoň výběr vizualizace",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Toto byl poslední výkaz v sadě dat. Chcete smazat sadu dat včetně veškerých dat?",
+    "Request could not be processed" : "Požadavek se nepodařilo zpracovat",
     "Use this endpoint to submit data via an API:" : "Použít tento koncový bod pro odeslání dat prostřednictvím aplikačního program. rozhraní (API):",
     "Detail instructions at:" : "Podrobné pokyny na:",
     "REST API parameters" : "parametry pro REST API",

@@ -90,6 +90,7 @@ OC.L10N.register(
     "The report type selection is missing" : "Rapor türü seçimi eksik",
     "At least one visualization selection is required" : "En az bir görselleştirme seçimi yapılmalıdır",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Bu rapor, veri kümesinin son raporuydu. Tüm verilerle birlikte veri kümesini silmek istiyor musunuz?",
+    "Request could not be processed" : "İstek işlenemedi",
     "Use this endpoint to submit data via an API:" : "Bir API ile veri göndermek için bu uç noktayı kullanın:",
     "Detail instructions at:" : "Ayrıntılı yönergeler:",
     "REST API parameters" : "REST API parametreleri",

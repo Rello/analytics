@@ -88,6 +88,7 @@
     "The report type selection is missing" : "Brak wyboru rodzaju raportu",
     "At least one visualization selection is required" : "Wymagany jest co najmniej jeden wybór wizualizacji",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "To był ostatni raport dotyczący zbioru danych. Czy chcesz usunąć zbiór danych zawierający wszystkie dane?",
+    "Request could not be processed" : "Nie można przetworzyć żądania",
     "Use this endpoint to submit data via an API:" : "Użyj tego punktu końcowego do przesyłania danych za pomocą API:",
     "Detail instructions at:" : "Szczegółowe instrukcje na:",
     "REST API parameters" : "Parametry REST API",

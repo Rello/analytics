@@ -90,6 +90,7 @@ OC.L10N.register(
     "The report type selection is missing" : "Die Auswahl der Berichtsart fehlt",
     "At least one visualization selection is required" : "Mindestens eine Visualisierung ist erforderlich",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Dies war der letzte Bericht mit diesem Datensatz. Soll der Datensatz inklusive allen Daten gelöscht werden?",
+    "Request could not be processed" : "Anfrage konnte nicht bearbeitet werden",
     "Use this endpoint to submit data via an API:" : "Diesen Endpunkt verwenden um Daten über API zu laden:",
     "Detail instructions at:" : "Detaillierte Anleitung unter:",
     "REST API parameters" : "REST-API-Parameter",
