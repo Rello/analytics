@@ -80,7 +80,6 @@
     "Reports can be grouped into a folder structure." : "Les rapports peuvent être regroupés dans un dossier.",
     "Do you want to create a new group folder?" : "Voulez-vous créer un nouveau groupement de dossier ?",
     "Report group" : "Groupement de dossiers",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Les descriptions de colonnes sont dérivées du jeu de données et ne peuvent pas être modifiées au niveau du rapport",
     "Datasets can be changed in a separate maintenance" : "Les jeux de données peuvent être modifiés dans une gestion séparée",
     "Switch to the dataset maintenance from here?" : "Passer à la gestion du jeu de données à partir d'ici?",
     "New" : "Nouveau",

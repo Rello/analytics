@@ -71,7 +71,6 @@
     "Text variables" : "文本变量",
     "Do you want to create a new group folder?" : "要创建一个新的组文件夹吗？",
     "Report group" : "报告组",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "列描述派生自数据集，不能在报表级别上更改",
     "Datasets can be changed in a separate maintenance" : "数据集可以在单独的维护中更改",
     "Switch to the dataset maintenance from here?" : "从这里切换到数据集维护？",
     "New" : "新建",

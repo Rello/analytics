@@ -80,7 +80,6 @@ OC.L10N.register(
     "Reports can be grouped into a folder structure." : "Txostenak karpeta egitura batean taldekatu daitezke.",
     "Do you want to create a new group folder?" : "Talde-karpeta bat sortu nahi duzu?",
     "Report group" : "Eman berri talde honi buruz",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Zutabeen deskribapenak datu multzotik ateratzen dira eta ezin dira aldatu txosten mailan",
     "Datasets can be changed in a separate maintenance" : "Datu-sortak mantenu banandu batean aldatu daitezke",
     "Switch to the dataset maintenance from here?" : "Aldatu datu-sorta mantenura hemendik?",
     "New" : "Berria",

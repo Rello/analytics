@@ -68,7 +68,6 @@ OC.L10N.register(
     "Text variables" : "Besedilne spremenljivke",
     "Do you want to create a new group folder?" : "Ali želite ustvariti novo skupinsko mapo?",
     "Report group" : "Skupina poročil",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Opisi stolpcev so povzeti iz podatkovne množice in jih ni mogoče spreminjati na ravni poročila.",
     "Datasets can be changed in a separate maintenance" : "Podatkovne množice je mogoče spreminjati ločeno med nastavljanjem.",
     "Switch to the dataset maintenance from here?" : "Ali želite preklopiti na urejanje podatkovne množice?",
     "New" : "Novo",

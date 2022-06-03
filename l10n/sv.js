@@ -75,7 +75,6 @@ OC.L10N.register(
     "Text variables" : "Textvariabler",
     "Do you want to create a new group folder?" : "Vill du skapa en ny gruppmapp?",
     "Report group" : "Rapportgrupp",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Kolumnnamn hämtas från datalistan och kan inte ändras i rapportläge.",
     "New" : "Ny",
     "The report name is missing" : "Rapportnamnet saknas",
     "The report type selection is missing" : "Val av rapporttyp saknas",

@@ -80,7 +80,6 @@
     "Reports can be grouped into a folder structure." : "A jelentések mappastruktúrába csoportosíthatók.",
     "Do you want to create a new group folder?" : "Létrehoz egy új csoportmappát?",
     "Report group" : "Jelentéscsoport",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Az oszlopleírások az adatkészletből kerülnek előállításra, és a jelentések szintjén nem módosíthatók",
     "Datasets can be changed in a separate maintenance" : "Az adatkészletek külön karbantartás során módosíthatók",
     "Switch to the dataset maintenance from here?" : "Innen átvált az adatkészlet-karbantartásra?",
     "New" : "Új",

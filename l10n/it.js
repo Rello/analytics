@@ -75,7 +75,6 @@ OC.L10N.register(
     "Text variables" : "Variabili di testo",
     "Do you want to create a new group folder?" : "Desideri creare una nuova cartella di gruppo?",
     "Report group" : "Gruppo di report",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Le descrizioni delle colonne derivano dal set di dati e non possono essere modificate a livello di report",
     "Datasets can be changed in a separate maintenance" : "I set di dati possono essere cambiati in una manutenzione separata",
     "Switch to the dataset maintenance from here?" : "Passare alla manutenzione del set di dati da qui?",
     "New" : "Nuovo",
