@@ -82,6 +82,7 @@ OC.L10N.register(
     "Reports can be grouped into a folder structure." : "Raporlar bir klasör yapısında gruplanabilir.",
     "Do you want to create a new group folder?" : "Yeni bir grup klasörü oluşturmak ister misiniz?",
     "Report group" : "Rapor grubu",
+    "Column descriptions are derived from the dataset and cannot be changed on a report level" : "Sütun açıklamaları veri kümesinden alınır ve rapor düzeyinde değiştirilemez",
     "Datasets can be changed in a separate maintenance" : "Veri kümeleri ayrı bir bakımda değiştirilebilir",
     "Switch to the dataset maintenance from here?" : "Veri kümesi bakımına geçmek ister misiniz?",
     "New" : "Yeni",

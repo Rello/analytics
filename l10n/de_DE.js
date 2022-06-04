@@ -82,6 +82,7 @@ OC.L10N.register(
     "Reports can be grouped into a folder structure." : "Berichte können in einer Ordnerstruktur gruppiert werden.",
     "Do you want to create a new group folder?" : "Möchten Sie einen neuen Gruppenordner erstellen?",
     "Report group" : "Berichtsgruppe",
+    "Column descriptions are derived from the dataset and cannot be changed on a report level" : "Spaltenbezeichnungen werden vom Datensatz übernommen und können im Bericht nicht geändert werden",
     "Datasets can be changed in a separate maintenance" : "Datensätze können in einem eigenen Bereich angepasst werden",
     "Switch to the dataset maintenance from here?" : "Von hier zur Datensatzpflege wechseln?",
     "New" : "Neu",

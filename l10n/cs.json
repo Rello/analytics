@@ -80,6 +80,7 @@
     "Reports can be grouped into a folder structure." : "Výkazy je možné seskupovat do stromové struktury.",
     "Do you want to create a new group folder?" : "Chcete vytvořit novou skupinovou složku?",
     "Report group" : "Skupina výkazu",
+    "Column descriptions are derived from the dataset and cannot be changed on a report level" : "Popisy sloupců jsou převzaty ze souboru dat a na úrovni výkazu je nelze měnit",
     "Datasets can be changed in a separate maintenance" : "Soubory dat je možné měnit ve zvlášť údržbě",
     "Switch to the dataset maintenance from here?" : "Přepnout odsud na údržbu souboru dat?",
     "New" : "Nový",

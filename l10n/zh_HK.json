@@ -80,6 +80,7 @@
     "Reports can be grouped into a folder structure." : "報告可以分組到資料夾結構中。",
     "Do you want to create a new group folder?" : "是否要創建新的組資料夾？",
     "Report group" : "報告群組",
+    "Column descriptions are derived from the dataset and cannot be changed on a report level" : "列描述源自數據集，無法在報表級別更改",
     "Datasets can be changed in a separate maintenance" : "可以在單獨的維護中更改數據集",
     "Switch to the dataset maintenance from here?" : "從這裡切換到數據集維護？",
     "New" : "新",
