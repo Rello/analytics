@@ -227,6 +227,22 @@ OCA.Analytics.UI = {
 
     buildChart: function (jsondata) {
 
+        const defaultLegendClickHandler = Chart.defaults.plugins.legend.onClick;
+        const pieDoughnutLegendClickHandler = Chart.controllers.doughnut.overrides.plugins.legend.onClick;
+        const newLegendClickHandler = function (e, legendItem, legend) {
+            const index = legendItem.datasetIndex;
+            const type = legend.chart.config.type;
+
+                // Do the original logic
+                if (type === 'pie' || type === 'doughnut') {
+                    pieDoughnutLegendClickHandler(e, legendItem, legend)
+                } else {
+                    defaultLegendClickHandler(e, legendItem, legend);
+                }
+            document.getElementById('saveIcon').style.removeProperty('display');
+
+        };
+
         OCA.Analytics.UI.showElement('tableSeparatorContainer');
         OCA.Analytics.UI.showElement('chartContainer');
         let ctx = document.getElementById('myChart').getContext('2d');
@@ -251,6 +267,7 @@ OCA.Analytics.UI = {
         Chart.defaults.elements.point.radius = 1;
         Chart.defaults.plugins.legend.display = false;
         Chart.defaults.plugins.legend.position = 'bottom';
+        Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
 
         var chartOptions = {
             maintainAspectRatio: false,
@@ -596,7 +613,7 @@ OCA.Analytics.UI = {
     reportOptionsEventlisteners: function () {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
-        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.updateReport);
+        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
         document.getElementById('saveIconNew').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);

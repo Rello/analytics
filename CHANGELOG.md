@@ -3,6 +3,7 @@
 ## 4.3.0 - 2022-04-xx
 ### Added
 - new application start page #276
+- persist legend selections (hidden/visible) #120
 - remove data when user is deleted #280
 - Chart.js v3.8
 - chartjs-plugin-zoom v1.2.1

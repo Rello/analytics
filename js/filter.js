@@ -403,7 +403,7 @@ OCA.Analytics.Filter = {
             dataOptions = '';
         }
 
-        // if any dataseries is tied to the secondary yAxis or not
+        // if any data series is tied to the secondary yAxis or not
         // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
         let enableAxisV2 = '{"scales":{"yAxes":[{},{"display":true}]}}';
         let enableAxis = '{"scales":{"secondary":{"display":true}}}';
@@ -469,6 +469,39 @@ OCA.Analytics.Filter = {
         }
     },
 
+    // function to check non standard legend selections during save
+    checkLegendSelections: function () {
+        let dataOptions;
+        if (OCA.Analytics.currentReportData.options.dataoptions !== '') {
+            dataOptions  = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+        } else {
+            dataOptions = {};
+        }
+
+        let userDatasetOptions = [];
+        let optionObject = {};
+        let nonDefaultValues = false;
+        let legendItems = OCA.Analytics.chartObject.legend.legendItems;
+        for (let i = 0; i < legendItems.length; i++) {
+            optionObject = {};
+            if (i <= 3 && legendItems[i]['hidden'] === true) { // per default, the first 4 are always visible
+                optionObject['hidden'] = true;
+            }
+            if (i >> 3 && legendItems[i]['hidden'] === false) { // per default, all others are hidden
+                optionObject['hidden'] = false;
+            }
+            if (Object.keys(optionObject).length) nonDefaultValues = true;
+            userDatasetOptions.push(optionObject);
+        }
+
+        if (nonDefaultValues === true) {
+            cloner.deep.merge(dataOptions, userDatasetOptions);
+        } else {
+            dataOptions.forEach(function(item){ delete item.hidden });
+        }
+        return dataOptions;
+    },
+
     // live update the background color of the input boxes
     updateColor: function (evt) {
         let field = evt.target;
@@ -506,8 +539,9 @@ OCA.Analytics.Filter.Backend = {
 
     },
 
-    updateReport: function () {
+    saveReport: function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
+        OCA.Analytics.unsavedFilters = false;
 
         if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
             OCA.Analytics.currentReportData.options.filteroptions = {};
@@ -515,14 +549,15 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
 
-        OCA.Analytics.unsavedFilters = false;
+        // function to check non standard legend selections during save
+        let dataOptions = JSON.stringify(OCA.Analytics.Filter.checkLegendSelections());
 
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/report/') + reportId + '/options',
             data: {
                 'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
-                'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,
+                'dataoptions': dataOptions,
                 'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
             },
             success: function () {
