@@ -11,6 +11,7 @@ OC.L10N.register(
     "Filter" : "Filtru",
     "Add" : "Adaugă",
     "Color" : "Culoare",
+    "Overview" : "Prezentare generală",
     "Basic settings" : "Setări de bază",
     "Remove from favorites" : "Șterge din favorite",
     "Add to favorites" : "Adăugați la favorite",

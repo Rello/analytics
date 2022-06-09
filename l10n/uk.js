@@ -33,6 +33,7 @@ OC.L10N.register(
     "Date" : "Дата",
     "New in" : "Нові можливості",
     "View changelog" : "Переглянути журнал змін",
+    "Local file" : "Локальний файл",
     "File" : "Файл",
     "Version" : "Версія",
     "Authentication" : "Автентифікація",

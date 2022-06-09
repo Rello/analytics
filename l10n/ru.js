@@ -79,7 +79,6 @@ OC.L10N.register(
     "Reports can be grouped into a folder structure." : "Отчеты могут быть сгруппированы в папки.",
     "Do you want to create a new group folder?" : "Вы хотите создать новую групповую папку?",
     "Report group" : "Групповой отчёт",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Описание столбцов берётся из набора данных и не может быть изменено на уровне отчёта.",
     "Datasets can be changed in a separate maintenance" : "Наборы данных могут быть изменены в процессе самостоятельного обслуживания",
     "Switch to the dataset maintenance from here?" : "Перейти к обслуживанию набора данных отсюда?",
     "New" : "Новый",

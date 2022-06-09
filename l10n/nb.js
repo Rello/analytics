@@ -73,7 +73,6 @@ OC.L10N.register(
     "Text variables" : "Tekstvariabler",
     "Do you want to create a new group folder?" : "Vil du opprette en ny gruppemappe?",
     "Report group" : "Rapportgruppe",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Kolonnebeskrivelsene er hentet fra datasettet og kan ikke endres på rapportnivå",
     "Datasets can be changed in a separate maintenance" : "Datasett kan endres i et separat vedlikehold",
     "Switch to the dataset maintenance from here?" : "Bytte til vedlikehold av datasettet herfra?",
     "New" : "Ny",

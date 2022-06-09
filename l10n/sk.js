@@ -82,7 +82,6 @@ OC.L10N.register(
     "Reports can be grouped into a folder structure." : "Zostavy môžu byť zaradené do skupín v adresárovej štruktúre.",
     "Do you want to create a new group folder?" : "Chceli by ste vytvoriť nový skupinový priečinok?",
     "Report group" : "Skupina zostavy",
-    "Column descriptions are derived from the dataset and can not be changed on a report level" : "Popisy stĺpcov sú odvodené zo súboru údajov a nemožno ich zmeniť na úrovni zostavy",
     "Datasets can be changed in a separate maintenance" : "Súbory údajov je možné meniť v samostatnej údržbe",
     "Switch to the dataset maintenance from here?" : "Prepnúť súbor údajov do režimu údržby odtiaľto?",
     "New" : "Nový",
