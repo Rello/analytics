@@ -470,34 +470,32 @@ OCA.Analytics.Filter = {
     },
 
     // function to check non standard legend selections during save
-    checkLegendSelections: function () {
-        let dataOptions;
-        if (OCA.Analytics.currentReportData.options.dataoptions !== '') {
-            dataOptions  = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
-        } else {
-            dataOptions = {};
-        }
-
-        let userDatasetOptions = [];
-        let optionObject = {};
-        let nonDefaultValues = false;
+    processLegendSelections: function (dataOptions) {
         let legendItems = OCA.Analytics.chartObject.legend.legendItems;
         for (let i = 0; i < legendItems.length; i++) {
-            optionObject = {};
-            if (i <= 3 && legendItems[i]['hidden'] === true) { // per default, the first 4 are always visible
-                optionObject['hidden'] = true;
+            if (!dataOptions.hasOwnProperty(i)) dataOptions[i] = {};    // create dummy for every index as a later index might get a setting
+            if (i < 4 && legendItems[i]['hidden'] === true) {           // per default, the first 4 are  visible
+                dataOptions[i]['hidden'] = true;
+            } else if (i > 3 && legendItems[i]['hidden'] === false) {   // per default, all others are hidden
+                dataOptions[i]['hidden'] = false;
+            } else if (i in dataOptions) {
+                delete dataOptions[i]['hidden'];
             }
-            if (i >> 3 && legendItems[i]['hidden'] === false) { // per default, all others are hidden
-                optionObject['hidden'] = false;
-            }
-            if (Object.keys(optionObject).length) nonDefaultValues = true;
-            userDatasetOptions.push(optionObject);
+        }
+        return dataOptions;
+    },
+
+    cleanupDataOptionsArray: function (dataOptions) {
+        let lastNonDefaultValue = false;
+        let items = dataOptions.length;
+        for (let i = 0; i < items; i++) {
+            if (Object.entries(dataOptions[i]).length !== 0) lastNonDefaultValue = i;
         }
 
-        if (nonDefaultValues === true) {
-            cloner.deep.merge(dataOptions, userDatasetOptions);
-        } else {
-            dataOptions.forEach(function(item){ delete item.hidden });
+        if (lastNonDefaultValue !== false) {    // remove all tailing {}
+            dataOptions.splice(lastNonDefaultValue + 1, items - lastNonDefaultValue);
+        } else {                                // or reset the whole array if no setting at all exists
+            dataOptions = [];
         }
         return dataOptions;
     },
@@ -549,15 +547,24 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
 
+        let dataOptions;
+        if (OCA.Analytics.currentReportData.options.dataoptions !== '') {
+            dataOptions  = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+        } else {
+            dataOptions = [];
+        }
+
         // function to check non standard legend selections during save
-        let dataOptions = JSON.stringify(OCA.Analytics.Filter.checkLegendSelections());
+        dataOptions = OCA.Analytics.Filter.processLegendSelections(dataOptions);
+        // cleanup the array to keep it as small as necessary
+        dataOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(dataOptions);
 
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/report/') + reportId + '/options',
             data: {
                 'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
-                'dataoptions': dataOptions,
+                'dataoptions': JSON.stringify(dataOptions),
                 'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
             },
             success: function () {
