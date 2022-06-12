@@ -243,7 +243,7 @@ OCA.Analytics.Advanced.Dataload = {
         // set  the options for a datasource
         let fieldValues = JSON.parse(dataload['option']);
         for (let fieldValue in fieldValues) {
-            document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = fieldValues[fieldValue] : null;
+            document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Advanced.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
         }
 
         if (dataload['datasource'] === OCA.Analytics.TYPE_INTERNAL_FILE || dataload['datasource'] === OCA.Analytics.TYPE_EXCEL) {
@@ -252,6 +252,18 @@ OCA.Analytics.Advanced.Dataload = {
 
         OCA.Analytics.UI.showElement('dataloadRun');
         document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleExecuteButton);
+    },
+
+    decodeEscapedHtml: function (text) {
+        let map =
+            {
+                '&amp;': '&',
+                '&lt;': '<',
+                '&gt;': '>',
+                '&quot;': '"',
+                '&#039;': "'"
+            };
+        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
     },
 
     handleCreateButton: function () {

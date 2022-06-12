@@ -207,7 +207,7 @@ OCA.Analytics.Sidebar.Report = {
                     if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
                         let options = JSON.parse(data['link']);
                         for (let option in options) {
-                            document.getElementById(option) ? document.getElementById(option).value = options[option] : null;
+                            document.getElementById(option) ? document.getElementById(option).value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]) : null;
                         }
                     } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_GIT)) { // Old format before 3.1.0
                         document.getElementById('user').value = data['link'].split('/')[0];
@@ -224,6 +224,18 @@ OCA.Analytics.Sidebar.Report = {
                 }
             }
         });
+    },
+
+    decodeEscapedHtml: function (text) {
+        let map =
+            {
+                '&amp;': '&',
+                '&lt;': '<',
+                '&gt;': '>',
+                '&quot;': '"',
+                '&#039;': "'"
+            };
+        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
     },
 
     indicateMetadataChanged: function () {

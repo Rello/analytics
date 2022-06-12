@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.0 - 2022-04-xx
+## 4.3.0 - 2022-06-xx
 ### Added
 - new application start page #276
 - persist legend selections (hidden/visible) #120
@@ -11,6 +11,7 @@
 ### Fixed
 - issue when datasets exist without reports #273
 - unhandled error in data load #274
+- issue in data load: URL parsing replace &amp; #278
 
 ## 4.2.1 - 2022-03-27
 ### Fixed
