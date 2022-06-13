@@ -470,16 +470,18 @@ OCA.Analytics.Filter = {
     },
 
     // function to check non standard legend selections during save
-    processLegendSelections: function (dataOptions) {
-        let legendItems = OCA.Analytics.chartObject.legend.legendItems;
-        for (let i = 0; i < legendItems.length; i++) {
-            if (!dataOptions.hasOwnProperty(i)) dataOptions[i] = {};    // create dummy for every index as a later index might get a setting
-            if (i < 4 && legendItems[i]['hidden'] === true) {           // per default, the first 4 are  visible
-                dataOptions[i]['hidden'] = true;
-            } else if (i > 3 && legendItems[i]['hidden'] === false) {   // per default, all others are hidden
-                dataOptions[i]['hidden'] = false;
-            } else if (i in dataOptions) {
-                delete dataOptions[i]['hidden'];
+    processChartLegendSelections: function (dataOptions) {
+        if (OCA.Analytics.chartObject !== null) {
+            let legendItems = OCA.Analytics.chartObject.legend.legendItems;
+            for (let i = 0; i < legendItems.length; i++) {
+                if (!dataOptions.hasOwnProperty(i)) dataOptions[i] = {};    // create dummy for every index as a later index might get a setting
+                if (i < 4 && legendItems[i]['hidden'] === true) {           // per default, the first 4 are  visible
+                    dataOptions[i]['hidden'] = true;
+                } else if (i > 3 && legendItems[i]['hidden'] === false) {   // per default, all others are hidden
+                    dataOptions[i]['hidden'] = false;
+                } else if (i in dataOptions) {
+                    delete dataOptions[i]['hidden'];
+                }
             }
         }
         return dataOptions;
@@ -555,7 +557,7 @@ OCA.Analytics.Filter.Backend = {
         }
 
         // function to check non standard legend selections during save
-        dataOptions = OCA.Analytics.Filter.processLegendSelections(dataOptions);
+        dataOptions = OCA.Analytics.Filter.processChartLegendSelections(dataOptions);
         // cleanup the array to keep it as small as necessary
         dataOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(dataOptions);
 
