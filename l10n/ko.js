@@ -1,7 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
-    "Dataset" : "Dataset",
+    "Dataset" : "데이터 셋",
     "Data" : "데이터",
     "Data load" : "데이터 불러오기",
     "Data maintenance is not possible for this type of report" : "이 유형의 보고서에는 데이터 유지가 가능하지 않습니다.",
