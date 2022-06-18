@@ -12,6 +12,7 @@ OC.L10N.register(
     "Delete data load" : "Apagar carregamento de dados",
     "Select file" : "Selecione o ficheiro",
     "Data source simulation" : "Simulação da fonte de dados",
+    "Load started" : "Carregamento iniciado",
     "Delete" : "Apagar",
     "Search" : "Pesquisa sobre",
     "first" : "primeiro",
