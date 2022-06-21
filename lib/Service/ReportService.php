@@ -86,6 +86,18 @@ class ReportService
     public function index(): array
     {
         $ownReports = $this->ReportMapper->index();
+
+        // get shared reports and remove duplicates
+        $sharedReports = $this->ShareService->getSharedReports();
+        foreach ($sharedReports as $sharedReport) {
+            $this->logger->info('reportservice: '. $sharedReport['name']);
+
+            if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
+                $sharedReport['type'] = '99';
+                $sharedReport['parrent'] = '0';
+                array_push($ownReports, $sharedReport);
+            }
+        }
         if (count($ownReports) === 0) return $ownReports;
 
         // get data load indicators for icons shown in the advanced screen
@@ -100,16 +112,6 @@ class ReportService
                 }
                 $ownReports[$key]['dataloads'] = $dataload['dataloads'];
                 $ownReports[$key]['schedules'] = $dataload['schedules'];
-            }
-        }
-
-        // get shared reports and remove duplicates
-        $sharedReports = $this->ShareService->getSharedReports();
-        foreach ($sharedReports as $sharedReport) {
-            if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
-                $sharedReport['type'] = '99';
-                $sharedReport['parrent'] = '0';
-                array_push($ownReports, $sharedReport);
             }
         }
 
