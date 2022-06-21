@@ -15,7 +15,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Storage: real-time or database
 - Advanced data loads with scheduling
 - Visualization: combined charts, zoom, tables, filters
-- Analysis functions: trend
+- Analysis functions: trend, dis-/aggregation
 - Thresholds for alerts and color coding
 - Integration: Files, Activity, Notifications, Flow, Dashboard, Search
 - Sharing: user, groups, link
