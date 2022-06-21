@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.1 - 2022-06-21
+### Fixed
+- Icons for share users too big #282
+
 ## 4.3.0 - 2022-06-13
 ### Added
 - new application start page #276
