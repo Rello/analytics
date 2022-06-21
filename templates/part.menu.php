@@ -74,12 +74,12 @@
             </li>
             <li>
                 <button id="aggregateIcon">
-                    <span><?php p($l->t('Aggregate values (beta)')); ?></span>
+                    <span><?php p($l->t('Aggregate values')); ?></span>
                 </button>
             </li>
             <li>
                 <button id="disAggregateIcon">
-                    <span><?php p($l->t('Disaggregate values (beta)')); ?></span>
+                    <span><?php p($l->t('Disaggregate values')); ?></span>
                 </button>
             </li>
             <li>
