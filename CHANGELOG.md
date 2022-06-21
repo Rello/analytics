@@ -4,6 +4,7 @@
 ### Fixed
 - Icons for share users too big #282
 - Shared report not shown #283
+- wrong image url #284
 
 ## 4.3.0 - 2022-06-13
 ### Added
