@@ -64,7 +64,7 @@
             <li id="backIcon">
                 <button>
                     <span class="icon-view-previous"></span>
-                    <span><?php p($l->t('back')); ?></span>
+                    <span><?php p($l->t('Back')); ?></span>
                 </button>
             </li>
             <li>
@@ -92,7 +92,7 @@
             <li id="backIcon2">
                 <button>
                     <span class="icon-view-previous"></span>
-                    <span><?php p($l->t('back')); ?></span>
+                    <span><?php p($l->t('Back')); ?></span>
                 </button>
             </li>
             <li>
