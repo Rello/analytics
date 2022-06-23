@@ -28,7 +28,6 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Parool on vale. Proovi uuesti.",
     "Password" : "Parool",
     "Favorites" : "Lemmikud",
-    "back" : "tagasi",
     "Display" : "Vaade",
     "Open documentation" : "Ava dokumentatsioon",
     "Update" : "Uuenda",

@@ -185,7 +185,6 @@ OC.L10N.register(
     "Auto refresh" : "Автоматично опресняване",
     "Download chart" : "Изтегляне на диаграма",
     "Save as new report" : "Запиши като нов доклад",
-    "back" : "назад",
     "Linear Regression" : "Линейна регресия",
     "1 min" : "1 мин",
     "10 min" : "10 мин",

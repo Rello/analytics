@@ -166,7 +166,6 @@ OC.L10N.register(
     "Auto refresh" : "自动刷新",
     "Download chart" : "下载图表",
     "Save as new report" : "另存为新报告",
-    "back" : "返回",
     "Linear Regression" : "线性回归",
     "1 min" : "1 分钟",
     "10 min" : "10 分钟",

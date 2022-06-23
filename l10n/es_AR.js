@@ -32,7 +32,6 @@ OC.L10N.register(
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
     "Options" : "Opciones",
-    "back" : "atrás",
     "Display" : "Mostrar",
     "Open documentation" : "Abrir documentación",
     "Update" : "Actualizar",

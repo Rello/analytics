@@ -50,7 +50,6 @@ OC.L10N.register(
     "Password" : "Contrasenya",
     "Favorites" : "Preferits",
     "Options" : "Opcions",
-    "back" : "enrere",
     "Display" : "Pantalla",
     "Open documentation" : "Obre la documentació",
     "Update" : "Actualitzar",

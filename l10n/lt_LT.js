@@ -42,7 +42,6 @@ OC.L10N.register(
     "Favorites" : "Mėgstami",
     "More Information …" : "Daugiau informacijos…",
     "Options" : "Parinktys",
-    "back" : "atgal",
     "Display" : "Ekranas",
     "Open documentation" : "Atverti dokumentaciją",
     "Update" : "Atnaujinti",

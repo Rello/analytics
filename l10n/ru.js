@@ -179,7 +179,6 @@ OC.L10N.register(
     "Auto refresh" : "Автоматическое обновление",
     "Download chart" : "Диаграмма загрузки",
     "Save as new report" : "Сохранить в виде нового отчёта",
-    "back" : "назад",
     "Linear Regression" : "Линейная регрессия",
     "1 min" : "1 мин",
     "10 min" : "10 мин",

@@ -189,7 +189,6 @@ OC.L10N.register(
     "Auto refresh" : "Actualiser automatiquement",
     "Download chart" : "Télécharger le graphique",
     "Save as new report" : "Enregistrer en tant que nouveau rapport",
-    "back" : "retour",
     "Linear Regression" : "Régression linéaire",
     "1 min" : "1 min.",
     "10 min" : "10 min.",

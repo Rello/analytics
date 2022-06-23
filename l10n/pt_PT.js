@@ -48,7 +48,6 @@ OC.L10N.register(
     "Password" : "Palavra-passe",
     "Favorites" : "Favoritos",
     "Options" : "Opções",
-    "back" : "anterior",
     "Display" : "Mostrar",
     "Chart" : "Gráfico",
     "Open documentation" : "Abrir documentação",

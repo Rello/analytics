@@ -151,7 +151,6 @@ OC.L10N.register(
     "Auto refresh" : "Samodejno osveži",
     "Download chart" : "Prejemi diagram",
     "Save as new report" : "Shrani kot novo poročilo",
-    "back" : "nazaj",
     "Linear Regression" : "Linearna regresija",
     "1 min" : "1 min",
     "10 min" : "10 min",

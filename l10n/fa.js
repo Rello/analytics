@@ -36,7 +36,6 @@ OC.L10N.register(
     "Password" : "کلمه عبور",
     "Favorites" : "مورد علاقه‌ها",
     "Options" : "گزینه‌ها",
-    "back" : "بازگشت",
     "Display" : "نمایش",
     "Open documentation" : "مستندات باز",
     "Update" : "یه‌روزرسانی",

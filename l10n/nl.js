@@ -171,7 +171,6 @@ OC.L10N.register(
     "Auto refresh" : "Auto verversing",
     "Download chart" : "Download grafiek",
     "Save as new report" : "Opslaan als nieuw rapport",
-    "back" : "terug",
     "Linear Regression" : "Lineaire Regressie",
     "1 min" : "1 min",
     "10 min" : "10 min",

@@ -85,7 +85,6 @@ OC.L10N.register(
     "No data found" : "ダーターが見つかりません",
     "Favorites" : "お気に入り",
     "Options" : "オプション",
-    "back" : "戻る",
     "1 min" : "1分",
     "30 min" : "30分",
     "Display" : "表示",

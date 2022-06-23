@@ -36,7 +36,6 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Parola este incorectă. Încercaţi din nou.",
     "Password" : "Parolă",
     "Favorites" : "Favorite",
-    "back" : "înapoi",
     "Display" : "Display",
     "Open documentation" : "Deschide documentația",
     "Update" : "Actualizare",

@@ -38,7 +38,6 @@ OC.L10N.register(
     "Password" : "كلمة السر",
     "Favorites" : "المفضلات",
     "Options" : "الخيارات",
-    "back" : "عودة",
     "Display" : "عرض",
     "Open documentation" : "فتح الدليل",
     "Update" : "تحديث",
