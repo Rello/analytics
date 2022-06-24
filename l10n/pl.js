@@ -192,6 +192,7 @@ OC.L10N.register(
     "Auto refresh" : "Automatyczne odświeżanie",
     "Download chart" : "Pobierz wykres",
     "Save as new report" : "Zapisz jako nowy raport",
+    "Back" : "Poprzednia",
     "Aggregate values" : "Zagregowane wartości",
     "Disaggregate values" : "Dezagregowane wartości",
     "Linear Regression" : "Regresja liniowa",

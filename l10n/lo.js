@@ -22,6 +22,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "ລະຫັດບໍ່ຖືກຕ້ອງ. ລອງໃໝ່ອີກຄັ້ງ.",
     "Password" : "ລະຫັດຜ່ານ",
     "Favorites" : "ລາຍການທີ່ມັກ",
+    "Back" : "ຫຼັງ",
     "Settings" : "ການຕັ້ງຄ່າ",
     "Name" : "ຊື່",
     "No" : "ບໍ່",

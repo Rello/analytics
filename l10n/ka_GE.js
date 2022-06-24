@@ -28,6 +28,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "პაროლი არასწორია. სცადეთ ახლიდან.",
     "Password" : "პაროლი",
     "Favorites" : "რჩეულები",
+    "Back" : "უკან",
     "Display" : "დისპლეი",
     "Open documentation" : "ღია დოკუმენტაცია",
     "Update" : "განახლება",

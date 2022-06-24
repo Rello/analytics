@@ -19,6 +19,7 @@ OC.L10N.register(
     "copy" : "පිටපත්",
     "Password" : "මුර පදය",
     "Favorites" : "ප්‍රියතම",
+    "Back" : "ආපසු",
     "Update" : "යාවත්කාල",
     "Settings" : "සැකසුම්",
     "Name" : "නම",

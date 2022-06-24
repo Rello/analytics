@@ -43,6 +43,7 @@ OC.L10N.register(
     "Password" : "Zaporka",
     "Favorites" : "Favoriti",
     "Options" : "Mogućnosti",
+    "Back" : "Natrag",
     "Display" : "Prikaz",
     "Chart" : "Grafikon",
     "Open documentation" : "Otvori dokumentaciju",

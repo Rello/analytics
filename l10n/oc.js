@@ -56,6 +56,7 @@ OC.L10N.register(
     "Password" : "Senhal",
     "Favorites" : "Favorits",
     "Options" : "Opcions",
+    "Back" : "Retorn",
     "1 min" : "1 min",
     "10 min" : "10 min",
     "30 min" : "30 min",

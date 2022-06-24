@@ -114,6 +114,7 @@ OC.L10N.register(
     "Please select a dataset" : "Valitse datajoukko",
     "Options" : "Valinnat",
     "Save as new report" : "Tallenna uudeksi raportiksi",
+    "Back" : "Takaisin",
     "1 min" : "1 min",
     "10 min" : "10 min",
     "30 min" : "30 min",

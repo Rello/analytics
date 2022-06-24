@@ -126,6 +126,7 @@ OC.L10N.register(
     "Password" : "Adgangskode",
     "Favorites" : "Favoritter",
     "Options" : "Valgmuligheder",
+    "Back" : "Tilbage",
     "Display" : "Vis",
     "Open documentation" : "Åbn dokumentation",
     "Update" : "Opdater",

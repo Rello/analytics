@@ -16,6 +16,7 @@ OC.L10N.register(
     "File" : "File",
     "Password" : "Kata laluan",
     "Favorites" : "Favorites",
+    "Back" : "Kembali",
     "Update" : "Kemaskini",
     "Export" : "Eksport",
     "Settings" : "Tetapan",

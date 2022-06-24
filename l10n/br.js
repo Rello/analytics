@@ -31,6 +31,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Direizh eo ger-tremen. Klaskit en-dro.",
     "Password" : "Ger-tremen",
     "Favorites" : "Pennrolloù",
+    "Back" : "Distro",
     "Open documentation" : "Digeriñ an dielvadur",
     "Update" : "Hizivaat",
     "Settings" : "Arventennoù",

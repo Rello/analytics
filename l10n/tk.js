@@ -14,6 +14,7 @@ OC.L10N.register(
     "File" : "Faýl",
     "Password" : "Açarsöz",
     "Favorites" : "Halanýanlar",
+    "Back" : "Yzyna",
     "Settings" : "Sazlamalar",
     "Name" : "Ady",
     "No" : "Ýok",

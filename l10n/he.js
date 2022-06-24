@@ -40,6 +40,7 @@ OC.L10N.register(
     "Password" : "ססמה",
     "Favorites" : "מועדפים",
     "Options" : "אפשרויות",
+    "Back" : "חזרה",
     "Display" : "תצוגה",
     "Chart" : "תרשים",
     "Open documentation" : "פתיחת תיעוד",

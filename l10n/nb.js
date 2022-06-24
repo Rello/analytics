@@ -154,6 +154,7 @@ OC.L10N.register(
     "Password" : "PassordP",
     "Favorites" : "Favoritter",
     "Options" : "Valg",
+    "Back" : "Tilbake",
     "Display" : "Vis",
     "Open documentation" : "Åpne dokumentasjon",
     "Update" : "Oppdater",

@@ -31,6 +31,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Fjalëkalim i gabuar. Provojeni sërish.",
     "Password" : "Fjalëkalim",
     "Favorites" : "Favorites",
+    "Back" : "Prapa",
     "Display" : "Ekran",
     "Open documentation" : "Dokumentacion i hapur",
     "Update" : "Përditëso",

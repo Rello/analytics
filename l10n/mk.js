@@ -40,6 +40,7 @@ OC.L10N.register(
     "Password" : "Лозинка",
     "Favorites" : "Омилени",
     "Options" : "Опции",
+    "Back" : "Назад",
     "Display" : "Прикажи",
     "Open documentation" : "Отвори ја документацијата",
     "Update" : "Ажурирај",

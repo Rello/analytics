@@ -27,6 +27,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Die wagwoord is verkeerd. Probeer weer.",
     "Password" : "Wagwoord",
     "Favorites" : "Gunstelinge",
+    "Back" : "Terug",
     "Open documentation" : "Open dokumentasie",
     "Update" : "Werk by",
     "Export" : "Voer uit",

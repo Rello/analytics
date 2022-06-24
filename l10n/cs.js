@@ -192,6 +192,7 @@ OC.L10N.register(
     "Auto refresh" : "Automaticky znovu načítat",
     "Download chart" : "Stáhnout si graf",
     "Save as new report" : "Uložit jako nový výkaz",
+    "Back" : "Zpět",
     "Aggregate values" : "Agregovat hodnoty",
     "Disaggregate values" : "Zrušit agregaci hodnot",
     "Linear Regression" : "Lineární regrese",

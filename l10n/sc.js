@@ -44,6 +44,7 @@ OC.L10N.register(
     "Password" : "Crae",
     "Favorites" : "Preferidos",
     "Options" : "Optziones",
+    "Back" : "In segus",
     "Display" : "Ischermu",
     "Chart" : "Gràficu",
     "Open documentation" : "Aberi sa documentatzione",

@@ -155,6 +155,7 @@ OC.L10N.register(
     "Auto refresh" : "Automatisk uppdatering",
     "Download chart" : "Ladda ner diagram",
     "Save as new report" : "Spara som en ny rapport",
+    "Back" : "Tillbaka",
     "Linear Regression" : "Linjär regression",
     "1 min" : "1 min",
     "10 min" : "10 min",

@@ -38,6 +38,7 @@ OC.L10N.register(
     "Password" : "Lykilorð",
     "Favorites" : "Eftirlæti",
     "Options" : "Valkostir",
+    "Back" : "Til baka",
     "Display" : "Birting",
     "Open documentation" : "Opna hjálparskjöl",
     "Update" : "Uppfæra",

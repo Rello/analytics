@@ -22,6 +22,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Le contrasigno es incorrecte. Tenta de novo.",
     "Password" : "Contrasigno",
     "Favorites" : "Favoritos",
+    "Back" : "Retro",
     "Open documentation" : "Aperir documentation",
     "Update" : "Actualisation",
     "Export" : "Exportar",

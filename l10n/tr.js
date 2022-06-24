@@ -192,6 +192,7 @@ OC.L10N.register(
     "Auto refresh" : "Otomatik yenileme",
     "Download chart" : "Çizelgeyi indir",
     "Save as new report" : "Yeni rapor olarak kaydet",
+    "Back" : "Önceki",
     "Aggregate values" : "Değer birleştirme",
     "Disaggregate values" : "Değer ayrıştırma",
     "Linear Regression" : "Doğrusal regresyon",

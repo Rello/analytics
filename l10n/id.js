@@ -36,6 +36,7 @@ OC.L10N.register(
     "Password" : "Kata sandi",
     "Favorites" : "Disukai",
     "Options" : "Pilihan",
+    "Back" : "Kembali",
     "Display" : "Tampilkan",
     "Open documentation" : "Buka dokumentasi",
     "Update" : "Perbarui",

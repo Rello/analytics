@@ -191,6 +191,7 @@ OC.L10N.register(
     "Auto refresh" : "Automatikus frissítés",
     "Download chart" : "Grafikon letöltése",
     "Save as new report" : "Mentés új jelentésként",
+    "Back" : "Vissza",
     "Linear Regression" : "Lineáris regresszió",
     "1 min" : "1 perc",
     "10 min" : "10 perc",

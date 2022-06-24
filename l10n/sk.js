@@ -191,6 +191,7 @@ OC.L10N.register(
     "Auto refresh" : "Automatické obnovovanie",
     "Download chart" : "Stiahnuť graf",
     "Save as new report" : "Uložiť ako novú zostavu",
+    "Back" : "Späť",
     "Linear Regression" : "Lineárna Regresia",
     "1 min" : "1 minúta",
     "10 min" : "10 minút",

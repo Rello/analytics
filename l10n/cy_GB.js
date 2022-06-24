@@ -23,6 +23,7 @@ OC.L10N.register(
     "Version" : "Fersiwn",
     "Password" : "Cyfrinair",
     "Favorites" : "Ffefrynnau",
+    "Back" : "Nôl",
     "Update" : "Diweddaru",
     "Export" : "Allforio",
     "Settings" : "Gosodiadau",

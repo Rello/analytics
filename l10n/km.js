@@ -83,6 +83,7 @@ OC.L10N.register(
     "Javascript issue" : "បញ្ហា Javascript ",
     "More Information …" : "មើលព័ត៌មានបន្តែម …",
     "Options" : "ជម្រើស",
+    "Back" : "ត្រឡប់ក្រោយ",
     "1 min" : "1 នាទី",
     "10 min" : "10 នាទី",
     "30 min" : "30 នាទី",

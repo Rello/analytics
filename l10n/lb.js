@@ -19,6 +19,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Den Passwuert ass incorrect. Probeier ed nach eng keier.",
     "Password" : "Passwuert",
     "Favorites" : "Favoriten",
+    "Back" : "Zeréck",
     "Open documentation" : "Dokumentatioun opmaachen",
     "Update" : "Update",
     "Export" : "Exportéieren",
