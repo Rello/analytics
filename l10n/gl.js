@@ -39,7 +39,7 @@ OC.L10N.register(
     "Password" : "Contrasinal",
     "Favorites" : "Favoritos",
     "Options" : "Opcións",
-    "back" : "atrás",
+    "Back" : "Atrás",
     "Display" : "Presentar",
     "Open documentation" : "Abrir a documentación",
     "Update" : "Actualizar",

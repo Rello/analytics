@@ -32,7 +32,7 @@ OC.L10N.register(
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
     "Options" : "Opciones",
-    "back" : "atrás",
+    "Back" : "Atrás",
     "Display" : "Mostrar",
     "Open documentation" : "Abrir documentación",
     "Update" : "Actualizar",

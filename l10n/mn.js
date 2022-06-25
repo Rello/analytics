@@ -25,6 +25,7 @@ OC.L10N.register(
     "copy" : "Хуулах ",
     "Password" : "Нууц үг",
     "Favorites" : "Онцолсон",
+    "Back" : "буцах",
     "Open documentation" : "бичиг баримт нээх",
     "Update" : "Шинэчлэх",
     "Export" : "Экспорт",

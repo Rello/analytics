@@ -29,6 +29,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "La pasvorto malĝustas. Provu denove.",
     "Password" : "Pasvorto",
     "Favorites" : "Pliŝataĵoj",
+    "Back" : "Antaŭen",
     "Display" : "Montrilo",
     "Open documentation" : "Malfermi la dokumentaron",
     "Update" : "Ĝisdatigi",

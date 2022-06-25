@@ -26,6 +26,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "La contraseña ye incorreuta. Inténtalo otra vegada.",
     "Password" : "Password",
     "Favorites" : "Favorites",
+    "Back" : "Atrás",
     "Display" : "Amosar",
     "Open documentation" : "Abrir documentación",
     "Update" : "Anovar",

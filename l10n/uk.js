@@ -43,7 +43,7 @@ OC.L10N.register(
     "Password" : "Пароль",
     "Favorites" : "Улюблене",
     "Options" : "Параметри",
-    "back" : "повернутися",
+    "Back" : "Назад",
     "Display" : "Показати",
     "Open documentation" : "Відкрити документацію",
     "Update" : "Оновлення",

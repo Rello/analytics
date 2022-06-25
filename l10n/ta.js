@@ -18,6 +18,7 @@ OC.L10N.register(
     "File" : "File",
     "Password" : "கடவுச்சொல்",
     "Favorites" : "விருப்பங்கள்",
+    "Back" : "பின்னுக்கு",
     "Update" : "இற்றைப்படுத்தல்",
     "Export" : "ஏற்றுமதி",
     "Settings" : "அமைப்புகள்",

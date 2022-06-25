@@ -50,6 +50,7 @@ OC.L10N.register(
     "Password" : "密碼",
     "Favorites" : "我的最愛",
     "Options" : "選項",
+    "Back" : "返回",
     "Display" : "顯示",
     "Table" : "表格",
     "Open documentation" : "開啟文件",

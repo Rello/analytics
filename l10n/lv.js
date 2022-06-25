@@ -28,6 +28,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Nepareiza parole. Mēģiniet vēlreiz.",
     "Password" : "Parole",
     "Favorites" : "Favorīti",
+    "Back" : "Atpakaļ",
     "Open documentation" : "Atvērt dokumentāciju",
     "Update" : "Atjaunināt",
     "Export" : "Eksportēt",

@@ -32,7 +32,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "The password is wrong. Try again.",
     "Password" : "Password",
     "Favorites" : "Favourites",
-    "back" : "back",
+    "Back" : "Back",
     "Display" : "Display",
     "Open documentation" : "Open documentation",
     "Update" : "Update",

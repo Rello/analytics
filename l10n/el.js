@@ -62,7 +62,7 @@ OC.L10N.register(
     "Please select a dataset" : "Παρακαλούμε ελέγξτε το σετ δεδομένων",
     "Options" : "Επιλογές",
     "Auto refresh" : "Αυτόματη ανανέωση",
-    "back" : "πίσω",
+    "Back" : "Πίσω",
     "1 min" : "1 λεπτ",
     "Saved Data" : "Αποθηκευμένα δεδομένα",
     "Column" : "Στήλη",

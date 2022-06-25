@@ -20,6 +20,7 @@ OC.L10N.register(
     "copy" : "kopiraj",
     "Password" : "Lozinka",
     "Favorites" : "Omiljene",
+    "Back" : "Nazad",
     "Display" : "Prikaz",
     "Update" : "Ažuriraj",
     "Settings" : "Поставке",

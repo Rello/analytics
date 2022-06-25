@@ -42,6 +42,7 @@ OC.L10N.register(
     "Password" : "Passord",
     "Favorites" : "Favorittar",
     "More Information …" : "Meir informasjon…",
+    "Back" : "Tilbake",
     "Update" : "Oppdater",
     "Export" : "Eksporter",
     "Settings" : "Innstillingar",

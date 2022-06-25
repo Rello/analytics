@@ -16,6 +16,7 @@ OC.L10N.register(
     "Announcements" : "Ilɣa",
     "Password" : "Awal uffir",
     "Favorites" : "Imenyafen",
+    "Back" : "Retour",
     "Settings" : "Iɣewwaṛen",
     "Name" : "Nom",
     "Title" : "Azwel",

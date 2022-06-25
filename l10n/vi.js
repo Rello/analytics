@@ -54,6 +54,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Mật khẩu sai. Hãy thử lại.",
     "Password" : "Mật khẩu",
     "Favorites" : "Ưa thích",
+    "Back" : "Quay lại",
     "Display" : "Hiển th",
     "Open documentation" : "Mở tài liệu",
     "Update" : "Cập nhật",
