@@ -24,6 +24,7 @@ OC.L10N.register(
     "Notification" : "Notification",
     "Date" : "Date",
     "View changelog" : "View changelog",
+    "Local file" : "Local file",
     "File" : "File",
     "Version" : "Version",
     "Authentication" : "Authentication",
