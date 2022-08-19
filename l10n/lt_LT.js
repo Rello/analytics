@@ -44,6 +44,7 @@ OC.L10N.register(
     "Options" : "Parinktys",
     "Back" : "Atgal",
     "Display" : "Ekranas",
+    "Table" : "Lentelė",
     "Open documentation" : "Atverti dokumentaciją",
     "Update" : "Atnaujinti",
     "Export" : "Eksportuoti",

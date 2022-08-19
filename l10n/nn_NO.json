@@ -36,11 +36,13 @@
     "Year" : "År",
     "File" : "Fil",
     "Version" : "Utgåve",
+    "Authentication" : "Godkjenning",
     "The password is wrong. Try again." : "Passordet er gale. Prøv igjen.",
     "Password" : "Passord",
     "Favorites" : "Favorittar",
     "More Information …" : "Meir informasjon…",
     "Back" : "Tilbake",
+    "Open documentation" : "Opne dokumentasjon",
     "Update" : "Oppdater",
     "Export" : "Eksporter",
     "Settings" : "Innstillingar",
@@ -54,6 +56,7 @@
     "Hourly" : "Kvar time",
     "Unshare" : "Fjern deling",
     "Password protection" : "Password protection",
+    "Copy link" : "Kopier lenkje",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

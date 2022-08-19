@@ -29,6 +29,7 @@ OC.L10N.register(
     "Year" : "Ár",
     "New in" : "Nýtt í",
     "View changelog" : "Skoða breytingaannál",
+    "Local file" : "Skrá á tölvunni",
     "File" : "Skrá",
     "Version" : "Útgáfa",
     "Authentication" : "Auðkenning",
