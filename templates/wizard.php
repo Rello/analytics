@@ -184,7 +184,7 @@
                     <div style="display: table-cell; width: 50%;">
                         <?php p($l->t('Report title')); ?>
                         <br>
-                        <input style="display: table-cell; width: 400px;" id="wizardNewName">
+                        <input style="display: table-cell; width: 400px;" id="wizardNewName" value="<?php p($l->t('New report')); ?>">
                         <br><br>
                         <?php p($l->t('Subheader')); ?>
                         <br>
