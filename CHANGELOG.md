@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.0 - 2022-08-xx
+### Fixed
+- Usernames shown as IDs instead of readable names #286
+
 ## 4.3.1 - 2022-06-25
 ### Fixed
 - Icons for share users too big #282

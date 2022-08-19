@@ -100,7 +100,7 @@ class ShareService
     {
         $shares = $this->ShareMapper->getShares($reportId);
         foreach ($shares as &$share) {
-            if ($share['type'] === 0) {
+            if ((int)$share['type'] === 0) {
                 $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
             }
             $share['pass'] = $share['pass'] !== null;
