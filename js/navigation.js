@@ -70,7 +70,6 @@ OCA.Analytics.Navigation = {
         li.innerHTML = '<div class="infoBox" style="margin-top: 50px;">' +
             '<img src="' + OC.imagePath('analytics', 'infoReport') + '" alt="info">\n' +
             '<div class="infoBoxHeader">' + t('analytics', 'No reports yet') + '</div>\n';
-            //'<div class="infoBoxText">' + t('analytics', 'To get started, create your first report') + '</div>';
         return li;
     },
 
