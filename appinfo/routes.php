@@ -27,6 +27,7 @@ return [
         ['name' => 'report#createFromDataFile', 'url' => '/report/file', 'verb' => 'POST'],
         ['name' => 'report#updateOptions', 'url' => '/report/{reportId}/options', 'verb' => 'POST'],
         ['name' => 'report#updateRefresh', 'url' => '/report/{reportId}/refresh', 'verb' => 'POST'],
+        ['name' => 'report#updateGroup', 'url' => '/report/{reportId}/group', 'verb' => 'POST'],
         ['name' => 'report#getOwnFavoriteReports', 'url' => '/favorites', 'verb' => 'GET'],
         ['name' => 'report#setFavorite', 'url' => '/favorite/{reportId}', 'verb' => 'POST'],
         ['name' => 'report#export', 'url' => '/report/export/{reportId}', 'verb' => 'GET'],

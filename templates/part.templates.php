@@ -392,6 +392,7 @@
             <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
             <li><a href="#" id="navigationMenuAdvanced"><span
                             class="icon-category-customization"></span><span></span></a></li>
+            <li><a href="#" id="navigationMenuNewGroup"><span class="icon-add"></span><span></span></a></li>
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>

@@ -28,33 +28,7 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Sidebar.hideSidebar();
         document.getElementById('navigationDatasets').innerHTML = '';
 
-        let li = OCA.Analytics.Navigation.buildOverviewButton();
-        document.getElementById('navigationDatasets').appendChild(li);
-
-        let li2 = document.createElement('li');
-        li2.classList.add('pinned', 'first-pinned');
-        let a2 = document.createElement('a');
-        a2.classList.add('icon-add', 'svg');
-        a2.id = 'newReportButton';
-        a2.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-        if (OCA.Analytics.isAdvanced) {
-            a2.innerText = t('analytics', 'New dataset');
-        } else {
-            a2.innerText = t('analytics', 'New report');
-        }
-        li2.appendChild(a2);
-        document.getElementById('navigationDatasets').appendChild(li2);
-
-        if (!OCA.Analytics.isAdvanced) {
-            let li3 = document.createElement('li');
-            li3.classList.add('pinned', 'second-pinned');
-            let a3 = document.createElement('a');
-            a3.classList.add('icon-category-customization', 'svg');
-            a3.innerText = t('analytics', 'Dataset maintenance');
-            a3.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-            li3.appendChild(a3);
-            document.getElementById('navigationDatasets').appendChild(li3);
-        }
+        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
 
         if (data.length === 0) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
@@ -63,6 +37,56 @@ OCA.Analytics.Navigation = {
                 OCA.Analytics.Navigation.buildNavigationRow(navigation);
             }
         }
+
+        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
+
+        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
+        if (!OCA.Analytics.isAdvanced) {
+            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
+        }
+
+    },
+
+    buildNewButton: function () {
+        let li = document.createElement('li');
+        li.classList.add('pinned', 'first-pinned');
+        let a = document.createElement('a');
+        a.classList.add('icon-add', 'svg');
+        a.id = 'newReportButton';
+        a.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
+        if (OCA.Analytics.isAdvanced) {
+            a.innerText = t('analytics', 'New dataset');
+        } else {
+            a.innerText = t('analytics', 'New report');
+        }
+        li.appendChild(a);
+        return li;
+    },
+
+    buildDatasetMaintenanceButton: function () {
+        let li = document.createElement('li');
+        li.classList.add('pinned', 'second-pinned');
+        let a = document.createElement('a');
+        a.classList.add('icon-category-customization', 'svg');
+        a.innerText = t('analytics', 'Dataset maintenance');
+        a.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
+        li.appendChild(a);
+        return li;
+    },
+
+    buildNewGroupPlaceholder: function () {
+        let li = document.createElement('li');
+        li.style.visibility = 'hidden';
+        li.id = 'NewGroupPlaceholder';
+        let a = document.createElement('a');
+        a.classList.add('icon-folder', 'svg');
+        a.innerText = t('analytics', 'New report group');
+        a.style.fontStyle = 'italic';
+        a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_newGroup_handler);
+        a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
+        a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
+        li.appendChild(a);
+        return li;
     },
 
     buildIntroRow: function () {
@@ -93,11 +117,22 @@ OCA.Analytics.Navigation = {
     buildNavigationRow: function (data) {
         let li = document.createElement('li');
         let typeIcon;
+        let typeINT = parseInt(data['type']);
 
         let a = document.createElement('a');
         a.setAttribute('href', '#/r/' + data['id']);
         a.style.position = 'relative';
-        let typeINT = parseInt(data['type']);
+
+        // make reports exept folders drag-able
+        a.draggable = false;
+        if (typeINT !== OCA.Analytics.TYPE_EMPTY_GROUP) {
+            a.draggable = true;
+            a.addEventListener("dragstart", OCA.Analytics.Navigation.Drag.dragstart_handler);
+            a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_onReport_handler);
+            a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_report_handler);
+            a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_report_handler);
+        }
+
         if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE || typeINT === OCA.Analytics.TYPE_EXCEL) {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
@@ -111,6 +146,9 @@ OCA.Analytics.Navigation = {
         } else if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
+            a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_handler);
+            a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
+            a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
         } else {
             typeIcon = 'icon-external';
         }
@@ -121,6 +159,7 @@ OCA.Analytics.Navigation = {
         a.dataset.id = data['id'];
         a.dataset.type = data['type'];
         a.dataset.name = data['name'];
+        a.dataset.parent = data['parent'];
         li.appendChild(a);
 
         let ulSublist = document.createElement('ul');
@@ -238,6 +277,12 @@ OCA.Analytics.Navigation = {
         edit.children[1].innerText = t('analytics', 'Basic settings');
         edit.dataset.testing = 'basic' + data.name;
 
+        let newGroup = navigationMenu.getElementById('navigationMenuNewGroup');
+        newGroup.addEventListener('click', OCA.Analytics.Navigation.handleNewGroupClicked);
+        newGroup.children[1].innerText = t('analytics', 'Add to new group');
+        newGroup.dataset.testing = 'newGroup' + data.name;
+        newGroup.dataset.id = data.id;
+
         let dataset = navigationMenu.getElementById('navigationMenuAdvanced');
         dataset.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
         dataset.children[1].innerText = t('analytics', 'Dataset maintenance');
@@ -265,11 +310,13 @@ OCA.Analytics.Navigation = {
             unshareReport.remove();
             favorite.remove();
             dataset.remove();
+            newGroup.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
         } else if (parseInt(data['type']) === OCA.Analytics.TYPE_SHARED) {
             deleteReport.remove();
             dataset.remove();
             edit.remove();
+            newGroup.remove();
             unshareReport.dataset.shareId = data.shareId;
             unshareReport.addEventListener('click', OCA.Analytics.Navigation.handleUnshareButton);
         } else if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
@@ -357,6 +404,15 @@ OCA.Analytics.Navigation = {
         evt.stopPropagation();
         OCA.Analytics.Sidebar.showSidebar(evt);
     },
+
+    handleNewGroupClicked: function (evt) {
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
+        evt.stopPropagation();
+        OCA.Analytics.Sidebar.Report.createGroup(evt.target.parentElement.dataset.id);
+    },
+
 
     handleAdvancedClicked: function (evt) {
         let datasetId = evt.target.parentNode.dataset.dataset;
@@ -446,7 +502,7 @@ OCA.Analytics.Navigation = {
                 let data = JSON.parse(xhr.response);
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.reports = data;
-                if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === datasetId)) !== -1) {
+                if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
                     OCA.Analytics.Sidebar.hideSidebar();
                     let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
                     if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
@@ -468,7 +524,77 @@ OCA.Analytics.Navigation = {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(params);
     },
+
 };
+/**
+ * @namespace OCA.Analytics.Navigation.Drag
+ */
+OCA.Analytics.Navigation.Drag = {
+    dragObject: null,
+
+    dragstart_handler: function (ev) {
+        ev.dataTransfer.setData("id", ev.target.dataset.id);
+        ev.effectAllowed = "copyMove";
+        OCA.Analytics.Navigation.Drag.dragObject = ev.target;
+        document.getElementById('NewGroupPlaceholder').style.visibility = 'initial';
+    },
+
+    dragend_handler: function (ev) {
+        ev.dataTransfer.clearData();
+    },
+
+    drop_handler: function (ev) {
+        ev.preventDefault();
+        OCA.Analytics.Navigation.Drag.addReportToGroup(this.dataset.id, ev.dataTransfer.getData("id"));
+        ev.currentTarget.style.background = "";
+    },
+
+    drop_onReport_handler: function (ev) {
+        ev.preventDefault();
+        OCA.Analytics.Navigation.Drag.addReportToGroup(this.dataset.parent, ev.dataTransfer.getData("id"));
+        ev.currentTarget.style.background = "";
+    },
+
+    drop_newGroup_handler: function (ev) {
+        ev.preventDefault();
+        OCA.Analytics.Sidebar.Report.createGroup(ev.dataTransfer.getData("id"));
+        ev.currentTarget.style.background = "";
+    },
+
+    dragover_handler: function (ev) {
+        ev.currentTarget.style.background = "#FCEFA1";
+        ev.dataTransfer.dropEffect = "move";
+        ev.preventDefault();
+    },
+
+    dragleave_handler: function (ev) {
+        ev.currentTarget.style.background = "";
+        ev.preventDefault();
+    },
+
+    dragover_report_handler: function (ev) {
+        ev.dataTransfer.dropEffect = "move";
+        ev.preventDefault();
+    },
+
+    dragleave_report_handler: function (ev) {
+        ev.preventDefault();
+    },
+
+    addReportToGroup: function (groupId, reportId) {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/report/') + reportId + '/group',
+            data: {
+                'groupId': groupId,
+            },
+            success: function () {
+                OCA.Analytics.Navigation.init(groupId);
+            }
+        });
+
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!OCA.Analytics.isAdvanced) {

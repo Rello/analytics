@@ -218,6 +218,24 @@ class ReportMapper
     }
 
     /**
+     * update report group assignment (from drag & drop)
+     * @param $id
+     * @param $groupId
+     * @return bool
+     * @throws \OCP\DB\Exception
+     */
+    public function updateGroup($id, $groupId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('parent', $sql->createNamedParameter($groupId))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->execute();
+        return true;
+    }
+
+    /**
      * read report options
      * @param $id
      * @return array

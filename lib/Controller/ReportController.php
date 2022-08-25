@@ -62,9 +62,9 @@ class ReportController extends Controller
      * @param $value
      * @return DataResponse
      */
-    public function create($name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value)
+    public function create($name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport = null)
     {
-        return new DataResponse($this->ReportService->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value));
+        return new DataResponse($this->ReportService->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport));
     }
 
     /**
@@ -172,6 +172,19 @@ class ReportController extends Controller
     public function updateRefresh(int $reportId, $refresh)
     {
         return new DataResponse($this->ReportService->updateRefresh($reportId, $refresh));
+    }
+
+    /**
+     * update report group assignment (from drag & drop)
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param $groupId
+     * @return DataResponse
+     */
+    public function updateGroup(int $reportId, $groupId)
+    {
+        return new DataResponse($this->ReportService->updateGroup($reportId, $groupId));
     }
 
     /**

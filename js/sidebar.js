@@ -433,7 +433,7 @@ OCA.Analytics.Sidebar.Report = {
         }
     },
 
-    createGroup: function () {
+    createGroup: function (addReport = null) {
         $.ajax({
             type: 'POST',
             url: OC.generateUrl('apps/analytics/report'),
@@ -442,9 +442,10 @@ OCA.Analytics.Sidebar.Report = {
                 'parent': 0,
                 'type': OCA.Analytics.TYPE_EMPTY_GROUP,
                 'dataset': 0,
+                'addReport': addReport,
             },
-            success: function () {
-                OCA.Analytics.Navigation.init();
+            success: function (data) {
+                OCA.Analytics.Navigation.init(data);
             }
         });
     },

@@ -1,6 +1,10 @@
 # Changelog
 
 ## 4.4.0 - 2022-08-xx
+
+### Added
+- Navigation drag & drop #292
+- 
 ### Fixed
 - Usernames shown as IDs instead of readable names #286
 - Faster report creation #293

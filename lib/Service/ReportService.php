@@ -176,12 +176,12 @@ class ReportService
         }
     }
 
-        /**
+    /**
      * create new blank report
      *
      * @return int
      */
-    public function create($name, $subheader, $parent, $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value): int
+    public function create($name, $subheader, $parent, $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport = null): int
     {
         $array = json_decode($link, true);
         foreach ($array as $key => $value) {
@@ -197,6 +197,10 @@ class ReportService
         }
         $reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
         $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
+
+        if ($addReport !== null) {
+            $this->updateGroup($addReport, $reportId);
+        }
         return $reportId;
     }
 
@@ -490,6 +494,19 @@ class ReportService
     public function updateRefresh(int $reportId, $refresh)
     {
         return $this->ReportMapper->updateRefresh($reportId, $refresh);
+    }
+
+    /**
+     * update report group assignment (from drag & drop)
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param $groupId
+     * @return bool
+     */
+    public function updateGroup(int $reportId, $groupId)
+    {
+        return $this->ReportMapper->updateGroup($reportId, $groupId);
     }
 
     /**
