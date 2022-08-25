@@ -29,12 +29,12 @@ OC.L10N.register(
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
     "Back" : "Atrás",
+    "Settings" : "Configuraciones ",
+    "Name" : "Nombre",
     "Display" : "Mostrar",
     "Open documentation" : "Abrir la documentación",
     "Update" : "Actualizar",
     "Export" : "Exportar",
-    "Settings" : "Configuraciones ",
-    "Name" : "Nombre",
     "Import" : "Importar",
     "Setting" : "Configuración",
     "Title" : "Título",
@@ -48,4 +48,4 @@ OC.L10N.register(
     "Get more information" : "Obten más información",
     "Create" : "Crear"
 },
-"nplurals=2; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
