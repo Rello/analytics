@@ -20,6 +20,7 @@ OC.L10N.register(
     "Share link" : "Jaga link",
     "Link copied" : "Link kopeeritud",
     "Type" : "Tüüp",
+    "Notification" : "Teavitus",
     "Date" : "Kuupäev",
     "File" : "Fail",
     "Version" : "Versioon",
