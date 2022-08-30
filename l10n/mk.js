@@ -13,6 +13,7 @@ OC.L10N.register(
     "Filter" : "Филтер",
     "Value" : "Вредност",
     "Add" : "Додади",
+    "Line" : "Линија",
     "Bar" : "Бар",
     "Color" : "Боја",
     "Overview" : "Преглед",
