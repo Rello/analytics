@@ -8,6 +8,14 @@
  * @copyright 2019-2022 Marcel Scherello
  */
 
+#app-navigation:not(.vue) .collapsible:before {
+    content: inherit;
+}
+
+#app-navigation:not(.vue) .collapsible.open >a {
+    background-image: var(--icon-triangle-s-000);
+}
+
 #app-navigation:not(.vue) .app-navigation-entry-utils {
     opacity: 0;
 }
