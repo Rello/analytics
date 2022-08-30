@@ -58,6 +58,7 @@ class ThresholdMapper
             ->addSelect('value')
             ->addSelect('option')
             ->addSelect('severity')
+            ->addSelect('user_id')
             ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();

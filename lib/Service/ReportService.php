@@ -184,8 +184,10 @@ class ReportService
     public function create($name, $subheader, $parent, $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport = null): int
     {
         $array = json_decode($link, true);
-        foreach ($array as $key => $value) {
-            $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        if (is_array($array)){
+            foreach ($array as $key => $value) {
+                $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+            }
         }
         $link = json_encode($array);
 

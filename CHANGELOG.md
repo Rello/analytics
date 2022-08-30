@@ -8,6 +8,7 @@
 ### Fixed
 - Usernames shown as IDs instead of readable names #286
 - Faster report creation #293
+- Notification issue for occ dataload #294
 
 ## 4.3.1 - 2022-06-25
 ### Fixed

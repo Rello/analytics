@@ -101,12 +101,12 @@ class ThresholdService
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
-        $datasetMetadata = $this->ReportMapper->readOwn($reportId);
+        $datasetMetadata = $this->ReportMapper->read($reportId);
 
         foreach ($thresholds as $threshold) {
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
                 if (version_compare($value, $threshold['value'], $threshold['option'])) {
-                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $datasetMetadata['user_id']);
+                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $threshold['user_id']);
                     $result = 'Threshold value met';
                 }
             }

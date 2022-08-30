@@ -118,7 +118,7 @@ class ReportMapper
     }
 
     /**
-     * get single report
+     * get single report for user
      * @param int $id
      * @return array
      */
@@ -131,6 +131,23 @@ class ReportMapper
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->orderBy('parent', 'ASC')
             ->addOrderBy('name', 'ASC');
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+    /**
+     * get single report
+     * @param int $id
+     * @return array
+     */
+    public function read(int $id)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $statement = $sql->execute();
         $result = $statement->fetch();
         $statement->closeCursor();
