@@ -42,7 +42,7 @@ class ThresholdController extends Controller
      */
     public function read(int $reportId)
     {
-        return $this->ThresholdService->read($reportId);
+        return $this->ThresholdService->readRaw($reportId);
     }
 
     /**

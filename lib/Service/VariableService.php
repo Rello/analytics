@@ -33,6 +33,26 @@ class VariableService
     }
 
     /**
+     * replace %*% text variables in thresholds
+     *
+     * @param array $thresholds
+     * @return array
+     */
+    public function replaceThresholdsVariables($thresholds)
+    {
+        foreach ($thresholds as &$threshold) {
+            $fields = ['dimension1', 'dimension2'];
+            foreach ($fields as $field) {
+                isset($threshold[$field]) ? $name = $threshold[$field] : $name = '';
+                $parsed = $this->parseFilter($name, '');
+                if (!$parsed) break;
+                $threshold[$field] = $parsed['6$startDate'];
+            }
+        }
+        return $thresholds;
+    }
+
+    /**
      * replace %*% text variables in name and subheader
      *
      * @param array $datasetMetadata

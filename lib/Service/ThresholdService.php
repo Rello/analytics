@@ -22,18 +22,21 @@ class ThresholdService
     private $ThresholdMapper;
     private $ReportMapper;
     private $NotificationManager;
+    private $VariableService;
 
     public function __construct(
         LoggerInterface $logger,
         ThresholdMapper $ThresholdMapper,
         NotificationManager $NotificationManager,
-        ReportMapper $ReportMapper
+        ReportMapper $ReportMapper,
+        VariableService $VariableService
     )
     {
         $this->logger = $logger;
         $this->ThresholdMapper = $ThresholdMapper;
         $this->NotificationManager = $NotificationManager;
         $this->ReportMapper = $ReportMapper;
+        $this->VariableService = $VariableService;
     }
 
     /**
@@ -43,6 +46,20 @@ class ThresholdService
      * @return array
      */
     public function read(int $reportId)
+    {
+        $thresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
+        $thresholdsParsed = $this->VariableService->replaceThresholdsVariables($thresholds);
+
+        return $thresholdsParsed;
+    }
+
+    /**
+     * read all thresholds for a dataset without any replaced text variables
+     *
+     * @param int $reportId
+     * @return array
+     */
+    public function readRaw(int $reportId)
     {
         return $this->ThresholdMapper->getThresholdsByReport($reportId);
     }

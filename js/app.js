@@ -210,16 +210,26 @@ OCA.Analytics.UI = {
 
         thresholds = thresholds.filter(p => p.dimension1 === data[0] || p.dimension1 === '*');
 
+        let color;
+        let severity;
         for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(data[2]), parseFloat(threshold['value']));
-            threshold['severity'] = parseInt(threshold['severity']);
+            // use the last column for comparison of the value
+            const comparison = operators[threshold['option']](parseFloat(data[data.length-1]), parseFloat(threshold['value']));
+            severity = parseInt(threshold['severity']);
             if (comparison === true) {
-                if (threshold['severity'] === 2) {
-                    $(row).find('td:eq(2)').css('color', 'red');
-                } else if (threshold['severity'] === 3) {
-                    $(row).find('td:eq(2)').css('color', 'orange');
-                } else if (threshold['severity'] === 4) {
-                    $(row).find('td:eq(2)').css('color', 'green');
+                if (severity === 2) {
+                    color = 'red';
+                } else if (severity === 3) {
+                    color = 'orange';
+                } else if (severity === 4) {
+                    color = 'green';
+                }
+
+                if (data.length > 3) {
+                    // external data source
+                    row.style.color = color;
+                } else {
+                    row.childNodes.item(data.length-1).style.color = color;
                 }
             }
         }

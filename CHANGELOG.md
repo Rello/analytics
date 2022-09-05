@@ -4,7 +4,9 @@
 
 ### Added
 - Navigation drag & drop #292
-- 
+- Textvariables for thresholds #299
+
+
 ### Fixed
 - Usernames shown as IDs instead of readable names #286
 - Faster report creation #293
