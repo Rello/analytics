@@ -1199,6 +1199,17 @@ OCA.Analytics.Sidebar.Threshold = {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const url = OC.generateUrl('apps/analytics/threshold');
 
+        if (document.getElementById('sidebarThresholdDimension1').value === '' ||
+            document.getElementById('sidebarThresholdValue').value === '') {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Missing data'));
+            return;
+        }
+
+        if (isNaN(document.getElementById('sidebarThresholdValue').value.replace(',', '.'))) {
+            OCA.Analytics.Notification.notification('error', t('analytics', '3rd field must be a valid number'));
+            return;
+        }
+
         $.ajax({
             type: 'POST',
             url: url,
