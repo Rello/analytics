@@ -473,6 +473,7 @@ OCA.Analytics.Filter = {
     processChartLegendSelections: function (dataOptions) {
         if (OCA.Analytics.chartObject !== null) {
             let legendItems = OCA.Analytics.chartObject.legend.legendItems;
+            dataOptions.length = legendItems.length;                        // cleanup any obsolete settings from data sets not being there anymore
             for (let i = 0; i < legendItems.length; i++) {
                 if (!dataOptions.hasOwnProperty(i)) dataOptions[i] = {};    // create dummy for every index as a later index might get a setting
                 if (i < 4 && legendItems[i]['hidden'] === true) {           // per default, the first 4 are  visible
@@ -549,12 +550,8 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
 
-        let dataOptions;
-        if (OCA.Analytics.currentReportData.options.dataoptions !== '') {
-            dataOptions  = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
-        } else {
-            dataOptions = [];
-        }
+        let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+        dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
 
         // function to check non standard legend selections during save
         dataOptions = OCA.Analytics.Filter.processChartLegendSelections(dataOptions);

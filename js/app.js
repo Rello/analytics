@@ -504,8 +504,11 @@ OCA.Analytics.UI = {
         //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
         let userDatasetOptions = jsondata.options.dataoptions;
         if (userDatasetOptions !== '' && userDatasetOptions !== null) {
+            let numberOfDatasets = datasets.length;
+            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
+            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
             datasets = cloner.deep.merge({}, datasets);
-            datasets = cloner.deep.merge(datasets, JSON.parse(userDatasetOptions));
+            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
             datasets = Object.values(datasets);
         }
 

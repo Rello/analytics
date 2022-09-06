@@ -6,12 +6,12 @@
 - Navigation drag & drop #292
 - Textvariables for thresholds #299
 
-
 ### Fixed
 - Usernames shown as IDs instead of readable names #286
 - Faster report creation #293
 - Notification issue for occ dataload #294
 - Share Link doesn't include port number #298
+- Display series are persistently listed in the legend even if not present #288
 
 ## 4.3.1 - 2022-06-25
 ### Fixed
