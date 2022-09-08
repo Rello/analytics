@@ -64,7 +64,7 @@ class Regex implements IDatasource
      */
     public function readData($option): array
     {
-        $regex = $option['regex'];
+        $regex = htmlspecialchars_decode($option['regex'], ENT_NOQUOTES);
         $url = $option['url'];
 
         $context = stream_context_create(
