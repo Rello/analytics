@@ -6,6 +6,7 @@
 - Navigation drag & drop #292
 - Textvariables for thresholds #299
 - New threshold notification type: "new record" #297
+- NC25 support
 
 ### Fixed
 - Usernames shown as IDs instead of readable names #286

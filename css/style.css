@@ -1,0 +1,412 @@
+/**
+ * Analytics
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the LICENSE.md file.
+ *
+ * @author Marcel Scherello <analytics@scherello.de>
+ * @copyright 2019-2022 Marcel Scherello
+ */
+
+#app-navigation:not(.vue) .collapsible:before {
+    content: inherit;
+}
+
+#app-navigation:not(.vue) .collapsible.open > a {
+    background-image: var(--icon-triangle-s-dark);
+}
+
+#app-navigation:not(.vue) > ul > li {
+    overflow: initial;
+}
+
+#xxapp-navigation:not(.vue) .app-navigation-entry-utils {
+    opacity: 0;
+}
+
+#app-navigation:not(.vue) > ul > li.active > .app-navigation-entry-utils:hover,
+#app-navigation:not(.vue) > ul > li.active > a:hover + .app-navigation-entry-utils,
+#app-navigation:not(.vue) > ul > li.active > .app-navigation-entry-utils:hover,
+#app-navigation:not(.vue) > ul > li.active > a:hover + .app-navigation-entry-utils:hover,
+{
+    background-color: var(--color-primary-light);
+}
+
+#app-navigation:not(.vue) > ul > li > a:hover + .app-navigation-entry-utils,
+{
+    opacity: 1;
+    background-color: var(--color-background-hover)
+}
+
+#app-navigation:not(.vue) > ul > li > ul > li > a:hover + .app-navigation-entry-utils {
+    opacity: 1;
+}
+
+#app-navigation:not(.vue) > ul > li.active > div.app-navigation-entry-utils > ul > li > button {
+    opacity: 0.5;
+}
+
+#app-navigation:not(.vue) > ul > li > ul > li > .app-navigation-entry-utils:hover {
+    opacity: 1;
+}
+
+
+#app-navigation:not(.vue) .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button, #app-navigation:not(.vue) .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+    opacity: 0;
+}
+
+#app-sidebar .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0.5;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+}
+
+#app-sidebar .fileName h3 {
+    margin-left: 20px;
+}
+
+#analytics-settings li.analytics-settings-item {
+    background-size: 15px 15px;
+    background-position: 0 center;
+    opacity: 0.8;
+    line-height: 30px;
+    min-height: 30px;
+}
+
+.avatar > img {
+    width: 32px;
+}
+
+#reportHeader {
+    text-align: center;
+}
+
+#reportMenuBar {
+    margin-bottom: 20px;
+}
+
+#reportSubHeader {
+    text-align: center;
+}
+
+#reportPlaceholder {
+    height: 5px;
+}
+
+#filterContainer {
+    width: 99%;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+#chartContainer {
+    position: relative;
+    min-width: 310px;
+    height: 50vh;
+    width: 99%;
+}
+
+#chartZoomReset {
+    position: absolute;
+    right: 20px;
+    background-color: whitesmoke;
+}
+
+#chartLegendContainer {
+    height: 16px;
+}
+
+#tableSeparatorContainer {
+    margin-bottom: 40px;
+}
+
+#chartLegend {
+    right: 6%;
+    position: absolute;
+    padding-left: 70px;
+    opacity: 0.5;
+}
+
+#chartLegend:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#tableContainer {
+    width: 100%;
+    height: 50%;
+}
+
+#noDataContainer {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.thresholdBullet {
+    margin: 10px;
+    width: 12px;
+    height: 12px;
+}
+
+.thresholdItem {
+    display: inline-flex;
+    width: 100%;
+}
+
+.thresholdText {
+    margin-top: 6px;
+    width: 50%;
+}
+
+.thresholdDelete {
+    margin-top: 12px;
+    width: 50%;
+}
+
+.input150 {
+    width: 150px;
+}
+
+.input250 {
+    width: 250px;
+}
+
+.optionsInput {
+    width: 130px;
+}
+
+.optionsInputValue {
+    width: 200px;
+}
+
+.sidebarInput {
+    width: 200px;
+}
+
+table.dataTable tbody tr {
+    background-color: var(--color-main-background) !important;
+}
+
+.analytics-options {
+    opacity: 0.5;
+    background-size: 20px;
+    margin-left: 10px;
+    float: right;
+    height: 22px;
+    width: 22px;
+}
+
+.analytics-options:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.icon-analytics-filter-add {
+    background-image: url(../img/filteradd.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-options {
+    background-image: url(../img/options.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-save {
+    background-image: url(../img/save.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-save-warning {
+    background-image: url(../img/save.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chart-options {
+    background-image: url(../img/chartoptions.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-refresh {
+    background-image: url(../img/refresh.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-forecast {
+    background-image: url(../img/forecast.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartTable {
+    background-image: url(../img/chartTable.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartArea {
+    background-image: url(../img/chartArea.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartBar {
+    background-image: url(../img/chartBar.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartDonut {
+    background-image: url(../img/chartDonut.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartTime {
+    background-image: url(../img/chartTime.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartLine {
+    background-image: url(../img/chartLine.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-chartNone {
+    background-image: url(../img/chartNone.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-charts-wizard {
+    opacity: 0.5;
+    background-size: 50px;
+    height: 50px;
+    width: 70px;
+    float: left;
+}
+
+.icon-analytics-filter-remove {
+    background-image: url(../img/filterremove.svg);
+    filter: var(--background-invert-if-dark);
+    height: 25px;
+    width: 25px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.icon-analytics-drilldown {
+    background-image: url(../img/column.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.filterVisualizationItem {
+    background-color: var(--color-background-dark);
+    padding: 5px;
+    border-radius: 15px;
+    padding-left: 34px;
+    background-position: 10px center;
+    background-image: var(--icon-close-dark);
+    background-repeat: no-repeat;
+    opacity: .5;
+    font-size: smaller;
+    cursor: pointer;
+}
+
+.filterVisualizationItem:hover {
+    opacity: 1;
+}
+
+.whatsNewPopover {
+    bottom: 35px !important;
+    left: 15px !important;
+    width: 270px;
+    z-index: 700;
+}
+
+.whatsNewPopover p {
+    width: auto !important;
+}
+
+.whatsNewPopover .caption {
+    font-weight: bold;
+    cursor: auto !important;
+}
+
+.whatsNewPopover .icon-close {
+    position: absolute;
+    right: 0;
+}
+
+.whatsNewPopover::after {
+    content: none;
+}
+
+.userGuidance {
+    color: var(--color-text-lighter);
+    font-style: italic;
+    text-align: center;
+}
+
+.action-separator {
+    height: 0;
+    margin: 5px 10px 5px 15px;
+    border-bottom: 1px solid var(--color-border-dark);
+    cursor: default;
+}
+
+.indicateImportantField {
+    border: 1px solid var(--color-warning) !important;
+}
+
+.favorite-mark {
+    position: absolute;
+    top: 5px;
+    left: 25px;
+    line-height: 100%;
+}
+
+.favorite-star {
+    display: inline-block;
+    opacity: 0.5;
+}
+
+.infoBox {
+    padding: 5px;
+    box-shadow: 2px 2px 5px var(--color-background-darker);
+    border-radius: var(--border-radius-large);
+    width: 170px;
+    margin: 0 auto;
+}
+
+.infoBox:hover {
+    background: var(--color-background-hover);
+    cursor: pointer;
+}
+
+.infoBox > img {
+    height: 80px;
+    margin: 0 auto;
+    display: block;
+    cursor: pointer;
+}
+
+.infoBox > .infoBoxHeader {
+    vertical-align: middle;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-text-lighter);
+    cursor: pointer;
+}
+
+.infoBox > .infoBoxText {
+    width: 100%;
+    color: var(--color-text-lighter);
+    font-style: italic;
+    text-align: center;
+    cursor: pointer;
+}
+
+/**
+ * Print settings, better leave them at the eof
+ */
+@import 'print.scss';
