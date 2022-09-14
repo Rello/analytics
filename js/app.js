@@ -208,7 +208,7 @@ OCA.Analytics.UI = {
             },
         };
 
-        thresholds = thresholds.filter(p => p.dimension1 === data[0] || p.dimension1 === '*');
+        thresholds = thresholds.filter(p => (p.dimension1 === data[0] || p.dimension1 === '*') && p.option !== 'new');
 
         let color;
         let severity;

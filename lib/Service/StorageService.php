@@ -121,10 +121,10 @@ class StorageService
             $error = 1;
         }
 
-        // get all reports for the dataset and evaluate if thresholds are maintained
+        // get all reports for the dataset and evaluate their thresholds for push notifications
         if ($error === 0) {
             foreach ($this->ReportService->reportsForDataset($datasetId) as $report) {
-                $validateResult = $this->ThresholdService->validate($report['id'], $dimension1, $dimension2, $value);
+                $validateResult = $this->ThresholdService->validate($report['id'], $dimension1, $dimension2, $value, $insert);
                 if ($validateResult !== '') $validate = $validateResult;
             }
         }

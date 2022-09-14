@@ -270,6 +270,8 @@
                         p($l->t('>= greater equal')); ?></option>
                     <option value="!="><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('!= not equal')); ?></option>
+                    <option value="new"><?php // TRANSLATORS description in a dropdown; limited space
+                        p($l->t('new record')); ?></option>
                 </select>
             </div>
         </div>

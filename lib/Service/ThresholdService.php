@@ -15,6 +15,7 @@ use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
 use Psr\Log\LoggerInterface;
+use OCP\IL10N;
 
 class ThresholdService
 {
@@ -23,20 +24,23 @@ class ThresholdService
     private $ReportMapper;
     private $NotificationManager;
     private $VariableService;
+    private $l10n;
 
     public function __construct(
         LoggerInterface $logger,
         ThresholdMapper $ThresholdMapper,
         NotificationManager $NotificationManager,
         ReportMapper $ReportMapper,
-        VariableService $VariableService
-    )
+        VariableService $VariableService,
+        IL10N $l10n
+   )
     {
         $this->logger = $logger;
         $this->ThresholdMapper = $ThresholdMapper;
         $this->NotificationManager = $NotificationManager;
         $this->ReportMapper = $ReportMapper;
         $this->VariableService = $VariableService;
+        $this->l10n = $l10n;
     }
 
     /**
@@ -105,16 +109,17 @@ class ThresholdService
     }
 
     /**
-     * validate threshold per report
+     * validate notification thresholds per report
      *
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @param $value
+     * @param int $insert
      * @return string
      * @throws \Exception
      */
-    public function validate(int $reportId, $dimension1, $dimension2, $value)
+    public function validate(int $reportId, $dimension1, $dimension2, $value, int $insert = 0)
     {
         $result = '';
         $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
@@ -124,6 +129,9 @@ class ThresholdService
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
                 if (version_compare($value, $threshold['value'], $threshold['option'])) {
                     $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $threshold['user_id']);
+                    $result = 'Threshold value met';
+                } elseif ($threshold['option'] === 'new' && $insert != 0) {
+                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $this->l10n->t('new record'), 'value' => ''], $threshold['user_id']);
                     $result = 'Threshold value met';
                 }
             }

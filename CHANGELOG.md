@@ -5,6 +5,7 @@
 ### Added
 - Navigation drag & drop #292
 - Textvariables for thresholds #299
+- New threshold notification type: "new record" #297
 
 ### Fixed
 - Usernames shown as IDs instead of readable names #286
@@ -12,6 +13,7 @@
 - Notification issue for occ dataload #294
 - Share Link doesn't include port number #298
 - Display series are persistently listed in the legend even if not present #288
+- html-grabber not working due to html-escaping
 
 ## 4.3.1 - 2022-06-25
 ### Fixed

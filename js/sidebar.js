@@ -1166,6 +1166,12 @@ OCA.Analytics.Sidebar.Threshold = {
             bulletColor = 'green';
         }
 
+        if (data.option === 'new') { // adjust the text for the "new records" option
+            data.value = data.dimension1;
+            data.dimension1 = t('analytics', 'new record');
+            data.option = t('analytics', 'for');
+        }
+
         if (data.severity === 1) {
             bullet = document.createElement('img');
             bullet.src = OC.imagePath('notifications', 'notifications-dark.svg');
