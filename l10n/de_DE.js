@@ -71,7 +71,7 @@ OC.L10N.register(
     "Overview" : "Übersicht",
     "Scheduled data load" : "Geplante Datenladung",
     "Basic settings" : "Grundeinstellungen",
-    "Add to new group" : "Neue Gruppe hinzufügen",
+    "Add to new group" : "Zu neuer Gruppe hinzufügen",
     "Remove from favorites" : "Von Favoriten entfernen",
     "Add to favorites" : "Zu Favoriten hinzufügen",
     "Delete folder" : "Ordner löschen",

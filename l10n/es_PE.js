@@ -24,6 +24,7 @@ OC.L10N.register(
     "Version" : "Versión",
     "Authentication" : "Autenticación",
     "Announcements" : "Anuncios",
+    "copy" : "copiar",
     "The password is wrong. Try again." : "La contraseña está equivoada. Por favor vuelve a intentarlo. ",
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",

@@ -102,6 +102,7 @@ OC.L10N.register(
     "Link copied" : "Link kopiert",
     "Column 1" : "Spalte 1",
     "Column 3" : "Spalte 3",
+    "Missing data" : "Fehlende Daten",
     "3rd field must be a valid number" : "Das 3. Feld muss eine gültige Zahl sein",
     "Demo: Thresholds" : "Demo: Schwellwerte",
     "Type" : "Art",

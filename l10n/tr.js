@@ -102,6 +102,7 @@ OC.L10N.register(
     "Link copied" : "Bağlantı kopyalandı",
     "Column 1" : "1. sütun",
     "Column 3" : "3. sütun",
+    "Missing data" : "Eksik veriler",
     "3rd field must be a valid number" : "3. alan geçerli bir sayı olmalıdır",
     "Demo: Thresholds" : "Tanıtım: Eşikler",
     "Type" : "Tür",
