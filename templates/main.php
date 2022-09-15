@@ -17,6 +17,7 @@ Util::addStyle('analytics', '3rdParty/jquery.dataTables.min');
 Util::addStyle('files_sharing', 'icons');
 Util::addStyle('analytics', 'dashboard');
 Util::addStyle('analytics', 'wizard');
+Util::addStyle('analytics', 'print');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
