@@ -102,6 +102,7 @@ OC.L10N.register(
     "Link copied" : "Посилання скопійовано",
     "Column 1" : "Колонка 1",
     "Column 3" : "Колонка 3",
+    "Missing data" : "Відсутні дані",
     "3rd field must be a valid number" : "3-е поле має бути дійсним числом",
     "Demo: Thresholds" : "Демо: Пороги",
     "Type" : "Тип",
