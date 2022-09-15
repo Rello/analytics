@@ -1,7 +1,6 @@
 # Changelog
 
-## 4.4.0 - 2022-08-xx
-
+## 4.4.0 - 2022-09-15
 ### Added
 - Navigation drag & drop #292
 - Textvariables for thresholds #299
