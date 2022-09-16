@@ -102,6 +102,8 @@ OC.L10N.register(
     "Link copied" : "已複製連結",
     "Column 1" : "欄 1",
     "Column 3" : "欄 3",
+    "new record" : "新紀錄",
+    "for" : "為",
     "Missing data" : "資料遺失",
     "3rd field must be a valid number" : "第三個欄位必須是有效數字",
     "Demo: Thresholds" : "示範：閾值",
