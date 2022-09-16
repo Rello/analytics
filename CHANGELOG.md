@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.x - 2022-09-xx
+### Changed
+- DataTables 1.12.1
+
 ## 4.4.0 - 2022-09-15
 ### Added
 - Navigation drag & drop #292

@@ -13,7 +13,7 @@ use OCP\Util;
 
 Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', 'sharetabview');
-Util::addStyle('analytics', '3rdParty/jquery.dataTables.min');
+Util::addStyle('analytics', '3rdParty/datatables.min');
 Util::addStyle('files_sharing', 'icons');
 Util::addStyle('analytics', 'dashboard');
 Util::addStyle('analytics', 'wizard');
@@ -22,7 +22,7 @@ Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'filter');
-Util::addScript('analytics', '3rdParty/jquery.dataTables.min');
+Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
