@@ -3,6 +3,8 @@
 ## 4.4.x - 2022-09-xx
 ### Changed
 - DataTables 1.12.1
+- Chart.js v3.9.1
+- chartjs-plugin-datalabels v2.1.0
 
 ## 4.4.0 - 2022-09-15
 ### Added
