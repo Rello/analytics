@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Saved",
     "Delete" : "Delete",
     "Search" : "Search",
+    "Add a report to the favorites to be shown here." : "Add a report to the favourites to be shown here.",
     "OK" : "OK",
     "Cancel" : "Cancel",
     "Filter" : "Filter",
