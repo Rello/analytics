@@ -102,6 +102,8 @@ OC.L10N.register(
     "Link copied" : "Link copiado",
     "Column 1" : "Coluna 1",
     "Column 3" : "Coluna 3",
+    "new record" : "novo recorde",
+    "for" : "para",
     "Missing data" : "Dados perdidos",
     "3rd field must be a valid number" : "O terceiro campo deve ser um número válido",
     "Demo: Thresholds" : "Demonstração: limites",

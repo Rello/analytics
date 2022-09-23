@@ -65,6 +65,7 @@ OC.L10N.register(
     "New dataset" : "Datu-sorta berria",
     "New report" : "Txosten berria",
     "Dataset maintenance" : "Datu-sorta mantenua",
+    "New report group" : "Txosten talde berria",
     "No reports yet" : "Ez dago txostenik oraindik",
     "Back to reports" : "Itzuli txostenetara",
     "Overview" : "Ikuspegi orokorra",
