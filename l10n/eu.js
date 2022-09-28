@@ -103,6 +103,7 @@ OC.L10N.register(
     "Column 1" : "1 zutabea",
     "Column 3" : "3 zutabea",
     "new record" : "sarrera berria",
+    "for" : "honentzat",
     "Missing data" : "Datuak falta dira",
     "3rd field must be a valid number" : "3. eremua baliozko zenbakia izan behar da",
     "Demo: Thresholds" : "Demo: Atalaseak",
