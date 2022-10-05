@@ -51,6 +51,7 @@ class Regex implements IDatasource
     {
         $template = array();
         array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
+        array_push($template, ['id' => 'name', 'name' => 'Data series description', 'placeholder' => 'optional']);
         array_push($template, ['id' => 'regex', 'name' => $this->l10n->t('valid regex'), 'placeholder' => '//']);
         array_push($template, ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')]);
         array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
@@ -65,7 +66,7 @@ class Regex implements IDatasource
     public function readData($option): array
     {
         $regex = htmlspecialchars_decode($option['regex'], ENT_NOQUOTES);
-        $url = $option['url'];
+        $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
 
         $context = stream_context_create(
             array(
@@ -84,7 +85,7 @@ class Regex implements IDatasource
             if (isset($option['limit'])) {
                 if ($i === (int)$option['limit'] AND (int)$option['limit'] !== 0) break;
             }
-            array_push($data, ['', $matches['dimension'][$i], $matches['value'][$i]]);
+            array_push($data, [$option['name'], $matches['dimension'][$i], $matches['value'][$i]]);
         }
 
         $header = array();
@@ -97,38 +98,8 @@ class Regex implements IDatasource
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => 0,
+            'rawData' => $html,
+            'URL' => $url,
         ];
-    }
-
-    private function backup()
-    {
-        /**
-         * $ch = curl_init();
-         * curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-         * curl_setopt($ch, CURLOPT_COOKIESESSION, true );
-         * curl_setopt($ch, CURLOPT_COOKIEFILE, '');
-         * curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
-         * curl_setopt($ch, CURLOPT_HEADER, false);
-         * curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-         * curl_setopt($ch, CURLOPT_URL, $url);
-         * curl_setopt($ch, CURLOPT_REFERER, $url);
-         * curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-         * curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36');
-         * //$html = curl_exec($ch);
-         * curl_close($ch);
-         *
-         * //$this->logger->debug($result);
-         * //$html = str_get_html($result, true, false);
-         * //$this->logger->debug($html);
-         * //$value = $html->find('a[href=/gp/bestsellers/books/405436/ref=pd_zg_hrsr_books]', 0)->parent->parent->first_child->innertext;
-         * //ocument.querySelectorAll("a[href='/gp/bestsellers/books/405436/ref=pd_zg_hrsr_books']")[0].parentNode.parentNode.firstElementChild.innerText
-         * //$string = 'http://www.amazon.de/dp/3964433578';
-         * //$filter = '/(<span class=\"zg_hrsr_rank\">Nr. )(.*)(<\/span><span class="zg_hrsr_ladder">in&nbsp;<a href="\/gp\/bestsellers)(.*)(hrsr_books">)(.*)(<\/a><\/span>)/';
-         * //$filter = '/(<span class="zg_hrsr_rank">Nr. )(.*)(<\/span><span class="zg_hrsr_ladder">in&nbsp;<a href="\/gp\/bestsellers\/books\/405436\/ref=pd_zg_hrsr_books">Vietnamesisch)/';
-         * //$filter = '/(<span class="zg_hrsr_rank">Nr. )(.*)(<\/span>)(.*)(hrsr_books">)/';
-         * //$filter = '/(<span class="zg_hrsr_rank">Nr. )(?<value>.*)(<\/span>\n	)(.*)(?<dimension>Vietnamesisch lernen)/';
-         * //$this->logger->debug('values all: '. json_encode($values));
-         * //$values = $values['value'];
-         * //$this->logger->debug('values first array: '. json_encode($values));**/
     }
 }

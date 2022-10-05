@@ -8,6 +8,7 @@
 
 ### Fixed
 - handle thousand separator comma
+- regex datasource wrong html escaping
 
 ## 4.4.0 - 2022-09-15
 ### Added
