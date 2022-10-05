@@ -23,6 +23,7 @@ OC.L10N.register(
     "Notification" : "Notificación",
     "Date" : "Fecha",
     "New in" : "Nuevo en",
+    "View changelog" : "Ver registro de cambios",
     "File" : "Archivo",
     "Version" : "Versión",
     "Authentication" : "Autenticación",

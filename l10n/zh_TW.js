@@ -275,7 +275,7 @@ OC.L10N.register(
     "Data is processed inside Nextcloud." : "資料在 Nextcloud 中處理。",
     "Share your reports and insights" : "分享您的報告與見解",
     "Fully integrated into Nextcloud" : "完全整合到 Nextcloud 中",
-    "Open Source" : "開啟來源",
+    "Open Source" : "開放原始碼",
     "Visualize any data with easy to use reports" : "使用易於使用的報告來視覺化任何資料",
     "Different chart types like lines, columns or doughnuts" : "多種圖表類型，如折線圖、柱狀圖或甜甜圈圖",
     "Customize further chart options by using advanced scripting" : "透過使用進階指令稿來進一步自訂圖表選項",
