@@ -167,9 +167,13 @@ class StorageService
 
     private function floatvalue($val)
     {
+        // remove thousand separators
+        $val = preg_replace('/(?<=\d)\,(?=\d{3}\b)/', '', $val);
+        $val = preg_replace('/(?<=\d)\.(?=\d{3}\b)/', '', $val);
+        // convert comma to decimal point
         $val = str_replace(",", ".", $val);
-        $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        $val = preg_replace('/[^0-9-.]+/', '', $val);
+        //$val = preg_replace('/\.(?=.*\.)/', '', $val);
+        //$val = preg_replace('/[^0-9-.]+/', '', $val);
         if (is_numeric($val)) {
             return number_format(floatval($val), 2, '.', '');
         } else {

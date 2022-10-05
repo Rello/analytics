@@ -6,6 +6,9 @@
 - Chart.js v3.9.1
 - chartjs-plugin-datalabels v2.1.0
 
+### Fixed
+- handle thousand separator comma
+
 ## 4.4.0 - 2022-09-15
 ### Added
 - Navigation drag & drop #292
