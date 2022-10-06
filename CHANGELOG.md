@@ -9,6 +9,7 @@
 ### Fixed
 - handle thousand separator comma
 - regex datasource wrong html escaping
+- issue in dataload: URL parsing replace &amp; #278
 
 ## 4.4.0 - 2022-09-15
 ### Added

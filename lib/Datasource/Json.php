@@ -67,7 +67,7 @@ class Json implements IDatasource
      */
     public function readData($option): array
     {
-        $string = $option['url'];
+        $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
         $path = $option['path'];
         $auth = $option['auth'];
         $post = ($option['method'] === 'POST') ? true : false;
@@ -77,7 +77,7 @@ class Json implements IDatasource
         $ch = curl_init();
         if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_URL, $string);
+            curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -89,14 +89,15 @@ class Json implements IDatasource
             if ($option['body'] && $option['body'] !== '') {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $option['body']);
             }
-            $curlResult = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $rawResult = curl_exec($ch);
+            $http_code = curl_getinfo($ch);
+            $this->logger->error('debug: '. json_encode($http_code));
             curl_close($ch);
         } else {
-            $curlResult = '';
+            $rawResult = '';
         }
 
-        $json = json_decode($curlResult, true);
+        $json = json_decode($rawResult, true);
 
         // check if an array of values should be extracted
         preg_match_all("/(?<={).*(?=})/", $path, $matches);
@@ -139,7 +140,8 @@ class Json implements IDatasource
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
-            'rawdata' => $curlResult,
+            'rawdata' => $rawResult,
+            'URL' => $url,
             'error' => ($http_code>=200 && $http_code<300) ? 0 : 'HTTP response code: '.$http_code,
         ];
     }
