@@ -207,7 +207,7 @@ OC.L10N.register(
     "Report was changed - Press here to save the current state" : "Звіт змінено - натисніть тут, щоб зберегти поточний стан",
     "Settings" : "Налаштування",
     "Import report" : "Звіт про імпорт",
-    "Do you like this app?" : "Вам подобається цей додаток?",
+    "Do you like this app?" : "Чи вам до вподоби цей застосунок?",
     "Introduction" : "Вступ",
     "More information …" : "Більше інформації …",
     "Name" : "Ім'я",
