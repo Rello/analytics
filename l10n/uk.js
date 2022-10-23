@@ -143,7 +143,7 @@ OC.L10N.register(
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Аналітика</strong>: до звіту додано нові дані",
     "<strong>Analytics</strong>: New reports" : "<strong>Аналітика</strong>: нові звіти",
     "Reports" : "Звіти",
-    "Local file" : "Локальний файл",
+    "Local file" : "Файл на пристрої",
     "File" : "Файл",
     "Sheet" : "Аркуш",
     "sheet name" : "ім'я аркуша",
