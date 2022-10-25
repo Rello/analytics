@@ -102,6 +102,8 @@ OC.L10N.register(
     "Link copied" : "Hivatkozás másolva",
     "Column 1" : "1. oszlop",
     "Column 3" : "3. oszlop",
+    "new record" : "új rekord",
+    "for" : "a következőhöz:",
     "Missing data" : "Hiányzó adat",
     "3rd field must be a valid number" : "A 3. mezőben valós számnak kell lennie",
     "Demo: Thresholds" : "Demó: Küszöbértékek",

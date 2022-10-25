@@ -205,7 +205,7 @@ OC.L10N.register(
     "10 min" : "10 min",
     "30 min" : "30 min",
     "Report was changed - Press here to save the current state" : "O relatório foi alterado - Pressione aqui para salvar o estado atual",
-    "Settings" : "Definições",
+    "Settings" : "Configurações",
     "Import report" : "Relatório de importação",
     "Do you like this app?" : "Você gosta deste aplicativo?",
     "Introduction" : "Introdução",
