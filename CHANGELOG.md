@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.x - 2022-09-xx
+## 4.4.1 - 2022-09-xx
 ### Changed
 - DataTables 1.12.1
 - Chart.js v3.9.1
@@ -10,6 +10,7 @@
 - handle thousand separator comma
 - regex datasource wrong html escaping
 - issue in dataload: URL parsing replace &amp; #278
+- Sharing of groups should not be possible #313
 
 ## 4.4.0 - 2022-09-15
 ### Added

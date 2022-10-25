@@ -27,7 +27,7 @@ OCA.Analytics.Sidebar = {
             OCA.Analytics.Sidebar.hideSidebar();
         } else {
             document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
-            OCA.Analytics.Sidebar.constructTabs(datasetType);
+            OCA.Analytics.Sidebar.constructTabs(parseInt(datasetType));
 
             if (!OCA.Analytics.isAdvanced) {
                 if (appsidebar.dataset.id === '') {
@@ -52,7 +52,7 @@ OCA.Analytics.Sidebar = {
         this.sidebar_tabs[id] = tab;
     },
 
-    constructTabs: function () {
+    constructTabs: function (datasetType) {
 
         document.querySelector('.tabHeaders').innerHTML = '';
         document.querySelector('.tabsContainer').innerHTML = '';
@@ -63,15 +63,19 @@ OCA.Analytics.Sidebar = {
             tabindex: '1',
             name: t('analytics', 'Report'),
             action: OCA.Analytics.Sidebar.Report.tabContainerReport,
+            validTypes: [],
+            excludeTypes: [],
         });
 
-        OCA.Analytics.Sidebar.registerSidebarTab({
+            OCA.Analytics.Sidebar.registerSidebarTab({
             id: 'tabHeaderData',
             class: 'tabContainerData',
             tabindex: '2',
             name: t('analytics', 'Data'),
             action: OCA.Analytics.Sidebar.Data.tabContainerData,
-        });
+            validTypes: [OCA.Analytics.TYPE_INTERNAL_DB],
+            excludeTypes:[],
+            });
 
         OCA.Analytics.Sidebar.registerSidebarTab({
             id: 'tabHeaderThreshold',
@@ -79,6 +83,8 @@ OCA.Analytics.Sidebar = {
             tabindex: '3',
             name: t('analytics', 'Thresholds'),
             action: OCA.Analytics.Sidebar.Threshold.tabContainerThreshold,
+            validTypes: [],
+            excludeTypes:[OCA.Analytics.TYPE_EMPTY_GROUP],
         });
 
         OCA.Analytics.Sidebar.registerSidebarTab({
@@ -88,6 +94,8 @@ OCA.Analytics.Sidebar = {
             // TRANSLATORS Noun; headline in sidebar
             name: t('analytics', 'Share'),
             action: OCA.Analytics.Sidebar.Share.tabContainerShare,
+            validTypes: [],
+            excludeTypes: [OCA.Analytics.TYPE_EMPTY_GROUP, OCA.Analytics.TYPE_SHARED],
         });
 
         let items = _.map(OCA.Analytics.Sidebar.sidebar_tabs, function (item) {
@@ -96,6 +104,16 @@ OCA.Analytics.Sidebar = {
         items.sort(OCA.Analytics.Sidebar.sortByName);
 
         for (let tab in items) {
+
+            // if tab can not be used for certain report types
+            if(items[tab].excludeTypes.length !== 0 && items[tab].excludeTypes.includes(datasetType)) {
+                continue;
+            }
+            // if tab can only be used for certain report types
+            if(items[tab].validTypes.length !== 0 && !items[tab].validTypes.includes(datasetType)) {
+                continue;
+            }
+
             let li = $('<li/>').addClass('tabHeader')
                 .attr({
                     'id': items[tab].id,
@@ -690,12 +708,6 @@ OCA.Analytics.Sidebar.Data = {
         document.getElementById('tabHeaderData').classList.add('selected');
         OCA.Analytics.UI.showElement('tabContainerData');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-
-        if (parseInt(document.getElementById('app-sidebar').dataset.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
-            let message = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
-            document.getElementById('tabContainerData').innerHTML = message;
-            return;
-        }
 
         let type = 'report';
         if (OCA.Analytics.isAdvanced) {
