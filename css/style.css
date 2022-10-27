@@ -12,41 +12,24 @@
     content: inherit;
 }
 
+/* show a down-triangle if a folder is opened */
 #app-navigation:not(.vue) .collapsible.open > a {
     background-image: var(--icon-triangle-s-dark);
 }
 
-#app-navigation:not(.vue) > ul > li {
-    overflow: initial;
-}
-
-#app-navigation:not(.vue) > ul > li.active > .app-navigation-entry-utils:hover,
-#app-navigation:not(.vue) > ul > li.active > a:hover + .app-navigation-entry-utils,
-#app-navigation:not(.vue) > ul > li.active > .app-navigation-entry-utils:hover,
-#app-navigation:not(.vue) > ul > li.active > a:hover + .app-navigation-entry-utils:hover
+/* show the ... icon when the navigation row is hovered */
+#app-navigation:not(.vue) > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button,
+#app-navigation:not(.vue) > ul > li > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button
 {
-    background-color: var(--color-primary-light);
-}
-
-#app-navigation:not(.vue) > ul > li > a:hover + .app-navigation-entry-utils
-{
-    opacity: 1;
-    background-color: var(--color-background-hover)
-}
-
-#app-navigation:not(.vue) > ul > li > ul > li > a:hover + .app-navigation-entry-utils {
-    opacity: 1;
-}
-
-#app-navigation:not(.vue) > ul > li.active > div.app-navigation-entry-utils > ul > li > button {
     opacity: 0.5;
 }
 
+/* show the ... icon when the icon itself is hovered */
 #app-navigation:not(.vue) > ul > li > ul > li > .app-navigation-entry-utils:hover {
     opacity: 1;
 }
 
-
+/* hide the ... icon as default */
 #app-navigation:not(.vue) .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button, #app-navigation:not(.vue) .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
     opacity: 0;
 }
