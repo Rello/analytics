@@ -22,12 +22,14 @@ class StorageService
     private $ThresholdService;
     private $DatasetService;
     private $ReportService;
+    private $VariableService;
 
     public function __construct(
         LoggerInterface $logger,
         StorageMapper $StorageMapper,
         DatasetService $DatasetService,
         ThresholdService $ThresholdService,
+        VariableService $VariableService,
         ReportService $ReportService
     )
     {
@@ -35,6 +37,7 @@ class StorageService
         $this->StorageMapper = $StorageMapper;
         $this->DatasetService = $DatasetService;
         $this->ThresholdService = $ThresholdService;
+        $this->VariableService = $VariableService;
         $this->ReportService = $ReportService;
     }
 
@@ -108,6 +111,10 @@ class StorageService
         $value = $this->floatvalue($value);
         $validate = '';
         $insert = $update = $error = $action = 0;
+
+        // replace text variables like %now%
+        $dimension1 = $this->VariableService->replaceTextVariablesSingle($dimension1);
+        $dimension2 = $this->VariableService->replaceTextVariablesSingle($dimension2);
 
         if ($value !== false) {
             try {

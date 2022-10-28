@@ -44,7 +44,7 @@ class VariableService
             $fields = ['dimension1', 'dimension2'];
             foreach ($fields as $field) {
                 isset($threshold[$field]) ? $name = $threshold[$field] : $name = '';
-                $parsed = $this->parseFilter($name, '');
+                $parsed = $this->parseFilter($name);
                 if (!$parsed) break;
                 $threshold[$field] = $parsed['6$startDate'];
             }
@@ -72,6 +72,8 @@ class VariableService
                         $replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
                     } elseif ($match === '%currentTime%') {
                         $replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
+                    } elseif ($match === '%now%') {
+                        $replace = time();
                     } elseif ($match === '%lastUpdateDate%') {
                         $timestamp = $this->DatasetMapper->getLastUpdate($datasetMetadata['dataset']);
                         $replace = $this->IDateTimeFormatter->formatDate($timestamp, 'short');
@@ -92,6 +94,34 @@ class VariableService
     }
 
     /**
+     * replace variables in single field
+     * used in: API
+     *
+     * @param $field
+     * @return array
+     */
+    public function replaceTextVariablesSingle($field)
+    {
+        preg_match_all("/%.*?%/", $field, $matches);
+        if (count($matches[0]) > 0) {
+            foreach ($matches[0] as $match) {
+                $replace = null;
+                if ($match === '%currentDate%') {
+                    $replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
+                } elseif ($match === '%currentTime%') {
+                    $replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
+                } elseif ($match === '%now%') {
+                    $replace = time();
+                }
+                if ($replace !== null) {
+                    $field = preg_replace('/' . $match . '/', $replace, $field);
+                }
+            }
+        }
+        return $field;
+    }
+
+    /**
      * replace variables in filters and apply format
      *
      * @param $reportMetadata
@@ -102,7 +132,7 @@ class VariableService
         $filteroptions = json_decode($reportMetadata['filteroptions'], true);
         if (isset($filteroptions['filter'])) {
             foreach ($filteroptions['filter'] as $key => $value) {
-                $parsed = $this->parseFilter($value['value'], $value['option']);
+                $parsed = $this->parseFilter($value['value']);
                 $format = $this->parseFormat($value['value']);
 
                 if (!$parsed) break;
@@ -118,66 +148,63 @@ class VariableService
      * parsing of %*% variables
      *
      * @param $filter
-     * @param $option
      * @return array|bool
      */
-    private function parseFilter($filter, $option) {
+    private function parseFilter($filter) {
         preg_match_all("/(?<=%).*(?=%)/", $filter, $matches);
         if (count($matches[0]) > 0) {
             $filter = $matches[0][0];
-            preg_match('/(last|next|current|to|yester)?/', $filter, $directionMatch);
-            preg_match('/[0-9]+/', $filter, $offsetMatch);
-            preg_match('/(day|days|week|weeks|month|months|year|years)$/', $filter, $unitMatch);
+            preg_match('/(last|next|current|to|yester)?/', $filter, $directionMatch); // direction
+            preg_match('/[0-9]+/', $filter, $offsetMatch); // how much
+            preg_match('/(day|days|week|weeks|month|months|year|years)$/', $filter, $unitMatch); // unit
 
             if (!$directionMatch[0] || !$unitMatch[0]) {
+                // no known text variables found
                 return false;
             }
 
+            // if no offset is specified, apply 1 as default
             !$offsetMatch[0] ? $offset = 1: $offset = $offsetMatch[0];
 
-            // remove s to unify e.g. weeks => week
+            // remove "s" to unify e.g. weeks => week
             $unit = rtrim($unitMatch[0], 's');
 
             if ($directionMatch[0] === "last" || $directionMatch[0] === "yester") {
+                // go back
                 $direction = '-';
-                //$directionWord = $directionMatch[0];
             } elseif ($directionMatch[0] === "next") {
+                // go forward
                 $direction = '+';
-                //$directionWord = $directionMatch[0];
-            } else { // current
+            } else {
+                // current
                 $direction = '+';
                 $offset = 0;
-                //$directionWord = 'this';
             }
 
-            $timestring = $direction . $offset . ' ' . $unit;
-            $baseDate = strtotime($timestring);
+            // create a usable string for php like "+3 days"
+            $timeString = $direction . $offset . ' ' . $unit;
+            // get a timestamp of the target date
+            $baseDate = strtotime($timeString);
 
+            // get the correct format depending of the unit. e.g. first day of the month in case unit is "month"
             if ($unit === 'day') {
                 $startString = 'today';
-                //$endString = 'yesterday';
             } else {
                 $startString = 'first day of this ' . $unit;
-                //$endString = 'last day of ' . $directionWord . ' ' . $unit;
             }
             $startTS = strtotime($startString, $baseDate);
             $start = date("Y-m-d", $startTS);
-            //$endTS = strtotime($endString);
-            //$end = date("Y-m-d", $endTS);
 
             $return = [
                 'value' => $startTS,
                 'option' => 'GT',
                 '1$filter' => $filter,
-                '2$timestring' => $timestring,
+                '2$timestring' => $timeString,
                 '3$target' => $baseDate,
                 '4$target_clean' => date("Y-m-d", $baseDate),
                 '5$startString' => $startString,
                 '6$startDate' => $start,
                 '7$startTS' => $startTS,
-                //'8$endString' => $endString,
-                //'9$endDate' => $end,
-                //'9$endTS' => $endTS,
            ];
         } else {
             $return = false;

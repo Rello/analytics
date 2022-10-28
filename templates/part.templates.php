@@ -196,10 +196,18 @@
             <div id="DataTextDimension1"
                  style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
             <input style="display: table-cell;" class="sidebarInput" id="DataDimension1">
+            <div style="display: table-cell;">
+                <a id="sidebarDataDimension1Hint" title="<?php p($l->t('Variables')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div id="DataTextDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></div>
             <input style="display: table-cell;" class="sidebarInput" id="DataDimension2">
+            <div style="display: table-cell;">
+                <a id="sidebarDataDimension2Hint" title="<?php p($l->t('Variables')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div id="DataTextValue"
@@ -249,15 +257,18 @@
     <br>
     <div class="table" style="display: table;">
         <div style="display: table-row;">
-            <div id="sidebarThresholdTextDimension1"
-                 style="display: table-cell; width: 120px;"><?php p($l->t('Object')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarThresholdDimension1" class="input150"
-                                                     placeholder="<?php p($l->t('single value or *')); ?>"></div>
+            <div id="sidebarThresholdTextDimension1" style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
+            <div style="display: table-cell;">
+                <input id="sidebarThresholdDimension1" class="sidebarInput" placeholder="<?php p($l->t('single value or *')); ?>"></div>
+            <div style="display: table-cell;">
+                <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
             <div style="display: table-cell;">
-                <select id="sidebarThresholdOption" class="input150">
+                <select id="sidebarThresholdOption" class="sidebarInput">
                     <option value="=" selected><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('= equal')); ?></option>
                     <option value=">"><?php // TRANSLATORS description in a dropdown; limited space
@@ -278,12 +289,12 @@
         <div style="display: table-row;">
             <div id="sidebarThresholdTextValue"
                  style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarThresholdValue" class="input150"></div>
+            <div style="display: table-cell;"><input id="sidebarThresholdValue" class="sidebarInput"></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>
             <div style="display: table-cell;">
-                <select id="sidebarThresholdSeverity" class="input150">
+                <select id="sidebarThresholdSeverity" class="sidebarInput">
                     <option value="1" selected><?php p($l->t('Notification')); ?></option>
                     <option value="2"><?php p($l->t('Red')); ?></option>
                     <option value="3"><?php p($l->t('Yellow')); ?></option>

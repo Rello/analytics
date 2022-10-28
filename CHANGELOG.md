@@ -1,6 +1,9 @@
 # Changelog
 
 ## 4.4.1 - 2022-09-xx
+### Added
+- Text variables for API #314
+
 ### Changed
 - DataTables 1.12.1
 - Chart.js v3.9.1
@@ -11,6 +14,7 @@
 - regex datasource wrong html escaping
 - issue in dataload: URL parsing replace &amp; #278
 - Sharing of groups should not be possible #313
+- various NC25 css fixes
 
 ## 4.4.0 - 2022-09-15
 ### Added

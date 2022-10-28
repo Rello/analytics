@@ -396,6 +396,7 @@ OCA.Analytics.Sidebar.Report = {
             '%lastUpdateTime%<br>' +
             '%currentDate%<br>' +
             '%currentTime%<br>' +
+            '%now% (timestamp)<br>' +
             '%owner%';
         OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
     },
@@ -735,6 +736,9 @@ OCA.Analytics.Sidebar.Data = {
                 document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
                 document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
 
+                document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+                document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+
                 document.getElementById('DataValue').addEventListener('keydown', function (event) {
                     if (event.key === 'Enter') {
                         OCA.Analytics.Sidebar.Backend.updateData();
@@ -745,6 +749,15 @@ OCA.Analytics.Sidebar.Data = {
                 });
             }
         });
+    },
+
+    handleDimensionHint: function () {
+        let text = t('analytics', 'Text variables can be used in the dimensions.<br>They are replaced when the data is added.') +
+            '<br><br>' +
+            '%currentDate%<br>' +
+            '%currentTime%<br>' +
+            '%now% (timestamp)';
+        OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
     },
 
     handleDataUpdateButton: function () {
@@ -1137,6 +1150,9 @@ OCA.Analytics.Sidebar.Threshold = {
                 document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column 1');
                 document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Column 3');
                 document.getElementById('createThresholdButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
+
+                document.getElementById('sidebarThresholdHint').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdHint);
+
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);
                 }
@@ -1156,6 +1172,15 @@ OCA.Analytics.Sidebar.Threshold = {
                 });
             }
         });
+    },
+
+    handleThresholdHint: function () {
+        let text = t('analytics', 'Text variables can be used to evaluate a date value.<br>For example %today% can be used to highlight the data of today.<br>Operator and value are not relevant in this case.') +
+            '<br><br>' +
+            '%today%<br>' +
+            '%next day%<br>' +
+            '%next 2 days% (in 2 days)';
+        OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
     },
 
     handleThresholdCreateButton: function () {
