@@ -307,10 +307,10 @@
     </button>
     <br>
     <br>
-    <div id="sidebarThresholdCreateNewHeader" ><h3><?php // TRANSLATORS Noun shown in a button
-            p($l->t('Other Thresholds')); ?></h3></div>
+    <div id="sidebarThresholdCreateNewHeader" ><h3><?php // TRANSLATORS Noun shown in a button. German "Weitere"
+            p($l->t('Others')); ?></h3></div>
     <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
-        <?php p($l->t('Add notification for new records')); ?>
+        <?php p($l->t('Notification for new records')); ?>
     </button>
     <br>
     <br>
