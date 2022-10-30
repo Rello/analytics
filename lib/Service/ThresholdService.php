@@ -127,11 +127,11 @@ class ThresholdService
 
         foreach ($thresholds as $threshold) {
             if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
-                if (version_compare($value, $threshold['value'], $threshold['option'])) {
-                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $threshold['user_id']);
-                    $result = 'Threshold value met';
-                } elseif ($threshold['option'] === 'new' && $insert != 0) {
+                if ($threshold['option'] === 'new' && $insert != 0) {
                     $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $this->l10n->t('new record'), 'value' => ''], $threshold['user_id']);
+                    $result = 'Threshold value met';
+                } elseif (version_compare($value, $threshold['value'], $threshold['option'])) {
+                    $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], ['report' => $datasetMetadata['name'], 'subject' => $dimension1, 'rule' => $threshold['option'], 'value' => $threshold['value']], $threshold['user_id']);
                     $result = 'Threshold value met';
                 }
             }

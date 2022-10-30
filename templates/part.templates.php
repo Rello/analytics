@@ -281,8 +281,6 @@
                         p($l->t('>= greater equal')); ?></option>
                     <option value="!="><?php // TRANSLATORS description in a dropdown; limited space
                         p($l->t('!= not equal')); ?></option>
-                    <option value="new"><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('new record')); ?></option>
                 </select>
             </div>
         </div>
@@ -304,8 +302,15 @@
         </div>
     </div>
     <br>
-    <button id="createThresholdButton" type="button" class="primary">
+    <button id="sidebarThresholdCreateButton" type="button" class="primary">
         <?php p($l->t('Save threshold')); ?>
+    </button>
+    <br>
+    <br>
+    <div id="sidebarThresholdCreateNewHeader" ><h3><?php // TRANSLATORS Noun shown in a button
+            p($l->t('Other Thresholds')); ?></h3></div>
+    <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
+        <?php p($l->t('Add notification for new records')); ?>
     </button>
     <br>
     <br>

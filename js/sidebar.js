@@ -1149,12 +1149,15 @@ OCA.Analytics.Sidebar.Threshold = {
                 document.getElementById('tabContainerThreshold').appendChild(table);
                 document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column 1');
                 document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Column 3');
-                document.getElementById('createThresholdButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
+                document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
+                document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
 
                 document.getElementById('sidebarThresholdHint').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdHint);
 
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);
+                    document.getElementById('sidebarThresholdCreateNewHeader').hidden = true;
+                    document.getElementById('sidebarThresholdCreateNewButton').hidden = true;
                 }
 
                 $.ajax({
@@ -1187,6 +1190,25 @@ OCA.Analytics.Sidebar.Threshold = {
         OCA.Analytics.Sidebar.Threshold.createThreashold();
     },
 
+    handleThresholdCreateNewButton: function () {
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const url = OC.generateUrl('apps/analytics/threshold');
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'reportId': reportId,
+                'dimension1': 0,
+                'option': 'new',
+                'value': 0,
+                'severity': 1,
+            },
+            success: function () {
+                document.querySelector('.tabHeader.selected').click();
+            }
+        });
+    },
+
     handleThresholdDeleteButton: function (evt) {
         const thresholdId = evt.target.dataset.id;
         OCA.Analytics.Sidebar.Threshold.deleteThreshold(thresholdId);
@@ -1204,9 +1226,9 @@ OCA.Analytics.Sidebar.Threshold = {
         }
 
         if (data.option === 'new') { // adjust the text for the "new records" option
-            data.value = data.dimension1;
+            data.value = '';
             data.dimension1 = t('analytics', 'new record');
-            data.option = t('analytics', 'for');
+            data.option = '';
         }
 
         if (data.severity === 1) {

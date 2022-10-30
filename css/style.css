@@ -136,6 +136,10 @@
     width: 100%;
 }
 
+.thresholdItem > .icon-close {
+    cursor: pointer;
+}
+
 .thresholdText {
     margin-top: 6px;
     width: 50%;
