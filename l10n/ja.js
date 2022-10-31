@@ -102,6 +102,7 @@ OC.L10N.register(
     "Import" : "インポート",
     "REST API" : "REST API",
     "Advanced configuration" : "高度な設定",
+    "Others" : "その他",
     "Selection" : "選択",
     "Setting" : "設定",
     "Title" : "タイトル",

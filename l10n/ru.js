@@ -245,6 +245,7 @@ OC.L10N.register(
     "!= not equal" : "!= не равно",
     "Severity" : "Серьёзность",
     "Save threshold" : "Ограничение сохранения",
+    "Others" : "Другие",
     "Selection" : "Выбор",
     "No data load created yet" : "Загрузка данных ещё не создана",
     "Setting" : "Настройка",

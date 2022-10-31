@@ -147,6 +147,7 @@ OC.L10N.register(
     "> greater" : "> suurempi",
     "< less" : "< vähemmän",
     "!= not equal" : "!= erisuuri",
+    "Others" : "Muut",
     "Selection" : "Valinta",
     "Setting" : "Asetus",
     "Title" : "Nimeke",

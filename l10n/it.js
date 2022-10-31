@@ -213,6 +213,7 @@ OC.L10N.register(
     "!= not equal" : "!= non uguale",
     "Severity" : "Severità",
     "Save threshold" : "Salva soglia",
+    "Others" : "Altri",
     "Selection" : "Selezione",
     "Setting" : "Impostazione",
     "Title" : "Titolo",

@@ -56,6 +56,7 @@ OC.L10N.register(
     "From file" : "Iš failo",
     "From clipboard" : "Iš iškarpinės",
     "Advanced configuration" : "Išplėstinė konfigūracija",
+    "Others" : "Kiti",
     "Selection" : "Pasirinkimas",
     "Setting" : "Nustatymas",
     "Title" : "Pavadinimas",

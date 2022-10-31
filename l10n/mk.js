@@ -51,6 +51,7 @@ OC.L10N.register(
     "Update" : "Ажурирај",
     "Export" : "Извези",
     "Import" : "Увези",
+    "Others" : "Останати",
     "Title" : "Наслов",
     "No" : "Не",
     "Yes" : "Да",

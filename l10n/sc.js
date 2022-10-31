@@ -55,6 +55,7 @@ OC.L10N.register(
     "Update" : "Agiorna",
     "Export" : "Esporta",
     "Import" : "Importa",
+    "Others" : "Àtere",
     "Selection" : "Seletzione",
     "Title" : "Tìtulu",
     "No" : "No",

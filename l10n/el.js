@@ -82,6 +82,7 @@ OC.L10N.register(
     "From file" : "Από αρχείο",
     "From clipboard" : "Από το πρόχειρο",
     "<= less equal" : "<= μικρότερο ή ίσο",
+    "Others" : "Άλλοι",
     "Selection" : "Επιλογή",
     "Setting" : "Ρύθμιση",
     "Title" : "Τίτλος",

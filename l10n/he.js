@@ -49,6 +49,7 @@ OC.L10N.register(
     "Update" : "עדכון",
     "Export" : "ייצוא",
     "Import" : "ייבוא",
+    "Others" : "חרים",
     "Setting" : "הגדרות",
     "Title" : "תפקיד",
     "No" : "לא",
