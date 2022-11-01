@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.1 - 2022-09-xx
+## 4.4.1 - 2022-11-xx
 ### Added
 - Text variables for API #314
 
