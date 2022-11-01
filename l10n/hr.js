@@ -52,6 +52,7 @@ OC.L10N.register(
     "Update" : "Ažuriraj",
     "Export" : "Izvoz",
     "Import" : "Uvezi",
+    "Others" : "Ostalo",
     "Title" : "Naslov",
     "No" : "Ne",
     "Yes" : "Da",

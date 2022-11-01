@@ -211,6 +211,7 @@ OC.L10N.register(
     "!= not equal" : "!= 不相等",
     "Severity" : "严重性",
     "Save threshold" : "保存阈值",
+    "Others" : "其它",
     "Selection" : "选择",
     "Setting" : "设置",
     "Title" : "标题",

@@ -47,6 +47,7 @@ OC.L10N.register(
     "Update" : "Uppfæra",
     "Export" : "Flytja út",
     "Import" : "Flytja inn",
+    "Others" : "Others",
     "Setting" : "Stilling",
     "Title" : "Titill",
     "No" : "Nei",

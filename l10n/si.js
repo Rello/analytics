@@ -23,6 +23,7 @@ OC.L10N.register(
     "Settings" : "සැකසුම්",
     "Name" : "නම",
     "Update" : "යාවත්කාල",
+    "Others" : "වෙනත්",
     "No" : "නැහැ",
     "Yes" : "ඔව්",
     "Daily" : "දිනපතා",

@@ -37,6 +37,7 @@ OC.L10N.register(
     "Update" : "Ĝisdatigi",
     "Export" : "Eksporti",
     "Import" : "Importi",
+    "Others" : "Aliaj",
     "Title" : "Titolo",
     "No" : "No",
     "Yes" : "Yes",

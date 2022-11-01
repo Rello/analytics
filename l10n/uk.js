@@ -103,7 +103,6 @@ OC.L10N.register(
     "Column 1" : "Колонка 1",
     "Column 3" : "Колонка 3",
     "new record" : "новий запис",
-    "for" : "для",
     "Missing data" : "Відсутні дані",
     "3rd field must be a valid number" : "3-е поле має бути дійсним числом",
     "Demo: Thresholds" : "Демо: Пороги",

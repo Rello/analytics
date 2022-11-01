@@ -136,6 +136,7 @@ OC.L10N.register(
     "Update" : "Opdater",
     "Export" : "Eksportér",
     "Import" : "Importér",
+    "Others" : "Andre",
     "Selection" : "Valg",
     "Setting" : "Indstilling",
     "Title" : "Titel",

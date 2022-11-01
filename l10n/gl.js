@@ -122,6 +122,7 @@ OC.L10N.register(
     "From file" : "Dun ficheiro",
     "From clipboard" : "Do portapapeis",
     "Advanced configuration" : "Configuración avanzada",
+    "Others" : "Outros",
     "Setting" : "Axuste",
     "Title" : "Título",
     "No" : "Non",
