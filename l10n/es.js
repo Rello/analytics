@@ -250,6 +250,7 @@ OC.L10N.register(
     "Severity" : "Gravedad",
     "Save threshold" : "Guardar umbral",
     "Others" : "Otros",
+    "Notification for new records" : "Notificación para nuevos registros",
     "Selection" : "Selección",
     "No data load created yet" : "No se ha creado ninguna carga de datos",
     "Setting" : "Ajuste",

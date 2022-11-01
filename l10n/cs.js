@@ -250,6 +250,7 @@ OC.L10N.register(
     "Severity" : "Závažnost",
     "Save threshold" : "Práh uložení",
     "Others" : "Ostatní",
+    "Notification for new records" : "Upozorňování na nové záznamy",
     "Selection" : "Výběr",
     "No data load created yet" : "Zatím nevytvořeno žádné načítání dat",
     "Setting" : "Nastavování",
