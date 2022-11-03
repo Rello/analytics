@@ -170,6 +170,8 @@ OC.L10N.register(
     "Options" : "Valg",
     "Back" : "Tilbake",
     "Settings" : "Innstillinger",
+    "Do you like this app?" : "Liker du denne appen?",
+    "More information …" : "Mer informasjon ...",
     "Name" : "Navn",
     "Display" : "Vis",
     "Open documentation" : "Åpne dokumentasjon",

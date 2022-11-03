@@ -250,6 +250,7 @@ OC.L10N.register(
     "Severity" : "Ağırlık",
     "Save threshold" : "Eşiği kaydet",
     "Others" : "Diğerleri",
+    "Notification for new records" : "Yeni kayıtlar için bildirim",
     "Selection" : "Seçim",
     "No data load created yet" : "Henüz bir veri yüklemesi oluşturulmamış",
     "Setting" : "Ayar",
