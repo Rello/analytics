@@ -77,7 +77,7 @@ OC.L10N.register(
     "Delete folder" : "Вилучити каталог",
     "Report" : "Звіт",
     "Thresholds" : "Пороги",
-    "Share" : "Поділитися",
+    "Share" : "Спільний доступ",
     "All data will be deleted!" : "Всі дані будуть видалені!",
     "Text variables can be used in the name or subheader.<br>They are replaced when the report is executed." : "Текстові змінні можна використовувати в імені або підзаголовку. <br>Вони замінюються під час виконання звіту.",
     "Text variables" : "Текстові змінні",
