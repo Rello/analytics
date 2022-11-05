@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.1 - 2022-11-xx
+## 4.5.0 - 2022-11-05
 ### Added
 - Text variables for API #314
 
@@ -16,6 +16,7 @@
 - issue in dataload: URL parsing replace &amp; #278
 - Sharing of groups should not be possible #313
 - various NC25 css fixes
+- Print layout #302
 
 ## 4.4.0 - 2022-09-15
 ### Added
