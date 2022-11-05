@@ -91,7 +91,6 @@ class Json implements IDatasource
             }
             $rawResult = curl_exec($ch);
             $http_code = curl_getinfo($ch);
-            $this->logger->error('debug: '. json_encode($http_code));
             curl_close($ch);
         } else {
             $rawResult = '';

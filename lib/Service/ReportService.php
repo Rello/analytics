@@ -200,7 +200,7 @@ class ReportService
         $reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
         $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
 
-        if ($addReport !== null) {
+        if ($addReport !== null && $addReport !== '') {
             $this->updateGroup($addReport, $reportId);
         }
         return $reportId;

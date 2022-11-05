@@ -1152,6 +1152,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.addEventListener("beforeprint", function () {
-        document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
+        //document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
     });
 });
