@@ -35,6 +35,7 @@ OC.L10N.register(
     "Update" : "Atjaunināt",
     "Export" : "Eksportēt",
     "Import" : "Importēt",
+    "Others" : "Citi",
     "Title" : "Amats",
     "No" : "Nē",
     "Yes" : "Jā",
