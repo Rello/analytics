@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.1 - 2022-11-19
+### Fixed
+- Missing dataset id in example API call #317
+
 ## 4.5.0 - 2022-11-05
 ### Added
 - Text variables for API #314

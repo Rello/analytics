@@ -102,7 +102,7 @@ class DatasetService
     }
 
     /**
-     * get own dataset details
+     * get own dataset details; used in external access like dataset controller
      *
      * @param int $datasetId
      * @return array|bool
@@ -114,6 +114,7 @@ class DatasetService
         if (! empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
         }
+        $ownDataset['dataset'] = $ownDataset['id'];
         return $ownDataset;
     }
 
