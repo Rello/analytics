@@ -3,6 +3,7 @@
 ## 4.5.1 - 2022-11-19
 ### Fixed
 - Missing dataset id in example API call #317
+- No data received on JSON #319
 
 ## 4.5.0 - 2022-11-05
 ### Added

@@ -90,7 +90,7 @@ class Json implements IDatasource
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $option['body']);
             }
             $rawResult = curl_exec($ch);
-            $http_code = curl_getinfo($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
         } else {
             $rawResult = '';
