@@ -75,7 +75,7 @@ class File implements IDatasource
     {
         $data = array();
         $header = array();
-        $headerrow = $errorMessage = 0;
+        $headerrow = $error = 0;
         $selectedColumns = array();
 
         $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
@@ -112,7 +112,7 @@ class File implements IDatasource
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
-            'error' => $errorMessage,
+            'error' => $error,
         ];
     }
 

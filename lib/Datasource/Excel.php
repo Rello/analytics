@@ -79,7 +79,7 @@ class Excel implements IDatasource
 
         include_once __DIR__ . '/../../vendor/autoload.php';
         $header = $dataClean = $data = array();
-        $headerrow = $errorMessage = 0;
+        $headerrow = $error = 0;
 
         $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
         $fileName = $file->getStorage()->getLocalFile($file->getInternalPath());
@@ -129,7 +129,7 @@ class Excel implements IDatasource
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $dataClean,
-            'error' => $errorMessage,
+            'error' => $error,
         ];
     }
 

@@ -118,7 +118,7 @@ class DataloadMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
-            ->select('id')
+            ->select('*')
             ->where($sql->expr()->eq('schedule', $sql->createNamedParameter($schedule)));
         $statement = $sql->execute();
         $result = $statement->fetchAll();

@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- Notifications for failed data loads
+
 ## 4.5.1 - 2022-11-18
 ### Fixed
 - Missing dataset id in example API call #317

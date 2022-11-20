@@ -53,9 +53,9 @@ interface IDatasource
      *
      * return needs to be an array
      *  [
-     *      'header' => $header,
+     *      'header' => $header,  //array('column header 1', 'column header 2','column header 3')
      *      'data' => $data,
-     *      'error' => 0,
+     *      'error' => 0,         // INT 0 = no error
      *  ]
      *
      * @param array

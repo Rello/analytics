@@ -87,43 +87,69 @@ class Notifier implements INotifier
         $l = $this->l10nFactory->get('analytics', $languageCode);
         $parsedSubject = '';
 
+        $parameters = $notification->getSubjectParameters();
+
         switch ($notification->getObjectType()) {
             case NotificationManager::SUBJECT_THRESHOLD:
                 $parsedSubject = $l->t("Report '{report}': {subject} reached the threshold of {rule} {value}");
+                $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $notification->getObjectId();
+
+                $notification->setRichSubject(
+                    $parsedSubject,
+                    [
+                        'report' => [
+                            'type' => 'highlight',
+                            'id' => $notification->getObjectId(),
+                            'name' => $parameters['report'],
+                            'link' => $link,
+                        ],
+                        'subject' => [
+                            'type' => 'highlight',
+                            'id' => $notification->getObjectId(),
+                            'name' => $parameters['subject'],
+                        ],
+                        'rule' => [
+                            'type' => 'highlight',
+                            'id' => $notification->getObjectId(),
+                            'name' => $parameters['rule'],
+                        ],
+                        'value' => [
+                            'type' => 'highlight',
+                            'id' => $notification->getObjectId(),
+                            'name' => $parameters['value'],
+                        ],
+                    ]
+                );
+
+                break;
+            case NotificationManager::DATALOAD_ERROR:
+                $parsedSubject = $l->t("Error during data load '{dataloadName}' for data set '{datasetName}'" );
+                $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . 'a/#/r/' . $notification->getObjectId();
+
+                $notification->setRichSubject(
+                    $parsedSubject,
+                    [
+                        'dataloadName' => [
+                            'type' => 'highlight',
+                            'id' => $notification->getObjectId(),
+                            'name' => $parameters['dataloadName'],
+                        ],
+                        'datasetName' => [
+                            'type' => 'highlight',
+                            'id' => $notification->getObjectId(),
+                            'name' => $parameters['datasetName'],
+                            'link' => $link,
+                        ]
+                    ]
+                );
+
                 break;
             default: // legacy due to switch to subject field filled with an id for notification removal
-                $parsedSubject = $l->t("Report '{report}': {subject} reached the threshold of {rule} {value}");
+                //$parsedSubject = $l->t("Report '{report}': {subject} reached the threshold of {rule} {value}");
+                //$link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $notification->getObjectId();
         }
 
-        $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $notification->getObjectId();
 
-        $parameters = $notification->getSubjectParameters();
-        $notification->setRichSubject(
-            $parsedSubject,
-            [
-                'report' => [
-                    'type' => 'highlight',
-                    'id' => $notification->getObjectId(),
-                    'name' => $parameters['report'],
-                    'link' => $link,
-                ],
-                'subject' => [
-                    'type' => 'highlight',
-                    'id' => $notification->getObjectId(),
-                    'name' => $parameters['subject'],
-                ],
-                'rule' => [
-                    'type' => 'highlight',
-                    'id' => $notification->getObjectId(),
-                    'name' => $parameters['rule'],
-                ],
-                'value' => [
-                    'type' => 'highlight',
-                    'id' => $notification->getObjectId(),
-                    'name' => $parameters['value'],
-                ]
-            ]
-        );
         $notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')));
         $this->setParsedSubjectFromRichSubject($notification);
         return $notification;

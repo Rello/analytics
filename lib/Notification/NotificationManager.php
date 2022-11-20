@@ -18,6 +18,7 @@ class NotificationManager
 {
     const OBJECT_REPORT = 'analytics_report';
     const SUBJECT_THRESHOLD = 'data_threshold';
+    const DATALOAD_ERROR = 'dataload_error';
     /** @var INotificationManager */
     protected $notificationManager;
     private $logger;

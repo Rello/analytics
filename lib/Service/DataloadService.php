@@ -14,6 +14,7 @@ namespace OCA\Analytics\Service;
 use Exception;
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DatasourceController;
+use OCA\Analytics\Notification\NotificationManager;
 use OCA\Analytics\Db\DataloadMapper;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
@@ -28,8 +29,10 @@ class DataloadService
     private $DatasourceController;
     private $ActivityManager;
     private $ReportService;
+    private $DatasetService;
     private $l10n;
     private $DataloadMapper;
+    private $NotificationManager;
 
     public function __construct(
         $userId,
@@ -38,7 +41,9 @@ class DataloadService
         ActivityManager $ActivityManager,
         DatasourceController $DatasourceController,
         ReportService $ReportService,
+        DatasetService $DatasetService,
         StorageService $StorageService,
+        NotificationManager $NotificationManager,
         DataloadMapper $DataloadMapper
     )
     {
@@ -49,6 +54,8 @@ class DataloadService
         $this->ActivityManager = $ActivityManager;
         $this->DatasourceController = $DatasourceController;
         $this->ReportService = $ReportService;
+        $this->DatasetService = $DatasetService;
+        $this->NotificationManager = $NotificationManager;
         $this->DataloadMapper = $DataloadMapper;
     }
 
@@ -125,12 +132,17 @@ class DataloadService
     {
         $schedules = $this->DataloadMapper->getDataloadBySchedule($schedule);
         foreach ($schedules as $dataload) {
-            $this->execute($dataload['id']);
+            $result = $this->execute($dataload['id']);
+            if ($result['error'] !== 0) {
+                // if the data source produced an error, a notification needs to be triggered
+                $dataset = $this->DatasetService->read($dataload['dataset']);
+                $this->NotificationManager->triggerNotification(NotificationManager::DATALOAD_ERROR, $dataload['dataset'], $dataload['id'], ['dataloadName' => $dataload['name'], 'datasetName' => $dataset['name']], $dataload['user_id']);
+            }
         }
     }
 
     /**
-     * execute a data load from datas ource and store into dataset
+     * execute a data load from data source and store into dataset
      *
      * @param int $dataloadId
      * @return array
@@ -147,13 +159,13 @@ class DataloadService
         $result = $this->getDataFromDatasource($dataloadId);
         $datasetId = $result['datasetId'];
 
+        // data source option to delete all date before loading
         if (isset($option['delete']) and $option['delete'] === 'true') {
             $bulkInsert = $this->StorageService->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
         }
 
-        $this->DataloadMapper->beginTransaction();
-
         if ($result['error'] === 0) {
+            $this->DataloadMapper->beginTransaction();
             $currentCount = 0;
             foreach ($result['data'] as $row) {
                 if (count($row) === 1) {
@@ -178,8 +190,13 @@ class DataloadService
                 }
                 if ($action['error'] === 0) $currentCount++;
             }
+            $this->DataloadMapper->commit();
+        } else {
+            // if the data source produced an error, a notification needs to be triggered
+            // $dataset = $this->DatasetService->read($dataloadMetadata['dataset']);
+            // $this->NotificationManager->triggerNotification(NotificationManager::DATALOAD_ERROR, $dataloadMetadata['dataset'], $dataloadMetadata['id'], ['dataloadName' => $dataloadMetadata['name'], 'datasetName' => $dataset['name']], $dataloadMetadata['user_id']);
+            $error = 1;
         }
-        $this->DataloadMapper->commit();
 
         $result = [
             'insert' => $insert,
