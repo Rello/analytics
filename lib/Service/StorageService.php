@@ -55,7 +55,11 @@ class StorageService
         $availableDimensions = array();
         $header = array();
         $datasetMetadata = $this->DatasetService->read($datasetId);
-        $options = json_decode($reportMetadata['filteroptions'], true);
+        if ($reportMetadata['filteroptions'] !== null) {
+            $options = json_decode($reportMetadata['filteroptions'], true);
+        } else {
+            $options = null;
+        }
 
         if (!empty($datasetMetadata)) {
             // output the dimensions available for filtering of this dataset

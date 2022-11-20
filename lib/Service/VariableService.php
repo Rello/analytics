@@ -129,18 +129,20 @@ class VariableService
      */
     public function replaceFilterVariables($reportMetadata)
     {
-        $filteroptions = json_decode($reportMetadata['filteroptions'], true);
-        if (isset($filteroptions['filter'])) {
-            foreach ($filteroptions['filter'] as $key => $value) {
-                $parsed = $this->parseFilter($value['value']);
-                $format = $this->parseFormat($value['value']);
+        if ($reportMetadata['filteroptions'] !== null) {
+            $filteroptions = json_decode($reportMetadata['filteroptions'], true);
+            if (isset($filteroptions['filter'])) {
+                foreach ($filteroptions['filter'] as $key => $value) {
+                    $parsed = $this->parseFilter($value['value']);
+                    $format = $this->parseFormat($value['value']);
 
-                if (!$parsed) break;
-                $filteroptions['filter'][$key]['option'] = $parsed['option'];
-                $filteroptions['filter'][$key]['value'] = date($format, $parsed['value']);
+                    if (!$parsed) break;
+                    $filteroptions['filter'][$key]['option'] = $parsed['option'];
+                    $filteroptions['filter'][$key]['value'] = date($format, $parsed['value']);
+                }
             }
+            $reportMetadata['filteroptions'] = json_encode($filteroptions);
         }
-        $reportMetadata['filteroptions'] = json_encode($filteroptions);
         return $reportMetadata;
     }
 
@@ -164,7 +166,7 @@ class VariableService
             }
 
             // if no offset is specified, apply 1 as default
-            !$offsetMatch[0] ? $offset = 1: $offset = $offsetMatch[0];
+            !isset($offsetMatch[0]) ? $offset = 1: $offset = $offsetMatch[0];
 
             // remove "s" to unify e.g. weeks => week
             $unit = rtrim($unitMatch[0], 's');
