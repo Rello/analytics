@@ -27,6 +27,7 @@ OC.L10N.register(
     "Notification" : "اطلاع",
     "Date" : "تاریخ",
     "Year" : "سال",
+    "Local file" : "پروندهٔ محلّی",
     "File" : "فایل",
     "Version" : "نسخه",
     "Authentication" : "احراز هویت",
