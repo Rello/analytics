@@ -137,8 +137,18 @@ class VariableService
                     $format = $this->parseFormat($value['value']);
 
                     if (!$parsed) break;
-                    $filteroptions['filter'][$key]['option'] = $parsed['option'];
+
+                    // if a parser is selected in the chart options, it should also be valid here automatically
+                    $chartOptions = json_decode($reportMetadata['chartoptions'], true);
+                    if(isset($chartOptions['scales']['xAxes']['time']['parser'])) {
+                        $format = $chartOptions['scales']['xAxes']['time']['parser'];
+                    }
+
+                    // translate commonly known X timestamp format to U for php
+                    if ($format === 'X') $format = 'U';
+
                     $filteroptions['filter'][$key]['value'] = date($format, $parsed['value']);
+                    $filteroptions['filter'][$key]['option'] = $parsed['option'];
                 }
             }
             $reportMetadata['filteroptions'] = json_encode($filteroptions);

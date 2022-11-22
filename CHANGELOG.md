@@ -3,6 +3,9 @@
 ### Added
 - Notifications for failed data loads
 
+### Changes
+- Filter variables to use same time format like chart #321
+
 ## 4.5.1 - 2022-11-18
 ### Fixed
 - Missing dataset id in example API call #317
