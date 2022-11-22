@@ -171,6 +171,7 @@ OC.L10N.register(
     "Read file and add its data to an existing dataset" : "Dosyayı oku ve içindeki verileri var olan bir veri kümesine ekle",
     "Announcements" : "Duyurular",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "'{report}' raporu: {subject}, {rule} {value} eşiğine ulaştı",
+    "Error during data load '{dataloadName}' for data set '{datasetName}'" : "'{datasetName}' veri kümesi için '{dataloadName}' verileri yüklenirken sorun çıktı",
     "No data" : "Herhangi bir veri yok",
     "Last field must be a valid number" : "Son alanı geçerli bir sayı olmalıdır",
     "copy" : "kopyala",
