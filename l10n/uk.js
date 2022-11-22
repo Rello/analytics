@@ -196,7 +196,7 @@ OC.L10N.register(
     "Options" : "Параметри",
     "Analysis" : "Аналіз",
     "Auto refresh" : "Автоматичне оновлення",
-    "Download chart" : "Завантажити діаграму",
+    "Download chart" : "Звантажити діаграму",
     "Save as new report" : "Зберегти як новий звіт",
     "Back" : "Назад",
     "Aggregate values" : "Сукупні значення",
