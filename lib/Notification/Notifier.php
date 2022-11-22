@@ -123,7 +123,7 @@ class Notifier implements INotifier
 
                 break;
             case NotificationManager::DATALOAD_ERROR:
-                $parsedSubject = $l->t("Error during data load '{dataloadName}' for data set '{datasetName}'" );
+                $parsedSubject = $l->t("Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" );
                 $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . 'a/#/r/' . $notification->getObjectId();
 
                 $notification->setRichSubject(
