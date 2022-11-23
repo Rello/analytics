@@ -44,6 +44,7 @@ OC.L10N.register(
     "Share link" : "Διαμοιρασμός συνδέσμου",
     "Link copied" : "Ο σύνδεσμος αντιγράφηκε",
     "Column 3" : "Στήλη 3",
+    "Missing data" : "Ελλιπή δεδομένα",
     "Type" : "Τύπος",
     "Notification" : "Ειδοποίηση",
     "Object" : "Αντικείμενο",
