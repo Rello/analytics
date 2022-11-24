@@ -171,6 +171,7 @@ OC.L10N.register(
     "Read file and add its data to an existing dataset" : "讀取檔案並新增其資料至既有的資料集",
     "Announcements" : "公告",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "報告「{report}」：{subject} 達到了 {rule} {value} 的閾值",
+    "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "資料集「{datasetName}」的資料載入「{dataloadName}」時發生錯誤",
     "No data" : "無資料",
     "Last field must be a valid number" : "最後ㄧ欄必須是有效數字",
     "copy" : "複製",

@@ -169,6 +169,7 @@
     "Read file and add its data to an existing dataset" : "Прочетете файла и добавете неговите данни към съществуващ набор от данни",
     "Announcements" : "Уведомления",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Доклад „{report}“: {subject} достигна прага на {rule} {value}",
+    "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Грешка при зареждане на данни \"{dataloadName}\", за набора от данни \"{datasetName}\"",
     "No data" : "Няма данни",
     "Last field must be a valid number" : "Последното поле трябва да е валиден номер",
     "copy" : "копиране",
