@@ -171,6 +171,7 @@ OC.L10N.register(
     "Read file and add its data to an existing dataset" : "Прочитати файл і додати його дані до існуючого набору даних",
     "Announcements" : "Оголошення",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Звіт \"{report}\": {subject} досяг порогу {rule} {value}",
+    "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Помилка при завантаженні даних \"{dataloadName}\" для набору даних \"{datasetName}\"",
     "No data" : "Немає даних",
     "Last field must be a valid number" : "Останнє поле має бути дійсним числом",
     "copy" : "копіювати",
