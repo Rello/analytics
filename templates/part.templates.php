@@ -54,10 +54,10 @@
         </div>
     </div>
     <br>
-    <div id="reportDatasourceSectionHeader"><h3><?php p($l->t('Data source options')); ?></h3></div>
-    <div id="reportDatasourceSection" class="table" style="display: table; width: 100%; max-width: 500px;"></div>
-    <div id="reportDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
-    <div id="reportDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+    <div id="reportDatasourceSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDatasourceSectionHeaderH3"><?php p($l->t('Data source options')); ?></h3></div>
+    <div id="reportDatasourceSection" class="table" style="display: none; width: 100%; max-width: 500px;"></div>
+    <div id="reportDimensionSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDimensionSectionHeaderH3"><?php p($l->t('Column headers')); ?></h3></div>
+    <div id="reportDimensionSection" class="table" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
             <div style="display: table-cell;"><input id="sidebarReportDimension1" class="sidebarInput"></div>
@@ -76,8 +76,8 @@
         </div>
     </div>
     <br>
-    <div id="reportVisualizationSectionHeader"><h3><?php p($l->t('Visualization')); ?></h3></div>
-    <div id="reportVisualizationSection" class="table" style="display: table; width: 100%; max-width: 500px;">
+    <div id="reportVisualizationSectionHeader" class="sidebarHeaderClosed"><h3 id="reportVisualizationSectionHeaderH3"><?php p($l->t('Visualization')); ?></h3></div>
+    <div id="reportVisualizationSection" class="table" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Display')); ?></div>
             <div style="display: table-cell;">
@@ -102,22 +102,22 @@
             </div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell;  width: 100%;"><?php p($l->t('Chart options')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarReportChartOptions"
-                                                     placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput">
+            <div style="display: table-cell;  width: 100%; vertical-align: middle;"><?php p($l->t('Chart options')); ?></div>
+            <div style="display: table-cell;"><textarea id="sidebarReportChartOptions"
+                                                        placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput" row="1"></textarea>
             </div>
-            <div style="display: table-cell;">
+            <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
                    href="https://github.com/Rello/analytics/wiki/Advanced-chart-options">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell;  width: 100%;"><?php p($l->t('Data options')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarReportDataOptions"
-                                                     placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput">
+            <div style="display: table-cell; width: 100%; vertical-align: middle;"><?php p($l->t('Data options')); ?></div>
+            <div style="display: table-cell;"><textarea id="sidebarReportDataOptions"
+                                                     placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput" row="1"></textarea>
             </div>
-            <div style="display: table-cell;">
+            <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
                    href="https://github.com/Rello/analytics/wiki/Advanced-chart-options">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>

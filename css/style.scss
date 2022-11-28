@@ -185,6 +185,29 @@
   width: 200px;
 }
 
+.sidebarHeaderClosed {
+    @include icon-color('arrowRight', 'analytics', $color-black, 1);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.sidebarHeaderOpened {
+    @include icon-color('arrowDown', 'analytics', $color-black, 1);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+#reportDimensionSectionHeaderH3,
+#reportDatasourceSectionHeaderH3,
+#reportVisualizationSectionHeaderH3
+{
+    cursor: pointer;
+}
+
 table.dataTable tbody tr {
   background-color: var(--color-main-background) !important;
 }

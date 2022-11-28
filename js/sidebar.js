@@ -156,6 +156,20 @@ OCA.Analytics.Sidebar = {
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
 
+    showHideSidebarSection: function (evt) {
+        let header = evt.target.parentElement;
+        let clickedHeaderClosed = header.classList.contains('sidebarHeaderClosed');
+        let section = header.nextElementSibling;
+        if (clickedHeaderClosed) {
+            section.style.display = 'table';
+            header.classList.remove('sidebarHeaderClosed');
+            header.classList.add('sidebarHeaderOpened');
+        } else {
+            section.style.display = 'none';
+            header.classList.remove('sidebarHeaderOpened');
+            header.classList.add('sidebarHeaderClosed');
+        }
+    },
 };
 
 OCA.Analytics.Sidebar.Report = {
@@ -215,9 +229,13 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('sidebarReportGroupHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleGroupHint);
                     document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDimensionHint);
 
+                    document.getElementById('reportDimensionSectionHeaderH3').addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
+                    document.getElementById('reportVisualizationSectionHeaderH3').addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
+                    document.getElementById('reportDatasourceSectionHeaderH3').addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
+
                     // get all the options for a datasource
+                    OCA.Analytics.Sidebar.Report.handleDatasourceChange();
                     if ((parseInt(data['type']) !== OCA.Analytics.TYPE_EMPTY_GROUP)) {
-                        OCA.Analytics.Sidebar.Report.handleDatasourceChange();
                         OCA.Analytics.Sidebar.Report.handleDatasetChange();
                     }
 
@@ -293,31 +311,22 @@ OCA.Analytics.Sidebar.Report = {
         OCA.Analytics.Sidebar.Report.indicateMetadataChanged();
 
         if (type === OCA.Analytics.TYPE_INTERNAL_DB) {
-            document.getElementById('reportDimensionSection').style.display = 'table';
             document.getElementById('reportDimensionSectionHeader').style.removeProperty('display');
-            document.getElementById('reportDatasourceSection').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
-            document.getElementById('reportVisualizationSection').style.display = 'table';
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
             document.getElementById('sidebarReportDatasetRow').style.display = 'table-row';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
         } else if (type === OCA.Analytics.TYPE_EMPTY_GROUP) {
-            document.getElementById('reportDimensionSection').style.display = 'none';
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
-            document.getElementById('reportDatasourceSection').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
-            document.getElementById('reportVisualizationSection').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.display = 'none';
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'none';
             document.getElementById('sidebarReportParentRow').style.display = 'none';
         } else {
-            document.getElementById('reportDimensionSection').style.display = 'none';
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
-            document.getElementById('reportDatasourceSection').style.display = 'table';
             document.getElementById('reportDatasourceSectionHeader').style.removeProperty('display');
-            document.getElementById('reportVisualizationSection').style.display = 'table';
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
@@ -798,7 +807,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataAdvancedButton: function () {
-        window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + document.getElementById('app-sidebar').dataset.id;
+        window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + document.getElementById('DataApiDataset').innerText;
     },
 
 };

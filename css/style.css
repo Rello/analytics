@@ -170,6 +170,31 @@
     width: 200px;
 }
 
+.sidebarHeaderClosed {
+    background-image: url(../img/arrowRight.svg);
+    filter: var(--background-invert-if-dark);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.sidebarHeaderOpened {
+    background-image: url(../img/arrowDown.svg);
+    filter: var(--background-invert-if-dark);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+#reportDimensionSectionHeaderH3,
+#reportDatasourceSectionHeaderH3,
+#reportVisualizationSectionHeaderH3
+{
+    cursor: pointer;
+}
+
 table.dataTable tbody tr {
     background-color: var(--color-main-background) !important;
 }
