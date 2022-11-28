@@ -171,6 +171,7 @@ OC.L10N.register(
     "Read file and add its data to an existing dataset" : "Lee un archivo y añade sus datos a un conjunto de datos existente",
     "Announcements" : "Anuncios",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Informe '{report}: {subject} ha alcanzado el umbral de {rule} {value}",
+    "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Error mientras se cargaban los datos \"{dataloadName}\" para el dataset \"{datasetName}\"",
     "No data" : "Sin datos",
     "Last field must be a valid number" : "El último campo debe ser un número válido",
     "copy" : "copiar",
