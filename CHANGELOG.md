@@ -7,6 +7,7 @@
 ### Changes
 - Filter variables to use same time format like chart #321
 - Sidebar UI optimizations
+- Optimized share report template
 
 ## 4.5.1 - 2022-11-18
 ### Fixed

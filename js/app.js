@@ -1019,7 +1019,7 @@ OCA.Analytics.Backend = {
                     OCA.Analytics.UI.showElement('reportSubHeader');
                 }
 
-                document.title = data.options.name + ' @ ' + OCA.Analytics.initialDocumentTitle;
+                document.title = data.options.name + ' - ' + OCA.Analytics.initialDocumentTitle;
                 if (data.status !== 'nodata' && parseInt(data.error) === 0) {
 
                     // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently

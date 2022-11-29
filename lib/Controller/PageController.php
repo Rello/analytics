@@ -16,6 +16,7 @@ use OCA\Analytics\Service\ShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\StandaloneTemplateResponse;
+use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -86,16 +87,6 @@ class PageController extends Controller
         );
 
         return new TemplateResponse($this->appName, 'main', $params);
-
-        //$response = new TemplateResponse($this->appName, 'main', $params);
-        //$csp = new ContentSecurityPolicy();
-        //$csp->addAllowedScriptDomain('*')
-        //    ->addAllowedConnectDomain('*')
-        //    ->addAllowedStyleDomain('*')
-        //    ->addAllowedFontDomain('*')
-        //    ->allowEvalScript(true);
-        //$response->setContentSecurityPolicy($csp);
-        //return $response;
     }
 
     /**
@@ -151,7 +142,10 @@ class PageController extends Controller
             }
             $params = array();
             $params['token'] = $token;
-            return new TemplateResponse($this->appName, 'public', $params);
+            $response = new PublicTemplateResponse($this->appName, 'public', $params);
+            $response->setHeaderTitle('Nextcloud Analytics');
+            $response->setFooterVisible(false);
+            return $response;
         }
     }
 
