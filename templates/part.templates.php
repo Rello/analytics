@@ -38,7 +38,7 @@
                     <div class="icon-add" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
-        <div style="display: table-row;">
+        <div style="display: table-row;" id="sidebarReportDatasourceRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Data source')); ?></div>
             <select style="display: table-cell;" id="sidebarReportDatasource" class="sidebarInput" disabled>
                 <option value="0"><?php p($l->t('Report group')); ?></option>
@@ -54,10 +54,10 @@
         </div>
     </div>
     <br>
-    <div id="reportDatasourceSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDatasourceSectionHeaderH3"><?php p($l->t('Data source options')); ?></h3></div>
-    <div id="reportDatasourceSection" class="table" style="display: none; width: 100%; max-width: 500px;"></div>
-    <div id="reportDimensionSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDimensionSectionHeaderH3"><?php p($l->t('Column headers')); ?></h3></div>
-    <div id="reportDimensionSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+    <div id="reportDatasourceSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDatasourceSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Data source options')); ?></h3></div>
+    <div id="reportDatasourceSection" style="display: none; width: 100%; max-width: 500px;"></div>
+    <div id="reportDimensionSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDimensionSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Column headers')); ?></h3></div>
+    <div id="reportDimensionSection" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
             <div style="display: table-cell;"><input id="sidebarReportDimension1" class="sidebarInput"></div>
@@ -74,10 +74,10 @@
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
             <div style="display: table-cell;"><input id="sidebarReportValue" class="sidebarInput"></div>
         </div>
+        <br>
     </div>
-    <br>
-    <div id="reportVisualizationSectionHeader" class="sidebarHeaderClosed"><h3 id="reportVisualizationSectionHeaderH3"><?php p($l->t('Visualization')); ?></h3></div>
-    <div id="reportVisualizationSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+    <div id="reportVisualizationSectionHeader" class="sidebarHeaderClosed"><h3 id="reportVisualizationSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Visualization')); ?></h3></div>
+    <div id="reportVisualizationSection" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Display')); ?></div>
             <div style="display: table-cell;">
@@ -224,29 +224,36 @@
     </button>
     <br>
     <br>
-    <div><h3><?php // TRANSLATORS Noun shown in a button
+    <div class="sidebarHeaderClosed"><h3 id="dataImportSectionHeaderH3" class="sidebarPointer"><?php // TRANSLATORS Noun shown in a button
             p($l->t('Import')); ?></h3></div>
-    <button id="importDataFileButton" type="button">
-        <?php p($l->t('From file')); ?>
-    </button>
-    <button id="importDataClipboardButton" type="button">
-        <?php p($l->t('From clipboard')); ?>
-    </button>
-    <br>
-    <textarea id="importDataClipboardText" rows="5" cols="50" hidden></textarea>
-    <br>
-    <button id="importDataClipboardButtonGo" type="button" hidden>
-        <?php // TRANSLATORS Noun shown in a button
-        p($l->t('Import')); ?>
-    </button>
-    <div><h3><?php p($l->t('REST API')); ?></h3></div>
-    <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
-    <input type="hidden" id="DataApiDataset">
-    <br>
-    <div><h3><?php p($l->t('Data load')); ?></h3></div>
-    <button id="advancedButton" type="button">
-        <?php p($l->t('Advanced configuration')); ?>
-    </button>
+    <div id="dataImportSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+        <button id="importDataFileButton" type="button">
+            <?php p($l->t('From file')); ?>
+        </button>
+        <button id="importDataClipboardButton" type="button">
+            <?php p($l->t('From clipboard')); ?>
+        </button>
+        <br>
+        <textarea id="importDataClipboardText" rows="5" cols="50" hidden></textarea>
+        <br>
+        <button id="importDataClipboardButtonGo" type="button" hidden>
+            <?php // TRANSLATORS Noun shown in a button
+            p($l->t('Import')); ?>
+        </button>
+    </div>
+
+    <div class="sidebarHeaderClosed"><h3 id="dataApiSectionHeaderH3" class="sidebarPointer"><?php p($l->t('REST API')); ?></h3></div>
+    <div id="dataApiSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+        <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
+        <input type="hidden" id="DataApiDataset">
+        <br>
+    </div>
+    <div class="sidebarHeaderClosed"><h3 id="dataAdvancedSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Data load')); ?></h3></div>
+    <div id="dataAdvancedSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+        <button id="advancedButton" type="button">
+            <?php p($l->t('Advanced configuration')); ?>
+        </button>
+    </div>
 </template>
 
 <template id="templateThreshold">

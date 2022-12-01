@@ -170,6 +170,13 @@ OCA.Analytics.Sidebar = {
             header.classList.add('sidebarHeaderClosed');
         }
     },
+
+    assignSectionClickEvents: function () {
+        let elements = document.querySelectorAll('[id$="HeaderH3"]');
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
+        }
+    },
 };
 
 OCA.Analytics.Sidebar.Report = {
@@ -229,9 +236,7 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('sidebarReportGroupHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleGroupHint);
                     document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDimensionHint);
 
-                    document.getElementById('reportDimensionSectionHeaderH3').addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
-                    document.getElementById('reportVisualizationSectionHeaderH3').addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
-                    document.getElementById('reportDatasourceSectionHeaderH3').addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
+                    OCA.Analytics.Sidebar.assignSectionClickEvents();
 
                     // get all the options for a datasource
                     OCA.Analytics.Sidebar.Report.handleDatasourceChange();
@@ -314,6 +319,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('reportDimensionSectionHeader').style.removeProperty('display');
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
+            document.getElementById('sidebarReportDatasourceRow').style.display = 'none';
             document.getElementById('sidebarReportDatasetRow').style.display = 'table-row';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
@@ -321,6 +327,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.display = 'none';
+            document.getElementById('sidebarReportDatasourceRow').style.display = 'none';
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'none';
             document.getElementById('sidebarReportParentRow').style.display = 'none';
@@ -328,6 +335,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.removeProperty('display');
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
+            document.getElementById('sidebarReportDatasourceRow').style.display = 'table-row';
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
@@ -747,6 +755,8 @@ OCA.Analytics.Sidebar.Data = {
 
                 document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
                 document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+
+                OCA.Analytics.Sidebar.assignSectionClickEvents();
 
                 document.getElementById('DataValue').addEventListener('keydown', function (event) {
                     if (event.key === 'Enter') {
