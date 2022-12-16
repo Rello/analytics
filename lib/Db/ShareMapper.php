@@ -242,12 +242,22 @@ class ShareMapper
      */
     public function updateSharePermissions($shareId, $permissions)
     {
+        // update the share itself
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('permissions', $sql->createNamedParameter($permissions))
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
         $sql->execute();
+
+        // update the users within a group share
+        $sqlg = $this->db->getQueryBuilder();
+        $sqlg->update(self::TABLE_NAME)
+            ->set('permissions', $sqlg->createNamedParameter($permissions))
+            ->where($sqlg->expr()->eq('uid_initiator', $sqlg->createNamedParameter($this->userSession->getUser()->getUID())))
+            ->andWhere($sqlg->expr()->eq('parent', $sqlg->createNamedParameter($shareId)));
+        $sqlg->execute();
+
         return true;
     }
 

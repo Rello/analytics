@@ -9,6 +9,9 @@
 - Sidebar UI optimizations
 - Optimized share report template
 
+### Fixed
+- No update permission when sharing to group #324
+
 ## 4.5.1 - 2022-11-18
 ### Fixed
 - Missing dataset id in example API call #317

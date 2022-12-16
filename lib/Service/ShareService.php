@@ -146,7 +146,7 @@ class ShareService
         $sharedReports = $this->ShareMapper->getSharedReports();
         foreach ($sharedReports as &$sharedReport) {
             $sharedReport['type'] = '99';
-            $sharedReport['parrent'] = '0';
+            $sharedReport['parent'] = '0';
         }
         return $sharedReports;
     }

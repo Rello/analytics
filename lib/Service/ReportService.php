@@ -94,7 +94,7 @@ class ReportService
 
             if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
                 $sharedReport['type'] = '99';
-                $sharedReport['parrent'] = '0';
+                $sharedReport['parent'] = '0';
                 array_push($ownReports, $sharedReport);
             }
         }
