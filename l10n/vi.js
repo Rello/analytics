@@ -46,6 +46,7 @@ OC.L10N.register(
     "Notification" : "Thông báo",
     "Date" : "Date",
     "Year" : "Năm",
+    "View changelog" : "Xem nhật ký thay đổi",
     "Local file" : "Tệp cục bộ",
     "File" : "Tệp",
     "Version" : "Phiên bản",

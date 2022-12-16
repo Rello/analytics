@@ -65,6 +65,7 @@ OC.L10N.register(
     "Year" : "Ano",
     "New in" : "Novo en",
     "View changelog" : "Ver o rexistro de cambios",
+    "Local file" : "Ficheiro local",
     "File" : "Ficheiro",
     "Version" : "Versión",
     "Authentication" : "Autenticación",
