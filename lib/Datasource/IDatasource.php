@@ -33,15 +33,19 @@ interface IDatasource
     public function getId(): int;
 
     /**
-     * get the available options of the datasoure
+     * get the available options of the data soure
      *
-     * return needs to be an array
-     *  id      = name of the option for the readData
-     *  name    = displayed name of the inputfield in the UI
-     *  type    = 'tf' to create a dropdown if placeholder holds values separated with /
-     *  placeholder = helptext for the inputfield in the UI
+     * return needs to be an array and can consist of many fields.
+     * every field needs to provide the following format
+     *  id          *mandatory*     = name of the option for the readData
+     *  name        *mandatory*     = displayed name of the inputfield in the UI
+     *  type        *optional*      = 'tf' to create a dropdown. Values need to be provided in the placeholder separated with "/".
+     *                                  e.g. "true/false"
+     *                                  if value/text pairs are required for the dropdown/option, the values need to be separated with "-" in addition.
+     *                                  e.g. "eq-equal/gt-greater"
+     *  placeholder *mandatory*     = helptext for the inputfield in the UI
      *
-     *  ['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'tf', 'placeholder' => 'adaptation/absolute']
+     *  {['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'tf', 'placeholder' => 'adaptation/absolute']}
      *
      * @return array
      * @since 3.1.0
@@ -54,6 +58,7 @@ interface IDatasource
      * return needs to be an array
      *  [
      *      'header' => $header,  //array('column header 1', 'column header 2','column header 3')
+     *      'dimensions' => array_slice($header, 0, count($header) - 1),
      *      'data' => $data,
      *      'error' => 0,         // INT 0 = no error
      *  ]

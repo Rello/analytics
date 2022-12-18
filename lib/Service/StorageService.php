@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Db\StorageMapper;
+use OCP\DB\Exception;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
@@ -155,6 +156,7 @@ class StorageService
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
+     * @param string|null $user_id
      * @return bool
      */
     public function delete(int $datasetId, $dimension1, $dimension2, string $user_id = null)
@@ -170,10 +172,39 @@ class StorageService
      * @param $dimension1
      * @param $dimension2
      * @return array
+     * @throws Exception
      */
     public function deleteSimulate(int $datasetId, $dimension1, $dimension2)
     {
         return $this->StorageMapper->deleteSimulate($datasetId, $dimension1, $dimension2);
+    }
+
+    /**
+     * Delete data with variables; used for data deletion jobs
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $filter
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteWithFilter(int $datasetId, $filter)
+    {
+        return $this->StorageMapper->deleteWithFilter($datasetId, $filter);
+    }
+
+    /**
+     * Simulate delete data with variables; used for data deletion jobs
+     *
+     * @NoAdminRequired
+     * @param int $datasetId
+     * @param $filter
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteWithFilterSimulate(int $datasetId, $filter)
+    {
+        return $this->StorageMapper->deleteWithFilterSimulate($datasetId, $filter);
     }
 
     private function floatvalue($val)

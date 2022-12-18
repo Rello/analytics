@@ -19,8 +19,7 @@
 
 /* show the ... icon when the navigation row is hovered */
 #app-navigation:not(.vue) > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button,
-#app-navigation:not(.vue) > ul > li > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button
-{
+#app-navigation:not(.vue) > ul > li > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button {
     opacity: 0.5;
 }
 
@@ -188,8 +187,7 @@
     padding-left: 20px;
 }
 
-.sidebarPointer
-{
+.sidebarPointer {
     cursor: pointer;
 }
 

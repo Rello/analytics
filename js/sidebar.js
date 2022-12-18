@@ -67,15 +67,15 @@ OCA.Analytics.Sidebar = {
             excludeTypes: [],
         });
 
-            OCA.Analytics.Sidebar.registerSidebarTab({
+        OCA.Analytics.Sidebar.registerSidebarTab({
             id: 'tabHeaderData',
             class: 'tabContainerData',
             tabindex: '2',
             name: t('analytics', 'Data'),
             action: OCA.Analytics.Sidebar.Data.tabContainerData,
             validTypes: [OCA.Analytics.TYPE_INTERNAL_DB],
-            excludeTypes:[],
-            });
+            excludeTypes: [],
+        });
 
         OCA.Analytics.Sidebar.registerSidebarTab({
             id: 'tabHeaderThreshold',
@@ -84,7 +84,7 @@ OCA.Analytics.Sidebar = {
             name: t('analytics', 'Thresholds'),
             action: OCA.Analytics.Sidebar.Threshold.tabContainerThreshold,
             validTypes: [],
-            excludeTypes:[OCA.Analytics.TYPE_EMPTY_GROUP],
+            excludeTypes: [OCA.Analytics.TYPE_EMPTY_GROUP],
         });
 
         OCA.Analytics.Sidebar.registerSidebarTab({
@@ -106,11 +106,11 @@ OCA.Analytics.Sidebar = {
         for (let tab in items) {
 
             // if tab can not be used for certain report types
-            if(items[tab].excludeTypes.length !== 0 && items[tab].excludeTypes.includes(datasetType)) {
+            if (items[tab].excludeTypes.length !== 0 && items[tab].excludeTypes.includes(datasetType)) {
                 continue;
             }
             // if tab can only be used for certain report types
-            if(items[tab].validTypes.length !== 0 && !items[tab].validTypes.includes(datasetType)) {
+            if (items[tab].validTypes.length !== 0 && !items[tab].validTypes.includes(datasetType)) {
                 continue;
             }
 
@@ -276,7 +276,9 @@ OCA.Analytics.Sidebar.Report = {
                 '&quot;': '"',
                 '&#039;': "'"
             };
-        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
+        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {
+            return map[m];
+        });
     },
 
     indicateMetadataChanged: function () {
@@ -419,10 +421,12 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     handleGroupHint: function () {
-        let text = t('analytics', 'Reports can be grouped into a folder structure.')+
+        let text = t('analytics', 'Reports can be grouped into a folder structure.') +
             '<br><br>' +
             t('analytics', 'Do you want to create a new group folder?');
-        OCA.Analytics.Notification.confirm(t('analytics', 'Report group'), text, function () {OCA.Analytics.Sidebar.Report.createGroup();});
+        OCA.Analytics.Notification.confirm(t('analytics', 'Report group'), text, function () {
+            OCA.Analytics.Sidebar.Report.createGroup();
+        });
     },
 
     handleDimensionHint: function () {
@@ -432,7 +436,9 @@ OCA.Analytics.Sidebar.Report = {
             '<br>' +
             t('analytics', 'Switch to the dataset maintenance from here?');
         const datasetId = parseInt(document.getElementById('sidebarReportDataset').value);
-        OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;});
+        OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {
+            window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
+        });
     },
 
     buildGroupingDropdown: function (element) {
@@ -631,13 +637,13 @@ OCA.Analytics.Sidebar.Report = {
                         t('analytics', 'Dataset'),
                         t('analytics', 'This was the last report on the dataset. Do you want to delete the dataset including all data?'),
                         function () {
-                                $.ajax({
-                                    type: 'DELETE',
-                                    url: OC.generateUrl('apps/analytics/dataset/') + data,
-                                    success: function () {
-                                        OCA.Analytics.Navigation.getDatasets(datasetId);
-                                    }
-                                });
+                            $.ajax({
+                                type: 'DELETE',
+                                url: OC.generateUrl('apps/analytics/dataset/') + data,
+                                success: function () {
+                                    OCA.Analytics.Navigation.getDatasets(datasetId);
+                                }
+                            });
                         },
                         true
                     );
@@ -747,7 +753,7 @@ OCA.Analytics.Sidebar.Data = {
                 document.getElementById('DataApiDataset').innerText = data['dataset'];
                 //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
                 document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
-                document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeleteButton);
+                document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
                 document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
                 document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportClipboardButton);
                 document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
@@ -783,7 +789,7 @@ OCA.Analytics.Sidebar.Data = {
         OCA.Analytics.Sidebar.Backend.updateData();
     },
 
-    handleDataDeleteButton: function () {
+    handleDataDeletionButton: function () {
         OCA.Analytics.Sidebar.Backend.deleteDataSimulate();
     },
 
@@ -885,7 +891,7 @@ OCA.Analytics.Sidebar.Share = {
         } else {
             linkRow.getElementById('sharingOptionsGroupNew').remove();
             linkRow.getElementById('shareOpenDirect').href = OC.generateUrl('/apps/analytics/p/') + token;
-            linkRow.getElementById('shareClipboardLink').value = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':'+OC.getPort() : '') + OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('shareClipboardLink').value = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + OC.generateUrl('/apps/analytics/p/') + token;
             linkRow.getElementById('shareClipboard').addEventListener('click', OCA.Analytics.Sidebar.Share.handleShareClipboard)
             linkRow.getElementById('moreIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
             linkRow.getElementById('showPassword').addEventListener('click', OCA.Analytics.Sidebar.Share.showPassMenu);

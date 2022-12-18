@@ -925,15 +925,24 @@ OCA.Analytics.Datasource = {
 
     buildOptionsSelect: function (templateOption) {
         let input = document.createElement('select');
+        let text, value;
         input.style.display = 'inline-flex';
         input.classList.add('sidebarInput');
         input.id = templateOption.id;
 
+        // if options are split with "-", they are considered as value/key pairs
         let selectOptions = templateOption.placeholder.split("/")
         for (let selectOption of selectOptions) {
+            let keyValue = selectOption.split('-');
+            value = selectOption;
+            text = selectOption;
+            if (keyValue.length >> 1) {
+                value = keyValue[0];
+                text = keyValue[1];
+            }
             let option = document.createElement('option');
-            option.value = selectOption;
-            option.innerText = selectOption;
+            option.value = value;
+            option.innerText = text;
             input.appendChild(option);
         }
         return input;

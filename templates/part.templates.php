@@ -54,9 +54,13 @@
         </div>
     </div>
     <br>
-    <div id="reportDatasourceSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDatasourceSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Data source options')); ?></h3></div>
+    <div id="reportDatasourceSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDatasourceSectionHeaderH3"
+                                                                            class="sidebarPointer"><?php p($l->t('Data source options')); ?></h3>
+    </div>
     <div id="reportDatasourceSection" style="display: none; width: 100%; max-width: 500px;"></div>
-    <div id="reportDimensionSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDimensionSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Column headers')); ?></h3></div>
+    <div id="reportDimensionSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDimensionSectionHeaderH3"
+                                                                           class="sidebarPointer"><?php p($l->t('Column headers')); ?></h3>
+    </div>
     <div id="reportDimensionSection" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
@@ -76,7 +80,9 @@
         </div>
         <br>
     </div>
-    <div id="reportVisualizationSectionHeader" class="sidebarHeaderClosed"><h3 id="reportVisualizationSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Visualization')); ?></h3></div>
+    <div id="reportVisualizationSectionHeader" class="sidebarHeaderClosed"><h3 id="reportVisualizationSectionHeaderH3"
+                                                                               class="sidebarPointer"><?php p($l->t('Visualization')); ?></h3>
+    </div>
     <div id="reportVisualizationSection" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%;"><?php p($l->t('Display')); ?></div>
@@ -104,7 +110,8 @@
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%; vertical-align: middle;"><?php p($l->t('Chart options')); ?></div>
             <div style="display: table-cell;"><textarea id="sidebarReportChartOptions"
-                                                        placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput" row="1"></textarea>
+                                                        placeholder="<?php p($l->t('advanced')); ?>"
+                                                        class="sidebarInput" row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
@@ -115,7 +122,8 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%; vertical-align: middle;"><?php p($l->t('Data options')); ?></div>
             <div style="display: table-cell;"><textarea id="sidebarReportDataOptions"
-                                                     placeholder="<?php p($l->t('advanced')); ?>" class="sidebarInput" row="1"></textarea>
+                                                        placeholder="<?php p($l->t('advanced')); ?>"
+                                                        class="sidebarInput" row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
@@ -190,43 +198,47 @@
 </template>
 
 <template id="templateData">
-    <div><h3><?php p($l->t('Manual entry')); ?></h3></div>
-    <div class="table" style="display: table; width: 100%; max-width: 500px;">
-        <div style="display: table-row;">
-            <div id="DataTextDimension1"
-                 style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
-            <input style="display: table-cell;" class="sidebarInput" id="DataDimension1">
-            <div style="display: table-cell;">
-                <a id="sidebarDataDimension1Hint" title="<?php p($l->t('Variables')); ?>">
-                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
-                </a></div>
+    <div class="sidebarHeaderOpened"><h3 id="dataManualSectionHeaderH3"
+                                         class="sidebarPointer"><?php p($l->t('Manual entry')); ?></h3></div>
+    <div id="dataManualSection" style="display: table; width: 100%; max-width: 500px;">
+        <div class="table" style="display: table; width: 100%; max-width: 500px;">
+            <div style="display: table-row;">
+                <div id="DataTextDimension1"
+                     style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
+                <input style="display: table-cell;" class="sidebarInput" id="DataDimension1">
+                <div style="display: table-cell;">
+                    <a id="sidebarDataDimension1Hint" title="<?php p($l->t('Variables')); ?>">
+                        <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                    </a></div>
+            </div>
+            <div style="display: table-row;">
+                <div id="DataTextDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></div>
+                <input style="display: table-cell;" class="sidebarInput" id="DataDimension2">
+                <div style="display: table-cell;">
+                    <a id="sidebarDataDimension2Hint" title="<?php p($l->t('Variables')); ?>">
+                        <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                    </a></div>
+            </div>
+            <div style="display: table-row;">
+                <div id="DataTextValue"
+                     style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
+                <input style="display: table-cell;" class="sidebarInput" id="DataValue">
+            </div>
         </div>
-        <div style="display: table-row;">
-            <div id="DataTextDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></div>
-            <input style="display: table-cell;" class="sidebarInput" id="DataDimension2">
-            <div style="display: table-cell;">
-                <a id="sidebarDataDimension2Hint" title="<?php p($l->t('Variables')); ?>">
-                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
-                </a></div>
-        </div>
-        <div style="display: table-row;">
-            <div id="DataTextValue"
-                 style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-            <input style="display: table-cell;" class="sidebarInput" id="DataValue">
-        </div>
+        <br>
+        <button id="updateDataButton" type="button" class="primary">
+            <?php p($l->t('Save data')); ?>
+        </button>
+        <button id="deleteDataButton" type="button">
+            <?php p($l->t('Delete data')); ?>
+        </button>
+        <br>
+        <br>
     </div>
-    <br>
-    <button id="updateDataButton" type="button" class="primary">
-        <?php p($l->t('Save data')); ?>
-    </button>
-    <button id="deleteDataButton" type="button">
-        <?php p($l->t('Delete data')); ?>
-    </button>
-    <br>
-    <br>
-    <div class="sidebarHeaderClosed"><h3 id="dataImportSectionHeaderH3" class="sidebarPointer"><?php // TRANSLATORS Noun shown in a button
+    <div class="sidebarHeaderClosed"><h3 id="dataImportSectionHeaderH3"
+                                         class="sidebarPointer"><?php // TRANSLATORS Noun shown in a button
             p($l->t('Import')); ?></h3></div>
-    <div id="dataImportSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+    <div id="dataImportSection" style="display: none; width: 100%; max-width: 500px;">
         <button id="importDataFileButton" type="button">
             <?php p($l->t('From file')); ?>
         </button>
@@ -234,22 +246,25 @@
             <?php p($l->t('From clipboard')); ?>
         </button>
         <br>
-        <textarea id="importDataClipboardText" rows="5" cols="50" hidden></textarea>
+        <textarea id="importDataClipboardText" rows="5" cols="150" hidden></textarea>
         <br>
         <button id="importDataClipboardButtonGo" type="button" hidden>
             <?php // TRANSLATORS Noun shown in a button
             p($l->t('Import')); ?>
         </button>
+        <br>
     </div>
 
-    <div class="sidebarHeaderClosed"><h3 id="dataApiSectionHeaderH3" class="sidebarPointer"><?php p($l->t('REST API')); ?></h3></div>
-    <div id="dataApiSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+    <div class="sidebarHeaderClosed"><h3 id="dataApiSectionHeaderH3"
+                                         class="sidebarPointer"><?php p($l->t('REST API')); ?></h3></div>
+    <div id="dataApiSection" style="display: none; width: 100%; max-width: 500px;">
         <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
         <input type="hidden" id="DataApiDataset">
         <br>
     </div>
-    <div class="sidebarHeaderClosed"><h3 id="dataAdvancedSectionHeaderH3" class="sidebarPointer"><?php p($l->t('Data load')); ?></h3></div>
-    <div id="dataAdvancedSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+    <div class="sidebarHeaderClosed"><h3 id="dataAdvancedSectionHeaderH3"
+                                         class="sidebarPointer"><?php p($l->t('Data load')); ?></h3></div>
+    <div id="dataAdvancedSection" style="display: none; width: 100%; max-width: 500px;">
         <button id="advancedButton" type="button">
             <?php p($l->t('Advanced configuration')); ?>
         </button>
@@ -264,9 +279,11 @@
     <br>
     <div class="table" style="display: table;">
         <div style="display: table-row;">
-            <div id="sidebarThresholdTextDimension1" style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
+            <div id="sidebarThresholdTextDimension1"
+                 style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
             <div style="display: table-cell;">
-                <input id="sidebarThresholdDimension1" class="sidebarInput" placeholder="<?php p($l->t('single value or *')); ?>"></div>
+                <input id="sidebarThresholdDimension1" class="sidebarInput"
+                       placeholder="<?php p($l->t('single value or *')); ?>"></div>
             <div style="display: table-cell;">
                 <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -314,7 +331,7 @@
     </button>
     <br>
     <br>
-    <div id="sidebarThresholdCreateNewHeader" ><h3><?php // TRANSLATORS Noun shown in a button. German "Weitere"
+    <div id="sidebarThresholdCreateNewHeader"><h3><?php // TRANSLATORS Noun shown in a button. German "Weitere"
             p($l->t('Others')); ?></h3></div>
     <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
         <?php p($l->t('Notification for new records')); ?>
@@ -328,10 +345,10 @@
     <div style="display: flex;">
         <div style="width: 25%;">
             <div class="wizardHeader"><?php p($l->t('Selection')); ?></div>
-            <div id="dataloadList"><?php p($l->t('No data load created yet')); ?></div>
+            <h3 style="padding-top: 20px;"><?php p($l->t('Data load')); ?></h3>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
-                    <div id="createDataloadButton" class="icon-add icon" style="padding: 0 0px 0 44px;">
+                    <div id="createDataloadButton" class="icon-add icon sidebarPointer" style="padding: 0 0px 0 44px;">
                     </div>
                 </div>
                 <div style="display: table-cell;">
@@ -339,16 +356,22 @@
                     </select>
                 </div>
             </div>
+            <div id="dataLoadList"></div>
+            <h3 style="padding-top: 20px;"><?php p($l->t('Data deletion')); ?></h3>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
-                    <div class="icon" style="padding: 0 0px 0 44px;">
+                    <div id="createDataDeletionButton" class="icon-add icon sidebarPointer"
+                         style="padding: 0 0px 0 44px;">
                     </div>
                 </div>
-                <div style="display: table-cell;">
-                    <a href="https://github.com/Rello/analytics/wiki/Datasources"
-                       target="_blank"><?php p($l->t('More information …')); ?></a>
+                <div style="display: table-cell;"><?php p($l->t('New deletion')); ?>
                 </div>
             </div>
+            <div id="dataDeleteList"></div>
+            <br>
+            <br>
+            <a href="https://github.com/Rello/analytics/wiki/Datasources"
+               target="_blank"><?php p($l->t('More information …')); ?></a>
         </div>
         <div style="width: 5%;">
             <div class="wizardHeader icon-view-next"></div>
@@ -534,7 +557,8 @@
                          </li>
                       <li id="shareChartMenuDomain" class="linkPassMenu hidden">
                             <span class="menuitem icon-timezone">
-                                <input id="shareChartDomain" type="input" placeholder="<?php p($l->t('Domain of external site')); ?>"
+                                <input id="shareChartDomain" type="input"
+                                       placeholder="<?php p($l->t('Domain of external site')); ?>"
                                        class="linkPassText">
                                 <input id="shareChartSubmit" type="submit" value=""
                                        class="icon-confirm share-pass-submit"

@@ -75,7 +75,7 @@ class File implements IDatasource
     {
         $data = array();
         $header = array();
-        $headerrow = $error = 0;
+        $error = 0;
         $selectedColumns = array();
 
         $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
@@ -94,7 +94,6 @@ class File implements IDatasource
         $header = str_getcsv($rows[0], $delimiter);
         $rows = array_slice($rows, 1);
 
-        $data = array();
         if (count($selectedColumns) !== 0) {
             $header = $this->minimizeRow($selectedColumns, $header);
 

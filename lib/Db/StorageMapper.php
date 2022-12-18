@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IL10N;
@@ -172,6 +173,7 @@ class StorageMapper
      * @param $dimension1
      * @param $dimension2
      * @return array
+     * @throws Exception
      */
     public function deleteSimulate(int $datasetId, $dimension1, $dimension2)
     {
@@ -193,6 +195,57 @@ class StorageMapper
     }
 
     /**
+     * delete data
+     * @param int $datasetId
+     * @param $options
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteWithFilter(int $datasetId, $options)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+
+        // add the where clauses depending on the filter selection of the
+        if (isset($options['filter'])) {
+            foreach ($options['filter'] as $key => $value) {
+                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
+            }
+        }
+        $sql->execute();
+
+        return true;
+    }
+
+    /**
+     * delete data
+     * @param int $datasetId
+     * @param $options
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteWithFilterSimulate(int $datasetId, $options)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->selectAlias($sql->func()->count('*'), 'count')
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+
+            // add the where clauses depending on the filter selection of the
+            if (isset($options['filter'])) {
+                foreach ($options['filter'] as $key => $value) {
+                    $this->sqlWhere($sql, $key, $value['option'], $value['value']);
+                }
+            }
+
+        $statement = $sql->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
+        /**
      * delete all data of a dataset
      * @param int $datasetId
      * @return bool

@@ -79,7 +79,7 @@ OCA.Analytics.Advanced = {
             id: 'tabHeaderDataload',
             class: 'tabContainerDataload',
             tabindex: '2',
-            name: t('analytics', 'Data load'),
+            name: t('analytics', 'Automation'),
             action: OCA.Analytics.Advanced.Dataload.tabContainerDataload,
         });
 
@@ -165,13 +165,19 @@ OCA.Analytics.Advanced.Dataload = {
                 document.getElementById('tabContainerDataload').innerHTML = '';
                 document.getElementById('tabContainerDataload').appendChild(table);
                 document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCreateButton);
-                document.getElementById('dataloadList').innerHTML = '';
+                document.getElementById('createDataDeletionButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCreateDataDeletionButton);
+                document.getElementById('dataLoadList').innerHTML = '';
+                document.getElementById('dataDeleteList').innerHTML = '';
 
                 OCA.Analytics.Advanced.Dataload.dataloadArray = [];
 
                 // list all available data loads for dataset
                 for (let dataload of data['dataloads']) {
-                    document.getElementById('dataloadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
+                    if (parseInt(dataload['datasource']) === 0) {
+                        document.getElementById('dataDeleteList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
+                    } else {
+                        document.getElementById('dataLoadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
+                    }
                     // keys need to be int; some instances deliver strings from the backend
                     dataload['dataset'] = parseInt(dataload['dataset']);
                     dataload['datasource'] = parseInt(dataload['datasource']);
@@ -180,19 +186,48 @@ OCA.Analytics.Advanced.Dataload = {
                     OCA.Analytics.Advanced.Dataload.dataloadArray.push(dataload);
                 }
                 if (OCA.Analytics.Advanced.Dataload.dataloadArray.length === 0) {
-                    document.getElementById('dataloadList').innerHTML = '<span class="userGuidance">'
-                        + t('analytics', 'This report does not have any data loads. <br>Choose a data source from the dropdown and press "+"')
-                        + '</span><br><br>';
+                    document.getElementById('dataLoadList').innerHTML = '<span class="userGuidance">'
+                        + t('analytics', 'Choose a data source from the dropdown and press "+"')
+                        + '</span><br>';
                 } else {
                     document.getElementById('dataloadDetailItems').innerHTML = '<span class="userGuidance">'
                         + t('analytics', 'Choose a data load from the list to change its settings')
                         + '</span>';
                 }
 
+                let dataLoadCreated = document.getElementById('app-sidebar').dataset.dataLoadCreated;
+                if (dataLoadCreated !== 'null' && typeof(dataLoadCreated) !== 'undefined') {
+                    OCA.Analytics.Advanced.Dataload.buildDataloadOptions(null, dataLoadCreated);
+                }
+                document.getElementById('app-sidebar').dataset.dataLoadCreated = null;
+
                 // list all available datasources
                 document.getElementById('datasourceSelect').appendChild(OCA.Analytics.Datasource.buildDropdown());
+
+                // write dimension structure to datasource array [0] in case it is required for a deletion job later
+                OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
+
             }
         });
+    },
+
+    updateDatasourceDeletionOption: function () {
+        // write dimension structure to datasource array [0] in case it is required for a deletion job later
+
+        // fill Options dropdown
+        let optionSelectOptions = '';
+        for (let i = 0; i < Object.keys(OCA.Analytics.Filter.optionTextsArray).length; i++) {
+            optionSelectOptions = optionSelectOptions + Object.keys(OCA.Analytics.Filter.optionTextsArray)[i] + '-' + Object.values(OCA.Analytics.Filter.optionTextsArray)[i] + '/';
+        }
+
+        const datasetId = document.getElementById('app-sidebar').dataset.id;
+        let dataset = OCA.Analytics.datasets.find(x => parseInt(x.id) === parseInt(datasetId));
+
+        let datasetOptions = [];
+        datasetOptions.push({id: 'filterDimension', name: t('analytics', 'Filter by'), type: 'tf', placeholder: 'dimension1-'+dataset['dimension1'] + '/' + 'dimension2-'+dataset['dimension2']});
+        datasetOptions.push({id: 'filterOption', name: t('analytics', 'Operator'), type: 'tf', placeholder: optionSelectOptions});
+        datasetOptions.push({id: 'filterValue', name: t('analytics', 'Value'), placeholder: ''});
+        OCA.Analytics.datasourceOptions[0] = datasetOptions;
     },
 
     buildDataloadRow: function (dataload) {
@@ -222,8 +257,13 @@ OCA.Analytics.Advanced.Dataload = {
         OCA.Analytics.Advanced.Dataload.buildDataloadOptions(evt);
     },
 
-    buildDataloadOptions: function (evt) {
-        let dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+    buildDataloadOptions: function (evt, id = null) {
+        let dataload;
+        if (id === null) {
+            dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+        } else {
+            dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(id));
+        }
 
         document.getElementById('dataloadDetail').dataset.id = dataload['id'];
         document.getElementById('dataloadName').value = dataload['name'];
@@ -236,7 +276,8 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
         document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload['id'];
 
-        // get all the options for a datasource
+        // get all the options (fields, descriptions, defaults) for a datasource
+        // they are read from the generic data source definitions
         document.getElementById('dataloadDetailItems').innerHTML = '';
         document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildOptionsForm(dataload['datasource']));
 
@@ -254,20 +295,12 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleExecuteButton);
     },
 
-    decodeEscapedHtml: function (text) {
-        let map =
-            {
-                '&amp;': '&',
-                '&lt;': '<',
-                '&gt;': '>',
-                '&quot;': '"',
-                '&#039;': "'"
-            };
-        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
-    },
-
     handleCreateButton: function () {
-        OCA.Analytics.Advanced.Dataload.createDataload();
+        if (document.getElementById('datasourceSelect').value === '') {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Please select data source'));
+        } else {
+            OCA.Analytics.Advanced.Dataload.createDataload();
+        }
     },
 
     createDataload: function () {
@@ -278,7 +311,27 @@ OCA.Analytics.Advanced.Dataload = {
                 'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
                 'datasourceId': document.getElementById('datasourceSelect').value,
             },
-            success: function () {
+            success: function (data) {
+                document.getElementById('app-sidebar').dataset.dataLoadCreated = data.id;
+                document.querySelector('.tabHeader.selected').click();
+            }
+        });
+    },
+
+    handleCreateDataDeletionButton: function () {
+        OCA.Analytics.Advanced.Dataload.createDataDelete();
+    },
+
+    createDataDelete: function () {
+        $.ajax({
+            type: 'POST',
+            url: OC.generateUrl('apps/analytics/dataload'),
+            data: {
+                'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
+                'datasourceId': 0,
+            },
+            success: function (data) {
+                document.getElementById('app-sidebar').dataset.dataLoadCreated = data.id;
                 document.querySelector('.tabHeader.selected').click();
             }
         });
@@ -312,6 +365,7 @@ OCA.Analytics.Advanced.Dataload = {
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['option'] = option;
+                document.querySelector('[data-id="' + parseInt(dataloadId) + '"]').innerHTML = document.getElementById('dataloadName').value;
             }
         });
     },
@@ -341,29 +395,6 @@ OCA.Analytics.Advanced.Dataload = {
 
     handleExecuteButton: function () {
         OCA.Analytics.Advanced.Dataload.executeDataload();
-    },
-
-    handleFilepicker: function () {
-        let dataloadId = document.getElementById('dataloadDetail').dataset.id;
-        let type = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId))['datasource'];
-
-        let mime;
-        if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
-            mime = ['text/csv', 'text/plain'];
-        } else if (type === OCA.Analytics.TYPE_EXCEL) {
-            mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.oasis.opendocument.spreadsheet',
-                'application/vnd.ms-excel'];
-        }
-        OC.dialogs.filepicker(
-            t('analytics', 'Select file'),
-            function (path) {
-                document.getElementById('link').value = path;
-            },
-            false,
-            mime,
-            true,
-            1);
     },
 
     executeDataload: function () {
@@ -410,15 +441,51 @@ OCA.Analytics.Advanced.Dataload = {
                     } else {
                         messageType = 'error';
                     }
-                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' '  + t('analytics', 'records updated') + ', '  + data.error+ ' '  + t('analytics', 'errors'));
+                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' '  + t('analytics', 'records updated') + ', '  + data.error + ' '  + t('analytics', 'errors') + ', '  + data.delete + ' '  + t('analytics', 'deletions'));
                 }
             }
         });
     },
 
+    handleFilepicker: function () {
+        let dataloadId = document.getElementById('dataloadDetail').dataset.id;
+        let type = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId))['datasource'];
+
+        let mime;
+        if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
+            mime = ['text/csv', 'text/plain'];
+        } else if (type === OCA.Analytics.TYPE_EXCEL) {
+            mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.oasis.opendocument.spreadsheet',
+                'application/vnd.ms-excel'];
+        }
+        OC.dialogs.filepicker(
+            t('analytics', 'Select file'),
+            function (path) {
+                document.getElementById('link').value = path;
+            },
+            false,
+            mime,
+            true,
+            1);
+    },
+
+    decodeEscapedHtml: function (text) {
+        let map =
+            {
+                '&amp;': '&',
+                '&lt;': '<',
+                '&gt;': '>',
+                '&quot;': '"',
+                '&#039;': "'"
+            };
+        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
+    },
+
 };
 
 OCA.Analytics.Advanced.Dataset = {
+    dataloadArray: [],
 
     tabContainerDataset: function () {
         const datasetId = document.getElementById('app-sidebar').dataset.id;
@@ -448,6 +515,7 @@ OCA.Analytics.Advanced.Dataset = {
                     document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleUpdateButton);
                     //document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleExportButton);
 
+                    // get status information like report and data count
                     OCA.Analytics.Advanced.Dataset.getStatus();
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
@@ -458,7 +526,9 @@ OCA.Analytics.Advanced.Dataset = {
 
     },
 
+
     getStatus: function () {
+        // get status information like report and data count
         const datasetId = document.getElementById('app-sidebar').dataset.id;
         $.ajax({
             type: 'GET',

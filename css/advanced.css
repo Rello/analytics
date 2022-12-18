@@ -21,9 +21,8 @@
   padding: 0 12px 0 44px;
 }
 
-#dataloadList, #dataloadDetail, #dataloadRun {
-  //padding-left: 50px;
-  padding-top: 20px;
+#dataloadDetail, #dataloadRun {
+  padding-top: 30px;
 }
 
 .wizardHeader {

@@ -3,6 +3,7 @@
 ## 4.5.2 - 2022-12-xx
 ### Added
 - Notifications for failed data loads
+- Schedule deletion jobs per dataset to clean up old data #316
 
 ### Changes
 - Filter variables to use same time format like chart #321

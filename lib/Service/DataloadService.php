@@ -30,6 +30,7 @@ class DataloadService
     private $ActivityManager;
     private $ReportService;
     private $DatasetService;
+    private $VariableService;
     private $l10n;
     private $DataloadMapper;
     private $NotificationManager;
@@ -43,6 +44,7 @@ class DataloadService
         ReportService $ReportService,
         DatasetService $DatasetService,
         StorageService $StorageService,
+        VariableService $VariableService,
         NotificationManager $NotificationManager,
         DataloadMapper $DataloadMapper
     )
@@ -55,6 +57,7 @@ class DataloadService
         $this->DatasourceController = $DatasourceController;
         $this->ReportService = $ReportService;
         $this->DatasetService = $DatasetService;
+        $this->VariableService = $VariableService;
         $this->NotificationManager = $NotificationManager;
         $this->DataloadMapper = $DataloadMapper;
     }
@@ -151,20 +154,43 @@ class DataloadService
     public function execute(int $dataloadId)
     {
         $bulkSize = 500;
-        $insert = $update = $error = 0;
+        $insert = $update = $error = $delete = 0;
         $bulkInsert = null;
 
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
-        $option = json_decode($dataloadMetadata['option'], true);
         $result = $this->getDataFromDatasource($dataloadId);
-        $datasetId = $result['datasetId'];
+        $option = json_decode($dataloadMetadata['option'], true);
 
-        // data source option to delete all date before loading
+        if ($dataloadMetadata['datasource'] === 0) {
+            // this is a deletion request. Just run the deletion and stop after that with a return.
+
+            $option = json_decode($dataloadMetadata['option'], true);
+
+            // deletion jobs are using the same dimension/option/value settings a report filter
+            $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
+            // Text variables like %xx% could be in use here
+            $filter = $this->VariableService->replaceFilterVariables($filter);
+
+            $this->StorageService->deleteWithFilterSimulate($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true));
+
+            $result = [
+                'insert' => $insert,
+                'update' => $update,
+                // use the existing row count from the deletion simulation which was run during getDataFromDatasource
+                'delete' => $result['data']['count'],
+                'error' => $error,
+            ];
+            return $result;
+        }
+
+        // if the data source option to delete all date before loading is "true"
+        $datasetId = $result['datasetId'];
         if (isset($option['delete']) and $option['delete'] === 'true') {
             $bulkInsert = $this->StorageService->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
         }
 
         if ($result['error'] === 0) {
+            // collect mass updates to reduce statements to the database
             $this->DataloadMapper->beginTransaction();
             $currentCount = 0;
             foreach ($result['data'] as $row) {
@@ -192,15 +218,13 @@ class DataloadService
             }
             $this->DataloadMapper->commit();
         } else {
-            // if the data source produced an error, a notification needs to be triggered
-            // $dataset = $this->DatasetService->read($dataloadMetadata['dataset']);
-            // $this->NotificationManager->triggerNotification(NotificationManager::DATALOAD_ERROR, $dataloadMetadata['dataset'], $dataloadMetadata['id'], ['dataloadName' => $dataloadMetadata['name'], 'datasetName' => $dataset['name']], $dataloadMetadata['user_id']);
             $error = 1;
         }
 
         $result = [
             'insert' => $insert,
             'update' => $update,
+            'delete' => $delete,
             'error' => $error,
         ];
 
@@ -215,15 +239,35 @@ class DataloadService
      * @param int $dataloadId
      * @return array|NotFoundResponse
      * @throws NotFoundResponse|NotFoundException
+     * @throws \OCP\DB\Exception
      */
     public function getDataFromDatasource(int $dataloadId)
     {
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
 
         if (!empty($dataloadMetadata)) {
-            $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
-            $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
-            $result['datasetId'] = $dataloadMetadata['dataset'];
+
+            if ($dataloadMetadata['datasource'] !== 0) {
+                $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
+                $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
+                $result['datasetId'] = $dataloadMetadata['dataset'];
+            } else {
+                // this is a deletion request. Just run the simulation and return the possible row count in the expected result array
+                $option = json_decode($dataloadMetadata['option'], true);
+
+                // deletion jobs are using the same dimension/option/value settings a report filter
+                $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
+                // Text variables like %xx% could be in use here
+                $filter = $this->VariableService->replaceFilterVariables($filter);
+
+                $result = [
+                    'header' => '',
+                    'dimensions' => '',
+                    'data' => $this->StorageService->deleteWithFilterSimulate($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true)),
+                    'error' => 0,
+                ];
+            }
+
             return $result;
         } else {
             return new NotFoundResponse();
