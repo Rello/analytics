@@ -1,12 +1,12 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Vērtība",
     "Saved" : "Saglabāts",
     "Delete" : "Dzēst",
     "Search" : "Meklēt",
     "OK" : "Labi",
     "Cancel" : "Atcelt",
-    "Value" : "Vērtība",
     "Add" : "Pievienot",
     "Color" : "Krāsa",
     "Remove from favorites" : "Noņemt no izlases",

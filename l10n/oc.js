@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Valor",
     "Saved" : "Enregistrat",
     "Are you sure?" : "Ne sètz segur ?",
     "Select file" : "Seleccionar fichièr",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "less than" : "mens de",
     "OK" : "D’acòrdi",
     "Cancel" : "Anullar",
-    "Value" : "Valor",
     "Add" : "Apondre",
     "Secondary" : "Segondari",
     "Line" : "Linha",

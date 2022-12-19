@@ -1,8 +1,9 @@
 { "translations": {
     "Data" : "Data",
+    "Value" : "Verdi",
     "Saved" : "Lagra",
-    "Select file" : "Vel fil",
     "errors" : "feil",
+    "Select file" : "Vel fil",
     "Delete" : "Slett",
     "Delete data" : "Slett data",
     "Search" : "Søk",
@@ -14,7 +15,6 @@
     "OK" : "OK",
     "Cancel" : "Avbryt",
     "Filter" : "Filter",
-    "Value" : "Verdi",
     "Variables" : "Variablar",
     "Add" : "Legg til",
     "Color" : "Farge",

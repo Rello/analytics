@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Вредност",
     "Saved" : "Зачувано",
     "Delete" : "Избриши",
     "Search" : "Барај",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "OK" : "Добро",
     "Cancel" : "Откажи",
     "Filter" : "Филтер",
-    "Value" : "Вредност",
     "Add" : "Додади",
     "Line" : "Линија",
     "Bar" : "Бар",

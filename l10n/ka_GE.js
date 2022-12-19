@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "მნიშვნელობა",
     "Saved" : "შენახულია",
     "Delete" : "წაშლა",
     "Search" : "ძიება",
     "OK" : "კარგი",
     "Cancel" : "უარყოფა",
     "Filter" : "ფილტრი",
-    "Value" : "მნიშვნელობა",
     "Add" : "დამატება",
     "Color" : "ფერი",
     "Overview" : "ზოგადი მიმოხილვა",

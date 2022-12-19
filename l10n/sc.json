@@ -1,5 +1,6 @@
 { "translations": {
     "Data" : "Datos",
+    "Value" : "Balore",
     "Saved" : "Sarvadu",
     "Are you sure?" : "A beru boles sighire?",
     "Delete" : "Cantzella",
@@ -12,7 +13,6 @@
     "OK" : "AB",
     "Cancel" : "Annulla",
     "Filter" : "Filtru",
-    "Value" : "Balore",
     "Add" : "Agiunghe",
     "Bar" : "Tzilleri",
     "Color" : "Colore",

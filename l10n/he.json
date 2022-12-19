@@ -1,5 +1,6 @@
 { "translations": {
     "Data" : "נתונים",
+    "Value" : "ערך",
     "Saved" : "נשמרה",
     "Delete" : "מחיקה",
     "Search" : "חיפוש",
@@ -9,7 +10,6 @@
     "OK" : "אישור",
     "Cancel" : "ביטול",
     "Filter" : "מסנן",
-    "Value" : "ערך",
     "Add" : "הוספה",
     "Bar" : "בר",
     "Color" : "צבע",

@@ -1,11 +1,11 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "අගය",
     "Search" : "සොයන්න",
     "OK" : "හරි",
     "Cancel" : "අවලංගු කරන්න",
     "Filter" : "පෙරහන",
-    "Value" : "අගය",
     "Add" : "එකතු කරන්න",
     "Share" : "බෙදාගන්න",
     "New" : "නව",

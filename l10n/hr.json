@@ -1,5 +1,7 @@
 { "translations": {
     "Data" : "Podaci",
+    "Filter by" : "Filtriraj prema",
+    "Value" : "Vrijednost",
     "Saved" : "Spremljeno",
     "Delete" : "Izbriši",
     "Search" : "Traži",
@@ -10,8 +12,6 @@
     "OK" : "U redu",
     "Cancel" : "Odustani",
     "Filter" : "Filtar",
-    "Filter by" : "Filtriraj prema",
-    "Value" : "Vrijednost",
     "Add" : "Dodaj",
     "Bar" : "Bar",
     "Color" : "Boja",

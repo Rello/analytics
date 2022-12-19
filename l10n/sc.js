@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Data" : "Datos",
+    "Value" : "Balore",
     "Saved" : "Sarvadu",
     "Are you sure?" : "A beru boles sighire?",
     "Delete" : "Cantzella",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "OK" : "AB",
     "Cancel" : "Annulla",
     "Filter" : "Filtru",
-    "Value" : "Balore",
     "Add" : "Agiunghe",
     "Bar" : "Tzilleri",
     "Color" : "Colore",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Gildi",
     "Saved" : "Vistað",
     "Delete" : "Eyða",
     "Search" : "Search",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "OK" : "Í lagi",
     "Cancel" : "Hætta við",
     "Filter" : "Sía",
-    "Value" : "Gildi",
     "Add" : "Bæta við",
     "Bar" : "Bar",
     "Color" : "Litur",

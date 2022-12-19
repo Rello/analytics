@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Vlerë",
     "Saved" : "Ruajtur",
     "Delete" : "Fshij",
     "Search" : "Kërko",
     "OK" : "OK",
     "Cancel" : "Anullo",
     "Filter" : "Filtro",
-    "Value" : "Vlerë",
     "Add" : "Shto",
     "Color" : "Ngjyrë ",
     "Basic settings" : "Konfigurime bazike",

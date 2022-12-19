@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Үнийн дүн",
     "Saved" : "Хадгалах",
     "Delete" : "Устгах",
     "Search" : "Хайх",
     "OK" : "ок",
     "Cancel" : "болиулах",
     "Filter" : "Шүүлтүүр",
-    "Value" : "Үнийн дүн",
     "Add" : "нэмэх",
     "Color" : "Өнгө",
     "Remove from favorites" : "Remove from favorites",

@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Data" : "נתונים",
+    "Value" : "ערך",
     "Saved" : "נשמרה",
     "Delete" : "מחיקה",
     "Search" : "חיפוש",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "OK" : "אישור",
     "Cancel" : "ביטול",
     "Filter" : "מסנן",
-    "Value" : "ערך",
     "Add" : "הוספה",
     "Bar" : "בר",
     "Color" : "צבע",

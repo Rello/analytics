@@ -2,6 +2,8 @@ OC.L10N.register(
     "analytics",
     {
     "Data" : "Podaci",
+    "Filter by" : "Filtriraj prema",
+    "Value" : "Vrijednost",
     "Saved" : "Spremljeno",
     "Delete" : "Izbriši",
     "Search" : "Traži",
@@ -12,8 +14,6 @@ OC.L10N.register(
     "OK" : "U redu",
     "Cancel" : "Odustani",
     "Filter" : "Filtar",
-    "Filter by" : "Filtriraj prema",
-    "Value" : "Vrijednost",
     "Add" : "Dodaj",
     "Bar" : "Bar",
     "Color" : "Boja",

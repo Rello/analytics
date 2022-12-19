@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Reikšmė",
     "Saved" : "Įrašyta",
     "Are you sure?" : "Ar esate tikri?",
     "Delete" : "Ištrinti",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "OK" : "Gerai",
     "Cancel" : "Atšaukti",
     "Filter" : "Filtras",
-    "Value" : "Reikšmė",
     "Add" : "Pridėti",
     "Bar" : "Baras",
     "Color" : "Spalva",

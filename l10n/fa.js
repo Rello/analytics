@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "ارزش",
     "Saved" : "دخیره شد",
     "Delete" : "حذف",
     "Search" : "جستجو",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "OK" : "تایید",
     "Cancel" : "لغو",
     "Filter" : "پالایه",
-    "Value" : "ارزش",
     "Add" : "افزودن",
     "Bar" : "دادگاه",
     "Color" : "رنگ",

@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Valor",
     "Saved" : "Guardado",
     "Delete" : "Borrar",
     "Search" : "Buscar",
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
-    "Value" : "Valor",
     "Add" : "Agregar",
     "Color" : "Color",
     "Overview" : "Generalidades",
