@@ -1,6 +1,7 @@
 # Changelog
 
 ## 4.6.0 - 2022-12-23
+
 ### Added
 - Notifications for failed data loads
 - Schedule deletion jobs per dataset to clean up old data #316
