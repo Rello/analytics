@@ -289,6 +289,9 @@ OCA.Analytics.Advanced.Dataload = {
 
         if (dataload['datasource'] === OCA.Analytics.TYPE_INTERNAL_FILE || dataload['datasource'] === OCA.Analytics.TYPE_EXCEL) {
             document.getElementById('link').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleFilepicker);
+        } else if (dataload['datasource'] === 0) {
+            // this is a deletion job
+            OCA.Analytics.UI.hideElement('dataloadDetailDelete');
         }
 
         OCA.Analytics.UI.showElement('dataloadRun');
