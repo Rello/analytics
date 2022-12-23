@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.6.0 - 2022-12-23
+### Added
+- Notifications for failed data loads
+- Schedule deletion jobs per dataset to clean up old data #316
+- Filter variables to use same time format like chart #321
+
+### Changes
+- Sidebar UI optimizations
+- Optimized share report template
+
+### Fixed
+- No update permission when sharing to group #324
+
 ## 4.5.2 - 2022-12-xx
 ### Added
 - Notifications for failed data loads
