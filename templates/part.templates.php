@@ -370,7 +370,7 @@
             <div id="dataDeleteList"></div>
             <br>
             <br>
-            <a href="https://github.com/Rello/analytics/wiki/Datasources"
+            <a href="https://github.com/Rello/analytics/wiki/Automation-(load-&-delete)"
                target="_blank"><?php p($l->t('More information …')); ?></a>
         </div>
         <div style="width: 5%;">
