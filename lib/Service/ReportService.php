@@ -223,7 +223,7 @@ class ReportService
         $template = $this->ReportMapper->readOwn($reportId);
         $newId = $this->ReportMapper->create(
         // TRANSLATORS Noun
-            $template['name'] . ' ' . $this->l10n->t('copy'),
+            $template['name'] . ' ' . $this->l10n->t('- copy'),
             $template['subheader'],
             $template['parent'],
             $template['type'],
