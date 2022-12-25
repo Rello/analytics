@@ -79,6 +79,7 @@ OC.L10N.register(
     "Yes" : "Òc",
     "Execution" : "Execucion",
     "Daily" : "Quotidian",
+    "Hourly" : "Cada ora",
     "Unshare" : "Partejar pas mai",
     "Password protection" : "Proteccion per senhal",
     "Copy link" : "Copiar lo ligam",
