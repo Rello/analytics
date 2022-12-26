@@ -1,7 +1,11 @@
 { "translations": {
     "Data" : "נתונים",
+    "Choose a data source from the dropdown and press \"+\"" : "בחר מקום מידע מהתפריט הנפתח ולחץ על כפתור ה\"+\"",
     "Value" : "ערך",
+    "Please select data source" : "אבא בחר מקור מידע",
     "Saved" : "נשמרה",
+    "Are you sure?" : "האם הינך בטוח?",
+    "Load started" : "טעינה החלה",
     "Delete" : "מחיקה",
     "Search" : "חיפוש",
     "first" : "ראשון",
