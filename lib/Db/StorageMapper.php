@@ -268,7 +268,7 @@ class StorageMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
-            ->addSelect($sql->func()->count('*'))
+            ->selectAlias($sql->func()->count('*'), 'count')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
         $statement = $sql->execute();
