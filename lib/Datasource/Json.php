@@ -12,13 +12,12 @@
 namespace OCA\Analytics\Datasource;
 
 use OCP\IL10N;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 
 class Json implements IDatasource
 {
-    private $logger;
-    private $l10n;
+    private LoggerInterface $logger;
+    private IL10N $l10n;
 
     public function __construct(
         IL10N $l10n,
@@ -51,13 +50,13 @@ class Json implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-        array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password']);
-        array_push($template, ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z']);
-        array_push($template, ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf']);
-        array_push($template, ['id' => 'body', 'name' => 'Request body', 'placeholder' => '']);
-        array_push($template, ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json']);
-        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
+        $template[] = ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url'];
+        $template[] = ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password'];
+        $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
+        $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
+        $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
+        $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
+        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf'];
         return $template;
     }
 
@@ -71,9 +70,10 @@ class Json implements IDatasource
         $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
         $path = $option['path'];
         $auth = $option['auth'];
-        $post = ($option['method'] === 'POST') ? true : false;
+        $post = $option['method'] === 'POST';
         $contentType = ($option['content-type'] && $option['content-type'] !== '') ? $option['content-type'] : 'application/json';
         $data = array();
+        $http_code = '';
 
         $ch = curl_init();
         if ($ch !== false) {
@@ -120,7 +120,7 @@ class Json implements IDatasource
                 $dim1 = $this->get_nested_array_value($rowArray, $paths[0]) ?: $paths[0];
                 $dim2 =  $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
                 $val =  $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
-                array_push($data, [$dim1, $dim2, $val]);
+                $data[] = [$dim1, $dim2, $val];
             }
         } else {
             // single value extraction
@@ -134,12 +134,12 @@ class Json implements IDatasource
                     foreach ($array as $key => $value) {
                         $pathArray = explode('/', $singlePath);
                         $group = end($pathArray);
-                        array_push($data, [$group, $key, $value]);
+                        $data[] = [$group, $key, $value];
                     }
                 } else {
                     $pathArray = explode('/', $singlePath);
                     $key = end($pathArray);
-                    array_push($data, ['', $key, $array]);
+                    $data[] = ['', $key, $array];
                 }
             }
         }
@@ -165,12 +165,11 @@ class Json implements IDatasource
      * @NoAdminRequired
      * @param $array
      * @param $path
-     * @param string $delimiter
      * @return array|string
      */
-    private function get_nested_array_value(&$array, $path, $delimiter = '/')
+    private function get_nested_array_value(&$array, $path): array|string
     {
-        $pathParts = explode($delimiter, $path);
+        $pathParts = explode('/', $path);
         $current = &$array;
         foreach ($pathParts as $key) {
             $current = &$current[$key];
