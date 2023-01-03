@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Datasource;
 
 use OCP\IL10N;
+use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 
 class Json implements IDatasource
@@ -98,21 +99,35 @@ class Json implements IDatasource
 
         $json = json_decode($rawResult, true);
 
-        // check if an array of values should be extracted
+        // check if a specific array of values should be extracted
+        // e.g. {BTC,tmsp,price}
         preg_match_all("/(?<={).*(?=})/", $path, $matches);
         if (count($matches[0]) > 0) {
             // array extraction
+
+            // check if absolute path is in front of the array
+            // e.g. data/data{from,to,intensity/forecast}
+            $firstArray = strpos($path, '{');
+            if ($firstArray && $firstArray !== 0) {
+                $singlePath = substr($path,0, $firstArray);
+                $json = $this->get_nested_array_value($json, $singlePath);
+            }
+
             $paths = explode(',', $matches[0][0]);
             foreach ($json as $rowArray) {
-                $dim1 = $rowArray[$paths[0]] ?: $paths[0];
-                $dim2 = $rowArray[$paths[1]] ?: $paths[1];
-                $val = $rowArray[$paths[2]] ?: $paths[2];
+                // get the paths from the array
+                // if no match is not found, the path will be used as a constant string
+                $dim1 = $this->get_nested_array_value($rowArray, $paths[0]) ?: $paths[0];
+                $dim2 =  $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
+                $val =  $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
                 array_push($data, [$dim1, $dim2, $val]);
             }
         } else {
             // single value extraction
+            // e.g. data/currentHashrate,data/averageHashrate
             $paths = explode(',', $path);
             foreach ($paths as $singlePath) {
+                // e.g. data/currentHashrate
                 $array = $this->get_nested_array_value($json, $singlePath);
 
                 if (is_array($array)) {
@@ -128,7 +143,6 @@ class Json implements IDatasource
                 }
             }
         }
-
 
         $header = array();
         $header[0] = '';

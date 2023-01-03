@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.0 - 2023-12-xx
+### Added
+- JSON: read array data which is not on the first level #326
+
 ## 4.6.0 - 2022-12-26
 ### Added
 - Notifications for failed data loads
