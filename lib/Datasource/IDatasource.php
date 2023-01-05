@@ -40,10 +40,13 @@ interface IDatasource
      *  id          *mandatory*     = name of the option for the readData
      *  name        *mandatory*     = displayed name of the inputfield in the UI
      *  type        *optional*      = 'tf' to create a dropdown. Values need to be provided in the placeholder separated with "/".
+     *  placeholder *mandatory*     = helptext for the inputfield in the UI
+     *                                for type=tf:
      *                                  e.g. "true/false"
      *                                  if value/text pairs are required for the dropdown/option, the values need to be separated with "-" in addition.
      *                                  e.g. "eq-equal/gt-greater"
-     *  placeholder *mandatory*     = helptext for the inputfield in the UI
+     *                                  to avoid translation of the technical strings, separate them
+     *                                  'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No')
      *
      *  {['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'tf', 'placeholder' => 'adaptation/absolute']}
      *

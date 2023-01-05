@@ -16,8 +16,8 @@ use Psr\Log\LoggerInterface;
 
 class Github implements IDatasource
 {
-    private $logger;
-    private $l10n;
+    private LoggerInterface $logger;
+    private IL10N $l10n;
 
     public function __construct(
         IL10N $l10n,
@@ -50,20 +50,21 @@ class Github implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-        array_push($template, ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user']);
-        array_push($template, ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository']);
-        array_push($template, ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')]);
-        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('false/true'), 'type' => 'tf']);
+        $template[] = ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user'];
+        $template[] = ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository'];
+        $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')];
+         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'false-' - $this->l10n->t('No').'/true-'.$this->l10n->t('Yes'), 'type' => 'tf'];
         return $template;
     }
 
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the datasoure
+     * @return array available options of the data soure
      */
     public function readData($option): array
     {
+        $http_code = '';
         if (isset($option['link'])) $string = 'https://api.github.com/repos/' . $option['link'] . '/releases';
         else $string = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
 
@@ -92,9 +93,9 @@ class Github implements IDatasource
             }
             $nc_value = 0;
             foreach ($item['assets'] as $asset) {
-                if (substr($asset['name'], -2) === 'gz') $nc_value = $asset['download_count'];
+                if (str_ends_with($asset['name'], 'gz')) $nc_value = $asset['download_count'];
             }
-            array_push($data, [$item['tag_name'], $this->floatvalue($nc_value)]);
+            $data[] = [$item['tag_name'], $this->floatvalue($nc_value)];
             $i++;
         }
 
@@ -115,7 +116,7 @@ class Github implements IDatasource
         ];
     }
 
-    private function floatvalue($val)
+    private function floatvalue($val): float|bool
     {
         $val = str_replace(",", ".", $val);
         $val = preg_replace('/\.(?=.*\.)/', '', $val);

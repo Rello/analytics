@@ -16,8 +16,8 @@ use Psr\Log\LoggerInterface;
 
 class Regex implements IDatasource
 {
-    private $logger;
-    private $l10n;
+    private LoggerInterface $logger;
+    private IL10N $l10n;
 
     public function __construct(
         IL10N $l10n,
@@ -50,18 +50,18 @@ class Regex implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-        array_push($template, ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url']);
-        array_push($template, ['id' => 'name', 'name' => 'Data series description', 'placeholder' => 'optional']);
-        array_push($template, ['id' => 'regex', 'name' => $this->l10n->t('valid regex'), 'placeholder' => '//']);
-        array_push($template, ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')]);
-        array_push($template, ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf']);
+        $template[] = ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url'];
+        $template[] = ['id' => 'name', 'name' => 'Data series description', 'placeholder' => 'optional'];
+        $template[] = ['id' => 'regex', 'name' => $this->l10n->t('valid regex'), 'placeholder' => '//'];
+        $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')];
+        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No'), 'type' => 'tf'];
         return $template;
     }
 
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the datasoure
+     * @return array available options of the data soure
      */
     public function readData($option): array
     {
@@ -85,7 +85,7 @@ class Regex implements IDatasource
             if (isset($option['limit'])) {
                 if ($i === (int)$option['limit'] AND (int)$option['limit'] !== 0) break;
             }
-            array_push($data, [$option['name'], $matches['dimension'][$i], $matches['value'][$i]]);
+            $data[] = [$option['name'], $matches['dimension'][$i], $matches['value'][$i]];
         }
 
         $header = array();

@@ -56,7 +56,7 @@ class Json implements IDatasource
         $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
         $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
-        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => $this->l10n->t('true/false'), 'type' => 'tf'];
+        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No'), 'type' => 'tf'];
         return $template;
     }
 
@@ -165,9 +165,9 @@ class Json implements IDatasource
      * @NoAdminRequired
      * @param $array
      * @param $path
-     * @return array|string
+     * @return array|string|null
      */
-    private function get_nested_array_value(&$array, $path): array|string
+    private function get_nested_array_value(&$array, $path): array|string|null
     {
         $pathParts = explode('/', $path);
         $current = &$array;
