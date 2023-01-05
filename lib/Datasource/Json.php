@@ -20,7 +20,7 @@ class Json implements IDatasource
     private IL10N $l10n;
 
     public function __construct(
-        IL10N $l10n,
+        IL10N           $l10n,
         LoggerInterface $logger
     )
     {
@@ -56,7 +56,7 @@ class Json implements IDatasource
         $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
         $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
-        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No'), 'type' => 'tf'];
+        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' - $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
     }
 
@@ -109,17 +109,18 @@ class Json implements IDatasource
             // e.g. data/data{from,to,intensity/forecast}
             $firstArray = strpos($path, '{');
             if ($firstArray && $firstArray !== 0) {
-                $singlePath = substr($path,0, $firstArray);
+                $singlePath = substr($path, 0, $firstArray);
                 $json = $this->get_nested_array_value($json, $singlePath);
             }
 
+            // separate the fields of the array {BTC,tmsp,price}
             $paths = explode(',', $matches[0][0]);
             foreach ($json as $rowArray) {
-                // get the paths from the array
-                // if no match is not found, the path will be used as a constant string
+                // get the array fields from the json
+                // if no match is not found, the field name will be used as a constant string
                 $dim1 = $this->get_nested_array_value($rowArray, $paths[0]) ?: $paths[0];
-                $dim2 =  $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
-                $val =  $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
+                $dim2 = $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
+                $val = $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
                 $data[] = [$dim1, $dim2, $val];
             }
         } else {
@@ -131,6 +132,7 @@ class Json implements IDatasource
                 $array = $this->get_nested_array_value($json, $singlePath);
 
                 if (is_array($array)) {
+                    // if the tartet is an array itself
                     foreach ($array as $key => $value) {
                         $pathArray = explode('/', $singlePath);
                         $group = end($pathArray);
@@ -155,7 +157,7 @@ class Json implements IDatasource
             'data' => $data,
             'rawdata' => $rawResult,
             'URL' => $url,
-            'error' => ($http_code>=200 && $http_code<300) ? 0 : 'HTTP response code: '.$http_code,
+            'error' => ($http_code >= 200 && $http_code < 300) ? 0 : 'HTTP response code: ' . $http_code,
         ];
     }
 

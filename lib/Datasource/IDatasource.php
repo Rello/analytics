@@ -38,9 +38,9 @@ interface IDatasource
      * return needs to be an array and can consist of many fields.
      * every field needs to provide the following format
      *  id          *mandatory*     = name of the option for the readData
-     *  name        *mandatory*     = displayed name of the inputfield in the UI
+     *  name        *mandatory*     = displayed name of the input field in the UI
      *  type        *optional*      = 'tf' to create a dropdown. Values need to be provided in the placeholder separated with "/".
-     *  placeholder *mandatory*     = helptext for the inputfield in the UI
+     *  placeholder *mandatory*     = help text for the input field in the UI
      *                                for type=tf:
      *                                  e.g. "true/false"
      *                                  if value/text pairs are required for the dropdown/option, the values need to be separated with "-" in addition.
@@ -66,7 +66,7 @@ interface IDatasource
      *      'error' => 0,         // INT 0 = no error
      *  ]
      *
-     * @param array
+     * @param array $option
      * @return array available options of the datasoure
      * @since 3.1.0
      */
