@@ -11,13 +11,13 @@
     "Type" : "Type",
     "Date" : "Date",
     "File" : "File",
+    "No" : "No",
+    "Yes" : "Yes",
     "Password" : "پاسورڈ",
     "Favorites" : "Favorites",
     "Settings" : "سیٹینگز",
     "Name" : "اسم",
     "Title" : "عنوان",
-    "No" : "No",
-    "Yes" : "Yes",
     "Unshare" : "شئیرنگ ختم کریں",
     "Password protection" : "Password protection"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

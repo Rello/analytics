@@ -15,6 +15,8 @@ OC.L10N.register(
     "Type" : "Type",
     "Date" : "Date",
     "File" : "File",
+    "No" : "No",
+    "Yes" : "Yes",
     "Version" : "نەشرى",
     "Password" : "ئىم",
     "Favorites" : "يىغقۇچ",
@@ -24,8 +26,6 @@ OC.L10N.register(
     "Export" : "چىقار",
     "Import" : "ئەكىر",
     "Title" : "ماۋزۇ",
-    "No" : "No",
-    "Yes" : "Yes",
     "Unshare" : "ھەمبەھىرلىمە",
     "Password protection" : "Password protection",
     "Create" : "قۇر"

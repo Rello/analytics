@@ -16,6 +16,8 @@ OC.L10N.register(
     "Type" : "வகை",
     "Date" : "Date",
     "File" : "File",
+    "No" : "No",
+    "Yes" : "Yes",
     "Password" : "கடவுச்சொல்",
     "Favorites" : "விருப்பங்கள்",
     "Back" : "பின்னுக்கு",
@@ -25,8 +27,6 @@ OC.L10N.register(
     "Export" : "ஏற்றுமதி",
     "Import" : "இறக்குமதி",
     "Title" : "தலைப்பு",
-    "No" : "No",
-    "Yes" : "Yes",
     "Unshare" : "பகிரப்படாதது",
     "Password protection" : "Password protection",
     "Create" : "உருவாக்குக"

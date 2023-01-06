@@ -15,6 +15,8 @@ OC.L10N.register(
     "Type" : "Type",
     "Date" : "Date",
     "File" : "File",
+    "No" : "No",
+    "Yes" : "Yes",
     "Version" : "﻿ಆವೃತ್ತಿ",
     "Password" : "ಗುಪ್ತ ಪದ",
     "Favorites" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
@@ -23,8 +25,6 @@ OC.L10N.register(
     "Export" : "ರಫ್ತು",
     "Import" : "ಆಮದು",
     "Title" : "ಶೀರ್ಷಿಕೆ",
-    "No" : "No",
-    "Yes" : "Yes",
     "Unshare" : "ಹಂಚಿಕೆಯನ್ನು ಹಿಂತೆಗೆ",
     "Password protection" : "Password protection",
     "Create" : "ಸೃಷ್ಟಿಸಿ"

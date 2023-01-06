@@ -12,6 +12,8 @@ OC.L10N.register(
     "New" : "New",
     "Share link" : "Share link",
     "File" : "File",
+    "No" : "No",
+    "Yes" : "Yes",
     "copy" : "copy",
     "Password" : "Password",
     "Favorites" : "Favorites",
@@ -19,8 +21,6 @@ OC.L10N.register(
     "Name" : "Name",
     "Open documentation" : "Hujjatlarni ochish",
     "Update" : "Update",
-    "No" : "No",
-    "Yes" : "Yes",
     "Unshare" : "Unshare"
 },
 "nplurals=1; plural=0;");
