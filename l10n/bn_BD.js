@@ -14,6 +14,7 @@ OC.L10N.register(
     "New" : "নতুন",
     "Share link" : "লিংক ভাগাভাগি করেন",
     "Type" : "ধরণ",
+    "Notification" : "নোটিফিকেশন ",
     "Date" : "Date",
     "File" : "File",
     "No" : "No",
