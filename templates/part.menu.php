@@ -39,10 +39,10 @@
                 </button>
             </li>
             <li>
-                <button id="downlaodChartIcon">
+                <button id="downloadChartIcon">
                     <span class="icon-download"></span>
                     <span><?php p($l->t('Download chart')); ?></span>
-                    <a id="downlaodChartLink" href='' download="Chart.png" hidden>-</a>
+                    <a id="downloadChartLink" href='' download="Chart.png" hidden>-</a>
                 </button>
             </li>
             <li class="action-separator"></li>

@@ -10,6 +10,7 @@
 /** global: OCA */
 /** global: OCP */
 /** global: OC */
+/** global: t */
 /** global: table */
 /** global: Chart */
 /** global: cloner */
@@ -38,6 +39,7 @@ if (!OCA.Analytics) {
         isAdvanced: false,
         currentReportData: {},
         chartObject: null,
+        tableObject: null,
         // flexible mapping depending on type requiered by the used chart library
         chartTypeMapping: {
             'datetime': 'line',
@@ -92,7 +94,7 @@ OCA.Analytics.Core = {
 
     getInitialState: function (key) {
         const app = 'analytics';
-        const elem = document.querySelector(`#initial-state-${app}-${key}`)
+        const elem = document.querySelector('#initial-state-' + app + '-' + key);
         if (elem === null) {
             return false;
         }
@@ -100,7 +102,7 @@ OCA.Analytics.Core = {
     },
 
     openWiki: function () {
-        window.open('https://github.com/rello/analytics/wiki','_blank');
+        window.open('https://github.com/rello/analytics/wiki', '_blank');
     }
 };
 
@@ -121,6 +123,8 @@ OCA.Analytics.UI = {
             let columnType = Object.keys(allDimensions).find(key => allDimensions[key] === header[headerKeys[i]]);
 
             if (i === headerKeys.length - 1) {
+                // this is the last column
+
                 // prepare for later unit cloumn
                 //columns[i]['render'] = function(data, type, row, meta) {
                 //    return data + ' ' + row[row.length-2];
@@ -128,7 +132,7 @@ OCA.Analytics.UI = {
                 if (header[headerKeys[i]] !== null && header[headerKeys[i]].length === 1) {
                     unit = header[headerKeys[i]];
                 }
-                columns[i]['render'] = $.fn.dataTable.render.number('.', ',', 2, unit + ' ');
+                columns[i]['render'] = DataTable.render.number(null, null, 2, unit + ' ');
                 columns[i]['className'] = 'dt-right';
             } else if (columnType === 'timestamp') {
                 columns[i]['render'] = function (data, type) {
@@ -166,23 +170,26 @@ OCA.Analytics.UI = {
             },
         };
 
-        $('#tableContainer').DataTable({
+        OCA.Analytics.tableObject = new DataTable(document.getElementById("tableContainer"), {
             data: data,
             columns: columns,
             language: language,
             rowCallback: function (row, data, index) {
                 OCA.Analytics.UI.dataTableRowCallback(row, data, index, jsondata.thresholds)
             },
-            drawCallback: function () {
-                var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
-                pagination.toggle(this.api().page.info().pages > 1);
-                var info = $(this).closest('.dataTables_wrapper').find('.dataTables_info');
+            initComplete: function () {
+                let info = this.closest('.dataTables_wrapper').find('.dataTables_info');
                 info.toggle(this.api().page.info().pages > 1);
-                var length = $(this).closest('.dataTables_wrapper').find('.dataTables_length');
+                let length = this.closest('.dataTables_wrapper').find('.dataTables_length');
                 length.toggle(this.api().page.info().pages > 1);
-                var filter = $(this).closest('.dataTables_wrapper').find('.dataTables_filter');
+                let filter = this.closest('.dataTables_wrapper').find('.dataTables_filter');
                 filter.toggle(this.api().page.info().pages > 1);
             },
+            drawCallback: function () {
+                let pagination = this.closest('.dataTables_wrapper').find('.dataTables_paginate');
+                pagination.toggle(this.api().page.info().pages > 1);
+
+            }
         });
     },
 
@@ -214,7 +221,7 @@ OCA.Analytics.UI = {
         let severity;
         for (let threshold of thresholds) {
             // use the last column for comparison of the value
-            const comparison = operators[threshold['option']](parseFloat(data[data.length-1]), parseFloat(threshold['value']));
+            const comparison = operators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
             severity = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (severity === 2) {
@@ -229,7 +236,7 @@ OCA.Analytics.UI = {
                     // external data source
                     row.style.color = color;
                 } else {
-                    row.childNodes.item(data.length-1).style.color = color;
+                    row.childNodes.item(data.length - 1).style.color = color;
                 }
             }
         }
@@ -243,12 +250,12 @@ OCA.Analytics.UI = {
             const index = legendItem.datasetIndex;
             const type = legend.chart.config.type;
 
-                // Do the original logic
-                if (type === 'pie' || type === 'doughnut') {
-                    pieDoughnutLegendClickHandler(e, legendItem, legend)
-                } else {
-                    defaultLegendClickHandler(e, legendItem, legend);
-                }
+            // Do the original logic
+            if (type === 'pie' || type === 'doughnut') {
+                pieDoughnutLegendClickHandler(e, legendItem, legend)
+            } else {
+                defaultLegendClickHandler(e, legendItem, legend);
+            }
             document.getElementById('saveIcon').style.removeProperty('display');
 
         };
@@ -279,7 +286,7 @@ OCA.Analytics.UI = {
         Chart.defaults.plugins.legend.position = 'bottom';
         Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
 
-        var chartOptions = {
+        let chartOptions = {
             maintainAspectRatio: false,
             responsive: true,
             scales: {
@@ -333,8 +340,8 @@ OCA.Analytics.UI = {
                     label: function (tooltipItem, data) {
 //                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
                         let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
-                        if (tooltipItem.yLabel !== '') {
-                            return datasetLabel + ': ' + parseFloat(tooltipItem.yLabel).toLocaleString();
+                        if (tooltipItem['yLabel'] !== '') {
+                            return datasetLabel + ': ' + parseFloat(tooltipItem['yLabel']).toLocaleString();
                         } else {
                             return datasetLabel;
                         }
@@ -432,7 +439,7 @@ OCA.Analytics.UI = {
         for (let i = 0; i < datasets.length; ++i) {
             let j = i - (Math.floor(i / colors.length) * colors.length)
 
-            // in only one dataset is being shown, create a fancy gadient fill
+            // in only one dataset is being shown, create a fancy gradient fill
             if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
                 const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
                     , (m, r, g, b) => '#' + r + r + g + g + b + b)
@@ -513,7 +520,7 @@ OCA.Analytics.UI = {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
-            plugins: [ChartDataLabels,ChartZoom],
+            plugins: [ChartDataLabels, ChartZoom],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
@@ -539,9 +546,9 @@ OCA.Analytics.UI = {
 
     downloadChart: function () {
         OCA.Analytics.UI.hideReportMenu();
-        document.getElementById('downlaodChartLink').href = OCA.Analytics.chartObject.toBase64Image();
-        document.getElementById('downlaodChartLink').setAttribute('download', OCA.Analytics.currentReportData.options.name + '.png');
-        document.getElementById('downlaodChartLink').click();
+        document.getElementById('downloadChartLink').href = OCA.Analytics.chartObject.toBase64Image();
+        document.getElementById('downloadChartLink').setAttribute('download', OCA.Analytics.currentReportData.options.name + '.png');
+        document.getElementById('downloadChartLink').click();
     },
 
     resetContentArea: function () {
@@ -549,8 +556,9 @@ OCA.Analytics.UI = {
             OCA.Analytics.UI.showElement('analytics-intro');
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
-            if ($.fn.dataTable.isDataTable('#tableContainer')) {
-                $('#tableContainer').DataTable().destroy();
+            if (OCA.Analytics.tableObject !== null) {
+                OCA.Analytics.tableObject.destroy();
+                OCA.Analytics.tableObject = null;
             }
             OCA.Analytics.UI.hideElement('chartContainer');
             OCA.Analytics.UI.hideElement('chartLegendContainer');
@@ -570,15 +578,15 @@ OCA.Analytics.UI = {
             document.getElementById('chartOptionsIcon').disabled = false;
             document.getElementById('analysisIcon').disabled = false;
             document.getElementById('drilldownIcon').disabled = false;
-            document.getElementById('downlaodChartIcon').disabled = false;
+            document.getElementById('downloadChartIcon').disabled = false;
             document.getElementById('analysisIcon').disabled = false;
         }
     },
 
     buildReportOptions: function () {
         let currentReport = OCA.Analytics.currentReportData;
-        let canUpdate = parseInt(currentReport.options.permissions) === OC.PERMISSION_UPDATE;
-        let isInternalShare = currentReport.options.isShare !== undefined;
+        let canUpdate = parseInt(currentReport.options['permissions']) === OC.PERMISSION_UPDATE;
+        let isInternalShare = currentReport.options['isShare'] !== undefined;
         let isExternalShare = document.getElementById('sharingToken').value !== '';
 
         if (isExternalShare) {
@@ -613,11 +621,11 @@ OCA.Analytics.UI = {
         if (visualization === 'table') {
             document.getElementById('chartOptionsIcon').disabled = true;
             document.getElementById('analysisIcon').disabled = true;
-            document.getElementById('downlaodChartIcon').disabled = true;
+            document.getElementById('downloadChartIcon').disabled = true;
         }
 
         let refresh = parseInt(currentReport.options.refresh);
-        isNaN(refresh) ? refresh = 0 : refresh = refresh;
+        isNaN(refresh) ? refresh = 0 : refresh;
         document.getElementById('refresh' + refresh).checked = true;
 
         OCA.Analytics.Filter.refreshFilterVisualisation();
@@ -639,7 +647,7 @@ OCA.Analytics.UI = {
         //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
         document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-        document.getElementById('downlaodChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
+        document.getElementById('downloadChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
 
         let refresh = document.getElementsByName('refresh');
@@ -816,7 +824,7 @@ OCA.Analytics.Functions = {
 
             let lastValue = 0;
             let newValue;
-            let newData = OCA.Analytics.chartObject.data.datasets[y]['data'].map(function(currentValue, index, arr) {
+            let newData = OCA.Analytics.chartObject.data.datasets[y]['data'].map(function (currentValue, index, arr) {
                 if (mode === 'aggregate') {
                     if (typeof (currentValue) === 'number') {
                         newValue = currentValue + lastValue;
@@ -875,12 +883,12 @@ OCA.Analytics.Datasource = {
     },
 
     sortOptions: function (obj) {
-        var sortable = [];
-        for (var key in obj)
+        let sortable = [];
+        for (let key in obj)
             if (obj.hasOwnProperty(key))
                 sortable.push([key, obj[key]]);
         sortable.sort(function (a, b) {
-            var x = a[1].toLowerCase(),
+            let x = a[1].toLowerCase(),
                 y = b[1].toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
@@ -952,13 +960,13 @@ OCA.Analytics.Datasource = {
 
 OCA.Analytics.Backend = {
 
-    formatParams: function( params ){
-    return "?" + Object
-        .keys(params)
-        .map(function(key){
-            return key+"="+encodeURIComponent(params[key])
-        })
-        .join("&")
+    formatParams: function (params) {
+        return "?" + Object
+            .keys(params)
+            .map(function (key) {
+                return key + "=" + encodeURIComponent(params[key])
+            })
+            .join("&")
     },
 
     getData: function () {
@@ -977,7 +985,7 @@ OCA.Analytics.Backend = {
             url = OC.generateUrl('apps/analytics/data/public/') + token;
         }
 
-        // send user current filteroptions to the datarequest;
+        // send user current filter options to the data request;
         // if nothing is changed by the user, the filter which is stored for the report, will be used
         let ajaxData = {};
         if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.filteroptions) !== 'undefined') {
@@ -992,24 +1000,21 @@ OCA.Analytics.Backend = {
             ajaxData.chartoptions = OCA.Analytics.currentReportData.options.chartoptions;
         }
 
-/*
+        // using xmlhttprequest in this place as long running requests need to be aborted
+        // abort() is not possible for fetch()
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', url + '?' + OCA.Analytics.Backend.formatParams(ajaxData));
+        let params = new URLSearchParams(ajaxData);
+        let requestUrl = `${url}?${params}`;
+
+        xhr.open('GET', requestUrl, true);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                let a = 1;
-            }
-        }
-*/
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                // Do something with the data here
 
-        OCA.Analytics.currentXhrRequest = $.ajax({
-            type: 'GET',
-            url: url,
-            data: ajaxData,
-            success: function (data) {
                 OCA.Analytics.UI.hideElement('analytics-loading');
                 OCA.Analytics.UI.showElement('analytics-content');
                 OCA.Analytics.currentReportData = data;
@@ -1055,7 +1060,8 @@ OCA.Analytics.Backend = {
                 let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
                 OCA.Analytics.Backend.startRefreshTimer(refresh);
             }
-        });
+        };
+        xhr.send();
     },
 
     sortDates: function (data) {
@@ -1076,11 +1082,11 @@ OCA.Analytics.Backend = {
     },
 
     formatDates: function (data) {
-        let firstrow = data[0];
+        let firstRow = data[0];
         let now;
-        for (let i = 0; i < firstrow.length; i++) {
+        for (let i = 0; i < firstRow.length; i++) {
             // loop columns and check for a valid date
-            if (!isNaN(new Date(firstrow[i]).valueOf()) && firstrow[i] !== null && firstrow[i].length >= 19) {
+            if (!isNaN(new Date(firstRow[i]).valueOf()) && firstRow[i] !== null && firstRow[i].length >= 19) {
                 // column contains a valid date
                 // then loop all rows for this column and convert to local time
                 for (let j = 0; j < data.length; j++) {
@@ -1102,24 +1108,32 @@ OCA.Analytics.Backend = {
     },
 
     getDatasourceDefinitions: function () {
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/datasource'),
-            success: function (data) {
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        fetch(OC.generateUrl('apps/analytics/datasource'), {
+            method: 'GET',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.datasourceOptions = data['options'];
                 OCA.Analytics.datasources = data['datasources'];
-            }
-        });
+            });
     },
 
     getDatasetDefinitions: function () {
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset'),
-            success: function (data) {
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        fetch(OC.generateUrl('apps/analytics/dataset'), {
+            method: 'GET',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.datasets = data;
-            }
-        });
+            });
     },
 
     startRefreshTimer(minutes) {
