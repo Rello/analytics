@@ -33,7 +33,7 @@ OCA.Analytics.Advanced = {
 
             if (document.getElementById('advanced').value === 'false') {
                 if (appsidebar.dataset.id === '') {
-                    $('#sidebarClose').on('click', OCA.Analytics.Advanced.hideSidebar);
+                    document.getElementById("sidebarClose").addEventListener("click", OCA.Analytics.Advanced.hideSidebar);
                     OC.Apps.showAppSidebar();
                 }
             } else {
@@ -55,7 +55,6 @@ OCA.Analytics.Advanced = {
     },
 
     constructTabs: function () {
-
         document.querySelector('.tabHeaders').innerHTML = '';
         document.querySelector('.tabsContainer').innerHTML = '';
 
@@ -89,22 +88,23 @@ OCA.Analytics.Advanced = {
         items.sort(OCA.Analytics.Advanced.sortByName);
 
         for (let tab in items) {
-            let li = $('<li/>').addClass('tabHeader')
-                .attr({
-                    'id': items[tab].id,
-                    'tabindex': items[tab].tabindex
-                });
-            let atag = $('<a/>').text(items[tab].name);
-            atag.prop('title', items[tab].name);
+            let li = document.createElement('li');
+            li.classList.add('tabHeader');
+            li.setAttribute('id', items[tab].id);
+            li.setAttribute('tabindex', items[tab].tabindex);
+            let atag = document.createElement('a');
+            atag.textContent = items[tab].name;
+            atag.setAttribute('title', items[tab].name);
             li.append(atag);
-            $('.tabHeaders').append(li);
+            let tabHeaders = document.querySelector('.tabHeaders');
+            tabHeaders.appendChild(li);
 
-            let div = $('<div/>').addClass('tab ' + items[tab].class)
-                .attr({
-                    'id': items[tab].class
-                });
-            $('.tabsContainer').append(div);
-            $('#' + items[tab].id).on('click', items[tab].action);
+            let div = document.createElement('div');
+            div.classList.add('tab', items[tab].class);
+            div.setAttribute('id', items[tab].class);
+            let tabsContainer = document.querySelector('.tabsContainer');
+            tabsContainer.appendChild(div);
+            document.getElementById(items[tab].id).addEventListener('click', items[tab].action);
         }
     },
 
@@ -152,13 +152,19 @@ OCA.Analytics.Advanced.Dataload = {
             return;
         }
 
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataload'),
-            data: {
-                'datasetId': datasetId
-            },
-            success: function (data) {
+        let url = OC.generateUrl('apps/analytics/dataload');
+        let params = new URLSearchParams({datasetId: datasetId});
+        let requestUrl = `${url}?${params}`;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateDataload').content, true);
                 table.id = 'tableDataload';
@@ -196,7 +202,7 @@ OCA.Analytics.Advanced.Dataload = {
                 }
 
                 let dataLoadCreated = document.getElementById('app-sidebar').dataset.dataLoadCreated;
-                if (dataLoadCreated !== 'null' && typeof(dataLoadCreated) !== 'undefined') {
+                if (dataLoadCreated !== 'null' && typeof (dataLoadCreated) !== 'undefined') {
                     OCA.Analytics.Advanced.Dataload.buildDataloadOptions(null, dataLoadCreated);
                 }
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = null;
@@ -206,9 +212,7 @@ OCA.Analytics.Advanced.Dataload = {
 
                 // write dimension structure to datasource array [0] in case it is required for a deletion job later
                 OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
-
-            }
-        });
+            });
     },
 
     updateDatasourceDeletionOption: function () {
@@ -224,8 +228,18 @@ OCA.Analytics.Advanced.Dataload = {
         let dataset = OCA.Analytics.datasets.find(x => parseInt(x.id) === parseInt(datasetId));
 
         let datasetOptions = [];
-        datasetOptions.push({id: 'filterDimension', name: t('analytics', 'Filter by'), type: 'tf', placeholder: 'dimension1-'+dataset['dimension1'] + '/' + 'dimension2-'+dataset['dimension2']});
-        datasetOptions.push({id: 'filterOption', name: t('analytics', 'Operator'), type: 'tf', placeholder: optionSelectOptions});
+        datasetOptions.push({
+            id: 'filterDimension',
+            name: t('analytics', 'Filter by'),
+            type: 'tf',
+            placeholder: 'dimension1-' + dataset['dimension1'] + '/' + 'dimension2-' + dataset['dimension2']
+        });
+        datasetOptions.push({
+            id: 'filterOption',
+            name: t('analytics', 'Operator'),
+            type: 'tf',
+            placeholder: optionSelectOptions
+        });
         datasetOptions.push({id: 'filterValue', name: t('analytics', 'Value'), placeholder: ''});
         OCA.Analytics.datasourceOptions[0] = datasetOptions;
     },
@@ -307,18 +321,25 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     createDataload: function () {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataload'),
-            data: {
-                'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
-                'datasourceId': document.getElementById('datasourceSelect').value,
-            },
-            success: function (data) {
+        let requestUrl = OC.generateUrl('apps/analytics/dataload');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                datasetId: parseInt(document.getElementById('app-sidebar').dataset.id),
+                datasourceId: document.getElementById('datasourceSelect').value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = data.id;
                 document.querySelector('.tabHeader.selected').click();
-            }
-        });
+            });
     },
 
     handleCreateDataDeletionButton: function () {
@@ -326,18 +347,25 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     createDataDelete: function () {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataload'),
-            data: {
-                'datasetId': parseInt(document.getElementById('app-sidebar').dataset.id),
-                'datasourceId': 0,
-            },
-            success: function (data) {
+        let requestUrl = OC.generateUrl('apps/analytics/dataload');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                datasetId: parseInt(document.getElementById('app-sidebar').dataset.id),
+                datasourceId: 0,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = data.id;
                 document.querySelector('.tabHeader.selected').click();
-            }
-        });
+            });
     },
 
     handleUpdateButton: function () {
@@ -355,22 +383,29 @@ OCA.Analytics.Advanced.Dataload = {
         }
         option = JSON.stringify(option);
 
-        $.ajax({
-            type: 'PUT',
-            url: OC.generateUrl('apps/analytics/dataload/') + dataloadId,
-            data: {
-                'name': document.getElementById('dataloadName').value,
-                'schedule': document.getElementById('dataloadSchedule').value,
-                'option': option,
-            },
-            success: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/dataload/') + dataloadId;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify({
+                name: document.getElementById('dataloadName').value,
+                schedule: document.getElementById('dataloadSchedule').value,
+                option: option,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['option'] = option;
                 document.querySelector('[data-id="' + parseInt(dataloadId) + '"]').innerHTML = document.getElementById('dataloadName').value;
-            }
-        });
+            });
     },
 
     handleDeleteButton: function () {
@@ -387,13 +422,19 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     deleteDataload: function () {
-        $.ajax({
-            type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.id,
-            success: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.id;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 document.querySelector('.tabHeader.selected').click();
-            }
-        });
+            });
     },
 
     handleExecuteButton: function () {
@@ -419,13 +460,21 @@ OCA.Analytics.Advanced.Dataload = {
             OCA.Analytics.Notification.notification('success', t('analytics', 'Load started'));
         }
 
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataload/') + mode,
-            data: {
-                'dataloadId': document.getElementById('dataloadDetail').dataset.id,
-            },
-            success: function (data) {
+        let requestUrl = OC.generateUrl('apps/analytics/dataload/') + mode;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                dataloadId: document.getElementById('dataloadDetail').dataset.id,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 if (mode === 'simulate') {
                     if (parseInt(data.error) === 0) {
                         document.querySelector("[id*=oc-dialog-]").innerHTML = '<div id="simulationData">' + JSON.stringify(data.data) + '</div>';
@@ -435,7 +484,6 @@ OCA.Analytics.Advanced.Dataload = {
                             + '<br><br><textarea style="width: 500px;" cols="200" rows="15">'
                             + new Option(data.rawdata).innerHTML
                             + '</textarea>';
-
                     }
                 } else {
                     let messageType;
@@ -444,10 +492,9 @@ OCA.Analytics.Advanced.Dataload = {
                     } else {
                         messageType = 'error';
                     }
-                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' '  + t('analytics', 'records updated') + ', '  + data.error + ' '  + t('analytics', 'errors') + ', '  + data.delete + ' '  + t('analytics', 'deletions'));
+                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated') + ', ' + data.error + ' ' + t('analytics', 'errors') + ', ' + data.delete + ' ' + t('analytics', 'deletions'));
                 }
-            }
-        });
+            });
     },
 
     handleFilepicker: function () {
@@ -482,7 +529,9 @@ OCA.Analytics.Advanced.Dataload = {
                 '&quot;': '"',
                 '&#039;': "'"
             };
-        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
+        return text.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function (m) {
+            return map[m];
+        });
     },
 
 };
@@ -498,10 +547,17 @@ OCA.Analytics.Advanced.Dataset = {
         OCA.Analytics.UI.showElement('tabContainerDataset');
         document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId,
-            success: function (data) {
+        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + datasetId;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 let table;
                 if (data !== false) {
                     // clone the DOM template
@@ -524,30 +580,34 @@ OCA.Analytics.Advanced.Dataset = {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
                 }
-            }
-        });
-
+            });
     },
 
 
     getStatus: function () {
         // get status information like report and data count
         const datasetId = document.getElementById('app-sidebar').dataset.id;
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/dataset/') + datasetId + '/status',
-            success: function (data) {
+
+        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + datasetId + '/status';
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 document.getElementById('sidebarDatasetStatusRecords').innerText = parseInt(data['data']['count']).toLocaleString();
 
                 let text = '';
                 for (let report of data['reports']) {
-                    text = text + '- ' +report['name']+ '<br>';
+                    text = text + '- ' + report['name'] + '<br>';
                 }
                 if (text === '') text = t('analytics', 'This dataset is not used!');
                 document.getElementById('sidebarDatasetStatusReports').innerHTML = text;
-            }
-        });
-
+            });
     },
 
     handleDeleteButton: function (evt) {
@@ -593,31 +653,45 @@ OCA.Analytics.Advanced.Dataset = {
             return;
         }
 
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/dataset'),
-            data: {
-                'name': name,
-                'dimension1': dimension1,
-                'dimension2': dimension2,
-                'value': value
-            },
-            success: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/dataset');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                name: name,
+                dimension1: dimension1,
+                dimension2: dimension2,
+                value: value
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.Wizard.close();
                 OCA.Analytics.Navigation.init();
-            }
-        });
+            });
     },
 
     delete: function (reportId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-        $.ajax({
-            type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/dataset/') + reportId,
-            success: function (data) {
+
+        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.Navigation.init();
-            }
-        });
+            });
     },
 
     export: function () {
@@ -631,24 +705,30 @@ OCA.Analytics.Advanced.Dataset = {
         button.classList.add('loading');
         button.disabled = true;
 
+        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
 
-        $.ajax({
-            type: 'PUT',
-            url: OC.generateUrl('apps/analytics/dataset/') + reportId,
-            data: {
-                'name': document.getElementById('sidebarDatasetName').value,
-                'dimension1': document.getElementById('sidebarDatasetDimension1').value,
-                'dimension2': document.getElementById('sidebarDatasetDimension2').value,
-                'value': document.getElementById('sidebarDatasetValue').value
-            },
-            success: function () {
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify({
+                name: document.getElementById('sidebarDatasetName').value,
+                dimension1: document.getElementById('sidebarDatasetDimension1').value,
+                dimension2: document.getElementById('sidebarDatasetDimension2').value,
+                value: document.getElementById('sidebarDatasetValue').value
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
 
                 OCA.Analytics.Navigation.init(reportId);
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-            }
-        });
+            });
     },
 };
 
@@ -659,15 +739,24 @@ OCA.Analytics.Advanced.Backend = {
         const button = document.getElementById('updateDataButton');
         button.classList.add('loading');
         button.disabled = true;
-        $.ajax({
-            type: 'PUT',
-            url: OC.generateUrl('apps/analytics/data/') + reportId,
-            data: {
-                'dimension1': document.getElementById('DataDimension1').value,
-                'dimension2': document.getElementById('DataDimension2').value,
-                'value': document.getElementById('DataValue').value,
-            },
-            success: function (data) {
+
+        let requestUrl = OC.generateUrl('apps/analytics/data/') + reportId;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify({
+                dimension1: document.getElementById('DataDimension1').value,
+                dimension2: document.getElementById('DataDimension2').value,
+                value: document.getElementById('DataValue').value
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
@@ -679,8 +768,7 @@ OCA.Analytics.Advanced.Backend = {
                 } else {
                     OCA.Analytics.Notification.notification('error', data.error);
                 }
-            }
-        });
+            });
     },
 
     deleteDataSimulate: function () {
@@ -688,15 +776,24 @@ OCA.Analytics.Advanced.Backend = {
         const button = document.getElementById('deleteDataButton');
         button.classList.add('loading');
         button.disabled = true;
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/data/deleteDataSimulate'),
-            data: {
-                'reportId': reportId,
-                'dimension1': document.getElementById('DataDimension1').value,
-                'dimension2': document.getElementById('DataDimension2').value,
-            },
-            success: function (data) {
+
+        let requestUrl = OC.generateUrl('apps/analytics/data/deleteDataSimulate');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                reportId: reportId,
+                dimension1: document.getElementById('DataDimension1').value,
+                dimension2: document.getElementById('DataDimension2').value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 OC.dialogs.confirm(
                     t('analytics', 'Are you sure?') + ' ' + t('analytics', 'Records to be deleted: ') + data.delete.count,
                     t('analytics', 'Delete data'),
@@ -710,8 +807,7 @@ OCA.Analytics.Advanced.Backend = {
                     },
                     true
                 );
-            }
-        });
+            });
     },
 
     deleteData: function () {
@@ -719,22 +815,30 @@ OCA.Analytics.Advanced.Backend = {
         const button = document.getElementById('deleteDataButton');
         button.classList.add('loading');
         button.disabled = true;
-        $.ajax({
-            type: 'DELETE',
-            url: OC.generateUrl('apps/analytics/data/') + reportId,
-            data: {
-                'dimension1': document.getElementById('DataDimension1').value,
-                'dimension2': document.getElementById('DataDimension2').value,
-            },
-            success: function (data) {
+
+        let requestUrl = OC.generateUrl('apps/analytics/data/') + reportId;
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: headers,
+            body: JSON.stringify({
+                dimension1: document.getElementById('DataDimension1').value,
+                dimension2: document.getElementById('DataDimension2').value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (document.getElementById('advanced').value === 'false') {
                     OCA.Analytics.UI.resetContentArea();
                     OCA.Analytics.Backend.getData();
                 }
-            }
-        });
+            });
     },
 
     importCsvData: function () {
@@ -742,14 +846,23 @@ OCA.Analytics.Advanced.Backend = {
         const button = document.getElementById('importDataClipboardButton');
         button.classList.add('loading');
         button.disabled = true;
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/data/importCSV'),
-            data: {
-                'reportId': reportId,
-                'import': document.getElementById('importDataClipboardText').value,
-            },
-            success: function (data) {
+
+        let requestUrl = OC.generateUrl('apps/analytics/data/importCSV');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                reportId: reportId,
+                import: document.getElementById('importDataClipboardText').value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
@@ -761,13 +874,12 @@ OCA.Analytics.Advanced.Backend = {
                 } else {
                     OCA.Analytics.Notification.notification('error', data.error);
                 }
-            },
-            error: function () {
+            })
+            .catch(error => {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
                 button.classList.remove('loading');
                 button.disabled = false;
-            }
-        });
+            });
     },
 
     importFileData: function (path) {
@@ -776,14 +888,22 @@ OCA.Analytics.Advanced.Backend = {
         button.classList.add('loading');
         button.disabled = true;
 
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/data/importFile'),
-            data: {
-                'reportId': reportId,
-                'path': path,
-            },
-            success: function (data) {
+        let requestUrl = OC.generateUrl('apps/analytics/data/importFile');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                reportId: reportId,
+                path: path,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (data.error === 0) {
@@ -795,12 +915,11 @@ OCA.Analytics.Advanced.Backend = {
                 } else {
                     OCA.Analytics.Notification.notification('error', data.error);
                 }
-            },
-            error: function () {
+            })
+            .catch(error => {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
                 button.classList.remove('loading');
                 button.disabled = false;
-            }
-        });
+            });
     },
 };
