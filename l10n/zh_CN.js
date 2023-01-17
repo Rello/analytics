@@ -184,6 +184,7 @@ OC.L10N.register(
     "No data found" : "未找到数据",
     "Favorites" : "收藏",
     "Quickstart" : "快速入门",
+    "New Report" : "新报告",
     "Intro" : "介绍",
     "Wiki" : "Wiki",
     "Javascript issue" : "Javascript 问题",
