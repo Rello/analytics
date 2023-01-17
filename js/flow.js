@@ -66,13 +66,19 @@
         },
         methods: {
             fetchDatasets() {
-                $.ajax({
-                    type: 'GET',
-                    url: OC.generateUrl('apps/analytics/dataset'),
-                    success: function (data) {
+                let requestUrl = OC.generateUrl('apps/analytics/dataset');
+                let headers = new Headers();
+                headers.append('requesttoken', OC.requestToken);
+                headers.append('OCS-APIREQUEST', 'true');
+
+                fetch(requestUrl, {
+                    method: 'GET',
+                    headers: headers
+                })
+                    .then(response => response.json())
+                    .then(data => {
                         Component.items = data;
-                    }
-                });
+                    });
             },
         },
     };

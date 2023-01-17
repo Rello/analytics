@@ -159,17 +159,6 @@ OCA.Analytics.WhatsNew = {
             }
         };
         xhr.send();
-
-/*
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/analytics/whatsnew'),
-            data: {'format': 'json'},
-            success: options.success || function (data, statusText, xhr) {
-                OCA.Analytics.WhatsNew.show(data, statusText, xhr);
-            },
-        });
-*/
     },
 
     dismiss: function (version) {

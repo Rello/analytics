@@ -55,6 +55,14 @@ if (!OCA.Analytics) {
         unsavedFilters: null,
         refreshTimer: null,
         currentXhrRequest: null,
+
+        headers: function () {
+            let headers = new Headers();
+            headers.append('requesttoken', OC.requestToken);
+            headers.append('OCS-APIREQUEST', 'true');
+            headers.append('Content-Type', 'application/json');
+            return headers;
+        }
     };
 }
 /**
@@ -1108,12 +1116,10 @@ OCA.Analytics.Backend = {
     },
 
     getDatasourceDefinitions: function () {
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        fetch(OC.generateUrl('apps/analytics/datasource'), {
+        let requestUrl = OC.generateUrl('apps/analytics/datasource');
+        fetch(requestUrl, {
             method: 'GET',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
@@ -1123,12 +1129,10 @@ OCA.Analytics.Backend = {
     },
 
     getDatasetDefinitions: function () {
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        fetch(OC.generateUrl('apps/analytics/dataset'), {
+        let requestUrl = OC.generateUrl('apps/analytics/dataset');
+        fetch(requestUrl, {
             method: 'GET',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {

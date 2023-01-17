@@ -155,13 +155,9 @@ OCA.Analytics.Advanced.Dataload = {
         let url = OC.generateUrl('apps/analytics/dataload');
         let params = new URLSearchParams({datasetId: datasetId});
         let requestUrl = `${url}?${params}`;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-
         fetch(requestUrl, {
             method: 'GET',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
@@ -322,14 +318,9 @@ OCA.Analytics.Advanced.Dataload = {
 
     createDataload: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload');
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 datasetId: parseInt(document.getElementById('app-sidebar').dataset.id),
                 datasourceId: document.getElementById('datasourceSelect').value,
@@ -348,14 +339,9 @@ OCA.Analytics.Advanced.Dataload = {
 
     createDataDelete: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload');
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 datasetId: parseInt(document.getElementById('app-sidebar').dataset.id),
                 datasourceId: 0,
@@ -384,14 +370,9 @@ OCA.Analytics.Advanced.Dataload = {
         option = JSON.stringify(option);
 
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + dataloadId;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'PUT',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 name: document.getElementById('dataloadName').value,
                 schedule: document.getElementById('dataloadSchedule').value,
@@ -423,13 +404,9 @@ OCA.Analytics.Advanced.Dataload = {
 
     deleteDataload: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.id;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-
         fetch(requestUrl, {
             method: 'DELETE',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
@@ -461,14 +438,9 @@ OCA.Analytics.Advanced.Dataload = {
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + mode;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 dataloadId: document.getElementById('dataloadDetail').dataset.id,
             })
@@ -548,13 +520,9 @@ OCA.Analytics.Advanced.Dataset = {
         document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + datasetId;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-
         fetch(requestUrl, {
             method: 'GET',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
@@ -589,13 +557,9 @@ OCA.Analytics.Advanced.Dataset = {
         const datasetId = document.getElementById('app-sidebar').dataset.id;
 
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + datasetId + '/status';
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-
         fetch(requestUrl, {
             method: 'GET',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
@@ -654,14 +618,9 @@ OCA.Analytics.Advanced.Dataset = {
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/dataset');
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 name: name,
                 dimension1: dimension1,
@@ -680,13 +639,9 @@ OCA.Analytics.Advanced.Dataset = {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-
         fetch(requestUrl, {
             method: 'DELETE',
-            headers: headers
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
@@ -706,14 +661,9 @@ OCA.Analytics.Advanced.Dataset = {
         button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'PUT',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 name: document.getElementById('sidebarDatasetName').value,
                 dimension1: document.getElementById('sidebarDatasetDimension1').value,
@@ -741,14 +691,9 @@ OCA.Analytics.Advanced.Backend = {
         button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/data/') + reportId;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'PUT',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 dimension1: document.getElementById('DataDimension1').value,
                 dimension2: document.getElementById('DataDimension2').value,
@@ -778,14 +723,9 @@ OCA.Analytics.Advanced.Backend = {
         button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/data/deleteDataSimulate');
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
                 dimension1: document.getElementById('DataDimension1').value,
@@ -817,14 +757,9 @@ OCA.Analytics.Advanced.Backend = {
         button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/data/') + reportId;
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'DELETE',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 dimension1: document.getElementById('DataDimension1').value,
                 dimension2: document.getElementById('DataDimension2').value,
@@ -848,14 +783,9 @@ OCA.Analytics.Advanced.Backend = {
         button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/data/importCSV');
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
                 import: document.getElementById('importDataClipboardText').value,
@@ -889,14 +819,9 @@ OCA.Analytics.Advanced.Backend = {
         button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/data/importFile');
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-
         fetch(requestUrl, {
             method: 'POST',
-            headers: headers,
+            headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
                 path: path,

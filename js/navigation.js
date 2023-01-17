@@ -24,6 +24,35 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Backend.getDatasetDefinitions();
     },
 
+    getDatasets: function (datasetId) {
+        let datatype;
+        if (OCA.Analytics.isAdvanced) {
+            datatype = 'dataset';
+        } else {
+            datatype = 'report';
+        }
+
+        let requestUrl = OC.generateUrl('apps/analytics/' + datatype);
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        })
+            .then(response => response.json())
+            .then(data => {
+                //let data = JSON.parse(data);
+                OCA.Analytics.Navigation.buildNavigation(data);
+                OCA.Analytics.reports = data;
+                if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
+                    OCA.Analytics.Sidebar.hideSidebar();
+                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
+                    if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
+                        navigationItem.parentElement.parentElement.parentElement.classList.add('open');
+                    }
+                    navigationItem.click();
+                }
+            });
+    },
+
     buildNavigation: function (data) {
         OCA.Analytics.Sidebar.hideSidebar();
         document.getElementById('navigationDatasets').innerHTML = '';
@@ -484,37 +513,6 @@ OCA.Analytics.Navigation = {
         xhr.send();
     },
 
-    getDatasets: function (datasetId) {
-        let datatype;
-        if (OCA.Analytics.isAdvanced) {
-            datatype = 'dataset';
-        } else {
-            datatype = 'report';
-        }
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', OC.generateUrl('apps/analytics/' + datatype, true));
-        xhr.setRequestHeader('requesttoken', OC.requestToken);
-        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                let data = JSON.parse(xhr.response);
-                OCA.Analytics.Navigation.buildNavigation(data);
-                OCA.Analytics.reports = data;
-                if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
-                    OCA.Analytics.Sidebar.hideSidebar();
-                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
-                    if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
-                        navigationItem.parentElement.parentElement.parentElement.classList.add('open');
-                    }
-                    navigationItem.click();
-                }
-            }
-        };
-        xhr.send();
-    },
-
     favoriteUpdate: function (datasetId, isFavorite) {
         let params = 'favorite=' + isFavorite;
         let xhr = new XMLHttpRequest();
@@ -582,17 +580,18 @@ OCA.Analytics.Navigation.Drag = {
     },
 
     addReportToGroup: function (groupId, reportId) {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/') + reportId + '/group',
-            data: {
-                'groupId': groupId,
-            },
-            success: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId + '/group';
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                groupId: groupId,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.Navigation.init(groupId);
-            }
-        });
-
+            });
     }
 }
 

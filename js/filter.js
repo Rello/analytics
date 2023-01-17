@@ -524,20 +524,26 @@ OCA.Analytics.Filter.Backend = {
 
         OCA.Analytics.unsavedFilters = false;
 
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/copy'),
-            data: {
-                'reportId': reportId,
-                'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
-                'dataoptions': OCA.Analytics.currentReportData.options.dataoptions,
-                'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
-            },
-            success: function (data) {
-                OCA.Analytics.Navigation.init(data);
-            }
-        });
+        let requestUrl = OC.generateUrl('apps/analytics/report/copy');
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
 
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                reportId: reportId,
+                chartoptions: OCA.Analytics.currentReportData.options.chartoptions,
+                dataoptions: OCA.Analytics.currentReportData.options.dataoptions,
+                filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Navigation.init(data);
+            });
     },
 
     saveReport: function () {
@@ -558,19 +564,26 @@ OCA.Analytics.Filter.Backend = {
         // cleanup the array to keep it as small as necessary
         dataOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(dataOptions);
 
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/') + reportId + '/options',
-            data: {
-                'chartoptions': OCA.Analytics.currentReportData.options.chartoptions,
-                'dataoptions': JSON.stringify(dataOptions),
-                'filteroptions': OCA.Analytics.currentReportData.options.filteroptions,
-            },
-            success: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId + '/options';
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                chartoptions: OCA.Analytics.currentReportData.options.chartoptions,
+                dataoptions: JSON.stringify(dataOptions),
+                filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 delete OCA.Analytics.currentReportData.options;
                 OCA.Analytics.Backend.getData();
-            }
-        });
+            });
     },
 
     saveRefresh: function (evt) {
@@ -579,17 +592,23 @@ OCA.Analytics.Filter.Backend = {
         refresh = parseInt(refresh.substring(7));
         const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
 
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/report/') + datasetId + '/refresh',
-            data: {
-                'refresh': refresh,
-            },
-            success: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/report/') + datasetId + '/refresh';
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                refresh: refresh,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Backend.startRefreshTimer(refresh);
-            }
-        });
+            });
     },
-
 };
