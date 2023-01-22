@@ -6,6 +6,7 @@ OC.L10N.register(
     "Search" : "ค้นหา",
     "OK" : "ตกลง",
     "Cancel" : "ยกเลิก",
+    "Filter" : "ตัวกรอง",
     "Add" : "เพิ่ม",
     "Color" : "สี",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
