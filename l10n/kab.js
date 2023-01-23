@@ -13,6 +13,7 @@ OC.L10N.register(
     "Share link" : "Fren aseɣwen",
     "Link copied" : "Aseɣwen yettwanɣel",
     "Type" : "Anaw",
+    "Local file" : "Afaylu adigan",
     "File" : "Afaylu",
     "No" : "Uhu",
     "Yes" : "Oui",
