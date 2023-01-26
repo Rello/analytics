@@ -42,7 +42,7 @@ OC.L10N.register(
     "Title" : "ชื่อเรื่อง",
     "Daily" : "รายวัน",
     "Hourly" : "รายชั่วโมง",
-    "Unshare" : "ยกเลิกการแชร์",
+    "Unshare" : "เลิกแชร์",
     "Password protection" : "ป้องกันด้วยรหัสผ่าน",
     "Copy link" : "คัดลอกลิงก์",
     "Get more information" : "รับข้อมูลเพิ่มเติม",
