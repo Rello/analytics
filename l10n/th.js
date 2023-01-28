@@ -21,6 +21,7 @@ OC.L10N.register(
     "Date" : "วันที่",
     "New in" : "ใหม่ใน",
     "View changelog" : "ดูบันทึกการเปลี่ยนแปลง",
+    "Local file" : "ไฟล์ในต้นทาง",
     "File" : "ไฟล์",
     "No" : "ไม่",
     "Yes" : "ใช่",
