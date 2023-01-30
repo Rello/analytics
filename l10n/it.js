@@ -103,6 +103,7 @@ OC.L10N.register(
     "Link copied" : "Collegamento copiato",
     "Column 1" : "Colonna 1",
     "Column 3" : "Colonna 3",
+    "Missing data" : "Dati Mancanti",
     "3rd field must be a valid number" : "Il 3° campo deve essere un numero valido",
     "Demo: Thresholds" : "Demo: Soglie",
     "Type" : "Tipo",
