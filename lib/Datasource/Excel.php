@@ -17,8 +17,6 @@ use OCP\IL10N;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
-use PhpOffice\PhpSpreadsheet\Cell\Cell;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Psr\Log\LoggerInterface;
 
@@ -26,17 +24,14 @@ class Excel implements IDatasource
 {
     private $logger;
     private $rootFolder;
-    private $userId;
     private $l10n;
 
     public function __construct(
-        $userId,
         IL10N $l10n,
         LoggerInterface $logger,
         IRootFolder $rootFolder
     )
     {
-        $this->userId = $userId;
         $this->l10n = $l10n;
         $this->logger = $logger;
         $this->rootFolder = $rootFolder;
@@ -59,24 +54,25 @@ class Excel implements IDatasource
     }
 
     /**
-     * @return array available options of the datasoure
+     * @return array available options of the data source
      */
     public function getTemplate(): array
     {
         $template = array();
-        array_push($template, ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File')]);
-        array_push($template, ['id' => 'sheet', 'name' => $this->l10n->t('Sheet'), 'placeholder' => $this->l10n->t('sheet name')]);
-        array_push($template, ['id' => 'range', 'name' => $this->l10n->t('Cell range'), 'placeholder' => $this->l10n->t('e.g. A1:C3,A5:C5')]);
+        $template[] = ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File')];
+        $template[] = ['id' => 'sheet', 'name' => $this->l10n->t('Sheet'), 'placeholder' => $this->l10n->t('sheet name')];
+        $template[] = ['id' => 'range', 'name' => $this->l10n->t('Cell range'), 'placeholder' => $this->l10n->t('e.g. A1:C3,A5:C5')];
         return $template;
     }
 
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the datasoure
+     * @return array
      * @throws NotFoundException
      * @throws \OCP\Files\NotPermittedException
      * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function readData($option): array
     {
@@ -97,7 +93,7 @@ class Excel implements IDatasource
 
         // separated columns can be selected via ranges e.g. "A1:B9,C1:C9"
         // these ranges are read and linked
-        $ranges = str_getcsv($option['range'], ',');
+        $ranges = str_getcsv($option['range']);
         foreach ($ranges as $range) {
             $values = $spreadsheet->getActiveSheet()->rangeToArray(
                 $range,                // The worksheet range that we want to retrieve
@@ -113,9 +109,9 @@ class Excel implements IDatasource
                 // first range will fill the array with all rows
                 $data = $values;
             } else {
-                // further columns will be attatched to the first ones
+                // further columns will be attached to the first ones
                 foreach ($data as $key => $value) {
-                    $data[$key] = array_merge($data[$key], $values[$key]);
+                    $data[$key] = array_merge($value, $values[$key]);
                 }
 
             }
@@ -142,7 +138,7 @@ class Excel implements IDatasource
      * @param $array
      * @return bool
      */
-    private function containsOnlyNull($array)
+    private function containsOnlyNull($array): bool
     {
         return !(array_reduce($array, function ($carry, $item) {
                 return $carry += (is_null($item) ? 0 : 1);
@@ -158,7 +154,7 @@ class Excel implements IDatasource
      * @return array
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function convertExcelDate($spreadsheet, $values, $range)
+    private function convertExcelDate($spreadsheet, $values, $range): array
     {
         $map = [
             "yyyy" => "Y",
