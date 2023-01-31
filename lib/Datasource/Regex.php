@@ -20,7 +20,7 @@ class Regex implements IDatasource
     private IL10N $l10n;
 
     public function __construct(
-        IL10N $l10n,
+        IL10N           $l10n,
         LoggerInterface $logger
     )
     {
@@ -54,7 +54,7 @@ class Regex implements IDatasource
         $template[] = ['id' => 'name', 'name' => 'Data series description', 'placeholder' => 'optional'];
         $template[] = ['id' => 'regex', 'name' => $this->l10n->t('valid regex'), 'placeholder' => '//'];
         $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')];
-        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No'), 'type' => 'tf'];
+        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
     }
 
@@ -83,7 +83,7 @@ class Regex implements IDatasource
         $count = count($matches['dimension']);
         for ($i = 0; $i < $count; $i++) {
             if (isset($option['limit'])) {
-                if ($i === (int)$option['limit'] AND (int)$option['limit'] !== 0) break;
+                if ($i === (int)$option['limit'] and (int)$option['limit'] !== 0) break;
             }
             $data[] = [$option['name'], $matches['dimension'][$i], $matches['value'][$i]];
         }
