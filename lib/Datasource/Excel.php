@@ -14,8 +14,12 @@ namespace OCA\Analytics\Datasource;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Psr\Log\LoggerInterface;
 
 class Excel implements IDatasource
@@ -76,7 +80,6 @@ class Excel implements IDatasource
      */
     public function readData($option): array
     {
-
         include_once __DIR__ . '/../../vendor/autoload.php';
         $header = $dataClean = $data = array();
         $headerrow = $error = 0;
@@ -86,14 +89,13 @@ class Excel implements IDatasource
 
         $inputFileType = IOFactory::identify($fileName);
         $reader = IOFactory::createReader($inputFileType);
-        $reader->setReadDataOnly(true);
+        //$reader->setReadDataOnly(true); disabled as idDate is not working otherwise
         if (strlen($option['sheet']) > 0) {
             $reader->setLoadSheetsOnly([$option['sheet']]);
         }
-
         $spreadsheet = $reader->load($fileName);
 
-        // separated columns can be selected via ranges e.g. "A1:B9, C1:C9"
+        // separated columns can be selected via ranges e.g. "A1:B9,C1:C9"
         // these ranges are read and linked
         $ranges = str_getcsv($option['range'], ',');
         foreach ($ranges as $range) {
@@ -104,6 +106,9 @@ class Excel implements IDatasource
                 TRUE,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
                 FALSE       // Should the array be indexed by cell row and cell column
             );
+
+            $values = $this->convertExcelDate($spreadsheet, $values, $range);
+
             if (empty($data)) {
                 // first range will fill the array with all rows
                 $data = $values;
@@ -133,10 +138,57 @@ class Excel implements IDatasource
         ];
     }
 
+    /**
+     * @param $array
+     * @return bool
+     */
     private function containsOnlyNull($array)
     {
-        return array_reduce($array, function ($carry, $item) {
-            return $carry += (is_null($item) ? 0 : 1);
-        }, 0) > 0 ? false : true;
+        return !(array_reduce($array, function ($carry, $item) {
+                return $carry += (is_null($item) ? 0 : 1);
+            }, 0) > 0);
+    }
+
+    /**
+     * every cell is checked if it is an excel date (stored in number of days since 1990)
+     * then, the date format from excel is reapplied in php
+     * @param $spreadsheet
+     * @param $values
+     * @param $range
+     * @return array
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    private function convertExcelDate($spreadsheet, $values, $range)
+    {
+        $map = [
+            "yyyy" => "Y",
+            "mm" => "m",
+            "dd" => "d",
+            "hh" => "H",
+            "MM" => "i",
+            "ss" => "s"
+        ];
+
+        $start = str_getcsv($range, ':');
+        $startCell = Coordinate::coordinateFromString($start[0]);
+        $startColumn = (int)Coordinate::columnIndexFromString($startCell[0]);
+        $startRow = (int)$startCell[1];
+
+        foreach ($values as $rowIndex => $row) {
+            foreach ($row as $columnIndex => $cellValue) {
+                $columnLetter = Coordinate::stringFromColumnIndex($columnIndex + $startColumn);
+                $rowNumber = $rowIndex + $startRow;
+                $coordinate = $columnLetter . $rowNumber;
+                $cell = $spreadsheet->getActiveSheet()->getCell($coordinate);
+                if (Date::isDateTime($cell)) {
+                    $date = Date::excelToDateTimeObject($cell->getValue());
+                    $excelFormat = $cell->getStyle()->getNumberFormat()->getFormatCode();
+                    $excelFormat = rtrim($excelFormat, ";@");
+                    $targetFormat = strtr($excelFormat, $map);
+                    $values[$rowIndex][$columnIndex] = $date->format($targetFormat);
+                }
+            }
+        }
+        return $values;
     }
 }
