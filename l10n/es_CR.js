@@ -1,6 +1,12 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "Conjunto de datos",
+    "Data" : "Datos",
+    "Automation" : "Automatización",
+    "Data maintenance is not possible for this type of report" : "El mantenimiento de los datos no es posible para este tipo de reporte",
+    "Choose a data source from the dropdown and press \"+\"" : "Seleccione un origen de datos desde el desplegable y presione \"+\"",
+    "Choose a data load from the list to change its settings" : "Seleccione una carga de datos desde una lista para cambiar sus ajustes",
     "Value" : "Valor",
     "Saved" : "Guardado",
     "Delete" : "Borrar",
