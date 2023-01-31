@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.7.0 - 2023-01-xx
+## 4.7.0 - 2023-02-xx
 ### Added
 - JSON: read array data which is not on the first level #326
 
