@@ -103,10 +103,11 @@ class StorageService
      * @param $value
      * @param string|null $user_id
      * @param $bulkInsert
+     * @param $aggregation
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function update(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $bulkInsert = null)
+    public function update(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $bulkInsert = null, $aggregation = null)
     {
         TODO:
         //dates in both columns
@@ -123,7 +124,7 @@ class StorageService
 
         if ($value !== false) {
             try {
-                $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert);
+                $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert, $aggregation);
             } catch (\Exception $e) {
                 $error = 1;
             }
@@ -205,6 +206,16 @@ class StorageService
     public function deleteWithFilterSimulate(int $datasetId, $filter)
     {
         return $this->StorageMapper->deleteWithFilterSimulate($datasetId, $filter);
+    }
+
+    /**
+     * Get the number of records for a dataset
+     * @param int $datasetId
+     * @return array
+     */
+    public function getRecordCount(int $datasetId)
+    {
+        return $this->StorageMapper->getRecordCount($datasetId);
     }
 
     private function floatvalue($val)

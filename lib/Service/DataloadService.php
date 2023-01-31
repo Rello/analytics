@@ -156,14 +156,28 @@ class DataloadService
         $bulkSize = 500;
         $insert = $update = $error = $delete = 0;
         $bulkInsert = null;
+        $aggregation = null;
 
+        // get the meta data
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
-        $result = $this->getDataFromDatasource($dataloadId);
         $option = json_decode($dataloadMetadata['option'], true);
 
-        if ($dataloadMetadata['datasource'] === 0) {
-            // this is a deletion request. Just run the deletion and stop after that with a return.
+        // get the data from the datasource
+        $result = $this->getDataFromDatasource($dataloadId);
+        $datasetId = $result['datasetId'];
 
+        // dont continue in case of datasource error
+        if ($result['error'] !== 0) {
+            return [
+                'insert' => $insert,
+                'update' => $update,
+                'delete' => $delete,
+                'error' => 1,
+            ];
+        }
+
+        // this is a deletion request. Just run the deletion and stop after that with a return.
+        if ($dataloadMetadata['datasource'] === 0) {
             $option = json_decode($dataloadMetadata['option'], true);
 
             // deletion jobs are using the same dimension/option/value settings a report filter
@@ -173,53 +187,64 @@ class DataloadService
 
             $this->StorageService->deleteWithFilterSimulate($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true));
 
-            $result = [
+            return [
                 'insert' => $insert,
                 'update' => $update,
                 // use the existing row count from the deletion simulation which was run during getDataFromDatasource
                 'delete' => $result['data']['count'],
                 'error' => $error,
             ];
-            return $result;
         }
 
-        // if the data source option to delete all date before loading is "true"
-        $datasetId = $result['datasetId'];
+        // "delete all date before loading" is true in the data source options
+        // in this case, bulkInsert is set to true. Then no further checks for existing records are needed
+        // reduce db selects
         if (isset($option['delete']) and $option['delete'] === 'true') {
-            $bulkInsert = $this->StorageService->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
+            $this->StorageService->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
+            $bulkInsert = true;
         }
 
-        if ($result['error'] === 0) {
-            // collect mass updates to reduce statements to the database
-            $this->DataloadMapper->beginTransaction();
-            $currentCount = 0;
-            foreach ($result['data'] as $row) {
-                if (count($row) === 1) {
-                    // only one column is not possible
-                    $this->logger->info('loading data with only one column is not possible. This is a data load for the dataset: ' . $datasetId);
-                    $error = $error + 1;
-                    continue;
-                }
-                if (count($row) === 2) {
-                    // if data source only delivers 2 columns, the value needs to be in the last one
-                    $row[2] = $row[1];
-                    $row[1] = null;
-                }
-                $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert);
-                $insert = $insert + $action['insert'];
-                $update = $update + $action['update'];
-                $error = $error + $action['error'];
+        // if the data set has no data, it is the same as the delete all option
+        // in this case, bulkInsert is set to true. Then no further checks for existing records are needed
+        // reduce db selects
+        $numberOfRecords = $this->StorageService->getRecordCount($datasetId);
+        if ($numberOfRecords['count'] === 0) {
+            $this->logger->info('Empty dataset => enabling bulk load');
+            $bulkInsert = true;
+        }
 
-                if ($currentCount % $bulkSize === 0) {
-                    $this->DataloadMapper->commit();
-                    $this->DataloadMapper->beginTransaction();
-                }
-                if ($action['error'] === 0) $currentCount++;
+        // Feature not yet available
+        if (isset($option['aggregation']) and $option['aggregation'] !== 'overwrite') {
+            $aggregation = $option['aggregation'];
+        }
+
+        // collect mass updates to reduce statements to the database
+        $this->DataloadMapper->beginTransaction();
+        $currentCount = 0;
+        foreach ($result['data'] as $row) {
+            if (count($row) === 1) {
+                // only one column is not possible
+                $this->logger->info('loading data with only one column is not possible. This is a data load for the dataset: ' . $datasetId);
+                $error = $error + 1;
+                continue;
             }
-            $this->DataloadMapper->commit();
-        } else {
-            $error = 1;
+            if (count($row) === 2) {
+                // if data source only delivers 2 columns, the value needs to be in the last one
+                $row[2] = $row[1];
+                $row[1] = null;
+            }
+            $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert, $aggregation);
+            $insert = $insert + $action['insert'];
+            $update = $update + $action['update'];
+            $error = $error + $action['error'];
+
+            if ($currentCount % $bulkSize === 0) {
+                $this->DataloadMapper->commit();
+                $this->DataloadMapper->beginTransaction();
+            }
+            if ($action['error'] === 0) $currentCount++;
         }
+        $this->DataloadMapper->commit();
 
         $result = [
             'insert' => $insert,
@@ -228,7 +253,7 @@ class DataloadService
             'error' => $error,
         ];
 
-        if ($error === 0) $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
+        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
         return $result;
     }
 

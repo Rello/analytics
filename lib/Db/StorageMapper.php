@@ -46,11 +46,13 @@ class StorageMapper
      * @param $dimension2
      * @param $value
      * @param string|null $user_id
-     * @param int|null $timestamp
+     * @param null $timestamp
      * @param $bulkInsert
+     * @param $aggregation
      * @return string
+     * @throws Exception
      */
-    public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null, $bulkInsert = null)
+    public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null, $bulkInsert = null, $aggregation = null)
     {
         $dimension1 = str_replace('*', '', $dimension1);
         $dimension2 = str_replace('*', '', $dimension2);
@@ -59,10 +61,12 @@ class StorageMapper
 
         if ($user_id) $this->userId = $user_id;
 
+        // if the data source option to delete all date before loading is "true"
+        // in this case, bulkInsert is set to true. Then no further checks for existing records is needed
         if ($bulkInsert === null) {
             $sql = $this->db->getQueryBuilder();
             $sql->from(self::TABLE_NAME)
-                ->addSelect('id')
+                ->addSelect('value')
                 ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
                 ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
                 ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
@@ -75,12 +79,21 @@ class StorageMapper
         if ($result) {
             $sql = $this->db->getQueryBuilder();
             $sql->update(self::TABLE_NAME)
-                ->set('value', $sql->createNamedParameter($value))
                 ->set('timestamp', $sql->createNamedParameter($timestamp))
                 ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
                 ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
                 ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
                 ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
+
+            if ($aggregation === 'summation') {
+                // Feature not yet available
+                // $this->logger->error('old value: ' . $result['value']);
+                // $this->logger->error('new value: ' . $value + $result['value']);
+                $sql->set('value', $sql->createNamedParameter($value + $result['value']));
+            } else {
+                $sql->set('value', $sql->createNamedParameter($value));
+            }
+
             $sql->execute();
             return 'update';
         } else {
