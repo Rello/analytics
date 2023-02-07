@@ -33,7 +33,7 @@ interface IDatasource
     public function getId(): int;
 
     /**
-     * get the available options of the data soure
+     * available options of the data source
      *
      * return needs to be an array and can consist of many fields.
      * every field needs to provide the following format
@@ -48,6 +48,7 @@ interface IDatasource
      *                                  to avoid translation of the technical strings, separate them
      *                                  'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No')
      *
+     *  example:
      *  {['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'tf', 'placeholder' => 'adaptation/absolute']}
      *
      * @return array
@@ -66,8 +67,8 @@ interface IDatasource
      *      'error' => 0,         // INT 0 = no error
      *  ]
      *
-     * @param array $option
-     * @return array available options of the datasoure
+     * @param $option
+     * @return array available options of the data source
      * @since 3.1.0
      */
     public function readData($option): array;

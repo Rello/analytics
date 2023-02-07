@@ -662,7 +662,7 @@ OCA.Analytics.Sidebar.Report = {
             });
     },
 
-    deleteDatasetAlso: function () {
+    deleteDatasetAlso: function (data) {
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + data;
         fetch(requestUrl, {
             method: 'DELETE',
@@ -1209,8 +1209,8 @@ OCA.Analytics.Sidebar.Threshold = {
                 table.id = 'tableThreshold';
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);
-                document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column 1');
-                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Column 3');
+                document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column') + ' 1';
+                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Column') + ' 3';
                 document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
                 document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
 

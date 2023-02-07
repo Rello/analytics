@@ -118,6 +118,7 @@ OCA.Analytics.UI = {
 
     buildDataTable: function (jsondata) {
         OCA.Analytics.UI.showElement('tableContainer');
+        //OCA.Analytics.UI.showElement('tableMenuBar');
 
         let columns = [];
         let data, unit = '';
@@ -138,9 +139,19 @@ OCA.Analytics.UI = {
                 //    return data + ' ' + row[row.length-2];
                 //};
                 if (header[headerKeys[i]] !== null && header[headerKeys[i]].length === 1) {
-                    unit = header[headerKeys[i]];
+                    unit = header[headerKeys[i]] + ' ';
                 }
-                columns[i]['render'] = DataTable.render.number(null, null, 2, unit + ' ');
+                //columns[i]['render'] = DataTable.render.number(null, null, 2, unit + ' ');
+                columns[i]['render'] = function (data, type, row, meta) {
+                    // If display or filter data is requested, format the number
+                    if (type === 'display' || type === 'filter') {
+                        return unit + parseFloat(data).toLocaleString();
+                    }
+                    // Otherwise the data type requested (`type`) is type detection or
+                    // sorting data, for which we want to use the integer, so just return
+                    // that, unaltered
+                    return data;
+                }
                 columns[i]['className'] = 'dt-right';
             } else if (columnType === 'timestamp') {
                 columns[i]['render'] = function (data, type) {
@@ -179,6 +190,7 @@ OCA.Analytics.UI = {
         };
 
         OCA.Analytics.tableObject = new DataTable(document.getElementById("tableContainer"), {
+            //dom: 'tipl',
             data: data,
             columns: columns,
             language: language,
@@ -575,11 +587,13 @@ OCA.Analytics.UI = {
             document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.UI.handleZoomResetButton);
             OCA.Analytics.UI.hideElement('tableContainer');
             OCA.Analytics.UI.hideElement('tableSeparatorContainer');
+            //OCA.Analytics.UI.hideElement('tableMenuBar');
             document.getElementById('tableContainer').innerHTML = '';
-            document.getElementById('reportHeader').innerHTML = '';
-            document.getElementById('reportSubHeader').innerHTML = '';
+
             OCA.Analytics.UI.hideElement('reportSubHeader');
             OCA.Analytics.UI.hideElement('noDataContainer');
+            document.getElementById('reportHeader').innerHTML = '';
+            document.getElementById('reportSubHeader').innerHTML = '';
 
             OCA.Analytics.UI.showElement('reportMenuBar');
             OCA.Analytics.UI.hideReportMenu();
@@ -642,6 +656,7 @@ OCA.Analytics.UI = {
     reportOptionsEventlisteners: function () {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
+        //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleTableMenu);
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
         document.getElementById('saveIconNew').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
@@ -657,6 +672,8 @@ OCA.Analytics.UI = {
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('downloadChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
+
+        //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.UI.tableSearch);
 
         let refresh = document.getElementsByName('refresh');
         for (let i = 0; i < refresh.length; i++) {
@@ -691,6 +708,11 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuRefresh').style.setProperty('display', 'none', 'important');
     },
 
+    toggleTableMenu: function () {
+        document.getElementById('tableMenu').classList.toggle('open');
+        document.getElementById('tableMenuMain').style.removeProperty('display');
+    },
+
     showReportMenuAnalysis: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuAnalysis').style.removeProperty('display');
@@ -707,7 +729,9 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuMain').style.removeProperty('display');
     },
 
-
+    tableSearch: function () {
+        OCA.Analytics.tableObject.search( this.value ).draw();
+    }
 };
 
 OCA.Analytics.Functions = {
@@ -908,13 +932,16 @@ OCA.Analytics.Datasource = {
         let form = document.createDocumentFragment();
 
         for (let templateOption of template) {
-            // loop all options of the datasourcetemplate and create the input form
-            let tablerow = document.createElement('div');
-            tablerow.style.display = 'table-row';
+            // loop all options of the datasource template and create the input form
+            let tableRow = document.createElement('div');
+            tableRow.style.display = 'table-row';
             let label = document.createElement('div');
             label.style.display = 'table-cell';
             label.style.width = '100%';
             label.innerText = templateOption.name;
+            let infoColumn = document.createElement('div');
+            infoColumn.style.display = 'table-cell';
+            infoColumn.style.minWidth = '20px';
 
             let input;
             if (templateOption.type && templateOption.type === 'tf') {
@@ -923,9 +950,10 @@ OCA.Analytics.Datasource = {
                 input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
             }
             input.style.display = 'table-cell';
-            form.appendChild(tablerow);
-            tablerow.appendChild(label);
-            tablerow.appendChild(input);
+            form.appendChild(tableRow);
+            tableRow.appendChild(label);
+            tableRow.appendChild(input);
+            tableRow.appendChild(infoColumn);
         }
         return form;
     },
