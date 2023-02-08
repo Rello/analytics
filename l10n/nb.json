@@ -97,8 +97,6 @@
     "Add share link" : "Legg til delingslenke",
     "Share link" : "Del lenke",
     "Link copied" : "Lenke kopiert",
-    "Column 1" : "Kolonne 1",
-    "Column 3" : "Kolonne 3",
     "Text variables can be used to evaluate a date value.<br>For example %today% can be used to highlight the data of today.<br>Operator and value are not relevant in this case." : "Tekstvariabler kan brukes til å evaluere en datoverdi. <br>For eksempel kan %today% brukes til å fremheve dagens data.<br> Operatør og verdi er ikke relevante i dette tilfellet.",
     "3rd field must be a valid number" : "Tredje feltet må være et gyldig nummer",
     "Demo: Thresholds" : "Demonstrasjon: Terskler",

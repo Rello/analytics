@@ -29,8 +29,6 @@ OC.L10N.register(
     "New" : "Nòu",
     "Share link" : "Partejar lo ligam",
     "Link copied" : "Ligam copiat",
-    "Column 1" : "Colomna 1",
-    "Column 3" : "Colomna 3",
     "Type" : "Tipe",
     "none" : "pas cap",
     "Green" : "Verd",
