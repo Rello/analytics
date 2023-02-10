@@ -97,8 +97,6 @@ OC.L10N.register(
     "Add share link" : "Tilføj delt link",
     "Share link" : "Del link",
     "Link copied" : "Link kopieret",
-    "Column 1" : "Kolonne 1",
-    "Column 3" : "Kolonne 3",
     "Text variables can be used to evaluate a date value.<br>For example %today% can be used to highlight the data of today.<br>Operator and value are not relevant in this case." : "Tekstvariabler kan bruges til at evaluere en datoværdi.<br>For eksempel kan %todag% bruges til at fremhæve dagens data.<br>Operator og værdi er ikke relevante i dette tilfælde.",
     "new record" : "Ny optegnelse",
     "Missing data" : "Manglende data",
