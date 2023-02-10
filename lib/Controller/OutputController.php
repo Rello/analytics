@@ -128,6 +128,9 @@ class OutputController extends Controller
         );
         $result['filterApplied'] = $reportMetadata['filteroptions'];
         $reportMetadata['filteroptions'] = $filterWithVariables; // keep the original filters
+        // there can be different values for no options. null during creation; empty after removal; => harmonize them
+        $reportMetadata['chartoptions'] = ($reportMetadata['chartoptions'] === '' || $reportMetadata['chartoptions'] === 'null') ? null : $reportMetadata['chartoptions'];
+        $reportMetadata['dataoptions'] = ($reportMetadata['dataoptions'] === '' || $reportMetadata['dataoptions'] === 'null') ? null : $reportMetadata['dataoptions'];
         $result['options'] = $reportMetadata;
         $result['thresholds'] = $this->ThresholdService->read($reportMetadata['id']);
         return $result;

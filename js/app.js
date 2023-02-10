@@ -1024,16 +1024,16 @@ OCA.Analytics.Backend = {
         // send user current filter options to the data request;
         // if nothing is changed by the user, the filter which is stored for the report, will be used
         let ajaxData = {};
-        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.filteroptions) !== 'undefined') {
-            ajaxData.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
-        }
-
-        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.dataoptions) !== 'undefined') {
-            ajaxData.dataoptions = OCA.Analytics.currentReportData.options.dataoptions;
-        }
-
-        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined' && typeof (OCA.Analytics.currentReportData.options.chartoptions) !== 'undefined') {
-            ajaxData.chartoptions = OCA.Analytics.currentReportData.options.chartoptions;
+        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
+            if (typeof (OCA.Analytics.currentReportData.options.filteroptions) !== 'undefined') {
+                ajaxData.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
+            }
+            if (typeof (OCA.Analytics.currentReportData.options.dataoptions) !== 'undefined') {
+                ajaxData.dataoptions = OCA.Analytics.currentReportData.options.dataoptions;
+            }
+            if (typeof (OCA.Analytics.currentReportData.options.chartoptions) !== 'undefined') {
+                ajaxData.chartoptions = OCA.Analytics.currentReportData.options.chartoptions;
+            }
         }
 
         // using xmlhttprequest in this place as long running requests need to be aborted

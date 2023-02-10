@@ -219,7 +219,7 @@ class ShareService
             return $this->ShareMapper->updateShareDomain($shareId, $domain);
         }
         if ($canEdit !== null) {
-            $canEdit === 'true' ? $canEdit = \OCP\Constants::PERMISSION_UPDATE : $canEdit = \OCP\Constants::PERMISSION_READ;
+            $canEdit === true ? $canEdit = \OCP\Constants::PERMISSION_UPDATE : $canEdit = \OCP\Constants::PERMISSION_READ;
             return $this->ShareMapper->updateSharePermissions($shareId, $canEdit);
         }
     }

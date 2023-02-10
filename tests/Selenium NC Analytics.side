@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "https://nc25/",
+  "url": "https://nc24/",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -135,7 +135,7 @@
       "command": "select",
       "target": "id=timestamp",
       "targets": [],
-      "value": "label=false"
+      "value": "label=No"
     }, {
       "id": "bcc6285b-3e0d-4481-805f-e9667237640c",
       "comment": "",
@@ -688,7 +688,7 @@
         ["xpath=//td[3]", "xpath:position"],
         ["xpath=//td[contains(.,'1.10')]", "xpath:innerText"]
       ],
-      "value": "1,10"
+      "value": "1,1"
     }]
   }, {
     "id": "0c055c34-1395-4a0b-9537-c3ce2f9d8337",
@@ -2133,6 +2133,20 @@
       ],
       "value": ""
     }, {
+      "id": "9a523a76-311f-4f64-bf61-84e3774bfcd0",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.toastify",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "7a784e71-e978-4703-9acf-3d3a50a38bda",
+      "comment": "",
+      "command": "",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "744657b2-0c3a-4054-b2bc-00e6103f4cc7",
       "comment": "",
       "command": "click",
@@ -2162,20 +2176,22 @@
       "id": "3d114575-8975-46d9-9063-fc8c4ec809b9",
       "comment": "",
       "command": "assertText",
-      "target": "xpath=//div[@id='oc-dialog-0-content']/textarea",
+      "target": "id=simulationData",
       "targets": [
-        ["css=.focus-visible", "css:finder"],
-        ["xpath=//div[@id='oc-dialog-0-content']/textarea", "xpath:idRelative"],
-        ["xpath=//textarea", "xpath:position"]
+        ["id=simulationData", "id"],
+        ["css=#simulationData", "css:finder"],
+        ["xpath=//div[@id='simulationData']", "xpath:attributes"],
+        ["xpath=//div[@id='oc-dialog-0-content']/div", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div", "xpath:position"]
       ],
       "value": "[[\"json testdata\",\"test 99\",\"99\"],[\"json testdata\",\"test 88\",\"88\"],[\"json testdata\",\"test 77\",\"77\"]]"
     }, {
       "id": "5880ec8c-986f-44d3-90f6-10ae4f03c7fd",
       "comment": "",
       "command": "click",
-      "target": "css=.primary:nth-child(1)",
+      "target": "css=.oc-dialog-buttonrow > .primary",
       "targets": [
-        ["css=.primary:nth-child(1)", "css:finder"],
+        ["css=.oc-dialog-buttonrow > .primary", "css:finder"],
         ["xpath=//body[@id='body-user']/div[7]/div[2]/button", "xpath:idRelative"],
         ["xpath=//div[7]/div[2]/button", "xpath:position"],
         ["xpath=//button[contains(.,'OK')]", "xpath:innerText"]
@@ -2972,7 +2988,7 @@
       "id": "a321be0d-3961-4699-ba63-e71bc96013fc",
       "comment": "",
       "command": "click",
-      "target": "linkText=Data load",
+      "target": "linkText=Automation",
       "targets": [
         ["linkText=Dataload", "linkText"],
         ["css=#tabHeaderDataload > a", "css:finder"],

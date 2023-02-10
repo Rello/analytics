@@ -10,6 +10,7 @@
 
 ### Fixed
 - table search box gets hidden #329
+- decimal number formatting in table
 
 ## 4.6.0 - 2022-12-26
 ### Added
@@ -17,7 +18,7 @@
 - Schedule deletion jobs per dataset to clean up old data #316
 - Filter variables to use same time format like chart #321
 
-### Changes
+### Changed
 - Sidebar UI optimizations
 - Optimized share report template
 
@@ -29,7 +30,7 @@
 - Notifications for failed data loads
 - Schedule deletion jobs per dataset to clean up old data #316
 
-### Changes
+### Changed
 - Filter variables to use same time format like chart #321
 - Sidebar UI optimizations
 - Optimized share report template
@@ -291,7 +292,7 @@
 - delete option in report menu
 
 ### Changed
-- Filter changes are not persisted automatically [#94](https://github.com/rello/analytics/issues/94)
+- Filter Changed are not persisted automatically [#94](https://github.com/rello/analytics/issues/94)
 - Disable dataload for non-internal reports [#74](https://github.com/rello/analytics/issues/74)
 - more flexible clipboard import
 - don´t load dashboard when accessing report directly

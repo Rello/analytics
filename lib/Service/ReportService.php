@@ -180,6 +180,7 @@ class ReportService
      * create new blank report
      *
      * @return int
+     * @throws Exception
      */
     public function create($name, $subheader, $parent, $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport = null): int
     {
