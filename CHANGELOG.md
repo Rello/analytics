@@ -1,12 +1,12 @@
 # Changelog
 
-## 4.7.0 - 2023-02-xx
+## 4.7.0 - 2023-02-10
 ### Added
 - JSON: read array data which is not on the first level #326
-
+- recognize dates in spreadsheet data source #311
+- 
 ### Changed
 - removal of jQuery dependencies
-- recognize dates in spreadsheet data source #311
 
 ### Fixed
 - table search box gets hidden #329
