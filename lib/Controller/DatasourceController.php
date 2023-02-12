@@ -174,14 +174,14 @@ class DatasourceController extends Controller
      */
     private function getOwnDatasources()
     {
-        $datasources = [];
-        $datasources[self::DATASET_TYPE_FILE] = $this->FileService;
-        $datasources[self::DATASET_TYPE_EXCEL] = $this->ExcelService;
-        $datasources[self::DATASET_TYPE_GIT] = $this->GithubService;
-        $datasources[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService;
-        $datasources[self::DATASET_TYPE_REGEX] = $this->RegexService;
-        $datasources[self::DATASET_TYPE_JSON] = $this->JsonService;
-        return $datasources;
+        $dataSources = [];
+        $dataSources[self::DATASET_TYPE_FILE] = $this->FileService;
+        $dataSources[self::DATASET_TYPE_EXCEL] = $this->ExcelService;
+        $dataSources[self::DATASET_TYPE_GIT] = $this->GithubService;
+        $dataSources[self::DATASET_TYPE_EXTERNAL_FILE] = $this->ExternalFileService;
+        $dataSources[self::DATASET_TYPE_REGEX] = $this->RegexService;
+        $dataSources[self::DATASET_TYPE_JSON] = $this->JsonService;
+        return $dataSources;
     }
 
     /**
@@ -190,20 +190,24 @@ class DatasourceController extends Controller
      */
     private function getRegisteredDatasources()
     {
-        $datasources = [];
+        $dataSources = [];
         $event = new DatasourceEvent();
         $this->dispatcher->dispatchTyped($event);
 
         foreach ($event->getDataSources() as $class) {
-            $uniqueId = '99' . \OC::$server->get($class)->getId();
+            try {
+                $uniqueId = '99' . \OC::$server->get($class)->getId();
 
-            if (isset($datasources[$uniqueId])) {
-                $this->logger->error(new \InvalidArgumentException('Data source with the same ID already registered: ' . \OC::$server->get($class)->getName()));
-                continue;
+                if (isset($dataSources[$uniqueId])) {
+                    $this->logger->error(new \InvalidArgumentException('Data source with the same ID already registered: ' . \OC::$server->get($class)->getName()));
+                    continue;
+                }
+                $dataSources[$uniqueId] = \OC::$server->get($class);
+            } catch (\Error $e) {
+                $this->logger->error('Can not initialize data source: '. json_encode($class));
             }
-            $datasources[$uniqueId] = \OC::$server->get($class);
         }
-        return $datasources;
+        return $dataSources;
     }
 
     /**

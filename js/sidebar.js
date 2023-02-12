@@ -1418,7 +1418,7 @@ OCA.Analytics.Sidebar.Backend = {
 
         let requestUrl = OC.generateUrl('apps/analytics/data/deleteDataSimulate');
         fetch(requestUrl, {
-            method: 'PUT',
+            method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,

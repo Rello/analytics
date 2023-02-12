@@ -1,10 +1,17 @@
 # Changelog
 
+## 4.7.1 - 2023-02-12
+### Fixed
+- data deletion simulation not counting correct
+- share edit setting not saved
+- catching external datasource issues
+- handling of null columns during loads
+
 ## 4.7.0 - 2023-02-10
 ### Added
 - JSON: read array data which is not on the first level #326
 - recognize dates in spreadsheet data source #311
-- 
+
 ### Changed
 - removal of jQuery dependencies
 

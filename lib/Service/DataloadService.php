@@ -154,7 +154,7 @@ class DataloadService
     public function execute(int $dataloadId)
     {
         $bulkSize = 500;
-        $insert = $update = $error = $delete = 0;
+        $insert = $update = $error = $delete = $currentCount = 0;
         $bulkInsert = null;
         $aggregation = null;
 
@@ -197,8 +197,8 @@ class DataloadService
         }
 
         // "delete all date before loading" is true in the data source options
-        // in this case, bulkInsert is set to true. Then no further checks for existing records are needed
-        // reduce db selects
+        // in this case, bulkInsert is additionally set to true. Then no further checks for existing records are needed
+        // to reduce db selects
         if (isset($option['delete']) and $option['delete'] === 'true') {
             $this->StorageService->delete($datasetId, '*', '*', $dataloadMetadata['user_id']);
             $bulkInsert = true;
@@ -206,10 +206,9 @@ class DataloadService
 
         // if the data set has no data, it is the same as the delete all option
         // in this case, bulkInsert is set to true. Then no further checks for existing records are needed
-        // reduce db selects
+        // to reduce db selects
         $numberOfRecords = $this->StorageService->getRecordCount($datasetId);
         if ($numberOfRecords['count'] === 0) {
-            $this->logger->info('Empty dataset => enabling bulk load');
             $bulkInsert = true;
         }
 
@@ -220,19 +219,19 @@ class DataloadService
 
         // collect mass updates to reduce statements to the database
         $this->DataloadMapper->beginTransaction();
-        $currentCount = 0;
         foreach ($result['data'] as $row) {
+            // only one column is not possible
             if (count($row) === 1) {
-                // only one column is not possible
                 $this->logger->info('loading data with only one column is not possible. This is a data load for the dataset: ' . $datasetId);
                 $error = $error + 1;
                 continue;
             }
+            // if data source only delivers 2 columns, the value needs to be in the last one
             if (count($row) === 2) {
-                // if data source only delivers 2 columns, the value needs to be in the last one
                 $row[2] = $row[1];
                 $row[1] = null;
             }
+
             $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert, $aggregation);
             $insert = $insert + $action['insert'];
             $update = $update + $action['update'];
@@ -274,6 +273,7 @@ class DataloadService
 
             if ($dataloadMetadata['datasource'] !== 0) {
                 $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
+
                 $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
                 $result['datasetId'] = $dataloadMetadata['dataset'];
             } else {

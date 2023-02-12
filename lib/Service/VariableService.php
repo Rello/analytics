@@ -102,19 +102,21 @@ class VariableService
      */
     public function replaceTextVariablesSingle($field)
     {
-        preg_match_all("/%.*?%/", $field, $matches);
-        if (count($matches[0]) > 0) {
-            foreach ($matches[0] as $match) {
-                $replace = null;
-                if ($match === '%currentDate%') {
-                    $replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
-                } elseif ($match === '%currentTime%') {
-                    $replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
-                } elseif ($match === '%now%') {
-                    $replace = time();
-                }
-                if ($replace !== null) {
-                    $field = preg_replace('/' . $match . '/', $replace, $field);
+        if ($field !== null) {
+            preg_match_all("/%.*?%/", $field, $matches);
+            if (count($matches[0]) > 0) {
+                foreach ($matches[0] as $match) {
+                    $replace = null;
+                    if ($match === '%currentDate%') {
+                        $replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
+                    } elseif ($match === '%currentTime%') {
+                        $replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
+                    } elseif ($match === '%now%') {
+                        $replace = time();
+                    }
+                    if ($replace !== null) {
+                        $field = preg_replace('/' . $match . '/', $replace, $field);
+                    }
                 }
             }
         }

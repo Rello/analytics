@@ -236,14 +236,16 @@ class StorageService
 
     private function convertGermanDateFormat($val)
     {
-        $fullString = explode(' ', $val);
-        $dateLength = strlen($fullString[0]);
-        $dateParts = explode('.', $fullString[0]);
+        if ($val !== null) {
+            $fullString = explode(' ', $val);
+            $dateLength = strlen($fullString[0]);
+            $dateParts = explode('.', $fullString[0]);
 
-        if ($dateLength >= 6 && $dateLength <= 10 && count($dateParts) === 3) {
-            // is most likely a german date format 20.02.2020
-            $fullString[0] = $dateParts[2] . '-' . sprintf('%02d', $dateParts[1]) . '-' . sprintf('%02d', $dateParts[0]);
-            $val = implode(' ', $fullString);
+            if ($dateLength >= 6 && $dateLength <= 10 && count($dateParts) === 3) {
+                // is most likely a german date format 20.02.2020
+                $fullString[0] = $dateParts[2] . '-' . sprintf('%02d', $dateParts[1]) . '-' . sprintf('%02d', $dateParts[0]);
+                $val = implode(' ', $fullString);
+            }
         }
         return $val;
     }

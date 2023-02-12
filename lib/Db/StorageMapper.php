@@ -54,8 +54,8 @@ class StorageMapper
      */
     public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null, $bulkInsert = null, $aggregation = null)
     {
-        $dimension1 = str_replace('*', '', $dimension1);
-        $dimension2 = str_replace('*', '', $dimension2);
+        $dimension1 = $dimension1 !== null ? str_replace('*', '', $dimension1) : null;
+        $dimension2 = $dimension2 !== null ? str_replace('*', '', $dimension2) : null;
         $timestamp = $timestamp ?? time();
         $result = '';
 
@@ -68,10 +68,16 @@ class StorageMapper
             $sql->from(self::TABLE_NAME)
                 ->addSelect('value')
                 ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-                ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-                ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
-                ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
-            $statement = $sql->execute();
+                ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+
+            // if the dimension value is null, a different where clause is required
+            $expression1 = $dimension1 === null ? $sql->expr()->isNull('dimension1') : $sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1));
+            $expression2 = $dimension2 === null ? $sql->expr()->isNull('dimension2') : $sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2));
+
+            $sql->andWhere($expression1)
+                ->andWhere($expression2);
+
+            $statement = $sql->executeQuery();
             $result = $statement->fetch();
             $statement->closeCursor();
         }
@@ -85,7 +91,7 @@ class StorageMapper
                 ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
                 ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
 
-            if ($aggregation === 'summation') {
+            if ($aggregation === 'xxsummation') {
                 // Feature not yet available
                 // $this->logger->error('old value: ' . $result['value']);
                 // $this->logger->error('new value: ' . $value + $result['value']);
@@ -161,22 +167,30 @@ class StorageMapper
      * @param int $datasetId
      * @param $dimension1
      * @param $dimension2
+     * @param string|null $user_id
      * @return bool
+     * @throws Exception
      */
     public function delete(int $datasetId, $dimension1, $dimension2, string $user_id = null)
     {
-        $dimension1 = str_replace('*', '%', $dimension1);
-        $dimension2 = str_replace('*', '%', $dimension2);
         if ($user_id) $this->userId = $user_id;
 
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-            ->andWhere($sql->expr()->like('dimension1', $sql->createNamedParameter($dimension1)))
-            ->andWhere($sql->expr()->like('dimension2', $sql->createNamedParameter($dimension2)));
-        $sql->execute();
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
+        // a %(*) does not work for null columns. in case it is just %, don't apply the where clause at all
+        if ($dimension1 !== '*') {
+            $dimension1 = str_replace('*', '%', $dimension1);
+            $sql->andWhere($sql->expr()->like('dimension1', $sql->createNamedParameter($dimension1)));
+        }
+        if ($dimension2 !== '*') {
+            $dimension2 = str_replace('*', '%', $dimension2);
+            $sql->andWhere($sql->expr()->like('dimension2', $sql->createNamedParameter($dimension2)));
+        }
+
+        $sql->executeStatement();
         return true;
     }
 
@@ -190,17 +204,23 @@ class StorageMapper
      */
     public function deleteSimulate(int $datasetId, $dimension1, $dimension2)
     {
-        $dimension1 = str_replace('*', '%', $dimension1);
-        $dimension2 = str_replace('*', '%', $dimension2);
-
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->selectAlias($sql->func()->count('*'), 'count')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-            ->andWhere($sql->expr()->like('dimension1', $sql->createNamedParameter($dimension1)))
-            ->andWhere($sql->expr()->like('dimension2', $sql->createNamedParameter($dimension2)));
-        $statement = $sql->execute();
+            ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+
+        if ($dimension1 !== '*') {
+            $dimension1 = str_replace('*', '%', $dimension1);
+            $sql->andWhere($sql->expr()->like('dimension1', $sql->createNamedParameter($dimension1)));
+        }
+
+        if ($dimension2 !== '*') {
+            $dimension2 = str_replace('*', '%', $dimension2);
+            $sql->andWhere($sql->expr()->like('dimension2', $sql->createNamedParameter($dimension2)));
+        }
+
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
 
