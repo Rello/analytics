@@ -383,6 +383,7 @@
                     <div style="display: table-row;">
                         <div style="display: table-cell; width: 100%"><?php p($l->t('Title')); ?></div>
                         <input class="sidebarInput" id="dataloadName" style="display: table-cell;">
+                        <div style="display: table-cell; min-width: 20px;"></div>
                     </div>
                 </div>
                 <br>
@@ -390,18 +391,21 @@
                 </div>
                 <br>
                 <div id="dataloadDetailDelete" hidden>
-<!--                    <div style="display: table-row;"> //to be implemented later?
-                        <div style="display: table-cell; width: 100%;"><?php /*p($l->t('Aggregation')); */?></div>
+                    <!--                    <div style="display: table-row;"> //to be implemented later?
+                        <div style="display: table-cell; width: 100%;"><?php /*p($l->t('Aggregation')); */ ?></div>
                         <select class="sidebarInput" id="aggregation" style="display: table-cell;">
-                            <option value="overwrite" selected><?php /*p($l->t('Overwrite')); */?></option>
-                            <option value="summation"><?php /*p($l->t('Summation')); */?></option>
+                            <option value="overwrite" selected><?php /*p($l->t('Overwrite')); */ ?></option>
+                            <option value="summation"><?php /*p($l->t('Summation')); */ ?></option>
                         </select></div>
--->                    <div style="display: table-row;">
+-->
+                    <div style="display: table-row;">
                         <div style="display: table-cell; width: 100%;"><?php p($l->t('Delete data before load')); ?></div>
                         <select class="sidebarInput" id="delete" style="display: table-cell;">
                             <option value="false"><?php p($l->t('No')); ?></option>
                             <option value="true"><?php p($l->t('Yes')); ?></option>
-                        </select></div>
+                        </select>
+                        <div style="display: table-cell; min-width: 20px;"></div>
+                    </div>
                 </div>
                 <div id="dataloadDetailButtons" hidden>
                     <button id="dataloadDeleteButton" style="padding: 15px;" class="icon-delete"></button>
