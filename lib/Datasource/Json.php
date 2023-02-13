@@ -169,7 +169,7 @@ class Json implements IDatasource
      * @param $path
      * @return array|string|null
      */
-    private function get_nested_array_value(&$array, $path): array|string|null
+    private function get_nested_array_value(&$array, $path)
     {
         $pathParts = explode('/', $path);
         $current = &$array;

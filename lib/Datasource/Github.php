@@ -60,7 +60,7 @@ class Github implements IDatasource
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the data soure
+     * @return array available options of the data source
      */
     public function readData($option): array
     {
@@ -116,7 +116,7 @@ class Github implements IDatasource
         ];
     }
 
-    private function floatvalue($val): float|bool
+    private function floatvalue($val)
     {
         $val = str_replace(",", ".", $val);
         $val = preg_replace('/\.(?=.*\.)/', '', $val);

@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.2 - 2023-02-13
+### Fixed
+- php version dependencies (type declaration)
+
 ## 4.7.1 - 2023-02-12
 ### Fixed
 - data deletion simulation not counting correct
