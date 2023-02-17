@@ -245,6 +245,9 @@ OCA.Analytics.Sidebar.Report = {
                     OCA.Analytics.Sidebar.Report.handleDatasourceChange();
                     if ((parseInt(data['type']) !== OCA.Analytics.TYPE_EMPTY_GROUP)) {
                         OCA.Analytics.Sidebar.Report.handleDatasetChange();
+                    } else {
+                        document.getElementById('sidebarReportExportButton').style.display = 'none';
+                        document.getElementById('sidebarReportNameHint').style.display = 'none';
                     }
 
                     // set the options for a datasource

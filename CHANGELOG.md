@@ -2,6 +2,7 @@
 
 ### Fixed
 - report import not working #336
+- hide export button for folder #335
 
 ## 4.7.2 - 2023-02-13
 ### Fixed
