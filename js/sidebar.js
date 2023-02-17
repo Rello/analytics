@@ -680,6 +680,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     import: function (path, raw) {
+        if (typeof raw === 'number') raw = null; // file picker is returning some INT which is not helpful in the service
         let requestUrl = OC.generateUrl('apps/analytics/report/import/');
         let headers = new Headers();
         headers.append('requesttoken', OC.requestToken);

@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- report import not working #336
+
 ## 4.7.2 - 2023-02-13
 ### Fixed
 - php version dependencies (type declaration)

@@ -415,6 +415,8 @@ class ReportService
         $report = $this->ReportMapper->readOwn($reportId);
         $datasetId = $report['dataset'];
 
+        $this->DataloadMapper->beginTransaction();
+
         foreach ($data['dataload'] as $dataload) {
             isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;
             isset($dataload['name']) ? $name = $dataload['name'] : $name = null;
@@ -440,6 +442,8 @@ class ReportService
             isset($dData[2]) ? $value = $dData[2] : $value = null;
             $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value);
         }
+
+        $this->DataloadMapper->commit();
 
         if (isset($data['favorite'])) {
             $this->setFavorite($reportId, $data['favorite']);
