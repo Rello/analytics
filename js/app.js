@@ -929,25 +929,38 @@ OCA.Analytics.Datasource = {
 
     buildOptionsForm: function (datasource) {
         let template = OCA.Analytics.datasourceOptions[datasource];
-        let form = document.createDocumentFragment();
+        let form = document.createElement('div');
+        form.id = 'dataSourceOptions';
+
+        // create a hidden dummy for the data source type
+        form.appendChild(OCA.Analytics.Datasource.buildOptionHidden('dataSourceType',datasource));
 
         for (let templateOption of template) {
             // loop all options of the datasource template and create the input form
+
+            // create the label column
             let tableRow = document.createElement('div');
             tableRow.style.display = 'table-row';
             let label = document.createElement('div');
             label.style.display = 'table-cell';
             label.style.width = '100%';
             label.innerText = templateOption.name;
+            // create the info icon column
             let infoColumn = document.createElement('div');
             infoColumn.style.display = 'table-cell';
             infoColumn.style.minWidth = '20px';
 
+            //create the input fields
             let input;
             if (templateOption.type && templateOption.type === 'tf') {
                 input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
             } else {
                 input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
+                if (templateOption.type === 'filePicker') {
+                    input.addEventListener('click', OCA.Analytics.Datasource.handleFilepicker);
+                } else if (templateOption.type === 'columnPicker') {
+                    input.addEventListener('click', OCA.Analytics.Datasource.handleColumnPicker);
+                }
             }
             input.style.display = 'table-cell';
             form.appendChild(tableRow);
@@ -955,7 +968,16 @@ OCA.Analytics.Datasource = {
             tableRow.appendChild(input);
             tableRow.appendChild(infoColumn);
         }
+
         return form;
+    },
+
+    buildOptionHidden: function (id, value) {
+        let dataSourceType = document.createElement('input');
+        dataSourceType.hidden = true;
+        dataSourceType.id = id;
+        dataSourceType.innerText = value;
+        return dataSourceType;
     },
 
     buildOptionsInput: function (templateOption) {
@@ -964,6 +986,7 @@ OCA.Analytics.Datasource = {
         input.classList.add('sidebarInput');
         input.placeholder = templateOption.placeholder;
         input.id = templateOption.id;
+        input.dataset.type = templateOption.type;
         return input;
     },
 
@@ -973,6 +996,7 @@ OCA.Analytics.Datasource = {
         input.style.display = 'inline-flex';
         input.classList.add('sidebarInput');
         input.id = templateOption.id;
+        input.dataset.type = templateOption.type;
 
         // if options are split with "-", they are considered as value/key pairs
         let selectOptions = templateOption.placeholder.split("/")
@@ -992,6 +1016,149 @@ OCA.Analytics.Datasource = {
         return input;
     },
 
+    handleColumnPicker: function () {
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Column Picker'),
+            OCA.Analytics.Datasource.processColumnPickerDialog
+        );
+
+        // Get the values from all input fields but not the cloumn picker
+        // they are used to get the data from the data source
+        let option = {};
+        let inputFields = document.querySelectorAll('#dataSourceOptions input, #dataSourceOptions select');
+        for (let inputField of inputFields) {
+            if (inputField.dataset.type !== 'columnPicker') option[inputField.id] = inputField.value;
+        }
+
+        let requestUrl = OC.generateUrl('apps/analytics/data');
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                type: parseInt(document.getElementById('dataSourceType').innerText),
+                options: JSON.stringify(option),
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                OCA.Analytics.Datasource.createColumnPickerContent(data);
+            })
+            .catch(error => {
+                // stop if the file link is missing
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Parameter missing'));
+                OCA.Analytics.Notification.dialogClose();
+            });
+    },
+
+    createColumnPickerContent: function (data) {
+        // Array of items
+        const items = data.data[0].map((value, index) => {
+            return {
+                id: index + 1,
+                name: data.header[index],
+                text: value,
+                checked: true
+            };
+        });
+
+        let selectionArray = document.querySelector('[data-type="columnPicker"]').value.split(',').map(str => parseInt(str));
+
+        // sort the items and put selected ones in front
+        items.sort((a, b) => {
+            const indexA = selectionArray.indexOf(a.id);
+            const indexB = selectionArray.indexOf(b.id);
+            if (indexA < 0) return indexB >= 0 ? 1 : 0;
+            if (indexB < 0) return -1;
+            return indexA - indexB;
+        });
+
+        // selected ones should get the checkbox true
+        items.forEach((item) => {
+            item.checked = selectionArray.includes(item.id);
+        });
+
+        const list = document.createElement("ul");
+        list.id = 'sortable-list';
+        list.style.display = 'inline-block';
+        list.style.listStyle = 'none';
+        list.style.margin = '0';
+        list.style.padding = '0';
+        list.style.width = "400px"
+        items.forEach((item) => {
+            const li = document.createElement("li");
+            li.style.display = 'flex';
+            li.style.alignItems = 'center';
+            li.style.margin = '5px';
+            li.style.backgroundColor = 'var(--color-background-hover)';
+            li.draggable = true;
+            li.addEventListener("dragstart", OCA.Analytics.Notification.handleDragStart);
+            li.addEventListener("dragover", OCA.Analytics.Notification.handleDragOver);
+            li.addEventListener("drop", OCA.Analytics.Notification.handleDrop);
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = item.id;
+            checkbox.checked = item.checked;
+
+            const span = document.createElement("span");
+            span.textContent = item.name;
+            span.style.marginLeft = '10px';
+            const spanContent = document.createElement("span");
+            spanContent.textContent = item.text;
+            spanContent.style.marginLeft = '10px';
+            spanContent.style.fontStyle = 'italic';
+            li.appendChild(checkbox);
+            li.appendChild(span);
+            li.appendChild(spanContent);
+            list.appendChild(li);
+        });
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            list,
+            'Select the required columns.<br>Rearange the sequence with drag & drop.<br>Remove all selections to reset.',
+        );
+    },
+
+    processColumnPickerDialog: function () {
+        //get the list and sequence of the selected items
+        const checkboxList = document.querySelectorAll('#sortable-list input[type="checkbox"]');
+        const checkboxIds = [];
+
+        checkboxList.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                checkboxIds.push(checkbox.id);
+            }
+        });
+        document.querySelector('[data-type="columnPicker"]').value = checkboxIds;
+        OCA.Analytics.Notification.dialogClose();
+    },
+
+    handleFilepicker: function () {
+        let type = parseInt(document.getElementById('dataSourceType').innerText);
+
+        let mime;
+        if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
+            mime = ['text/csv', 'text/plain'];
+        } else if (type === OCA.Analytics.TYPE_EXCEL) {
+            mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.oasis.opendocument.spreadsheet',
+                'application/vnd.ms-excel'];
+        }
+        OC.dialogs.filepicker(
+            t('analytics', 'Select file'),
+            function (path) {
+                document.querySelector('[data-type="filePicker"]').value = path;
+            },
+            false,
+            mime,
+            true,
+            1);
+    },
 };
 
 OCA.Analytics.Backend = {

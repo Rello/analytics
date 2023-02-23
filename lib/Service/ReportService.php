@@ -270,7 +270,7 @@ class ReportService
      * @param $name
      * @param $subheader
      * @param int $parent
-     * @param $link
+     * @param $options
      * @param $visualization
      * @param $chart
      * @param $chartoptions
@@ -280,15 +280,15 @@ class ReportService
      * @param $value
      * @return bool
      */
-    public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
+    public function update(int $reportId, $name, $subheader, int $parent, $options, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
-        $array = json_decode($link, true);
+        $array = json_decode($options, true);
         foreach ($array as $key => $value) {
             $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
-        $link = json_encode($array);
+        $options = json_encode($array);
 
-        return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
+        return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $options, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
     }
 
     /**

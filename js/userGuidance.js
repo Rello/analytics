@@ -253,32 +253,49 @@ OCA.Analytics.WhatsNew = {
  * @namespace OCA.Analytics.Notification
  */
 OCA.Analytics.Notification = {
-    dialog: function (title, text, type) {
-        OC.dialogs.message(
-            text,
-            title,
-            type,
-            OC.dialogs.OK_BUTTON,
-            function () {
-            },
-            true,
-            true
+    draggedItem: null,
+
+    info: function (header, text, guidance) {
+        document.body.insertAdjacentHTML('beforeend',
+            '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
+            + '<div id="analyticsDialogContainer" class="analyticsDialog">'
+            + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + header
+            + '</h2>'
+            + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
+            + '<div id="analyticsDialogContent">'
+            + '</div>'
+            + '<br><div class="analyticsDialogButtonrow">'
+            + '<a class="button primary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '</div></div>'
         );
+        document.getElementById('analyticsDialogGuidance').innerHTML = guidance;
+        document.getElementById('analyticsDialogContent').innerHTML = text;
+        document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+        document.getElementById("analyticsDialogBtnGo").addEventListener("click", OCA.Analytics.Notification.dialogClose);
     },
 
-    confirm: function (title, text, callback) {
-        OC.dialogs.confirmHtml(
-            text,
-            title,
-            function (e) {
-                if (e === true) {
-                    if (typeof callback === 'function') {
-                        callback();
-                    }
-                }
-            },
-            true
+    confirm: function (header, text, callback) {
+        document.body.insertAdjacentHTML('beforeend',
+            '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
+            + '<div id="analyticsDialogContainer" class="analyticsDialog">'
+            + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + header
+            + '</h2>'
+            + '<div id="analyticsDialogContent">'
+            + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
+            + '</div>'
+            + '<br><div class="analyticsDialogButtonrow">'
+            + '<a class="button primary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '</div></div>'
         );
+        document.getElementById('analyticsDialogContent').innerHTML = text;
+        document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+        document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+        document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
     },
 
     notification: function (type, message) {
@@ -295,4 +312,64 @@ OCA.Analytics.Notification = {
         }
     },
 
+    /**
+     * @param {string} header Popup header as text
+     * @param callback Callback function of the OK button
+     */
+    htmlDialogInitiate: function (header, callback) {
+        document.body.insertAdjacentHTML('beforeend',
+            '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
+            + '<div id="analyticsDialogContainer" class="analyticsDialog">'
+            + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + header
+            + '</h2>'
+            + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
+            + '<div id="analyticsDialogContent">'
+            + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
+            + '</div>'
+            + '<br><div class="analyticsDialogButtonrow">'
+            + '<a class="button primary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '</div></div>'
+        );
+
+        document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+        document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+        document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
+    },
+
+    htmlDialogUpdate: function (content, guidance) {
+        document.getElementById('analyticsDialogContent').innerHTML = '';
+        document.getElementById('analyticsDialogContent').appendChild(content);
+        document.getElementById('analyticsDialogGuidance').innerHTML = guidance;
+    },
+
+    dialogClose: function () {
+        document.getElementById('analyticsDialogContainer').remove();
+        document.getElementById('analyticsDialogOverlay').remove();
+    },
+
+    handleDragStart: function (e) {
+        OCA.Analytics.Notification.draggedItem = this;
+        e.dataTransfer.effectAllowed = "move";
+    },
+
+    handleDragOver: function (e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        e.dataTransfer.dropEffect = "move";
+        return false;
+    },
+
+    handleDrop: function (e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+        if (OCA.Analytics.Notification.draggedItem !== this) {
+            this.parentNode.insertBefore(OCA.Analytics.Notification.draggedItem, this);
+        }
+        return false;
+    },
 }

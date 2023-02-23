@@ -24,14 +24,14 @@ OCA.Analytics.Sidebar = {
         let appsidebar = document.getElementById('app-sidebar');
 
         if (appsidebar.dataset.id === datasetId && !OCA.Analytics.isAdvanced) {
-            OCA.Analytics.Sidebar.hideSidebar();
+            OCA.Analytics.Sidebar.close();
         } else {
             document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
             OCA.Analytics.Sidebar.constructTabs(parseInt(datasetType));
 
             if (!OCA.Analytics.isAdvanced) {
                 if (appsidebar.dataset.id === '') {
-                    $('#sidebarClose').on('click', OCA.Analytics.Sidebar.hideSidebar);
+                    $('#sidebarClose').on('click', OCA.Analytics.Sidebar.close);
                     OC.Apps.showAppSidebar();
                 }
             } else {
@@ -133,7 +133,7 @@ OCA.Analytics.Sidebar = {
         }
     },
 
-    hideSidebar: function () {
+    close: function () {
         document.getElementById('app-sidebar').dataset.id = '';
         OC.Apps.hideAppSidebar();
         document.querySelector('.tabHeaders').innerHTML = '';
@@ -295,17 +295,15 @@ OCA.Analytics.Sidebar.Report = {
         if (id === undefined) id = evt.target.dataset.id;
         if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
 
-        OC.dialogs.confirm(
-            t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
+        OCA.Analytics.Notification.confirm(
             t('analytics', 'Delete'),
-            function (e) {
-                if (e === true) {
-                    OCA.Analytics.Sidebar.Report.delete(id);
-                    OCA.Analytics.UI.resetContentArea();
-                    OCA.Analytics.Sidebar.hideSidebar();
-                }
-            },
-            true
+            t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
+            function () {
+                OCA.Analytics.Sidebar.Report.delete(id);
+                OCA.Analytics.UI.resetContentArea();
+                OCA.Analytics.Sidebar.close();
+                OCA.Analytics.Notification.dialogClose();
+            }
         );
     },
 
@@ -348,10 +346,6 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
 
             document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
-
-            if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_EXCEL) {
-                document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Report.handleFilepicker);
-            }
         }
     },
     handleDatasourceChangeWizard: function () {
@@ -359,10 +353,6 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('wizardNewTypeOptionsRow').style.display = 'table-row';
         document.getElementById('wizardNewDatasourceSection').innerHTML = '';
         document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
-
-        if (type === OCA.Analytics.TYPE_INTERNAL_FILE || type === OCA.Analytics.TYPE_EXCEL) {
-            document.getElementById('link').addEventListener('click', OCA.Analytics.Sidebar.Report.handleFilepicker);
-        }
     },
 
     handleDatasetChange: function () {
@@ -386,52 +376,30 @@ OCA.Analytics.Sidebar.Report = {
         }
     },
 
-    handleFilepicker: function () {
-        let type;
-        if (document.getElementById('wizardNewDatasource') !== null) {
-            type = document.getElementById('wizardNewDatasource').value;
-        } else {
-            type = parseInt(document.getElementById('app-sidebar').dataset.type);
-        }
-
-        let mime;
-        if (parseInt(type) === OCA.Analytics.TYPE_INTERNAL_FILE) {
-            mime = ['text/csv', 'text/plain'];
-        } else if (parseInt(type) === OCA.Analytics.TYPE_EXCEL) {
-            mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.oasis.opendocument.spreadsheet',
-                'application/vnd.ms-excel'];
-        }
-        OC.dialogs.filepicker(
-            t('analytics', 'Select file'),
-            function (path) {
-                document.getElementById('link').value = path;
-            },
-            false,
-            mime,
-            true,
-            1);
-    },
-
     handleNameHint: function () {
-        let text = t('analytics', 'Text variables can be used in the name or subheader.<br>They are replaced when the report is executed.') +
-            '<br><br>' +
-            '%lastUpdateDate%<br>' +
+        let header = t('analytics', 'Text variables');
+        let text = '%lastUpdateDate%<br>' +
             '%lastUpdateTime%<br>' +
             '%currentDate%<br>' +
             '%currentTime%<br>' +
             '%now% (timestamp)<br>' +
             '%owner%';
-        OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
+        let guidance = t('analytics', 'Text variables can be used in the name or subheader.<br>They are replaced when the report is executed.');
+        OCA.Analytics.Notification.info(header, text, guidance);
     },
 
     handleGroupHint: function () {
         let text = t('analytics', 'Reports can be grouped into a folder structure.') +
-            '<br><br>' +
+            '<br>' +
             t('analytics', 'Do you want to create a new group folder?');
-        OCA.Analytics.Notification.confirm(t('analytics', 'Report group'), text, function () {
-            OCA.Analytics.Sidebar.Report.createGroup();
-        });
+        OCA.Analytics.Notification.confirm(
+            t('analytics', 'Report group'),
+            text,
+            function () {
+                OCA.Analytics.Sidebar.Report.createGroup();
+                OCA.Analytics.Notification.dialogClose();
+            }
+        );
     },
 
     handleDimensionHint: function () {
@@ -441,9 +409,13 @@ OCA.Analytics.Sidebar.Report = {
             '<br>' +
             t('analytics', 'Switch to the dataset maintenance from here?');
         const datasetId = parseInt(document.getElementById('sidebarReportDataset').value);
-        OCA.Analytics.Notification.confirm(t('analytics', 'Dataset'), text, function () {
-            window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
-        });
+        OCA.Analytics.Notification.confirm(
+            t('analytics', 'Dataset'),
+            text,
+            function () {
+                window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
+            }
+        );
     },
 
     buildGroupingDropdown: function (element) {
@@ -652,7 +624,8 @@ OCA.Analytics.Sidebar.Report = {
                         t('analytics', 'This was the last report on the dataset. Do you want to delete the dataset including all data?'),
                         function () {
                             OCA.Analytics.Sidebar.Report.deleteDatasetAlso(data);
-                            },
+                            OCA.Analytics.Notification.dialogClose();
+                        },
                         true
                     );
                 }
@@ -805,12 +778,12 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDimensionHint: function () {
-        let text = t('analytics', 'Text variables can be used in the dimensions.<br>They are replaced when the data is added.') +
-            '<br><br>' +
-            '%currentDate%<br>' +
+         let header = t('analytics', 'Text variables');
+        let text = '%currentDate%<br>' +
             '%currentTime%<br>' +
             '%now% (timestamp)';
-        OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
+        let guidance = t('analytics', 'Text variables can be used in the dimensions.<br>They are replaced when the data is added.');
+        OCA.Analytics.Notification.info(header, text, guidance);
     },
 
     handleDataUpdateButton: function () {
@@ -833,21 +806,15 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataApiButton: function () {
-        OC.dialogs.message(
-            t('analytics', 'Use this endpoint to submit data via an API:')
-            + '<br><br>'
-            + OC.generateUrl('/apps/analytics/api/3.0/data/')
+        let header = t('analytics', 'REST API parameters');
+        let text = OC.generateUrl('/apps/analytics/api/3.0/data/')
             + document.getElementById('DataApiDataset').innerText
             + '/add<br><br>'
-            + t('analytics', 'Detail instructions at:') + '<br>https://github.com/rello/analytics/wiki/API',
-            t('analytics', 'REST API parameters'),
-            'info',
-            OC.dialogs.OK_BUTTON,
-            function (e) {
-            },
-            true,
-            true
-        );
+            + '<a href="https://github.com/rello/analytics/wiki/API" target="_blank">'
+            + t('analytics', 'More Information …')
+            + '</a>';
+        let guidance = t('analytics', 'Use this endpoint to submit data via an API:');
+        OCA.Analytics.Notification.info(header, text, guidance);
     },
 
     handleDataAdvancedButton: function () {
@@ -1155,7 +1122,7 @@ OCA.Analytics.Sidebar.Share = {
         //    + '&shareType[]=10';
 
         let requestUrl = URL + '?' + params;
-         fetch(requestUrl, {
+        fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers(),
         })
@@ -1251,12 +1218,11 @@ OCA.Analytics.Sidebar.Threshold = {
     },
 
     handleThresholdHint: function () {
-        let text = t('analytics', 'Text variables can be used to evaluate a date value.<br>For example %today% can be used to highlight the data of today.<br>Operator and value are not relevant in this case.') +
-            '<br><br>' +
-            '%today%<br>' +
+        let guidance = t('analytics', 'Text variables can be used to evaluate a date value.<br>For example %today% can be used to highlight the data of today.<br>Operator and value are not relevant in this case.');
+        let text = '%today%<br>' +
             '%next day%<br>' +
             '%next 2 days% (in 2 days)';
-        OCA.Analytics.Notification.dialog(t('analytics', 'Text variables'), text, 'info');
+        OCA.Analytics.Notification.info(t('analytics', 'Text variables'), text, guidance);
     },
 
     handleThresholdCreateButton: function () {
@@ -1417,8 +1383,8 @@ OCA.Analytics.Sidebar.Backend = {
     deleteDataSimulate: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('deleteDataButton');
-        button.classList.add('loading');
-        button.disabled = true;
+        //button.classList.add('loading');
+        //button.disabled = true;
 
         let requestUrl = OC.generateUrl('apps/analytics/data/deleteDataSimulate');
         fetch(requestUrl, {
@@ -1433,18 +1399,13 @@ OCA.Analytics.Sidebar.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                OC.dialogs.confirm(
-                    t('analytics', 'Are you sure?') + ' ' + t('analytics', 'Records to be deleted: ') + data.delete.count,
+                OCA.Analytics.Notification.confirm(
                     t('analytics', 'Delete data'),
+                    t('analytics', 'Are you sure?') + '<br>' + t('analytics', 'Records to be deleted: ') + data.delete.count,
                     function (e) {
-                        if (e === true) {
                             OCA.Analytics.Sidebar.Backend.deleteData();
-                        } else if (e === false) {
-                            button.classList.remove('loading');
-                            button.disabled = false;
-                        }
-                    },
-                    true
+                            OCA.Analytics.Notification.dialogClose();
+                    }
                 );
             });
     },

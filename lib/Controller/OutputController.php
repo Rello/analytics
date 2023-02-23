@@ -88,6 +88,41 @@ class OutputController extends Controller
     }
 
     /**
+     * Preview the data
+     *
+     * @NoAdminRequired
+     * @param $type
+     * @param $options
+     * @return DataResponse|NotFoundResponse
+     * @throws Exception
+     */
+    public function readPreview ($type, $options)
+    {
+        $reportMetadata = [];
+         $array = json_decode($options, true);
+        foreach ($array as $key => $value) {
+            $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+        $reportMetadata['link'] = json_encode($array);
+        $reportMetadata['type'] = $type;
+        $reportMetadata['dataset'] = 0;
+        $reportMetadata['filteroptions'] = '';
+        $reportMetadata['user_id'] = 'admin';
+        $reportMetadata['id'] = 0;
+
+        $result = $this->getData($reportMetadata);
+        unset($result['options']
+            , $result['dimensions']
+            , $result['filterApplied']
+            , $result['thresholds']
+        );
+        $result['data'] = array_slice($result['data'], 0, 1);
+
+        return new DataResponse($result, HTTP::STATUS_OK);
+    }
+
+
+    /**
      * Get the data from backend;
      * pre-evaluation of valid datasetId within read & readPublic is trusted here
      *
@@ -96,7 +131,7 @@ class OutputController extends Controller
      * @return array
      * @throws Exception
      */
-    public function getData($reportMetadata)
+    private function getData($reportMetadata)
     {
         $datasource = (int)$reportMetadata['type'];
         $datasetId = (int)$reportMetadata['dataset'];

@@ -59,7 +59,7 @@ class Excel implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-        $template[] = ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File')];
+        $template[] = ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File'), 'type' => 'filePicker'];
         $template[] = ['id' => 'sheet', 'name' => $this->l10n->t('Sheet'), 'placeholder' => $this->l10n->t('sheet name')];
         $template[] = ['id' => 'range', 'name' => $this->l10n->t('Cell range'), 'placeholder' => $this->l10n->t('e.g. A1:C3,A5:C5')];
         return $template;

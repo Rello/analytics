@@ -390,15 +390,13 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     handleDeleteButton: function () {
-        OC.dialogs.confirm(
-            t('analytics', 'Are you sure?'),
+        OCA.Analytics.Notification.confirm(
             t('analytics', 'Delete data load'),
+            t('analytics', 'Are you sure?'),
             function (e) {
-                if (e === true) {
-                    OCA.Analytics.Advanced.Dataload.deleteDataload();
-                }
-            },
-            true
+                OCA.Analytics.Advanced.Dataload.deleteDataload();
+                OCA.Analytics.Notification.dialogClose();
+            }
         );
     },
 
@@ -578,16 +576,14 @@ OCA.Analytics.Advanced.Dataset = {
         let id = evt.target.parentNode.dataset.id;
         if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
 
-        OC.dialogs.confirm(
-            t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data including all reports will be deleted!'),
+        OCA.Analytics.Notification.confirm(
             t('analytics', 'Delete'),
+            t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data including all reports will be deleted!'),
             function (e) {
-                if (e === true) {
-                    OCA.Analytics.Advanced.Dataset.delete(id);
-                    OCA.Analytics.Advanced.hideSidebar();
-                }
-            },
-            true
+                OCA.Analytics.Advanced.Dataset.delete(id);
+                OCA.Analytics.Advanced.hideSidebar();
+                OCA.Analytics.Notification.dialogClose();
+            }
         );
     },
 
@@ -678,173 +674,6 @@ OCA.Analytics.Advanced.Dataset = {
 
                 OCA.Analytics.Navigation.init(reportId);
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-            });
-    },
-};
-
-OCA.Analytics.Advanced.Backend = {
-
-    updateData: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const button = document.getElementById('updateDataButton');
-        button.classList.add('loading');
-        button.disabled = true;
-
-        let requestUrl = OC.generateUrl('apps/analytics/data/') + reportId;
-        fetch(requestUrl, {
-            method: 'PUT',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                dimension1: document.getElementById('DataDimension1').value,
-                dimension2: document.getElementById('DataDimension2').value,
-                value: document.getElementById('DataValue').value
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                button.classList.remove('loading');
-                button.disabled = false;
-                if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
-                    }
-                } else {
-                    OCA.Analytics.Notification.notification('error', data.error);
-                }
-            });
-    },
-
-    deleteDataSimulate: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const button = document.getElementById('deleteDataButton');
-        button.classList.add('loading');
-        button.disabled = true;
-
-        let requestUrl = OC.generateUrl('apps/analytics/data/deleteDataSimulate');
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                reportId: reportId,
-                dimension1: document.getElementById('DataDimension1').value,
-                dimension2: document.getElementById('DataDimension2').value,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                OC.dialogs.confirm(
-                    t('analytics', 'Are you sure?') + ' ' + t('analytics', 'Records to be deleted: ') + data.delete.count,
-                    t('analytics', 'Delete data'),
-                    function (e) {
-                        if (e === true) {
-                            OCA.Analytics.Sidebar.Backend.deleteData();
-                        } else if (e === false) {
-                            button.classList.remove('loading');
-                            button.disabled = false;
-                        }
-                    },
-                    true
-                );
-            });
-    },
-
-    deleteData: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const button = document.getElementById('deleteDataButton');
-        button.classList.add('loading');
-        button.disabled = true;
-
-        let requestUrl = OC.generateUrl('apps/analytics/data/') + reportId;
-        fetch(requestUrl, {
-            method: 'DELETE',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                dimension1: document.getElementById('DataDimension1').value,
-                dimension2: document.getElementById('DataDimension2').value,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                button.classList.remove('loading');
-                button.disabled = false;
-                if (document.getElementById('advanced').value === 'false') {
-                    OCA.Analytics.UI.resetContentArea();
-                    OCA.Analytics.Backend.getData();
-                }
-            });
-    },
-
-    importCsvData: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const button = document.getElementById('importDataClipboardButton');
-        button.classList.add('loading');
-        button.disabled = true;
-
-        let requestUrl = OC.generateUrl('apps/analytics/data/importCSV');
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                reportId: reportId,
-                import: document.getElementById('importDataClipboardText').value,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                button.classList.remove('loading');
-                button.disabled = false;
-                if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
-                    }
-                } else {
-                    OCA.Analytics.Notification.notification('error', data.error);
-                }
-            })
-            .catch(error => {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
-                button.classList.remove('loading');
-                button.disabled = false;
-            });
-    },
-
-    importFileData: function (path) {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        const button = document.getElementById('importDataFileButton');
-        button.classList.add('loading');
-        button.disabled = true;
-
-        let requestUrl = OC.generateUrl('apps/analytics/data/importFile');
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                reportId: reportId,
-                path: path,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                button.classList.remove('loading');
-                button.disabled = false;
-                if (data.error === 0) {
-                    OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (document.getElementById('advanced').value === 'false') {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
-                    }
-                } else {
-                    OCA.Analytics.Notification.notification('error', data.error);
-                }
-            })
-            .catch(error => {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
-                button.classList.remove('loading');
-                button.disabled = false;
             });
     },
 };

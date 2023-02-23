@@ -40,6 +40,8 @@ interface IDatasource
      *  id          *mandatory*     = name of the option for the readData
      *  name        *mandatory*     = displayed name of the input field in the UI
      *  type        *optional*      = 'tf' to create a dropdown. Values need to be provided in the placeholder separated with "/".
+     *                                  'filePicker' will launch the file picker
+     *                                  'columnPicker' will launch the file picker
      *  placeholder *mandatory*     = help text for the input field in the UI
      *                                for type=tf:
      *                                  e.g. "true/false"

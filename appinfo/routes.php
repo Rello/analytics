@@ -42,10 +42,9 @@ return [
         ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
 
         // Data Output
-        ['name' => 'output#index', 'url' => '/data', 'verb' => 'GET'],
-        ['name' => 'output#create', 'url' => '/data', 'verb' => 'POST'],
         ['name' => 'output#read', 'url' => '/data/{reportId}', 'verb' => 'GET'],
         ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
+        ['name' => 'output#readPreview', 'url' => '/data', 'verb' => 'POST'],
 
         // Data Maintenance
         ['name' => 'dataload#updateData', 'url' => '/data/{reportId}', 'verb' => 'PUT'],

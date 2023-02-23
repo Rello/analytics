@@ -43,7 +43,7 @@ OCA.Analytics.Navigation = {
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.reports = data;
                 if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
-                    OCA.Analytics.Sidebar.hideSidebar();
+                    OCA.Analytics.Sidebar.close();
                     let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
                     if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
@@ -54,7 +54,7 @@ OCA.Analytics.Navigation = {
     },
 
     buildNavigation: function (data) {
-        OCA.Analytics.Sidebar.hideSidebar();
+        OCA.Analytics.Sidebar.close();
         document.getElementById('navigationDatasets').innerHTML = '';
 
         document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
@@ -366,6 +366,7 @@ OCA.Analytics.Navigation = {
             ];
             OCA.Analytics.Wizard.show();
         } else {
+            OCA.Analytics.Sidebar.close();
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
                 ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizard],
@@ -377,7 +378,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleOverviewButton: function () {
-        OCA.Analytics.Sidebar.hideSidebar();
+        OCA.Analytics.Sidebar.close();
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
         }
@@ -409,7 +410,7 @@ OCA.Analytics.Navigation = {
                 delete OCA.Analytics.currentReportData.options;
             }
             OCA.Analytics.unsavedFilters = false;
-            OCA.Analytics.Sidebar.hideSidebar();
+            OCA.Analytics.Sidebar.close();
             OCA.Analytics.Backend.getData();
         }
     },
