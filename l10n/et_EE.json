@@ -1,7 +1,6 @@
 { "translations": {
     "Saved" : "Salvestatud",
     "Delete" : "Kustuta",
-    "Delete data" : "Kustuta andmed",
     "Search" : "Otsi",
     "OK" : "OK",
     "Cancel" : "Loobu",
@@ -17,6 +16,7 @@
     "New" : "Uus",
     "Share link" : "Jaga link",
     "Link copied" : "Link kopeeritud",
+    "Delete data" : "Kustuta andmed",
     "Type" : "Tüüp",
     "Notification" : "Teavitus",
     "Date" : "Kuupäev",
