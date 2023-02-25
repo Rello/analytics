@@ -39,6 +39,8 @@ OC.L10N.register(
     "Aggregation" : "Agregace",
     "Disaggregation" : "Rozdělování",
     "Please select" : "Vyberte",
+    "Column Picker" : "Výběr sloupců",
+    "Parameter missing" : "Chybí parametr",
     "Add a report to the favorites to be shown here." : "Pokud chcete, aby byl zobrazován zde, přidejte výkaz mezi oblíbené.",
     "equal to" : "rovno",
     "greater than" : "větší než",

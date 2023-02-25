@@ -39,6 +39,8 @@ OC.L10N.register(
     "Aggregation" : "Agregación",
     "Disaggregation" : "Desagregación",
     "Please select" : "Por favor selecciona",
+    "Column Picker" : "Selector de Columnas",
+    "Parameter missing" : "Falta un parámetro",
     "Add a report to the favorites to be shown here." : "Añade un informe a los favoritos para que aparezca aquí.",
     "equal to" : "igual a",
     "greater than" : "mayor que",
