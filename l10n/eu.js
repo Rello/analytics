@@ -39,6 +39,8 @@ OC.L10N.register(
     "Aggregation" : "Agregazioa",
     "Disaggregation" : "Desagregazioa",
     "Please select" : "Mesedez, hautatu",
+    "Column Picker" : "Zutabe-hautatzailea",
+    "Parameter missing" : "Parametroa falta da",
     "Add a report to the favorites to be shown here." : "Gehitu txosten bat hemen erakutsiko diren gogokoetara.",
     "equal to" : "honen berdina",
     "greater than" : "hau baino handiagoa",

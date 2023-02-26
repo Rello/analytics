@@ -39,6 +39,7 @@ OC.L10N.register(
     "Aggregation" : "Agrégation",
     "Disaggregation" : "Désagrégation",
     "Please select" : "Veuillez sélectionner",
+    "Parameter missing" : "Paramètre maquant",
     "Add a report to the favorites to be shown here." : "Ajoutez un rapport dans les favoris pour l'afficher ici.",
     "equal to" : "égal à",
     "greater than" : "plus grand que",

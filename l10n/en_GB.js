@@ -39,6 +39,8 @@ OC.L10N.register(
     "Aggregation" : "Aggregation",
     "Disaggregation" : "Disaggregation",
     "Please select" : "Please select",
+    "Column Picker" : "Column Picker",
+    "Parameter missing" : "Parameter missing",
     "Add a report to the favorites to be shown here." : "Add a report to the favourites to be shown here.",
     "equal to" : "equal to",
     "greater than" : "greater than",

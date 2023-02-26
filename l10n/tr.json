@@ -37,6 +37,8 @@
     "Aggregation" : "Birleştirme",
     "Disaggregation" : "Ayrıştırma",
     "Please select" : "Lütfen seçin",
+    "Column Picker" : "Sütun seçici",
+    "Parameter missing" : "Parametre eksik",
     "Add a report to the favorites to be shown here." : "Burada görüntülenen sık kullanılanlara bir rapor ekler.",
     "equal to" : "şuna eşit olan",
     "greater than" : "şundan büyük olan",
