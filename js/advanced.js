@@ -420,15 +420,9 @@ OCA.Analytics.Advanced.Dataload = {
         let mode;
         if (document.getElementById('testrunCheckbox').checked) {
             mode = 'simulate';
-            OC.dialogs.message(
-                '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading" id="dataloadLoadingIndicator">Loading</div>',
+            OCA.Analytics.Notification.htmlDialogInitiate(
                 t('analytics', 'Data source simulation'),
-                'info',
-                OC.dialogs.OK_BUTTON,
-                function () {
-                },
-                true,
-                true
+                OCA.Analytics.Notification.dialogClose,
             );
         } else {
             mode = 'execute';
@@ -443,18 +437,29 @@ OCA.Analytics.Advanced.Dataload = {
                 dataloadId: document.getElementById('dataloadDetail').dataset.id,
             })
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (mode === 'simulate') {
+                    let dialogContent
                     if (parseInt(data.error) === 0) {
-                        document.querySelector("[id*=oc-dialog-]").innerHTML = '<div id="simulationData">' + JSON.stringify(data.data) + '</div>';
+                        dialogContent = document.createElement('div');
+                        dialogContent.id = 'simulationData';
+                        dialogContent.innerHTML = JSON.stringify(data.data);
                     } else {
-                        document.querySelector("[id*=oc-dialog-]").innerHTML = 'Error: '
-                            + data.error
-                            + '<br><br><textarea style="width: 500px;" cols="200" rows="15">'
-                            + new Option(data.rawdata).innerHTML
-                            + '</textarea>';
+                        dialogContent = document.createElement('div');
+                        dialogContent.innerHTML = '<textarea style="width: 500px;" cols="200" rows="15">'
+                            + new Option(data.rawdata).innerHTML + '</textarea>';
                     }
+                    OCA.Analytics.Notification.htmlDialogUpdate(
+                        dialogContent,
+                        'Error: ' + data.error,
+                    );
+
                 } else {
                     let messageType;
                     if (parseInt(data.error) === 0) {
@@ -464,6 +469,11 @@ OCA.Analytics.Advanced.Dataload = {
                     }
                     OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated') + ', ' + data.error + ' ' + t('analytics', 'errors') + ', ' + data.delete + ' ' + t('analytics', 'deletions'));
                 }
+            })
+            .catch(error => {
+                // stop if the file link is missing
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Parameter missing'));
+                OCA.Analytics.Notification.dialogClose();
             });
     },
 
@@ -482,7 +492,7 @@ OCA.Analytics.Advanced.Dataload = {
         OC.dialogs.filepicker(
             t('analytics', 'Select file'),
             function (path) {
-                document.getElementById('link').value = path;
+                document.querySelector('[data-type="filePicker"]').value = path;
             },
             false,
             mime,
