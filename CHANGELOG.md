@@ -1,8 +1,13 @@
 # Changelog
 
+### Added
+- Column picker for file data sources #337
+- unified popup
+
 ### Fixed
 - report import not working #336
 - hide export button for folder #335
+- error handling when data source type is not available anymore
 
 ## 4.7.2 - 2023-02-13
 ### Fixed
