@@ -932,6 +932,11 @@ OCA.Analytics.Datasource = {
         let form = document.createElement('div');
         form.id = 'dataSourceOptions';
 
+        if (typeof(template) === 'undefined') {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Data source not available anymore'));
+            return form;
+        }
+
         // create a hidden dummy for the data source type
         form.appendChild(OCA.Analytics.Datasource.buildOptionHidden('dataSourceType',datasource));
 
