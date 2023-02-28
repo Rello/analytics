@@ -125,13 +125,14 @@ class OutputController extends Controller
     /**
      * Get the data from backend;
      * pre-evaluation of valid datasetId within read & readPublic is trusted here
+     * also used in Pagecontroller-indexPublicMin
      *
      * @NoAdminRequired
      * @param $reportMetadata
      * @return array
      * @throws Exception
      */
-    private function getData($reportMetadata)
+    public function getData($reportMetadata)
     {
         $datasource = (int)$reportMetadata['type'];
         $datasetId = (int)$reportMetadata['dataset'];

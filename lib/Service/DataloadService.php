@@ -501,7 +501,7 @@ class DataloadService
     private function detectDelimiter($data): string
     {
         $delimiters = ["\t", ";", "|", ","];
-        $data_2 = null;
+        $data_2 = array();
         $delimiter = $delimiters[0];
         foreach ($delimiters as $d) {
             $firstRow = str_getcsv($data, "\n")[0];

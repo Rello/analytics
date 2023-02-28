@@ -121,6 +121,11 @@ class DatasourceController extends Controller
      */
     public function read(int $datasourceId, $datasetMetadata)
     {
+        if (!$this->getDatasources()[$datasourceId]) {
+            $result['error'] = $this->l10n->t('Data source not available anymore');
+            return $result;
+        }
+
         $option = array();
         // before 3.1.0, the options were in another format. as of 3.1.0 the standard option array is used
         if ($datasetMetadata['link'][0] !== '{') {
