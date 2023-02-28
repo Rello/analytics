@@ -39,6 +39,8 @@ OC.L10N.register(
     "Aggregation" : "Агрегација",
     "Disaggregation" : "Дисагрегација",
     "Please select" : "Молимо изаберите",
+    "Column Picker" : "Бирач колона",
+    "Parameter missing" : "Недостаје параметар",
     "Add a report to the favorites to be shown here." : "Додајте извештај у омиљене ако желите да се овде прикаже.",
     "equal to" : "једнако са",
     "greater than" : "веће од",
