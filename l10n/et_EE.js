@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Salvestatud",
     "Delete" : "Kustuta",
-    "Delete data" : "Kustuta andmed",
     "Search" : "Otsi",
     "OK" : "OK",
     "Cancel" : "Loobu",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "New" : "Uus",
     "Share link" : "Jaga link",
     "Link copied" : "Link kopeeritud",
+    "Delete data" : "Kustuta andmed",
     "Type" : "Tüüp",
     "Notification" : "Teavitus",
     "Date" : "Kuupäev",
