@@ -13,6 +13,7 @@
 /** global: table */
 /** global: Chart */
 /** global: cloner */
+/** global: Headers */
 
 'use strict';
 /**
@@ -169,7 +170,7 @@ OCA.Analytics.Filter = {
         );
 
         // fill Dimension dropdown
-        let dimensionSelectOptions;
+        let dimensionSelectOptions = '';
         let availableDimensions = OCA.Analytics.currentReportData.dimensions;
         for (let i = 0; i < Object.keys(availableDimensions).length; i++) {
             dimensionSelectOptions = dimensionSelectOptions + '<option value="' + Object.keys(availableDimensions)[i] + '">' + Object.values(availableDimensions)[i] + '</option>';
@@ -177,7 +178,7 @@ OCA.Analytics.Filter = {
         document.getElementById('filterDialogDimension').innerHTML = dimensionSelectOptions;
 
         // fill Options dropdown
-        let optionSelectOptions;
+        let optionSelectOptions = '';
         for (let i = 0; i < Object.keys(OCA.Analytics.Filter.optionTextsArray).length; i++) {
             optionSelectOptions = optionSelectOptions + '<option value="' + Object.keys(OCA.Analytics.Filter.optionTextsArray)[i] + '">' + Object.values(OCA.Analytics.Filter.optionTextsArray)[i] + '</option>';
         }
@@ -362,7 +363,7 @@ OCA.Analytics.Filter = {
         chartOptions === '' || chartOptions === null ? chartOptions = {} : chartOptions;
         let userDatasetOptions = [];
         let nonDefaultValues, seondaryAxisRequired = false;
-        let optionObject = {};
+        let optionObject;
 
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
