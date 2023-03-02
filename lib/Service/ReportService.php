@@ -384,7 +384,7 @@ class ReportService
      */
     public function import(string $path = null, string $raw = null)
     {
-        if ($path !== '') {
+        if ($path !== '' and $path !== null) {
             $file = $this->rootFolder->getUserFolder($this->userId)->get($path);
             $data = $file->getContent();
         } else if ($raw !== null) {

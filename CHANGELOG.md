@@ -2,7 +2,8 @@
 
 ### Added
 - Column picker for file data sources #337
-- unified popup
+- import reports directly from computer and not via NC files
+- unified popups
 
 ### Fixed 
 - report import not working #336

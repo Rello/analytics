@@ -492,8 +492,19 @@ OCA.Analytics.Navigation = {
     },
 
     handleImportButton: function () {
-        const mimeparts = ['text/plain'];
-        OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Sidebar.Report.import.bind(this), false, mimeparts, true, 1);
+        const fileInput = document.getElementById('importFile');
+        fileInput.click();
+        fileInput.addEventListener('change', async () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                return;
+            }
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = async () => {
+                OCA.Analytics.Sidebar.Report.import(null, reader.result);
+            };
+        })
     },
 
     handleUnshareButton: function (evt) {

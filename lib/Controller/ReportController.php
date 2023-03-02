@@ -237,5 +237,4 @@ class ReportController extends Controller
     {
         return new DataResponse($this->ReportService->import($path, $raw));
     }
-
 }
