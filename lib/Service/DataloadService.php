@@ -158,13 +158,8 @@ class DataloadService
         $bulkInsert = null;
         $aggregation = null;
 
-        // get the meta data
-        $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
-        $option = json_decode($dataloadMetadata['option'], true);
-
         // get the data from the datasource
         $result = $this->getDataFromDatasource($dataloadId);
-        $datasetId = $result['datasetId'];
 
         // dont continue in case of datasource error
         if ($result['error'] !== 0) {
@@ -176,22 +171,24 @@ class DataloadService
             ];
         }
 
+        // get the meta data
+        $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
+        $option = json_decode($dataloadMetadata['option'], true);
+        $datasetId = $dataloadMetadata['dataset'];
+
         // this is a deletion request. Just run the deletion and stop after that with a return.
         if ($dataloadMetadata['datasource'] === 0) {
-            $option = json_decode($dataloadMetadata['option'], true);
-
             // deletion jobs are using the same dimension/option/value settings a report filter
             $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
             // Text variables like %xx% could be in use here
             $filter = $this->VariableService->replaceFilterVariables($filter);
 
-            $this->StorageService->deleteWithFilterSimulate($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true));
+            $records = $this->StorageService->deleteWithFilter($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true));
 
             return [
                 'insert' => $insert,
                 'update' => $update,
-                // use the existing row count from the deletion simulation which was run during getDataFromDatasource
-                'delete' => $result['data']['count'],
+                'delete' => $records,
                 'error' => $error,
             ];
         }

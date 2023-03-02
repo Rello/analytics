@@ -231,7 +231,7 @@ class StorageMapper
      * delete data
      * @param int $datasetId
      * @param $options
-     * @return bool
+     * @return int
      * @throws Exception
      */
     public function deleteWithFilter(int $datasetId, $options)
@@ -246,9 +246,7 @@ class StorageMapper
                 $this->sqlWhere($sql, $key, $value['option'], $value['value']);
             }
         }
-        $sql->execute();
-
-        return true;
+        return $sql->executeStatement(); // number of deleted rows
     }
 
     /**

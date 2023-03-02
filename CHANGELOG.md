@@ -8,6 +8,7 @@
 - report import not working #336
 - hide export button for folder #335
 - error handling when data source type is not available anymore
+- automated data deletion not working #339
 
 ## 4.7.2 - 2023-02-13
 ### Fixed
