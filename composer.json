@@ -2,7 +2,8 @@
 	"require": {
       "php": ">=7.4.0",
       "ext-curl": "*",
-      "ext-json": "*"
+      "ext-json": "*",
+      "ext-gd": "*"
     },
 	"require-dev": {
       "nextcloud/ocp": "^v24.0.1",
