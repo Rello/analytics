@@ -10,6 +10,6 @@
       "symfony/symfony": "^4.4.19",
       "guzzlehttp/guzzle": "^6.3.0",
       "phpoffice/phpspreadsheet": "^1.16.0",
-      "psr/log": "^3.0.0"
+      "psr/log": "^1.1.0"
     }
 }
