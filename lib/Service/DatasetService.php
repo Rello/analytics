@@ -189,7 +189,7 @@ class DatasetService
      * @return bool
      * @throws Exception
      */
-    public function update(int $datasetId, $name,$dimension1 = null, $dimension2 = null, $value = null)
+    public function update(int $datasetId, $name, $dimension1 = null, $dimension2 = null, $value = null)
     {
         return $this->DatasetMapper->update($datasetId, $name, $dimension1, $dimension2, $value);
     }

@@ -179,6 +179,7 @@ class DataloadService
         // this is a deletion request. Just run the deletion and stop after that with a return.
         if ($dataloadMetadata['datasource'] === 0) {
             // deletion jobs are using the same dimension/option/value settings a report filter
+            $filter = array();
             $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
             // Text variables like %xx% could be in use here
             $filter = $this->VariableService->replaceFilterVariables($filter);
@@ -259,7 +260,7 @@ class DataloadService
      *
      * @param int $dataloadId
      * @return array|NotFoundResponse
-     * @throws NotFoundResponse|NotFoundException
+     * @throws NotFoundResponse
      * @throws \OCP\DB\Exception
      */
     public function getDataFromDatasource(int $dataloadId)
@@ -278,6 +279,7 @@ class DataloadService
                 $option = json_decode($dataloadMetadata['option'], true);
 
                 // deletion jobs are using the same dimension/option/value settings a report filter
+                $filter = array();
                 $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
                 // Text variables like %xx% could be in use here
                 $filter = $this->VariableService->replaceFilterVariables($filter);
@@ -459,6 +461,7 @@ class DataloadService
         $dataset = $this->getDatasetId($objectId, $isDataset);
         if ($dataset != '') {
             $insert = $update = 0;
+            $reportMetadata = array();
             $reportMetadata['link'] = $path;
             $reportMetadata['user_id'] = $this->userId;
             $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_FILE, $reportMetadata);

@@ -70,7 +70,7 @@ class DatasetController extends Controller
      *
      * @NoAdminRequired
      * @param int $datasetId
-     * @return array
+     * @return array|bool
      */
     public function read(int $datasetId)
     {
@@ -105,9 +105,9 @@ class DatasetController extends Controller
      * @NoAdminRequired
      * @param int $datasetId
      * @param $name
-     * @param null $dimension1
-     * @param null $dimension2
-     * @param null $value
+     * @param $dimension1
+     * @param $dimension2
+     * @param $value
      * @return bool
      * @throws \OCP\DB\Exception
      */

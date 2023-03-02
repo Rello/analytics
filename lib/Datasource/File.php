@@ -74,7 +74,6 @@ class File implements IDatasource
     public function readData($option): array
     {
         $data = array();
-        $header = array();
         $error = 0;
         $selectedColumns = array();
 
