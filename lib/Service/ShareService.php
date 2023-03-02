@@ -204,9 +204,9 @@ class ShareService
      *
      * @NoAdminRequired
      * @param $shareId
-     * @param null $password
-     * @param null $canEdit
-     * @param null $domain
+     * @param string|null $password
+     * @param string|null $canEdit
+     * @param string|null $domain
      * @return bool
      */
     public function update($shareId, $password = null, $canEdit = null, $domain = null)

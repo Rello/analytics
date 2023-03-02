@@ -618,7 +618,7 @@ OCA.Analytics.Sidebar.Report = {
         })
             .then(response => response.json())
             .then(data => {
-                if (data !== true) {
+                if (data !== 'true') {
                     OCA.Analytics.Notification.confirm(
                         t('analytics', 'Dataset'),
                         t('analytics', 'This was the last report on the dataset. Do you want to delete the dataset including all data?'),

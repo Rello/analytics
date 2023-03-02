@@ -5,8 +5,9 @@
       "ext-json": "*"
     },
 	"require-dev": {
-      "christophwurst/nextcloud": "^v22.1.1",
+      "nextcloud/ocp": "^v24.0.1",
       "symfony/symfony": "^4.4.19",
-      "guzzlehttp/guzzle": "^6.3.0"
+      "guzzlehttp/guzzle": "^6.3.0",
+      "phpoffice/phpspreadsheet": "^1.16.0"
     }
 }

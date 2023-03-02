@@ -311,7 +311,7 @@ class ReportService
         if (empty($report) && (int)$metadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
             return $metadata['dataset'];
         } else {
-            return true;
+            return 'true';
         }
     }
 
@@ -390,7 +390,7 @@ class ReportService
         } else if ($raw !== null) {
             $data = $raw;
         } else {
-            return false;
+            return 0;
         }
         $data = json_decode($data, true);
 
