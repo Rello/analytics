@@ -40,6 +40,7 @@ OC.L10N.register(
     "Aggregation" : "Aggregation",
     "Disaggregation" : "Disaggregation",
     "Please select" : "Bitte auswählen",
+    "Data source not available anymore" : "Datenquelle nicht mehr verfügbar",
     "Column Picker" : "Spaltenwähler",
     "Add a report to the favorites to be shown here." : "Fügen Sie einen Report den Favoriten hinzu, um ihn hier zu sehen.",
     "equal to" : "gleich",

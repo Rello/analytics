@@ -40,6 +40,7 @@ OC.L10N.register(
     "Aggregation" : "Aggregation",
     "Disaggregation" : "Disaggregation",
     "Please select" : "Please select",
+    "Data source not available anymore" : "Data source not available anymore",
     "Column Picker" : "Column Picker",
     "Add a report to the favorites to be shown here." : "Add a report to the favourites to be shown here.",
     "equal to" : "equal to",
