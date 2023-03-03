@@ -40,6 +40,7 @@ OC.L10N.register(
     "Aggregation" : "Агрегација",
     "Disaggregation" : "Дисагрегација",
     "Please select" : "Молимо изаберите",
+    "Data source not available anymore" : "Извор података више није доступан",
     "Column Picker" : "Бирач колона",
     "Add a report to the favorites to be shown here." : "Додајте извештај у омиљене ако желите да се овде прикаже.",
     "equal to" : "једнако са",
