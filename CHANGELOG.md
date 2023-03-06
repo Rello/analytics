@@ -1,7 +1,8 @@
 # Changelog
 
 ### Added
-- Column picker for file data sources #337
+- column picker for data sources #337
+- number-only input type for data sources
 - import reports directly from computer and not via NC files
 - unified popups
 

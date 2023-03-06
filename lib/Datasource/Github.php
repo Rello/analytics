@@ -52,7 +52,7 @@ class Github implements IDatasource
         $template = array();
         $template[] = ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user'];
         $template[] = ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository'];
-        $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')];
+        $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows'), 'type' => 'number'];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'false-' . $this->l10n->t('No').'/true-'.$this->l10n->t('Yes'), 'type' => 'tf'];
         return $template;
     }

@@ -992,6 +992,10 @@ OCA.Analytics.Datasource = {
         input.placeholder = templateOption.placeholder;
         input.id = templateOption.id;
         input.dataset.type = templateOption.type;
+        if (templateOption.type && templateOption.type === 'number') {
+            input.type = 'number';
+            input.min = '1';
+        }
         return input;
     },
 
@@ -1116,7 +1120,7 @@ OCA.Analytics.Datasource = {
             const spanContent = document.createElement("span");
             spanContent.textContent = item.text;
             spanContent.style.marginLeft = '10px';
-            spanContent.style.fontStyle = 'italic';
+            spanContent.style.color = 'var(--color-text-maxcontrast)';
             li.appendChild(checkbox);
             li.appendChild(span);
             li.appendChild(spanContent);

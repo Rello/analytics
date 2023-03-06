@@ -53,7 +53,7 @@ class Regex implements IDatasource
         $template[] = ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url'];
         $template[] = ['id' => 'name', 'name' => 'Data series description', 'placeholder' => 'optional'];
         $template[] = ['id' => 'regex', 'name' => $this->l10n->t('valid regex'), 'placeholder' => '//'];
-        $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows')];
+        $template[] = ['id' => 'limit', 'name' => $this->l10n->t('Limit'), 'placeholder' => $this->l10n->t('Number of rows'), 'type' => 'number'];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
     }
