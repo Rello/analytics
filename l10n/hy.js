@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "Տվյալների հավաքածու",
+    "Data" : "Տվյալ",
+    "Automation" : "Ավտոմատացում",
     "Saved" : "Պահված",
     "Delete" : "հեռացնել",
     "Search" : "Search",
