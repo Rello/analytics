@@ -40,7 +40,7 @@ OC.L10N.register(
     "Aggregation" : "Agregace",
     "Disaggregation" : "Rozdělování",
     "Please select" : "Vyberte",
-    "Data source not available anymore" : "Zdroj dat již není k dispozici",
+    "Data source not available anymore" : "Zdroj dat už není k dispozici",
     "Column Picker" : "Výběr sloupců",
     "Add a report to the favorites to be shown here." : "Pokud chcete, aby byl zobrazován zde, přidejte výkaz mezi oblíbené.",
     "equal to" : "rovno",
