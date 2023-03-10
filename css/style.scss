@@ -120,10 +120,9 @@
 }
 
 #chartLegend {
-    right: 6%;
-    position: absolute;
-    padding-left: 70px;
+    padding-left: 80px;
     opacity: 0.5;
+    float: right;
 }
 
 #chartLegend:hover {
