@@ -40,6 +40,7 @@ OC.L10N.register(
     "Aggregation" : "Birleştirme",
     "Disaggregation" : "Ayrıştırma",
     "Please select" : "Lütfen seçin",
+    "Data source not available anymore" : "Veri kaynağı artık kullanılamıyor",
     "Column Picker" : "Sütun seçici",
     "Add a report to the favorites to be shown here." : "Burada görüntülenen sık kullanılanlara bir rapor ekler.",
     "equal to" : "şuna eşit olan",
