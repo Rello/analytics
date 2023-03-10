@@ -360,7 +360,7 @@ OCA.Analytics.Filter = {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions;
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
-        chartOptions === '' || chartOptions === null ? chartOptions = {} : chartOptions;
+        chartOptions === '' || chartOptions === null ? chartOptions = [] : chartOptions;
         let userDatasetOptions = [];
         let nonDefaultValues, seondaryAxisRequired = false;
         let optionObject;
