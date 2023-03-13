@@ -932,6 +932,11 @@ OCA.Analytics.Datasource = {
         let form = document.createElement('div');
         form.id = 'dataSourceOptions';
 
+        if (datasource === OCA.Analytics.TYPE_INTERNAL_DB
+            || datasource === OCA.Analytics.TYPE_EMPTY_GROUP) {
+            return form
+        }
+
         if (typeof(template) === 'undefined') {
             OCA.Analytics.Notification.notification('error', t('analytics', 'Data source not available anymore'));
             return form;

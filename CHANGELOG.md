@@ -11,8 +11,9 @@
 - hide export button for folder #335
 - error handling when data source type is not available anymore
 - automated data deletion not working #339
-- Cannot change color of data series #338
+- cannot change color of data series #338
 - chart legend not scrolling
+- UI inconsistency (dataset maintenance <> advanced) #340
 
 ## 4.7.2 - 2023-02-13
 ### Fixed

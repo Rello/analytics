@@ -793,7 +793,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDimensionHint: function () {
-         let header = t('analytics', 'Text variables');
+        let header = t('analytics', 'Text variables');
         let text = '%currentDate%<br>' +
             '%currentTime%<br>' +
             '%now% (timestamp)';
@@ -1418,8 +1418,8 @@ OCA.Analytics.Sidebar.Backend = {
                     t('analytics', 'Delete data'),
                     t('analytics', 'Are you sure?') + '<br>' + t('analytics', 'Records to be deleted: ') + data.delete.count,
                     function (e) {
-                            OCA.Analytics.Sidebar.Backend.deleteData();
-                            OCA.Analytics.Notification.dialogClose();
+                        OCA.Analytics.Sidebar.Backend.deleteData();
+                        OCA.Analytics.Notification.dialogClose();
                     }
                 );
             });
