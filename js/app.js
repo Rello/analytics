@@ -957,23 +957,25 @@ OCA.Analytics.Datasource = {
 
             //create the input fields
             let input;
-            if (templateOption.type && templateOption.type === 'tf') {
-                input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
-            } else {
-                input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
-                if (templateOption.type === 'filePicker') {
+            input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
+            input.style.display = 'table-cell';
+            if (templateOption.type) {
+                if (templateOption.type === 'tf') {
+                    input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
+                } else if (templateOption.type === 'filePicker') {
+                    input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
                     input.addEventListener('click', OCA.Analytics.Datasource.handleFilepicker);
                 } else if (templateOption.type === 'columnPicker') {
+                    input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
+                    input.disabled = true;
                     input.addEventListener('click', OCA.Analytics.Datasource.handleColumnPicker);
                 }
             }
-            input.style.display = 'table-cell';
             form.appendChild(tableRow);
             tableRow.appendChild(label);
             tableRow.appendChild(input);
             tableRow.appendChild(infoColumn);
         }
-
         return form;
     },
 
@@ -997,6 +999,27 @@ OCA.Analytics.Datasource = {
             input.min = '1';
         }
         return input;
+    },
+
+    buildOptionsCheckboxIndicator: function (templateOption) {
+        let input = document.createElement('input');
+        input.type = 'checkbox'
+        input.disabled = true;
+        input.style.display = 'inline-flex';
+        //input.classList.add('sidebarInput');
+        input.id = templateOption.id;
+        input.dataset.type = templateOption.type;
+
+        let edit = document.createElement('span');
+        edit.style.display = 'inline-flex';
+        edit.classList.add('icon','icon-rename');
+        edit.style.minHeight = '36px';
+
+        let div = document.createElement('div');
+        div.style.display = 'table-cell';
+        div.appendChild(input);
+        div.appendChild(edit);
+        return div;
     },
 
     buildOptionsSelect: function (templateOption) {

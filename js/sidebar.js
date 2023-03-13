@@ -171,7 +171,7 @@ OCA.Analytics.Sidebar = {
         }
     },
 
-    assignSectionClickEvents: function () {
+    assignSectionHeaderClickEvents: function () {
         let elements = document.querySelectorAll('[id$="HeaderH3"]');
         for (let i = 0; i < elements.length; i++) {
             elements[i].addEventListener('click', OCA.Analytics.Sidebar.showHideSidebarSection);
@@ -206,64 +206,31 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('tabContainerReport').innerHTML = '';
                     document.getElementById('tabContainerReport').appendChild(table);
 
+                    // create the drop downs for Data source, grouping and possible data set
                     document.getElementById('sidebarReportDatasource').appendChild(OCA.Analytics.Datasource.buildDropdown());
                     OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
                     OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
 
-                    document.getElementById('sidebarReportName').value = data['name'];
-                    document.getElementById('sidebarReportSubheader').value = data['subheader'];
-                    document.getElementById('sidebarReportParent').value = data['parent'];
-                    document.getElementById('sidebarReportDatasource').value = data['type'];
-                    document.getElementById('sidebarReportDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChange);
-                    document.getElementById('sidebarReportDataset').value = data['dataset'];
-                    document.getElementById('sidebarReportDataset').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasetChange);
-                    document.getElementById('sidebarReportChart').value = data['chart'];
-                    document.getElementById('sidebarReportVisualization').value = data['visualization'];
-                    // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
-                    if (data['chartoptions'] !== null) {
-                        document.getElementById('sidebarReportChartOptions').value = data['chartoptions'].replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
-                    }
-                    document.getElementById('sidebarReportDataOptions').value = data['dataoptions'];
-                    document.getElementById('sidebarReportDimension1').value = data['dimension1'];
-                    document.getElementById('sidebarReportDimension2').value = data['dimension2'];
-                    document.getElementById('sidebarReportValue').value = data['value'];
-                    document.getElementById('sidebarReportDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
-                    document.getElementById('sidebarReportUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleUpdateButton);
-                    document.getElementById('sidebarReportExportButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleExportButton);
+                    OCA.Analytics.Sidebar.Report.fillReportMetadataFields(data);
+                    OCA.Analytics.Sidebar.Report.assignEventListeners();
 
-                    document.getElementById('sidebarReportName').addEventListener('change', OCA.Analytics.Sidebar.Report.indicateMetadataChanged);
-                    document.getElementById('sidebarReportParent').addEventListener('change', OCA.Analytics.Sidebar.Report.indicateMetadataChanged);
-
-                    document.getElementById('sidebarReportNameHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
-                    document.getElementById('sidebarReportSubheaderHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
-                    document.getElementById('sidebarReportGroupHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleGroupHint);
-                    document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDimensionHint);
-
-                    OCA.Analytics.Sidebar.assignSectionClickEvents();
+                    // build the sections depending on report type
+                    OCA.Analytics.Sidebar.Report.buildSections(data['type']);
+                    OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
                     // get all the options for a datasource
-                    OCA.Analytics.Sidebar.Report.handleDatasourceChange();
+                    document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(data['type']));
+
                     if ((parseInt(data['type']) !== OCA.Analytics.TYPE_EMPTY_GROUP)) {
-                        OCA.Analytics.Sidebar.Report.handleDatasetChange();
+                        // report
+                        OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
                     } else {
+                        // group
                         document.getElementById('sidebarReportExportButton').style.display = 'none';
                         document.getElementById('sidebarReportNameHint').style.display = 'none';
                     }
 
-                    // set the options for a datasource
-                    if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
-                        let options = JSON.parse(data['link']);
-                        for (let option in options) {
-                            document.getElementById(option) ? document.getElementById(option).value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]) : null;
-                        }
-                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_GIT)) { // Old format before 3.1.0
-                        document.getElementById('user').value = data['link'].split('/')[0];
-                        document.getElementById('repository').value = data['link'].split('/')[1];
-                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_EXTERNAL_FILE)) { // Old format before 3.1.0
-                        document.getElementById('link').value = data['link'];
-                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_FILE)) { // Old format before 3.1.0
-                        document.getElementById('link').value = data['link'];
-                    }
+                    OCA.Analytics.Sidebar.Report.fillDatasourceOptionFields(data);
 
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
@@ -286,7 +253,59 @@ OCA.Analytics.Sidebar.Report = {
         });
     },
 
-    indicateMetadataChanged: function () {
+    fillReportMetadataFields: function (data) {
+        document.getElementById('sidebarReportName').value = data['name'];
+        document.getElementById('sidebarReportSubheader').value = data['subheader'];
+        document.getElementById('sidebarReportParent').value = data['parent'];
+        document.getElementById('sidebarReportDatasource').value = data['type'];
+        // obsolete? document.getElementById('sidebarReportDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChange);
+        document.getElementById('sidebarReportDataset').value = data['dataset'];
+        // obsolete? document.getElementById('sidebarReportDataset').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasetChange);
+        document.getElementById('sidebarReportChart').value = data['chart'];
+        document.getElementById('sidebarReportVisualization').value = data['visualization'];
+        // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
+        if (data['chartoptions'] !== null) {
+            document.getElementById('sidebarReportChartOptions').value = data['chartoptions'].replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
+        }
+        document.getElementById('sidebarReportDataOptions').value = data['dataoptions'];
+        document.getElementById('sidebarReportDimension1').value = data['dimension1'];
+        document.getElementById('sidebarReportDimension2').value = data['dimension2'];
+        document.getElementById('sidebarReportValue').value = data['value'];
+    },
+
+    fillDatasourceOptionFields: function (data) {
+        // set the options for a datasource
+        if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
+            let options = JSON.parse(data['link']);
+            for (let option in options) {
+                document.getElementById(option) ? document.getElementById(option).value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]) : null;
+                if (document.getElementById(option).type === 'checkbox') {
+                    document.getElementById(option).checked = true;
+                }
+            }
+        } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_GIT)) { // Old format before 3.1.0
+            document.getElementById('user').value = data['link'].split('/')[0];
+            document.getElementById('repository').value = data['link'].split('/')[1];
+        } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_EXTERNAL_FILE)) { // Old format before 3.1.0
+            document.getElementById('link').value = data['link'];
+        } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_FILE)) { // Old format before 3.1.0
+            document.getElementById('link').value = data['link'];
+        }
+    },
+
+    assignEventListeners: function () {
+        document.getElementById('sidebarReportDeleteButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
+        document.getElementById('sidebarReportUpdateButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleUpdateButton);
+        document.getElementById('sidebarReportExportButton').addEventListener('click', OCA.Analytics.Sidebar.Report.handleExportButton);
+        document.getElementById('sidebarReportName').addEventListener('change', OCA.Analytics.Sidebar.Report.indicatorMetadataWasChanged);
+        document.getElementById('sidebarReportParent').addEventListener('change', OCA.Analytics.Sidebar.Report.indicatorMetadataWasChanged);
+        document.getElementById('sidebarReportNameHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
+        document.getElementById('sidebarReportSubheaderHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleNameHint);
+        document.getElementById('sidebarReportGroupHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleGroupHint);
+        document.getElementById('sidebarReportDimensionHint').addEventListener('click', OCA.Analytics.Sidebar.Report.handleDimensionHint);
+    },
+
+    indicatorMetadataWasChanged: function () {
         OCA.Analytics.Sidebar.Report.metadataChanged = true;
     },
 
@@ -315,12 +334,9 @@ OCA.Analytics.Sidebar.Report = {
         OCA.Analytics.Sidebar.Report.export();
     },
 
-    handleDatasourceChange: function () {
-        const type = parseInt(document.getElementById('sidebarReportDatasource').value);
+    buildSections: function (datasourceType) {
         document.getElementById('reportDatasourceSection').innerHTML = '';
-        OCA.Analytics.Sidebar.Report.indicateMetadataChanged();
-
-        if (type === OCA.Analytics.TYPE_INTERNAL_DB) {
+        if (datasourceType === OCA.Analytics.TYPE_INTERNAL_DB) {
             document.getElementById('reportDimensionSectionHeader').style.removeProperty('display');
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.removeProperty('display');
@@ -328,7 +344,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportDatasetRow').style.display = 'table-row';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
-        } else if (type === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        } else if (datasourceType === OCA.Analytics.TYPE_EMPTY_GROUP) {
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.display = 'none';
@@ -344,10 +360,9 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
-
-            document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
         }
     },
+
     handleDatasourceChangeWizard: function () {
         const type = parseInt(document.getElementById('wizardNewDatasource').value);
         document.getElementById('wizardNewTypeOptionsRow').style.display = 'table-row';
@@ -355,7 +370,7 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
     },
 
-    handleDatasetChange: function () {
+    fillDatasetRelatedFields: function () {
         const dataset = parseInt(document.getElementById('sidebarReportDataset').value);
         const datasource = parseInt(document.getElementById('sidebarReportDatasource').value);
 
@@ -764,7 +779,7 @@ OCA.Analytics.Sidebar.Data = {
                 document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
                 document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
 
-                OCA.Analytics.Sidebar.assignSectionClickEvents();
+                OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
                 document.getElementById('DataValue').addEventListener('keydown', function (event) {
                     if (event.key === 'Enter') {

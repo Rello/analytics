@@ -125,7 +125,7 @@ class OutputController extends Controller
     /**
      * Get the data from backend;
      * pre-evaluation of valid datasetId within read & readPublic is trusted here
-     * also used in Pagecontroller-indexPublicMin
+     * also used in Pagecontroller-indexPublicMin ToDo: make this private
      *
      * @NoAdminRequired
      * @param $reportMetadata
