@@ -85,7 +85,6 @@ OC.L10N.register(
     "Password" : "パスワード",
     "No data found" : "ダーターが見つかりません",
     "Favorites" : "お気に入り",
-    "Analytics - Advanced configuration" : "アナリティクス - 高度な設定",
     "Options" : "オプション",
     "Back" : "戻る",
     "1 min" : "1分",

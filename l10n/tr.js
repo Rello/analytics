@@ -195,7 +195,6 @@ OC.L10N.register(
     "Javascript issue" : "JavaScript sorunu",
     "If you see this message, please disable AdBlock/uBlock for this domain (only)." : "Bu iletiyi görürseniz, lütfen bu etki alanı için AdBlock/uBlock uygulamasını devre dışı bırakın (yalnızca).",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy listesi, *analytics* için bir genel arama karakteri süzgeci nedeniyle bazı komut dosyalarını engelliyor.",
-    "Analytics - Advanced configuration" : "Analytics - Gelişmiş yapılandırma",
     "This section is used for dataset maintenance and data load configurations." : "Veri kümesi bakımı ve veri yüklemesi yapılandırmaları bu bölümden yapılabilir.",
     "Please select a dataset" : "Lütfen bir veri kümesi seçin",
     "Options" : "Seçenekler",

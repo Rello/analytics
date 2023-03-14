@@ -195,7 +195,6 @@ OC.L10N.register(
     "Javascript issue" : "Javascript проблем",
     "If you see this message, please disable AdBlock/uBlock for this domain (only)." : "Ако видите ову поруку, молимо вас да искључите AdBlock/uBlock за овај домен (само за њега).",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy листа блокира неке скрипте услед џокер филтера за *analytics*.",
-    "Analytics - Advanced configuration" : "Аналитика - Напредна конфигурација",
     "This section is used for dataset maintenance and data load configurations." : "Овај одељак се користи за одржавање скупа података и за учитавање конфигурација.",
     "Please select a dataset" : "Молимо изаберите скуп података",
     "Options" : "Избори",
