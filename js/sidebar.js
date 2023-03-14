@@ -217,12 +217,11 @@ OCA.Analytics.Sidebar.Report = {
                     // build the sections depending on report type
                     OCA.Analytics.Sidebar.Report.buildSections(data['type']);
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
-
-                    // get all the options for a datasource
-                    document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(data['type']));
-
+                    
                     if ((parseInt(data['type']) !== OCA.Analytics.TYPE_EMPTY_GROUP)) {
                         // report
+                        // get all the options for a datasource
+                        document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(data['type']));
                         OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
                     } else {
                         // group

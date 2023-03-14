@@ -286,8 +286,7 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
         document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload['id'];
 
-        // get all the options (fields, descriptions, defaults) for a datasource
-        // they are read from the generic data source definitions
+        // get all the options for a datasource
         document.getElementById('dataloadDetailItems').innerHTML = '';
         document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildOptionsForm(dataload['datasource']));
 
@@ -297,9 +296,7 @@ OCA.Analytics.Advanced.Dataload = {
             document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Advanced.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
         }
 
-        if (dataload['datasource'] === OCA.Analytics.TYPE_INTERNAL_FILE || dataload['datasource'] === OCA.Analytics.TYPE_EXCEL) {
-            document.getElementById('link').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleFilepicker);
-        } else if (dataload['datasource'] === 0) {
+        if (dataload['datasource'] === 0) {
             // this is a deletion job
             OCA.Analytics.UI.hideElement('dataloadDetailDelete');
         }
@@ -445,7 +442,8 @@ OCA.Analytics.Advanced.Dataload = {
             })
             .then(data => {
                 if (mode === 'simulate') {
-                    let dialogContent
+                    let dialogContent;
+                    let errorData = '';
                     if (parseInt(data.error) === 0) {
                         dialogContent = document.createElement('div');
                         dialogContent.id = 'simulationData';
@@ -454,10 +452,11 @@ OCA.Analytics.Advanced.Dataload = {
                         dialogContent = document.createElement('div');
                         dialogContent.innerHTML = '<textarea style="width: 500px;" cols="200" rows="15">'
                             + new Option(data.rawdata).innerHTML + '</textarea>';
+                        errorData = 'Error: ' + data.error;
                     }
                     OCA.Analytics.Notification.htmlDialogUpdate(
                         dialogContent,
-                        'Error: ' + data.error,
+                        errorData,
                     );
 
                 } else {
