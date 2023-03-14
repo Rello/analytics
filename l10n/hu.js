@@ -192,7 +192,6 @@ OC.L10N.register(
     "Javascript issue" : "Javascript probléma",
     "If you see this message, please disable AdBlock/uBlock for this domain (only)." : "Ha ezt az üzenetet látja, akkor tiltsa le az AdBlockot/uBlockot (csak) ennél a domainnél.",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "Az EasyPrivacy lista blokkol bizonyos parancsfájlokat, mert tartalmazza a *analytics* szűrőfeltételt.",
-    "Analytics - Advanced configuration" : "Elemzés – Speciális beállítások",
     "This section is used for dataset maintenance and data load configurations." : "Ez a szakasz az adatkészlet-karbantartás és az adatbetöltések beállításait tartalmazza.",
     "Please select a dataset" : "Válasszon adatkészletet",
     "Options" : "Beállítások",
