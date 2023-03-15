@@ -10,7 +10,7 @@ OC.L10N.register(
     "Operator" : "Operator",
     "Value" : "Nilari",
     "Saved" : "Disimpan",
-    "Are you sure?" : "Apakah anda yakin?",
+    "Are you sure?" : "Apakah Anda yakin?",
     "Data source simulation" : "Simulasi data sumber",
     "Select file" : "Pilih file",
     "Delete" : "Hapus",

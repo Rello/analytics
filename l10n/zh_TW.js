@@ -40,6 +40,7 @@ OC.L10N.register(
     "Aggregation" : "聚合",
     "Disaggregation" : "取消聚合",
     "Please select" : "請選取",
+    "Data source not available anymore" : "資料來源不再可用",
     "Column Picker" : "欄選擇器",
     "Add a report to the favorites to be shown here." : "將報告新增至要顯示在此處的最愛。",
     "equal to" : "等於",
