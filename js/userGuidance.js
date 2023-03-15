@@ -42,7 +42,7 @@ OCA.Analytics.Wizard = {
     show: function () {
         OCA.Analytics.Wizard.currentSlide = 0;
         let wizard = document.importNode(document.getElementById('wizardDialog').content, true);
-        document.getElementById('content').appendChild(wizard);
+        document.body.appendChild(wizard);
         document.getElementById('wizardNext').addEventListener('click', OCA.Analytics.Wizard.next);
         document.getElementById('wizardPrevious').addEventListener('click', OCA.Analytics.Wizard.previous);
         document.getElementById('wizardClose').addEventListener('click', OCA.Analytics.Wizard.cancel);

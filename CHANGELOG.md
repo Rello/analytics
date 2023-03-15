@@ -14,6 +14,7 @@
 - cannot change color of data series #338
 - chart legend not scrolling
 - UI inconsistency (dataset maintenance <> advanced) #340
+- new report wizard closing button hidden
 
 ## 4.7.2 - 2023-02-13
 ### Fixed
