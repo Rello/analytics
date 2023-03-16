@@ -225,7 +225,7 @@
 
 #analyticsWizard .page .image {
     padding: 30px;
-    max-width: calc(60% - 40px);
+    max-width: calc(65% - 40px);
     flex-grow: 1;
 }
 
