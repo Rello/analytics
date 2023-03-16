@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "http://localhost:8080",
+  "url": "http://localhost:8081",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -387,12 +387,13 @@
       "id": "1320c5b7-ba50-4967-955c-8fde69e36ec9",
       "comment": "",
       "command": "assertText",
-      "target": "css=.oc-dialog-title",
+      "target": "id=analyticsDialogContainer",
       "targets": [
-        ["css=.oc-dialog-title", "css:finder"],
-        ["xpath=//body[@id='body-user']/div[6]/h2", "xpath:idRelative"],
-        ["xpath=//div[6]/h2", "xpath:position"],
-        ["xpath=//h2[contains(.,'Dataset')]", "xpath:innerText"]
+        ["id=analyticsDialogContainer", "id"],
+        ["css=#analyticsDialogContainer", "css:finder"],
+        ["xpath=//div[@id='analyticsDialogContainer']", "xpath:attributes"],
+        ["xpath=//body[@id='body-user']/div[9]", "xpath:idRelative"],
+        ["xpath=//div[9]", "xpath:position"]
       ],
       "value": "Dataset"
     }, {
@@ -4214,21 +4215,21 @@
       "id": "da338628-bda0-4bbc-8ff9-6b21d122745f",
       "comment": "",
       "command": "open",
-      "target": "/nextcloud/apps/analytics/#/r/",
+      "target": "/apps/analytics/#/r/",
       "targets": [],
       "value": ""
     }, {
       "id": "1d07c509-056b-43c5-9ebb-987092d19be2",
       "comment": "",
       "command": "setWindowSize",
-      "target": "1621x874",
+      "target": "1621x796",
       "targets": [],
       "value": ""
     }, {
       "id": "a870d142-8492-485f-ab59-3a1434300095",
       "comment": "",
       "command": "eyesSetViewportSize",
-      "target": "1621x874",
+      "target": "1621x796",
       "targets": [],
       "value": ""
     }, {
@@ -5055,7 +5056,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",
@@ -5069,7 +5070,7 @@
       "id": "12fa11da-e09a-4932-ac90-70b6ce9f5d47",
       "snapshot": {
         "commands": {
-          "a870d142-8492-485f-ab59-3a1434300095": "await eyes.setViewportSize({width: 1621, height: 874});",
+          "a870d142-8492-485f-ab59-3a1434300095": "await eyes.setViewportSize({width: 1621, height: 796});",
           "5d14090d-6c27-4c5c-b1c7-5420084b5e9a": "if (!opts.isNested) {await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.window().webHook(preRenderHook).fully(true));}",
           "f2693f2a-9e22-4964-b5dd-2d1921336b86": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`analytics_dialog_container`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`analytics_dialog_container`)).webHook(preRenderHook));}",
           "c39dfd18-36ca-4366-b003-5044c6d32513": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`analytics_dialog_container`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`analytics_dialog_container`)).webHook(preRenderHook));}",

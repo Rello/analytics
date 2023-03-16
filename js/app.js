@@ -956,18 +956,14 @@ OCA.Analytics.Datasource = {
             infoColumn.style.minWidth = '20px';
 
             //create the input fields
-            let input;
-            input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
+            let input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
             input.style.display = 'table-cell';
             if (templateOption.type) {
                 if (templateOption.type === 'tf') {
                     input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
                 } else if (templateOption.type === 'filePicker') {
-                    input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
                     input.addEventListener('click', OCA.Analytics.Datasource.handleFilepicker);
                 } else if (templateOption.type === 'columnPicker') {
-                    input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
-                    //input.disabled = true;
                     input.addEventListener('click', OCA.Analytics.Datasource.handleColumnPicker);
                 }
             }
@@ -997,6 +993,9 @@ OCA.Analytics.Datasource = {
         if (templateOption.type && templateOption.type === 'number') {
             input.type = 'number';
             input.min = '1';
+        }
+        if (templateOption.type) {
+            input.autocomplete = 'off';
         }
         return input;
     },

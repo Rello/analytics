@@ -217,19 +217,17 @@ OCA.Analytics.Sidebar.Report = {
                     // build the sections depending on report type
                     OCA.Analytics.Sidebar.Report.buildSections(data['type']);
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
-                    
-                    if ((parseInt(data['type']) !== OCA.Analytics.TYPE_EMPTY_GROUP)) {
-                        // report
-                        // get all the options for a datasource
-                        document.getElementById('reportDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(data['type']));
-                        OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
-                    } else {
-                        // group
+
+                    if ((parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP)) {
                         document.getElementById('sidebarReportExportButton').style.display = 'none';
                         document.getElementById('sidebarReportNameHint').style.display = 'none';
+                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_DB)) {
+                        OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
+                    } else {
+                        let optionForm = OCA.Analytics.Datasource.buildOptionsForm(data['type']);
+                        document.getElementById('reportDatasourceSection').appendChild(optionForm);
+                        OCA.Analytics.Sidebar.Report.fillDatasourceOptionFields(data);
                     }
-
-                    OCA.Analytics.Sidebar.Report.fillDatasourceOptionFields(data);
 
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
@@ -1300,7 +1298,7 @@ OCA.Analytics.Sidebar.Threshold = {
 
         let text = document.createElement('div');
         text.classList.add('thresholdText');
-        text.innerText = data.dimension1 + ' ' + data.option + ' ' + data.value;
+        text.innerText = data.dimension1 + ' ' + data.option + ' ' + parseFloat(data.value).toLocaleString();
 
         let tDelete = document.createElement('div');
         tDelete.classList.add('icon-close');
