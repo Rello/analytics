@@ -86,6 +86,7 @@ OC.L10N.register(
     "No" : "Không",
     "Yes" : "Có",
     "Version" : "Phiên bản",
+    "Authentication" : "Xác thực",
     "Announcements" : "Các thông báo",
     "copy" : "sao chép",
     "The password is wrong. Try again." : "Mật khẩu sai. Hãy thử lại.",
