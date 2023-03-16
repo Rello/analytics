@@ -1,8 +1,9 @@
 # Changelog
 
+## 4.8.0 - 2023-03-16
 ### Added
 - column picker for data sources #337
-- number-only input type for data sources
+- number-only option field for data sources
 - import reports directly from computer and not via NC files
 - unified popups
 

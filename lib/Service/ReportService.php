@@ -90,8 +90,6 @@ class ReportService
         // get shared reports and remove duplicates
         $sharedReports = $this->ShareService->getSharedReports();
         foreach ($sharedReports as $sharedReport) {
-            $this->logger->info('reportservice: '. $sharedReport['name']);
-
             if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
                 $sharedReport['type'] = '99';
                 $sharedReport['parent'] = '0';
@@ -113,13 +111,6 @@ class ReportService
                 $ownReports[$key]['dataloads'] = $dataload['dataloads'];
                 $ownReports[$key]['schedules'] = $dataload['schedules'];
             }
-        }
-
-        $favoriteMigration = $this->config->getUserValue($this->userId, 'analytics', 'favMig', '0');
-        if ($favoriteMigration === '0') {
-            $this->logger->info('Favorite migration being performed');
-            $this->favoriteMigration($ownReports);
-            $this->config->setUserValue($this->userId, 'analytics', 'favMig', 3.7);
         }
 
         $favorites = $this->tagManager->load('analytics')->getFavorites();
@@ -532,25 +523,6 @@ class ReportService
      */
     public function reportsForDataset($datasetId) {
         return $this->ReportMapper->reportsForDataset($datasetId);
-    }
-
-    /**
-     * migrate old favorite ids
-     *
-     * @param $ownReports
-     * @return bool
-     */
-    private function favoriteMigration($ownReports) {
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
-        foreach ($favorites as $favorite) {
-            $key = array_search($favorite, array_column($ownReports, 'dataset'));
-            if ($key) {
-                $this->logger->info('Favorite was migrated from '. $ownReports[$key]['dataset'] . ' to new report ' . $ownReports[$key]['id']);
-                $this->tagManager->load('analytics')->removeFromFavorites($ownReports[$key]['dataset']);
-                $this->tagManager->load('analytics')->addToFavorites($ownReports[$key]['id']);
-            }
-        }
-        return true;
     }
 
     private function floatvalue($val)
