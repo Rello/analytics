@@ -16,7 +16,9 @@ use OCA\Analytics\Flow\FlowOperation;
 use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Listener\UserDeletedListener;
 use OCA\Analytics\Notification\Notifier;
-use OCA\Analytics\Search\Provider;
+use OCA\Analytics\Search\SearchProvider;
+use OCA\Analytics\Listener\ReferenceListener;
+use OCA\Analytics\Reference\ReferenceProvider;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -24,6 +26,7 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\Collaboration\Reference\RenderReferenceEvent;
 use Psr\Container\ContainerInterface;
 
 class Application extends App implements IBootstrap
@@ -40,7 +43,11 @@ class Application extends App implements IBootstrap
         $context->registerDashboardWidget(Widget::class);
         $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
         $context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
-        $context->registerSearchProvider(Provider::class);
+        $context->registerSearchProvider(SearchProvider::class);
+
+        $context->registerReferenceProvider(ReferenceProvider::class);
+        $context->registerEventListener(RenderReferenceEvent::class, ReferenceListener::class);
+
         $this->registerNotifications();
     }
 
