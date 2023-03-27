@@ -26,8 +26,15 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Reference = {
     init: function () {
-        _registerWidget('analytics', async (el, { richObjectType, richObject, accessible }) => {
-            el.innerHTML = '<div>hello world</div>';
+        _registerWidget('analytics', async (el, {richObjectType, richObject, accessible}) => {
+            el.innerHTML = '<a href="' + richObject.url + '" target="_blank" style="display: flex;">'
+                + '<img src="' + richObject.image + '" style="width: 20%; padding: 20px; opacity:.5;">'
+                + '<div style="width: 75%; padding:10px;">'
+                + '<div style="font-weight: 600;">' + richObject.name + '</div>'
+                + '<br>'
+                + '<div>' + richObject.subheader + '</div>'
+                //+ '<div style="color: var(--color-text-maxcontrast);">' + richObject.url + '</div>'
+                + '</div></a>';
         });
     },
 }

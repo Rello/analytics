@@ -24,7 +24,7 @@ class NotificationManager
     private $logger;
 
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface      $logger,
         INotificationManager $notificationManager
     )
     {
