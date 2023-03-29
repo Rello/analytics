@@ -177,6 +177,7 @@ OC.L10N.register(
     "Announcements" : "Објаве",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Извештај ’{report}’: {subject} је достигао границу {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Грешка током учитавања података „{dataloadName}” за скуп података „{datasetName}",
+    "Analytics Report" : "Извештај аналитике",
     "No data" : "Нема података",
     "Last field must be a valid number" : "Последње поље мора бити важећи број",
     "copy" : "копирај",

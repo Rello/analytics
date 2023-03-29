@@ -175,6 +175,7 @@
     "Announcements" : "公告",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "報告 “{report}”：{subject} 達到了 {rule} {value} 的閾點",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "資料集「{datasetName}」的數據載入「{dataloadName}」時發生錯誤",
+    "Analytics Report" : "分析報告",
     "No data" : "沒有數據",
     "Last field must be a valid number" : "最後一個字段必須是有效數字",
     "copy" : "複製",
