@@ -177,6 +177,7 @@ OC.L10N.register(
     "Announcements" : "Anúncios",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Relatório '{report}': {subject} atingiu o limiar de {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Erro durante o carregamento de dados \"{dataloadName}\" para o conjunto de dados \"{datasetName}\"",
+    "Analytics Report" : "Relatório de Análise",
     "No data" : "Sem dados",
     "Last field must be a valid number" : "O último campo deve ser um número válido",
     "copy" : "copiar",

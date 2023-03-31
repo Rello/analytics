@@ -177,6 +177,7 @@ OC.L10N.register(
     "Announcements" : "Bejelentések",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "„{report}” jelentés: {subject} elérte a(z) {rule} szabály küszöbértékét: {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Hiba történt a(z) „{dataloadName}” a(z) „{datasetName}” adatkészletbe történő betöltése során ",
+    "Analytics Report" : "Elemzési jelentés",
     "No data" : "Nincs adat",
     "Last field must be a valid number" : "Az utolsó mezőben valós számnak kell lennie",
     "copy" : "másolás",
