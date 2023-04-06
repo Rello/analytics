@@ -26,6 +26,7 @@ OC.L10N.register(
     "Delete folder" : "Suprimir dossièr",
     "Share" : "Partejar",
     "New" : "Nòu",
+    "Add share link" : "Apondre ligam de partatge",
     "Share link" : "Partejar lo ligam",
     "Link copied" : "Ligam copiat",
     "Delete data" : "Suprimir donada",

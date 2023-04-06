@@ -175,6 +175,7 @@
     "Announcements" : "Meddelanden",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Rapporten '{report}': {subject} har uppnått gränsvärdet {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Fel under dataladdning \"{dataloadName}\" för datamängd \"{datasetName}\"",
+    "Analytics Report" : "Analytics rapport",
     "No data" : "Inga data",
     "Last field must be a valid number" : "Sista fältet måste vara ett giltigt nummer",
     "copy" : "kopiera",

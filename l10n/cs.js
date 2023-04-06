@@ -177,6 +177,7 @@ OC.L10N.register(
     "Announcements" : "Oznámení",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Výkaz „{report}“: {subject} dosáhl prahu pravidla {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Chyba při načítání „{dataloadName}“ sady dat „{datasetName}“",
+    "Analytics Report" : "Analytický výkaz",
     "No data" : "Žádná data",
     "Last field must be a valid number" : "Je třeba, aby poslední kolonka obsahovala platné číslo",
     "copy" : "zkopírovat",
