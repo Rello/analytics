@@ -13,8 +13,10 @@ namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\ShareMapper;
+use OCP\DB\Exception;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
@@ -26,6 +28,8 @@ class ShareService
     const SHARE_TYPE_LINK = 3;
     const SHARE_TYPE_ROOM = 10;
 
+    /** @var IUserSession */
+    private $userSession;
     /** @var LoggerInterface */
     private $logger;
     /** @var ShareMapper */
@@ -39,6 +43,7 @@ class ShareService
     private $VariableService;
 
     public function __construct(
+        IUserSession $userSession,
         LoggerInterface $logger,
         ShareMapper $ShareMapper,
         ActivityManager $ActivityManager,
@@ -48,6 +53,7 @@ class ShareService
         VariableService $VariableService
     )
     {
+        $this->userSession = $userSession;
         $this->logger = $logger;
         $this->ShareMapper = $ShareMapper;
         $this->secureRandom = $secureRandom;
@@ -69,22 +75,11 @@ class ShareService
      */
     public function create($reportId, $type, $user)
     {
+        $token = null;
         if ((int)$type === self::SHARE_TYPE_LINK) {
             $token = $this->generateToken();
-            $this->ShareMapper->createShare($reportId, $type, $user, $token);
-        } elseif ((int)$type === self::SHARE_TYPE_USER) {
-            $this->ShareMapper->createShare($reportId, $type, $user, null);
-        } elseif ((int)$type === self::SHARE_TYPE_GROUP) {
-            // add the entry for the group
-            $parent = $this->ShareMapper->createShare($reportId, self::SHARE_TYPE_GROUP, $user, null);
-
-            // add entries for every user of the group
-            $usersInGroup = $this->groupManager->displayNamesInGroup($user);
-            foreach ($usersInGroup as $userId => $displayName) {
-                $this->ShareMapper->createShare($reportId, self::SHARE_TYPE_USERGROUP, $userId, null, $parent);
-            }
         }
-
+        $this->ShareMapper->createShare($reportId, $type, $user, $token);
         $this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_SHARE);
         return true;
     }
@@ -100,7 +95,7 @@ class ShareService
     {
         $shares = $this->ShareMapper->getShares($reportId);
         foreach ($shares as &$share) {
-            if ((int)$share['type'] === 0) {
+            if ((int)$share['type'] === self::SHARE_TYPE_USER) {
                 $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
             }
             $share['pass'] = $share['pass'] !== null;
@@ -118,9 +113,7 @@ class ShareService
     public function getReportByToken($token)
     {
         $reportId = $this->ShareMapper->getReportByToken($token);
-        $reportId = $this->VariableService->replaceTextVariables($reportId);
-
-        return $reportId;
+        return $this->VariableService->replaceTextVariables($reportId);
     }
 
     /**
@@ -140,15 +133,38 @@ class ShareService
      * get all reports shared with user
      *
      * @NoAdminRequired
+     * @throws Exception
      */
     public function getSharedReports()
     {
-        $sharedReports = $this->ShareMapper->getSharedReports();
-        foreach ($sharedReports as &$sharedReport) {
-            $sharedReport['type'] = '99';
-            $sharedReport['parent'] = '0';
+        $sharedReports = $this->ShareMapper->getAllSharedReports();
+        $groupsOfUser = $this->groupManager->getUserGroups($this->userSession->getUser());
+        $reports = array();
+
+        foreach ($sharedReports as $sharedReport) {
+            if ($sharedReport['shareType'] === self::SHARE_TYPE_GROUP) {
+                if (array_key_exists($sharedReport['shareUid_owner'], $groupsOfUser)) {
+                    $sharedReport['parent'] = '0';
+                    if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
+                        unset($sharedReport['shareId']);
+                        unset($sharedReport['shareType']);
+                        unset($sharedReport['shareUid_owner']);
+                        $reports[] = $sharedReport;
+                    }
+                }
+            } elseif ($sharedReport['shareType'] === self::SHARE_TYPE_USER) {
+                if ($this->userSession->getUser()->getUID() === $sharedReport['shareUid_owner']) {
+                    $sharedReport['parent'] = '0';
+                    if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
+                        unset($sharedReport['shareId']);
+                        unset($sharedReport['shareType']);
+                        unset($sharedReport['shareUid_owner']);
+                        $reports[] = $sharedReport;
+                    }
+                }
+            }
         }
-        return $sharedReports;
+        return $reports;
     }
 
     /**
@@ -157,10 +173,17 @@ class ShareService
      * @NoAdminRequired
      * @param $reportId
      * @return array
+     * @throws Exception
      */
     public function getSharedReport($reportId)
     {
-        return $this->ShareMapper->getSharedReport($reportId);
+        $sharedReport = $this->getSharedReports();
+        if (in_array($reportId, array_column($sharedReport, "id"))) {
+            $key = array_search($reportId, array_column($sharedReport, 'id'));
+            return $sharedReport[$key];
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -169,21 +192,11 @@ class ShareService
      * @NoAdminRequired
      * @param $shareId
      * @return bool
+     * @throws Exception
      */
     public function delete($shareId)
     {
-        $share = $this->ShareMapper->getShare($shareId);
-        $type = $share['type'];
-        if ((int)$type === self::SHARE_TYPE_LINK) {
-            $this->ShareMapper->deleteShare($shareId);
-        } elseif ((int)$type === self::SHARE_TYPE_USER) {
-            $this->ShareMapper->deleteShare($shareId);
-        } elseif ((int)$type === self::SHARE_TYPE_USERGROUP) {
-            $this->ShareMapper->deleteShare($shareId);
-        } elseif ((int)$type === self::SHARE_TYPE_GROUP) {
-            $this->ShareMapper->deleteShare($shareId);
-            $this->ShareMapper->deleteShareByParent($shareId);
-        }
+        $this->ShareMapper->deleteShare($shareId);
         return true;
     }
 

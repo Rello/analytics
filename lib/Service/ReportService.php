@@ -86,14 +86,14 @@ class ReportService
     public function index(): array
     {
         $ownReports = $this->ReportMapper->index();
+        $sharedReports = $this->ShareService->getSharedReports();
+        $keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare');
 
         // get shared reports and remove duplicates
-        $sharedReports = $this->ShareService->getSharedReports();
         foreach ($sharedReports as $sharedReport) {
             if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
-                $sharedReport['type'] = '99';
-                $sharedReport['parent'] = '0';
-                array_push($ownReports, $sharedReport);
+                // just keep the necessary fields
+                $ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));;
             }
         }
         if (count($ownReports) === 0) return $ownReports;
@@ -329,16 +329,18 @@ class ReportService
      * get own reports which are marked as favorites
      *
      * @return array|bool
+     * @throws Exception
      */
     public function getOwnFavoriteReports()
     {
         $ownReports = $this->ReportMapper->index();
-        $favorites = $this->tagManager->load('analytics')->getFavorites();
         $sharedReports = $this->ShareService->getSharedReports();
+        $favorites = $this->tagManager->load('analytics')->getFavorites();
 
+        // remove the favorite if the report is not existing anymore
         foreach ($favorites as $favorite) {
-            if (array_search($favorite, array_column($ownReports, 'id')) === false
-                && array_search($favorite, array_column($sharedReports, 'id')) === false) {
+            if (!in_array($favorite, array_column($ownReports, 'id'))
+                && !in_array($favorite, array_column($sharedReports, 'id'))) {
                 unset($favorites[$favorite]);
                 $this->tagManager->load('analytics')->removeFromFavorites($favorite);
             }

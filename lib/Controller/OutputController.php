@@ -150,6 +150,7 @@ class OutputController extends Controller
         } else {
             // Realtime data
             $result = $this->DatasourceController->read($datasource, $reportMetadata);
+            unset($result['rawdata']);
         }
 
         unset($reportMetadata['parent']
@@ -162,6 +163,7 @@ class OutputController extends Controller
             , $reportMetadata['password']
             , $reportMetadata['dataset']
         );
+
         $result['filterApplied'] = $reportMetadata['filteroptions'];
         $reportMetadata['filteroptions'] = $filterWithVariables; // keep the original filters
         // there can be different values for no options. null during creation; empty after removal; => harmonize them

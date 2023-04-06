@@ -56,7 +56,6 @@ OCA.Analytics.Navigation = {
     buildNavigation: function (data) {
         OCA.Analytics.Sidebar.close();
         document.getElementById('navigationDatasets').innerHTML = '';
-
         document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
 
         if (data.length === 0) {
@@ -68,7 +67,6 @@ OCA.Analytics.Navigation = {
         }
 
         document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
-
         document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
         if (!OCA.Analytics.isAdvanced) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
@@ -166,7 +164,7 @@ OCA.Analytics.Navigation = {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (typeINT === OCA.Analytics.TYPE_SHARED) {
+        } else if (data['isShare'] === 1) {
             if (OCA.Analytics.isAdvanced) {
                 // don´t show shared reports in advanced config mode at all as no config is possible
                 return;
