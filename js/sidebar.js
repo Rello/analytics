@@ -948,7 +948,7 @@ OCA.Analytics.Sidebar.Share = {
         shareeRow.getElementById('username').dataset.shareType = shareType;
         shareeRow.getElementById('username').dataset.user = uid_owner;
         shareeRow.getElementById('icon-more').addEventListener('click', OCA.Analytics.Sidebar.Share.showShareMenu);
-        shareeRow.getElementById('deleteShareIcon').addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
+        shareeRow.getElementById('deleteShare').addEventListener('click', OCA.Analytics.Sidebar.Share.removeShare);
         shareeRow.getElementById('deleteShare').dataset.id = id;
         shareeRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Sidebar.Share.updateShareCanEdit);
         shareeRow.getElementById('shareEditing').dataset.id = id;
