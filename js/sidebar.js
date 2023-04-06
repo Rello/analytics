@@ -207,7 +207,7 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('tabContainerReport').appendChild(table);
 
                     // create the drop downs for Data source, grouping and possible data set
-                    document.getElementById('sidebarReportDatasource').appendChild(OCA.Analytics.Datasource.buildDropdown());
+                    OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource');
                     OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
                     OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
 
@@ -255,9 +255,8 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('sidebarReportSubheader').value = data['subheader'];
         document.getElementById('sidebarReportParent').value = data['parent'];
         document.getElementById('sidebarReportDatasource').value = data['type'];
-        // obsolete? document.getElementById('sidebarReportDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChange);
+        document.getElementById('sidebarReportDatasource').dataset.typeId = data['type']; // workaround to store the type in case the dropdown is not yet filled
         document.getElementById('sidebarReportDataset').value = data['dataset'];
-        // obsolete? document.getElementById('sidebarReportDataset').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasetChange);
         document.getElementById('sidebarReportChart').value = data['chart'];
         document.getElementById('sidebarReportVisualization').value = data['visualization'];
         // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
@@ -723,8 +722,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('wizardNewTypeStoredOld').classList.add('primary');
         })
 
-        document.getElementById('wizardNewDatasource').innerHTML = '';
-        document.getElementById('wizardNewDatasource').appendChild(OCA.Analytics.Datasource.buildDropdown());
+        OCA.Analytics.Datasource.buildDropdown('wizardNewDatasource');
         document.getElementById('wizardNewDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChangeWizard);
 
         OCA.Analytics.Sidebar.Report.buildGroupingDropdown('wizardNewGrouping');

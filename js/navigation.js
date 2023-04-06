@@ -56,11 +56,11 @@ OCA.Analytics.Navigation = {
     buildNavigation: function (data) {
         OCA.Analytics.Sidebar.close();
         document.getElementById('navigationDatasets').innerHTML = '';
-        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
 
         if (data.length === 0) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
+            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
             for (let navigation of data) {
                 OCA.Analytics.Navigation.buildNavigationRow(navigation);
             }
@@ -121,6 +121,7 @@ OCA.Analytics.Navigation = {
         li.innerHTML = '<div class="infoBox" style="margin-top: 50px;">' +
             '<img src="' + OC.imagePath('analytics', 'infoReport') + '" alt="info">\n' +
             '<div class="infoBoxHeader">' + t('analytics', 'No reports yet') + '</div>\n';
+        li.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         return li;
     },
 

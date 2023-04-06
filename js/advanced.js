@@ -204,7 +204,7 @@ OCA.Analytics.Advanced.Dataload = {
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = null;
 
                 // list all available datasources
-                document.getElementById('datasourceSelect').appendChild(OCA.Analytics.Datasource.buildDropdown());
+                OCA.Analytics.Datasource.buildDropdown('datasourceSelect');
 
                 // write dimension structure to datasource array [0] in case it is required for a deletion job later
                 OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();

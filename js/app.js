@@ -48,7 +48,6 @@ if (!OCA.Analytics) {
             'line': 'line',
             'doughnut': 'doughnut'
         },
-        datasources: [],
         datasourceOptions: [],
         datasets: [],
         reports: [],
@@ -70,8 +69,6 @@ if (!OCA.Analytics) {
  */
 OCA.Analytics.Core = {
     initApplication: function () {
-        OCA.Analytics.Backend.getDatasourceDefinitions();
-
         const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {
             if (urlHash[2] === 'f') {
@@ -896,22 +893,44 @@ OCA.Analytics.Functions = {
 };
 
 OCA.Analytics.Datasource = {
-    buildDropdown: function () {
+    buildDropdown: function (target) {
         let options = document.createDocumentFragment();
         let option = document.createElement('option');
         option.value = '';
-        option.innerText = t('analytics', 'Please select');
+        option.innerText = t('analytics', 'Loading');
         options.appendChild(option);
+        document.getElementById(target).innerHTML = '';
+        document.getElementById(target).appendChild(options);
 
-        let sortedOptions = OCA.Analytics.Datasource.sortOptions(OCA.Analytics.datasources);
-        sortedOptions.forEach((entry) => {
-            let value = entry[1];
-            option = document.createElement('option');
-            option.value = entry[0];
-            option.innerText = value;
-            options.appendChild(option);
-        });
-        return options;
+        let requestUrl = OC.generateUrl('apps/analytics/datasource');
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.datasourceOptions = data['options'];
+                let options = document.createDocumentFragment();
+                let option = document.createElement('option');
+                option.value = '';
+                option.innerText = t('analytics', 'Please select');
+                options.appendChild(option);
+
+                let sortedOptions = OCA.Analytics.Datasource.sortOptions(data['datasources']);
+                sortedOptions.forEach((entry) => {
+                    let value = entry[1];
+                    option = document.createElement('option');
+                    option.value = entry[0];
+                    option.innerText = value;
+                    options.appendChild(option);
+                });
+                document.getElementById(target).innerHTML = '';
+                document.getElementById(target).appendChild(options);
+                if (document.getElementById(target).dataset.typeId) {
+                    // in case the value was set in the sidebar befor the dropdown was ready
+                    document.getElementById(target).value = document.getElementById(target).dataset.typeId;
+                }
+            });
     },
 
     sortOptions: function (obj) {
@@ -1339,19 +1358,6 @@ OCA.Analytics.Backend = {
             }
         }
         return data;
-    },
-
-    getDatasourceDefinitions: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/datasource');
-        fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.datasourceOptions = data['options'];
-                OCA.Analytics.datasources = data['datasources'];
-            });
     },
 
     getDatasetDefinitions: function () {
