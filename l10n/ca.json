@@ -175,6 +175,7 @@
     "Announcements" : "Anuncis",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Informe \"{report}\": {subject} ha arribat al llindar de {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Error durant la càrrega de dades \"{dataloadName}\" per al conjunt de dades \"{datasetName}\"",
+    "Analytics Report" : "Informe d'Analítica",
     "No data" : "Sense dades",
     "Last field must be a valid number" : "L'últim camp ha de ser un número vàlid",
     "copy" : "còpia",
