@@ -23,3 +23,7 @@ docs/*
 __MACOSX/*
 ._*
 .smbdelete*
+
+# VSCode
+.vscode
+.code-workspace
