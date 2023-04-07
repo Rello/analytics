@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Saved",
     "Delete" : "Delete",
     "Search" : "Search",
+    "Loading" : "Loading",
     "OK" : "OK",
     "Cancel" : "Cancel",
     "Add" : "Add",

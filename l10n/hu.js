@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Trend",
     "Aggregation" : "Aggregálás ",
     "Disaggregation" : "Dezaggregálás",
+    "Loading" : "Betöltés",
     "Please select" : "Válasszon",
     "Data source not available anymore" : "Az adatforrás már nem érhető el",
     "Column Picker" : "Oszlopválasztó",

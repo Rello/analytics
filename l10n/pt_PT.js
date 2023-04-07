@@ -24,6 +24,7 @@ OC.L10N.register(
     "Show _MENU_ entries" : "Mostrar entradas de _MENU_",
     "first" : "primeiro",
     "last" : "ultimo",
+    "Loading" : "A carregar",
     "OK" : "Ok",
     "Cancel" : "Cancelar",
     "Filter" : "Filtro",

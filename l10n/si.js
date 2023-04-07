@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Value" : "අගය",
     "Search" : "සොයන්න",
+    "Loading" : "පූරණය වෙමින්",
     "OK" : "හරි",
     "Cancel" : "අවලංගු කරන්න",
     "Filter" : "පෙරහන",

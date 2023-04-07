@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Konservita",
     "Delete" : "Forigi",
     "Search" : "Serĉi",
+    "Loading" : "Ŝargado",
     "OK" : "Bone",
     "Cancel" : "Nuligi",
     "Add" : "Aldoni",

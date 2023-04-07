@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Tendencia",
     "Aggregation" : "Agregación",
     "Disaggregation" : "Desagregación",
+    "Loading" : "Cargando",
     "Please select" : "Por favor selecciona",
     "Data source not available anymore" : "La fuente de datos ya no se encuentra disponible",
     "Column Picker" : "Selector de Columnas",

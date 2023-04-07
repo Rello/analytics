@@ -25,6 +25,7 @@ OC.L10N.register(
     "Trend" : "Tendencia",
     "Aggregation" : "Agregación",
     "Disaggregation" : "Desagregación",
+    "Loading" : "Cargando",
     "Please select" : "Seleccione",
     "equal to" : "igual a",
     "greater than" : "maior que",

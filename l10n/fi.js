@@ -17,6 +17,7 @@ OC.L10N.register(
     "last" : "viimeinen",
     "Trend" : "Trendi",
     "Aggregation" : "Aggregointi",
+    "Loading" : "Ladataan",
     "Add a report to the favorites to be shown here." : "Lisää raportti suosikkeihin nähdäksesi sen täällä.",
     "equal to" : "yhtä suuri kuin",
     "greater than" : "suurempi kuin",

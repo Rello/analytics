@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "趨勢",
     "Aggregation" : "聚合",
     "Disaggregation" : "取消聚合",
+    "Loading" : "正在載入",
     "Please select" : "請選取",
     "Data source not available anymore" : "資料來源不再可用",
     "Column Picker" : "欄選擇器",

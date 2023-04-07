@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Eğilim",
     "Aggregation" : "Birleştirme",
     "Disaggregation" : "Ayrıştırma",
+    "Loading" : "Yükleniyor",
     "Please select" : "Lütfen seçin",
     "Data source not available anymore" : "Veri kaynağı artık kullanılamıyor",
     "Column Picker" : "Sütun seçici",

@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Trend",
     "Aggregation" : "Aggregatie",
     "Disaggregation" : "Disaggregatie",
+    "Loading" : "Laden",
     "Please select" : "Selecteer alsjeblieft",
     "Data source not available anymore" : "Gegevensbron niet meer beschikbaar",
     "Column Picker" : "Kolomkiezer",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Search" : "Klask",
     "first" : "kentañ",
     "next" : "war-lerc'h",
+    "Loading" : "Kargañ",
     "OK" : "OK",
     "Cancel" : "Arrest",
     "Filter" : "Filtre",

@@ -4,6 +4,7 @@ OC.L10N.register(
     "Value" : "Value",
     "Delete" : "நீக்குக",
     "Search" : "Search",
+    "Loading" : "Loading",
     "OK" : "சரி ",
     "Cancel" : "இரத்து செய்க",
     "Add" : "சேர்க்க",

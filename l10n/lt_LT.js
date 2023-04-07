@@ -8,6 +8,7 @@ OC.L10N.register(
     "Search" : "Ieškoti",
     "first" : "pirmas",
     "last" : "paskutinis",
+    "Loading" : "Įkeliama",
     "OK" : "Gerai",
     "Cancel" : "Atšaukti",
     "Filter" : "Filtras",

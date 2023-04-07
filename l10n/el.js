@@ -34,6 +34,7 @@ OC.L10N.register(
     "Trend" : "Τάση",
     "Aggregation" : "Συσσωμάτωση",
     "Disaggregation" : "Διάσπαση",
+    "Loading" : "Γίνεται φόρτωση",
     "Please select" : "Παρακαλώ επιλέξτε",
     "Add a report to the favorites to be shown here." : "Προσθέστε μια αναφορά στα αγαπημένα για να εμφανιστούν εδώ.",
     "equal to" : "ίσο με",

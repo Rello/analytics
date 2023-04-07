@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "趋势",
     "Aggregation" : "聚合",
     "Disaggregation" : "解聚合",
+    "Loading" : "加载中",
     "Please select" : "请选择",
     "Data source not available anymore" : "数据源不再可用",
     "Column Picker" : "列选择器",

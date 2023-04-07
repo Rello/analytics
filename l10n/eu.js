@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Joera",
     "Aggregation" : "Agregazioa",
     "Disaggregation" : "Desagregazioa",
+    "Loading" : "Kargatzen",
     "Please select" : "Mesedez, hautatu",
     "Column Picker" : "Zutabe-hautatzailea",
     "Add a report to the favorites to be shown here." : "Gehitu txosten bat hemen erakutsiko diren gogokoetara.",

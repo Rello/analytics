@@ -38,6 +38,7 @@ OC.L10N.register(
     "Trend" : "Tendenza",
     "Aggregation" : "Aggregazione",
     "Disaggregation" : "Disaggregazione",
+    "Loading" : "Caricamento",
     "Please select" : "Seleziona",
     "Add a report to the favorites to be shown here." : "Aggiungere un report ai preferiti per visualizzarlo qui.",
     "equal to" : "uguale a",

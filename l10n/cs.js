@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Trend",
     "Aggregation" : "Agregace",
     "Disaggregation" : "Rozdělování",
+    "Loading" : "Načítání",
     "Please select" : "Vyberte",
     "Data source not available anymore" : "Zdroj dat už není k dispozici",
     "Column Picker" : "Výběr sloupců",

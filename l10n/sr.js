@@ -39,6 +39,7 @@ OC.L10N.register(
     "Trend" : "Тренд",
     "Aggregation" : "Агрегација",
     "Disaggregation" : "Дисагрегација",
+    "Loading" : "Учитавам",
     "Please select" : "Молимо изаберите",
     "Data source not available anymore" : "Извор података више није доступан",
     "Column Picker" : "Бирач колона",

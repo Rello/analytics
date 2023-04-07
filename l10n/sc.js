@@ -12,6 +12,7 @@ OC.L10N.register(
     "previous" : "pretzedente",
     "next" : "imbeniente",
     "last" : "ùltimu",
+    "Loading" : "Carrighende",
     "OK" : "AB",
     "Cancel" : "Annulla",
     "Filter" : "Filtru",
