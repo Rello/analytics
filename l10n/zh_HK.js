@@ -196,6 +196,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Javascript issue" : "Javascript 問題",
     "If you see this message, please disable AdBlock/uBlock for this domain (only)." : "如果您看到此消息，請禁用此域的 AdBlock/uBlock（僅）。",
+    "The EasyPrivacy list is blocking some scripts because of a wildcard '*analytics*' string filter." : "由於 *analytics* 的通配符過濾器，EasyPrivacy 清單阻止了某些腳本語言的執行。",
     "This section is used for dataset maintenance and data load configurations." : "此部分用於數據集維護和數據加載配置。",
     "Please select a dataset" : "請選擇數據集",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "由於 *analytics* 的通配符過濾器，EasyPrivacy 列表阻止了某些腳本的執行。",

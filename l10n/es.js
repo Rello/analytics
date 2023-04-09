@@ -196,6 +196,7 @@ OC.L10N.register(
     "Wiki" : "Wik",
     "Javascript issue" : "Error de Javascript",
     "If you see this message, please disable AdBlock/uBlock for this domain (only)." : "Si ves este mensaje, desactiva AdBlock/uBlock para este dominio (únicamente).",
+    "The EasyPrivacy list is blocking some scripts because of a wildcard '*analytics*' string filter." : "La lista de EasyPrivacy está bloqueando algunos scripts debido a un filtro con comodines para '*analytics*'.",
     "This section is used for dataset maintenance and data load configurations." : "Esta sección se utiliza para el mantenimiento de conjuntos de datos y los ajustes de cargas de datos",
     "Please select a dataset" : "Por favor selecciona un conjunto de datos",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "La lista de EasyPrivacy está bloqueando algunos scripts debido a un filtro  para *analytics*.",
