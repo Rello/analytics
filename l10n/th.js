@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "บันทึกแล้ว",
     "Delete" : "ลบ",
     "Search" : "ค้นหา",
+    "Loading" : "กำลังโหลด",
     "OK" : "ตกลง",
     "Cancel" : "ยกเลิก",
     "Filter" : "ตัวกรอง",

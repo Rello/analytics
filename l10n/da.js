@@ -32,6 +32,7 @@ OC.L10N.register(
     "Trend" : "tendens",
     "Aggregation" : "sammenlægning",
     "Disaggregation" : "Opdeling",
+    "Loading" : "Loader",
     "Please select" : "Venligst vælg",
     "Add a report to the favorites to be shown here." : "Tilføj en rapport til favoritterne, der skal vises her.",
     "equal to" : "lig med",

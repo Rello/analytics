@@ -30,6 +30,7 @@ OC.L10N.register(
     "Trend" : "Xu hướng",
     "Aggregation" : "Tổng hợp",
     "Disaggregation" : "Phân tách",
+    "Loading" : "Đang tải",
     "Please select" : "Hãy chọn",
     "equal to" : "bằng",
     "greater than" : "lớn hơn",

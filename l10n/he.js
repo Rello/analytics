@@ -13,6 +13,7 @@ OC.L10N.register(
     "first" : "ראשון",
     "next" : "הבא",
     "last" : "אחרון",
+    "Loading" : "בטעינה",
     "OK" : "אישור",
     "Cancel" : "ביטול",
     "Filter" : "מסנן",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "previous" : "precedent",
     "next" : "seguent",
     "last" : "darrièr",
+    "Loading" : "Cargament",
     "equal to" : "egal a ",
     "less than" : "mens de",
     "OK" : "D’acòrdi",

@@ -103,7 +103,7 @@
     <h3><?php p($l->t('Javascript issue')); ?></h3>
     <span><?php p($l->t('If you see this message, please disable AdBlock/uBlock for this domain (only).')); ?></span>
     <br>
-    <span><?php p($l->t('The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*.')); ?></span>
+    <span><?php p($l->t('The EasyPrivacy list is blocking some scripts because of a wildcard \'*analytics*\' string filter.')); ?></span>
     <br>
     <br>
     <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"

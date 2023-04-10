@@ -11,6 +11,7 @@ OC.L10N.register(
     "first" : "prvi",
     "next" : "sljedeći",
     "last" : "zadnji",
+    "Loading" : "Učitavanje",
     "OK" : "U redu",
     "Cancel" : "Odustani",
     "Filter" : "Filtar",

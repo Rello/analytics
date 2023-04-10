@@ -36,6 +36,7 @@ OC.L10N.register(
     "Trend" : "トレンド",
     "Aggregation" : "集計",
     "Disaggregation" : "分解",
+    "Loading" : "読み込み中",
     "Please select" : "選択してください",
     "Add a report to the favorites to be shown here." : "ここに表示されるレポートをお気に入りに追加する。",
     "equal to" : "同様",

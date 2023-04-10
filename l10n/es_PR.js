@@ -5,6 +5,7 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Delete" : "Borrar",
     "Search" : "Buscar",
+    "Loading" : "Cargando",
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
