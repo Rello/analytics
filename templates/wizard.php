@@ -77,7 +77,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></h3>
+                <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></p>
                 <ul>
                     <li><?php p($l->t('Different chart types like lines, columns or doughnuts')); ?></li>
                     <li><?php p($l->t('Customize further chart options by using advanced scripting')); ?></li>
@@ -94,7 +94,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader2"><?php p($l->t('Slice and dice your data')); ?></h3>
+                <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data')); ?></p>
                 <ul>
                     <li><?php p($l->t('Flexible filters including dynamic date variables')); ?></li>
                     <li><?php p($l->t('Change drill down by removing columns')); ?></li>
@@ -111,7 +111,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader3"><?php p($l->t('Use data from various data sources')); ?></h3>
+                <p id="wizardNewHeader3"><?php p($l->t('Use data from various data sources')); ?></p>
                 <ul>
                     <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
                     <li><?php p($l->t('Use data from GitHub to monitor download statistics in real-time')); ?></li>
@@ -128,7 +128,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
             <div class="description">
-                <h3 id="wizardNewHeader4"><?php p($l->t('Advanced configuration - Data loads')); ?></h3>
+                <p id="wizardNewHeader4"><?php p($l->t('Advanced configuration - Data loads')); ?></p>
                 <ul>
                     <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
                     <li><?php p($l->t('Use timestamps to historize data')); ?></li>

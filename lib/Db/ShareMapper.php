@@ -121,7 +121,7 @@ class ShareMapper
                     'token' => $sql->createNamedParameter($token),
                     'parent' => $sql->createNamedParameter($parent),
                 ]);
-            $sql->executeQuery();
+            $sql->executeStatement();
         }
         return $sql->getLastInsertId();
     }
