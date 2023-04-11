@@ -84,7 +84,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
         if (!$adminLinkPreviewEnabled) {
             //return false;
         }
-        return preg_match('~/apps/analytics~', $referenceText) === 1;
+        return preg_match('~/apps/analytics/#/r/~', $referenceText) === 1;
     }
 
     public function resolveReference(string $referenceText): ?IReference
@@ -92,17 +92,24 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
         if ($this->matchReference($referenceText)) {
             preg_match("/\d+$/", $referenceText, $matches); // get the last integer
             $reportMetadata = $this->ReportService->read((int)$matches[0]);
-            $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg'));
-
+            if (!empty($reportMetadata)) {
+                $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg'));
+                $name = $reportMetadata['name'];
+                $subheader = $reportMetadata['subheader'];
+            } else {
+                $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'noReport.svg'));
+                $name = $this->l10n->t('Report not found');
+                $subheader = $this->l10n->t('This report was removed or not shared with you');
+            }
             $reference = new Reference($referenceText);
-            $reference->setTitle($reportMetadata['name']);
-            $reference->setDescription($reportMetadata['subheader']);
+            $reference->setTitle($name);
+            $reference->setDescription($subheader);
             $reference->setImageUrl($imageUrl);
             $reference->setRichObject(
                 self::RICH_OBJECT_TYPE,
                 [
-                    'name' => $reportMetadata['name'],
-                    'subheader' => $reportMetadata['subheader'],
+                    'name' => $name,
+                    'subheader' => $subheader,
                     'url' => $referenceText,
                     'image' => $imageUrl
                 ]
