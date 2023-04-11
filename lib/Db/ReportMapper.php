@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\Exception;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
@@ -319,6 +320,24 @@ class ReportMapper
             ->select('user_id')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($reportId)));
         $result = (string)$sql->execute()->fetchOne();
+        return $result;
+    }
+
+    /**
+     * get reports by group
+     * @param $groupId
+     * @return array
+     * @throws Exception
+     */
+    public function getReportsByGroup($groupId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('parent', $sql->createNamedParameter($groupId)));
+        $statement = $sql->executeQuery();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
         return $result;
     }
 

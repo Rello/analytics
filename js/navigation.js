@@ -153,7 +153,7 @@ OCA.Analytics.Navigation = {
 
         // make reports exept folders drag-able
         a.draggable = false;
-        if (typeINT !== OCA.Analytics.TYPE_EMPTY_GROUP) {
+        if (typeINT !== OCA.Analytics.TYPE_GROUP) {
             a.draggable = true;
             a.addEventListener("dragstart", OCA.Analytics.Navigation.Drag.dragstart_handler);
             a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_onReport_handler);
@@ -165,13 +165,7 @@ OCA.Analytics.Navigation = {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
-        } else if (data['isShare'] === 1) {
-            if (OCA.Analytics.isAdvanced) {
-                // don´t show shared reports in advanced config mode at all as no config is possible
-                return;
-            }
-            typeIcon = 'icon-shared';
-        } else if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        } else if (typeINT === OCA.Analytics.TYPE_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
             a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_handler);
@@ -180,6 +174,15 @@ OCA.Analytics.Navigation = {
         } else {
             typeIcon = 'icon-external';
         }
+
+        if (data['isShare'] === 1) {
+            if (OCA.Analytics.isAdvanced) {
+                // don´t show shared reports in advanced config mode at all as no config is possible
+                return;
+            }
+            typeIcon = 'icon-shared';
+        }
+
         a.classList.add(typeIcon);
         a.classList.add('svg');
 
@@ -208,7 +211,7 @@ OCA.Analytics.Navigation = {
             li.appendChild(divUtils);
         }
 
-        if (typeINT === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        if (typeINT === OCA.Analytics.TYPE_GROUP) {
             li.appendChild(ulSublist);
             a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
         } else {
@@ -334,7 +337,7 @@ OCA.Analytics.Navigation = {
 
         let unshareReport = navigationMenu.getElementById('navigationMenuUnshare');
 
-        if (parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
             unshareReport.remove();
             favorite.remove();
             dataset.remove();

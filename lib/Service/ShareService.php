@@ -13,6 +13,7 @@ namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\ShareMapper;
+use OCA\Analytics\Db\ReportMapper;
 use OCP\DB\Exception;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -24,7 +25,7 @@ class ShareService
 {
     const SHARE_TYPE_USER = 0;
     const SHARE_TYPE_GROUP = 1;
-    const SHARE_TYPE_USERGROUP = 2;
+    const SHARE_TYPE_USERGROUP = 2; // obsolete
     const SHARE_TYPE_LINK = 3;
     const SHARE_TYPE_ROOM = 10;
 
@@ -34,6 +35,7 @@ class ShareService
     private $logger;
     /** @var ShareMapper */
     private $ShareMapper;
+    private $ReportMapper;
     private $secureRandom;
     private $ActivityManager;
     /** @var IGroupManager */
@@ -46,6 +48,7 @@ class ShareService
         IUserSession $userSession,
         LoggerInterface $logger,
         ShareMapper $ShareMapper,
+        ReportMapper $ReportMapper,
         ActivityManager $ActivityManager,
         IGroupManager $groupManager,
         ISecureRandom $secureRandom,
@@ -56,6 +59,7 @@ class ShareService
         $this->userSession = $userSession;
         $this->logger = $logger;
         $this->ShareMapper = $ShareMapper;
+        $this->ReportMapper = $ReportMapper;
         $this->secureRandom = $secureRandom;
         $this->groupManager = $groupManager;
         $this->ActivityManager = $ActivityManager;
@@ -93,6 +97,7 @@ class ShareService
      */
     public function read($reportId)
     {
+
         $shares = $this->ShareMapper->getShares($reportId);
         foreach ($shares as &$share) {
             if ((int)$share['type'] === self::SHARE_TYPE_USER) {
@@ -142,9 +147,11 @@ class ShareService
         $reports = array();
 
         foreach ($sharedReports as $sharedReport) {
+            // shared with a group?
             if ($sharedReport['shareType'] === self::SHARE_TYPE_GROUP) {
+                // is the current user part of this group?
                 if (array_key_exists($sharedReport['shareUid_owner'], $groupsOfUser)) {
-                    $sharedReport['parent'] = '0';
+                    // was the report not yet added to the result?
                     if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
                         unset($sharedReport['shareId']);
                         unset($sharedReport['shareType']);
@@ -152,9 +159,11 @@ class ShareService
                         $reports[] = $sharedReport;
                     }
                 }
+            // shared with a user directly?
             } elseif ($sharedReport['shareType'] === self::SHARE_TYPE_USER) {
+                // current user matching?
                 if ($this->userSession->getUser()->getUID() === $sharedReport['shareUid_owner']) {
-                    $sharedReport['parent'] = '0';
+                    // was the report not yet added to the result?
                     if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
                         unset($sharedReport['shareId']);
                         unset($sharedReport['shareType']);
@@ -164,11 +173,26 @@ class ShareService
                 }
             }
         }
+
+        foreach ($reports as $report) {
+            // if it is a shared group, get all reports below
+            if ($report['type'] === ReportService::REPORT_TYPE_GROUP) {
+                $subreport = $this->ReportMapper->getReportsByGroup($report['id']);
+                $reports = array_merge($reports, $subreport);
+            }
+        }
+
+        $reports = array_map(function($report) {
+            $report['isShare'] = 1;
+            return $report;
+        }, $reports);
+
         return $reports;
     }
 
     /**
      * get metadata of a report, shared with current user
+     * used to check if user is allowed to execute current report
      *
      * @NoAdminRequired
      * @param $reportId
@@ -249,5 +273,4 @@ class ShareService
             ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_DIGITS);
         return $token;
     }
-
 }

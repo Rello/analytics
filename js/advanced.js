@@ -552,7 +552,7 @@ OCA.Analytics.Advanced.Dataset = {
                     // get status information like report and data count
                     OCA.Analytics.Advanced.Dataset.getStatus();
                 } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
                 }
             });

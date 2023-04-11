@@ -12,6 +12,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Service\ShareService;
+use OCA\Analytics\Service\ReportService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
@@ -28,17 +29,20 @@ class ShareController extends Controller
     /** @var LoggerInterface */
     private $logger;
     private $ShareService;
+    private $ReportService;
 
     public function __construct(
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        ShareService $ShareService
+        ShareService $ShareService,
+        ReportService $ReportService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ShareService = $ShareService;
+        $this->ReportService = $ReportService;
     }
 
     /**
@@ -52,8 +56,11 @@ class ShareController extends Controller
      */
     public function create($reportId, $type, $user)
     {
+        if ($this->ReportService->isOwn($reportId)) {
         return new DataResponse($this->ShareService->create($reportId, $type, $user));
-    }
+        } else {
+            return new DataResponse(false);
+        }    }
 
     /**
      * get all shares for a dataset
@@ -64,7 +71,11 @@ class ShareController extends Controller
      */
     public function read($reportId)
     {
-        return new DataResponse($this->ShareService->read($reportId));
+        if ($this->ReportService->isOwn($reportId)) {
+            return new DataResponse($this->ShareService->read($reportId));
+        } else {
+            return new DataResponse(false);
+        }
     }
 
     /**

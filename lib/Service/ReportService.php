@@ -44,6 +44,8 @@ class ReportService
     private $VariableService;
     private $l10n;
 
+    const REPORT_TYPE_GROUP = 0;
+
     public function __construct(
         $userId,
         IL10N $l10n,

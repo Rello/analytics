@@ -84,7 +84,7 @@ OCA.Analytics.Sidebar = {
             name: t('analytics', 'Thresholds'),
             action: OCA.Analytics.Sidebar.Threshold.tabContainerThreshold,
             validTypes: [],
-            excludeTypes: [OCA.Analytics.TYPE_EMPTY_GROUP],
+            excludeTypes: [OCA.Analytics.TYPE_GROUP],
         });
 
         OCA.Analytics.Sidebar.registerSidebarTab({
@@ -95,7 +95,7 @@ OCA.Analytics.Sidebar = {
             name: t('analytics', 'Share'),
             action: OCA.Analytics.Sidebar.Share.tabContainerShare,
             validTypes: [],
-            excludeTypes: [OCA.Analytics.TYPE_EMPTY_GROUP, OCA.Analytics.TYPE_SHARED],
+            excludeTypes: [OCA.Analytics.TYPE_SHARED],
         });
 
         let items = _.map(OCA.Analytics.Sidebar.sidebar_tabs, function (item) {
@@ -218,7 +218,7 @@ OCA.Analytics.Sidebar.Report = {
                     OCA.Analytics.Sidebar.Report.buildSections(data['type']);
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
-                    if ((parseInt(data['type']) === OCA.Analytics.TYPE_EMPTY_GROUP)) {
+                    if ((parseInt(data['type']) === OCA.Analytics.TYPE_GROUP)) {
                         document.getElementById('sidebarReportExportButton').style.display = 'none';
                         document.getElementById('sidebarReportNameHint').style.display = 'none';
                     } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_DB)) {
@@ -230,7 +230,7 @@ OCA.Analytics.Sidebar.Report = {
                     }
 
                 } else {
-                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No maintenance possible') + '</p></div>';
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
                     document.getElementById('tabContainerReport').innerHTML = table;
                 }
             });
@@ -340,7 +340,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportDatasetRow').style.display = 'table-row';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
-        } else if (datasourceType === OCA.Analytics.TYPE_EMPTY_GROUP) {
+        } else if (datasourceType === OCA.Analytics.TYPE_GROUP) {
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
             document.getElementById('reportVisualizationSectionHeader').style.display = 'none';
@@ -438,7 +438,7 @@ OCA.Analytics.Sidebar.Report = {
         tableParent.appendChild(option);
 
         for (let dataset of OCA.Analytics.reports) {
-            if (parseInt(dataset.type) === OCA.Analytics.TYPE_EMPTY_GROUP) {
+            if (parseInt(dataset.type) === OCA.Analytics.TYPE_GROUP) {
                 option = document.createElement('option');
                 option.text = dataset.name;
                 option.value = dataset.id;
@@ -471,7 +471,7 @@ OCA.Analytics.Sidebar.Report = {
             body: JSON.stringify({
                 name: t('analytics', 'New'),
                 parent: 0,
-                type: OCA.Analytics.TYPE_EMPTY_GROUP,
+                type: OCA.Analytics.TYPE_GROUP,
                 dataset: 0,
                 addReport: addReport,
             })
@@ -749,41 +749,47 @@ OCA.Analytics.Sidebar.Data = {
         let requestUrl = OC.generateUrl('apps/analytics/' + type + '/') + reportId;
         fetch(requestUrl, {
             method: 'GET',
-            headers: OCA.Analytics.headers(),
+            headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
             .then(data => {
                 let table;
-                // clone the DOM template
-                table = document.importNode(document.getElementById('templateData').content, true);
-                table.id = 'tableData';
-                document.getElementById('tabContainerData').innerHTML = '';
-                document.getElementById('tabContainerData').appendChild(table);
-                document.getElementById('DataTextDimension1').innerText = data['dimension1'];
-                document.getElementById('DataTextDimension2').innerText = data['dimension2'];
-                document.getElementById('DataTextValue').innerText = data['value'];
-                document.getElementById('DataApiDataset').innerText = data['dataset'];
-                //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
-                document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
-                document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
-                document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
-                document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportClipboardButton);
-                document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
-                document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
+                if (data !== false) {
+                    // clone the DOM template
 
-                document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
-                document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+                    table = document.importNode(document.getElementById('templateData').content, true);
+                    table.id = 'tableData';
+                    document.getElementById('tabContainerData').innerHTML = '';
+                    document.getElementById('tabContainerData').appendChild(table);
+                    document.getElementById('DataTextDimension1').innerText = data['dimension1'];
+                    document.getElementById('DataTextDimension2').innerText = data['dimension2'];
+                    document.getElementById('DataTextValue').innerText = data['value'];
+                    document.getElementById('DataApiDataset').innerText = data['dataset'];
+                    //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
+                    document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
+                    document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
+                    document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
+                    document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportClipboardButton);
+                    document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
+                    document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
 
-                OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
+                    document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+                    document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
 
-                document.getElementById('DataValue').addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter') {
-                        OCA.Analytics.Sidebar.Backend.updateData();
-                        document.getElementById('DataDimension2').focus();
-                        document.getElementById('DataDimension2').value = '';
-                        document.getElementById('DataValue').value = '';
-                    }
-                });
+                    OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
+
+                    document.getElementById('DataValue').addEventListener('keydown', function (event) {
+                        if (event.key === 'Enter') {
+                            OCA.Analytics.Sidebar.Backend.updateData();
+                            document.getElementById('DataDimension2').focus();
+                            document.getElementById('DataDimension2').value = '';
+                            document.getElementById('DataValue').value = '';
+                        }
+                    });
+                } else {
+                    table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
+                    document.getElementById('tabContainerData').innerHTML = table;
+                }
             });
     },
 
@@ -873,8 +879,8 @@ OCA.Analytics.Sidebar.Share = {
                     document.getElementById('tabContainerShare').innerHTML = '';
                     document.getElementById('tabContainerShare').appendChild(template);
                 } else {
-                    const table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No shares found') + '</p></div>';
-                    document.getElementById('tabContainerData').innerHTML = table;
+                    const table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
+                    document.getElementById('tabContainerShare').innerHTML = table;
                 }
             });
     },

@@ -75,7 +75,6 @@ class ShareMapper
             ->selectAlias('SHARE.id', 'shareId')
             ->selectAlias('SHARE.type', 'shareType')
             ->selectAlias('SHARE.uid_owner', 'shareUid_owner')
-            ->selectAlias($sql->createNamedParameter(true, IQueryBuilder::PARAM_BOOL), 'isShare')
             ->addSelect('SHARE.permissions');
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
@@ -124,24 +123,6 @@ class ShareMapper
             $sql->executeStatement();
         }
         return $sql->getLastInsertId();
-    }
-
-    /**
-     * Get single shares metadata
-     * @param $shareId
-     * @return array
-     * @throws Exception
-     */
-    public function getShare($shareId)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->from(self::TABLE_NAME)
-            ->select('id', 'type', 'parent')
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
-        $statement = $sql->executeQuery();
-        $result = $statement->fetch();
-        $statement->closeCursor();
-        return $result;
     }
 
     /**
@@ -257,22 +238,6 @@ class ShareMapper
                 $sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())),
                 $sql->expr()->eq('uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID()))
             ));
-        $sql->executeStatement();
-        return true;
-    }
-
-    /**
-     * Delete all shares by parent ID (users of a group share)
-     * @param $parent
-     * @return bool
-     * @throws Exception
-     */
-    public function deleteShareByParent($parent)
-    {
-        $sql = $this->db->getQueryBuilder();
-        $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('parent', $sql->createNamedParameter($parent)));
         $sql->executeStatement();
         return true;
     }

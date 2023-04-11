@@ -20,7 +20,7 @@ if (!OCA.Analytics) {
      * @namespace
      */
     OCA.Analytics = {
-        TYPE_EMPTY_GROUP: 0,
+        TYPE_GROUP: 0,
         TYPE_INTERNAL_FILE: 1,
         TYPE_INTERNAL_DB: 2,
         TYPE_GIT: 3,
