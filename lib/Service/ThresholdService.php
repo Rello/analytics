@@ -52,9 +52,7 @@ class ThresholdService
     public function read(int $reportId)
     {
         $thresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
-        $thresholdsParsed = $this->VariableService->replaceThresholdsVariables($thresholds);
-
-        return $thresholdsParsed;
+        return $this->VariableService->replaceThresholdsVariables($thresholds);
     }
 
     /**

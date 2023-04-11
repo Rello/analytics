@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\Exception;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
@@ -32,6 +33,9 @@ class ThresholdMapper
         $this->logger = $logger;
     }
 
+    /**
+     * @throws Exception
+     */
     public function create($reportId, $dimension1, $value, $option, $severity)
     {
         $sql = $this->db->getQueryBuilder();
@@ -44,10 +48,13 @@ class ThresholdMapper
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($severity),
             ]);
-        $sql->execute();
+        $sql->executeStatement();
         return (int)$sql->getLastInsertId();
     }
 
+    /**
+     * @throws Exception
+     */
     public function getThresholdsByReport($reportId)
     {
         $sql = $this->db->getQueryBuilder();
@@ -59,13 +66,18 @@ class ThresholdMapper
             ->addSelect('option')
             ->addSelect('severity')
             ->addSelect('user_id')
-            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
-        $statement = $sql->execute();
+            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+        ;
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getSevOneThresholdsByReport($reportId)
     {
         $sql = $this->db->getQueryBuilder();
@@ -73,28 +85,34 @@ class ThresholdMapper
             ->select('*')
             ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->eq('severity', $sql->createNamedParameter('1')));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
     }
 
+    /**
+     * @throws Exception
+     */
     public function deleteThreshold($thresholdId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($thresholdId)))
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     public function deleteThresholdByReport($reportId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 }
