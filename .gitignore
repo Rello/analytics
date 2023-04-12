@@ -25,5 +25,5 @@ __MACOSX/*
 .smbdelete*
 
 # VSCode
-.vscode
-.code-workspace
+.vscode/
+*.code-workspace
