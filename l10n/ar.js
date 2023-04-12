@@ -17,7 +17,6 @@ OC.L10N.register(
     "records updated" : "تم تحديث السجلات",
     "errors" : "أخطاء",
     "Select file" : "اختيار الملف",
-    "No maintenance possible" : "الصيانة غير ممكنة",
     "This dataset is not used!" : "مجموعة البيانات غير مستخدمة",
     "Delete" : "إزالة",
     "All data including all reports will be deleted!" : "كل البيانات بما فيها التقارير سيتم حذفها",

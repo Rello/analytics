@@ -61,7 +61,6 @@ OC.L10N.register(
     "Request could not be processed" : "Pyyntöä ei voitu käsitellä",
     "REST API parameters" : "REST-rajapinnan parametrit",
     "More Information …" : "Lisää tietoa…",
-    "No shares found" : "Jakoja ei löytynyt",
     "Add share link" : "Lisää jakolinkki",
     "Share link" : "Jaa linkki",
     "Link copied" : "Linkki kopioitu",
