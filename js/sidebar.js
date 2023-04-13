@@ -879,7 +879,7 @@ OCA.Analytics.Sidebar.Share = {
                     document.getElementById('tabContainerShare').innerHTML = '';
                     document.getElementById('tabContainerShare').appendChild(template);
                 } else {
-                    const table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
+                    let table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
                     document.getElementById('tabContainerShare').innerHTML = table;
                 }
             });

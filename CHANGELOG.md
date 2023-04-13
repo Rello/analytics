@@ -1,8 +1,10 @@
 # Changelog
 
+### Added
+- sharing of report groups #342
+
 ### Fixed
 - thresholds of other user in shared report
-
 
 ## 4.8.0 - 2023-03-16
 ### Added

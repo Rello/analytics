@@ -89,7 +89,7 @@ class ReportService
     {
         $ownReports = $this->ReportMapper->index();
         $sharedReports = $this->ShareService->getSharedReports();
-        $keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare');
+        $keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
 
         // get shared reports and remove duplicates
         foreach ($sharedReports as $sharedReport) {

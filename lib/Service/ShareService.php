@@ -153,9 +153,9 @@ class ShareService
                 if (array_key_exists($sharedReport['shareUid_owner'], $groupsOfUser)) {
                     // was the report not yet added to the result?
                     if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
-                        unset($sharedReport['shareId']);
                         unset($sharedReport['shareType']);
                         unset($sharedReport['shareUid_owner']);
+                        $sharedReport['isShare'] = self::SHARE_TYPE_GROUP;
                         $reports[] = $sharedReport;
                     }
                 }
@@ -165,9 +165,9 @@ class ShareService
                 if ($this->userSession->getUser()->getUID() === $sharedReport['shareUid_owner']) {
                     // was the report not yet added to the result?
                     if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
-                        unset($sharedReport['shareId']);
                         unset($sharedReport['shareType']);
                         unset($sharedReport['shareUid_owner']);
+                        $sharedReport['isShare'] = self::SHARE_TYPE_USER;
                         $reports[] = $sharedReport;
                     }
                 }
@@ -178,15 +178,14 @@ class ShareService
             // if it is a shared group, get all reports below
             if ($report['type'] === ReportService::REPORT_TYPE_GROUP) {
                 $subreport = $this->ReportMapper->getReportsByGroup($report['id']);
+                $subreport = array_map(function($report) {
+                    $report['isShare'] = self::SHARE_TYPE_GROUP;
+                    return $report;
+                }, $subreport);
+
                 $reports = array_merge($reports, $subreport);
             }
         }
-
-        $reports = array_map(function($report) {
-            $report['isShare'] = 1;
-            return $report;
-        }, $reports);
-
         return $reports;
     }
 
@@ -211,7 +210,7 @@ class ShareService
     }
 
     /**
-     * delete a share
+     * Delete an own share (sharee or receiver)
      *
      * @NoAdminRequired
      * @param $shareId

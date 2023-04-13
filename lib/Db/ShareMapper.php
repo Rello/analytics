@@ -224,7 +224,7 @@ class ShareMapper
     }
 
     /**
-     * Delete a share
+     * Delete an own share (sharee or receiver)
      * @param $shareId
      * @return bool
      * @throws Exception

@@ -181,6 +181,7 @@ OCA.Analytics.Navigation = {
                 return;
             }
             typeIcon = 'icon-shared';
+            //data['type'] = OCA.Analytics.TYPE_SHARED;
         }
 
         a.classList.add(typeIcon);
@@ -204,8 +205,11 @@ OCA.Analytics.Navigation = {
         if (!OCA.Analytics.isAdvanced) {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
-            li.appendChild(divUtils);
-            li.appendChild(divMenu);
+            if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
+                // do not add an empty menue. can occur for e.g. shared group folders
+                li.appendChild(divUtils);
+                li.appendChild(divMenu);
+            }
         } else {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
             li.appendChild(divUtils);
@@ -336,25 +340,32 @@ OCA.Analytics.Navigation = {
         deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
 
         let unshareReport = navigationMenu.getElementById('navigationMenuUnshare');
+        unshareReport.dataset.shareId = data.shareId;
+        unshareReport.addEventListener('click', OCA.Analytics.Navigation.handleUnshareButton);
 
+        let separator = navigationMenu.getElementById('navigationMenueSeparator');
+
+        if (data['isShare'] === undefined) {
+            unshareReport.parentElement.remove();
+        } else if (data['isShare'] !== undefined) {
+            separator.remove();
+            deleteReport.parentElement.remove();
+            dataset.parentElement.remove();
+            newGroup.parentElement.remove();
+            if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
+                edit.parentElement.remove();
+            }
+            if (parseInt(data['isShare']) === OCA.Analytics.SHARE_TYPE_GROUP) {
+                unshareReport.parentElement.remove();
+            }
+        }
         if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
-            unshareReport.remove();
-            favorite.remove();
-            dataset.remove();
-            newGroup.remove();
+            favorite.parentElement.remove();
+            newGroup.parentElement.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
-        } else if (parseInt(data['type']) === OCA.Analytics.TYPE_SHARED) {
-            deleteReport.remove();
-            dataset.remove();
-            edit.remove();
-            newGroup.remove();
-            unshareReport.dataset.shareId = data.shareId;
-            unshareReport.addEventListener('click', OCA.Analytics.Navigation.handleUnshareButton);
-        } else if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
-            dataset.remove();
-            unshareReport.remove();
-        } else {
-            unshareReport.remove();
+        }
+        if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
+            dataset.parentElement.remove();
         }
 
         return navigationMenu;

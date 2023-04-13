@@ -458,7 +458,7 @@
                     <span></span>
                 </a>
             </li>
-            <li class="action-separator"></li>
+            <li id="navigationMenueSeparator" class="action-separator"></li>
             <li><a href="#" id="navigationMenuDelete"><span
                             class="icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a></li>
             <li><a href="#" id="navigationMenuUnshare"><span
