@@ -179,7 +179,6 @@ OC.L10N.register(
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "\"{datasetName}\" veri kümesi için \"{dataloadName}\" verileri yüklenirken sorun çıktı",
     "Analytics Report" : "İstatistikler raporu",
     "Report not found" : "Rapor bulunamadı",
-    "This report was removed or not shared with you" : "Bu rapor silinmiş ya da sizinle paylaşılmamış",
     "No data" : "Herhangi bir veri yok",
     "Last field must be a valid number" : "Son alanı geçerli bir sayı olmalıdır",
     "copy" : "kopyala",

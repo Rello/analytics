@@ -179,7 +179,6 @@ OC.L10N.register(
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Fel under dataladdning \"{dataloadName}\" för datamängd \"{datasetName}\"",
     "Analytics Report" : "Analytics rapport",
     "Report not found" : "Rapporten hittades inte",
-    "This report was removed or not shared with you" : "Den här rapporten har tagits bort eller har inte delats med dig",
     "No data" : "Inga data",
     "Last field must be a valid number" : "Sista fältet måste vara ett giltigt nummer",
     "copy" : "kopiera",

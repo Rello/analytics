@@ -177,7 +177,6 @@
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "資料集「{datasetName}」的數據載入「{dataloadName}」時發生錯誤",
     "Analytics Report" : "分析報告",
     "Report not found" : "找不到報告",
-    "This report was removed or not shared with you" : "此報告已刪除或未與您分享",
     "No data" : "沒有數據",
     "Last field must be a valid number" : "最後一個字段必須是有效數字",
     "copy" : "複製",

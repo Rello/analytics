@@ -177,7 +177,6 @@
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"",
     "Analytics Report" : "Analytics Report",
     "Report not found" : "Report not found",
-    "This report was removed or not shared with you" : "This report was removed or not shared with you",
     "No data" : "No data",
     "Last field must be a valid number" : "Last field must be a valid number",
     "copy" : "copy",
