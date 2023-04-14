@@ -177,6 +177,7 @@
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Грешка током учитавања података „{dataloadName}” за скуп података „{datasetName}",
     "Analytics Report" : "Извештај аналитике",
     "Report not found" : "Није пронађен извештај",
+    "This report was removed or is not shared with you" : "Овај извештај је уклоњен или није дељен са вама",
     "No data" : "Нема података",
     "Last field must be a valid number" : "Последње поље мора бити важећи број",
     "copy" : "копирај",
