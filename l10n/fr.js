@@ -179,6 +179,7 @@ OC.L10N.register(
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Erreur lors du chargement de données \"{dataloadName}\" pour le jeu de données \"{datasetName}\"",
     "Analytics Report" : "Rapport Analytics",
     "Report not found" : "Rapport introuvable",
+    "This report was removed or is not shared with you" : "Ce rapport a été supprimé ou n'est pas partagé avec vous",
     "No data" : "Aucune donnée",
     "Last field must be a valid number" : "Le dernier champ doit contenir un nombre valide",
     "copy" : "copier",
