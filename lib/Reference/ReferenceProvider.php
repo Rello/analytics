@@ -99,7 +99,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
             } else {
                 $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'noReport.svg'));
                 $name = $this->l10n->t('Report not found');
-                $subheader = $this->l10n->t('This report was removed or not shared with you');
+                $subheader = $this->l10n->t('This report was removed or is not shared with you');
             }
             $reference = new Reference($referenceText);
             $reference->setTitle($name);

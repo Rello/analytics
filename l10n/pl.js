@@ -179,7 +179,6 @@ OC.L10N.register(
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Błąd podczas ładowania danych \"{dataloadName}\" dla zestawu danych \"{datasetName}\"",
     "Analytics Report" : "Raport analityczny",
     "Report not found" : "Nie znaleziono raportu",
-    "This report was removed or not shared with you" : "Ten raport został usunięty lub nie został Ci udostępniony",
     "No data" : "Brak danych",
     "Last field must be a valid number" : "Ostatnie pole musi być poprawną liczbą",
     "copy" : "kopia",

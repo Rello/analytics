@@ -177,7 +177,7 @@
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Chyba při načítání „{dataloadName}“ sady dat „{datasetName}“",
     "Analytics Report" : "Analytický výkaz",
     "Report not found" : "Výkaz nenalezen",
-    "This report was removed or not shared with you" : "Tento výkaz byl odebrán nebo vám není nasdílen",
+    "This report was removed or is not shared with you" : "Tento výkaz byl odebrán nebo vám není nasdílen",
     "No data" : "Žádná data",
     "Last field must be a valid number" : "Je třeba, aby poslední kolonka obsahovala platné číslo",
     "copy" : "zkopírovat",
