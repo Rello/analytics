@@ -66,13 +66,14 @@ class ExternalFile implements IDatasource
      */
     public function readData($option): array
     {
+        $url = htmlspecialchars_decode($option['link'], ENT_NOQUOTES);
         $ch = curl_init();
         if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_URL, $option['link']);
-            curl_setopt($ch, CURLOPT_REFERER, $option['link']);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_REFERER, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
             $curlResult = curl_exec($ch);
