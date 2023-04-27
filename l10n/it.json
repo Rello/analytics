@@ -259,6 +259,8 @@
     "Unshare" : "Rimuovi condivisione",
     "can navigate" : "può navigare",
     "Password protection" : "Protezione password",
+    "Share chart for external website" : "Condividi il grafico per il sito Web esterno",
+    "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Per includere un grafico in un sito web esterno, quel dominio deve essere autorizzato (criterio CSP)",
     "Copy link" : "Copia link",
     "Domain of external site" : "Dominio del sito esterno",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics rende visibili i tuoi dati e ti aiuta a valutarli.",
