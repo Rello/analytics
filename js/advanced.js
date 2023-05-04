@@ -256,7 +256,7 @@ OCA.Analytics.Advanced.Dataload = {
         let a = document.createElement('a');
         a.classList.add(typeIcon);
         a.innerText = dataload['name'];
-        a.dataset.id = parseInt(dataload['id']);
+        a.dataset.dataloadId = parseInt(dataload['id']);
         a.dataset.datasourceId = parseInt(dataload['datasource']);
         a.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadSelect);
         item.appendChild(a);
@@ -270,12 +270,12 @@ OCA.Analytics.Advanced.Dataload = {
     buildDataloadOptions: function (evt, id = null) {
         let dataload;
         if (id === null) {
-            dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+            dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.dataloadId));
         } else {
             dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(id));
         }
 
-        document.getElementById('dataloadDetail').dataset.id = dataload['id'];
+        document.getElementById('dataloadDetail').dataset.dataloadId = dataload['id'];
         document.getElementById('dataloadName').value = dataload['name'];
         OCA.Analytics.UI.showElement('dataloadDetailHeader');
         OCA.Analytics.UI.showElement('dataloadDetailButtons');
@@ -356,7 +356,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     updateDataload: function () {
-        const dataloadId = document.getElementById('dataloadDetail').dataset.id;
+        const dataloadId = parseInt(document.getElementById('dataloadDetail').dataset.dataloadId);
         let option = {};
 
         // loop all dynamic options of the selected datasource
@@ -379,10 +379,10 @@ OCA.Analytics.Advanced.Dataload = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['schedule'] = document.getElementById('dataloadSchedule').value;
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['name'] = document.getElementById('dataloadName').value;
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === parseInt(dataloadId))['option'] = option;
-                document.querySelector('[data-id="' + parseInt(dataloadId) + '"]').innerHTML = document.getElementById('dataloadName').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['schedule'] = document.getElementById('dataloadSchedule').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
+                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
+                document.querySelector('[data-dataload-id="' + dataloadId + '"]').innerHTML = document.getElementById('dataloadName').value;
             });
     },
 
@@ -398,7 +398,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     deleteDataload: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.id;
+        let requestUrl = OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.dataloadId;
         fetch(requestUrl, {
             method: 'DELETE',
             headers: OCA.Analytics.headers()
@@ -431,7 +431,7 @@ OCA.Analytics.Advanced.Dataload = {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
-                dataloadId: document.getElementById('dataloadDetail').dataset.id,
+                dataloadId: document.getElementById('dataloadDetail').dataset.dataloadId,
             })
         })
             .then(response => {
@@ -477,7 +477,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     handleFilepicker: function () {
-        let dataloadId = document.getElementById('dataloadDetail').dataset.id;
+        let dataloadId = document.getElementById('dataloadDetail').dataset.dataloadId;
         let type = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId))['datasource'];
 
         let mime;

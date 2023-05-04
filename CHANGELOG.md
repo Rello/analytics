@@ -1,7 +1,9 @@
 # Changelog
 
 ### Added
+- smart picker integration #343
 - sharing of report groups #342
+- Allow custom headers in JSON data source #351
 
 ### Fixed
 - thresholds of other user in shared report

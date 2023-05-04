@@ -55,6 +55,7 @@ class Json implements IDatasource
         $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
         $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
         $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
+        $template[] = ['id' => 'customHeaders', 'name' => 'Custom headers', 'placeholder' => 'key: value, key: value'];
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
@@ -74,6 +75,10 @@ class Json implements IDatasource
         $contentType = ($option['content-type'] && $option['content-type'] !== '') ? $option['content-type'] : 'application/json';
         $data = array();
         $http_code = '';
+        $headers = ($option['customHeaders'] && $option['customHeaders'] !== '') ? explode(",", $option['customHeaders']) : [];
+        $headers = array_map('trim', $headers);
+        $headers[] = 'OCS-APIRequest: true';
+        $headers[] = 'Content-Type: ' . $contentType;
 
         $ch = curl_init();
         if ($ch !== false) {
@@ -81,10 +86,7 @@ class Json implements IDatasource
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'OCS-APIRequest: true',
-                'Content-Type: ' . $contentType
-            ));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
             if ($option['body'] && $option['body'] !== '') {
@@ -156,6 +158,7 @@ class Json implements IDatasource
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'rawdata' => $rawResult,
+            'customHeaders' => $headers,
             'URL' => $url,
             'error' => ($http_code >= 200 && $http_code < 300) ? 0 : 'HTTP response code: ' . $http_code,
         ];
