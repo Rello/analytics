@@ -71,8 +71,6 @@
                             src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
                             alt="infoReport">
                     <div class="infoBoxHeader"><?php p($l->t('New Report')); ?></div>
-<!--                    <div class="infoBoxText">--><?php //// TRANSLATORS space is critical here. please stay within 40 letters
-//                        p($l->t('Create a report with the wizard')); ?><!--</div>-->
                 </div>
             </li>
             <li style="display: inline-block; margin: 10px;">
@@ -80,8 +78,6 @@
                             src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoIntro.svg') ?>"
                             alt="infoIntro">
                     <div class="infoBoxHeader"><?php p($l->t('Intro')); ?></div>
-<!--                    <div class="infoBoxText">--><?php //// TRANSLATORS space is critical here. please stay within 40 letters
-//                        p($l->t('See the introduction again')); ?><!--</div>-->
                 </div>
             </li>
             <li style="display: inline-block; margin: 10px;">
@@ -89,8 +85,6 @@
                             src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoWiki.svg') ?>"
                             alt="infoWiki">
                     <div class="infoBoxHeader"><?php p($l->t('Wiki')); ?></div>
-<!--                    <div class="infoBoxText">--><?php //// TRANSLATORS space is critical here. please stay within 40 letters
-//                        p($l->t('Find more information in the Wiki')); ?><!--</div>-->
                 </div>
             </li>
         </ul>

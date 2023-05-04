@@ -51,12 +51,12 @@ class Json implements IDatasource
     {
         $template = array();
         $template[] = ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url'];
-        $template[] = ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password'];
-        $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
         $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
-        $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
-        $template[] = ['id' => 'customHeaders', 'name' => 'Custom headers', 'placeholder' => 'key: value, key: value'];
+        $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
+        $template[] = ['id' => 'customHeaders', 'name' => 'Custom headers', 'placeholder' => 'key: value,key: value'];
+        $template[] = ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password'];
+        $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
     }
