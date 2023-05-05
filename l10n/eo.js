@@ -19,6 +19,7 @@ OC.L10N.register(
     "Share link" : "Kunhavigi ligilon",
     "Link copied" : "Ligilo kopiita",
     "Type" : "Tipo",
+    "Notification" : "Atentigo",
     "Date" : "Date",
     "New in" : "Nova en",
     "View changelog" : "Vidi ŝanĝoprotokolon",
