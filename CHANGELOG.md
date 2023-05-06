@@ -4,6 +4,7 @@
 - smart picker integration #343
 - sharing of report groups #342
 - Allow custom headers in JSON data source #351
+- Grouping data source parameters into "more" section for better readability
 
 ### Fixed
 - thresholds of other user in shared report

@@ -207,7 +207,7 @@ OCA.Analytics.Advanced.Dataload = {
                 OCA.Analytics.Datasource.buildDropdown('datasourceSelect');
 
                 // write dimension structure to datasource array [0] in case it is required for a deletion job later
-                OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
+                //OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
             });
     },
 
@@ -268,6 +268,9 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     buildDataloadOptions: function (evt, id = null) {
+        // write dimension structure to datasource array [0] in case it is required for a deletion job later
+        OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
+
         let dataload;
         if (id === null) {
             dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.dataloadId));

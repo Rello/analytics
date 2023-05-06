@@ -110,7 +110,7 @@
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%; vertical-align: middle;"><?php p($l->t('Chart options')); ?></div>
             <div style="display: table-cell;"><textarea id="sidebarReportChartOptions"
-                                                        placeholder="<?php p($l->t('advanced')); ?>"
+                                                        placeholder="<?php p($l->t('Advanced')); ?>"
                                                         class="sidebarInput" row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
@@ -122,7 +122,7 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%; vertical-align: middle;"><?php p($l->t('Data options')); ?></div>
             <div style="display: table-cell;"><textarea id="sidebarReportDataOptions"
-                                                        placeholder="<?php p($l->t('advanced')); ?>"
+                                                        placeholder="<?php p($l->t('Advanced')); ?>"
                                                         class="sidebarInput" row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">

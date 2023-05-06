@@ -128,7 +128,7 @@
                         src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
             </div>
             <div class="description">
-                <p id="wizardNewHeader4"><?php p($l->t('Advanced configuration - Data loads')); ?></p>
+                <p id="wizardNewHeader4"><?php p($l->t('Automation')); ?></p>
                 <ul>
                     <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
                     <li><?php p($l->t('Use timestamps to historize data')); ?></li>

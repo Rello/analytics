@@ -274,7 +274,6 @@ OCA.Analytics.UI = {
                 defaultLegendClickHandler(e, legendItem, legend);
             }
             document.getElementById('saveIcon').style.removeProperty('display');
-
         };
 
         OCA.Analytics.UI.showElement('tableSeparatorContainer');
@@ -949,6 +948,7 @@ OCA.Analytics.Datasource = {
     buildOptionsForm: function (datasource) {
         let template = OCA.Analytics.datasourceOptions[datasource];
         let form = document.createElement('div');
+        let insideSection = false;
         form.id = 'dataSourceOptions';
 
         if (typeof(template) === 'undefined') {
@@ -962,9 +962,15 @@ OCA.Analytics.Datasource = {
         for (let templateOption of template) {
             // loop all options of the datasource template and create the input form
 
+            if (templateOption.type === 'section') {
+                let tableRow = OCA.Analytics.Datasource.buildOptionsSection(templateOption);
+                form.appendChild(tableRow);
+                insideSection = true;
+                continue;
+            }
             // create the label column
             let tableRow = document.createElement('div');
-            tableRow.style.display = 'table-row';
+            tableRow.style.display = insideSection === false ? 'table-row' : 'none';
             let label = document.createElement('div');
             label.style.display = 'table-cell';
             label.style.width = '100%';
@@ -1019,6 +1025,18 @@ OCA.Analytics.Datasource = {
         return input;
     },
 
+    buildOptionsSection: function (templateOption) {
+        let tableRow = document.createElement('div');
+        tableRow.classList.add('sidebarHeaderClosed');
+        let label = document.createElement('a');
+        label.style.display = 'table-cell';
+        label.style.width = '100%';
+        label.innerText = templateOption.name;
+        label.addEventListener('click', OCA.Analytics.Datasource.showHiddenOptions);
+        tableRow.appendChild(label);
+        return tableRow;
+    },
+
     buildOptionsCheckboxIndicator: function (templateOption) {
         let input = document.createElement('input');
         input.type = 'checkbox'
@@ -1064,6 +1082,18 @@ OCA.Analytics.Datasource = {
             input.appendChild(option);
         }
         return input;
+    },
+
+    showHiddenOptions: function () {
+        const dataSourceOptionsDiv = document.getElementById("dataSourceOptions");
+        const divElements = dataSourceOptionsDiv.children;
+
+        for (let i = 0; i < divElements.length; i++) {
+            if (divElements[i].tagName.toLowerCase() === "div") {
+                divElements[i].style.display = "table-row";
+            }
+        }
+        dataSourceOptionsDiv.getElementsByClassName("sidebarHeaderClosed")[0].style.display = "none";
     },
 
     handleColumnPicker: function () {

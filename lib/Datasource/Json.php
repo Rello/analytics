@@ -53,6 +53,7 @@ class Json implements IDatasource
         $template[] = ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url'];
         $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
         $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
+        $template[] = ['id' => 'section', 'name' => $this->l10n->t('More options'), 'type' => 'section'];
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
         $template[] = ['id' => 'customHeaders', 'name' => 'Custom headers', 'placeholder' => 'key: value,key: value'];
         $template[] = ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password'];
