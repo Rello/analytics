@@ -34,6 +34,7 @@ OC.L10N.register(
     "Settings" : "პარამეტრები",
     "Name" : "სახელი",
     "Display" : "დისპლეი",
+    "Advanced" : "მოწინავე",
     "Open documentation" : "ღია დოკუმენტაცია",
     "Update" : "განახლება",
     "Export" : "ექსპორტი",

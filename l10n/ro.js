@@ -43,6 +43,7 @@ OC.L10N.register(
     "Settings" : "Setări",
     "Name" : "Nume",
     "Display" : "Display",
+    "Advanced" : "Avansat",
     "Open documentation" : "Deschide documentația",
     "Update" : "Actualizare",
     "Export" : "Exportă",

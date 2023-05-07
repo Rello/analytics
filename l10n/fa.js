@@ -43,6 +43,7 @@ OC.L10N.register(
     "Settings" : "تنظیمات",
     "Name" : "نام",
     "Display" : "نمایش",
+    "Advanced" : "پیشرفته",
     "Open documentation" : "مستندات باز",
     "Update" : "یه‌روزرسانی",
     "Export" : "گرفتن خروجی",

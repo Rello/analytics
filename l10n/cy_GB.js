@@ -28,6 +28,7 @@ OC.L10N.register(
     "Back" : "Nôl",
     "Settings" : "Gosodiadau",
     "Name" : "Enw",
+    "Advanced" : "Uwch",
     "Update" : "Diweddaru",
     "Export" : "Allforio",
     "Import" : "Mewnforio",

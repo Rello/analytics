@@ -53,6 +53,7 @@ OC.L10N.register(
     "Name" : "שם",
     "Display" : "תצוגה",
     "Chart" : "תרשים",
+    "Advanced" : "מתקדם",
     "Open documentation" : "פתיחת תיעוד",
     "Update" : "עדכון",
     "Export" : "ייצוא",

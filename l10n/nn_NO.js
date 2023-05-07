@@ -49,6 +49,7 @@ OC.L10N.register(
     "Settings" : "Innstillingar",
     "More information …" : "Meir informasjon…",
     "Name" : "Namn",
+    "Advanced" : "Avansert",
     "Open documentation" : "Opne dokumentasjon",
     "Update" : "Oppdater",
     "Export" : "Eksporter",

@@ -99,6 +99,7 @@ OC.L10N.register(
     "Name" : "名前",
     "Display" : "表示",
     "Chart" : "チャート",
+    "Advanced" : "高度な",
     "Open documentation" : "ドキュメントを開く",
     "Update" : "更新",
     "Export" : "エクスポート",

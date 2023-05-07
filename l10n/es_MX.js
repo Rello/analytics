@@ -50,6 +50,7 @@ OC.L10N.register(
     "Name" : "Nombre",
     "Display" : "Mostrar",
     "Chart" : "Gráfico",
+    "Advanced" : "Avanzado",
     "Open documentation" : "Abrir documentación",
     "Update" : "Actualizar",
     "Export" : "Exportar",

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Back" : "Kembali",
     "Settings" : "Tetapan",
     "Name" : "Nama",
+    "Advanced" : "Maju",
     "Update" : "Kemaskini",
     "Export" : "Eksport",
     "Import" : "Import",
