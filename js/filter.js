@@ -54,8 +54,8 @@ OCA.Analytics.Filter = {
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
-            + '<a class="oc-dialog-close" id="btnClose"></a>'
-            + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
+            + '<a class="analyticsDialogClose" id="btnClose"></a>'
+            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
             + t('analytics', 'Drilldown')
             + '</h2>'
             + '<div class="table" style="display: table;">'
@@ -69,9 +69,9 @@ OCA.Analytics.Filter = {
             + '</div>'
             + drilldownRows
             + '</div>'
-            + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
+            + '<div class="analyticsDialogButtonrow" id="buttons">'
             + '<a class="button primary" id="drilldownDialogGo">' + t('analytics', 'OK') + '</a>'
-            + '<a class="button primary" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '<a class="button" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
             + '</div>'
         );
 
@@ -113,8 +113,8 @@ OCA.Analytics.Filter = {
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
-            + '<a class="oc-dialog-close" id="btnClose"></a>'
-            + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
+            + '<a class="analyticsDialogClose" id="btnClose"></a>'
+            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
             + t('analytics', 'Filter')
             + '</h2>'
             + '<span hidden id="filterDialogHintText" class="userGuidance">'
@@ -163,9 +163,9 @@ OCA.Analytics.Filter = {
             + '</a></div>'
             + '</div></div>'
             + '<br>'
-            + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
+            + '<div class="analyticsDialogButtonrow" id="buttons">'
             + '<a class="button primary" id="filterDialogGo">' + t('analytics', 'Add') + '</a>'
-            + '<a class="button primary" id="filterDialogCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '<a class="button" id="filterDialogCancel">' + t('analytics', 'Cancel') + '</a>'
             + '</div>'
         );
 
@@ -322,8 +322,8 @@ OCA.Analytics.Filter = {
             '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
-            + '<a class="oc-dialog-close" id="btnClose"></a>'
-            + '<h2 class="oc-dialog-title" style="display:flex;margin-right:30px;">'
+            + '<a class="analyticsDialogClose" id="btnClose"></a>'
+            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
             + t('analytics', 'Chart options')
             + '</h2>'
             + '<div class="table" style="display: table;">'
@@ -340,9 +340,9 @@ OCA.Analytics.Filter = {
             + '</div>'
             + drilldownRows
             + '</div>'
-            + '<div class="oc-dialog-buttonrow boutons" id="buttons">'
+            + '<div class="analyticsDialogButtonrow" id="buttons">'
             + '<a class="button primary" id="drilldownDialogGo">' + t('analytics', 'OK') + '</a>'
-            + '<a class="button primary" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '<a class="button" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
             + '</div>'
         );
 

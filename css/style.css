@@ -109,359 +109,359 @@
 }
 
 #chartLegend:hover {
-opacity: 1;
-cursor: pointer;
+    opacity: 1;
+    cursor: pointer;
 }
 
 #tableContainer {
-width: 100%;
-height: 40%;
+    width: 100%;
+    height: 40%;
 }
 
 #noDataContainer {
-padding-top: 50px;
-text-align: center;
+    padding-top: 50px;
+    text-align: center;
 }
 
 .thresholdBullet {
-margin: 10px;
-width: 12px;
-height: 12px;
+    margin: 10px;
+    width: 12px;
+    height: 12px;
 }
 
 .thresholdItem {
-display: inline-flex;
-width: 100%;
+    display: inline-flex;
+    width: 100%;
 }
 
 .thresholdItem > .icon-close {
-cursor: pointer;
+    cursor: pointer;
 }
 
 .thresholdText {
-margin-top: 6px;
-width: 50%;
+    margin-top: 6px;
+    width: 50%;
 }
 
 .thresholdDelete {
-margin-top: 12px;
-width: 50%;
+    margin-top: 12px;
+    width: 50%;
 }
 
 .input150 {
-width: 150px;
+    width: 150px;
 }
 
 .input250 {
-width: 250px;
+    width: 250px;
 }
 
 .optionsInput {
-width: 130px;
+    width: 130px;
 }
 
 .optionsInputValue {
-width: 200px;
+    width: 200px;
 }
 
 .sidebarInput {
-width: 200px;
-border: 2px solid var(--color-border-dark) !important;
+    width: 200px;
+    border: 2px solid var(--color-border-dark) !important;
 }
 
 .sidebarHeaderClosed {
-background-image: url(../img/arrowRight.svg);
-filter: var(--background-invert-if-dark);
-background-size: 16px 16px;
-background-position: 0;
-background-repeat: no-repeat;
-padding-left: 20px;
+    background-image: url(../img/arrowRight.svg);
+    filter: var(--background-invert-if-dark);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 20px;
 }
 
 .sidebarHeaderOpened {
-background-image: url(../img/arrowDown.svg);
-filter: var(--background-invert-if-dark);
-background-size: 16px 16px;
-background-position: 0;
-background-repeat: no-repeat;
-padding-left: 20px;
+    background-image: url(../img/arrowDown.svg);
+    filter: var(--background-invert-if-dark);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 20px;
 }
 
 .sidebarPointer {
-cursor: pointer;
+    cursor: pointer;
 }
 
 table.dataTable tbody tr {
-background-color: var(--color-main-background) !important;
+    background-color: var(--color-main-background) !important;
 }
 
 .analytics-options {
-opacity: 0.5;
-background-size: 20px;
-margin-left: 10px;
-float: right;
-height: 22px;
-width: 22px;
+    opacity: 0.5;
+    background-size: 20px;
+    margin-left: 10px;
+    float: right;
+    height: 22px;
+    width: 22px;
 }
 
 .analytics-options:hover {
-opacity: 1;
-cursor: pointer;
+    opacity: 1;
+    cursor: pointer;
 }
 
 .icon-analytics-filter-add {
-background-image: url(../img/filteradd.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/filteradd.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-options {
-background-image: url(../img/options.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/options.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-save {
-background-image: url(../img/save.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/save.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-save-warning {
-background-image: url(../img/save.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/save.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chart-options {
-background-image: url(../img/chartoptions.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartoptions.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-refresh {
-background-image: url(../img/refresh.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/refresh.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-forecast {
-background-image: url(../img/forecast.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/forecast.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartTable {
-background-image: url(../img/chartTable.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartTable.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartArea {
-background-image: url(../img/chartArea.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartArea.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartBar {
-background-image: url(../img/chartBar.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartBar.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartDonut {
-background-image: url(../img/chartDonut.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartDonut.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartTime {
-background-image: url(../img/chartTime.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartTime.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartLine {
-background-image: url(../img/chartLine.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartLine.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-chartNone {
-background-image: url(../img/chartNone.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/chartNone.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .icon-analytics-charts-wizard {
-opacity: 0.5;
-background-size: 50px;
-height: 50px;
-width: 70px;
-float: left;
+    opacity: 0.5;
+    background-size: 50px;
+    height: 50px;
+    width: 70px;
+    float: left;
 }
 
 .icon-analytics-filter-remove {
-background-image: url(../img/filterremove.svg);
-filter: var(--background-invert-if-dark);
-height: 25px;
-width: 25px;
-display: inline-block;
-margin-left: 10px;
+    background-image: url(../img/filterremove.svg);
+    filter: var(--background-invert-if-dark);
+    height: 25px;
+    width: 25px;
+    display: inline-block;
+    margin-left: 10px;
 }
 
 .icon-analytics-drilldown {
-background-image: url(../img/column.svg);
-filter: var(--background-invert-if-dark);
+    background-image: url(../img/column.svg);
+    filter: var(--background-invert-if-dark);
 }
 
 .filterVisualizationItem {
-background-color: var(--color-background-dark);
-padding: 5px;
-border-radius: 15px;
-padding-left: 34px;
-background-position: 10px center;
-background-image: var(--icon-close-dark);
-background-repeat: no-repeat;
-opacity: .5;
-font-size: smaller;
-cursor: pointer;
+    background-color: var(--color-background-dark);
+    padding: 5px;
+    border-radius: 15px;
+    padding-left: 34px;
+    background-position: 10px center;
+    background-image: var(--icon-close-dark);
+    background-repeat: no-repeat;
+    opacity: .5;
+    font-size: smaller;
+    cursor: pointer;
 }
 
 .filterVisualizationItem:hover {
-opacity: 1;
+    opacity: 1;
 }
 
 .whatsNewPopover {
-bottom: 35px !important;
-left: 15px !important;
-width: 270px;
-z-index: 700;
+    bottom: 35px !important;
+    left: 15px !important;
+    width: 270px;
+    z-index: 700;
 }
 
 .whatsNewPopover p {
-width: auto !important;
+    width: auto !important;
 }
 
 .whatsNewPopover .caption {
-font-weight: bold;
-cursor: auto !important;
+    font-weight: bold;
+    cursor: auto !important;
 }
 
 .whatsNewPopover .icon-close {
-position: absolute;
-right: 0;
+    position: absolute;
+    right: 0;
 }
 
 .whatsNewPopover::after {
-content: none;
+    content: none;
 }
 
 .userGuidance {
-color: var(--color-text-lighter);
-font-style: italic;
-text-align: center;
+    color: var(--color-text-lighter);
+    font-style: italic;
+    text-align: center;
 }
 
 .action-separator {
-height: 0;
-margin: 5px 10px 5px 15px;
-border-bottom: 1px solid var(--color-border-dark);
-cursor: default;
+    height: 0;
+    margin: 5px 10px 5px 15px;
+    border-bottom: 1px solid var(--color-border-dark);
+    cursor: default;
 }
 
 .indicateImportantField {
-border: 1px solid var(--color-warning) !important;
+    border: 1px solid var(--color-warning) !important;
 }
 
 .favorite-mark {
-position: absolute;
-top: 5px;
-left: 25px;
-line-height: 100%;
+    position: absolute;
+    top: 5px;
+    left: 25px;
+    line-height: 100%;
 }
 
 .favorite-star {
-display: inline-block;
-opacity: 0.5;
+    display: inline-block;
+    opacity: 0.5;
 }
 
 .infoBox {
-padding: 5px;
-box-shadow: 2px 2px 5px var(--color-background-darker);
-border-radius: var(--border-radius-large);
-width: 170px;
-margin: 0 auto;
+    padding: 5px;
+    box-shadow: 2px 2px 5px var(--color-background-darker);
+    border-radius: var(--border-radius-large);
+    width: 170px;
+    margin: 0 auto;
 }
 
 .infoBox:hover {
-background: var(--color-background-hover);
-cursor: pointer;
+    background: var(--color-background-hover);
+    cursor: pointer;
 }
 
 .infoBox > img {
-height: 80px;
-margin: 0 auto;
-display: block;
-cursor: pointer;
+    height: 80px;
+    margin: 0 auto;
+    display: block;
+    cursor: pointer;
 }
 
 .infoBox > .infoBoxHeader {
-vertical-align: middle;
-width: 100%;
-margin-top: 10px;
-text-align: center;
-font-weight: bold;
-color: var(--color-text-lighter);
-cursor: pointer;
+    vertical-align: middle;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-text-lighter);
+    cursor: pointer;
 }
 
 .infoBox > .infoBoxText {
-width: 100%;
-color: var(--color-text-lighter);
-font-style: italic;
-text-align: center;
-cursor: pointer;
+    width: 100%;
+    color: var(--color-text-lighter);
+    font-style: italic;
+    text-align: center;
+    cursor: pointer;
 }
 
 .analyticsDialogHeader {
-background-image: url(../img/app-dark.svg);
-filter: var(--background-invert-if-dark);
-background-size: 16px 16px;
-background-position: 0;
-background-repeat: no-repeat;
-padding-left: 25px;
+    background-image: url(../img/app-dark.svg);
+    filter: var(--background-invert-if-dark);
+    background-size: 16px 16px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    padding-left: 25px;
 }
 
 .analyticsDialogClose {
-position: absolute;
-top: 0;
-right: 0;
-padding: 25px;
-background: var(--icon-close-dark) no-repeat center;
-opacity: .5;
-border-radius: var(--border-radius-pill);
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 25px;
+    background: var(--icon-close-dark) no-repeat center;
+    opacity: .5;
+    border-radius: var(--border-radius-pill);
 }
 
 .analyticsDialog {
-background: var(--color-main-background);
-color: var(--color-text-light);
-border-radius: var(--border-radius-large);
-box-shadow: 0 0 30px var(--color-box-shadow);
-padding: 24px;
-z-index: 10000;
-font-size: 100%;
-box-sizing: border-box;
-min-width: 200px;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-max-height: calc(100% - 20px);
-max-width: calc(100% - 20px);
-overflow: auto;
-position: fixed;
+    background: var(--color-main-background);
+    color: var(--color-text-light);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 0 30px var(--color-box-shadow);
+    padding: 24px;
+    z-index: 10000;
+    font-size: 100%;
+    box-sizing: border-box;
+    min-width: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: calc(100% - 20px);
+    max-width: calc(100% - 20px);
+    overflow: auto;
+    position: fixed;
 }
 
 .analyticsDialogDim {
-background-color: #000;
-opacity: .2;
-z-index: 9999;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
+    background-color: #000;
+    opacity: .2;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .analyticsDialogButtonrow {
-justify-content: space-between;
-position: relative;
-display: flex;
-padding-top: 10px;
+    justify-content: space-between;
+    position: relative;
+    display: flex;
+    padding-top: 10px;
 }
