@@ -892,44 +892,44 @@ OCA.Analytics.Functions = {
 };
 
 OCA.Analytics.Datasource = {
-    buildDropdown: function (target) {
+    buildDropdown: async function (target) {
+        let optionsInit = document.createDocumentFragment();
+        let optionInit = document.createElement('option');
+        optionInit.value = '';
+        optionInit.innerText = t('analytics', 'Loading');
+        optionsInit.appendChild(optionInit);
+        document.getElementById(target).innerHTML = '';
+        document.getElementById(target).appendChild(optionsInit);
+
+        // need to offer an await here, because the datasourceOptions is important for subsequent functions in the sidebar
+        let requestUrl = OC.generateUrl('apps/analytics/datasource');
+        let response = await fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        });
+        let data = await response.json();
+
+        OCA.Analytics.datasourceOptions = data['options'];
         let options = document.createDocumentFragment();
         let option = document.createElement('option');
         option.value = '';
-        option.innerText = t('analytics', 'Loading');
+        option.innerText = t('analytics', 'Please select');
         options.appendChild(option);
+
+        let sortedOptions = OCA.Analytics.Datasource.sortOptions(data['datasources']);
+        sortedOptions.forEach((entry) => {
+            let value = entry[1];
+            option = document.createElement('option');
+            option.value = entry[0];
+            option.innerText = value;
+            options.appendChild(option);
+        });
         document.getElementById(target).innerHTML = '';
         document.getElementById(target).appendChild(options);
-
-        let requestUrl = OC.generateUrl('apps/analytics/datasource');
-        fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.datasourceOptions = data['options'];
-                let options = document.createDocumentFragment();
-                let option = document.createElement('option');
-                option.value = '';
-                option.innerText = t('analytics', 'Please select');
-                options.appendChild(option);
-
-                let sortedOptions = OCA.Analytics.Datasource.sortOptions(data['datasources']);
-                sortedOptions.forEach((entry) => {
-                    let value = entry[1];
-                    option = document.createElement('option');
-                    option.value = entry[0];
-                    option.innerText = value;
-                    options.appendChild(option);
-                });
-                document.getElementById(target).innerHTML = '';
-                document.getElementById(target).appendChild(options);
-                if (document.getElementById(target).dataset.typeId) {
-                    // in case the value was set in the sidebar befor the dropdown was ready
-                    document.getElementById(target).value = document.getElementById(target).dataset.typeId;
-                }
-            });
+        if (document.getElementById(target).dataset.typeId) {
+            // in case the value was set in the sidebar befor the dropdown was ready
+            document.getElementById(target).value = document.getElementById(target).dataset.typeId;
+        }
     },
 
     sortOptions: function (obj) {
@@ -945,7 +945,7 @@ OCA.Analytics.Datasource = {
         return sortable;
     },
 
-    buildOptionsForm: function (datasource) {
+    buildDatasourceRelatedForm: function (datasource) {
         let template = OCA.Analytics.datasourceOptions[datasource];
         let form = document.createElement('div');
         let insideSection = false;
@@ -962,12 +962,14 @@ OCA.Analytics.Datasource = {
         for (let templateOption of template) {
             // loop all options of the datasource template and create the input form
 
+            // if it is a section, we don´t need the usual labels
             if (templateOption.type === 'section') {
                 let tableRow = OCA.Analytics.Datasource.buildOptionsSection(templateOption);
                 form.appendChild(tableRow);
                 insideSection = true;
                 continue;
             }
+
             // create the label column
             let tableRow = document.createElement('div');
             tableRow.style.display = insideSection === false ? 'table-row' : 'none';
@@ -1032,6 +1034,7 @@ OCA.Analytics.Datasource = {
         label.style.display = 'table-cell';
         label.style.width = '100%';
         label.innerText = templateOption.name;
+        label.id = 'optionSectionHeader';
         label.addEventListener('click', OCA.Analytics.Datasource.showHiddenOptions);
         tableRow.appendChild(label);
         return tableRow;
@@ -1093,7 +1096,7 @@ OCA.Analytics.Datasource = {
                 divElements[i].style.display = "table-row";
             }
         }
-        dataSourceOptionsDiv.getElementsByClassName("sidebarHeaderClosed")[0].style.display = "none";
+        document.getElementById('optionSectionHeader').parentElement.remove();
     },
 
     handleColumnPicker: function () {

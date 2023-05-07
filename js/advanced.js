@@ -291,7 +291,7 @@ OCA.Analytics.Advanced.Dataload = {
 
         // get all the options for a datasource
         document.getElementById('dataloadDetailItems').innerHTML = '';
-        document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildOptionsForm(dataload['datasource']));
+        document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(dataload['datasource']));
 
         // set the options for a datasource
         let fieldValues = JSON.parse(dataload['option']);

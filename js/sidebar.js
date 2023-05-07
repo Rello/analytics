@@ -197,7 +197,7 @@ OCA.Analytics.Sidebar.Report = {
             headers: OCA.Analytics.headers()
         })
             .then(response => response.json())
-            .then(data => {
+            .then(async data => {
                 let table;
                 if (data !== false) {
                     // clone the DOM template
@@ -207,7 +207,8 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('tabContainerReport').appendChild(table);
 
                     // create the drop downs for Data source, grouping and possible data set
-                    OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource');
+                    // need to do an await here, because the datasourceOptions is important for subsequent functions
+                    await OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource');
                     OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
                     OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
 
@@ -224,9 +225,9 @@ OCA.Analytics.Sidebar.Report = {
                     } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_DB)) {
                         OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
                     } else {
-                        let optionForm = OCA.Analytics.Datasource.buildOptionsForm(data['type']);
+                        let optionForm = OCA.Analytics.Datasource.buildDatasourceRelatedForm(data['type']);
                         document.getElementById('reportDatasourceSection').appendChild(optionForm);
-                        OCA.Analytics.Sidebar.Report.fillDatasourceOptionFields(data);
+                        OCA.Analytics.Sidebar.Report.fillDatasourceRelatedFields(data);
                     }
 
                 } else {
@@ -269,7 +270,7 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('sidebarReportValue').value = data['value'];
     },
 
-    fillDatasourceOptionFields: function (data) {
+    fillDatasourceRelatedFields: function (data) {
         // set the options for a datasource
         if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
             let options = JSON.parse(data['link']);
@@ -363,7 +364,7 @@ OCA.Analytics.Sidebar.Report = {
         const type = parseInt(document.getElementById('wizardNewDatasource').value);
         document.getElementById('wizardNewTypeOptionsRow').style.display = 'table-row';
         document.getElementById('wizardNewDatasourceSection').innerHTML = '';
-        document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildOptionsForm(type));
+        document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(type));
     },
 
     fillDatasetRelatedFields: function () {
