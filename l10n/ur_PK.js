@@ -19,6 +19,7 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Settings" : "سیٹینگز",
     "Name" : "اسم",
+    "Advanced" : "ایڈوانسڈ",
     "Title" : "عنوان",
     "Unshare" : "شئیرنگ ختم کریں",
     "Password protection" : "Password protection"

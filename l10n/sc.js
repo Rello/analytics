@@ -54,6 +54,7 @@ OC.L10N.register(
     "Name" : "Nùmene",
     "Display" : "Ischermu",
     "Chart" : "Gràficu",
+    "Advanced" : "Connoschèntzia avantzada",
     "Open documentation" : "Aberi sa documentatzione",
     "Update" : "Agiorna",
     "Export" : "Esporta",

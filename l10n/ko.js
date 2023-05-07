@@ -102,6 +102,7 @@ OC.L10N.register(
     "Name" : "이름",
     "Saved Data" : "데이터를 저장",
     "Display" : "표시",
+    "Advanced" : "고급",
     "Open documentation" : "문서 열기",
     "Update" : "업데이트",
     "Export" : "내보내기",

@@ -45,6 +45,7 @@ OC.L10N.register(
     "Settings" : "Stillingar",
     "Name" : "Heiti",
     "Display" : "Birting",
+    "Advanced" : "Ítarlegt",
     "Open documentation" : "Opna hjálparskjöl",
     "Update" : "Uppfæra",
     "Export" : "Flytja út",

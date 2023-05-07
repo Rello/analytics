@@ -30,6 +30,7 @@ OC.L10N.register(
     "Back" : "буцах",
     "Settings" : "Тохиргоо",
     "Name" : "Нэр",
+    "Advanced" : "нарийвчилсан",
     "Open documentation" : "бичиг баримт нээх",
     "Update" : "Шинэчлэх",
     "Export" : "Экспорт",

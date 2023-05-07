@@ -51,6 +51,7 @@ OC.L10N.register(
     "Name" : "Naziv",
     "Display" : "Prikaz",
     "Chart" : "Grafikon",
+    "Advanced" : "Napredno",
     "Open documentation" : "Otvori dokumentaciju",
     "Update" : "Ažuriraj",
     "Export" : "Izvoz",

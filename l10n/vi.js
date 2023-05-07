@@ -95,6 +95,7 @@ OC.L10N.register(
     "Settings" : "Cài đặt",
     "Name" : "Tên",
     "Display" : "Hiển th",
+    "Advanced" : "Nâng cao",
     "Open documentation" : "Mở tài liệu",
     "Update" : "Cập nhật",
     "Export" : "Xuất ra",

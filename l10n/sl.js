@@ -224,7 +224,7 @@ OC.L10N.register(
     "Timeline (date in column 2)" : "Časovnica (datum v drugem stolpcu)",
     "Area" : "Polje",
     "Doughnut" : "Krof",
-    "advanced" : "napredno",
+    "Advanced" : "Napredno",
     "Open documentation" : "Odpri dokumentacijo",
     "Data options" : "Možnosti podatkov",
     "Update" : "Posodobi",

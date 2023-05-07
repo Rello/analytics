@@ -81,6 +81,7 @@ OC.L10N.register(
     "Settings" : "Setelan",
     "Name" : "Nama",
     "Display" : "Tampilkan",
+    "Advanced" : "Lanjutan",
     "Open documentation" : "Buka dokumentasi",
     "Update" : "Perbarui",
     "Export" : "Ekspor",

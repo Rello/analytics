@@ -37,6 +37,7 @@ OC.L10N.register(
     "Settings" : "การตั้งค่า",
     "Name" : "ชื่อ",
     "Display" : "แสดงผล",
+    "Advanced" : "ขั้นสูง",
     "Open documentation" : "เปิดเอกสารประกอบ",
     "Update" : "อัปเดต",
     "Export" : "ส่งออก",

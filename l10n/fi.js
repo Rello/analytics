@@ -148,6 +148,7 @@ OC.L10N.register(
     "Table" : "Taulukko",
     "Chart" : "Kaavio",
     "Doughnut" : "Donitsi",
+    "Advanced" : "Lisäasetukset",
     "Open documentation" : "Avaa dokumentaatio",
     "Data options" : "Datavalinnat",
     "Update" : "Päivitä",

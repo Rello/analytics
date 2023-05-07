@@ -35,6 +35,7 @@ OC.L10N.register(
     "Settings" : "Seaded",
     "Name" : "Nimi",
     "Display" : "Vaade",
+    "Advanced" : "Täpsem",
     "Open documentation" : "Ava dokumentatsioon",
     "Update" : "Uuenda",
     "Export" : "Ekspordi",

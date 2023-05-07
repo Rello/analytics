@@ -114,7 +114,7 @@ OC.L10N.register(
     "Chart" : "Gráfica",
     "Timeline (date in column 2)" : "Liña temporal (data na columna 2)",
     "Area" : "Área",
-    "advanced" : "avanzado",
+    "Advanced" : "Avanzado",
     "Open documentation" : "Abrir a documentación",
     "Data options" : "Opcións dos datos",
     "Update" : "Actualizar",

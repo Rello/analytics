@@ -22,6 +22,7 @@ OC.L10N.register(
     "Favorites" : "يىغقۇچ",
     "Settings" : "تەڭشەكلەر",
     "Name" : "ئاتى",
+    "Advanced" : "ئالىي",
     "Update" : "يېڭىلا",
     "Export" : "چىقار",
     "Import" : "ئەكىر",

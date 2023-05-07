@@ -198,6 +198,7 @@ OC.L10N.register(
     "Table" : "Πίνακας",
     "Chart" : "Διάγραμμα",
     "Area" : "Περιοχή",
+    "Advanced" : "Για προχωρημένους",
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
     "Update" : "Ενημέρωση",
     "Export" : "Εξαγωγή",
