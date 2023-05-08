@@ -13,18 +13,11 @@
     <div class="modal-mask" id="analyticsWizard"
          style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
          hidden>
-
-        <div class="modal-header-top">
-            <div class="icons-menu">
-                <button id="wizardClose" class="action-item action-item--single icon-close">
-                </button>
-            </div>
-        </div>
         <div class="modal-wrapper modal-wrapper--normal" style="">
-            <a class="prev" style="">
-                <div id="wizardPrevious" class="icon icon-view-previous icon-white">
-                    <span class="hidden-visually">Previous</span>
-                </div>
+            <a class="prev" id="wizardPrevious">
+                <svg fill="currentColor" width="40" height="40" viewBox="0 0 24 24" class="material-design-icon__svg">
+                    <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"><!----></path>
+                </svg>
             </a>
             <div class="modal-container">
                 <div class="modal-header">
@@ -37,11 +30,19 @@
                 <div id="pageBody" class="modal-body"></div>
                 <div class="modal-footer" id="wizardFooter">
                 </div>
+                <button id="wizardClose" class="wizardClose">
+                    <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24"
+                         class="material-design-icon__svg">
+                        <path
+                            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z">
+                            <!----></path>
+                    </svg>
+                </button>
             </div>
-            <a class="next" style="">
-                <div id="wizardNext" class="icon icon-view-next icon-white">
-                    <span class="hidden-visually">Next</span>
-                </div>
+            <a class="next" id="wizardNext">
+                <svg fill="currentColor" width="40" height="40" viewBox="0 0 24 24" style="">
+                    <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"><!----></path>
+                </svg>
             </a>
         </div>
 </template>
@@ -49,7 +50,8 @@
 <template id="wizard-start">
     <div class="page" style="display: none;">
         <div class="content content-values">
-            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.')); ?><br><?php p($l->t('Give your numbers a meaning.')); ?></h3>
+            <h3><?php p($l->t('Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.')); ?>
+                <br><?php p($l->t('Give your numbers a meaning.')); ?></h3>
             <ul id="wizard-values">
                 <li>
                     <span class="icon-timezone"></span>
@@ -72,107 +74,108 @@
     </div>
 </template>
 <template id="wizard-charts">
-        <div class="page" style="display: none;">
-            <div class="image"><img
-                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
-            </div>
-            <div class="description">
-                <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></p>
-                <ul>
-                    <li><?php p($l->t('Different chart types like lines, columns or doughnuts')); ?></li>
-                    <li><?php p($l->t('Customize further chart options by using advanced scripting')); ?></li>
-                    <li><?php p($l->t('Show your most important insights in the Nextcloud Dashboard')); ?></li>
-                    <li><?php p($l->t('Interactive tables')); ?></li>
-                    <li><?php p($l->t('Use thresholds to mark exceptions or receive Nextcloud notifications')); ?></li>
-                </ul>
-            </div>
+    <div class="page" style="display: none;">
+        <div class="image"><img
+                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
         </div>
+        <div class="description">
+            <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></p>
+            <ul>
+                <li><?php p($l->t('Different chart types like lines, columns or doughnuts')); ?></li>
+                <li><?php p($l->t('Customize further chart options by using advanced scripting')); ?></li>
+                <li><?php p($l->t('Show your most important insights in the Nextcloud Dashboard')); ?></li>
+                <li><?php p($l->t('Interactive tables')); ?></li>
+                <li><?php p($l->t('Use thresholds to mark exceptions or receive Nextcloud notifications')); ?></li>
+            </ul>
+        </div>
+    </div>
 </template>
 <template id="wizard-filter">
-        <div class="page" style="display: none;">
-            <div class="image"><img
-                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
-            </div>
-            <div class="description">
-                <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data')); ?></p>
-                <ul>
-                    <li><?php p($l->t('Flexible filters including dynamic date variables')); ?></li>
-                    <li><?php p($l->t('Change drill down by removing columns')); ?></li>
-                    <li><?php p($l->t('Customize charts with primary or secondary axis')); ?></li>
-                    <li><?php p($l->t('Use different chart types per data series')); ?></li>
-                    <li><?php p($l->t('Save default filters')); ?></li>
-                </ul>
-            </div>
+    <div class="page" style="display: none;">
+        <div class="image"><img
+                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
         </div>
+        <div class="description">
+            <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data')); ?></p>
+            <ul>
+                <li><?php p($l->t('Flexible filters including dynamic date variables')); ?></li>
+                <li><?php p($l->t('Change drill down by removing columns')); ?></li>
+                <li><?php p($l->t('Customize charts with primary or secondary axis')); ?></li>
+                <li><?php p($l->t('Use different chart types per data series')); ?></li>
+                <li><?php p($l->t('Save default filters')); ?></li>
+            </ul>
+        </div>
+    </div>
 </template>
 <template id="wizard-datasource">
-        <div class="page" style="display: none;">
-            <div class="image"><img
-                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
-            </div>
-            <div class="description">
-                <p id="wizardNewHeader3"><?php p($l->t('Use data from various data sources')); ?></p>
-                <ul>
-                    <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
-                    <li><?php p($l->t('Use data from GitHub to monitor download statistics in real-time')); ?></li>
-                    <li><?php p($l->t('The JSON data source can read data from external services')); ?></li>
-                    <li><?php p($l->t('With the HTML-Grabber, almost any website data can be extracted')); ?></li>
-                    <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in real-time')); ?></li>
-                </ul>
-            </div>
+    <div class="page" style="display: none;">
+        <div class="image"><img
+                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
         </div>
+        <div class="description">
+            <p id="wizardNewHeader3"><?php p($l->t('Use data from various data sources')); ?></p>
+            <ul>
+                <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
+                <li><?php p($l->t('Use data from GitHub to monitor download statistics in real-time')); ?></li>
+                <li><?php p($l->t('The JSON data source can read data from external services')); ?></li>
+                <li><?php p($l->t('With the HTML-Grabber, almost any website data can be extracted')); ?></li>
+                <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in real-time')); ?></li>
+            </ul>
+        </div>
+    </div>
 </template>
 <template id="wizard-dataload">
-        <div class="page" style="display: none;">
-            <div class="image"><img
-                        src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
-            </div>
-            <div class="description">
-                <p id="wizardNewHeader4"><?php p($l->t('Automation')); ?></p>
-                <ul>
-                    <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
-                    <li><?php p($l->t('Use timestamps to historize data')); ?></li>
-                    <li><?php p($l->t('Full (deletion of old data) or delta loads')); ?></li>
-                    <li><?php p($l->t('Schedule data loads in the background daily or hourly')); ?></li>
-                    <li><?php p($l->t('Trigger data loads via scripts using the occ command')); ?></li>
-                    <li><?php p($l->t('Use the REST API to push data into Analytics')); ?></li>
-                </ul>
-            </div>
+    <div class="page" style="display: none;">
+        <div class="image"><img
+                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
         </div>
+        <div class="description">
+            <p id="wizardNewHeader4"><?php p($l->t('Automation')); ?></p>
+            <ul>
+                <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
+                <li><?php p($l->t('Use timestamps to historize data')); ?></li>
+                <li><?php p($l->t('Full (deletion of old data) or delta loads')); ?></li>
+                <li><?php p($l->t('Schedule data loads in the background daily or hourly')); ?></li>
+                <li><?php p($l->t('Trigger data loads via scripts using the occ command')); ?></li>
+                <li><?php p($l->t('Use the REST API to push data into Analytics')); ?></li>
+            </ul>
+        </div>
+    </div>
 </template>
 <template id="wizardFinal">
-        <div class="page content-final" style="display: none;">
-            <div class="description-wide">
-                <div class="description-block">
-                    <h3 class="icon-info"><?php p($l->t('Get more information')); ?></h3>
-                    <ul>
-                        <li><a href="https://github.com/Rello/analytics/wiki" target="_blank" rel="noreferrer noopener"><?php p($l->t('Wiki')); ?></a>
-                        </li>
-                        <li><a href="https://help.nextcloud.com/c/apps/analytics/159" target="_blank"
-                               rel="noreferrer noopener"><?php p($l->t('Nextcloud forum')); ?></a></li>
-                    </ul>
-                </div>
-                <br>
-                <div class="description-block">
-                    <p><?php p($l->t('You can open this introduction again by selecting "Introduction" in the Analytics settings section.')); ?></p>
-                </div>
+    <div class="page content-final" style="display: none;">
+        <div class="description-wide">
+            <div class="description-block">
+                <h3 class="icon-info"><?php p($l->t('Get more information')); ?></h3>
+                <ul>
+                    <li><a href="https://github.com/Rello/analytics/wiki" target="_blank"
+                           rel="noreferrer noopener"><?php p($l->t('Wiki')); ?></a>
+                    </li>
+                    <li><a href="https://help.nextcloud.com/c/apps/analytics/159" target="_blank"
+                           rel="noreferrer noopener"><?php p($l->t('Nextcloud forum')); ?></a></li>
+                </ul>
             </div>
-            <div class="description-wide">
-                <div class="description-block">
-                    <h3 class="icon-link"><?php p($l->t('Quickstart')); ?></h3>
-                    <p><?php p($l->t('Activate a set of demo report to show how Analytics works.')); ?></p>
-                    <button id="wizardDemo">
-                        <?php p($l->t('Create Demo')); ?>
-                    </button>
-                </div>
-                <br><br>
-                <div class="description-block">
-                    <button id="wizardEnd" class="primary modal-default-button">
-                        <?php p($l->t('Start using Analytics')); ?>
-                    </button>
-                </div>
+            <br>
+            <div class="description-block">
+                <p><?php p($l->t('You can open this introduction again by selecting "Introduction" in the Analytics settings section.')); ?></p>
             </div>
         </div>
+        <div class="description-wide">
+            <div class="description-block">
+                <h3 class="icon-link"><?php p($l->t('Quickstart')); ?></h3>
+                <p><?php p($l->t('Activate a set of demo report to show how Analytics works.')); ?></p>
+                <button id="wizardDemo">
+                    <?php p($l->t('Create Demo')); ?>
+                </button>
+            </div>
+            <br><br>
+            <div class="description-block">
+                <button id="wizardEnd" class="primary modal-default-button">
+                    <?php p($l->t('Start using Analytics')); ?>
+                </button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template id="wizardNewGeneral">
@@ -184,7 +187,8 @@
                     <div style="display: table-cell; width: 50%;">
                         <?php p($l->t('Report title')); ?>
                         <br>
-                        <input style="display: table-cell; width: 400px;" id="wizardNewName" value="<?php p($l->t('New report')); ?>">
+                        <input style="display: table-cell; width: 400px;" id="wizardNewName"
+                               value="<?php p($l->t('New report')); ?>">
                         <br><br>
                         <?php p($l->t('Subheader')); ?>
                         <br>
@@ -337,8 +341,8 @@
                     <div style="display: table-cell; ">
                         <div class="icon-analytics-chartLine icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 17px;">
-                        <input type="radio" id="chartTime" class="radio" name="chart" value="datetime">
-                        <label for="chartTime"><?php p($l->t('Timeline (date in column 2)')); ?></label>
+                            <input type="radio" id="chartTime" class="radio" name="chart" value="datetime">
+                            <label for="chartTime"><?php p($l->t('Timeline (date in column 2)')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
@@ -353,8 +357,8 @@
                     <div style="display: table-cell; ">
                         <div class="icon-analytics-chartTime icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 17px;">
-                        <input type="radio" id="chartLine" class="radio" name="chart" value="line">
-                        <label for="chartLine"><?php p($l->t('Line')); ?></label>
+                            <input type="radio" id="chartLine" class="radio" name="chart" value="line">
+                            <label for="chartLine"><?php p($l->t('Line')); ?></label>
                         </div>
                     </div>
                 </div>
@@ -371,8 +375,8 @@
                     <div style="display: table-cell;">
                         <div class="icon-analytics-chartBar icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 17px;">
-                        <input type="radio" id="chartBar" class="radio" name="chart" value="column">
-                        <label for="chartBar"><?php p($l->t('Bar')); ?></label>
+                            <input type="radio" id="chartBar" class="radio" name="chart" value="column">
+                            <label for="chartBar"><?php p($l->t('Bar')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
@@ -383,8 +387,8 @@
                     <div style="display: table-cell;">
                         <div class="icon-analytics-chartDonut icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 17px;">
-                        <input type="radio" id="chartDonut" class="radio" name="chart" value="doughnut">
-                        <label for="chartDonut"><?php p($l->t('Doughnut')); ?></label>
+                            <input type="radio" id="chartDonut" class="radio" name="chart" value="doughnut">
+                            <label for="chartDonut"><?php p($l->t('Doughnut')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
@@ -410,7 +414,7 @@
             <div class="table" style="display: table; width: 100%;">
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
-                        <?php p($l->t('Dataset'));?> <?php p($l->t('Title'));?>
+                        <?php p($l->t('Dataset')); ?> <?php p($l->t('Title')); ?>
                         <br>
                         <input style="display: table-cell; width: 400px;" id="wizardDatasetName">
                         <br><br>

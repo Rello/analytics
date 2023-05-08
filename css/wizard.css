@@ -90,7 +90,24 @@
     width: 8%;
     min-width: 60px;
     height: 100%;
-    transition: opacity 250ms, visibility 250ms;
+    color: var(--color-primary-text);
+}
+
+#analyticsWizard .modal-wrapper .modal-container .wizardClose {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: var(--color-main-text);
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+    width: 44px;
+    height: 44px;
+    margin: 0px;
+}
+
+#analyticsWizard .modal-wrapper .modal-container .wizardClose:hover {
+    background-color: var(--color);
+    background-color: var(--color-background-hover);
 }
 
 #analyticsWizard .modal-wrapper .icon-view-next,
@@ -107,9 +124,7 @@
     width: 44px;
     height: 44px;
     padding: 12px 11px;
-/ / color: white;
     border-radius: 22px;
-/ / background-image: none;
     font-size: 24px;
 }
 
@@ -186,7 +201,7 @@
     padding: 20px 12px;
     background-color: var(--color-primary);
     background-size: contain;
-    /*background-image: url(/nextcloud/core/img/background.png?v=4), linear-gradient(40deg, #0082c9 0%, #30b6ff 100%);*/
+    background-image: var(--image-background, var(--image-background-plain, url("../../../core/img/background.svg"), linear-gradient(40deg, #0082c9 0%, #30b6ff 100%)));
     color: var(--color-primary-text);
     text-align: center;
 }

@@ -125,8 +125,8 @@ OCA.Analytics.Wizard = {
             callback();
         }
 
-        OCA.Analytics.Wizard.currentSlide === 1 ? prev.hidden = true : prev.hidden = false;
-        OCA.Analytics.Wizard.currentSlide === OCA.Analytics.Wizard.sildeArray.length - 1 ? next.hidden = true : next.hidden = false;
+        OCA.Analytics.Wizard.currentSlide === 1 ? prev.style.visibility = 'hidden' : prev.style.visibility = 'initial';
+        OCA.Analytics.Wizard.currentSlide === OCA.Analytics.Wizard.sildeArray.length - 1 ? next.style.visibility = 'hidden' : next.style.visibility = 'initial';
     },
 
     wizardFinal: function () {
