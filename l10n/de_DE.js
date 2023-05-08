@@ -170,6 +170,7 @@ OC.L10N.register(
     "JSON" : "JSON",
     "HTTP method" : "HTTP-Methode",
     "Object path" : "Objekt-Pfad",
+    "More options" : "Weitere Optionen",
     "Authentication" : "Authentifizierung",
     "HTML grabber" : "HTML-Grabber",
     "valid regex" : "gültiger Regex",

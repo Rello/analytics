@@ -170,6 +170,7 @@ OC.L10N.register(
     "JSON" : "JSON",
     "HTTP method" : "HTTP metódus",
     "Object path" : "Objektumútvonal",
+    "More options" : "További lehetőségek",
     "Authentication" : "Hitelesítés",
     "HTML grabber" : "HTML fogadó",
     "valid regex" : "érvényes regex",

@@ -32,6 +32,7 @@ OC.L10N.register(
     "Back" : "Terug",
     "Settings" : "Instellings",
     "Name" : "Naam",
+    "Advanced" : "Gevorderd",
     "Open documentation" : "Open dokumentasie",
     "Update" : "Werk by",
     "Export" : "Voer uit",

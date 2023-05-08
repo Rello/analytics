@@ -170,6 +170,7 @@ OC.L10N.register(
     "JSON" : "JSON",
     "HTTP method" : "HTTP yöntemi",
     "Object path" : "Nesne yolu",
+    "More options" : "Diğer seçenekler",
     "Authentication" : "Kimlik doğrulama",
     "HTML grabber" : "Html yakalayıcı",
     "valid regex" : "geçerli kurallı ifade",
