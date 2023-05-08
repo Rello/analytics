@@ -434,7 +434,7 @@
     }]
   }, {
     "id": "481aca91-1337-422f-8748-81aa12f3dfc7",
-    "name": "20 Data",
+    "name": "20 Add Data",
     "commands": [{
       "id": "bf9a3511-30fd-4530-baec-d9c053a3f07f",
       "comment": "",
@@ -1498,7 +1498,7 @@
     }]
   }, {
     "id": "958b783e-1ac4-4f7e-885b-182a630fb95e",
-    "name": "50 Automation Dataload",
+    "name": "50 Automation Dataload (csv; column picker)",
     "commands": [{
       "id": "c0594c62-c044-4aef-bb55-5fb60f0a1708",
       "comment": "Advance Settings via URL",
@@ -2095,6 +2095,34 @@
       ],
       "value": "json testdata"
     }, {
+      "id": "59efd030-0108-40cd-807b-779742d0cc45",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=optionSectionHeader",
+      "targets": [
+        ["linkText=More options", "linkText"],
+        ["css=.sidebarHeaderClosed > a", "css:finder"],
+        ["xpath=//a[contains(text(),'More options')]", "xpath:link"],
+        ["xpath=//div[@id='dataSourceOptions']/div[4]/a", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'More options')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4e5c2840-100c-4de5-9dae-73c2a35a0a37",
+      "comment": "",
+      "command": "click",
+      "target": "id=optionSectionHeader",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0631e201-708d-4c0c-bf0a-af1d06ae4c8f",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "id=optionSectionHeader",
+      "targets": [],
+      "value": "30000"
+    }, {
       "id": "51da866b-f97c-4693-b154-79d72ad7bbf4",
       "comment": "",
       "command": "click",
@@ -2538,7 +2566,7 @@
     }]
   }, {
     "id": "9833f9a7-630d-4ea4-890d-b84f0a2e3ca8",
-    "name": "25 Filter",
+    "name": "25 Report Filter",
     "commands": [{
       "id": "e78dd293-0f55-423f-ad79-74285b348462",
       "comment": "",
@@ -4199,11 +4227,11 @@
       "id": "6e5ddb5c-3e5e-42ed-ba9d-9bc73a04f240",
       "comment": "",
       "command": "assertText",
-      "target": "css=.empty-content__title",
+      "target": "css=.empty-content:nth-child(1) > .empty-content__title",
       "targets": [
-        ["css=.empty-content__title", "css:finder"],
+        ["css=.empty-content:nth-child(1) > .empty-content__title", "css:finder"],
         ["xpath=//div[@id='header-menu-notifications']/div/div/div/h2", "xpath:idRelative"],
-        ["xpath=//h2", "xpath:position"],
+        ["xpath=//div[2]/div/div/div/h2", "xpath:position"],
         ["xpath=//h2[contains(.,'No notifications')]", "xpath:innerText"]
       ],
       "value": "No notifications"
@@ -4297,13 +4325,7 @@
       "comment": "",
       "command": "eyesCheckElement",
       "target": "id=analytics_dialog_container",
-      "targets": [
-        ["id=analytics_dialog_container", "id"],
-        ["css=#analytics_dialog_container", "css:finder"],
-        ["xpath=//div[@id='analytics_dialog_container']", "xpath:attributes"],
-        ["xpath=//body[@id='body-user']/div[10]", "xpath:idRelative"],
-        ["xpath=//div[10]", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }, {
       "id": "2b5f1446-4b45-42fa-9284-c2277e75fcd3",
@@ -4351,13 +4373,7 @@
       "comment": "",
       "command": "eyesCheckElement",
       "target": "id=analytics_dialog_container",
-      "targets": [
-        ["id=analytics_dialog_container", "id"],
-        ["css=#analytics_dialog_container", "css:finder"],
-        ["xpath=//div[@id='analytics_dialog_container']", "xpath:attributes"],
-        ["xpath=//body[@id='body-user']/div[11]", "xpath:idRelative"],
-        ["xpath=//div[11]", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }, {
       "id": "3e1cbd6c-4285-45ea-ac60-3eb154fc3867",
@@ -4422,13 +4438,7 @@
       "comment": "",
       "command": "eyesCheckElement",
       "target": "id=app-sidebar",
-      "targets": [
-        ["id=app-sidebar", "id"],
-        ["css=#app-sidebar", "css:finder"],
-        ["xpath=//div[@id='app-sidebar']", "xpath:attributes"],
-        ["xpath=//div[@id='content']/div[3]", "xpath:idRelative"],
-        ["xpath=//div[8]/div[3]", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }, {
       "id": "de458b2a-2c0f-4360-9d63-d1ad81ab5aa0",
@@ -4461,13 +4471,7 @@
       "comment": "",
       "command": "eyesCheckElement",
       "target": "id=app-sidebar",
-      "targets": [
-        ["id=app-sidebar", "id"],
-        ["css=#app-sidebar", "css:finder"],
-        ["xpath=//div[@id='app-sidebar']", "xpath:attributes"],
-        ["xpath=//div[@id='content']/div[3]", "xpath:idRelative"],
-        ["xpath=//div[9]/div[3]", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }, {
       "id": "5a325c2a-949f-4e88-87c1-de2a984008ea",
@@ -4495,13 +4499,7 @@
       "comment": "",
       "command": "eyesCheckElement",
       "target": "id=app-sidebar",
-      "targets": [
-        ["id=app-sidebar", "id"],
-        ["css=#app-sidebar", "css:finder"],
-        ["xpath=//div[@id='app-sidebar']", "xpath:attributes"],
-        ["xpath=//div[@id='content']/div[3]", "xpath:idRelative"],
-        ["xpath=//div[10]/div[3]", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }, {
       "id": "d1d40708-b8f4-416a-8f89-76c944e1fb42",
@@ -4529,13 +4527,7 @@
       "comment": "",
       "command": "eyesCheckElement",
       "target": "id=app-sidebar",
-      "targets": [
-        ["id=app-sidebar", "id"],
-        ["css=#app-sidebar", "css:finder"],
-        ["xpath=//div[@id='app-sidebar']", "xpath:attributes"],
-        ["xpath=//div[@id='content']/div[3]", "xpath:idRelative"],
-        ["xpath=//div[11]/div[3]", "xpath:position"]
-      ],
+      "targets": [],
       "value": ""
     }]
   }, {
@@ -5061,33 +5053,5 @@
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",
     "version": "1.0.0"
-  }],
-  "snapshot": {
-    "globalConfig": {
-      "snapshot": "const { Eyes, Target } = require('@applitools/eyes-selenium');global.Target = Target;const { ConsoleLogHandler, BatchInfo, AccessibilityLevel, AccessibilityGuidelinesVersion } = require('@applitools/eyes-sdk-core');let apiKey = process.env.APPLITOOLS_API_KEY, serverUrl = process.env.APPLITOOLS_SERVER_URL, appName = \"Analytics Test\", batchId = configuration.runId, batchName;"
-    },
-    "tests": [{
-      "id": "12fa11da-e09a-4932-ac90-70b6ce9f5d47",
-      "snapshot": {
-        "commands": {
-          "a870d142-8492-485f-ab59-3a1434300095": "await eyes.setViewportSize({width: 1621, height: 796});",
-          "5d14090d-6c27-4c5c-b1c7-5420084b5e9a": "if (!opts.isNested) {await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.window().webHook(preRenderHook).fully(true));}",
-          "f2693f2a-9e22-4964-b5dd-2d1921336b86": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`analytics_dialog_container`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`analytics_dialog_container`)).webHook(preRenderHook));}",
-          "c39dfd18-36ca-4366-b003-5044c6d32513": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`analytics_dialog_container`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`analytics_dialog_container`)).webHook(preRenderHook));}",
-          "2711916f-30be-4f07-85be-ef22ac92050c": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`app-sidebar`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`app-sidebar`)).webHook(preRenderHook));}",
-          "85a3f166-8bc3-48de-a0de-3d6df3ac44f3": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`app-sidebar`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`app-sidebar`)).webHook(preRenderHook));}",
-          "d2bba7e8-6898-4f5d-9853-ef2214627c60": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`app-sidebar`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`app-sidebar`)).webHook(preRenderHook));}",
-          "5bbbc5c5-61ca-4934-b703-e498e1639ccf": "if (!opts.isNested) {await driver.wait(until.elementLocated(By.id(`app-sidebar`)), configuration.timeout); await eyes.check(\"\" || (new URL(await driver.getCurrentUrl())).pathname, Target.region(By.id(`app-sidebar`)).webHook(preRenderHook));}"
-        },
-        "setupHooks": ["const _driver = driver;driver = await eyes.open(driver, appName, \"UX Applitools\");global.preRenderHook = \"\";"],
-        "teardownHooks": ["driver = _driver;"]
-      }
-    }]
-  },
-  "dependencies": {
-    "@applitools/eyes-selenium": "4.44.0"
-  },
-  "jest": {
-    "extraGlobals": ["Math"]
-  }
+  }]
 }
