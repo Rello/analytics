@@ -32,6 +32,7 @@ OC.L10N.register(
     "Settings" : "Settings",
     "Name" : "Nome",
     "Display" : "Amosar",
+    "Advanced" : "Avanzáu",
     "Open documentation" : "Abrir documentación",
     "Update" : "Anovar",
     "Export" : "Esportar",

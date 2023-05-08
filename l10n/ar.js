@@ -102,6 +102,7 @@ OC.L10N.register(
     "Settings" : "الإعدادات",
     "Name" : "الاسم",
     "Display" : "عرض",
+    "Advanced" : "تعديلات متقدمه",
     "Open documentation" : "فتح الدليل",
     "Update" : "تحديث",
     "Export" : "تصدير",

@@ -233,6 +233,7 @@ OC.L10N.register(
     "Timeline (date in column 2)" : "Хронология (Дата в колона 2)",
     "Area" : "Област",
     "Doughnut" : "Поничка/Пръстеновидна",
+    "Advanced" : "Допълнителни",
     "Open documentation" : "Отваряне на документацията",
     "Data options" : "Опции за данни",
     "Update" : "Обновяване",
