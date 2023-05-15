@@ -257,4 +257,22 @@ class ShareMapper
         $sql->executeStatement();
         return true;
     }
+
+    /**
+     * delete all shares when a share-receiving-user is deleted
+     *
+     * @param $userId
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteByUser($userId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->delete(self::TABLE_NAME)
+            ->where($sql->expr()->eq('uid_owner', $sql->createNamedParameter($userId)))
+            ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter(0)));
+        $sql->executeStatement();
+        return true;
+    }
+
 }

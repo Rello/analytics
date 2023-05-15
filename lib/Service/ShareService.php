@@ -70,7 +70,6 @@ class ShareService
     /**
      * create a new share
      *
-     * @NoAdminRequired
      * @param $reportId
      * @param $type
      * @param $user
@@ -91,19 +90,24 @@ class ShareService
     /**
      * get all shares for a report
      *
-     * @NoAdminRequired
      * @param $reportId
      * @return array
+     * @throws Exception
      */
     public function read($reportId)
     {
 
         $shares = $this->ShareMapper->getShares($reportId);
-        foreach ($shares as &$share) {
+        foreach ($shares as $key => $share) {
             if ((int)$share['type'] === self::SHARE_TYPE_USER) {
-                $share['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
+                if (!$this->userManager->userExists($share['uid_owner'])) {
+                    $this->ShareMapper->deleteShare($share['id']);
+                    unset($shares[$key]);
+                    continue;
+                }
+                $shares[$key]['displayName'] = $this->userManager->get($share['uid_owner'])->getDisplayName();
             }
-            $share['pass'] = $share['pass'] !== null;
+            $shares[$key]['pass'] = $share['pass'] !== null;
         }
         return $shares;
     }
@@ -111,7 +115,6 @@ class ShareService
     /**
      * get all report by token
      *
-     * @NoAdminRequired
      * @param $token
      * @return array
      */
@@ -124,7 +127,6 @@ class ShareService
     /**
      * verify password hahes
      *
-     * @NoAdminRequired
      * @param $password
      * @param $sharePassword
      * @return bool
@@ -137,7 +139,6 @@ class ShareService
     /**
      * get all reports shared with user
      *
-     * @NoAdminRequired
      * @throws Exception
      */
     public function getSharedReports()
@@ -193,7 +194,6 @@ class ShareService
      * get metadata of a report, shared with current user
      * used to check if user is allowed to execute current report
      *
-     * @NoAdminRequired
      * @param $reportId
      * @return array
      * @throws Exception
@@ -212,7 +212,6 @@ class ShareService
     /**
      * Delete an own share (sharee or receiver)
      *
-     * @NoAdminRequired
      * @param $shareId
      * @return bool
      * @throws Exception
@@ -226,7 +225,6 @@ class ShareService
     /**
      * delete all shares for a report
      *
-     * @NoAdminRequired
      * @param $reportId
      * @return bool
      */
@@ -236,9 +234,19 @@ class ShareService
     }
 
     /**
+     * delete all shares when a share-receiving-user is deleted
+     *
+     * @param $userId
+     * @return bool
+     */
+    public function deleteByUser($userId)
+    {
+        return $this->ShareMapper->deleteByUser($userId);
+    }
+
+    /**
      * update/set share password
      *
-     * @NoAdminRequired
      * @param $shareId
      * @param string|null $password
      * @param string|null $canEdit

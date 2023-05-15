@@ -1,10 +1,12 @@
 # Changelog
 
+## 4.9.0 - 2023-05-15
 ### Added
 - smart picker integration #343
 - sharing of report groups #342
 - Allow custom headers in JSON data source #351
 - Grouping data source parameters into "more" section for better readability
+- cleanup receiving shares when user is deleted
 
 ### Fixed
 - thresholds of other user in shared report
