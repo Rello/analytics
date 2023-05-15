@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "http://localhost:8081",
+  "url": "http://localhost:8085",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -2096,7 +2096,7 @@
       "value": "json testdata"
     }, {
       "id": "59efd030-0108-40cd-807b-779742d0cc45",
-      "comment": "",
+      "comment": "Test extend-able \"more options\"",
       "command": "assertElementPresent",
       "target": "id=optionSectionHeader",
       "targets": [
@@ -3391,7 +3391,7 @@
         ["xpath=//div[5]/div[2]/h3", "xpath:position"],
         ["xpath=//h3[contains(.,'Advanced configuration: Data loads')]", "xpath:innerText"]
       ],
-      "value": "Advanced configuration - Data loads"
+      "value": "Automation"
     }, {
       "id": "1f70289a-4ce0-4f5e-b578-791ffef39934",
       "comment": "",
@@ -5048,7 +5048,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",
