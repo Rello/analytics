@@ -11,11 +11,15 @@
 
 namespace OCA\Analytics\Service;
 
+use OCP\DB\Exception;
 use Psr\Log\LoggerInterface;
 
 class UserService
 {
     private $logger;
+    private $ShareService;
+    private $ReportService;
+    private $DatasetService;
 
     public function __construct(
         LoggerInterface $logger,
@@ -35,7 +39,7 @@ class UserService
      *
      * @param $userId
      * @return bool
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function deleteUserData($userId)
     {
