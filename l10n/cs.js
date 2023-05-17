@@ -170,6 +170,7 @@ OC.L10N.register(
     "JSON" : "JSON",
     "HTTP method" : "HTTP metoda",
     "Object path" : "Popis umístění objektu",
+    "More options" : "Další volby",
     "Authentication" : "Ověřování se",
     "HTML grabber" : "odchytávač HTML",
     "valid regex" : "platný regulární výraz",
