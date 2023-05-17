@@ -17,11 +17,11 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Visualization: combined charts, zoom, tables, filters
 - Analysis functions: trend, dis-/aggregation
 - Thresholds for alerts and color coding
-- Integration: Files, Activity, Notifications, Flow, Dashboard, Search
+- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker
 - Sharing: user, groups, link
 
 ]]></description>
-    <version>4.9.0</version>
+    <version>4.9.1</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>

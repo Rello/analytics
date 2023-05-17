@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.9.1 - 2023-05-17
+### Fixed
+- Whats-new popup
+
 ## 4.9.0 - 2023-05-15
 ### Added
 - smart picker integration #343
