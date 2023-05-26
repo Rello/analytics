@@ -148,9 +148,11 @@ class ShareService
         $reports = array();
 
         foreach ($sharedReports as $sharedReport) {
+            $this->logger->debug('Shareservice: evaluating share: ' . $sharedReport["id"] . ' type ' . $sharedReport['shareType'] . ' for '. $sharedReport['shareUid_owner']);
             // shared with a group?
             if ($sharedReport['shareType'] === self::SHARE_TYPE_GROUP) {
                 // is the current user part of this group?
+                $this->logger->debug('Shareservice: Type group');
                 if (array_key_exists($sharedReport['shareUid_owner'], $groupsOfUser)) {
                     // was the report not yet added to the result?
                     if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
@@ -163,9 +165,12 @@ class ShareService
             // shared with a user directly?
             } elseif ($sharedReport['shareType'] === self::SHARE_TYPE_USER) {
                 // current user matching?
+                $this->logger->debug('Shareservice: Type user; check against current user ' . $this->userSession->getUser()->getUID());
                 if ($this->userSession->getUser()->getUID() === $sharedReport['shareUid_owner']) {
                     // was the report not yet added to the result?
+                    $this->logger->debug('Shareservice: Share belongs to current user');
                     if (!in_array($sharedReport["id"], array_column($reports, "id"))) {
+                        $this->logger->debug('Shareservice: Share added to output');
                         unset($sharedReport['shareType']);
                         unset($sharedReport['shareUid_owner']);
                         $sharedReport['isShare'] = self::SHARE_TYPE_USER;
