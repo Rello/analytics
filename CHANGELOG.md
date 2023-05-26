@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.9.3 - 2023-05-27
+### Fixed
+- Sharing reports not possible any more #354
+- 
 ## 4.9.2 - 2023-05-26
 ### Fixed
 - Sharing reports not possible any more #354
