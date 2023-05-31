@@ -71,6 +71,8 @@ OC.L10N.register(
     "View changelog" : "Ver o rexistro de cambios",
     "Local file" : "Ficheiro local",
     "File" : "Ficheiro",
+    "Select columns" : "Seleccionar columnas",
+    "e.g. 1,2,4 or leave empty" : "p.ex. 1,2,4 ou deixe en branco",
     "No" : "Non",
     "Yes" : "Si",
     "Version" : "Versión",
