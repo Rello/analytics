@@ -32,6 +32,7 @@ OCA.Analytics.Sidebar = {
             if (!OCA.Analytics.isAdvanced) {
                 if (appsidebar.dataset.id === '') {
                     $('#sidebarClose').on('click', OCA.Analytics.Sidebar.close);
+                    // OC.Apps not working anymore
                     appsidebar.classList.remove('disappear');
                 }
             } else {
