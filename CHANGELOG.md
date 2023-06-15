@@ -1,9 +1,13 @@
 # Changelog
 
+## 4.9.4 - 2023-06-15
+### Fixed
+- NC 27 Uncaught (in promise) TypeError: OC.Apps is undefined #356
+
 ## 4.9.3 - 2023-05-27
 ### Fixed
 - Sharing reports not possible any more #354
-- 
+
 ## 4.9.2 - 2023-05-26
 ### Fixed
 - Sharing reports not possible any more #354

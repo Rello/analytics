@@ -166,7 +166,8 @@
 
 .sidebarInput {
     width: 200px;
-    border: 2px solid var(--color-border-dark) !important;
+    border: 1px solid var(--color-border-dark) !important;
+    border-radius: var(--border-radius-large);
 }
 
 .sidebarHeaderClosed {

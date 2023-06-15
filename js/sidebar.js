@@ -32,12 +32,12 @@ OCA.Analytics.Sidebar = {
             if (!OCA.Analytics.isAdvanced) {
                 if (appsidebar.dataset.id === '') {
                     $('#sidebarClose').on('click', OCA.Analytics.Sidebar.close);
-                    OC.Apps.showAppSidebar();
+                    appsidebar.classList.remove('disappear');
                 }
             } else {
                 OCA.Analytics.UI.hideElement('analytics-intro');
                 OCA.Analytics.UI.showElement('analytics-content');
-                OC.Apps.showAppSidebar();
+                appsidebar.classList.remove('disappear');
             }
             appsidebar.dataset.id = datasetId;
             appsidebar.dataset.type = datasetType;
@@ -135,7 +135,7 @@ OCA.Analytics.Sidebar = {
 
     close: function () {
         document.getElementById('app-sidebar').dataset.id = '';
-        OC.Apps.hideAppSidebar();
+        document.getElementById('app-sidebar').classList.add('disappear');
         document.querySelector('.tabHeaders').innerHTML = '';
         document.querySelector('.tabsContainer').innerHTML = '';
     },

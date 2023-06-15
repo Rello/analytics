@@ -34,12 +34,12 @@ OCA.Analytics.Advanced = {
             if (document.getElementById('advanced').value === 'false') {
                 if (appsidebar.dataset.id === '') {
                     document.getElementById("sidebarClose").addEventListener("click", OCA.Analytics.Advanced.hideSidebar);
-                    OC.Apps.showAppSidebar();
+                    appsidebar.classList.remove('disappear');
                 }
             } else {
                 OCA.Analytics.UI.hideElement('analytics-intro');
                 OCA.Analytics.UI.showElement('analytics-content');
-                OC.Apps.showAppSidebar();
+                appsidebar.classList.remove('disappear');
             }
             appsidebar.dataset.id = datasetId;
             appsidebar.dataset.type = datasetType;
@@ -110,7 +110,7 @@ OCA.Analytics.Advanced = {
 
     hideSidebar: function () {
         document.getElementById('app-sidebar').dataset.id = '';
-        OC.Apps.hideAppSidebar();
+        document.getElementById('app-sidebar').classList.add('disappear');
         document.querySelector('.tabHeaders').innerHTML = '';
         document.querySelector('.tabsContainer').innerHTML = '';
     },
