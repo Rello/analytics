@@ -45,8 +45,10 @@ class Application extends App implements IBootstrap
         $context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
         $context->registerSearchProvider(SearchProvider::class);
 
-        $context->registerReferenceProvider(ReferenceProvider::class);
-        $context->registerEventListener(RenderReferenceEvent::class, ReferenceListener::class);
+        if (method_exists($context, 'registerReferenceProvider')) {
+            $context->registerReferenceProvider(ReferenceProvider::class);
+            $context->registerEventListener(RenderReferenceEvent::class, ReferenceListener::class);
+        }
 
         $this->registerNotifications();
     }
