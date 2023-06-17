@@ -520,6 +520,10 @@ OCA.Analytics.Navigation = {
         })
     },
 
+    handleSettingsButton: function () {
+        document.getElementById('app-settings').classList.toggle('open');
+    },
+
     handleUnshareButton: function (evt) {
         let shareId = evt.target.parentNode.dataset.shareId;
 
@@ -629,4 +633,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
     document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
+    document.getElementById('appSettingsButton').addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);
 });

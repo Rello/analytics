@@ -4,6 +4,7 @@
 ### Fixed
 - NC 27 Uncaught (in promise) TypeError: OC.Apps is undefined #356
 - Error in journal after upgrade Nextcloud to 24.0.12 #355
+- Settings navigation not working
 
 ## 4.9.3 - 2023-05-27
 ### Fixed

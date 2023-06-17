@@ -260,7 +260,7 @@ OCA.Analytics.Notification = {
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
             + '<div id="analyticsDialogContainer" class="analyticsDialog">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
-            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + '<h2 class="analyticsDialogHeader" id="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
             + header
             + '</h2>'
             + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
@@ -281,7 +281,7 @@ OCA.Analytics.Notification = {
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
             + '<div id="analyticsDialogContainer" class="analyticsDialog">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
-            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + '<h2 class="analyticsDialogHeader" id="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
             + header
             + '</h2>'
             + '<div id="analyticsDialogContent">'
@@ -321,7 +321,7 @@ OCA.Analytics.Notification = {
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
             + '<div id="analyticsDialogContainer" class="analyticsDialog">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
-            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + '<h2 class="analyticsDialogHeader" id="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
             + header
             + '</h2>'
             + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
