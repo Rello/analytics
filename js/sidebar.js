@@ -201,6 +201,7 @@ OCA.Analytics.Sidebar.Report = {
             .then(async data => {
                 let table;
                 if (data !== false) {
+                    data['type'] = parseInt(data['type']);
                     // clone the DOM template
                     table = document.importNode(document.getElementById('templateReport').content, true);
                     table.id = 'sidebarReport';
@@ -220,10 +221,10 @@ OCA.Analytics.Sidebar.Report = {
                     OCA.Analytics.Sidebar.Report.buildSections(data['type']);
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
-                    if ((parseInt(data['type']) === OCA.Analytics.TYPE_GROUP)) {
+                    if (data['type'] === OCA.Analytics.TYPE_GROUP) {
                         document.getElementById('sidebarReportExportButton').style.display = 'none';
                         document.getElementById('sidebarReportNameHint').style.display = 'none';
-                    } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_DB)) {
+                    } else if (data['type'] === OCA.Analytics.TYPE_INTERNAL_DB) {
                         OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
                     } else {
                         let optionForm = OCA.Analytics.Datasource.buildDatasourceRelatedForm(data['type']);
