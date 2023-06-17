@@ -28,6 +28,7 @@ OC.L10N.register(
     "Version" : "Versioon",
     "Authentication" : "Autentimine",
     "Announcements" : "Teated",
+    "copy" : "koopia",
     "The password is wrong. Try again." : "Parool on vale. Proovi uuesti.",
     "Password" : "Parool",
     "Favorites" : "Lemmikud",
