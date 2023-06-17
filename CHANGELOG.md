@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.9.4 - 2023-06-15
+## 4.9.4 - 2023-06-17
 ### Fixed
 - NC 27 Uncaught (in promise) TypeError: OC.Apps is undefined #356
 - Error in journal after upgrade Nextcloud to 24.0.12 #355
