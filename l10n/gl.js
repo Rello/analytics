@@ -137,7 +137,7 @@ OC.L10N.register(
     "Password protection" : "Protección por contrasinal",
     "Copy link" : "Copiar a ligazón",
     "Get more information" : "Obteña máis información",
-    "Nextcloud forum" : "Foro do Nextcloud",
+    "Nextcloud forum" : "Foro de Nextcloud",
     "General information" : "Información xeral",
     "Report title" : "Título do informe",
     "Type of report" : "Tipo de informe",
