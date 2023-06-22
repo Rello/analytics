@@ -82,7 +82,7 @@ OC.L10N.register(
     "Announcements" : "Anuncios",
     "No data" : "Sen datos",
     "copy" : "copia",
-    "The password is wrong. Try again." : "O contrasinal é incorrecto. Ténteo de novo.",
+    "The password is wrong. Try again." : "O contrasinal é erróneo. Ténteo de novo.",
     "Password" : "Contrasinal",
     "No data found" : "Non se atoparon datos",
     "Favorites" : "Favoritos",
