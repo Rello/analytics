@@ -89,7 +89,7 @@ OC.L10N.register(
     "Quickstart" : "Inicio rápido",
     "Intro" : "Introdució",
     "Wiki" : "Wik",
-    "Please select a dataset" : "Escolla un conxunto de datos",
+    "Please select a dataset" : "Seleccione un conxunto de datos",
     "Options" : "Opcións",
     "Analysis" : "Análise",
     "Download chart" : "Descargar a gráfica",

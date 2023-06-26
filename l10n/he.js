@@ -38,6 +38,8 @@ OC.L10N.register(
     "View changelog" : "הצגת יומן שינויים",
     "Local file" : "קובץ מקומי",
     "File" : "קובץ",
+    "Select columns" : "בחירת עמודות",
+    "e.g. 1,2,4 or leave empty" : "למשל: 1,2,4 או להשאיר ריק",
     "No" : "לא",
     "Yes" : "כן",
     "Version" : "גרסה",
