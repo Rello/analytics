@@ -129,6 +129,7 @@ OC.L10N.register(
     "From clipboard" : "Do portapapeis",
     "Advanced configuration" : "Configuración avanzada",
     "Others" : "Outros",
+    "Selection" : "Selección",
     "Setting" : "Axuste",
     "Title" : "Título",
     "Daily" : "Cada día",
