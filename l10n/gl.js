@@ -102,6 +102,7 @@ OC.L10N.register(
     "30 min" : "30 min",
     "Settings" : "Axustes",
     "Import report" : "Importar informe",
+    "Do you like this app?" : "Gústalle esta aplicación?",
     "Introduction" : "Introdución",
     "More information …" : "Máis información…",
     "Name" : "Nome",
