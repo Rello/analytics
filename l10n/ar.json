@@ -83,6 +83,7 @@
     "New" : "جديد",
     "Share link" : "مشاركة الرابط",
     "Link copied" : "تم نسخ الرابط",
+    "Missing data" : "بيانات ناقصة",
     "Delete data" : "إحذف البيانات",
     "Records to be deleted: " : "السجلات التي سيتم حذفها",
     "Technical error. Please check the logs." : "خطأ تقني: راجع سجلات تاريخ الحركات logs من فضلك",
