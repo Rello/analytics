@@ -92,6 +92,7 @@ OC.L10N.register(
     "Type" : "نوع",
     "Notification" : "تنبيه",
     "Date" : "التاريخ ",
+    "Year" : "السنة",
     "New in" : "جديد الى",
     "View changelog" : "اعرض سجل التغييرات",
     "Local file" : "ملف محلي",
