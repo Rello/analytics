@@ -18,6 +18,7 @@ OC.L10N.register(
     "Select file" : "Seleccionar ficheiro",
     "Delete" : "Eliminar",
     "Search" : "Buscar",
+    "Showing 0 to 0 of 0 entries" : "Amosando da 0 á 0 de 0 entradas",
     "first" : "primeiro",
     "previous" : "anterior",
     "next" : "seguinte",
