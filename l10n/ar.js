@@ -138,6 +138,7 @@ OC.L10N.register(
     "> greater" : "أكثر من >",
     "< less" : "أقل من <",
     "!= not equal" : "لا يساوي =!",
+    "Others" : "آخرون",
     "Selection" : "اختيار",
     "Data deletion" : "حذف البيانات",
     "Setting" : "الإعدادات",
