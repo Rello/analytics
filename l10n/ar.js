@@ -126,6 +126,7 @@ OC.L10N.register(
     "Saved Data" : "البيانات المحفوظة",
     "Display" : "عرض",
     "Table" : "جدول",
+    "Chart" : "المخطط",
     "Advanced" : "تعديلات متقدمه",
     "Open documentation" : "فتح الدليل",
     "Update" : "تحديث",

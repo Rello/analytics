@@ -62,6 +62,7 @@ OC.L10N.register(
     "Share link" : "Compartir ligazón",
     "Link copied" : "Ligazón copiada",
     "Column" : "Columna",
+    "Missing data" : "Faltan datos",
     "Delete data" : "Eliminar datos",
     "Technical error. Please check the logs." : "Erro técnico. Consulte os ficheiros de rexistro.",
     "Type" : "Tipo",
