@@ -15,52 +15,51 @@
     <div id="reportMenu" class="popovermenu" style="top: 33px; right: -5px;">
         <ul id="reportMenuMain">
             <li>
-                <button id="drilldownIcon">
+                <button id="reportMenuDrilldown">
                     <span class="icon-analytics-drilldown"></span>
                     <span><?php p($l->t('Drilldown')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="chartOptionsIcon">
+                <button id="reportMenuChartOptions">
                     <span class="icon-analytics-chart-options"></span>
                     <span><?php p($l->t('Chart options')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="analysisIcon">
+                <button id="reportMenuAnalysis">
                     <span class="icon-analytics-forecast"></span>
                     <span><?php p($l->t('Analysis')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="refreshIcon">
+                <button id="reportMenuTranslate">
+                    <span class="icon-analytics-translate"></span>
+                    <span><?php p($l->t('Translate')); ?></span>
+                </button>
+            </li>
+            <li>
+                <button id="reportMenuRefresh">
                     <span class="icon-history"></span>
                     <span><?php p($l->t('Auto refresh')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="downloadChartIcon">
+                <button id="reportMenuDownload">
                     <span class="icon-download"></span>
                     <span><?php p($l->t('Download chart')); ?></span>
                     <a id="downloadChartLink" href='' download="Chart.png" hidden>-</a>
                 </button>
             </li>
             <li class="action-separator"></li>
-<!--            <li id="saveIconOld">
-                <button>
-                    <span class="icon-analytics-save-warning"
-                          title="<?php /*p($l->t('Report was changed - Press here to save the current state')); */?>"></span>
-                    <span><?php /*p($l->t('Save changes')); */?></span>
-                </button>
-            </li>
--->            <li id="saveIconNew">
+            <li id="reportMenuSave">
                 <button>
                     <span class="icon-add" title="<?php p($l->t('Save as new report')); ?>"></span>
                     <span><?php p($l->t('Save as new report')); ?></span>
                 </button>
             </li>
         </ul>
-        <ul id="reportMenuAnalysis" style="display: none !important;">
+        <ul id="reportMenuSubAnalysis" style="display: none !important;">
             <li id="backIcon">
                 <button>
                     <span class="icon-view-previous"></span>
@@ -88,9 +87,9 @@
                 </button>
             </li>
         </ul>
-        <ul id="reportMenuRefresh" style="display: none !important;">
+        <ul id="reportMenuSubRefresh" style="display: none !important;">
             <li id="backIcon2">
-                <button>
+                <button href="#">
                     <span class="icon-view-previous"></span>
                     <span><?php p($l->t('Back')); ?></span>
                 </button>
@@ -124,8 +123,23 @@
                 </span>
             </li>
         </ul>
+        <ul id="reportMenuSubTranslate" style="display: none !important;">
+            <li id="backIcon3">
+                <button>
+                    <span class="icon-view-previous"></span>
+                    <span><?php p($l->t('Back')); ?></span>
+                </button>
+            </li>
+            <li>
+                <span class="menuitem icon-analytics-translate">
+                    <select id="translateLanguage" class="menueInput" style="margin-left: 0px;">
+                    </select>
+                </span>
+            </li>
+       </ul>
     </div>
-    <div id="saveIcon" class="analytics-options icon-analytics-save-warning has-tooltip" title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
+    <div id="saveIcon" class="analytics-options icon-analytics-save-warning has-tooltip"
+         title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
 
     <div id="addFilterIcon" class="analytics-options icon-analytics-filter-add has-tooltip"
          title="<?php p($l->t('Filter')); ?>"></div>

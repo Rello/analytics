@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "http://localhost:8085",
+  "url": "http://localhost:8027",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -2695,9 +2695,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=drilldownIcon", "id"],
-        ["css=#drilldownIcon", "css:finder"],
-        ["xpath=//div[@id='drilldownIcon']", "xpath:attributes"],
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -2706,11 +2706,11 @@
       "id": "a4699a56-f6e7-4d6e-9676-da66a2d9d645",
       "comment": "",
       "command": "click",
-      "target": "id=drilldownIcon",
+      "target": "id=reportMenuDrilldown",
       "targets": [
-        ["id=drilldownIcon", "id"],
-        ["css=#drilldownIcon", "css:finder"],
-        ["xpath=//div[@id='drilldownIcon']", "xpath:attributes"],
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -2774,9 +2774,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=drilldownIcon", "id"],
-        ["css=#drilldownIcon", "css:finder"],
-        ["xpath=//div[@id='drilldownIcon']", "xpath:attributes"],
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -2833,9 +2833,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=drilldownIcon", "id"],
-        ["css=#drilldownIcon", "css:finder"],
-        ["xpath=//div[@id='drilldownIcon']", "xpath:attributes"],
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -2844,11 +2844,11 @@
       "id": "77f75cae-c7ae-421b-b417-36d0667cd18c",
       "comment": "",
       "command": "click",
-      "target": "id=drilldownIcon",
+      "target": "id=reportMenuDrilldown",
       "targets": [
-        ["id=drilldownIcon", "id"],
-        ["css=#drilldownIcon", "css:finder"],
-        ["xpath=//div[@id='drilldownIcon']", "xpath:attributes"],
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -2947,9 +2947,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=drilldownIcon", "id"],
-        ["css=#drilldownIcon", "css:finder"],
-        ["xpath=//div[@id='drilldownIcon']", "xpath:attributes"],
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -3688,10 +3688,10 @@
       "id": "13ffb638-bbd3-4fea-afa5-9704d6e1381a",
       "comment": "",
       "command": "click",
-      "target": "css=#refreshIcon > span:nth-child(2)",
+      "target": "css=#reportMenuRefresh > span:nth-child(2)",
       "targets": [
-        ["css=#refreshIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='refreshIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -3758,10 +3758,10 @@
       "id": "bdc76de2-c2cf-4282-8077-2d40b7b62fe9",
       "comment": "",
       "command": "click",
-      "target": "css=#refreshIcon > span:nth-child(2)",
+      "target": "css=#reportMenuRefresh > span:nth-child(2)",
       "targets": [
-        ["css=#refreshIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='refreshIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -3807,10 +3807,10 @@
       "id": "584e1c4e-0eb9-4890-b7de-fd3b8b31aa87",
       "comment": "",
       "command": "click",
-      "target": "css=#refreshIcon > span:nth-child(2)",
+      "target": "css=#reportMenuRefresh > span:nth-child(2)",
       "targets": [
-        ["css=#refreshIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='refreshIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -4312,10 +4312,10 @@
       "id": "73203f11-8be8-47bb-a728-817ce2af78c5",
       "comment": "",
       "command": "click",
-      "target": "css=#drilldownIcon > span:nth-child(2)",
+      "target": "css=#reportMenuDrilldown > span:nth-child(2)",
       "targets": [
-        ["css=#drilldownIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='drilldownIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuDrilldown > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuDrilldown']/span[2]", "xpath:idRelative"],
         ["xpath=//button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Drilldown')]", "xpath:innerText"]
       ],
@@ -4360,10 +4360,10 @@
       "id": "54f5a425-3fbd-4c5b-8ed4-c171d173955c",
       "comment": "",
       "command": "click",
-      "target": "css=#chartOptionsIcon > span:nth-child(2)",
+      "target": "css=#reportMenuChartOptions > span:nth-child(2)",
       "targets": [
-        ["css=#chartOptionsIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='chartOptionsIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuChartOptions > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuChartOptions']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Chart options')]", "xpath:innerText"]
       ],
@@ -4586,10 +4586,10 @@
       "id": "f06fbafc-0036-4989-9d5d-f8a68b36cae7",
       "comment": "",
       "command": "click",
-      "target": "id=chartOptionsIcon",
+      "target": "id=reportMenuChartOptions",
       "targets": [
-        ["css=#refreshIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='refreshIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -4680,10 +4680,10 @@
       "id": "c6feb686-8ec3-4846-9b03-627579086e23",
       "comment": "",
       "command": "click",
-      "target": "id=chartOptionsIcon",
+      "target": "id=reportMenuChartOptions",
       "targets": [
-        ["css=#chartOptionsIcon > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='chartOptionsIcon']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuChartOptions > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuChartOptions']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Chart options')]", "xpath:innerText"]
       ],
@@ -5032,6 +5032,125 @@
       "targets": [],
       "value": ""
     }]
+  }, {
+    "id": "9a96bf9b-852a-4707-981e-8bc87cfa6243",
+    "name": "28 Options Translate",
+    "commands": [{
+      "id": "0f500ce7-5bb2-4901-99f3-8e157a0ed9d6",
+      "comment": "",
+      "command": "open",
+      "target": "/apps/analytics/#/r/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "636430cf-84e4-4624-a0b7-3d42b8628810",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Testreport",
+      "targets": [
+        ["linkText=Neu", "linkText"],
+        ["css=li:nth-child(4) > .icon-projects", "css:finder"],
+        ["xpath=//a[contains(text(),'Neu')]", "xpath:link"],
+        ["xpath=//ul[@id='navigationDatasets']/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#/r/22')]", "xpath:href"],
+        ["xpath=//div[3]/div/ul/li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Neu')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a8b7794a-2b04-4f70-8e0d-8558fdb39643",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "5a5c1fb4-ce06-4b93-b499-845bd4294da2",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportMenuIcon",
+      "targets": [
+        ["id=reportMenuIcon", "id"],
+        ["css=#reportMenuIcon", "css:finder"],
+        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["xpath=//div[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f751149f-db97-4e60-811e-b6b0ba4c39c9",
+      "comment": "",
+      "command": "click",
+      "target": "css=#reportMenuTranslate > .icon-analytics-translate",
+      "targets": [
+        ["css=#reportMenuTranslate > .icon-analytics-translate", "css:finder"],
+        ["xpath=//button[@id='reportMenuTranslate']/span", "xpath:idRelative"],
+        ["xpath=//li[4]/button/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c81cc9dc-6d67-4d59-83ca-e0f37ebff747",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=#backIcon3 span:nth-child(2)",
+      "targets": [
+        ["css=#backIcon2 span:nth-child(2)", "css:finder"],
+        ["xpath=//li[@id='backIcon2']/button/span[2]", "xpath:idRelative"],
+        ["xpath=//ul[3]/li/button/span[2]", "xpath:position"]
+      ],
+      "value": "Back"
+    }, {
+      "id": "e057b3f9-eb41-479a-b803-5a5df9026df5",
+      "comment": "",
+      "command": "select",
+      "target": "id=translateLanguage",
+      "targets": [
+        ["id=translateLanguage", "id"],
+        ["css=#translateLanguage", "css:finder"],
+        ["xpath=//select[@id='translateLanguage']", "xpath:attributes"],
+        ["xpath=//ul[@id='reportMenuSubTranslate']/li[2]/span/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "value=DE"
+    }, {
+      "id": "bd52e6c3-97c1-4c7e-b2fa-eb7ff80aa265",
+      "comment": "",
+      "command": "pause",
+      "target": "2000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3901f33a-e960-41dd-98d7-b77144dc639d",
+      "comment": "",
+      "command": "assertText",
+      "target": "xpath=//table[@id='tableContainer']/thead/tr/th[2]",
+      "targets": [
+        ["css=td:nth-child(2)", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/tbody/tr/td[2]", "xpath:idRelative"],
+        ["xpath=//td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
+      ],
+      "value": "Spalte 2"
+    }, {
+      "id": "e1a654bb-ec95-4997-af6a-3181adfca508",
+      "comment": "",
+      "command": "assertText",
+      "target": "xpath=//table[@id='tableContainer']/thead/tr/th[3]",
+      "targets": [
+        ["css=td:nth-child(2)", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/tbody/tr/td[2]", "xpath:idRelative"],
+        ["xpath=//td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
+      ],
+      "value": "Wert"
+    }]
   }],
   "suites": [{
     "id": "a1d58086-f3d1-4a78-9485-4f571193f568",
@@ -5048,7 +5167,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",

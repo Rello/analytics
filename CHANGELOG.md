@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.9.5 - 2023-07-25
+### Added
+- translation integration for reports #358
+
 ## 4.9.4 - 2023-06-17
 ### Fixed
 - NC 27 Uncaught (in promise) TypeError: OC.Apps is undefined #356

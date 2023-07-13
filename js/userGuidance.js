@@ -298,6 +298,11 @@ OCA.Analytics.Notification = {
         document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
     },
 
+    /**
+     * Function to display notifications.
+     * @param {('info'|'success'|'error')} type - The type of the notification.
+     * @param {string} message - The notification message.
+     */
     notification: function (type, message) {
         if (parseInt(OC.config.versionstring.substr(0, 2)) >= 17) {
             if (type === 'success') {

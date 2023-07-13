@@ -29,7 +29,7 @@
         <div id="tableMenu" class="popovermenu" style="top: 33px; right: -5px;">
             <ul id="tableMenuMain">
                 <li>
-                    <button id="drilldownIcon">
+                    <button id="reportMenuDrilldown">
                         <span class="icon-analytics-drilldown"></span>
                         <span><?php /*p($l->t('Drilldown')); */?></span>
                     </button>

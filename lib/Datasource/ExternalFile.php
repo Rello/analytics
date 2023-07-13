@@ -97,7 +97,7 @@ class ExternalFile implements IDatasource
         $delimiter = $this->detectDelimiter($rows[0]);
 
         $header = str_getcsv($rows[0], $delimiter);
-        $rows = array_slice($rows, 1);
+        //$rows = array_slice($rows, 1);
 
         $data = array();
         if (count($selectedColumns) !== 0) {
@@ -117,7 +117,7 @@ class ExternalFile implements IDatasource
             'header' => $header,
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
-            'rawdata' => $curlResult,
+            'rawdata' => $curlResult . '-' .$delimiter  ,
             'error' => ($http_code>=200 && $http_code<300) ? 0 : 'HTTP response code: '.$http_code,
         ];
     }

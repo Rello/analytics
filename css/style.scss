@@ -180,10 +180,14 @@
 .optionsInputValue {
   width: 200px;
 }
-.sidebarInput {
-  width: 200px;
-  border: 1px solid var(--color-border-dark) !important;
-  border-radius: var(--border-radius-large);
+.sidebarInput, .menueInput {
+    width: 200px;
+    border: 1px solid var(--color-border-dark) !important;
+    border-radius: var(--border-radius-large);
+}
+
+.sidebarInput:hover, .menueInput:hover {
+    border-color: var(--color-primary-element) !important;
 }
 
 .sidebarHeaderClosed {
@@ -223,6 +227,10 @@ table.dataTable tbody tr {
 .analytics-options:hover {
     opacity: 1;
     cursor: pointer;
+}
+
+[class^='icon-analytics'] {
+    opacity: 1 !important;
 }
 
 .icon-analytics-filter-add {
@@ -279,6 +287,10 @@ table.dataTable tbody tr {
 
 .icon-analytics-chartNone {
   @include icon-color('chartNone', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-translate {
+  @include icon-color('translate', 'analytics', $color-black, 1);
 }
 
 .icon-analytics-charts-wizard {

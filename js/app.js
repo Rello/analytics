@@ -54,6 +54,7 @@ if (!OCA.Analytics) {
         unsavedFilters: null,
         refreshTimer: null,
         currentXhrRequest: null,
+        translationAvailable: false,
 
         headers: function () {
             let headers = new Headers();
@@ -112,6 +113,39 @@ OCA.Analytics.Core = {
 };
 
 OCA.Analytics.UI = {
+
+    buildReport: function () {
+        document.getElementById('reportHeader').innerText = OCA.Analytics.currentReportData.options.name;
+        if (OCA.Analytics.currentReportData.options.subheader !== '') {
+            document.getElementById('reportSubHeader').innerText = OCA.Analytics.currentReportData.options.subheader;
+            OCA.Analytics.UI.showElement('reportSubHeader');
+        }
+
+        document.title = OCA.Analytics.currentReportData.options.name + ' - ' + OCA.Analytics.initialDocumentTitle;
+        if (OCA.Analytics.currentReportData.status !== 'nodata' && parseInt(OCA.Analytics.currentReportData.error) === 0) {
+
+            // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+            OCA.Analytics.currentReportData.data = OCA.Analytics.Backend.sortDates(OCA.Analytics.currentReportData.data);
+
+            OCA.Analytics.currentReportData.data = OCA.Analytics.Backend.formatDates(OCA.Analytics.currentReportData.data);
+            let visualization = OCA.Analytics.currentReportData.options.visualization;
+            if (visualization === 'chart') {
+                OCA.Analytics.UI.buildChart(OCA.Analytics.currentReportData);
+            } else if (visualization === 'table') {
+                OCA.Analytics.UI.buildDataTable(OCA.Analytics.currentReportData);
+            } else {
+                OCA.Analytics.UI.buildChart(OCA.Analytics.currentReportData);
+                OCA.Analytics.UI.buildDataTable(OCA.Analytics.currentReportData);
+            }
+        } else {
+            OCA.Analytics.UI.showElement('noDataContainer');
+            if (parseInt(OCA.Analytics.currentReportData.error) !== 0) {
+                OCA.Analytics.Notification.notification('error', OCA.Analytics.currentReportData.error);
+            }
+        }
+        OCA.Analytics.UI.buildReportOptions();
+
+    },
 
     buildDataTable: function (jsondata) {
         OCA.Analytics.UI.showElement('tableContainer');
@@ -593,11 +627,12 @@ OCA.Analytics.UI = {
 
             OCA.Analytics.UI.showElement('reportMenuBar');
             OCA.Analytics.UI.hideReportMenu();
-            document.getElementById('chartOptionsIcon').disabled = false;
-            document.getElementById('analysisIcon').disabled = false;
-            document.getElementById('drilldownIcon').disabled = false;
-            document.getElementById('downloadChartIcon').disabled = false;
-            document.getElementById('analysisIcon').disabled = false;
+            document.getElementById('reportMenuChartOptions').disabled = false;
+            document.getElementById('reportMenuAnalysis').disabled = false;
+            document.getElementById('reportMenuDrilldown').disabled = false;
+            document.getElementById('reportMenuDownload').disabled = false;
+            document.getElementById('reportMenuAnalysis').disabled = false;
+            document.getElementById('reportMenuTranslate').disabled = false;
         }
     },
 
@@ -628,18 +663,25 @@ OCA.Analytics.UI = {
         }
 
         if (parseInt(currentReport.options.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
-            document.getElementById('drilldownIcon').disabled = true;
+            document.getElementById('reportMenuDrilldown').disabled = true;
+        }
+
+        if (!OCA.Analytics.translationAvailable) {
+            document.getElementById('reportMenuTranslate').disabled = true;
+        } else {
+            document.getElementById('translateLanguage').value = (OC.getLanguage() === 'en') ? 'en-gb' : OC.getLanguage();
+            OCA.Analytics.Translation.languages();
         }
 
         if (currentReport.options.chart === 'doughnut') {
-            document.getElementById('analysisIcon').disabled = true;
+            document.getElementById('reportMenuAnalysis').disabled = true;
         }
 
         let visualization = currentReport.options.visualization;
         if (visualization === 'table') {
-            document.getElementById('chartOptionsIcon').disabled = true;
-            document.getElementById('analysisIcon').disabled = true;
-            document.getElementById('downloadChartIcon').disabled = true;
+            document.getElementById('reportMenuChartOptions').disabled = true;
+            document.getElementById('reportMenuAnalysis').disabled = true;
+            document.getElementById('reportMenuDownload').disabled = true;
         }
 
         let refresh = parseInt(currentReport.options.refresh);
@@ -654,19 +696,22 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
         //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleTableMenu);
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
-        document.getElementById('saveIconNew').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
-        document.getElementById('drilldownIcon').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
-        document.getElementById('chartOptionsIcon').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
+        document.getElementById('reportMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
+        document.getElementById('reportMenuDrilldown').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
 
-        document.getElementById('analysisIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
-        document.getElementById('refreshIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuRefresh);
+        document.getElementById('reportMenuAnalysis').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
+        document.getElementById('reportMenuRefresh').addEventListener('click', OCA.Analytics.UI.showReportMenuRefresh);
+        document.getElementById('reportMenuTranslate').addEventListener('click', OCA.Analytics.UI.showReportMenuTranslate);
+        document.getElementById('translateLanguage').addEventListener('change', OCA.Analytics.Translation.translate);
         document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
         document.getElementById('disAggregateIcon').addEventListener('click', OCA.Analytics.Functions.disAggregate);
         document.getElementById('aggregateIcon').addEventListener('click', OCA.Analytics.Functions.aggregate);
         //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
         document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-        document.getElementById('downloadChartIcon').addEventListener('click', OCA.Analytics.UI.downloadChart);
+        document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
+        document.getElementById('reportMenuDownload').addEventListener('click', OCA.Analytics.UI.downloadChart);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
 
         //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.UI.tableSearch);
@@ -700,8 +745,9 @@ OCA.Analytics.UI = {
     toggleReportMenu: function () {
         document.getElementById('reportMenu').classList.toggle('open');
         document.getElementById('reportMenuMain').style.removeProperty('display');
-        document.getElementById('reportMenuAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubTranslate').style.setProperty('display', 'none', 'important');
     },
 
     toggleTableMenu: function () {
@@ -711,22 +757,102 @@ OCA.Analytics.UI = {
 
     showReportMenuAnalysis: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuAnalysis').style.removeProperty('display');
+        document.getElementById('reportMenuSubAnalysis').style.removeProperty('display');
     },
 
     showReportMenuRefresh: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuRefresh').style.removeProperty('display');
+        document.getElementById('reportMenuSubRefresh').style.removeProperty('display');
+    },
+
+    showReportMenuTranslate: function () {
+        document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubTranslate').style.removeProperty('display');
     },
 
     showReportMenuMain: function () {
-        document.getElementById('reportMenuAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('reportMenuSubTranslate').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuMain').style.removeProperty('display');
     },
 
     tableSearch: function () {
-        OCA.Analytics.tableObject.search( this.value ).draw();
+        OCA.Analytics.tableObject.search(this.value).draw();
+    }
+};
+
+OCA.Analytics.Translation = {
+    translate: function () {
+        let name = OCA.Analytics.currentReportData.options.name;
+        let subheader = OCA.Analytics.currentReportData.options.subheader;
+        let header = OCA.Analytics.currentReportData.header;
+        let dimensions = JSON.stringify(OCA.Analytics.currentReportData.dimensions);
+        let text = name + '**' + subheader + '**' + header + '**' + dimensions;
+
+        let targetLanguage = document.getElementById('translateLanguage').value;
+        targetLanguage = targetLanguage === 'EN' ? 'EN-US' : targetLanguage;
+
+        let requestUrl = OC.generateUrl('ocs/v2.php/translation/translate');
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                fromLanguage: null,
+                text: text,
+                toLanguage: targetLanguage
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        OCA.Analytics.Notification.notification('error', t('analytics', 'Translation error. Possibly wrong ISO code?'));
+                        return Promise.reject('400 Error');
+                    }
+                }
+                return response.text();
+            })
+            .then(data => {
+                let parser = new DOMParser();
+                let xmlDoc = parser.parseFromString(data, "text/xml");
+
+                let text = xmlDoc.getElementsByTagName("text")[0].childNodes[0].nodeValue;
+                text = text.split('**');
+                let from = xmlDoc.getElementsByTagName("from")[0].childNodes[0].nodeValue;
+
+                OCA.Analytics.currentReportData.options.name = text[0];
+                OCA.Analytics.currentReportData.options.subheader = text[1];
+                OCA.Analytics.currentReportData.header = text[2].split(',');
+                OCA.Analytics.currentReportData.dimensions = JSON.parse(text[3]);
+                OCA.Analytics.UI.resetContentArea();
+                OCA.Analytics.UI.buildReport();
+            })
+            .catch(error => {
+                console.log('There has been a problem with your fetch operation: ', error);
+            });
+
+    },
+
+    languages: function () {
+        const elem = document.querySelector('#initial-state-analytics-translationLanguages');
+        let translateLanguage = document.getElementById('translateLanguage');
+        translateLanguage.innerHTML = '';
+
+        let option = document.createElement('option');
+        option.text = t('analytics', 'Choose language');
+        option.value = '';
+        translateLanguage.appendChild(option);
+
+        const set = new Set();
+        for (const item of JSON.parse(atob(elem.value))) {
+            if (!set.has(item.from)) {
+                set.add(item.from)
+                let option = document.createElement('option');
+                option.text = item.fromLabel;
+                option.value = item.from;
+                translateLanguage.appendChild(option);
+            }
+        }
     }
 };
 
@@ -951,13 +1077,13 @@ OCA.Analytics.Datasource = {
         let insideSection = false;
         form.id = 'dataSourceOptions';
 
-        if (typeof(template) === 'undefined') {
+        if (typeof (template) === 'undefined') {
             OCA.Analytics.Notification.notification('error', t('analytics', 'Data source not available anymore'));
             return form;
         }
 
         // create a hidden dummy for the data source type
-        form.appendChild(OCA.Analytics.Datasource.buildOptionHidden('dataSourceType',datasource));
+        form.appendChild(OCA.Analytics.Datasource.buildOptionHidden('dataSourceType', datasource));
 
         for (let templateOption of template) {
             // loop all options of the datasource template and create the input form
@@ -1051,7 +1177,7 @@ OCA.Analytics.Datasource = {
 
         let edit = document.createElement('span');
         edit.style.display = 'inline-flex';
-        edit.classList.add('icon','icon-rename');
+        edit.classList.add('icon', 'icon-rename');
         edit.style.minHeight = '36px';
 
         let div = document.createElement('div');
@@ -1319,29 +1445,7 @@ OCA.Analytics.Backend = {
                     OCA.Analytics.UI.showElement('reportSubHeader');
                 }
 
-                document.title = data.options.name + ' - ' + OCA.Analytics.initialDocumentTitle;
-                if (data.status !== 'nodata' && parseInt(data.error) === 0) {
-
-                    // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-                    data.data = OCA.Analytics.Backend.sortDates(data.data);
-
-                    data.data = OCA.Analytics.Backend.formatDates(data.data);
-                    let visualization = data.options.visualization;
-                    if (visualization === 'chart') {
-                        OCA.Analytics.UI.buildChart(data);
-                    } else if (visualization === 'table') {
-                        OCA.Analytics.UI.buildDataTable(data);
-                    } else {
-                        OCA.Analytics.UI.buildChart(data);
-                        OCA.Analytics.UI.buildDataTable(data);
-                    }
-                } else {
-                    OCA.Analytics.UI.showElement('noDataContainer');
-                    if (parseInt(data.error) !== 0) {
-                        OCA.Analytics.Notification.notification('error', data.error);
-                    }
-                }
-                OCA.Analytics.UI.buildReportOptions();
+                OCA.Analytics.UI.buildReport();
 
                 let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
                 OCA.Analytics.Backend.startRefreshTimer(refresh);
@@ -1443,6 +1547,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
     }
 
+    OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
     window.addEventListener("beforeprint", function () {
         //document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
     });

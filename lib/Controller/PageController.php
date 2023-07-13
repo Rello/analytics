@@ -86,6 +86,23 @@ class PageController extends Controller
             $this->config->getUserValue($user->getUID(), 'analytics', 'wizzard', 0)
         );
 
+        try {
+            $translationAvailable = \OCP\Server::get(\OCP\Translation\ITranslationManager::class)->hasProviders();
+            $translationLanguages = \OCP\Server::get(\OCP\Translation\ITranslationManager::class)->getLanguages();
+        } catch (\Exception $e) {
+            $translationAvailable = false;
+            $translationLanguages = false;
+        }
+
+        $this->initialState->provideInitialState(
+            'translationAvailable',
+            $translationAvailable
+        );
+        $this->initialState->provideInitialState(
+            'translationLanguages',
+            $translationLanguages
+        );
+
         return new TemplateResponse($this->appName, 'main', $params);
     }
 
