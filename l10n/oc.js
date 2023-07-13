@@ -66,6 +66,7 @@ OC.L10N.register(
     "Saved Data" : "Donadas enregistradas",
     "Visualization" : "Visualizacion",
     "Display" : "Afichatge",
+    "Table" : "Tablèu",
     "Open documentation" : "Dobrir la documentacion",
     "Update" : "Actualizar",
     "Export" : "Exportar",
@@ -83,6 +84,7 @@ OC.L10N.register(
     "Password protection" : "Proteccion per senhal",
     "Copy link" : "Copiar lo ligam",
     "General information" : "Informacions generalas",
+    "No Table" : "Cap de tablèu",
     "Create" : "Crear"
 },
 "nplurals=2; plural=(n > 1);");
