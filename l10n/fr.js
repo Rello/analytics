@@ -23,7 +23,7 @@ OC.L10N.register(
     "Parameter missing" : "Paramètre maquant",
     "Select file" : "Sélectionner un fichier",
     "No changes possible" : "Aucun changement possible",
-    "This dataset is not used!" : "Ce jeu de données n'est pas utilisé!",
+    "This dataset is not used!" : "Ce jeu de données n'est pas utilisé !",
     "Delete" : "Supprimer",
     "All data including all reports will be deleted!" : "Toutes les données, y compris tous les rapports seront supprimés !",
     "The dataset name is missing" : "Le nom du jeu de données est manquant",
