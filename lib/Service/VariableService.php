@@ -124,6 +124,21 @@ class VariableService
     }
 
     /**
+     * replace variables in single field
+     * used in: API
+     *
+     * @param $columns
+     * @return string
+     */
+    public function replaceDatasourceColumns($columns)
+    {
+        $parsed = $this->parseFilter($columns);
+        $format = $this->parseFormat($columns);
+        if (!$parsed) return $columns;
+        return date($format, $parsed['value']);
+    }
+
+        /**
      * replace variables in filters and apply format
      *
      * @param $reportMetadata

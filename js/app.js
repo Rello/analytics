@@ -1231,7 +1231,7 @@ OCA.Analytics.Datasource = {
             OCA.Analytics.Datasource.processColumnPickerDialog
         );
 
-        // Get the values from all input fields but not the cloumn picker
+        // Get the values from all input fields but not the column picker
         // they are used to get the data from the data source
         let option = {};
         let inputFields = document.querySelectorAll('#dataSourceOptions input, #dataSourceOptions select');
@@ -1291,6 +1291,7 @@ OCA.Analytics.Datasource = {
             item.checked = selectionArray.includes(item.id);
         });
 
+        // create the list element
         const list = document.createElement("ul");
         list.id = 'sortable-list';
         list.style.display = 'inline-block';
@@ -1299,38 +1300,85 @@ OCA.Analytics.Datasource = {
         list.style.padding = '0';
         list.style.width = "400px"
         items.forEach((item) => {
-            const li = document.createElement("li");
-            li.style.display = 'flex';
-            li.style.alignItems = 'center';
-            li.style.margin = '5px';
-            li.style.backgroundColor = 'var(--color-background-hover)';
-            li.draggable = true;
-            li.addEventListener("dragstart", OCA.Analytics.Notification.handleDragStart);
-            li.addEventListener("dragover", OCA.Analytics.Notification.handleDragOver);
-            li.addEventListener("drop", OCA.Analytics.Notification.handleDrop);
-
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.id = item.id;
-            checkbox.checked = item.checked;
-
-            const span = document.createElement("span");
-            span.textContent = item.name;
-            span.style.marginLeft = '10px';
-            const spanContent = document.createElement("span");
-            spanContent.textContent = item.text;
-            spanContent.style.marginLeft = '10px';
-            spanContent.style.color = 'var(--color-text-maxcontrast)';
-            li.appendChild(checkbox);
-            li.appendChild(span);
-            li.appendChild(spanContent);
-            list.appendChild(li);
+            list.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
         });
 
+        // create the button below to add a custom column
+        const button = document.createElement('div');
+        button.innerText = t('analytics', 'Add custom column');
+        button.style.backgroundPosition = '5px center';
+        button.style.paddingLeft = '25px';
+        button.classList.add('icon-add', 'sidebarPointer');
+        button.id = 'addColumnButton';
+        button.addEventListener('click', OCA.Analytics.Datasource.addFixedColumn);
+
+        // create span for reference to the old values
+        const hint = document.createElement('span');
+        hint.style.paddingLeft = '25px';
+        hint.classList.add('userGuidance');
+        hint.id = 'addColumnHint'
+        hint.innerText
+
+        const content = document.createDocumentFragment();
+        content.appendChild(list);
+        content.appendChild(document.createElement('br'));
+        content.appendChild(document.createElement('br'));
+        content.appendChild(button);
+        content.appendChild(document.createElement('br'));
+        content.appendChild(hint);
+
         OCA.Analytics.Notification.htmlDialogUpdate(
-            list,
-            'Select the required columns.<br>Rearange the sequence with drag & drop.<br>Remove all selections to reset.',
+            content,
+            t('analytics', 'Select the required columns.<br>Rearange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}.')
+                .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown##text-variables" target="_blank">')
+                .replace('{linkend}', '</a>')
         );
+    },
+
+    addFixedColumn: function () {
+        const currentColumns = document.querySelector('input[data-type="columnPicker"]').value;
+        const preText = t('analytics', 'Previous Values: ');
+        document.getElementById('addColumnHint').innerText = preText + currentColumns;
+
+        const sortableList = document.querySelector("#analyticsDialogContent > #sortable-list");
+        const item = {
+            id: 'fixedColumn',
+            name: t('analytics', 'Enter the fixed value:'),
+            text: 'new',
+            checked: true,
+            contenteditable: true
+        }
+        sortableList.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
+    },
+
+    buildColumnPickerRow: function (item) {
+        const li = document.createElement("li");
+        li.style.display = 'flex';
+        li.style.alignItems = 'center';
+        li.style.margin = '5px';
+        li.style.backgroundColor = 'var(--color-background-hover)';
+        li.draggable = true;
+        li.addEventListener("dragstart", OCA.Analytics.Notification.handleDragStart);
+        li.addEventListener("dragover", OCA.Analytics.Notification.handleDragOver);
+        li.addEventListener("drop", OCA.Analytics.Notification.handleDrop);
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = item.id;
+        checkbox.checked = item.checked;
+
+        const span = document.createElement("span");
+        span.textContent = item.name;
+        span.style.marginLeft = '10px';
+        const spanContent = document.createElement("span");
+        spanContent.textContent = item.text;
+        spanContent.style.marginLeft = '10px';
+        spanContent.style.color = 'var(--color-text-maxcontrast)';
+        item.contenteditable === true ? spanContent.contentEditable = 'true' : false;
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(spanContent);
+        return li;
     },
 
     processColumnPickerDialog: function () {
@@ -1339,8 +1387,16 @@ OCA.Analytics.Datasource = {
         const checkboxIds = [];
 
         checkboxList.forEach(function (checkbox) {
+            let id = checkbox.id;
+
+            // if it is a custom column, the entered text has to be used as id
+            if (id === 'fixedColumn') {
+                const li = checkbox.closest('li');
+                const secondSpan = li.querySelector('span[contenteditable]');
+                id = secondSpan.textContent;
+            }
             if (checkbox.checked) {
-                checkboxIds.push(checkbox.id);
+                checkboxIds.push(id);
             }
         });
         document.querySelector('[data-type="columnPicker"]').value = checkboxIds;

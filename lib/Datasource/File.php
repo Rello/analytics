@@ -15,6 +15,7 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
+use OCA\Analytics\Service\VariableService;
 
 class File implements IDatasource
 {
@@ -22,18 +23,21 @@ class File implements IDatasource
     private $rootFolder;
     private $userId;
     private $l10n;
+    private $VariableService;
 
     public function __construct(
         $userId,
         IL10N $l10n,
         LoggerInterface $logger,
-        IRootFolder $rootFolder
+        IRootFolder $rootFolder,
+        VariableService $VariableService
     )
     {
         $this->userId = $userId;
         $this->l10n = $l10n;
         $this->logger = $logger;
         $this->rootFolder = $rootFolder;
+        $this->VariableService = $VariableService;
     }
 
     /**
@@ -94,8 +98,8 @@ class File implements IDatasource
         $rows = array_slice($rows, 1);
 
         if (count($selectedColumns) !== 0) {
+            // if only a subset of columns or fixed column values are set, they are replaced here
             $header = $this->minimizeRow($selectedColumns, $header);
-
             foreach ($rows as $row) {
                 $data[] = $this->minimizeRow($selectedColumns, str_getcsv($row, $delimiter));
             }
@@ -121,7 +125,8 @@ class File implements IDatasource
             if (is_numeric($selectedColumn)) {
                 $rowMinimized[] = $row[$selectedColumn - 1];
             } else {
-                $rowMinimized[] = $selectedColumn;
+                // if columns contain replacement variables, they are processed here
+                $rowMinimized[] = $this->VariableService->replaceDatasourceColumns($selectedColumn);
             }
         }
         return $rowMinimized;

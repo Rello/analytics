@@ -3,6 +3,7 @@
 ## 4.9.5 - 2023-07-25
 ### Added
 - translation integration for reports #358
+- custom columns (incl. text variables) in column picker #359
 
 ## 4.9.4 - 2023-06-17
 ### Fixed
