@@ -50,6 +50,7 @@ OC.L10N.register(
     "Password" : "ססמה",
     "Favorites" : "מועדפים",
     "Options" : "אפשרויות",
+    "Translate" : "תרגום",
     "Back" : "חזרה",
     "Settings" : "הגדרות",
     "Name" : "שם",

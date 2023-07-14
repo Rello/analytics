@@ -202,6 +202,7 @@
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "Seznam filtrovacích pravidel EasyPrivacy blokuje některé skripty kvůli filtrování výrazu *analytics*.",
     "Options" : "Předvolby",
     "Analysis" : "Analýza",
+    "Translate" : "Překládání",
     "Auto refresh" : "Automaticky znovu načítat",
     "Download chart" : "Stáhnout si graf",
     "Save as new report" : "Uložit jako nový výkaz",

@@ -22,6 +22,7 @@ OC.L10N.register(
     "copy" : "පිටපත්",
     "Password" : "මුර පදය",
     "Favorites" : "ප්‍රියතම",
+    "Translate" : "පරිවර්තනය",
     "Back" : "ආපසු",
     "Settings" : "සැකසුම්",
     "Name" : "නම",

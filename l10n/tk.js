@@ -16,6 +16,7 @@ OC.L10N.register(
     "Yes" : "Hawa",
     "Password" : "Açarsöz",
     "Favorites" : "Halanýanlar",
+    "Translate" : "Terjime et",
     "Back" : "Yzyna",
     "Settings" : "Sazlamalar",
     "Name" : "Ady",

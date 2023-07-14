@@ -37,6 +37,7 @@ OC.L10N.register(
     "Update" : "Werk by",
     "Export" : "Voer uit",
     "Import" : "Voer In",
+    "Others" : "Ander",
     "Setting" : "Instelling",
     "Title" : "Titel",
     "Daily" : "Daagliks",

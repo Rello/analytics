@@ -39,6 +39,7 @@ OC.L10N.register(
     "Password" : "Parolă",
     "Favorites" : "Favorite",
     "Options" : "Opțiuni",
+    "Translate" : "Tradu",
     "Back" : "Înapoi",
     "Settings" : "Setări",
     "Name" : "Nume",

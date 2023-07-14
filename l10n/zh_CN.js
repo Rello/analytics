@@ -196,6 +196,7 @@ OC.L10N.register(
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "由于*analytics*的通配符过滤条件，EasyPrivacy列表阻止了某些脚本的运行",
     "Options" : "选项",
     "Analysis" : "分析",
+    "Translate" : "翻译",
     "Auto refresh" : "自动刷新",
     "Download chart" : "下载图表",
     "Save as new report" : "另存为新报告",

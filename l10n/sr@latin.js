@@ -22,6 +22,7 @@ OC.L10N.register(
     "copy" : "kopiraj",
     "Password" : "Lozinka",
     "Favorites" : "Omiljene",
+    "Translate" : "Prevedi",
     "Back" : "Nazad",
     "Settings" : "Поставке",
     "Name" : "Ime",

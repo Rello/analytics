@@ -168,6 +168,7 @@ OC.L10N.register(
     "Password" : "Adgangskode",
     "Favorites" : "Favoritter",
     "Options" : "Valgmuligheder",
+    "Translate" : "Oversæt",
     "Back" : "Tilbage",
     "Settings" : "Indstillinger",
     "Do you like this app?" : "Synes du godt om denne app?",

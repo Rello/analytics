@@ -25,6 +25,7 @@ OC.L10N.register(
     "Version" : "Fersiwn",
     "Password" : "Cyfrinair",
     "Favorites" : "Ffefrynnau",
+    "Translate" : "Cyfieithu",
     "Back" : "Nôl",
     "Settings" : "Gosodiadau",
     "Name" : "Enw",

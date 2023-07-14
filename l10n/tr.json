@@ -202,6 +202,7 @@
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy listesi, *analytics* için bir genel arama karakteri süzgeci nedeniyle bazı komut dosyalarını engelliyor.",
     "Options" : "Seçenekler",
     "Analysis" : "İnceleme",
+    "Translate" : "Çevir",
     "Auto refresh" : "Otomatik yenileme",
     "Download chart" : "Çizelgeyi indir",
     "Save as new report" : "Yeni rapor olarak kaydet",

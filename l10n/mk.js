@@ -45,6 +45,7 @@ OC.L10N.register(
     "Password" : "Лозинка",
     "Favorites" : "Омилени",
     "Options" : "Опции",
+    "Translate" : "Преведи",
     "Back" : "Назад",
     "Settings" : "Параметри",
     "Name" : "Име",

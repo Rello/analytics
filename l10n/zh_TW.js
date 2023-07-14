@@ -204,6 +204,7 @@ OC.L10N.register(
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "由於 *analytics* 的萬用字元過濾條件，EasyPrivacy 清單封鎖了某些指令稿的執行。",
     "Options" : "選項",
     "Analysis" : "分析",
+    "Translate" : "翻譯",
     "Auto refresh" : "自動重新整理",
     "Download chart" : "下載圖表",
     "Save as new report" : "儲存為新報告",

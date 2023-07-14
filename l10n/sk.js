@@ -187,6 +187,7 @@ OC.L10N.register(
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "Zoznam EasyPrivacy blokuje niektoré skripty z dôvodu filtra zástupných znakov pre *analytiku*.",
     "Options" : "Možnosti",
     "Analysis" : "Analýza",
+    "Translate" : "Preložiť",
     "Auto refresh" : "Automatické obnovovanie",
     "Download chart" : "Stiahnuť graf",
     "Save as new report" : "Uložiť ako novú zostavu",

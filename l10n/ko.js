@@ -103,6 +103,7 @@ OC.L10N.register(
     "Favorites" : "즐겨찾기",
     "Wiki" : "사전",
     "Options" : "옵션들",
+    "Translate" : "번역:",
     "Save as new report" : "새로운 리포트를 저장",
     "Back" : "뒤로",
     "1 min" : "1분",

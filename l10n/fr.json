@@ -202,6 +202,7 @@
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "La liste EasyPrivacy bloque certains scripts en raison d'un filtre générique pour *analytics*.",
     "Options" : "Options",
     "Analysis" : "Analyse",
+    "Translate" : "Traduire",
     "Auto refresh" : "Actualiser automatiquement",
     "Download chart" : "Télécharger le graphique",
     "Save as new report" : "Enregistrer en tant que nouveau rapport",

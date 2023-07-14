@@ -180,6 +180,7 @@ OC.L10N.register(
     "Favorites" : "Αγαπημένα",
     "Please select a dataset" : "Παρακαλούμε ελέγξτε το σετ δεδομένων",
     "Options" : "Επιλογές",
+    "Translate" : "Μετάφραση",
     "Auto refresh" : "Αυτόματη ανανέωση",
     "Back" : "Πίσω",
     "1 min" : "1 λεπτ",

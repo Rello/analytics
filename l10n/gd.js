@@ -17,6 +17,7 @@ OC.L10N.register(
     "Version" : "Tionndadh",
     "Password" : "Facal-faire",
     "Favorites" : "Annsachdan",
+    "Translate" : "Eadar-theangaich",
     "Back" : "Air ais",
     "Settings" : "Roghainnean",
     "Name" : "Ainm",

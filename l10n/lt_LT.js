@@ -45,6 +45,7 @@ OC.L10N.register(
     "Password" : "Slaptažodis",
     "Favorites" : "Mėgstami",
     "Options" : "Parinktys",
+    "Translate" : "Verskite",
     "Back" : "Atgal",
     "Settings" : "Nustatymai",
     "Do you like this app?" : "Ar jums patinka ši programėlė?",

@@ -77,6 +77,7 @@ OC.L10N.register(
     "Password" : "Kata sandi",
     "Favorites" : "Disukai",
     "Options" : "Pilihan",
+    "Translate" : "Terjemahkan",
     "Back" : "Kembali",
     "Settings" : "Setelan",
     "Name" : "Nama",
