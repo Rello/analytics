@@ -21,6 +21,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "Password" : "கடவுச்சொல்",
     "Favorites" : "விருப்பங்கள்",
+    "Translate" : "Translate",
     "Back" : "பின்னுக்கு",
     "Settings" : "அமைப்புகள்",
     "Name" : "பெயர்",

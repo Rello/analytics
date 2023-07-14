@@ -27,6 +27,7 @@ OC.L10N.register(
     "copy" : "Хуулах ",
     "Password" : "Нууц үг",
     "Favorites" : "Онцолсон",
+    "Translate" : "Орчуулга",
     "Back" : "буцах",
     "Settings" : "Тохиргоо",
     "Name" : "Нэр",

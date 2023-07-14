@@ -39,6 +39,7 @@ OC.L10N.register(
     "Password" : "کلمه عبور",
     "Favorites" : "مورد علاقه‌ها",
     "Options" : "گزینه‌ها",
+    "Translate" : "ترجمه",
     "Back" : "بازگشت",
     "Settings" : "تنظیمات",
     "Name" : "نام",

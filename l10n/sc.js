@@ -47,6 +47,7 @@ OC.L10N.register(
     "Password" : "Crae",
     "Favorites" : "Preferidos",
     "Options" : "Optziones",
+    "Translate" : "Borta",
     "Back" : "In segus",
     "Settings" : "Impostatziones",
     "Do you like this app?" : "Ti praghet cust'aplicatzione?",

@@ -24,6 +24,7 @@ OC.L10N.register(
     "Version" : "Տարբերակ",
     "Password" : "Գաղտնաբառ",
     "Favorites" : "Սիրվածներ",
+    "Translate" : "Թարգմանել",
     "Settings" : "կարգավորումներ",
     "Name" : "Անուն",
     "Update" : "Թարմացնել",

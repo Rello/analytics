@@ -33,6 +33,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Fjalëkalim i gabuar. Provojeni sërish.",
     "Password" : "Fjalëkalim",
     "Favorites" : "Favorites",
+    "Translate" : "Përkthe",
     "Back" : "Prapa",
     "Settings" : "Rregullimet",
     "Name" : "Emri",

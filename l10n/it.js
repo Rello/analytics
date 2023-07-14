@@ -192,6 +192,7 @@ OC.L10N.register(
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy sta bloccando alcuni script a causa di un filtro per *analytics*.",
     "Options" : "Opzioni",
     "Analysis" : "Analisi",
+    "Translate" : "Traduci",
     "Auto refresh" : "Auto aggiornamento",
     "Download chart" : "Scarica grafico",
     "Save as new report" : "Salva come nuovo report",

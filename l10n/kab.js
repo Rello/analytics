@@ -23,6 +23,7 @@ OC.L10N.register(
     "Password" : "Awal uffir",
     "Favorites" : "Imenyafen",
     "Options" : "Iɣewwaṛen",
+    "Translate" : "Suqel",
     "Back" : "Retour",
     "Settings" : "Iɣewwaṛen",
     "Name" : "Nom",

@@ -46,6 +46,7 @@ OC.L10N.register(
     "Password" : "Zaporka",
     "Favorites" : "Favoriti",
     "Options" : "Mogućnosti",
+    "Translate" : "Prevedi",
     "Back" : "Natrag",
     "Settings" : "Postavke",
     "Name" : "Naziv",

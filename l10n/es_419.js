@@ -30,6 +30,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Error en la contraseña. Inténtalo de nuevo.",
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
+    "Translate" : "Traducir",
     "Back" : "Atrás",
     "Settings" : "Ajustes",
     "Name" : "Nombre",

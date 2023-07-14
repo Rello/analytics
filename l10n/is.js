@@ -41,6 +41,7 @@ OC.L10N.register(
     "Password" : "Lykilorð",
     "Favorites" : "Eftirlæti",
     "Options" : "Valkostir",
+    "Translate" : "Þýða",
     "Back" : "Til baka",
     "Settings" : "Stillingar",
     "Name" : "Heiti",

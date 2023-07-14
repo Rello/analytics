@@ -68,6 +68,7 @@ OC.L10N.register(
     "Password" : "Palavra-passe",
     "Favorites" : "Favoritos",
     "Options" : "Opções",
+    "Translate" : "Traduzir",
     "Back" : "Anterior",
     "Settings" : "Configurações",
     "Name" : "Nome",
