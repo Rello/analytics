@@ -46,6 +46,7 @@ OC.L10N.register(
     "Data source not available anymore" : "Datenquelle nicht mehr verfügbar",
     "Column Picker" : "Spaltenwähler",
     "Add custom column" : "Benutzerdefinierte Spalte hinzufügen",
+    "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Wählen Sie die gewünschten Spalten aus, <br>ändern Sie die Reihenfolge per Drag & Drop, <br>entfernen Sie alle Markierungen, um sie zurückzusetzen, <br>fügen Sie benutzerdefinierte Spalten hinzu, einschließlich Textvariablen für Daten. Siehe das {linkstart}Wiki{linkend}.",
     "Previous Values: " : "Vorherige Werte:",
     "Enter the fixed value:" : "Den festen Wert eingeben:",
     "Add a report to the favorites to be shown here." : "Fügen Sie einen Report den Favoriten hinzu, um ihn hier zu sehen.",
