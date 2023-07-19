@@ -44,6 +44,7 @@
     "Data source not available anymore" : "La fuente de datos ya no se encuentra disponible",
     "Column Picker" : "Selector de Columnas",
     "Add custom column" : "Agregar columna personalizada",
+    "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Seleccione las columnas requeridas.<br>Reorganice la secuencia con arrastrar y soltar.<br>Elimine todas las selecciones para restablecer<br>Agregue columnas personalizadas, incluidas las variables de texto para las fechas. Consulte  {linkstart}Wiki{linkend}.",
     "Previous Values: " : "Valores previos:",
     "Enter the fixed value:" : "Introduzca el valor fijo:",
     "Add a report to the favorites to be shown here." : "Añade un informe a los favoritos para que aparezca aquí.",
