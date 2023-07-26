@@ -37,7 +37,7 @@ OC.L10N.register(
     "last" : "último",
     "Reset zoom" : "Restabelecer o zoom",
     "Translation error. Possibly wrong ISO code?" : "Produciuse un erro de tradución. É posíbel que o código ISO non sexa correcto?",
-    "Choose language" : "Escolla o idioma",
+    "Choose language" : "Escoller o idioma",
     "Trend" : "Tendencia",
     "Aggregation" : "Agregación",
     "Disaggregation" : "Desagregación",
