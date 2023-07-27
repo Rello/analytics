@@ -9,7 +9,7 @@ build:
                 - js-scrutinizer-run
 
     environment:
-      php: 8.0.0
+      php: 8.2.0
 
 filter:
     excluded_paths:
