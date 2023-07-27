@@ -4,8 +4,8 @@
 ### Added
 - translation integration for reports #358
 - custom columns (incl. text variables) in column picker #359
-- accept csv data without header row #360
 - list available values for input boxes (e.g. filters) #362
+- accept csv data without header row #360
 
 ## 4.9.4 - 2023-06-17
 ### Fixed
