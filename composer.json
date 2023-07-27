@@ -7,9 +7,10 @@
     },
 	"require-dev": {
       "nextcloud/ocp": "^v27.0.0",
-      "symfony/symfony": "^4.4.19",
+      "symfony/symfony": "^6.3.1",
       "guzzlehttp/guzzle": "^6.3.0",
       "phpoffice/phpspreadsheet": "^1.16.0",
-      "psr/log": "^1.1.4"
+      "psr/log": "^1.1.4",
+      "psr/container": "^2.0.2"
     }
 }
