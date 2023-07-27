@@ -778,6 +778,8 @@ OCA.Analytics.Sidebar.Data = {
 
                     document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
                     document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+                    document.getElementById('DataDimension1').addEventListener('click', OCA.Analytics.UI.showDropDownList);
+                    document.getElementById('DataDimension2').addEventListener('click', OCA.Analytics.UI.showDropDownList);
 
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
@@ -1205,6 +1207,7 @@ OCA.Analytics.Sidebar.Threshold = {
                 document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
 
                 document.getElementById('sidebarThresholdHint').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdHint);
+                document.getElementById('sidebarThresholdDimension1').addEventListener('click', OCA.Analytics.UI.showDropDownList);
 
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);

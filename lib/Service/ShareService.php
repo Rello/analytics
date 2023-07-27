@@ -148,7 +148,6 @@ class ShareService
         $reports = array();
 
         foreach ($sharedReports as $sharedReport) {
-            $this->logger->debug('Shareservice: evaluating share ' . $sharedReport["shareId"] . ' of report ' . $sharedReport["id"] . ' with type ' . $sharedReport['shareType'] . ' for '. $sharedReport['shareUid_owner']);
             // shared with a group?
             if ((int)$sharedReport['shareType'] === self::SHARE_TYPE_GROUP) {
                 // is the current user part of this group?

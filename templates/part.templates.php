@@ -205,7 +205,7 @@
             <div style="display: table-row;">
                 <div id="DataTextDimension1"
                      style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
-                <input style="display: table-cell;" class="sidebarInput" id="DataDimension1">
+                <input style="display: table-cell;" class="sidebarInput" id="DataDimension1" autocomplete="off" data-dropDownListIndex="0">
                 <div style="display: table-cell;">
                     <a id="sidebarDataDimension1Hint" title="<?php p($l->t('Variables')); ?>">
                         <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -213,7 +213,7 @@
             </div>
             <div style="display: table-row;">
                 <div id="DataTextDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></div>
-                <input style="display: table-cell;" class="sidebarInput" id="DataDimension2">
+                <input style="display: table-cell;" class="sidebarInput" id="DataDimension2" autocomplete="off" data-dropDownListIndex="1">
                 <div style="display: table-cell;">
                     <a id="sidebarDataDimension2Hint" title="<?php p($l->t('Variables')); ?>">
                         <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -283,7 +283,7 @@
                  style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
             <div style="display: table-cell;">
                 <input id="sidebarThresholdDimension1" class="sidebarInput"
-                       placeholder="<?php p($l->t('single value or *')); ?>"></div>
+                       placeholder="<?php p($l->t('single value or *')); ?>" autocomplete="off" data-dropDownListIndex="0"></div>
             <div style="display: table-cell;">
                 <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>

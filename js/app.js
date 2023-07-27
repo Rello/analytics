@@ -83,16 +83,16 @@ OCA.Analytics.Core = {
         }
     },
 
-    getDistinctValues: function (array) {
+    getDistinctValues: function (array, index) {
         let unique = [];
         let distinct = [];
         if (array === undefined) {
             return distinct;
         }
         for (let i = 0; i < array.length; i++) {
-            if (!unique[array[i][0]]) {
-                distinct.push(array[i][0]);
-                unique[array[i][0]] = 1;
+            if (!unique[array[i][index]]) {
+                distinct.push(array[i][index]);
+                unique[array[i][index]] = 1;
             }
         }
         return distinct;
@@ -568,7 +568,7 @@ OCA.Analytics.UI = {
             datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
             datasets = Object.values(datasets);
         }
-
+        
         OCA.Analytics.chartObject = new Chart(ctx, {
             plugins: [ChartDataLabels, ChartZoom],
             type: OCA.Analytics.chartTypeMapping[chartType],
@@ -779,6 +779,103 @@ OCA.Analytics.UI = {
 
     tableSearch: function () {
         OCA.Analytics.tableObject.search(this.value).draw();
+    },
+
+    showDropDownList: function (evt) {
+        if (document.getElementById('tmpList')) {
+            return;
+        }
+        let inputField = evt.target;
+        if (!inputField.hasAttribute('data-dropDownListIndex')) {
+            return;
+        }
+        // make the list align-able
+        inputField.style.position = 'relative';
+        let dropDownListIndex = inputField.dataset.dropdownlistindex;
+
+        // get the values for the list from the report data
+        let listValues = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, dropDownListIndex);
+
+        let ul = document.createElement('ul');
+        ul.id = 'tmpList';
+        ul.classList.add('dropDownList');
+
+        // take over the class from the input field to ensure same size
+        for (let className of inputField.classList) {
+            ul.classList.add(className);
+        }
+
+        for (let item of listValues) {
+            let li = document.createElement('li');
+            li.id = item;
+            li.innerText = item;
+            ul.appendChild(li);
+        }
+
+        // add the list to the input field and "open" its border at the bottom
+        inputField.insertAdjacentElement('afterend', ul);
+        inputField.classList.add('dropDownListParentOpen');
+
+        // create an event listener on document level to recognize a click outside the list
+        document.addEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
+
+        inputField.addEventListener('keydown', function(event) {
+            let li = document.getElementById('tmpList').getElementsByTagName('li');
+
+            if (event.key === 'Tab') {
+                // if the Tab key is pressed, we mimic autocompletion by using the first visible entry
+                event.preventDefault(); // prevent the focus from moving to the next element
+
+                // loop through all li items in the list
+                for (let i = 0; i < li.length; i++) {
+                    // if the li is visible, set the input value to its text and hide the list
+                    if (li[i].style.display !== 'none') {
+                        inputField.value = li[i].textContent;
+                        OCA.Analytics.UI.hideDropDownList();
+                        break; // exit the loop after finding the first visible li
+                    }
+                }
+            } else {
+                // for every keypress, we filter the list vor matching entries
+                let filter = inputField.value.toUpperCase(); // get the typed text in uppercase
+                // loop through all li items in the list
+                for (var i = 0; i < li.length; i++) {
+                    var txtValue = li[i].textContent || li[i].innerText; // get the text in the li
+                    // if the li text doesn't match the typed text, hide it
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            }
+        });
+    },
+
+    handleDropDownListClicked: function(event) {
+        let dropDownList = document.getElementById('tmpList');
+        let inputField = dropDownList.previousElementSibling;
+        let isClickInside = dropDownList.contains(event.target);
+        let isClickOnInput = inputField === event.target;
+
+        // If the click is inside the list and the target is an LI
+        if (isClickInside && event.target.tagName === 'LI') {
+            inputField.value = event.target.textContent;
+            OCA.Analytics.UI.hideDropDownList();
+        }
+        // If the click is outside the list, hide the list
+        else if (!isClickInside && !isClickOnInput) {
+            OCA.Analytics.UI.hideDropDownList();
+        }
+    },
+
+    hideDropDownList: function () {
+        // remove the global event listener again
+        document.removeEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
+        let dropDownList = document.getElementById('tmpList');
+        let inputField = dropDownList.previousElementSibling;
+        inputField.classList.remove('dropDownListParentOpen');
+        dropDownList.remove();
     }
 };
 

@@ -6,10 +6,10 @@
       "ext-gd": "*"
     },
 	"require-dev": {
-      "nextcloud/ocp": "^v24.0.1",
+      "nextcloud/ocp": "^v27.0.0",
       "symfony/symfony": "^4.4.19",
       "guzzlehttp/guzzle": "^6.3.0",
       "phpoffice/phpspreadsheet": "^1.16.0",
-      "psr/log": "^1.1.0"
+      "psr/log": "^1.1.4"
     }
 }

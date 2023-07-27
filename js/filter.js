@@ -155,7 +155,7 @@ OCA.Analytics.Filter = {
             + '</select>'
             + '</div>'
             + '<div style="display: table-cell;">'
-            + '<input type="text" id="filterDialogValue" class="optionsInputValue">'
+            + '<input type="text" id="filterDialogValue" class="optionsInputValue" autocomplete="off" data-dropDownListIndex="0">'
             + '</div>'
             + '<div style="display: table-cell;">'
             + '<a id="filterDialogHint" title ="' + t('analytics', 'Variables') + '">'
@@ -176,6 +176,9 @@ OCA.Analytics.Filter = {
             dimensionSelectOptions = dimensionSelectOptions + '<option value="' + Object.keys(availableDimensions)[i] + '">' + Object.values(availableDimensions)[i] + '</option>';
         }
         document.getElementById('filterDialogDimension').innerHTML = dimensionSelectOptions;
+        document.getElementById('filterDialogDimension').addEventListener('change', function () {
+            document.getElementById('filterDialogValue').dataset.dropdownlistindex = document.getElementById('filterDialogDimension').selectedIndex;
+        });
 
         // fill Options dropdown
         let optionSelectOptions = '';
@@ -194,6 +197,7 @@ OCA.Analytics.Filter = {
                 document.getElementById('filterDialogValue').value = filterValue;
                 document.getElementById('filterDialogOption').value = filterOption;
                 document.getElementById('filterDialogDimension').value = filterDimension;
+                document.getElementById('filterDialogValue').dataset.dropdownlistindex = document.getElementById('filterDialogDimension').selectedIndex;
             }
         }
 
@@ -201,6 +205,8 @@ OCA.Analytics.Filter = {
         document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("filterDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
         document.getElementById("filterDialogGo").addEventListener("click", OCA.Analytics.Filter.processFilterDialog);
+        document.getElementById('filterDialogValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
+
         document.getElementById('filterDialogValue').addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 OCA.Analytics.Filter.processFilterDialog();

@@ -158,13 +158,11 @@
 
 .optionsInput {
     width: 130px;
+    border: 1px solid var(--color-border-dark) !important;
+    border-radius: var(--border-radius-large);
 }
 
-.optionsInputValue {
-    width: 200px;
-}
-
-.sidebarInput, .menueInput {
+.sidebarInput, .menueInput, .optionsInputValue {
     width: 200px;
     border: 1px solid var(--color-border-dark) !important;
     border-radius: var(--border-radius-large);
@@ -478,4 +476,32 @@ table.dataTable tbody tr {
     position: relative;
     display: flex;
     padding-top: 10px;
+}
+
+.dropDownList {
+    border-color: var(--color-primary-element) !important;
+    position: absolute;
+    z-index: 9999;
+    background-color: #fff;
+    border-top: none !important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-top: -3px;
+}
+
+.dropDownList > li {
+    height: 30px;
+    padding: 0 12px;
+}
+
+.dropDownList > li:hover {
+    background-color: var(--color-background-hover);
+    cursor: pointer;
+}
+
+.dropDownListParentOpen {
+    border-color: var(--color-primary-element) !important;
+    border-bottom: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
