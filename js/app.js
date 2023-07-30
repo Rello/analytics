@@ -805,11 +805,15 @@ OCA.Analytics.UI = {
             ul.classList.add(className);
         }
 
+        let listCount = 0;
+        let listCountMax = 4;
         for (let item of listValues) {
             let li = document.createElement('li');
             li.id = item;
             li.innerText = item;
+            listCount > listCountMax ? li.style.display = 'none' : li.style.display = '';
             ul.appendChild(li);
+            listCount++;
         }
 
         // add the list to the input field and "open" its border at the bottom
@@ -819,7 +823,7 @@ OCA.Analytics.UI = {
         // create an event listener on document level to recognize a click outside the list
         document.addEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
 
-        inputField.addEventListener('keydown', function(event) {
+        inputField.addEventListener('keyup', function(event) {
             let li = document.getElementById('tmpList').getElementsByTagName('li');
 
             if (event.key === 'Tab') {
@@ -839,11 +843,13 @@ OCA.Analytics.UI = {
                 // for every keypress, we filter the list vor matching entries
                 let filter = inputField.value.toUpperCase(); // get the typed text in uppercase
                 // loop through all li items in the list
-                for (var i = 0; i < li.length; i++) {
-                    var txtValue = li[i].textContent || li[i].innerText; // get the text in the li
+                listCount = 0;
+                for (let i = 0; i < li.length; i++) {
+                    let txtValue = li[i].textContent || li[i].innerText; // get the text in the li
                     // if the li text doesn't match the typed text, hide it
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    if (txtValue.toUpperCase().indexOf(filter) > -1 && listCount < listCountMax ) {
                         li[i].style.display = "";
+                        listCount++;
                     } else {
                         li[i].style.display = "none";
                     }

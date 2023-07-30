@@ -1202,7 +1202,7 @@ OCA.Analytics.Sidebar.Threshold = {
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);
                 document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column') + ' 1';
-                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Column') + ' 3';
+                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Value');
                 document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
                 document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
 

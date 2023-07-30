@@ -132,7 +132,7 @@ OCA.Analytics.Filter = {
             + '<div style="display: table-cell; width: 150px;">'
             + '<label for="filterDialogOption">' + t('analytics', 'Operator') + '</label>'
             + '</div>'
-            + '<div style="display: table-cell; width: 150px;">'
+            + '<div style="display: table-cell; width: 220px;">'
             + '<label for="filterDialogValue">' + t('analytics', 'Value') + '</label>'
             + '</div>'
             + '<div style="display: table-cell; width: 20px;"></div>'
@@ -441,6 +441,8 @@ OCA.Analytics.Filter = {
     close: function () {
         document.getElementById('analytics_dialog_container').remove();
         document.getElementById('analytics_dialog_overlay').remove();
+        // remove the global event listener which was added by the drop down lists
+        document.removeEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
     },
 
     // function for shorter coding of the dialog creation
