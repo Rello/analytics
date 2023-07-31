@@ -1,11 +1,14 @@
 # Changelog
 
-## 4.9.5 - 2023-07-25
+## 4.10.0 - 2023-07-25
 ### Added
 - translation integration for reports #358
-- custom columns (incl. text variables) in column picker #359
+- add custom columns (incl. text variables) in column picker #359
 - list available values for input boxes (e.g. filters) #362
-- accept csv data without header row #360
+- csv data: select header row #360
+
+### Fixed
+- 3digit comma values evaluated as 1000s #357
 
 ## 4.9.4 - 2023-06-17
 ### Fixed

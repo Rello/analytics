@@ -84,9 +84,15 @@ class ThresholdService
 
     private function floatvalue($val)
     {
+        // if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
+        if (preg_match('/(?<=\b0)\,(?=\d{3}\b)/', $val) === 0 && preg_match('/(?<=\b0)\.(?=\d{3}\b)/', $val) === 0) {
+            // remove , as 1000 separator
+            $val = preg_replace('/(?<=\d)\,(?=\d{3}\b)/', '', $val);
+            // remove . as 1000 separator
+            $val = preg_replace('/(?<=\d)\.(?=\d{3}\b)/', '', $val);
+        }
+        // convert remaining comma to decimal point
         $val = str_replace(",", ".", $val);
-        $val = preg_replace('/\.(?=.*\.)/', '', $val);
-        $val = preg_replace('/[^0-9-.]+/', '', $val);
         if (is_numeric($val)) {
             return number_format(floatval($val), 2, '.', '');
         } else {
