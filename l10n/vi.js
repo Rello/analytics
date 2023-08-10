@@ -78,6 +78,7 @@ OC.L10N.register(
     "Object" : "Đối tượng",
     "Date" : "Date",
     "Year" : "Năm",
+    "New in" : "Mới trong",
     "View changelog" : "Xem nhật ký thay đổi",
     "You deleted report {report}" : "Bạn đã xoá báo cáo {report}",
     "Local file" : "Tệp cục bộ",
