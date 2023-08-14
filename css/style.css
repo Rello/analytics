@@ -313,6 +313,12 @@ table.dataTable tbody tr {
     filter: var(--background-invert-if-dark);
 }
 
+.icon-analytics-gripLines {
+    background-image: url(../img/gripLines.svg);
+    filter: var(--background-invert-if-dark);
+    margin: 10px;
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;

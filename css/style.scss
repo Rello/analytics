@@ -312,6 +312,11 @@ table.dataTable tbody tr {
   @include icon-color('column', 'analytics', $color-black, 1);
 }
 
+.icon-analytics-gripLines {
+  @include icon-color('gripLines', 'analytics', $color-black, 1);
+  margin: 10px;
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;

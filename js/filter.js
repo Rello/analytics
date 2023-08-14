@@ -289,7 +289,7 @@ OCA.Analytics.Filter = {
         } catch (e) {
             dataOptions = '';
         }
-        let distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data);
+        let distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0);
         if (dataOptions === null) dataOptions = {};
 
         // check if defined dataoptions don´t match the number of dataseries anymore

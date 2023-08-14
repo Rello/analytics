@@ -1465,6 +1465,9 @@ OCA.Analytics.Datasource = {
         li.addEventListener("dragover", OCA.Analytics.Notification.handleDragOver);
         li.addEventListener("drop", OCA.Analytics.Notification.handleDrop);
 
+        const gripLines = document.createElement('div')
+        gripLines.classList.add('icon-analytics-gripLines', 'sidebarPointer');
+
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.id = item.id;
@@ -1478,6 +1481,7 @@ OCA.Analytics.Datasource = {
         spanContent.style.marginLeft = '10px';
         spanContent.style.color = 'var(--color-text-maxcontrast)';
         item.contenteditable === true ? spanContent.contentEditable = 'true' : false;
+        li.appendChild(gripLines);
         li.appendChild(checkbox);
         li.appendChild(span);
         li.appendChild(spanContent);
