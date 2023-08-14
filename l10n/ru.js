@@ -36,6 +36,7 @@ OC.L10N.register(
     "next" : "следующий",
     "last" : "последний",
     "Reset zoom" : "Сбросить масштаб",
+    "Choose language" : "Выберите язык",
     "Trend" : "Тренд",
     "Aggregation" : "Объединение",
     "Disaggregation" : "Разъединение",
