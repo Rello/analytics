@@ -210,6 +210,7 @@ class DatasourceController extends Controller
                 $dataSources[$uniqueId] = \OC::$server->get($class);
             } catch (\Error $e) {
                 $this->logger->error('Can not initialize data source: '. json_encode($class));
+                $this->logger->error($e->getMessage());
             }
         }
         return $dataSources;
