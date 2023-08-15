@@ -4,7 +4,7 @@ OC.L10N.register(
     "Dataset" : "مجموعه داده",
     "Data" : "داده",
     "Automation" : "اتوماسیون",
-    "Data maintenance is not possible for this type of report" : "Data maintenance is not possible for this type of report",
+    "Data maintenance is not possible for this type of report" : "نگهداری داده ها برای این نوع گزارش امکان پذیر نیست",
     "Choose a data source from the dropdown and press \"+\"" : "Choose a data source from the dropdown and press \"+\"",
     "Choose a data load from the list to change its settings" : "Choose a data load from the list to change its settings",
     "Filter by" : "Filter by",
