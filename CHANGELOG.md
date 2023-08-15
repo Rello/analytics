@@ -6,9 +6,11 @@
 - add custom columns (incl. text variables) in column picker #359
 - list available values for input boxes (e.g. filters) #362
 - csv data: select header row #360
+- Report: drill down & aggregation also for external data sources #365
 
 ### Fixed
 - 3digit comma values evaluated as 1000s #357
+- show errors of external data sources
 
 ## 4.9.4 - 2023-06-17
 ### Fixed

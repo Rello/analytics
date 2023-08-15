@@ -48,16 +48,16 @@ class DatasourceController extends Controller
     const DATASET_TYPE_EXCEL = 7;
 
     public function __construct(
-        string $AppName,
-        IRequest $request,
-        LoggerInterface $logger,
-        Github $GithubService,
-        File $FileService,
-        Regex $RegexService,
-        Json $JsonService,
-        ExternalFile $ExternalFileService,
-        Excel $ExcelService,
-        IL10N $l10n,
+        string           $AppName,
+        IRequest         $request,
+        LoggerInterface  $logger,
+        Github           $GithubService,
+        File             $FileService,
+        Regex            $RegexService,
+        Json             $JsonService,
+        ExternalFile     $ExternalFileService,
+        Excel            $ExcelService,
+        IL10N            $l10n,
         IEventDispatcher $dispatcher
     )
     {
@@ -150,10 +150,14 @@ class DatasourceController extends Controller
                 $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s") . 'Z');
             }
 
-            // filter result set if required
             if (isset($datasetMetadata['filteroptions']) && strlen($datasetMetadata['filteroptions']) >> 2) {
-                $result['data'] = $this->filterData($result['data'], $datasetMetadata['filteroptions']);
+                // filter data
+                $result = $this->filterData($result, $datasetMetadata['filteroptions']);
+                // remove columns and aggregate data
+                $result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
             }
+
+
         } catch (\Error $e) {
             $result['error'] = $e->getMessage();
         }
@@ -209,7 +213,7 @@ class DatasourceController extends Controller
                 }
                 $dataSources[$uniqueId] = \OC::$server->get($class);
             } catch (\Error $e) {
-                $this->logger->error('Can not initialize data source: '. json_encode($class));
+                $this->logger->error('Can not initialize data source: ' . json_encode($class));
                 $this->logger->error($e->getMessage());
             }
         }
@@ -253,14 +257,12 @@ class DatasourceController extends Controller
     {
         $options = json_decode($filter, true);
         if (isset($options['filter'])) {
-
             foreach ($options['filter'] as $key => $value) {
-
                 $filterValue = $value['value'];
                 $filterOption = $value['option'];
                 $filtered = array();
 
-                foreach ($data as $record) {
+                foreach ($data['data'] as $record) {
                     if (
                         ($filterOption === 'EQ' && $record[$key] === $filterValue)
                         || ($filterOption === 'GT' && $record[$key] > $filterValue)
@@ -275,7 +277,62 @@ class DatasourceController extends Controller
                         }
                     }
                 }
-                $data = $filtered;
+                $data['data'] = $filtered;
+            }
+        }
+        return $data;
+    }
+
+    private function aggregateData($data, $filter)
+    {
+        $options = json_decode($filter, true);
+        if (isset($options['drilldown'])) {
+            // Sort the indices in descending order
+            $sortedIndices = array_keys($options['drilldown']);
+            rsort($sortedIndices);
+
+            foreach ($sortedIndices as $removeIndex) {
+                $aggregatedData = [];
+
+                // remove the header of the column which is not needed
+                unset($data['header'][$removeIndex]);
+                $data['header'] = array_values($data['header']);
+
+                // remove the column of the data
+                foreach ($data['data'] as $row) {
+                    // Remove the desired column by its index
+                    unset($row[$removeIndex]);
+
+                    // The last column is assumed to always be the value
+                    $value = array_pop($row);
+
+                    // If there are no columns left except the value column
+                    if (empty($row)) {
+                        $key = 'xxsingle_valuexx';
+                    } else {
+                        // Use remaining columns as key
+                        $key = implode("|", $row);
+                    }
+
+                    if (!isset($aggregatedData[$key])) {
+                        $aggregatedData[$key] = 0;
+                    }
+                    $aggregatedData[$key] += $value;
+                }
+
+                // Convert the associative array to the desired format
+                $result = [];
+                foreach ($aggregatedData as $aKey => $aValue) {
+                    // If only the value column remains, append its total value
+                    if ($aKey === 'xxsingle_valuexx') {
+                        $aKey = $this->l10n->t('Total');
+                        // Add an empty column to the beginning
+                        array_unshift($data['header'], "");
+                    }
+                    $result[] = [$aKey, $aValue];
+                }
+
+                $data['data'] = $result;
             }
         }
         return $data;

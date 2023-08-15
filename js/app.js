@@ -662,10 +662,6 @@ OCA.Analytics.UI = {
             OCA.Analytics.UI.showElement('reportMenuIcon');
         }
 
-        if (parseInt(currentReport.options.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
-            document.getElementById('reportMenuDrilldown').disabled = true;
-        }
-
         if (!OCA.Analytics.translationAvailable) {
             document.getElementById('reportMenuTranslate').disabled = true;
         } else {
