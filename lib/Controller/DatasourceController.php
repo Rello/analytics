@@ -306,7 +306,7 @@ class DatasourceController extends Controller
                     // The last column is assumed to always be the value
                     $value = array_pop($row);
 
-                    // If there are no columns left except the value column
+                    // If there are no columns left except the value column, insert a dummy
                     if (empty($row)) {
                         $key = 'xxsingle_valuexx';
                     } else {
@@ -326,12 +326,11 @@ class DatasourceController extends Controller
                     // If only the value column remains, append its total value
                     if ($aKey === 'xxsingle_valuexx') {
                         $aKey = $this->l10n->t('Total');
-                        // Add an empty column to the beginning
-                        array_unshift($data['header'], "");
+                        // Add an empty column to the header because of the "total" row description
+                        array_unshift($data['header'], '');
                     }
                     $result[] = [$aKey, $aValue];
                 }
-
                 $data['data'] = $result;
             }
         }
