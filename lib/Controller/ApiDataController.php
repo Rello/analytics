@@ -99,7 +99,7 @@ class ApiDataController extends ApiController
         return $this->requestResponse(
             true,
             Http::STATUS_OK,
-            'Data update successfull');
+            'Data update successful');
     }
 
     /**
@@ -131,7 +131,7 @@ class ApiDataController extends ApiController
 
             $this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
             $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
-            $message = 'Data update successfull';
+            $message = 'Data update successful';
         }
 
         return $this->requestResponse(
