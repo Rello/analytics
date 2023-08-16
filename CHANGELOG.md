@@ -11,6 +11,7 @@
 ### Fixed
 - 3digit comma values evaluated as 1000s #357
 - show errors of external data sources
+- error on public pages #363
 
 ## 4.9.4 - 2023-06-17
 ### Fixed

@@ -1696,14 +1696,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('sharingToken').value === '') {
         OCA.Analytics.UI.showElement('analytics-intro');
         OCA.Analytics.Core.initApplication();
+        if (!OCA.Analytics.isAdvanced) {
+            OCA.Analytics.UI.reportOptionsEventlisteners();
+            document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
+            document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
+            document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
+        }
     } else {
         OCA.Analytics.Backend.getData();
-    }
-    if (!OCA.Analytics.isAdvanced) {
-        OCA.Analytics.UI.reportOptionsEventlisteners();
-        document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-        document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
-        document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
     }
 
     OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
