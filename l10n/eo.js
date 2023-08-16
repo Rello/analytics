@@ -23,6 +23,7 @@ OC.L10N.register(
     "Date" : "Date",
     "New in" : "Nova en",
     "View changelog" : "Vidi ŝanĝoprotokolon",
+    "Total" : "Sumo",
     "File" : "Dosiero",
     "Yes" : "Yes",
     "No" : "No",

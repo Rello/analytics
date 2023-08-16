@@ -33,6 +33,7 @@ OC.L10N.register(
     "Notification" : "Notificación",
     "Date" : "Fecha",
     "Analytics" : "Analíticas",
+    "Total" : "Total",
     "Reports" : "Informes",
     "File" : "Archivo",
     "Yes" : "Sí",

@@ -81,6 +81,7 @@ OC.L10N.register(
     "New in" : "Mới trong",
     "View changelog" : "Xem nhật ký thay đổi",
     "You deleted report {report}" : "Bạn đã xoá báo cáo {report}",
+    "Total" : "Tổng cộng",
     "Local file" : "Tệp cục bộ",
     "File" : "Tệp",
     "Yes" : "Có",

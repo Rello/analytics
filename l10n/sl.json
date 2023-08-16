@@ -145,6 +145,7 @@
     "New data has been added to dataset {report} via data load" : "Novi podatki so dodani v podatkovno množico {report} iz pripravljenega podatkovnega nabora.",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analitika</strong>: v poročilo so dodani novi podatki.",
     "<strong>Analytics</strong>: New reports" : "<strong>Analitika</strong>: Nova poročila",
+    "Total" : "Skupaj",
     "Reports" : "Poročila",
     "Local file" : "Krajevna datoteka",
     "File" : "Datoteka",

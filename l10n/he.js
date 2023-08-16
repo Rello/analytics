@@ -36,6 +36,7 @@ OC.L10N.register(
     "Year" : "שנה",
     "New in" : "חדש ב־",
     "View changelog" : "הצגת יומן שינויים",
+    "Total" : "סך הכול",
     "Local file" : "קובץ מקומי",
     "File" : "קובץ",
     "Yes" : "כן",

@@ -15,6 +15,7 @@ OC.L10N.register(
     "Share link" : "Compartir ligamine",
     "Type" : "Typo",
     "Date" : "Date",
+    "Total" : "Total",
     "File" : "File",
     "Yes" : "Si",
     "No" : "No",

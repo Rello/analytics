@@ -12,6 +12,7 @@ OC.L10N.register(
     "Do you want to create a new group folder?" : "Do you want to create a new group folder?",
     "New" : "New",
     "Share link" : "Share link",
+    "Total" : "Total",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

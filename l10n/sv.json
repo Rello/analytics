@@ -152,6 +152,7 @@
     "New data has been added to dataset {report} via data load" : "Ny data har lagts till i datamängden {report} via datainläsning",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analyser</strong>: Nya data har införts i en rapport",
     "<strong>Analytics</strong>: New reports" : "<strong>Analyser</strong>: Nya rapporter",
+    "Total" : "Totalt",
     "Reports" : "Rapporter",
     "Local file" : "Lokal fil",
     "File" : "Fil",

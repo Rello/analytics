@@ -147,6 +147,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "S'han afegit dades noves al conjunt de dades {report} mitjançant la càrrega de dades",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analítica</strong>: s'han afegit dades noves a un informe",
     "<strong>Analytics</strong>: New reports" : "<strong>Analítica</strong>: Nous informes",
+    "Total" : "Total",
     "Reports" : "Informes",
     "Local file" : "Fitxer local",
     "File" : "Fitxer",

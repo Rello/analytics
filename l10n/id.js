@@ -65,6 +65,7 @@ OC.L10N.register(
     "Date" : "Date",
     "New in" : "Terbaru",
     "View changelog" : "Lihat log pembaruan",
+    "Total" : "Total",
     "Local file" : "File lokal",
     "File" : "Berkas",
     "Yes" : "Ya",

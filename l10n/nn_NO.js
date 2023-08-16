@@ -37,6 +37,7 @@ OC.L10N.register(
     "Yellow" : "Gul",
     "Date" : "Dato",
     "Year" : "År",
+    "Total" : "Totalt",
     "File" : "Fil",
     "Yes" : "Ja",
     "No" : "Nei",

@@ -19,6 +19,7 @@ OC.L10N.register(
     "Type" : "Төрөл",
     "Notification" : "Мэдэгдэл",
     "Date" : "Он сар өдөр",
+    "Total" : "Нийт",
     "File" : "File",
     "Yes" : "Тийм",
     "No" : "Үгүй",

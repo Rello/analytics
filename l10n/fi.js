@@ -88,6 +88,7 @@ OC.L10N.register(
     "shared report {report} with you" : "jakoi raportin {report} kanssasi",
     "You have added new data to dataset {report}" : "Olet lisännyt uutta dataa datajoukkoon {report}",
     "You have imported data in dataset {report}" : "Olet tuonut dataa datajoukkoon {report}",
+    "Total" : "Yhteensä",
     "Reports" : "Raportit",
     "Local file" : "Paikallinen tiedosto",
     "File" : "Tiedosto",

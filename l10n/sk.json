@@ -136,6 +136,7 @@
     "New data has been added to dataset {report} via data load" : "Do množiny údajov {report} boli pridané nové údaje prostredníctvom načítaných údajov",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analytika</strong>: do zostavy boli pridané nové údaje",
     "<strong>Analytics</strong>: New reports" : "<strong>Analytika</strong>: Nové zostavy",
+    "Total" : "Celkom",
     "Reports" : "Zostavy",
     "Local file" : "Lokálny súbor",
     "File" : "Súbor",

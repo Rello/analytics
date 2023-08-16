@@ -27,6 +27,7 @@ OC.L10N.register(
     "Type" : "Tipo",
     "Notification" : "Notificación",
     "Date" : "Fecha",
+    "Total" : "Total",
     "File" : "Archivo",
     "Yes" : "Sí",
     "No" : "No",

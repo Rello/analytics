@@ -23,6 +23,7 @@ OC.L10N.register(
     "Notification" : "Njoftim",
     "Date" : "Data",
     "New in" : "I ri në ",
+    "Total" : "Total",
     "File" : "Skedar ",
     "Yes" : "Yes",
     "No" : "Jo",

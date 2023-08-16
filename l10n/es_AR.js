@@ -24,6 +24,7 @@ OC.L10N.register(
     "Date" : "Fecha",
     "New in" : "Nuevo en",
     "View changelog" : "Ver registro de cambios",
+    "Total" : "Total",
     "File" : "Archivo",
     "Yes" : "Si",
     "No" : "No",

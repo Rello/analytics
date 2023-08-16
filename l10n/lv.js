@@ -20,6 +20,7 @@ OC.L10N.register(
     "Notification" : "Paziņojums",
     "Date" : "Datums",
     "View changelog" : "Skatīt izmaiņu sarakstu",
+    "Total" : "Kopā",
     "File" : "Datne",
     "Yes" : "Jā",
     "No" : "Nē",
