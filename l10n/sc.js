@@ -35,6 +35,7 @@ OC.L10N.register(
     "Year" : "Annu",
     "New in" : "Prima borta in",
     "View changelog" : "Càstia su registru de is càmbios",
+    "Total" : "Totale",
     "File" : "Archìviu",
     "Yes" : "Si",
     "No" : "No",

@@ -34,6 +34,7 @@ OC.L10N.register(
     "Year" : "Godina",
     "New in" : "Novo u",
     "View changelog" : "Prikaži zapis promjena",
+    "Total" : "Ukupno",
     "Local file" : "Lokalna datoteka",
     "File" : "Datoteka",
     "Yes" : "Da",

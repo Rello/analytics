@@ -32,6 +32,7 @@ OC.L10N.register(
     "Year" : "Metai",
     "New in" : "Nauja",
     "View changelog" : "Rodyti keitinių žurnalą",
+    "Total" : "Iš viso",
     "Local file" : "Failas iš įrenginio",
     "File" : "Failas",
     "Yes" : "Taip",

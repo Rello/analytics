@@ -152,6 +152,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "Adatbetöltéssel új adatok lettek hozzáadva a(z) {report} adatkészlethez",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Elemzés</strong>: Új adatok lettek hozzáadva egy jelentéshez",
     "<strong>Analytics</strong>: New reports" : "<strong>Elemzés</strong>: Új jelentések",
+    "Total" : "Összesen",
     "Reports" : "Jelentések",
     "Local file" : "Helyi fájl",
     "File" : "Fájl",

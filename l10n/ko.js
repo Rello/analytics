@@ -88,6 +88,7 @@ OC.L10N.register(
     "Year" : "년",
     "New in" : "새로운 것",
     "View changelog" : "변경 기록 확인",
+    "Total" : "합계",
     "Reports" : "리포트들",
     "Local file" : "로컬 파일",
     "File" : "파일",

@@ -147,6 +147,7 @@
     "New data has been added to dataset {report} via data load" : "Новые данные были добавлены в набор данных {report} через загрузку данных",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Аналитика</strong>: В отчёт были добавлены новые данные",
     "<strong>Analytics</strong>: New reports" : "<strong>Аналитика</strong>: Новый отчёт",
+    "Total" : "Всего",
     "Reports" : "Отчёты",
     "Local file" : "Локальный файл",
     "File" : "Файл",

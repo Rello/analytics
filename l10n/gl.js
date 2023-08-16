@@ -154,6 +154,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "Engadíronse novos datos ao conxunto de datos {report} a través da carga de datos",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analitica</strong>: Engadíronse novos datos a un informe",
     "<strong>Analytics</strong>: New reports" : "<strong>Analitica</strong>: Novos informes",
+    "Total" : "Total",
     "Reports" : "Informes",
     "Local file" : "Ficheiro local",
     "File" : "Ficheiro",

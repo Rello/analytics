@@ -152,6 +152,7 @@
     "New data has been added to dataset {report} via data load" : "Se han añadido datos nuevos al conjunto de datos {report} vía carga de datos",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analíticas</strong>: Se han añadido datos nuevos a un informe",
     "<strong>Analytics</strong>: New reports" : "<strong>Analíticas</strong>: Nuevos informes",
+    "Total" : "Total",
     "Reports" : "Informes",
     "Local file" : "Archivo local",
     "File" : "Archivo",

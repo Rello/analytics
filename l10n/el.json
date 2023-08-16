@@ -138,6 +138,7 @@
     "New data has been added to dataset {report} via data load" : "Προστέθηκαν νέα δεδομένα στο σύνολο δεδομένων {report} μέσω της φόρτωσης δεδομένων",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Αναλυτικά Στοιχεία</strong>: Προστέθηκαν νέα δεδομένα σε μια αναφορά",
     "<strong>Analytics</strong>: New reports" : "<strong>Αναλυτικά Στοιχεία</strong>: Νέες αναφορές",
+    "Total" : "Σύνολο",
     "Reports" : "Αναφορές",
     "Local file" : "Τοπικό αρχείο",
     "File" : "Αρχείο",

@@ -56,6 +56,7 @@ OC.L10N.register(
     "Date" : "Data",
     "New in" : "Novo em",
     "View changelog" : "Ver registo de alterações",
+    "Total" : "Total",
     "Local file" : "Ficheiro local",
     "File" : "Ficheiro",
     "Yes" : "Sim",

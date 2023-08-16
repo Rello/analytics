@@ -154,6 +154,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "Nová data byla přidána do výkazu {report} prostřednictvím stahování",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analýzy</strong>: Do výkazu byla přidána nová data",
     "<strong>Analytics</strong>: New reports" : "<strong>Analýzy</strong>: Nové výkazy",
+    "Total" : "Celkem",
     "Reports" : "Výkazy",
     "Local file" : "Místní soubor",
     "File" : "Soubor",

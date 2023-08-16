@@ -146,6 +146,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "Нові дані додано до набору даних {report} через завантаження даних",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Аналітика</strong>: до звіту додано нові дані",
     "<strong>Analytics</strong>: New reports" : "<strong>Аналітика</strong>: нові звіти",
+    "Total" : "Разом",
     "Reports" : "Звіти",
     "Local file" : "Файл на пристрої",
     "File" : "Файл",

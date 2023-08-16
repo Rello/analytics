@@ -21,6 +21,7 @@ OC.L10N.register(
     "Type" : "სახეობა",
     "Notification" : "შეტყობინება",
     "Date" : "თარიღი",
+    "Total" : "სულ",
     "File" : "ფაილი",
     "Yes" : "კი",
     "No" : "არა",

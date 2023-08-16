@@ -32,6 +32,7 @@ OC.L10N.register(
     "Year" : "Година",
     "New in" : "Ново во",
     "View changelog" : "Видете ги проммените",
+    "Total" : "Вкупно",
     "Local file" : "Локална датотека",
     "File" : "Датотека",
     "Yes" : "Да",

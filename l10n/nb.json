@@ -134,6 +134,7 @@
     "New data has been added to dataset {report} via API" : "Nye data har blitt lagt til datasettet {report} via API",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analyse</strong>: Nye data ble lagt til en rapport",
     "<strong>Analytics</strong>: New reports" : "<strong>Analyse</strong>: Nye rapporter",
+    "Total" : "Totalt",
     "Reports" : "Rapporter",
     "Local file" : "Lokal fil",
     "File" : "Fil",

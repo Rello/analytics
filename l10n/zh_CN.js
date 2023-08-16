@@ -146,6 +146,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "已通过数据加载将新数据添加至数据集 {report}",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analytics</strong>：新数据已添加到报告中",
     "<strong>Analytics</strong>: New reports" : "<strong>Analytics</strong>：新报告",
+    "Total" : "总量",
     "Reports" : "报告",
     "Local file" : "本地文件",
     "File" : "文件",

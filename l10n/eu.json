@@ -152,6 +152,7 @@
     "New data has been added to dataset {report} via data load" : "Datu berriak gehitu dira {report} datu-multzoan datu-kargaren bidez",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analitikak</strong>: Datu berriak gehitu dira txosten batera",
     "<strong>Analytics</strong>: New reports" : "<strong>Analitikak</strong>: Txosten berriak",
+    "Total" : "Denetara",
     "Reports" : "Txostenak",
     "Local file" : "Fitxategi lokala",
     "File" : "Fitxategia",

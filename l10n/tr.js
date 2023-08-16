@@ -154,6 +154,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "{report} veri kümesine veri yüklemesi ile yeni veriler eklendi.",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analytics</strong>: Rapora yeni veriler eklendi",
     "<strong>Analytics</strong>: New reports" : "<strong>Analytics</strong>: Yeni raporlar",
+    "Total" : "Toplam",
     "Reports" : "Raporlar",
     "Local file" : "Yerel dosya",
     "File" : "Dosya",
