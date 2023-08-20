@@ -40,7 +40,7 @@
             </li>
             <li>
                 <button id="reportMenuRefresh">
-                    <span class="icon-history"></span>
+                    <span class="icon-analytics-refresh"></span>
                     <span><?php p($l->t('Auto refresh')); ?></span>
                 </button>
             </li>
@@ -49,6 +49,12 @@
                     <span class="icon-download"></span>
                     <span><?php p($l->t('Download chart')); ?></span>
                     <a id="downloadChartLink" href='' download="Chart.png" hidden>-</a>
+                </button>
+            </li>
+            <li>
+                <button id="reportMenuResetTableState">
+                    <span class="icon-analytics-reset"></span>
+                    <span><?php p($l->t('Reset Table')); ?></span>
                 </button>
             </li>
             <li class="action-separator"></li>

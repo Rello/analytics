@@ -319,6 +319,16 @@ table.dataTable tbody tr {
     margin: 10px;
 }
 
+.icon-analytics-refresh {
+    background-image: url(../img/refresh.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-reset {
+    background-image: url(../img/reset.svg);
+    filter: var(--background-invert-if-dark);
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;

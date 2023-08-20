@@ -39,8 +39,8 @@ class Version4010Date20230815190000 extends SimpleMigrationStep
             ->values([
                 'version' => $query->createNamedParameter('4.10.0'),
                 'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
-"en":{"regular":["Translation integration","Custom columns in column picker","List available values for input boxes"],"admin":["New Features apply to users"]},
-"de":{"regular":["Translation Integration","Benutzerdefinierte Spalten im Column Picker","Eingabehilfe in Formularfeldern"],"admin":["Nur User Features"]}
+"en":{"regular":["Translation integration","Custom columns in column picker","List available values for input boxes","Table enhancements"],"admin":["New Features apply to users"]},
+"de":{"regular":["Translation Integration","Benutzerdefinierte Spalten im Column Picker","Eingabehilfe in Formularfeldern","Tabellen Verbesserungen"],"admin":["Nur User Features"]}
 }}'),
             ])
             ->executeStatement();

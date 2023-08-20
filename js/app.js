@@ -220,8 +220,20 @@ OCA.Analytics.UI = {
             },
         };
 
+        // restore saved table state
+        let tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)
+            ? JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)
+            : {};
+        let defaultOrder = {};
+        let defaultLength = 10;
+
         OCA.Analytics.tableObject = new DataTable(document.getElementById("tableContainer"), {
             //dom: 'tipl',
+            order: tableOptions.order || defaultOrder,
+            pageLength: tableOptions.length || defaultLength,
+            scrollX: true,
+            autoWidth: false,
+            fixedColumns: true,
             data: data,
             columns: columns,
             language: language,
@@ -241,6 +253,18 @@ OCA.Analytics.UI = {
                 pagination.toggle(this.api().page.info().pages > 1);
 
             }
+        });
+
+        // Listener for when the pagination length is changed
+        OCA.Analytics.tableObject.on('length.dt', function() {
+            OCA.Analytics.unsavedFilters === true;
+            document.getElementById('saveIcon').style.removeProperty('display');
+        });
+
+        // Listener for when the table is ordered
+        OCA.Analytics.tableObject.on('order.dt', function() {
+            OCA.Analytics.unsavedFilters === true;
+            document.getElementById('saveIcon').style.removeProperty('display');
         });
     },
 
@@ -291,6 +315,20 @@ OCA.Analytics.UI = {
                 }
             }
         }
+    },
+
+    resetTableState: function () {
+        if (OCA.Analytics.tableObject !== null) {
+            OCA.Analytics.tableObject
+                .order([])
+                .page.len(10)
+                .draw();
+            OCA.Analytics.unsavedFilters === true;
+            document.getElementById('saveIcon').style.removeProperty('display');
+            document.getElementById('tableContainer_length').style.removeProperty('display');
+            document.getElementById('tableContainer_filter').style.removeProperty('display');
+        }
+        OCA.Analytics.UI.hideReportMenu();
     },
 
     buildChart: function (jsondata) {
@@ -680,6 +718,12 @@ OCA.Analytics.UI = {
             document.getElementById('reportMenuDownload').disabled = true;
         }
 
+        if (visualization === 'chart') {
+            document.getElementById('reportMenuResetTableState').disabled = true;
+        } else {
+            document.getElementById('reportMenuResetTableState').disabled = false;
+        }
+
         let refresh = parseInt(currentReport.options.refresh);
         isNaN(refresh) ? refresh = 0 : refresh;
         document.getElementById('refresh' + refresh).checked = true;
@@ -708,6 +752,7 @@ OCA.Analytics.UI = {
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('reportMenuDownload').addEventListener('click', OCA.Analytics.UI.downloadChart);
+        document.getElementById('reportMenuResetTableState').addEventListener('click', OCA.Analytics.UI.resetTableState);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
 
         //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.UI.tableSearch);

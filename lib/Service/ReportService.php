@@ -211,7 +211,7 @@ class ReportService
      * @return int
      * @throws Exception
      */
-    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
+    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
 
         $template = $this->ReportMapper->readOwn($reportId);
@@ -228,7 +228,7 @@ class ReportService
             $template['dimension1'],
             $template['dimension2'],
             $template['value']);
-        $this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions);
+        $this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
         return $newId;
     }
 
@@ -401,12 +401,13 @@ class ReportService
         isset($report['chartoptions']) ? $chartoptions = $report['chartoptions'] : $chartoptions = null;
         isset($report['dataoptions']) ? $dataoptions = $report['dataoptions'] : $dataoptions = null;
         isset($report['filteroptions']) ? $filteroptions = $report['filteroptions'] : $filteroptions = null;
+        isset($report['tableoptions']) ? $tableoptions = $report['tableoptions'] : $tableoptions = null;
         isset($report['dimension1']) ? $dimension1 = $report['dimension1'] : $dimension1 = null;
         isset($report['dimension2']) ? $dimension2 = $report['dimension2'] : $dimension2 = null;
         isset($report['value']) ? $value = $report['value'] : $value = null;
 
         $reportId = $this->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
-        $this->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions);
+        $this->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
         $report = $this->ReportMapper->readOwn($reportId);
         $datasetId = $report['dataset'];
 
@@ -478,11 +479,13 @@ class ReportService
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
+     * @param $tableoptions
      * @return bool
+     * @throws Exception
      */
-    public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions)
+    public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
-        return $this->ReportMapper->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions);
+        return $this->ReportMapper->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
     }
 
     /**

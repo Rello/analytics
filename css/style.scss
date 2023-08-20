@@ -317,6 +317,14 @@ table.dataTable tbody tr {
   margin: 10px;
 }
 
+.icon-analytics-reset {
+  @include icon-color('reset', 'analytics', $color-black, 1);
+}
+
+.icon-analytics-refresh {
+  @include icon-color('refresh', 'analytics', $color-black, 1);
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;

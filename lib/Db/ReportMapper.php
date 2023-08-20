@@ -40,6 +40,7 @@ class ReportMapper
     /**
      * get reports
      * @return array
+     * @throws Exception
      */
     public function index()
     {
@@ -53,7 +54,7 @@ class ReportMapper
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->orderBy('parent', 'ASC')
             ->addOrderBy('name', 'ASC');
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
@@ -63,6 +64,7 @@ class ReportMapper
      * get reports for user
      * @param $userId
      * @return array
+     * @throws Exception
      */
     public function indexByUser($userId)
     {
@@ -70,7 +72,7 @@ class ReportMapper
         $sql->from(self::TABLE_NAME)
             ->select('id')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($userId)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
@@ -90,7 +92,7 @@ class ReportMapper
      * @param $dimension2
      * @param $value
      * @return int
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value)
     {
@@ -114,7 +116,7 @@ class ReportMapper
                 'chart' => $sql->createNamedParameter($chart),
                 'visualization' => $sql->createNamedParameter($visualization),
             ]);
-        $sql->execute();
+        $sql->executeStatement();
         return (int)$sql->getLastInsertId();
     }
 
@@ -122,6 +124,7 @@ class ReportMapper
      * get single report for user
      * @param int $id
      * @return array
+     * @throws Exception
      */
     public function readOwn(int $id)
     {
@@ -132,7 +135,7 @@ class ReportMapper
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->orderBy('parent', 'ASC')
             ->addOrderBy('name', 'ASC');
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
         return $result;
@@ -142,6 +145,7 @@ class ReportMapper
      * get single report
      * @param int $id
      * @return array
+     * @throws Exception
      */
     public function read(int $id)
     {
@@ -149,7 +153,7 @@ class ReportMapper
         $sql->from(self::TABLE_NAME)
             ->select('*')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
         return $result;
@@ -171,6 +175,7 @@ class ReportMapper
      * @param $value
      * @param $filteroptions
      * @return bool
+     * @throws Exception
      */
     public function update($id, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value, $filteroptions = null)
     {
@@ -191,7 +196,7 @@ class ReportMapper
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         if ($filteroptions !== null) $sql->set('filteroptions', $sql->createNamedParameter($filteroptions));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
@@ -201,28 +206,30 @@ class ReportMapper
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
+     * @param $tableoptions
      * @return bool
+     * @throws Exception
      */
-    public function updateOptions($id, $chartoptions, $dataoptions, $filteroptions)
+    public function updateOptions($id, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('chartoptions', $sql->createNamedParameter($chartoptions))
             ->set('dataoptions', $sql->createNamedParameter($dataoptions))
             ->set('filteroptions', $sql->createNamedParameter($filteroptions))
+            ->set('tableoptions', $sql->createNamedParameter($tableoptions))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
     /**
      * update report refresh interval
      * @param $id
-     * @param $chartoptions
-     * @param $dataoptions
-     * @param $filteroptions
+     * @param $refresh
      * @return bool
+     * @throws Exception
      */
     public function updateRefresh($id, $refresh)
     {
@@ -231,7 +238,7 @@ class ReportMapper
             ->set('refresh', $sql->createNamedParameter($refresh))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
@@ -240,7 +247,7 @@ class ReportMapper
      * @param $id
      * @param $groupId
      * @return bool
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function updateGroup($id, $groupId)
     {
@@ -249,7 +256,7 @@ class ReportMapper
             ->set('parent', $sql->createNamedParameter($groupId))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
@@ -257,6 +264,7 @@ class ReportMapper
      * read report options
      * @param $id
      * @return array
+     * @throws Exception
      */
     public function readOptions($id)
     {
@@ -267,7 +275,7 @@ class ReportMapper
             ->addSelect('chart')
             ->addSelect('user_id')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
         return $result;
@@ -277,20 +285,22 @@ class ReportMapper
      * delete report
      * @param $id
      * @return bool
+     * @throws Exception
      */
     public function delete($id)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
     /**
-     * search reports by searchstring
+     * search reports by search string
      * @param $searchString
      * @return array
+     * @throws Exception
      */
     public function search($searchString)
     {
@@ -302,7 +312,7 @@ class ReportMapper
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->iLike('name', $sql->createNamedParameter('%' . $this->db->escapeLikeParameter($searchString) . '%')))
             ->orderBy('name', 'ASC');
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
@@ -312,6 +322,7 @@ class ReportMapper
      * get the report owner
      * @param $reportId
      * @return int
+     * @throws Exception
      */
     public function getOwner($reportId)
     {
@@ -319,8 +330,7 @@ class ReportMapper
         $sql->from(self::TABLE_NAME)
             ->select('user_id')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($reportId)));
-        $result = (string)$sql->execute()->fetchOne();
-        return $result;
+        return (string)$sql->executeQuery()->fetchOne();
     }
 
     /**
@@ -345,7 +355,7 @@ class ReportMapper
      * reports for a dataset
      * @param $datasetId
      * @return array
-     * @throws \OCP\DB\Exception
+     * @throws Exception
      */
     public function reportsForDataset($datasetId)
     {
@@ -355,7 +365,7 @@ class ReportMapper
             ->addSelect('name')
             ->addSelect('user_id')
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;

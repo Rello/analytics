@@ -261,7 +261,6 @@ OCA.Analytics.Filter = {
         }
         if (OCA.Analytics.unsavedFilters === true) {
             document.getElementById('saveIcon').style.removeProperty('display');
-
         } else {
             document.getElementById('saveIcon').style.display = 'none';
         }
@@ -547,6 +546,7 @@ OCA.Analytics.Filter.Backend = {
                 chartoptions: OCA.Analytics.currentReportData.options.chartoptions,
                 dataoptions: OCA.Analytics.currentReportData.options.dataoptions,
                 filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
+                tableoptions: OCA.Analytics.currentReportData.options.tableoptions,
             })
         })
             .then(response => response.json())
@@ -564,6 +564,13 @@ OCA.Analytics.Filter.Backend = {
         } else {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
+
+        let fullState = OCA.Analytics.tableObject.state();
+        let extractedState = {
+            order: fullState.order,
+            length: fullState.length
+        };
+        OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(extractedState);
 
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
@@ -586,6 +593,7 @@ OCA.Analytics.Filter.Backend = {
                 chartoptions: OCA.Analytics.currentReportData.options.chartoptions,
                 dataoptions: JSON.stringify(dataOptions),
                 filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
+                tableoptions: OCA.Analytics.currentReportData.options.tableoptions,
             })
         })
             .then(response => response.json())

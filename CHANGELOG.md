@@ -7,6 +7,11 @@
 - list available values for input boxes (e.g. filters) #362
 - csv data: select header row #360
 - Report: drill down & aggregation also for external data sources #365
+- Tables: fixed first column, horizontal scrolling #367
+- Tables: save states like table length and sorting #367
+
+### Changed
+- DataTables 1.13.6
 
 ### Fixed
 - 3digit comma values evaluated as 1000s #357

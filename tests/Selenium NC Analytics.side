@@ -2617,6 +2617,27 @@
       ],
       "value": ""
     }, {
+      "id": "a3b250ff-e60f-4330-a47f-8a0ef2c75673",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogValue",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "10ca2a08-dc9c-4fc2-b13e-fb13d4b658ca",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=Dimension 11",
+      "targets": [
+        ["id=Dimension 11", "id"],
+        ["css=#Dimension\\ 11", "css:finder"],
+        ["xpath=//li[@id='Dimension 11']", "xpath:attributes"],
+        ["xpath=//ul[@id='tmpList']/li[2]", "xpath:idRelative"],
+        ["xpath=//div[4]/ul/li[2]", "xpath:position"],
+        ["xpath=//li[contains(.,'Dimension 11')]", "xpath:innerText"]
+      ],
+      "value": "Dimension 11"
+    }, {
       "id": "90024739-1b37-4aa0-9afd-5a6de1f1432b",
       "comment": "",
       "command": "type",

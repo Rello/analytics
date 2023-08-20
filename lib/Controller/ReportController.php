@@ -14,6 +14,7 @@ namespace OCA\Analytics\Controller;
 use OCA\Analytics\Service\ReportService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\DB\Exception;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
@@ -75,11 +76,13 @@ class ReportController extends Controller
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
+     * @param $tableoptions
      * @return DataResponse
+     * @throws Exception
      */
-    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions)
+    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
-        return new DataResponse($this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions));
+        return new DataResponse($this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions));
     }
 
     /**
@@ -154,11 +157,13 @@ class ReportController extends Controller
      * @param $chartoptions
      * @param $dataoptions
      * @param $filteroptions
+     * @param $tableoptions
      * @return DataResponse
+     * @throws Exception
      */
-    public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions)
+    public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
-        return new DataResponse($this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions));
+        return new DataResponse($this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions));
     }
 
     /**
