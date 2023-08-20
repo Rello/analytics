@@ -46,7 +46,7 @@
             </li>
             <li>
                 <button id="reportMenuDownload">
-                    <span class="icon-download"></span>
+                    <span class="icon-analytics-download"></span>
                     <span><?php p($l->t('Download chart')); ?></span>
                     <a id="downloadChartLink" href='' download="Chart.png" hidden>-</a>
                 </button>

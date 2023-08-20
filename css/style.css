@@ -329,6 +329,11 @@ table.dataTable tbody tr {
     filter: var(--background-invert-if-dark);
 }
 
+.icon-analytics-download {
+    background-image: url(../img/download.svg);
+    filter: var(--background-invert-if-dark);
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;

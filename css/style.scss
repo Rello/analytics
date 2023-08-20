@@ -325,6 +325,9 @@ table.dataTable tbody tr {
   @include icon-color('refresh', 'analytics', $color-black, 1);
 }
 
+.icon-analytics-download {
+  @include icon-color('download', 'analytics', $color-black, 1);
+}
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;
