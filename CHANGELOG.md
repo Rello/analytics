@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.10.0 - 2023-08-16
+## 4.10.0 - 2023-08-22
 ### Added
 - translation integration for reports #358
 - add custom columns (incl. text variables) in column picker #359
