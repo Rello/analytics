@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "ترجِم",
     "Auto refresh" : "تحديث تلقائي",
     "Download chart" : "تحميل الرسم البياني",
+    "Reset Table" : "إعادة تعيين الجدول",
     "Save as new report" : "حفظ كتقرير جديد",
     "Back" : "عودة",
     "Aggregate values" : "القيمة الإجمالية",

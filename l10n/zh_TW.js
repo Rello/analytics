@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "翻譯",
     "Auto refresh" : "自動重新整理",
     "Download chart" : "下載圖表",
+    "Reset Table" : "重設表格",
     "Save as new report" : "儲存為新報告",
     "Back" : "返回",
     "Aggregate values" : "聚合值",
