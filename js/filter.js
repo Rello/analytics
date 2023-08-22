@@ -570,7 +570,11 @@ OCA.Analytics.Filter.Backend = {
             order: fullState.order,
             length: fullState.length
         };
-        OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(extractedState);
+        let tableOptions = null;
+        if (fullState.order.length !== 0 || fullState.length !== 10) {
+            tableOptions = JSON.stringify(extractedState);
+        }
+        OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
 
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);

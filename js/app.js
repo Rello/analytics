@@ -224,7 +224,7 @@ OCA.Analytics.UI = {
         let tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)
             ? JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)
             : {};
-        let defaultOrder = {};
+        let defaultOrder = [];
         let defaultLength = 10;
 
         OCA.Analytics.tableObject = new DataTable(document.getElementById("tableContainer"), {
