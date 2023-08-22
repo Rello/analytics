@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "Traduzir",
     "Auto refresh" : "Atualização automática",
     "Download chart" : "Baixar gráfico",
+    "Reset Table" : "Redefinir Tabela",
     "Save as new report" : "Salvar como novo relatório",
     "Back" : "Voltar",
     "Aggregate values" : "Valores agregados",

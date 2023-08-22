@@ -214,6 +214,7 @@ OC.L10N.register(
     "Translate" : "Översätt",
     "Auto refresh" : "Automatisk uppdatering",
     "Download chart" : "Ladda ner diagram",
+    "Reset Table" : "Återställ tabell",
     "Save as new report" : "Spara som en ny rapport",
     "Back" : "Tillbaka",
     "Aggregate values" : "Aggregeringsvärden",

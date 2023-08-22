@@ -20,6 +20,7 @@ OC.L10N.register(
     "Type" : "Tipe",
     "Notification" : "Kennisgewing",
     "Date" : "Datum",
+    "Total" : "Totaal",
     "File" : "Lêer",
     "Yes" : "Ja",
     "No" : "Nee",

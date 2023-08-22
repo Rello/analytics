@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "Překládání",
     "Auto refresh" : "Automaticky znovu načítat",
     "Download chart" : "Stáhnout si graf",
+    "Reset Table" : "Resetovat tabulku",
     "Save as new report" : "Uložit jako nový výkaz",
     "Back" : "Zpět",
     "Aggregate values" : "Agregovat hodnoty",

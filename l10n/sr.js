@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "Превођење",
     "Auto refresh" : "Ауто освежавање",
     "Download chart" : "Преузимање графика",
+    "Reset Table" : "Ресетуј табелу",
     "Save as new report" : "Сачувај као нови извештај",
     "Back" : "Назад",
     "Aggregate values" : "Групиши вредности",
