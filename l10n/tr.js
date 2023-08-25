@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "Çevir",
     "Auto refresh" : "Otomatik yenileme",
     "Download chart" : "Çizelgeyi indir",
+    "Reset Table" : "Tabloyu sıfırla",
     "Save as new report" : "Yeni rapor olarak kaydet",
     "Back" : "Geri",
     "Aggregate values" : "Değer birleştirme",
