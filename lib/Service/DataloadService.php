@@ -205,7 +205,7 @@ class DataloadService
         // if the data set has no data, it is the same as the delete all option
         // in this case, bulkInsert is set to true. Then no further checks for existing records are needed
         // to reduce db selects
-        $numberOfRecords = $this->StorageService->getRecordCount($datasetId);
+        $numberOfRecords = $this->StorageService->getRecordCount($datasetId, $dataloadMetadata['user_id']);
         if ($numberOfRecords['count'] === 0) {
             $bulkInsert = true;
         }

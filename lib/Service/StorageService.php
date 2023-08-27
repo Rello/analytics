@@ -26,12 +26,12 @@ class StorageService
     private $VariableService;
 
     public function __construct(
-        LoggerInterface $logger,
-        StorageMapper $StorageMapper,
-        DatasetService $DatasetService,
+        LoggerInterface  $logger,
+        StorageMapper    $StorageMapper,
+        DatasetService   $DatasetService,
         ThresholdService $ThresholdService,
-        VariableService $VariableService,
-        ReportService $ReportService
+        VariableService  $VariableService,
+        ReportService    $ReportService
     )
     {
         $this->logger = $logger;
@@ -211,11 +211,12 @@ class StorageService
     /**
      * Get the number of records for a dataset
      * @param int $datasetId
+     * @param string|null $user_id
      * @return array
      */
-    public function getRecordCount(int $datasetId)
+    public function getRecordCount(int $datasetId, string $user_id = null)
     {
-        return $this->StorageMapper->getRecordCount($datasetId);
+        return $this->StorageMapper->getRecordCount($datasetId, $user_id);
     }
 
     private function floatvalue($val)

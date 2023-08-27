@@ -100,7 +100,7 @@ class StorageMapper
                 $sql->set('value', $sql->createNamedParameter($value));
             }
 
-            $sql->execute();
+            $sql->executeStatement();
             return 'update';
         } else {
             $sql = $this->db->getQueryBuilder();
@@ -113,7 +113,7 @@ class StorageMapper
                     'value' => $sql->createNamedParameter($value),
                     'timestamp' => $sql->createNamedParameter($timestamp),
                 ]);
-            $sql->execute();
+            $sql->executeStatement();
             return 'insert';
         }
     }
@@ -151,7 +151,7 @@ class StorageMapper
             }
         }
 
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $rows = $statement->fetchAll();
         $statement->closeCursor();
 
@@ -263,20 +263,20 @@ class StorageMapper
             ->selectAlias($sql->func()->count('*'), 'count')
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
-            // add the where clauses depending on the filter selection of the
-            if (isset($options['filter'])) {
-                foreach ($options['filter'] as $key => $value) {
-                    $this->sqlWhere($sql, $key, $value['option'], $value['value']);
-                }
+        // add the where clauses depending on the filter selection of the
+        if (isset($options['filter'])) {
+            foreach ($options['filter'] as $key => $value) {
+                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
             }
+        }
 
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
         return $result;
     }
 
-        /**
+    /**
      * delete all data of a dataset
      * @param int $datasetId
      * @return bool
@@ -286,23 +286,26 @@ class StorageMapper
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
     /**
      * Simulate delete data
      * @param int $datasetId
+     * @param string|null $user_id
      * @return array
+     * @throws Exception
      */
-    public function getRecordCount(int $datasetId)
+    public function getRecordCount(int $datasetId, string $user_id = null)
     {
+        if ($user_id) $this->userId = $user_id;
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->selectAlias($sql->func()->count('*'), 'count')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
         return $result;
