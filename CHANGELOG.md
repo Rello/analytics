@@ -3,6 +3,7 @@
 ## 4.10.1 - 2023-08-22
 ### Fixed
 - incorrect record count during data loads
+- flow background color
 
 ## 4.10.0 - 2023-08-22
 ### Added
