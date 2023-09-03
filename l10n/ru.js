@@ -215,6 +215,7 @@ OC.L10N.register(
     "Translate" : "Помочь с переводом",
     "Auto refresh" : "Автоматическое обновление",
     "Download chart" : "Диаграмма загрузки",
+    "Reset Table" : "Сбросить Таблицу",
     "Save as new report" : "Сохранить в виде нового отчёта",
     "Back" : "Назад",
     "Aggregate values" : "Совокупные значения",
