@@ -118,6 +118,10 @@ class Json implements IDatasource
 
             // separate the fields of the array {BTC,tmsp,price}
             $paths = explode(',', $matches[0][0]);
+            // fill up with dummies in case of missing columns
+            while (count($paths) < 3) {
+                array_unshift($paths, 'empty');
+            }
             foreach ($json as $rowArray) {
                 // get the array fields from the json
                 // if no match is not found, the field name will be used as a constant string
