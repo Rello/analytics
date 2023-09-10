@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.10.x - 2023-08-22
+- enable long text input in data source
+
 ## 4.10.1 - 2023-08-22
 ### Fixed
 - incorrect record count during data loads

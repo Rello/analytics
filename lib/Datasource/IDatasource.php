@@ -44,6 +44,7 @@ interface IDatasource
      *                                  'columnPicker' will launch the file picker
      *                                  'number' for a number-only input field
      *                                  'section' will create a click-able section header and hide all options afterwards per default
+     *                                  'longtext' will create a text area input
      *  placeholder *mandatory*     = help text for the input field in the UI
      *                                for type=tf:
      *                                  e.g. "true/false"

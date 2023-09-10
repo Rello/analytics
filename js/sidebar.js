@@ -580,7 +580,7 @@ OCA.Analytics.Sidebar.Report = {
         button.disabled = true;
 
         let option = {};
-        let inputFields = document.querySelectorAll('#reportDatasourceSection input, #reportDatasourceSection select');
+        let inputFields = document.querySelectorAll('#reportDatasourceSection input, #reportDatasourceSection select, #reportDatasourceSection textarea');
         for (let inputField of inputFields) {
             option[inputField.id] = inputField.value;
         }

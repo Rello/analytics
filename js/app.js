@@ -508,6 +508,12 @@ OCA.Analytics.UI = {
                 });
             } else {
                 datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
+                /*datasets[targetDataseries]['data'].push({
+                    y: parseFloat(values[keyFigureColumn]),
+                    x: values[characteristicColumn]
+
+                });*/
+
                 if (targetDataseries === 0) {
                     // Add category labels only once and not for every data series.
                     // They have to be unique anyway
@@ -1281,7 +1287,8 @@ OCA.Analytics.Datasource = {
     },
 
     buildOptionsInput: function (templateOption) {
-        let input = document.createElement('input');
+        let type = templateOption.type && templateOption.type === 'longtext' ? 'textarea' : 'input';
+        let input = document.createElement(type);
         input.style.display = 'inline-flex';
         input.classList.add('sidebarInput');
         input.placeholder = templateOption.placeholder;

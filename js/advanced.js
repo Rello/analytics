@@ -363,7 +363,7 @@ OCA.Analytics.Advanced.Dataload = {
         let option = {};
 
         // loop all dynamic options of the selected datasource
-        let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select, #dataloadDetailDelete select');
+        let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select, #dataloadDetailItems textarea, #dataloadDetailDelete select');
         for (let inputField of inputFields) {
             option[inputField['id']] = inputField['value'];
         }
