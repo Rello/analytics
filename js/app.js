@@ -40,10 +40,12 @@ if (!OCA.Analytics) {
         currentReportData: {},
         chartObject: null,
         tableObject: null,
-        // flexible mapping depending on type requiered by the used chart library
+        // flexible mapping depending on type required by the used chart library
         chartTypeMapping: {
             'datetime': 'line',
             'column': 'bar',
+            'columnSt': 'bar', // map stacked type also to base type; needed in filter
+            'columnSt100': 'bar', // map stacked type also to base type; needed in filter
             'area': 'line',
             'line': 'line',
             'doughnut': 'doughnut'
@@ -256,13 +258,13 @@ OCA.Analytics.UI = {
         });
 
         // Listener for when the pagination length is changed
-        OCA.Analytics.tableObject.on('length.dt', function() {
+        OCA.Analytics.tableObject.on('length.dt', function () {
             OCA.Analytics.unsavedFilters === true;
             document.getElementById('saveIcon').style.removeProperty('display');
         });
 
         // Listener for when the table is ordered
-        OCA.Analytics.tableObject.on('order.dt', function() {
+        OCA.Analytics.tableObject.on('order.dt', function () {
             OCA.Analytics.unsavedFilters === true;
             document.getElementById('saveIcon').style.removeProperty('display');
         });
@@ -352,8 +354,23 @@ OCA.Analytics.UI = {
         OCA.Analytics.UI.showElement('chartContainer');
         let ctx = document.getElementById('myChart').getContext('2d');
 
-        let chartType;
-        jsondata.options.chart === '' ? chartType = 'column' : chartType = jsondata.options.chart;
+        let stacked = false;
+        let stacked100 = false;
+        let chartTypeFull;
+        jsondata.options.chart === '' ? chartTypeFull = 'column' : chartTypeFull = jsondata.options.chart;
+
+        // derive the stacked or the stacked-100 option out of the chart type
+        // the general chart type is used for the chart from here on
+        let chartType = chartTypeFull.replace(/St100$/, '');
+        chartType = chartType.replace(/St$/, '');
+
+        if (chartTypeFull.endsWith('St100')) {
+            stacked = true;
+            stacked100 = true;
+        } else if (chartTypeFull.endsWith('St')) {
+            stacked = true;
+        }
+
         let datasets = [], xAxisCategories = [];
         let lastObject = false;
         let dataSeries = -1;
@@ -407,6 +424,7 @@ OCA.Analytics.UI = {
                     },
                 },
                 'xAxes': {
+                    stacked: false,
                     type: 'category',
                     time: {
                         parser: 'YYYY-MM-DD HH:mm',
@@ -507,12 +525,12 @@ OCA.Analytics.UI = {
 
                 });
             } else {
-                datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
-                /*datasets[targetDataseries]['data'].push({
+                //datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
+                datasets[targetDataseries]['data'].push({
                     y: parseFloat(values[keyFigureColumn]),
                     x: values[characteristicColumn]
 
-                });*/
+                });
 
                 if (targetDataseries === 0) {
                     // Add category labels only once and not for every data series.
@@ -562,6 +580,15 @@ OCA.Analytics.UI = {
             }
         }
 
+        if (stacked === true) {
+            chartOptions.scales['primary'].stacked = true;
+            chartOptions.scales['xAxes'].stacked = true;
+            chartOptions.scales['primary'].max = 100;
+        }
+        if (stacked100 === true) {
+            datasets = OCA.Analytics.UI.calculateStacked100(datasets);
+        }
+
         if (chartType === 'datetime') {
             chartOptions.scales['xAxes'].type = 'time';
             chartOptions.scales['xAxes'].distribution = 'linear';
@@ -569,6 +596,7 @@ OCA.Analytics.UI = {
             chartOptions.scales['xAxes'].type = 'time';
             chartOptions.scales['xAxes'].distribution = 'linear';
             chartOptions.scales['primary'].stacked = true;
+            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
             Chart.defaults.elements.line.fill = true;
         } else if (chartType === 'doughnut') {
             chartOptions.scales['xAxes'].display = false;
@@ -614,13 +642,40 @@ OCA.Analytics.UI = {
         }
         
         OCA.Analytics.chartObject = new Chart(ctx, {
-            plugins: [ChartDataLabels, ChartZoom],
+            //plugins: [ChartDataLabels, ChartZoom, ChartjsPluginStacked100.default],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
                 datasets: datasets
             },
             options: chartOptions,
+        });
+    },
+
+    calculateStacked100: function (rawData) {
+        // Create a map to store total y-values for each x-label
+        const totalMap = {};
+
+        // Calculate total y-values for each x-label
+        rawData.forEach(dataset => {
+            dataset.data.forEach(point => {
+                if (!totalMap[point.x]) {
+                    totalMap[point.x] = 0;
+                }
+                totalMap[point.x] += point.y;
+            });
+        });
+
+        // Convert y-values to percentages
+        return rawData.map(dataset => {
+            const newDataset = {...dataset};
+            newDataset.data = dataset.data.map(point => {
+                return {
+                    x: point.x,
+                    y: totalMap[point.x] === 0 ? 0 : (point.y / totalMap[point.x]) * 100
+                };
+            });
+            return newDataset;
         });
     },
 
@@ -870,7 +925,7 @@ OCA.Analytics.UI = {
         // create an event listener on document level to recognize a click outside the list
         document.addEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
 
-        inputField.addEventListener('keyup', function(event) {
+        inputField.addEventListener('keyup', function (event) {
             let li = document.getElementById('tmpList').getElementsByTagName('li');
 
             if (event.key === 'Tab') {
@@ -894,7 +949,7 @@ OCA.Analytics.UI = {
                 for (let i = 0; i < li.length; i++) {
                     let txtValue = li[i].textContent || li[i].innerText; // get the text in the li
                     // if the li text doesn't match the typed text, hide it
-                    if (txtValue.toUpperCase().indexOf(filter) > -1 && listCount < listCountMax ) {
+                    if (txtValue.toUpperCase().indexOf(filter) > -1 && listCount < listCountMax) {
                         li[i].style.display = "";
                         listCount++;
                     } else {
@@ -905,7 +960,7 @@ OCA.Analytics.UI = {
         });
     },
 
-    handleDropDownListClicked: function(event) {
+    handleDropDownListClicked: function (event) {
         let dropDownList = document.getElementById('tmpList');
         let inputField = dropDownList.previousElementSibling;
         let isClickInside = dropDownList.contains(event.target);

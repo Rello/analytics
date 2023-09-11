@@ -102,7 +102,10 @@
                     <option value="line"><?php p($l->t('Line')); ?></option>
                     <option value="datetime"><?php p($l->t('Timeline (date in column 2)')); ?></option>
                     <option value="column"><?php p($l->t('Bar')); ?></option>
+                    <option value="columnSt">&nbsp;<?php p($l->t('Bar - Stacked')); ?></option>
+                    <option value="columnSt100">&nbsp;<?php p($l->t('Bar - Stacked 100%%')); ?></option>
                     <option value="area"><?php p($l->t('Area')); ?></option>
+                    <option value="areaSt100">&nbsp;<?php p($l->t('Area - 100%%')); ?></option>
                     <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
                 </select>
             </div>

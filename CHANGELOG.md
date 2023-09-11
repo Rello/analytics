@@ -1,6 +1,7 @@
 # Changelog
 
-## 4.10.x - 2023-08-22
+## 4.11.0 - 2023-08-22
+- Chart: stacked and stacked 100% options #370
 - enable long text input in data source
 
 ## 4.10.1 - 2023-08-22
