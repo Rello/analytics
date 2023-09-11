@@ -518,11 +518,21 @@ OCA.Analytics.UI = {
                 lastObject = values[dataSeriesColumn];
             }
 
-            if (chartType === 'datetime' || chartType === 'area') {
+            datasets[targetDataseries]['data'].push({
+                y: parseFloat(values[keyFigureColumn]),
+                x: values[characteristicColumn]
+            });
+            if (targetDataseries === 0) {
+                // Add category labels only once and not for every data series.
+                // They have to be unique anyway
+                xAxisCategories.push(values[characteristicColumn]);
+            }
+
+            // removed; chartjs can work with x/y in all chart types
+            /*if (chartType === 'datetime' || chartType === 'area') {
                 datasets[targetDataseries]['data'].push({
                     y: parseFloat(values[keyFigureColumn]),
                     x: values[characteristicColumn]
-
                 });
             } else {
                 //datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
@@ -537,11 +547,11 @@ OCA.Analytics.UI = {
                     // They have to be unique anyway
                     xAxisCategories.push(values[characteristicColumn]);
                 }
-            }
+            }*/
         }
 
         if (datasets.length > 1) {
-            // show legend button only when usefull with >1 dataset
+            // show legend button only when useful with >1 dataset
             OCA.Analytics.UI.showElement('chartLegendContainer');
         }
 
@@ -642,7 +652,7 @@ OCA.Analytics.UI = {
         }
         
         OCA.Analytics.chartObject = new Chart(ctx, {
-            //plugins: [ChartDataLabels, ChartZoom, ChartjsPluginStacked100.default],
+            //plugins: [ChartDataLabels, ChartZoom, ChartjsPluginStacked100.default], // not required in chart3 anymore
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
