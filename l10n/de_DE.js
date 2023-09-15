@@ -243,6 +243,7 @@ OC.L10N.register(
     "Chart" : "Diagramm",
     "Timeline (date in column 2)" : "Zeitleiste (Datum in Spalte 2)",
     "Area" : "Fläche",
+    "Area - 100%%" : "Bereich - 100%%",
     "Doughnut" : "Krapfen",
     "Advanced" : "Erweitert",
     "Open documentation" : "Dokumentation öffnen",
