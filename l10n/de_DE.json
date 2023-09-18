@@ -240,6 +240,8 @@
     "Table" : "Tabelle",
     "Chart" : "Diagramm",
     "Timeline (date in column 2)" : "Zeitleiste (Datum in Spalte 2)",
+    "Bar - Stacked" : "Balken – gestapelt",
+    "Bar - Stacked 100%%" : "Balken – 100%% gestapelt",
     "Area" : "Fläche",
     "Area - 100%%" : "Bereich - 100%%",
     "Doughnut" : "Krapfen",
