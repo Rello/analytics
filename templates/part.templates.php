@@ -99,14 +99,21 @@
             <div style="display: table-cell;">
                 <select id="sidebarReportChart" class="sidebarInput">
                     <option value="" selected></option>
-                    <option value="line"><?php p($l->t('Line')); ?></option>
+                    <option value="line"><?php // TRANSLATORS Short description for a 'Line Chart'
+                        p($l->t('Line')); ?></option>
                     <option value="datetime"><?php p($l->t('Timeline (date in column 2)')); ?></option>
-                    <option value="column"><?php p($l->t('Bar')); ?></option>
-                    <option value="columnSt">&nbsp;<?php p($l->t('Bar - Stacked')); ?></option>
-                    <option value="columnSt100">&nbsp;<?php p($l->t('Bar - Stacked 100%%')); ?></option>
-                    <option value="area"><?php p($l->t('Area')); ?></option>
-                    <option value="areaSt100">&nbsp;<?php p($l->t('Area - 100%%')); ?></option>
-                    <option value="doughnut"><?php p($l->t('Doughnut')); ?></option>
+                    <option value="column"><?php // TRANSLATORS Short description for a 'Bar Chart'
+                        p($l->t('Bar')); ?></option>
+                    <option value="columnSt">&nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart'
+                        p($l->t('Bar - Stacked')); ?></option>
+                    <option value="columnSt100">&nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart with 100% relations'
+                        p($l->t('Bar - Stacked 100%%')); ?></option>
+                    <option value="area"><?php  // TRANSLATORS Short description for an 'Area Chart'
+                        p($l->t('Area')); ?></option>
+                    <option value="areaSt100">&nbsp;<?php // TRANSLATORS Short description for an 'Area Chart with 100% relations'
+                        p($l->t('Area - 100%%')); ?></option>
+                    <option value="doughnut"><?php // TRANSLATORS Short description for a 'Doughnut Chart'
+                        p($l->t('Doughnut')); ?></option>
                 </select>
             </div>
         </div>
