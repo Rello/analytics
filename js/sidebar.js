@@ -614,7 +614,8 @@ OCA.Analytics.Sidebar.Report = {
                     OCA.Analytics.Backend.getDatasetDefinitions();
                 } else {
                     if (!OCA.Analytics.isAdvanced) {
-                        OCA.Analytics.currentReportData.options.chartoptions = '';
+                        // todo check why this was added
+                        // OCA.Analytics.currentReportData.options.chartoptions = '';
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     } else {
