@@ -80,7 +80,8 @@ class ApiDataController extends ApiController
         $params = $this->request->getParams();
         $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
-        $this->deriveMaintenancePossible($datasetMetadata);
+        $response = $this->deriveMaintenancePossible($datasetMetadata);
+        if ($response !== true) return $response;
 
         if (!isset($params['dimension1'])) {
             $this->errors[] = 'Dimension 1 required';
@@ -117,7 +118,8 @@ class ApiDataController extends ApiController
         $params = $this->request->getParams();
         $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
-        $this->deriveMaintenancePossible($datasetMetadata);
+        $response = $this->deriveMaintenancePossible($datasetMetadata);
+        if ($response !== true) return $response;
 
         foreach ($params['data'] as $dataArray) {
 
@@ -156,7 +158,8 @@ class ApiDataController extends ApiController
         //$this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
-        $this->deriveMaintenancePossible($datasetMetadata);
+        $response = $this->deriveMaintenancePossible($datasetMetadata);
+        if ($response !== true) return $response;
 
         foreach ($params['delete'] as $dataArray) {
             $dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
@@ -308,18 +311,16 @@ class ApiDataController extends ApiController
     /**
      * derive if maintenance is possible
      * @param $datasetMetadata
-     * @return DataResponse | bool
+     * @return bool|DataResponse
      */
     protected function deriveMaintenancePossible($datasetMetadata)
     {
         if (empty($datasetMetadata)) {
-            $this->errors[] = 'Unknown report or dataset';
+            $this->errors[] = 'Unknown or unauthorized report or dataset';
             return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
-        } elseif ((int)$datasetMetadata['type'] !== DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-            $this->errors[] = 'Report does not allow data maintenance';
-            return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
+        } else {
+            return true;
         }
-        return true;
     }
 
     /**
@@ -330,6 +331,7 @@ class ApiDataController extends ApiController
      */
     protected function requestResponse($success, $code = null, $message = null)
     {
+        $this->logger->debug(json_encode($code));
         if (!$success) {
             if ($code === null) {
                 $code = self::UNKNOWN;

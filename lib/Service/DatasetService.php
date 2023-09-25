@@ -113,8 +113,8 @@ class DatasetService
         $ownDataset = $this->DatasetMapper->readOwn($datasetId);
         if (!empty($ownDataset)) {
             $ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+            $ownDataset['dataset'] = $ownDataset['id'];
         }
-        $ownDataset['dataset'] = $ownDataset['id'];
         return $ownDataset;
     }
 

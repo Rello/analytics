@@ -1,13 +1,15 @@
 # Changelog
 
 ## 4.11.0 - 2023-08-22
+### Added
 - Chart: stacked and stacked 100% options #370
 - enable long text input in data source
 
 ## 4.10.1 - 2023-08-22
 ### Fixed
 - incorrect record count during data loads
-- flow background color
+- NC Flow - background color
+- incorrect API error message #371
 
 ## 4.10.0 - 2023-08-22
 ### Added
