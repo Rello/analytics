@@ -155,7 +155,6 @@ class ApiDataController extends ApiController
     {
         $message = 'No -delete- parameter';
         $params = $this->request->getParams();
-        //$this->logger->debug('array: ' . json_encode($params));
         $datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
         $response = $this->deriveMaintenancePossible($datasetMetadata);
@@ -331,7 +330,6 @@ class ApiDataController extends ApiController
      */
     protected function requestResponse($success, $code = null, $message = null)
     {
-        $this->logger->debug(json_encode($code));
         if (!$success) {
             if ($code === null) {
                 $code = self::UNKNOWN;
