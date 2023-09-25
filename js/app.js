@@ -354,35 +354,14 @@ OCA.Analytics.UI = {
         OCA.Analytics.UI.showElement('chartContainer');
         let ctx = document.getElementById('myChart').getContext('2d');
 
-        let stacked = false;
-        let stacked100 = false;
+        // store the full chart type for deriving the stacked attribute later
+        // the general chart type is used for the chart from here on
         let chartTypeFull;
         jsondata.options.chart === '' ? chartTypeFull = 'column' : chartTypeFull = jsondata.options.chart;
+        let chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
 
-        // derive the stacked or the stacked-100 option out of the chart type
-        // the general chart type is used for the chart from here on
-        let chartType = chartTypeFull.replace(/St100$/, '');
-        chartType = chartType.replace(/St$/, '');
-
-        if (chartTypeFull.endsWith('St100')) {
-            stacked = true;
-            stacked100 = true;
-        } else if (chartTypeFull.endsWith('St')) {
-            stacked = true;
-        }
-
-        let datasets = [], xAxisCategories = [];
-        let lastObject = false;
-        let dataSeries = -1;
-        let targetDataseries = 0;
-        let hidden = false;
-
-        let header = jsondata.header;
-        let headerKeys = Object.keys(header).length;
-        let dataSeriesColumn = headerKeys - 3; //characteristic is taken from the second last column
-        let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
-        let keyFigureColumn = headerKeys - 1; //key figures is taken from the last column
-
+        // get the default settings for a chart
+        let chartOptions = OCA.Analytics.UI.getDefaultChartOptions();
         Chart.defaults.elements.line.borderWidth = 2;
         Chart.defaults.elements.line.tension = 0.1;
         Chart.defaults.elements.line.fill = false;
@@ -391,7 +370,171 @@ OCA.Analytics.UI = {
         Chart.defaults.plugins.legend.position = 'bottom';
         Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
 
-        let chartOptions = {
+        // convert the data array
+        let [xAxisCategories, datasets] = OCA.Analytics.UI.convertDataToChartJsFormat(jsondata.data, chartType);
+
+        // show legend button only when useful with >1 dataset
+        datasets.length > 1 ? OCA.Analytics.UI.showElement('chartLegendContainer') : null;
+
+        // do the color magic
+        // a predefined color array is used
+        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        for (let i = 0; i < datasets.length; ++i) {
+            let j = i - (Math.floor(i / colors.length) * colors.length)
+
+            // in only one dataset is being shown, create a fancy gradient fill
+            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
+                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
+                    .substring(1).match(/.{2}/g)
+                    .map(x => parseInt(x, 16));
+
+                datasets[0].backgroundColor = function (context) {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
+                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
+                    return gradient;
+                }
+                datasets[i].borderColor = colors[j];
+                Chart.defaults.elements.line.fill = true;
+            } else if (chartType === 'doughnut') {
+                // special array handling for dougnuts
+                datasets[i].backgroundColor = colors;
+                datasets[i].borderColor = colors;
+                Chart.defaults.elements.line.fill = false;
+            } else {
+                datasets[i].backgroundColor = colors[j];
+                Chart.defaults.elements.line.fill = false;
+                datasets[i].borderColor = colors[j];
+            }
+        }
+
+        // derive the stacked or the stacked-100 option and adjust the data and options
+        let stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
+        let stacked100 = chartTypeFull.endsWith('St100');
+        if (stacked === true) {
+            chartOptions.scales['primary'].stacked = true;
+            chartOptions.scales['xAxes'].stacked = true;
+            chartOptions.scales['primary'].max = 100;
+        }
+        if (stacked100 === true) {
+            datasets = OCA.Analytics.UI.calculateStacked100(datasets);
+        }
+
+        // overwrite some default chart options depending on the chart type
+        if (chartType === 'datetime') {
+            chartOptions.scales['xAxes'].type = 'time';
+            chartOptions.scales['xAxes'].distribution = 'linear';
+        } else if (chartType === 'area') {
+            chartOptions.scales['xAxes'].type = 'time';
+            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['primary'].stacked = true;
+            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
+            Chart.defaults.elements.line.fill = true;
+        } else if (chartType === 'doughnut') {
+            chartOptions.scales['xAxes'].display = false;
+            chartOptions.scales['primary'].display = false;
+            chartOptions.scales['primary'].grid.display = false;
+            chartOptions.scales['secondary'].display = false;
+            chartOptions.scales['secondary'].grid.display = false;
+            chartOptions.circumference = 180;
+            chartOptions.rotation = -90;
+            Chart.defaults.plugins.legend.display = true;
+            chartOptions.plugins.datalabels.display = true;
+        }
+
+        // the user can add/overwrite chart options
+        // the user can put the options in array-format into the report definition
+        // these are merged with the standard report settings
+        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": {"time": {"unit" : "month"}}}}'
+        // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
+
+        // replace old settings from Chart.js 2
+        // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
+        if (jsondata.options.chartoptions !== null) {
+            jsondata.options.chartoptions = jsondata.options.chartoptions.replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
+        }
+        OCA.Analytics.currentReportData.options.chartoptions = jsondata.options.chartoptions;
+        let userChartOptions = jsondata.options.chartoptions;
+        if (userChartOptions !== '' && userChartOptions !== null) {
+            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
+        }
+
+        // the user can modify dataset/series settings
+        // these are merged with the data array coming from the backend
+        // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
+        //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
+        let userDatasetOptions = jsondata.options.dataoptions;
+        if (userDatasetOptions !== '' && userDatasetOptions !== null) {
+            let numberOfDatasets = datasets.length;
+            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
+            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
+            datasets = cloner.deep.merge({}, datasets);
+            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
+            datasets = Object.values(datasets);
+        }
+
+        OCA.Analytics.chartObject = new Chart(ctx, {
+            type: OCA.Analytics.chartTypeMapping[chartType],
+            data: {
+                labels: xAxisCategories,
+                datasets: datasets
+            },
+            options: chartOptions,
+        });
+    },
+
+    convertDataToChartJsFormat: function (data, chartType) {
+        const labelMap = new Map();
+        let datasetCounter = 0;
+        let datasets = [], xAxisCategories = [];
+        data.forEach((row) => {
+            // default expected columns
+            let dataSeriesColumn, characteristicColumn, value;
+
+            // when only 2 columns are provided, no label will be set
+            if (row.length === 3) {
+                [dataSeriesColumn, characteristicColumn, value] = row;
+            } else if (row.length === 2) {
+                [characteristicColumn, value] = row;
+                dataSeriesColumn = '';
+            }
+
+            // Add category labels only once and not for every data series
+            if (!xAxisCategories.includes(characteristicColumn)) {
+                xAxisCategories.push(characteristicColumn);
+            }
+
+            // create the data series
+            if (!labelMap.has(dataSeriesColumn)) {
+                labelMap.set(dataSeriesColumn, {
+                    ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}), // no label for doughnut charts
+                    data: [],
+                    hidden: datasetCounter >= 4 // default hide > 4th series for better visibility
+                });
+                datasetCounter++;
+            }
+
+            const dataset = labelMap.get(dataSeriesColumn);
+            if (chartType === 'doughnut') {
+                dataset.data.push(parseFloat(value));
+            } else {
+                dataset.data.push({x: characteristicColumn, y: parseFloat(value)});
+            }
+        });
+
+        if (chartType === 'doughnut') {
+            datasets = [{data: Array.from(labelMap.values()).flatMap(d => d.data)}];
+        } else {
+            datasets = Array.from(labelMap.values());
+        }
+        return [xAxisCategories, datasets];
+    },
+
+    getDefaultChartOptions: function () {
+        return {
             maintainAspectRatio: false,
             responsive: true,
             scales: {
@@ -488,178 +631,6 @@ OCA.Analytics.UI = {
                 }
             },
         };
-
-        for (let values of jsondata.data) {
-            // indexOf will search, if an exiting dataset exists already for that label (first column)
-            // internal data comes sorted from the database and the dataSeries can increment
-            // external data like csv can be unsorted
-            if (dataSeriesColumn >= 0 && datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn])) === -1) {
-                // create new data series for every new label in dataSeriesColumn
-                datasets.push({label: values[dataSeriesColumn], data: [], hidden: hidden});
-                dataSeries++;
-                // default hide > 4th series for better visibility
-                if (dataSeries === 3) {
-                    hidden = true;
-                }
-                lastObject = values[dataSeriesColumn];
-                targetDataseries = dataSeries;
-            } else if (lastObject === false) {
-                // when only 2 columns are provided, no label will be set
-                datasets.push({label: '', data: [], hidden: hidden});
-                dataSeries++;
-                targetDataseries = dataSeries;
-                lastObject = true;
-            } else if (lastObject !== values[dataSeriesColumn] && lastObject !== true) {
-                // find the correct dataset, where the data needs to be added to
-                targetDataseries = datasets.indexOf(datasets.find(o => o.label === values[dataSeriesColumn]));
-                if (targetDataseries === -1) {
-                    targetDataseries = 0;
-                }
-                lastObject = values[dataSeriesColumn];
-            }
-
-            datasets[targetDataseries]['data'].push({
-                y: parseFloat(values[keyFigureColumn]),
-                x: values[characteristicColumn]
-            });
-            if (targetDataseries === 0) {
-                // Add category labels only once and not for every data series.
-                // They have to be unique anyway
-                xAxisCategories.push(values[characteristicColumn]);
-            }
-
-            // removed; chartjs can work with x/y in all chart types
-            /*if (chartType === 'datetime' || chartType === 'area') {
-                datasets[targetDataseries]['data'].push({
-                    y: parseFloat(values[keyFigureColumn]),
-                    x: values[characteristicColumn]
-                });
-            } else {
-                //datasets[targetDataseries]['data'].push(parseFloat(values[keyFigureColumn]));
-                datasets[targetDataseries]['data'].push({
-                    y: parseFloat(values[keyFigureColumn]),
-                    x: values[characteristicColumn]
-
-                });
-
-                if (targetDataseries === 0) {
-                    // Add category labels only once and not for every data series.
-                    // They have to be unique anyway
-                    xAxisCategories.push(values[characteristicColumn]);
-                }
-            }*/
-        }
-
-        if (datasets.length > 1) {
-            // show legend button only when useful with >1 dataset
-            OCA.Analytics.UI.showElement('chartLegendContainer');
-        }
-
-        // do the color magic
-        // a predefined color array is used
-        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
-        for (let i = 0; i < datasets.length; ++i) {
-            let j = i - (Math.floor(i / colors.length) * colors.length)
-
-            // in only one dataset is being shown, create a fancy gradient fill
-            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
-                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
-                    .substring(1).match(/.{2}/g)
-                    .map(x => parseInt(x, 16));
-
-                datasets[0].backgroundColor = function (context) {
-                    const chart = context.chart;
-                    const {ctx, chartArea} = chart;
-                    let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
-                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
-                    return gradient;
-                }
-                datasets[i].borderColor = colors[j];
-                Chart.defaults.elements.line.fill = true;
-            } else if (chartType === 'doughnut') {
-                // special array handling for dougnuts
-                datasets[i].backgroundColor = colors;
-                datasets[i].borderColor = colors;
-                Chart.defaults.elements.line.fill = false;
-            } else {
-                datasets[i].backgroundColor = colors[j];
-                Chart.defaults.elements.line.fill = false;
-                datasets[i].borderColor = colors[j];
-            }
-        }
-
-        if (stacked === true) {
-            chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = true;
-            chartOptions.scales['primary'].max = 100;
-        }
-        if (stacked100 === true) {
-            datasets = OCA.Analytics.UI.calculateStacked100(datasets);
-        }
-
-        if (chartType === 'datetime') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
-        } else if (chartType === 'area') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
-            chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
-            Chart.defaults.elements.line.fill = true;
-        } else if (chartType === 'doughnut') {
-            chartOptions.scales['xAxes'].display = false;
-            chartOptions.scales['primary'].display = false;
-            chartOptions.scales['primary'].grid.display = false;
-            chartOptions.scales['secondary'].display = false;
-            chartOptions.scales['secondary'].grid.display = false;
-            chartOptions.circumference = 180;
-            chartOptions.rotation = -90;
-            Chart.defaults.plugins.legend.display = true;
-            chartOptions.plugins.datalabels.display = true;
-        }
-
-        // the user can add/overwrite chart options
-        // the user can put the options in array-format into the report definition
-        // these are merged with the standard report settings
-        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": {"time": {"unit" : "month"}}}}'
-        // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
-
-        // replace old settings from Chart.js 2
-        // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
-        if (jsondata.options.chartoptions !== null) {
-            jsondata.options.chartoptions = jsondata.options.chartoptions.replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
-        }
-        OCA.Analytics.currentReportData.options.chartoptions = jsondata.options.chartoptions;
-        let userChartOptions = jsondata.options.chartoptions;
-        if (userChartOptions !== '' && userChartOptions !== null) {
-            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
-        }
-
-        // the user can modify dataset/series settings
-        // these are merged with the data array coming from the backend
-        // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
-        //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
-        let userDatasetOptions = jsondata.options.dataoptions;
-        if (userDatasetOptions !== '' && userDatasetOptions !== null) {
-            let numberOfDatasets = datasets.length;
-            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
-            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
-            datasets = cloner.deep.merge({}, datasets);
-            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
-            datasets = Object.values(datasets);
-        }
-        
-        OCA.Analytics.chartObject = new Chart(ctx, {
-            //plugins: [ChartDataLabels, ChartZoom, ChartjsPluginStacked100.default], // not required in chart3 anymore
-            type: OCA.Analytics.chartTypeMapping[chartType],
-            data: {
-                labels: xAxisCategories,
-                datasets: datasets
-            },
-            options: chartOptions,
-        });
     },
 
     calculateStacked100: function (rawData) {
