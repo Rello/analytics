@@ -10,6 +10,7 @@
 - incorrect record count during data loads
 - NC Flow - background color
 - incorrect API error message #371
+- custom colors in doughnut chart #372
 
 ## 4.10.0 - 2023-08-22
 ### Added

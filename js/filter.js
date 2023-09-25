@@ -314,6 +314,7 @@ OCA.Analytics.Filter = {
                 + '<div style="display: table-cell;">'
                 + '<select id="optionsChartType' + [i] + '" name="optionsChartType" class="optionsInput">'
                 + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>' + t('analytics', 'Line') + '</option>'
+                + '<option value="doughnut" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'doughnut', defaultChartType) + '>' + t('analytics', 'doughnut') + '</option>'
                 + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Bar') + '</option>'
                 + '</select>'
                 + '</div>'

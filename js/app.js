@@ -334,7 +334,6 @@ OCA.Analytics.UI = {
     },
 
     buildChart: function (jsondata) {
-
         const defaultLegendClickHandler = Chart.defaults.plugins.legend.onClick;
         const pieDoughnutLegendClickHandler = Chart.controllers.doughnut.overrides.plugins.legend.onClick;
         const newLegendClickHandler = function (e, legendItem, legend) {
@@ -400,9 +399,18 @@ OCA.Analytics.UI = {
                 datasets[i].borderColor = colors[j];
                 Chart.defaults.elements.line.fill = true;
             } else if (chartType === 'doughnut') {
-                // special array handling for dougnuts
-                datasets[i].backgroundColor = colors;
-                datasets[i].borderColor = colors;
+                // special array handling for doughnuts
+                if (jsondata.options.dataoptions !== null) {
+                    const arr = JSON.parse(jsondata.options.dataoptions);
+                    let index = 0;
+                    for (const obj of arr) {
+                        if (obj.backgroundColor) {
+                            colors[index] = obj.backgroundColor;
+                        }
+                        index++;
+                    }
+                }
+                datasets[i].backgroundColor = datasets[i].borderColor = colors;
                 Chart.defaults.elements.line.fill = false;
             } else {
                 datasets[i].backgroundColor = colors[j];
@@ -415,8 +423,7 @@ OCA.Analytics.UI = {
         let stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
         let stacked100 = chartTypeFull.endsWith('St100');
         if (stacked === true) {
-            chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = true;
+            chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
             chartOptions.scales['primary'].max = 100;
         }
         if (stacked100 === true) {
@@ -435,14 +442,12 @@ OCA.Analytics.UI = {
             Chart.defaults.elements.line.fill = true;
         } else if (chartType === 'doughnut') {
             chartOptions.scales['xAxes'].display = false;
-            chartOptions.scales['primary'].display = false;
-            chartOptions.scales['primary'].grid.display = false;
-            chartOptions.scales['secondary'].display = false;
-            chartOptions.scales['secondary'].grid.display = false;
+            chartOptions.scales['primary'].display = chartOptions.scales['primary'].grid.display = false;
+            chartOptions.scales['secondary'].display = chartOptions.scales['secondary'].grid.display = false;
             chartOptions.circumference = 180;
             chartOptions.rotation = -90;
-            Chart.defaults.plugins.legend.display = true;
             chartOptions.plugins.datalabels.display = true;
+            Chart.defaults.plugins.legend.display = true;
         }
 
         // the user can add/overwrite chart options
@@ -465,9 +470,9 @@ OCA.Analytics.UI = {
         // the user can modify dataset/series settings
         // these are merged with the data array coming from the backend
         // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
-        //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
+        // for doughnuts, no overwrites are allowed. Colors were taken care of before already
         let userDatasetOptions = jsondata.options.dataoptions;
-        if (userDatasetOptions !== '' && userDatasetOptions !== null) {
+        if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
             let numberOfDatasets = datasets.length;
             let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
             userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
