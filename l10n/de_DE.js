@@ -65,6 +65,7 @@ OC.L10N.register(
     "Primary" : "Primär",
     "Secondary" : "Sekundär",
     "Line" : "Linie",
+    "doughnut" : "Krapfen",
     "Bar" : "Balken",
     "Chart options" : "Diagrammoptionen",
     "Data series" : "Datenreihe",
