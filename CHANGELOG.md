@@ -5,12 +5,12 @@
 - Chart: stacked and stacked 100% options #370
 - enable long text input in data source
 
-## 4.10.1 - 2023-08-22
 ### Fixed
 - incorrect record count during data loads
 - NC Flow - background color
 - incorrect API error message #371
 - custom colors in doughnut chart #372
+- dashboard charts not generating
 
 ## 4.10.0 - 2023-08-22
 ### Added
