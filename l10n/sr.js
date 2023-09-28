@@ -65,6 +65,7 @@ OC.L10N.register(
     "Primary" : "Примарна",
     "Secondary" : "Секундарна",
     "Line" : "Линија",
+    "doughnut" : "крофна",
     "Bar" : "Бар",
     "Chart options" : "Опције графика",
     "Data series" : "Низ података",

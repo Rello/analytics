@@ -65,6 +65,7 @@ OC.L10N.register(
     "Primary" : "主要",
     "Secondary" : "次要",
     "Line" : "折線圖",
+    "doughnut" : "甜甜圈圖",
     "Bar" : "長條圖",
     "Chart options" : "圖表選項",
     "Data series" : "資料序列",
