@@ -65,6 +65,7 @@ OC.L10N.register(
     "Primary" : "Birincil",
     "Secondary" : "İkincil",
     "Line" : "Çizgi",
+    "doughnut" : "Halka",
     "Bar" : "Çubuk",
     "Chart options" : "Çizelge seçenekleri",
     "Data series" : "Veri dizileri",
