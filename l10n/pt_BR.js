@@ -65,6 +65,7 @@ OC.L10N.register(
     "Primary" : "Primário",
     "Secondary" : "Secundária",
     "Line" : "Linha",
+    "doughnut" : "rosquinha",
     "Bar" : "Barra",
     "Chart options" : "Opções de gráfico",
     "Data series" : "Série de dados",
