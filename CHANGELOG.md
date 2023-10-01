@@ -11,6 +11,7 @@
 - incorrect API error message #371
 - custom colors in doughnut chart #372
 - dashboard charts not generating
+- csv import remove spaces
 
 ## 4.10.0 - 2023-08-22
 ### Added

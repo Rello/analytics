@@ -104,7 +104,8 @@ class ExternalFile implements IDatasource
         $delimiter = $this->detectDelimiter($rows[0]);
 
         // the first row will define the column headers, even if it is not a real header
-        $header = str_getcsv($rows[0], $delimiter);
+        // trim removes any leading or ending spaces
+        $header = array_map('trim', str_getcsv($rows[0], $delimiter));
 
         // if the data has a real header, remove the first row
         if (!isset($option['hasHeader']) or $option['hasHeader'] !== 'false') {
@@ -116,11 +117,11 @@ class ExternalFile implements IDatasource
             // if only a subset of columns or fixed column values are set, they are replaced here
             $header = $this->minimizeRow($selectedColumns, $header);
             foreach ($rows as $row) {
-                $data[] = $this->minimizeRow($selectedColumns, str_getcsv($row, $delimiter));
+                $data[] = $this->minimizeRow($selectedColumns, array_map('trim', str_getcsv($row, $delimiter)));
             }
         } else {
             foreach ($rows as $row) {
-                $data[] = str_getcsv($row, $delimiter);
+                $data[] = array_map('trim', str_getcsv($row, $delimiter));
             }
         }
         unset($rows);
