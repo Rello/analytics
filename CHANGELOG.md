@@ -12,6 +12,7 @@
 - custom colors in doughnut chart #372
 - dashboard charts not generating
 - csv import remove spaces
+- chart generation optimization
 
 ## 4.10.0 - 2023-08-22
 ### Added

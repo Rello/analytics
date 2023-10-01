@@ -482,6 +482,7 @@ OCA.Analytics.UI = {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
+            plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
@@ -492,6 +493,13 @@ OCA.Analytics.UI = {
     },
 
     convertDataToChartJsFormat: function (data, chartType) {
+/*
+        let headerKeys = Object.keys(header).length;
+        let dataSeriesColumn = headerKeys - 3; //characteristic is taken from the second last column
+        let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
+        let value = headerKeys - 1; //key figures is taken from the last column
+*/
+
         const labelMap = new Map();
         let datasetCounter = 0;
         let datasets = [], xAxisCategories = [];
@@ -500,8 +508,8 @@ OCA.Analytics.UI = {
             let dataSeriesColumn, characteristicColumn, value;
 
             // when only 2 columns are provided, no label will be set
-            if (row.length === 3) {
-                [dataSeriesColumn, characteristicColumn, value] = row;
+            if (row.length >= 3) {
+                [dataSeriesColumn, characteristicColumn, value] = row.slice(-3);
             } else if (row.length === 2) {
                 [characteristicColumn, value] = row;
                 dataSeriesColumn = '';

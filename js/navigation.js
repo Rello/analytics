@@ -290,6 +290,7 @@ OCA.Analytics.Navigation = {
         button.dataset.id = data.id;
         button.dataset.name = data.name;
         button.dataset.type = data.type;
+        button.ariaLabel = data.name;
         button.classList.add('menuButton');
         liMenuButton.appendChild(button);
         ulUtils.appendChild(liMenuButton);
