@@ -54,6 +54,7 @@ OC.L10N.register(
     "Type" : "Tipo",
     "Notification" : "Notificação",
     "Date" : "Data",
+    "Year" : "Year",
     "New in" : "Novo em",
     "View changelog" : "Ver registo de alterações",
     "Total" : "Total",
