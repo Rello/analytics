@@ -249,8 +249,8 @@ OCA.Analytics.Filter = {
                 if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
                     // text variable used
                     optionText = '';
-                    filterValue = filterValue.replace(/%/g,'');
-                    filterValue = filterValue.replace (/\(.*?\)/g, '');
+                    filterValue = filterValue.replace(/%/g, '');
+                    filterValue = filterValue.replace(/\(.*?\)/g, '');
                 }
                 span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterValue;
                 span.classList.add('filterVisualizationItem');
@@ -566,14 +566,16 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
 
-        let fullState = OCA.Analytics.tableObject.state();
-        let extractedState = {
-            order: fullState.order,
-            length: fullState.length
-        };
         let tableOptions = null;
-        if (fullState.order.length !== 0 || fullState.length !== 10) {
-            tableOptions = JSON.stringify(extractedState);
+        if (OCA.Analytics.tableObject) {
+            let fullState = OCA.Analytics.tableObject.state();
+            let extractedState = {
+                order: fullState.order,
+                length: fullState.length
+            };
+            if (fullState.order.length !== 0 || fullState.length !== 10) {
+                tableOptions = JSON.stringify(extractedState);
+            }
         }
         OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
 

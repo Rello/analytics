@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- save error for reports without table
+
 ## 4.11.0 - 2023-10-01
 ### Added
 - Chart: stacked and stacked 100% options #370
