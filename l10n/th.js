@@ -19,6 +19,7 @@ OC.L10N.register(
     "Share link" : "แชร์ลิงก์",
     "Link copied" : "คัดลอกลิงก์แล้ว",
     "Type" : "ประเภท",
+    "Notification" : "การแจ้งเตือน",
     "Date" : "วันที่",
     "New in" : "ใหม่ใน",
     "View changelog" : "ดูบันทึกการเปลี่ยนแปลง",
