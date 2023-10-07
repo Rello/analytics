@@ -243,6 +243,7 @@ OC.L10N.register(
     "Chart" : "График",
     "Timeline (date in column 2)" : "Сроки (дата в колонке 2)",
     "Area" : "Область",
+    "Area - 100%%" : "Площадь - 100%%",
     "Doughnut" : "Пончик",
     "Advanced" : "Дополнительно",
     "Open documentation" : "Открыть документацию",
