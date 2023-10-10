@@ -36,6 +36,8 @@ OC.L10N.register(
     "next" : "다음",
     "last" : "마지막",
     "Reset zoom" : "확대 초기화",
+    "Translation error. Possibly wrong ISO code?" : "번역 에러. 잘못된 ISO 코드",
+    "Choose language" : "언어 선택",
     "Trend" : "트렌드",
     "Aggregation" : "집합화",
     "Disaggregation" : "세분화",
