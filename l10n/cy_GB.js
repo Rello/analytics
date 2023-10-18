@@ -35,6 +35,7 @@ OC.L10N.register(
     "Import" : "Mewnforio",
     "Title" : "Teitl",
     "Daily" : "Dyddiol",
+    "Hourly" : "Pob awr",
     "Unshare" : "Dad-rannu",
     "Password protection" : "Password protection",
     "Copy link" : "Copïo dolen",
