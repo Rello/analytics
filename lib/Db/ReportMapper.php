@@ -57,6 +57,16 @@ class ReportMapper
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
+
+        if ($result !== false && is_array($result)) {
+            foreach ($result as &$row) {
+                $row['dataset'] = (int) $row['dataset'];
+                $row['type'] = (int) $row['type'];
+                $row['parent'] = (int) $row['parent'];
+            }
+            unset($row); // Unset reference
+        }
+
         return $result;
     }
 
@@ -138,6 +148,14 @@ class ReportMapper
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
+
+        if ($result !== false) {
+            $result['dataset'] = (int) $result['dataset'];
+            $result['type'] = (int) $result['type'];
+            $result['parent'] = (int) $result['parent'];
+            $result['refresh'] = (int) $result['refresh'];
+        }
+
         return $result;
     }
 
@@ -156,6 +174,14 @@ class ReportMapper
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
+
+        if ($result !== false) {
+            $result['dataset'] = (int) $result['dataset'];
+            $result['type'] = (int) $result['type'];
+            $result['parent'] = (int) $result['parent'];
+            $result['refresh'] = (int) $result['refresh'];
+        }
+
         return $result;
     }
 
@@ -315,6 +341,14 @@ class ReportMapper
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
+
+        if ($result !== false && is_array($result)) {
+            foreach ($result as &$row) {
+                $row['type'] = (int) $row['type'];
+            }
+            unset($row); // Unset reference
+        }
+
         return $result;
     }
 
@@ -348,6 +382,16 @@ class ReportMapper
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
+
+        if ($result !== false && is_array($result)) {
+            foreach ($result as &$row) {
+                $row['dataset'] = (int) $row['dataset'];
+                $row['type'] = (int) $row['type'];
+                $row['parent'] = (int) $row['parent'];
+            }
+            unset($row); // Unset reference
+        }
+
         return $result;
     }
 

@@ -2,6 +2,7 @@
 
 ### Fixed
 - save error for reports without table
+- type parsing in report mapper
 
 ## 4.11.0 - 2023-10-01
 ### Added
