@@ -13,6 +13,7 @@
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
+    <input type="hidden" name="story" value="false" id="story">
     <h2 id="reportHeader"></h2>
     <h3 id="reportSubHeader" hidden></h3>
     <div id="reportPlaceholder"></div>
@@ -23,24 +24,6 @@
         <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
     </div>
     <div id="tableSeparatorContainer"></div>
-    <!--<div id="tableMenuBar" style="position: relative; height: 24px;">
-        <span id="tableMenuIcon" class="analytics-options icon-more has-tooltip"
-              title="<?php /*p($l->t('Options')); */?>"></span>
-        <div id="tableMenu" class="popovermenu" style="top: 33px; right: -5px;">
-            <ul id="tableMenuMain">
-                <li>
-                    <button id="reportMenuDrilldown">
-                        <span class="icon-analytics-drilldown"></span>
-                        <span><?php /*p($l->t('Drilldown')); */?></span>
-                    </button>
-                </li>
-                <li>
-                    <label for="menuSearchBox">Table:</label><input type="search" id="menuSearchBox">
-                </li>
-           </ul>
-        </div>
-    </div>-->
-
     <table id="tableContainer"></table>
     <div id="noDataContainer" hidden>
         <?php p($l->t('No data found')); ?>
@@ -54,15 +37,6 @@
         <ul id="ulAnalytics" style="width: 100%;"></ul>
     </div>
     <br>
-    <!--<h3><?php /*p($l->t('Recent Reports')); */ ?></h3>
-    <div>
-        <ul id="ulRecentReports" style="width: 100%;">
-            <li>- Report a</li>
-            <li>- Report b</li>
-            <li>- Report c</li>
-        </ul>
-    </div>
-    <br>-->
     <h3><?php p($l->t('Quickstart')); ?></h3>
     <div>
         <ul id="ulQuickstart" style="width: 100%;">

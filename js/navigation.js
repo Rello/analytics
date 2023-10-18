@@ -39,7 +39,6 @@ OCA.Analytics.Navigation = {
         })
             .then(response => response.json())
             .then(data => {
-                //let data = JSON.parse(data);
                 OCA.Analytics.Navigation.buildNavigation(data);
                 OCA.Analytics.reports = data;
                 if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
@@ -151,7 +150,7 @@ OCA.Analytics.Navigation = {
         a.setAttribute('href', '#/r/' + data['id']);
         a.style.position = 'relative';
 
-        // make reports exept folders drag-able
+        // make reports except folders drag-able
         a.draggable = false;
         if (typeINT !== OCA.Analytics.TYPE_GROUP) {
             a.draggable = true;
@@ -206,7 +205,7 @@ OCA.Analytics.Navigation = {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
             if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
-                // do not add an empty menue. can occur for e.g. shared group folders
+                // do not add an empty menu. can occur for e.g. shared group folders
                 li.appendChild(divUtils);
                 li.appendChild(divMenu);
             }
@@ -235,7 +234,6 @@ OCA.Analytics.Navigation = {
                 categoryList.appendChild(li);
             }
         }
-
     },
 
     buildFavoriteIcon: function (id, name) {
@@ -399,8 +397,8 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.UI.hideElement('analytics-content');
         OCA.Analytics.UI.showElement('analytics-intro');
         document.getElementById('ulAnalytics').innerHTML = '';
-        window.location.href = '#'
-        OCA.Analytics.Dashboard.init()
+        window.location.href = '#';
+        OCA.Analytics.Dashboard.init();
     },
 
     handleNavigationClicked: function (evt) {
