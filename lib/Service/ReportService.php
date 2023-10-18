@@ -394,7 +394,7 @@ class ReportService
         isset($report['subheader']) ? $subheader = $report['subheader'] : $subheader = '';
         $parent = 0;
         $dataset = 0;
-        isset($report['type']) ? $type = $report['type'] : $type = null;
+        isset($report['type']) ? $type = (int)$report['type'] : $type = null;
         isset($report['link']) ? $link = $report['link'] : $link = null;
         isset($report['visualization']) ? $visualization = $report['visualization'] : $visualization = null;
         isset($report['chart']) ? $chart = $report['chart'] : $chart = null;
@@ -406,6 +406,12 @@ class ReportService
         isset($report['dimension2']) ? $dimension2 = $report['dimension2'] : $dimension2 = null;
         isset($report['value']) ? $value = $report['value'] : $value = null;
 
+        $this->logger->info('creating dataset');
+
+        if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB) { // New dataset
+            $this->logger->info('creating dataset');
+            $dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
+        }
         $reportId = $this->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
         $this->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
         $report = $this->ReportMapper->readOwn($reportId);

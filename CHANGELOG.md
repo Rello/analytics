@@ -3,6 +3,7 @@
 ### Fixed
 - save error for reports without table
 - type parsing in report mapper
+- report import not creating dataset
 
 ## 4.11.0 - 2023-10-01
 ### Added
