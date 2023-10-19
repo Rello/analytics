@@ -35,6 +35,7 @@ OC.L10N.register(
     "Disaggregation" : "Deagregácia",
     "Loading" : "Načítava sa",
     "Please select" : "Prosím vyberte",
+    "Add custom column" : "Pridať vlastný stĺpec",
     "Add a report to the favorites to be shown here." : "Pridajte report medzi obľúbené položky, ak si prajete aby sa zobrazil tu.",
     "equal to" : "rovnaké ako",
     "greater than" : "väčšie ako",
