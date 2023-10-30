@@ -22,6 +22,7 @@ OC.L10N.register(
     "Type" : "Tüüp",
     "Notification" : "Teavitus",
     "Date" : "Kuupäev",
+    "Year" : "Aasta",
     "Total" : "Kokku",
     "Local file" : "Kohalik fail",
     "File" : "Fail",
