@@ -109,6 +109,7 @@ OC.L10N.register(
     "Unshare" : "Bỏ chia sẻ",
     "Password protection" : "Password protection",
     "Copy link" : "Sao chép liên kết",
+    "Get more information" : "Có thêm thông tin",
     "Create" : "‎Tạo‎"
 },
 "nplurals=1; plural=0;");
