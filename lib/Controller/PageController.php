@@ -116,6 +116,15 @@ class PageController extends Controller
     }
 
     /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function story()
+    {
+        return new TemplateResponse($this->appName, 'main_story');
+    }
+
+    /**
      * @PublicPage
      * @NoCSRFRequired
      * @UseSession

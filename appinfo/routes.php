@@ -13,6 +13,7 @@ return [
     'routes' => [
         ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         ['name' => 'page#advanced', 'url' => '/a/', 'verb' => 'GET'],
+        ['name' => 'page#story', 'url' => '/s/', 'verb' => 'GET'],
         ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
         ['name' => 'page#indexPublicMin', 'url' => '/pm/{token}', 'verb' => 'GET'],
         ['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],
