@@ -211,6 +211,7 @@ OC.L10N.register(
     "This section is used for dataset maintenance and data load configurations." : "Dieser Abschnitt wird für die Pflege von Datensätzen und die Konfiguration von Datenladungen verwendet.",
     "Please select a dataset" : "Bitte einen Datensatz wählen",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "Die EasyPrivacy-Liste blockiert einige Skripte aufgrund eines Wildcard-Filters für *analytics*.",
+    "Success Story - march 2023 14" : "Erfolgsgeschichte – 14. März 2023",
     "Options" : "Optionen",
     "Analysis" : "Analyse",
     "Translate" : "Übersetzen",
