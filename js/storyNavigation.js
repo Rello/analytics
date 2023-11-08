@@ -20,7 +20,7 @@ OCA.Analytics.Navigation = {
 
     init: function (datasetId) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-        //OCA.Analytics.Navigation.getDatasets(datasetId);
+        OCA.Analytics.Navigation.getDatasets(datasetId);
         //OCA.Analytics.Backend.getDatasetDefinitions();
         OCA.Analytics.Navigation.buildNavigation();
     },
@@ -30,7 +30,7 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isAdvanced) {
             datatype = 'dataset';
         } else {
-            datatype = 'report';
+            datatype = 'story';
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/' + datatype);
@@ -372,6 +372,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleNewButton: function () {
+        OCA.Analytics.Story.newStory();
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
