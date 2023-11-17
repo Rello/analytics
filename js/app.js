@@ -18,11 +18,7 @@
 
 'use strict';
 
-if (!OCA.Analytics) {
-    /**
-     * @namespace
-     */
-    OCA.Analytics = {
+OCA.Analytics = Object.assign({}, OCA.Analytics, {
         TYPE_GROUP: 0,
         TYPE_INTERNAL_FILE: 1,
         TYPE_INTERNAL_DB: 2,
@@ -65,8 +61,7 @@ if (!OCA.Analytics) {
             headers.append('Content-Type', 'application/json');
             return headers;
         }
-    };
-}
+});
 /**
  * @namespace OCA.Analytics.Core
  */

@@ -4,6 +4,7 @@
 - save error for reports without table
 - type parsing in report mapper
 - report import not creating dataset
+- js files loaded in an undefined sequence #378
 
 ## 4.11.0 - 2023-10-01
 ### Added
