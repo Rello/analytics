@@ -99,7 +99,7 @@
     "New" : "Novo",
     "The report name is missing" : "Falta o nome do informe",
     "The report type selection is missing" : "Falta a selección do tipo de informe",
-    "At least one visualization selection is required" : "Precisase polo menos unha selección de vista",
+    "At least one visualization selection is required" : "Precísase de polo menos unha selección de vista",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Este foi o último informe sobre o conxunto de datos. Quere eliminar o conxunto de datos incluíndo todos os datos?",
     "Request could not be processed" : "Non foi posíbel procesar a solicitude",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Pódense usar variábeis de texto nas dimensións.<br>Substitúense cando se engaden os datos.",
