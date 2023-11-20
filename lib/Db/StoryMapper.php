@@ -48,7 +48,6 @@ class StoryMapper
         $sql->from(self::TABLE_NAME)
             ->select('*')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->andWhere($sql->expr()->eq('page', $sql->createNamedParameter('0')))
             ->orderBy('name', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
@@ -60,28 +59,22 @@ class StoryMapper
     /**
      * create report
      * @param $name
-     * @param $subheader
      * @param $type
-     * @param $page
      * @param $parent
-     * @param $reports
-     * @param $layout
+     * @param $pages
      * @return int
      * @throws Exception
      */
-    public function create($name, $subheader, $type, $page, $parent, $reports, $layout)
+    public function create($name, $type, $parent, $pages)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
                 'name' => $sql->createNamedParameter($name),
-                'subheader' => $sql->createNamedParameter($subheader),
                 'type' => $sql->createNamedParameter($type),
-                'page' => $sql->createNamedParameter($page),
                 'parent' => $sql->createNamedParameter($parent),
-                'reports' => $sql->createNamedParameter($reports),
-                'layout' => $sql->createNamedParameter($layout),
+                'pages' => $sql->createNamedParameter($pages),
             ]);
         $sql->executeStatement();
         return (int)$sql->getLastInsertId();
@@ -101,7 +94,7 @@ class StoryMapper
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
             ->orWhere($sql->expr()->eq('parent', $sql->createNamedParameter($id)))
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-            ->orderBy('page', 'ASC');
+            ->orderBy('name', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
@@ -113,27 +106,21 @@ class StoryMapper
      * update report
      * @param $id
      * @param $name
-     * @param $subheader
      * @param $type
-     * @param $page
      * @param $parent
-     * @param $reports
-     * @param $layout
+     * @param $pages
      * @return bool
      * @throws Exception
      */
-    public function update($id, $name, $subheader, $type, $page, $parent, $reports, $layout)
+    public function update($id, $name, $type, $parent, $pages)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('name', $sql->createNamedParameter($name))
-            ->set('subheader', $sql->createNamedParameter($subheader))
             ->set('type', $sql->createNamedParameter($type))
-            ->set('page', $sql->createNamedParameter($page))
             ->set('parent', $sql->createNamedParameter($parent))
-            ->set('reports', $sql->createNamedParameter($reports))
-            ->set('layout', $sql->createNamedParameter($layout))
+            ->set('pages', $sql->createNamedParameter($pages))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
          $sql->executeStatement();

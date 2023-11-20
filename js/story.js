@@ -61,91 +61,43 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  * @namespace OCA.Analytics.Story
  */
 OCA.Analytics.Story = {
-    storiesTmp: [
-        {id:1, name:'Story 1 - Page 1', subheader: 'test', reports:'3,48,46', parent: 0, page: 0, layout: '<div class="flex-container">\n' +
-                '        <div class="flex-row">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-item" style="height: 50%;"></div>\n' +
-                '</div>' +
-                '<div class="flex-container">\n' +
-                '        <div class="flex-row">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-item" style="height: 50%;"></div>\n' +
-                '</div>'},
-    ],
-    storiesTmp2: [
-        {id:1, name:'Story 1 - Page 1', reports:'3,48', parent: 0, page: 0, layout: '<div class="flex-container">\n' +
-                '       <div id="subHeader" style="text-align: left; background-color: var(--color-primary-light);padding: 12px;">subheader</div>\n' +
-                '       <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-item" style="height: 50%;"></div>\n' +
-                '</div>' +
-                '<div class="flex-container">\n' +
-                '        <div class="flex-row">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-item" style="height: 50%;"></div>\n' +
-                '</div>'},
-        {id:2, name:'1-2', reports:'3,48,46', parent: 1, page: 1, layout: '<div class="flex-container">\n' +
-                '        <div class="flex-item" style="height: 50%;">\n' +
-                '        </div>\n' +
-                '        <div class="flex-row">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'},
-        {id:3, name:'Story 1 - Page 2', reports:'3,48,46', parent: 1, page: 2, layout: '<div class="flex-container">\n' +
-                '        <div class="flex-item" style="height: 50%;">\n' +
-                '        </div>\n' +
-                '        <div class="flex-row">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'}
-
-    ],
-    stories: [
-        {id:1, name:'Story Header - Teststory', subheader: 'Teststory Page 1', reports:'', parent: 0, page: 0, layout: ''},
-    ],
-    currentStory: [],
+    TYPE_GROUP: 0,
+    storiesTmp: {
+        id: 1,
+        name: 'Story 1',
+        pages: [
+            {page: 0, name: 'page 1', layout: ''},
+        ]
+    },
+    stories: [],
+    currentStory: {},
     currentPage: 0,
     editMode: false,
     layouts: [
-        {id:1, name:'2-1', layout: '<div class="flex-container">\n' +
+        {
+            id: 1, name: '2-1', layout: '<div class="flex-container">\n' +
+                '<div class="storySubHeaderRow"><div class="subHeader editable"></div></div>' +
                 '<div class="flex-row" style="height: 50%;">\n' +
                 '            <div class="flex-item"></div>\n' +
                 '            <div class="flex-item"></div>\n' +
                 '        </div>\n' +
                 '        <div class="flex-item" style="height: 50%;"></div>\n' +
-                '    </div>'},
-        {id:2, name:'1-2', layout: '<div class="flex-container">\n' +
+                '    </div>'
+        },
+        {
+            id: 2, name: '1-2', layout: '<div class="flex-container">\n' +
+                '<div class="storySubHeaderRow"><div class="subHeader editable"></div></div>' +
                 '        <div class="flex-item" style="height: 50%;"></div>\n' +
                 '        <div class="flex-row" style="height: 50%;">\n' +
                 '            <div class="flex-item"></div>\n' +
                 '            <div class="flex-item"></div>\n' +
                 '        </div>\n' +
-                '    </div>'},
-        {id:3, name:'2-2', layout: '<div class="flex-container">\n' +
+                '    </div>'
+        },
+        {
+            id: 3, name: '2-2', layout: '<div class="flex-container">\n' +
+                '<div class="storySubHeaderRow"><div class="subHeader editable"></div></div>' +
                 '        <div class="flex-row" style="height: 50%;">\n' +
-                 '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'},
-        {id:4, name:'4-2', layout: '<div class="flex-container">\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
                 '            <div class="flex-item"></div>\n' +
                 '            <div class="flex-item"></div>\n' +
                 '        </div>\n' +
@@ -153,30 +105,211 @@ OCA.Analytics.Story = {
                 '            <div class="flex-item"></div>\n' +
                 '            <div class="flex-item"></div>\n' +
                 '        </div>\n' +
-                '    </div>'},
+                '    </div>'
+        },
+        {
+            id: 4, name: '4-2', layout: '<div class="flex-container">\n' +
+                '<div class="storySubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '        <div class="flex-row" style="height: 50%;">\n' +
+                '            <div class="flex-item"></div>\n' +
+                '            <div class="flex-item"></div>\n' +
+                '            <div class="flex-item"></div>\n' +
+                '            <div class="flex-item"></div>\n' +
+                '        </div>\n' +
+                '        <div class="flex-row" style="height: 50%;">\n' +
+                '            <div class="flex-item"></div>\n' +
+                '            <div class="flex-item"></div>\n' +
+                '        </div>\n' +
+                '    </div>'
+        },
     ],
 
     init: function () {
         OCA.Analytics.Story.Backend.getReports();
-        OCA.Analytics.Story.getStory();
+        //OCA.Analytics.Story.getStory();
         // OCA.Analytics.Story.addEditLayer();
     },
 
-    handleEditButton: function() {
+
+    handleEditButton: function () {
+
         if (OCA.Analytics.Story.editMode) {
-            let hoverBoxes = document.getElementsByName('editBox');
-            if (hoverBoxes.length !== 0) {
-                Array.from(hoverBoxes).forEach((box) => {
-                    box.parentNode.removeChild(box);
-                });
-            }
+            // store edited values
+            OCA.Analytics.Story.currentStory.name = document.getElementById('storyHeader').innerText;
+
+            OCA.Analytics.Story.removeAllOverlays();
+            OCA.Analytics.Story.removeEditableTextBoxes();
+
+            // get the subheaders and store them to the story
+            document.querySelectorAll('.subHeader').forEach((item) => {
+                let page = item.id.split('-')[1];
+                OCA.Analytics.Story.currentStory.pages[page].name = item.innerText;
+            });
+
+            // hide elements and disable edit mode
             OCA.Analytics.UI.hideElement('plusBtn');
-            OCA.Analytics.Story.editMode = false;
+
+            let editBoxes = document.getElementsByName('editBox');
+            editBoxes.forEach((editBox) => {
+                editBox.remove();
+            });
+
         } else {
-            OCA.Analytics.Story.buildWidgetEdit();
-            OCA.Analytics.Story.buildLayoutEdit();
             OCA.Analytics.UI.showElement('plusBtn');
-            OCA.Analytics.Story.editMode = true;
+            OCA.Analytics.Story.buildLayoutEdit();
+            OCA.Analytics.Story.addAllOverlays();
+            OCA.Analytics.Story.addEditableTextBoxes();
+        }
+
+        OCA.Analytics.Story.editMode = !OCA.Analytics.Story.editMode;
+    },
+
+    addAllOverlays: function () {
+        // create or remove grey overlays to indicate the editable areas
+        const flexItems = document.querySelectorAll('.flex-item');
+        flexItems.forEach(flexItem => {
+            const existingOverlay = flexItem.querySelector('.overlay');
+            if (!existingOverlay) {
+                OCA.Analytics.Story.createOverlay(flexItem);
+            }
+        });
+    },
+
+    removeAllOverlays: function () {
+        // create or remove grey overlays to indicate the editable areas
+        const flexItems = document.querySelectorAll('.flex-item');
+        flexItems.forEach(flexItem => {
+            const existingOverlay = flexItem.querySelector('.overlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+            }
+        });
+    },
+
+    addEditableTextBoxes: function () {
+        let editableElements = document.getElementsByClassName('editable');
+        editableElements.forEach(editableElement => {
+            if (!editableElement.hasAttribute('contenteditable')) {
+                editableElement.setAttribute('contenteditable', 'true');
+            }
+        });
+    },
+
+    removeEditableTextBoxes: function () {
+        let editableElements = document.getElementsByClassName('editable');
+        editableElements.forEach(editableElement => {
+            if (editableElement.hasAttribute('contenteditable')) {
+                editableElement.removeAttribute('contenteditable');
+            }
+        });
+    },
+
+    // Function to create and show the overlay for all areas
+    createOverlay: function (flexItem, isActive) {
+        let overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        overlay.dataset.itemId = flexItem.id
+        let overlayText = document.createElement('span');
+        overlayText.classList.add('overlayText');
+        overlayText.innerText = 'select to edit';
+        overlayText.id = 'overlayText';
+        overlay.appendChild(overlayText);
+        flexItem.appendChild(overlay);
+
+        overlay.addEventListener('click', function (evt) {
+            // Remove the active state from any previous flex-item
+            let activeOverlays = document.querySelectorAll('.overlay.active');
+            activeOverlays.forEach(function (activeOverlay) {
+                activeOverlay.classList.remove('active');
+                activeOverlay.firstChild.innerText = 'select to edit';
+            });
+
+            // indicate now active overlay
+            evt.target.classList.add('active');
+            evt.target.firstChild.innerText = '';
+
+            OCA.Analytics.Story.showMenu(evt.target.dataset.itemId); // Position the menu items in a circle
+        });
+
+        if (isActive) {
+            // when the item was drawn after a report change, the overlay needs to be added again
+            //overlay.classList.add('active');
+            //overlay.firstChild.innerText = '';
+        }
+    },
+
+    // Function to calculate the positions of the menu items
+    showMenu: function (itemId) {
+        const menu = document.querySelector('.menu');
+        menu.style.display = 'block'; // Show the menu
+        menu.dataset.itemId = itemId;
+        let menuItems = menu.querySelectorAll('.menu-item:not(.close-menu-item)');
+        let numberOfItems = menuItems.length;
+        let angleStep = 360 / numberOfItems;
+        let menuRadius = menu.offsetWidth / 2; // Radius of the menu container
+
+        menuItems.forEach(function (item, index) {
+            // Calculate the angle for this item
+            const angle = angleStep * index;
+            const angleRad = (angle * Math.PI) / 180;
+
+            // Assuming menu items are circular, calculate the radius from the center of the menu
+            const itemRadius = item.offsetWidth / 2; // Radius of a menu item
+
+            // Position items inside the container, offset by the radius of a menu item
+            const x = menuRadius + (menuRadius - itemRadius) * Math.cos(angleRad) - itemRadius;
+            const y = menuRadius + (menuRadius - itemRadius) * Math.sin(angleRad) - itemRadius;
+
+            // Apply the calculated positions
+            item.style.left = `${x}px`;
+            item.style.top = `${y}px`;
+        });
+
+        // add the menu item event listeners in case they were not yet added
+        // if not, add them to all menu related items one time
+        if (menu.getAttribute('listenerAdded') !== 'true') {
+            menu.addEventListener('click', function (e) {
+                const action = e.target.getAttribute('data-modal');
+                // Check if the clicked item is the close button
+                if (action === 'close') {
+                    menu.style.display = 'none'; // Hide the menu
+                    // remove all active states from overlays
+                    let activeOverlays = document.querySelectorAll('.overlay.active');
+                    activeOverlays.forEach(function (activeOverlay) {
+                        activeOverlay.classList.remove('active');
+                        activeOverlay.firstChild.innerText = 'select to edit';
+                    });
+                    event.stopPropagation()
+                } else {
+                    const modalId = e.target.dataset.modal;
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.style.display = 'block';
+                        modal.dataset.itemId = e.target.parentElement.dataset.itemId;
+                    }
+                }
+            });
+            // add an attribute to recognize if listener is already there
+            menu.setAttribute('listenerAdded', 'true');
+
+            // Close modals when clicking on the close button
+            document.querySelectorAll('.modal .close').forEach(function (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    const modal = this.closest('.modal');
+                    modal.style.display = 'none';
+                });
+            });
+
+            // Close the menu if the user clicks outside of it
+            document.addEventListener('click', function (e) {
+                if (!e.target.classList.contains('overlay') && !e.target.classList.contains('menu-item') && !e.target.classList.contains('close')) {
+                    menu.style.display = 'none';
+                    let overlays = document.querySelectorAll('.overlay.active');
+                    overlays.forEach(function (item) {
+                        item.classList.remove('active');
+                    });
+                }
+            });
         }
     },
 
@@ -185,7 +318,7 @@ OCA.Analytics.Story = {
         Array.from(flexItems).forEach((item, positionIndex) => {
             const hoverBox = document.createElement('div');
             const dropdown = document.createElement('select');
-            let storyId = item.id.split('-')[0];
+            let pageId = item.id.split('-')[0];
             let reportIndex = item.id.split('-')[1];
 
             // Populate dropdown with given numbers
@@ -201,10 +334,10 @@ OCA.Analytics.Story = {
             dropdown.id = `dropdown-${item.id}`;
             dropdown.addEventListener('change', (e) => {
                 item.setAttribute('data-chart', parseInt(e.target.value));
-                let story = OCA.Analytics.Story.currentStory.find(x => parseInt(x.id) === parseInt(storyId));
-                let reportsArr = story.reports.split(',');
+                let page = OCA.Analytics.Story.currentStory.pages[pageId];
+                let reportsArr = page.reports.split(',');
                 reportsArr[reportIndex] = parseInt(e.target.value);
-                story.reports = reportsArr.join(',');
+                page.reports = reportsArr.join(',');
                 OCA.Analytics.Story.buildWidget(item.id);
                 // Re-attach hoverBox to DOM
                 dropdown.value = e.target.value;
@@ -222,10 +355,19 @@ OCA.Analytics.Story = {
             item.style.position = "relative";
             item.appendChild(hoverBox);
         });
+
+        let editableElements = document.getElementsByClassName('editable');
+        for (let i = 0; i < editableElements.length; i++) {
+            if (editableElements[i].hasAttribute('contenteditable')) {
+            } else {
+                // Add the attribute if it doesn't exist
+                editableElements[i].setAttribute('contenteditable', 'true');
+            }
+        }
     },
 
     buildLayoutEdit: function () {
-        let storyHeader = document.getElementById('storyHeader');
+        let storyHeader = document.getElementById('app-content');
         let hoverBox = document.createElement('div');
         let dropdown = document.createElement('select');
 
@@ -236,28 +378,30 @@ OCA.Analytics.Story = {
         dropdown.appendChild(option);
 
         // Populate dropdown with given numbers
-            OCA.Analytics.Story.layouts.forEach((layout) => {
-                const option = document.createElement('option');
-                option.value = layout.id;
-                option.text = layout.name;
-                dropdown.appendChild(option);
-            });
+        OCA.Analytics.Story.layouts.forEach((layout) => {
+            const option = document.createElement('option');
+            option.value = layout.id;
+            option.text = layout.name;
+            dropdown.appendChild(option);
+        });
 
-            dropdown.addEventListener('change', (e) => {
-                let layout =  OCA.Analytics.Story.layouts.find(x => parseInt(x.id) === parseInt(e.target.value));
-                let page = OCA.Analytics.Story.currentPage;
-                let story = OCA.Analytics.Story.currentStory[page];
-                story.layout = layout.layout;
-                OCA.Analytics.Story.getStory();
-            });
+        dropdown.addEventListener('change', (e) => {
+            let layout = OCA.Analytics.Story.layouts.find(x => parseInt(x.id) === parseInt(e.target.value));
+            let page = OCA.Analytics.Story.currentPage;
+            let story = OCA.Analytics.Story.currentStory.pages[page];
+            story.layout = layout.layout;
+            OCA.Analytics.Story.getStory(page);
+            OCA.Analytics.Story.addAllOverlays();
+            OCA.Analytics.Story.addEditableTextBoxes();
+        });
 
-            hoverBox.appendChild(dropdown);
-            hoverBox.style.position = "absolute";
-            hoverBox.style.top = "0";
-            hoverBox.style.right = "50px";
-            hoverBox.style.zIndex = "1";
-            hoverBox.style.background = "white";
-            hoverBox.setAttribute('name', 'editBox');
+        hoverBox.appendChild(dropdown);
+        hoverBox.style.position = "absolute";
+        hoverBox.style.top = "20px";
+        hoverBox.style.right = "50px";
+        hoverBox.style.zIndex = "1";
+        hoverBox.style.background = "white";
+        hoverBox.setAttribute('name', 'editBox');
 
         storyHeader.style.position = "relative";
         storyHeader.appendChild(hoverBox);
@@ -270,45 +414,58 @@ OCA.Analytics.Story = {
         OCA.Analytics.Story.addPage();
     },
 
-    getStory: function () {
+    getStory: function (targetPage) {
+        //go to first page
+        if (targetPage) {
+            OCA.Analytics.Story.navigatePage(targetPage);
+        } else {
+            OCA.Analytics.Story.navigatePage('start');
+        }
+
         // add the layout structure for all pages
         document.getElementById('storyPages').innerHTML = '';
-        OCA.Analytics.Story.currentStory
-            .filter(story => story.layout !== '')
-            .forEach((story) => {
-            // Parse the string to DOM
-            let parser = new DOMParser();
-            let layout = parser.parseFromString(story.layout, 'text/html');
+
+        OCA.Analytics.Story.currentStory.pages.forEach((page, pageIndex) => {
+            let flexContainer = null;
+            if (page.layout !== '') {
+                // Parse the string to DOM
+                let parser = new DOMParser();
+                let layout = parser.parseFromString(page.layout, 'text/html');
+                flexContainer = layout.querySelector('div');
+            } else {
+                flexContainer = document.createElement('div');
+                flexContainer.classList.add('flex-container');
+            }
 
             // assign the story id to the container
-            let flexContainer = layout.querySelector('div');
-            flexContainer.id = story.id;
+            flexContainer.id = pageIndex;
 
             // add the unique ids to all flex items
             flexContainer.querySelectorAll('.flex-item').forEach((item, idx) => {
-                item.id = `${story.id}-${idx}`;
+                item.id = `${pageIndex}-${idx}`;
             });
 
+            // add the unique ids to all subHeaders and set the text
+            flexContainer.querySelectorAll('.subHeader').forEach((item, idx) => {
+                item.id = 'subHeader-' + pageIndex;
+                item.innerText = page.name;
+            });
 
-            // document.getElementById('storySubHeader').innerText = story.subheader;
-            if (story.page === 0) {document.getElementById('storyHeader').innerText = story.name}
+            // set the main header
+            document.getElementById('storyHeader').innerText = OCA.Analytics.Story.currentStory.name;
+
             document.getElementById('storyPages').appendChild(flexContainer);
         });
 
         OCA.Analytics.Story.updateNavButtons();
         OCA.Analytics.Story.updatePageWidth();
 
-        //OCA.Analytics.Story.currentStory = story;
-        // document.getElementById('storyPages').innerHTML = OCA.Analytics.Story.currentStory['layout'];
-
-        // loop story structure
-        //let reports = document.getElementsByName('chart');
-        //let reports = document.querySelectorAll('div[data-chart]');
         let items = document.getElementsByClassName('flex-item');
         items.forEach((item) => {
             OCA.Analytics.Story.buildWidget(item.id);
         });
-        if (OCA.Analytics.Story.editMode) OCA.Analytics.Story.buildWidgetEdit();
+        if (OCA.Analytics.Story.editMode) OCA.Analytics.Story.addAllOverlays();
+        ;
     },
 
     buildWidget: function (itemId) {
@@ -320,13 +477,14 @@ OCA.Analytics.Story = {
         }
 
         //let reportId = widget.dataset.chart;
-        let storyId = itemId.split('-')[0];
+        let pageId = itemId.split('-')[0];
         let reportIndex = itemId.split('-')[1];
         //let reportId = OCA.Analytics.Story.currentStory['reports'].split(',')[reportIndex];
-        let story = OCA.Analytics.Story.currentStory.find(x => parseInt(x.id) === parseInt(storyId));
-        let reportId = story.reports.split(',')[reportIndex];
+        let page = OCA.Analytics.Story.currentStory.pages[pageId];
+        let reportId = page.reports[reportIndex];
 
         if (reportId !== undefined && reportId !== '') {
+            reportId = parseInt(reportId['value']);
             //let widget = document.querySelectorAll('div[data-chart]')[positionIndex];
             let widget = document.getElementById(itemId);
             widget.innerHTML = '';
@@ -397,7 +555,7 @@ OCA.Analytics.Story = {
                 </div>`;
     },
 
-    navigatePage: function(direction) {
+    navigatePage: function (direction) {
         let pagesContainer = document.getElementById('storyPages');
         let pageCount = pagesContainer.children.length;
 
@@ -411,6 +569,8 @@ OCA.Analytics.Story = {
                 return; // No more pages to the left
             }
             OCA.Analytics.Story.currentPage--;
+        } else if (direction === 'start') {
+            OCA.Analytics.Story.currentPage = 0;
         }
 
         const newMargin = OCA.Analytics.Story.currentPage * -100;
@@ -418,7 +578,7 @@ OCA.Analytics.Story = {
         OCA.Analytics.Story.updateNavButtons();
     },
 
-    updateNavButtons: function() {
+    updateNavButtons: function () {
         let pagesContainer = document.getElementById('storyPages');
         let pageCount = pagesContainer.children.length;
 
@@ -435,22 +595,9 @@ OCA.Analytics.Story = {
         }
     },
 
-    addPage: function() {
-        let story = OCA.Analytics.Story.currentStory[OCA.Analytics.Story.currentPage];
-        let storyId;
-        let page;
-        if (story === undefined) {
-            // new story button triggered
-            storyId = 1;
-            page = 0;
-        } else {
-            storyId = story.id+1;
-            page = OCA.Analytics.Story.currentPage + 1;
-        }
-
-        OCA.Analytics.Story.Backend.create(page, 0, '<div class="flex-container"></div>');
-        //OCA.Analytics.Story.currentStory.push({id: storyId, name: 'New story header', subheader: 'New subheader', reports: '', parent: 1, page: page, layout: '<div class="flex-container"></div>'});
-        OCA.Analytics.Story.getStory();
+    addPage: function () {
+        OCA.Analytics.Story.currentStory.pages.push({page: 0, name: 'New', reports: '', layout: ''});
+        OCA.Analytics.Story.getStory('next');
         OCA.Analytics.Story.updateNavButtons();
     },
 
@@ -899,8 +1046,37 @@ OCA.Analytics.Story.Backend = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.reports = data;
-                let emptyReport = {id: 0, name: 'please choose'};
-                OCA.Analytics.reports.unshift(emptyReport);
+
+                // Populate report selection menu with given numbers
+                let reportSelectorContainer = document.getElementById('reportSelectorContainer');
+                OCA.Analytics.reports.forEach((report) => {
+                    const reportItem = document.createElement('div');
+                    reportItem.className = 'report-item'; // You can add CSS classes for styling here.
+                    reportItem.textContent = report.name;
+                    reportItem.setAttribute('reportId', report.id);
+
+                    reportItem.addEventListener('click', (e) => {
+                        let reportId = parseInt(e.target.getAttribute('reportId'));
+
+                        let itemId = document.getElementById('modal1').dataset.itemId;
+                        let pageId = itemId.split('-')[0];
+                        let reportIndex = itemId.split('-')[1];
+                        let targetItem = document.getElementById(itemId);
+
+                        targetItem.setAttribute('data-chart', reportId);
+                        let page = OCA.Analytics.Story.currentStory.pages[pageId];
+                        //let reportsArr = page.reports.split(',');
+                        let reportsArr = page.reports;
+                        reportsArr[reportIndex] = {'type':'r', 'value': reportId};
+                        //page.reports = reportsArr.join(',');
+                        OCA.Analytics.Story.buildWidget(itemId);
+                        OCA.Analytics.Story.createOverlay(targetItem, true);
+
+                        document.getElementById('modal1').style.display = 'none';
+                    });
+
+                    reportSelectorContainer.appendChild(reportItem);
+                });
             });
     },
 
@@ -911,21 +1087,38 @@ OCA.Analytics.Story.Backend = {
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 name: 'New story header',
-                subheader: 'New subheader',
                 type: 0,
-                page: page,
                 parent: parent,
-                reports: '',
-                layout: layout,
+                pages: '',
             })
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Story.currentStory.push({id: storyId, name: 'New story header', subheader: 'New subheader', reports: '', parent: 1, page: page, layout: '<div class="flex-container"></div>'});
+                OCA.Analytics.Story.currentStory.push({
+                    id: storyId,
+                    name: 'New story header',
+                    reports: '',
+                    parent: 1,
+                    page: page,
+                    layout: '<div class="flex-container"></div>'
+                });
                 OCA.Analytics.Wizard.close();
                 OCA.Analytics.Navigation.init();
             });
+    },
 
+    update: function () {
+
+        let requestUrl = OC.generateUrl('apps/analytics/story/') + OCA.Analytics.Story.currentStory.id;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify(OCA.Analytics.Story.currentStory)
+        })
+            .then(response => response.json())
+            .then(data => {
+                //
+            });
     }
 }
 

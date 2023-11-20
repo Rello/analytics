@@ -50,26 +50,14 @@ class Version4012Date20231108180000 extends SimpleMigrationStep
                 'notnull' => true,
                 'length' => 64,
             ]);
-            $table->addColumn('subheader', 'string', [
-                'notnull' => false,
-                'length' => 256,
-            ]);
             $table->addColumn('type', 'integer', [
-                'notnull' => false,
-            ]);
-            $table->addColumn('page', 'integer', [
                 'notnull' => false,
             ]);
             $table->addColumn('parent', 'integer', [
                 'notnull' => false,
             ]);
-            $table->addColumn('reports', 'string', [
+            $table->addColumn('pages', 'text', [
                 'notnull' => false,
-                'length' => 256,
-            ]);
-            $table->addColumn('layout', 'string', [
-                'notnull' => false,
-                'length' => 1000,
             ]);
             $table->setPrimaryKey(['id']);
             $table->addIndex(['user_id'], 'analytics_dataset_user_id_idx');

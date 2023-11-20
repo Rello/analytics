@@ -42,6 +42,13 @@ return [
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
 
+        // Story
+        ['name' => 'story#index', 'url' => '/story', 'verb' => 'GET'],
+        ['name' => 'story#create', 'url' => '/story', 'verb' => 'POST'],
+        ['name' => 'story#read', 'url' => '/story/{storyId}', 'verb' => 'GET'],
+        ['name' => 'story#delete', 'url' => '/story/{storyId}', 'verb' => 'DELETE'],
+        ['name' => 'story#update', 'url' => '/story/{storyId}', 'verb' => 'PUT'],
+
         // Data Output
         ['name' => 'output#read', 'url' => '/data/{reportId}', 'verb' => 'GET'],
         ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],

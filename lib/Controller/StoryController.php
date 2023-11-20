@@ -51,18 +51,15 @@ class StoryController extends Controller
      *
      * @NoAdminRequired
      * @param $name
-     * @param $subheader
      * @param int $type
-     * @param int $page
      * @param int $parent
-     * @param $reports
-     * @param $layout
+     * @param int $pages
      * @return DataResponse
      * @throws Exception
      */
-    public function create($name, $subheader, int $type, int $page, int $parent, $reports, $layout)
+    public function create($name, int $type, int $parent, int $pages)
     {
-        return new DataResponse($this->StoryService->create($name, $subheader, $type, $page, $parent, $reports, $layout));
+        return new DataResponse($this->StoryService->create($name, $type, $parent, $pages));
     }
 
 
@@ -98,19 +95,17 @@ class StoryController extends Controller
      * get report details
      *
      * @NoAdminRequired
-     * @param int $id
+     * @param int $storyId
      * @param $name
-     * @param $subheader
      * @param int $type
-     * @param int $page
      * @param int $parent
-     * @param $reports
-     * @param $layout
+     * @param $pages
      * @return DataResponse
      * @throws Exception
      */
-    public function update(int $id, $name, $subheader, int $type, int $page, int $parent, $reports, $layout)
+    public function update(int $storyId, $name, int $type, int $parent, $pages)
     {
-        return new DataResponse($this->StoryService->update($id, $name, $subheader, $type, $page, $parent, $reports, $layout));
+        $pages = json_encode($pages);
+        return new DataResponse($this->StoryService->update($storyId, $name, $type, $parent, $pages));
     }
 }

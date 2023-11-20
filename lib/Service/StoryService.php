@@ -63,7 +63,7 @@ class StoryService
         $this->ShareService = $ShareService;
         $this->DatasetService = $DatasetService;
         $this->StoryMapper = $StoryMapper;
-         $this->ActivityManager = $ActivityManager;
+        $this->ActivityManager = $ActivityManager;
         $this->rootFolder = $rootFolder;
         $this->VariableService = $VariableService;
         $this->config = $config;
@@ -75,6 +75,7 @@ class StoryService
      *
      * @return array
      * @throws PreConditionNotMetException
+     * @throws Exception
      */
     public function index(): array
     {
@@ -126,18 +127,15 @@ class StoryService
      * create new blank report
      *
      * @param $name
-     * @param $subheader
      * @param int $type
-     * @param int $page
      * @param int $parent
-     * @param $reports
-     * @param $layout
+     * @param $pages
      * @return int
      * @throws Exception
      */
-    public function create($name, $subheader, int $type, int $page, int $parent, $reports, $layout): int
+    public function create($name, int $type, int $parent, $pages): int
     {
-        $reportId = $this->StoryMapper->create($name, $subheader, $type, $page, $parent, $reports, $layout);
+        $reportId = $this->StoryMapper->create($name, $type, $parent, $pages);
         //$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
         return $reportId;
     }
@@ -149,16 +147,14 @@ class StoryService
      * @param $name
      * @param $subheader
      * @param int $type
-     * @param int $page
      * @param int $parent
-     * @param $reports
-     * @param $layout
+     * @param $pages
      * @return bool
      * @throws Exception
      */
-    public function update(int $id, $name, $subheader, int $type, int $page, int $parent, $reports, $layout)
+    public function update(int $id, $name, int $type, int $parent, $pages)
     {
-        return $this->StoryMapper->update($id, $name, $subheader, $type, $page, $parent, $reports, $layout);
+        return $this->StoryMapper->update($id, $name, $type, $parent, $pages);
     }
 
     /**

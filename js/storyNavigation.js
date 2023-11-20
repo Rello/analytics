@@ -41,7 +41,7 @@ OCA.Analytics.Navigation = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Navigation.buildNavigation(data);
-                OCA.Analytics.reports = data;
+                OCA.Analytics.Story.stories = data;
                 if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
                     OCA.Analytics.Sidebar.close();
                     let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
@@ -60,7 +60,7 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
-            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
+            // document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
             for (let navigation of data) {
                 OCA.Analytics.Navigation.buildNavigationRow(navigation);
             }
@@ -202,7 +202,7 @@ OCA.Analytics.Navigation = {
             a.appendChild(divFav);
         }
 
-        if (!OCA.Analytics.isAdvanced) {
+/*        if (!OCA.Analytics.isAdvanced) {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
             if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
@@ -213,7 +213,7 @@ OCA.Analytics.Navigation = {
         } else {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
             li.appendChild(divUtils);
-        }
+        }*/
 
         if (typeINT === OCA.Analytics.TYPE_GROUP) {
             li.appendChild(ulSublist);
@@ -414,6 +414,7 @@ OCA.Analytics.Navigation = {
             }
             evt.target.parentElement.classList.add('active');
         }
+/*
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
@@ -427,6 +428,14 @@ OCA.Analytics.Navigation = {
             OCA.Analytics.Sidebar.close();
             OCA.Analytics.Backend.getData();
         }
+*/
+        OCA.Analytics.Story.currentStory = OCA.Analytics.Story.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+        // create a proper object out of the pages string
+        // as objects are always assigned as references in the line above, check if the object was already parsed
+        if (typeof OCA.Analytics.Story.currentStory.pages === 'string') {
+            OCA.Analytics.Story.currentStory.pages = JSON.parse(OCA.Analytics.Story.currentStory.pages);
+        }
+        OCA.Analytics.Story.getStory();
     },
 
     handleOptionsClicked: function (evt) {
