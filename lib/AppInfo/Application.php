@@ -28,6 +28,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use Psr\Container\ContainerInterface;
+use OCP\WorkflowEngine\Events\RegisterOperationsEvent;
 
 class Application extends App implements IBootstrap
 {
@@ -51,16 +52,13 @@ class Application extends App implements IBootstrap
         }
 
         $this->registerNotifications();
+
+        $context->registerEventListener(RegisterOperationsEvent::class, FlowOperation::class);
     }
 
     public function boot(IBootContext $context): void
     {
-        $server = $context->getServerContainer();
-
-        /** @var IEventDispatcher $dispatcher */
-        $dispatcher = $server->get(IEventDispatcher::class);
-        FlowOperation::register($dispatcher);
-    }
+     }
 
     protected function registerNotifications(): void
     {

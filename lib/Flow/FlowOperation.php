@@ -25,7 +25,8 @@ use OCP\WorkflowEngine\IManager;
 use OCP\WorkflowEngine\IOperation;
 use OCP\WorkflowEngine\IRuleMatcher;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use OCP\WorkflowEngine\Events\RegisterOperationsEvent;
+use Psr\Container\ContainerInterface;
 
 class FlowOperation implements IOperation
 {
@@ -37,13 +38,15 @@ class FlowOperation implements IOperation
     private $logger;
     private $DataloadController;
     private $eventDispatcher;
+    private ContainerInterface $container;
 
     public function __construct(
         IL10N $l,
         IURLGenerator $urlGenerator,
         LoggerInterface $logger,
         DataloadController $DataloadController,
-        IEventDispatcher $eventDispatcher
+        IEventDispatcher $eventDispatcher,
+        ContainerInterface $container
     )
     {
         $this->l = $l;
@@ -51,15 +54,15 @@ class FlowOperation implements IOperation
         $this->logger = $logger;
         $this->DataloadController = $DataloadController;
         $this->eventDispatcher = $eventDispatcher;
+        $this->container = $container;
     }
 
-    public static function register(IEventDispatcher $dispatcher): void
-    {
-        $dispatcher->addListener(IManager::EVENT_NAME_REG_OPERATION, function (GenericEvent $event) {
-            $operation = \OC::$server->query(FlowOperation::class);
-            $event->getSubject()->registerOperation($operation);
-            Util::addScript('analytics', 'flow');
-        });
+    public function handle(Event $event): void {
+        if (!$event instanceof RegisterOperationsEvent) {
+            return;
+        }
+        $event->registerOperation($this->container->get(FlowOperation::class));
+        Util::addScript('analytics', 'flow');
     }
 
     public function getDisplayName(): string
