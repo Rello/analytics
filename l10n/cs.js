@@ -211,7 +211,6 @@ OC.L10N.register(
     "This section is used for dataset maintenance and data load configurations." : "Tato sekce slouží pro údržbu souboru dat a nastavování načítání dat.",
     "Please select a dataset" : "Vyberte soubor dat",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "Seznam filtrovacích pravidel EasyPrivacy blokuje některé skripty kvůli filtrování výrazu *analytics*.",
-    "Success Story - march 2023 14" : "Příběh úspěchu – 14. březen 2023",
     "Options" : "Předvolby",
     "Analysis" : "Analýza",
     "Translate" : "Překládání",

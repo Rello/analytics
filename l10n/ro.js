@@ -32,6 +32,7 @@ OC.L10N.register(
     "Yes" : "a",
     "No" : "Nu",
     "Version" : "Versiune",
+    "More options" : "Mai multe opțiuni",
     "Authentication" : "Autentificare",
     "Announcements" : "Anunțuri",
     "copy" : "copiază",
