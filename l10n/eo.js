@@ -26,6 +26,7 @@ OC.L10N.register(
     "New in" : "Nova en",
     "View changelog" : "Vidi ŝanĝoprotokolon",
     "Total" : "Sumo",
+    "Local file" : "Loka dosiero",
     "File" : "Dosiero",
     "Yes" : "Yes",
     "No" : "No",
