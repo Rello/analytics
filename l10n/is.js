@@ -11,6 +11,7 @@ OC.L10N.register(
     "Cancel" : "Hætta við",
     "Filter" : "Sía",
     "Add" : "Bæta við",
+    "Line" : "Lína",
     "Bar" : "Bar",
     "Color" : "Litur",
     "Overview" : "Yfirlit",
