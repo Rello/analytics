@@ -1532,7 +1532,7 @@ OCA.Analytics.Datasource = {
 
     addFixedColumn: function () {
         const currentColumns = document.querySelector('input[data-type="columnPicker"]').value;
-        const preText = t('analytics', 'Previous Values: ');
+        const preText = t('analytics', 'Previous Values:');
         document.getElementById('addColumnHint').innerText = preText + currentColumns;
 
         const sortableList = document.querySelector("#analyticsDialogContent > #sortable-list");
