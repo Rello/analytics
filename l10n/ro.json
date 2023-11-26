@@ -1,4 +1,5 @@
 { "translations": {
+    "Value" : "Valoare",
     "Saved" : "Salvat",
     "Delete" : "Șterge",
     "Search" : "Caută",
@@ -8,6 +9,7 @@
     "Cancel" : "Anulare",
     "Filter" : "Filtru",
     "Add" : "Adaugă",
+    "Line" : "Linie",
     "Color" : "Culoare",
     "Overview" : "Prezentare generală",
     "Basic settings" : "Setări de bază",

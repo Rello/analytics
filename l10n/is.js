@@ -48,6 +48,7 @@ OC.L10N.register(
     "Settings" : "Stillingar",
     "Name" : "Heiti",
     "Display" : "Birting",
+    "Table" : "Tafla",
     "Advanced" : "Ítarlegt",
     "Open documentation" : "Opna hjálparskjöl",
     "Update" : "Uppfæra",
