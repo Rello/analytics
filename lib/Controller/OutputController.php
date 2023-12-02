@@ -39,7 +39,7 @@ class OutputController extends Controller
     private $VariableService;
 
     public function __construct(
-        string $AppName,
+        string $appName,
         IRequest $request,
         LoggerInterface $logger,
         ReportService $ReportService,
@@ -51,7 +51,7 @@ class OutputController extends Controller
         VariableService $VariableService
     )
     {
-        parent::__construct($AppName, $request);
+        parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ReportService = $ReportService;
         $this->DataSession = $DataSession;

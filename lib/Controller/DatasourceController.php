@@ -48,7 +48,7 @@ class DatasourceController extends Controller
     const DATASET_TYPE_EXCEL = 7;
 
     public function __construct(
-        string           $AppName,
+        string           $appName,
         IRequest         $request,
         LoggerInterface  $logger,
         Github           $GithubService,
@@ -61,7 +61,7 @@ class DatasourceController extends Controller
         IEventDispatcher $dispatcher
     )
     {
-        parent::__construct($AppName, $request);
+        parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->ExternalFileService = $ExternalFileService;
         $this->GithubService = $GithubService;

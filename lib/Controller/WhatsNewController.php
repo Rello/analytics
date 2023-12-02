@@ -36,10 +36,9 @@ class WhatsNewController extends Controller
     /** @var IFactory */
     private $langFactory;
     private $logger;
-    private $AppName;
 
     public function __construct(
-        string $AppName,
+        string $appName,
         IRequest $request,
         IUserSession $userSession,
         IConfig $config,
@@ -48,8 +47,8 @@ class WhatsNewController extends Controller
         LoggerInterface $logger
     )
     {
-        parent::__construct($AppName, $request);
-        $this->AppName = $AppName;
+        parent::__construct($appName, $request);
+        $this->appName = $appName;
         $this->config = $config;
         $this->userSession = $userSession;
         $this->whatsNewService = $whatsNewService;
@@ -66,8 +65,8 @@ class WhatsNewController extends Controller
         if ($user === null) {
             throw new \RuntimeException("Acting user cannot be resolved");
         }
-        $lastRead = $this->config->getUserValue($user->getUID(), $this->AppName, 'whatsNewLastRead', 0);
-        $currentVersion = $this->whatsNewService->normalizeVersion($this->config->getAppValue($this->AppName, 'installed_version'));
+        $lastRead = $this->config->getUserValue($user->getUID(), $this->appName, 'whatsNewLastRead', 0);
+        $currentVersion = $this->whatsNewService->normalizeVersion($this->config->getAppValue($this->appName, 'installed_version'));
 
         if (version_compare($lastRead, $currentVersion, '>=')) {
             return new DataResponse([], Http::STATUS_NO_CONTENT);
@@ -111,7 +110,7 @@ class WhatsNewController extends Controller
         $version = $this->whatsNewService->normalizeVersion($version);
         // checks whether it's a valid version, throws an Exception otherwise
         $this->whatsNewService->getChangesForVersion($version);
-        $this->config->setUserValue($user->getUID(), $this->AppName, 'whatsNewLastRead', $version);
+        $this->config->setUserValue($user->getUID(), $this->appName, 'whatsNewLastRead', $version);
         return new DataResponse();
     }
 }

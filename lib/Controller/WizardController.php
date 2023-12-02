@@ -26,17 +26,16 @@ class WizardController extends Controller
     protected $config;
     /** @var IUserSession */
     private $userSession;
-    private $AppName;
 
     public function __construct(
-        string $AppName,
+        string $appName,
         IRequest $request,
         IUserSession $userSession,
         IConfig $config
     )
     {
-        parent::__construct($AppName, $request);
-        $this->AppName = $AppName;
+        parent::__construct($appName, $request);
+        $this->appName = $appName;
         $this->config = $config;
         $this->userSession = $userSession;
     }
@@ -54,7 +53,7 @@ class WizardController extends Controller
         if ($user === null) {
             throw new \RuntimeException("Acting user cannot be resolved");
         }
-        $this->config->setUserValue($user->getUID(), $this->AppName, 'wizzard', 1);
+        $this->config->setUserValue($user->getUID(), $this->appName, 'wizzard', 1);
         return new DataResponse();
     }
 }

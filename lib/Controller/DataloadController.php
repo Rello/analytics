@@ -26,13 +26,13 @@ class DataloadController extends Controller
     private $DataloadService;
 
     public function __construct(
-        string $AppName,
+        string $appName,
         IRequest $request,
         LoggerInterface $logger,
         DataloadService $DataloadService
     )
     {
-        parent::__construct($AppName, $request);
+        parent::__construct($appName, $request);
         $this->logger = $logger;
         $this->DataloadService = $DataloadService;
     }
