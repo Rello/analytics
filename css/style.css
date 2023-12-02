@@ -8,29 +8,179 @@
  * @copyright 2019-2022 Marcel Scherello
  */
 
-#app-navigation:not(.vue) .collapsible:before {
+#app-navigation .collapsible:before {
     content: inherit;
 }
 
 /* show a down-triangle if a folder is opened */
-#app-navigation:not(.vue) .collapsible.open > a {
+#app-navigation .collapsible.open > a {
     background-image: var(--icon-triangle-s-dark);
 }
 
 /* show the ... icon when the navigation row is hovered */
-#app-navigation:not(.vue) > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button,
-#app-navigation:not(.vue) > ul > li > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button {
+#app-navigation > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button,
+#app-navigation > ul > li > ul > li > a:hover + .app-navigation-entry-utils > ul > li > button {
     opacity: 0.5;
 }
 
 /* show the ... icon when the icon itself is hovered */
-#app-navigation:not(.vue) > ul > li > ul > li > .app-navigation-entry-utils:hover {
+#app-navigation > ul > li > ul > li > .app-navigation-entry-utils:hover {
     opacity: 1;
 }
 
 /* hide the ... icon as default */
-#app-navigation:not(.vue) .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button, #app-navigation:not(.vue) .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
     opacity: 0;
+}
+
+/* take over from core >NC28*/
+
+#app-navigation > ul {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    padding-bottom: 0;
+}
+
+#app-navigation > ul > li {
+    display: inline-flex;
+    flex-wrap: wrap;
+    order: 1;
+    flex-shrink: 0;
+    margin: 0;
+    margin-bottom: 3px;
+    width: 100%;
+    border-radius: var(--border-radius-pill);
+}
+
+#app-navigation>ul>li a:hover,
+#app-navigation>ul>li a:hover>a {
+    background-color: var(--color-background-hover);
+}
+
+#app-navigation > ul > li.active,
+#app-navigation > ul > li.active > a,
+#app-navigation > ul > li a:active,
+#app-navigation > ul > li a:active > a,
+#app-navigation > ul > li a.selected,
+#app-navigation > ul > li a.selected > a,
+#app-navigation > ul > li a.active,
+#app-navigation > ul > li a.active > a {
+    background-color: var(--color-primary-element-light);
+}
+
+#app-navigation > ul > li > a.svg, #app-navigation > ul > li > ul > li > a.svg {
+    padding: 0 12px 0 44px;
+}
+
+#app-navigation>ul>li>a, #app-navigation>ul>li>ul>li>a {
+    background-size: 16px 16px;
+    background-position: 14px center;
+    background-repeat: no-repeat;
+    display: block;
+    justify-content: space-between;
+    line-height: 44px;
+    min-height: 44px;
+    padding: 0 12px 0 14px;
+    overflow: hidden;
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: var(--border-radius-pill);
+    color: var(--color-main-text);
+    flex: 1 1 0px;
+    z-index: 100;
+}
+
+#app-navigation .app-navigation-entry-utils {
+    flex: 0 1 auto;
+}
+
+#app-navigation .app-navigation-entry-utils ul,
+#app-navigation .app-navigation-entry-menu ul {
+    list-style-type: none;
+}
+#app-navigation .app-navigation-entry-utils ul {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#app-navigation .app-navigation-entry-utils li {
+    width: 44px !important;
+    height: 44px;
+}
+#app-navigation li {
+    position: relative;
+}
+
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button button:not([class^=icon-]):not([class*=" icon-"]) {
+    background-image: var(--icon-more-dark);
+}
+
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button:hover, #app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button:focus, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button:hover, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button:focus {
+    background-color: rgba(0,0,0,0);
+    opacity: 1;
+}
+
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+    border: 0;
+    opacity: .5;
+    background-color: rgba(0,0,0,0);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+    opacity: 0;
+}
+
+#app-navigation .app-navigation-entry-utils button {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+}
+
+#app-navigation>ul>li>.app-navigation-entry-menu, #app-navigation>ul>li>ul>li>.app-navigation-entry-menu {
+    top: 44px;
+}
+
+#app-navigation>ul>li.pinned.first-pinned {
+    margin-top: auto !important;
+}
+#app-navigation>ul>li.pinned {
+    order: 2;
+}
+
+#app-navigation>ul>li>ul {
+    flex: 0 1 auto;
+    width: 100%;
+    position: relative;
+}
+
+#app-navigation>ul>li>ul>li {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding-left: 44px;
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+#app-navigation>ul>li.deleted>ul, #app-navigation>ul>li.collapsible:not(.open)>ul {
+    display: none;
+}
+
+
+#app-navigation>ul>li>ul>li.active, #app-navigation>ul>li>ul>li.active>a, #app-navigation>ul>li>ul>li a.selected, #app-navigation>ul>li>ul>li a.selected>a {
+    border-radius: var(--border-radius-pill);
+    background-color: var(--color-primary-element-light);
 }
 
 #app-sidebar .close {
