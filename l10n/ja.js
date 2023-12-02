@@ -100,6 +100,7 @@ OC.L10N.register(
     "More information …" : "詳細情報",
     "Name" : "名前",
     "Display" : "表示",
+    "Table" : "表",
     "Chart" : "チャート",
     "Advanced" : "高度な",
     "Open documentation" : "ドキュメントを開く",

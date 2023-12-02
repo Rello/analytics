@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Value" : "Valoare",
     "Saved" : "Salvat",
     "Delete" : "Șterge",
     "Search" : "Caută",
@@ -10,6 +11,7 @@ OC.L10N.register(
     "Cancel" : "Anulare",
     "Filter" : "Filtru",
     "Add" : "Adaugă",
+    "Line" : "Linie",
     "Color" : "Culoare",
     "Overview" : "Prezentare generală",
     "Basic settings" : "Setări de bază",
