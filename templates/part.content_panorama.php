@@ -9,26 +9,25 @@
  * @copyright 2019-2022 Marcel Scherello
  */
 ?>
-<div class="storyHeaderRow"><div id="storyHeader" class="storyHeader editable"></div></div>
 
 <style>
-    .storyHeaderRow {
+    .panoramaHeaderRow {
         text-align: center;
         background-color: var(--color-primary-light);
         font-weight: bold;
         padding: 10px;
     }
-    .storySubHeaderRow {
+    .panoramaSubHeaderRow {
         text-align: center;
     }
 
-    .storyHeaderRow .editable,
-    .storySubHeaderRow .editable {
+    .panoramaHeaderRow .editable,
+    .panoramaSubHeaderRow .editable {
         padding: 1px;
     }
 
     .subHeader[contenteditable="true"],
-    .storyHeader[contenteditable="true"] {
+    .panoramaHeader[contenteditable="true"] {
         border: 1px dashed blue;
         padding: initial;
         cursor: text;
@@ -69,6 +68,31 @@
         position: relative;
     }
 
+    .textContainer {
+        flex-direction: column;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        padding-left: 50px;
+    }
+
+    .textContainer ul {
+        list-style: initial;
+        padding-left: 40px;
+    }
+
+    .textContainer h1 {
+        font-weight: bold;
+        font-size: 25px;
+    }
+
+    .hintBox {
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
     .bg-azure {
         background-color: azure;
     }
@@ -83,7 +107,7 @@
         margin: 0 10px;
         opacity: 0.3;
         cursor: pointer;
-        transition: opacity 0.3s ease;
+        font-weight: 500;
     }
     .nav-item:hover {
         opacity: 1;
@@ -92,6 +116,12 @@
         opacity: 0.1;
         cursor: not-allowed;
     }
+
+    .nav-item.highlighted {
+        color: var(--color-warning);
+        opacity: 0.8;
+    }
+
     .edit {
         z-index: 9999;
         position: fixed;
@@ -107,7 +137,7 @@
         font-size: 24px;
     }
 
-    .menu-container {
+    .editMenuContainer {
         position: fixed;
         width: 250px;
         height: 250px;
@@ -116,7 +146,7 @@
         z-index: 1000;
     }
 
-    .menu {
+    .editMenu {
         position: relative;
         width: 100%;
         height: 100%;
@@ -128,14 +158,19 @@
         height: 60px;
         text-align: center;
         line-height: 60px;
-        background-color: #333;
+        background-color: var(--color-info);
         color: white;
         border-radius: 50%;
         cursor: pointer;
         /* You'll need to adjust the following transform values for each item
         transform: translate(0px, 0px); */
     }
-    .menu .close-menu-item {
+
+    .menu-item:hover {
+        background-color: var(--color-info-hover);
+    }
+
+    .editMenu .close-menu-item {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -202,19 +237,89 @@
         padding: 5px; /* Adjust padding as needed */
     }
 
+    /* Layout Selector */
+    .layoutModal {
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .layoutModalContent {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 60%;
+    }
+
+    .layoutModalGrid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .layoutModalGridCell {
+        width: calc(25% - 20px); /* Adjust based on gap size */
+        border: 1px solid #ddd;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .layoutModalGridCell:hover {
+        cursor: pointer;
+        background-color: var(--color-primary-light-hover);
+    }
+
+    .layoutModalName {
+        text-align: center;
+        margin-top: 5px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .layoutModalHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .layoutModalTitle {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .layoutModalGridPreview {
+        /* Additional styling for layout preview */
+        height: 100px; /* Set a fixed height for previews */
+        overflow: hidden; /* Hide overflow */
+    }
+
+    .layoutModalGridPreview .flex-item {
+        padding: 0;
+        margin: 2px;
+        border: 1px solid #888;
+    }
+
 </style>
-<div id="analytics-content" class="container" style="width:100%;">
-    <div class="menu-container">
-        <div class="menu" style="display: none">
+<div id="analytics-content" class="container" style="width:100%;" hidden>
+    <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
+    <div id="editMenuContainer" class="editMenuContainer" style="display:none;">
+        <div class="editMenu" id="editMenu">
             <div class="menu-item" data-modal="modal1">Chart</div>
             <div class="menu-item" data-modal="modal2">Text</div>
-            <div class="menu-item" data-modal="modal3">Empty</div>
+            <!--<div class="menu-item" data-modal="modal3">Empty</div>-->
             <div class="menu-item" data-modal="modal4">Picture</div>
             <div class="menu-item close-menu-item" data-modal="close">X</div>
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Modals for the menu -->
     <div id="modal1" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
@@ -227,7 +332,10 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Enter a Free Text</p>
+            <p>Enter a Free Text</p><br><br>
+            <textarea id="textInput" rows="5" cols="50"></textarea>
+            <br>
+            <button type="button" id="textInputButton">save</button>
         </div>
     </div>
     <div id="modal3" class="modal">
@@ -242,24 +350,70 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <p>Choose a picture</p>
+            <br><br>
+            <button type="button" id="pictureInputButton">save</button>
         </div>
     </div>
     <!-- Modals -->
 
-    <div class="edit">
+    <div id="editBtnContainer" class="edit">
         <span class="nav-item" id="editBtn">...</span>
+        <span class="nav-item" id="layoutBtn">...</span>
     </div>
-    <div class="navigation">
+
+    <div id="navBtnContainer" class="navigation">
         <span class="nav-item" id="prevBtn"><</span>
         <span class="nav-item" id="nextBtn">></span>
     </div>
-    <div class="addPage">
-        <span class="nav-item" id="plusBtn">+</span>
+
+    <!-- LayoutChooser -->
+    <div id="layoutModal" class="layoutModal" style="display:none;">
+        <div class="layoutModalContent">
+            <div class="layoutModalHeader">
+                <span class="layoutModalTitle">Select Layout</span>
+                <span id="layoutModalClose" class="close">&times;</span>
+            </div>
+            <div id="layoutModalGrid" class="layoutModalGrid">
+                <!-- Layout previews will be dynamically inserted here -->
+            </div>
+        </div>
     </div>
-    <div class="pages" id="storyPages">
+
+
+    <!--<div class="addPage">
+        <span class="nav-item" id="plusBtn">+</span>
+    </div>-->
+    <div class="pages" id="panoramaPages">
     </div>
 </div>
 <div id="analytics-intro" style="padding: 0px" hidden>
+    <h3><?php p($l->t('Quickstart')); ?></h3>
+    <div>
+        <ul id="ulQuickstart" style="width: 100%;">
+            <li style="display: inline-block; margin: 10px;">
+                <div class="infoBox" id="infoBoxReport"><img height="80px" width="80px"
+                                                             src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
+                                                             alt="infoReport">
+                    <div class="infoBoxHeader"><?php p($l->t('New Panorama')); ?></div>
+                </div>
+            </li>
+            <li style="display: inline-block; margin: 10px;">
+                <div class="infoBox" id="infoBoxIntro"><img height="80px" width="80px"
+                                                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoIntro.svg') ?>"
+                                                            alt="infoIntro">
+                    <div class="infoBoxHeader"><?php p($l->t('Intro')); ?></div>
+                </div>
+            </li>
+            <li style="display: inline-block; margin: 10px;">
+                <div class="infoBox" id="infoBoxWiki"><img height="80px" width="80px"
+                                                           src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoWiki.svg') ?>"
+                                                           alt="infoWiki">
+                    <div class="infoBoxHeader"><?php p($l->t('Wiki')); ?></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <br>
 </div>
 <div id="analytics-warning" style="width:50%; padding: 50px">
     <h2><?php p($l->t('Analytics')); ?></h2>

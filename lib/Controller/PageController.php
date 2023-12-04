@@ -119,9 +119,9 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function story()
+    public function panorama()
     {
-        return new TemplateResponse($this->appName, 'main_story');
+        return new TemplateResponse($this->appName, 'main_panorama');
     }
 
     /**

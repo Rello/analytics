@@ -13,7 +13,7 @@ namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DatasourceController;
-use OCA\Analytics\Db\StoryMapper;
+use OCA\Analytics\Db\PanoramaMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
@@ -23,7 +23,7 @@ use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
 use OCP\IL10N;
 
-class StoryService
+class PanoramaService
 {
     /** @var IConfig */
     protected $config;
@@ -33,7 +33,7 @@ class StoryService
     private $ShareService;
     private $DatasetService;
     private $StorageMapper;
-    private $StoryMapper;
+    private $PanoramaMapper;
     private $ThresholdMapper;
     private $DataloadMapper;
     private $ActivityManager;
@@ -50,7 +50,7 @@ class StoryService
         ITagManager $tagManager,
         ShareService $ShareService,
         DatasetService $DatasetService,
-        StoryMapper $StoryMapper,
+        PanoramaMapper $PanoramaMapper,
         ActivityManager $ActivityManager,
         IRootFolder $rootFolder,
         IConfig $config,
@@ -62,7 +62,7 @@ class StoryService
         $this->tagManager = $tagManager;
         $this->ShareService = $ShareService;
         $this->DatasetService = $DatasetService;
-        $this->StoryMapper = $StoryMapper;
+        $this->PanoramaMapper = $PanoramaMapper;
         $this->ActivityManager = $ActivityManager;
         $this->rootFolder = $rootFolder;
         $this->VariableService = $VariableService;
@@ -79,7 +79,7 @@ class StoryService
      */
     public function index(): array
     {
-        $ownReports = $this->StoryMapper->index();
+        $ownReports = $this->PanoramaMapper->index();
         //$sharedReports = $this->ShareService->getSharedReports();
         $sharedReports = null;
         $keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
@@ -97,25 +97,25 @@ class StoryService
     /**
      * get own report details
      *
-     * @param int $storyId
+     * @param int $panoramaId
      * @return array
      * @throws Exception
      */
-    public function read(int $storyId)
+    public function read(int $panoramaId)
     {
-        $ownReport = $this->StoryMapper->readOwn($storyId);
+        $ownReport = $this->PanoramaMapper->readOwn($panoramaId);
         return $ownReport;
     }
 
     /**
      * check if own report
      *
-     * @param int $storyId
+     * @param int $panoramaId
      * @return bool
      */
-    public function isOwn(int $storyId)
+    public function isOwn(int $panoramaId)
     {
-        $ownReport = $this->StoryMapper->readOwn($storyId);
+        $ownReport = $this->PanoramaMapper->readOwn($panoramaId);
         if (!empty($ownReport)) {
             return true;
         } else {
@@ -133,9 +133,9 @@ class StoryService
      * @return int
      * @throws Exception
      */
-    public function create($name, int $type, int $parent, $pages): int
+    public function create(int $type, int $parent): int
     {
-        $reportId = $this->StoryMapper->create($name, $type, $parent, $pages);
+        $reportId = $this->PanoramaMapper->create($this->l10n->t('New'), $type, $parent, '[]');
         //$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
         return $reportId;
     }
@@ -154,7 +154,7 @@ class StoryService
      */
     public function update(int $id, $name, int $type, int $parent, $pages)
     {
-        return $this->StoryMapper->update($id, $name, $type, $parent, $pages);
+        return $this->PanoramaMapper->update($id, $name, $type, $parent, $pages);
     }
 
     /**
@@ -166,7 +166,7 @@ class StoryService
      */
     public function delete(int $reportId)
     {
-        $this->StoryMapper->delete($reportId);
+        $this->PanoramaMapper->delete($reportId);
         return 'true';
     }
 
@@ -196,6 +196,6 @@ class StoryService
      */
     public function search(string $searchString)
     {
-        return $this->StoryMapper->search($searchString);
+        return $this->PanoramaMapper->search($searchString);
     }
 }

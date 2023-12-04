@@ -17,17 +17,24 @@
 OCA.Analytics.Navigation = {
     quickstartValue: '',
     quickstartId: 0,
+    handlers: {},
 
-    init: function (datasetId) {
-        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-        OCA.Analytics.Navigation.getDatasets(datasetId);
-        OCA.Analytics.Backend.getDatasetDefinitions();
+    registerHandler: function(context, handlerFunction) {
+        OCA.Analytics.Navigation.handlers[context] = handlerFunction;
     },
 
-    getDatasets: function (datasetId) {
+    init: function (navigationItem) {
+        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
+        OCA.Analytics.Navigation.getNavigationContent(navigationItem);
+        OCA.Analytics.Backend?.getDatasetDefinitions?.();
+    },
+
+    getNavigationContent: function (navigationItem) {
         let datatype;
         if (OCA.Analytics.isAdvanced) {
             datatype = 'dataset';
+        } else if (OCA.Analytics.isPanorama) {
+            datatype = 'panorama';
         } else {
             datatype = 'report';
         }
@@ -39,11 +46,14 @@ OCA.Analytics.Navigation = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.buildNavigation(data);
+                if (OCA.Analytics.Panorama) {
+                    OCA.Analytics.Panorama.stories = data;
+                }
                 OCA.Analytics.reports = data;
-                if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
+                OCA.Analytics.Navigation.buildNavigation(data);
+                if (navigationItem && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationItem))) !== -1) {
                     OCA.Analytics.Sidebar.close();
-                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
+                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + navigationItem + '"]');
                     if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
@@ -53,10 +63,10 @@ OCA.Analytics.Navigation = {
     },
 
     buildNavigation: function (data) {
-        OCA.Analytics.Sidebar.close();
+        OCA.Analytics.Sidebar?.close?.();
         document.getElementById('navigationDatasets').innerHTML = '';
 
-        if (data.length === 0) {
+        if (data === undefined || data.length === 0) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
@@ -67,10 +77,9 @@ OCA.Analytics.Navigation = {
 
         document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
         document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
-        if (!OCA.Analytics.isAdvanced) {
+        if (!OCA.Analytics.isAdvanced && !OCA.Analytics.isPanorama) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
         }
-
     },
 
     buildNewButton: function () {
@@ -82,6 +91,8 @@ OCA.Analytics.Navigation = {
         a.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         if (OCA.Analytics.isAdvanced) {
             a.innerText = t('analytics', 'New dataset');
+        } else if (OCA.Analytics.isPanorama) {
+            a.innerText = t('analytics', 'New panorama');
         } else {
             a.innerText = t('analytics', 'New report');
         }
@@ -201,7 +212,10 @@ OCA.Analytics.Navigation = {
             a.appendChild(divFav);
         }
 
-        if (!OCA.Analytics.isAdvanced) {
+        if (OCA.Analytics.isAdvanced) {
+            let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
+            li.appendChild(divUtils);
+        } else {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
             if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
@@ -209,9 +223,6 @@ OCA.Analytics.Navigation = {
                 li.appendChild(divUtils);
                 li.appendChild(divMenu);
             }
-        } else {
-            let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
-            li.appendChild(divUtils);
         }
 
         if (typeINT === OCA.Analytics.TYPE_GROUP) {
@@ -336,7 +347,7 @@ OCA.Analytics.Navigation = {
 
         let deleteReport = navigationMenu.getElementById('navigationMenuDelete');
         deleteReport.dataset.id = data.id;
-        deleteReport.addEventListener('click', OCA.Analytics.Sidebar.Report.handleDeleteButton);
+        deleteReport.addEventListener('click', OCA.Analytics.Navigation.handleDeleteButton);
 
         let unshareReport = navigationMenu.getElementById('navigationMenuUnshare');
         unshareReport.dataset.shareId = data.shareId;
@@ -371,12 +382,19 @@ OCA.Analytics.Navigation = {
     },
 
     handleNewButton: function () {
+        // ToDo: change app.js to register handler
+
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
                 ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
             ];
             OCA.Analytics.Wizard.show();
+        } else if (OCA.Analytics.isPanorama) {
+            let handler = OCA.Analytics.Navigation.handlers['create'];
+            if (handler) {
+                handler();
+            }
         } else {
             OCA.Analytics.Sidebar.close();
             OCA.Analytics.Wizard.sildeArray = [
@@ -402,6 +420,8 @@ OCA.Analytics.Navigation = {
     },
 
     handleNavigationClicked: function (evt) {
+        // ToDo: change app.js to register handler
+
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         }
@@ -415,6 +435,11 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
+        } else if (OCA.Analytics.isPanorama) {
+            let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
+            if (handler) {
+                handler(evt);
+            }
         } else {
             document.getElementById('filterVisualisation').innerHTML = '';
             if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
@@ -428,7 +453,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleOptionsClicked: function (evt) {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.UI?.hideReportMenu?.();
         let openMenu;
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             openMenu = document.querySelector('.app-navigation-entry-menu.open').previousElementSibling.firstElementChild.firstElementChild.firstElementChild.dataset.id;
@@ -521,6 +546,10 @@ OCA.Analytics.Navigation = {
 
     handleSettingsButton: function () {
         document.getElementById('app-settings').classList.toggle('open');
+    },
+
+    handleDeleteButton: function () {
+        OCA.Analytics.Sidebar.Report.handleDeleteButton();
     },
 
     handleUnshareButton: function (evt) {
@@ -624,7 +653,7 @@ OCA.Analytics.Navigation.Drag = {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!OCA.Analytics.isAdvanced) {
+    if (!OCA.Analytics.isAdvanced && !OCA.Analytics.isPanorama) {
         OCA.Analytics.WhatsNew.whatsnew();
         if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
             OCA.Analytics.Wizard.showFirstStart();

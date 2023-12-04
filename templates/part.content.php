@@ -13,7 +13,7 @@
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
-    <input type="hidden" name="story" value="false" id="story">
+    <input type="hidden" name="panorama" value="false" id="panorama">
     <h2 id="reportHeader"></h2>
     <h3 id="reportSubHeader" hidden></h3>
     <div id="reportPlaceholder"></div>

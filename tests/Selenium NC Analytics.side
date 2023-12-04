@@ -2781,12 +2781,12 @@
       "id": "6104f398-3936-4f83-9bc4-0208102e4efd",
       "comment": "column 2 should not be there",
       "command": "assertNotText",
-      "target": "xpath=//table[@id='tableContainer']/thead/tr/th[2]",
+      "target": "xpath=//div[@id='tableContainer_wrapper']/div[3]/div/div/table/thead/tr/th[2]",
       "targets": [
-        ["css=td:nth-child(2)", "css:finder"],
-        ["xpath=//table[@id='tableContainer']/tbody/tr/td[2]", "xpath:idRelative"],
-        ["xpath=//td[2]", "xpath:position"],
-        ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
+        ["css=.dataTables_scrollHeadInner .dt-right", "css:finder"],
+        ["xpath=//div[@id='tableContainer_wrapper']/div[3]/div/div/table/thead/tr/th[2]", "xpath:idRelative"],
+        ["xpath=//th[2]", "xpath:position"],
+        ["xpath=//th[contains(.,'Value')]", "xpath:innerText"]
       ],
       "value": "Column 2"
     }, {
@@ -2926,7 +2926,7 @@
       "id": "224e89ab-81a9-4d36-9503-452d1090ded0",
       "comment": "column 2 should be there again",
       "command": "assertText",
-      "target": "xpath=//table[@id='tableContainer']/thead/tr/th[2]",
+      "target": "xpath=//div[@id='tableContainer_wrapper']/div[3]/div/div/table/thead/tr/th[2]",
       "targets": [
         ["css=td:nth-child(2)", "css:finder"],
         ["xpath=//table[@id='tableContainer']/tbody/tr/td[2]", "xpath:idRelative"],

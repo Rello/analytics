@@ -11,28 +11,29 @@
 
 namespace OCA\Analytics\Controller;
 
-use OCA\Analytics\Service\StoryService;
+use OCA\Analytics\Service\PanoramaService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
 use OCP\IRequest;
+use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
 
-class StoryController extends Controller
+class PanoramaController extends Controller
 {
     private $logger;
-    private $StoryService;
+    private $PanoramaService;
 
     public function __construct(
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        StoryService $StoryService
+        PanoramaService $PanoramaService
     )
     {
         parent::__construct($appName, $request);
         $this->logger = $logger;
-        $this->StoryService = $StoryService;
+        $this->PanoramaService = $PanoramaService;
     }
 
     /**
@@ -40,26 +41,26 @@ class StoryController extends Controller
      *
      * @NoAdminRequired
      * @return DataResponse
+     * @throws Exception
+     * @throws PreConditionNotMetException
      */
     public function index()
     {
-        return new DataResponse($this->StoryService->index());
+        return new DataResponse($this->PanoramaService->index());
     }
 
     /**
      * create new blank report
      *
      * @NoAdminRequired
-     * @param $name
      * @param int $type
      * @param int $parent
-     * @param int $pages
      * @return DataResponse
      * @throws Exception
      */
-    public function create($name, int $type, int $parent, int $pages)
+    public function create(int $type, int $parent)
     {
-        return new DataResponse($this->StoryService->create($name, $type, $parent, $pages));
+        return new DataResponse($this->PanoramaService->create($type, $parent));
     }
 
 
@@ -67,25 +68,25 @@ class StoryController extends Controller
      * get own report details
      *
      * @NoAdminRequired
-     * @param int $storyId
+     * @param int $panoramaId
      * @return DataResponse
      */
-    public function read(int $storyId)
+    public function read(int $panoramaId)
     {
-        return new DataResponse($this->StoryService->read($storyId));
+        return new DataResponse($this->PanoramaService->read($panoramaId));
     }
 
     /**
      * Delete report and all depending objects
      *
      * @NoAdminRequired
-     * @param int $storyId
+     * @param int $panoramaId
      * @return DataResponse
      */
-    public function delete(int $storyId)
+    public function delete(int $panoramaId)
     {
-        if ($this->StoryService->isOwn($storyId)) {
-            return new DataResponse($this->StoryService->delete($storyId));
+        if ($this->PanoramaService->isOwn($panoramaId)) {
+            return new DataResponse($this->PanoramaService->delete($panoramaId));
         } else {
             return new DataResponse(false,400);
         }
@@ -95,7 +96,7 @@ class StoryController extends Controller
      * get report details
      *
      * @NoAdminRequired
-     * @param int $storyId
+     * @param int $panoramaId
      * @param $name
      * @param int $type
      * @param int $parent
@@ -103,9 +104,9 @@ class StoryController extends Controller
      * @return DataResponse
      * @throws Exception
      */
-    public function update(int $storyId, $name, int $type, int $parent, $pages)
+    public function update(int $panoramaId, $name, int $type, int $parent, $pages)
     {
         $pages = json_encode($pages);
-        return new DataResponse($this->StoryService->update($storyId, $name, $type, $parent, $pages));
+        return new DataResponse($this->PanoramaService->update($panoramaId, $name, $type, $parent, $pages));
     }
 }

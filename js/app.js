@@ -67,6 +67,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  */
 OCA.Analytics.Core = {
     initApplication: function () {
+
         const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {
             if (urlHash[2] === 'f') {

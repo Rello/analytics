@@ -16,11 +16,9 @@ Util::addStyle('analytics', 'sharetabview');
 Util::addStyle('analytics', '3rdParty/datatables.min');
 Util::addStyle('files_sharing', 'icons');
 Util::addStyle('analytics', 'print');
-//Util::addScript('analytics', 'app');
-//Util::addScript('analytics', 'sidebar');
-Util::addScript('analytics', 'story');
-Util::addScript('analytics', 'storyNavigation');
-Util::addScript('analytics', 'filter');
+Util::addScript('analytics', 'panorama');
+Util::addScript('analytics', 'navigation');
+//Util::addScript('analytics', 'filter');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
@@ -29,6 +27,7 @@ Util::addScript('analytics', '3rdParty/chartjs-plugin-zoom.min');
 Util::addScript('analytics', '3rdParty/moment');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'userGuidance');
+Util::addScript('analytics', '3rdParty/marked.min');
 ?>
 
 <div id="app-navigation">
@@ -40,7 +39,7 @@ Util::addScript('analytics', 'userGuidance');
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>
-    <?php print_unescaped($this->inc('part.content_story')); ?>
+    <?php print_unescaped($this->inc('part.content_panorama')); ?>
 </div>
 <?php print_unescaped($this->inc('part.sidebar')); ?>
 <div>

@@ -16,13 +16,13 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
-class StoryMapper
+class PanoramaMapper
 {
     private $userId;
     private $l10n;
     private $db;
     private $logger;
-    const TABLE_NAME = 'analytics_story';
+    const TABLE_NAME = 'analytics_panorama';
 
     public function __construct(
         $userId,
@@ -81,7 +81,7 @@ class StoryMapper
     }
 
     /**
-     * get single story including subpages for user
+     * get single panorama including subpages for user
      * @param int $id
      * @return array
      * @throws Exception

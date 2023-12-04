@@ -13,7 +13,7 @@ return [
     'routes' => [
         ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         ['name' => 'page#advanced', 'url' => '/a/', 'verb' => 'GET'],
-        ['name' => 'page#story', 'url' => '/s/', 'verb' => 'GET'],
+        ['name' => 'page#panorama', 'url' => '/s/', 'verb' => 'GET'],
         ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
         ['name' => 'page#indexPublicMin', 'url' => '/pm/{token}', 'verb' => 'GET'],
         ['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],
@@ -43,11 +43,11 @@ return [
         ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
 
         // Story
-        ['name' => 'story#index', 'url' => '/story', 'verb' => 'GET'],
-        ['name' => 'story#create', 'url' => '/story', 'verb' => 'POST'],
-        ['name' => 'story#read', 'url' => '/story/{storyId}', 'verb' => 'GET'],
-        ['name' => 'story#delete', 'url' => '/story/{storyId}', 'verb' => 'DELETE'],
-        ['name' => 'story#update', 'url' => '/story/{storyId}', 'verb' => 'PUT'],
+        ['name' => 'panorama#index', 'url' => '/panorama', 'verb' => 'GET'],
+        ['name' => 'panorama#create', 'url' => '/panorama', 'verb' => 'POST'],
+        ['name' => 'panorama#read', 'url' => '/panorama/{panoramaId}', 'verb' => 'GET'],
+        ['name' => 'panorama#delete', 'url' => '/panorama/{panoramaId}', 'verb' => 'DELETE'],
+        ['name' => 'panorama#update', 'url' => '/panorama/{panoramaId}', 'verb' => 'PUT'],
 
         // Data Output
         ['name' => 'output#read', 'url' => '/data/{reportId}', 'verb' => 'GET'],

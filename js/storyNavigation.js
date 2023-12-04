@@ -30,7 +30,7 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isAdvanced) {
             datatype = 'dataset';
         } else {
-            datatype = 'story';
+            datatype = 'panorama';
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/' + datatype);
@@ -41,7 +41,7 @@ OCA.Analytics.Navigation = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Navigation.buildNavigation(data);
-                OCA.Analytics.Story.stories = data;
+                OCA.Analytics.Panorama.stories = data;
                 if (datasetId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(datasetId))) !== -1) {
                     OCA.Analytics.Sidebar.close();
                     let navigationItem = document.querySelector('#navigationDatasets [data-id="' + datasetId + '"]');
@@ -71,7 +71,6 @@ OCA.Analytics.Navigation = {
         if (!OCA.Analytics.isAdvanced) {
             //document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
         }
-
     },
 
     buildNewButton: function () {
@@ -372,7 +371,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleNewButton: function () {
-        OCA.Analytics.Story.newStory();
+        OCA.Analytics.Panorama.newPanorama();
         if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
@@ -429,13 +428,13 @@ OCA.Analytics.Navigation = {
             OCA.Analytics.Backend.getData();
         }
 */
-        OCA.Analytics.Story.currentStory = OCA.Analytics.Story.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+        OCA.Analytics.Panorama.currentPanorama = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
         // create a proper object out of the pages string
         // as objects are always assigned as references in the line above, check if the object was already parsed
-        if (typeof OCA.Analytics.Story.currentStory.pages === 'string') {
-            OCA.Analytics.Story.currentStory.pages = JSON.parse(OCA.Analytics.Story.currentStory.pages);
+        if (typeof OCA.Analytics.Panorama.currentPanorama.pages === 'string') {
+            OCA.Analytics.Panorama.currentPanorama.pages = JSON.parse(OCA.Analytics.Panorama.currentPanorama.pages);
         }
-        OCA.Analytics.Story.getStory();
+        OCA.Analytics.Panorama.getPanorama();
     },
 
     handleOptionsClicked: function (evt) {

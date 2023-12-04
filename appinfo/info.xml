@@ -44,7 +44,7 @@ Visualize and share anything, from financial analysis to IoT logs.
         https://raw.githubusercontent.com/Rello/analytics/master/screenshots/architecture25.png
     </screenshot>
     <dependencies>
-        <nextcloud min-version="20" max-version="99"/>
+        <nextcloud min-version="26" max-version="99"/>
     </dependencies>
     <activity>
         <settings>
