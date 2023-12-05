@@ -29,7 +29,7 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Backend?.getDatasetDefinitions?.();
     },
 
-    getNavigationContent: function (navigationItem) {
+    getNavigationContent: function (navigationId) {
         let datatype;
         if (OCA.Analytics.isAdvanced) {
             datatype = 'dataset';
@@ -51,9 +51,9 @@ OCA.Analytics.Navigation = {
                 }
                 OCA.Analytics.reports = data;
                 OCA.Analytics.Navigation.buildNavigation(data);
-                if (navigationItem && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationItem))) !== -1) {
-                    OCA.Analytics.Sidebar.close();
-                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + navigationItem + '"]');
+                if (navigationId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationId))) !== -1) {
+                    OCA.Analytics.Sidebar?.close?.();
+                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + navigationId + '"]');
                     if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
@@ -548,8 +548,17 @@ OCA.Analytics.Navigation = {
         document.getElementById('app-settings').classList.toggle('open');
     },
 
-    handleDeleteButton: function () {
-        OCA.Analytics.Sidebar.Report.handleDeleteButton();
+    handleDeleteButton: function (evt) {
+        // ToDo: change app.js to register handler
+
+        if (OCA.Analytics.isPanorama) {
+            let handler = OCA.Analytics.Navigation.handlers['delete'];
+            if (handler) {
+                handler(evt);
+            }
+        } else {
+            OCA.Analytics.Sidebar.Report.handleDeleteButton();
+        }
     },
 
     handleUnshareButton: function (evt) {

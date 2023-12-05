@@ -152,8 +152,9 @@ OCA.Analytics.Panorama = {
     init: function () {
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
         document.getElementById('nextBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('next'));
-        document.getElementById('editBtn').addEventListener('click', OCA.Analytics.Panorama.handleEditButton);
-        document.getElementById('layoutBtn').addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector);
+        document.getElementById('optionBtn').addEventListener('click', OCA.Analytics.Panorama.toggleOptionMenu);
+        document.getElementById('optionMenuEdit').addEventListener('click', OCA.Analytics.Panorama.handleEditButton);
+        document.getElementById('optionMenuLayout').addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector);
 
         document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
 
@@ -171,6 +172,10 @@ OCA.Analytics.Panorama = {
             OCA.Analytics.Panorama.handleNavigationClicked(event);
         });
 
+        OCA.Analytics.Navigation.registerHandler('delete', function(event) {
+            OCA.Analytics.Panorama.handleDeleteButton(event);
+        });
+
         //OCA.Analytics.Panorama.getPanorama();
         // OCA.Analytics.Panorama.addEditLayer();
     },
@@ -179,10 +184,18 @@ OCA.Analytics.Panorama = {
         OCA.Analytics.UI.hideElement('analytics-intro');
         OCA.Analytics.UI.showElement('analytics-content');
         OCA.Analytics.Panorama.currentPanorama = [];
-        OCA.Analytics.Panorama.addPage();
+        OCA.Analytics.Panorama.Backend.create();
     },
 
     addPage: function () {
+        // store texts in case they were entered already
+        OCA.Analytics.Panorama.currentPanorama.name = document.getElementById('panoramaHeader').innerText;
+        // get the subheaders and store them to the panorama
+        document.querySelectorAll('.subHeader').forEach((item) => {
+            let page = item.id.split('-')[1];
+            OCA.Analytics.Panorama.currentPanorama.pages[page].name = item.innerText;
+        });
+
         OCA.Analytics.Panorama.currentPanorama.pages.push({page: 0, name: 'New', reports: [], layout: ''});
         OCA.Analytics.Panorama.getPanorama('next');
         OCA.Analytics.Panorama.updateNavButtons();
@@ -195,11 +208,33 @@ OCA.Analytics.Panorama = {
     },
 
     handleNavigationClicked: function (evt) {
-        OCA.Analytics.Panorama.currentPanorama = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+        const foundItem = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
+        OCA.Analytics.Panorama.currentPanorama = JSON.parse(JSON.stringify(foundItem));
+        //OCA.Analytics.Panorama.currentPanorama = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
         if (typeof OCA.Analytics.Panorama.currentPanorama.pages === 'string') {
             OCA.Analytics.Panorama.currentPanorama.pages = JSON.parse(OCA.Analytics.Panorama.currentPanorama.pages);
         }
+        OCA.Analytics.Panorama.editMode = false;
+        OCA.Analytics.Panorama.removeEditableTextBoxes();
+        OCA.Analytics.Panorama.removeLayoutSelctor();
+        OCA.Analytics.Panorama.hideOptionMenu();
         OCA.Analytics.Panorama.getPanorama();
+    },
+
+    handleDeleteButton: function (evt) {
+        let id = evt.target.parentNode.dataset.id;
+        if (id === undefined) id = evt.target.dataset.id;
+
+        OCA.Analytics.Notification.confirm(
+            t('analytics', 'Delete'),
+            t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
+            function () {
+                OCA.Analytics.Panorama.Backend.delete(id);
+                //OCA.Analytics.UI.resetContentArea();
+                OCA.Analytics.Notification.dialogClose();
+            }
+        );
+
     },
 
     // get the panorama and loop all widgets
@@ -225,7 +260,8 @@ OCA.Analytics.Panorama = {
                 flexContainer.classList.add('flex-container');
                 let hintBox = document.createElement('div');
                 hintBox.classList.add('hintBox');
-                hintBox.innerText = 'Choose a layout';
+                hintBox.innerText = t('analytics', 'choose a layout');
+                hintBox.addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector)
                 flexContainer.appendChild(hintBox);
             }
 
@@ -417,6 +453,7 @@ OCA.Analytics.Panorama = {
                 let page = item.id.split('-')[1];
                 OCA.Analytics.Panorama.currentPanorama.pages[page].name = item.innerText;
             });
+            OCA.Analytics.Panorama.Backend.update();
         } else {
             //OCA.Analytics.Panorama.buildLayoutSelector();
             OCA.Analytics.Panorama.addAllOverlays();
@@ -424,7 +461,32 @@ OCA.Analytics.Panorama = {
         }
 
         OCA.Analytics.Panorama.editMode = !OCA.Analytics.Panorama.editMode;
+        OCA.Analytics.Panorama.toggleEditSaveButtonDisplay();
         OCA.Analytics.Panorama.updateNavButtons();
+        OCA.Analytics.Panorama.hideOptionMenu();
+    },
+
+    toggleEditSaveButtonDisplay: function () {
+        let icon = document.getElementById('optionMenuEditIcon');
+        let text = document.getElementById('optionMenuEditText');
+        if (OCA.Analytics.Panorama.editMode) {
+            icon.classList.remove('icon-rename');
+            icon.classList.add('icon-analytics-save-warning');
+            text.innerText = t('analytics', 'Save');
+        } else {
+            icon.classList.add('icon-rename');
+            icon.classList.remove('icon-analytics-save-warning');
+            text.innerText = t('analytics', 'Edit content');
+        }
+    },
+
+    toggleOptionMenu: function () {
+        OCA.Analytics.Panorama.toggleEditSaveButtonDisplay();
+        document.getElementById('optionMenu').classList.toggle('open');
+    },
+
+    hideOptionMenu: function () {
+        document.getElementById('optionMenu').classList.remove('open');
     },
 
     // create grey overlays to indicate the editable areas
@@ -451,17 +513,13 @@ OCA.Analytics.Panorama = {
 
         overlay.addEventListener('click', function (evt) {
             // Remove the active state from any previous flex-item
-            let activeOverlays = document.querySelectorAll('.overlay.active');
-            activeOverlays.forEach(function (activeOverlay) {
-                activeOverlay.classList.remove('active');
-                activeOverlay.firstChild.innerText = t('analytics', 'select to edit');
-            });
+            OCA.Analytics.Panorama.resetAllOverlays();
 
             // indicate now active overlay
-            evt.target.classList.add('active');
-            evt.target.firstChild.innerText = t('analytics', 'choose content');
+            evt.currentTarget.classList.add('active');
+            evt.currentTarget.firstChild.innerText = t('analytics', 'choose the content');
 
-            OCA.Analytics.Panorama.showEditMenue(evt.target.dataset.itemId); // Position the menu items in a circle
+            OCA.Analytics.Panorama.showEditMenue(evt.currentTarget.dataset.itemId); // Position the menu items in a circle
         });
 
         if (isActive) {
@@ -469,6 +527,14 @@ OCA.Analytics.Panorama = {
             //overlay.classList.add('active');
             //overlay.firstChild.innerText = '';
         }
+    },
+
+    resetAllOverlays: function () {
+        let activeOverlays = document.querySelectorAll('.overlay.active');
+        activeOverlays.forEach(function (activeOverlay) {
+            activeOverlay.classList.remove('active');
+            activeOverlay.firstChild.innerText = t('analytics', 'select to edit');
+        });
     },
 
     removeAllOverlays: function () {
@@ -538,13 +604,8 @@ OCA.Analytics.Panorama = {
                 // Check if the clicked item is the close button
                 if (action === 'close') {
                     document.getElementById('editMenuContainer').style.display = 'none';
-                    //menu.style.display = 'none'; // Hide the menu
-                    // remove all active states from overlays
-                    let activeOverlays = document.querySelectorAll('.overlay.active');
-                    activeOverlays.forEach(function (activeOverlay) {
-                        activeOverlay.classList.remove('active');
-                        activeOverlay.firstChild.innerText = 'select to edit';
-                    });
+                    // Remove the active state from any previous flex-item
+                    OCA.Analytics.Panorama.resetAllOverlays();
                     event.stopPropagation()
                 } else {
                     const modalId = e.target.dataset.modal;
@@ -568,13 +629,14 @@ OCA.Analytics.Panorama = {
 
             // Close the menu if the user clicks outside of it
             document.addEventListener('click', function (e) {
-                if (!e.target.classList.contains('overlay') && !e.target.classList.contains('menu-item') && !e.target.classList.contains('close')) {
+                if (!e.target.classList.contains('overlay')
+                    && !e.target.classList.contains('menu-item')
+                    && !e.target.classList.contains('close')
+                    && !e.target.classList.contains('overlayText')
+                ) {
                     document.getElementById('editMenuContainer').style.display = 'none';
-                    //menu.style.display = 'none';
-                    let overlays = document.querySelectorAll('.overlay.active');
-                    overlays.forEach(function (item) {
-                        item.classList.remove('active');
-                    });
+                    // Remove the active state from any previous flex-item
+                    OCA.Analytics.Panorama.resetAllOverlays();
                 }
             });
 
@@ -648,6 +710,7 @@ OCA.Analytics.Panorama = {
     },
 
     buildLayoutSelector: function () {
+        OCA.Analytics.Panorama.hideOptionMenu();
         document.getElementById('layoutModal').style.display = 'block';
 
         const layouts = OCA.Analytics.Panorama.layouts;
@@ -689,6 +752,39 @@ OCA.Analytics.Panorama = {
     removeLayoutSelctor: function () {
         //document.getElementById('layoutSelector').remove();
         document.getElementById('layoutModal').style.display = 'none';
+    },
+
+    buildReportSelector: function () {
+        // Populate report selection menu with given numbers
+        let reportSelectorContainer = document.getElementById('reportSelectorContainer');
+        OCA.Analytics.reports.forEach((report) => {
+            const reportItem = document.createElement('div');
+            reportItem.className = 'reportSelectorItem'; // You can add CSS classes for styling here.
+            reportItem.textContent = report.name;
+            reportItem.setAttribute('reportId', report.id);
+
+            reportItem.addEventListener('click', (e) => {
+                let reportId = parseInt(e.target.getAttribute('reportId'));
+
+                let itemId = document.getElementById('modal1').dataset.itemId;
+                let pageId = itemId.split('-')[0];
+                let reportIndex = itemId.split('-')[1];
+                let targetItem = document.getElementById(itemId);
+
+                targetItem.setAttribute('data-chart', reportId);
+                let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
+                //let reportsArr = page.reports.split(',');
+                let reportsArr = page.reports;
+                reportsArr[reportIndex] = {'type': OCA.Analytics.Panorama.TYPE_REPORT, 'value': reportId};
+                //page.reports = reportsArr.join(',');
+                OCA.Analytics.Panorama.buildWidget(itemId);
+                OCA.Analytics.Panorama.buildOverlay(targetItem, true);
+
+                document.getElementById('modal1').style.display = 'none';
+            });
+
+            reportSelectorContainer.appendChild(reportItem);
+        });
     },
 
     handleFilepicker: function () {
@@ -1237,37 +1333,7 @@ OCA.Analytics.Panorama.Backend = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.reports = data;
-
-                // Populate report selection menu with given numbers
-                let reportSelectorContainer = document.getElementById('reportSelectorContainer');
-                OCA.Analytics.reports.forEach((report) => {
-                    const reportItem = document.createElement('div');
-                    reportItem.className = 'report-item'; // You can add CSS classes for styling here.
-                    reportItem.textContent = report.name;
-                    reportItem.setAttribute('reportId', report.id);
-
-                    reportItem.addEventListener('click', (e) => {
-                        let reportId = parseInt(e.target.getAttribute('reportId'));
-
-                        let itemId = document.getElementById('modal1').dataset.itemId;
-                        let pageId = itemId.split('-')[0];
-                        let reportIndex = itemId.split('-')[1];
-                        let targetItem = document.getElementById(itemId);
-
-                        targetItem.setAttribute('data-chart', reportId);
-                        let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
-                        //let reportsArr = page.reports.split(',');
-                        let reportsArr = page.reports;
-                        reportsArr[reportIndex] = {'type': OCA.Analytics.Panorama.TYPE_REPORT, 'value': reportId};
-                        //page.reports = reportsArr.join(',');
-                        OCA.Analytics.Panorama.buildWidget(itemId);
-                        OCA.Analytics.Panorama.buildOverlay(targetItem, true);
-
-                        document.getElementById('modal1').style.display = 'none';
-                    });
-
-                    reportSelectorContainer.appendChild(reportItem);
-                });
+                OCA.Analytics.Panorama.buildReportSelector();
             });
     },
 
@@ -1283,12 +1349,11 @@ OCA.Analytics.Panorama.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.init(data);
             });
     },
 
     update: function () {
-
         let requestUrl = OC.generateUrl('apps/analytics/panorama/') + OCA.Analytics.Panorama.currentPanorama.id;
         fetch(requestUrl, {
             method: 'PUT',
@@ -1297,9 +1362,25 @@ OCA.Analytics.Panorama.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                //
+                OCA.Analytics.Navigation.init();
             });
-    }
+    },
+
+    delete: function (id) {
+        let requestUrl = OC.generateUrl('apps/analytics/panorama/') + id;
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Navigation.init();
+            })
+            .catch(error => {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'))
+            });
+    },
+
 }
 
 OCA.Analytics.UI = {

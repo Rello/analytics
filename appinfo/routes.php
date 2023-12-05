@@ -42,7 +42,7 @@ return [
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
 
-        // Story
+        // Panorama
         ['name' => 'panorama#index', 'url' => '/panorama', 'verb' => 'GET'],
         ['name' => 'panorama#create', 'url' => '/panorama', 'verb' => 'POST'],
         ['name' => 'panorama#read', 'url' => '/panorama/{panoramaId}', 'verb' => 'GET'],

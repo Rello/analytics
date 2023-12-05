@@ -193,7 +193,7 @@
 
     .modal-content {
         width: 300px;
-        height: 300px;
+        height: 400px;
         top: 40%;
         left: 50%;
         background-color: #fefefe;
@@ -232,9 +232,26 @@
     .overlay.active{
         background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent overlay */
     }
+
     .overlayText {
         background-color: white;
         padding: 5px; /* Adjust padding as needed */
+        cursor: pointer;
+    }
+
+    #reportSelectorContainer {
+        max-height: 280px; /* Adjust the max height as needed */
+        overflow-y: auto; /* Enables vertical scrolling when content overflows */
+    }
+
+    .reportSelectorItem {
+        padding: 5px;
+    }
+
+    .reportSelectorItem:hover {
+        cursor: pointer;
+        background-color: var(--color-primary-element-hover);
+        color: var(--color-primary-text);
     }
 
     /* Layout Selector */
@@ -311,7 +328,7 @@
     <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">
         <div class="editMenu" id="editMenu">
-            <div class="menu-item" data-modal="modal1">Chart</div>
+            <div class="menu-item" data-modal="modal1">Report</div>
             <div class="menu-item" data-modal="modal2">Text</div>
             <!--<div class="menu-item" data-modal="modal3">Empty</div>-->
             <div class="menu-item" data-modal="modal4">Picture</div>
@@ -324,7 +341,7 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Choose a report</p><br><br>
+            <h2>Choose a report</h2><br>
             <div id="reportSelectorContainer"></div>
         </div>
     </div>
@@ -332,9 +349,11 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Enter a Free Text</p><br><br>
-            <textarea id="textInput" rows="5" cols="50"></textarea>
+            <h2>Enter a free text</h2><br>
+            <textarea id="textInput" rows="8" cols="50" style="width: 100%;"></textarea>
             <br>
+            <span class="userGuidance">Markup can be used here</span>
+            <br><br>
             <button type="button" id="textInputButton">save</button>
         </div>
     </div>
@@ -342,28 +361,45 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Platzhalter für Später</p>
+            <h2>Platzhalter für Später</h2>
         </div>
     </div>
     <div id="modal4" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Choose a picture</p>
+            <h2>Choose a picture</h2><br>
+            <span class="userGuidance">Select a picture from Nextcloud</span>
             <br><br>
-            <button type="button" id="pictureInputButton">save</button>
+            <button type="button" id="pictureInputButton">Choose</button>
         </div>
     </div>
     <!-- Modals -->
 
-    <div id="editBtnContainer" class="edit">
-        <span class="nav-item" id="editBtn">...</span>
-        <span class="nav-item" id="layoutBtn">...</span>
+    <div id="optionBtnContainer" class="edit">
+        <span class="nav-item" id="optionBtn">...</span>
     </div>
 
     <div id="navBtnContainer" class="navigation">
         <span class="nav-item" id="prevBtn"><</span>
         <span class="nav-item" id="nextBtn">></span>
+    </div>
+
+    <div id="optionMenu" class="popovermenu" style="top: 50px; right: 10px;">
+        <ul id="optionMenuMain">
+            <li>
+                <button id="optionMenuEdit">
+                    <span id="optionMenuEditIcon" class="icon-rename"></span>
+                    <span id="optionMenuEditText"></span>
+                </button>
+            </li>
+            <li>
+                <button id="optionMenuLayout">
+                    <span class="icon-analytics-drilldown"></span>
+                    <span><?php p($l->t('Change layout')); ?></span>
+                </button>
+            </li>
+        </ul>
     </div>
 
     <!-- LayoutChooser -->
@@ -379,10 +415,6 @@
         </div>
     </div>
 
-
-    <!--<div class="addPage">
-        <span class="nav-item" id="plusBtn">+</span>
-    </div>-->
     <div class="pages" id="panoramaPages">
     </div>
 </div>
