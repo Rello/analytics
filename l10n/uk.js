@@ -146,7 +146,7 @@ OC.L10N.register(
     "You created a new report: {report}" : "Ви створили новий звіт: {report}",
     "You deleted report {report}" : "Ви видалили звіт {report}",
     "You shared report {report}" : "Ви поділилися звітом {report}",
-    "shared report {report} with you" : "поділився з вами звітом {report}",
+    "shared report {report} with you" : "вам було надано доступ до звіту {report}",
     "You have added new data to dataset {report}" : "Ви додали нові дані до набору даних {report}",
     "has added new data to dataset {report}" : "додав нові дані до набору даних {report}",
     "You have imported data in dataset {report}" : "Ви імпортували дані в набір даних {report}",
