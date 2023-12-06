@@ -15,6 +15,7 @@ OC.L10N.register(
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Add to favorites" : "რჩეულებში დამატება",
     "Delete folder" : "დირექტორიის გაუქმება",
+    "Save" : "შენახვა",
     "Share" : "გაზიარება",
     "New" : "ახალი",
     "Share link" : "ბმულის გაზიარება",

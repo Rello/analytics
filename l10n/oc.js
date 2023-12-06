@@ -25,6 +25,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Suprimir dossièr",
+    "Save" : "Enregistrar",
     "Share" : "Partejar",
     "New" : "Nòu",
     "Add share link" : "Apondre ligam de partatge",

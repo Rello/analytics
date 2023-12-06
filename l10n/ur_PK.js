@@ -8,6 +8,7 @@ OC.L10N.register(
     "Add" : "شامل کریں",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "حفظ",
     "Share" : "تقسیم",
     "Share link" : "اشتراک لنک",
     "Type" : "Type",

@@ -24,6 +24,7 @@ OC.L10N.register(
     "Remove from favorites" : "Eliminar de favoritos",
     "Add to favorites" : "Agregar a favoritos",
     "Delete folder" : "Borrar carpeta",
+    "Save" : "Guardar",
     "Report" : "Reportar",
     "Share" : "Compartir",
     "New" : "Nuevo",

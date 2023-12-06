@@ -24,6 +24,7 @@ OC.L10N.register(
     "Remove from favorites" : "Boga·nche dae preferidos",
     "Add to favorites" : "Agiunghe a is preferidos",
     "Delete folder" : "Cantzella sa cartella",
+    "Save" : "Sarva",
     "Report" : "Signala",
     "Share" : "Cumpartzidura",
     "New" : "Nou",

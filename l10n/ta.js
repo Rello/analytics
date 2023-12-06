@@ -11,6 +11,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "கோப்பை அழிக்க",
+    "Save" : "சேமிக்க ",
     "Share" : "பகிர்வு",
     "New" : "புதிய",
     "Share link" : "Share link",

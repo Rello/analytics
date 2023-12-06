@@ -6,6 +6,7 @@ OC.L10N.register(
     "OK" : "Bolýar",
     "Cancel" : "ýatyrmak",
     "Add to favorites" : "Saýlananlara goşuň",
+    "Save" : "Saklamak",
     "Report" : "Hasabat ugradyň",
     "Share" : "Paýlaş",
     "Share link" : "Baglanyşyk paýlaş",
