@@ -13,6 +13,7 @@ OC.L10N.register(
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Add to favorites" : "Voeg by gunstelinge",
     "Delete folder" : "Skrap vouer",
+    "Save" : "Stoor",
     "Share" : "Deel",
     "New" : "Nuut",
     "Share link" : "Deel skakel",

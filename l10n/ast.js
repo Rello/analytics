@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "Desaniciar",
     "Cancel" : "Encaboxar",
     "Add" : "Amestar",
+    "Save" : "Guardar",
     "Notification" : "Avisu",
     "Date" : "Data",
     "Year" : "Añu",

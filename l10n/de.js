@@ -87,6 +87,7 @@ OC.L10N.register(
     "Add to favorites" : "Zu Favoriten hinzufügen",
     "Delete folder" : "Ordner löschen",
     "All data will be deleted!" : "Alle Daten werden gelöscht!",
+    "Save" : "Speichern",
     "Request could not be processed" : "Anfrage konnte nicht bearbeitet werden",
     "Report" : "Bericht",
     "Thresholds" : "Schwellwerte",
