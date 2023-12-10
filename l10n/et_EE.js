@@ -14,6 +14,7 @@ OC.L10N.register(
     "Remove from favorites" : "Eemalda lemmikutest",
     "Add to favorites" : "Lisa lemmikutesse",
     "Delete folder" : "Kustuta kaust",
+    "Save" : "Salvesta",
     "Share" : "Jaga",
     "New" : "Uus",
     "Share link" : "Jaga link",

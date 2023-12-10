@@ -8,6 +8,7 @@ OC.L10N.register(
     "Add" : "Dodaj",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add to favorites" : "Dodaj u omiljene",
+    "Save" : "Sačuvaj",
     "Report" : "Prijavi",
     "Share" : "Podeli",
     "New" : "Nov",

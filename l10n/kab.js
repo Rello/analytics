@@ -9,6 +9,7 @@ OC.L10N.register(
     "Add" : "Rnu",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
+    "Save" : "Sekles",
     "Report" : "Aneqqis",
     "Share" : "Bḍu",
     "Share link" : "Fren aseɣwen",

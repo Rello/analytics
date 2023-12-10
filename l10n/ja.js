@@ -56,6 +56,7 @@ OC.L10N.register(
     "Remove from favorites" : "お気に入りから削除",
     "Add to favorites" : "お気に入りに追加",
     "Delete folder" : "フォルダーを削除",
+    "Save" : "保存",
     "Report" : "報告",
     "Share" : "共有",
     "New" : "新規作成",

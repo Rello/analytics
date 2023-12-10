@@ -13,6 +13,7 @@ OC.L10N.register(
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Add to favorites" : "เพิ่มในรายการโปรด",
     "Delete folder" : "ลบโฟลเดอร์",
+    "Save" : "บันทึก",
     "Report" : "รายงาน",
     "Share" : "แชร์",
     "New" : "สร้างใหม่",

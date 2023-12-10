@@ -18,6 +18,7 @@ OC.L10N.register(
     "Remove from favorites" : "Șterge din favorite",
     "Add to favorites" : "Adăugați la favorite",
     "Delete folder" : "Șterge director",
+    "Save" : "Salvează",
     "Report" : "Raport",
     "Share" : "Partajează",
     "New" : "Nou",

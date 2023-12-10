@@ -8,6 +8,7 @@ OC.L10N.register(
     "Add" : "Tambah",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "Simpan",
     "Share" : "Kongsi",
     "New" : "Baru",
     "Share link" : "Share link",

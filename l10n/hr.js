@@ -23,6 +23,7 @@ OC.L10N.register(
     "Remove from favorites" : "Ukloni iz favorita",
     "Add to favorites" : "Dodaj u favorite",
     "Delete folder" : "Izbriši mapu",
+    "Save" : "Spremi",
     "Report" : "Prijavi",
     "Share" : "Dijeli",
     "New" : "Novo",
