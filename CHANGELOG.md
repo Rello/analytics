@@ -5,9 +5,11 @@
 - flow event listener for NC28
 - css adjustment for NC28
 - scss removal (<26)
+- min version 26
 
 ### Fixed
 - missing back button when no data sets exist yet
+- Nextcloud Tables name with "-" #380
 
 ## 4.11.1 - 2023-11-20
 ### Fixed

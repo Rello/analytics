@@ -1394,7 +1394,8 @@ OCA.Analytics.Datasource = {
         // if options are split with "-", they are considered as value/key pairs
         let selectOptions = templateOption.placeholder.split("/")
         for (let selectOption of selectOptions) {
-            let keyValue = selectOption.split('-');
+            let index = selectOption.indexOf('-');
+            let keyValue = [selectOption.substring(0, index), selectOption.substring(index + 1)];
             value = selectOption;
             text = selectOption;
             if (keyValue.length >> 1) {
