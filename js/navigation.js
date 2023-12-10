@@ -66,10 +66,10 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Sidebar?.close?.();
         document.getElementById('navigationDatasets').innerHTML = '';
 
+        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
         if (data === undefined || data.length === 0) {
             document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
-            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
             for (let navigation of data) {
                 OCA.Analytics.Navigation.buildNavigationRow(navigation);
             }
@@ -557,7 +557,7 @@ OCA.Analytics.Navigation = {
                 handler(evt);
             }
         } else {
-            OCA.Analytics.Sidebar.Report.handleDeleteButton();
+            OCA.Analytics.Sidebar.Report.handleDeleteButton(evt);
         }
     },
 
