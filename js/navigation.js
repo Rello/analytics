@@ -127,10 +127,19 @@ OCA.Analytics.Navigation = {
     },
 
     buildIntroRow: function () {
+        let text;
+        if (OCA.Analytics.isAdvanced) {
+            text = t('analytics', 'No dataset yet');
+        } else if (OCA.Analytics.isPanorama) {
+            text = t('analytics', 'No panorama yet');
+        } else {
+            text = t('analytics', 'No report yet');
+        }
+
         let li = document.createElement('li');
         li.innerHTML = '<div class="infoBox" style="margin-top: 50px;">' +
             '<img src="' + OC.imagePath('analytics', 'infoReport') + '" alt="info">\n' +
-            '<div class="infoBoxHeader">' + t('analytics', 'No reports yet') + '</div>\n';
+            '<div class="infoBoxHeader">' + text + '</div>\n';
         li.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         return li;
     },

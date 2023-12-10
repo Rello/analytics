@@ -326,6 +326,7 @@
 </style>
 <div id="analytics-content" class="container" style="width:100%;" hidden>
     <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
+
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">
         <div class="editMenu" id="editMenu">
             <div class="menu-item" data-modal="modal1">Report</div>
@@ -336,45 +337,42 @@
         </div>
     </div>
 
-    <!-- Modals for the menu -->
-    <div id="modal1" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Choose a report</h2><br>
-            <div id="reportSelectorContainer"></div>
+    <!-- Modals for the edit menu -->
+    <div>
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Choose a report</h2><br>
+                <div id="reportSelectorContainer"></div>
+            </div>
+        </div>
+        <div id="modal2" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Enter a free text</h2><br>
+                <textarea id="textInput" rows="8" cols="50" style="width: 100%;"></textarea>
+                <br>
+                <span class="userGuidance">Markup can be used here</span>
+                <br><br>
+                <button type="button" id="textInputButton">save</button>
+            </div>
+        </div>
+        <div id="modal3" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Platzhalter für Später</h2>
+            </div>
+        </div>
+        <div id="modal4" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Choose a picture</h2><br>
+                <span class="userGuidance">Select a picture from Nextcloud</span>
+                <br><br>
+                <button type="button" id="pictureInputButton">Choose</button>
+            </div>
         </div>
     </div>
-    <div id="modal2" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Enter a free text</h2><br>
-            <textarea id="textInput" rows="8" cols="50" style="width: 100%;"></textarea>
-            <br>
-            <span class="userGuidance">Markup can be used here</span>
-            <br><br>
-            <button type="button" id="textInputButton">save</button>
-        </div>
-    </div>
-    <div id="modal3" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Platzhalter für Später</h2>
-        </div>
-    </div>
-    <div id="modal4" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Choose a picture</h2><br>
-            <span class="userGuidance">Select a picture from Nextcloud</span>
-            <br><br>
-            <button type="button" id="pictureInputButton">Choose</button>
-        </div>
-    </div>
-    <!-- Modals -->
 
     <div id="optionBtnContainer" class="edit">
         <span class="nav-item" id="optionBtn">...</span>

@@ -694,7 +694,9 @@ OCA.Analytics.Panorama = {
             OCA.Analytics.Panorama.currentPanorama.pages[currentPage].layout = selectedLayout.layout;
             OCA.Analytics.Panorama.getPanorama(currentPage);
             OCA.Analytics.Panorama.addAllOverlays();
-            OCA.Analytics.Panorama.addEditableTextBoxes();
+            //OCA.Analytics.Panorama.addEditableTextBoxes();
+            OCA.Analytics.Panorama.editMode = false;
+            OCA.Analytics.Panorama.handleEditButton();
         });
 
         hoverBox.appendChild(dropdown);
@@ -729,8 +731,9 @@ OCA.Analytics.Panorama = {
                 let currentPage = OCA.Analytics.Panorama.currentPage;
                 OCA.Analytics.Panorama.currentPanorama.pages[currentPage].layout = selectedLayout.layout;
                 OCA.Analytics.Panorama.getPanorama(currentPage);
-                OCA.Analytics.Panorama.addAllOverlays();
-                OCA.Analytics.Panorama.addEditableTextBoxes();
+                //OCA.Analytics.Panorama.addEditableTextBoxes();
+                OCA.Analytics.Panorama.editMode = false;
+                OCA.Analytics.Panorama.handleEditButton();
             });
 
             // Add the layout preview
@@ -747,7 +750,7 @@ OCA.Analytics.Panorama = {
 
             grid.appendChild(cell);
         });
-        },
+    },
 
     removeLayoutSelctor: function () {
         //document.getElementById('layoutSelector').remove();
