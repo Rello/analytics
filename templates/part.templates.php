@@ -439,6 +439,8 @@
                 <select id="dataloadSchedule" class="input150">
                     <option value="" selected><?php p($l->t('Not scheduled')); ?></option>
                     <option value="d"><?php p($l->t('Daily')); ?></option>
+                    <option value="e"><?php p($l->t('Daily - End of day')); ?></option>
+                    <option value="b"><?php p($l->t('Daily - Start of day')); ?></option>
                     <option value="h"><?php p($l->t('Hourly')); ?></option>
                 </select>
                 <br><br>

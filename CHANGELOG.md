@@ -1,6 +1,9 @@
 # Changelog
 
-## 4.11.1 - 2023-11-20
+## 4.12.0 - 2023-11-20
+### Added
+- Cron schedule "End of day" and "Start of day" #381
+
 ### Changed
 - flow event listener for NC28
 - css adjustment for NC28
