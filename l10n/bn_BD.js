@@ -10,6 +10,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "ফোল্ডার মোছ",
+    "Save" : "সংরক্ষণ",
     "Share" : "ভাগাভাগি কর",
     "New" : "নতুন",
     "Share link" : "লিংক ভাগাভাগি করেন",

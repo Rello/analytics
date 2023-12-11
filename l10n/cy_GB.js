@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add" : "Ychwanegu",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "Cadw",
     "Share" : "Rhannu",
     "New" : "Newydd",
     "Share link" : "Rhannu dolen",
