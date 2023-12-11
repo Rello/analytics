@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "http://localhost:8027",
+  "url": "http://localhost:8028",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -1612,7 +1612,7 @@
       "id": "dcb6b632-bcea-4512-93a3-046bbaf7d70b",
       "comment": "",
       "command": "assertText",
-      "target": "css=.oc-dialog-title",
+      "target": "css=.dialog__name",
       "targets": [
         ["css=.oc-dialog-title", "css:finder"],
         ["xpath=//body[@id='body-user']/div/h2", "xpath:idRelative"],
@@ -1624,18 +1624,18 @@
       "id": "6a83b1d5-4d54-4b5b-8c24-53335034e638",
       "comment": "",
       "command": "click",
-      "target": "css=tr:nth-child(1) .filename-parts__first",
+      "target": "css=.file-picker__row:nth-child(1) .file-picker__file-name",
       "targets": [
-        ["css=tr:nth-child(1) .filename-parts__first", "css:finder"],
-        ["xpath=//table[@id='picker-filestable']/tbody/tr/td/span/span", "xpath:idRelative"],
-        ["xpath=//td/span/span", "xpath:position"]
+        ["css=.file-picker__row:nth-child(1) .file-picker__file-name", "css:finder"],
+        ["xpath=//div[@id='modal-description-uwnce']/div/div/div/div/div[2]/table/tbody/tr/td/div/div[2]", "xpath:idRelative"],
+        ["xpath=//td/div/div[2]", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "1c48b13e-34cf-4630-b6ef-1e89977c6f0d",
       "comment": "",
       "command": "click",
-      "target": "css=tr:nth-child(1) .filename-parts__first",
+      "target": "css=tr:nth-child(1) .file-picker__file-name",
       "targets": [
         ["css=tr:nth-child(1) .filename-parts__first", "css:finder"],
         ["xpath=//table[@id='picker-filestable']/tbody/tr/td/span/span", "xpath:idRelative"],
@@ -1646,12 +1646,11 @@
       "id": "03c2ff3e-2156-495d-a778-1740c2d4e2ca",
       "comment": "",
       "command": "click",
-      "target": "css=.oc-dialog-buttonrow > .primary",
+      "target": "css=.button-vue__text:nth-child(1)",
       "targets": [
-        ["css=.oc-dialog-buttonrow > .primary", "css:finder"],
-        ["xpath=//body[@id='body-user']/div/div[2]/button", "xpath:idRelative"],
-        ["xpath=//div[2]/button", "xpath:position"],
-        ["xpath=//button[contains(.,'Choose')]", "xpath:innerText"]
+        ["css=.button-vue__text:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='modal-description-egloh']/div/div[2]/button/span/span", "xpath:idRelative"],
+        ["xpath=//div/div/div[2]/button/span/span", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -1833,7 +1832,7 @@
         ["xpath=//div[@id='analyticsDialogContent']/div", "xpath:idRelative"],
         ["xpath=//div[7]/div/div", "xpath:position"]
       ],
-      "value": "[[\" import 44\",\"2022-09-06\",\" 44b\"],[\" import 55\",\"2022-09-07\",\" 55c\"]]"
+      "value": "[[\"import 44\",\"2022-09-06\",\"44b\"],[\"import 55\",\"2022-09-07\",\"55c\"]]"
     }, {
       "id": "5a77ea6d-5272-437e-83a5-df42f935315b",
       "comment": "",
@@ -5188,7 +5187,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",

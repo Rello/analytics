@@ -92,6 +92,7 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isAdvanced) {
             a.innerText = t('analytics', 'New dataset');
         } else if (OCA.Analytics.isPanorama) {
+            // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
             a.innerText = t('analytics', 'New panorama');
         } else {
             a.innerText = t('analytics', 'New report');
@@ -131,6 +132,7 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isAdvanced) {
             text = t('analytics', 'No dataset yet');
         } else if (OCA.Analytics.isPanorama) {
+            // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
             text = t('analytics', 'No panorama yet');
         } else {
             text = t('analytics', 'No report yet');
