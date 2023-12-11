@@ -10,6 +10,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Izbriši fasciklu",
+    "Save" : "Spremi",
     "Share" : "Podjeli",
     "New" : "Novo",
     "Share link" : "Podijelite vezu",
