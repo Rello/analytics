@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.12.0 - 2023-11-20
+## 4.12.0 - 2023-12-11
 ### Added
 - Cron schedule "End of day" and "Start of day" #381
 
