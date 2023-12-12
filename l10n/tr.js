@@ -119,7 +119,6 @@ OC.L10N.register(
     "Delete data" : "Verileri sil",
     "Records to be deleted: " : "Silinecek kayıtlar:",
     "Technical error. Please check the logs." : "Teknik bir sorun çıktı. Lütfen günlük kayıtlarına bakın.",
-    "No reports yet" : "Henüz bir rapor hazırlanmamış",
     "Demo: Thresholds" : "Tanıtım: Eşikler",
     "Type" : "Tür",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Eşikler verileri vurgulamak için kullanılabilir. Bildirim eşiği kullanılarak anında bildirimler gönderilebilir.",

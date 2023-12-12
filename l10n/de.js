@@ -119,7 +119,6 @@ OC.L10N.register(
     "Delete data" : "Daten löschen",
     "Records to be deleted: " : "Zu löschende Datensätze:",
     "Technical error. Please check the logs." : "Technischer Fehler. Bitte prüfe die Protokolle.",
-    "No reports yet" : "Noch keine Berichte vorhanden",
     "Demo: Thresholds" : "Demo: Schwellwerte",
     "Type" : "Art",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Schwellwerte können zur Hervorhebung von Daten genutzt werden. Durch einen Benachrichtigungs-Schwellwert werden Push-Nachrichten verschickt.",

@@ -122,7 +122,6 @@
     "Delete data" : "Supprimer la donnée",
     "Records to be deleted: " : "Enregistrement à supprimer : ",
     "Technical error. Please check the logs." : "Erreur technique. Merci de vérifier les journaux.",
-    "No reports yet" : "Aucun rapport pour le moment",
     "Demo: Thresholds" : "Démo : Seuils",
     "Type" : "Type",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Les seuils peuvent être utilisés pour mettre en évidence des données. À l'aide du seuil de notification, des messages de notification sont envoyés.",

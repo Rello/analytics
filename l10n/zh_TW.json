@@ -122,7 +122,6 @@
     "Delete data" : "刪除資料",
     "Records to be deleted: " : "要被刪除的紀錄：",
     "Technical error. Please check the logs." : "技術錯誤。請檢查紀錄檔。",
-    "No reports yet" : "尚無報告",
     "Demo: Thresholds" : "示範：閾值",
     "Type" : "類型",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "閾值可用於強調資料。使用通知閾值，就會傳送推送訊息。",

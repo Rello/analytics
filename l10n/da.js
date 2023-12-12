@@ -113,7 +113,6 @@ OC.L10N.register(
     "Delete data" : "Slet data",
     "Records to be deleted: " : "Poster som bliver slettet:",
     "Technical error. Please check the logs." : "Teknisk fejl. Venligst tjek logfilerne.",
-    "No reports yet" : "Ingen rapporter endnu",
     "Demo: Thresholds" : "Demo: Grænseværdier",
     "Type" : "Type",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Grænseværdier kan bruges til at fremhæve data. Ved at bruge notifikations grænsen sendes push-beskeder.",

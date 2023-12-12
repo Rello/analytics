@@ -121,7 +121,6 @@ OC.L10N.register(
     "Delete data" : "删除数据",
     "Records to be deleted: " : "将被删除的记录：",
     "Technical error. Please check the logs." : "技术错误。请检查日志",
-    "No reports yet" : "暂无报告",
     "Demo: Thresholds" : "示例：阈值",
     "Type" : "类型",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "阈值可用于强调数据。使用通知阈值，将会传送推送消息。",

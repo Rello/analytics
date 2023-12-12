@@ -124,7 +124,6 @@ OC.L10N.register(
     "Delete data" : "Брисање података",
     "Records to be deleted: " : "Записи за брисање:",
     "Technical error. Please check the logs." : "Техничка грешка. Молимо вас погледајте дневнике.",
-    "No reports yet" : "Још увек нема извештаја",
     "Demo: Thresholds" : "Демо: Прагови",
     "Type" : "Тип",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Прагови могу да се употребе за истицање података. Брза обавештења се шаљу употребом прага обавешења.",

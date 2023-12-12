@@ -113,7 +113,6 @@ OC.L10N.register(
     "Delete data" : "Elimina dati",
     "Records to be deleted: " : "Record da eliminare:",
     "Technical error. Please check the logs." : "Errore tecnico. Per favore controlla i logs.",
-    "No reports yet" : "Ancora nessun report",
     "Demo: Thresholds" : "Demo: Soglie",
     "Type" : "Tipo",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Le soglie possono essere utilizzate per evidenziare i dati. Utilizzando la soglia di notifica, i messaggi push vengono inviati.",

@@ -118,7 +118,6 @@ OC.L10N.register(
     "Delete data" : "Delete data",
     "Records to be deleted: " : "Records to be deleted: ",
     "Technical error. Please check the logs." : "Technical error. Please check the logs.",
-    "No reports yet" : "No reports yet",
     "Demo: Thresholds" : "Demo: Thresholds",
     "Type" : "نوع",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent.",

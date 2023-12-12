@@ -119,7 +119,6 @@ OC.L10N.register(
     "Delete data" : "Verwijder data",
     "Records to be deleted: " : "Te verwijderen archieven:",
     "Technical error. Please check the logs." : "Technische fout. Controleer alsjeblieft de logs",
-    "No reports yet" : "Nog geen rapporten",
     "Demo: Thresholds" : "Demo: Drempelwaarden",
     "Type" : "Type",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Drempelwaarden kunnen worden gebruikt om gegevens te markeren. Met behulp van de meldingsdrempel worden pushberichten verzonden.",
