@@ -20,6 +20,7 @@ OC.L10N.register(
     "Type" : "Tips",
     "Notification" : "Paziņojums",
     "Date" : "Datums",
+    "Year" : "Gads",
     "View changelog" : "Skatīt izmaiņu sarakstu",
     "Total" : "Kopā",
     "File" : "Datne",
