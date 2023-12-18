@@ -137,7 +137,7 @@ OC.L10N.register(
     "Demo: Finance" : "Demo: Finance",
     "Segment" : "Segment",
     "Year" : "سال",
-    "Sales and revenue of the last years." : "Sales and revenue of the last years.",
+    "Sales and revenue of the last years." : "فروش‌ها و درآمد سال‌های گذشته.",
     "New in" : "جدید در",
     "View changelog" : "مشاهده تغییرات",
     "Show in Analytics" : "Show in Analytics",
