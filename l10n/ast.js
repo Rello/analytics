@@ -16,6 +16,7 @@ OC.L10N.register(
     "Authentication" : "Autenticación",
     "Announcements" : "Anuncios",
     "Password" : "Contraseña",
+    "Favorites" : "Favoritos",
     "Options" : "Opciones",
     "Back" : "Atrás",
     "Settings" : "Configuración",
