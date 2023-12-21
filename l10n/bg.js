@@ -112,7 +112,6 @@ OC.L10N.register(
     "Delete data" : "Изтриване на данни",
     "Records to be deleted: " : "Записи за изтриване:",
     "Technical error. Please check the logs." : "Техническа грешка. Моля, проверете журналите.",
-    "No reports yet" : "Все още няма доклади",
     "Demo: Thresholds" : "Демо: Прагове",
     "Type" : "Тип",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Праговете могат да се използват за подчертаване на данни. При използване на праг при известие, се изпращат push /насочени/ съобщения.",

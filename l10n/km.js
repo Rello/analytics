@@ -50,7 +50,6 @@ OC.L10N.register(
     "Column" : "ជួរឈរ",
     "Delete data" : "លុបទិន្នន័យ",
     "Technical error. Please check the logs." : "មានបញ្ហាបច្ចេកទេស. សូមទៅមើលកំណត់ហេតុ.",
-    "No reports yet" : "មិនទាន់មានរបាយការណ៍",
     "Type" : "ប្រភេទ",
     "none" : "មិនមាន",
     "Green" : "ពណ៌បៃតង",

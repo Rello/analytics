@@ -101,7 +101,6 @@
     "Delete data" : "Zmazať údaje",
     "Records to be deleted: " : "Záznamy pre zmazanie:",
     "Technical error. Please check the logs." : "Technická chyba. Prosím skontrolujte logy.",
-    "No reports yet" : " Zatiaľ žiadne reporty",
     "Demo: Thresholds" : "Demo: Prah",
     "Type" : "Typ",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Na zvýraznenie údajov možno použiť prahové hodnoty. Pomocou upozornení na blížiaci sa limit, sa odosielajú správy push.",

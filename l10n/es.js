@@ -119,7 +119,6 @@ OC.L10N.register(
     "Delete data" : "Eliminar datos",
     "Records to be deleted: " : "Registros a eliminar:",
     "Technical error. Please check the logs." : "Error técnico. Por favor, consulta los registros.",
-    "No reports yet" : "Aún no hay informes",
     "Demo: Thresholds" : "Demo: Umbrales",
     "Type" : "Tipo",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Los umbrales se pueden usar para resaltar datos. Usando el umbral de notificación, se están enviando mensajes push.",

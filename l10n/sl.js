@@ -116,7 +116,6 @@ OC.L10N.register(
     "Delete data" : "Izbriši podatke",
     "Records to be deleted: " : "Zapisi, ki bodo izbriasani:",
     "Technical error. Please check the logs." : "Tehnična napaka: preverite dnevniški zapis.",
-    "No reports yet" : "Ni še pripravljenih poročil",
     "Demo: Thresholds" : "Demo: Pragi",
     "Type" : "Vrsta",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Pražna vrednost je priročna za poudarjanje. Z določilom mejne vrednosti, lahko sistem samodejno pošlje sporočilo.",

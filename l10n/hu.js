@@ -118,7 +118,6 @@ OC.L10N.register(
     "Delete data" : "Adatok törlése",
     "Records to be deleted: " : "Törlendő rekordok:",
     "Technical error. Please check the logs." : "Technikai hiba. Ellenőrizze a naplókat.",
-    "No reports yet" : "Még nincsenek jelentések",
     "Demo: Thresholds" : "Demó: Küszöbértékek",
     "Type" : "Típus",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "A küszöbértékek az adatok kiemelésére használhatók. Az értesítési küszöbérték használatával leküldéses értesítések kerülnek küldésre.",

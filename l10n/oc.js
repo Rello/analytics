@@ -58,6 +58,7 @@ OC.L10N.register(
     "Password" : "Senhal",
     "Favorites" : "Favorits",
     "Options" : "Opcions",
+    "Translate" : "Tradurre",
     "Back" : "Retorn",
     "1 min" : "1 min",
     "10 min" : "10 min",

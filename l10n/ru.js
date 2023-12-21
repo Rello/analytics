@@ -119,7 +119,6 @@ OC.L10N.register(
     "Delete data" : "Удалить данные",
     "Records to be deleted: " : "Удаляемые записи:",
     "Technical error. Please check the logs." : "Техническая ошибка. Пожалуйста, проверьте журнал событий.",
-    "No reports yet" : "Пока что нет отчётов",
     "Demo: Thresholds" : "Демо: Пороговые значения",
     "Type" : "Тип",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Пороговые значения могут использоваться для выделения данных. При достижении пороговых значение уведомлений будут отправляться push-сообщения.",

@@ -116,7 +116,6 @@
     "Delete data" : "Eliminar datos",
     "Records to be deleted: " : "Registros que se eliminarán: ",
     "Technical error. Please check the logs." : "Error técnico. Por favor, verifica los registros.",
-    "No reports yet" : "Aún no hay informes",
     "Demo: Thresholds" : "Demo: Límites",
     "Type" : "Tipo",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Los límites se pueden utilizar para resaltar datos. Utilizando el límite de notificación, se envían mensajes push.",

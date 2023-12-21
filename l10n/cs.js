@@ -124,7 +124,6 @@ OC.L10N.register(
     "Delete data" : "Smazat data",
     "Records to be deleted: " : "Záznamy pro smazání:",
     "Technical error. Please check the logs." : "Technická chyba. Zkontrolujte záznamy událostí.",
-    "No reports yet" : "Zatím žádné výkazy",
     "Demo: Thresholds" : "Demo: Prahové hodnoty",
     "Type" : "Typ",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Prahové hodnoty mohou být použity pro zvýraznění dat. Pomocí prahů upozornění jsou posílány odesílané zprávy.",

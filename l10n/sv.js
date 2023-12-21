@@ -119,7 +119,6 @@ OC.L10N.register(
     "Delete data" : "Radera data",
     "Records to be deleted: " : "Poster att radera: ",
     "Technical error. Please check the logs." : "Tekniskt fel, vänligen se loggarna.",
-    "No reports yet" : "Inga rapporter ännu",
     "Demo: Thresholds" : "Demo: Tröskelvärden",
     "Type" : "Typ",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Tröskelvärden kan användas för att markera data. Vid notis-tröskelvärde skickas en push-notis.",

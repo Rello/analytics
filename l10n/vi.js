@@ -69,7 +69,6 @@ OC.L10N.register(
     "Delete data" : "Xóa dữ liệu",
     "Records to be deleted: " : "Các bản ghi được xoá:",
     "Technical error. Please check the logs." : "Lỗi kĩ thuật, Xin hãy kiểm tra nhật ký",
-    "No reports yet" : "Chưa có báo cáo",
     "Type" : "Loại",
     "Normal value" : "Giâ trị thông  thường",
     "Green" : "Xanh lá",

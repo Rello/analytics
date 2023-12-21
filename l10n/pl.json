@@ -122,7 +122,6 @@
     "Delete data" : "Usuń dane",
     "Records to be deleted: " : "Rekordy do usunięcia: ",
     "Technical error. Please check the logs." : "Błąd techniczny. Sprawdź logi.",
-    "No reports yet" : "Brak raportów",
     "Demo: Thresholds" : "Demo: Progi",
     "Type" : "Rodzaj",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Progi mogą służyć do wyróżniania danych. Wykorzystując próg powiadomień, wysyłane są wiadomości Push.",

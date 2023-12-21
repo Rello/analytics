@@ -71,7 +71,6 @@ OC.L10N.register(
     "Delete data" : "Poista data",
     "Records to be deleted: " : "Poistettavat tietueet:",
     "Technical error. Please check the logs." : "Tekninen virhe. Tarkista lokit.",
-    "No reports yet" : "Ei vielä raportteja",
     "Type" : "Tyyppi",
     "none" : "ei mitään",
     "Green" : "Vihreä",
