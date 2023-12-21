@@ -18,7 +18,6 @@ Util::addStyle('files_sharing', 'icons');
 Util::addStyle('analytics', 'print');
 Util::addScript('analytics', 'panorama');
 Util::addScript('analytics', 'navigation');
-//Util::addScript('analytics', 'filter');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
@@ -27,7 +26,6 @@ Util::addScript('analytics', '3rdParty/chartjs-plugin-zoom.min');
 Util::addScript('analytics', '3rdParty/moment');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'userGuidance');
-Util::addScript('analytics', '3rdParty/marked.min');
 ?>
 
 <div id="app-navigation">

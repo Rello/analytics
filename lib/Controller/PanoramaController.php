@@ -109,4 +109,30 @@ class PanoramaController extends Controller
         $pages = json_encode($pages);
         return new DataResponse($this->PanoramaService->update($panoramaId, $name, $type, $parent, $pages));
     }
+
+    /**
+     * get own reports which are marked as favorites
+     *
+     * @NoAdminRequired
+     * @return DataResponse
+     * @throws Exception
+     */
+    public function getOwnFavoriteReports()
+    {
+        return new DataResponse($this->PanoramaService->getOwnFavoriteReports());
+    }
+
+    /**
+     * set/remove the favorite flag for a report
+     *
+     * @NoAdminRequired
+     * @param int $panoramaId
+     * @param string $favorite
+     * @return DataResponse
+     */
+    public function setFavorite(int $panoramaId, string $favorite)
+    {
+        return new DataResponse($this->PanoramaService->setFavorite($panoramaId, $favorite));
+    }
+
 }

@@ -323,37 +323,40 @@
         border: 1px solid #888;
     }
 
+    .heading-anchor,
+    .text-readonly-bar {
+        display: none !important;
+    }
 </style>
 <div id="analytics-content" class="container" style="width:100%;" hidden>
     <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
 
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">
         <div class="editMenu" id="editMenu">
-            <div class="menu-item" data-modal="modal1">Report</div>
-            <div class="menu-item" data-modal="modal2">Text</div>
+            <div class="menu-item" data-modal="modalReport">Report</div>
+            <div class="menu-item" data-modal="modalText">Text</div>
             <!--<div class="menu-item" data-modal="modal3">Empty</div>-->
-            <div class="menu-item" data-modal="modal4">Picture</div>
+            <div class="menu-item" data-modal="modalPicture">Picture</div>
             <div class="menu-item close-menu-item" data-modal="close">X</div>
         </div>
     </div>
 
     <!-- Modals for the edit menu -->
     <div>
-        <div id="modal1" class="modal">
+        <div id="modalReport" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Choose a report</h2><br>
                 <div id="reportSelectorContainer"></div>
             </div>
         </div>
-        <div id="modal2" class="modal">
-            <div class="modal-content">
+        <div id="modalText" class="modal">
+            <div class="modal-content" style="width: 700px; height: 500px; top: 30%; left: 40%;">
                 <span class="close">&times;</span>
                 <h2>Enter a free text</h2><br>
-                <textarea id="textInput" rows="8" cols="50" style="width: 100%;"></textarea>
+                <textarea id="textInputContent" hidden></textarea>
+                <div id="textInput" style="width: 649px;height: 330px;overflow: hidden;"></div>
                 <br>
-                <span class="userGuidance">Markup can be used here</span>
-                <br><br>
                 <button type="button" id="textInputButton">save</button>
             </div>
         </div>
@@ -363,7 +366,7 @@
                 <h2>Platzhalter für Später</h2>
             </div>
         </div>
-        <div id="modal4" class="modal">
+        <div id="modalPicture" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Choose a picture</h2><br>
@@ -397,6 +400,13 @@
                     <span><?php p($l->t('Change layout')); ?></span>
                 </button>
             </li>
+            <li>
+                <button id="optionMenuDeletePage">
+                    <span class="icon-delete"></span>
+                    <span><?php p($l->t('Delete current page')); ?></span>
+                </button>
+            </li>
+
         </ul>
     </div>
 
@@ -416,7 +426,14 @@
     <div class="pages" id="panoramaPages">
     </div>
 </div>
-<div id="analytics-intro" style="padding: 0px" hidden>
+<div id="analytics-intro" style="padding: 30px" hidden>
+    <h2><?php p($l->t('Analytics')); ?></h2>
+    <br>
+    <h3><?php p($l->t('Favorites')); ?></h3>
+    <div>
+        <ul id="ulAnalytics" style="width: 100%;"></ul>
+    </div>
+    <br>
     <h3><?php p($l->t('Quickstart')); ?></h3>
     <div>
         <ul id="ulQuickstart" style="width: 100%;">

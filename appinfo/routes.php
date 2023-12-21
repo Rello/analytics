@@ -13,7 +13,7 @@ return [
     'routes' => [
         ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         ['name' => 'page#advanced', 'url' => '/a/', 'verb' => 'GET'],
-        ['name' => 'page#panorama', 'url' => '/s/', 'verb' => 'GET'],
+        ['name' => 'page#panorama', 'url' => '/pa/', 'verb' => 'GET'],
         ['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
         ['name' => 'page#indexPublicMin', 'url' => '/pm/{token}', 'verb' => 'GET'],
         ['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],
@@ -48,6 +48,8 @@ return [
         ['name' => 'panorama#read', 'url' => '/panorama/{panoramaId}', 'verb' => 'GET'],
         ['name' => 'panorama#delete', 'url' => '/panorama/{panoramaId}', 'verb' => 'DELETE'],
         ['name' => 'panorama#update', 'url' => '/panorama/{panoramaId}', 'verb' => 'PUT'],
+        ['name' => 'panorama#getOwnFavoriteReports', 'url' => '/panoramaFavorites', 'verb' => 'GET'],
+        ['name' => 'panorama#setFavorite', 'url' => '/panoramaFavorite/{panoramaId}', 'verb' => 'POST'],
 
         // Data Output
         ['name' => 'output#read', 'url' => '/data/{reportId}', 'verb' => 'GET'],

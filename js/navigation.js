@@ -19,7 +19,7 @@ OCA.Analytics.Navigation = {
     quickstartId: 0,
     handlers: {},
 
-    registerHandler: function(context, handlerFunction) {
+    registerHandler: function (context, handlerFunction) {
         OCA.Analytics.Navigation.handlers[context] = handlerFunction;
     },
 
@@ -389,23 +389,26 @@ OCA.Analytics.Navigation = {
             dataset.parentElement.remove();
         }
 
+        if (OCA.Analytics.isPanorama) {
+            edit.parentElement.remove();
+            newGroup.parentElement.remove(); // re-add later
+        }
+
         return navigationMenu;
     },
 
     handleNewButton: function () {
         // ToDo: change app.js to register handler
 
-        if (OCA.Analytics.isAdvanced) {
+        let handler = OCA.Analytics.Navigation.handlers['create'];
+        if (handler) {
+            handler();
+        } else if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
                 ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
             ];
             OCA.Analytics.Wizard.show();
-        } else if (OCA.Analytics.isPanorama) {
-            let handler = OCA.Analytics.Navigation.handlers['create'];
-            if (handler) {
-                handler();
-            }
         } else {
             OCA.Analytics.Sidebar.close();
             OCA.Analytics.Wizard.sildeArray = [
@@ -419,7 +422,7 @@ OCA.Analytics.Navigation = {
     },
 
     handleOverviewButton: function () {
-        OCA.Analytics.Sidebar.close();
+        OCA.Analytics.Sidebar?.close?.();
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
         }
@@ -427,7 +430,8 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.UI.showElement('analytics-intro');
         document.getElementById('ulAnalytics').innerHTML = '';
         window.location.href = '#';
-        OCA.Analytics.Dashboard.init();
+        OCA.Analytics.Dashboard?.init?.();
+        OCA.Analytics.Panorama?.Dashboard?.init?.();
     },
 
     handleNavigationClicked: function (evt) {
@@ -443,14 +447,13 @@ OCA.Analytics.Navigation = {
             }
             evt.target.parentElement.classList.add('active');
         }
-        if (OCA.Analytics.isAdvanced) {
+
+        let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
+        if (handler) {
+            handler(evt);
+        } else if (OCA.Analytics.isAdvanced) {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
-        } else if (OCA.Analytics.isPanorama) {
-            let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
-            if (handler) {
-                handler(evt);
-            }
         } else {
             document.getElementById('filterVisualisation').innerHTML = '';
             if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
@@ -480,7 +483,7 @@ OCA.Analytics.Navigation = {
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         }
         evt.stopPropagation();
-        OCA.Analytics.Sidebar.showSidebar(evt);
+        OCA.Analytics.Sidebar?.showSidebar?.(evt);
     },
 
     handleNewGroupClicked: function (evt) {
@@ -518,7 +521,13 @@ OCA.Analytics.Navigation = {
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Add to favorites');
             document.getElementById('fav-' + datasetId).remove();
         }
-        OCA.Analytics.Navigation.favoriteUpdate(datasetId, isFavorite);
+
+        let handler = OCA.Analytics.Navigation.handlers['favoriteUpdate'];
+        if (handler) {
+            handler(datasetId, isFavorite);
+        } else {
+            OCA.Analytics.Navigation.favoriteUpdate(datasetId, isFavorite);
+        }
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
     },
 
@@ -562,11 +571,9 @@ OCA.Analytics.Navigation = {
     handleDeleteButton: function (evt) {
         // ToDo: change app.js to register handler
 
-        if (OCA.Analytics.isPanorama) {
-            let handler = OCA.Analytics.Navigation.handlers['delete'];
-            if (handler) {
-                handler(evt);
-            }
+        let handler = OCA.Analytics.Navigation.handlers['delete'];
+        if (handler) {
+            handler(evt);
         } else {
             OCA.Analytics.Sidebar.Report.handleDeleteButton(evt);
         }

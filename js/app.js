@@ -66,7 +66,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  * @namespace OCA.Analytics.Core
  */
 OCA.Analytics.Core = {
-    initApplication: function () {
+    init: function () {
 
         const urlHash = decodeURI(location.hash);
         if (urlHash.length > 1) {
@@ -1793,7 +1793,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (document.getElementById('sharingToken').value === '') {
         OCA.Analytics.UI.showElement('analytics-intro');
-        OCA.Analytics.Core.initApplication();
+        OCA.Analytics.Core.init();
         if (!OCA.Analytics.isAdvanced) {
             OCA.Analytics.UI.reportOptionsEventlisteners();
             document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);

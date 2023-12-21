@@ -11,11 +11,33 @@
 
 'use strict';
 
+// Workaround because NC still delivers moment but triggers a deprecated warning every time it is used
+var myMoment = moment;
+
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
     OCA.Analytics.UI.hideElement('analytics-warning');
     OCA.Analytics.UI.showElement('analytics-intro');
-    OCA.Analytics.Navigation.init();
+
+    // register handlers for the navigation bar
+    OCA.Analytics.Navigation.registerHandler('create', function() {
+        OCA.Analytics.Panorama.newPanorama();
+    });
+
+    OCA.Analytics.Navigation.registerHandler('navigationClicked', function(event) {
+        OCA.Analytics.Panorama.handleNavigationClicked(event);
+    });
+
+    OCA.Analytics.Navigation.registerHandler('delete', function(event) {
+        OCA.Analytics.Panorama.handleDeleteButton(event);
+    });
+
+    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', function(id, isFavorite) {
+        OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
+    });
+
+    const urlHash = decodeURI(location.hash);
+    OCA.Analytics.Navigation.init(urlHash.length > 1 && urlHash[2] === 'r' ? parseInt(urlHash.substring(4)) : undefined);
     OCA.Analytics.Panorama.init();
 })
 
@@ -58,13 +80,6 @@ OCA.Analytics.Panorama = {
     TYPE_REPORT: 0,
     TYPE_TEXT: 1,
     TYPE_PICTURE: 2,
-    storiesTmp: {
-        id: 1,
-        name: 'Story 1',
-        pages: [
-            {page: 0, name: 'page 1', layout: ''},
-        ]
-    },
     stories: [],
     emptyPageTemplate: {page: 0, name: 'New', reports: [], layout: ''},
     currentPanorama: {},
@@ -72,82 +87,71 @@ OCA.Analytics.Panorama = {
     editMode: false,
     layouts: [
         {
-            id: 1, name: '2-1', layout: '<div class="flex-container">\n' +
+            id: 1, name: '2-1', layout: '<div class="flex-container">' +
                 '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
-                '<div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-item" style="height: 50%;"></div>\n' +
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '<div class="flex-item" style="height: 50%;"></div>' +
                 '</div>'
         },
         {
-            id: 2, name: '1-2', layout: '<div class="flex-container">\n' +
+            id: 2, name: '1-2', layout: '<div class="flex-container">' +
                 '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
-                '        <div class="flex-item" style="height: 50%;"></div>\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'
+                '<div class="flex-item" style="height: 50%;"></div>' +
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '</div>'
         },
         {
-            id: 3, name: '2-2', layout: '<div class="flex-container">\n' +
+            id: 3, name: '2-2', layout: '<div class="flex-container">' +
                 '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '</div>'
         },
         {
-            id: 4, name: '4-2', layout: '<div class="flex-container">\n' +
+            id: 4, name: '4-2', layout: '<div class="flex-container">' +
                 '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '</div>'
         },
         {
-            id: 3, name: '2-2', layout: '<div class="flex-container">\n' +
+            id: 3, name: '2-2', layout: '<div class="flex-container">' +
                 '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '</div>'
         },
         {
-            id: 4, name: '4-2', layout: '<div class="flex-container">\n' +
+            id: 4, name: '4-2', layout: '<div class="flex-container">' +
                 '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '        <div class="flex-row" style="height: 50%;">\n' +
-                '            <div class="flex-item"></div>\n' +
-                '            <div class="flex-item"></div>\n' +
-                '        </div>\n' +
-                '    </div>'
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '<div class="flex-row" style="height: 50%;">' +
+                '<div class="flex-item"></div><div class="flex-item"></div>' +
+                '</div>' +
+                '</div>'
         },
     ],
+    textEditor: null,
 
     init: function () {
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
@@ -155,6 +159,7 @@ OCA.Analytics.Panorama = {
         document.getElementById('optionBtn').addEventListener('click', OCA.Analytics.Panorama.toggleOptionMenu);
         document.getElementById('optionMenuEdit').addEventListener('click', OCA.Analytics.Panorama.handleEditButton);
         document.getElementById('optionMenuLayout').addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector);
+        document.getElementById('optionMenuDeletePage').addEventListener('click', OCA.Analytics.Panorama.handleDeletePageButton);
 
         document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
 
@@ -163,21 +168,6 @@ OCA.Analytics.Panorama = {
         });
 
         OCA.Analytics.Panorama.Backend.getReports();
-
-        OCA.Analytics.Navigation.registerHandler('create', function() {
-            OCA.Analytics.Panorama.newPanorama();
-        });
-
-        OCA.Analytics.Navigation.registerHandler('navigationClicked', function(event) {
-            OCA.Analytics.Panorama.handleNavigationClicked(event);
-        });
-
-        OCA.Analytics.Navigation.registerHandler('delete', function(event) {
-            OCA.Analytics.Panorama.handleDeleteButton(event);
-        });
-
-        //OCA.Analytics.Panorama.getPanorama();
-        // OCA.Analytics.Panorama.addEditLayer();
     },
 
     newPanorama: function () {
@@ -201,7 +191,14 @@ OCA.Analytics.Panorama = {
         OCA.Analytics.Panorama.updateNavButtons();
     },
 
-    updatePageWidth: function () {
+    handleDeletePageButton: function () {
+        OCA.Analytics.Panorama.currentPanorama.pages.splice(OCA.Analytics.Panorama.currentPage, 1);
+        OCA.Analytics.Panorama.getPanorama();
+        OCA.Analytics.Panorama.updateNavButtons();
+        OCA.Analytics.Panorama.toggleEditSaveButtonDisplay();
+    },
+
+     updatePageWidth: function () {
         let pagesContainer = document.getElementById('panoramaPages');
         let pageCount = pagesContainer.children.length;
         pagesContainer.style.width = `${pageCount * 100}%`;
@@ -231,6 +228,7 @@ OCA.Analytics.Panorama = {
             function () {
                 OCA.Analytics.Panorama.Backend.delete(id);
                 //OCA.Analytics.UI.resetContentArea();
+                OCA.Analytics.Navigation.handleOverviewButton();
                 OCA.Analytics.Notification.dialogClose();
             }
         );
@@ -341,7 +339,11 @@ OCA.Analytics.Panorama = {
             } else if (contentType === OCA.Analytics.Panorama.TYPE_TEXT) {
                 let textContainer = document.createElement('div');
                 textContainer.classList.add('textContainer');
-                textContainer.innerHTML = marked.parse(contentValue);
+                window.OCA.Text.createEditor({
+                    el: textContainer,
+                    content: contentValue,
+                    readOnly: true,
+                })
                 widget.appendChild(textContainer);
             } else if (contentType === OCA.Analytics.Panorama.TYPE_PICTURE) {
                 let textContainer = document.createElement('div');
@@ -380,6 +382,9 @@ OCA.Analytics.Panorama = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 let jsondata = JSON.parse(xhr.response);
+                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+                jsondata = OCA.Analytics.Report.sortDates(jsondata);
+                jsondata.data = OCA.Analytics.Report.formatDates(jsondata.data);
                 OCA.Analytics.Panorama.setTypeReportContent(jsondata, itemId);
             }
         };
@@ -401,13 +406,13 @@ OCA.Analytics.Panorama = {
             let divElement = document.createElement('canvas');
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
-            OCA.Analytics.Panorama.buildChart(jsondata, itemId);
+            OCA.Analytics.Report.buildChart(jsondata, itemId);
         } else {
             let canvasElement = document.getElementById(`myWidget${itemId}`);
             let divElement = document.createElement('table');
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
-            OCA.Analytics.Panorama.buildDataTable(jsondata, itemId);
+            OCA.Analytics.Report.buildDataTable(jsondata, itemId);
         }
     },
 
@@ -610,9 +615,33 @@ OCA.Analytics.Panorama = {
                 } else {
                     const modalId = e.target.dataset.modal;
                     const modal = document.getElementById(modalId);
+                    // show the corresponding modal
                     if (modal) {
                         modal.style.display = 'block';
                         modal.dataset.itemId = e.target.parentElement.dataset.itemId;
+
+                        // special handling for the text modal
+                        if (modalId === 'modalText') {
+                            let itemId = document.getElementById('modalText').dataset.itemId;
+                            //let reportId = widget.dataset.chart;
+                            let pageId = itemId.split('-')[0];
+                            let itemIndex = itemId.split('-')[1];
+                            //let reportId = OCA.Analytics.Panorama.currentPanorama['reports'].split(',')[reportIndex];
+                            let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
+                            let itemContent = page.reports[itemIndex];
+
+                            if (itemContent.type !== OCA.Analytics.Panorama.TYPE_TEXT) {
+                                itemContent.value = '';
+                            }
+
+                            OCA.Analytics.Panorama.textEditor = window.OCA.Text.createEditor({
+                                el: document.getElementById('textInput'),
+                                content: itemContent.value,
+                                onUpdate: ({ markdown }) => {
+                                    document.getElementById('textInputContent').value = markdown
+                                },
+                            })
+                        }
                     }
                 }
             });
@@ -642,7 +671,7 @@ OCA.Analytics.Panorama = {
 
             // event listener for the text input. to be moved out later
             document.getElementById('textInputButton').addEventListener('click', (e) => {
-                let itemId = document.getElementById('modal2').dataset.itemId;
+                let itemId = document.getElementById('modalText').dataset.itemId;
                 let pageId = itemId.split('-')[0];
                 let reportIndex = itemId.split('-')[1];
                 let targetItem = document.getElementById(itemId);
@@ -653,13 +682,13 @@ OCA.Analytics.Panorama = {
                 let reportsArr = page.reports;
                 reportsArr[reportIndex] = {
                     'type': OCA.Analytics.Panorama.TYPE_TEXT,
-                    'value': document.getElementById('textInput').value
+                    'value': document.getElementById('textInputContent').value
                 };
                 //page.reports = reportsArr.join(',');
                 OCA.Analytics.Panorama.buildWidget(itemId);
                 OCA.Analytics.Panorama.buildOverlay(targetItem, true);
 
-                document.getElementById('modal2').style.display = 'none';
+                document.getElementById('modalText').style.display = 'none';
             });
 
             // Image Picker
@@ -769,7 +798,7 @@ OCA.Analytics.Panorama = {
             reportItem.addEventListener('click', (e) => {
                 let reportId = parseInt(e.target.getAttribute('reportId'));
 
-                let itemId = document.getElementById('modal1').dataset.itemId;
+                let itemId = document.getElementById('modalReport').dataset.itemId;
                 let pageId = itemId.split('-')[0];
                 let reportIndex = itemId.split('-')[1];
                 let targetItem = document.getElementById(itemId);
@@ -783,7 +812,7 @@ OCA.Analytics.Panorama = {
                 OCA.Analytics.Panorama.buildWidget(itemId);
                 OCA.Analytics.Panorama.buildOverlay(targetItem, true);
 
-                document.getElementById('modal1').style.display = 'none';
+                document.getElementById('modalReport').style.display = 'none';
             });
 
             reportSelectorContainer.appendChild(reportItem);
@@ -796,7 +825,7 @@ OCA.Analytics.Panorama = {
         OC.dialogs.filepicker(
             t('stor', 'Select file'),
             function (path) {
-                let itemId = document.getElementById('modal4').dataset.itemId;
+                let itemId = document.getElementById('modalPicture').dataset.itemId;
                 let pageId = itemId.split('-')[0];
                 let reportIndex = itemId.split('-')[1];
                 let targetItem = document.getElementById(itemId);
@@ -812,7 +841,7 @@ OCA.Analytics.Panorama = {
                     //page.reports = reportsArr.join(',');
                     OCA.Analytics.Panorama.buildWidget(itemId);
                     OCA.Analytics.Panorama.buildOverlay(targetItem, true);
-                    document.getElementById('modal4').style.display = 'none';
+                    document.getElementById('modalPicture').style.display = 'none';
                 })
 
             },
@@ -848,61 +877,124 @@ OCA.Analytics.Panorama = {
             document.getElementById('nextBtn').innerText = '>';
         }
     },
+}
 
-    nFormatter: function (num) {
-        if (num >= 1000000000) {
-            return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
-        }
-        if (num >= 1000000) {
-            return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-        }
-        if (num >= 1000) {
-            return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-        }
-        return num;
+/**
+ * @namespace OCA.Analytics.Panorama.Backend
+ */
+OCA.Analytics.Panorama.Backend = {
+    getReports: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/report');
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.reports = data;
+                OCA.Analytics.Panorama.buildReportSelector();
+            });
     },
 
-    validateThreshold: function (kpi, value, thresholds) {
-        const operators = {
-            '=': function (a, b) {
-                return a === b
-            },
-            '<': function (a, b) {
-                return a < b
-            },
-            '>': function (a, b) {
-                return a > b
-            },
-            '<=': function (a, b) {
-                return a <= b
-            },
-            '>=': function (a, b) {
-                return a >= b
-            },
-            '!=': function (a, b) {
-                return a !== b
-            },
-        };
-        let thresholdColor;
+    create: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/panorama');
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                type: OCA.Analytics.TYPE_INTERNAL_FILE,
+                parent: 0,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Navigation.init(data);
+            });
+    },
 
-        thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
+    update: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/panorama/') + OCA.Analytics.Panorama.currentPanorama.id;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify(OCA.Analytics.Panorama.currentPanorama)
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Navigation.init();
+            });
+    },
 
-        for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
-            threshold['severity'] = parseInt(threshold['severity']);
-            if (comparison === true) {
-                if (threshold['severity'] === 2) {
-                    thresholdColor = 'style="color: red;"';
-                } else if (threshold['severity'] === 3) {
-                    thresholdColor = 'style="color: orange;"';
-                } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'style="color: green;"';
+    delete: function (id) {
+        let requestUrl = OC.generateUrl('apps/analytics/panorama/') + id;
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Navigation.init();
+            })
+            .catch(error => {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'))
+            });
+    },
+}
+
+/**
+ * @namespace OCA.Analytics.Panorama.Dashboard
+ */
+OCA.Analytics.Panorama.Dashboard = {
+    init: function () {
+        if (decodeURI(location.hash).length === 0) {
+            OCA.Analytics.Panorama.Dashboard.getFavorites();
+        }
+    },
+
+    getFavorites: function () {
+        const url = OC.generateUrl('apps/analytics/panoramaFavorites', true);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.response !== '[]') {
+                    for (let panorama of JSON.parse(xhr.response)) {
+                        let story = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(panorama));
+
+                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem">' + story.name + '</li>';
+                        document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
+
+                    }
+                } else {
+                    document.getElementById('ulAnalytics').innerHTML = '<div>'
+                        + t('analytics', 'Add a report to the favorites to be shown here.')
+                        + '</div>';
                 }
             }
-        }
-
-        return thresholdColor;
+        };
+        xhr.send();
     },
+
+    favoriteUpdate: function (panoramaId, isFavorite) {
+        let params = 'favorite=' + isFavorite;
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', OC.generateUrl('apps/analytics/panoramaFavorite/' + panoramaId, true), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(params);
+    },
+}
+
+/**
+ * @namespace OCA.Analytics.Panorama.Report
+ */
+OCA.Analytics.Report = {
 
     buildChart: function (jsondata, positionIndex) {
 
@@ -915,15 +1007,14 @@ OCA.Analytics.Panorama = {
         let chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
 
         // get the default settings for a chart
-        let chartOptions = OCA.Analytics.Panorama.getDefaultChartOptions();
+        let chartOptions = OCA.Analytics.Report.getDefaultChartOptions();
         Chart.defaults.elements.line.borderWidth = 2;
         Chart.defaults.elements.line.tension = 0.1;
         Chart.defaults.elements.point.radius = 0;
         Chart.defaults.plugins.tooltip.enabled = true;
-        Chart.defaults.plugins.legend.display = false;
 
         // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.Panorama.convertDataToChartJsFormat(jsondata.data, chartType);
+        let [xAxisCategories, datasets] = OCA.Analytics.Report.convertDataToChartJsFormat(jsondata.data, chartType);
 
         // do the color magic
         // a predefined color array is used
@@ -977,7 +1068,7 @@ OCA.Analytics.Panorama = {
             chartOptions.scales['primary'].max = 100;
         }
         if (stacked100 === true) {
-            datasets = OCA.Analytics.UI.calculateStacked100(datasets);
+            datasets = OCA.Analytics.Report.calculateStacked100(datasets);
         }
 
         // overwrite some default chart options depending on the chart type
@@ -1036,7 +1127,7 @@ OCA.Analytics.Panorama = {
             options: chartOptions,
         });
     },
-    
+
     getDefaultChartOptions: function () {
         return {
             bezierCurve: false, //remove curves from your plot
@@ -1073,12 +1164,16 @@ OCA.Analytics.Panorama = {
                 },
             },
             legend: {
-                display: false,
+                display: true,
             },
             animation: {
                 duration: 0 // general animation time
             },
             plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                },
                 datalabels: {
                     display: false,
                     formatter: (value, ctx) => {
@@ -1267,123 +1362,75 @@ OCA.Analytics.Panorama = {
         });
     },
 
-    /*    Backup
-        buildWidgetEdit: function () {
-            let flexItems = document.getElementsByClassName('flex-item');
-            Array.from(flexItems).forEach((item, positionIndex) => {
-                const hoverBox = document.createElement('div');
-                const dropdown = document.createElement('select');
-                let pageId = item.id.split('-')[0];
-                let reportIndex = item.id.split('-')[1];
-    
-                // Populate dropdown with given numbers
-                OCA.Analytics.reports.forEach((report) => {
-                    const option = document.createElement('option');
-                    option.value = report.id;
-                    option.text = report.name;
-                    dropdown.appendChild(option);
+    sortDates: function (data) {
+        if (data.options.chartoptions !== '') {
+            if (JSON.parse(data.options.chartoptions)?.scales?.xAxes?.time?.parser !== undefined) {
+                let parser = JSON.parse(data.options.chartoptions)["scales"]["xAxes"]["time"]["parser"];
+                data.data.sort(function (a, b) {
+                    let sortColumn = a.length - 2;
+                    if (sortColumn === 0) {
+                        return myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
+                    } else {
+                        return a[0] - b[0] || myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
+                    }
                 });
-    
-                dropdown.value = item.getAttribute('data-chart');
-    
-                dropdown.id = `dropdown-${item.id}`;
-                dropdown.addEventListener('change', (e) => {
-                    item.setAttribute('data-chart', parseInt(e.target.value));
-                    let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
-                    let reportsArr = page.reports.split(',');
-                    reportsArr[reportIndex] = parseInt(e.target.value);
-                    page.reports = reportsArr.join(',');
-                    OCA.Analytics.Panorama.buildWidget(item.id);
-                    // Re-attach hoverBox to DOM
-                    dropdown.value = e.target.value;
-                    item.appendChild(hoverBox);
-                });
-    
-                hoverBox.appendChild(dropdown);
-                hoverBox.style.position = "absolute";
-                hoverBox.style.top = "5px";
-                hoverBox.style.right = "0";
-                hoverBox.style.zIndex = "1";
-                hoverBox.style.background = "white";
-                hoverBox.setAttribute('name', 'editBox');
-    
-                item.style.position = "relative";
-                item.appendChild(hoverBox);
-            });
-    
-            let editableElements = document.getElementsByClassName('editable');
-            for (let i = 0; i < editableElements.length; i++) {
-                if (editableElements[i].hasAttribute('contenteditable')) {
-                } else {
-                    // Add the attribute if it doesn't exist
-                    editableElements[i].setAttribute('contenteditable', 'true');
+            }
+        }
+        return data;
+    },
+
+    formatDates: function (data) {
+        let firstRow = data[0];
+        let now;
+        for (let i = 0; i < firstRow.length; i++) {
+            // loop columns and check for a valid date
+            if (!isNaN(new Date(firstRow[i]).valueOf()) && firstRow[i] !== null && firstRow[i].length >= 19) {
+                // column contains a valid date
+                // then loop all rows for this column and convert to local time
+                for (let j = 0; j < data.length; j++) {
+                    if (data[j][i].length === 19) {
+                        // values are assumed to have a timezone or are used as UTC
+                        data[j][i] = data[j][i] + 'Z';
+                    }
+                    now = new Date(data[j][i]);
+                    data[j][i] = now.getFullYear()
+                        + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1) //getMonth will start with Jan = 0
+                        + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
+                        + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
+                        + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+                        + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds()
                 }
             }
-        },*/
-
-}
-
-/**
- * @namespace OCA.Analytics.Panorama.Backend
- */
-OCA.Analytics.Panorama.Backend = {
-    getReports: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/report');
-        fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.reports = data;
-                OCA.Analytics.Panorama.buildReportSelector();
-            });
+        }
+        return data;
     },
 
-    create: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/panorama');
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                type: OCA.Analytics.TYPE_INTERNAL_FILE,
-                parent: 0,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.Navigation.init(data);
-            });
-    },
+    calculateStacked100: function (rawData) {
+        // Create a map to store total y-values for each x-label
+        const totalMap = {};
 
-    update: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/panorama/') + OCA.Analytics.Panorama.currentPanorama.id;
-        fetch(requestUrl, {
-            method: 'PUT',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify(OCA.Analytics.Panorama.currentPanorama)
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.Navigation.init();
+        // Calculate total y-values for each x-label
+        rawData.forEach(dataset => {
+            dataset.data.forEach(point => {
+                if (!totalMap[point.x]) {
+                    totalMap[point.x] = 0;
+                }
+                totalMap[point.x] += point.y;
             });
-    },
+        });
 
-    delete: function (id) {
-        let requestUrl = OC.generateUrl('apps/analytics/panorama/') + id;
-        fetch(requestUrl, {
-            method: 'DELETE',
-            headers: OCA.Analytics.headers(),
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.Navigation.init();
-            })
-            .catch(error => {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'))
+        // Convert y-values to percentages
+        return rawData.map(dataset => {
+            const newDataset = {...dataset};
+            newDataset.data = dataset.data.map(point => {
+                return {
+                    x: point.x,
+                    y: totalMap[point.x] === 0 ? 0 : (point.y / totalMap[point.x]) * 100
+                };
             });
+            return newDataset;
+        });
     },
-
 }
 
 OCA.Analytics.UI = {

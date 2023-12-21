@@ -25,6 +25,8 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use OCA\Text\Event\LoadEditor;
+use OCP\EventDispatcher\IEventDispatcher;
 
 /**
  * Controller class for main page.
@@ -46,6 +48,7 @@ class PageController extends Controller
     private $outputController;
     /** @var IInitialState */
     protected $initialState;
+    private IEventDispatcher $eventDispatcher;
 
     public function __construct(
         string $appName,
@@ -57,7 +60,8 @@ class PageController extends Controller
         IConfig $config,
         DataSession $DataSession,
         IInitialState $initialState,
-        OutputController $outputController
+        OutputController $outputController,
+        IEventDispatcher $eventDispatcher
     )
     {
         parent::__construct($appName, $request);
@@ -69,6 +73,7 @@ class PageController extends Controller
         $this->DataSession = $DataSession;
         $this->initialState = $initialState;
         $this->outputController = $outputController;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -121,6 +126,9 @@ class PageController extends Controller
      */
     public function panorama()
     {
+        if (class_exists(LoadEditor::class)) {
+            $this->eventDispatcher->dispatchTyped(new LoadEditor());
+        }
         return new TemplateResponse($this->appName, 'main_panorama');
     }
 

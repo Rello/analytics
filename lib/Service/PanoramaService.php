@@ -91,6 +91,17 @@ class PanoramaService
                 $ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));;
             }
         }
+
+        $favorites = $this->tagManager->load('analyticsPanorama')->getFavorites();
+        foreach ($ownReports as &$ownReport) {
+            $hasTag = 0;
+            if (is_array($favorites) and in_array($ownReport['id'], $favorites)) {
+                $hasTag = 1;
+            }
+            $ownReport['favorite'] = $hasTag;
+            $ownReport = $this->VariableService->replaceTextVariables($ownReport);
+        }
+
         return $ownReports;
     }
 
@@ -179,6 +190,7 @@ class PanoramaService
      */
     public function deleteByUser(string $userId)
     {
+        // ToDo
         $reports = $this->ReportMapper->indexByUser($userId);
         foreach ($reports as $report) {
             $this->ShareService->deleteShareByReport($report['id']);
@@ -188,6 +200,48 @@ class PanoramaService
         }
         return true;
     }
+
+    /**
+     * get own reports which are marked as favorites
+     *
+     * @return array|bool
+     * @throws Exception
+     */
+    public function getOwnFavoriteReports()
+    {
+        $ownReports = $this->PanoramaMapper->index();
+        //$sharedReports = $this->ShareService->getSharedReports();
+        $sharedReports = [];
+        $favorites = $this->tagManager->load('analyticsPanorama')->getFavorites();
+
+        // remove the favorite if the report is not existing anymore
+        foreach ($favorites as $favorite) {
+            if (!in_array($favorite, array_column($ownReports, 'id'))
+                && !in_array($favorite, array_column($sharedReports, 'id'))) {
+                unset($favorites[$favorite]);
+                $this->tagManager->load('analyticsPanorama')->removeFromFavorites($favorite);
+            }
+        }
+        return $favorites;
+    }
+
+    /**
+     * set/remove the favorite flag for a report
+     *
+     * @param int $panoramaId
+     * @param string $favorite
+     * @return bool
+     */
+    public function setFavorite(int $panoramaId, string $favorite)
+    {
+        if ($favorite === 'true') {
+            $return = $this->tagManager->load('analyticsPanorama')->addToFavorites($panoramaId);
+        } else {
+            $return = $this->tagManager->load('analyticsPanorama')->removeFromFavorites($panoramaId);
+        }
+        return $return;
+    }
+
     /**
      * search for reports
      *
