@@ -220,6 +220,7 @@ OC.L10N.register(
     "Please select a dataset" : "الرجاء إختيار مجموعة البيانات",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "تحظر قائمة EasyPrivacy بعض البرامج النصية بسبب أحرف البدل wildcards لـ Analytics.",
     "Change layout" : "غيِّر مُخطّط العرض",
+    "Delete current page" : "إحذِف الصفحة الحالية",
     "New Panorama" : "بانوراما جديدة",
     "Options" : "خيارات",
     "Analysis" : "التحليل",

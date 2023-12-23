@@ -220,6 +220,7 @@ OC.L10N.register(
     "Please select a dataset" : "Молимо изаберите скуп података",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy листа блокира неке скрипте услед џокер филтера за *analytics*.",
     "Change layout" : "Промени распоред",
+    "Delete current page" : "Обриши текућу страницу",
     "New Panorama" : "Нова панорама",
     "Options" : "Избори",
     "Analysis" : "Анализа",
