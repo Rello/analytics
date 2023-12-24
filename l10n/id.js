@@ -93,6 +93,7 @@ OC.L10N.register(
     "Type" : "tipe",
     "Notification" : "Notifikasi",
     "Date" : "Date",
+    "Year" : "Tahun",
     "New in" : "Terbaru",
     "View changelog" : "Lihat log pembaruan",
     "Total" : "Total",

@@ -220,6 +220,7 @@ OC.L10N.register(
     "Please select a dataset" : "請選擇數據集",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "由於 *analytics* 的通配符過濾器，EasyPrivacy 列表阻止了某些腳本的執行。",
     "Change layout" : "更改佈局",
+    "Delete current page" : "已刪除目前的頁面",
     "New Panorama" : "新全景",
     "Options" : "選項",
     "Analysis" : "分析",

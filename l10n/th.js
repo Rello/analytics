@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "ชุดข้อมูล",
+    "Data" : "ข้อมูล",
+    "Automation" : "อัตโนมัติ",
     "Saved" : "บันทึกแล้ว",
     "Delete" : "ลบ",
     "Search" : "ค้นหา",

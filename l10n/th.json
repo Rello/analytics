@@ -1,4 +1,7 @@
 { "translations": {
+    "Dataset" : "ชุดข้อมูล",
+    "Data" : "ข้อมูล",
+    "Automation" : "อัตโนมัติ",
     "Saved" : "บันทึกแล้ว",
     "Delete" : "ลบ",
     "Search" : "ค้นหา",
