@@ -250,7 +250,7 @@ OC.L10N.register(
     "Advanced" : "پیشرفته",
     "Open documentation" : "مستندات باز",
     "Data options" : "Data options",
-    "Update" : "یه‌روزرسانی",
+    "Update" : "به‌روزرسانی",
     "Export" : "گرفتن خروجی",
     "Number of records" : "Number of records",
     "Manual entry" : "Manual entry",
