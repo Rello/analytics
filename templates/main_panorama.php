@@ -26,6 +26,8 @@ Util::addScript('analytics', '3rdParty/chartjs-plugin-zoom.min');
 Util::addScript('analytics', '3rdParty/moment');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'userGuidance');
+Util::addScript('analytics', '3rdParty/jspdf.umd.min');
+Util::addScript('analytics', '3rdParty/html2canvas.min');
 ?>
 
 <div id="app-navigation">

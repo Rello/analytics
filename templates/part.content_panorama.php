@@ -406,6 +406,12 @@
                     <span><?php p($l->t('Delete current page')); ?></span>
                 </button>
             </li>
+            <li>
+                <button id="optionMenuPdf">
+                    <span class="icon-analytics-pdf"></span>
+                    <span><?php p($l->t('Export as PDF')); ?></span>
+                </button>
+            </li>
 
         </ul>
     </div>

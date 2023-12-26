@@ -350,6 +350,10 @@ OCA.Analytics.Notification = {
         document.getElementById('analyticsDialogGuidance').innerHTML = guidance;
     },
 
+    htmlDialogUpdateAdd: function (guidance) {
+        document.getElementById('analyticsDialogGuidance').innerHTML += '<br>' + guidance;
+    },
+
     dialogClose: function () {
         document.getElementById('analyticsDialogContainer').remove();
         document.getElementById('analyticsDialogOverlay').remove();

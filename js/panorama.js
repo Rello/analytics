@@ -20,19 +20,19 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.UI.showElement('analytics-intro');
 
     // register handlers for the navigation bar
-    OCA.Analytics.Navigation.registerHandler('create', function() {
+    OCA.Analytics.Navigation.registerHandler('create', function () {
         OCA.Analytics.Panorama.newPanorama();
     });
 
-    OCA.Analytics.Navigation.registerHandler('navigationClicked', function(event) {
+    OCA.Analytics.Navigation.registerHandler('navigationClicked', function (event) {
         OCA.Analytics.Panorama.handleNavigationClicked(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('delete', function(event) {
+    OCA.Analytics.Navigation.registerHandler('delete', function (event) {
         OCA.Analytics.Panorama.handleDeleteButton(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', function(id, isFavorite) {
+    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', function (id, isFavorite) {
         OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
     });
 
@@ -151,7 +151,6 @@ OCA.Analytics.Panorama = {
                 '</div>'
         },
     ],
-    textEditor: null,
 
     init: function () {
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
@@ -160,10 +159,11 @@ OCA.Analytics.Panorama = {
         document.getElementById('optionMenuEdit').addEventListener('click', OCA.Analytics.Panorama.handleEditButton);
         document.getElementById('optionMenuLayout').addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector);
         document.getElementById('optionMenuDeletePage').addEventListener('click', OCA.Analytics.Panorama.handleDeletePageButton);
+        document.getElementById('optionMenuPdf').addEventListener('click', OCA.Analytics.Panorama.handlePdfButton);
 
         document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
 
-        document.getElementById('layoutModalClose').addEventListener('click', function() {
+        document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
         });
 
@@ -198,7 +198,7 @@ OCA.Analytics.Panorama = {
         OCA.Analytics.Panorama.toggleEditSaveButtonDisplay();
     },
 
-     updatePageWidth: function () {
+    updatePageWidth: function () {
         let pagesContainer = document.getElementById('panoramaPages');
         let pageCount = pagesContainer.children.length;
         pagesContainer.style.width = `${pageCount * 100}%`;
@@ -234,6 +234,108 @@ OCA.Analytics.Panorama = {
         );
 
     },
+
+
+    prepareContentForPDF: function () {
+        // Find all charts within the page
+        const charts = document.querySelectorAll('canvas');
+        charts.forEach(chartCanvas => {
+            const chart = Chart.getChart(chartCanvas); // Get the Chart.js instance from the canvas
+            if (chart) {
+                const imageData = chart.toBase64Image(); // Get a base64-encoded image of the chart
+
+                // Create an image element
+                const img = document.createElement('img');
+                img.src = imageData;
+                img.style = chartCanvas.style.cssText; // Copy the canvas styles to the image
+
+                // Temporarily hide the canvas and place the image in the same location
+                chartCanvas.style.display = 'none';
+                chartCanvas.parentNode.insertBefore(img, chartCanvas);
+            }
+        });
+    },
+
+    revertContentForPDFChanges: function() {
+        // Find all chart images and canvases to revert changes
+        const charts = document.querySelectorAll('canvas');
+        charts.forEach(chartCanvas => {
+            const img = chartCanvas.previousSibling;
+            if (img && img.tagName === 'IMG') {
+                // Remove the image and show the canvas again
+                img.parentNode.removeChild(img);
+                chartCanvas.style.display = '';
+            }
+        });
+    },
+
+    async handlePdfButton() {
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Export as PDF'),
+            OCA.Analytics.Notification.dialogClose
+        );
+
+        const headerHeight = 30; // Fixed height that looks good
+        const pages = document.querySelectorAll('.flex-container');
+        const headerElement = document.querySelector('.panoramaHeaderRow');
+        const pdf = new jspdf.jsPDF({
+            orientation: 'landscape',
+            unit: 'pt',
+        });
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            document.createElement('div'),
+            t('analytics', 'Starting PDF export')
+        );
+
+        try {
+            const headerText = document.querySelector('.panoramaHeader').textContent;
+            OCA.Analytics.Notification.htmlDialogUpdateAdd('header captured');
+
+            for (const [index, page] of pages.entries()) {
+                OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'capturing page {pageCount}', {pageCount: index}));
+                const canvas = await html2canvas(page, {scale: 2});
+                const imgData = canvas.toDataURL('image/png');
+
+                OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'captured page {pageCount}', {pageCount: index}));
+                if (index > 0) {
+                    pdf.addPage();
+                }
+
+                // Calculate the y position for the header
+                pdf.setFontSize(12); // Adjust as needed
+                const textYOffset = 20; // Adjust based on your headerHeight and padding
+
+                // Add the header text centered at the top of each PDF page
+                pdf.text(headerText, pdf.internal.pageSize.getWidth() / 2, textYOffset, { align: 'center' });
+
+                // Determine the scale factor to fit the image within the PDF page size
+                const scaleX = pdf.internal.pageSize.getWidth() / canvas.width;
+                const scaleY = (pdf.internal.pageSize.getHeight() - headerHeight) / canvas.height;
+                const scaleFactor = Math.min(scaleX, scaleY);
+
+                // Calculate the scaled dimensions
+                const scaledWidth = canvas.width * scaleFactor;
+                const scaledHeight = canvas.height * scaleFactor;
+
+                // Calculate the center position
+                const xOffset = (pdf.internal.pageSize.getWidth() - scaledWidth) / 2;
+                const yOffset = (pdf.internal.pageSize.getHeight() - scaledHeight) / 2 + headerHeight;
+
+                // Add the page content centered and scaled
+                pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');
+                OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'page {pageCount} added to pdf', {pageCount: index}));
+            }
+
+            OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'creating pdf'));
+            pdf.save('download.pdf');
+            OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'created pdf'));
+            OCA.Analytics.Notification.dialogClose();
+        } catch (error) {
+            OCA.Analytics.Notification.htmlDialogUpdateAdd("Error generating PDF: ", error);
+        }
+    },
+
 
     // get the panorama and loop all widgets
     getPanorama: function (targetPage) {
@@ -634,10 +736,10 @@ OCA.Analytics.Panorama = {
                                 itemContent.value = '';
                             }
 
-                            OCA.Analytics.Panorama.textEditor = window.OCA.Text.createEditor({
+                            window.OCA.Text.createEditor({
                                 el: document.getElementById('textInput'),
                                 content: itemContent.value,
-                                onUpdate: ({ markdown }) => {
+                                onUpdate: ({markdown}) => {
                                     document.getElementById('textInputContent').value = markdown
                                 },
                             })
@@ -820,7 +922,7 @@ OCA.Analytics.Panorama = {
     },
 
     handleFilepicker: function () {
-        let mime = ['image/x-png', 'image/jpeg'];
+        let mime = ['image/png', 'image/x-png', 'image/jpeg'];
 
         OC.dialogs.filepicker(
             t('stor', 'Select file'),
@@ -1130,6 +1232,7 @@ OCA.Analytics.Report = {
 
     getDefaultChartOptions: function () {
         return {
+            devicePixelRatio: 2,
             bezierCurve: false, //remove curves from your plot
             scaleShowLabels: false, //remove labels
             tooltipEvents: [], //remove trigger from tooltips so they will not be show

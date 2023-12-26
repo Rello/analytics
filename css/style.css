@@ -366,6 +366,10 @@ table.dataTable tbody tr {
     opacity: 1 !important;
 }
 
+.icon-analytics-pdf {
+    background-image: url(../img/pdf.svg);
+    filter: var(--background-invert-if-dark);
+}
 .icon-analytics-filter-add {
     background-image: url(../img/filteradd.svg);
     filter: var(--background-invert-if-dark);
