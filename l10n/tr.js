@@ -220,6 +220,7 @@ OC.L10N.register(
     "Please select a dataset" : "Lütfen bir veri kümesi seçin",
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy listesi, *analytics* için bir genel arama karakteri süzgeci nedeniyle bazı komut dosyalarını engelliyor.",
     "Change layout" : "Görünümü değiştir",
+    "Delete current page" : "Geçerli sayfayı sil",
     "New Panorama" : "Yeni manzara",
     "Options" : "Seçenekler",
     "Analysis" : "İnceleme",

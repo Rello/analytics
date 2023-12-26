@@ -22,6 +22,7 @@ OC.L10N.register(
     "Settings" : "Configuración",
     "More information …" : "Más información…",
     "Name" : "Nome",
+    "Export" : "Esportar",
     "Selection" : "Seleición",
     "Daily" : "Caldía",
     "Hourly" : "Cada hora"
