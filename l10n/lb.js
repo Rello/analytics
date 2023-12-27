@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Dossier läschen",
     "Save" : "Späicheren",
+    "Download" : "Eroflueden",
     "Share" : "Deelen",
     "New" : "Nei",
     "Share link" : "Link deelen",

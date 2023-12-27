@@ -12,6 +12,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "கோப்பை அழிக்க",
     "Save" : "சேமிக்க ",
+    "Download" : "பதிவிறக்குக",
     "Share" : "பகிர்வு",
     "New" : "புதிய",
     "Share link" : "Share link",

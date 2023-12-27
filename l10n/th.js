@@ -17,6 +17,7 @@ OC.L10N.register(
     "Add to favorites" : "เพิ่มในรายการโปรด",
     "Delete folder" : "ลบโฟลเดอร์",
     "Save" : "บันทึก",
+    "Download" : "ดาวน์โหลด",
     "Report" : "รายงาน",
     "Share" : "แชร์",
     "New" : "สร้างใหม่",

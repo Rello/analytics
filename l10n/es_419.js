@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add to favorites" : "Agregar a tus favoritos",
     "Delete folder" : "Borrar carpeta",
     "Save" : "Guardar",
+    "Download" : "Descargar",
     "Share" : "Compartir",
     "New" : "Nuevo",
     "Share link" : "Compartir liga",

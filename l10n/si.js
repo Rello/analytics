@@ -8,6 +8,7 @@ OC.L10N.register(
     "Cancel" : "අවලංගු කරන්න",
     "Filter" : "පෙරහන",
     "Add" : "එකතු කරන්න",
+    "Download" : "බාගන්න",
     "Share" : "බෙදාගන්න",
     "New" : "නව",
     "Link copied" : "සබැඳිය පිටපත් කළා",

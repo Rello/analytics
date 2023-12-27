@@ -9,6 +9,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Save" : "Simpan",
+    "Download" : "Muat turun",
     "Share" : "Kongsi",
     "New" : "Baru",
     "Share link" : "Share link",

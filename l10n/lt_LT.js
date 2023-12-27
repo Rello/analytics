@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add to favorites" : "Pridėti į mėgstamus",
     "Delete folder" : "Ištrinti aplanką",
     "Save" : "Įrašyti",
+    "Download" : "Atsisiųsti",
     "Report" : "Ataskaita",
     "Share" : "Bendrinti",
     "New" : "Nauja",

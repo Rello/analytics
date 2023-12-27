@@ -26,6 +26,7 @@ OC.L10N.register(
     "Add to favorites" : "הוספה למועדפים",
     "Delete folder" : "מחיקת תיקייה",
     "Save" : "שמירה",
+    "Download" : "הורדה",
     "Report" : "דיווח",
     "Share" : "שתף",
     "New" : "חדש",

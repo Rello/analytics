@@ -10,6 +10,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "قىسقۇچ ئۆچۈر",
     "Save" : "ساقلا",
+    "Download" : "چۈشۈر",
     "Share" : "ھەمبەھىر",
     "New" : "يېڭى",
     "Share link" : "Share link",

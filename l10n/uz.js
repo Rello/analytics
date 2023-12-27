@@ -9,6 +9,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Add" : "Add",
     "Delete folder" : "Delete folder",
+    "Download" : "Download",
     "Do you want to create a new group folder?" : "Do you want to create a new group folder?",
     "New" : "New",
     "Share link" : "Share link",

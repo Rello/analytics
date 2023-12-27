@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add to favorites" : "Додади во фаворити",
     "Delete folder" : "Избриши папка",
     "Save" : "Сними",
+    "Download" : "Преземи",
     "Report" : "Пријави",
     "Share" : "Сподели",
     "New" : "Ново",

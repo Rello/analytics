@@ -13,6 +13,7 @@ OC.L10N.register(
     "Add to favorites" : "Pievienot izlasei",
     "Delete folder" : "Dzēst mapi",
     "Save" : "Saglabāt",
+    "Download" : "Lejupielādēt",
     "Share" : "Koplietot",
     "New" : "Jauns",
     "Share link" : "Koplietot saiti",

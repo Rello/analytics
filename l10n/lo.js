@@ -10,6 +10,7 @@ OC.L10N.register(
     "Add to favorites" : "ເພີ່ມລາຍການທີ່ມັກ",
     "Delete folder" : "ລຶບໂຟນເດີ",
     "Save" : "ບັນທຶກ",
+    "Download" : "ດາວໂຫລດ",
     "Report" : "ລາຍງານ",
     "Share" : "ແບ່ງປັນ",
     "Share link" : "ແບ່ງປັນລິງ",

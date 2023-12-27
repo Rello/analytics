@@ -25,6 +25,7 @@ OC.L10N.register(
     "Add to favorites" : "Agiunghe a is preferidos",
     "Delete folder" : "Cantzella sa cartella",
     "Save" : "Sarva",
+    "Download" : "Iscàrriga",
     "Report" : "Signala",
     "Share" : "Cumpartzidura",
     "New" : "Nou",

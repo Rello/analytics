@@ -20,6 +20,7 @@ OC.L10N.register(
     "Add to favorites" : "Bæta í Eftirlæti",
     "Delete folder" : "Eyða möppu",
     "Save" : "Vista",
+    "Download" : "Sækja",
     "Report" : "Skýrsla",
     "Share" : "Deila",
     "New" : "Nýtt",
