@@ -82,6 +82,7 @@ OC.L10N.register(
     "Delete folder" : "Suprimeix la carpeta",
     "Save" : "Desar",
     "All data will be deleted!" : "Totes les dades seran suprimides!",
+    "Download" : "Baixa",
     "Request could not be processed" : "No s'ha pogut processar la sol·licitud",
     "Report" : "Informar",
     "Thresholds" : "Llindars",

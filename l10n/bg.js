@@ -80,6 +80,7 @@ OC.L10N.register(
     "Delete folder" : "Изтриване на папка",
     "Save" : "Запиши",
     "All data will be deleted!" : "Всички данни ще бъдат изтрити!",
+    "Download" : "Изтегляне",
     "Request could not be processed" : "Заявката не можа да бъде обработена",
     "Report" : "Доклад",
     "Thresholds" : "Прагове",

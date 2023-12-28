@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "ফোল্ডার মোছ",
     "Save" : "সংরক্ষণ",
+    "Download" : "ডাউনলোড",
     "Share" : "ভাগাভাগি কর",
     "New" : "নতুন",
     "Share link" : "লিংক ভাগাভাগি করেন",

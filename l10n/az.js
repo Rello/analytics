@@ -13,6 +13,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Qovluğu sil",
     "Save" : "Saxla",
+    "Download" : "Yüklə",
     "Share" : "Paylaş",
     "New" : "Yeni",
     "Share link" : "Linki yayımla",
