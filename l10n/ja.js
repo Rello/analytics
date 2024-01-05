@@ -48,6 +48,7 @@ OC.L10N.register(
     "Cancel" : "キャンセル",
     "Filter" : "フィルター",
     "Add" : "追加",
+    "Line" : "線",
     "Bar" : "バー",
     "Color" : "色",
     "Overview" : "概要",
