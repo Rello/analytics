@@ -77,6 +77,7 @@
     "Add share link" : "공유 링크생성",
     "Share link" : "링크 공유",
     "Link copied" : "링크 복사됨",
+    "Missing data" : "유실된 데이터",
     "Delete data" : "데이터 삭제",
     "Records to be deleted: " : "삭제될 리코드 : ",
     "Technical error. Please check the logs." : "기술적인 에러입니다. 로그를 확인해주세요.",

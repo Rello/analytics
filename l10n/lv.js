@@ -5,6 +5,8 @@ OC.L10N.register(
     "Saved" : "Saglabāts",
     "Delete" : "Dzēst",
     "Search" : "Meklēt",
+    "first" : "pirmais",
+    "last" : "pēdējais",
     "OK" : "Labi",
     "Cancel" : "Atcelt",
     "Add" : "Pievienot",
