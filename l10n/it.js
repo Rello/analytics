@@ -109,7 +109,7 @@ OC.L10N.register(
     "Link copied" : "Collegamento copiato",
     "Column" : "Colonna",
     "new record" : "nuovo record",
-    "Missing data" : "Dati Mancanti",
+    "Missing data" : "Dati mancanti",
     "3rd field must be a valid number" : "Il 3° campo deve essere un numero valido",
     "Delete data" : "Elimina dati",
     "Records to be deleted: " : "Record da eliminare:",
