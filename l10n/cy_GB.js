@@ -12,6 +12,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Save" : "Cadw",
+    "Download" : "Llwytho i lawr",
     "Share" : "Rhannu",
     "New" : "Newydd",
     "Share link" : "Rhannu dolen",

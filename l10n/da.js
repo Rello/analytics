@@ -83,6 +83,7 @@ OC.L10N.register(
     "Delete folder" : "Slet mappe",
     "Save" : "Gem",
     "All data will be deleted!" : "Alle data vil blive slettet!",
+    "Download" : "Download",
     "Request could not be processed" : "Anmodningen kunne ikke behandles",
     "Report" : "Rapport",
     "Thresholds" : "Tærskelværdier",
