@@ -11,6 +11,7 @@
 
 namespace OCA\Analytics\Db;
 
+use OCP\DB\Exception;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
@@ -68,7 +69,7 @@ class DataloadMapper
                 'datasource' => $sql->createNamedParameter($datasourceId),
                 'option' => $sql->createNamedParameter('{}'),
             ]);
-        $sql->execute();
+        $sql->executeStatement();
         return (int)$sql->getLastInsertId();
     }
 
@@ -86,7 +87,7 @@ class DataloadMapper
             ->select('*')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
@@ -101,7 +102,7 @@ class DataloadMapper
             ->selectAlias($sql->func()->max('schedule'), 'schedules')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->addgroupBy('dataset');
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
@@ -120,7 +121,7 @@ class DataloadMapper
         $sql->from(self::TABLE_NAME)
             ->select('*')
             ->where($sql->expr()->eq('schedule', $sql->createNamedParameter($schedule)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
@@ -146,8 +147,43 @@ class DataloadMapper
             ->set('schedule', $sql->createNamedParameter($schedule))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
+    }
+
+    /**
+     * copy a data load
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @return bool
+     * @throws Exception
+     */
+    public function copy(int $dataloadId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $selectSql = $sql->select('*')
+            ->from(self::TABLE_NAME)
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
+        $statement = $sql->executeQuery($selectSql);
+        $record = $statement->fetch();
+
+        if ($record) {
+            $insertSql = $this->db->getQueryBuilder();
+            $insertSql->insert(self::TABLE_NAME)
+                ->values([
+                    'user_id' => $insertSql->createNamedParameter($this->userId),
+                    'name' => $insertSql->createNamedParameter($record['name'] . ' (copy)'),
+                    'dataset' => $insertSql->createNamedParameter($record['dataset']),
+                    'datasource' => $insertSql->createNamedParameter($record['datasource']),
+                    'option' => $insertSql->createNamedParameter($record['option']),
+                ]);
+            $insertSql->executeStatement();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -163,7 +199,7 @@ class DataloadMapper
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
@@ -179,7 +215,7 @@ class DataloadMapper
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
-        $sql->execute();
+        $sql->executeStatement();
         return true;
     }
 
@@ -194,7 +230,7 @@ class DataloadMapper
         $sql->from(self::TABLE_NAME)
             ->select('*')
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
-        $statement = $sql->execute();
+        $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
         return $result;

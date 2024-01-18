@@ -113,6 +113,17 @@ class DataloadService
     }
 
     /**
+     * copy a data load
+     *
+     * @param int $dataloadId
+     * @return bool
+     */
+    public function copy(int $dataloadId)
+    {
+        return $this->DataloadMapper->copy($dataloadId);
+    }
+
+    /**
      * delete a data load
      *
      * @param int $dataloadId

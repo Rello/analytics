@@ -285,6 +285,7 @@ OCA.Analytics.Advanced.Dataload = {
         OCA.Analytics.UI.showElement('dataloadDetailDelete');
         document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleUpdateButton);
         document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDeleteButton);
+        document.getElementById('dataloadCopyButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCopyButton);
         document.getElementById('dataloadSchedule').value = dataload['schedule'];
         document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
         document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload['id'];
@@ -386,6 +387,36 @@ OCA.Analytics.Advanced.Dataload = {
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
                 document.querySelector('[data-dataload-id="' + dataloadId + '"]').innerHTML = document.getElementById('dataloadName').value;
+            });
+    },
+
+    handleCopyButton: function () {
+        OCA.Analytics.Advanced.Dataload.copyDataload();
+    },
+
+    copyDataload: function () {
+        let requestUrl = OC.generateUrl('apps/analytics/dataload/copy');
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                dataloadId: document.getElementById('dataloadDetail').dataset.dataloadId,
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                OCA.Analytics.Notification.notification('success', t('analytics', 'Data load copied'));
+                document.querySelector('.tabHeader.selected').click();
+            })
+            .catch(error => {
+                // stop if the file link is missing
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Parameter missing'));
+                OCA.Analytics.Notification.dialogClose();
             });
     },
 

@@ -47,9 +47,9 @@ class StorageService
      *
      * @NoAdminRequired
      * @param $datasetId
-     * @param $options
+     * @param $reportMetadata
      * @return array
-     * @throws \OCP\DB\Exception
+     * @throws Exceptionx
      */
     public function read($datasetId, $reportMetadata)
     {
@@ -68,7 +68,8 @@ class StorageService
             $availableDimensions['dimension1'] = $datasetMetadata['dimension1'];
             $availableDimensions['dimension2'] = $datasetMetadata['dimension2'];
 
-            // return the header texts of the data being transferred according to the current drilldown state selected by user
+            // return the header texts of the data being transferred according to the current drill down state selected by user
+            // if the dimension is not part of the drill down filter, it is not hidden => to be displayed
             if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
             if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
             $header[6] = $datasetMetadata['value'];

@@ -70,6 +70,7 @@ return [
         ['name' => 'dataload#delete', 'url' => '/dataload/{dataloadId}', 'verb' => 'DELETE'],
         ['name' => 'dataload#simulate', 'url' => '/dataload/simulate', 'verb' => 'POST'],
         ['name' => 'dataload#execute', 'url' => '/dataload/execute', 'verb' => 'POST'],
+        ['name' => 'dataload#copy', 'url' => '/dataload/copy', 'verb' => 'POST'],
 
         // Datasource
         ['name' => 'datasource#index', 'url' => '/datasource', 'verb' => 'GET'],

@@ -131,7 +131,8 @@ class StorageMapper
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)))
             ->addgroupBy('dataset');
 
-        // loop the available dimensions and check if any is hidden by the drilldown selection of the user
+        // loop the available dimensions and check if any is hidden by the drill down selection of the user
+        // if the dimension is not part of the drill down filter, it is not hidden => to be displayed
         $availableDimensions = array('dimension1', 'dimension2');
         foreach ($availableDimensions as $dimension) {
             if (!isset($options['drilldown'][$dimension])) {

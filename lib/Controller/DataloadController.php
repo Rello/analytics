@@ -80,6 +80,19 @@ class DataloadController extends Controller
     }
 
     /**
+     * copy a dataload
+     *
+     * @NoAdminRequired
+     * @param int $dataloadId
+     * @return DataResponse
+     * @throws NotFoundException
+     */
+    public function copy(int $dataloadId): DataResponse
+    {
+        return new DataResponse($this->DataloadService->copy($dataloadId));
+    }
+
+    /**
      * delete a dataload
      *
      * @NoAdminRequired

@@ -418,8 +418,9 @@
                     </div>
                 </div>
                 <div id="dataloadDetailButtons" hidden>
-                    <button id="dataloadDeleteButton" style="padding: 15px;" class="icon-delete"></button>
-                    <button id="dataloadUpdateButton" style="padding: 15px;" class="icon-checkmark"></button>
+                    <button id="dataloadDeleteButton" style="padding: 15px;" title="<?php p($l->t('Delete')); ?>" class="icon-delete"></button>
+                    <button id="dataloadCopyButton" style="padding: 15px;" title="<?php p($l->t('Copy')); ?>" class="icon-analytics-copy"></button>
+                    <button id="dataloadUpdateButton" style="padding: 15px;" title="<?php p($l->t('Update')); ?>" class="icon-checkmark"></button>
                 </div>
             </div>
         </div>
