@@ -13,6 +13,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Save" : "Պահպանել",
+    "Download" : "Ներբեռնել",
     "Share" : "Կիսվել",
     "New" : "Նոր",
     "Share link" : "Կիսվել հղմամբ",

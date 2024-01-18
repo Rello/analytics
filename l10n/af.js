@@ -14,6 +14,7 @@ OC.L10N.register(
     "Add to favorites" : "Voeg by gunstelinge",
     "Delete folder" : "Skrap vouer",
     "Save" : "Stoor",
+    "Download" : "Laai af",
     "Share" : "Deel",
     "New" : "Nuut",
     "Share link" : "Deel skakel",

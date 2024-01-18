@@ -9,6 +9,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Save" : "حفظ",
+    "Download" : "ڈاؤن لوڈ",
     "Share" : "تقسیم",
     "Share link" : "اشتراک لنک",
     "Type" : "Type",

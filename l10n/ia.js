@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Deler dossier",
     "Save" : "Salveguardar",
+    "Download" : "Discargar",
     "Share" : "Compartir",
     "New" : "Nove",
     "Share link" : "Compartir ligamine",

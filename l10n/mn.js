@@ -14,6 +14,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Хавтсыг устгах",
     "Save" : "Хадгалах",
+    "Download" : "Татах",
     "Share" : "Түгээх",
     "New" : "Шинэ",
     "Share link" : "Холбоос хуваалцах",

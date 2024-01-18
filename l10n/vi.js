@@ -55,6 +55,7 @@ OC.L10N.register(
     "Add to favorites" : "Thêm vào ưa thích",
     "Delete folder" : "Xóa thư mục",
     "Save" : "Lưu",
+    "Download" : "Tải xuống",
     "Request could not be processed" : "Yêu cầu không thể xử lý",
     "Report" : "Báo cáo",
     "Share" : "Chia sẻ",

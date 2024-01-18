@@ -44,6 +44,7 @@ OC.L10N.register(
     "Add to favorites" : "Adicionar aos favoritos",
     "Delete folder" : "Apagar pasta",
     "Save" : "Guardar",
+    "Download" : "Transferir",
     "Report" : "Relatório",
     "Share" : "Partilhar",
     "New" : "Novo",

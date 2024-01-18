@@ -17,6 +17,7 @@ OC.L10N.register(
     "Add to favorites" : "Ouzhpennañ er pennrolloù",
     "Delete folder" : "Dilemel an teuliad",
     "Save" : "Enrollañ",
+    "Download" : "Pellgargañ",
     "Report" : "Kemmenn",
     "Share" : "Rannan",
     "New" : "Nevez",

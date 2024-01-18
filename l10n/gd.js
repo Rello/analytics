@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "Sguir dheth",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Save" : "Sàbhail",
+    "Download" : "Luchdaich a-nuas",
     "Report" : "Dèan aithris air",
     "Share" : "Co-roinn",
     "Share link" : "Ceangal co-roinnidh",

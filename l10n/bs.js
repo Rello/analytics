@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Izbriši fasciklu",
     "Save" : "Spremi",
+    "Download" : "Preuzmi",
     "Share" : "Podjeli",
     "New" : "Novo",
     "Share link" : "Podijelite vezu",

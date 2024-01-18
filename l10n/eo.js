@@ -17,6 +17,7 @@ OC.L10N.register(
     "Add to favorites" : "Aldoni al pliŝataĵoj",
     "Delete folder" : "Forigi dosierujon",
     "Save" : "Konservi",
+    "Download" : "Elŝuti",
     "Share" : "Kunhavigi",
     "New" : "Nova",
     "Share link" : "Kunhavigi ligilon",
