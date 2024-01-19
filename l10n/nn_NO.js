@@ -58,6 +58,7 @@ OC.L10N.register(
     "Export" : "Eksporter",
     "Import" : "Importer",
     "Title" : "Tittel",
+    "Copy" : "Kopier",
     "Daily" : "Kvar dag",
     "Hourly" : "Kvar time",
     "Unshare" : "Fjern deling",

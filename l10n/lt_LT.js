@@ -68,6 +68,7 @@ OC.L10N.register(
     "Selection" : "Pasirinkimas",
     "Setting" : "Nustatymas",
     "Title" : "Pavadinimas",
+    "Copy" : "Kopija",
     "Daily" : "Kas dieną",
     "Hourly" : "Kas valandą",
     "Unshare" : "Nustoti bendrinti",

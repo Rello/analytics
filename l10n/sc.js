@@ -66,6 +66,7 @@ OC.L10N.register(
     "Others" : "Àtere",
     "Selection" : "Seletzione",
     "Title" : "Tìtulu",
+    "Copy" : "Còpia",
     "Daily" : "Ogni die",
     "Hourly" : "Ogni ora",
     "Unshare" : "Annulla sa cumpartzidura",

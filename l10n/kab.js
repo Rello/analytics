@@ -31,6 +31,7 @@ OC.L10N.register(
     "Name" : "Nom",
     "Advanced" : "Talqayt",
     "Title" : "Azwel",
+    "Copy" : "Nɣel",
     "Daily" : "S wass",
     "Hourly" : "S usrag",
     "Copy link" : "Nɣel aseɣwen",

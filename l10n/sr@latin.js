@@ -31,6 +31,7 @@ OC.L10N.register(
     "Update" : "Ažuriraj",
     "Import" : "Uvezi",
     "Title" : "Naslov",
+    "Copy" : "Kopiraj",
     "Daily" : "дневно",
     "Hourly" : "сваки сат",
     "Unshare" : "Ukini deljenje",

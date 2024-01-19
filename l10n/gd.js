@@ -23,6 +23,7 @@ OC.L10N.register(
     "Back" : "Air ais",
     "Settings" : "Roghainnean",
     "Name" : "Ainm",
+    "Copy" : "Dèan lethbhreac",
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
     "Create" : "Cruthaich"

@@ -51,6 +51,7 @@
     "Update" : "Update",
     "Export" : "Export",
     "Import" : "Import",
+    "Copy" : "Copy",
     "Daily" : "Daily",
     "Hourly" : "Hourly",
     "Unshare" : "Unshare",

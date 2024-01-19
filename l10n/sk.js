@@ -249,6 +249,7 @@ OC.L10N.register(
     "Setting" : "Nastavenie",
     "Title" : "Názov",
     "Delete data before load" : "Zmazať údaje pred načítaním",
+    "Copy" : "Kopírovať",
     "Execution" : "Spustenie",
     "Load now" : "Načítať teraz",
     "Test run" : "Testovacie spustenie",
