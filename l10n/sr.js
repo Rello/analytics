@@ -12,6 +12,7 @@ OC.L10N.register(
     "Value" : "Вредност",
     "Please select data source" : "Молимо изаберите извор података",
     "Saved" : "Сачувано",
+    "Data load copied" : "Копирани су учитани подаци",
     "Parameter missing" : "Недостаје параметар",
     "Delete data load" : "Брисање учитаних података",
     "Are you sure?" : "Да ли сте сигурни?",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Value" : "Valor",
     "Please select data source" : "Por favor, seleccione una fuente de datos",
     "Saved" : "Guardado",
+    "Data load copied" : "Carga de datos copiada",
     "Parameter missing" : "Falta un parámetro",
     "Delete data load" : "Eliminar carga de datos",
     "Are you sure?" : "¿Estás seguro?",
