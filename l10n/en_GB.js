@@ -12,6 +12,7 @@ OC.L10N.register(
     "Value" : "Value",
     "Please select data source" : "Please select data source",
     "Saved" : "Saved",
+    "Data load copied" : "Data load copied",
     "Parameter missing" : "Parameter missing",
     "Delete data load" : "Delete data load",
     "Are you sure?" : "Are you sure?",
