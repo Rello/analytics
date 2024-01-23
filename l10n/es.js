@@ -369,7 +369,7 @@ OC.L10N.register(
     "The report can be based on a new dataset or read existing data that is available already." : "El informe puede estar basado en un conjunto de datos nuevo o puede leer datos existentes que ya estén disponibles.",
     "Many reports can be based on the same data, but every report has its own visualization, threshold and sharing settings." : "Varios informes pueden basarse en los mismos datos, pero cada informe tiene sus propios ajustes de visualización, umbrales y de uso compartido.",
     "Datasets can store data from scheduled data loads, the REST API or manual data entry. This can be configured via the Dataset maintenance" : "Los conjuntos de datos pueden almacenar datos de cargas de datos programadas, la API REST o de entrada manual. Esto se puede configurar desde el mantenimiento conjunto de datos",
-    "Choose the names of the columns for the new dataset" : "Elige los nombres de las columnas del nuevo conjunto de datos",
+    "Choose the names of the columns for the new dataset" : "Elija los nombres de las columnas del nuevo conjunto de datos",
     "Visualization of the report" : "Visualización del informe",
     "All settings can be changed afterwards" : "Todos los ajustes se pueden cambiar más tarde",
     "No Chart" : "Sin Gráfica",
