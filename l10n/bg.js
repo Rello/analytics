@@ -266,6 +266,7 @@ OC.L10N.register(
     "Setting" : "Настройка",
     "Title" : "Заглавие",
     "Delete data before load" : "Изтриване на данните преди зареждане",
+    "Copy" : "Копие",
     "Execution" : "Изпълнение",
     "Load now" : "Заредете сега",
     "Test run" : "Изпълняване на тест",
