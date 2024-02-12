@@ -27,6 +27,12 @@
                 </button>
             </li>
             <li>
+                <button id="reportMenuTableOptions">
+                    <span class="icon-analytics-chart-options"></span>
+                    <span><?php p($l->t('Table options')); ?></span>
+                </button>
+            </li>
+            <li>
                 <button id="reportMenuAnalysis">
                     <span class="icon-analytics-forecast"></span>
                     <span><?php p($l->t('Analysis')); ?></span>

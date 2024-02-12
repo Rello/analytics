@@ -279,6 +279,167 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Backend.getData();
     },
 
+    openTableOptionsDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
+        let tableOptions;
+        try {
+            tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
+        } catch (e) {
+            tableOptions = {};
+        }
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Table options'),
+            OCA.Analytics.Filter.processTableOptionsDialog
+        );
+
+        // Total row setting
+        let tableRow = document.createElement('div');
+        tableRow.style = 'display: table-row';
+        let tableCell1 = document.createElement('div');
+        tableCell1.style = 'display: table-cell';
+        tableCell1.innerText =  t('analytics', 'Totals row');
+        let selectField = document.createElement('select');
+        selectField.id = 'tableOptionTotalRow';
+        const option1 = new Option(t('analytics', 'yes'), 'true');
+        const option2 = new Option(t('analytics', 'no'), 'false');
+        (tableOptions.footer ? option1 : option2).selected = true;
+        selectField.add(option1);
+        selectField.add(option2);
+        tableRow.appendChild(tableCell1);
+        tableRow.appendChild(selectField);
+
+        // Rows input field
+        let tableRow2 = document.createElement('div');
+        tableRow2.style = 'display: table-row';
+        let tableCell2 = document.createElement('div');
+        tableCell2.style = 'display: table-cell';
+        tableCell2.innerText =  t('analytics', 'What to show in the rows:');
+        let inputField = document.createElement('input');
+        inputField.id = 'tableOptionRows';
+        inputField.value = (tableOptions.layout && tableOptions.layout.rows) ? tableOptions.layout.rows : '';
+        tableRow2.appendChild(tableCell2);
+        tableRow2.appendChild(inputField);
+
+        // Columns input field
+        let tableRow3 = document.createElement('div');
+        tableRow3.style = 'display: table-row';
+        let tableCell3 = document.createElement('div');
+        tableCell3.style = 'display: table-cell';
+        tableCell3.innerText =  t('analytics', 'What to show in the columns:');
+        let inputField2 = document.createElement('input');
+        inputField2.id = 'tableOptionColumns';
+        inputField2.value = (tableOptions.layout && tableOptions.layout.columns) ? tableOptions.layout.columns : '';
+        tableRow3.appendChild(tableCell3);
+        tableRow3.appendChild(inputField2);
+
+        // Data input field
+        let tableRow4 = document.createElement('div');
+        tableRow4.style = 'display: table-row';
+        let tableCell4 = document.createElement('div');
+        tableCell4.style = 'display: table-cell';
+        tableCell4.innerText =  t('analytics', 'What to show in the columns:');
+        let inputField3 = document.createElement('input');
+        inputField3.id = 'tableOptionData';
+        inputField3.value = (tableOptions.layout && tableOptions.layout.data) ? tableOptions.layout.data : '';
+        tableRow4.appendChild(tableCell4);
+        tableRow4.appendChild(inputField3);
+
+        let layoutRaw = '<div class="container">\n' +
+            '    <div id="rows" class="columnSection">\n' +
+            '        <p>Rows</p>\n' +
+            '    </div>\n' +
+            '    <div id="columns" class="columnSection">\n' +
+            '        <p>Columns</p>\n' +
+            '    </div>\n' +
+            '    <div id="measures" class="columnSection">\n' +
+            '        <p>Measures</p>\n' +
+            '    </div>\n' +
+            '    <div id="notVisualized" class="columnSection">\n' +
+            '        <p>Not Visualized</p>\n' +
+            '    </div>\n' +
+            '</div>'
+
+        let parser = new DOMParser();
+        let layout = parser.parseFromString(layoutRaw, 'text/html');
+        let container = layout.querySelector('.container');
+
+
+        // add the final content to the modal
+        let content = document.createDocumentFragment();
+        content.appendChild(tableRow);
+        //content.appendChild(tableRow2);
+        //content.appendChild(tableRow3);
+        //content.appendChild(tableRow4);
+        content.appendChild(container.cloneNode(true)); // Clone the container with event listeners
+
+        // Attach event listeners programmatically
+        content.querySelectorAll('.columnSection').forEach(section => {
+            section.addEventListener('drop', OCA.Analytics.Filter.Drag.drop);
+            section.addEventListener('dragover', OCA.Analytics.Filter.Drag.allowDrop);
+        });
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            content,
+            t('analytics', 'Table options guidance')
+        );
+
+        OCA.Analytics.Filter.Drag.initialize();
+    },
+
+    processTableOptionsDialog: function () {
+        let tableOptions;
+        try {
+            tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
+        } catch (e) {
+            tableOptions = [];
+        }
+        let tableOptionTotalRow = document.getElementById('tableOptionTotalRow').value;
+/*
+        let tableOptionRows = document.getElementById('tableOptionRows').value;
+        let tableOptionColumns = document.getElementById('tableOptionColumns').value;
+        let tableOptionData = document.getElementById('tableOptionData').value;
+*/
+
+        if (tableOptionTotalRow === 'true') {
+            tableOptions.footer = true;
+        } else {
+            delete tableOptions.footer;
+        }
+
+/*
+        let rows = tableOptionRows ? tableOptionRows.split(',').map(Number) : [];
+        let columns = tableOptionColumns ? tableOptionColumns.split(',').map(Number) : [];
+        let data = tableOptionData ? tableOptionData.split(',').map(Number) : [];
+        let layout = {
+            rows: rows,
+            columns: columns,
+            data: data
+        };
+*/
+        let layout = {};
+
+        document.querySelectorAll('.columnSection').forEach(function(section) {
+            var sectionId = section.id;
+            // Initialize the layout[sectionId] as an empty array if undefined
+            if (!layout[sectionId]) {
+                layout[sectionId] = [];
+            }
+            var childNodes = section.getElementsByClassName('draggable');
+            for (var i = 0; i < childNodes.length; i++) {
+                var columnId = parseInt(childNodes[i].id.replace('column-', ''));
+                layout[sectionId].push(columnId);
+            }
+        });
+
+        tableOptions.layout = layout;
+
+        OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Notification.dialogClose();
+    },
+
     openChartOptionsDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
         let drilldownRows = '';
@@ -521,6 +682,77 @@ OCA.Analytics.Filter = {
     }
 };
 
+OCA.Analytics.Filter.Drag = {
+    allowDrop: function(ev) {
+        ev.preventDefault();
+    },
+    drag: function(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    },
+    drop: function(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        var dropTarget = ev.target;
+
+        // Check if the drop target is within a section or is the section title
+        while (!dropTarget.classList.contains('columnSection') && !dropTarget.classList.contains('draggable')) {
+            dropTarget = dropTarget.parentNode; // Traverse up to find the section
+        }
+
+        if (dropTarget.classList.contains('draggable')) {
+            dropTarget.parentNode.insertBefore(draggedElement, dropTarget);
+        } else if (dropTarget.classList.contains('columnSection')) {
+            dropTarget.appendChild(draggedElement);
+        }
+    },
+
+
+    initialize: function() {
+        let layoutConfig = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
+        let headerItems = OCA.Analytics.currentReportData.header;
+
+       /* // Clear existing sections
+        document.querySelectorAll('.columnSection').forEach(function(section) {
+            section.innerHTML = '<p>' + section.id.charAt(0).toUpperCase() + section.id.slice(1) + '</p>';
+        });*/
+
+        // Function to create a draggable div
+    const createDraggableItem = (text, index) => {
+        let div = document.createElement('div');
+        div.id = 'column-' + index;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.ondragstart = OCA.Analytics.Filter.Drag.drag;
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.margin = '5px';
+        div.style.backgroundColor = 'var(--color-background-hover)';
+
+        // Create and append the icon div
+        let iconDiv = document.createElement('div');
+        iconDiv.className = 'icon-analytics-gripLines sidebarPointer';
+        div.appendChild(iconDiv);
+
+        // Create and append the text span
+        let textSpan = document.createElement('span');
+        textSpan.textContent = text;
+        div.appendChild(textSpan);
+
+        return div;
+    };
+
+        // Append items to their respective sections
+        Object.keys(layoutConfig).forEach(section => {
+            let sectionElement = document.getElementById(section);
+            layoutConfig[section].forEach(index => {
+                let draggableItem = createDraggableItem(headerItems[index], index);
+                sectionElement.appendChild(draggableItem);
+            });
+        });
+    }
+};
+
 OCA.Analytics.Filter.Backend = {
     newReport: function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
@@ -566,18 +798,30 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
 
-        let tableOptions = null;
+        let tableOptions = {};
         if (OCA.Analytics.tableObject) {
             let fullState = OCA.Analytics.tableObject.state();
             let extractedState = {
                 order: fullState.order,
                 length: fullState.length
             };
-            if (fullState.order.length !== 0 || fullState.length !== 10) {
-                tableOptions = JSON.stringify(extractedState);
+            if (fullState.order.length !== 0) {
+                tableOptions.order = fullState.order;
+            }
+            if (fullState.length !== 10) {
+                tableOptions.length = fullState.length;
             }
         }
-        OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
+
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).footer === true) {
+            tableOptions.footer = true;
+        }
+
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout) {
+            tableOptions.layout = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
+        }
+
+        OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
 
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
