@@ -117,6 +117,7 @@ OC.L10N.register(
     "Selection" : "選択",
     "Setting" : "設定",
     "Title" : "タイトル",
+    "Copy" : "コピー",
     "Daily" : "毎日",
     "Hourly" : "1時間ごと",
     "Unshare" : "共有を解除",

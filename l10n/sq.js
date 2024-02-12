@@ -48,6 +48,7 @@ OC.L10N.register(
     "Import" : "Import",
     "Setting" : "Konfigurim",
     "Title" : "Titulli",
+    "Copy" : "Kopjoni",
     "Daily" : "Përditë",
     "Hourly" : "Çdo orë",
     "Unshare" : "Hiqe ndarjen",

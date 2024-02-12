@@ -50,6 +50,7 @@ OC.L10N.register(
     "Export" : "ส่งออก",
     "Import" : "นำเข้า",
     "Title" : "ชื่อเรื่อง",
+    "Copy" : "คัดลอก",
     "Daily" : "รายวัน",
     "Hourly" : "รายชั่วโมง",
     "Unshare" : "เลิกแชร์",

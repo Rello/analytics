@@ -53,6 +53,7 @@ OC.L10N.register(
     "Update" : "Update",
     "Export" : "Export",
     "Import" : "Import",
+    "Copy" : "Copy",
     "Daily" : "Daily",
     "Hourly" : "Hourly",
     "Unshare" : "Unshare",

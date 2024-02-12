@@ -30,6 +30,7 @@ OC.L10N.register(
     "Back" : "ຫຼັງ",
     "Settings" : "ການຕັ້ງຄ່າ",
     "Name" : "ຊື່",
+    "Copy" : "ສຳເນົາ",
     "Daily" : "ລາຍວັນ",
     "Hourly" : "ຊົ່ວໂມງ",
     "Unshare" : "ຍົກເລີກການແບ່ງປັນ",

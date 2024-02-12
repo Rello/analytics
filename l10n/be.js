@@ -21,6 +21,7 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Settings" : "Налады",
     "Title" : "Title",
+    "Copy" : "Капіяваць",
     "Daily" : "Штодзень",
     "Hourly" : "Штогадзіну",
     "Password protection" : "Password protection"

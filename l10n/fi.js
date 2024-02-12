@@ -175,6 +175,7 @@ OC.L10N.register(
     "Setting" : "Asetus",
     "Title" : "Nimeke",
     "Delete data before load" : "Poista data ennen lataamista",
+    "Copy" : "Kopioi",
     "Execution" : "Suoritus",
     "Load now" : "Lataa nyt",
     "Daily" : "Päivittäin",

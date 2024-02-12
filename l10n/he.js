@@ -67,6 +67,7 @@ OC.L10N.register(
     "Others" : "חרים",
     "Setting" : "הגדרות",
     "Title" : "תפקיד",
+    "Copy" : "העתקה",
     "Daily" : "יומי",
     "Hourly" : "שעתי",
     "Unshare" : "ביטול שיתוף",

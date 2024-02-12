@@ -56,6 +56,7 @@ OC.L10N.register(
     "Import" : "Importă",
     "Setting" : "Setare",
     "Title" : "Titlu",
+    "Copy" : "Copiază",
     "Daily" : "Zilnic",
     "Hourly" : "La oră",
     "Unshare" : "Oprește partajarea",

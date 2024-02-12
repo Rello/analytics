@@ -59,6 +59,7 @@ OC.L10N.register(
     "Others" : "Others",
     "Setting" : "Stilling",
     "Title" : "Titill",
+    "Copy" : "Afrita",
     "Daily" : "Daglega",
     "Hourly" : "Klukkutíma fresti",
     "Unshare" : "Hætta deilingu",

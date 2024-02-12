@@ -38,6 +38,7 @@ OC.L10N.register(
     "Export" : "Çıxarış",
     "Import" : "Əlavə et",
     "Title" : "Başlıq",
+    "Copy" : "Kopyala",
     "Daily" : "Günlük",
     "Hourly" : "Saatlıq",
     "Unshare" : "Paylaşımı durdur",
