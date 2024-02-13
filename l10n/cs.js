@@ -62,6 +62,7 @@ OC.L10N.register(
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dynamické textové proměnné je možné použít k výběru datumů.<br>Výběr je zapsán mezi dvěma znaky % (např. %last2months%).<br>Informace ohledně filtrů, které jsou k dispozici a alternativních formátech datumů jsou k dispozici ve {linkstart}Wiki{linkend}.",
     "Variables" : "Proměnné",
     "Add" : "Přidat",
+    "no" : "č.",
     "Primary" : "Hlavní",
     "Secondary" : "Sekundární",
     "Line" : "Čára",

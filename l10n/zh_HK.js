@@ -63,6 +63,7 @@ OC.L10N.register(
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "動態文本變量可用於選擇日期。<br>選擇寫在兩個 % 之間（例如 %last2months%）。<br>{linkstart}Wiki{linkend} 中提供了有關可用過濾器和替代日期格式的資訊。",
     "Variables" : "變量",
     "Add" : "添加",
+    "no" : "尚未投票",
     "Primary" : "主要的",
     "Secondary" : "次要的",
     "Line" : "線形",

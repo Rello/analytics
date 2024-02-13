@@ -61,6 +61,7 @@
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "動態文字變數可用於選取日期。<br>選取時段寫在兩個百分比符號 % 中間（例如 %last2months%）。<br>{linkstart}Wiki{linkend} 中提供了關於可用的過濾條件與替代日期格式的資訊。",
     "Variables" : "變數",
     "Add" : "新增",
+    "no" : "否",
     "Primary" : "主要",
     "Secondary" : "次要",
     "Line" : "折線圖",
