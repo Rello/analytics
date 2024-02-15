@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Data" : "Datos",
     "Value" : "Valor",
+    "Saved" : "Guardóse",
     "Delete" : "Desaniciar",
     "Search" : "Buscar",
     "OK" : "Normal",
