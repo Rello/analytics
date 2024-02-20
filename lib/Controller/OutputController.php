@@ -70,16 +70,17 @@ class OutputController extends Controller
      * @param $filteroptions
      * @param $dataoptions
      * @param $chartoptions
+     * @param $tableoptions
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions)
+    public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions, $tableoptions)
     {
         $reportMetadata = $this->ReportService->read($reportId);
         if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedReport($reportId);
 
         if (!empty($reportMetadata)) {
-            $reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions);
+            $reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
             $result = $this->getData($reportMetadata);
             return new DataResponse($result, HTTP::STATUS_OK);
         } else {
@@ -214,9 +215,10 @@ class OutputController extends Controller
      * @param $filteroptions
      * @param $dataoptions
      * @param $chartoptions
+     * @param $tableoptions
      * @return mixed
      */
-    private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions)
+    private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions)
     {
         // send current user filter options to the data request
         // only if the report has update-permissions
@@ -225,6 +227,7 @@ class OutputController extends Controller
             $metadata['filteroptions'] = $filteroptions;
             $metadata['dataoptions'] = $dataoptions;
             $metadata['chartoptions'] = $chartoptions;
+            $metadata['tableoptions'] = $tableoptions;
         }
         return $metadata;
     }

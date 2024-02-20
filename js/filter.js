@@ -293,84 +293,43 @@ OCA.Analytics.Filter = {
             OCA.Analytics.Filter.processTableOptionsDialog
         );
 
-        // Total row setting
-        let tableRow = document.createElement('div');
-        tableRow.style = 'display: table-row';
-        let tableCell1 = document.createElement('div');
-        tableCell1.style = 'display: table-cell';
-        tableCell1.innerText =  t('analytics', 'Totals row');
-        let selectField = document.createElement('select');
-        selectField.id = 'tableOptionTotalRow';
-        const option1 = new Option(t('analytics', 'yes'), 'true');
-        const option2 = new Option(t('analytics', 'no'), 'false');
+/*        // Total row setting
         (tableOptions.footer ? option1 : option2).selected = true;
-        selectField.add(option1);
-        selectField.add(option2);
-        tableRow.appendChild(tableCell1);
-        tableRow.appendChild(selectField);
+*/
 
-        // Rows input field
-        let tableRow2 = document.createElement('div');
-        tableRow2.style = 'display: table-row';
-        let tableCell2 = document.createElement('div');
-        tableCell2.style = 'display: table-cell';
-        tableCell2.innerText =  t('analytics', 'What to show in the rows:');
-        let inputField = document.createElement('input');
-        inputField.id = 'tableOptionRows';
-        inputField.value = (tableOptions.layout && tableOptions.layout.rows) ? tableOptions.layout.rows : '';
-        tableRow2.appendChild(tableCell2);
-        tableRow2.appendChild(inputField);
-
-        // Columns input field
-        let tableRow3 = document.createElement('div');
-        tableRow3.style = 'display: table-row';
-        let tableCell3 = document.createElement('div');
-        tableCell3.style = 'display: table-cell';
-        tableCell3.innerText =  t('analytics', 'What to show in the columns:');
-        let inputField2 = document.createElement('input');
-        inputField2.id = 'tableOptionColumns';
-        inputField2.value = (tableOptions.layout && tableOptions.layout.columns) ? tableOptions.layout.columns : '';
-        tableRow3.appendChild(tableCell3);
-        tableRow3.appendChild(inputField2);
-
-        // Data input field
-        let tableRow4 = document.createElement('div');
-        tableRow4.style = 'display: table-row';
-        let tableCell4 = document.createElement('div');
-        tableCell4.style = 'display: table-cell';
-        tableCell4.innerText =  t('analytics', 'What to show in the columns:');
-        let inputField3 = document.createElement('input');
-        inputField3.id = 'tableOptionData';
-        inputField3.value = (tableOptions.layout && tableOptions.layout.data) ? tableOptions.layout.data : '';
-        tableRow4.appendChild(tableCell4);
-        tableRow4.appendChild(inputField3);
-
-        let layoutRaw = '<div class="container">\n' +
-            '    <div id="rows" class="columnSection">\n' +
-            '        <p>Rows</p>\n' +
-            '    </div>\n' +
-            '    <div id="columns" class="columnSection">\n' +
-            '        <p>Columns</p>\n' +
-            '    </div>\n' +
-            '    <div id="measures" class="columnSection">\n' +
-            '        <p>Measures</p>\n' +
-            '    </div>\n' +
-            '    <div id="notVisualized" class="columnSection">\n' +
-            '        <p>Not Visualized</p>\n' +
-            '    </div>\n' +
-            '</div>'
+        let layoutRaw = '<div class="tableOptionsLayout">\n' +
+            '<div class="dummy"></div>' +
+            '<div class="dummy2"></div>' +
+            '<div id="tableOptionsLayoutRows">\n' +
+            '    <p>Rows</p>\n' +
+            '    <div id="rows" class="columnSection"></div>\n' +
+            '  </div>\n' +
+            '  <div id="tableOptionsLayoutColumns">\n' +
+            '    <p>Columns</p>\n' +
+            '    <div id="columns" class="columnSection"></div>\n' +
+            '  </div>\n' +
+            '  <div id="tableOptionsLayoutMeasures">\n' +
+            '    <p>Measures</p>\n' +
+            '    <div id="measures" class="columnSection"></div>\n' +
+            '  </div>\n' +
+            '  <div id="tableOptionsLayoutTotals">\n' +
+            '    <p>Show column totals</p>\n' +
+            '    <div id="totalsSwitch">' +
+            '        <label class="toggle-option">\n' +
+            '            <input type="radio" name="totalOption" value="true" checked> Yes\n' +
+            '        </label>\n' +
+            '        <label class="toggle-option">\n' +
+            '            <input type="radio" name="totalOption" value="false"> No\n' +
+            '        </label></div>\n' +
+            '  </div>\n' +
+            '</div>';
 
         let parser = new DOMParser();
         let layout = parser.parseFromString(layoutRaw, 'text/html');
-        let container = layout.querySelector('.container');
-
+        let container = layout.querySelector('.tableOptionsLayout');
 
         // add the final content to the modal
         let content = document.createDocumentFragment();
-        content.appendChild(tableRow);
-        //content.appendChild(tableRow2);
-        //content.appendChild(tableRow3);
-        //content.appendChild(tableRow4);
         content.appendChild(container.cloneNode(true)); // Clone the container with event listeners
 
         // Attach event listeners programmatically
@@ -381,7 +340,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             content,
-            t('analytics', 'Table options guidance')
+            t('analytics', 'The table can be customized by selecting the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section.')
         );
 
         OCA.Analytics.Filter.Drag.initialize();
@@ -394,32 +353,25 @@ OCA.Analytics.Filter = {
         } catch (e) {
             tableOptions = [];
         }
-        let tableOptionTotalRow = document.getElementById('tableOptionTotalRow').value;
-/*
-        let tableOptionRows = document.getElementById('tableOptionRows').value;
-        let tableOptionColumns = document.getElementById('tableOptionColumns').value;
-        let tableOptionData = document.getElementById('tableOptionData').value;
-*/
 
+        let tableOptionTotalRow;
+        let radios = document.getElementsByName('totalOption');
+        for (let i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                tableOptionTotalRow = radios[i].value;
+            }
+        }
+
+        //let tableOptionTotalRow = document.getElementById('tableOptionTotalRow').value;
         if (tableOptionTotalRow === 'true') {
             tableOptions.footer = true;
         } else {
             delete tableOptions.footer;
         }
 
-/*
-        let rows = tableOptionRows ? tableOptionRows.split(',').map(Number) : [];
-        let columns = tableOptionColumns ? tableOptionColumns.split(',').map(Number) : [];
-        let data = tableOptionData ? tableOptionData.split(',').map(Number) : [];
-        let layout = {
-            rows: rows,
-            columns: columns,
-            data: data
-        };
-*/
         let layout = {};
 
-        document.querySelectorAll('.columnSection').forEach(function(section) {
+        document.querySelectorAll('.columnSection').forEach(function (section) {
             var sectionId = section.id;
             // Initialize the layout[sectionId] as an empty array if undefined
             if (!layout[sectionId]) {
@@ -683,13 +635,17 @@ OCA.Analytics.Filter = {
 };
 
 OCA.Analytics.Filter.Drag = {
-    allowDrop: function(ev) {
+    allowDrop: function (ev) {
         ev.preventDefault();
     },
-    drag: function(ev) {
+
+    drag: function (ev) {
         ev.dataTransfer.setData("text", ev.target.id);
+        // Manage placeholders after updating layout
+        OCA.Analytics.Filter.Drag.managePlaceholders();
     },
-    drop: function(ev) {
+
+    drop: function (ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
         var draggedElement = document.getElementById(data);
@@ -700,57 +656,102 @@ OCA.Analytics.Filter.Drag = {
             dropTarget = dropTarget.parentNode; // Traverse up to find the section
         }
 
+        // Remove placeholder if present
+        let placeholder = ev.target.querySelector('.placeholder');
+        if (placeholder) {
+            ev.target.removeChild(placeholder);
+        }
+
         if (dropTarget.classList.contains('draggable')) {
             dropTarget.parentNode.insertBefore(draggedElement, dropTarget);
         } else if (dropTarget.classList.contains('columnSection')) {
             dropTarget.appendChild(draggedElement);
         }
+
+        // Update layout and manage placeholders
+        OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 
+    initialize: function () {
+        let layoutConfig;
+        try {
+            layoutConfig = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
+        } catch (e) {
+            layoutConfig = null;
+        }
 
-    initialize: function() {
-        let layoutConfig = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
         let headerItems = OCA.Analytics.currentReportData.header;
+        let rowsSection = document.getElementById('rows');
 
-       /* // Clear existing sections
-        document.querySelectorAll('.columnSection').forEach(function(section) {
+        // Clear existing sections
+        document.querySelectorAll('.section').forEach(function(section) {
             section.innerHTML = '<p>' + section.id.charAt(0).toUpperCase() + section.id.slice(1) + '</p>';
-        });*/
+        });
 
         // Function to create a draggable div
-    const createDraggableItem = (text, index) => {
-        let div = document.createElement('div');
-        div.id = 'column-' + index;
-        div.className = 'draggable';
-        div.draggable = true;
-        div.ondragstart = OCA.Analytics.Filter.Drag.drag;
-        div.style.display = 'flex';
-        div.style.alignItems = 'center';
-        div.style.margin = '5px';
-        div.style.backgroundColor = 'var(--color-background-hover)';
+        const createDraggableItem = (text, index) => {
+            let div = document.createElement('div');
+            div.id = 'column-' + index;
+            div.className = 'draggable tableOptionsLayoutItem';
+            div.draggable = true;
+            div.ondragstart = OCA.Analytics.Filter.Drag.drag;
 
-        // Create and append the icon div
-        let iconDiv = document.createElement('div');
-        iconDiv.className = 'icon-analytics-gripLines sidebarPointer';
-        div.appendChild(iconDiv);
+            // Create and append the icon div
+            let iconDiv = document.createElement('div');
+            iconDiv.className = 'icon-analytics-gripLines sidebarPointer';
+            div.appendChild(iconDiv);
 
-        // Create and append the text span
-        let textSpan = document.createElement('span');
-        textSpan.textContent = text;
-        div.appendChild(textSpan);
+            // Create and append the text span
+            let textSpan = document.createElement('span');
+            textSpan.textContent = text;
+            div.appendChild(textSpan);
 
-        return div;
-    };
+            return div;
+        };
 
-        // Append items to their respective sections
-        Object.keys(layoutConfig).forEach(section => {
-            let sectionElement = document.getElementById(section);
-            layoutConfig[section].forEach(index => {
-                let draggableItem = createDraggableItem(headerItems[index], index);
-                sectionElement.appendChild(draggableItem);
+        if (!layoutConfig) {
+            // Fallback: Add all header items to the "rows" section
+            headerItems.forEach((text, index) => {
+                let draggableItem = createDraggableItem(text, index);
+                rowsSection.appendChild(draggableItem);
             });
+        } else {
+            // Append items to their respective sections based on layoutConfig
+            Object.keys(layoutConfig).forEach(section => {
+                let sectionElement = document.getElementById(section);
+                layoutConfig[section].forEach(index => {
+                    let draggableItem = createDraggableItem(headerItems[index], index);
+                    sectionElement.appendChild(draggableItem);
+                });
+            });
+        }
+
+        // Manage placeholders initially
+        OCA.Analytics.Filter.Drag.managePlaceholders();
+    },
+
+    managePlaceholders: function() {
+        // Function to create a placeholder div
+        const createPlaceholder = () => {
+            let placeholderDiv = document.createElement('div');
+            placeholderDiv.className = 'dragAndDropPlaceholder';
+            placeholderDiv.textContent = 'Please drag content here';
+            return placeholderDiv;
+        };
+
+        document.querySelectorAll('.columnSection').forEach(section => {
+            let placeholder = section.querySelector('.dragAndDropPlaceholder');
+            if (section.getElementsByClassName('draggable').length === 0) {
+                if (!placeholder) {
+                    section.appendChild(createPlaceholder());
+                }
+            } else {
+                if (placeholder) {
+                    section.removeChild(placeholder);
+                }
+            }
         });
-    }
+    },
 };
 
 OCA.Analytics.Filter.Backend = {

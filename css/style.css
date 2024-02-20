@@ -687,3 +687,100 @@ table.dataTable tbody tr {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
+
+.dragAndDropPlaceholder {
+    border: 2px dashed var(--color-background-hover);;
+    text-align: center;
+    margin: 5px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px; /* Reduced height */
+    max-height: 30px;
+    border-radius: 15px; /* Rounded edges */
+    color: var(--color-text-lighter);
+    font-style: italic;
+}
+
+.tableOptionsLayout {
+    width: 600px;
+    display: grid;
+    grid-template-areas:
+      "dummy columns"
+      "rows measures"
+      "dummy2 totals";
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: auto; /* Define the height for rows and measures */
+    gap: 10px;
+    padding: 10px;
+}
+.table-layout > div {
+    border: 1px dashed #000;
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+#tableOptionsLayoutRows {
+    grid-area: rows;
+    display: flex;
+    flex-direction: column;
+    min-height: 100px; /* Minimum height to ensure visibility */
+}
+#tableOptionsLayoutColumns {
+    grid-area: columns;
+}
+#tableOptionsLayoutMeasures {
+    grid-area: measures;
+    display: flex;
+    flex-direction: column;
+    min-height: 100px; /* Minimum height to ensure visibility */
+}
+#tableOptionsLayoutTotals {
+    grid-area: totals;
+}
+
+.columnSection {
+    border: 1px solid var(--color-border-dark);
+}
+
+#tableOptionsLayoutColumns .columnSection,
+#tableOptionsLayoutMeasures .columnSection{
+    display: flex; /* Align items horizontally */
+    flex-wrap: wrap; /* Allow multiple lines if needed */
+}
+
+.tableOptionsLayoutItem {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    background-color: var(--color-background-hover);
+    padding-right: 10px;
+    height: 30px;
+}
+
+#rows,
+#measures {
+    flex-grow: 1; /* Grow to use available space */
+    overflow: auto; /* Add scroll if content overflows */
+}
+
+#tableOptionsLayoutRows > p,
+#tableOptionsLayoutMeasures > p {
+    margin: 0; /* Remove margin from <p> if any, or set it as needed */
+}
+
+#tableOptionsLayoutTotals {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-switch {
+    display: flex;
+}
+
+.toggle-option {
+    display: inline-flex;
+    align-items: center; /* Center items vertically */
+    margin: 0 5px; /* Spacing between options */
+}
