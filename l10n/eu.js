@@ -62,7 +62,6 @@ OC.L10N.register(
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Testu-aldagai dinamikoak erabil daitezke datak hautatzeko. <br>Hautapena % biren artean idazten da (adibidez, % last2months%). <br>Eskuragarri dauden iragazkiei eta data-formatu alternatiboei buruzko informazioa {linkstart}Wiki{linkend}-n dago eskuragarri.",
     "Variables" : "Aldagaiak",
     "Add" : "Gehitu",
-    "no" : "ez",
     "Primary" : "Nagusia",
     "Secondary" : "Bigarren mailakoa",
     "Line" : "Lerro",
