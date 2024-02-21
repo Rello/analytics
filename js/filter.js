@@ -293,54 +293,25 @@ OCA.Analytics.Filter = {
             OCA.Analytics.Filter.processTableOptionsDialog
         );
 
-/*        // Total row setting
-        (tableOptions.footer ? option1 : option2).selected = true;
-*/
-
-        let layoutRaw = '<div class="tableOptionsLayout">\n' +
-            '<div class="dummy"></div>' +
-            '<div class="dummy2"></div>' +
-            '<div id="tableOptionsLayoutRows">\n' +
-            '    <p>Rows</p>\n' +
-            '    <div id="rows" class="columnSection"></div>\n' +
-            '  </div>\n' +
-            '  <div id="tableOptionsLayoutColumns">\n' +
-            '    <p>Columns</p>\n' +
-            '    <div id="columns" class="columnSection"></div>\n' +
-            '  </div>\n' +
-            '  <div id="tableOptionsLayoutMeasures">\n' +
-            '    <p>Measures</p>\n' +
-            '    <div id="measures" class="columnSection"></div>\n' +
-            '  </div>\n' +
-            '  <div id="tableOptionsLayoutTotals">\n' +
-            '    <p>Show column totals</p>\n' +
-            '    <div id="totalsSwitch">' +
-            '        <label class="toggle-option">\n' +
-            '            <input type="radio" name="totalOption" value="true" checked> Yes\n' +
-            '        </label>\n' +
-            '        <label class="toggle-option">\n' +
-            '            <input type="radio" name="totalOption" value="false"> No\n' +
-            '        </label></div>\n' +
-            '  </div>\n' +
-            '</div>';
-
-        let parser = new DOMParser();
-        let layout = parser.parseFromString(layoutRaw, 'text/html');
-        let container = layout.querySelector('.tableOptionsLayout');
-
-        // add the final content to the modal
-        let content = document.createDocumentFragment();
-        content.appendChild(container.cloneNode(true)); // Clone the container with event listeners
+        // clone the DOM template
+        let container = document.getElementById('templateTableOptions').content;
+        container = document.importNode(container, true);
 
         // Attach event listeners programmatically
-        content.querySelectorAll('.columnSection').forEach(section => {
+        container.querySelectorAll('.columnSection').forEach(section => {
             section.addEventListener('drop', OCA.Analytics.Filter.Drag.drop);
             section.addEventListener('dragover', OCA.Analytics.Filter.Drag.allowDrop);
         });
 
+        if (tableOptions && tableOptions.footer) {
+            container.querySelector('input[name="totalOption"][value="true"]').checked = true;
+        } else {
+            container.querySelector('input[name="totalOption"][value="false"]').checked = true;
+        }
+
         OCA.Analytics.Notification.htmlDialogUpdate(
-            content,
-            t('analytics', 'The table can be customized by selecting the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section.')
+            container,
+            t('analytics', 'The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section.')
         );
 
         OCA.Analytics.Filter.Drag.initialize();
@@ -350,27 +321,23 @@ OCA.Analytics.Filter = {
         let tableOptions;
         try {
             tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
-        } catch (e) {
-            tableOptions = [];
-        }
-
-        let tableOptionTotalRow;
-        let radios = document.getElementsByName('totalOption');
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                tableOptionTotalRow = radios[i].value;
+            if (tableOptions === null) {
+                tableOptions = {};
             }
+        } catch (e) {
+            tableOptions = {};
         }
 
-        //let tableOptionTotalRow = document.getElementById('tableOptionTotalRow').value;
+        const selectedRadio = document.querySelector('input[name="totalOption"]:checked');
+        const tableOptionTotalRow = selectedRadio ? selectedRadio.value : null;
+
         if (tableOptionTotalRow === 'true') {
             tableOptions.footer = true;
-        } else {
+        } else if (tableOptions) {
             delete tableOptions.footer;
         }
 
         let layout = {};
-
         document.querySelectorAll('.columnSection').forEach(function (section) {
             var sectionId = section.id;
             // Initialize the layout[sectionId] as an empty array if undefined
@@ -384,7 +351,16 @@ OCA.Analytics.Filter = {
             }
         });
 
-        tableOptions.layout = layout;
+        const isSequential = (arr) => arr.every((val, i, array) => i === 0 || (val === array[i - 1] + 1));
+        if (layout.columns.length === 0 && layout.measures.length === 0 && layout.hidden.length === 0) {
+            if (!isSequential(layout.rows)) {
+                tableOptions.layout = layout;
+            } else if (tableOptions && tableOptions.layout) {
+                delete tableOptions.layout;
+            }
+        } else {
+            tableOptions.layout = layout;
+        }
 
         OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
         OCA.Analytics.unsavedFilters = true;
@@ -735,7 +711,7 @@ OCA.Analytics.Filter.Drag = {
         const createPlaceholder = () => {
             let placeholderDiv = document.createElement('div');
             placeholderDiv.className = 'dragAndDropPlaceholder';
-            placeholderDiv.textContent = 'Please drag content here';
+            placeholderDiv.textContent = t('analytics', 'Drag fields here');
             return placeholderDiv;
         };
 

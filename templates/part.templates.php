@@ -106,11 +106,13 @@
                         p($l->t('Bar')); ?></option>
                     <option value="columnSt">&nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart'
                         p($l->t('Bar - Stacked')); ?></option>
-                    <option value="columnSt100">&nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart with 100% relations'
+                    <option value="columnSt100">
+                        &nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart with 100% relations'
                         p($l->t('Bar - Stacked 100%%')); ?></option>
-                    <option value="area"><?php  // TRANSLATORS Short description for an 'Area Chart'
+                    <option value="area"><?php // TRANSLATORS Short description for an 'Area Chart'
                         p($l->t('Area')); ?></option>
-                    <option value="areaSt100">&nbsp;<?php // TRANSLATORS Short description for an 'Area Chart with 100% relations'
+                    <option value="areaSt100">
+                        &nbsp;<?php // TRANSLATORS Short description for an 'Area Chart with 100% relations'
                         p($l->t('Area - 100%%')); ?></option>
                     <option value="doughnut"><?php // TRANSLATORS Short description for a 'Doughnut Chart'
                         p($l->t('Doughnut')); ?></option>
@@ -215,7 +217,8 @@
             <div style="display: table-row;">
                 <div id="DataTextDimension1"
                      style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
-                <input style="display: table-cell;" class="sidebarInput" id="DataDimension1" autocomplete="off" data-dropDownListIndex="0">
+                <input style="display: table-cell;" class="sidebarInput" id="DataDimension1" autocomplete="off"
+                       data-dropDownListIndex="0">
                 <div style="display: table-cell;">
                     <a id="sidebarDataDimension1Hint" title="<?php p($l->t('Variables')); ?>">
                         <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -223,7 +226,8 @@
             </div>
             <div style="display: table-row;">
                 <div id="DataTextDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></div>
-                <input style="display: table-cell;" class="sidebarInput" id="DataDimension2" autocomplete="off" data-dropDownListIndex="1">
+                <input style="display: table-cell;" class="sidebarInput" id="DataDimension2" autocomplete="off"
+                       data-dropDownListIndex="1">
                 <div style="display: table-cell;">
                     <a id="sidebarDataDimension2Hint" title="<?php p($l->t('Variables')); ?>">
                         <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -293,7 +297,8 @@
                  style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
             <div style="display: table-cell;">
                 <input id="sidebarThresholdDimension1" class="sidebarInput"
-                       placeholder="<?php p($l->t('single value or *')); ?>" autocomplete="off" data-dropDownListIndex="0"></div>
+                       placeholder="<?php p($l->t('single value or *')); ?>" autocomplete="off"
+                       data-dropDownListIndex="0"></div>
             <div style="display: table-cell;">
                 <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -418,9 +423,12 @@
                     </div>
                 </div>
                 <div id="dataloadDetailButtons" hidden>
-                    <button id="dataloadDeleteButton" style="padding: 15px;" title="<?php p($l->t('Delete')); ?>" class="icon-delete"></button>
-                    <button id="dataloadCopyButton" style="padding: 15px;" title="<?php p($l->t('Copy')); ?>" class="icon-analytics-copy"></button>
-                    <button id="dataloadUpdateButton" style="padding: 15px;" title="<?php p($l->t('Update')); ?>" class="icon-checkmark"></button>
+                    <button id="dataloadDeleteButton" style="padding: 15px;" title="<?php p($l->t('Delete')); ?>"
+                            class="icon-delete"></button>
+                    <button id="dataloadCopyButton" style="padding: 15px;" title="<?php p($l->t('Copy')); ?>"
+                            class="icon-analytics-copy"></button>
+                    <button id="dataloadUpdateButton" style="padding: 15px;" title="<?php p($l->t('Update')); ?>"
+                            class="icon-checkmark"></button>
                 </div>
             </div>
         </div>
@@ -601,4 +609,37 @@
             </div>
         </span>
     </li>
+</template>
+
+<template id="templateTableOptions">
+    <div class="tableOptionsLayout">
+        <div class="dummy"></div>
+        <div class="dummy2"></div>
+        <div id="tableOptionsLayoutRows">
+            <p><?php p($l->t('Rows')); ?></p>
+            <div id="rows" class="columnSection"></div>
+        </div>
+        <div id="tableOptionsLayoutColumns">
+            <p><?php p($l->t('Columns')); ?></p>
+            <div id="columns" class="columnSection"></div>
+        </div>
+        <div id="tableOptionsLayoutMeasures">
+            <p><?php p($l->t('Measures')); ?></p>
+            <div id="measures" class="columnSection"></div>
+        </div>
+        <div id="tableOptionsLayoutTotals">
+            <p><?php p($l->t('Show totals')); ?></p>
+            <div id="totalsSwitch">
+                <label class="toggle-option">
+                    <input type="radio" name="totalOption" value="true" checked><?php p($l->t('Yes')); ?>
+                </label>
+                <label class="toggle-option">
+                    <input type="radio" name="totalOption" value="false"><?php p($l->t('No')); ?>
+                </label></div>
+        </div>
+        <div id="tableOptionsLayoutAvailable">
+            <p><?php p($l->t('Not required')); ?></p>
+            <div id="hidden" class="columnSection"></div>
+        </div>
+    </div>
 </template>
