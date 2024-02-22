@@ -318,6 +318,8 @@
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "要在外部網站中包含圖表，必須允許該網域（CSP 政策）",
     "Copy link" : "複製連結",
     "Domain of external site" : "外部網站的網域",
+    "Rows" : "列",
+    "Columns" : "欄位",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics 讓您的資料視覺化並協助您評估它們 - 從財務資料到 IoT 紀錄檔。",
     "Give your numbers a meaning." : "為您的數字賦予涵義。",
     "Data is processed inside Nextcloud." : "資料在 Nextcloud 中處理。",

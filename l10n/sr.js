@@ -320,6 +320,8 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Да би се график укључио у спољашњи веб сајт, тај домен мора да се дозволи (CSP полиса)",
     "Copy link" : "Копирај везу",
     "Domain of external site" : "Домен спољашњег сајта",
+    "Rows" : "Редови",
+    "Columns" : "Колоне",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Аналитика омогућава видљивост ваших података и помаже вам да их оцените - од финансијских података до IoT дневника.",
     "Give your numbers a meaning." : "Дајте значење својим бројевима.",
     "Data is processed inside Nextcloud." : "Подаци се обрађују унутар Nextcloud.",

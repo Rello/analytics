@@ -308,6 +308,8 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Para incluir um gráfico em um site externo, esse domínio precisa ser permitido (política CSP)",
     "Copy link" : "Copiar o link",
     "Domain of external site" : "Domínio do site externo",
+    "Rows" : "Linhas",
+    "Columns" : "Colunas",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "O Nextcloud Analytics torna seus dados visíveis e ajuda você a avaliá-los - de dados financeiros a logs de IoT.",
     "Give your numbers a meaning." : "Dê um significado aos seus números.",
     "Data is processed inside Nextcloud." : "Os dados são processados dentro do Nextcloud.",

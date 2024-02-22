@@ -320,6 +320,8 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Um ein Diagramm in eine externe Webseite einzufügen, muss die Domain zugelassen werden (CSP Policy)",
     "Copy link" : "Link kopieren",
     "Domain of external site" : "Domain der externen Seite",
+    "Rows" : "Reihen",
+    "Columns" : "Spalten",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics macht Ihre Daten sichtbar und unterstützt bei deren Analyse - von Finanzzahlen bis zu IoT-Protokollen.",
     "Give your numbers a meaning." : "Geben Sie Ihren Zahlen eine Bedeutung.",
     "Data is processed inside Nextcloud." : "Datenverarbeitung in Nextcloud.",

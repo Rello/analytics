@@ -295,6 +295,8 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "To including a chart in an external website, that domain needs to be allowed (CSP policy)",
     "Copy link" : "کپی کردن لینک",
     "Domain of external site" : "Domain of external site",
+    "Rows" : "Rows",
+    "Columns" : "Columns",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.",
     "Give your numbers a meaning." : "Give your numbers a meaning.",
     "Data is processed inside Nextcloud." : "Data is processed inside Nextcloud.",
