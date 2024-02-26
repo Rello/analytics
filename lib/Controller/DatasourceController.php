@@ -141,13 +141,16 @@ class DatasourceController extends Controller
 
             // if data source should be timestamped/snapshoted
             if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
+                date_default_timezone_set('UTC');
                 $result['data'] = array_map(function ($tag) {
                     $columns = count($tag);
-                    return array($tag[$columns - 2], $tag[$columns - 2], $tag[$columns - 1]);
-                }, $result['data']);
-                date_default_timezone_set('UTC');
-                // shift values by one dimension and stores date in second column
-                $result['data'] = $this->replaceDimension($result['data'], 1, date("Y-m-d H:i:s") . 'Z');
+                    if ($columns > 1) {
+                        // shift values by one dimension and stores date in second column
+                        return array($tag[$columns - 2], date("Y-m-d H:i:s") . 'Z', $tag[$columns - 1]);
+                    } else {
+                        // just return 2 columns if the original data only has one column
+                        return array(date("Y-m-d H:i:s") . 'Z', $tag[$columns - 1]);
+                    }}, $result['data']);
             }
 
             if (isset($datasetMetadata['filteroptions']) && strlen($datasetMetadata['filteroptions']) >> 2) {
@@ -218,31 +221,6 @@ class DatasourceController extends Controller
             }
         }
         return $dataSources;
-    }
-
-    /**
-     * replace all values of one dimension
-     *
-     * @NoAdminRequired
-     * @param $Array
-     * @param $Find
-     * @param $Replace
-     * @return array
-     */
-    private function replaceDimension($Array, $Find, $Replace)
-    {
-        if (is_array($Array)) {
-            foreach ($Array as $Key => $Val) {
-                if (is_array($Array[$Key])) {
-                    $Array[$Key] = $this->replaceDimension($Array[$Key], $Find, $Replace);
-                } else {
-                    if ($Key === $Find) {
-                        $Array[$Key] = $Replace;
-                    }
-                }
-            }
-        }
-        return $Array;
     }
 
     /**
