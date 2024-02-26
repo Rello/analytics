@@ -318,6 +318,8 @@
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Dışarıdaki bir siteye bir çizelge eklemek için bu etki alanına izin verilmelidir (CSP ilkesi)",
     "Copy link" : "Bağlantıyı kopyala",
     "Domain of external site" : "Dış sitenin etki alanı",
+    "Rows" : "Satırlar",
+    "Columns" : "Sütunlar",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics, mali verilerden IoT günlüklerine kadar çeşitli verilerinizi görünür kılar ve  bunları değerlendirmenize yardımcı olur.",
     "Give your numbers a meaning." : "Rakamlarınızı anlamlandırın.",
     "Data is processed inside Nextcloud." : "Veriler Nextcloud içinde işlenir.",

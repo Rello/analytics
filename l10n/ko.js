@@ -137,6 +137,8 @@ OC.L10N.register(
     "Unshare" : "공유 해제",
     "Password protection" : "암호 보호",
     "Copy link" : "링크 복사",
+    "Rows" : "행",
+    "Columns" : "행",
     "Get more information" : "추가 정보 얻기",
     "Nextcloud forum" : "Nextcloud 포럼",
     "Create" : "생성"

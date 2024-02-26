@@ -287,6 +287,8 @@ OC.L10N.register(
     "Share chart for external website" : "Souporaba diagrama na zunanji spletni strani",
     "Copy link" : "Kopiraj povezavo",
     "Domain of external site" : "Domena zunanjega spletišča",
+    "Rows" : "Vrstice",
+    "Columns" : "Stolpci",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Program Analitika omogoča grafično prikazovanje podatkov in hitro evalvacijo – od finančnih podatkov do dnevnikov IoT.",
     "Give your numbers a meaning." : "Dodajte številkam pomen.",
     "Data is processed inside Nextcloud." : "Podatki se obdelujejo znotraj oblaka Nextcloud.",

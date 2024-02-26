@@ -293,6 +293,8 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Hogy külső weboldalon használhassa a diagramot, engedélyeznie kell a domain (CSP házirend)",
     "Copy link" : "Hivatkozás másolása",
     "Domain of external site" : "A külső oldal domainje",
+    "Rows" : "Sorok",
+    "Columns" : "Oszlopok",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "A Nextcloud Elemzés láthatóvá teszi az adatait, és segít kiértékelni őket – a pénzügyi adatoktól az IoT naplókig.",
     "Give your numbers a meaning." : "Adjon jelentést a számainak.",
     "Data is processed inside Nextcloud." : "Az adatok feldolgozása a Nextcloudon belül történik.",

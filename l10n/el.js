@@ -274,6 +274,8 @@ OC.L10N.register(
     "can navigate" : "μπορεί να πλοηγηθεί",
     "Password protection" : "Προστασία συνθηματικού",
     "Copy link" : "Αντιγραφή συνδέσμου",
+    "Rows" : "Γραμμές",
+    "Columns" : "Στήλες",
     "Open Source" : "Ανοικτού Κώδικα",
     "Save default filters" : "Αποθήκευση προεπιλεγμένων φίλτρων",
     "Use data from various data sources" : "Χρήση δεδομένων από διάφορες πηγές",

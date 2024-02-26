@@ -317,6 +317,8 @@
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Para incluir una tabla en un sitio web exteron, se debe permitir ese dominio (política CSP)",
     "Copy link" : "Copiar enlace",
     "Domain of external site" : "Dominio del sitio externo",
+    "Rows" : "Filas",
+    "Columns" : "Columnas",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics hace visibles sus datos y le ayuda a evaluarlos, desde los datos financieros hasta los registros de IoT.",
     "Give your numbers a meaning." : "Dale un significado a tus números.",
     "Data is processed inside Nextcloud." : "Los datos se procesan dentro de Nextcloud.",

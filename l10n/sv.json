@@ -294,6 +294,8 @@
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "För att inkludera ett diagram på en extern webbsida måste domänen vara godkänd genom CSP policy",
     "Copy link" : "Kopiera länk",
     "Domain of external site" : "Domän för extern sida",
+    "Rows" : "Rader",
+    "Columns" : "Kolumner",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics gör din data synbar och hjälper dig att utvärdera dem - från finansiell data till IoT-loggar.",
     "Give your numbers a meaning." : "Ge dina siffror en mening.",
     "Data is processed inside Nextcloud." : "Data är processerad inom Nextcloud.",
