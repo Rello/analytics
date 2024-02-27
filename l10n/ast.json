@@ -9,6 +9,8 @@
     "Add" : "Amestar",
     "Line" : "Llinia",
     "Remove from favorites" : "Quitar de Favoritos",
+    "Add to favorites" : "Meter en Favoritos",
+    "Delete folder" : "Desaniciar la carpeta",
     "Save" : "Guardar",
     "Download" : "Baxar",
     "Notification" : "Avisu",
@@ -20,6 +22,7 @@
     "Version" : "Versión",
     "Authentication" : "Autenticación",
     "Announcements" : "Anuncios",
+    "copy" : "copia",
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
     "Options" : "Opciones",
@@ -30,6 +33,7 @@
     "Update" : "Anovar",
     "Export" : "Esportar",
     "Selection" : "Seleición",
+    "Copy" : "Copiar",
     "Daily" : "Caldía",
     "Hourly" : "Cada hora"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
