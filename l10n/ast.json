@@ -13,6 +13,8 @@
     "Delete folder" : "Desaniciar la carpeta",
     "Save" : "Guardar",
     "Download" : "Baxar",
+    "Share" : "Compartir",
+    "New" : "Nuevu",
     "Notification" : "Avisu",
     "Date" : "Data",
     "Year" : "Añu",
@@ -35,6 +37,7 @@
     "Selection" : "Seleición",
     "Copy" : "Copiar",
     "Daily" : "Caldía",
-    "Hourly" : "Cada hora"
+    "Hourly" : "Cada hora",
+    "Create" : "Crear"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

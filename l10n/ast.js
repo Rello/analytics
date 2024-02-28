@@ -15,6 +15,8 @@ OC.L10N.register(
     "Delete folder" : "Desaniciar la carpeta",
     "Save" : "Guardar",
     "Download" : "Baxar",
+    "Share" : "Compartir",
+    "New" : "Nuevu",
     "Notification" : "Avisu",
     "Date" : "Data",
     "Year" : "Añu",
@@ -37,6 +39,7 @@ OC.L10N.register(
     "Selection" : "Seleición",
     "Copy" : "Copiar",
     "Daily" : "Caldía",
-    "Hourly" : "Cada hora"
+    "Hourly" : "Cada hora",
+    "Create" : "Crear"
 },
 "nplurals=2; plural=(n != 1);");
