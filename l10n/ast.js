@@ -21,6 +21,7 @@ OC.L10N.register(
     "Date" : "Data",
     "Year" : "Añu",
     "View changelog" : "Ver el rexistru de cambeos",
+    "File" : "Ficheru",
     "Yes" : "Sí",
     "No" : "Non",
     "Version" : "Versión",
