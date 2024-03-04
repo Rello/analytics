@@ -543,7 +543,7 @@ table.dataTable tbody tr {
 }
 
 .userGuidance {
-    color: var(--color-text-lighter);
+    color: var(--color-text-maxcontrast);
     font-style: italic;
     text-align: center;
 }
@@ -597,13 +597,13 @@ table.dataTable tbody tr {
     margin-top: 10px;
     text-align: center;
     font-weight: bold;
-    color: var(--color-text-lighter);
+    color: var(--color-text-maxcontrast);
     cursor: pointer;
 }
 
 .infoBox > .infoBoxText {
     width: 100%;
-    color: var(--color-text-lighter);
+    color: var(--color-text-maxcontrast);
     font-style: italic;
     text-align: center;
     cursor: pointer;
@@ -630,7 +630,7 @@ table.dataTable tbody tr {
 
 .analyticsDialog {
     background: var(--color-main-background);
-    color: var(--color-text-light);
+    color: var(--color-main-text);
     border-radius: var(--border-radius-large);
     box-shadow: 0 0 30px var(--color-box-shadow);
     padding: 24px;
@@ -704,7 +704,7 @@ table.dataTable tbody tr {
     min-height: 30px; /* Reduced height */
     max-height: 30px;
     border-radius: 15px; /* Rounded edges */
-    color: var(--color-text-lighter);
+    color: var(--color-text-maxcontrast);
     font-style: italic;
 }
 
@@ -714,8 +714,7 @@ table.dataTable tbody tr {
     grid-template-areas:
       "dummy columns"
       "rows measures"
-      "dummy2 totals"
-      "hidden hidden";
+      "hidden totals";
     grid-template-columns: 1fr 2fr;
     grid-template-rows: auto; /* Define the height for rows and measures */
     gap: 10px;
@@ -776,9 +775,9 @@ table.dataTable tbody tr {
 }
 
 #tableOptionsLayoutTotals {
-    display: flex;
+    /*  display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
 }
 
 .toggle-switch {

@@ -5,6 +5,7 @@
 
 ### Fixed
 - console error when using timestamps for 1-column raw data #384
+- css deprecation 
 
 ## 4.12.0 - 2023-12-11
 ### Added
