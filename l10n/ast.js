@@ -40,6 +40,7 @@ OC.L10N.register(
     "Do you like this app?" : "¿Préstate esta aplicación?",
     "More information …" : "Más información…",
     "Name" : "Nome",
+    "Open documentation" : "Abrir la documentación",
     "Update" : "Anovar",
     "Export" : "Esportar",
     "Import" : "Importar",
@@ -49,6 +50,8 @@ OC.L10N.register(
     "Daily" : "Caldía",
     "Hourly" : "Cada hora",
     "Unshare" : "Dexar de compartir",
+    "Copy link" : "Copiar l'enllaz",
+    "Get more information" : "Consiguir más información",
     "Create" : "Crear"
 },
 "nplurals=2; plural=(n != 1);");
