@@ -13,6 +13,7 @@ OC.L10N.register(
     "Select file" : "Seleccionar archivo",
     "Delete" : "Eliminar",
     "Search" : "Buscar",
+    "Loading" : "Cargando",
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
