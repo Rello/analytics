@@ -35,11 +35,14 @@ OC.L10N.register(
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
     "Options" : "Opciones",
+    "Translate" : "Traducir",
     "Back" : "Atrás",
     "Settings" : "Configuración",
     "Do you like this app?" : "¿Préstate esta aplicación?",
     "More information …" : "Más información…",
     "Name" : "Nome",
+    "Table" : "Tabla",
+    "Open documentation" : "Abrir la documentación",
     "Update" : "Anovar",
     "Export" : "Esportar",
     "Import" : "Importar",
@@ -49,6 +52,8 @@ OC.L10N.register(
     "Daily" : "Caldía",
     "Hourly" : "Cada hora",
     "Unshare" : "Dexar de compartir",
+    "Copy link" : "Copiar l'enllaz",
+    "Get more information" : "Consiguir más información",
     "Create" : "Crear"
 },
 "nplurals=2; plural=(n != 1);");
