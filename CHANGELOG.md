@@ -3,6 +3,9 @@
 ### Added
 - copy data loads
 
+### Changed
+- DataTables v2
+
 ### Fixed
 - console error when using timestamps for 1-column raw data #384
 - css deprecation 

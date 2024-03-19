@@ -348,6 +348,12 @@ table.dataTable tbody tr {
     background-color: var(--color-main-background) !important;
 }
 
+/* make the pagination smaller */
+div.dt-container .dt-paging .dt-paging-button {
+    font-size: 12px;
+    font-weight: 400;
+}
+
 .analytics-options {
     opacity: 0.5;
     background-size: 20px;
