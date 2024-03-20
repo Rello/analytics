@@ -116,576 +116,35 @@ OCA.Analytics.UI = {
         document.getElementById('reportHeader').innerText = OCA.Analytics.currentReportData.options.name;
         if (OCA.Analytics.currentReportData.options.subheader !== '') {
             document.getElementById('reportSubHeader').innerText = OCA.Analytics.currentReportData.options.subheader;
-            OCA.Analytics.UI.showElement('reportSubHeader');
+            OCA.Analytics.Visualization.showElement('reportSubHeader');
         }
 
         document.title = OCA.Analytics.currentReportData.options.name + ' - ' + OCA.Analytics.initialDocumentTitle;
         if (OCA.Analytics.currentReportData.status !== 'nodata' && parseInt(OCA.Analytics.currentReportData.error) === 0) {
 
             // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-            OCA.Analytics.currentReportData.data = OCA.Analytics.Backend.sortDates(OCA.Analytics.currentReportData.data);
+            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
 
-            OCA.Analytics.currentReportData.data = OCA.Analytics.Backend.formatDates(OCA.Analytics.currentReportData.data);
+            OCA.Analytics.currentReportData.data = OCA.Analytics.Visualization.formatDates(OCA.Analytics.currentReportData.data);
             let visualization = OCA.Analytics.currentReportData.options.visualization;
             if (visualization === 'chart') {
-                OCA.Analytics.UI.buildChart(OCA.Analytics.currentReportData);
+                let ctx = document.getElementById('myChart').getContext('2d');
+                OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.UI.getDefaultChartOptions());
             } else if (visualization === 'table') {
-                OCA.Analytics.UI.buildDataTable(OCA.Analytics.currentReportData);
+                OCA.Analytics.Visualization.buildDataTable(document.getElementById("tableContainer"), OCA.Analytics.currentReportData);
             } else {
-                OCA.Analytics.UI.buildChart(OCA.Analytics.currentReportData);
-                OCA.Analytics.UI.buildDataTable(OCA.Analytics.currentReportData);
+                let ctx = document.getElementById('myChart').getContext('2d');
+                OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.UI.getDefaultChartOptions());
+                OCA.Analytics.Visualization.buildDataTable(document.getElementById("tableContainer"), OCA.Analytics.currentReportData);
             }
         } else {
-            OCA.Analytics.UI.showElement('noDataContainer');
+            OCA.Analytics.Visualization.showElement('noDataContainer');
             if (parseInt(OCA.Analytics.currentReportData.error) !== 0) {
                 OCA.Analytics.Notification.notification('error', OCA.Analytics.currentReportData.error);
             }
         }
         OCA.Analytics.UI.buildReportOptions();
 
-    },
-
-    buildDataTable: function (jsondata) {
-        OCA.Analytics.UI.showElement('tableContainer');
-        //OCA.Analytics.UI.showElement('tableMenuBar');
-
-        let columns = [];
-        let data, unit = '';
-
-        let header = jsondata.header;
-        let allDimensions = jsondata.dimensions;
-        (jsondata.dimensions) ? allDimensions = jsondata.dimensions : allDimensions = jsondata.header;
-        /*
-                let headerKeys = Object.keys(header);
-                for (let i = 0; i < headerKeys.length; i++) {
-                    columns[i] = {'title': (header[headerKeys[i]] !== null) ? header[headerKeys[i]] : ""};
-                    let columnType = Object.keys(allDimensions).find(key => allDimensions[key] === header[headerKeys[i]]);
-
-                    if (i === headerKeys.length - 1) {
-                        // this is the last column
-
-                        // prepare for later unit cloumn
-                        //columns[i]['render'] = function(data, type, row, meta) {
-                        //    return data + ' ' + row[row.length-2];
-                        //};
-                        if (header[headerKeys[i]] !== null && header[headerKeys[i]].length === 1) {
-                            unit = header[headerKeys[i]] + ' ';
-                        }
-                        //columns[i]['render'] = DataTable.render.number(null, null, 2, unit + ' ');
-                        columns[i]['render'] = function (data, type, row, meta) {
-                            // If display or filter data is requested, format the number
-                            if (type === 'display' || type === 'filter') {
-                                return unit + parseFloat(data).toLocaleString();
-                            }
-                            // Otherwise the data type requested (`type`) is type detection or
-                            // sorting data, for which we want to use the integer, so just return
-                            // that, unaltered
-                            return data;
-                        }
-                        columns[i]['className'] = 'dt-right';
-                    } else if (columnType === 'timestamp') {
-                        columns[i]['render'] = function (data, type) {
-                            // If display or filter data is requested, format the date
-                            if (type === 'display' || type === 'filter') {
-                                return new Date(data * 1000).toLocaleString();
-                            }
-                            // Otherwise the data type requested (`type`) is type detection or
-                            // sorting data, for which we want to use the integer, so just return
-                            // that, unaltered
-                            return data;
-                        }
-                    } else if (columnType === 'unit') {
-                        columns[i]['visible'] = false;
-                        columns[i]['searchable'] = false;
-                    }
-                }
-                data = jsondata.data;
-
-                // transform the table
-
-                let headers = ['Category', ...new Set(data.map(item => item[1]))];
-                headers = headers.map((title, index) => {
-                    return index === 0 ? { title } : { title, className: 'dt-right' };
-                });
-                let transformedData = {};
-
-                data.forEach(row => {
-                    if (!transformedData[row[0]]) {
-                        transformedData[row[0]] = new Array(headers.length - 1).fill(null);
-                    }
-                    let index = headers.map(h => h.title).indexOf(row[1]);
-                    transformedData[row[0]][index - 1] = parseFloat(row[2]).toLocaleString();
-                });
-
-                let finalData = Object.entries(transformedData).map(([key, values]) => {
-                    return [key, ...values];
-                });
-
-                columns = headers; // Formatted columns array
-                data = finalData;
-        */
-
-        // restore saved table state
-        let tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)
-            ? JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)
-            : {};
-        let defaultOrder = [];
-        let defaultLength = 10;
-
-        let layoutConfig = tableOptions.layout;
-        //layoutConfig = {};
-        let originalData = jsondata.data;
-        let uniqueHeaders = new Set();
-        let transformedData = {};
-
-        if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
-            // No layoutConfig provided - display all columns in rows
-            columns = header.map((header, index) => ({title: header, className: index === 0 ? '' : 'dt-right'}));
-            data = originalData;
-        } else if (layoutConfig.rows && !layoutConfig.columns.length && !layoutConfig.measures.length) {
-            // Case for simple changing the column sequence
-
-            // Use titles from the headers array based on the reordered indices
-            columns = layoutConfig.rows.map((index, i) => ({
-                title: header[index],
-                className: i > 0 ? 'dt-right' : ''
-            }));
-
-            // Reorder the data according to the new column sequence
-            data = originalData.map(row =>
-                layoutConfig.rows.map((index, i) =>
-                    i === layoutConfig.rows.length - 1 ? parseFloat(row[index]).toLocaleString() : row[index]
-                )
-            );
-        } else {
-            // Case for pivot like rearrangement of the table
-
-            // 1. Extract unique headers and initialize transformedData
-            originalData.forEach(row => {
-                const columnHeader = row[layoutConfig.columns[0]];
-                uniqueHeaders.add(columnHeader);
-                transformedData[row[layoutConfig.rows[0]]] = {};
-            });
-
-            // Sort the headers for consistent ordering
-            uniqueHeaders = Array.from(uniqueHeaders).sort();
-
-            // 2. Transform the data
-            originalData.forEach(row => {
-                const rowHeader = row[layoutConfig.rows[0]];
-                const columnHeader = row[layoutConfig.columns[0]];
-                const dataValue = row[layoutConfig.measures[0]];
-                transformedData[rowHeader][columnHeader] = dataValue;
-            });
-
-            // 3. Generate the columns array
-            columns = [{title: 'Category', className: ''}];
-            uniqueHeaders.forEach(header => {
-                columns.push({
-                    title: header,
-                    className: 'dt-right',
-                    render: function (data, type, row, meta) {
-                        if (data === null || isNaN(parseFloat(data))) {
-                            return '';
-                        } else {
-                            return parseFloat(data).toLocaleString();
-                        }
-                    }
-                });
-            });
-
-            // Convert transformed data to array format
-            data = Object.entries(transformedData).map(([key, values]) => {
-                return [key, ...uniqueHeaders.map(header => values[header] || null)];
-            });
-        }
-
-        // Calculate column totals
-        let columnTotals = new Array(data[0].length).fill(0);
-        data.forEach(row => {
-            row.forEach((value, index) => {
-                let numericValue = value === null ? 0 : parseFloat(value);
-                if (!isNaN(numericValue)) {
-                    columnTotals[index] += numericValue;
-                }
-            });
-        });
-
-// Format the totals and add "Total" label to the first column
-        let totalsRow = columnTotals.map((total, index) =>
-            index === 0 ? "Total" : (!isNaN(total) ? total : '')
-        );
-
-// Append the totals row to the data
-        //data.push(totalsRow);
-
-        const language = {
-            // TRANSLATORS Noun
-            search: t('analytics', 'Search'),
-            lengthMenu: t('analytics', 'Show _MENU_ entries'),
-            info: t('analytics', 'Showing _START_ to _END_ of _TOTAL_ entries'),
-            infoEmpty: t('analytics', 'Showing 0 to 0 of 0 entries'),
-            paginate: {
-                // TRANSLATORS pagination description non-capital
-                first: t('analytics', 'first'),
-                // TRANSLATORS pagination description non-capital
-                previous: t('analytics', 'previous'),
-                // TRANSLATORS pagination description non-capital
-                next: t('analytics', 'next'),
-                // TRANSLATORS pagination description non-capital
-                last: t('analytics', 'last')
-            },
-        };
-
-
-        document.getElementById('tableContainer').createTFoot().insertRow(0);
-        OCA.Analytics.tableObject = new DataTable(document.getElementById("tableContainer"), {
-            //dom: 'lrtip',
-            order: tableOptions.order || defaultOrder,
-            pageLength: tableOptions.length || defaultLength,
-            scrollX: true,
-            autoWidth: false,
-            fixedColumns: true,
-            data: data,
-            columns: columns,
-            language: language,
-            rowCallback: function (row, data, index) {
-                OCA.Analytics.UI.dataTableRowCallback(row, data, index, jsondata.thresholds)
-            },
-            initComplete: function () {
-                let info = this.closest('.dataTables_wrapper').find('.dataTables_info');
-                info.toggle(this.api().page.info().pages > 1);
-                let length = this.closest('.dataTables_wrapper').find('.dataTables_length');
-                length.toggle(this.api().page.info().pages > 1);
-                let filter = this.closest('.dataTables_wrapper').find('.dataTables_filter');
-                filter.toggle(this.api().page.info().pages > 1);
-            },
-            drawCallback: function () {
-                let pagination = this.closest('.dataTables_wrapper').find('.dataTables_paginate');
-                pagination.toggle(this.api().page.info().pages > 1);
-
-            },
-            footerCallback: function (row, data, start, end, display) {
-                const api = this.api();
-                const footerRow = api.table().footer().querySelector('tr');
-
-                // If footer should not be displayed, empty the footer and return
-                if (tableOptions.footer !== true) {
-                    while (footerRow.firstChild) {
-                        footerRow.removeChild(footerRow.firstChild);
-                    }
-                    return;
-                }
-
-                api.columns().every(function (i) {
-                    const columnData = this.data().toArray();
-                    const total = columnData.reduce(function (sum, curValue) {
-                        return sum + parseFloat(curValue || 0);
-                    }, 0);
-
-                    let cell = footerRow.querySelector('td:nth-child(' + (i + 1) + ')');
-                    // Append a new td if not exist
-                    if (!cell) {
-                        cell = footerRow.appendChild(document.createElement('td'));
-                    }
-                    // set cell value
-                    if (i === 0) {
-                        cell.innerHTML = 'Total';
-                    } else {
-                        cell.innerHTML = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() : '';
-                        cell.classList.add('dt-right');
-                    }
-                });
-            }
-        });
-
-        // Listener for when the pagination length is changed
-        OCA.Analytics.tableObject.on('length.dt', function () {
-            OCA.Analytics.unsavedFilters === true;
-            document.getElementById('saveIcon').style.removeProperty('display');
-        });
-
-        // Listener for when the table is ordered
-        OCA.Analytics.tableObject.on('order.dt', function () {
-            OCA.Analytics.unsavedFilters === true;
-            document.getElementById('saveIcon').style.removeProperty('display');
-        });
-    },
-
-    dataTableRowCallback: function (row, data, index, thresholds) {
-        const operators = {
-            '=': function (a, b) {
-                return a === b
-            },
-            '<': function (a, b) {
-                return a < b
-            },
-            '>': function (a, b) {
-                return a > b
-            },
-            '<=': function (a, b) {
-                return a <= b
-            },
-            '>=': function (a, b) {
-                return a >= b
-            },
-            '!=': function (a, b) {
-                return a !== b
-            },
-        };
-
-        thresholds = thresholds.filter(p => (p.dimension1 === data[0] || p.dimension1 === '*') && p.option !== 'new');
-
-        let color;
-        let severity;
-        for (let threshold of thresholds) {
-            // use the last column for comparison of the value
-            const comparison = operators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
-            severity = parseInt(threshold['severity']);
-            if (comparison === true) {
-                if (severity === 2) {
-                    color = 'red';
-                } else if (severity === 3) {
-                    color = 'orange';
-                } else if (severity === 4) {
-                    color = 'green';
-                }
-
-                if (data.length > 3) {
-                    // external data source
-                    row.style.color = color;
-                } else {
-                    row.childNodes.item(data.length - 1).style.color = color;
-                }
-            }
-        }
-    },
-
-    resetTableState: function () {
-        if (OCA.Analytics.tableObject !== null) {
-            OCA.Analytics.tableObject
-                .order([])
-                .page.len(10)
-                .draw();
-            OCA.Analytics.unsavedFilters === true;
-            document.getElementById('saveIcon').style.removeProperty('display');
-            document.getElementById('tableContainer_length').style.removeProperty('display');
-            document.getElementById('tableContainer_filter').style.removeProperty('display');
-        }
-        OCA.Analytics.UI.hideReportMenu();
-    },
-
-    buildChart: function (jsondata) {
-        const defaultLegendClickHandler = Chart.defaults.plugins.legend.onClick;
-        const pieDoughnutLegendClickHandler = Chart.controllers.doughnut.overrides.plugins.legend.onClick;
-        const newLegendClickHandler = function (e, legendItem, legend) {
-            const index = legendItem.datasetIndex;
-            const type = legend.chart.config.type;
-
-            // Do the original logic
-            if (type === 'pie' || type === 'doughnut') {
-                pieDoughnutLegendClickHandler(e, legendItem, legend)
-            } else {
-                defaultLegendClickHandler(e, legendItem, legend);
-            }
-            document.getElementById('saveIcon').style.removeProperty('display');
-        };
-
-        OCA.Analytics.UI.showElement('tableSeparatorContainer');
-        OCA.Analytics.UI.showElement('chartContainer');
-        let ctx = document.getElementById('myChart').getContext('2d');
-
-        // store the full chart type for deriving the stacked attribute later
-        // the general chart type is used for the chart from here on
-        let chartTypeFull;
-        jsondata.options.chart === '' ? chartTypeFull = 'column' : chartTypeFull = jsondata.options.chart;
-        let chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
-
-        // get the default settings for a chart
-        let chartOptions = OCA.Analytics.UI.getDefaultChartOptions();
-        Chart.defaults.elements.line.borderWidth = 2;
-        Chart.defaults.elements.line.tension = 0.1;
-        Chart.defaults.elements.line.fill = false;
-        Chart.defaults.elements.point.radius = 1;
-        Chart.defaults.plugins.legend.display = false;
-        Chart.defaults.plugins.legend.position = 'bottom';
-        Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
-
-        // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.UI.convertDataToChartJsFormat(jsondata.data, chartType);
-
-        // show legend button only when useful with >1 dataset
-        datasets.length > 1 ? OCA.Analytics.UI.showElement('chartLegendContainer') : null;
-
-        // do the color magic
-        // a predefined color array is used
-        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
-        for (let i = 0; i < datasets.length; ++i) {
-            let j = i - (Math.floor(i / colors.length) * colors.length)
-
-            // in only one dataset is being shown, create a fancy gradient fill
-            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
-                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
-                    .substring(1).match(/.{2}/g)
-                    .map(x => parseInt(x, 16));
-
-                datasets[0].backgroundColor = function (context) {
-                    const chart = context.chart;
-                    const {ctx, chartArea} = chart;
-                    let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
-                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
-                    return gradient;
-                }
-                datasets[i].borderColor = colors[j];
-                Chart.defaults.elements.line.fill = true;
-            } else if (chartType === 'doughnut') {
-                // special array handling for doughnuts
-                if (jsondata.options.dataoptions !== null) {
-                    const arr = JSON.parse(jsondata.options.dataoptions);
-                    let index = 0;
-                    for (const obj of arr) {
-                        if (obj.backgroundColor) {
-                            colors[index] = obj.backgroundColor;
-                        }
-                        index++;
-                    }
-                }
-                datasets[i].backgroundColor = datasets[i].borderColor = colors;
-                Chart.defaults.elements.line.fill = false;
-            } else {
-                datasets[i].backgroundColor = colors[j];
-                Chart.defaults.elements.line.fill = false;
-                datasets[i].borderColor = colors[j];
-            }
-        }
-
-        // derive the stacked or the stacked-100 option and adjust the data and options
-        let stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
-        let stacked100 = chartTypeFull.endsWith('St100');
-        if (stacked === true) {
-            chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
-            chartOptions.scales['primary'].max = 100;
-        }
-        if (stacked100 === true) {
-            datasets = OCA.Analytics.UI.calculateStacked100(datasets);
-        }
-
-        // overwrite some default chart options depending on the chart type
-        if (chartType === 'datetime') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
-        } else if (chartType === 'area') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
-            chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
-            Chart.defaults.elements.line.fill = true;
-        } else if (chartType === 'doughnut') {
-            chartOptions.scales['xAxes'].display = false;
-            chartOptions.scales['primary'].display = chartOptions.scales['primary'].grid.display = false;
-            chartOptions.scales['secondary'].display = chartOptions.scales['secondary'].grid.display = false;
-            chartOptions.circumference = 180;
-            chartOptions.rotation = -90;
-            chartOptions.plugins.datalabels.display = true;
-            Chart.defaults.plugins.legend.display = true;
-        }
-
-        // the user can add/overwrite chart options
-        // the user can put the options in array-format into the report definition
-        // these are merged with the standard report settings
-        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": {"time": {"unit" : "month"}}}}'
-        // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
-
-        // replace old settings from Chart.js 2
-        // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
-        if (jsondata.options.chartoptions !== null) {
-            jsondata.options.chartoptions = jsondata.options.chartoptions.replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
-        }
-        OCA.Analytics.currentReportData.options.chartoptions = jsondata.options.chartoptions;
-        let userChartOptions = jsondata.options.chartoptions;
-        if (userChartOptions !== '' && userChartOptions !== null) {
-            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
-        }
-
-        // the user can modify dataset/series settings
-        // these are merged with the data array coming from the backend
-        // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
-        // for doughnuts, no overwrites are allowed. Colors were taken care of before already
-        let userDatasetOptions = jsondata.options.dataoptions;
-        if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
-            let numberOfDatasets = datasets.length;
-            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
-            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
-            datasets = cloner.deep.merge({}, datasets);
-            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
-            datasets = Object.values(datasets);
-        }
-
-        OCA.Analytics.chartObject = new Chart(ctx, {
-            plugins: [ChartDataLabels],
-            type: OCA.Analytics.chartTypeMapping[chartType],
-            data: {
-                labels: xAxisCategories,
-                datasets: datasets
-            },
-            options: chartOptions,
-        });
-    },
-
-    convertDataToChartJsFormat: function (data, chartType) {
-        /*
-                let headerKeys = Object.keys(header).length;
-                let dataSeriesColumn = headerKeys - 3; //characteristic is taken from the second last column
-                let characteristicColumn = headerKeys - 2; //characteristic is taken from the second last column
-                let value = headerKeys - 1; //key figures is taken from the last column
-        */
-
-        const labelMap = new Map();
-        let datasetCounter = 0;
-        let datasets = [], xAxisCategories = [];
-        data.forEach((row) => {
-            // default expected columns
-            let dataSeriesColumn, characteristicColumn, value;
-
-            // when only 2 columns are provided, no label will be set
-            if (row.length >= 3) {
-                [dataSeriesColumn, characteristicColumn, value] = row.slice(-3);
-            } else if (row.length === 2) {
-                [characteristicColumn, value] = row;
-                dataSeriesColumn = '';
-            }
-
-            // Add category labels only once and not for every data series
-            if (!xAxisCategories.includes(characteristicColumn)) {
-                xAxisCategories.push(characteristicColumn);
-            }
-
-            // create the data series
-            if (!labelMap.has(dataSeriesColumn)) {
-                labelMap.set(dataSeriesColumn, {
-                    ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}), // no label for doughnut charts
-                    data: [],
-                    hidden: datasetCounter >= 4 // default hide > 4th series for better visibility
-                });
-                datasetCounter++;
-            }
-
-            const dataset = labelMap.get(dataSeriesColumn);
-            if (chartType === 'doughnut') {
-                dataset.data.push(parseFloat(value));
-            } else {
-                dataset.data.push({x: characteristicColumn, y: parseFloat(value)});
-            }
-        });
-
-        if (chartType === 'doughnut') {
-            datasets = [{data: Array.from(labelMap.values()).flatMap(d => d.data)}];
-        } else {
-            datasets = Array.from(labelMap.values());
-        }
-        return [xAxisCategories, datasets];
     },
 
     getDefaultChartOptions: function () {
@@ -754,6 +213,9 @@ OCA.Analytics.UI = {
             },
 
             plugins: {
+                legend: {
+                    display: false,
+                },
                 datalabels: {
                     display: false,
                     formatter: (value, ctx) => {
@@ -788,40 +250,13 @@ OCA.Analytics.UI = {
         };
     },
 
-    calculateStacked100: function (rawData) {
-        // Create a map to store total y-values for each x-label
-        const totalMap = {};
-
-        // Calculate total y-values for each x-label
-        rawData.forEach(dataset => {
-            dataset.data.forEach(point => {
-                if (!totalMap[point.x]) {
-                    totalMap[point.x] = 0;
-                }
-                totalMap[point.x] += point.y;
-            });
-        });
-
-        // Convert y-values to percentages
-        return rawData.map(dataset => {
-            const newDataset = {...dataset};
-            newDataset.data = dataset.data.map(point => {
-                return {
-                    x: point.x,
-                    y: totalMap[point.x] === 0 ? 0 : (point.y / totalMap[point.x]) * 100
-                };
-            });
-            return newDataset;
-        });
-    },
-
     toggleZoomResetButton: function () {
-        OCA.Analytics.UI.showElement('chartZoomReset');
+        OCA.Analytics.Visualization.showElement('chartZoomReset');
     },
 
     handleZoomResetButton: function () {
         OCA.Analytics.chartObject.resetZoom();
-        OCA.Analytics.UI.hideElement('chartZoomReset');
+        OCA.Analytics.Visualization.hideElement('chartZoomReset');
     },
 
     toggleChartLegend: function () {
@@ -838,29 +273,29 @@ OCA.Analytics.UI = {
 
     resetContentArea: function () {
         if (OCA.Analytics.isAdvanced) {
-            OCA.Analytics.UI.showElement('analytics-intro');
+            OCA.Analytics.Visualization.showElement('analytics-intro');
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
             if (OCA.Analytics.tableObject !== null) {
                 OCA.Analytics.tableObject.destroy();
                 OCA.Analytics.tableObject = null;
             }
-            OCA.Analytics.UI.hideElement('chartContainer');
-            OCA.Analytics.UI.hideElement('chartLegendContainer');
+            OCA.Analytics.Visualization.hideElement('chartContainer');
+            OCA.Analytics.Visualization.hideElement('chartLegendContainer');
             document.getElementById('chartContainer').innerHTML = '';
             document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
             document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.UI.handleZoomResetButton);
-            OCA.Analytics.UI.hideElement('tableContainer');
-            OCA.Analytics.UI.hideElement('tableSeparatorContainer');
-            //OCA.Analytics.UI.hideElement('tableMenuBar');
+            OCA.Analytics.Visualization.hideElement('tableContainer');
+            OCA.Analytics.Visualization.hideElement('tableSeparatorContainer');
+            //OCA.Analytics.Visualization.hideElement('tableMenuBar');
             document.getElementById('tableContainer').innerHTML = '';
 
-            OCA.Analytics.UI.hideElement('reportSubHeader');
-            OCA.Analytics.UI.hideElement('noDataContainer');
+            OCA.Analytics.Visualization.hideElement('reportSubHeader');
+            OCA.Analytics.Visualization.hideElement('noDataContainer');
             document.getElementById('reportHeader').innerHTML = '';
             document.getElementById('reportSubHeader').innerHTML = '';
 
-            OCA.Analytics.UI.showElement('reportMenuBar');
+            OCA.Analytics.Visualization.showElement('reportMenuBar');
             OCA.Analytics.UI.hideReportMenu();
             document.getElementById('reportMenuChartOptions').disabled = false;
             document.getElementById('reportMenuTableOptions').disabled = false;
@@ -880,22 +315,22 @@ OCA.Analytics.UI = {
 
         if (isExternalShare) {
             if (canUpdate) {
-                OCA.Analytics.UI.hideElement('reportMenuIcon');
+                OCA.Analytics.Visualization.hideElement('reportMenuIcon');
                 OCA.Analytics.Filter.refreshFilterVisualisation();
             } else {
                 //document.getElementById('reportMenuBar').remove();
-                OCA.Analytics.UI.hideElement('reportMenuBar');
+                OCA.Analytics.Visualization.hideElement('reportMenuBar');
                 //document.getElementById('reportMenuBar').id = 'reportMenuBarHidden';
             }
             return;
         }
 
         if (!canUpdate) {
-            OCA.Analytics.UI.hideElement('reportMenuBar');
+            OCA.Analytics.Visualization.hideElement('reportMenuBar');
         }
 
         if (isInternalShare) {
-            OCA.Analytics.UI.showElement('reportMenuIcon');
+            OCA.Analytics.Visualization.showElement('reportMenuIcon');
         }
 
         if (!OCA.Analytics.translationAvailable) {
@@ -919,6 +354,7 @@ OCA.Analytics.UI = {
 
         if (visualization === 'chart') {
             document.getElementById('reportMenuResetTableState').disabled = true;
+            document.getElementById('reportMenuTableOptions').disabled = true;
         } else {
             document.getElementById('reportMenuResetTableState').disabled = false;
         }
@@ -960,20 +396,6 @@ OCA.Analytics.UI = {
         let refresh = document.getElementsByName('refresh');
         for (let i = 0; i < refresh.length; i++) {
             refresh[i].addEventListener('change', OCA.Analytics.Filter.Backend.saveRefresh);
-        }
-    },
-
-    showElement: function (element) {
-        if (document.getElementById(element)) {
-            document.getElementById(element).hidden = false;
-            //document.getElementById(element).style.removeProperty('display');
-        }
-    },
-
-    hideElement: function (element) {
-        if (document.getElementById(element)) {
-            document.getElementById(element).hidden = true;
-            //document.getElementById(element).style.display = 'none';
         }
     },
 
@@ -1203,7 +625,7 @@ OCA.Analytics.Translation = {
 OCA.Analytics.Functions = {
 
     trend: function () {
-        OCA.Analytics.UI.showElement('chartLegendContainer');
+        OCA.Analytics.Visualization.showElement('chartLegendContainer');
         OCA.Analytics.UI.hideReportMenu();
 
         let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
@@ -1298,7 +720,7 @@ OCA.Analytics.Functions = {
     },
 
     aggregationFunction: function (mode) {
-        OCA.Analytics.UI.showElement('chartLegendContainer');
+        OCA.Analytics.Visualization.showElement('chartLegendContainer');
         OCA.Analytics.UI.hideReportMenu();
 
         let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
@@ -1790,9 +1212,9 @@ OCA.Analytics.Backend = {
     getData: function () {
         if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
         OCA.Analytics.UI.resetContentArea();
-        OCA.Analytics.UI.hideElement('analytics-intro');
-        OCA.Analytics.UI.hideElement('analytics-content');
-        OCA.Analytics.UI.showElement('analytics-loading');
+        OCA.Analytics.Visualization.hideElement('analytics-intro');
+        OCA.Analytics.Visualization.hideElement('analytics-content');
+        OCA.Analytics.Visualization.showElement('analytics-loading');
 
         let url;
         if (document.getElementById('sharingToken').value === '') {
@@ -1836,8 +1258,8 @@ OCA.Analytics.Backend = {
                 let data = JSON.parse(xhr.responseText);
                 // Do something with the data here
 
-                OCA.Analytics.UI.hideElement('analytics-loading');
-                OCA.Analytics.UI.showElement('analytics-content');
+                OCA.Analytics.Visualization.hideElement('analytics-loading');
+                OCA.Analytics.Visualization.showElement('analytics-content');
                 OCA.Analytics.currentReportData = data;
                 try {
                     OCA.Analytics.currentReportData.options.filteroptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
@@ -1851,7 +1273,7 @@ OCA.Analytics.Backend = {
                 document.getElementById('reportHeader').innerText = data.options.name;
                 if (data.options.subheader !== '') {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
-                    OCA.Analytics.UI.showElement('reportSubHeader');
+                    OCA.Analytics.Visualization.showElement('reportSubHeader');
                 }
 
                 OCA.Analytics.UI.buildReport();
@@ -1861,49 +1283,6 @@ OCA.Analytics.Backend = {
             }
         };
         xhr.send();
-    },
-
-    sortDates: function (data) {
-        if (OCA.Analytics.currentReportData.options.chartoptions !== '') {
-            if (JSON.parse(OCA.Analytics.currentReportData.options.chartoptions)?.scales?.xAxes?.time?.parser !== undefined) {
-                let parser = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions)["scales"]["xAxes"]["time"]["parser"];
-                data.sort(function (a, b) {
-                    let sortColumn = a.length - 2;
-                    if (sortColumn === 0) {
-                        return moment(a[sortColumn], parser).toDate() - moment(b[sortColumn], parser).toDate();
-                    } else {
-                        return a[0] - b[0] || moment(a[sortColumn], parser).toDate() - moment(b[sortColumn], parser).toDate();
-                    }
-                });
-            }
-        }
-        return data;
-    },
-
-    formatDates: function (data) {
-        let firstRow = data[0];
-        let now;
-        for (let i = 0; i < firstRow.length; i++) {
-            // loop columns and check for a valid date
-            if (!isNaN(new Date(firstRow[i]).valueOf()) && firstRow[i] !== null && firstRow[i].length >= 19) {
-                // column contains a valid date
-                // then loop all rows for this column and convert to local time
-                for (let j = 0; j < data.length; j++) {
-                    if (data[j][i].length === 19) {
-                        // values are assumed to have a timezone or are used as UTC
-                        data[j][i] = data[j][i] + 'Z';
-                    }
-                    now = new Date(data[j][i]);
-                    data[j][i] = now.getFullYear()
-                        + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1) //getMonth will start with Jan = 0
-                        + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
-                        + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
-                        + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
-                        + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds()
-                }
-            }
-        }
-        return data;
     },
 
     getDatasetDefinitions: function () {
@@ -1941,10 +1320,10 @@ document.addEventListener('DOMContentLoaded', function () {
         OCA.Analytics.isAdvanced = true;
     }
     OCA.Analytics.initialDocumentTitle = document.title;
-    OCA.Analytics.UI.hideElement('analytics-warning');
+    OCA.Analytics.Visualization.hideElement('analytics-warning');
 
     if (document.getElementById('sharingToken').value === '') {
-        OCA.Analytics.UI.showElement('analytics-intro');
+        OCA.Analytics.Visualization.showElement('analytics-intro');
         OCA.Analytics.Core.init();
         if (!OCA.Analytics.isAdvanced) {
             OCA.Analytics.UI.reportOptionsEventlisteners();

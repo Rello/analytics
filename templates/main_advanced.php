@@ -16,6 +16,7 @@ Util::addStyle('analytics', 'advanced');
 Util::addStyle('analytics', 'wizard');
 //Util::addStyle('analytics', 'sharetabview');
 Util::addScript('analytics', 'app');
+Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'advanced');

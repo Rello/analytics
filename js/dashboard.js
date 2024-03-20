@@ -127,7 +127,10 @@ OCA.Analytics.Dashboard = {
 
         if (type !== 'table') {
             document.getElementById('kpi' + reportId).remove();
-            OCA.Analytics.Dashboard.buildChart(jsondata);
+            let ctx = document.getElementById('myChart' + jsondata['options']['id']).getContext('2d');
+            OCA.Analytics.Visualization.buildChart(ctx, jsondata, this.getDefaultChartOptions());
+
+            //OCA.Analytics.Dashboard.buildChart(jsondata);
         } else {
             document.getElementById('chartContainer' + reportId).remove();
         }
@@ -378,13 +381,13 @@ OCA.Analytics.Dashboard = {
                     display: false,
                 },
             },
-            legend: {
-                display: false,
-            },
             animation: {
                 duration: 1500 // general animation time
             },
             plugins: {
+                legend: {
+                    display: false,
+                },
                 datalabels: {
                     display: false,
                     formatter: (value, ctx) => {

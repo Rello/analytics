@@ -79,6 +79,7 @@ class Widget implements IWidget
     public function load(): void
     {
         Util::addScript('analytics', 'dashboard');
+        Util::addScript('analytics', 'visualization');
         Util::addStyle('analytics', 'dashboard');
         Util::addScript('analytics', '3rdParty/chart.min');
         Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');

@@ -36,8 +36,8 @@ OCA.Analytics.Sidebar = {
                     appsidebar.classList.remove('disappear');
                 }
             } else {
-                OCA.Analytics.UI.hideElement('analytics-intro');
-                OCA.Analytics.UI.showElement('analytics-content');
+                OCA.Analytics.Visualization.hideElement('analytics-intro');
+                OCA.Analytics.Visualization.showElement('analytics-content');
                 appsidebar.classList.remove('disappear');
             }
             appsidebar.dataset.id = datasetId;
@@ -189,7 +189,7 @@ OCA.Analytics.Sidebar.Report = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderReport').classList.add('selected');
-        OCA.Analytics.UI.showElement('tabContainerReport');
+        OCA.Analytics.Visualization.showElement('tabContainerReport');
         document.getElementById('tabContainerReport').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId;
@@ -742,7 +742,7 @@ OCA.Analytics.Sidebar.Data = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderData').classList.add('selected');
-        OCA.Analytics.UI.showElement('tabContainerData');
+        OCA.Analytics.Visualization.showElement('tabContainerData');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         let type = 'report';
@@ -822,8 +822,8 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataImportClipboardButton: function () {
-        OCA.Analytics.UI.showElement('importDataClipboardText');
-        OCA.Analytics.UI.showElement('importDataClipboardButtonGo');
+        OCA.Analytics.Visualization.showElement('importDataClipboardText');
+        OCA.Analytics.Visualization.showElement('importDataClipboardButtonGo');
         document.getElementById('importDataClipboardButtonGo').addEventListener('click', OCA.Analytics.Sidebar.Backend.importCsvData);
     },
 
@@ -852,7 +852,7 @@ OCA.Analytics.Sidebar.Share = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderShare').classList.add('selected');
-        OCA.Analytics.UI.showElement('tabContainerShare');
+        OCA.Analytics.Visualization.showElement('tabContainerShare');
         document.getElementById('tabContainerShare').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         // clone the DOM template
@@ -1186,7 +1186,7 @@ OCA.Analytics.Sidebar.Threshold = {
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderThreshold').classList.add('selected');
-        OCA.Analytics.UI.showElement('tabContainerThreshold');
+        OCA.Analytics.Visualization.showElement('tabContainerThreshold');
         document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         // get the report metadata to put correct labels to the input boxes

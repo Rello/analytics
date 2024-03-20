@@ -215,7 +215,7 @@ OCA.Analytics.Filter = {
     },
 
     handleVariableHint: function () {
-        OCA.Analytics.UI.showElement('filterDialogHintText');
+        OCA.Analytics.Visualization.showElement('filterDialogHintText');
     },
 
     processFilterDialog: function () {
@@ -281,12 +281,6 @@ OCA.Analytics.Filter = {
 
     openTableOptionsDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
-        let tableOptions;
-        try {
-            tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
-        } catch (e) {
-            tableOptions = {};
-        }
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Table options'),
@@ -302,11 +296,23 @@ OCA.Analytics.Filter = {
             section.addEventListener('drop', OCA.Analytics.Filter.Drag.drop);
             section.addEventListener('dragover', OCA.Analytics.Filter.Drag.allowDrop);
         });
+        container.getElementById('tableOptionsResetState').addEventListener('click', OCA.Analytics.Filter.processTableOptionsReset);
+
+        let tableOptions;
+        try {
+            tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
+        } catch (e) {
+            tableOptions = {};
+        }
 
         if (tableOptions && tableOptions.footer) {
             container.querySelector('input[name="totalOption"][value="true"]').checked = true;
         } else {
             container.querySelector('input[name="totalOption"][value="false"]').checked = true;
+        }
+
+        if (tableOptions && tableOptions.calculatedColumns) {
+            container.getElementById('tableOptionsCalculatedColumns').value = tableOptions.calculatedColumns;
         }
 
         OCA.Analytics.Notification.htmlDialogUpdate(
@@ -362,10 +368,26 @@ OCA.Analytics.Filter = {
             tableOptions.layout = layout;
         }
 
+        let calculatedColumns = document.getElementById('tableOptionsCalculatedColumns').value;
+        if (calculatedColumns !== '') {
+            tableOptions.calculatedColumns = calculatedColumns;
+        }
+
+        if (OCA.Analytics.currentReportData.options.tableoptions !== JSON.stringify(tableOptions)) {
+            delete tableOptions.colReorder;
+        }
+
         OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
+    },
+
+    processTableOptionsReset: function () {
+        if (OCA.Analytics.currentReportData.options.tableoptions !== null) {
+            OCA.Analytics.currentReportData.options.tableoptions = null;
+            OCA.Analytics.unsavedFilters = true;
+        }
     },
 
     openChartOptionsDialog: function () {
@@ -776,26 +798,35 @@ OCA.Analytics.Filter.Backend = {
         }
 
         let tableOptions = {};
+
+        //get the table states
         if (OCA.Analytics.tableObject) {
             let fullState = OCA.Analytics.tableObject.state();
-            let extractedState = {
-                order: fullState.order,
-                length: fullState.length
-            };
             if (fullState.order.length !== 0) {
                 tableOptions.order = fullState.order;
             }
             if (fullState.length !== 10) {
                 tableOptions.length = fullState.length;
             }
+            if (!fullState.colReorder.every((value, index) => value === index)) {
+                // store the column order just if the index is not counting upwards, because this is the default
+                tableOptions.colReorder = {
+                    order: fullState.colReorder
+                };
+            }
         }
 
+        // get the other states which are not related to the tableState itself
         if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).footer === true) {
             tableOptions.footer = true;
         }
 
         if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout) {
             tableOptions.layout = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
+        }
+
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).calculatedColumns) {
+            tableOptions.calculatedColumns = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).calculatedColumns;
         }
 
         OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);

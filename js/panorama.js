@@ -11,13 +11,10 @@
 
 'use strict';
 
-// Workaround because NC still delivers moment but triggers a deprecated warning every time it is used
-var myMoment = moment;
-
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
-    OCA.Analytics.UI.hideElement('analytics-warning');
-    OCA.Analytics.UI.showElement('analytics-intro');
+    OCA.Analytics.Visualization.hideElement('analytics-warning');
+    OCA.Analytics.Visualization.showElement('analytics-intro');
 
     // register handlers for the navigation bar
     OCA.Analytics.Navigation.registerHandler('create', function () {
@@ -52,6 +49,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     TYPE_SHARED: 99,
     tableObject: null,
     isAdvanced: false,
+    currentReportData: {},
     isPanorama: true,
     // flexible mapping depending on type required by the used chart library
     chartTypeMapping: {
@@ -185,8 +183,8 @@ OCA.Analytics.Panorama = {
     },
 
     newPanorama: function () {
-        OCA.Analytics.UI.hideElement('analytics-intro');
-        OCA.Analytics.UI.showElement('analytics-content');
+        OCA.Analytics.Visualization.hideElement('analytics-intro');
+        OCA.Analytics.Visualization.showElement('analytics-content');
         OCA.Analytics.Panorama.currentPanorama = [];
         OCA.Analytics.Backend.create();
     },
@@ -251,8 +249,8 @@ OCA.Analytics.Panorama = {
         });
 
 
-        OCA.Analytics.UI.hideElement('analytics-intro');
-        OCA.Analytics.UI.showElement('analytics-content');
+        OCA.Analytics.Visualization.hideElement('analytics-intro');
+        OCA.Analytics.Visualization.showElement('analytics-content');
 
         // update the visibility of the next/prev buttons
         OCA.Analytics.Panorama.updateNavButtons();
@@ -294,7 +292,7 @@ OCA.Analytics.Panorama = {
         let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
         let itemContent = page.reports[itemIndex];
 
-        if (itemContent !== undefined && itemContent !== '') {
+        if (itemContent !== null && itemContent !== undefined) {
             let contentValue = itemContent['value'];
             let contentType = parseInt(itemContent['type']);
             //let widget = document.querySelectorAll('div[data-chart]')[positionIndex];
@@ -362,13 +360,14 @@ OCA.Analytics.Panorama = {
             let divElement = document.createElement('canvas');
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
-            OCA.Analytics.Report.buildChart(jsondata, itemId);
+            let ctx = document.getElementById('myWidget' + itemId).getContext('2d');
+            OCA.Analytics.Visualization.buildChart(ctx, jsondata, OCA.Analytics.UI.getDefaultChartOptions());
         } else {
             let canvasElement = document.getElementById(`myWidget${itemId}`);
             let divElement = document.createElement('table');
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
-            OCA.Analytics.Report.buildDataTable(jsondata, itemId);
+            OCA.Analytics.Visualization.buildDataTable(document.getElementById('myWidget' + itemId), jsondata);
         }
     },
     
@@ -501,7 +500,7 @@ OCA.Analytics.Panorama = {
         });
     },
 
-    // show the content selector menu when an overlay is clicked
+    // show the flower style content selector menu when an overlay is clicked
     showWidgetContentSelector: function (itemId) {
         document.getElementById('editMenuContainer').style.display = 'block';
         const menu = document.getElementById('editMenu');
@@ -628,14 +627,52 @@ OCA.Analytics.Panorama = {
     },
     
     buildWidgetContentReportSelector: function () {
-        // Populate report selection menu with given numbers
+        // Populate report selection menu with all available reports
         let reportSelectorContainer = document.getElementById('reportSelectorContainer');
-        OCA.Analytics.reports.forEach((report) => {
-            const reportItem = document.createElement('div');
-            reportItem.className = 'reportSelectorItem'; // You can add CSS classes for styling here.
-            reportItem.textContent = report.name;
-            reportItem.setAttribute('reportId', report.id);
+        let reportMap = new Map();
+        let rootReports = [];
 
+        // Separate reports into root-level and child reports
+        OCA.Analytics.reports.forEach(report => {
+            if (report.parent === 0) {
+                rootReports.push(report);
+                if (report.type === 0) {
+                    reportMap.set(report.id, []);
+                }
+            } else {
+                if (reportMap.has(report.parent)) {
+                    reportMap.get(report.parent).push(report);
+                }
+            }
+        });
+
+        // Sort root-level reports alphabetically
+        rootReports.sort((a, b) => a.name.localeCompare(b.name));
+
+        // Iterate and build the list
+        rootReports.forEach(report => {
+            let reportItem = OCA.Analytics.Panorama.buildWidgetContentReportSelectorItem(report, 0);
+            reportSelectorContainer.appendChild(reportItem);
+
+            // Add children for folders
+            if (report.type === 0 && reportMap.has(report.id)) {
+                reportMap.get(report.id).forEach(childReport => {
+                    let childReportItem = OCA.Analytics.Panorama.buildWidgetContentReportSelectorItem(childReport, 20); // Indent child reports
+                    reportSelectorContainer.appendChild(childReportItem);
+                });
+            }
+        });
+    },
+
+    // Helper function to create report item element
+    buildWidgetContentReportSelectorItem: function (report, indent) {
+        const reportItem = document.createElement('div');
+        reportItem.className = 'reportSelectorItem';
+        reportItem.textContent = report.name;
+        reportItem.setAttribute('reportId', report.id);
+        reportItem.style.paddingLeft = indent + 'px';
+
+        if (report.type !== 0) {
             reportItem.addEventListener('click', (e) => {
                 let reportId = parseInt(e.target.getAttribute('reportId'));
 
@@ -653,8 +690,8 @@ OCA.Analytics.Panorama = {
 
                 document.getElementById('modalReport').style.display = 'none';
             });
-            reportSelectorContainer.appendChild(reportItem);
-        });
+        }
+        return reportItem;
     },
 
     buildWidgetContentFileSelector: function () {
@@ -760,6 +797,8 @@ OCA.Analytics.Panorama = {
 
     },
 
+    // convert all canvas to images for better export quality
+    // currently not used
     prepareContentForPDF: function () {
         // Find all charts within the page
         const charts = document.querySelectorAll('canvas');
@@ -780,6 +819,7 @@ OCA.Analytics.Panorama = {
         });
     },
 
+    // revers all images to canvas for further usage
     revertContentForPDF: function() {
         // Find all chart images and canvases to revert changes
         const charts = document.querySelectorAll('canvas');
@@ -793,6 +833,7 @@ OCA.Analytics.Panorama = {
         });
     },
 
+    // open the file picker which offers the selection for pdf save or download
     handlePdfButton: function () {
         let mime = ['httpd/unix-directory'];
 
@@ -831,7 +872,6 @@ OCA.Analytics.Panorama = {
 
         const headerHeight = 30; // Fixed height that looks good
         const pages = document.querySelectorAll('.flex-container');
-        const headerElement = document.querySelector('.panoramaHeaderRow');
         const pdf = new jspdf.jsPDF({
             orientation: 'landscape',
             unit: 'pt',
@@ -842,9 +882,19 @@ OCA.Analytics.Panorama = {
             t('analytics', 'Starting PDF export')
         );
 
+
         try {
             const headerText = document.querySelector('.panoramaHeader').textContent;
             OCA.Analytics.Notification.htmlDialogUpdateAdd('header captured');
+
+            // Set PDF metadata
+            pdf.setProperties({
+                title:      headerText,
+                subject:    headerText,
+                author:     OC.getCurrentUser().displayName,
+                keywords:   headerText + ', PDF, Analytics, Panorama',
+                creator:    'Analytics - Nextcloud'
+            });
 
             for (const [index, page] of pages.entries()) {
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'capturing page {pageCount}', {pageCount: index}));
@@ -999,8 +1049,8 @@ OCA.Analytics.Backend = {
             if (xhr.readyState === 4) {
                 let jsondata = JSON.parse(xhr.response);
                 // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-                jsondata = OCA.Analytics.Report.sortDates(jsondata);
-                jsondata.data = OCA.Analytics.Report.formatDates(jsondata.data);
+                jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
+                jsondata.data = OCA.Analytics.Visualization.formatDates(jsondata.data);
                 OCA.Analytics.Panorama.setWidgetTypeReportContent(jsondata, itemId);
             }
         };
@@ -1119,143 +1169,7 @@ OCA.Analytics.Dashboard = {
     },
 }
 
-/**
- * @namespace OCA.Analytics.Report
- */
-OCA.Analytics.Report = {
-
-    buildChart: function (jsondata, positionIndex) {
-
-        let ctx = document.getElementById('myWidget' + positionIndex).getContext('2d');
-
-        // store the full chart type for deriving the stacked attribute later
-        // the general chart type is used for the chart from here on
-        let chartTypeFull;
-        jsondata.options.chart === '' ? chartTypeFull = 'column' : chartTypeFull = jsondata.options.chart;
-        let chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
-
-        // get the default settings for a chart
-        let chartOptions = OCA.Analytics.Report.getDefaultChartOptions();
-        Chart.defaults.elements.line.borderWidth = 2;
-        Chart.defaults.elements.line.tension = 0.1;
-        Chart.defaults.elements.point.radius = 0;
-        Chart.defaults.plugins.tooltip.enabled = true;
-
-        // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.Report.convertDataToChartJsFormat(jsondata.data, chartType);
-
-        // do the color magic
-        // a predefined color array is used
-        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
-        for (let i = 0; i < datasets.length; ++i) {
-            let j = i - (Math.floor(i / colors.length) * colors.length)
-
-            // in only one dataset is being shown, create a fancy gradient fill
-            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
-                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
-                    .substring(1).match(/.{2}/g)
-                    .map(x => parseInt(x, 16));
-
-                datasets[0].backgroundColor = function (context) {
-                    const chart = context.chart;
-                    const {ctx, chartArea} = chart;
-                    let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
-                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
-                    return gradient;
-                }
-                datasets[i].borderColor = colors[j];
-                Chart.defaults.elements.line.fill = true;
-            } else if (chartType === 'doughnut') {
-                // special array handling for doughnuts
-                if (jsondata.options.dataoptions !== null) {
-                    const arr = JSON.parse(jsondata.options.dataoptions);
-                    let index = 0;
-                    for (const obj of arr) {
-                        if (obj.backgroundColor) {
-                            colors[index] = obj.backgroundColor;
-                        }
-                        index++;
-                    }
-                }
-                datasets[i].backgroundColor = datasets[i].borderColor = colors;
-                Chart.defaults.elements.line.fill = false;
-            } else {
-                datasets[i].backgroundColor = colors[j];
-                Chart.defaults.elements.line.fill = false;
-                datasets[i].borderColor = colors[j];
-            }
-        }
-
-        // derive the stacked or the stacked-100 option and adjust the data and options
-        let stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
-        let stacked100 = chartTypeFull.endsWith('St100');
-        if (stacked === true) {
-            chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
-            chartOptions.scales['primary'].max = 100;
-        }
-        if (stacked100 === true) {
-            datasets = OCA.Analytics.Report.calculateStacked100(datasets);
-        }
-
-        // overwrite some default chart options depending on the chart type
-        if (chartType === 'datetime') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
-        } else if (chartType === 'area') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
-            chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
-            Chart.defaults.elements.line.fill = true;
-        } else if (chartType === 'doughnut') {
-            chartOptions.scales['xAxes'].display = false;
-            chartOptions.scales['primary'].display = chartOptions.scales['primary'].grid.display = false;
-            chartOptions.scales['secondary'].display = chartOptions.scales['secondary'].grid.display = false;
-            chartOptions.circumference = 180;
-            chartOptions.rotation = -90;
-            datasets[0]['borderWidth'] = 0;
-        }
-
-        // the user can add/overwrite chart options
-        // the user can put the options in array-format into the report definition
-        // these are merged with the standard report settings
-        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
-        // e.g. add a secondary y-axis '{"scales": {"yAxes": [{},{"id":"B","position":"right"}]}}'
-        let userChartOptions = jsondata.options.chartoptions;
-        if (userChartOptions !== '' && userChartOptions !== null) {
-            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
-        }
-
-        // never show any axis in the dashboard
-        chartOptions.scales['secondary'].display = false;
-        chartOptions.scales['primary'].display = true;
-
-        // the user can modify dataset/series settings
-        // these are merged with the data array coming from the backend
-        // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
-        //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
-        let userDatasetOptions = jsondata.options.dataoptions;
-        if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
-            let numberOfDatasets = datasets.length;
-            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
-            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
-            datasets = cloner.deep.merge({}, datasets);
-            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
-            datasets = Object.values(datasets);
-        }
-
-        let myChart = new Chart(ctx, {
-            type: OCA.Analytics.chartTypeMapping[chartType],
-            data: {
-                labels: xAxisCategories,
-                datasets: datasets
-            },
-            options: chartOptions,
-        });
-    },
-
+OCA.Analytics.UI = {
     getDefaultChartOptions: function () {
         return {
             devicePixelRatio: 2,
@@ -1292,16 +1206,12 @@ OCA.Analytics.Report = {
                     display: true,
                 },
             },
-            legend: {
-                display: true,
-            },
             animation: {
                 duration: 0 // general animation time
             },
             plugins: {
                 legend: {
                     display: true,
-                    position: 'bottom',
                 },
                 datalabels: {
                     display: false,
@@ -1321,259 +1231,5 @@ OCA.Analytics.Report = {
                 }
             },
         };
-    },
-
-    convertDataToChartJsFormat: function (data, chartType) {
-        const labelMap = new Map();
-        let datasetCounter = 0;
-        let datasets = [], xAxisCategories = [];
-        data.forEach((row) => {
-            // default expected columns
-            let dataSeriesColumn, characteristicColumn, value;
-
-            // when only 2 columns are provided, no label will be set
-            if (row.length >= 3) {
-                [dataSeriesColumn, characteristicColumn, value] = row.slice(-3);
-            } else if (row.length === 2) {
-                [characteristicColumn, value] = row;
-                dataSeriesColumn = '';
-            }
-
-            // Add category labels only once and not for every data series
-            if (!xAxisCategories.includes(characteristicColumn)) {
-                xAxisCategories.push(characteristicColumn);
-            }
-
-            // create the data series
-            if (!labelMap.has(dataSeriesColumn)) {
-                labelMap.set(dataSeriesColumn, {
-                    ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}), // no label for doughnut charts
-                    data: [],
-                    hidden: datasetCounter >= 4 // default hide > 4th series for better visibility
-                });
-                datasetCounter++;
-            }
-
-            const dataset = labelMap.get(dataSeriesColumn);
-            if (chartType === 'doughnut') {
-                dataset.data.push(parseFloat(value));
-            } else {
-                dataset.data.push({x: characteristicColumn, y: parseFloat(value)});
-            }
-        });
-
-        if (chartType === 'doughnut') {
-            datasets = [{data: Array.from(labelMap.values()).flatMap(d => d.data)}];
-        } else {
-            datasets = Array.from(labelMap.values());
-        }
-        return [xAxisCategories, datasets];
-    },
-
-    buildDataTable: function (jsondata, positionIndex) {
-        //OCA.Analytics.UI.showElement('tableContainer');
-        //OCA.Analytics.UI.showElement('tableMenuBar');
-
-        let columns = [];
-        let data, unit = '';
-
-        let header = jsondata.header;
-        let allDimensions = jsondata.dimensions;
-        (jsondata.dimensions) ? allDimensions = jsondata.dimensions : allDimensions = jsondata.header;
-        let headerKeys = Object.keys(header);
-        for (let i = 0; i < headerKeys.length; i++) {
-            columns[i] = {'title': (header[headerKeys[i]] !== null) ? header[headerKeys[i]] : ""};
-            let columnType = Object.keys(allDimensions).find(key => allDimensions[key] === header[headerKeys[i]]);
-
-            if (i === headerKeys.length - 1) {
-                // this is the last column
-
-                // prepare for later unit cloumn
-                //columns[i]['render'] = function(data, type, row, meta) {
-                //    return data + ' ' + row[row.length-2];
-                //};
-                if (header[headerKeys[i]] !== null && header[headerKeys[i]].length === 1) {
-                    unit = header[headerKeys[i]] + ' ';
-                }
-                //columns[i]['render'] = DataTable.render.number(null, null, 2, unit + ' ');
-                columns[i]['render'] = function (data, type, row, meta) {
-                    // If display or filter data is requested, format the number
-                    if (type === 'display' || type === 'filter') {
-                        return unit + parseFloat(data).toLocaleString();
-                    }
-                    // Otherwise the data type requested (`type`) is type detection or
-                    // sorting data, for which we want to use the integer, so just return
-                    // that, unaltered
-                    return data;
-                }
-                columns[i]['className'] = 'dt-right';
-            } else if (columnType === 'timestamp') {
-                columns[i]['render'] = function (data, type) {
-                    // If display or filter data is requested, format the date
-                    if (type === 'display' || type === 'filter') {
-                        return new Date(data * 1000).toLocaleString();
-                    }
-                    // Otherwise the data type requested (`type`) is type detection or
-                    // sorting data, for which we want to use the integer, so just return
-                    // that, unaltered
-                    return data;
-                }
-            } else if (columnType === 'unit') {
-                columns[i]['visible'] = false;
-                columns[i]['searchable'] = false;
-            }
-        }
-        data = jsondata.data;
-
-        const language = {
-            // TRANSLATORS Noun
-            search: t('analytics', 'Search'),
-            lengthMenu: t('analytics', 'Show _MENU_ entries'),
-            info: t('analytics', 'Showing _START_ to _END_ of _TOTAL_ entries'),
-            infoEmpty: t('analytics', 'Showing 0 to 0 of 0 entries'),
-            paginate: {
-                // TRANSLATORS pagination description non-capital
-                first: t('analytics', 'first'),
-                // TRANSLATORS pagination description non-capital
-                previous: t('analytics', 'previous'),
-                // TRANSLATORS pagination description non-capital
-                next: t('analytics', 'next'),
-                // TRANSLATORS pagination description non-capital
-                last: t('analytics', 'last')
-            },
-        };
-
-        // restore saved table state
-        let tableOptions = JSON.parse(jsondata.options.tableoptions)
-            ? JSON.parse(jsondata.options.tableoptions)
-            : {};
-        let defaultOrder = [];
-        let defaultLength = 10;
-
-        OCA.Analytics.tableObject = new DataTable(document.getElementById('myWidget' + positionIndex), {
-            //dom: 'tipl',
-            order: tableOptions.order || defaultOrder,
-            pageLength: tableOptions.length || defaultLength,
-            scrollX: true,
-            autoWidth: false,
-            fixedColumns: true,
-            data: data,
-            columns: columns,
-            language: language,
-            rowCallback: function (row, data, index) {
-                //OCA.Analytics.UI.dataTableRowCallback(row, data, index, jsondata.thresholds)
-            },
-            initComplete: function () {
-                let info = this.closest('.dataTables_wrapper').find('.dataTables_info');
-                info.toggle(this.api().page.info().pages > 1);
-                let length = this.closest('.dataTables_wrapper').find('.dataTables_length');
-                length.toggle(this.api().page.info().pages > 1);
-                let filter = this.closest('.dataTables_wrapper').find('.dataTables_filter');
-                filter.toggle(this.api().page.info().pages > 1);
-            },
-            drawCallback: function () {
-                let pagination = this.closest('.dataTables_wrapper').find('.dataTables_paginate');
-                pagination.toggle(this.api().page.info().pages > 1);
-
-            }
-        });
-
-        // Listener for when the pagination length is changed
-        OCA.Analytics.tableObject.on('length.dt', function () {
-            OCA.Analytics.unsavedFilters === true;
-            document.getElementById('saveIcon').style.removeProperty('display');
-        });
-
-        // Listener for when the table is ordered
-        OCA.Analytics.tableObject.on('order.dt', function () {
-            OCA.Analytics.unsavedFilters === true;
-            document.getElementById('saveIcon').style.removeProperty('display');
-        });
-    },
-
-    sortDates: function (data) {
-        if (data.options.chartoptions !== '') {
-            if (JSON.parse(data.options.chartoptions)?.scales?.xAxes?.time?.parser !== undefined) {
-                let parser = JSON.parse(data.options.chartoptions)["scales"]["xAxes"]["time"]["parser"];
-                data.data.sort(function (a, b) {
-                    let sortColumn = a.length - 2;
-                    if (sortColumn === 0) {
-                        return myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
-                    } else {
-                        return a[0] - b[0] || myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
-                    }
-                });
-            }
-        }
-        return data;
-    },
-
-    formatDates: function (data) {
-        let firstRow = data[0];
-        let now;
-        for (let i = 0; i < firstRow.length; i++) {
-            // loop columns and check for a valid date
-            if (!isNaN(new Date(firstRow[i]).valueOf()) && firstRow[i] !== null && firstRow[i].length >= 19) {
-                // column contains a valid date
-                // then loop all rows for this column and convert to local time
-                for (let j = 0; j < data.length; j++) {
-                    if (data[j][i].length === 19) {
-                        // values are assumed to have a timezone or are used as UTC
-                        data[j][i] = data[j][i] + 'Z';
-                    }
-                    now = new Date(data[j][i]);
-                    data[j][i] = now.getFullYear()
-                        + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1) //getMonth will start with Jan = 0
-                        + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
-                        + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
-                        + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
-                        + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds()
-                }
-            }
-        }
-        return data;
-    },
-
-    calculateStacked100: function (rawData) {
-        // Create a map to store total y-values for each x-label
-        const totalMap = {};
-
-        // Calculate total y-values for each x-label
-        rawData.forEach(dataset => {
-            dataset.data.forEach(point => {
-                if (!totalMap[point.x]) {
-                    totalMap[point.x] = 0;
-                }
-                totalMap[point.x] += point.y;
-            });
-        });
-
-        // Convert y-values to percentages
-        return rawData.map(dataset => {
-            const newDataset = {...dataset};
-            newDataset.data = dataset.data.map(point => {
-                return {
-                    x: point.x,
-                    y: totalMap[point.x] === 0 ? 0 : (point.y / totalMap[point.x]) * 100
-                };
-            });
-            return newDataset;
-        });
-    },
-}
-
-OCA.Analytics.UI = {
-    hideElement: function (element) {
-        if (document.getElementById(element)) {
-            document.getElementById(element).hidden = true;
-            //document.getElementById(element).style.display = 'none';
-        }
-    },
-
-    showElement: function (element) {
-        if (document.getElementById(element)) {
-            document.getElementById(element).hidden = false;
-            //document.getElementById(element).style.removeProperty('display');
-        }
     },
 }

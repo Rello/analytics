@@ -5,6 +5,7 @@
 
 ### Changed
 - DataTables v2
+- Code cleanup and refactoring
 
 ### Fixed
 - console error when using timestamps for 1-column raw data #384

@@ -614,7 +614,6 @@
 <template id="templateTableOptions">
     <div class="tableOptionsLayout">
         <div class="dummy"></div>
-        <div class="dummy2"></div>
         <div id="tableOptionsLayoutRows">
             <p><?php p($l->t('Rows')); ?></p>
             <div id="rows" class="columnSection"></div>
@@ -642,4 +641,11 @@
             <div id="hidden" class="columnSection"></div>
         </div>
     </div>
+    <button id="tableOptionsResetState">
+        <span class="icon-analytics-reset"></span>
+        <span><?php p($l->t('Reset table')); ?></span>
+    </button>
+    <br><br>
+    <h3><?php p($l->t('Calculated Columns')); ?> - *beta*</h3>
+    <textarea id="tableOptionsCalculatedColumns"></textarea>
 </template>

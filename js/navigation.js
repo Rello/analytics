@@ -426,8 +426,8 @@ OCA.Analytics.Navigation = {
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
         }
-        OCA.Analytics.UI.hideElement('analytics-content');
-        OCA.Analytics.UI.showElement('analytics-intro');
+        OCA.Analytics.Visualization.hideElement('analytics-content');
+        OCA.Analytics.Visualization.showElement('analytics-intro');
         document.getElementById('ulAnalytics').innerHTML = '';
         window.location.href = '#';
         OCA.Analytics.Dashboard?.init?.();

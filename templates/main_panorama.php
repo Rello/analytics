@@ -17,6 +17,7 @@ Util::addStyle('analytics', '3rdParty/datatables.min');
 Util::addStyle('files_sharing', 'icons');
 Util::addStyle('analytics', 'print');
 Util::addScript('analytics', 'panorama');
+Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.min');

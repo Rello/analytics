@@ -60,7 +60,7 @@
             <li>
                 <button id="reportMenuResetTableState">
                     <span class="icon-analytics-reset"></span>
-                    <span><?php p($l->t('Reset Table')); ?></span>
+                    <span><?php p($l->t('Reset table')); ?></span>
                 </button>
             </li>
             <li class="action-separator"></li>
