@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Salvestatud",
     "Delete" : "Kustuta",
-    "Search" : "Otsi",
     "OK" : "OK",
     "Cancel" : "Loobu",
     "Filter" : "Filter",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Notification" : "Teavitus",
     "Date" : "Kuupäev",
     "Year" : "Aasta",
+    "Search" : "Otsi",
     "Total" : "Kokku",
     "Local file" : "Kohalik fail",
     "File" : "Fail",

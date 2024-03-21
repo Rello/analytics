@@ -1,6 +1,5 @@
 { "translations": {
     "Delete" : "Delete",
-    "Search" : "Search",
     "OK" : "OK",
     "Cancel" : "Cancel",
     "Add" : "Add",
@@ -11,6 +10,7 @@
     "Type" : "Type",
     "Notification" : "Абвестка",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

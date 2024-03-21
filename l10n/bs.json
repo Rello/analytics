@@ -1,7 +1,6 @@
 { "translations": {
     "Saved" : "Spremljeno",
     "Delete" : "Obriši",
-    "Search" : "Search",
     "OK" : "OK",
     "Cancel" : "Otkaži",
     "Add" : "Dodaj",
@@ -15,6 +14,7 @@
     "Share link" : "Podijelite vezu",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

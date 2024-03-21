@@ -1,6 +1,5 @@
 { "translations": {
     "Delete" : "Obriši",
-    "Search" : "Traži",
     "OK" : "U redu",
     "Cancel" : "Otkaži",
     "Add" : "Dodaj",
@@ -14,6 +13,7 @@
     "Link copied" : "Veza iskopirana",
     "Type" : "Tip",
     "Date" : "Date",
+    "Search" : "Traži",
     "File" : "Fajl",
     "Yes" : "Da",
     "No" : "Ne",

@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Saxlanıldı",
     "Delete" : "Sil",
-    "Search" : "Axtarış",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
     "Add" : "Əlavə etmək",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "Link copied" : "Link kopyalandı",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Axtarış",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

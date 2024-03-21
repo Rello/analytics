@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Obriši",
-    "Search" : "Traži",
     "OK" : "U redu",
     "Cancel" : "Otkaži",
     "Add" : "Dodaj",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Link copied" : "Veza iskopirana",
     "Type" : "Tip",
     "Date" : "Date",
+    "Search" : "Traži",
     "File" : "Fajl",
     "Yes" : "Da",
     "No" : "Ne",

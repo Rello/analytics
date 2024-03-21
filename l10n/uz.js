@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Saved",
     "Delete" : "Delete",
-    "Search" : "Search",
     "Loading" : "Loading",
     "OK" : "OK",
     "Cancel" : "Cancel",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "Do you want to create a new group folder?" : "Do you want to create a new group folder?",
     "New" : "New",
     "Share link" : "Share link",
+    "Search" : "Search",
     "Total" : "Total",
     "File" : "File",
     "Yes" : "Yes",

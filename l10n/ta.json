@@ -1,7 +1,6 @@
 { "translations": {
     "Value" : "Value",
     "Delete" : "நீக்குக",
-    "Search" : "Search",
     "Loading" : "Loading",
     "OK" : "சரி ",
     "Cancel" : "இரத்து செய்க",
@@ -16,6 +15,7 @@
     "Share link" : "Share link",
     "Type" : "வகை",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

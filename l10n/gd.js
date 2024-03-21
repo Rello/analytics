@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Sguab às",
-    "Search" : "Lorg",
     "OK" : "Ceart ma-thà",
     "Cancel" : "Sguir dheth",
     "Add to favorites" : "Cuir ris na h-annsachdan",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "Share link" : "Ceangal co-roinnidh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh",
     "Type" : "Seòrsa",
+    "Search" : "Lorg",
     "File" : "Faidhle",
     "Yes" : "Tha",
     "No" : "Chan eil",

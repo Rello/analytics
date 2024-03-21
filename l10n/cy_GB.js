@@ -3,9 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Wedi'u cadw",
     "Delete" : "Dileu",
-    "Search" : "Chwilio",
-    "first" : "cyntaf",
-    "last" : "o;af",
     "OK" : "Iawn",
     "Cancel" : "Diddymu",
     "Add" : "Ychwanegu",
@@ -21,6 +18,7 @@ OC.L10N.register(
     "Notification" : "Hysbysiad",
     "Date" : "Date",
     "Year" : "Blwyddyn",
+    "Search" : "Chwilio",
     "File" : "File",
     "Yes" : "Iawn",
     "No" : "No",

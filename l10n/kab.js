@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Kkes",
-    "Search" : "Nadi",
     "OK" : "IH",
     "Cancel" : "Sefsex",
     "Filter" : "Sizdeg",
@@ -17,6 +16,7 @@ OC.L10N.register(
     "Link copied" : "Aseɣwen yettwanɣel",
     "Type" : "Anaw",
     "Notification" : "Alɣu",
+    "Search" : "Nadi",
     "Local file" : "Afaylu adigan",
     "File" : "Afaylu",
     "Yes" : "Oui",

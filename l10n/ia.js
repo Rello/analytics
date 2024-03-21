@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Salveguardate",
     "Delete" : "Deler",
-    "Search" : "Cercar",
     "OK" : "Ok",
     "Cancel" : "Cancellar",
     "Add" : "Adder",
@@ -17,6 +16,7 @@ OC.L10N.register(
     "Share link" : "Compartir ligamine",
     "Type" : "Typo",
     "Date" : "Date",
+    "Search" : "Cercar",
     "Total" : "Total",
     "File" : "File",
     "Yes" : "Si",

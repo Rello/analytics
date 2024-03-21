@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Value" : "අගය",
-    "Search" : "සොයන්න",
     "Loading" : "පූරණය වෙමින්",
     "OK" : "හරි",
     "Cancel" : "අවලංගු කරන්න",
@@ -14,6 +13,7 @@ OC.L10N.register(
     "Link copied" : "සබැඳිය පිටපත් කළා",
     "Date" : "දිනය",
     "Year" : "වර්ෂය",
+    "Search" : "සොයන්න",
     "File" : "ගොනුව",
     "Yes" : "ඔව්",
     "No" : "නැහැ",

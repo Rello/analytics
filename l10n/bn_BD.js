@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "সংরক্ষণ করা হলো",
     "Delete" : "মুছে",
-    "Search" : "Search",
     "OK" : "তথাস্তু",
     "Cancel" : "বাতির",
     "Add" : "যোগ করুন",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Type" : "ধরণ",
     "Notification" : "নোটিফিকেশন ",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
