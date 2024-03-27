@@ -323,7 +323,7 @@ OC.L10N.register(
     "Measures" : "Maßnahmen",
     "Show totals" : "Summen anzeigen",
     "Not required" : "Nicht erforderlich",
-    "Calculated Columns" : "Spalten berechnen",
+    "Calculated Columns" : "Berechnete Spalten",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics macht Ihre Daten sichtbar und unterstützt bei deren Analyse - von Finanzzahlen bis zu IoT-Protokollen.",
     "Give your numbers a meaning." : "Geben Sie Ihren Zahlen eine Bedeutung.",
     "Data is processed inside Nextcloud." : "Datenverarbeitung in Nextcloud.",
