@@ -1,6 +1,5 @@
 { "translations": {
     "Delete" : "حذف کریں",
-    "Search" : "Search",
     "OK" : "اوکے",
     "Cancel" : "منسوخ کریں",
     "Add" : "شامل کریں",
@@ -12,6 +11,7 @@
     "Share link" : "اشتراک لنک",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

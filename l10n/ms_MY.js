@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Padam",
-    "Search" : "Search",
     "OK" : "OK",
     "Cancel" : "Batal",
     "Add" : "Tambah",
@@ -15,6 +14,7 @@ OC.L10N.register(
     "Share link" : "Share link",
     "Type" : "Jenis",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

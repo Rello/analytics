@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "ئۆچۈر",
-    "Search" : "Search",
     "OK" : "جەزملە",
     "Cancel" : "ۋاز كەچ",
     "Add" : "قوش",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Share link" : "Share link",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "﻿ಉಳಿಸಿದ",
     "Delete" : "﻿ಅಳಿಸಿ",
-    "Search" : "Search",
     "OK" : "ಸರಿ",
     "Cancel" : "﻿ರದ್ದು",
     "Add" : "﻿ಸೇರಿಸಿ",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Share link" : "ಸಂಪರ್ಕ ಕೊಂಡಿಯನ್ನು  ﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

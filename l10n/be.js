@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Delete",
-    "Search" : "Search",
     "OK" : "OK",
     "Cancel" : "Cancel",
     "Add" : "Add",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "Type" : "Type",
     "Notification" : "Абвестка",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

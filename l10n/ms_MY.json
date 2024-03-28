@@ -1,6 +1,5 @@
 { "translations": {
     "Delete" : "Padam",
-    "Search" : "Search",
     "OK" : "OK",
     "Cancel" : "Batal",
     "Add" : "Tambah",
@@ -13,6 +12,7 @@
     "Share link" : "Share link",
     "Type" : "Jenis",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

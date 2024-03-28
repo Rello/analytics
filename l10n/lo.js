@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "ລຶບ",
-    "Search" : "ຄົ້ນຫາ",
     "OK" : "ຕົກລົງ",
     "Cancel" : "ຍົກເລີກ",
     "Add" : "ເພີ່ມ",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "Date" : "ວັນທີ",
     "New in" : "ໃຫມ່",
     "View changelog" : "ເບິ່ງການປ່ຽນແປງ",
+    "Search" : "ຄົ້ນຫາ",
     "File" : "ຟາຍ",
     "Yes" : "ແມ່ນແລ້ວ",
     "No" : "ບໍ່",

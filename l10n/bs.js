@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Spremljeno",
     "Delete" : "Obriši",
-    "Search" : "Search",
     "OK" : "OK",
     "Cancel" : "Otkaži",
     "Add" : "Dodaj",
@@ -17,6 +16,7 @@ OC.L10N.register(
     "Share link" : "Podijelite vezu",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

@@ -3,9 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Konservita",
     "Delete" : "Forigi",
-    "Search" : "Serĉi",
-    "first" : "Una",
-    "last" : "Lasta",
     "Loading" : "Ŝargado",
     "OK" : "Bone",
     "Cancel" : "Nuligi",
@@ -27,6 +24,7 @@ OC.L10N.register(
     "Date" : "Date",
     "New in" : "Nova en",
     "View changelog" : "Vidi ŝanĝoprotokolon",
+    "Search" : "Serĉi",
     "Total" : "Sumo",
     "Local file" : "Loka dosiero",
     "File" : "Dosiero",

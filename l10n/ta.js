@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Value" : "Value",
     "Delete" : "நீக்குக",
-    "Search" : "Search",
     "Loading" : "Loading",
     "OK" : "சரி ",
     "Cancel" : "இரத்து செய்க",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Share link" : "Share link",
     "Type" : "வகை",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

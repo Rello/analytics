@@ -1,6 +1,5 @@
 { "translations": {
     "Delete" : "ئۆچۈر",
-    "Search" : "Search",
     "OK" : "جەزملە",
     "Cancel" : "ۋاز كەچ",
     "Add" : "قوش",
@@ -14,6 +13,7 @@
     "Share link" : "Share link",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Search",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",

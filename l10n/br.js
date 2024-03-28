@@ -3,9 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Enrollet",
     "Delete" : "Lemel",
-    "Search" : "Klask",
-    "first" : "kentañ",
-    "next" : "war-lerc'h",
     "Loading" : "Kargañ",
     "OK" : "OK",
     "Cancel" : "Arrest",
@@ -28,6 +25,7 @@ OC.L10N.register(
     "Date" : "Deiz",
     "New in" : "Nevez e-bazh",
     "View changelog" : "Sellet al levr kemmoù",
+    "Search" : "Klask",
     "File" : "Restr",
     "Yes" : "Ya",
     "No" : "Nann",

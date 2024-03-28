@@ -1,7 +1,6 @@
 { "translations": {
     "Saved" : "Saxlanıldı",
     "Delete" : "Sil",
-    "Search" : "Axtarış",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
     "Add" : "Əlavə etmək",
@@ -18,6 +17,7 @@
     "Link copied" : "Link kopyalandı",
     "Type" : "Type",
     "Date" : "Date",
+    "Search" : "Axtarış",
     "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
