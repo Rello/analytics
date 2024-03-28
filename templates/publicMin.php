@@ -11,12 +11,13 @@
 ?>
 <html class="ng-csp" data-placeholder-focus="false" lang="en" data-locale="en">
 <head>
-    <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/moment.js"></script>
-    <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/cloner.js"></script>
-    <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/appMin.js"></script>
-    <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/chart.min.js"></script>
-    <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-adapter-moment.js"></script>
-    <script nonce="" defer="" src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-plugin-datalabels.min.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/moment.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/cloner.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/appMin.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/visualization.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chart.min.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-adapter-moment.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-plugin-datalabels.min.js"></script>
 </head>
 <input type="hidden" name="data" value="<?php p(json_encode($_['data'])); ?>" id="data">
 <div id="app-content">

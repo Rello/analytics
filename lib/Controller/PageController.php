@@ -214,6 +214,7 @@ class PageController extends Controller
             $params = array();
             $params['data'] = $this->outputController->getData($share);
             $params['baseurl'] = str_replace('/img/app.svg', '', $this->urlGenerator->imagePath('analytics', 'app.svg'));
+            $params['nonce'] = \OC::$server->getContentSecurityPolicyNonceManager()->getNonce();
             $response = new StandaloneTemplateResponse($this->appName, 'publicMin', $params, '');
             $csp = new ContentSecurityPolicy();
             $csp->addAllowedScriptDomain('*');
