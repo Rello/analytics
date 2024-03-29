@@ -5,6 +5,7 @@ OC.L10N.register(
     "Value" : "Valor",
     "Saved" : "Guardóse",
     "Delete" : "Desaniciar",
+    "Loading" : "Cargando",
     "OK" : "Normal",
     "Cancel" : "Encaboxar",
     "Filter" : "Peñerar",
@@ -32,6 +33,7 @@ OC.L10N.register(
     "Announcements" : "Anuncios",
     "No data" : "Nun hai nengún datu!",
     "copy" : "copia",
+    "The password is wrong. Try again." : "La contraseña ye incorreuta. Volvi tentalo.",
     "Password" : "Contraseña",
     "Favorites" : "Favoritos",
     "Options" : "Opciones",
@@ -52,6 +54,7 @@ OC.L10N.register(
     "Daily" : "Caldía",
     "Hourly" : "Cada hora",
     "Unshare" : "Dexar de compartir",
+    "Password protection" : "Proteición con contraseña",
     "Copy link" : "Copiar l'enllaz",
     "Get more information" : "Consiguir más información",
     "Create" : "Crear"
