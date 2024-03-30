@@ -318,6 +318,7 @@ OC.L10N.register(
     "Domain of external site" : "Domaine du site externe",
     "Rows" : "Lignes",
     "Columns" : "Colonnes",
+    "Not required" : "Non requis",
     "Calculated Columns" : "Colonnes calculées",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics rend vos données visibles et vous aide à les évaluer - des données financières aux journaux IoT.",
     "Give your numbers a meaning." : "Donnez un sens à vos chiffres.",
