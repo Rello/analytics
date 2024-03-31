@@ -23,6 +23,7 @@
     "New" : "Nuevu",
     "Share link" : "Compartir l'enllaz",
     "Link copied" : "Copióse l'enllaz",
+    "Column" : "Columna",
     "Type" : "Tipu",
     "Notification" : "Avisu",
     "Date" : "Data",
@@ -60,6 +61,8 @@
     "Unshare" : "Dexar de compartir",
     "Password protection" : "Proteición con contraseña",
     "Copy link" : "Copiar l'enllaz",
+    "Rows" : "Fileres",
+    "Columns" : "Columnes",
     "Get more information" : "Consiguir más información",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -25,6 +25,7 @@ OC.L10N.register(
     "New" : "Nuevu",
     "Share link" : "Compartir l'enllaz",
     "Link copied" : "Copióse l'enllaz",
+    "Column" : "Columna",
     "Type" : "Tipu",
     "Notification" : "Avisu",
     "Date" : "Data",
@@ -62,6 +63,8 @@ OC.L10N.register(
     "Unshare" : "Dexar de compartir",
     "Password protection" : "Proteición con contraseña",
     "Copy link" : "Copiar l'enllaz",
+    "Rows" : "Fileres",
+    "Columns" : "Columnes",
     "Get more information" : "Consiguir más información",
     "Create" : "Crear"
 },
