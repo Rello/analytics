@@ -14,6 +14,7 @@ OC.L10N.register(
     "Filter" : "Peñerar",
     "Add" : "Amestar",
     "Line" : "Llinia",
+    "Color" : "Color",
     "Basic settings" : "Configuración básica",
     "Remove from favorites" : "Quitar de Favoritos",
     "Add to favorites" : "Meter en Favoritos",
@@ -66,6 +67,7 @@ OC.L10N.register(
     "Rows" : "Fileres",
     "Columns" : "Columnes",
     "Get more information" : "Consiguir más información",
+    "Nextcloud forum" : "Foru de Nextcloud",
     "Create" : "Crear"
 },
 "nplurals=2; plural=(n != 1);");

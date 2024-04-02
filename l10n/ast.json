@@ -12,6 +12,7 @@
     "Filter" : "Peñerar",
     "Add" : "Amestar",
     "Line" : "Llinia",
+    "Color" : "Color",
     "Basic settings" : "Configuración básica",
     "Remove from favorites" : "Quitar de Favoritos",
     "Add to favorites" : "Meter en Favoritos",
@@ -64,6 +65,7 @@
     "Rows" : "Fileres",
     "Columns" : "Columnes",
     "Get more information" : "Consiguir más información",
+    "Nextcloud forum" : "Foru de Nextcloud",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
