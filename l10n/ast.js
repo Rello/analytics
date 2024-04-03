@@ -33,6 +33,7 @@ OC.L10N.register(
     "Year" : "Añu",
     "View changelog" : "Ver el rexistru de cambeos",
     "Search" : "Buscar",
+    "Total" : "Total",
     "File" : "Ficheru",
     "Yes" : "Sí",
     "No" : "Non",
