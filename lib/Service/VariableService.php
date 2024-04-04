@@ -151,9 +151,8 @@ class VariableService
             if (isset($filteroptions['filter'])) {
                 foreach ($filteroptions['filter'] as $key => $value) {
                     $parsed = $this->parseFilter($value['value']);
-                    $format = $this->parseFormat($value['value']);
 
-                    if (!$parsed) break;
+                    if (!$parsed) continue;
 
                     // if a parser is selected in the chart options, it should also be valid here automatically
                     if (isset($reportMetadata['chartoptions'])) {
@@ -162,6 +161,9 @@ class VariableService
                             $format = $chartOptions['scales']['xAxes']['time']['parser'];
                         }
                     }
+                    $format = $this->parseFormat($value['value']);
+
+                    $this->logger->info('filterreplace: ' . $format);
 
                     // translate commonly known X timestamp format to U for php
                     if ($format === 'X') $format = 'U';
