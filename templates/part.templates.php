@@ -400,6 +400,11 @@
                         <input class="sidebarInput" id="dataloadName" style="display: table-cell;">
                         <div style="display: table-cell; min-width: 20px;"></div>
                     </div>
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; width: 100%"></div>
+                        <div id="dataloadType" class="userGuidance" style="display: table-cell;"></div>
+                        <div style="display: table-cell; min-width: 20px;"></div>
+                    </div>
                 </div>
                 <br>
                 <div id="dataloadDetailItems">
@@ -623,7 +628,8 @@
             <div id="columns" class="columnSection"></div>
         </div>
         <div id="tableOptionsLayoutMeasures">
-            <p><?php p($l->t('Measures')); ?></p>
+            <p><?php // TRANSLATORS Measures means values DE:"Kennzahlen" and refers to the display area of a data table
+                p($l->t('Measures')); ?></p>
             <div id="measures" class="columnSection"></div>
         </div>
         <div id="tableOptionsLayoutTotals">
