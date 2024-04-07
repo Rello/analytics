@@ -58,6 +58,7 @@ OC.L10N.register(
     "Settings" : "Ajustes",
     "Name" : "Nombre",
     "Display" : "Mostrar",
+    "Table" : "Tabla",
     "Chart" : "Gráfico",
     "Advanced" : "Avanzado",
     "Open documentation" : "Abrir documentación",
