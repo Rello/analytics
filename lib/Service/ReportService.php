@@ -406,10 +406,7 @@ class ReportService
         isset($report['dimension2']) ? $dimension2 = $report['dimension2'] : $dimension2 = null;
         isset($report['value']) ? $value = $report['value'] : $value = null;
 
-        $this->logger->info('creating dataset');
-
         if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB) { // New dataset
-            $this->logger->info('creating dataset');
             $dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
         }
         $reportId = $this->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);

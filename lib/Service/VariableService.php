@@ -163,8 +163,6 @@ class VariableService
                     }
                     $format = $this->parseFormat($value['value']);
 
-                    $this->logger->info('filterreplace: ' . $format);
-
                     // translate commonly known X timestamp format to U for php
                     if ($format === 'X') $format = 'U';
 
