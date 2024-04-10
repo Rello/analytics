@@ -628,7 +628,7 @@
             <div id="columns" class="columnSection"></div>
         </div>
         <div id="tableOptionsLayoutMeasures">
-            <p><?php // TRANSLATORS Measures means values DE:"Kennzahlen" and refers to the display area of a data table
+            <p><?php // TRANSLATORS "Measures" means key figures and refers to the display area of a data table
                 p($l->t('Measures')); ?></p>
             <div id="measures" class="columnSection"></div>
         </div>

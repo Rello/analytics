@@ -29,7 +29,21 @@ OCA.Analytics.Visualization = {
     // *** table ***
     // *************
 
-    buildDataTable: function (domTarget, jsondata) {
+    buildDataTable: function (domTarget, jsondata, ordering = true, uniqueId) {
+
+        if (!uniqueId) {
+            uniqueId = jsondata.options.id;
+        } else {
+            uniqueId = parseInt(uniqueId.replace(/[^0-9]+/g, ''),10);
+        }
+
+        if (OCA.Analytics.tableObject?.uniqueId) {
+            OCA.Analytics.tableObject[uniqueId].destroy();
+            domTarget.innerHTML = '';
+            OCA.Analytics.tableObject[uniqueId] = [];
+            //test
+        }
+
         this.showElement('tableContainer');
 
         // get current table state
@@ -54,8 +68,8 @@ OCA.Analytics.Visualization = {
             },
         };
 
-        ({ data, columns } = this.convertDataToDataTableFormat(jsondata.data, tableOptions.layout, jsondata.header));
-        ({ data, columns } = this.dataTableCalculatedColumns(data, columns, tableOptions));
+        ({data, columns} = this.convertDataToDataTableFormat(jsondata.data, tableOptions.layout, jsondata.header));
+        ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
 
         // Calculate column totals
         let columnTotals = new Array(data[0].length).fill(0);
@@ -71,8 +85,9 @@ OCA.Analytics.Visualization = {
         const isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
 
         domTarget.createTFoot().insertRow(0);
-        OCA.Analytics.tableObject = new DataTable(domTarget, {
+        OCA.Analytics.tableObject[uniqueId] = new DataTable(domTarget, {
             //dom: 'lrtip',
+            ordering: ordering,
             layout: {
                 topStart: isDataLengthGreaterThanDefault ? 'pageLength' : null,
                 topEnd: isDataLengthGreaterThanDefault ? 'search' : null,
@@ -83,9 +98,8 @@ OCA.Analytics.Visualization = {
             order: tableOptions.order || defaultOrder,
             pageLength: tableOptions.length || defaultLength,
             pagingType: 'simple_numbers',
-            scrollX: true,
+            //scrollX: true,
             autoWidth: false,
-            fixedColumns: true,
             data: data,
             columns: columns,
             language: language,
@@ -97,10 +111,12 @@ OCA.Analytics.Visualization = {
             }
         });
 
-        // Listener for when the pagination length is changed, table sorted, columns re-ordered
-        OCA.Analytics.tableObject.on('length.dt', this.handleDataTableChanged);
-        OCA.Analytics.tableObject.on('order.dt', this.handleDataTableChanged);
-        OCA.Analytics.tableObject.on('column-reorder', this.handleDataTableChanged);
+        if (!OCA.Analytics.isPanorama) {
+            // Listener for when the pagination length is changed, table sorted, columns re-ordered
+            OCA.Analytics.tableObject[uniqueId].on('length.dt', this.handleDataTableChanged);
+            OCA.Analytics.tableObject[uniqueId].on('order.dt', this.handleDataTableChanged);
+            OCA.Analytics.tableObject[uniqueId].on('column-reorder', this.handleDataTableChanged);
+        }
     },
 
     convertDataToDataTableFormat: function (originalData, layoutConfig, header) {
@@ -176,10 +192,10 @@ OCA.Analytics.Visualization = {
                 return [key, ...uniqueHeaders.map(header => values[header] || null)];
             });
         }
-        return { data, columns };
+        return {data, columns};
     },
 
-    dataTableCalculatedColumns: function(data, columns, tableOptions) {
+    dataTableCalculatedColumns: function (data, columns, tableOptions) {
         let userCalculations = tableOptions.calculatedColumns ? JSON.parse('[' + tableOptions.calculatedColumns + ']') : [];
         userCalculations.forEach((calc, calcIndex) => {
             switch (calc.operation) {
@@ -243,7 +259,7 @@ OCA.Analytics.Visualization = {
                 // Add more cases for different operations as needed
             }
         });
-        return { data, columns };
+        return {data, columns};
     },
 
     dataTableRowCallback: function (row, data, index, thresholds) {
@@ -335,9 +351,9 @@ OCA.Analytics.Visualization = {
                 .page.len(10)
                 .draw();
             OCA.Analytics.unsavedFilters = true;
-            document.getElementById('saveIcon').style.removeProperty('display');
-            document.getElementById('tableContainer_length').style.removeProperty('display');
-            document.getElementById('tableContainer_filter').style.removeProperty('display');
+            document.getElementById('saveIcon')?.style.removeProperty('display');
+            document.getElementById('tableContainer_length')?.style.removeProperty('display');
+            document.getElementById('tableContainer_filter')?.style.removeProperty('display');
         }
         OCA.Analytics.UI.hideReportMenu();
     },
@@ -364,7 +380,7 @@ OCA.Analytics.Visualization = {
             } else {
                 defaultLegendClickHandler(e, legendItem, legend);
             }
-            document.getElementById('saveIcon').style.removeProperty('display');
+            document.getElementById('saveIcon')?.style.removeProperty('display');
         };
 
         this.showElement('tableSeparatorContainer');

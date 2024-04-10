@@ -4,13 +4,13 @@
 - copy data loads
 
 ### Changed
-- DataTables v2
+- DataTables 2.0.3
 - Code cleanup and refactoring
 
 ### Fixed
 - console error when using timestamps for 1-column raw data #384
 - css deprecation 
-- add nonce to js scripts
+- CSP issues in NC28 with js scripts
 
 ## 4.12.0 - 2023-12-11
 ### Added

@@ -57,7 +57,7 @@
                     <a id="downloadChartLink" href='' download="Chart.png" hidden>-</a>
                 </button>
             </li>
-            <li>
+            <li style="display: none;">
                 <button id="reportMenuResetTableState">
                     <span class="icon-analytics-reset"></span>
                     <span><?php p($l->t('Reset table')); ?></span>

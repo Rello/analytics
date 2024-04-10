@@ -35,7 +35,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     isAdvanced: false,
     currentReportData: {},
     chartObject: null,
-    tableObject: null,
+    tableObject: [],
     // flexible mapping depending on type required by the used chart library
     chartTypeMapping: {
         'datetime': 'line',
@@ -46,7 +46,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         'line': 'line',
         'doughnut': 'doughnut'
     },
-    datasourceOptions: [],
+    datasources: [],
     datasets: [],
     reports: [],
     unsavedFilters: null,
@@ -276,10 +276,12 @@ OCA.Analytics.UI = {
             OCA.Analytics.Visualization.showElement('analytics-intro');
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
-            if (OCA.Analytics.tableObject !== null) {
-                OCA.Analytics.tableObject.destroy();
-                OCA.Analytics.tableObject = null;
-            }
+            let key = Object.keys(OCA.Analytics.tableObject)[0];
+                if (key !== undefined) {
+                    OCA.Analytics.tableObject[key].destroy();
+                }
+
+            OCA.Analytics.tableObject = [];
             OCA.Analytics.Visualization.hideElement('chartContainer');
             OCA.Analytics.Visualization.hideElement('chartLegendContainer');
             document.getElementById('chartContainer').innerHTML = '';
@@ -801,7 +803,7 @@ OCA.Analytics.Datasource = {
         });
         let data = await response.json();
 
-        OCA.Analytics.datasourceOptions = data['options'];
+        OCA.Analytics.datasources = data;
         let options = document.createDocumentFragment();
         let option = document.createElement('option');
         option.value = '';
@@ -838,7 +840,7 @@ OCA.Analytics.Datasource = {
     },
 
     buildDatasourceRelatedForm: function (datasource) {
-        let template = OCA.Analytics.datasourceOptions[datasource];
+        let template = OCA.Analytics.datasources.options[datasource];
         let form = document.createElement('div');
         let insideSection = false;
         form.id = 'dataSourceOptions';

@@ -801,7 +801,8 @@ OCA.Analytics.Filter.Backend = {
 
         //get the table states
         if (OCA.Analytics.tableObject) {
-            let fullState = OCA.Analytics.tableObject.state();
+            let key = Object.keys(OCA.Analytics.tableObject)[0];
+            let fullState = OCA.Analytics.tableObject[key].state();
             if (fullState.order.length !== 0) {
                 tableOptions.order = fullState.order;
             }
@@ -817,15 +818,15 @@ OCA.Analytics.Filter.Backend = {
         }
 
         // get the other states which are not related to the tableState itself
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).footer === true) {
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.footer === true) {
             tableOptions.footer = true;
         }
 
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout) {
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.layout) {
             tableOptions.layout = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
         }
 
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).calculatedColumns) {
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.calculatedColumns) {
             tableOptions.calculatedColumns = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).calculatedColumns;
         }
 

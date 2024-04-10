@@ -185,6 +185,7 @@ class OutputController extends Controller
      * @param $filteroptions
      * @param $dataoptions
      * @param $chartoptions
+     * @param $tableoptions
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
@@ -202,7 +203,7 @@ class OutputController extends Controller
                     return new NotFoundResponse();
                 }
             }
-            $share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions, $chartoptions);
+            $share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
             $result = $this->getData($share);
             return new DataResponse($result, HTTP::STATUS_OK);
         }

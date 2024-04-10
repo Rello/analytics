@@ -47,7 +47,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     TYPE_EXTERNAL_REGEX: 5,
     TYPE_EXCEL: 7,
     TYPE_SHARED: 99,
-    tableObject: null,
+    tableObject: [],
     isAdvanced: false,
     currentReportData: {},
     isPanorama: true,
@@ -367,7 +367,7 @@ OCA.Analytics.Panorama = {
             let divElement = document.createElement('table');
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
-            OCA.Analytics.Visualization.buildDataTable(document.getElementById('myWidget' + itemId), jsondata);
+            OCA.Analytics.Visualization.buildDataTable(document.getElementById('myWidget' + itemId), jsondata, false, itemId);
         }
     },
     

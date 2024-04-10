@@ -237,7 +237,7 @@ OCA.Analytics.Advanced.Dataload = {
             placeholder: optionSelectOptions
         });
         datasetOptions.push({id: 'filterValue', name: t('analytics', 'Value'), placeholder: ''});
-        OCA.Analytics.datasourceOptions[0] = datasetOptions;
+        OCA.Analytics.datasources.options[0] = datasetOptions;
     },
 
     buildDataloadRow: function (dataload) {
@@ -280,6 +280,7 @@ OCA.Analytics.Advanced.Dataload = {
 
         document.getElementById('dataloadDetail').dataset.dataloadId = dataload['id'];
         document.getElementById('dataloadName').value = dataload['name'];
+        document.getElementById('dataloadType').innerText = OCA.Analytics.datasources.datasources[dataload['datasource']];
         OCA.Analytics.Visualization.showElement('dataloadDetailHeader');
         OCA.Analytics.Visualization.showElement('dataloadDetailButtons');
         OCA.Analytics.Visualization.showElement('dataloadDetailDelete');
