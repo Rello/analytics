@@ -106,6 +106,7 @@ OC.L10N.register(
     "Real-time download statistics from GitHub." : "Estádistiques en tiempu real de GitHub",
     "Segment" : "Segmentu",
     "Year" : "Añu",
+    "New in" : "Novedá en",
     "View changelog" : "Ver el rexistru de cambeos",
     "Search" : "Buscar",
     "Analytics" : "Analítiques",
