@@ -320,7 +320,7 @@ OC.L10N.register(
     "Domain of external site" : "Domain der externen Seite",
     "Rows" : "Reihen",
     "Columns" : "Spalten",
-    "Measures" : "Maßnahmen",
+    "Measures" : "Kennzahlen",
     "Show totals" : "Summen anzeigen",
     "Not required" : "Nicht erforderlich",
     "Calculated Columns" : "Berechnete Spalten",
