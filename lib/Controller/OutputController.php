@@ -189,7 +189,7 @@ class OutputController extends Controller
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
-    public function readPublic($token, $filteroptions, $dataoptions, $chartoptions)
+    public function readPublic($token, $filteroptions, $dataoptions, $chartoptions, $tableoptions)
     {
         $share = $this->ShareService->getReportByToken($token);
         if (empty($share)) {
