@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "http://localhost:8028/",
+  "url": "http://localhost:8027/",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -2565,7 +2565,7 @@
     }]
   }, {
     "id": "9833f9a7-630d-4ea4-890d-b84f0a2e3ca8",
-    "name": "25 Report Filter",
+    "name": "22 Filter general",
     "commands": [{
       "id": "e78dd293-0f55-423f-ad79-74285b348462",
       "comment": "",
@@ -5170,6 +5170,472 @@
         ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
       ],
       "value": "Wert"
+    }]
+  }, {
+    "id": "f9235cd3-a664-494b-8c32-6dae9ac52f66",
+    "name": "23 Filter Table/Chart only",
+    "commands": [{
+      "id": "52aae10d-c1f6-4366-97ee-7c2acee0b52d",
+      "comment": "",
+      "command": "open",
+      "target": "/apps/analytics/#/r/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "dced3e23-6923-4568-bff4-5d3fcdf2b85f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Testreport",
+      "targets": [
+        ["linkText=Testreport", "linkText"],
+        ["css=li:nth-child(9) > .icon-projects", "css:finder"],
+        ["xpath=//a[contains(text(),'Testreport')]", "xpath:link"],
+        ["xpath=//ul[@id='navigationDatasets']/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#/r/65')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Testreport')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7ab4eed9-a4f3-46b1-af5a-d7238be1bf63",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=reportHeader",
+      "targets": [
+        ["id=reportHeader", "id"],
+        ["css=#reportHeader", "css:finder"],
+        ["xpath=//h2[@id='reportHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h2", "xpath:idRelative"],
+        ["xpath=//div[3]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Testreport')]", "xpath:innerText"]
+      ],
+      "value": "Testreport"
+    }, {
+      "id": "feb7f2c5-de81-49db-81ae-e6c1c029fa08",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@data-name='Testreport']",
+      "targets": [
+        ["css=li:nth-child(3) button", "css:finder"],
+        ["xpath=//ul[@id='navigationDatasets']/li[3]/div/ul/li/button", "xpath:idRelative"],
+        ["xpath=//li[3]/div/ul/li/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e8c166d3-f20a-4fc0-b9fd-42c884683dad",
+      "comment": "",
+      "command": "click",
+      "target": "css=.open .icon-rename",
+      "targets": [
+        ["linkText=Edit", "linkText"],
+        ["css=.open li:nth-child(1) > a", "css:finder"],
+        ["xpath=//ul[@id='navigationDatasets']/li[4]/div[2]/ul/li/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[17]", "xpath:href"],
+        ["xpath=//li[4]/div[2]/ul/li/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3b75ceba-f68d-41ab-9fc0-ca4732c61a38",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "id=sidebarReportName",
+      "targets": [
+        ["id=sidebarDatasetName", "id"],
+        ["css=#sidebarDataset #sidebarDatasetName", "css:finder"],
+        ["xpath=//input[@id='sidebarDatasetName']", "xpath:attributes"],
+        ["xpath=//div[@id='sidebarDataset']/div/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "c6d15953-5c4a-4195-8b41-009f0242a3b5",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportVisualizationSectionHeaderH3",
+      "targets": [
+        ["id=reportVisualizationSectionHeaderH3", "id"],
+        ["css=#reportVisualizationSectionHeaderH3", "css:finder"],
+        ["xpath=//h3[@id='reportVisualizationSectionHeaderH3']", "xpath:attributes"],
+        ["xpath=//div[@id='reportVisualizationSectionHeader']/h3", "xpath:idRelative"],
+        ["xpath=//div[6]/h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Visualization')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f4db1a9b-de73-4ab5-a012-b0c75b0f0812",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportVisualization",
+      "targets": [
+        ["id=sidebarReportVisualization", "id"],
+        ["css=#sidebarReportVisualization", "css:finder"],
+        ["xpath=//select[@id='sidebarReportVisualization']", "xpath:attributes"],
+        ["xpath=//div[@id='reportVisualizationSection']/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b1ad25aa-7d00-4947-9e90-7675e17069f2",
+      "comment": "",
+      "command": "select",
+      "target": "id=sidebarReportVisualization",
+      "targets": [],
+      "value": "label=Chart"
+    }, {
+      "id": "8fbe5943-4cb6-442c-bf5d-7f386d4caa3a",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportUpdateButton",
+      "targets": [
+        ["id=sidebarReportUpdateButton", "id"],
+        ["css=#sidebarReportUpdateButton", "css:finder"],
+        ["xpath=//button[@id='sidebarReportUpdateButton']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerReport']/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Update')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fdfb2cee-a72b-4694-ba9e-e819e8e2d63a",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e3fb123b-78b9-466b-ab1e-a240598d77e7",
+      "comment": "",
+      "command": "click",
+      "target": "id=addFilterIcon",
+      "targets": [
+        ["id=addFilterIcon", "id"],
+        ["css=#addFilterIcon", "css:finder"],
+        ["xpath=//div[@id='addFilterIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/div[3]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d13a0edb-84bf-43c6-baab-c9e7198f1100",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogValue",
+      "targets": [
+        ["id=filterDialogValue", "id"],
+        ["css=#filterDialogValue", "css:finder"],
+        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "cc8e105d-7d72-4315-b6bc-43c0118ac350",
+      "comment": "",
+      "command": "click",
+      "target": "id=Dimension 1",
+      "targets": [
+        ["id=Dimension 1", "id"],
+        ["css=#Dimension\\ 1", "css:finder"],
+        ["xpath=//li[@id='Dimension 1']", "xpath:attributes"],
+        ["xpath=//ul[@id='tmpList']/li", "xpath:idRelative"],
+        ["xpath=//div[4]/ul/li", "xpath:position"],
+        ["xpath=//li[contains(.,'Dimension 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "56d82d50-4032-4e6f-b4d4-962560bd75b8",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogGo",
+      "targets": [
+        ["id=filterDialogGo", "id"],
+        ["linkText=Add", "linkText"],
+        ["css=#filterDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'Add')]", "xpath:link"],
+        ["xpath=//a[@id='filterDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[5]/div/div[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "43eef27a-3cb8-4f6f-940b-b4bc6130c8f3",
+      "comment": "",
+      "command": "click",
+      "target": "id=saveIcon",
+      "targets": [
+        ["id=saveIcon", "id"],
+        ["css=#saveIcon", "css:finder"],
+        ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0dd1674a-280d-4842-b632-8c6b2624b162",
+      "comment": "Save item not visible",
+      "command": "waitForElementNotVisible",
+      "target": "id=saveIcon",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "bdd1ce6b-8ed4-410a-a8e5-246b33c3b115",
+      "comment": "check that filter is visible in the filter bar",
+      "command": "assertElementPresent",
+      "target": "id=dimension1",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1a0cb9f2-c4da-4cce-9ae1-8e40e4e3d67d",
+      "comment": "",
+      "command": "click",
+      "target": "id=dimension1",
+      "targets": [
+        ["id=dimension1", "id"],
+        ["css=#dimension1", "css:finder"],
+        ["xpath=//span[@id='dimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='filterVisualisation']/span", "xpath:idRelative"],
+        ["xpath=//div[4]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Column 1 equal to Dimension 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cd736394-8f08-456b-9ab3-a9b1bb1fdb4d",
+      "comment": "",
+      "command": "click",
+      "target": "id=saveIcon",
+      "targets": [
+        ["id=saveIcon", "id"],
+        ["css=#saveIcon", "css:finder"],
+        ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1b211780-1a04-4973-803e-5da1789a4376",
+      "comment": "Save item not visible",
+      "command": "waitForElementNotVisible",
+      "target": "id=saveIcon",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "4d2432d6-506a-4001-9f4a-bcf0cea48d19",
+      "comment": "check that filter is visible in the filter bar",
+      "command": "assertElementNotPresent",
+      "target": "id=dimension1",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6bb5c0ba-896e-452e-b9bd-6e5a04c81ea3",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportChart",
+      "targets": [
+        ["id=sidebarReportChart", "id"],
+        ["css=#sidebarReportChart", "css:finder"],
+        ["xpath=//select[@id='sidebarReportChart']", "xpath:attributes"],
+        ["xpath=//div[@id='reportVisualizationSection']/div[2]/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1092e34d-9153-49b4-8acc-948a859f8e9c",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportVisualization",
+      "targets": [
+        ["id=sidebarReportVisualization", "id"],
+        ["css=#sidebarReportVisualization", "css:finder"],
+        ["xpath=//select[@id='sidebarReportVisualization']", "xpath:attributes"],
+        ["xpath=//div[@id='reportVisualizationSection']/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "05d85673-5cdf-4b13-8053-959de1eeecdc",
+      "comment": "",
+      "command": "select",
+      "target": "id=sidebarReportVisualization",
+      "targets": [],
+      "value": "label=Table"
+    }, {
+      "id": "15f37b69-ed8a-4093-b6ed-4a7ec9ac2789",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportUpdateButton",
+      "targets": [
+        ["id=sidebarReportUpdateButton", "id"],
+        ["css=#sidebarReportUpdateButton", "css:finder"],
+        ["xpath=//button[@id='sidebarReportUpdateButton']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerReport']/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Update')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2e6da463-1ba8-4dd6-b938-7d6c39496580",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "458e2636-34f4-43e4-8bb3-84b6ea73c6d9",
+      "comment": "",
+      "command": "click",
+      "target": "id=addFilterIcon",
+      "targets": [
+        ["id=addFilterIcon", "id"],
+        ["css=#addFilterIcon", "css:finder"],
+        ["xpath=//div[@id='addFilterIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/div[3]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9d5e8974-3a28-4c56-ab02-24aefe382bbe",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogValue",
+      "targets": [
+        ["id=filterDialogValue", "id"],
+        ["css=#filterDialogValue", "css:finder"],
+        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "78ad6792-a0f5-422c-aa8f-353365249b52",
+      "comment": "",
+      "command": "click",
+      "target": "id=Dimension 1",
+      "targets": [
+        ["id=Dimension 1", "id"],
+        ["css=#Dimension\\ 1", "css:finder"],
+        ["xpath=//li[@id='Dimension 1']", "xpath:attributes"],
+        ["xpath=//ul[@id='tmpList']/li", "xpath:idRelative"],
+        ["xpath=//div[4]/ul/li", "xpath:position"],
+        ["xpath=//li[contains(.,'Dimension 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "68fe789f-f89b-408e-9933-ad41d3da31c9",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogGo",
+      "targets": [
+        ["id=filterDialogGo", "id"],
+        ["linkText=Add", "linkText"],
+        ["css=#filterDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'Add')]", "xpath:link"],
+        ["xpath=//a[@id='filterDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[5]/div/div[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "29699649-748f-4ddc-b95c-70a3d2729048",
+      "comment": "",
+      "command": "click",
+      "target": "id=saveIcon",
+      "targets": [
+        ["id=saveIcon", "id"],
+        ["css=#saveIcon", "css:finder"],
+        ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4773d3ee-1daf-4c2b-98b9-2c899e5eac24",
+      "comment": "Save item not visible",
+      "command": "waitForElementNotVisible",
+      "target": "id=saveIcon",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "6e5dae98-3b73-444e-9c11-372920351b4f",
+      "comment": "check that filter is visible in the filter bar",
+      "command": "assertElementPresent",
+      "target": "id=dimension1",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e5644299-f520-447f-887c-ad4c3b2a20fa",
+      "comment": "",
+      "command": "click",
+      "target": "id=dimension1",
+      "targets": [
+        ["id=dimension1", "id"],
+        ["css=#dimension1", "css:finder"],
+        ["xpath=//span[@id='dimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='filterVisualisation']/span", "xpath:idRelative"],
+        ["xpath=//div[4]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Column 1 equal to Dimension 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "29565dc0-6b56-4876-9f5a-cfa7f6ee4de8",
+      "comment": "",
+      "command": "click",
+      "target": "id=saveIcon",
+      "targets": [
+        ["id=saveIcon", "id"],
+        ["css=#saveIcon", "css:finder"],
+        ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "66783af4-7e48-40d1-9804-646a1ef37db2",
+      "comment": "Save item not visible",
+      "command": "waitForElementNotVisible",
+      "target": "id=saveIcon",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "e08a44ef-fd02-4551-9c69-1141f5cc3bf9",
+      "comment": "check that filter is not visible in the filter bar",
+      "command": "assertElementNotPresent",
+      "target": "id=dimension1",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1aba48ad-3dc9-436c-a72d-fb667ce56d48",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportVisualization",
+      "targets": [
+        ["id=sidebarReportVisualization", "id"],
+        ["css=#sidebarReportVisualization", "css:finder"],
+        ["xpath=//select[@id='sidebarReportVisualization']", "xpath:attributes"],
+        ["xpath=//div[@id='reportVisualizationSection']/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "45a2c347-af73-450a-b3ea-e8a7154b3784",
+      "comment": "",
+      "command": "select",
+      "target": "id=sidebarReportVisualization",
+      "targets": [],
+      "value": "label=Chart & Table"
+    }, {
+      "id": "5a13f9f1-b1f5-48be-86e0-da39721a0d57",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportUpdateButton",
+      "targets": [
+        ["id=sidebarReportUpdateButton", "id"],
+        ["css=#sidebarReportUpdateButton", "css:finder"],
+        ["xpath=//button[@id='sidebarReportUpdateButton']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerReport']/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Update')]", "xpath:innerText"]
+      ],
+      "value": ""
     }]
   }],
   "suites": [{

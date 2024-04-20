@@ -800,7 +800,7 @@ OCA.Analytics.Filter.Backend = {
         let tableOptions = {};
 
         //get the table states
-        if (OCA.Analytics.tableObject) {
+        if (OCA.Analytics.tableObject.length !== 0) {
             let key = Object.keys(OCA.Analytics.tableObject)[0];
             let fullState = OCA.Analytics.tableObject[key].state();
             if (fullState.order.length !== 0) {

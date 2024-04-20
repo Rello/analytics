@@ -1,5 +1,12 @@
 # Changelog
 
+### Fixed
+- Save filter fails for table-only report #392
+
+## 4.13.1 - 2024-04-14
+### Fixed
+- missing variable in public shares
+
 ## 4.13.0 - 2024-04-14
 ### Added
 - copy data loads
