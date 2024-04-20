@@ -17,6 +17,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
     "Add" : "Agregar",
+    "Line" : "Línea",
     "Color" : "Color",
     "Overview" : "Generalidades",
     "Data load" : "Carga de datos",
