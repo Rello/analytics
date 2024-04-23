@@ -1103,7 +1103,7 @@ OCA.Analytics.Backend = {
 
     uploadPdf: function (path, pdfBlob) {
         let username = OC.currentUser;
-        let requestUrl = OC.generateUrl('remote.php/dav/files/') + username + path;
+        let requestUrl = OC.linkToRemote('dav/files/') + username + path;
 
         fetch(requestUrl, {
             method: 'PUT',
