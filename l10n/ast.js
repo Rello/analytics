@@ -127,6 +127,7 @@ OC.L10N.register(
     "Limit" : "Llende",
     "Version" : "Versión",
     "JSON" : "JSON",
+    "More options" : "Más opciones",
     "Authentication" : "Autenticación",
     "Announcements" : "Anuncios",
     "Report not found" : "Nun s'atopó l'informe",
