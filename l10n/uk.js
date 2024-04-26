@@ -82,7 +82,7 @@ OC.L10N.register(
     "Data load" : "Завантажити дані",
     "Basic settings" : "Основні налаштування",
     "Add to new group" : "Додати до нової групи",
-    "Remove from favorites" : "Вилучено з улюбленого",
+    "Remove from favorites" : "Прибрати зірочку",
     "Add to favorites" : "Додати зірочку",
     "Delete folder" : "Вилучити каталог",
     "choose a layout" : "виберіть макет",
