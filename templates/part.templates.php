@@ -655,3 +655,37 @@
     <h3><?php p($l->t('Calculated Columns')); ?> - *beta*</h3>
     <textarea id="tableOptionsCalculatedColumns"></textarea>
 </template>
+
+<template id="templateChartOptions">
+    <br>
+    <h2> <?php p($l->t('Switch Axis')); ?> </h2>
+    <div class="table" style="display: table;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 200px; text-align: center;">
+                <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked/><br>
+                <label for="opt1"><?php p($l->t('KPI model')); ?></label><br>
+                <span class="userGuidance"><?php p($l->t('A list of values. This is the default layout')); ?></span>
+            </div>
+            <div style="display: table-cell; width: 200px; text-align: center;">
+                <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel"/><br>
+                <label for="opt2"> <?php p($l->t('Account model')); ?></label><br>
+                <span class="userGuidance"><?php p($l->t('One line per topic with the numbers in the same line')); ?></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <h2> <?php p($l->t('Visualization')); ?> </h2>
+    <div class="table" style="display: table;" id="chartOptionsTable">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;"><?php p($l->t('Data series')); ?>
+            </div>
+            <div style="display: table-cell; width: 150px;"><?php p($l->t('Vertical axis')); ?>
+            </div>
+            <div style="display: table-cell; width: 150px;"><?php p($l->t('Chart type')); ?>
+            </div>
+            <div style="display: table-cell; width: 150px;"><?php p($l->t('Color')); ?>
+            </div>
+        </div>
+    </div>
+</template>

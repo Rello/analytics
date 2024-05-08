@@ -402,7 +402,7 @@ OCA.Analytics.Visualization = {
         Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
 
         // convert the data array
-        let [xAxisCategories, datasets] = this.convertDataToChartJsFormat(jsondata.data, chartType);
+        let [xAxisCategories, datasets] = this.convertDataToChartJsFormat(jsondata, chartType);
 
         // show legend button only when useful with >1 dataset
         datasets.length > 1 ? this.showElement('chartLegendContainer') : null;
@@ -522,48 +522,59 @@ OCA.Analytics.Visualization = {
         });
     },
 
-    convertDataToChartJsFormat: function (data, chartType) {
-        const labelMap = new Map();
-        let datasetCounter = 0;
+    convertDataToChartJsFormat: function (data, chartType, modelType) {
         let datasets = [], xAxisCategories = [];
-        data.forEach((row) => {
-            // default expected columns
-            let dataSeriesColumn, characteristicColumn, value;
+        let dataModel = '';
+        let header = data.header.slice(1);
 
-            // when only 2 columns are provided, no label will be set
-            if (row.length >= 3) {
-                [dataSeriesColumn, characteristicColumn, value] = row.slice(-3);
-            } else if (row.length === 2) {
-                [characteristicColumn, value] = row;
-                dataSeriesColumn = '';
+        if (data.options.chartoptions !== '') {
+            if (JSON.parse(data.options.chartoptions)?.analyticsModel !== undefined) {
+                dataModel = JSON.parse(data.options.chartoptions)["analyticsModel"];
             }
+        }
 
-            // Add category labels only once and not for every data series
-            if (!xAxisCategories.includes(characteristicColumn)) {
-                xAxisCategories.push(characteristicColumn);
-            }
-
-            // create the data series
-            if (!labelMap.has(dataSeriesColumn)) {
-                labelMap.set(dataSeriesColumn, {
-                    ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}), // no label for doughnut charts
-                    data: [],
-                    hidden: datasetCounter >= 4 // default hide > 4th series for better visibility
-                });
-                datasetCounter++;
-            }
-
-            const dataset = labelMap.get(dataSeriesColumn);
-            if (chartType === 'doughnut') {
-                dataset.data.push(parseFloat(value));
-            } else {
-                dataset.data.push({x: characteristicColumn, y: parseFloat(value)});
-            }
-        });
-
-        if (chartType === 'doughnut') {
-            datasets = [{data: Array.from(labelMap.values()).flatMap(d => d.data)}];
+        data = data.data;
+        if (dataModel === 'accountModel') {
+            xAxisCategories = header;
+            // Account Model: Create one dataset per row
+            data.forEach(row => {
+                const label = row[0]; // Date becomes the label
+                const dataPoints = row.slice(1).map((value, index) => ({
+                    x: xAxisCategories[index],
+                    y: value
+                }));
+                datasets.push({ label: label, data: dataPoints });
+            });
         } else {
+            // KPI-Model: Use existing logic
+            const labelMap = new Map();
+            let datasetCounter = 0;
+            data.forEach((row) => {
+                let dataSeriesColumn, characteristicColumn, value;
+                if (row.length >= 3) {
+                    [dataSeriesColumn, characteristicColumn, value] = row.slice(-3);
+                } else if (row.length === 2) {
+                    [characteristicColumn, value] = row;
+                    dataSeriesColumn = '';
+                }
+                if (!xAxisCategories.includes(characteristicColumn)) {
+                    xAxisCategories.push(characteristicColumn);
+                }
+                if (!labelMap.has(dataSeriesColumn)) {
+                    labelMap.set(dataSeriesColumn, {
+                        ...(chartType !== 'doughnut' && { label: dataSeriesColumn || undefined }),
+                        data: [],
+                        hidden: datasetCounter >= 4
+                    });
+                    datasetCounter++;
+                }
+                const dataset = labelMap.get(dataSeriesColumn);
+                if (chartType === 'doughnut') {
+                    dataset.data.push(parseFloat(value));
+                } else {
+                    dataset.data.push({ x: characteristicColumn, y: parseFloat(value) });
+                }
+            });
             datasets = Array.from(labelMap.values());
         }
         return [xAxisCategories, datasets];

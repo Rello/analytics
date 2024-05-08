@@ -392,6 +392,12 @@ OCA.Analytics.Filter = {
 
     openChartOptionsDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Chart options'),
+            OCA.Analytics.Filter.processOptionsDialog
+        );
+
         let drilldownRows = '';
         let dataOptions;
         try {
@@ -413,7 +419,7 @@ OCA.Analytics.Filter = {
         for (let i = 0; i < Object.keys(distinctCategories).length; i++) {
             let color = OCA.Analytics.Filter.checkColor(dataOptions, i);
             drilldownRows = drilldownRows + '<div style="display: table-row;">'
-                + '<div style="display: table-cell;">'
+                + '<div style="display: table-cell;" id="optionsTitle' + i + '">'
                 + Object.values(distinctCategories)[i]
                 + '</div>'
                 + '<div style="display: table-cell;">'
@@ -435,42 +441,31 @@ OCA.Analytics.Filter = {
                 + '</div>';
         }
 
-        document.body.insertAdjacentHTML('beforeend',
-            '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
-            + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
-            + '<div id="analytics_dialog">'
-            + '<a class="analyticsDialogClose" id="btnClose"></a>'
-            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
-            + t('analytics', 'Chart options')
-            + '</h2>'
-            + '<div class="table" style="display: table;">'
+        // clone the DOM template
+        let container = document.getElementById('templateChartOptions').content;
+        container = document.importNode(container, true);
 
-            + '<div style="display: table-row;">'
-            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Data series')
-            + '</div>'
-            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Vertical axis')
-            + '</div>'
-            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Chart type')
-            + '</div>'
-            + '<div style="display: table-cell; width: 150px;">' + t('analytics', 'Color')
-            + '</div>'
-            + '</div>'
-            + drilldownRows
-            + '</div>'
-            + '<div class="analyticsDialogButtonrow" id="buttons">'
-            + '<a class="button primary" id="drilldownDialogGo">' + t('analytics', 'OK') + '</a>'
-            + '<a class="button" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '</div>'
+        container.getElementById('chartOptionsTable').insertAdjacentHTML('beforeend', drilldownRows);
+
+        let dataModel;
+        try {
+            dataModel = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions)["analyticsModel"];
+            if (dataModel === 'accountModel') {
+                container.getElementById('analyticsModelOpt2').checked = true;
+            }
+        } catch (e) {
+            dataModel = '';
+        }
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Select the format of the data and how it should be visualized')
         );
 
         let optionsColor = document.getElementsByName('optionsColor');
         for (let i = 0; i < optionsColor.length; i++) {
             optionsColor[i].addEventListener('keyup', OCA.Analytics.Filter.updateColor);
         }
-
-        document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("drilldownDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("drilldownDialogGo").addEventListener("click", OCA.Analytics.Filter.processOptionsDialog);
     },
 
     processOptionsDialog: function () {
@@ -521,32 +516,57 @@ OCA.Analytics.Filter = {
             dataOptions = '';
         }
 
-        // if any data series is tied to the secondary yAxis or not
-        // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
-        let enableAxisV2 = '{"scales":{"yAxes":[{},{"display":true}]}}';
-        let enableAxis = '{"scales":{"secondary":{"display":true}}}';
-        if (seondaryAxisRequired === true) {
+        let chartOptionsObj = (chartOptions && chartOptions.length !== 0) ? JSON.parse(chartOptions) : {};
+
+        let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
+        if (dataModel === 'accountModel') {
+            let enableModel = { analyticsModel: dataModel };
             try {
                 // if there are existing settings, merge them
-                chartOptions = JSON.stringify(cloner.deep.merge(JSON.parse(chartOptions), JSON.parse(enableAxis)));
+                chartOptionsObj = cloner.deep.merge(chartOptionsObj, enableModel);
             } catch (e) {
-                chartOptions = enableAxis;
+                chartOptionsObj = enableModel;
             }
         } else {
-            if (chartOptions === enableAxis || chartOptions === enableAxisV2) {
-                // if the secondary axis is not required anymore but was enabled before
-                // the options are cleared all together
-                // this does only apply when ONLY the axis was enabled before
-                // this does not do anything, if the user had own custom settings
-                chartOptions = '';
+            try {
+                if (chartOptionsObj["analyticsModel"]) {
+                    delete chartOptionsObj["analyticsModel"];
+                }
+            } catch (e) {
+                // Handle error if JSON parsing fails
+            }
+        }
+
+        // if any data series is tied to the secondary yAxis or not
+        // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
+        // additional combinations for dataMode apply
+        if (seondaryAxisRequired === true) {
+            let enableAxis = { scales: {secondary:{display:true}}};
+            try {
+                // if there are existing settings, merge them
+                chartOptionsObj = cloner.deep.merge(chartOptionsObj, enableAxis);
+            } catch (e) {
+                chartOptionsObj = enableAxis;
+            }
+        } else {
+            try {
+                if (chartOptionsObj.scales && chartOptionsObj.scales.secondary) {
+                    delete chartOptionsObj.scales.secondary;
+                    // if the secondary axis is not required anymore but was enabled before
+                    // the options are cleared all together
+                    // this does only apply when ONLY the axis was enabled before
+                    // this does not do anything, if the user had own custom settings
+                }
+            } catch (e) {
+                // Handle error if JSON parsing fails
             }
         }
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
-        OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
+        OCA.Analytics.currentReportData.options.chartoptions = JSON.stringify(chartOptionsObj);
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
-        OCA.Analytics.Filter.close();
+        OCA.Analytics.Notification.dialogClose();
     },
 
     close: function () {

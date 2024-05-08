@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- charts: select account- (values in columns) or kpi-model (values in rows) #393
+
 ### Fixed
 - Save filter fails for table-only report #392
 

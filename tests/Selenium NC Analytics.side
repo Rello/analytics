@@ -387,13 +387,14 @@
       "id": "1320c5b7-ba50-4967-955c-8fde69e36ec9",
       "comment": "",
       "command": "assertText",
-      "target": "id=analyticsDialogContainer",
+      "target": "id=analyticsDialogHeader",
       "targets": [
-        ["id=analyticsDialogContainer", "id"],
-        ["css=#analyticsDialogContainer", "css:finder"],
-        ["xpath=//div[@id='analyticsDialogContainer']", "xpath:attributes"],
-        ["xpath=//body[@id='body-user']/div[9]", "xpath:idRelative"],
-        ["xpath=//div[9]", "xpath:position"]
+        ["id=analyticsDialogHeader", "id"],
+        ["css=#analyticsDialogHeader", "css:finder"],
+        ["xpath=//h2[@id='analyticsDialogHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analyticsDialogContainer']/h2", "xpath:idRelative"],
+        ["xpath=//div[8]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Dataset')]", "xpath:innerText"]
       ],
       "value": "Dataset"
     }, {
@@ -1621,6 +1622,15 @@
       ],
       "value": "Select file"
     }, {
+      "id": "2bc21151-5e97-47b5-8ea2-79704b2c55ae",
+      "comment": "",
+      "command": "click",
+      "target": "css=.home-icon > .material-design-icon__svg",
+      "targets": [
+        ["css=.home-icon > .material-design-icon__svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
       "id": "6a83b1d5-4d54-4b5b-8c24-53335034e638",
       "comment": "",
       "command": "click",
@@ -1635,22 +1645,24 @@
       "id": "1c48b13e-34cf-4630-b6ef-1e89977c6f0d",
       "comment": "",
       "command": "click",
-      "target": "css=tr:nth-child(1) .file-picker__file-name",
+      "target": "css=.file-picker__name-container",
       "targets": [
-        ["css=tr:nth-child(1) .filename-parts__first", "css:finder"],
-        ["xpath=//table[@id='picker-filestable']/tbody/tr/td/span/span", "xpath:idRelative"],
-        ["xpath=//td/span/span", "xpath:position"]
+        ["css=.file-picker__name-container", "css:finder"],
+        ["xpath=//div[@id='modal-description-knpbl']/div/div/div/div/div/div[2]/table/tbody/tr/td/div", "xpath:idRelative"],
+        ["xpath=//td/div", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "03c2ff3e-2156-495d-a778-1740c2d4e2ca",
       "comment": "",
       "command": "click",
-      "target": "css=.button-vue__text:nth-child(1)",
+      "target": "css=.dialog__actions > .button-vue",
       "targets": [
-        ["css=.button-vue__text:nth-child(1)", "css:finder"],
-        ["xpath=//div[@id='modal-description-egloh']/div/div[2]/button/span/span", "xpath:idRelative"],
-        ["xpath=//div/div/div[2]/button/span/span", "xpath:position"]
+        ["css=.dialog__actions > .button-vue", "css:finder"],
+        ["xpath=(//button[@type='button'])[20]", "xpath:attributes"],
+        ["xpath=//div[@id='modal-description-qrcqf']/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Choose analytics_testdatacsv.csv')]", "xpath:innerText"]
       ],
       "value": ""
     }, {
@@ -4247,14 +4259,14 @@
       "id": "6e5ddb5c-3e5e-42ed-ba9d-9bc73a04f240",
       "comment": "",
       "command": "assertText",
-      "target": "css=.empty-content:nth-child(1) > .empty-content__title",
+      "target": "css=.notification-container .empty-content__name",
       "targets": [
-        ["css=.empty-content:nth-child(1) > .empty-content__title", "css:finder"],
-        ["xpath=//div[@id='header-menu-notifications']/div/div/div/h2", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div/div/h2", "xpath:position"],
-        ["xpath=//h2[contains(.,'No notifications')]", "xpath:innerText"]
+        ["css=.notification-container .empty-content__name", "css:finder"],
+        ["xpath=//div[@id='header-menu-notifications']/div/div/div/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'No notifications')]", "xpath:innerText"]
       ],
-      "value": "No notifications"
+      "value": " No notifications"
     }]
   }, {
     "id": "12fa11da-e09a-4932-ac90-70b6ce9f5d47",
@@ -4618,11 +4630,13 @@
       "id": "cad984f4-88a4-4136-b830-11b776569eb7",
       "comment": "",
       "command": "assertText",
-      "target": "css=.table > div:nth-child(2) > div:nth-child(1)",
+      "target": "id=optionsTitle0",
       "targets": [
-        ["css=.table > div:nth-child(2) > div:nth-child(1)", "css:finder"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div", "xpath:idRelative"],
-        ["xpath=//div[7]/div/div/div[2]/div", "xpath:position"]
+        ["id=chartOptions0", "id"],
+        ["css=#chartOptions0", "css:finder"],
+        ["xpath=//div[@id='chartOptions0']", "xpath:attributes"],
+        ["xpath=//div[@id='chartOptionsTable']/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div[2]/div[2]/div", "xpath:position"]
       ],
       "value": "Dimension 1"
     }, {
@@ -4654,10 +4668,17 @@
       ],
       "value": "#cec7e8"
     }, {
+      "id": "e695e609-7491-4dbe-b8d5-8eaf0335e268",
+      "comment": "",
+      "command": "click",
+      "target": "id=analyticsModelOpt2",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "286d5618-595a-4618-bc3a-0b7943a8b7a7",
       "comment": "",
       "command": "click",
-      "target": "id=drilldownDialogGo",
+      "target": "id=analyticsDialogBtnGo",
       "targets": [
         ["id=drilldownDialogGo", "id"],
         ["linkText=OK", "linkText"],
@@ -4751,6 +4772,20 @@
       ],
       "value": "#cec7e8"
     }, {
+      "id": "52457411-7ac7-4c1a-a361-56897fd3cc93",
+      "comment": "",
+      "command": "assertChecked",
+      "target": "id=analyticsModelOpt2",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "17dca70a-f9ca-49bb-ba28-f3a39390b05e",
+      "comment": "",
+      "command": "click",
+      "target": "id=analyticsModelOpt1",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "d76ab84f-4997-4615-a6f7-b091f8a4639b",
       "comment": "",
       "command": "select",
@@ -4782,7 +4817,7 @@
       "id": "603a56d4-8d59-4d47-9c99-2866c2bd4aaa",
       "comment": "",
       "command": "click",
-      "target": "id=drilldownDialogGo",
+      "target": "id=analyticsDialogBtnGo",
       "targets": [
         ["id=drilldownDialogGo", "id"],
         ["linkText=OK", "linkText"],
