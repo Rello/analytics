@@ -7,7 +7,6 @@ OC.L10N.register(
     "Cancel" : "Loobu",
     "Filter" : "Filter",
     "Add" : "Lisa",
-    "Color" : "Värv",
     "Overview" : "Ülevaade",
     "Basic settings" : "Põhiseaded",
     "Remove from favorites" : "Eemalda lemmikutest",
@@ -53,6 +52,7 @@ OC.L10N.register(
     "Unshare" : "Lõpeta jagamine",
     "Password protection" : "Password protection",
     "Copy link" : "Kopeeri link",
+    "Color" : "Värv",
     "Create" : "Loo"
 },
 "nplurals=2; plural=(n != 1);");

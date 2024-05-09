@@ -11,7 +11,6 @@ OC.L10N.register(
     "Cancel" : "ยกเลิก",
     "Filter" : "ตัวกรอง",
     "Add" : "เพิ่ม",
-    "Color" : "สี",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Add to favorites" : "เพิ่มในรายการโปรด",
     "Delete folder" : "ลบโฟลเดอร์",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Unshare" : "เลิกแชร์",
     "Password protection" : "ป้องกันด้วยรหัสผ่าน",
     "Copy link" : "คัดลอกลิงก์",
+    "Color" : "สี",
     "Get more information" : "รับข้อมูลเพิ่มเติม",
     "Create" : "สร้าง"
 },

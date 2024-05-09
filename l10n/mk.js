@@ -10,7 +10,6 @@ OC.L10N.register(
     "Add" : "Додади",
     "Line" : "Линија",
     "Bar" : "Бар",
-    "Color" : "Боја",
     "Overview" : "Преглед",
     "Basic settings" : "Основни параметри",
     "Remove from favorites" : "Отстрани од фаворити",
@@ -63,6 +62,7 @@ OC.L10N.register(
     "Unshare" : "Отстрани споделување",
     "Password protection" : "Заштитено со лозинка",
     "Copy link" : "Копирај линк",
+    "Color" : "Боја",
     "Get more information" : "Побарајте повеќе информации",
     "Nextcloud forum" : "Nextcloud форум",
     "Create" : "Креирај"

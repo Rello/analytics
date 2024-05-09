@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "болиулах",
     "Filter" : "Шүүлтүүр",
     "Add" : "нэмэх",
-    "Color" : "Өнгө",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Хавтсыг устгах",
@@ -47,6 +46,7 @@ OC.L10N.register(
     "Unshare" : "Түгээлтийг зогсоох",
     "Password protection" : "Password protection",
     "Copy link" : "Холбоос хуулах",
+    "Color" : "Өнгө",
     "Create" : "Үүсгэх"
 },
 "nplurals=2; plural=(n != 1);");

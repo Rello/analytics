@@ -53,10 +53,6 @@
     "Secondary" : "Sekunder",
     "Line" : "Garis",
     "doughnut" : "donat",
-    "Data series" : "Seri data",
-    "Vertical axis" : "Sumbu vertikal",
-    "Chart type" : "Jenis bagan",
-    "Color" : "Warna",
     "New dataset" : "Himpunan data baru",
     "New panorama" : "Panorama baru",
     "New report" : "Laporan baru",
@@ -155,6 +151,7 @@
     "Settings" : "Setelan",
     "Name" : "Nama",
     "Display" : "Tampilkan",
+    "Chart type" : "Jenis bagan",
     "Advanced" : "Lanjutan",
     "Open documentation" : "Buka dokumentasi",
     "Update" : "Perbarui",
@@ -167,6 +164,9 @@
     "Unshare" : "Batalkan berbagi",
     "Password protection" : "Password protection",
     "Copy link" : "Salin tautan",
+    "Data series" : "Seri data",
+    "Vertical axis" : "Sumbu vertikal",
+    "Color" : "Warna",
     "Create" : "Buat"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

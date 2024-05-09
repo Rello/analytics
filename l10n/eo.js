@@ -7,7 +7,6 @@ OC.L10N.register(
     "OK" : "Bone",
     "Cancel" : "Nuligi",
     "Add" : "Aldoni",
-    "Color" : "Koloro",
     "Overview" : "Superrigardo",
     "Basic settings" : "Baza agordo",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
@@ -54,6 +53,7 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Password protection" : "Protektita per pasvorto",
     "Copy link" : "Kopii ligilon",
+    "Color" : "Koloro",
     "Get more information" : "Pli da informoj",
     "Create" : "Krei"
 },

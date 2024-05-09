@@ -15,7 +15,6 @@ OC.L10N.register(
     "Filter" : "מסנן",
     "Add" : "הוספה",
     "Bar" : "בר",
-    "Color" : "צבע",
     "Overview" : "סקירה",
     "Basic settings" : "הגדרות בסיסיות",
     "Remove from favorites" : "הסרה מהמועדפים",
@@ -70,6 +69,7 @@ OC.L10N.register(
     "Unshare" : "ביטול שיתוף",
     "Password protection" : "הגנה בססמה",
     "Copy link" : "העתקת קישור",
+    "Color" : "צבע",
     "Get more information" : "קבלת מידע נוסף",
     "Nextcloud forum" : "הפורום של Nextcloud",
     "Create" : "יצירה"

@@ -15,7 +15,6 @@ OC.L10N.register(
     "Filter" : "Filter",
     "Variables" : "Variablar",
     "Add" : "Legg til",
-    "Color" : "Farge",
     "Overview" : "Oversyn",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Legg til i favorittar",
@@ -62,6 +61,7 @@ OC.L10N.register(
     "Unshare" : "Fjern deling",
     "Password protection" : "Password protection",
     "Copy link" : "Kopier lenkje",
+    "Color" : "Farge",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"
 },

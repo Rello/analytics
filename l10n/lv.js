@@ -7,7 +7,6 @@ OC.L10N.register(
     "OK" : "Labi",
     "Cancel" : "Atcelt",
     "Add" : "Pievienot",
-    "Color" : "Krāsa",
     "Remove from favorites" : "Noņemt no izlases",
     "Add to favorites" : "Pievienot izlasei",
     "Delete folder" : "Dzēst mapi",
@@ -51,6 +50,7 @@ OC.L10N.register(
     "Unshare" : "Pārtraukt koplietošanu",
     "Password protection" : "Password protection",
     "Copy link" : "Kopēt saiti",
+    "Color" : "Krāsa",
     "Create" : "Izveidot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

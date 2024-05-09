@@ -8,7 +8,6 @@
     "Add" : "Додади",
     "Line" : "Линија",
     "Bar" : "Бар",
-    "Color" : "Боја",
     "Overview" : "Преглед",
     "Basic settings" : "Основни параметри",
     "Remove from favorites" : "Отстрани од фаворити",
@@ -61,6 +60,7 @@
     "Unshare" : "Отстрани споделување",
     "Password protection" : "Заштитено со лозинка",
     "Copy link" : "Копирај линк",
+    "Color" : "Боја",
     "Get more information" : "Побарајте повеќе информации",
     "Nextcloud forum" : "Nextcloud форум",
     "Create" : "Креирај"
