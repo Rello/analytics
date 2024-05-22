@@ -8,6 +8,8 @@ OC.L10N.register(
     "Cancel" : "Cealaigh",
     "Filter" : "Scagaire",
     "Add" : "Cuir",
+    "Overview" : "Forbhreathnú",
+    "Basic settings" : "Socruithe bunúsacha",
     "Remove from favorites" : "Bain ó cheanáin",
     "Add to favorites" : "Cuir le ceanáin",
     "Save" : "Sábháil",
