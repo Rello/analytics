@@ -16,10 +16,12 @@ OC.L10N.register(
     "New" : "Jauns",
     "Share link" : "Koplietot saiti",
     "Link copied" : "Saite nokopēta",
+    "new record" : "jauns ieraksts",
     "Type" : "Tips",
     "Notification" : "Paziņojums",
     "Date" : "Datums",
     "Year" : "Gads",
+    "New in" : "Jauns",
     "View changelog" : "Skatīt izmaiņu sarakstu",
     "Search" : "Meklēt",
     "Total" : "Kopā",
@@ -51,6 +53,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Kopēt saiti",
     "Color" : "Krāsa",
+    "Get more information" : "Iegūt vairāk informācijas",
     "Create" : "Izveidot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
