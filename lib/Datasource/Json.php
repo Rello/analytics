@@ -57,6 +57,7 @@ class Json implements IDatasource
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
         $template[] = ['id' => 'customHeaders', 'name' => 'Custom headers', 'placeholder' => 'key: value,key: value'];
         $template[] = ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password'];
+        $template[] = ['id' => 'insecure', 'name' => $this->l10n->t('Allow insecure connections'), 'placeholder' => '2-' . $this->l10n->t('No') . '/0-' . $this->l10n->t('Yes'), 'type' => 'tf'];
         $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
@@ -80,6 +81,8 @@ class Json implements IDatasource
         $headers = array_map('trim', $headers);
         $headers[] = 'OCS-APIRequest: true';
         $headers[] = 'Content-Type: ' . $contentType;
+        # VERITYHOST=0 to disable verification, 2 to enable. 1 is no longer a valid option.
+        $verifyHost = intval($option['insecure']);
 
         $ch = curl_init();
         if ($ch !== false) {
@@ -90,6 +93,7 @@ class Json implements IDatasource
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $verifyHost);
             if ($option['body'] && $option['body'] !== '') {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $option['body']);
             }

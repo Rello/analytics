@@ -1,13 +1,12 @@
 # Changelog
 
+## 4.14.0 - 2024-05-2x
 ### Added
 - charts: select account- (values in columns) or kpi-model (values in rows) #393
+- JSON: allow insecure/selfsigned certificate #309
 
 ### Fixed
 - Save filter fails for table-only report #392
-
-## 4.13.1 - 2024-04-14
-### Fixed
 - missing variable in public shares
 
 ## 4.13.0 - 2024-04-14
