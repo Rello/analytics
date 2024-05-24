@@ -32,7 +32,6 @@ OC.L10N.register(
     "Filter" : "Filter",
     "Add" : "Add",
     "Bar" : "Bar",
-    "Color" : "Color",
     "Overview" : "Overview",
     "Basic settings" : "Basic settings",
     "Remove from favorites" : "Remove from favorites",
@@ -79,6 +78,7 @@ OC.L10N.register(
     "Unshare" : "Unshare",
     "Password protection" : "Password protection",
     "Copy link" : "Copy link",
+    "Color" : "Color",
     "Get more information" : "Get more information",
     "Create" : "Create"
 },

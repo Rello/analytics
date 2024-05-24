@@ -42,7 +42,6 @@ OC.L10N.register(
     "Add" : "追加",
     "Line" : "線",
     "Bar" : "バー",
-    "Color" : "色",
     "Overview" : "概要",
     "Data load" : "データロード",
     "Basic settings" : "基本設定",
@@ -125,6 +124,7 @@ OC.L10N.register(
     "Copy link" : "リンクをコピー",
     "Rows" : "行",
     "Columns" : "カラム",
+    "Color" : "色",
     "Get more information" : "詳細情報の取得",
     "Nextcloud forum" : "Nextcloudフォーラム",
     "Create" : "作成"

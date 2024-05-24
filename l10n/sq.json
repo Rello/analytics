@@ -6,7 +6,6 @@
     "Cancel" : "Anullo",
     "Filter" : "Filtro",
     "Add" : "Shto",
-    "Color" : "Ngjyrë ",
     "Basic settings" : "Konfigurime bazike",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Shtoje tek të parapëlqyerat",
@@ -52,6 +51,7 @@
     "Unshare" : "Hiqe ndarjen",
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",
+    "Color" : "Ngjyrë ",
     "Create" : "Krijo"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

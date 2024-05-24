@@ -32,7 +32,6 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Filter" : "Filtro",
     "Add" : "Adicionar",
-    "Color" : "Cor",
     "Overview" : "Visão Geral",
     "Data load" : "Carregamento de dados",
     "Basic settings" : "Definições básicas",
@@ -88,6 +87,7 @@ OC.L10N.register(
     "Unshare" : "Cancelar partilha",
     "Password protection" : "Protegido por palavra-passe",
     "Copy link" : "Copiar hiperligação",
+    "Color" : "Cor",
     "Get more information" : "Obter mais informação",
     "Create" : "Criar"
 },

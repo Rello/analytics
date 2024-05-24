@@ -11,7 +11,6 @@ OC.L10N.register(
     "Filter" : "Filtras",
     "Add" : "Pridėti",
     "Bar" : "Baras",
-    "Color" : "Spalva",
     "Overview" : "Apžvalga",
     "Basic settings" : "Pagrindiniai nustatymai",
     "Remove from favorites" : "Šalinti iš mėgstamų",
@@ -72,6 +71,7 @@ OC.L10N.register(
     "Unshare" : "Nustoti bendrinti",
     "Password protection" : "Apsauga slaptažodžiu",
     "Copy link" : "Kopijuoti nuorodą",
+    "Color" : "Spalva",
     "Get more information" : "Gaukite daugiau informacijos",
     "Nextcloud forum" : "Nextcloud forumas",
     "Create" : "Sukurti"

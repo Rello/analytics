@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "Kanselleer",
     "Filter" : "Filter",
     "Add" : "Voeg by",
-    "Color" : "Kleur",
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Add to favorites" : "Voeg by gunstelinge",
     "Delete folder" : "Skrap vouer",
@@ -47,6 +46,7 @@ OC.L10N.register(
     "Hourly" : "Uurliks",
     "Unshare" : "Ontdeel",
     "Copy link" : "Kopieer skakel",
+    "Color" : "Kleur",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },

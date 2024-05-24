@@ -9,7 +9,6 @@ OC.L10N.register(
     "Filter" : "Filtru",
     "Add" : "Adaugă",
     "Line" : "Linie",
-    "Color" : "Culoare",
     "Overview" : "Prezentare generală",
     "Basic settings" : "Setări de bază",
     "Remove from favorites" : "Șterge din favorite",
@@ -60,6 +59,7 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "Password protection" : "Protecție parolă ",
     "Copy link" : "Copiază link",
+    "Color" : "Culoare",
     "Create" : "Crează"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

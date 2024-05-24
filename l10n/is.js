@@ -10,7 +10,6 @@ OC.L10N.register(
     "Add" : "Bæta við",
     "Line" : "Lína",
     "Bar" : "Bar",
-    "Color" : "Litur",
     "Overview" : "Yfirlit",
     "Basic settings" : "Grunnstillingar",
     "Remove from favorites" : "Fjarlægja úr eftirlætum",
@@ -63,6 +62,7 @@ OC.L10N.register(
     "Unshare" : "Hætta deilingu",
     "Password protection" : "Verndun með lykilorði",
     "Copy link" : "Afrita tengil",
+    "Color" : "Litur",
     "Get more information" : "Til að fá frekari upplýsingar",
     "Nextcloud forum" : "Nextcloud spjallsvæði",
     "Create" : "Búa til"

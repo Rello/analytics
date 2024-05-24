@@ -14,7 +14,6 @@ OC.L10N.register(
     "Add" : "Apondre",
     "Secondary" : "Segondari",
     "Line" : "Linha",
-    "Color" : "Color",
     "Overview" : "Vista d’ensemble",
     "Basic settings" : "Paramètres de basa",
     "Remove from favorites" : "Tirar dels favorits",
@@ -82,6 +81,7 @@ OC.L10N.register(
     "Unshare" : "Partejar pas mai",
     "Password protection" : "Proteccion per senhal",
     "Copy link" : "Copiar lo ligam",
+    "Color" : "Color",
     "General information" : "Informacions generalas",
     "No Table" : "Cap de tablèu",
     "Create" : "Crear"

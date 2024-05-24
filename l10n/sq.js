@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "Filter" : "Filtro",
     "Add" : "Shto",
-    "Color" : "Ngjyrë ",
     "Basic settings" : "Konfigurime bazike",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Shtoje tek të parapëlqyerat",
@@ -54,6 +53,7 @@ OC.L10N.register(
     "Unshare" : "Hiqe ndarjen",
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",
+    "Color" : "Ngjyrë ",
     "Create" : "Krijo"
 },
 "nplurals=2; plural=(n != 1);");

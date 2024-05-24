@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "უარყოფა",
     "Filter" : "ფილტრი",
     "Add" : "დამატება",
-    "Color" : "ფერი",
     "Overview" : "ზოგადი მიმოხილვა",
     "Basic settings" : "ძირითადი პარამეტრები",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
@@ -50,6 +49,7 @@ OC.L10N.register(
     "Unshare" : "გაზიარების შეწყვეტა",
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",
+    "Color" : "ფერი",
     "Create" : "შექმნა"
 },
 "nplurals=2; plural=(n!=1);");

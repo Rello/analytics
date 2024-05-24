@@ -10,7 +10,6 @@
     "Filter" : "Filtru",
     "Add" : "Agiunghe",
     "Bar" : "Tzilleri",
-    "Color" : "Colore",
     "Overview" : "Panoràmica",
     "Basic settings" : "Cunfiguratzione de base",
     "Remove from favorites" : "Boga·nche dae preferidos",
@@ -66,6 +65,7 @@
     "Unshare" : "Annulla sa cumpartzidura",
     "Password protection" : "Bardiadura de sa crae",
     "Copy link" : "Còpia ligòngiu",
+    "Color" : "Colore",
     "Get more information" : "Otene àteras informatziones",
     "Nextcloud forum" : "Forum de Nextcloud",
     "Create" : "Crea"

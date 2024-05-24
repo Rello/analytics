@@ -16,7 +16,6 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
     "Add" : "Agregar",
-    "Color" : "Color",
     "Overview" : "Resumen",
     "Basic settings" : "Configuraciones  básicas",
     "Remove from favorites" : "Eliminar de favoritos",
@@ -57,6 +56,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Color" : "Color",
     "Create" : "Crear"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

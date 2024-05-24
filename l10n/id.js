@@ -55,10 +55,6 @@ OC.L10N.register(
     "Secondary" : "Sekunder",
     "Line" : "Garis",
     "doughnut" : "donat",
-    "Data series" : "Seri data",
-    "Vertical axis" : "Sumbu vertikal",
-    "Chart type" : "Jenis bagan",
-    "Color" : "Warna",
     "New dataset" : "Himpunan data baru",
     "New panorama" : "Panorama baru",
     "New report" : "Laporan baru",
@@ -157,6 +153,7 @@ OC.L10N.register(
     "Settings" : "Setelan",
     "Name" : "Nama",
     "Display" : "Tampilkan",
+    "Chart type" : "Jenis bagan",
     "Advanced" : "Lanjutan",
     "Open documentation" : "Buka dokumentasi",
     "Update" : "Perbarui",
@@ -169,6 +166,9 @@ OC.L10N.register(
     "Unshare" : "Batalkan berbagi",
     "Password protection" : "Password protection",
     "Copy link" : "Salin tautan",
+    "Data series" : "Seri data",
+    "Vertical axis" : "Sumbu vertikal",
+    "Color" : "Warna",
     "Create" : "Buat"
 },
 "nplurals=1; plural=0;");

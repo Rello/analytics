@@ -18,7 +18,6 @@ OC.L10N.register(
     "Filter" : "Filtrar",
     "Add" : "Agregar",
     "Line" : "Línea",
-    "Color" : "Color",
     "Overview" : "Generalidades",
     "Data load" : "Carga de datos",
     "Basic settings" : "Configuraciones  básicas",
@@ -75,6 +74,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Color" : "Color",
     "Get more information" : "Obten más información",
     "Create" : "Crear"
 },
