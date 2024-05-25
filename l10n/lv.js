@@ -17,7 +17,7 @@ OC.L10N.register(
     "Share link" : "Koplietot saiti",
     "Link copied" : "Saite nokopēta",
     "new record" : "jauns ieraksts",
-    "Type" : "Tips",
+    "Type" : "Veids",
     "Notification" : "Paziņojums",
     "Date" : "Datums",
     "Year" : "Gads",
