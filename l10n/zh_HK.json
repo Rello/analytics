@@ -194,6 +194,7 @@
     "Object path" : "對象路徑",
     "More options" : "更多選項",
     "Authentication" : "驗證",
+    "Allow insecure connections" : "允許不安全的連線",
     "HTML grabber" : "HTML grabber",
     "valid regex" : "有效的正則表達式",
     "Read file and add its data to an existing dataset" : "讀取檔案並將其數據添加到現有數據集中",

@@ -196,6 +196,7 @@ OC.L10N.register(
     "Object path" : "مسار الكائن",
     "More options" : "خيارات أخرى",
     "Authentication" : "مصادقة",
+    "Allow insecure connections" : "السماح بالاتصالات غير المُؤمّنة",
     "HTML grabber" : "مٌلتقِط HTML grabber",
     "valid regex" : "تعبير نمطي \"regex\"صالح",
     "Read file and add its data to an existing dataset" : "اقرأ الملف وأضف بياناته إلى مجموعة بيانات موجودة",

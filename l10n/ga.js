@@ -33,6 +33,7 @@ OC.L10N.register(
     "Name" : "Ainm",
     "Display" : "Taispeáin",
     "Table" : "Tábla",
+    "Advanced" : "Casta",
     "Open documentation" : "Doiciméadú oscailte",
     "Update" : "Nuashonrú",
     "Title" : "Teideal",
