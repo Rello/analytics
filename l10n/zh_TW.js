@@ -196,6 +196,7 @@ OC.L10N.register(
     "Object path" : "物件路徑",
     "More options" : "更多選項",
     "Authentication" : "驗證",
+    "Allow insecure connections" : "允許不安全的連線",
     "HTML grabber" : "HTML 抓取程式",
     "valid regex" : "有效的正規表示式",
     "Read file and add its data to an existing dataset" : "讀取檔案並新增其資料至既有的資料集",

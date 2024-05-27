@@ -53,6 +53,7 @@ OC.L10N.register(
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "A dinamikus szöveges változók használhatók a dátumok kiválasztásához.<br>A kiválasztás két % jel közé kerül (például %last2months%).<br>Az elérhető szűrők és az alternatív dátumformátumok elérhetők a {linkstart}Wikiben{linkend}.",
     "Variables" : "Változók",
     "Add" : "Hozzáadás",
+    "Table options" : "Táblázatbeállítások",
     "Chart options" : "Diagrambeállítások",
     "Primary" : "Elsődleges",
     "Secondary" : "Másodlagos",
