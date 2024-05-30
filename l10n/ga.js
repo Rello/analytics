@@ -51,6 +51,7 @@ OC.L10N.register(
     "Copy" : "Cóipeáil",
     "Daily" : "Laethúil",
     "Hourly" : "in aghaidh na huaire",
+    "Password protection" : "Cosaint pasfhocal",
     "Copy link" : "Cóipeáil an nasc",
     "Color" : "Dath",
     "Create" : "Cruthaigh"
