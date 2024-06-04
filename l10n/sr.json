@@ -194,6 +194,7 @@
     "Object path" : "Путања објекта",
     "More options" : "Више опција",
     "Authentication" : "Провера идентитета",
+    "Allow insecure connections" : "Дозволи небезбедне везе",
     "HTML grabber" : "HTML хватач",
     "valid regex" : "исправан регуларни израз",
     "Read file and add its data to an existing dataset" : "Чита фајл и додаје податке из њега у постојећи скуп података",

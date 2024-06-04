@@ -196,6 +196,7 @@ OC.L10N.register(
     "Object path" : "Ruta del objeto",
     "More options" : "Más opciones",
     "Authentication" : "Autenticación",
+    "Allow insecure connections" : "Permitir conexiones inseguras",
     "HTML grabber" : "Capturador de HTML",
     "valid regex" : "expresión regular válida",
     "Read file and add its data to an existing dataset" : "Lee un archivo y añade sus datos a un conjunto de datos existente",
