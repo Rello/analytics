@@ -2,12 +2,10 @@
 /**
  * Analytics
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the LICENSE.md file.
- *
- * @author Marcel Scherello <analytics@scherello.de>
- * @copyright 2019-2022 Marcel Scherello
+ * SPDX-FileCopyrightText: 2019-2022 Marcel Scherello
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 ?>
 <div id="analytics-content" style="width:100%; padding: 20px 5%;" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">

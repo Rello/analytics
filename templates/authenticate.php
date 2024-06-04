@@ -1,4 +1,11 @@
 <?php
+/**
+ * Analytics
+ *
+ * SPDX-FileCopyrightText: 2019-2022 Marcel Scherello
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 /** @var $_ array */
 /** @var $l \OCP\IL10N */
 

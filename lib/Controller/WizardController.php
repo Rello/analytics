@@ -2,13 +2,8 @@
 /**
  * Analytics
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the LICENSE.md file.
- *
- * @author Marcel Scherello <analytics@scherello.de>
- * @author Arthur Schiwon <blizzz@arthur-schiwon.de>
- * @author Christoph Wurst <christoph@winzerhof-wurst.at>
- * @copyright 2019-2022 Marcel Scherello
+ * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace OCA\Analytics\Controller;

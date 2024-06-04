@@ -2,12 +2,10 @@
 /**
  * Analytics
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the LICENSE.md file.
- *
- * @author Marcel Scherello <analytics@scherello.de>
- * @copyright 2019-2022 Marcel Scherello
+ * SPDX-FileCopyrightText: 2019-2022 Marcel Scherello
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 ?>
 <h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Dataset maintenance')); ?></h3>
 <div id="analytics-content" style="width:100%; padding: 10px" hidden>
