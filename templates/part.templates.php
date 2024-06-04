@@ -658,18 +658,19 @@
 
 <template id="templateChartOptions">
     <br>
-    <h2> <?php p($l->t('Switch Axis')); ?> </h2>
+    <h2> <?php p($l->t('Data format')); ?> </h2>
+    <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
     <div class="table" style="display: table;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 200px; text-align: center;">
                 <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked/><br>
-                <label for="opt1"><?php p($l->t('KPI model')); ?></label><br>
-                <span class="userGuidance"><?php p($l->t('A list of values. This is the default layout')); ?></span>
+                <label for="opt1"><?php p($l->t('In rows')); ?></label><br>
+                <span class="userGuidance"><?php p($l->t('A list of values. This is the default.')); ?></span>
             </div>
             <div style="display: table-cell; width: 200px; text-align: center;">
                 <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel"/><br>
-                <label for="opt2"> <?php p($l->t('Account model')); ?></label><br>
-                <span class="userGuidance"><?php p($l->t('One line per topic with the numbers in the same line')); ?></span>
+                <label for="opt2"> <?php p($l->t('In columns')); ?></label><br>
+                <span class="userGuidance"><?php p($l->t('One line per topic with the values in the columns')); ?></span>
             </div>
         </div>
     </div>
