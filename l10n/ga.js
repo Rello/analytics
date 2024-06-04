@@ -49,6 +49,7 @@ OC.L10N.register(
     "Open documentation" : "Doiciméadú oscailte",
     "Update" : "Nuashonrú",
     "Export" : "Easpórtáil",
+    "Import" : "Iompórtáil",
     "Title" : "Teideal",
     "Copy" : "Cóipeáil",
     "Daily" : "Laethúil",
