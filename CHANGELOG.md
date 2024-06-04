@@ -5,6 +5,9 @@
 - charts: select account- (values in columns) or kpi-model (values in rows) #393
 - JSON: allow insecure/selfsigned certificate #309
 
+### Changed
+- moved to SPDX license and copyright header
+
 ### Fixed
 - Save filter fails for table-only report #392
 - missing variable in public shares
