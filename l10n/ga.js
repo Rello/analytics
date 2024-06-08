@@ -35,6 +35,7 @@ OC.L10N.register(
     "Yes" : "Tá",
     "No" : "Níl",
     "Version" : "Leagan",
+    "More options" : "Tuilleadh roghanna",
     "Authentication" : "Fíordheimhniú",
     "copy" : "cóip",
     "Password" : "Pasfhocal",
