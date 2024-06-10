@@ -38,6 +38,7 @@ OC.L10N.register(
     "More options" : "Tuilleadh roghanna",
     "Authentication" : "Fíordheimhniú",
     "copy" : "cóip",
+    "The password is wrong. Try again." : "Tá an focal faire mícheart. Déan iarracht arís.",
     "Password" : "Pasfhocal",
     "Favorites" : "Ceanáin",
     "Translate" : "Aistrigh",
