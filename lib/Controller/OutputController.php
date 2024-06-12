@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 
 class OutputController extends Controller
 {
+    private $userId;
     private $logger;
     private $ReportService;
     private $DataSession;
@@ -36,6 +37,7 @@ class OutputController extends Controller
     private $VariableService;
 
     public function __construct(
+        $userId,
         string $appName,
         IRequest $request,
         LoggerInterface $logger,
@@ -49,6 +51,7 @@ class OutputController extends Controller
     )
     {
         parent::__construct($appName, $request);
+        $this->userId = $userId;
         $this->logger = $logger;
         $this->ReportService = $ReportService;
         $this->DataSession = $DataSession;
@@ -105,7 +108,7 @@ class OutputController extends Controller
         $reportMetadata['type'] = $type;
         $reportMetadata['dataset'] = 0;
         $reportMetadata['filteroptions'] = '';
-        $reportMetadata['user_id'] = 'admin';
+        $reportMetadata['user_id'] = $this->userId;
         $reportMetadata['id'] = 0;
 
         $result = $this->getData($reportMetadata);

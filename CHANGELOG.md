@@ -13,6 +13,7 @@
 - Save filter fails for table-only report #392
 - missing variable in public shares
 - dark theme issues
+- "Parameter missing" in Nextcloud Tables data source #387
 
 ## 4.13.0 - 2024-04-14
 ### Added
