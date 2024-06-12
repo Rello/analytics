@@ -6,11 +6,13 @@
 - JSON: allow insecure/selfsigned certificate #309
 
 ### Changed
-- moved to SPDX license and copyright header
+- SPDX license and copyright header
+- material icons
 
 ### Fixed
 - Save filter fails for table-only report #392
 - missing variable in public shares
+- dark theme issues
 
 ## 4.13.0 - 2024-04-14
 ### Added

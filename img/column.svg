@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg"
-     preserveAspectRatio="xMidYMid meet" viewBox="112.64 49.663999999999994 419.3280000000001 419.3280000000001"
-     width="25" height="25">
-    <defs>
-        <path d="M112.64 468.99L531.97 468.99L531.97 49.66L112.64 49.66L112.64 468.99ZM128 65.02L229.38 65.02L229.38 453.63L128 453.63L128 65.02ZM244.74 65.02L399.36 65.02L399.36 453.63L244.74 453.63L244.74 65.02ZM415.23 453.63L415.23 65.02L516.61 65.02L516.61 453.63L415.23 453.63Z"
-              id="aYtF5I2Mm"></path>
-    </defs>
-    <g>
-        <use xlink:href="#aYtF5I2Mm" opacity="1" fill="#000000" fill-opacity="1"></use>
-        <g>
-            <use xlink:href="#aYtF5I2Mm" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1"
-                 stroke-opacity="0"></use>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M760-760H599h5-4 160Zm-240 0q0-33 23.5-56.5T600-840h160q33 0 56.5 23.5T840-760v400h-80v-400H600v640q-33 0-56.5-23.5T520-200v-560ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h160q33 0 56.5 23.5T440-760v560q0 33-23.5 56.5T360-120H200Zm160-640H200v560h160v-560Zm0 0H200h160ZM760-40v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></svg>

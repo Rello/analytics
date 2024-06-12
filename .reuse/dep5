@@ -15,9 +15,13 @@ Files: .* *.md *.json *.code-workspace tests/* sample_data/* screenshots/* vendo
 Copyright: 2019-2024 Marcel Scherello
 License: AGPL-3.0-or-later
 
-Files: img/*.gif img/*.png img/app-dark.svg img/app.svg img/*
+Files: img/app.svg img/app-dark.svg img/infoIntro.svg img/infoReport.svg img/infoWiki.svg img/save.svg img/warning.svg img/*.png img/*.gif
 Copyright: 2019-2024 Marcel Scherello
 License: AGPL-3.0-or-later
+
+Files: img/arrow*.svg img/chart*.svg img/column.svg img/copy.svg img/download.svg img/filteradd.svg img/filterremove.svg img/forecast.svg img/gripLines.svg img/noReport.svg img/options.svg img/pdf.svg img/refresh.svg img/reset.svg img/row.svg img/tableOptions.svg img/translate.svg
+Copyright: 2018-2024 Google LLC
+License: Apache-2.0
 
 Files: appinfo/info.xml
 Copyright: 2019-2024 Marcel Scherello

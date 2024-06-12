@@ -353,10 +353,7 @@ OCA.Analytics.UI = {
         }
 
         if (visualization === 'chart') {
-            document.getElementById('reportMenuResetTableState').disabled = true;
             document.getElementById('reportMenuTableOptions').disabled = true;
-        } else {
-            document.getElementById('reportMenuResetTableState').disabled = false;
         }
 
         let refresh = parseInt(currentReport.options.refresh);
@@ -388,7 +385,6 @@ OCA.Analytics.UI = {
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
         document.getElementById('reportMenuDownload').addEventListener('click', OCA.Analytics.UI.downloadChart);
-        document.getElementById('reportMenuResetTableState').addEventListener('click', OCA.Analytics.UI.resetTableState);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
 
         //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.UI.tableSearch);
