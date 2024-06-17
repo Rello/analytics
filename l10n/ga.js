@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Filter by" : "Scag de réir",
     "Value" : "Luach",
     "Saved" : "Shábháil",
     "Are you sure?" : "An bhfuil tú cinnte?",
@@ -23,6 +24,7 @@ OC.L10N.register(
     "New" : "Nua",
     "Share link" : "Comhroinn nasc",
     "Link copied" : "Cóipeáladh an nasc",
+    "Missing data" : "Sonraí ar iarraidh",
     "Type" : "Cineál",
     "Notification" : "Fógra",
     "Date" : "Dáta",
