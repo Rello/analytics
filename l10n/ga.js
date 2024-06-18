@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Data" : "Sonraí",
     "Filter by" : "Scag de réir",
     "Value" : "Luach",
     "Saved" : "Shábháil",
@@ -32,6 +33,8 @@ OC.L10N.register(
     "New in" : "Nua isteach",
     "View changelog" : "Féach ar loga na n-athruithe",
     "Search" : "Cuardach",
+    "Showing 0 to 0 of 0 entries" : "Ag taispeáint 0 go 0 as 0 iontráil",
+    "Total" : "Iomlán",
     "Local file" : "Comhad áitiúil",
     "File" : "Comhad",
     "Yes" : "Tá",
@@ -54,6 +57,7 @@ OC.L10N.register(
     "Name" : "Ainm",
     "Display" : "Taispeáin",
     "Table" : "Tábla",
+    "Chart" : "Cairt",
     "Advanced" : "Casta",
     "Open documentation" : "Doiciméadú oscailte",
     "Update" : "Nuashonrú",
