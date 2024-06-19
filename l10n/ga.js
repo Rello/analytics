@@ -6,6 +6,7 @@ OC.L10N.register(
     "Value" : "Luach",
     "Saved" : "Shábháil",
     "Are you sure?" : "An bhfuil tú cinnte?",
+    "Select file" : "Roghnaigh comhad",
     "Delete" : "Scrios",
     "Loading" : "Ag lódáil",
     "OK" : "Ceart go leor",
