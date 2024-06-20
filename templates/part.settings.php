@@ -17,7 +17,7 @@
         </button>
     </div>
 
-    <div id="app-settings-content">
+    <div id="app-settings-content" style="display: none;">
         <ul id="analytics-settings">
             <li class="analytics-settings-item icon-external">
                 <button id="importDatasetButton" style="padding: 0 25px;">

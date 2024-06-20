@@ -3,7 +3,7 @@
 ## 4.14.0 - 2024-05-2x
 ### Added
 - charts: select account- (values in columns) or kpi-model (values in rows) #393
-- JSON: allow insecure/selfsigned certificate #309
+- JSON: allow insecure/self-signed certificate #309
 
 ### Changed
 - SPDX license and copyright header
