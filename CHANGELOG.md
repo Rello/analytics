@@ -1,9 +1,10 @@
 # Changelog
 
-## 4.14.0 - 2024-05-2x
+## 4.14.0 - 2024-06-20
 ### Added
 - charts: select account- (values in columns) or kpi-model (values in rows) #393
 - JSON: allow insecure/self-signed certificate #309
+- REUSE compliance
 
 ### Changed
 - SPDX license and copyright header
