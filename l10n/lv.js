@@ -47,6 +47,7 @@ OC.L10N.register(
     "Others" : "Citi",
     "Setting" : "Iestatījumi",
     "Title" : "Amats",
+    "Copy" : "Kopēt",
     "Daily" : "Katru dienu",
     "Hourly" : "Ik stundu",
     "Unshare" : "Pārtraukt koplietošanu",
