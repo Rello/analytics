@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Value" : "Vērtība",
     "Saved" : "Saglabāts",
+    "Select file" : "Izvēlēties failu",
     "Delete" : "Dzēst",
     "OK" : "Labi",
     "Cancel" : "Atcelt",
