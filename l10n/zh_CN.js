@@ -207,7 +207,6 @@ OC.L10N.register(
     "Last field must be a valid number" : "最后一个字段必须是一个有效的数字",
     "copy" : "复制",
     "extract / store / visualize" : "提取/存储/可视化",
-    "Connect data from different sources in one place.\nEnable flexible reports and enjoy seamless Nextcloud integration.\nVisualize and share anything, from financial analysis to IoT logs.\n\n##### Features:\n- Data sources: csv, spreadsheet, API, imports, manual entry\n- 3rd party: GitHub Statistics, website grabber, JSON\n- Register external data sources from other apps\n- Storage: real-time or database\n- Advanced data loads with scheduling\n- Visualization: combined charts, zoom, tables, filters\n- Analysis functions: trend, dis-/aggregation\n- Thresholds for alerts and color coding\n- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation\n- Sharing: user, groups, link" : "在一个地方同时连接多个地方的数据。\n启用灵活的报告并享受 Nextcloud 的无缝接入。\n视觉化并分享所有材料，从财务分析到 loT 记录。\n\n#### 特点：\n- 数据源：csv、电子表格、API、导入、手动输入\n- 第三方：GitHub 统计数据、网站抓取工具、JSON\n- 从其他软件导入外部数据源\n- 存储：即时或数据库\n- 依据计划进行进阶数据导入\n- 可视化：组合图表、缩放、表格，筛选\n- 分析功能：趋势、取消/启用汇总\n- 警报阈值和高亮代码\n- 整合：文件、活动、通知、任务流、仪表盘、查找、智能拾取，翻译\n- 分享：用户、群组、链接",
     "This report is password protected" : "此报告受密码保护",
     "The password is wrong. Try again." : "密码错误。请重试。",
     "Password" : "密码",

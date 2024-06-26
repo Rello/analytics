@@ -208,7 +208,6 @@
     "Last field must be a valid number" : "最後一個字段必須是有效數字",
     "copy" : "複製",
     "extract / store / visualize" : "提取/存儲/使形象化",
-    "Connect data from different sources in one place.\nEnable flexible reports and enjoy seamless Nextcloud integration.\nVisualize and share anything, from financial analysis to IoT logs.\n\n##### Features:\n- Data sources: csv, spreadsheet, API, imports, manual entry\n- 3rd party: GitHub Statistics, website grabber, JSON\n- Register external data sources from other apps\n- Storage: real-time or database\n- Advanced data loads with scheduling\n- Visualization: combined charts, zoom, tables, filters\n- Analysis functions: trend, dis-/aggregation\n- Thresholds for alerts and color coding\n- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation\n- Sharing: user, groups, link" : "在一處連結不同來源的資料。\n啟用靈活的報告並享受無縫的 Nextcloud 整合。\n視覺化並分享任何東西，從財務分析到 IoT 紀錄檔。\n\n#### 功能：\n- 資料來源：csv、試算表、API、匯入、手動輸入\n- 第三方：GitHub 統計資料、網站擷取程式、JSON\n- 從其他應用程式註冊外部資料來源\n- 儲存：即時或資料庫\n- 有排程功能的進階資料載入\n- 視覺化：組合圖表、縮放、表格與過濾條件\n- 分析功能：趨勢、（取消）聚合\n- 警報與顏色編碼的閾值\n- 整合：檔案、活動、通知、流程、儀表板、搜尋、智慧型挑選器、翻譯\n- 分享：用戶、群組、連結",
     "This report is password protected" : "此報告受密碼保護",
     "The password is wrong. Try again." : "密碼錯誤，請重試",
     "Password" : "密碼",
