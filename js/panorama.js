@@ -266,7 +266,7 @@ OCA.Analytics.Panorama = {
         }
 
         // fill all items with widgets
-        let items = document.getElementsByClassName('flex-item');
+        let items = document.querySelectorAll('.flex-item');
         items.forEach((item) => {
             OCA.Analytics.Panorama.buildWidget(item.id);
         });
@@ -481,7 +481,7 @@ OCA.Analytics.Panorama = {
 
     // make text boxes like headers editable
     addEditableTextBoxes: function () {
-        let editableElements = document.getElementsByClassName('editable');
+        let editableElements = document.querySelectorAll('.editable');
         editableElements.forEach(editableElement => {
             if (!editableElement.hasAttribute('contenteditable')) {
                 editableElement.setAttribute('contenteditable', 'true');
@@ -490,7 +490,7 @@ OCA.Analytics.Panorama = {
     },
 
     removeEditableTextBoxes: function () {
-        let editableElements = document.getElementsByClassName('editable');
+        let editableElements = document.querySelectorAll('.editable');
         editableElements.forEach(editableElement => {
             if (editableElement.hasAttribute('contenteditable')) {
                 editableElement.removeAttribute('contenteditable');
