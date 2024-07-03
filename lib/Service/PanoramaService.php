@@ -8,11 +8,9 @@
 
 namespace OCA\Analytics\Service;
 
-use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\PanoramaMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\DB\Exception;
-use OCP\Files\IRootFolder;
 use OCP\ITagManager;
 use OCP\IConfig;
 use OCP\PreConditionNotMetException;
@@ -39,8 +37,6 @@ class PanoramaService {
 		ITagManager $tagManager,
 		ShareService $ShareService,
 		PanoramaMapper $PanoramaMapper,
-		ActivityManager $ActivityManager,
-		IRootFolder $rootFolder,
 		IConfig $config,
 		VariableService $VariableService
 	) {
@@ -170,9 +166,7 @@ class PanoramaService {
 		$reports = $this->ReportMapper->indexByUser($userId);
 		foreach ($reports as $report) {
 			$this->ShareService->deleteShareByReport($report['id']);
-			$this->ThresholdMapper->deleteThresholdByReport($report['id']);
 			$this->setFavorite($report['id'], 'false');
-			$this->ReportMapper->delete($report['id']);
 		}
 		return true;
 	}
