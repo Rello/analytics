@@ -304,7 +304,7 @@ OC.L10N.register(
     "Test run" : "Execución da proba",
     "Schedule in background" : "Programada en segundo plano",
     "Not scheduled" : "Sen programar",
-    "Daily" : "Cada día",
+    "Daily" : "A diario",
     "Daily - End of day" : "Diario – Fin do día",
     "Daily - Start of day" : "Diario – Comezo do día",
     "Hourly" : "Cada hora",
