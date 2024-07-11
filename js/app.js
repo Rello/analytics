@@ -123,18 +123,18 @@ OCA.Analytics.UI = {
             // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
             OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
 
-/*
-Sorting of integer values on x-axis #389
-Natural sorting needs to be selectable with a report or column parameter (drilldown dialog)
+            /*
+            Sorting of integer values on x-axis #389
+            Natural sorting needs to be selectable with a report or column parameter (drilldown dialog)
 
-            OCA.Analytics.currentReportData.data.sort((a, b) => {
-                let result = a[0].localeCompare(b[0], undefined, { numeric: true });
-                if (result === 0) {
-                    return a[1].localeCompare(b[1], undefined, { numeric: true });
-                }
-                return result;
-            });
-*/
+                        OCA.Analytics.currentReportData.data.sort((a, b) => {
+                            let result = a[0].localeCompare(b[0], undefined, { numeric: true });
+                            if (result === 0) {
+                                return a[1].localeCompare(b[1], undefined, { numeric: true });
+                            }
+                            return result;
+                        });
+            */
 
             OCA.Analytics.currentReportData.data = OCA.Analytics.Visualization.formatDates(OCA.Analytics.currentReportData.data);
             let visualization = OCA.Analytics.currentReportData.options.visualization;
@@ -191,7 +191,7 @@ Natural sorting needs to be selectable with a report or column parameter (drilld
                         },
                     },
                 },
-                'xAxes': {
+                'x': {
                     stacked: false,
                     type: 'category',
                     time: {
@@ -288,9 +288,9 @@ Natural sorting needs to be selectable with a report or column parameter (drilld
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
             let key = Object.keys(OCA.Analytics.tableObject)[0];
-                if (key !== undefined) {
-                    OCA.Analytics.tableObject[key].destroy();
-                }
+            if (key !== undefined) {
+                OCA.Analytics.tableObject[key].destroy();
+            }
 
             OCA.Analytics.tableObject = [];
             OCA.Analytics.Visualization.hideElement('chartContainer');

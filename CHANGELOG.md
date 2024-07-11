@@ -1,8 +1,12 @@
 # Changelog
 
 ## 4.14.1 - 2024-0x-xx
-### Fixed
+### Changed
+- Chart.js v4.4.3
+
+- ### Fixed
 - excel data source: remove all-null columns
+- code style
 
 ## 4.14.0 - 2024-06-20
 ### Added

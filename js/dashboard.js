@@ -289,16 +289,16 @@ OCA.Analytics.Dashboard = {
 
         // overwrite some default chart options depending on the chart type
         if (chartType === 'datetime') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['x'].type = 'time';
+            chartOptions.scales['x'].distribution = 'linear';
         } else if (chartType === 'area') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['x'].type = 'time';
+            chartOptions.scales['x'].distribution = 'linear';
             chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
+            chartOptions.scales['x'].stacked = false; // area does not work otherwise
             Chart.defaults.elements.line.fill = true;
         } else if (chartType === 'doughnut') {
-            chartOptions.scales['xAxes'].display = false;
+            chartOptions.scales['x'].display = false;
             chartOptions.scales['primary'].display = chartOptions.scales['primary'].grid.display = false;
             chartOptions.scales['secondary'].display = chartOptions.scales['secondary'].grid.display = false;
             chartOptions.circumference = 180;
@@ -370,7 +370,7 @@ OCA.Analytics.Dashboard = {
                         display: false,
                     },
                 },
-                'xAxes': {
+                'x': {
                     type: 'category',
                     distribution: 'linear',
                     grid: {

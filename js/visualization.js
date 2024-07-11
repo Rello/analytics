@@ -32,7 +32,7 @@ OCA.Analytics.Visualization = {
         if (!uniqueId) {
             uniqueId = jsondata.options.id;
         } else {
-            uniqueId = parseInt(uniqueId.replace(/[^0-9]+/g, ''),10);
+            uniqueId = parseInt(uniqueId.replace(/[^0-9]+/g, ''), 10);
         }
 
         if (OCA.Analytics.tableObject?.uniqueId) {
@@ -453,7 +453,7 @@ OCA.Analytics.Visualization = {
         let stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
         let stacked100 = chartTypeFull.endsWith('St100');
         if (stacked === true) {
-            chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
+            chartOptions.scales['primary'].stacked = chartOptions.scales['x'].stacked = true;
             chartOptions.scales['primary'].max = 100;
         }
         if (stacked100 === true) {
@@ -462,16 +462,16 @@ OCA.Analytics.Visualization = {
 
         // overwrite some default chart options depending on the chart type
         if (chartType === 'datetime') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['x'].type = 'time';
+            chartOptions.scales['x'].distribution = 'linear';
         } else if (chartType === 'area') {
-            chartOptions.scales['xAxes'].type = 'time';
-            chartOptions.scales['xAxes'].distribution = 'linear';
+            chartOptions.scales['x'].type = 'time';
+            chartOptions.scales['x'].distribution = 'linear';
             chartOptions.scales['primary'].stacked = true;
-            chartOptions.scales['xAxes'].stacked = false; // area does not work otherwise
+            chartOptions.scales['x'].stacked = false; // area does not work otherwise
             Chart.defaults.elements.line.fill = true;
         } else if (chartType === 'doughnut') {
-            chartOptions.scales['xAxes'].display = false;
+            chartOptions.scales['x'].display = false;
             chartOptions.scales['primary'].display = chartOptions.scales['primary'].grid.display = false;
             chartOptions.scales['secondary'].display = chartOptions.scales['secondary'].grid.display = false;
             chartOptions.circumference = 180;
@@ -532,6 +532,9 @@ OCA.Analytics.Visualization = {
         }
 
         data = data.data;
+
+        // as of chartjs 4, the yAxis needs to be mapped to the primary axis per default
+
         if (dataModel === 'accountModel') {
             xAxisCategories = header;
             // Account Model: Create one dataset per row
@@ -541,7 +544,7 @@ OCA.Analytics.Visualization = {
                     x: xAxisCategories[index],
                     y: value
                 }));
-                datasets.push({ label: label, data: dataPoints });
+                datasets.push({label: label, data: dataPoints, yAxisID: 'primary'});
             });
         } else {
             // KPI-Model: Use existing logic
@@ -560,9 +563,10 @@ OCA.Analytics.Visualization = {
                 }
                 if (!labelMap.has(dataSeriesColumn)) {
                     labelMap.set(dataSeriesColumn, {
-                        ...(chartType !== 'doughnut' && { label: dataSeriesColumn || undefined }),
+                        ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}),
                         data: [],
-                        hidden: datasetCounter >= 4
+                        hidden: datasetCounter >= 4,
+                        yAxisID: 'primary'
                     });
                     datasetCounter++;
                 }
@@ -570,7 +574,7 @@ OCA.Analytics.Visualization = {
                 if (chartType === 'doughnut') {
                     dataset.data.push(parseFloat(value));
                 } else {
-                    dataset.data.push({ x: characteristicColumn, y: parseFloat(value) });
+                    dataset.data.push({x: characteristicColumn, y: parseFloat(value)});
                 }
             });
             datasets = Array.from(labelMap.values());
@@ -607,8 +611,8 @@ OCA.Analytics.Visualization = {
 
     sortDates: function (data) {
         if (data.options.chartoptions !== '') {
-            if (JSON.parse(data.options.chartoptions)?.scales?.xAxes?.time?.parser !== undefined) {
-                let parser = JSON.parse(data.options.chartoptions)["scales"]["xAxes"]["time"]["parser"];
+            if (JSON.parse(data.options.chartoptions)?.scales?.x?.time?.parser !== undefined) {
+                let parser = JSON.parse(data.options.chartoptions)["scales"]["x"]["time"]["parser"];
                 data.data.sort(function (a, b) {
                     let sortColumn = a.length - 2;
                     if (sortColumn === 0) {
