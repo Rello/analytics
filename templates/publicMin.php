@@ -13,7 +13,7 @@
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/cloner.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/appMin.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/visualization.js"></script>
-    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chart.min.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chart.umd.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-adapter-moment.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/chartjs-plugin-datalabels.min.js"></script>
 </head>

@@ -12,7 +12,7 @@ Visualize and share anything, from financial analysis to IoT logs.
   - Nextcloud Forms, Nextcloud Tables 
   - external: GitHub, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber)
   , [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
-- [Register](https://github.com/Rello/analytics/wiki/Register-external-datasource) external data sources from other apps
+- [Register](https://github.com/Rello/analytics/wiki/Register-own-datasource) external data sources from other apps
 - Storage: real-time or database
 - Advanced data loads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
 - Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), zoom, tables,
