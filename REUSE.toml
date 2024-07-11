@@ -1,0 +1,138 @@
+# SPDX-FileCopyrightText: 2024 Marcel Scherello
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version = 1
+SPDX-PackageName = "Marcel Scherello"
+SPDX-PackageSupplier = "Marcel Scherello <analytics@scherello.de>"
+SPDX-PackageDownloadLocation = "https://github.com/rello/analytics"
+
+[[annotations]]
+path = "vendor1/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "l10n/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019-2024 Nextcloud translators"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = [".**", "**.md", "**.json", "**.code-workspace", "tests/**", "sample_data/**", "screenshots/**", "vendor/autoload.php"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["img/app.svg", "img/app-dark.svg", "img/infoIntro.svg", "img/infoReport.svg", "img/infoWiki.svg", "img/save.svg", "img/warning.svg", "img/**.png", "img/**.gif"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["img/arrow**.svg", "img/chart**.svg", "img/column.svg", "img/copy.svg", "img/download.svg", "img/filteradd.svg", "img/filterremove.svg", "img/forecast.svg", "img/gripLines.svg", "img/noReport.svg", "img/options.svg", "img/pdf.svg", "img/refresh.svg", "img/reset.svg", "img/row.svg", "img/tableOptions.svg", "img/translate.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2018-2024 Google LLC"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "appinfo/info.xml"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["css/3rdParty/datatables.min.css", "js/3rdParty/datatables.min.js"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "SpryMedia Ltd"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/html2canvas.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 Niklas von Hertzen <https://hertzen.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/jspdf.umd.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Copyright (c) 2010-2021 James Hall, https://github.com/MrRio/jsPDF (c) 2015-2021 yWorks GmbH, https://www.yworks.com/"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/chart.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 Chart.js Contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/chartjs-adapter-moment.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 chartjs-adapter-moment Contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/chartjs-plugin-colorschemes.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019 Akihiko Kusanagi"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/chartjs-plugin-datalabels.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017-2022 chartjs-plugin-datalabels contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/chartjs-plugin-zoom.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2016-2022 chartjs-plugin-zoom Contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/cloner.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Andrea Giammarchi - @WebReflection"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/moment.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Tim Wood, Iskren Chernev, Moment.js contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/markbaker/complex/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 Mark Baker (https://github.com/MarkBaker/PHPComplex)"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/markbaker/matrix/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 Mark Baker (https://github.com/MarkBaker/PHPComplex)"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/phpoffice/phpspreadsheet/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019 PhpSpreadsheet Authors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/composer/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/myclabs/php-enum/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2015 My C-Labs"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/psr/simple-cache/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2016 PHP Framework Interoperability Group"
+SPDX-License-Identifier = "MIT"
