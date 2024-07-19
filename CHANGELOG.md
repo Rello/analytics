@@ -3,6 +3,7 @@
 ## 4.14.1 - 2024-0x-xx
 ### Changed
 - Chart.js v4.4.3
+- NC30 css compatibility
 
 - ### Fixed
 - excel data source: remove all-null columns

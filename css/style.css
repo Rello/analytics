@@ -5,6 +5,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+.h3 {
+    font-size: 16px !important;
+    font-weight: normal !important;
+}
+
 #app-navigation .collapsible:before {
     content: inherit;
 }
@@ -53,7 +58,7 @@
     margin: 0;
     margin-bottom: 3px;
     width: 100%;
-    border-radius: var(--border-radius-pill);
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
 }
 
 #app-navigation>ul>li a:hover,
@@ -82,14 +87,13 @@
     background-repeat: no-repeat;
     display: block;
     justify-content: space-between;
-    line-height: 44px;
-    min-height: 44px;
+    line-height: var(--default-clickable-area);
     padding: 0 12px 0 14px;
     overflow: hidden;
     box-sizing: border-box;
     white-space: nowrap;
     text-overflow: ellipsis;
-    border-radius: var(--border-radius-pill);
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
     color: var(--color-main-text);
     flex: 1 1 0px;
     z-index: 100;
@@ -111,7 +115,7 @@
 
 #app-navigation .app-navigation-entry-utils li {
     width: 44px !important;
-    height: 44px;
+    height: var(--default-clickable-area);
 }
 #app-navigation li {
     position: relative;
@@ -176,7 +180,7 @@
 
 
 #app-navigation>ul>li>ul>li.active, #app-navigation>ul>li>ul>li.active>a, #app-navigation>ul>li>ul>li a.selected, #app-navigation>ul>li>ul>li a.selected>a {
-    border-radius: var(--border-radius-pill);
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
     background-color: var(--color-primary-element-light);
 }
 
