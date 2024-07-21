@@ -1195,7 +1195,7 @@ OCA.Analytics.UI = {
                         display: false,
                     },
                 },
-                'xAxes': {
+                'x': {
                     type: 'category',
                     distribution: 'linear',
                     grid: {
