@@ -156,7 +156,7 @@ OC.L10N.register(
     "Search" : "Buscar",
     "Show _MENU_ entries" : "Amosar _MENU_ entradas",
     "Showing _START_ to _END_ of _TOTAL_ entries" : "Amosando de _START_ a _END_ de _TOTAL_ entradas",
-    "Showing 0 to 0 of 0 entries" : "Amosando da 0 á 0 de 0 entradas",
+    "Showing 0 to 0 of 0 entries" : "Amosando de 0 a 0 de 0 entradas",
     "Analytics" : "Analítica",
     "You created a new report: {report}" : "Vde. creou un novo informe: {report}",
     "You deleted report {report}" : "Vde. eliminou un informe: {report}",
