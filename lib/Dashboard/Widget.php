@@ -78,7 +78,7 @@ class Widget implements IWidget
         Util::addScript('analytics', 'dashboard');
         Util::addScript('analytics', 'visualization');
         Util::addStyle('analytics', 'dashboard');
-        Util::addScript('analytics', '3rdParty/chart.min');
+        Util::addScript('analytics', '3rdParty/chart.umd');
         Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
         Util::addScript('analytics', '3rdParty/moment');
         Util::addScript('analytics', '3rdParty/cloner');
