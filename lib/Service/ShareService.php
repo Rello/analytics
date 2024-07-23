@@ -128,12 +128,16 @@ class ShareService {
 	}
 
 	/**
-	 * get all reports shared with user
+	 * get all reports or shared panoramas shared with user
 	 *
 	 * @throws Exception
 	 */
-	public function getSharedReports() {
-		$sharedReports = $this->ShareMapper->getAllSharedReports();
+	public function getSharedReports($getPanoramas = null) {
+		if ($getPanoramas === true) {
+			$sharedReports = $this->ShareMapper->getAllSharedPanoramas();
+		} else {
+			$sharedReports = $this->ShareMapper->getAllSharedReports();
+		}
 		$groupsOfUser = $this->groupManager->getUserGroups($this->userSession->getUser());
 		$reports = array();
 
@@ -154,7 +158,8 @@ class ShareService {
 				// shared with a user directly?
 			} elseif ((int)$sharedReport['shareType'] === self::SHARE_TYPE_USER) {
 				// current user matching?
-				$this->logger->debug('Shareservice: is user share; check against current user: ' . $this->userSession->getUser()->getUID());
+				$this->logger->debug('Shareservice: is user share; check against current user: ' . $this->userSession->getUser()
+																													 ->getUID());
 				if ($this->userSession->getUser()->getUID() === $sharedReport['shareUid_owner']) {
 					// was the report not yet added to the result?
 					$this->logger->debug('Shareservice: Share belongs to current user');
@@ -169,16 +174,19 @@ class ShareService {
 			}
 		}
 
-		foreach ($reports as $report) {
-			// if it is a shared group, get all reports below
-			if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
-				$subreport = $this->ReportMapper->getReportsByGroup($report['id']);
-				$subreport = array_map(function ($report) {
-					$report['isShare'] = self::SHARE_TYPE_GROUP;
-					return $report;
-				}, $subreport);
+		// no groupings of shares exist for panoramas
+		if ($getPanoramas === null) {
+			foreach ($reports as $report) {
+				// if it is a shared group, get all reports below
+				if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
+					$subreport = $this->ReportMapper->getReportsByGroup($report['id']);
+					$subreport = array_map(function ($report) {
+						$report['isShare'] = self::SHARE_TYPE_GROUP;
+						return $report;
+					}, $subreport);
 
-				$reports = array_merge($reports, $subreport);
+					$reports = array_merge($reports, $subreport);
+				}
 			}
 		}
 		return $reports;
@@ -197,6 +205,47 @@ class ShareService {
 		if (in_array($reportId, array_column($sharedReport, "id"))) {
 			$key = array_search($reportId, array_column($sharedReport, 'id'));
 			return $sharedReport[$key];
+		} else {
+			return [];
+		}
+	}
+
+	/**
+	 * get metadata of a report, shared with current user as part of a panorama
+	 * used to check if user is allowed to execute current report
+	 *
+	 * @param $reportId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSharedPanoramaReport($reportId) {
+		$foundReportId = 0;
+		$panoramaOwner = null;
+		$sharedPanoramas = $this->getSharedReports(true);
+		foreach ($sharedPanoramas as $sharedPanorama) {
+			$panoramaOwner = $sharedPanorama['user_id'];
+			$pages = json_decode($sharedPanorama['pages'], true);
+			foreach ($pages as $page) {
+				$reports = $page['reports'];
+				foreach ($reports as $report) {
+					// only use report type 0 = report; not text or image
+					if ($report['type'] === 0 && $report['value'] === $reportId) {
+						$foundReportId = $reportId;
+						break 3;
+					}
+				}
+			}
+		}
+
+		if ($foundReportId !== 0) {
+			$report = $this->ReportMapper->read($foundReportId);
+			// check against the original owner of the panorama
+			// This is needed to prevent getting other reports by modifying the panorama properties
+			if ($report['user_id'] === $panoramaOwner) {
+				return $report;
+			} else {
+				return [];
+			}
 		} else {
 			return [];
 		}

@@ -39,6 +39,7 @@ return [
         ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
         ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
         ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
+		['name' => 'dataset#provider', 'url' => '/dataset/{datasetId}/provider', 'verb' => 'POST'],
 
         // Panorama
         ['name' => 'panorama#index', 'url' => '/panorama', 'verb' => 'GET'],
@@ -51,6 +52,7 @@ return [
 
         // Data Output
         ['name' => 'output#read', 'url' => '/data/{reportId}', 'verb' => 'GET'],
+		['name' => 'output#readPanorama', 'url' => '/data/pa/{reportId}', 'verb' => 'GET'],
         ['name' => 'output#readPublic', 'url' => '/data/public/{token}', 'verb' => 'GET'],
         ['name' => 'output#readPreview', 'url' => '/data', 'verb' => 'POST'],
 

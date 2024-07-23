@@ -22,7 +22,8 @@ class ShareMapper
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_share';
-    const TABLE_NAME_REPORT = 'analytics_report';
+	const TABLE_NAME_REPORT = 'analytics_report';
+	const TABLE_NAME_PANORAMA = 'analytics_panorama';
 
     public function __construct(
         IDBConnection $db,
@@ -72,14 +73,37 @@ class ShareMapper
             ->selectAlias('SHARE.id', 'shareId')
             ->selectAlias('SHARE.type', 'shareType')
             ->selectAlias('SHARE.uid_owner', 'shareUid_owner')
-            ->addSelect('SHARE.permissions');
+            ->addSelect('SHARE.permissions')
+			->where($sql->expr()->isNotNull('SHARE.report'));
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
     }
 
-    /**
+	/**
+	 * get all shared panoramas
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getAllSharedPanoramas()
+	{
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME_PANORAMA, 'PANORAMA')
+			->rightJoin('PANORAMA', self::TABLE_NAME, 'SHARE', $sql->expr()->eq('PANORAMA.id', 'SHARE.panorama'))
+			->select('PANORAMA.*')
+			->selectAlias('SHARE.id', 'shareId')
+			->selectAlias('SHARE.type', 'shareType')
+			->selectAlias('SHARE.uid_owner', 'shareUid_owner')
+			->addSelect('SHARE.permissions')
+			->where($sql->expr()->isNotNull('SHARE.panorama'));
+		$statement = $sql->executeQuery();
+		$result = $statement->fetchAll();
+		$statement->closeCursor();
+		return $result;
+	}
+
+	/**
      * Create a new share
      * @param $reportId
      * @param $type

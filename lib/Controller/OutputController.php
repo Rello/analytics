@@ -14,6 +14,7 @@ use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Service\StorageService;
 use OCA\Analytics\Service\VariableService;
+use OCA\Analytics\Service\PanoramaService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -35,6 +36,7 @@ class OutputController extends Controller
     private $StorageService;
     private $ThresholdService;
     private $VariableService;
+	private $PanoramaService;
 
     public function __construct(
         $userId,
@@ -47,7 +49,8 @@ class OutputController extends Controller
         DatasourceController $DatasourceController,
         StorageService $StorageService,
         ThresholdService $ThresholdService,
-        VariableService $VariableService
+        VariableService $VariableService,
+		PanoramaService $PanoramaService
     )
     {
         parent::__construct($appName, $request);
@@ -60,6 +63,7 @@ class OutputController extends Controller
         $this->StorageService = $StorageService;
         $this->ThresholdService = $ThresholdService;
         $this->VariableService = $VariableService;
+		$this->PanoramaService = $PanoramaService;
     }
 
     /**
@@ -88,7 +92,28 @@ class OutputController extends Controller
         }
     }
 
-    /**
+	/**
+	 * get the data when requested from a panorama
+	 *
+	 * @NoAdminRequired
+	 * @param int $reportIds
+	 * @return DataResponse|NotFoundResponse
+	 * @throws Exception
+	 */
+	public function readPanorama(int $reportId)
+	{
+		$reportMetadata = $this->ReportService->read($reportId);
+		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
+
+		if (!empty($reportMetadata)) {
+			$result = $this->getData($reportMetadata);
+			return new DataResponse($result, HTTP::STATUS_OK);
+		} else {
+			return new NotFoundResponse();
+		}
+	}
+
+	/**
      * Preview the data
      *
      * @NoAdminRequired

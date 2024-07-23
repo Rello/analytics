@@ -58,21 +58,20 @@ class PanoramaService {
 	 * @throws Exception
 	 */
 	public function index(): array {
-		$ownReports = $this->PanoramaMapper->index();
-		//$sharedReports = $this->ShareService->getSharedReports();
-		$sharedReports = null;
-		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
+		$ownPanorama = $this->PanoramaMapper->index();
+		$sharedPanoramas = $this->ShareService->getSharedReports(true);
+		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId');
 
 		// get shared reports and remove duplicates
-		foreach ($sharedReports as $sharedReport) {
-			if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
+		foreach ($sharedPanoramas as $sharedPanorama) {
+			if (!array_search($sharedPanorama['id'], array_column($ownPanorama, 'id'))) {
 				// just keep the necessary fields
-				$ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));;
+				$ownPanorama[] = array_intersect_key($sharedPanorama, array_flip($keysToKeep));;
 			}
 		}
 
 		$favorites = $this->tagManager->load('analyticsPanorama')->getFavorites();
-		foreach ($ownReports as &$ownReport) {
+		foreach ($ownPanorama as &$ownReport) {
 			$hasTag = 0;
 			if (is_array($favorites) and in_array($ownReport['id'], $favorites)) {
 				$hasTag = 1;
@@ -81,7 +80,7 @@ class PanoramaService {
 			$ownReport = $this->VariableService->replaceTextVariables($ownReport);
 		}
 
-		return $ownReports;
+		return $ownPanorama;
 	}
 
 	/**

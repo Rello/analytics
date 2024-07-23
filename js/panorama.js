@@ -1036,7 +1036,7 @@ OCA.Analytics.Backend = {
     },
 
     getReportData: function (datasetId, itemId) {
-        const url = OC.generateUrl('apps/analytics/data/' + datasetId, true);
+        const url = OC.generateUrl('apps/analytics/data/pa/' + datasetId, true);
 
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
