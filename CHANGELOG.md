@@ -1,6 +1,9 @@
 # Changelog
 
 ## 4.14.1 - 2024-0x-xx
+### Added
+- data source: Local JSON
+
 ### Changed
 - Chart.js v4.4.3
 - NC30 css compatibility
@@ -120,7 +123,7 @@
 
 ### Fixed
 - thresholds of other user in shared report
-- URL parsing replace &amp; in CSV datasource #348
+- URL parsing replace &amp; in CSV data source #348
 - unified popups
 - wizard ui enhancement
 

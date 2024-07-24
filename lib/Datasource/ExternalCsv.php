@@ -12,7 +12,7 @@ use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use OCA\Analytics\Service\VariableService;
 
-class ExternalFile implements IDatasource
+class ExternalCsv implements IDatasource
 {
     private $logger;
     private $userId;
@@ -37,7 +37,7 @@ class ExternalFile implements IDatasource
      */
     public function getName(): string
     {
-        return $this->l10n->t('External file') . ': csv';
+        return $this->l10n->t('External') . ': csv';
     }
 
     /**

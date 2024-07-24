@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Psr\Log\LoggerInterface;
 
-class Excel implements IDatasource {
+class LocalExcel implements IDatasource {
 	private $logger;
 	private $rootFolder;
 	private $l10n;
@@ -36,7 +36,7 @@ class Excel implements IDatasource {
 	 * @return string Display Name of the datasource
 	 */
 	public function getName(): string {
-		return $this->l10n->t('Local file') . ': Spreadsheet';
+		return $this->l10n->t('Local') . ': Spreadsheet';
 	}
 
 	/**
@@ -53,8 +53,8 @@ class Excel implements IDatasource {
 		$template = array();
 		$template[] = [
 			'id' => 'link',
-			'name' => $this->l10n->t('File'),
-			'placeholder' => $this->l10n->t('File'),
+			'name' => $this->l10n->t('LocalCsv'),
+			'placeholder' => $this->l10n->t('LocalCsv'),
 			'type' => 'filePicker'
 		];
 		$template[] = [
