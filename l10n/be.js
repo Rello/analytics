@@ -13,7 +13,6 @@ OC.L10N.register(
     "Notification" : "Абвестка",
     "Date" : "Date",
     "Search" : "Search",
-    "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
     "copy" : "капіяваць",

@@ -19,7 +19,6 @@ OC.L10N.register(
     "Date" : "Date",
     "Year" : "Blwyddyn",
     "Search" : "Chwilio",
-    "File" : "File",
     "Yes" : "Iawn",
     "No" : "No",
     "Version" : "Fersiwn",

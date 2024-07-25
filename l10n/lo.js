@@ -20,7 +20,6 @@ OC.L10N.register(
     "New in" : "ໃຫມ່",
     "View changelog" : "ເບິ່ງການປ່ຽນແປງ",
     "Search" : "ຄົ້ນຫາ",
-    "File" : "ຟາຍ",
     "Yes" : "ແມ່ນແລ້ວ",
     "No" : "ບໍ່",
     "The password is wrong. Try again." : "ລະຫັດບໍ່ຖືກຕ້ອງ. ລອງໃໝ່ອີກຄັ້ງ.",

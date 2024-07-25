@@ -13,7 +13,6 @@ OC.L10N.register(
     "Link copied" : "Link-yň nusgasy alyndy",
     "Type" : "Görnüşi",
     "Search" : "Gözlemek",
-    "File" : "Faýl",
     "Yes" : "Hawa",
     "No" : "Ýok",
     "Password" : "Açarsöz",

@@ -22,7 +22,6 @@ OC.L10N.register(
     "Date" : "Datum",
     "Search" : "Soek",
     "Total" : "Totaal",
-    "File" : "Lêer",
     "Yes" : "Ja",
     "No" : "Nee",
     "Version" : "Weergawe",
