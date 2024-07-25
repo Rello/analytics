@@ -16,7 +16,6 @@ OC.L10N.register(
     "Type" : "Tip",
     "Date" : "Date",
     "Search" : "Traži",
-    "File" : "Fajl",
     "Yes" : "Da",
     "No" : "Ne",
     "Version" : "Verzija",

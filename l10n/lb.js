@@ -18,8 +18,6 @@ OC.L10N.register(
     "Type" : "Typ",
     "Date" : "Date",
     "Search" : "Search",
-    "Local file" : "Lokal Datei",
-    "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
     "The password is wrong. Try again." : "Den Passwuert ass incorrect. Probeier ed nach eng keier.",

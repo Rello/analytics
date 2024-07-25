@@ -15,7 +15,6 @@ OC.L10N.register(
     "Type" : "Jenis",
     "Date" : "Date",
     "Search" : "Search",
-    "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
     "Password" : "Kata laluan",

@@ -13,7 +13,6 @@ OC.L10N.register(
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh",
     "Type" : "Seòrsa",
     "Search" : "Lorg",
-    "File" : "Faidhle",
     "Yes" : "Tha",
     "No" : "Chan eil",
     "Version" : "Tionndadh",

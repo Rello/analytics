@@ -18,7 +18,6 @@ OC.L10N.register(
     "Notification" : "নোটিফিকেশন ",
     "Date" : "Date",
     "Search" : "Search",
-    "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
     "Version" : "ভার্সন",

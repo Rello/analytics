@@ -26,8 +26,6 @@ OC.L10N.register(
     "New in" : "Nevez e-bazh",
     "View changelog" : "Sellet al levr kemmoù",
     "Search" : "Klask",
-    "Local file" : "Restr lec'hel",
-    "File" : "Restr",
     "Yes" : "Ya",
     "No" : "Nann",
     "Version" : "Stumm",

@@ -20,7 +20,6 @@ OC.L10N.register(
     "Notification" : "Ծանուցում",
     "Date" : "Date",
     "Search" : "Search",
-    "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
     "Version" : "Տարբերակ",

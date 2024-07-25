@@ -21,7 +21,6 @@ OC.L10N.register(
     "Date" : "Он сар өдөр",
     "Search" : "Хайх",
     "Total" : "Нийт",
-    "File" : "File",
     "Yes" : "Тийм",
     "No" : "Үгүй",
     "Version" : "төрөл",

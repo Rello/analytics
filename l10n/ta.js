@@ -18,7 +18,6 @@ OC.L10N.register(
     "Type" : "வகை",
     "Date" : "Date",
     "Search" : "Search",
-    "File" : "File",
     "Yes" : "Yes",
     "No" : "No",
     "Password" : "கடவுச்சொல்",
