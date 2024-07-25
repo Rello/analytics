@@ -59,7 +59,7 @@ class LocalCsv implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-        $template[] = ['id' => 'link', 'name' => $this->l10n->t('LocalCsv'), 'placeholder' => $this->l10n->t('LocalCsv'), 'type' => 'filePicker'];
+        $template[] = ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File'), 'type' => 'filePicker'];
         $template[] = ['id' => 'hasHeader', 'name' => $this->l10n->t('Header row'), 'placeholder' => 'true-' . $this->l10n->t('Yes').'/false-'.$this->l10n->t('No'), 'type' => 'tf'];
         $template[] = ['id' => 'offset', 'name' => $this->l10n->t('Ignore leading rows'), 'placeholder' => $this->l10n->t('Number of rows'), 'type' => 'number'];
         $template[] = ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty'), 'type' => 'columnPicker'];

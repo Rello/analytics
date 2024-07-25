@@ -51,7 +51,7 @@ class LocalJson implements IDatasource
     public function getTemplate(): array
     {
         $template = array();
-		$template[] = ['id' => 'link', 'name' => $this->l10n->t('LocalCsv'), 'placeholder' => $this->l10n->t('LocalCsv'), 'type' => 'filePicker'];
+		$template[] = ['id' => 'link', 'name' => $this->l10n->t('File'), 'placeholder' => $this->l10n->t('File'), 'type' => 'filePicker'];
         $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;

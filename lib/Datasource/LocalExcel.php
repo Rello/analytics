@@ -53,8 +53,8 @@ class LocalExcel implements IDatasource {
 		$template = array();
 		$template[] = [
 			'id' => 'link',
-			'name' => $this->l10n->t('LocalCsv'),
-			'placeholder' => $this->l10n->t('LocalCsv'),
+			'name' => $this->l10n->t('File'),
+			'placeholder' => $this->l10n->t('File'),
 			'type' => 'filePicker'
 		];
 		$template[] = [
