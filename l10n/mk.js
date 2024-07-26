@@ -37,6 +37,7 @@ OC.L10N.register(
     "Authentication" : "Автентикација",
     "Version" : "Верзија",
     "Local" : "Локално",
+    "File" : "Датотека",
     "Announcements" : "Објави",
     "copy" : "копирај",
     "The password is wrong. Try again." : "Лозинката е погрешна. Обидите се повторно.",

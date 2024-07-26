@@ -167,6 +167,7 @@ OC.L10N.register(
     "Version" : "Versión",
     "Download count" : "Cantidad de descargas",
     "Local" : "Local",
+    "File" : "Archivo",
     "Sheet" : "Hoja de cálculo",
     "sheet name" : "nombre de la hoja de cálculo",
     "Cell range" : "Rango de celdas",

@@ -190,6 +190,7 @@ OC.L10N.register(
     "Version" : "Версія",
     "Download count" : "Кількість звантажень",
     "Local" : "Локально",
+    "File" : "Файл",
     "Sheet" : "Аркуш",
     "sheet name" : "ім'я аркуша",
     "Cell range" : "Діапазон клітинок",

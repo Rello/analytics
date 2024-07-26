@@ -189,6 +189,7 @@ OC.L10N.register(
     "Version" : "Versie",
     "Download count" : "Aantal downloads",
     "Local" : "Lokaal",
+    "File" : "Bestand",
     "Sheet" : "Bladzijde",
     "sheet name" : "bladzijde naam",
     "Cell range" : "Cellreeks",

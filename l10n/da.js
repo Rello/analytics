@@ -190,6 +190,8 @@ OC.L10N.register(
     "Limit" : "Grænse",
     "Version" : "Version",
     "Download count" : "Antal download",
+    "Local" : "Lokal",
+    "File" : "Fil",
     "Sheet" : "Ark",
     "sheet name" : "ark navn",
     "Cell range" : "Celleområde",

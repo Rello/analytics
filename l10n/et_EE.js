@@ -30,6 +30,7 @@ OC.L10N.register(
     "Authentication" : "Autentimine",
     "Version" : "Versioon",
     "Local" : "Kohalik",
+    "File" : "Fail",
     "Announcements" : "Teated",
     "copy" : "koopia",
     "The password is wrong. Try again." : "Parool on vale. Proovi uuesti.",

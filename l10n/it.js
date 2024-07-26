@@ -190,6 +190,7 @@ OC.L10N.register(
     "Version" : "Versione",
     "Download count" : "Conteggio scaricamenti",
     "Local" : "Locale",
+    "File" : "File",
     "Sheet" : "Foglio",
     "sheet name" : "nome foglio",
     "Cell range" : "Intervallo delle celle",

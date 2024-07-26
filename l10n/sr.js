@@ -191,6 +191,7 @@ OC.L10N.register(
     "Version" : "Верзија",
     "Download count" : "Број преузимања",
     "Local" : "Локално",
+    "File" : "Фајл",
     "Sheet" : "Лист",
     "sheet name" : "назив листа",
     "Cell range" : "Опсег ћелија",

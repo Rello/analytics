@@ -45,6 +45,7 @@ OC.L10N.register(
     "Authentication" : "Autentificacion",
     "Version" : "Version",
     "Local" : "Local",
+    "File" : "Fichier",
     "Sheet" : "Fuèlh",
     "Announcements" : "Anóncias",
     "No data" : "Cap de donada",

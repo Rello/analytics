@@ -96,6 +96,7 @@
     "e.g. 1,2,4 or leave empty" : "예) 1, 2, 4, 빈칸으로 두기",
     "Authentication" : "인증",
     "Version" : "버전",
+    "File" : "파일",
     "Announcements" : "공지",
     "No data" : "데이터가 없음",
     "copy" : "복사",

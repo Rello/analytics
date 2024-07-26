@@ -38,6 +38,7 @@ OC.L10N.register(
     "Authentication" : "Tapatybės nustatymas",
     "Version" : "Versija",
     "Local" : "Vietinis",
+    "File" : "Failas",
     "Announcements" : "Skelbimai",
     "No data" : "Nėra duomenų",
     "copy" : "kopija",

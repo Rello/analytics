@@ -39,6 +39,7 @@ OC.L10N.register(
     "Authentication" : "Autenticatzione",
     "Version" : "Versione",
     "Local" : "Locale",
+    "File" : "Archìviu",
     "Announcements" : "Comunicatziones",
     "No data" : "Perunu datu",
     "copy" : "còpia",

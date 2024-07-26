@@ -184,6 +184,7 @@ OC.L10N.register(
     "Version" : "Verzia",
     "Download count" : "Počet stiahnutí",
     "Local" : "Lokálne",
+    "File" : "Súbor",
     "Sheet" : "List",
     "sheet name" : "názov listu",
     "Cell range" : "Rozsah bunky",

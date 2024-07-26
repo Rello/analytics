@@ -28,6 +28,7 @@ OC.L10N.register(
     "Authentication" : "აუტენტიფიკაცია",
     "Version" : "ვერსია",
     "Local" : "ლოკალური",
+    "File" : "ფაილი",
     "Announcements" : "განცხადებები",
     "The password is wrong. Try again." : "პაროლი არასწორია. სცადეთ ახლიდან.",
     "Password" : "პაროლი",

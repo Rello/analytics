@@ -20,6 +20,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Version" : "Verzija",
+    "Local" : "Lokalno",
     "Password" : "Lozinka",
     "Favorites" : "Favoriti",
     "Settings" : "Podešavanje",

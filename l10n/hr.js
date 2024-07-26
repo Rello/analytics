@@ -38,6 +38,7 @@ OC.L10N.register(
     "No" : "Ne",
     "Authentication" : "Autentifikacija",
     "Version" : "Inačica",
+    "File" : "Datoteka",
     "Announcements" : "Obavijesti",
     "copy" : "kopiraj",
     "The password is wrong. Try again." : "Pogrešna zaporka. Pokušajte ponovno.",

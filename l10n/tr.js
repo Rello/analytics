@@ -191,6 +191,7 @@ OC.L10N.register(
     "Version" : "Sürüm",
     "Download count" : "İndirilme sayısı",
     "Local" : "Yerel",
+    "File" : "Dosya",
     "Sheet" : "Sayfa",
     "sheet name" : "sayfa  adı",
     "Cell range" : "Hücre aralığı",

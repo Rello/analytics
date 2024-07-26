@@ -42,6 +42,7 @@ OC.L10N.register(
     "Authentication" : "אימות",
     "Version" : "גרסה",
     "Local" : "מקומי",
+    "File" : "קובץ",
     "Announcements" : "הכרזות",
     "copy" : "עותק",
     "The password is wrong. Try again." : "הססמה שגויה. נא לנסות שוב.",

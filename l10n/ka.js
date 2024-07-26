@@ -57,6 +57,7 @@ OC.L10N.register(
     "Authentication" : "Authentication",
     "Version" : "Version",
     "Local" : "Local",
+    "File" : "File",
     "Announcements" : "Announcements",
     "copy" : "copy",
     "The password is wrong. Try again." : "The password is wrong. Try again.",

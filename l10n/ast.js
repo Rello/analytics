@@ -120,6 +120,7 @@ OC.L10N.register(
     "Authentication" : "Autenticación",
     "Limit" : "Llende",
     "Version" : "Versión",
+    "Local" : "Llocal",
     "Sheet" : "Fueya",
     "Cell range" : "Intervalu de caxelles",
     "Announcements" : "Anuncios",

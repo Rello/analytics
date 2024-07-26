@@ -189,6 +189,7 @@ OC.L10N.register(
     "Version" : "Bertsioa",
     "Download count" : "Deskarga zenbakia",
     "Local" : "Lokala",
+    "File" : "Fitxategia",
     "Sheet" : "Orria",
     "sheet name" : "orriaren izena",
     "Cell range" : "Gelaxka barrutia",

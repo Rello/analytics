@@ -191,6 +191,7 @@ OC.L10N.register(
     "Version" : "Leagan",
     "Download count" : "Íosluchtaigh áireamhán",
     "Local" : "Áitiúil",
+    "File" : "Comhad",
     "Sheet" : "Bileog",
     "sheet name" : "ainm bileog",
     "Cell range" : "Raon cille",

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Version" : "ভার্সন",
+    "Local" : "স্থানীয়",
     "The password is wrong. Try again." : "কুটশব্দটি ভুল। আবার চেষ্টা করুন।",
     "Password" : "কূটশব্দ",
     "Favorites" : "প্রিয়জন",

@@ -29,6 +29,7 @@ OC.L10N.register(
     "Yes" : "Ya",
     "No" : "Nann",
     "Version" : "Stumm",
+    "Local" : "Diabarzh",
     "copy" : "eilañ",
     "The password is wrong. Try again." : "Direizh eo ger-tremen. Klaskit en-dro.",
     "Password" : "Ger-tremen",

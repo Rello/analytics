@@ -184,6 +184,7 @@ OC.L10N.register(
     "Version" : "Версия",
     "Download count" : "Счетчик загрузок",
     "Local" : "Локальный",
+    "File" : "Файл",
     "Sheet" : "Таблица",
     "sheet name" : "название листа",
     "Cell range" : "Диапазон клеток",
