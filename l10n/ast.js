@@ -121,6 +121,7 @@ OC.L10N.register(
     "Limit" : "Llende",
     "Version" : "Versión",
     "Local" : "Llocal",
+    "File" : "Ficheru",
     "Sheet" : "Fueya",
     "Cell range" : "Intervalu de caxelles",
     "Announcements" : "Anuncios",

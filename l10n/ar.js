@@ -191,6 +191,7 @@ OC.L10N.register(
     "Version" : "الإصدار",
     "Download count" : "عدد التنزيلات",
     "Local" : "مَحَلِّي",
+    "File" : "File",
     "Sheet" : "صفحة",
     "sheet name" : "اسم الصفحة",
     "Cell range" : "نطاق الخلايا",

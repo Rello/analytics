@@ -109,6 +109,8 @@ OC.L10N.register(
     "Unshare" : "Bỏ chia sẻ",
     "Password protection" : "Password protection",
     "Copy link" : "Sao chép liên kết",
+    "Rows" : "Các hàng",
+    "Columns" : "Các cột",
     "Color" : "Màu sắc",
     "Get more information" : "Có thêm thông tin",
     "Create" : "‎Tạo‎"
