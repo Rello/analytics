@@ -190,6 +190,7 @@ OC.L10N.register(
     "Limit" : "Limite",
     "Version" : "Version",
     "Download count" : "Nombre de téléchargements",
+    "File" : "Fichier",
     "Sheet" : "Feuille",
     "sheet name" : "nom de la feuille",
     "Cell range" : "Plage de cellules",

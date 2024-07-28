@@ -22,6 +22,7 @@ OC.L10N.register(
     "Yes" : "Iawn",
     "No" : "No",
     "Version" : "Fersiwn",
+    "Local" : "Lleol",
     "Password" : "Cyfrinair",
     "Favorites" : "Ffefrynnau",
     "Translate" : "Cyfieithu",

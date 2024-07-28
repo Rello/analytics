@@ -30,6 +30,7 @@ OC.L10N.register(
     "Authentication" : "Aŭtentigo",
     "Version" : "Versio",
     "Local" : "Loka",
+    "File" : "Dosiero",
     "Announcements" : "Anoncoj",
     "copy" : "kopio",
     "The password is wrong. Try again." : "La pasvorto malĝustas. Provu denove.",

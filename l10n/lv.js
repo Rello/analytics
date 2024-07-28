@@ -31,6 +31,7 @@ OC.L10N.register(
     "Authentication" : "Autentifikācija",
     "Version" : "Versija",
     "Local" : "Lokāls",
+    "File" : "Datne",
     "Announcements" : "Paziņojumi",
     "copy" : "kopēt",
     "The password is wrong. Try again." : "Nepareiza parole. Mēģiniet vēlreiz.",

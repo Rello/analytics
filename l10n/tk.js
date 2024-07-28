@@ -15,6 +15,7 @@ OC.L10N.register(
     "Search" : "Gözlemek",
     "Yes" : "Hawa",
     "No" : "Ýok",
+    "File" : "Faýl",
     "Password" : "Açarsöz",
     "Favorites" : "Halanýanlar",
     "Translate" : "Terjime et",

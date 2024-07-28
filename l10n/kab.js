@@ -20,6 +20,7 @@ OC.L10N.register(
     "Yes" : "Oui",
     "No" : "Uhu",
     "Local" : "Adigan",
+    "File" : "Afaylu",
     "Announcements" : "Ilɣa",
     "Password" : "Awal uffir",
     "Favorites" : "Imenyafen",

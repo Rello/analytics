@@ -20,6 +20,7 @@ OC.L10N.register(
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",
+    "File" : "File",
     "Password" : "கடவுச்சொல்",
     "Favorites" : "விருப்பங்கள்",
     "Translate" : "Translate",

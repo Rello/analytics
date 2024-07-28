@@ -17,6 +17,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Local" : "Local",
+    "File" : "File",
     "copy" : "copy",
     "Password" : "Password",
     "Favorites" : "Favorites",

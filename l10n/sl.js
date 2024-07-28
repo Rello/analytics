@@ -171,6 +171,7 @@ OC.L10N.register(
     "Version" : "Različica",
     "Download count" : "Števec prejemov",
     "Local" : "Krajevno",
+    "File" : "Datoteka",
     "Sheet" : "Preglednica",
     "sheet name" : "ime preglednice",
     "Cell range" : "Obseg celic",

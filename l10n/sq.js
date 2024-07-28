@@ -31,6 +31,7 @@ OC.L10N.register(
     "Authentication" : "Mirëfilltësim",
     "Version" : "Versioni",
     "Local" : "Lokale",
+    "File" : "Skedar ",
     "Announcements" : "Lajmërimet",
     "copy" : "kopjo",
     "The password is wrong. Try again." : "Fjalëkalim i gabuar. Provojeni sërish.",

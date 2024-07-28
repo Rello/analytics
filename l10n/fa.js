@@ -176,6 +176,7 @@ OC.L10N.register(
     "Version" : "نسخه",
     "Download count" : "Download count",
     "Local" : "محلی",
+    "File" : "فایل",
     "Sheet" : "Sheet",
     "sheet name" : "sheet name",
     "Cell range" : "Cell range",

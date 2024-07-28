@@ -63,6 +63,7 @@ OC.L10N.register(
     "Authentication" : "Autenticação",
     "Version" : "Versão",
     "Local" : "Local",
+    "File" : "Ficheiro",
     "Announcements" : "Anúncios",
     "copy" : "copiar",
     "The password is wrong. Try again." : "A palavra-passe está errada. Por favor, tente de novo.",

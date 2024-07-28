@@ -190,6 +190,8 @@ OC.L10N.register(
     "Limit" : "Limit",
     "Version" : "Version",
     "Download count" : "Anzahl der Downloads",
+    "Local" : "Lokal",
+    "File" : "Datei",
     "Sheet" : "Blatt",
     "sheet name" : "Blattname",
     "Cell range" : "Zellenbereich",

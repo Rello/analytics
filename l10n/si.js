@@ -18,6 +18,7 @@ OC.L10N.register(
     "No" : "නැහැ",
     "Authentication" : "සත්‍යාපනය",
     "Version" : "අනුවාදය",
+    "File" : "ගොනුව",
     "Announcements" : "නිවේදන",
     "copy" : "පිටපත්",
     "Password" : "මුර පදය",

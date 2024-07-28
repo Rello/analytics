@@ -96,6 +96,7 @@ OC.L10N.register(
     "Version" : "Versio",
     "Download count" : "Latausmäärä",
     "Local" : "Paikallinen",
+    "File" : "Tiedosto",
     "Cell range" : "Solualue",
     "e.g. A1:C3,A5:C5" : "esim. A1:C3,A5:C5",
     "HTML grabber" : "HTML-kaappain",

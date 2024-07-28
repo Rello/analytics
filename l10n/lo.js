@@ -22,6 +22,7 @@ OC.L10N.register(
     "Search" : "ຄົ້ນຫາ",
     "Yes" : "ແມ່ນແລ້ວ",
     "No" : "ບໍ່",
+    "File" : "ຟາຍ",
     "The password is wrong. Try again." : "ລະຫັດບໍ່ຖືກຕ້ອງ. ລອງໃໝ່ອີກຄັ້ງ.",
     "Password" : "ລະຫັດຜ່ານ",
     "Favorites" : "ລາຍການທີ່ມັກ",

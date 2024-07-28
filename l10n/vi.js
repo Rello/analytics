@@ -85,6 +85,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Dấu thời gian của dữ liệu được tải",
     "Version" : "Phiên bản",
     "Local" : "Cục bộ",
+    "File" : "Tệp",
     "Announcements" : "Các thông báo",
     "copy" : "sao chép",
     "The password is wrong. Try again." : "Mật khẩu sai. Hãy thử lại.",
@@ -108,6 +109,8 @@ OC.L10N.register(
     "Unshare" : "Bỏ chia sẻ",
     "Password protection" : "Password protection",
     "Copy link" : "Sao chép liên kết",
+    "Rows" : "Các hàng",
+    "Columns" : "Các cột",
     "Color" : "Màu sắc",
     "Get more information" : "Có thêm thông tin",
     "Create" : "‎Tạo‎"

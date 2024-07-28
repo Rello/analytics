@@ -167,6 +167,7 @@ OC.L10N.register(
     "Version" : "Version",
     "Download count" : "Antal nedladdningar",
     "Local" : "Lokal",
+    "File" : "Fil",
     "Sheet" : "Blad",
     "sheet name" : "bladnamn",
     "Cell range" : "Cellområde",

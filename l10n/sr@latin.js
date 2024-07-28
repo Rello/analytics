@@ -19,6 +19,7 @@ OC.L10N.register(
     "Yes" : "Da",
     "No" : "Ne",
     "Version" : "Verzija",
+    "File" : "Fajl",
     "copy" : "kopiraj",
     "Password" : "Lozinka",
     "Favorites" : "Omiljene",

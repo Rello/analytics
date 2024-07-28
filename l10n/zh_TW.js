@@ -191,6 +191,7 @@ OC.L10N.register(
     "Version" : "版本",
     "Download count" : "下載次數",
     "Local" : "本機",
+    "File" : "檔案",
     "Sheet" : "工作表",
     "sheet name" : "工作表名稱",
     "Cell range" : "儲存格範圍",

@@ -25,6 +25,7 @@ OC.L10N.register(
     "Yes" : "Ja",
     "No" : "Nee",
     "Version" : "Weergawe",
+    "File" : "Lêer",
     "Announcements" : "Aankondigings",
     "copy" : "kopie",
     "The password is wrong. Try again." : "Die wagwoord is verkeerd. Probeer weer.",

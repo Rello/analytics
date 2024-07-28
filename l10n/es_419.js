@@ -36,6 +36,7 @@ OC.L10N.register(
     "Authentication" : "Autenticación",
     "Version" : "Versión",
     "Local" : "Local",
+    "File" : "Archivo",
     "Announcements" : "Anuncios",
     "The password is wrong. Try again." : "Error en la contraseña. Inténtalo de nuevo.",
     "Password" : "Contraseña",

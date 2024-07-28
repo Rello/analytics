@@ -16,6 +16,7 @@ OC.L10N.register(
     "Yes" : "Tha",
     "No" : "Chan eil",
     "Version" : "Tionndadh",
+    "File" : "Faidhle",
     "Password" : "Facal-faire",
     "Favorites" : "Annsachdan",
     "Translate" : "Eadar-theangaich",

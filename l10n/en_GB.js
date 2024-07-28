@@ -191,6 +191,7 @@ OC.L10N.register(
     "Version" : "Version",
     "Download count" : "Download count",
     "Local" : "Local",
+    "File" : "File",
     "Sheet" : "Sheet",
     "sheet name" : "sheet name",
     "Cell range" : "Cell range",

@@ -168,6 +168,7 @@ OC.L10N.register(
     "Version" : "Verzió",
     "Download count" : "Letöltések száma",
     "Local" : "Helyi",
+    "File" : "Fájl",
     "Sheet" : "Munkalap",
     "sheet name" : "munkalapnév",
     "Cell range" : "Cellatartomány",

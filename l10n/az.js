@@ -24,6 +24,7 @@ OC.L10N.register(
     "No" : "No",
     "Authentication" : "Autentifikasiya",
     "Version" : "Versiya",
+    "Local" : "Yerli",
     "The password is wrong. Try again." : "Şifrə yalnışdır. Yenidən cəhd edin.",
     "Password" : "Şifrə",
     "Favorites" : "Sevimlilər",

@@ -34,6 +34,7 @@ OC.L10N.register(
     "Authentication" : "การตรวจสอบสิทธิ์",
     "Version" : "รุ่น",
     "Local" : "ต้นทาง",
+    "File" : "ไฟล์",
     "Announcements" : "ประกาศ",
     "copy" : "คัดลอก",
     "The password is wrong. Try again." : "รหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง",

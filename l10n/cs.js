@@ -178,6 +178,8 @@ OC.L10N.register(
     "Limit" : "Omezení",
     "Version" : "Verze",
     "Download count" : "Počet stažení",
+    "Local" : "Lokální",
+    "File" : "Soubor",
     "Sheet" : "List",
     "sheet name" : "název listu",
     "Cell range" : "Rozsah buněk",

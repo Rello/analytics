@@ -172,6 +172,7 @@ OC.L10N.register(
     "Version" : "Έκδοση",
     "Download count" : "Πλήθος λήψεων",
     "Local" : "Τοπικός",
+    "File" : "Αρχείο",
     "Sheet" : "Φύλλο",
     "sheet name" : "όνομα φύλλου",
     "Cell range" : "Εύρος κελιού",
