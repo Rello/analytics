@@ -242,7 +242,6 @@
 #chartZoomReset {
     position: absolute;
     right: 20px;
-    background-color: whitesmoke;
 }
 
 #chartLegendContainer {
@@ -331,7 +330,6 @@
 
 .sidebarHeaderClosed {
     background-image: url(../img/arrowRight.svg);
-    filter: var(--background-invert-if-dark);
     background-size: 16px 16px;
     background-position: 0;
     background-repeat: no-repeat;
@@ -340,7 +338,6 @@
 
 .sidebarHeaderOpened {
     background-image: url(../img/arrowDown.svg);
-    filter: var(--background-invert-if-dark);
     background-size: 16px 16px;
     background-position: 0;
     background-repeat: no-repeat;
@@ -585,6 +582,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .infoBox {
+    background-color: var(--color-background-dark);
     padding: 5px;
     box-shadow: 2px 2px 5px var(--color-background-darker);
     border-radius: var(--border-radius-large);

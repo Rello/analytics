@@ -8,9 +8,10 @@
 - Chart.js v4.4.3
 - NC30 css compatibility
 
-- ### Fixed
+### Fixed
 - excel data source: remove all-null columns
 - code style
+- dark mode problems #400
 
 ## 4.14.0 - 2024-06-20
 ### Added
