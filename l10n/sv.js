@@ -150,6 +150,7 @@ OC.L10N.register(
     "<strong>Analytics</strong>: New reports" : "<strong>Analyser</strong>: Nya rapporter",
     "Total" : "Totalt",
     "Reports" : "Rapporter",
+    "External" : "Extern",
     "External URL" : "Extern URL",
     "Header row" : "Rubrikrad",
     "Yes" : "Ja",
