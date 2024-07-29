@@ -53,9 +53,9 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
             + '<a class="analyticsDialogClose" id="btnClose"></a>'
-            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
             + t('analytics', 'Drilldown')
-            + '</h2>'
+            + '</span></div>'
             + '<div class="table" style="display: table;">'
 
             + '<div style="display: table-row;">'
@@ -112,9 +112,9 @@ OCA.Analytics.Filter = {
             + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
             + '<a class="analyticsDialogClose" id="btnClose"></a>'
-            + '<h2 class="analyticsDialogHeader" style="display:flex;margin-right:30px;">'
+            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
             + t('analytics', 'Filter')
-            + '</h2>'
+            + '</span></div>'
             + '<span hidden id="filterDialogHintText" class="userGuidance">'
             + t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
                 .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown##text-variables" target="_blank">')
