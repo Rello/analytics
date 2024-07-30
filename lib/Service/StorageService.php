@@ -21,12 +21,12 @@ class StorageService {
 	private $VariableService;
 
 	public function __construct(
-		LoggerInterface $logger,
-		StorageMapper $StorageMapper,
-		DatasetService $DatasetService,
+		LoggerInterface  $logger,
+		StorageMapper    $StorageMapper,
+		DatasetService   $DatasetService,
 		ThresholdService $ThresholdService,
-		VariableService $VariableService,
-		ReportService $ReportService
+		VariableService  $VariableService,
+		ReportService    $ReportService
 	) {
 		$this->logger = $logger;
 		$this->StorageMapper = $StorageMapper;
@@ -216,7 +216,7 @@ class StorageService {
 
 	private function floatvalue($val) {
 		// if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
-		if (preg_match('/(?<=\b0)\,(?=\d{3}\b)/', $val) === 0 && preg_match('/(?<=\b0)\.(?=\d{3}\b)/', $val) === 0) {
+		if (preg_match('/(?<=\b0),(?=\d{3}\b)/', $val) === 1 && preg_match('/(?<=\b0).(?=\d{3}\b)/', $val) === 1) {
 			// remove , as 1000 separator
 			$val = preg_replace('/(?<=\d)\,(?=\d{3}\b)/', '', $val);
 			// remove . as 1000 separator
