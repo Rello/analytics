@@ -159,6 +159,7 @@ OC.L10N.register(
     "Version" : "Версия",
     "Download count" : "Брой изтегляния",
     "Local" : "Локален",
+    "File" : "Файл",
     "Sheet" : "Лист",
     "sheet name" : "Име на лист",
     "Cell range" : "Обхват на клетките",
