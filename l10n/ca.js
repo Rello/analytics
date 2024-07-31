@@ -174,6 +174,7 @@ OC.L10N.register(
     "Version" : "Versió",
     "Download count" : "Recompte de baixades",
     "Local" : "Local",
+    "File" : "Fitxer",
     "Sheet" : "Full",
     "sheet name" : "nom del full",
     "Cell range" : "Interval de cel·les",
