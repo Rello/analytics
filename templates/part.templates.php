@@ -98,22 +98,22 @@
                 <select id="sidebarReportChart" class="sidebarInput">
                     <option value="" selected></option>
                     <option value="line"><?php // TRANSLATORS Short description for a 'Line Chart'
-                        p($l->t('Line')); ?></option>
+						p($l->t('Line')); ?></option>
                     <option value="datetime"><?php p($l->t('Timeline (date in column 2)')); ?></option>
                     <option value="column"><?php // TRANSLATORS Short description for a 'Bar Chart'
-                        p($l->t('Bar')); ?></option>
+						p($l->t('Bar')); ?></option>
                     <option value="columnSt">&nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart'
-                        p($l->t('Bar - Stacked')); ?></option>
+						p($l->t('Bar - Stacked')); ?></option>
                     <option value="columnSt100">
                         &nbsp;<?php // TRANSLATORS Short description for a 'Stacked bar Chart with 100% relations'
-                        p($l->t('Bar - Stacked 100%%')); ?></option>
+						p($l->t('Bar - Stacked 100%%')); ?></option>
                     <option value="area"><?php // TRANSLATORS Short description for an 'Area Chart'
-                        p($l->t('Area')); ?></option>
+						p($l->t('Area')); ?></option>
                     <option value="areaSt100">
                         &nbsp;<?php // TRANSLATORS Short description for an 'Area Chart with 100% relations'
-                        p($l->t('Area - 100%%')); ?></option>
+						p($l->t('Area - 100%%')); ?></option>
                     <option value="doughnut"><?php // TRANSLATORS Short description for a 'Doughnut Chart'
-                        p($l->t('Doughnut')); ?></option>
+						p($l->t('Doughnut')); ?></option>
                 </select>
             </div>
         </div>
@@ -144,13 +144,13 @@
     </div>
     <br>
     <button id="sidebarReportUpdateButton" type="button" class="primary">
-        <?php p($l->t('Update')); ?>
+		<?php p($l->t('Update')); ?>
     </button>
     <button id="sidebarReportDeleteButton" type="button">
-        <?php p($l->t('Delete')); ?>
+		<?php p($l->t('Delete')); ?>
     </button>
     <button id="sidebarReportExportButton" type="button">
-        <?php p($l->t('Export')); ?>
+		<?php p($l->t('Export')); ?>
     </button>
 
 </template>
@@ -192,19 +192,49 @@
             <div style="display: table-cell;"><span id="sidebarDatasetStatusRecords" class="sidebarInput"></span>
             </div>
         </div>
+        <br>
+    </div>
+    <div class="sidebarHeaderClosed"><h3 id="datasetAiSectionHeaderH3"
+                                         class="sidebarPointer"><?php p($l->t('Nextcloud Assistant')); ?></h3></div>
+    <div id="datasetAiSectionDisabled" class="userGuidance" style="display: none;">
+		<?php p($l->t('Context Chat is required')); ?>
+    </div>
+    <div id="datasetAiSection" class="table" style="display: none; width: 100%; max-width: 500px;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 100%; vertical-align: middle;">
+                    <span>
+                        <?php p($l->t('Description')); ?>
+                    </span><br><span class="userGuidance">
+                        <?php p($l->t('Explain the kind of data and the purpose of the data')); ?>
+                    </span>
+                </div>
+                <textarea style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput"></textarea>
+            </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; "><?php p($l->t('Context Chat relevant')); ?></div>
+            <div style="display: table-cell; width: 200px;">
+                <input type="checkbox" id="sidebarDatasetAiIndex" class="checkbox">
+                <label for="sidebarDatasetAiIndex"></label>
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell;"><?php p($l->t('Manual index update')); ?></div>
+            <div style="display: table-cell; width: 200px;">
+                <button id="sidebarDatasetAiUpdateButton" type="button">
+					<?php p($l->t('Go')); ?>
+                </button>
+            </div>
+        </div>
     </div>
     <div style="width:100%; float: left;">
         <br>
         <button id="sidebarDatasetUpdateButton" type="button" class="primary">
-            <?php p($l->t('Update')); ?>
+			<?php p($l->t('Update')); ?>
         </button>
         <button id="sidebarDatasetDeleteButton" type="button">
-            <?php p($l->t('Delete')); ?>
+			<?php p($l->t('Delete')); ?>
         </button>
-        <!--        <button id="sidebarDatasetExportButton" type="button">
-            <?php /*p($l->t('Export')); */ ?>
-        </button>
--->    </div>
+    </div>
 </template>
 
 <template id="templateData">
@@ -239,30 +269,30 @@
         </div>
         <br>
         <button id="updateDataButton" type="button" class="primary">
-            <?php p($l->t('Save data')); ?>
+			<?php p($l->t('Save data')); ?>
         </button>
         <button id="deleteDataButton" type="button">
-            <?php p($l->t('Delete data')); ?>
+			<?php p($l->t('Delete data')); ?>
         </button>
         <br>
         <br>
     </div>
     <div class="sidebarHeaderClosed"><h3 id="dataImportSectionHeaderH3"
                                          class="sidebarPointer"><?php // TRANSLATORS Noun shown in a button
-            p($l->t('Import')); ?></h3></div>
+			p($l->t('Import')); ?></h3></div>
     <div id="dataImportSection" style="display: none; width: 100%; max-width: 500px;">
         <button id="importDataFileButton" type="button">
-            <?php p($l->t('From file')); ?>
+			<?php p($l->t('From file')); ?>
         </button>
         <button id="importDataClipboardButton" type="button">
-            <?php p($l->t('From clipboard')); ?>
+			<?php p($l->t('From clipboard')); ?>
         </button>
         <br>
         <textarea id="importDataClipboardText" rows="5" cols="150" hidden></textarea>
         <br>
         <button id="importDataClipboardButtonGo" type="button" hidden>
-            <?php // TRANSLATORS Noun shown in a button
-            p($l->t('Import')); ?>
+			<?php // TRANSLATORS Noun shown in a button
+			p($l->t('Import')); ?>
         </button>
         <br>
     </div>
@@ -278,7 +308,7 @@
                                          class="sidebarPointer"><?php p($l->t('Data load')); ?></h3></div>
     <div id="dataAdvancedSection" style="display: none; width: 100%; max-width: 500px;">
         <button id="advancedButton" type="button">
-            <?php p($l->t('Advanced configuration')); ?>
+			<?php p($l->t('Advanced configuration')); ?>
         </button>
     </div>
 </template>
@@ -307,17 +337,17 @@
             <div style="display: table-cell;">
                 <select id="sidebarThresholdOption" class="sidebarInput">
                     <option value="=" selected><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('= equal')); ?></option>
+						p($l->t('= equal')); ?></option>
                     <option value=">"><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('> greater')); ?></option>
+						p($l->t('> greater')); ?></option>
                     <option value="<"><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('< less')); ?></option>
+						p($l->t('< less')); ?></option>
                     <option value="<="><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('<= less equal')); ?></option>
+						p($l->t('<= less equal')); ?></option>
                     <option value=">="><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('>= greater equal')); ?></option>
+						p($l->t('>= greater equal')); ?></option>
                     <option value="!="><?php // TRANSLATORS description in a dropdown; limited space
-                        p($l->t('!= not equal')); ?></option>
+						p($l->t('!= not equal')); ?></option>
                 </select>
             </div>
         </div>
@@ -340,14 +370,14 @@
     </div>
     <br>
     <button id="sidebarThresholdCreateButton" type="button" class="primary">
-        <?php p($l->t('Save threshold')); ?>
+		<?php p($l->t('Save threshold')); ?>
     </button>
     <br>
     <br>
     <div id="sidebarThresholdCreateNewHeader"><h3><?php // TRANSLATORS Noun shown in a button. German "Weitere"
-            p($l->t('Others')); ?></h3></div>
+			p($l->t('Others')); ?></h3></div>
     <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
-        <?php p($l->t('Notification for new records')); ?>
+		<?php p($l->t('Notification for new records')); ?>
     </button>
     <br>
     <br>
@@ -446,7 +476,7 @@
                         for="testrunCheckbox"><?php p($l->t('Test run')); ?></label>
                 <br><br>
                 <span><?php // TRANSLATORS description of a textbox
-                    p($l->t('Schedule in background')); ?></span>
+					p($l->t('Schedule in background')); ?></span>
                 <br>
                 <select id="dataloadSchedule" class="input150">
                     <option value="" selected><?php p($l->t('Not scheduled')); ?></option>
@@ -472,14 +502,15 @@
 <template id="templateNavigationMenu">
     <div id="navigationMenu" class="app-navigation-entry-menu">
         <ul>
-            <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span></span></a></li>
+            <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span><?php p($l->t('Basic settings')); ?></span></a></li>
             <li><a href="#" id="navigationMenuAdvanced"><span
-                            class="icon-category-customization"></span><span></span></a></li>
-            <li><a href="#" id="navigationMenuNewGroup"><span class="icon-add"></span><span></span></a></li>
+                            class="icon-category-customization"></span><span><?php p($l->t('Dataset maintenance')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuShare"><span class="icon-share"></span><span><?php p($l->t('Share')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuNewGroup"><span class="icon-add"></span><span><?php p($l->t('Add to new group')); ?></span></a></li>
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>
-                    <span></span>
+                    <span><?php p($l->t('Add to favorites')); ?></span>
                 </a>
             </li>
             <li id="navigationMenueSeparator" class="action-separator"></li>
@@ -627,7 +658,7 @@
         </div>
         <div id="tableOptionsLayoutMeasures">
             <p><?php // TRANSLATORS "Measures" means key figures and refers to the display area of a data table
-                p($l->t('Measures')); ?></p>
+				p($l->t('Measures')); ?></p>
             <div id="measures" class="columnSection"></div>
         </div>
         <div id="tableOptionsLayoutTotals">

@@ -571,15 +571,26 @@ OCA.Analytics.Advanced.Dataset = {
                     // clone the DOM template
                     table = document.importNode(document.getElementById('templateDataset').content, true);
                     table.id = 'sidebarDataset';
+
                     document.getElementById('tabContainerDataset').innerHTML = '';
                     document.getElementById('tabContainerDataset').appendChild(table);
 
                     document.getElementById('sidebarDatasetName').value = data['name'];
+                    document.getElementById('sidebarDatasetSubheader').value = data['subheader'];
                     document.getElementById('sidebarDatasetDimension1').value = data['dimension1'];
                     document.getElementById('sidebarDatasetDimension2').value = data['dimension2'];
                     document.getElementById('sidebarDatasetValue').value = data['value'];
+                    document.getElementById('sidebarDatasetAiIndex').checked = parseInt(data['ai_index']) === 1;
+
                     document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleDeleteButton);
                     document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleUpdateButton);
+                    document.getElementById('sidebarDatasetAiUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleAiUpdateButton);
+
+                    if (OCA.Analytics.Core.getInitialState('contextChatAvailable') === true) {
+                        document.getElementById('datasetAiSectionDisabled').remove();
+                    }
+
+                    OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
                     //document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleExportButton);
 
                     // get status information like report and data count
@@ -631,6 +642,10 @@ OCA.Analytics.Advanced.Dataset = {
 
     handleUpdateButton: function () {
         OCA.Analytics.Advanced.Dataset.update();
+    },
+
+    handleAiUpdateButton: function () {
+        OCA.Analytics.Advanced.Dataset.aiUpdate();
     },
 
     handleExportButton: function () {
@@ -692,6 +707,19 @@ OCA.Analytics.Advanced.Dataset = {
         window.open(OC.generateUrl('apps/analytics/report/dataset/') + reportId, '_blank')
     },
 
+    aiUpdate: function () {
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId + '/provider';
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers()
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Notification.notification('success', t('analytics', 'Done'));
+            });
+    },
+
     update: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
         const button = document.getElementById('sidebarDatasetUpdateButton');
@@ -704,9 +732,11 @@ OCA.Analytics.Advanced.Dataset = {
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 name: document.getElementById('sidebarDatasetName').value,
+                subheader: document.getElementById('sidebarDatasetSubheader').value,
                 dimension1: document.getElementById('sidebarDatasetDimension1').value,
                 dimension2: document.getElementById('sidebarDatasetDimension2').value,
-                value: document.getElementById('sidebarDatasetValue').value
+                value: document.getElementById('sidebarDatasetValue').value,
+                aiIndex: document.getElementById('sidebarDatasetAiIndex').checked ? 1 : null,
             })
         })
             .then(response => response.json())

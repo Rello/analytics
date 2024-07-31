@@ -172,14 +172,16 @@ class DatasetService {
 	 *
 	 * @param int $datasetId
 	 * @param $name
-	 * @param $dimension1
-	 * @param $dimension2
-	 * @param $value
+	 * @param null $dimension1
+	 * @param null $dimension2
+	 * @param null $value
+	 * @param null $subheader
+	 * @param null $aiIndex
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function update(int $datasetId, $name, $dimension1 = null, $dimension2 = null, $value = null) {
-		return $this->DatasetMapper->update($datasetId, $name, $dimension1, $dimension2, $value);
+	public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
+		return $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
 	}
 
 	/**

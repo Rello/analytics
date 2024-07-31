@@ -10,6 +10,7 @@ namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\DataSession;
 use OCA\Analytics\Service\ShareService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\StandaloneTemplateResponse;
@@ -46,6 +47,8 @@ class PageController extends Controller
     /** @var IInitialState */
     protected $initialState;
     private IEventDispatcher $eventDispatcher;
+	/** @var IAppManager */
+	private $appManager;
 
     public function __construct(
         string $appName,
@@ -58,7 +61,8 @@ class PageController extends Controller
         DataSession $DataSession,
         IInitialState $initialState,
         OutputController $outputController,
-        IEventDispatcher $eventDispatcher
+        IEventDispatcher $eventDispatcher,
+		IAppManager $appManager
     )
     {
         parent::__construct($appName, $request);
@@ -71,6 +75,7 @@ class PageController extends Controller
         $this->initialState = $initialState;
         $this->outputController = $outputController;
         $this->eventDispatcher = $eventDispatcher;
+		$this->appManager = $appManager;
     }
 
     /**
@@ -114,7 +119,14 @@ class PageController extends Controller
      */
     public function advanced()
     {
-        return new TemplateResponse($this->appName, 'main_advanced');
+		$params = array();
+
+		$this->initialState->provideInitialState(
+			'contextChatAvailable',
+			$this->appManager->isEnabledForUser('context_chat')
+		);
+
+        return new TemplateResponse($this->appName, 'main_advanced', $params);
     }
 
     /**

@@ -16,6 +16,7 @@ Util::addStyle('analytics', 'print');
 Util::addScript('analytics', 'panorama');
 Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'navigation');
+Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.umd');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
