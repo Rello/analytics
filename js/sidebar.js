@@ -28,7 +28,7 @@ OCA.Analytics.Sidebar = {
 
             if (!OCA.Analytics.isAdvanced) {
                 if (appsidebar.dataset.id === '') {
-                    $('#sidebarClose').on('click', OCA.Analytics.Sidebar.close);
+                    document.getElementById('sidebarClose').addEventListener('click', OCA.Analytics.Sidebar.close);
                     // OC.Apps not working anymore
                     appsidebar.classList.remove('disappear');
                 }
@@ -112,22 +112,25 @@ OCA.Analytics.Sidebar = {
                 continue;
             }
 
-            let li = $('<li/>').addClass('tabHeader')
-                .attr({
-                    'id': items[tab].id,
-                    'tabindex': items[tab].tabindex
-                });
-            let atag = $('<a/>').text(items[tab].name);
-            atag.prop('title', items[tab].name);
-            li.append(atag);
-            $('.tabHeaders').append(li);
+            let li = document.createElement('li');
+            li.classList.add('tabHeader');
+            li.id = items[tab].id;
+            li.tabIndex = items[tab].tabindex;
 
-            let div = $('<div/>').addClass('tab ' + items[tab].class)
-                .attr({
-                    'id': items[tab].class
-                });
-            $('.tabsContainer').append(div);
-            $('#' + items[tab].id).on('click', items[tab].action);
+            let atag = document.createElement('a');
+            atag.textContent = items[tab].name;
+            atag.title = items[tab].name;
+
+            li.appendChild(atag);
+            document.querySelector('.tabHeaders').appendChild(li);
+
+            let div = document.createElement('div');
+            div.className = 'tab ' + items[tab].class;
+            div.id = items[tab].class;
+
+            document.querySelector('.tabsContainer').appendChild(div);
+
+            li.addEventListener('click', items[tab].action);
         }
     },
 

@@ -327,19 +327,21 @@ OCA.Analytics.Navigation = {
         menu.dataset.name = data.name;
 
         let edit = navigationMenu.getElementById('navigationMenuEdit');
-        edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicClicked);
-        edit.children[1].innerText = t('analytics', 'Basic settings');
+        edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicSettingsClicked);
         edit.dataset.testing = 'basic' + data.name;
 
         let newGroup = navigationMenu.getElementById('navigationMenuNewGroup');
         newGroup.addEventListener('click', OCA.Analytics.Navigation.handleNewGroupClicked);
-        newGroup.children[1].innerText = t('analytics', 'Add to new group');
         newGroup.dataset.testing = 'newGroup' + data.name;
         newGroup.dataset.id = data.id;
 
+        let share = navigationMenu.getElementById('navigationMenuShare');
+        share.addEventListener('click', OCA.Analytics.Navigation.buildShareModal);
+        share.dataset.testing = 'share' + data.name;
+        share.dataset.id = data.id;
+
         let dataset = navigationMenu.getElementById('navigationMenuAdvanced');
         dataset.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-        dataset.children[1].innerText = t('analytics', 'Dataset maintenance');
         dataset.dataset.testing = 'advanced' + data.name;
         dataset.dataset.dataset = data.dataset;
 
@@ -349,9 +351,7 @@ OCA.Analytics.Navigation = {
 
         if (parseInt(data.favorite) === 1) {
             favorite.firstElementChild.classList.replace('icon-star', 'icon-starred');
-            favorite.children[1].innerHTML = t('analytics', 'Remove from favorites');
-        } else {
-            favorite.children[1].innerHTML = t('analytics', 'Add to favorites');
+            favorite.children[1].innerText = t('analytics', 'Remove from favorites');
         }
 
         let deleteReport = navigationMenu.getElementById('navigationMenuDelete');
@@ -390,6 +390,8 @@ OCA.Analytics.Navigation = {
         if (OCA.Analytics.isPanorama) {
             edit.parentElement.remove();
             newGroup.parentElement.remove(); // re-add later
+        } else {
+            share.parentElement.remove();
         }
 
         return navigationMenu;
@@ -476,7 +478,7 @@ OCA.Analytics.Navigation = {
         }
     },
 
-    handleBasicClicked: function (evt) {
+    handleBasicSettingsClicked: function (evt) {
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         }
@@ -605,6 +607,43 @@ OCA.Analytics.Navigation = {
         xhr.send(params);
     },
 
+    buildShareModal: function (evt) {
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
+        let navigationItem = evt.target.closest('div');
+
+        document.getElementById('app-sidebar').dataset.id = navigationItem.dataset.id;
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Share') + ' ' + navigationItem.dataset.name,
+            OCA.Analytics.Notification.dialogClose
+        );
+        OCA.Analytics.Navigation.updateShareModal();
+    },
+
+    updateShareModal: function () {
+        const dummy = document.createElement('div');
+        dummy.id = 'tabHeaderShare';
+        dummy.classList.add('tabHeaders', 'tabHeader', 'selected');
+        dummy.addEventListener('click', OCA.Analytics.Navigation.updateShareModal);
+
+        const container = document.createElement('div');
+        container.id = 'tabContainerShare';
+
+        const content = document.createDocumentFragment();
+        content.appendChild(dummy);
+        content.appendChild(container);
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            content,
+            t('analytics', 'Select the share receiver')
+        );
+
+        OCA.Analytics.Sidebar.Share.tabContainerShare();
+
+    }
+
 };
 /**
  * @namespace OCA.Analytics.Navigation.Drag
@@ -674,7 +713,7 @@ OCA.Analytics.Navigation.Drag = {
             .then(data => {
                 OCA.Analytics.Navigation.init(groupId);
             });
-    }
+    },
 }
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -555,14 +555,15 @@ OCA.Analytics.Panorama = {
                             //let reportId = OCA.Analytics.Panorama.currentPanorama['reports'].split(',')[reportIndex];
                             let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
                             let itemContent = page.reports[itemIndex];
+                            let content = '';
 
-                            if (itemContent.type !== OCA.Analytics.Panorama.TYPE_TEXT) {
-                                itemContent.value = '';
+                            if (itemContent && itemContent.type === OCA.Analytics.Panorama.TYPE_TEXT) {
+                                content = itemContent.value;
                             }
 
                             window.OCA.Text.createEditor({
                                 el: document.getElementById('textInput'),
-                                content: itemContent.value,
+                                content: content,
                                 onUpdate: ({markdown}) => {
                                     document.getElementById('textInputContent').value = markdown
                                 },
