@@ -16,17 +16,20 @@ class UserService {
 	private $ShareService;
 	private $ReportService;
 	private $DatasetService;
+	private $PanoramaService;
 
 	public function __construct(
 		LoggerInterface $logger,
-		ReportService   $reportService,
-		DatasetService  $datasetService,
-		ShareService    $shareService
+		ReportService   $ReportService,
+		DatasetService  $DatasetService,
+		ShareService    $ShareService,
+		PanoramaService $PanoramaService
 	) {
 		$this->logger = $logger;
-		$this->ReportService = $reportService;
-		$this->DatasetService = $datasetService;
-		$this->ShareService = $shareService;
+		$this->ReportService = $ReportService;
+		$this->DatasetService = $DatasetService;
+		$this->ShareService = $ShareService;
+		$this->PanoramaService = $PanoramaService;
 	}
 
 	/**
@@ -41,6 +44,7 @@ class UserService {
 		$this->ReportService->deleteByUser($userId);
 		$this->DatasetService->deleteByUser($userId);
 		$this->ShareService->deleteByUser($userId);
+		$this->PanoramaService->deleteByUser($userId);
 		return true;
 	}
 }

@@ -89,6 +89,7 @@ class DatasetService {
 
 		foreach ($ownDatasets as &$ownDataset) {
 			$ownDataset['type'] = DatasourceController::DATASET_TYPE_INTERNAL_DB;
+			$ownDataset['item_type'] = ShareService::SHARE_ITEM_TYPE_DATASET;
 			$ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
 		}
 

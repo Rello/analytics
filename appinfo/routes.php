@@ -77,7 +77,8 @@ return [
 
         // Share
         ['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],
-        ['name' => 'share#read', 'url' => '/share/{reportId}', 'verb' => 'GET'],
+        ['name' => 'share#readReport', 'url' => '/share/report/{item_source}', 'verb' => 'GET'],
+		['name' => 'share#readPanorama', 'url' => '/share/panorama/{item_source}', 'verb' => 'GET'],
         ['name' => 'share#update', 'url' => '/share/{shareId}', 'verb' => 'PUT'],
         ['name' => 'share#delete', 'url' => '/share/{shareId}', 'verb' => 'DELETE'],
 

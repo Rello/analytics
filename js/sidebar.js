@@ -16,8 +16,8 @@ OCA.Analytics.Sidebar = {
     showSidebar: function (evt) {
         let navigationItem = evt.target;
         if (navigationItem.dataset.id === undefined) navigationItem = evt.target.closest('div');
-        const datasetId = navigationItem.dataset.id;
-        const datasetType = navigationItem.dataset.type;
+        let datasetId = navigationItem.dataset.id;
+        let datasetType = navigationItem.dataset.type;
         let appsidebar = document.getElementById('app-sidebar');
 
         if (appsidebar.dataset.id === datasetId && !OCA.Analytics.isAdvanced) {
@@ -39,6 +39,7 @@ OCA.Analytics.Sidebar = {
             }
             appsidebar.dataset.id = datasetId;
             appsidebar.dataset.type = datasetType;
+            appsidebar.dataset.item_type = navigationItem.dataset.item_type;
 
             document.getElementById('tabHeaderReport').classList.add('selected');
             document.querySelector('.tabHeader.selected').click();
@@ -848,7 +849,8 @@ OCA.Analytics.Sidebar.Data = {
 OCA.Analytics.Sidebar.Share = {
 
     tabContainerShare: function () {
-        const reportId = document.getElementById('app-sidebar').dataset.id;
+        let item_source = document.getElementById('app-sidebar').dataset.id;
+        let item_type = document.getElementById('app-sidebar').dataset.item_type;
 
         OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderShare').classList.add('selected');
@@ -861,7 +863,7 @@ OCA.Analytics.Sidebar.Share = {
         template.getElementById('linkShareList').appendChild(OCA.Analytics.Sidebar.Share.buildShareLinkRow(0, 0, true));
         template.getElementById('shareInput').addEventListener('keyup', OCA.Analytics.Sidebar.Share.searchShareeAPI);
 
-        let requestUrl = OC.generateUrl('apps/analytics/share/') + reportId;
+        let requestUrl = OC.generateUrl('apps/analytics/share/') + item_type + '/' + item_source;
         fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers(),
@@ -1040,7 +1042,8 @@ OCA.Analytics.Sidebar.Share = {
     },
 
     createShare: function (evt) {
-        const reportId = document.getElementById('app-sidebar').dataset.id;
+        let item_source = document.getElementById('app-sidebar').dataset.id;
+        let item_type = document.getElementById('app-sidebar').dataset.item_type;
         let shareType = evt.target.dataset.shareType;
         let shareUser = evt.target.dataset.user;
 
@@ -1049,7 +1052,8 @@ OCA.Analytics.Sidebar.Share = {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
-                reportId: reportId,
+                item_type: item_type,
+                item_source: item_source,
                 type: shareType,
                 user: shareUser,
             })

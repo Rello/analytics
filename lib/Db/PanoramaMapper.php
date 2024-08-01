@@ -53,7 +53,25 @@ class PanoramaMapper
         return $result;
     }
 
-    /**
+	/**
+	 * get reports for user
+	 * @param $userId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function indexByUser($userId)
+	{
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME)
+			->select('id')
+			->where($sql->expr()->eq('user_id', $sql->createNamedParameter($userId)));
+		$statement = $sql->executeQuery();
+		$result = $statement->fetchAll();
+		$statement->closeCursor();
+		return $result;
+	}
+
+	/**
      * create report
      * @param $name
      * @param $type

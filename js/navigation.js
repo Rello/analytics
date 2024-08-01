@@ -206,11 +206,13 @@ OCA.Analytics.Navigation = {
         a.classList.add(typeIcon);
         a.classList.add('svg');
 
+        // also add items to the navigation menu
         a.innerText = data['name'];
         a.dataset.id = data['id'];
         a.dataset.type = data['type'];
         a.dataset.name = data['name'];
         a.dataset.parent = data['parent'];
+        a.dataset.item_type = data['item_type'];
         li.appendChild(a);
 
         let ulSublist = document.createElement('ul');
@@ -325,6 +327,7 @@ OCA.Analytics.Navigation = {
         menu.dataset.id = data.id;
         menu.dataset.type = data.type;
         menu.dataset.name = data.name;
+        menu.dataset.item_type = data.item_type;
 
         let edit = navigationMenu.getElementById('navigationMenuEdit');
         edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicSettingsClicked);
@@ -614,6 +617,7 @@ OCA.Analytics.Navigation = {
         let navigationItem = evt.target.closest('div');
 
         document.getElementById('app-sidebar').dataset.id = navigationItem.dataset.id;
+        document.getElementById('app-sidebar').dataset.item_type = navigationItem.dataset.item_type;
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Share') + ' ' + navigationItem.dataset.name,

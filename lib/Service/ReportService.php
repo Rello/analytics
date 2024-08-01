@@ -82,7 +82,7 @@ class ReportService {
 	 */
 	public function index(): array {
 		$ownReports = $this->ReportMapper->index();
-		$sharedReports = $this->ShareService->getSharedReports();
+		$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
 		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
 
 		// get shared reports and remove duplicates
@@ -116,6 +116,7 @@ class ReportService {
 				$hasTag = 1;
 			}
 			$ownReport['favorite'] = $hasTag;
+			$ownReport['item_type'] = ShareService::SHARE_ITEM_TYPE_REPORT;
 			$ownReport = $this->VariableService->replaceTextVariables($ownReport);
 		}
 
@@ -297,7 +298,7 @@ class ReportService {
 	public function delete(int $reportId) {
 		$metadata = $this->ReportMapper->readOwn($reportId);
 		//$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
-		$this->ShareService->deleteShareByReport($reportId);
+		$this->ShareService->deleteSharesByItem(ShareService::SHARE_ITEM_TYPE_REPORT, $reportId);
 		$this->ThresholdMapper->deleteThresholdByReport($reportId);
 		$this->setFavorite($reportId, 'false');
 		$this->ReportMapper->delete($reportId);
@@ -320,7 +321,7 @@ class ReportService {
 	public function deleteByUser(string $userId) {
 		$reports = $this->ReportMapper->indexByUser($userId);
 		foreach ($reports as $report) {
-			$this->ShareService->deleteShareByReport($report['id']);
+			$this->ShareService->deleteSharesByItem(ShareService::SHARE_ITEM_TYPE_REPORT, $report['id']);
 			$this->ThresholdMapper->deleteThresholdByReport($report['id']);
 			$this->setFavorite($report['id'], 'false');
 			$this->ReportMapper->delete($report['id']);
@@ -336,7 +337,7 @@ class ReportService {
 	 */
 	public function getOwnFavoriteReports() {
 		$ownReports = $this->ReportMapper->index();
-		$sharedReports = $this->ShareService->getSharedReports();
+		$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
 		$favorites = $this->tagManager->load('analytics')->getFavorites();
 
 		// remove the favorite if the report is not existing anymore

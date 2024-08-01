@@ -1,12 +1,13 @@
 # Changelog
 
-## 4.14.1 - 2024-0x-xx
+## 4.15.0 - 2024-0x-xx
 ### Added
 - data source: Local JSON
 
 ### Changed
 - Chart.js v4.4.3
 - NC30 css compatibility
+- rework of sharing backend
 
 ### Fixed
 - excel data source: remove all-null columns

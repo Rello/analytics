@@ -12,6 +12,7 @@ namespace OCA\Analytics\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -21,9 +22,10 @@ use OCP\Migration\SimpleMigrationStep;
  */
 class Version4015Date20240714200000 extends SimpleMigrationStep
 {
-    public function __construct()
-    {
-    }
+	public function __construct(
+		private IDBConnection $connection,
+	) {
+	}
 
     /**
      * @param IOutput $output
@@ -65,12 +67,46 @@ class Version4015Date20240714200000 extends SimpleMigrationStep
 		}
 
 		$table = $schema->getTable('analytics_share');
-		if (!$table->hasColumn('panorama')) {
-			$table->addColumn('panorama', 'integer', [
+		if (!$table->hasColumn('item_type')) {
+			$table->addColumn('item_type', 'string', [
+				'notnull' => true,
+				'length' => 64,
+			]);
+		}
+		if (!$table->hasColumn('item_source')) {
+			$table->addColumn('item_source', 'integer', [
 				'notnull' => false,
 			]);
 		}
-
 		return $schema;
     }
+
+	/**
+	 * @param IOutput $output
+	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * @param array $options
+	 */
+	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options)
+	{
+
+		$update = $this->connection->getQueryBuilder();
+		$update->update('analytics_share')
+			   ->set('item_type', $update->createParameter('item_type'))
+			   ->set('item_source', $update->createParameter('item_source'))
+			   ->where($update->expr()->eq('id', $update->createParameter('id')));
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['id', 'report'])
+			  ->from('analytics_share');
+		$result = $query->executeQuery() ;
+
+		while ($row = $result->fetch()) {
+			$update
+				->setParameter('item_type', 'report')
+				->setParameter('item_source', $row['report'])
+				->setParameter('id', $row['id'])
+			;
+			$update->executeStatement();
+		}
+	}
 }

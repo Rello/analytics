@@ -24,6 +24,9 @@ class ShareService {
 	const SHARE_TYPE_USERGROUP = 2; // obsolete
 	const SHARE_TYPE_LINK = 3;
 	const SHARE_TYPE_ROOM = 10;
+	const SHARE_ITEM_TYPE_REPORT = 'report';
+	const SHARE_ITEM_TYPE_PANORAMA = 'panorama';
+	const SHARE_ITEM_TYPE_DATASET = 'dataset';
 
 	/** @var IUserSession */
 	private $userSession;
@@ -65,32 +68,36 @@ class ShareService {
 	/**
 	 * create a new share
 	 *
-	 * @param $reportId
+	 * @param $item_type
+	 * @param $item_source
 	 * @param $type
 	 * @param $user
 	 * @return bool
-	 * @throws \OCP\DB\Exception
+	 * @throws Exception
 	 */
-	public function create($reportId, $type, $user) {
+	public function create($item_type, $item_source, $type, $user) {
 		$token = null;
 		if ((int)$type === self::SHARE_TYPE_LINK) {
 			$token = $this->generateToken();
 		}
-		$this->ShareMapper->createShare($reportId, $type, $user, $token);
-		$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_SHARE);
+		$this->ShareMapper->createShare($item_type, $item_source, $type, $user, $token);
+
+		//TODO
+		//$this->ActivityManager->triggerEvent($item_source, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_SHARE);
 		return true;
 	}
 
 	/**
-	 * get all shares for a report
+	 * get all shares for a report or panorama
 	 *
-	 * @param $reportId
+	 * @param $item_source
+	 * @param $item_type
 	 * @return array
 	 * @throws Exception
 	 */
-	public function read($reportId) {
+	public function read($item_type, $item_source) {
 
-		$shares = $this->ShareMapper->getShares($reportId);
+		$shares = $this->ShareMapper->getShares($item_type , $item_source);
 		foreach ($shares as $key => $share) {
 			if ((int)$share['type'] === self::SHARE_TYPE_USER) {
 				if (!$this->userManager->userExists($share['uid_owner'])) {
@@ -128,12 +135,14 @@ class ShareService {
 	}
 
 	/**
-	 * get all reports or shared panoramas shared with user
+	 * get all shares for an item (report or panorama)
 	 *
+	 * @param $item_type
+	 * @return array|false
 	 * @throws Exception
 	 */
-	public function getSharedReports($getPanoramas = null) {
-		if ($getPanoramas === true) {
+	public function getSharedItems($item_type) {
+		if ($item_type === self::SHARE_ITEM_TYPE_PANORAMA) {
 			$sharedReports = $this->ShareMapper->getAllSharedPanoramas();
 		} else {
 			$sharedReports = $this->ShareMapper->getAllSharedReports();
@@ -175,7 +184,7 @@ class ShareService {
 		}
 
 		// no groupings of shares exist for panoramas
-		if ($getPanoramas === null) {
+		if ($item_type !== self::SHARE_ITEM_TYPE_PANORAMA) {
 			foreach ($reports as $report) {
 				// if it is a shared group, get all reports below
 				if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
@@ -201,7 +210,7 @@ class ShareService {
 	 * @throws Exception
 	 */
 	public function getSharedReport($reportId) {
-		$sharedReport = $this->getSharedReports();
+		$sharedReport = $this->getSharedItems(self::SHARE_ITEM_TYPE_REPORT);
 		if (in_array($reportId, array_column($sharedReport, "id"))) {
 			$key = array_search($reportId, array_column($sharedReport, 'id'));
 			return $sharedReport[$key];
@@ -221,7 +230,7 @@ class ShareService {
 	public function getSharedPanoramaReport($reportId) {
 		$foundReportId = 0;
 		$panoramaOwner = null;
-		$sharedPanoramas = $this->getSharedReports(true);
+		$sharedPanoramas = $this->getSharedItems(self::SHARE_ITEM_TYPE_PANORAMA);
 		foreach ($sharedPanoramas as $sharedPanorama) {
 			$panoramaOwner = $sharedPanorama['user_id'];
 			$pages = json_decode($sharedPanorama['pages'], true);
@@ -264,13 +273,15 @@ class ShareService {
 	}
 
 	/**
-	 * delete all shares for a report
+	 * delete all shares for a report or panorama
 	 *
-	 * @param $reportId
+	 * @param $item_type
+	 * @param $item_source
 	 * @return bool
+	 * @throws Exception
 	 */
-	public function deleteShareByReport($reportId) {
-		return $this->ShareMapper->deleteShareByReport($reportId);
+	public function deleteSharesByItem($item_type, $item_source) {
+		return $this->ShareMapper->deleteSharesByItem($item_type, $item_source);
 	}
 
 	/**

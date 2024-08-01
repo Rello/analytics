@@ -59,7 +59,7 @@ class PanoramaService {
 	 */
 	public function index(): array {
 		$ownPanorama = $this->PanoramaMapper->index();
-		$sharedPanoramas = $this->ShareService->getSharedReports(true);
+		$sharedPanoramas = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA);
 		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId');
 
 		// get shared reports and remove duplicates
@@ -77,6 +77,7 @@ class PanoramaService {
 				$hasTag = 1;
 			}
 			$ownReport['favorite'] = $hasTag;
+			$ownReport['item_type'] = ShareService::SHARE_ITEM_TYPE_PANORAMA;
 			$ownReport = $this->VariableService->replaceTextVariables($ownReport);
 		}
 
@@ -161,11 +162,10 @@ class PanoramaService {
 	 * @throws Exception
 	 */
 	public function deleteByUser(string $userId) {
-		// ToDo
-		$reports = $this->ReportMapper->indexByUser($userId);
-		foreach ($reports as $report) {
-			$this->ShareService->deleteShareByReport($report['id']);
-			$this->setFavorite($report['id'], 'false');
+		$panoramas = $this->PanoramaMapper->indexByUser($userId);
+		foreach ($panoramas as $panorama) {
+			$this->ShareService->deleteSharesByItem(ShareService::SHARE_ITEM_TYPE_PANORAMA, $panorama['id']);
+			$this->setFavorite($panorama['id'], 'false');
 		}
 		return true;
 	}
@@ -178,7 +178,7 @@ class PanoramaService {
 	 */
 	public function getOwnFavoriteReports() {
 		$ownReports = $this->PanoramaMapper->index();
-		//$sharedReports = $this->ShareService->getSharedReports();
+		//$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
 		$sharedReports = [];
 		$favorites = $this->tagManager->load('analyticsPanorama')->getFavorites();
 

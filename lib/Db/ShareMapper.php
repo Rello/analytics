@@ -47,12 +47,13 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME_REPORT, 'DS')
-            ->leftJoin('DS', self::TABLE_NAME, 'SH', $sql->expr()->eq('DS.id', 'SH.report'))
+            ->leftJoin('DS', self::TABLE_NAME, 'SHARE', $sql->expr()->eq('DS.id', 'SHARE.item_source'))
             ->select('DS.*')
-            ->addSelect('SH.permissions')
-            ->selectAlias('SH.domain', 'domain')
-            ->selectAlias('SH.password', 'password')
-            ->where($sql->expr()->eq('SH.token', $sql->createNamedParameter($token)));
+            ->addSelect('SHARE.permissions')
+            ->selectAlias('SHARE.domain', 'domain')
+            ->selectAlias('SHARE.password', 'password')
+            ->where($sql->expr()->eq('SHARE.token', $sql->createNamedParameter($token)))
+			->andWhere($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('report')));
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
@@ -68,13 +69,13 @@ class ShareMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME_REPORT, 'REPORT')
-            ->rightJoin('REPORT', self::TABLE_NAME, 'SHARE', $sql->expr()->eq('REPORT.id', 'SHARE.report'))
+            ->rightJoin('REPORT', self::TABLE_NAME, 'SHARE', $sql->expr()->eq('REPORT.id', 'SHARE.item_source'))
             ->select('REPORT.*')
             ->selectAlias('SHARE.id', 'shareId')
             ->selectAlias('SHARE.type', 'shareType')
             ->selectAlias('SHARE.uid_owner', 'shareUid_owner')
             ->addSelect('SHARE.permissions')
-			->where($sql->expr()->isNotNull('SHARE.report'));
+			->where($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('report')));
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -90,13 +91,13 @@ class ShareMapper
 	{
 		$sql = $this->db->getQueryBuilder();
 		$sql->from(self::TABLE_NAME_PANORAMA, 'PANORAMA')
-			->rightJoin('PANORAMA', self::TABLE_NAME, 'SHARE', $sql->expr()->eq('PANORAMA.id', 'SHARE.panorama'))
+			->rightJoin('PANORAMA', self::TABLE_NAME, 'SHARE', $sql->expr()->eq('PANORAMA.id', 'SHARE.item_source'))
 			->select('PANORAMA.*')
 			->selectAlias('SHARE.id', 'shareId')
 			->selectAlias('SHARE.type', 'shareType')
 			->selectAlias('SHARE.uid_owner', 'shareUid_owner')
 			->addSelect('SHARE.permissions')
-			->where($sql->expr()->isNotNull('SHARE.panorama'));
+			->where($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('panorama')));
 		$statement = $sql->executeQuery();
 		$result = $statement->fetchAll();
 		$statement->closeCursor();
@@ -104,21 +105,23 @@ class ShareMapper
 	}
 
 	/**
-     * Create a new share
-     * @param $reportId
-     * @param $type
-     * @param $uid_owner
-     * @param $token
-     * @param $parent
-     * @return bool
-     * @throws \OCP\DB\Exception
-     */
-    public function createShare($reportId, $type, $uid_owner, $token, $parent = null)
+	 * Create a new share
+	 * @param $item_type
+	 * @param $item_source
+	 * @param $type
+	 * @param $uid_owner
+	 * @param $token
+	 * @param null $parent
+	 * @return bool
+	 * @throws Exception
+	 */
+    public function createShare($item_type, $item_source, $type, $uid_owner, $token, $parent = null)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->Select('id')
-            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
+			->where($sql->expr()->eq('item_type', $sql->createNamedParameter($item_type)))
+            ->andWhere($sql->expr()->eq('item_source', $sql->createNamedParameter($item_source)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter($type)))
             ->andWhere($sql->expr()->eq('uid_owner', $sql->createNamedParameter($uid_owner)))
             ->andWhere($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())));
@@ -134,8 +137,9 @@ class ShareMapper
             $sql = $this->db->getQueryBuilder();
             $sql->insert(self::TABLE_NAME)
                 ->values([
-                    'report' => $sql->createNamedParameter($reportId),
-                    'type' => $sql->createNamedParameter($type),
+					'item_type' => $sql->createNamedParameter($item_type),
+                    'item_source' => $sql->createNamedParameter($item_source),
+					'type' => $sql->createNamedParameter($type),
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
                     'token' => $sql->createNamedParameter($token),
@@ -146,21 +150,23 @@ class ShareMapper
         return $sql->getLastInsertId();
     }
 
-    /**
-     * Get all shares of a report
-     * @param $reportId
-     * @return array
-     * @throws Exception
-     */
-    public function getShares($reportId)
+	/**
+	 * Get all shares of a report
+	 * @param $item_type
+	 * @param $item_source
+	 * @return array
+	 * @throws Exception
+	 */
+    public function getShares($item_type, $item_source)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('id', 'type', 'uid_owner', 'token', 'permissions', 'domain')
             ->selectAlias('password', 'pass')
             ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
-            ->andWhere($sql->expr()->neq('type', $sql->createNamedParameter(2)))
+            ->andWhere($sql->expr()->eq('item_type', $sql->createNamedParameter($item_type)))
+			->andWhere($sql->expr()->eq('item_source', $sql->createNamedParameter($item_source)))
+			->andWhere($sql->expr()->neq('type', $sql->createNamedParameter(2)))
             ->orderBy('id', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
@@ -175,12 +181,13 @@ class ShareMapper
      * @return array
      * @throws Exception
      */
-    public function getSharedReceiver($reportId)
+    public function getSharedReceiver($item_type, $item_source)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('uid_owner')
-            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
+			->where($sql->expr()->eq('item_type', $sql->createNamedParameter($item_type)))
+			->andWhere($sql->expr()->eq('item_source', $sql->createNamedParameter($item_source)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter(0)));
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
@@ -207,7 +214,8 @@ class ShareMapper
     }
 
     /**
-     * Update the password of a share
+     * Update the domain of a share
+	 * used for injecting charts into external sites
      * @param $shareId
      * @param $domain
      * @return bool
@@ -270,11 +278,12 @@ class ShareMapper
      * @return bool
      * @throws Exception
      */
-    public function deleteShareByReport($reportId)
+    public function deleteSharesByItem($item_type, $item_source)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
+			->where($sql->expr()->eq('item_type', $sql->createNamedParameter($item_type)))
+			->andWhere($sql->expr()->eq('item_source', $sql->createNamedParameter($item_source)));
         $sql->executeStatement();
         return true;
     }
