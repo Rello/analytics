@@ -297,7 +297,7 @@ class ReportService {
 	 */
 	public function delete(int $reportId) {
 		$metadata = $this->ReportMapper->readOwn($reportId);
-		//$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
+		$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_DELETE);
 		$this->ShareService->deleteSharesByItem(ShareService::SHARE_ITEM_TYPE_REPORT, $reportId);
 		$this->ThresholdMapper->deleteThresholdByReport($reportId);
 		$this->setFavorite($reportId, 'false');

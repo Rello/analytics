@@ -8,6 +8,7 @@
 
 namespace OCA\Analytics\Service;
 
+use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\PanoramaMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\DB\Exception;
@@ -27,6 +28,7 @@ class PanoramaService {
 	private $PanoramaMapper;
 	private $VariableService;
 	private $l10n;
+	private $ActivityManager;
 
 	const REPORT_TYPE_GROUP = 0;
 
@@ -38,7 +40,8 @@ class PanoramaService {
 		ShareService $ShareService,
 		PanoramaMapper $PanoramaMapper,
 		IConfig $config,
-		VariableService $VariableService
+		VariableService $VariableService,
+		ActivityManager $ActivityManager,
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
@@ -48,6 +51,7 @@ class PanoramaService {
 		$this->VariableService = $VariableService;
 		$this->config = $config;
 		$this->l10n = $l10n;
+		$this->ActivityManager = $ActivityManager;
 	}
 
 	/**
@@ -123,6 +127,7 @@ class PanoramaService {
 	 */
 	public function create(int $type, int $parent): int {
 		$reportId = $this->PanoramaMapper->create($this->l10n->t('New'), $type, $parent, '[]');
+		$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_PANORAMA, ActivityManager::SUBJECT_PANORAMA_ADD);
 		return $reportId;
 	}
 
@@ -150,6 +155,7 @@ class PanoramaService {
 	 * @throws Exception
 	 */
 	public function delete(int $reportId) {
+		$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_PANORAMA, ActivityManager::SUBJECT_PANORAMA_DELETE);
 		$this->PanoramaMapper->delete($reportId);
 		return 'true';
 	}

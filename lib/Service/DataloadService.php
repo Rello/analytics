@@ -258,7 +258,7 @@ class DataloadService
             'error' => $error,
         ];
 
-        $this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
+        //$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
         return $result;
     }
 
@@ -345,7 +345,7 @@ class DataloadService
                 'validate' => $action['validate'],
             ];
 
-            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
+            //if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
             return $result;
         } else {
             return false;
@@ -447,7 +447,7 @@ class DataloadService
                 'error' => $errorMessage,
             ];
 
-            if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+            //if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return $result;
         } else {
             return false;
@@ -488,7 +488,7 @@ class DataloadService
                 'error' => $result['error'],
             ];
 
-            if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+            //if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return $result;
         } else {
             return false;

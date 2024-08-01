@@ -117,7 +117,31 @@ class PanoramaMapper
         return $result;
     }
 
-    /**
+	/**
+	 * get single report
+	 * @param int $id
+	 * @return array
+	 * @throws Exception
+	 */
+	public function read(int $id)
+	{
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME)
+			->select('*')
+			->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+		$statement = $sql->executeQuery();
+		$result = $statement->fetch();
+		$statement->closeCursor();
+
+		if ($result !== false) {
+			$result['type'] = (int) $result['type'];
+			$result['parent'] = (int) $result['parent'];
+		}
+
+		return $result;
+	}
+
+	/**
      * update report
      * @param $id
      * @param $name

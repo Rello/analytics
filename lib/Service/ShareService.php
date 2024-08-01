@@ -82,8 +82,17 @@ class ShareService {
 		}
 		$this->ShareMapper->createShare($item_type, $item_source, $type, $user, $token);
 
-		//TODO
-		//$this->ActivityManager->triggerEvent($item_source, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_SHARE);
+		switch ($item_type) {
+			case ShareService::SHARE_ITEM_TYPE_REPORT:
+				$this->ActivityManager->triggerEvent($item_source, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_SHARE);
+				break;
+			case ShareService::SHARE_ITEM_TYPE_DATASET:
+				$this->ActivityManager->triggerEvent($item_source, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_SHARE);
+				break;
+			case ShareService::SHARE_ITEM_TYPE_PANORAMA:
+				$this->ActivityManager->triggerEvent($item_source, ActivityManager::OBJECT_PANORAMA, ActivityManager::SUBJECT_PANORAMA_SHARE);
+				break;
+		}
 		return true;
 	}
 
@@ -97,7 +106,7 @@ class ShareService {
 	 */
 	public function read($item_type, $item_source) {
 
-		$shares = $this->ShareMapper->getShares($item_type , $item_source);
+		$shares = $this->ShareMapper->getShares($item_type, $item_source);
 		foreach ($shares as $key => $share) {
 			if ((int)$share['type'] === self::SHARE_TYPE_USER) {
 				if (!$this->userManager->userExists($share['uid_owner'])) {

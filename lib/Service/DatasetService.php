@@ -164,8 +164,9 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function create($name, $dimension1, $dimension2, $value) {
-		//$this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
-		return $this->DatasetMapper->create($name, $dimension1, $dimension2, $value);
+		$datasetId = $this->DatasetMapper->create($name, $dimension1, $dimension2, $value);
+		$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
+		return $datasetId;
 	}
 
 	/**
@@ -216,6 +217,7 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function delete(int $datasetId) {
+		$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
 		$this->DatasetMapper->delete($datasetId);
 		$this->DataloadMapper->deleteByDataset($datasetId);
 		$this->StorageMapper->deleteByDataset($datasetId);
