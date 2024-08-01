@@ -7,9 +7,9 @@ OC.L10N.register(
     "Add" : "شامل کریں",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Share" : "تقسیم",
     "Save" : "حفظ",
     "Download" : "ڈاؤن لوڈ",
-    "Share" : "تقسیم",
     "Share link" : "اشتراک لنک",
     "Type" : "Type",
     "Date" : "Date",
@@ -21,6 +21,7 @@ OC.L10N.register(
     "Settings" : "سیٹینگز",
     "Name" : "اسم",
     "Advanced" : "ایڈوانسڈ",
+    "Description" : "تصریح",
     "Title" : "عنوان",
     "Unshare" : "شئیرنگ ختم کریں",
     "Password protection" : "Password protection"

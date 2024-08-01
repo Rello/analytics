@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Saved",
     "Delete" : "Delete",
+    "Done" : "Done",
     "Loading" : "Loading",
     "OK" : "OK",
     "Cancel" : "Cancel",
