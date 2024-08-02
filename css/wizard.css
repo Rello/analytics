@@ -285,12 +285,6 @@
     list-style: circle outside;
 }
 
-#analyticsWizard .page ul a:not(.button),
-a:not(.button):hover,
-a:not(.button):focus {
-    text-decoration: underline;
-}
-
 #analyticsWizard .page ul .button {
     display: inline-block;
 }

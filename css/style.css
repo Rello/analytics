@@ -5,13 +5,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-.h3 {
+h3 {
     font-size: 16px !important;
     font-weight: normal !important;
 }
 
+h2 {
+    font-size: 20px !important;
+}
+
+button, .button {
+    font-weight: normal !important;
+}
+
 #app-navigation .collapsible:before {
-    content: inherit;
+content: inherit;
 }
 
 /* show a down-triangle if a folder is opened */
