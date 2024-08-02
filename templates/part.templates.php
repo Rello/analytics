@@ -195,7 +195,7 @@
         <br>
     </div>
     <div class="sidebarHeaderClosed"><h3 id="datasetAiSectionHeaderH3"
-                                         class="sidebarPointer"><?php p($l->t('Nextcloud Assistant')); ?></h3></div>
+                                         class="sidebarPointer"><?php p($l->t('Nextcloud Assistant')); ?> <span class="betaFlag">Beta</span></h3></div>
     <div id="datasetAiSectionDisabled" class="userGuidance" style="display: none;">
 		<?php p($l->t('Context Chat is required')); ?>
     </div>
@@ -221,7 +221,7 @@
             <div style="display: table-cell;"><?php p($l->t('Manual index update')); ?></div>
             <div style="display: table-cell; width: 200px;">
                 <button id="sidebarDatasetAiUpdateButton" type="button">
-					<?php p($l->t('Go')); ?>
+					<?php p($l->t('Update')); ?>
                 </button>
             </div>
         </div>
@@ -681,7 +681,7 @@
         <span><?php p($l->t('Reset table')); ?></span>
     </button>
     <br><br>
-    <h3><?php p($l->t('Calculated Columns')); ?> - *beta*</h3>
+    <h3><?php p($l->t('Calculated Columns')); ?> <span class="betaFlag">Beta</span></h3>
     <textarea id="tableOptionsCalculatedColumns"></textarea>
 </template>
 

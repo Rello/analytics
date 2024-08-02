@@ -5,6 +5,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+.betaFlag {
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning);
+    border-radius: 16px;
+    padding: 0 9px;
+}
+
 h3 {
     font-size: 16px !important;
     font-weight: normal !important;
