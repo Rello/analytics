@@ -1,6 +1,7 @@
 { "translations": {
     "Saved" : "Saxlanıldı",
     "Delete" : "Sil",
+    "Done" : "Edildi",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
     "Add" : "Əlavə etmək",
@@ -33,6 +34,7 @@
     "Open documentation" : "Sənədləri aç",
     "Update" : "Yenilənmə",
     "Export" : "Çıxarış",
+    "Description" : "Açıqlanma",
     "Import" : "Əlavə et",
     "Title" : "Başlıq",
     "Copy" : "Kopyala",

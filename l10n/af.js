@@ -38,6 +38,7 @@ OC.L10N.register(
     "Open documentation" : "Open dokumentasie",
     "Update" : "Werk by",
     "Export" : "Voer uit",
+    "Description" : "Beskrywing",
     "Import" : "Voer In",
     "Others" : "Ander",
     "Setting" : "Instelling",

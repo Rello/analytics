@@ -1,6 +1,7 @@
 { "translations": {
     "Saved" : "Enrollet",
     "Delete" : "Lemel",
+    "Done" : "Graet",
     "Loading" : "Kargañ",
     "OK" : "OK",
     "Cancel" : "Arrest",
@@ -39,6 +40,7 @@
     "Advanced" : "Araokadennet",
     "Open documentation" : "Digeriñ an dielvadur",
     "Update" : "Hizivaat",
+    "Description" : "Deskrivadur",
     "Import" : "Emporzhiañ ",
     "Title" : "Titl",
     "Daily" : "Pemdeziek",
