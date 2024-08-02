@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "সংরক্ষণ করা হলো",
     "Delete" : "মুছে",
+    "Done" : "শেষ হলো",
     "OK" : "তথাস্তু",
     "Cancel" : "বাতির",
     "Add" : "যোগ করুন",
@@ -32,6 +33,7 @@ OC.L10N.register(
     "Advanced" : "সুচারু",
     "Update" : "পরিবর্ধন",
     "Export" : "রপ্তানি",
+    "Description" : "বিবরণ",
     "Import" : "আমদানি",
     "Title" : "শিরোনাম",
     "Daily" : "দৈনিক",

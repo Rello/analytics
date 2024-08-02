@@ -28,6 +28,7 @@ OC.L10N.register(
     "Advanced" : "Napredno",
     "Update" : "Ažuriraj",
     "Export" : "Izvezi",
+    "Description" : "Opis",
     "Import" : "Uvoz",
     "Title" : "Naslov",
     "Daily" : "Dnevno",

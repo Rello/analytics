@@ -74,7 +74,6 @@ OC.L10N.register(
     "View changelog" : "Xem nhật ký thay đổi",
     "Search" : "Tìm kiếm",
     "Showing 0 to 0 of 0 entries" : "Đang xem 0 đến 0 của 0 mục",
-    "You deleted report {report}" : "Bạn đã xoá báo cáo {report}",
     "Total" : "Tổng cộng",
     "Yes" : "Có",
     "No" : "Không",

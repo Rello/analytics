@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Enrollet",
     "Delete" : "Lemel",
+    "Done" : "Graet",
     "Loading" : "Kargañ",
     "OK" : "OK",
     "Cancel" : "Arrest",
@@ -41,6 +42,7 @@ OC.L10N.register(
     "Advanced" : "Araokadennet",
     "Open documentation" : "Digeriñ an dielvadur",
     "Update" : "Hizivaat",
+    "Description" : "Deskrivadur",
     "Import" : "Emporzhiañ ",
     "Title" : "Titl",
     "Daily" : "Pemdeziek",

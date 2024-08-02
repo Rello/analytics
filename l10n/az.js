@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Saxlanıldı",
     "Delete" : "Sil",
+    "Done" : "Edildi",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
     "Add" : "Əlavə etmək",
@@ -35,6 +36,7 @@ OC.L10N.register(
     "Open documentation" : "Sənədləri aç",
     "Update" : "Yenilənmə",
     "Export" : "Çıxarış",
+    "Description" : "Açıqlanma",
     "Import" : "Əlavə et",
     "Title" : "Başlıq",
     "Copy" : "Kopyala",
