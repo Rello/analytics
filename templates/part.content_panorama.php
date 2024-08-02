@@ -327,6 +327,8 @@
     }
 </style>
 <div id="analytics-content" class="container" style="width:100%;" hidden>
+    <div class="byAnalytics"><div class="analyticsDialogHeaderIcon" style="float: left;margin-right: 10px; margin-left: 10px;"></div><span style="font-size: 12px;">by Nextcloud Analytics</span>
+    </div>
     <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
 
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">

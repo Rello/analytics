@@ -83,6 +83,8 @@ OCA.Analytics.Navigation = {
     buildNewButton: function () {
         let li = document.createElement('li');
         li.classList.add('pinned', 'first-pinned');
+        let navigationEntrydiv = document.createElement('div');
+        navigationEntrydiv.classList.add('app-navigation-entry');
         let a = document.createElement('a');
         a.classList.add('icon-add', 'svg');
         a.id = 'newReportButton';
@@ -95,18 +97,22 @@ OCA.Analytics.Navigation = {
         } else {
             a.innerText = t('analytics', 'New report');
         }
-        li.appendChild(a);
+        li.appendChild(navigationEntrydiv);
+        navigationEntrydiv.appendChild(a);
         return li;
     },
 
     buildDatasetMaintenanceButton: function () {
         let li = document.createElement('li');
         li.classList.add('pinned', 'second-pinned');
+        let navigationEntrydiv = document.createElement('div');
+        navigationEntrydiv.classList.add('app-navigation-entry');
         let a = document.createElement('a');
         a.classList.add('icon-category-customization', 'svg');
         a.innerText = t('analytics', 'Dataset maintenance');
         a.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-        li.appendChild(a);
+        li.appendChild(navigationEntrydiv);
+        navigationEntrydiv.appendChild(a);
         return li;
     },
 
@@ -146,6 +152,8 @@ OCA.Analytics.Navigation = {
 
     buildOverviewButton: function () {
         let li = document.createElement('li');
+        let navigationEntrydiv = document.createElement('div');
+        navigationEntrydiv.classList.add('app-navigation-entry');
         let a = document.createElement('a');
         a.id = 'overviewButton'
         if (OCA.Analytics.isAdvanced) {
@@ -153,16 +161,19 @@ OCA.Analytics.Navigation = {
             a.innerText = t('analytics', 'Back to reports');
             a.addEventListener('click', OCA.Analytics.Navigation.handleBackToReportClicked);
         } else {
-            a.classList.add('icon-toggle-pictures', 'svg');
+            a.classList.add('icon-analytics-overview', 'svg');
             a.innerText = t('analytics', 'Overview');
             a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
         }
-        li.appendChild(a);
+        li.appendChild(navigationEntrydiv);
+        navigationEntrydiv.appendChild(a);
         return li;
     },
 
     buildNavigationRow: function (data) {
         let li = document.createElement('li');
+        let navigationEntrydiv = document.createElement('div');
+        navigationEntrydiv.classList.add('app-navigation-entry');
         let typeIcon;
         let typeINT = parseInt(data['type']);
 
@@ -180,10 +191,10 @@ OCA.Analytics.Navigation = {
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_report_handler);
         }
 
-        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE || typeINT === OCA.Analytics.TYPE_EXCEL) {
-            typeIcon = 'icon-file';
-        } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
-            typeIcon = 'icon-projects';
+        if (data['item_type'] === 'dataset') {
+            typeIcon = 'icon-analytics-dataset';
+        } else if (data['item_type'] === 'panorama') {
+            typeIcon = 'icon-analytics-panorama';
         } else if (typeINT === OCA.Analytics.TYPE_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
@@ -191,7 +202,7 @@ OCA.Analytics.Navigation = {
             a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
         } else {
-            typeIcon = 'icon-external';
+            typeIcon = 'icon-analytics-report';
         }
 
         if (data['isShare'] === 1) {
@@ -213,7 +224,8 @@ OCA.Analytics.Navigation = {
         a.dataset.name = data['name'];
         a.dataset.parent = data['parent'];
         a.dataset.item_type = data['item_type'];
-        li.appendChild(a);
+        li.appendChild(navigationEntrydiv);
+        navigationEntrydiv.appendChild(a);
 
         let ulSublist = document.createElement('ul');
         ulSublist.id = 'dataset-' + data['id'];
@@ -225,14 +237,14 @@ OCA.Analytics.Navigation = {
 
         if (OCA.Analytics.isAdvanced) {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
-            li.appendChild(divUtils);
+            navigationEntrydiv.appendChild(divUtils);
         } else {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
             let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
             if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
                 // do not add an empty menu. can occur for e.g. shared group folders
-                li.appendChild(divUtils);
-                li.appendChild(divMenu);
+                navigationEntrydiv.appendChild(divUtils);
+                navigationEntrydiv.appendChild(divMenu);
             }
         }
 
@@ -543,10 +555,10 @@ OCA.Analytics.Navigation = {
     },
 
     handleGroupClicked: function (evt) {
-        if (evt.target.parentNode.classList.contains('open')) {
-            evt.target.parentNode.classList.remove('open');
+        if (evt.target.parentNode.parentNode.classList.contains('open')) {
+            evt.target.parentNode.parentNode.classList.remove('open');
         } else {
-            evt.target.parentNode.classList.add('open');
+            evt.target.parentNode.parentNode.classList.add('open');
         }
         evt.stopPropagation();
     },

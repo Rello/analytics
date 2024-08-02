@@ -15,6 +15,7 @@
 - code style
 - dark mode problems #400
 - wrong decimal handling for certain numbers #397
+- navigation css
 
 ## 4.14.0 - 2024-06-20
 ### Added
