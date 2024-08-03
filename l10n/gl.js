@@ -270,7 +270,6 @@ OC.L10N.register(
     "Number of records" : "Número de rexistros",
     "Nextcloud Assistant" : "Asistente de Nextcloud",
     "Description" : "Descrición",
-    "Go" : "Ir",
     "Manual entry" : "Entrada manual",
     "Save data" : "Gardar datos",
     "Import" : "Importar",
