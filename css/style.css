@@ -461,17 +461,17 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-report {
     background-image: url(../img/report.svg);
-    filter: var(--background-invert-if-dark);
+    /*filter: var(--background-invert-if-dark);*/
 }
 
 .icon-analytics-dataset {
     background-image: url(../img/dataset.svg);
-    filter: var(--background-invert-if-dark);
+    /*filter: var(--background-invert-if-dark);*/
 }
 
 .icon-analytics-panorama {
     background-image: url(../img/panorama.svg);
-    filter: var(--background-invert-if-dark);
+    /*filter: var(--background-invert-if-dark);*/
 }
 
 .icon-analytics-charts-wizard {

@@ -179,7 +179,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: solid 1px black;
+    border: solid 1px var(--color-main-text);;
     margin: 5px;
 }
 
@@ -199,7 +199,7 @@
     padding: 20px 12px;
     background-color: var(--color-primary);
     background-size: contain;
-    background-image: var(--image-background, var(--image-background-plain, linear-gradient(40deg, #0082c9 0%, #30b6ff 100%)));
+    /*background-image: var(--image-background, var(--image-background-plain, linear-gradient(40deg, #0082c9 0%, #30b6ff 100%)));*/
     color: var(--color-primary-text);
     text-align: center;
 }
