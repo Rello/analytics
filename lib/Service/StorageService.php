@@ -49,7 +49,7 @@ class StorageService {
 		$availableDimensions = array();
 		$header = array();
 		$datasetMetadata = $this->DatasetService->read($datasetId);
-		if ($reportMetadata['filteroptions'] !== null) {
+		if ($reportMetadata && $reportMetadata['filteroptions'] !== null) {
 			$options = json_decode($reportMetadata['filteroptions'], true);
 		} else {
 			$options = null;

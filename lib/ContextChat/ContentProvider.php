@@ -32,6 +32,7 @@ class ContentProvider implements IContentProvider {
 		if (!$event instanceof ContentProviderRegisterEvent) {
 			return;
 		}
+		$this->logger->info('registering analytics content provider');
 		$event->registerContentProvider('analytics', 'report', ContentProvider::class);
 	}
 

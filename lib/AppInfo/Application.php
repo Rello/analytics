@@ -8,6 +8,7 @@
 
 namespace OCA\Analytics\AppInfo;
 
+use OCA\Analytics\ContextChat\ContentProvider;
 use OCA\Analytics\Dashboard\Widget;
 use OCA\Analytics\Flow\FlowOperation;
 use OCA\Analytics\Listener\LoadAdditionalScripts;
@@ -26,40 +27,38 @@ use OCP\User\Events\UserDeletedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use Psr\Container\ContainerInterface;
 use OCP\WorkflowEngine\Events\RegisterOperationsEvent;
+use OCA\ContextChat\Event\ContentProviderRegisterEvent;
 
-class Application extends App implements IBootstrap
-{
-    public const APP_ID = 'analytics';
+class Application extends App implements IBootstrap {
+	public const APP_ID = 'analytics';
 
-    public function __construct(array $urlParams = [])
-    {
-        parent::__construct(self::APP_ID, $urlParams);
-    }
+	public function __construct(array $urlParams = []) {
+		parent::__construct(self::APP_ID, $urlParams);
+	}
 
-    public function register(IRegistrationContext $context): void
-    {
-        $context->registerDashboardWidget(Widget::class);
-        $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
-        $context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
-        $context->registerSearchProvider(SearchProvider::class);
+	public function register(IRegistrationContext $context): void {
+		$context->registerDashboardWidget(Widget::class);
 
-        if (method_exists($context, 'registerReferenceProvider')) {
-            $context->registerReferenceProvider(ReferenceProvider::class);
-            $context->registerEventListener(RenderReferenceEvent::class, ReferenceListener::class);
-        }
+		$context->registerSearchProvider(SearchProvider::class);
 
-        $this->registerNotifications();
+		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
+		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
+		$context->registerEventListener(RegisterOperationsEvent::class, FlowOperation::class);
+		$context->registerEventListener(ContentProviderRegisterEvent::class, ContentProvider::class);
 
-        $context->registerEventListener(RegisterOperationsEvent::class, FlowOperation::class);
-    }
+		if (method_exists($context, 'registerReferenceProvider')) {
+			$context->registerReferenceProvider(ReferenceProvider::class);
+			$context->registerEventListener(RenderReferenceEvent::class, ReferenceListener::class);
+		}
 
-    public function boot(IBootContext $context): void
-    {
-     }
+		$this->registerNotifications();
+	}
 
-    protected function registerNotifications(): void
-    {
-        $notificationManager = \OC::$server->getNotificationManager();
-        $notificationManager->registerNotifierService(Notifier::class);
-    }
+	public function boot(IBootContext $context): void {
+	}
+
+	protected function registerNotifications(): void {
+		$notificationManager = \OC::$server->getNotificationManager();
+		$notificationManager->registerNotifierService(Notifier::class);
+	}
 }

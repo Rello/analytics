@@ -15,13 +15,13 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
-use OCA\Analytics\ContextChat\ContentManager;
+use OCA\Analytics\ContextChat\ContextChatManager;
 
 class DatasetController extends Controller {
 	private $logger;
 	private $DatasetService;
 	private $ReportService;
-	private $ContentManager;
+	private $ContextChatManager;
 
 	public function __construct(
 		$appName,
@@ -29,13 +29,13 @@ class DatasetController extends Controller {
 		LoggerInterface $logger,
 		DatasetService $DatasetService,
 		ReportService $ReportService,
-		ContentManager $ContentManager
+		ContextChatManager $ContextChatManager
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
 		$this->DatasetService = $DatasetService;
 		$this->ReportService = $ReportService;
-		$this->ContentManager = $ContentManager;
+		$this->ContextChatManager = $ContextChatManager;
 	}
 
 	/**
@@ -141,7 +141,7 @@ class DatasetController extends Controller {
 	 */
 	public function provider(int $datasetId) {
 		if ($this->DatasetService->isOwn($datasetId)) {
-			$this->ContentManager->submitContent($datasetId);
+			$this->ContextChatManager->submitContent($datasetId);
 			return new DataResponse('true');
 		} else {
 			return new DataResponse('false');

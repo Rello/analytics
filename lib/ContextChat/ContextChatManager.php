@@ -12,28 +12,32 @@ use OCP\DB\Exception;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use OCA\ContextChat\Public\ContentItem;
+use OCA\ContextChat\Public\ContentManager;
 use OCA\Analytics\Service\StorageService;
 use OCA\Analytics\Service\DatasetService;
 
-class ContentManager {
+class ContextChatManager {
 	private $userId;
 	private $logger;
 	private $l10n;
 	private $StorageService;
 	private $DatasetService;
+	private $ContentManager;
 
 	public function __construct(
 		$userId,
 		IL10N $l10n,
 		LoggerInterface $logger,
 		StorageService $StorageService,
-		DatasetService $DatasetService
+		DatasetService $DatasetService,
+		ContentManager $ContentManager
 	) {
 		$this->userId = $userId;
 		$this->l10n = $l10n;
 		$this->logger = $logger;
 		$this->StorageService = $StorageService;
 		$this->DatasetService = $DatasetService;
+		$this->ContentManager = $ContentManager;
 	}
 
 	/**
