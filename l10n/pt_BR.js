@@ -275,7 +275,6 @@ OC.L10N.register(
     "Explain the kind of data and the purpose of the data" : "Explique o tipo de dados e a finalidade dos dados",
     "Context Chat relevant" : "Contexto Bate-papo relevante",
     "Manual index update" : "Atualização manual do índice",
-    "Go" : "Ir",
     "Manual entry" : "Entrada manual",
     "Save data" : "Guardar dados",
     "Import" : "Importante",
