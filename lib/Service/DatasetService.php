@@ -35,6 +35,7 @@ class DatasetService {
 	private $rootFolder;
 	private $VariableService;
 	private $ReportMapper;
+	private $contextChatManager;
 
 	public function __construct(
 		$userId,
@@ -120,8 +121,7 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function read(int $datasetId) {
-		$ownDataset = $this->DatasetMapper->read($datasetId);
-		return $ownDataset;
+		return $this->DatasetMapper->read($datasetId);
 	}
 
 	/**
@@ -207,6 +207,21 @@ class DatasetService {
 		unset($result['dataset']['id'], $result['dataset']['user_id'], $result['dataset']['user_id'], $result['dataset']['parent']);
 		$data = json_encode($result);
 		return new DataDownloadResponse($data, $result['dataset']['name'] . '.export.txt', 'text/plain; charset=utf-8');
+	}
+
+	/**
+	 * Update the context chat provider
+	 *
+	 * @NoAdminRequired
+	 * @param int $datasetId
+	 * @return bool
+	 */
+	public function provider(int $datasetId) {
+		if (class_exists('OCA\ContextChat\Public\ContentManager')) {
+			$this->contextChatManager = \OC::$server->query('OCA\Analytics\ContextChat\ContextChatManager');
+			$this->contextChatManager->submitContent($datasetId);
+		}
+		return true;
 	}
 
 	/**

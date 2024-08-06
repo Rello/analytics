@@ -183,13 +183,13 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Reports')); ?></div>
             <div style="display: table-cell;">
-                <div id="sidebarDatasetStatusReports" class="sidebarInput"></div>
+                <div id="sidebarDatasetStatusReports" class="sidebarInput" style="border: 0px !important;"></div>
             </div>
         </div>
         <br>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Number of records')); ?></div>
-            <div style="display: table-cell;"><span id="sidebarDatasetStatusRecords" class="sidebarInput"></span>
+            <div style="display: table-cell;"><span id="sidebarDatasetStatusRecords"></span>
             </div>
         </div>
         <br>
@@ -205,10 +205,10 @@
                     <span>
                         <?php p($l->t('Description')); ?>
                     </span><br><span class="userGuidance">
-                        <?php p($l->t('Explain the kind of data and the purpose of the data')); ?>
+                        <?php p($l->t('Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing.')); ?>
                     </span>
                 </div>
-                <textarea style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput"></textarea>
+                <textarea rows="5" style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput"></textarea>
             </div>
         <div style="display: table-row;">
             <div style="display: table-cell; "><?php p($l->t('Context Chat relevant')); ?></div>

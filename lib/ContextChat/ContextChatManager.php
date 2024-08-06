@@ -44,10 +44,12 @@ class ContextChatManager {
 	 * Providers can use this to submit content for indexing in context chat
 	 *
 	 * @param int $datasetId
-	 * @return void
+	 * @return bool
 	 * @throws Exception
 	 */
-	public function submitContent(int $datasetId): void {
+	public function submitContent(int $datasetId): bool {
+		if (!$this->isActiveForDataset($datasetId)) return false;
+
 		$storageData = $this->StorageService->read($datasetId, null);
 		$datasetMetadata = $this->DatasetService->read($datasetId);
 
@@ -58,18 +60,24 @@ class ContextChatManager {
 		}, $storageData['data']);
 		$dataString = implode("\n", $data);
 
-		$content = 'This is a report of statistical data. ' . $datasetMetadata['subheader'] . '. ';
+		$content = 'This is a set of statistical data. The name of the report is: ' . $datasetMetadata['name'] . '. ';
+		$content .= 'The description of the data is: ' . $datasetMetadata['subheader'] . '. ';
 		$content .= 'The data comes in multiple rows which 3 columns separated by a comma. ';
 		$content .= 'The columns are ' . $columns . '. ';
 		$content .= 'The data is: ' . $dataString;
 
-		$contentItem = new ContentItem($datasetId, 'report', $datasetMetadata['name'], $content, 'Report', new \DateTime(), ['admin']);
+		$contentItem = new ContentItem($datasetId, 'report',
+			$datasetMetadata['name'],
+			$content, 'Report',
+			new \DateTime(),
+			[$this->userId]
+		);
 
 		$contentItems = [$contentItem];
 		//$this->ContentManager->removeContentForUsers('analytics', 'report', $dataset, ['admin']);
 		$this->logger->debug('adding item: ' . json_encode($contentItem));
 		$this->ContentManager->submitContent('analytics', $contentItems);
-		return;
+		return true;
 	}
 
 	/**
