@@ -40,6 +40,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "รหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง",
     "Password" : "รหัสผ่าน",
     "Favorites" : "รายการโปรด",
+    "Options" : "ตัวเลือก",
     "Translate" : "แปลภาษา",
     "Back" : "ย้อนกลับ",
     "Settings" : "การตั้งค่า",
