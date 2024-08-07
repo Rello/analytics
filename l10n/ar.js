@@ -283,7 +283,6 @@ OC.L10N.register(
     "Nextcloud Assistant" : "مُساعِد نكست كلاود Nextcloud Assistant",
     "Context Chat is required" : "سياقة المحادثة مطلوب",
     "Description" : "الوصف",
-    "Explain the kind of data and the purpose of the data" : "إشرَح نوع البيانات و الغرض منها",
     "Context Chat relevant" : "سياقات الدردشة ذات الصلة",
     "Manual index update" : "تحديث الفهرس يدويّاً",
     "Manual entry" : "إدخال يدوي",

@@ -283,7 +283,6 @@ OC.L10N.register(
     "Nextcloud Assistant" : "Nextcloud-Assistent",
     "Context Chat is required" : "Kontext-Chat ist erforderlich",
     "Description" : "Beschreibung",
-    "Explain the kind of data and the purpose of the data" : "Die Art und den Zweck der Daten erläutern",
     "Context Chat relevant" : "Kontext Chat relevant",
     "Manual index update" : "Manuelle Indexaktualisierung",
     "Manual entry" : "Manueller Eintrag",

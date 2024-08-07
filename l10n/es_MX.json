@@ -1,8 +1,10 @@
 { "translations": {
     "Dataset" : "Conjunto de datos",
     "Data" : "Datos",
+    "Automation" : "Automatización",
     "Data maintenance is not possible for this type of report" : "El mantenimiento de datos no es posible para este tipo de informe",
-    "Choose a data load from the list to change its settings" : "Escoge una carga de datos de la lista para cambiar sus configuraciones",
+    "Choose a data source from the dropdown and press \"+\"" : "Seleccione una fuente de datos desde el menú desplegable y presione \"+\"",
+    "Choose a data load from the list to change its settings" : "Escoja una carga de datos de la lista para cambiar sus configuraciones",
     "Value" : "Valor",
     "Saved" : "Guardado",
     "Delete data load" : "Eliminar carga de datos",
