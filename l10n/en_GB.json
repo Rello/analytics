@@ -281,6 +281,7 @@
     "Nextcloud Assistant" : "Nextcloud Assistant",
     "Context Chat is required" : "Context Chat is required",
     "Description" : "Description",
+    "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing." : "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing.",
     "Context Chat relevant" : "Context Chat relevant",
     "Manual index update" : "Manual index update",
     "Manual entry" : "Manual entry",

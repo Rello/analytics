@@ -281,6 +281,7 @@
     "Nextcloud Assistant" : "مُساعِد نكست كلاود Nextcloud Assistant",
     "Context Chat is required" : "سياقة المحادثة مطلوب",
     "Description" : "الوصف",
+    "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing." : "اشرح البيانات والغرض منها في جملة كاملة. هذا مطلوب لمساعد الذكاء الاصطناعي في فهم البيانات الأولية و لتحقيق أفضل معالجة.",
     "Context Chat relevant" : "سياقات الدردشة ذات الصلة",
     "Manual index update" : "تحديث الفهرس يدويّاً",
     "Manual entry" : "إدخال يدوي",

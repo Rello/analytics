@@ -283,6 +283,7 @@ OC.L10N.register(
     "Nextcloud Assistant" : "Nextcloud 小幫手",
     "Context Chat is required" : "需要情境聊天",
     "Description" : "描述",
+    "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing." : "用完整的句子解釋資料與其用途。這是人工智慧小幫手理解原始資料以供進一步處理所必須的。",
     "Context Chat relevant" : "相關的情境聊天",
     "Manual index update" : "手動索引更新",
     "Manual entry" : "手動輸入",

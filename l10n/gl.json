@@ -281,6 +281,7 @@
     "Nextcloud Assistant" : "Asistente de Nextcloud",
     "Context Chat is required" : "Precisase do contexto da parola",
     "Description" : "Descrición",
+    "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing." : "Explique os datos e a finalidade dos datos nunha oración completa. Isto é necesario para que o Asistente da IA comprenda os datos en bruto para o seu procesamento posterior.",
     "Context Chat relevant" : "Contexto relevante da parola",
     "Manual index update" : "Actualización manual do índice",
     "Manual entry" : "Entrada manual",
