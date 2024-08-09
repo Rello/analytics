@@ -283,6 +283,7 @@ OC.L10N.register(
     "Nextcloud Assistant" : "Cúntóir Nextcloud",
     "Context Chat is required" : "Tá Comhrá Comhthéacs ag teastáil",
     "Description" : "Cur síos",
+    "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing." : "Mínigh na sonraí agus cuspóir na sonraí i bpianbhreith iomlán. Tá sé seo ag teastáil chun go dtuigfidh an cúntóir AI na sonraí amh le haghaidh tuilleadh próiseála.",
     "Context Chat relevant" : "Comhrá Comhthéacs ábhartha",
     "Manual index update" : "Nuashonrú innéacs láimhe",
     "Manual entry" : "Iontráil láimhe",
