@@ -76,6 +76,8 @@ OC.L10N.register(
     "Save" : "Mentés",
     "All data will be deleted!" : "Az összes adat törölve lesz!",
     "Download" : "Letöltés",
+    "Export as PDF" : "Exportálás PDF-ként",
+    "Starting PDF export" : "PDF exportálás indítása",
     "Request could not be processed" : "A kérést nem sikerült feldolgozni",
     "Report" : "Jelentés",
     "Thresholds" : "Küszöbértékek",
