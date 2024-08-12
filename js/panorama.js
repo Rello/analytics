@@ -873,7 +873,7 @@ OCA.Analytics.Panorama = {
             OCA.Analytics.Notification.dialogClose
         );
 
-        const headerHeight = 30; // Fixed height that looks good
+        const headerHeight = 35; // Fixed height that looks good
         const pages = document.querySelectorAll('.flex-container');
         const pdf = new jspdf.jsPDF({
             orientation: 'landscape',
@@ -885,6 +885,9 @@ OCA.Analytics.Panorama = {
             t('analytics', 'Starting PDF export')
         );
 
+        // getting "by analytics"
+        const byCanvas = await html2canvas(document.getElementById('byAnalyticsImg'), {scale: 2});
+        const byImgData = byCanvas.toDataURL('image/png');
 
         try {
             const headerText = document.querySelector('.panoramaHeader').textContent;
@@ -910,10 +913,13 @@ OCA.Analytics.Panorama = {
                 }
 
                 // Calculate the y position for the header
-                pdf.setFontSize(12); // Adjust as needed
-                const textYOffset = 20; // Adjust based on your headerHeight and padding
+                pdf.setFontSize(14); // Adjust as needed
+                const textYOffset = 23; // Adjust based on your headerHeight and padding
 
                 // Add the header text centered at the top of each PDF page
+                pdf.setDrawColor(0);
+                pdf.setFillColor(229, 239, 245);
+                pdf.rect(1, 1, pdf.internal.pageSize.getWidth(), headerHeight, 'F');
                 pdf.text(headerText, pdf.internal.pageSize.getWidth() / 2, textYOffset, { align: 'center' });
 
                 // Determine the scale factor to fit the image within the PDF page size
@@ -931,6 +937,12 @@ OCA.Analytics.Panorama = {
 
                 // Add the page content centered and scaled
                 pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');
+
+                // Add the Analytics branding
+                pdf.addImage(byImgData, 'PNG', 12, pdf.internal.pageSize.getHeight() - 31, byCanvas.width /2 , byCanvas.height / 2, 100, 'FAST');
+                pdf.setFontSize(10);
+                pdf.text('Analytics', 64, pdf.internal.pageSize.getHeight() - 15, { align: 'center' });
+
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'page {pageCount} added to pdf', {pageCount: index}));
             }
 

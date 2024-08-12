@@ -49,8 +49,8 @@ OCA.Analytics.Filter = {
         }
 
         document.body.insertAdjacentHTML('beforeend',
-            '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
-            + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
+            '<div id="analytics_dialog_overlay" class="analyticsDialogDim"></div>'
+            + '<div id="analytics_dialog_container" class="analyticsDialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
             + '<a class="analyticsDialogClose" id="btnClose"></a>'
             + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
@@ -108,8 +108,8 @@ OCA.Analytics.Filter = {
     openFilterDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
         document.body.insertAdjacentHTML('beforeend',
-            '<div id="analytics_dialog_overlay" class="oc-dialog-dim"></div>'
-            + '<div id="analytics_dialog_container" class="oc-dialog" style="position: fixed;">'
+            '<div id="analytics_dialog_overlay" class="analyticsDialogDim"></div>'
+            + '<div id="analytics_dialog_container" class="analyticsDialog" style="position: fixed;">'
             + '<div id="analytics_dialog">'
             + '<a class="analyticsDialogClose" id="btnClose"></a>'
             + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
