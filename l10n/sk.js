@@ -116,7 +116,7 @@ OC.L10N.register(
     "Use this endpoint to submit data via an API:" : "Tento koncový bod použite na odosielanie údajov prostredníctvom rozhrania API:",
     "Add share link" : "Pridať odkaz na zdieľanie",
     "Share link" : "Zdieľať odkaz",
-    "Link copied" : "Odkaz skopírovaný",
+    "Link copied" : "Odkaz bol skopírovaný",
     "Column" : "Stĺpec",
     "new record" : "nový záznam",
     "Missing data" : "Chýbajúce údaje",
