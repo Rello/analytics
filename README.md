@@ -41,7 +41,7 @@ Apps can register own, external data sources via an event listener
 - [Marcel Scherello](https://github.com/rello) (author, project leader)
 
 ## Support
-Thank you to PhpStorm from [JetBrains](https://www.jetbrains.com/?from=AudioPlayerforNextcloudandownCloud) <br>
+Supported by PhpStorm by [JetBrains](https://www.jetbrains.com/?from=AudioPlayerforNextcloudandownCloud)<br>
 <img src="https://raw.githubusercontent.com/rello/analytics/master/screenshots/jetbrains.svg" alt="Main" width="100" title="Analytics">
 
 ---
