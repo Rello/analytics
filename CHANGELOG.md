@@ -3,6 +3,7 @@
 ## 4.15.0 - 2024-0x-xx
 ### Added
 - data source: Local JSON
+- full screen presentation mode
 
 ### Changed
 - Chart.js v4.4.3

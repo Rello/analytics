@@ -46,9 +46,9 @@
     .pages {
         display: flex;
         width: 200%;
-        height: 100%;
         transition: margin-left 0.5s ease;
         margin-left: 0;
+        height: calc(100% - 45px);
     }
     .flex-container {
         width: 100%;
@@ -326,11 +326,7 @@
         display: none !important;
     }
 </style>
-<div id="analytics-content" class="container" style="width:100%;" hidden>
-    <div class="byAnalytics">
-        <img id="byAnalyticsImg" style="width: 40px; margin-right: 10px;margin-left: 10px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-dark.svg') ?>">
-        <span style="font-size: 15px;">Analytics</span>
-    </div>
+<div id="analytics-content" class="" style="width:100%; height: 100%;" hidden>
     <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
 
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">

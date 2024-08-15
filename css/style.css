@@ -5,6 +5,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+:root {
+    --color-analytics-primary: #1d7343;
+    --color-analytics-shadow: #1d7343;
+}
+
 .betaFlag {
     color: var(--color-warning);
     border: 1px solid var(--color-warning);
@@ -527,6 +532,16 @@ div.dt-container .dt-paging .dt-paging-button {
     filter: var(--background-invert-if-dark);
 }
 
+.icon-analytics-fullscreen {
+    background-image: url(../img/fullscreen.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-fullscreenExit {
+    background-image: url(../img/fullscreenExit.svg);
+    filter: var(--background-invert-if-dark);
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;
@@ -637,21 +652,27 @@ div.dt-container .dt-paging .dt-paging-button {
     cursor: pointer;
 }
 
+#analyticsDialogContent {
+    padding: 10px;
+}
+
 .analyticsDialogHeader {
     color: var(--color-text-light);
     display: flex;
-    font-size: 20px;
+    font-size: 22px;
+    font-weight: bold;
     margin-bottom: 12px;
+    line-height: 23px;
 }
 
 .analyticsDialogHeaderIcon {
-    background-image: url(../img/app-dark.svg);
+    background-image: url(../img/app-color.svg);
     filter: var(--background-invert-if-dark);
-    background-size: 20px 20px;
+    background-size: 23px 23px;
     background-position: 0;
     background-repeat: no-repeat;
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
 }
 
 .analyticsDialogClose {
@@ -668,7 +689,6 @@ div.dt-container .dt-paging .dt-paging-button {
     background: var(--color-main-background);
     color: var(--color-main-text);
     border-radius: var(--border-radius-large);
-    box-shadow: 0 0 30px var(--color-box-shadow);
     padding: 24px;
     z-index: 10000;
     font-size: 100%;
@@ -684,8 +704,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .analyticsDialogDim {
-    background-color: #000;
-    opacity: .2;
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
     position: fixed;
     top: 0;
@@ -754,7 +773,6 @@ div.dt-container .dt-paging .dt-paging-button {
     grid-template-columns: 1fr 2fr;
     grid-template-rows: auto; /* Define the height for rows and measures */
     gap: 10px;
-    padding: 10px;
 }
 .table-layout > div {
     border: 1px dashed #000;
@@ -828,6 +846,30 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .byAnalytics {
     z-index: 9999;
-    position: fixed;
-    bottom: 20px;
+    position: relative;
+    bottom: 10px;
+    align-items: center;
+    display: flex;
+    left: 10px;
+}
+
+.analyticsFullscreenIcon {
+    position: relative;
+    left: 10px;
+    top: 10px;
+    float: left;
+}
+
+#content.analyticsFullscreen {
+    margin-top: var(--body-container-margin) !important;
+    height: calc(100% - var(--body-container-margin)* 2);
+}
+
+#header.analyticsFullscreen,
+#app-navigation.analyticsFullscreen{
+    display:none !important;
+}
+
+#byAnalytics.analyticsFullscreen {
+    display: none;
 }

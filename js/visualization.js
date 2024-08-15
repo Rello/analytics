@@ -666,4 +666,13 @@ OCA.Analytics.Visualization = {
         }
     },
 
+    toggleFullscreen: function () {
+            document.getElementById('header').classList.toggle('analyticsFullscreen');
+            document.getElementById('app-navigation').classList.toggle('analyticsFullscreen');
+            document.getElementById('content').classList.toggle('analyticsFullscreen');
+            document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
+
+            document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreen');
+            document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreenExit');
+    },
 }

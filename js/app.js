@@ -1339,6 +1339,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
             document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
             document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
+            document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
         }
     } else {
         OCA.Analytics.Backend.getData();

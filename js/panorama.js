@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Visualization.hideElement('analytics-warning');
     OCA.Analytics.Visualization.showElement('analytics-intro');
 
+    document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+
     // register handlers for the navigation bar
     OCA.Analytics.Navigation.registerHandler('create', function () {
         OCA.Analytics.Panorama.newPanorama();
@@ -886,7 +888,7 @@ OCA.Analytics.Panorama = {
         );
 
         // getting "by analytics"
-        const byCanvas = await html2canvas(document.getElementById('byAnalyticsImg'), {scale: 2});
+        const byCanvas = await html2canvas(document.getElementById('byAnalyticsImg'), {scale: 3});
         const byImgData = byCanvas.toDataURL('image/png');
 
         try {
@@ -939,9 +941,10 @@ OCA.Analytics.Panorama = {
                 pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');
 
                 // Add the Analytics branding
-                pdf.addImage(byImgData, 'PNG', 12, pdf.internal.pageSize.getHeight() - 31, byCanvas.width /2 , byCanvas.height / 2, 100, 'FAST');
-                pdf.setFontSize(10);
-                pdf.text('Analytics', 64, pdf.internal.pageSize.getHeight() - 15, { align: 'center' });
+                pdf.addImage(byImgData, 'PNG', pdf.internal.pageSize.getWidth() - 90, pdf.internal.pageSize.getHeight() - 30, 30 , 30, 100, 'MEDIUM');
+                pdf.setFontSize(8);
+                pdf.text('Created with', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 22);
+                pdf.text('Analytics', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 12);
 
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'page {pageCount} added to pdf', {pageCount: index}));
             }

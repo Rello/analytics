@@ -37,10 +37,15 @@ Util::addScript('analytics', 'userGuidance');
 </div>
 
 <div id="app-content">
+    <div id="fullscreenToggle" class="analyticsFullscreenIcon icon-analytics-fullscreen"></div>
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>
     <?php print_unescaped($this->inc('part.content')); ?>
+    <div id="byAnalytics" class="byAnalytics analyticsFullscreen">
+        <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;margin-left: 10px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
+        <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
+    </div>
 </div>
 <?php print_unescaped($this->inc('part.sidebar')); ?>
 <div>
