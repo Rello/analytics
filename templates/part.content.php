@@ -7,15 +7,15 @@
  */
 
 ?>
-<div id="analytics-content" style="width:100%; padding: 20px 5%;" hidden>
+<div id="analytics-content" style="width:100%; padding: 20px 30px;" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
     <input type="hidden" name="panorama" value="false" id="panorama">
-    <h2 id="reportHeader"></h2>
-    <h3 id="reportSubHeader" hidden></h3>
+	<?php print_unescaped($this->inc('part.menu')); ?>
+    <span id="reportHeader"></span>
+    <span id="reportSubHeader" hidden></span>
     <div id="reportPlaceholder"></div>
-    <?php print_unescaped($this->inc('part.menu')); ?>
     <div id="chartContainer">
     </div>
     <div id="chartLegendContainer">

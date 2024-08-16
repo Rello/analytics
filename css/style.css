@@ -214,18 +214,24 @@ content: inherit;
 
 #reportHeader {
     text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
 }
 
 #reportMenuBar {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 #reportSubHeader {
     text-align: center;
+    font-size: 16px;
+    display: block;
 }
 
 #reportPlaceholder {
-    height: 5px;
+    height: 20px;
 }
 
 #filterContainer {
@@ -361,12 +367,12 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .analytics-options {
-    opacity: 0.5;
-    background-size: 20px;
+    /*opacity: 0.5;*/
+    background-size: 24px;
     margin-left: 10px;
     float: right;
-    height: 22px;
-    width: 22px;
+    height: 24px;
+    width: 24px;
 }
 
 .analytics-options:hover {
@@ -539,6 +545,11 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-fullscreenExit {
     background-image: url(../img/fullscreenExit.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-more {
+    background-image: url(../img/more.svg);
     filter: var(--background-invert-if-dark);
 }
 
@@ -850,7 +861,7 @@ div.dt-container .dt-paging .dt-paging-button {
     bottom: 10px;
     align-items: center;
     display: flex;
-    left: 10px;
+    left: 30px;
 }
 
 .analyticsFullscreenIcon {

@@ -8,8 +8,9 @@
 
 ?>
 <div id="reportMenuBar" style="position: relative; height: 24px;">
-        <span id="reportMenuIcon" class="analytics-options icon-more has-tooltip"
-              title="<?php p($l->t('Options')); ?>"></span>
+    <div id="reportMenuIcon" class="analytics-options icon-analytics-more has-tooltip"
+         title="<?php p($l->t('Options')); ?>"></div>
+    <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
     <div id="reportMenu" class="popovermenu" style="top: 33px; right: -5px;">
         <ul id="reportMenuMain">
             <li>
@@ -140,7 +141,7 @@
                     </select>
                 </span>
             </li>
-       </ul>
+        </ul>
     </div>
     <div id="saveIcon" class="analytics-options icon-analytics-save-warning has-tooltip"
          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>

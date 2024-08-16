@@ -13,8 +13,9 @@
         text-align: center;
         background-color: var(--color-primary-light);
         font-weight: bold;
-        padding: 10px;
+        padding: 10px 80px;;
     }
+
     .panoramaSubHeaderRow {
         text-align: center;
     }
@@ -120,10 +121,10 @@
         opacity: 0.8;
     }
 
-    .edit {
+    #optionBtnContainer {
         z-index: 9999;
-        position: fixed;
-        top: 60px;
+        position: relative;
+        top: 10px;
         right: 20px;
         font-size: 24px;
     }
@@ -327,6 +328,12 @@
     }
 </style>
 <div id="analytics-content" class="" style="width:100%; height: 100%;" hidden>
+    <div id="optionBtnContainer" class="edit">
+        <div id="optionBtn" class="analytics-options icon-analytics-more has-tooltip"
+             title="<?php p($l->t('Options')); ?>"></div>
+        <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
+    </div>
+
     <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
 
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">
@@ -373,10 +380,6 @@
                 <button type="button" id="pictureInputButton">Choose</button>
             </div>
         </div>
-    </div>
-
-    <div id="optionBtnContainer" class="edit">
-        <span class="nav-item" id="optionBtn">...</span>
     </div>
 
     <div id="navBtnContainer" class="navigation">

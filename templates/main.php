@@ -37,7 +37,6 @@ Util::addScript('analytics', 'userGuidance');
 </div>
 
 <div id="app-content">
-    <div id="fullscreenToggle" class="analyticsFullscreenIcon icon-analytics-fullscreen"></div>
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>

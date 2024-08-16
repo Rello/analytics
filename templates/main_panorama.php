@@ -35,7 +35,6 @@ Util::addScript('analytics', '3rdParty/html2canvas.min');
 </div>
 
 <div id="app-content">
-    <div id="fullscreenToggle" class="analyticsFullscreenIcon icon-analytics-fullscreen"></div>
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>
