@@ -157,6 +157,8 @@ OC.L10N.register(
     "Showing 0 to 0 of 0 entries" : "Laat 0 tot 0 van 0 waarden zien",
     "Analytics" : "Analytics",
     "You created a new report: {report}" : "Je hebt een nieuw rapport aangemaakt: {report}",
+    "You deleted the report {report}" : "U heeft het rapport verwijderd",
+    "You shared the report {report}" : "U heeft het rapport gedeeld",
     "You have added new data to dataset {report}" : "Je hebt nieuwe data toegevoegd aan dataset {report}",
     "has added new data to dataset {report}" : "heeft nieuwe data aan dataset {report} toegevoegd",
     "You have imported data in dataset {report}" : "Je hebt de data in dataset {report} geïmporteerd",
