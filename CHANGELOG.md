@@ -10,6 +10,7 @@
 - NC30 css compatibility
 - rework of sharing backend
 - no activities for added data anymore
+- excel data source: handling of time and % values
 
 ### Fixed
 - excel data source: remove all-null columns

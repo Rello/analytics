@@ -99,12 +99,13 @@ class LocalExcel implements IDatasource {
 		// these ranges are read and linked
 		$ranges = str_getcsv($option['range']);
 		foreach ($ranges as $range) {
-			$values = $spreadsheet->getActiveSheet()->rangeToArray($range,                // The worksheet range that we want to retrieve
-				null,         // Value that should be returned for empty cells
-				true,   // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
-				true,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
-				false       // Should the array be indexed by cell row and cell column
-			);
+			$values = $spreadsheet->getActiveSheet()
+								  ->rangeToArray($range, // The worksheet range that we want to retrieve
+									  null,         // Value that should be returned for empty cells
+									  true,   // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
+									  true,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
+									  false       // Should the array be indexed by cell row and cell column
+								  );
 
 			$values = $this->convertExcelDate($spreadsheet, $values, $range);
 
@@ -173,12 +174,15 @@ class LocalExcel implements IDatasource {
 	 */
 	private function convertExcelDate($spreadsheet, $values, $range): array {
 		$map = [
-			"yyyy" => "Y",
-			"mm" => "m",
-			"dd" => "d",
-			"hh" => "H",
-			"MM" => "i",
-			"ss" => "s"
+			"yyyy" => "Y",  // Four-digit year
+			"yy" => "y",    // Two-digit year
+			"MM" => "m",    // Two-digit month
+			"mm" => "i",    // Two-digit minutes (lowercase)
+			"dd" => "d",    // Two-digit day
+			"d" => "j",     // Day without leading zeros
+			"hh" => "H",    // 24-hour format
+			"h" => "G",     // 12-hour format
+			"ss" => "s"     // Seconds
 		];
 
 		$start = str_getcsv($range, ':');
@@ -192,12 +196,32 @@ class LocalExcel implements IDatasource {
 				$rowNumber = $rowIndex + $startRow;
 				$coordinate = $columnLetter . $rowNumber;
 				$cell = $spreadsheet->getActiveSheet()->getCell($coordinate);
-				if (Date::isDateTime($cell)) {
-					$date = Date::excelToDateTimeObject($cell->getValue());
-					$excelFormat = $cell->getStyle()->getNumberFormat()->getFormatCode();
+				$excelFormat = $cell->getStyle()->getNumberFormat()->getFormatCode();
+
+				if (preg_match('/%/', $excelFormat)) {
+					// Convert percentage to decimal value
+					$cellValue = $cell->getCalculatedValue();
+					$values[$rowIndex][$columnIndex] = round($cellValue, 2);
+				} elseif (Date::isDateTime($cell)) {
 					$excelFormat = rtrim($excelFormat, ";@");
-					$targetFormat = strtr($excelFormat, $map);
-					$values[$rowIndex][$columnIndex] = $date->format($targetFormat);
+
+					// Check if it's a duration format (e.g., h:mm, [h]:mm, h:mm:ss)
+					if (preg_match('/[h]+:?[m]+:?[s]*/i', $excelFormat)) {
+						// Convert time duration to decimal
+						$excelTime = $cell->getCalculatedValue();
+						$totalHours = Date::excelToDateTimeObject($excelTime)->format('G'); // Extract hours
+						$totalMinutes = Date::excelToDateTimeObject($excelTime)->format('i'); // Extract minutes
+						$totalSeconds = Date::excelToDateTimeObject($excelTime)->format('s'); // Extract seconds
+
+						// Convert the time to decimal (minutes)
+						$totalMinutesValue = ($totalHours * 60) + $totalMinutes + ($totalSeconds / 60);
+						$values[$rowIndex][$columnIndex] = round($totalMinutesValue, 2); // Rounded to 2 decimal places
+					} else {
+						// Regular date formatting
+						$date = Date::excelToDateTimeObject($cell->getCalculatedValue());
+						$targetFormat = strtr($excelFormat, $map);
+						$values[$rowIndex][$columnIndex] = $date->format($targetFormat);
+					}
 				}
 			}
 		}
