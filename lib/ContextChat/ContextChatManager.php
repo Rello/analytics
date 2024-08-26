@@ -66,11 +66,14 @@ class ContextChatManager {
 		$content .= 'The columns are ' . $columns . '. ';
 		$content .= 'The data is: ' . $dataString;
 
-		$contentItem = new ContentItem($datasetId, 'report',
+		$contentItem = new ContentItem(
+			$datasetId,
+			'report',
 			$datasetMetadata['name'],
-			$content, 'Report',
+			$content,
+			'Report',
 			new \DateTime(),
-			[$this->userId]
+			[$datasetMetadata['user_id']]
 		);
 
 		$contentItems = [$contentItem];
