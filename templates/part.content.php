@@ -7,7 +7,7 @@
  */
 
 ?>
-<div id="analytics-content" style="width:100%; padding: 20px 30px;" hidden>
+<div id="analytics-content" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
@@ -26,54 +26,11 @@
     <div id="noDataContainer" hidden>
         <?php p($l->t('No data found')); ?>
     </div>
-</div>
-<div id="analytics-intro" style="padding: 30px" hidden>
-    <h2><?php p($l->t('Analytics')); ?></h2>
-    <br>
-    <h3><?php p($l->t('Favorites')); ?></h3>
-    <div>
-        <ul id="ulAnalytics" style="width: 100%;"></ul>
+    <div style="margin-bottom: 45px"></div>
+    <div id="byAnalytics" class="byAnalytics analyticsFullscreen">
+        <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;margin-left: 10px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
+        <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
     </div>
-    <br>
-    <h3><?php p($l->t('Quickstart')); ?></h3>
-    <div>
-        <ul id="ulQuickstart" style="width: 100%;">
-            <li style="display: inline-block; margin: 10px;">
-                <div class="infoBox" id="infoBoxReport"><img height="80px" width="80px"
-                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
-                            alt="infoReport">
-                    <div class="infoBoxHeader"><?php p($l->t('New Report')); ?></div>
-                </div>
-            </li>
-            <li style="display: inline-block; margin: 10px;">
-                <div class="infoBox" id="infoBoxIntro"><img height="80px" width="80px"
-                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoIntro.svg') ?>"
-                            alt="infoIntro">
-                    <div class="infoBoxHeader"><?php p($l->t('Intro')); ?></div>
-                </div>
-            </li>
-            <li style="display: inline-block; margin: 10px;">
-                <div class="infoBox" id="infoBoxWiki"><img height="80px" width="80px"
-                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoWiki.svg') ?>"
-                            alt="infoWiki">
-                    <div class="infoBoxHeader"><?php p($l->t('Wiki')); ?></div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <br>
-</div>
-<div id="analytics-warning" style="width:50%; padding: 50px">
-    <h2><?php p($l->t('Analytics')); ?></h2>
-    <br>
-    <h3><?php p($l->t('Javascript issue')); ?></h3>
-    <span><?php p($l->t('If you see this message, please disable AdBlock/uBlock for this domain (only).')); ?></span>
-    <br>
-    <span><?php p($l->t('The EasyPrivacy list is blocking some scripts because of a wildcard \'*analytics*\' string filter.')); ?></span>
-    <br>
-    <br>
-    <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
-       target="_blank"><?php p($l->t('More Information …')); ?></a>
 </div>
 <div id="analytics-loading" style="width:100%; padding: 100px 5%;" hidden>
     <div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>

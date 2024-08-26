@@ -6,8 +6,8 @@
  */
 
 :root {
-    --color-analytics-primary: #1d7343;
-    --color-analytics-shadow: #1d7343;
+    --color-analytics-primary: #12426E;
+    --color-analytics-shadow: #12426E;
 }
 
 .betaFlag {
@@ -186,6 +186,12 @@ content: inherit;
     display: none;
 }
 
+#analytics-content {
+    width: 100%;
+    height: 100%;
+    /*padding: 20px 30px;*/
+}
+
 #app-sidebar .close {
     position: absolute;
     top: 0;
@@ -222,6 +228,10 @@ content: inherit;
 
 #reportMenuBar {
     margin-bottom: 5px;
+    position: relative;
+    height: 24px;
+    padding-top: 5px;
+    padding-right: 30px;
 }
 
 #reportSubHeader {
@@ -245,6 +255,7 @@ content: inherit;
     min-width: 310px;
     height: 40vh;
     width: 99%;
+    padding: 0 40px;
 }
 
 #chartZoomReset {
@@ -254,6 +265,7 @@ content: inherit;
 
 #chartLegendContainer {
     height: 16px;
+    padding: 0 40px;
 }
 
 #tableSeparatorContainer {
@@ -274,6 +286,10 @@ content: inherit;
 #tableContainer {
     width: 100%;
     height: 40%;
+}
+
+#tableContainer_wrapper {
+    padding: 0 40px;
 }
 
 #noDataContainer {
@@ -858,10 +874,11 @@ div.dt-container .dt-paging .dt-paging-button {
 .byAnalytics {
     z-index: 9999;
     position: relative;
-    bottom: 10px;
+    bottom: 50px;
+    left: 20px;
     align-items: center;
     display: flex;
-    left: 30px;
+    width: 200px;
 }
 
 .analyticsFullscreenIcon {

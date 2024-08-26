@@ -10,14 +10,23 @@
 
 <style>
     .panoramaHeaderRow {
-        text-align: center;
-        background-color: var(--color-primary-light);
+        padding-right: 120px;
+        padding-top: 20px;
+        padding-left: 20px;
+    }
+
+    .panoramaHeader {
         font-weight: bold;
-        padding: 10px 80px;;
+        font-size: 22px;
     }
 
     .panoramaSubHeaderRow {
-        text-align: center;
+        padding-bottom: 10px;
+        padding-left: 20px;
+    }
+
+    .panoramaSubHeader {
+        font-size: 16px;
     }
 
     .panoramaHeaderRow .editable,
@@ -25,7 +34,7 @@
         padding: 1px;
     }
 
-    .subHeader[contenteditable="true"],
+    .panoramaSubHeader[contenteditable="true"],
     .panoramaHeader[contenteditable="true"] {
         border: 1px dashed blue;
         padding: initial;
@@ -44,26 +53,30 @@
         margin-top: -72px;
         padding-top: 72px;
     }
+
     .pages {
         display: flex;
         width: 200%;
         transition: margin-left 0.5s ease;
-        margin-left: 0;
-        height: calc(100% - 45px);
+        height: calc(100% - 60px);
+        margin: 10px;
     }
+
     .flex-container {
         width: 100%;
         display: flex;
         flex-direction: column;
         height: 100%;
     }
+
     .flex-row {
         flex: 1;
         display: flex;
     }
+
     .flex-item {
         flex: 1;
-        padding: 30px;
+        padding: 25px;
         position: relative;
     }
 
@@ -95,6 +108,7 @@
     .bg-azure {
         background-color: azure;
     }
+
     .navigation {
         z-index: 9999;
         position: fixed;
@@ -102,15 +116,17 @@
         right: 20px;
         font-size: 24px;
     }
+
     .nav-item {
         margin: 0 10px;
-        opacity: 0.3;
         cursor: pointer;
         font-weight: 500;
     }
+
     .nav-item:hover {
         opacity: 1;
     }
+
     .nav-item.disabled {
         opacity: 0.1;
         cursor: not-allowed;
@@ -128,6 +144,7 @@
         right: 20px;
         font-size: 24px;
     }
+
     .addPage {
         z-index: 9999;
         position: fixed;
@@ -176,6 +193,7 @@
         transform: translate(-50%, -50%);
         /* Additional styles for the close button if necessary */
     }
+
     /* Modal styles */
     .modal {
         display: none; /* Hidden by default */
@@ -186,8 +204,8 @@
         width: 100%; /* Full width */
         height: 100%; /* Full height */
         overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
     }
 
     .modal-content {
@@ -228,7 +246,8 @@
         justify-content: center;
         cursor: pointer;
     }
-    .overlay.active{
+
+    .overlay.active {
         background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent overlay */
     }
 
@@ -262,7 +281,7 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0, 0, 0, 0.4);
     }
 
     .layoutModalContent {
@@ -327,14 +346,16 @@
         display: none !important;
     }
 </style>
-<div id="analytics-content" class="" style="width:100%; height: 100%;" hidden>
+<div id="analytics-content" hidden>
     <div id="optionBtnContainer" class="edit">
         <div id="optionBtn" class="analytics-options icon-analytics-more has-tooltip"
              title="<?php p($l->t('Options')); ?>"></div>
         <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
     </div>
 
-    <div class="panoramaHeaderRow"><div id="panoramaHeader" class="panoramaHeader editable"></div></div>
+    <div class="panoramaHeaderRow">
+        <div id="panoramaHeader" class="panoramaHeader editable"></div>
+    </div>
 
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">
         <div class="editMenu" id="editMenu">
@@ -432,52 +453,8 @@
 
     <div class="pages" id="panoramaPages">
     </div>
-</div>
-<div id="analytics-intro" style="padding: 30px" hidden>
-    <h2><?php p($l->t('Analytics')); ?></h2>
-    <br>
-    <h3><?php p($l->t('Favorites')); ?></h3>
-    <div>
-        <ul id="ulAnalytics" style="width: 100%;"></ul>
+    <div id="byAnalytics" class="byAnalytics analyticsFullscreen">
+        <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
+        <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
     </div>
-    <br>
-    <h3><?php p($l->t('Quickstart')); ?></h3>
-    <div>
-        <ul id="ulQuickstart" style="width: 100%;">
-            <li style="display: inline-block; margin: 10px;">
-                <div class="infoBox" id="infoBoxReport"><img height="80px" width="80px"
-                                                             src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
-                                                             alt="infoReport">
-                    <div class="infoBoxHeader"><?php p($l->t('New Panorama')); ?></div>
-                </div>
-            </li>
-            <li style="display: inline-block; margin: 10px;">
-                <div class="infoBox" id="infoBoxIntro"><img height="80px" width="80px"
-                                                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoIntro.svg') ?>"
-                                                            alt="infoIntro">
-                    <div class="infoBoxHeader"><?php p($l->t('Intro')); ?></div>
-                </div>
-            </li>
-            <li style="display: inline-block; margin: 10px;">
-                <div class="infoBox" id="infoBoxWiki"><img height="80px" width="80px"
-                                                           src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoWiki.svg') ?>"
-                                                           alt="infoWiki">
-                    <div class="infoBoxHeader"><?php p($l->t('Wiki')); ?></div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <br>
-</div>
-<div id="analytics-warning" style="width:50%; padding: 50px">
-    <h2><?php p($l->t('Analytics')); ?></h2>
-    <br>
-    <h3><?php p($l->t('Javascript issue')); ?></h3>
-    <span><?php p($l->t('If you see this message, please disable AdBlock/uBlock for this domain (only).')); ?></span>
-    <br>
-    <span><?php p($l->t('The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*.')); ?></span>
-    <br>
-    <br>
-    <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
-       target="_blank"><?php p($l->t('More Information …')); ?></a>
 </div>

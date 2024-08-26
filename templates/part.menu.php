@@ -7,11 +7,11 @@
  */
 
 ?>
-<div id="reportMenuBar" style="position: relative; height: 24px;">
+<div id="reportMenuBar">
     <div id="reportMenuIcon" class="analytics-options icon-analytics-more has-tooltip"
          title="<?php p($l->t('Options')); ?>"></div>
     <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
-    <div id="reportMenu" class="popovermenu" style="top: 33px; right: -5px;">
+    <div id="reportMenu" class="popovermenu" style="top: 40px; right: 22px;">
         <ul id="reportMenuMain">
             <li>
                 <button id="reportMenuDrilldown">

@@ -38,10 +38,21 @@ Util::addScript('analytics', '3rdParty/html2canvas.min');
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>
+
+    <?php print_unescaped($this->inc('part.intro')); ?>
     <?php print_unescaped($this->inc('part.content_panorama')); ?>
-    <div id="byAnalytics" class="byAnalytics analyticsFullscreen">
-        <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;margin-left: 10px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
-        <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
+
+    <div id="analytics-warning" style="width:50%; padding: 50px">
+        <h2><?php p($l->t('Analytics')); ?></h2>
+        <br>
+        <h3><?php p($l->t('Javascript issue')); ?></h3>
+        <span><?php p($l->t('If you see this message, please disable AdBlock/uBlock for this domain (only).')); ?></span>
+        <br>
+        <span><?php p($l->t('The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*.')); ?></span>
+        <br>
+        <br>
+        <a href="https://github.com/Rello/analytics/wiki/EasyPrivacy-Blocklist"
+           target="_blank"><?php p($l->t('More Information …')); ?></a>
     </div>
 </div>
 <?php print_unescaped($this->inc('part.sidebar')); ?>

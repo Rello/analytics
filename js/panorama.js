@@ -90,7 +90,7 @@ OCA.Analytics.Panorama = {
     layouts: [
         {
             id: 1, name: '2-1', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '</div>' +
@@ -99,7 +99,7 @@ OCA.Analytics.Panorama = {
         },
         {
             id: 2, name: '1-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
                 '<div class="flex-item" style="height: 50%;"></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
@@ -108,7 +108,7 @@ OCA.Analytics.Panorama = {
         },
         {
             id: 3, name: '2-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '</div>' +
@@ -119,7 +119,7 @@ OCA.Analytics.Panorama = {
         },
         {
             id: 4, name: '4-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
@@ -131,7 +131,7 @@ OCA.Analytics.Panorama = {
         },
         {
             id: 3, name: '2-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '</div>' +
@@ -142,7 +142,7 @@ OCA.Analytics.Panorama = {
         },
         {
             id: 4, name: '4-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="subHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
@@ -197,7 +197,7 @@ OCA.Analytics.Panorama = {
         // store texts in case they were entered already
         OCA.Analytics.Panorama.currentPanorama.name = document.getElementById('panoramaHeader').innerText;
         // get the subheaders and store them to the panorama
-        document.querySelectorAll('.subHeader').forEach((item) => {
+        document.querySelectorAll('.panoramaSubHeader').forEach((item) => {
             let page = item.id.split('-')[1];
             OCA.Analytics.Panorama.currentPanorama.pages[page].name = item.innerText;
         });
@@ -244,8 +244,8 @@ OCA.Analytics.Panorama = {
             });
 
             // add the unique ids to all subHeaders and set the text
-            flexContainer.querySelectorAll('.subHeader').forEach((item, idx) => {
-                item.id = 'subHeader-' + pageIndex;
+            flexContainer.querySelectorAll('.panoramaSubHeader').forEach((item, idx) => {
+                item.id = 'panoramaSubHeader-' + pageIndex;
                 item.innerText = page.name;
             });
 
@@ -395,7 +395,7 @@ OCA.Analytics.Panorama = {
             OCA.Analytics.Panorama.removeLayoutSelctor();
 
             // get the subheaders and store them to the panorama
-            document.querySelectorAll('.subHeader').forEach((item) => {
+            document.querySelectorAll('.panoramaSubHeader').forEach((item) => {
                 let page = item.id.split('-')[1];
                 OCA.Analytics.Panorama.currentPanorama.pages[page].name = item.innerText;
             });
