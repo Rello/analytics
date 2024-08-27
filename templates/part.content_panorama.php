@@ -453,7 +453,7 @@
 
     <div class="pages" id="panoramaPages">
     </div>
-    <div id="byAnalytics" class="byAnalytics analyticsFullscreen">
+    <div id="byAnalytics" class="byAnalytics" style="display: none;">
         <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
         <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
     </div>

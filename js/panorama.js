@@ -888,8 +888,28 @@ OCA.Analytics.Panorama = {
         );
 
         // getting "by analytics"
-        const byCanvas = await html2canvas(document.getElementById('byAnalyticsImg'), {scale: 3});
-        const byImgData = byCanvas.toDataURL('image/png');
+        let imgElement = document.getElementById('byAnalyticsImg');
+        let imgParent = document.getElementById('byAnalytics');
+        let hasClass = imgParent.classList.contains('analyticsFullscreen');
+
+        if (!hasClass) {
+            imgParent.classList.add('analyticsFullscreen');
+        }
+
+        // Temporarily reset styles
+        imgElement.style.width = imgElement.naturalWidth + 'px';
+        imgElement.style.height = imgElement.naturalHeight + 'px';
+        imgElement.style.transform = 'none';  // Remove any CSS transforms
+
+        let byCanvas = await html2canvas(imgElement, {scale: 1});
+        let byImgData = byCanvas.toDataURL('image/png');
+
+        // restore the previous status
+        imgElement.style.width = '33px';
+        imgElement.style.height = '33px';
+        if (!hasClass) {
+            imgParent.classList.remove('analyticsFullscreen');
+        }
 
         try {
             const headerText = document.querySelector('.panoramaHeader').textContent;
@@ -941,7 +961,7 @@ OCA.Analytics.Panorama = {
                 pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');
 
                 // Add the Analytics branding
-                pdf.addImage(byImgData, 'PNG', pdf.internal.pageSize.getWidth() - 90, pdf.internal.pageSize.getHeight() - 30, 30 , 30, 100, 'MEDIUM');
+                pdf.addImage(byImgData, 'PNG', pdf.internal.pageSize.getWidth() - 100, pdf.internal.pageSize.getHeight() - 35, 30 , 30, 100, 'MEDIUM');
                 pdf.setFontSize(8);
                 pdf.text('Created with', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 22);
                 pdf.text('Analytics', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 12);

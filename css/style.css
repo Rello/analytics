@@ -899,5 +899,5 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 #byAnalytics.analyticsFullscreen {
-    display: none;
+    display: flex  !important;
 }
