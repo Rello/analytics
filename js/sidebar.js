@@ -226,7 +226,7 @@ OCA.Analytics.Sidebar.Report = {
                         document.getElementById('sidebarReportExportButton').style.display = 'none';
                         document.getElementById('sidebarReportNameHint').style.display = 'none';
                     } else if (data['type'] === OCA.Analytics.TYPE_INTERNAL_DB) {
-                        OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
+                        // OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
                     } else {
                         let optionForm = OCA.Analytics.Datasource.buildDatasourceRelatedForm(data['type']);
                         document.getElementById('reportDatasourceSection').appendChild(optionForm);
@@ -344,6 +344,9 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportDatasetRow').style.display = 'table-row';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
+            document.getElementById('sidebarReportDimension1').disabled = true;
+            document.getElementById('sidebarReportDimension2').disabled = true;
+            document.getElementById('sidebarReportValue').disabled = true;
         } else if (datasourceType === OCA.Analytics.TYPE_GROUP) {
             document.getElementById('reportDimensionSectionHeader').style.display = 'none';
             document.getElementById('reportDatasourceSectionHeader').style.display = 'none';
@@ -360,6 +363,9 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('sidebarReportDatasetRow').style.display = 'none';
             document.getElementById('sidebarReportSubheaderRow').style.display = 'table-row';
             document.getElementById('sidebarReportParentRow').style.display = 'table-row';
+            document.getElementById('sidebarReportDimension1').disabled = false;
+            document.getElementById('sidebarReportDimension2').disabled = false;
+            document.getElementById('sidebarReportValue').disabled = false;
         }
     },
 
