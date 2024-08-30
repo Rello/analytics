@@ -298,7 +298,6 @@ OC.L10N.register(
     "Data series" : "Data series",
     "Vertical axis" : "Vertical axis",
     "Color" : "رنگ",
-    "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs.",
     "Give your numbers a meaning." : "Give your numbers a meaning.",
     "Data is processed inside Nextcloud." : "Data is processed inside Nextcloud.",
     "Share your reports and insights" : "Share your reports and insights",
