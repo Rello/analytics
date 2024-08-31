@@ -25,7 +25,7 @@ Util::addScript('analytics', '3rdParty/chart.umd');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-zoom.min');
-Util::addScript('analytics', '3rdParty/moment');
+Util::addScript('analytics', '3rdParty/moment.min');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'dashboard');
 Util::addScript('analytics', 'userGuidance');

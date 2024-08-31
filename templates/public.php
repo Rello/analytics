@@ -10,7 +10,7 @@ use OCP\Util;
 
 Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', '3rdParty/datatables.min');
-Util::addScript('analytics', '3rdParty/moment');
+Util::addScript('analytics', '3rdParty/moment.min');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'filter');

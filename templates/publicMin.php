@@ -9,7 +9,7 @@
 ?>
 <html class="ng-csp" data-placeholder-focus="false" lang="en" data-locale="en">
 <head>
-    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/moment.js"></script>
+    <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/moment.min.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/3rdParty/cloner.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/appMin.js"></script>
     <script nonce="<?php p($_['nonce']); ?>" defer src="<?php p($_['baseurl']); ?>/js/visualization.js"></script>

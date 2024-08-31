@@ -7,6 +7,7 @@
 
 ### Changed
 - Chart.js v4.4.3
+- moment.js v2.30.1
 - NC30 css compatibility
 - rework of sharing backend
 - no activities for added data anymore
