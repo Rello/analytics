@@ -82,6 +82,7 @@ OC.L10N.register(
     "Delete folder" : "Вилучити каталог",
     "Add to favorites" : "Додати зірочку",
     "Share" : "Спільний доступ",
+    "Select the share receiver" : "Виберіть отримувача спільного ресурсу",
     "choose a layout" : "виберіть макет",
     "Save" : "Зберегти",
     "Edit content" : "Редагувати вміст",
