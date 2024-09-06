@@ -51,6 +51,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     refreshTimer: null,
     currentXhrRequest: null,
     translationAvailable: false,
+    isNewObject: false,
 
     headers: function () {
         let headers = new Headers();
@@ -1245,7 +1246,7 @@ OCA.Analytics.Backend = {
                 ajaxData.dataoptions = OCA.Analytics.currentReportData.options.dataoptions;
             }
             if (typeof (OCA.Analytics.currentReportData.options.chartoptions) !== 'undefined') {
-                ajaxData.chartoptions = OCA.Analytics.currentReportData.options.chartoptions;
+                ajaxData.chartoptions = JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions);
             }
             if (typeof (OCA.Analytics.currentReportData.options.tableoptions) !== 'undefined') {
                 ajaxData.tableoptions = OCA.Analytics.currentReportData.options.tableoptions;
@@ -1265,11 +1266,20 @@ OCA.Analytics.Backend = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let data = JSON.parse(xhr.responseText);
+
                 // Do something with the data here
 
                 OCA.Analytics.Visualization.hideElement('analytics-loading');
                 OCA.Analytics.Visualization.showElement('analytics-content');
                 OCA.Analytics.currentReportData = data;
+                try {
+                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
+                    let chartOptions = OCA.Analytics.currentReportData.options.chartoptions.replace(/xAxes/g, 'x');
+                    OCA.Analytics.currentReportData.options.chartoptions = JSON.parse(chartOptions);
+                } catch (e) {
+                    OCA.Analytics.currentReportData.options.chartoptions = {};
+                }
+
                 try {
                     OCA.Analytics.currentReportData.options.filteroptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
                 } catch (e) {

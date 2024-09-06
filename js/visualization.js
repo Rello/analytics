@@ -407,7 +407,7 @@ OCA.Analytics.Visualization = {
 
         // do the color magic
         // a predefined color array is used
-        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        let colors = ["#6BBFF6", "#00B2A6", "#0182C6", "#009688", "#6BBFF6", "#007966", "#255A9F", "#1A366C", "#dbdb8d", "#9edae5"];
         for (let i = 0; i < datasets.length; ++i) {
             let j = i - (Math.floor(i / colors.length) * colors.length)
 
@@ -482,12 +482,12 @@ OCA.Analytics.Visualization = {
         // the user can add/overwrite chart options
         // the user can put the options in array-format into the report definition
         // these are merged with the standard report settings
-        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": {"time": {"unit" : "month"}}}}'
+        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"x": {"time": {"unit" : "month"}}}}'
         // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
 
         let userChartOptions = jsondata.options.chartoptions;
         if (userChartOptions !== '' && userChartOptions !== null) {
-            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
+            chartOptions = cloner.deep.merge(chartOptions, userChartOptions);
         }
 
         // todo was used in panorame
@@ -525,9 +525,9 @@ OCA.Analytics.Visualization = {
         let dataModel = '';
         let header = data.header.slice(1);
 
-        if (data.options.chartoptions !== '') {
-            if (JSON.parse(data.options.chartoptions)?.analyticsModel !== undefined) {
-                dataModel = JSON.parse(data.options.chartoptions)["analyticsModel"];
+        if (data.options.chartoptions !== null) {
+            if (data.options.chartoptions?.analyticsModel !== undefined) {
+                dataModel = data.options.chartoptions["analyticsModel"];
             }
         }
 
@@ -610,9 +610,9 @@ OCA.Analytics.Visualization = {
     },
 
     sortDates: function (data) {
-        if (data.options.chartoptions !== '') {
-            if (JSON.parse(data.options.chartoptions)?.scales?.x?.time?.parser !== undefined) {
-                let parser = JSON.parse(data.options.chartoptions)["scales"]["x"]["time"]["parser"];
+        if (data.options.chartoptions !== null) {
+            if (data.options.chartoptions?.scales?.x?.time?.parser !== undefined) {
+                let parser = data.options.chartoptions["scales"]["x"]["time"]["parser"];
                 data.data.sort(function (a, b) {
                     let sortColumn = a.length - 2;
                     if (sortColumn === 0) {

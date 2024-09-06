@@ -447,7 +447,7 @@ OCA.Analytics.Filter = {
 
         let dataModel;
         try {
-            dataModel = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions)["analyticsModel"];
+            dataModel = OCA.Analytics.currentReportData.options.chartoptions["analyticsModel"];
             if (dataModel === 'accountModel') {
                 container.getElementById('analyticsModelOpt2').checked = true;
             }
@@ -470,7 +470,7 @@ OCA.Analytics.Filter = {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions;
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
-        chartOptions === '' || chartOptions === null ? chartOptions = [] : chartOptions;
+        chartOptions === null ? chartOptions = [] : chartOptions;
         let userDatasetOptions = [];
         let nonDefaultValues, seondaryAxisRequired = false;
         let optionObject;
@@ -514,7 +514,7 @@ OCA.Analytics.Filter = {
             dataOptions = '';
         }
 
-        let chartOptionsObj = (chartOptions && chartOptions.length !== 0) ? JSON.parse(chartOptions) : {};
+        let chartOptionsObj = (chartOptions && chartOptions.length !== 0) ? chartOptions : {};
 
         let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
         if (dataModel === 'accountModel') {
@@ -561,7 +561,7 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
-        OCA.Analytics.currentReportData.options.chartoptions = JSON.stringify(chartOptionsObj);
+        OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObj;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
@@ -793,7 +793,7 @@ OCA.Analytics.Filter.Backend = {
             headers: headers,
             body: JSON.stringify({
                 reportId: reportId,
-                chartoptions: OCA.Analytics.currentReportData.options.chartoptions,
+                chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
                 dataoptions: OCA.Analytics.currentReportData.options.dataoptions,
                 filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
                 tableoptions: OCA.Analytics.currentReportData.options.tableoptions,
@@ -801,6 +801,7 @@ OCA.Analytics.Filter.Backend = {
         })
             .then(response => response.json())
             .then(data => {
+                OCA.Analytics.isNewObject = true;
                 OCA.Analytics.Navigation.init(data);
             });
     },
@@ -868,7 +869,7 @@ OCA.Analytics.Filter.Backend = {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({
-                chartoptions: OCA.Analytics.currentReportData.options.chartoptions,
+                chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
                 dataoptions: JSON.stringify(dataOptions),
                 filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
                 tableoptions: OCA.Analytics.currentReportData.options.tableoptions,

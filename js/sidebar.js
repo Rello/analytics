@@ -203,6 +203,10 @@ OCA.Analytics.Sidebar.Report = {
                 let table;
                 if (data !== false) {
                     data['type'] = parseInt(data['type']);
+
+                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
+                    data['chartoptions'] = data['chartoptions'].replace(/xAxes/g, 'x')
+
                     // clone the DOM template
                     table = document.importNode(document.getElementById('templateReport').content, true);
                     table.id = 'sidebarReport';
@@ -376,6 +380,7 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(type));
     },
 
+    // todo: remove
     fillDatasetRelatedFields: function () {
         const dataset = parseInt(document.getElementById('sidebarReportDataset').value);
         const datasource = parseInt(document.getElementById('sidebarReportDatasource').value);
@@ -621,8 +626,6 @@ OCA.Analytics.Sidebar.Report = {
                     OCA.Analytics.Backend.getDatasetDefinitions();
                 } else {
                     if (!OCA.Analytics.isAdvanced) {
-                        // todo check why this was added
-                        // OCA.Analytics.currentReportData.options.chartoptions = '';
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     } else {

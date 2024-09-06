@@ -55,7 +55,12 @@ OCA.Analytics.Navigation = {
                     if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
                         navigationItem.parentElement.parentElement.parentElement.classList.add('open');
                     }
-                    navigationItem.click();
+                    if (OCA.Analytics.isNewObject) {
+                        OCA.Analytics.isNewObject = false;
+                        document.querySelector('#navigationDatasets [data-id="' + navigationId + '"] #navigationMenuEdit').click();
+                    } else {
+                        navigationItem.click();
+                    }
                 }
             });
     },
