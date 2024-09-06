@@ -620,6 +620,11 @@ OCA.Analytics.Sidebar.Report = {
                 button.classList.remove('loading');
                 button.disabled = false;
 
+                // store possibly changed values into the temporary variable as this is used in getData
+                // without this, the new options would only be active after a full reload
+                OCA.Analytics.currentReportData.options.chartoptions = JSON.parse(document.getElementById('sidebarReportChartOptions').value);
+                OCA.Analytics.currentReportData.options.dataoptions = JSON.parse(document.getElementById('sidebarReportDataOptions').value);
+
                 if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Report.metadataChanged = false;
                     OCA.Analytics.Navigation.init(reportId);

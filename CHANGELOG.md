@@ -4,6 +4,7 @@
 ### Added
 - data source: Local JSON
 - full screen presentation mode
+- 
 
 ### Changed
 - Chart.js v4.4.3
@@ -20,6 +21,7 @@
 - wrong decimal handling for certain numbers #397
 - navigation css
 - columns changeable in report type "stored data" #406
+- sidebar chart options not applied on immediately after update
 
 ## 4.14.0 - 2024-06-20
 ### Added
