@@ -98,7 +98,7 @@ content: inherit;
     display: block;
     justify-content: space-between;
     line-height: var(--default-clickable-area);
-    padding: 0 12px 0 44px;
+    padding: 0 0 0 44px;
     overflow: hidden;
     box-sizing: border-box;
     white-space: nowrap;
@@ -124,7 +124,7 @@ content: inherit;
 }
 
 #app-navigation .app-navigation-entry-utils li {
-    width: 44px !important;
+    width: 30px !important;
     height: var(--default-clickable-area);
 }
 #app-navigation li {
@@ -227,7 +227,7 @@ content: inherit;
 }
 
 #reportMenuBar {
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     position: relative;
     height: 24px;
     padding-top: 5px;
