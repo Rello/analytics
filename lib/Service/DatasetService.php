@@ -183,7 +183,14 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
-		return $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+		$dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+
+		if ($aiIndex === 1) {
+			$this->provider($datasetId);
+		} else {
+			$this->providerRemove($datasetId);
+		}
+		return $dbUpdate;
 	}
 
 	/**
@@ -225,6 +232,36 @@ class DatasetService {
 	}
 
 	/**
+	 * Remove dataset from context chat
+	 *
+	 * @NoAdminRequired
+	 * @param int $datasetId
+	 * @return bool
+	 */
+	private function providerRemove(int $datasetId) {
+		if (class_exists('OCA\ContextChat\Public\ContentManager')) {
+			$this->contextChatManager = \OC::$server->query('OCA\Analytics\ContextChat\ContextChatManager');
+			$this->contextChatManager->removeContentByDataset($datasetId);
+		}
+		return true;
+	}
+
+	/**
+	 * Remove user from context chat
+	 *
+	 * @NoAdminRequired
+	 * @param string $userId
+	 * @return bool
+	 */
+	private function providerRemoveByUser(string $userId) {
+		if (class_exists('OCA\ContextChat\Public\ContentManager')) {
+			$this->contextChatManager = \OC::$server->query('OCA\Analytics\ContextChat\ContextChatManager');
+			$this->contextChatManager->removeContentByUser($userId);
+		}
+		return true;
+	}
+
+	/**
 	 * Delete Dataset and all depending objects
 	 *
 	 * @param int $datasetId
@@ -236,6 +273,7 @@ class DatasetService {
 		$this->DatasetMapper->delete($datasetId);
 		$this->DataloadMapper->deleteByDataset($datasetId);
 		$this->StorageMapper->deleteByDataset($datasetId);
+		$this->providerRemove($datasetId);
 		return true;
 	}
 
@@ -253,6 +291,7 @@ class DatasetService {
 			$this->DataloadMapper->deleteByDataset($dataset['id']);
 			$this->StorageMapper->deleteByDataset($dataset['id']);
 		}
+		$this->providerRemoveByUser($userId);
 		return true;
 	}
 

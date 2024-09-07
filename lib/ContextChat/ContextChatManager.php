@@ -48,13 +48,12 @@ class ContextChatManager {
 	 * @throws Exception
 	 */
 	public function submitContent(int $datasetId): bool {
-		if (!$this->isActiveForDataset($datasetId)) return false;
-
-		$storageData = $this->StorageService->read($datasetId, null);
 		$datasetMetadata = $this->DatasetService->read($datasetId);
+		if ($datasetMetadata['ai_index'] !== 1) return false;
 
 		$columns = $datasetMetadata['dimension1'] .', '.$datasetMetadata['dimension2'].', '.$datasetMetadata['value'];
 
+		$storageData = $this->StorageService->read($datasetId, null);
 		$data = array_map(function ($subArray) {
 			return implode(",", $subArray);
 		}, $storageData['data']);
@@ -77,9 +76,34 @@ class ContextChatManager {
 		);
 
 		$contentItems = [$contentItem];
-		//$this->ContentManager->removeContentForUsers('analytics', 'report', $dataset, ['admin']);
-		$this->logger->debug('adding item: ' . json_encode($contentItem));
+		$this->logger->info('Adding Analytics to context chat: ' . json_encode($contentItem));
 		$this->ContentManager->submitContent('analytics', $contentItems);
+		return true;
+	}
+
+	/**
+	 * Remove a dataset from context chat
+	 *
+	 * @param int $datasetId
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function removeContentByDataset(int $datasetId): bool {
+		$datasetMetadata = $this->DatasetService->read($datasetId);
+		$this->logger->info('Removing Analytics dataset from context chat: ' . $datasetId);
+		$this->ContentManager->removeContentForUsers('analytics', 'report', $datasetId, [$datasetMetadata['user_id']]);
+		return true;
+	}
+
+	/**
+	 * Remove a dataset from context chat
+	 *
+	 * @param string $user
+	 * @return bool
+	 */
+	public function removeContentByUser(string $user): bool {
+		$this->logger->info('Removing Analytics from context chat for user: .' . $user);
+		$this->ContentManager->removeAllContentForUsers('analytics', 'report', [$user]);
 		return true;
 	}
 

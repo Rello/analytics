@@ -94,6 +94,9 @@ class ApiDataController extends ApiController
         $this->StorageService->update($datasetId, $params['dimension1'], $params['dimension2'], $params['dimension3']);
         //$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
 
+		// Update the Context Chat backend
+		$this->DatasetService->provider($datasetId);
+
         return $this->requestResponse(
             true,
             Http::STATUS_OK,
@@ -129,7 +132,11 @@ class ApiDataController extends ApiController
             }
 
             $this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
-            //$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
+
+			// Update the Context Chat backend
+			$this->DatasetService->provider($datasetId);
+
+			//$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_API);
             $message = 'Data update successful';
         }
 

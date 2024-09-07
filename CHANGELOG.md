@@ -2,9 +2,10 @@
 
 ## 4.15.0 - 2024-0x-xx
 ### Added
+- AI Assistant - Context Chat integration #403
 - data source: Local JSON
 - full screen presentation mode
-- 
+- App branding
 
 ### Changed
 - Chart.js v4.4.3

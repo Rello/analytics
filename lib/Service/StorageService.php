@@ -37,7 +37,7 @@ class StorageService {
 	}
 
 	/**
-	 * Get the items for the selected category
+	 * Read data from the storage backend
 	 *
 	 * @NoAdminRequired
 	 * @param $datasetId
@@ -88,7 +88,7 @@ class StorageService {
 	}
 
 	/**
-	 * Get the items for the selected category
+	 * Update data to the storage backend
 	 *
 	 * @NoAdminRequired
 	 * @param int $datasetId

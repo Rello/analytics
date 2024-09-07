@@ -258,6 +258,9 @@ class DataloadService
             'error' => $error,
         ];
 
+		// Update the Context Chat backend
+		$this->DatasetService->provider($datasetId);
+
         //$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
         return $result;
     }
@@ -324,16 +327,16 @@ class DataloadService
      */
     public function updateData(int $objectId, $dimension1, $dimension2, $value, bool $isDataset)
     {
-        $dataset = $this->getDatasetId($objectId, $isDataset);
+        $datasetId = $this->getDatasetId($objectId, $isDataset);
 
-        if ($dataset != '') {
+        if ($datasetId != '') {
             $insert = $update = $errorMessage = 0;
             $action = array();
             $value = $this->floatvalue($value);
             if ($value === false) {
                 $errorMessage = $this->l10n->t('3rd field must be a valid number');
             } else {
-                $action = $this->StorageService->update($dataset, $dimension1, $dimension2, $value);
+                $action = $this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
                 $insert = $insert + $action['insert'];
                 $update = $update + $action['update'];
             }
@@ -345,7 +348,10 @@ class DataloadService
                 'validate' => $action['validate'],
             ];
 
-            //if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
+			// Update the Context Chat backend
+			$this->DatasetService->provider($datasetId);
+
+			//if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD);
             return $result;
         } else {
             return false;
@@ -387,10 +393,14 @@ class DataloadService
      */
     public function deleteData(int $objectId, $dimension1, $dimension2, bool $isDataset)
     {
-        $dataset = $this->getDatasetId($objectId, $isDataset);
-        if ($dataset != '') {
-            $result = $this->StorageService->delete($dataset, $dimension1, $dimension2);
-            return ['delete' => $result];
+		$datasetId = $this->getDatasetId($objectId, $isDataset);
+        if ($datasetId != '') {
+            $result = $this->StorageService->delete($datasetId, $dimension1, $dimension2);
+
+			// Update the Context Chat backend
+			$this->DatasetService->provider($datasetId);
+
+			return ['delete' => $result];
         } else {
             return false;
         }
@@ -408,8 +418,8 @@ class DataloadService
      */
     public function importClipboard($objectId, $import, bool $isDataset)
     {
-        $dataset = $this->getDatasetId($objectId, $isDataset);
-        if ($dataset != '') {
+        $datasetId = $this->getDatasetId($objectId, $isDataset);
+        if ($datasetId != '') {
             $insert = $update = $errorMessage = $errorCounter = 0;
             $delimiter = '';
 
@@ -428,7 +438,7 @@ class DataloadService
                         $errorCounter++;
                     } else {
                         if ($numberOfColumns < 3) $row[1] = null;
-                        $action = $this->StorageService->update($dataset, $row[0], $row[1], $row[2]);
+                        $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2]);
                         $insert = $insert + $action['insert'];
                         $update = $update + $action['update'];
                     }
@@ -447,7 +457,10 @@ class DataloadService
                 'error' => $errorMessage,
             ];
 
-            //if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+			// Update the Context Chat backend
+			$this->DatasetService->provider($datasetId);
+
+			//if ($errorMessage === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return $result;
         } else {
             return false;
@@ -466,8 +479,8 @@ class DataloadService
      */
     public function importFile(int $objectId, $path, bool $isDataset)
     {
-        $dataset = $this->getDatasetId($objectId, $isDataset);
-        if ($dataset != '') {
+        $datasetId = $this->getDatasetId($objectId, $isDataset);
+        if ($datasetId != '') {
             $insert = $update = 0;
             $reportMetadata = array();
             $reportMetadata['link'] = $path;
@@ -476,7 +489,7 @@ class DataloadService
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {
-                    $action = $this->StorageService->update($dataset, $row[0], $row[1], $row[2]);
+                    $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2]);
                     $insert = $insert + $action['insert'];
                     $update = $update + $action['update'];
                 }
@@ -488,7 +501,10 @@ class DataloadService
                 'error' => $result['error'],
             ];
 
-            //if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
+			// Update the Context Chat backend
+			$this->DatasetService->provider($datasetId);
+
+			//if ($result['error'] === 0) $this->ActivityManager->triggerEvent($dataset, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_IMPORT);
             return $result;
         } else {
             return false;

@@ -137,7 +137,7 @@ class ActivityManager
 		}
 
         $users = $this->ShareMapper->getSharedReceiver($item_type, $event->getObjectId());
-		$this->logger->info('share receiver: ' . $item_type . $event->getObjectId());
+		//$this->logger->info('share receiver: ' . $item_type . $event->getObjectId());
         foreach ($users as $user) {
             $event->setAffectedUser($user['uid_owner']);
             $this->manager->publish($event);
