@@ -36,6 +36,9 @@ Visualize and share anything, from financial analysis to IoT logs.
     <website>https://rello.github.io/analytics/</website>
     <discussion>https://help.nextcloud.com/c/apps/analytics</discussion>
     <bugs>https://github.com/Rello/analytics/issues</bugs>
+    <donation title="Become a GitHub sponsor">https://github.com/sponsors/Rello</donation>
+    <donation title="Donate via PayPal" type="paypal">https://github.com/rello/analytics/wiki/donate</donation>
+    <donation title="Donate via Bitcoin">https://github.com/rello/analytics/wiki/donate</donation>
     <screenshot>
         https://raw.githubusercontent.com/Rello/analytics/master/screenshots/logo25.png
     </screenshot>
