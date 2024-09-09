@@ -478,7 +478,7 @@ OCA.Analytics.Filter = {
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
         let defaultYAxis = 'primary';
-        let defaultColors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        let defaultColors = OCA.Analytics.Visualization.defaultColorPalette;
 
         // loop all selections from the option dialog and add them to an array
         let optionsYAxis = document.getElementsByName('optionsYAxis');
@@ -593,7 +593,7 @@ OCA.Analytics.Filter = {
 
     // function to define the color for a data series
     checkColor: function (array, index) {
-        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        let colors = OCA.Analytics.Visualization.defaultColorPalette;
         let j = index - (Math.floor(index / colors.length) * colors.length)
         let field = 'backgroundColor';
         if (Array.isArray(array) && array.length && array[index]) {

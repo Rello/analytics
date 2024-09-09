@@ -82,7 +82,7 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function index()
+    public function report()
     {
         $params = array();
         $params['token'] = '';

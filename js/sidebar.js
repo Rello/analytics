@@ -20,13 +20,13 @@ OCA.Analytics.Sidebar = {
         let datasetType = navigationItem.dataset.type;
         let appsidebar = document.getElementById('app-sidebar');
 
-        if (appsidebar.dataset.id === datasetId && !OCA.Analytics.isAdvanced) {
+        if (appsidebar.dataset.id === datasetId && !OCA.Analytics.isDataset) {
             OCA.Analytics.Sidebar.close();
         } else {
             document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
             OCA.Analytics.Sidebar.constructTabs(parseInt(datasetType));
 
-            if (!OCA.Analytics.isAdvanced) {
+            if (!OCA.Analytics.isDataset) {
                 if (appsidebar.dataset.id === '') {
                     document.getElementById('sidebarClose').addEventListener('click', OCA.Analytics.Sidebar.close);
                     // OC.Apps not working anymore
@@ -439,7 +439,7 @@ OCA.Analytics.Sidebar.Report = {
             t('analytics', 'Dataset'),
             text,
             function () {
-                window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + datasetId;
+                window.location = OC.generateUrl('apps/analytics/d/') + datasetId;
             }
         );
     },
@@ -630,7 +630,7 @@ OCA.Analytics.Sidebar.Report = {
                     OCA.Analytics.Navigation.init(reportId);
                     OCA.Analytics.Backend.getDatasetDefinitions();
                 } else {
-                    if (!OCA.Analytics.isAdvanced) {
+                    if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     } else {
@@ -761,7 +761,7 @@ OCA.Analytics.Sidebar.Data = {
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
         let type = 'report';
-        if (OCA.Analytics.isAdvanced) {
+        if (OCA.Analytics.isDataset) {
             type = 'dataset';
         }
 
@@ -855,7 +855,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataAdvancedButton: function () {
-        window.location = OC.generateUrl('apps/analytics/a/') + '#/r/' + document.getElementById('DataApiDataset').innerText;
+        window.location = OC.generateUrl('apps/analytics/d/') + document.getElementById('DataApiDataset').innerText;
     },
 
 };
@@ -1402,7 +1402,7 @@ OCA.Analytics.Sidebar.Backend = {
                 dimension1: document.getElementById('DataDimension1').value,
                 dimension2: document.getElementById('DataDimension2').value,
                 value: document.getElementById('DataValue').value,
-                isDataset: OCA.Analytics.isAdvanced,
+                isDataset: OCA.Analytics.isDataset,
             })
         })
             .then(response => response.json())
@@ -1411,7 +1411,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (!OCA.Analytics.isAdvanced) {
+                    if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
@@ -1435,7 +1435,7 @@ OCA.Analytics.Sidebar.Backend = {
                 reportId: reportId,
                 dimension1: document.getElementById('DataDimension1').value,
                 dimension2: document.getElementById('DataDimension2').value,
-                isDataset: OCA.Analytics.isAdvanced,
+                isDataset: OCA.Analytics.isDataset,
             })
         })
             .then(response => response.json())
@@ -1464,14 +1464,14 @@ OCA.Analytics.Sidebar.Backend = {
             body: JSON.stringify({
                 dimension1: document.getElementById('DataDimension1').value,
                 dimension2: document.getElementById('DataDimension2').value,
-                isDataset: OCA.Analytics.isAdvanced,
+                isDataset: OCA.Analytics.isDataset,
             })
         })
             .then(response => response.json())
             .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
-                if (!OCA.Analytics.isAdvanced) {
+                if (!OCA.Analytics.isDataset) {
                     OCA.Analytics.UI.resetContentArea();
                     OCA.Analytics.Backend.getData();
                 }
@@ -1491,7 +1491,7 @@ OCA.Analytics.Sidebar.Backend = {
             body: JSON.stringify({
                 reportId: reportId,
                 import: document.getElementById('importDataClipboardText').value,
-                isDataset: OCA.Analytics.isAdvanced,
+                isDataset: OCA.Analytics.isDataset,
             })
         })
             .then(response => response.json())
@@ -1500,7 +1500,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (!OCA.Analytics.isAdvanced) {
+                    if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }
@@ -1528,7 +1528,7 @@ OCA.Analytics.Sidebar.Backend = {
             body: JSON.stringify({
                 reportId: reportId,
                 path: path,
-                isDataset: OCA.Analytics.isAdvanced,
+                isDataset: OCA.Analytics.isDataset,
             })
         })
             .then(response => response.json())
@@ -1537,7 +1537,7 @@ OCA.Analytics.Sidebar.Backend = {
                 button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (!OCA.Analytics.isAdvanced) {
+                    if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.UI.resetContentArea();
                         OCA.Analytics.Backend.getData();
                     }

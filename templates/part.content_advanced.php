@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<div id="analytics-intro" style="padding: 50px" hidden>
+<div id="analytics-intro" hidden>
     <span><?php p($l->t('This section is used for dataset maintenance and data load configurations.')); ?></span>
     <br>
     <br>

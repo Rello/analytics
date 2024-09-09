@@ -14,6 +14,7 @@
 - rework of sharing backend
 - no activities for added data anymore
 - excel data source: handling of time and % values
+- clean URLs without #
 
 ### Fixed
 - excel data source: remove all-null columns

@@ -8,7 +8,7 @@
 
 ?>
 
-<div id="analytics-intro" style="padding: 30px" hidden>
+<div id="analytics-intro" hidden>
     <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'logo.svg') ?>" style="width: 300px;margin-left: auto;margin-right: auto;/* padding-left: 100px; */display: block;">
     <br>
     <h3><?php p($l->t('Favorites')); ?></h3>

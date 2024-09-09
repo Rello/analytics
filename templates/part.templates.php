@@ -197,7 +197,9 @@
     <div class="sidebarHeaderClosed"><h3 id="datasetAiSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('Nextcloud Assistant')); ?> <span class="betaFlag">Beta</span></h3></div>
     <div id="datasetAiSectionDisabled" class="userGuidance" style="display: none;">
-		<?php p($l->t('Context Chat is required')); ?>
+		<?php
+        // TRANSLATORS "Context Chat" is a product name. Do not translate
+        p($l->t('Context Chat is required')); ?>
     </div>
     <div id="datasetAiSection" class="table" style="display: none; width: 100%; max-width: 500px;">
             <div style="display: table-row;">
@@ -211,7 +213,9 @@
                 <textarea rows="5" style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput"></textarea>
             </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; "><?php p($l->t('Context Chat relevant')); ?></div>
+            <div style="display: table-cell; "><?php
+				// TRANSLATORS "Context Chat" is a product name. Do not translate
+                p($l->t('Context Chat relevant')); ?></div>
             <div style="display: table-cell; width: 200px;">
                 <input type="checkbox" id="sidebarDatasetAiIndex" class="checkbox">
                 <label for="sidebarDatasetAiIndex"></label>

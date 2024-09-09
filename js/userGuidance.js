@@ -83,7 +83,7 @@ OCA.Analytics.Wizard = {
 
     close: function () {
         document.getElementById('analyticsWizard').remove();
-        if (!OCA.Analytics.isAdvanced) document.getElementById('overviewButton').click();
+        if (!OCA.Analytics.isDataset) document.getElementById('overviewButton').click();
     },
 
     cancel: function () {

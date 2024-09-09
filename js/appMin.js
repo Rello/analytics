@@ -23,7 +23,7 @@ if (!OCA.Analytics) {
      */
     OCA.Analytics = {
         initialDocumentTitle: null,
-        isAdvanced: false,
+        isDataset: false,
         currentReportData: {},
         chartObject: null,
         // flexible mapping depending on type required by the used chart library

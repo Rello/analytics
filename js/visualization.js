@@ -22,6 +22,7 @@ var myMoment = moment;
  * @namespace OCA.Analytics.Visualization
  */
 OCA.Analytics.Visualization = {
+    defaultColorPalette: ["#6BBFF6", "#00B2A6", "#0182C6", "#009688", "#6BBFF6", "#007966", "#255A9F", "#1A366C", "#dbdb8d", "#9edae5"],
 
     // *************
     // *** table ***
@@ -406,8 +407,7 @@ OCA.Analytics.Visualization = {
         datasets.length > 1 ? this.showElement('chartLegendContainer') : null;
 
         // do the color magic
-        // a predefined color array is used
-        let colors = ["#6BBFF6", "#00B2A6", "#0182C6", "#009688", "#6BBFF6", "#007966", "#255A9F", "#1A366C", "#dbdb8d", "#9edae5"];
+        let colors = OCA.Analytics.Visualization.defaultColorPalette;
         for (let i = 0; i < datasets.length; ++i) {
             let j = i - (Math.floor(i / colors.length) * colors.length)
 

@@ -10,7 +10,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    OCA.Analytics.Dashboard.init();
+    //OCA.Analytics.Dashboard.init();
 })
 
 OCA.Analytics = Object.assign({}, OCA.Analytics, {
@@ -233,8 +233,7 @@ OCA.Analytics.Dashboard = {
         let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType);
 
         // do the color magic
-        // a predefined color array is used
-        let colors = ["#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
+        let colors = OCA.Analytics.Visualization.defaultColorPalette;
         for (let i = 0; i < datasets.length; ++i) {
             let j = i - (Math.floor(i / colors.length) * colors.length)
 

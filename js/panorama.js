@@ -14,8 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Visualization.hideElement('analytics-warning');
     OCA.Analytics.Visualization.showElement('analytics-intro');
 
-    document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
-
     // register handlers for the navigation bar
     OCA.Analytics.Navigation.registerHandler('create', function () {
         OCA.Analytics.Panorama.newPanorama();
@@ -33,8 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
         OCA.Analytics.Dashboard.favoriteUpdate(id, isFavorite);
     });
 
-    const urlHash = decodeURI(location.hash);
-    OCA.Analytics.Navigation.init(urlHash.length > 1 && urlHash[2] === 'r' ? parseInt(urlHash.substring(4)) : undefined);
     OCA.Analytics.Panorama.init();
 })
 
@@ -52,7 +48,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     SHARE_TYPE_LINK: 3,
     SHARE_TYPE_ROOM: 10,
     tableObject: [],
-    isAdvanced: false,
+    isDataset: false,
     currentReportData: {},
     isPanorama: true,
     // flexible mapping depending on type required by the used chart library
@@ -155,6 +151,17 @@ OCA.Analytics.Panorama = {
     ],
 
     init: function () {
+        // URL semantic is analytics/*type*/id
+        let regex = /\/analytics\/([a-zA-Z0-9]+)\/(\d+)/;
+        let match = window.location.href.match(regex);
+
+        if (match) {
+            OCA.Analytics.Navigation.init(parseInt(match[2]));
+        } else {
+            OCA.Analytics.Navigation.init();
+            // Dashboard has to be loaded from the navigation as it depends on the report index
+        }
+
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
         document.getElementById('nextBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('next'));
         document.getElementById('optionBtn').addEventListener('click', OCA.Analytics.Panorama.toggleOptionMenu);
@@ -164,6 +171,7 @@ OCA.Analytics.Panorama = {
         document.getElementById('optionMenuPdf').addEventListener('click', OCA.Analytics.Panorama.handlePdfButton);
 
         document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
+        document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
 
         document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
@@ -1088,6 +1096,7 @@ OCA.Analytics.Backend = {
                 let jsondata = JSON.parse(xhr.response);
                 // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
                 jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
+                jsondata.options.chartoptions = JSON.parse(jsondata.options.chartoptions)
                 jsondata.data = OCA.Analytics.Visualization.formatDates(jsondata.data);
                 OCA.Analytics.Panorama.setWidgetTypeReportContent(jsondata, itemId);
             }
@@ -1162,9 +1171,7 @@ OCA.Analytics.Backend = {
  */
 OCA.Analytics.Dashboard = {
     init: function () {
-        if (decodeURI(location.hash).length === 0) {
-            OCA.Analytics.Dashboard.getFavorites();
-        }
+        OCA.Analytics.Dashboard.getFavorites();
     },
 
     getFavorites: function () {

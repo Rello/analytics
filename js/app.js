@@ -16,6 +16,26 @@
 
 'use strict';
 
+document.addEventListener('DOMContentLoaded', function () {
+    OCA.Analytics.initialDocumentTitle = document.title;
+    OCA.Analytics.Visualization.hideElement('analytics-warning');
+
+    if (document.getElementById('advanced').value === 'true') {
+        OCA.Analytics.isDataset = true;
+    }
+
+    OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
+
+    // Todo:
+    // register handlers for the navigation bar as in panorama
+
+    window.addEventListener("beforeprint", function () {
+        //document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
+    });
+
+    OCA.Analytics.Core.init();
+});
+
 OCA.Analytics = Object.assign({}, OCA.Analytics, {
     TYPE_GROUP: 0,
     TYPE_INTERNAL_FILE: 1,
@@ -30,7 +50,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     SHARE_TYPE_LINK: 3,
     SHARE_TYPE_ROOM: 10,
     initialDocumentTitle: null,
-    isAdvanced: false,
+    isDataset: false,
     currentReportData: {},
     chartObject: null,
     tableObject: [],
@@ -66,18 +86,30 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  */
 OCA.Analytics.Core = {
     init: function () {
+        // URL semantic is analytics/*type*/id
+        let regex = /\/analytics\/([a-zA-Z0-9]+)\/(\d+)/;
+        let match = window.location.href.match(regex);
 
-        const urlHash = decodeURI(location.hash);
-        if (urlHash.length > 1) {
-            if (urlHash[2] === 'f') {
-                window.location.href = '#';
-                OCA.Analytics.Sidebar.Report.createFromDataFile(urlHash.substring(3));
-            } else if (urlHash[2] === 'r') {
-                OCA.Analytics.Navigation.init((parseInt(urlHash.substring(4))));
-            }
+        if (match) {
+            OCA.Analytics.Navigation.init(parseInt(match[2]));
         } else {
             OCA.Analytics.Navigation.init();
+            // Dashboard has to be loaded from the navigation as it depends on the report index
         }
+
+        if (document.getElementById('sharingToken').value === '') {
+            OCA.Analytics.Visualization.showElement('analytics-intro');
+            if (!OCA.Analytics.isDataset) {
+                OCA.Analytics.UI.reportOptionsEventlisteners();
+                document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
+                document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
+                document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
+                document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+            }
+        } else {
+            OCA.Analytics.Backend.getData();
+        }
+
     },
 
     getDistinctValues: function (array, index) {
@@ -284,7 +316,7 @@ OCA.Analytics.UI = {
     },
 
     resetContentArea: function () {
-        if (OCA.Analytics.isAdvanced) {
+        if (OCA.Analytics.isDataset) {
             OCA.Analytics.Visualization.showElement('analytics-intro');
             document.getElementById('app-sidebar').classList.add('disappear');
         } else {
@@ -1333,30 +1365,3 @@ OCA.Analytics.Backend = {
         }
     },
 };
-
-document.addEventListener('DOMContentLoaded', function () {
-    if (document.getElementById('advanced').value === 'true') {
-        OCA.Analytics.isAdvanced = true;
-    }
-    OCA.Analytics.initialDocumentTitle = document.title;
-    OCA.Analytics.Visualization.hideElement('analytics-warning');
-
-    if (document.getElementById('sharingToken').value === '') {
-        OCA.Analytics.Visualization.showElement('analytics-intro');
-        OCA.Analytics.Core.init();
-        if (!OCA.Analytics.isAdvanced) {
-            OCA.Analytics.UI.reportOptionsEventlisteners();
-            document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-            document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
-            document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
-            document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
-        }
-    } else {
-        OCA.Analytics.Backend.getData();
-    }
-
-    OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
-    window.addEventListener("beforeprint", function () {
-        //document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
-    });
-});
