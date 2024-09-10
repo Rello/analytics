@@ -76,7 +76,7 @@ Visualize and share anything, from financial analysis to IoT logs.
         <navigation>
             <id>analytics</id>
             <name>Analytics</name>
-            <route>analytics.page.index</route>
+            <route>analytics.page.report</route>
             <icon>app.svg</icon>
             <order>6</order>
         </navigation>
