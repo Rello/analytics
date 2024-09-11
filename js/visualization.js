@@ -22,7 +22,7 @@ var myMoment = moment;
  * @namespace OCA.Analytics.Visualization
  */
 OCA.Analytics.Visualization = {
-    defaultColorPalette: ["#6BBFF6", "#00B2A6", "#0182C6", "#009688", "#6BBFF6", "#007966", "#255A9F", "#1A366C", "#dbdb8d", "#9edae5"],
+    defaultColorPalette: ["#1b7bb5","#EA6A47","#a3acb9","#6AB187","#39a7db","#c85200","#57606c","#a3cce9","#ffbc79","#c8d0d9"],
 
     // *************
     // *** table ***

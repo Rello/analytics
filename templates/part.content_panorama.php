@@ -10,28 +10,38 @@
 
 <style>
     .panoramaHeaderRow {
-        padding-right: 120px;
         padding-top: 20px;
-        padding-left: 20px;
     }
 
     .panoramaHeader {
-        font-weight: bold;
+        /*font-weight: bold;
         font-size: 22px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        color:white;
+        padding: 8px 20px;
+        width: 600px;
+        background: linear-gradient(to right, #1A366C, #F1F1F1);
+        margin-left: 30px;*/
     }
 
     .panoramaSubHeaderRow {
-        padding-bottom: 10px;
-        padding-left: 20px;
     }
 
     .panoramaSubHeader {
-        font-size: 16px;
+        /*font-size: 16px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        color: #FFFFFF;
+        padding: 0 0 8px 20px;
+        width: 600px;
+        background: linear-gradient(to right, #1A366C, #F1F1F1); */
+        margin-left: 15px !important;
     }
 
     .panoramaHeaderRow .editable,
     .panoramaSubHeaderRow .editable {
-        padding: 1px;
+        /*padding: 1px;*/
     }
 
     .panoramaSubHeader[contenteditable="true"],
@@ -58,8 +68,8 @@
         display: flex;
         width: 200%;
         transition: margin-left 0.5s ease;
-        height: calc(100% - 60px);
-        margin: 10px;
+        height: calc(100% - 69px);
+        /*margin: 10px;*/
     }
 
     .flex-container {
@@ -67,6 +77,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        padding: 0 15px 15px 15px;
     }
 
     .flex-row {
@@ -76,8 +87,12 @@
 
     .flex-item {
         flex: 1;
-        padding: 25px;
         position: relative;
+        margin: 15px;
+        padding: 15px;
+        position: relative;
+        background-color: #FFFF;
+        border-radius: 5px;
     }
 
     .textContainer {
@@ -140,7 +155,7 @@
     #optionBtnContainer {
         z-index: 9999;
         position: relative;
-        top: 10px;
+        top: 5px;
         right: 20px;
         font-size: 24px;
     }
@@ -354,7 +369,7 @@
     </div>
 
     <div class="panoramaHeaderRow">
-        <div id="panoramaHeader" class="panoramaHeader editable"></div>
+        <div id="panoramaHeader" class="reportHeader editable"></div>
     </div>
 
     <div id="editMenuContainer" class="editMenuContainer" style="display:none;">

@@ -86,6 +86,11 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  */
 OCA.Analytics.Core = {
     init: function () {
+        if (document.getElementById('sharingToken').value !== '') {
+            OCA.Analytics.Backend.getData();
+            return;
+        }
+
         // URL semantic is analytics/*type*/id
         let regex = /\/analytics\/([a-zA-Z0-9]+)\/(\d+)/;
         let match = window.location.href.match(regex);
@@ -97,19 +102,14 @@ OCA.Analytics.Core = {
             // Dashboard has to be loaded from the navigation as it depends on the report index
         }
 
-        if (document.getElementById('sharingToken').value === '') {
-            OCA.Analytics.Visualization.showElement('analytics-intro');
-            if (!OCA.Analytics.isDataset) {
-                OCA.Analytics.UI.reportOptionsEventlisteners();
-                document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-                document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
-                document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
-                document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
-            }
-        } else {
-            OCA.Analytics.Backend.getData();
+        OCA.Analytics.Visualization.showElement('analytics-intro');
+        if (!OCA.Analytics.isDataset) {
+            OCA.Analytics.UI.reportOptionsEventlisteners();
+            document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
+            document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
+            document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
+            document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
         }
-
     },
 
     getDistinctValues: function (array, index) {

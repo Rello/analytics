@@ -190,6 +190,10 @@ content: inherit;
     display: none;
 }
 
+#app-content {
+    background-color: #F1F1F1 !important;
+}
+
 #analytics-content {
     width: 100%;
     height: 100%;
@@ -229,12 +233,18 @@ content: inherit;
     width: 32px;
 }
 
-#reportHeader {
-    text-align: center;
-    font-size: 22px;
+.reportHeader {
     font-weight: bold;
+    font-size: 22px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color:white;
+    padding: 8px 20px;
+    width: 600px;
+    background: linear-gradient(to right, #1A366C, #F1F1F1);
+    /*margin-top: 20px;*/
+    margin-left: 30px;
     display: block;
-    margin-bottom: 10px;
 }
 
 #reportMenuBar {
@@ -242,13 +252,21 @@ content: inherit;
     position: relative;
     height: 24px;
     padding-top: 5px;
-    padding-right: 30px;
+    padding-right: 20px;
 }
 
-#reportSubHeader {
-    text-align: center;
+.reportSubHeader,
+.panoramaSubHeader {
     font-size: 16px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #FFFFFF;
+    padding: 0 0 8px 20px;
+    width: 600px;
+    background: linear-gradient(to right, #1A366C, #F1F1F1);
+    margin-left: 30px;
     display: block;
+    margin-bottom: 10px;
 }
 
 #reportPlaceholder {
@@ -261,12 +279,19 @@ content: inherit;
     margin-bottom: 10px;
 }
 
+#myChart {
+    background-color: #FFFF;
+    border-radius: 15px;
+}
+
 #chartContainer {
     position: relative;
     min-width: 310px;
     height: 40vh;
-    width: 99%;
-    padding: 0 40px;
+    margin: 0 30px;
+    background-color: #FFFF;
+    border-radius: 5px;
+    padding: 10px;
 }
 
 #chartZoomReset {
@@ -300,7 +325,11 @@ content: inherit;
 }
 
 #tableContainer_wrapper {
-    padding: 0 40px;
+    padding: 0 30px;
+}
+
+#tableContainer > thead {
+    background-color: #eAeAeA;
 }
 
 #noDataContainer {
