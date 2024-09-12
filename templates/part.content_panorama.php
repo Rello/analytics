@@ -368,7 +368,7 @@
         <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
     </div>
 
-    <div class="panoramaHeaderRow">
+    <div id="panoramaHeaderRow" class="panoramaHeaderRow">
         <div id="panoramaHeader" class="reportHeader editable"></div>
     </div>
 

@@ -22,7 +22,7 @@ var myMoment = moment;
  * @namespace OCA.Analytics.Visualization
  */
 OCA.Analytics.Visualization = {
-    defaultColorPalette: ["#1b7bb5","#EA6A47","#a3acb9","#6AB187","#39a7db","#c85200","#57606c","#a3cce9","#ffbc79","#c8d0d9"],
+    defaultColorPalette: ["#1A366C","#EA6A47","#a3acb9","#6AB187","#39a7db","#c85200","#57606c","#a3cce9","#ffbc79","#c8d0d9"],
 
     // *************
     // *** table ***
@@ -396,7 +396,7 @@ OCA.Analytics.Visualization = {
         Chart.defaults.elements.line.borderWidth = 2;
         Chart.defaults.elements.line.tension = 0.1;
         Chart.defaults.elements.line.fill = false;
-        Chart.defaults.elements.point.radius = 1;
+        Chart.defaults.elements.point.radius = 0.5;
         Chart.defaults.plugins.legend.position = 'bottom';
         Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
 

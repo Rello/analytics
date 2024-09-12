@@ -159,34 +159,55 @@ OCA.Analytics.Navigation = {
     },
 
     buildOverviewButton: function () {
+        const createNavEntry = (id, href, className, text, eventHandler) => {
+            let div = document.createElement('div');
+            div.classList.add('app-navigation-entry');
+            div.style.width = "50%";
+
+            let a = document.createElement('a');
+            a.id = id;
+            a.setAttribute('href', href);
+            a.classList.add(className, 'svg');
+            a.innerText = text;
+            if (eventHandler) a.addEventListener('click', eventHandler);
+
+            div.appendChild(a);
+            return div;
+        };
+
         let li = document.createElement('li');
-        let navigationEntryDiv = document.createElement('div');
-        navigationEntryDiv.classList.add('app-navigation-entry');
+        li.style.marginBottom = "20px";
+        const isReport = !OCA.Analytics.isDataset && !OCA.Analytics.isPanorama;
 
-        let datatype;
-        if (OCA.Analytics.isDataset) {
-            datatype = '';
-        } else if (OCA.Analytics.isPanorama) {
-            datatype = 'pa';
-        } else {
-            datatype = '';
+        const datatype = OCA.Analytics.isPanorama ? 'pa' : '';
+        const hrefPrimary = OC.generateUrl('apps/analytics/' + datatype);
+        const primaryClass = OCA.Analytics.isDataset ? 'icon-view-previous' : 'icon-analytics-overview';
+        const primaryText = OCA.Analytics.isDataset ? t('analytics', 'Back to reports') : t('analytics', 'Overview');
+        const primaryEvent = OCA.Analytics.isDataset ? OCA.Analytics.Navigation.handleBackToReportClicked : OCA.Analytics.Navigation.handleOverviewButton;
+
+        li.appendChild(createNavEntry('overviewButton', hrefPrimary, primaryClass, primaryText, primaryEvent));
+
+        const datatypeSecondary = OCA.Analytics.isDataset ? '' : OCA.Analytics.isPanorama ? '' : 'pa';
+        const hrefSecondary = OC.generateUrl('apps/analytics/' + datatypeSecondary);
+
+        // Determine the secondary button text and class based on conditions
+        const secondaryText = OCA.Analytics.isPanorama
+            ? t('analytics', 'Reports')
+            : isReport
+                // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
+                ? t('analytics', 'Panoramas')
+                : '';
+
+        const secondaryClass = OCA.Analytics.isPanorama
+            ? 'icon-analytics-report'
+            : isReport
+                ? 'icon-analytics-panorama'
+                : '';
+
+        if (secondaryText && secondaryClass) {
+            li.appendChild(createNavEntry('overviewButton', hrefSecondary, secondaryClass, secondaryText, null));
         }
 
-        let a = document.createElement('a');
-        a.id = 'overviewButton'
-        a.setAttribute('href', OC.generateUrl('apps/analytics/'+ datatype));
-
-        if (OCA.Analytics.isDataset) {
-            a.classList.add('icon-view-previous', 'svg');
-            a.innerText = t('analytics', 'Back to reports');
-            a.addEventListener('click', OCA.Analytics.Navigation.handleBackToReportClicked);
-        } else {
-            a.classList.add('icon-analytics-overview', 'svg');
-            a.innerText = t('analytics', 'Overview');
-            a.addEventListener('click', OCA.Analytics.Navigation.handleOverviewButton);
-        }
-        li.appendChild(navigationEntryDiv);
-        navigationEntryDiv.appendChild(a);
         return li;
     },
 

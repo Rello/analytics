@@ -138,7 +138,7 @@ OCA.Analytics.Dashboard = {
         let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(subheader, value, thresholds);
         //value = parseFloat(value).toLocaleString();
         value = OCA.Analytics.Dashboard.nFormatter(value);
-        let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
+        let href = OC.generateUrl('apps/analytics/r/' + reportId);
 
         return `<a href="${href}">
                 <div class="analyticsWidgetContent1">
@@ -453,6 +453,9 @@ OCA.Analytics.Dashboard = {
     },
 
     handleNavigationClicked: function (evt) {
+        evt.preventDefault();
+        history.pushState(null, '', evt.target.href);
+
         let reportId = evt.target.closest('a').parentElement.id.replace('analyticsWidgetItem', '');
         if (document.querySelector('#navigationDatasets [data-id="' + reportId + '"]') !== null) {
             document.querySelector('#navigationDatasets [data-id="' + reportId + '"]').click();

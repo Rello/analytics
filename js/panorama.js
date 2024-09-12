@@ -895,6 +895,11 @@ OCA.Analytics.Panorama = {
             t('analytics', 'Starting PDF export')
         );
 
+        // getting the header
+        let headerElement = document.getElementById('panoramaHeader');
+        const headerCanvas = await html2canvas(headerElement, {scale: 2});
+        const headerData = headerCanvas.toDataURL('image/png');
+
         // getting "by analytics"
         let imgElement = document.getElementById('byAnalyticsImg');
         let imgParent = document.getElementById('byAnalytics');
@@ -920,7 +925,7 @@ OCA.Analytics.Panorama = {
         }
 
         try {
-            const headerText = document.querySelector('.panoramaHeader').textContent;
+            const headerText = document.getElementById('panoramaHeader').textContent;
             OCA.Analytics.Notification.htmlDialogUpdateAdd('header captured');
 
             // Set PDF metadata
@@ -947,10 +952,13 @@ OCA.Analytics.Panorama = {
                 const textYOffset = 23; // Adjust based on your headerHeight and padding
 
                 // Add the header text centered at the top of each PDF page
-                pdf.setDrawColor(0);
-                pdf.setFillColor(229, 239, 245);
-                pdf.rect(1, 1, pdf.internal.pageSize.getWidth(), headerHeight, 'F');
-                pdf.text(headerText, pdf.internal.pageSize.getWidth() / 2, textYOffset, { align: 'center' });
+                //pdf.setDrawColor(0);
+                //pdf.setFillColor(229, 239, 245);
+               // pdf.rect(1, 1, pdf.internal.pageSize.getWidth(), headerHeight, 'F');
+                //pdf.text(headerText, pdf.internal.pageSize.getWidth() / 2, textYOffset, { align: 'center' });
+                // Add the page content centered and scaled
+                pdf.addImage(headerData, 'PNG', 28, 20, 380, 25, 200, 'FAST');
+
 
                 // Determine the scale factor to fit the image within the PDF page size
                 const scaleX = pdf.internal.pageSize.getWidth() / canvas.width;
