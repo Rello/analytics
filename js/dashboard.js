@@ -10,7 +10,12 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    //OCA.Analytics.Dashboard.init();
+    if (typeof OCA.Dashboard === 'object') {
+        OCA.Dashboard.register('analytics', (el) => {
+            el.innerHTML = '<ul id="ulAnalytics"></ul>';
+            OCA.Analytics.Dashboard.getFavorites();
+        });
+    }
 })
 
 OCA.Analytics = Object.assign({}, OCA.Analytics, {
@@ -39,16 +44,9 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  */
 OCA.Analytics.Dashboard = {
     init: function () {
-        if (typeof OCA.Dashboard === 'object') {
-            OCA.Dashboard.register('analytics', (el) => {
-                el.innerHTML = '<ul id="ulAnalytics"></ul>';
-                OCA.Analytics.Dashboard.getFavorites();
-            });
-        } else if (typeof OCA.Analytics.Navigation === 'object') {
-            // show favorites when the Analytics app itself is loaded
-            if (decodeURI(location.hash).length === 0) {
-                OCA.Analytics.Dashboard.getFavorites();
-            }
+        // show favorites when the Analytics app itself is loaded
+        if (decodeURI(location.hash).length === 0) {
+            OCA.Analytics.Dashboard.getFavorites();
         }
     },
 

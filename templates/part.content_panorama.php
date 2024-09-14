@@ -95,6 +95,16 @@
         border-radius: 5px;
     }
 
+    .flex-item-tall {
+        flex-grow: 2;
+        position: relative;
+        margin: 15px;
+        padding: 15px;
+        position: relative;
+        background-color: #FFFF;
+        border-radius: 5px;
+    }
+
     .textContainer {
         flex-direction: column;
         display: flex;

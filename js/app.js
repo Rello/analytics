@@ -87,6 +87,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
 OCA.Analytics.Core = {
     init: function () {
         if (document.getElementById('sharingToken').value !== '') {
+            document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
             OCA.Analytics.Backend.getData();
             return;
         }

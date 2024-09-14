@@ -487,8 +487,10 @@ OCA.Analytics.Navigation = {
     },
 
     handleOverviewButton: function (evt) {
-        evt.preventDefault();
-        history.pushState(null, '', evt.target.href);
+        if (evt) {
+            evt.preventDefault();
+            history.pushState(null, '', evt.target.href);
+        }
 
         OCA.Analytics.Sidebar?.close?.();
         if (document.querySelector('#navigationDatasets .active')) {
@@ -496,9 +498,10 @@ OCA.Analytics.Navigation = {
         }
         OCA.Analytics.Visualization.hideElement('analytics-content');
         OCA.Analytics.Visualization.showElement('analytics-intro');
-        document.getElementById('ulAnalytics').innerHTML = '';
-        OCA.Analytics.Dashboard?.init?.();
-        OCA.Analytics.Panorama?.Dashboard?.init?.();
+        // Do not reload DB all the time as it is already in the background
+        //document.getElementById('ulAnalytics').innerHTML = '';
+        //OCA.Analytics.Dashboard?.init?.();
+        //OCA.Analytics.Panorama?.Dashboard?.init?.();
     },
 
     handleNavigationClicked: function (evt) {

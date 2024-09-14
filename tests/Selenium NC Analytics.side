@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Analytics Test",
-  "url": "http://localhost:8027/",
+  "url": "http://localhost:8130/",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -10,7 +10,7 @@
       "id": "18faf15c-39e7-4b1a-92b9-140e4f45b558",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics/",
       "targets": [],
       "value": ""
     }, {
@@ -440,7 +440,7 @@
       "id": "bf9a3511-30fd-4530-baec-d9c053a3f07f",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -699,7 +699,7 @@
       "id": "97c8062b-b66e-48b8-8992-3ea46bed0f5a",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -1232,7 +1232,7 @@
       "id": "c96ba0f1-5166-4c36-a5ad-6b47d67fc4a1",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -1504,7 +1504,7 @@
       "id": "c0594c62-c044-4aef-bb55-5fb60f0a1708",
       "comment": "Advance Settings via URL",
       "command": "open",
-      "target": "/apps/analytics/a/",
+      "target": "/apps/analytics/d",
       "targets": [],
       "value": ""
     }, {
@@ -1562,7 +1562,7 @@
       "command": "select",
       "target": "id=datasourceSelect",
       "targets": [],
-      "value": "label=Local file: csv"
+      "value": "label=Local: csv"
     }, {
       "id": "621bd20c-3366-4627-8ebb-ad723910cfa5",
       "comment": "",
@@ -1973,7 +1973,7 @@
       "id": "5c342d81-e827-4902-a452-a464c510a23e",
       "comment": "Advance Settings via URL",
       "command": "open",
-      "target": "/apps/analytics/a/",
+      "target": "/apps/analytics/d",
       "targets": [],
       "value": ""
     }, {
@@ -2044,7 +2044,7 @@
       "command": "select",
       "target": "id=datasourceSelect",
       "targets": [],
-      "value": "label=JSON"
+      "value": "label=External: JSON"
     }, {
       "id": "032e70f1-b55a-4b6c-8200-d113317be2e6",
       "comment": "",
@@ -2234,7 +2234,7 @@
       "id": "03b743a2-6a88-4074-860a-761ae40b8996",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -2582,7 +2582,7 @@
       "id": "e78dd293-0f55-423f-ad79-74285b348462",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -3007,7 +3007,7 @@
       "id": "d1caead3-9976-4e71-91f6-a42aec05bdaf",
       "comment": "Advance Settings via URL",
       "command": "open",
-      "target": "/apps/analytics/a/",
+      "target": "/apps/analytics/d",
       "targets": [],
       "value": ""
     }, {
@@ -3078,7 +3078,7 @@
       "command": "select",
       "target": "id=datasourceSelect",
       "targets": [],
-      "value": "label=External file: csv"
+      "value": "label=External: csv"
     }, {
       "id": "aa5d07ec-a9a8-47c5-ac36-bddb68b47336",
       "comment": "",
@@ -3671,7 +3671,7 @@
       "id": "62056ec5-eb5b-4a9f-bbf0-c372c4ac35aa",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -3867,7 +3867,7 @@
       "id": "c28ee94e-dbd3-44d7-ab7b-3c7d2de79801",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -4569,7 +4569,7 @@
       "id": "8895e100-6b9c-4624-8b60-b0d8dfdd5c7a",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -4837,7 +4837,7 @@
       "id": "a054ffbd-a407-42e9-885b-df4573260c98",
       "comment": "Advance Settings via URL",
       "command": "open",
-      "target": "/apps/analytics/a/",
+      "target": "/apps/analytics/d",
       "targets": [],
       "value": ""
     }, {
@@ -5688,7 +5688,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/", "http://localhost:8130/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",

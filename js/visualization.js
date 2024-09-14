@@ -477,6 +477,7 @@ OCA.Analytics.Visualization = {
             chartOptions.circumference = 180;
             chartOptions.rotation = -90;
             chartOptions.plugins.datalabels.display = true;
+            chartOptions.plugins.datalabels.color = '#FFFFFF';
         }
 
         // the user can add/overwrite chart options

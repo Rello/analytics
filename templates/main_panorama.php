@@ -13,7 +13,7 @@ Util::addStyle('analytics', 'sharetabview');
 Util::addStyle('analytics', '3rdParty/datatables.min');
 Util::addStyle('files_sharing', 'icons');
 Util::addStyle('analytics', 'print');
-Util::addScript('analytics', 'panorama');
+Util::addStyle('analytics', 'dashboard');
 Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'sidebar');
@@ -27,6 +27,7 @@ Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'userGuidance');
 Util::addScript('analytics', '3rdParty/jspdf.umd.min');
 Util::addScript('analytics', '3rdParty/html2canvas.min');
+Util::addScript('analytics', 'panorama');
 ?>
 
 <div id="app-navigation">

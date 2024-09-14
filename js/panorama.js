@@ -125,29 +125,6 @@ OCA.Analytics.Panorama = {
                 '</div>' +
                 '</div>'
         },
-        {
-            id: 3, name: '2-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
-                '<div class="flex-row" style="height: 50%;">' +
-                '<div class="flex-item"></div><div class="flex-item"></div>' +
-                '</div>' +
-                '<div class="flex-row" style="height: 50%;">' +
-                '<div class="flex-item"></div><div class="flex-item"></div>' +
-                '</div>' +
-                '</div>'
-        },
-        {
-            id: 4, name: '4-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
-                '<div class="flex-row" style="height: 50%;">' +
-                '<div class="flex-item"></div><div class="flex-item"></div>' +
-                '<div class="flex-item"></div><div class="flex-item"></div>' +
-                '</div>' +
-                '<div class="flex-row" style="height: 50%;">' +
-                '<div class="flex-item"></div><div class="flex-item"></div>' +
-                '</div>' +
-                '</div>'
-        },
     ],
 
     init: function () {
@@ -1197,7 +1174,8 @@ OCA.Analytics.Dashboard = {
                     for (let panorama of JSON.parse(xhr.response)) {
                         let story = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(panorama));
 
-                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem">' + story.name + '</li>';
+                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem" style="height: 50px;text-align: center;">';
+                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">' + story.name + '</a></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
 
                     }

@@ -244,6 +244,7 @@ content: inherit;
     background: linear-gradient(to right, #1A366C, #F1F1F1);
     /*margin-top: 20px;*/
     margin-left: 30px;
+    margin-top: 10px;
     display: block;
 }
 
@@ -681,7 +682,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .infoBox {
-    background-color: var(--color-background-dark);
+    background-color: #FFFFFF;
     padding: 5px;
     box-shadow: 2px 2px 5px var(--color-background-darker);
     border-radius: var(--border-radius-large);

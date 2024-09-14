@@ -205,7 +205,9 @@ OCA.Analytics.Sidebar.Report = {
                     data['type'] = parseInt(data['type']);
 
                     // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    data['chartoptions'] = data['chartoptions'].replace(/xAxes/g, 'x')
+                    if (data['chartoptions']) {
+                        data['chartoptions'] = data['chartoptions'].replace(/xAxes/g, 'x');
+                    }
 
                     // clone the DOM template
                     table = document.importNode(document.getElementById('templateReport').content, true);
@@ -622,8 +624,13 @@ OCA.Analytics.Sidebar.Report = {
 
                 // store possibly changed values into the temporary variable as this is used in getData
                 // without this, the new options would only be active after a full reload
-                OCA.Analytics.currentReportData.options.chartoptions = JSON.parse(document.getElementById('sidebarReportChartOptions').value);
-                OCA.Analytics.currentReportData.options.dataoptions = JSON.parse(document.getElementById('sidebarReportDataOptions').value);
+                let chartOptions = document.getElementById('sidebarReportChartOptions').value;
+                let dataOptions = document.getElementById('sidebarReportDataOptions').value;
+
+                if (OCA.Analytics?.currentReportData?.options) {
+                    OCA.Analytics.currentReportData.options.chartoptions = chartOptions ? JSON.parse(chartOptions) : null;
+                    OCA.Analytics.currentReportData.options.dataoptions = dataOptions ? JSON.parse(dataOptions) : null;
+                }
 
                 if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Report.metadataChanged = false;

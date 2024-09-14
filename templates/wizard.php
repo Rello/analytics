@@ -9,8 +9,7 @@
 ?>
 <template id="wizardDialog">
     <div class="modal-mask" id="analyticsWizard"
-         style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
-         hidden>
+         style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
         <div class="modal-wrapper modal-wrapper--normal" style="">
             <a class="prev" id="wizardPrevious">
                 <svg fill="currentColor" width="40" height="40" viewBox="0 0 24 24" class="material-design-icon__svg">

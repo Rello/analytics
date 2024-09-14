@@ -119,9 +119,7 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%; vertical-align: middle;"><?php p($l->t('Chart options')); ?></div>
-            <div style="display: table-cell;"><textarea id="sidebarReportChartOptions"
-                                                        placeholder="<?php p($l->t('Advanced')); ?>"
-                                                        class="sidebarInput" row="1"></textarea>
+            <div style="display: table-cell;"><textarea id="sidebarReportChartOptions" class="sidebarInput" row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
@@ -131,9 +129,7 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%; vertical-align: middle;"><?php p($l->t('Data options')); ?></div>
-            <div style="display: table-cell;"><textarea id="sidebarReportDataOptions"
-                                                        placeholder="<?php p($l->t('Advanced')); ?>"
-                                                        class="sidebarInput" row="1"></textarea>
+            <div style="display: table-cell;"><textarea id="sidebarReportDataOptions" class="sidebarInput" row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
