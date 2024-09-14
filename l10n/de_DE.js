@@ -77,6 +77,7 @@ OC.L10N.register(
     "Back to reports" : "Zurück zu den Berichten",
     "Overview" : "Übersicht",
     "Reports" : "Berichte",
+    "Panoramas" : "Panoramen",
     "Scheduled data load" : "Geplante Datenladung",
     "Data load" : "Datenladung",
     "Remove from favorites" : "Von Favoriten entfernen",

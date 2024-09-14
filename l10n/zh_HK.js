@@ -77,6 +77,7 @@ OC.L10N.register(
     "Back to reports" : "返回報告",
     "Overview" : "概覽",
     "Reports" : "報告",
+    "Panoramas" : "全景",
     "Scheduled data load" : "預定數據加載",
     "Data load" : "數據加載",
     "Remove from favorites" : "從最愛中移除",
