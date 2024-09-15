@@ -44,18 +44,10 @@
         /*padding: 1px;*/
     }
 
-    .panoramaSubHeader[contenteditable="true"],
-    .panoramaHeader[contenteditable="true"] {
-        border: 1px dashed blue;
-        padding: initial;
-        cursor: text;
-        margin: initial;
-        background-color: initial;
-        width: initial;
-        height: initial;
-        min-height: initial;
-    }
 
+    .panoramaSubHeader[contenteditable="true"] {
+
+    }
     .container {
         width: 100%;
         height: 100%;

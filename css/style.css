@@ -242,10 +242,23 @@ content: inherit;
     padding: 8px 20px;
     width: 600px;
     background: linear-gradient(to right, #1A366C, #F1F1F1);
-    /*margin-top: 20px;*/
-    margin-left: 30px;
-    margin-top: 10px;
+    margin: 10px 0 0 30px;
     display: block;
+}
+
+.reportHeader[contenteditable="true"] {
+    border: 1px dashed blue;
+    font-weight: bold;
+    font-size: 22px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 8px 20px;
+    width: 600px;
+    background: white;
+    display: block;
+    margin: 10px 0 0 30px;
 }
 
 #reportMenuBar {
@@ -268,6 +281,21 @@ content: inherit;
     margin-left: 30px;
     display: block;
     margin-bottom: 10px;
+}
+
+.panoramaSubHeader[contenteditable="true"] {
+    border: 1px dashed blue;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 8px 20px;
+    width: 600px;
+    background: white;
+    display: block;
+    margin: 0 0 10px 30px;
 }
 
 #reportPlaceholder {
