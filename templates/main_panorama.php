@@ -12,6 +12,7 @@ Util::addStyle('analytics', 'style');
 Util::addStyle('analytics', 'sharetabview');
 Util::addStyle('analytics', '3rdParty/datatables.min');
 Util::addStyle('files_sharing', 'icons');
+Util::addStyle('analytics', 'wizard');
 Util::addStyle('analytics', 'print');
 Util::addStyle('analytics', 'dashboard');
 Util::addScript('analytics', 'visualization');
@@ -59,4 +60,5 @@ Util::addScript('analytics', 'panorama');
 <?php print_unescaped($this->inc('part.sidebar')); ?>
 <div>
     <?php print_unescaped($this->inc('part.templates')); ?>
+	<?php print_unescaped($this->inc('wizard')); ?>
 </div>

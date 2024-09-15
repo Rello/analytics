@@ -78,8 +78,8 @@
         <div class="description">
             <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></p>
             <ul>
+                <li><?php p($l->t('Panoramas with everything at one sight')); ?></li>
                 <li><?php p($l->t('Different chart types like lines, columns or doughnuts')); ?></li>
-                <li><?php p($l->t('Customize further chart options by using advanced scripting')); ?></li>
                 <li><?php p($l->t('Show your most important insights in the Nextcloud Dashboard')); ?></li>
                 <li><?php p($l->t('Interactive tables')); ?></li>
                 <li><?php p($l->t('Use thresholds to mark exceptions or receive Nextcloud notifications')); ?></li>

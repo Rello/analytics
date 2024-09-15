@@ -5,22 +5,23 @@
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
 Connect data from different sources in one place.
-Enable flexible reports and enjoy seamless Nextcloud integration.
+Use flexible Panoramas and reports with seamless Nextcloud integration.
 Visualize and share anything, from financial analysis to IoT logs.
 
 ##### Features:
+- Visualization: Panoramas, reports, charts, tables, filters
 - Data sources:
   - csv, spreadsheet, API, import, manual entry
-  - Nextcloud Forms, Nextcloud Tables
+  - Nextcloud Files, Forms, Tables
   - external: GitHub, website grabber, JSON
 - Register external data sources from other apps
 - Storage: real-time or database
 - Advanced data loads with scheduling
-- Visualization: combined charts, zoom, tables, filters
 - Analysis functions: trend, dis-/aggregation
 - Thresholds for alerts and color coding
-- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation
 - Sharing: user, groups, link
+- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation
+- AI Assistant: Context Chat integration
 
 ]]></description>
     <version>4.14.2</version>
@@ -40,13 +41,13 @@ Visualize and share anything, from financial analysis to IoT logs.
     <donation title="Donate via PayPal" type="paypal">https://github.com/rello/analytics/wiki/donate</donation>
     <donation title="Donate via Bitcoin">https://github.com/rello/analytics/wiki/donate</donation>
     <screenshot>
-        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/logo25.png
+        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/logo.png
     </screenshot>
     <screenshot>
-        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/charts25.png
+        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/charts.png
     </screenshot>
     <screenshot>
-        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/architecture25.png
+        https://raw.githubusercontent.com/Rello/analytics/master/screenshots/architecture.png
     </screenshot>
     <dependencies>
         <nextcloud min-version="26" max-version="99"/>

@@ -205,11 +205,11 @@
 }
 
 #analyticsWizard .modal-header .firstrunwizard-header .logo {
-    background-image: url(../img/app.svg);
+    background-image: url(../img/logo.svg);
     background-size: contain;
     background-repeat: no-repeat;
-    width: 80px;
-    height: 80px;
+    width: 235px;
+    height: 100px;
     max-height: 20vh;
     margin: 0 auto;
 }

@@ -91,6 +91,13 @@ OCA.Analytics.Dashboard = {
                 if (jsondata['status'] !== 'nodata' && jsondata['data'].length > 20) {
                     jsondata['data'].slice(jsondata['data'].length - 20); //just the last 20 records for the micro charts
                 }
+                try {
+                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
+                    let chartOptions = jsondata.options.chartoptions.replace(/xAxes/g, 'x');
+                    jsondata.options.chartoptions = JSON.parse(chartOptions);
+                } catch (e) {
+                    jsondata.options.chartoptions = {};
+                }
                 OCA.Analytics.Dashboard.createWidgetContent(jsondata);
             }
         };
