@@ -116,7 +116,7 @@ OCA.Analytics.Navigation = {
         let navigationEntrydiv = document.createElement('div');
         navigationEntrydiv.classList.add('app-navigation-entry');
         let a = document.createElement('a');
-        a.classList.add('icon-category-customization', 'svg');
+        a.classList.add('icon-category-customization');
         a.innerText = t('analytics', 'Dataset maintenance');
         a.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
         li.appendChild(navigationEntrydiv);
@@ -167,7 +167,7 @@ OCA.Analytics.Navigation = {
             let a = document.createElement('a');
             a.id = id;
             a.setAttribute('href', href);
-            a.classList.add(className, 'svg');
+            a.classList.add(className);
             a.innerText = text;
             if (eventHandler) a.addEventListener('click', eventHandler);
 

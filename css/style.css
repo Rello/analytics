@@ -191,7 +191,7 @@ content: inherit;
 }
 
 #app-content {
-    background-color: #F1F1F1 !important;
+    background-color: var(--color-background-hover) !important;
 }
 
 #analytics-content {
@@ -622,7 +622,7 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-overview {
     background-image: url(../img/overview.svg);
-    filter: var(--background-invert-if-dark);
+    /*filter: var(--background-invert-if-dark);*/
 }
 
 .icon-analytics-fullscreen {
