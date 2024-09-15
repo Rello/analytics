@@ -451,8 +451,10 @@ OCA.Analytics.Dashboard = {
     },
 
     handleNavigationClicked: function (evt) {
-        evt.preventDefault();
-        history.pushState(null, '', evt.target.href);
+        if (typeof OCA.Dashboard !== 'object') {
+            evt.preventDefault();
+            history.pushState(null, '', evt.target.href);
+        }
 
         let reportId = evt.target.closest('a').parentElement.id.replace('analyticsWidgetItem', '');
         if (document.querySelector('#navigationDatasets [data-id="' + reportId + '"]') !== null) {

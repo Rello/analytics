@@ -498,10 +498,10 @@ OCA.Analytics.Navigation = {
         }
         OCA.Analytics.Visualization.hideElement('analytics-content');
         OCA.Analytics.Visualization.showElement('analytics-intro');
-        // Do not reload DB all the time as it is already in the background
-        //document.getElementById('ulAnalytics').innerHTML = '';
-        //OCA.Analytics.Dashboard?.init?.();
-        //OCA.Analytics.Panorama?.Dashboard?.init?.();
+        // ToDo: Do not reload DB all the time as it is already in the background
+        document.getElementById('ulAnalytics').innerHTML = '';
+        OCA.Analytics.Dashboard?.init?.();
+        OCA.Analytics.Panorama?.Dashboard?.init?.();
     },
 
     handleNavigationClicked: function (evt) {

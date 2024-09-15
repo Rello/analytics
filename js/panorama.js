@@ -382,7 +382,8 @@ OCA.Analytics.Panorama = {
             // get the subheaders and store them to the panorama
             document.querySelectorAll('.panoramaSubHeader').forEach((item) => {
                 let page = item.id.split('-')[1];
-                OCA.Analytics.Panorama.currentPanorama.pages[page].name = item.innerText;
+                item.innerText = item.textContent;
+                OCA.Analytics.Panorama.currentPanorama.pages[page].name = item.textContent;
             });
             OCA.Analytics.Backend.update();
         } else {
@@ -1106,6 +1107,7 @@ OCA.Analytics.Backend = {
     },
 
     update: function () {
+        // clean up possible html data within the headers
         let requestUrl = OC.generateUrl('apps/analytics/panorama/') + OCA.Analytics.Panorama.currentPanorama.id;
         fetch(requestUrl, {
             method: 'PUT',
