@@ -1,5 +1,5 @@
-Connect data from different sources in one place.
-Use flexible Panoramas and reports with seamless Nextcloud integration.
+Connect data from different sources in one place.<br>
+Use flexible Panoramas and reports with seamless Nextcloud integration.<br>
 Visualize and share anything, from financial analysis to IoT logs.
 
 <p align="center">
