@@ -1,16 +1,17 @@
 # Changelog
 
-## 4.15.0 - 2024-0x-xx
+## 5.0.0 - 2024-09-15
 ### Added
 - AI Assistant - Context Chat integration #403
+- Panoramas - multi page dashboards
 - data source: Local JSON
 - full screen presentation mode
-- App branding
 
 ### Changed
+- Analytics branding
 - Chart.js v4.4.3
 - moment.js v2.30.1
-- NC30 css compatibility
+- NC30 compatibility
 - rework of sharing backend
 - no activities for added data anymore
 - excel data source: handling of time and % values

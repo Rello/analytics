@@ -8,23 +8,24 @@ Connect data from different sources in one place.
 Use flexible Panoramas and reports with seamless Nextcloud integration.
 Visualize and share anything, from financial analysis to IoT logs.
 
-##### Features:
-- Visualization: Panoramas, reports, charts, tables, filters
+
+#### Features:
+- Visualization: **Panoramas**, reports, charts, tables, filters
 - Data sources:
   - csv, spreadsheet, API, import, manual entry
   - Nextcloud Files, Forms, Tables
   - external: GitHub, website grabber, JSON
 - Register external data sources from other apps
-- Storage: real-time or database
+- Storage: **real-time** or database
 - Advanced data loads with scheduling
-- Analysis functions: trend, dis-/aggregation
+- Analysis functions: **trend**, dis-/aggregation
 - Thresholds for alerts and color coding
 - Sharing: user, groups, link
 - Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation
-- AI Assistant: Context Chat integration
+- **AI Assistant**: Context Chat integration
 
 ]]></description>
-    <version>4.14.2</version>
+    <version>5.0.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>

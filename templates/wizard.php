@@ -76,13 +76,13 @@
                 src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
         </div>
         <div class="description">
-            <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy to use reports')); ?></p>
+            <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy')); ?></p>
             <ul>
-                <li><?php p($l->t('Panoramas with everything at one sight')); ?></li>
-                <li><?php p($l->t('Different chart types like lines, columns or doughnuts')); ?></li>
-                <li><?php p($l->t('Show your most important insights in the Nextcloud Dashboard')); ?></li>
-                <li><?php p($l->t('Interactive tables')); ?></li>
-                <li><?php p($l->t('Use thresholds to mark exceptions or receive Nextcloud notifications')); ?></li>
+                <li><?php p($l->t('Showcase key insights with Panoramas')); ?></li>
+                <li><?php p($l->t('Various chart types, including lines, columns, and doughnuts')); ?></li>
+                <li><?php p($l->t('Gain a comprehensive view of your data with Nextcloud Dashboard')); ?></li>
+                <li><?php p($l->t('Interactive tables for deeper analysis')); ?></li>
+                <li><?php p($l->t('Set thresholds to highlight exceptions and receive Nextcloud notifications')); ?></li>
             </ul>
         </div>
     </div>
@@ -93,13 +93,13 @@
                 src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
         </div>
         <div class="description">
-            <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data')); ?></p>
+            <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data with precision')); ?></p>
             <ul>
-                <li><?php p($l->t('Flexible filters including dynamic date variables')); ?></li>
-                <li><?php p($l->t('Change drill down by removing columns')); ?></li>
-                <li><?php p($l->t('Customize charts with primary or secondary axis')); ?></li>
-                <li><?php p($l->t('Use different chart types per data series')); ?></li>
-                <li><?php p($l->t('Save default filters')); ?></li>
+                <li><?php p($l->t('Apply flexible filters, including dynamic date variables')); ?></li>
+                <li><?php p($l->t('Adjust drill-down views by removing columns effortlessly')); ?></li>
+                <li><?php p($l->t('Customize charts with primary and secondary axes')); ?></li>
+                <li><?php p($l->t('Mix and match chart types for each data series')); ?></li>
+                <li><?php p($l->t('Save default filters for quick access to your preferred views')); ?></li>
             </ul>
         </div>
     </div>
@@ -110,13 +110,13 @@
                 src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
         </div>
         <div class="description">
-            <p id="wizardNewHeader3"><?php p($l->t('Use data from various data sources')); ?></p>
+            <p id="wizardNewHeader3"><?php p($l->t('Utilize data from multiple sources with ease')); ?></p>
             <ul>
-                <li><?php p($l->t('Internal data is persisted in the database and delivers the most flexibility and performance')); ?></li>
-                <li><?php p($l->t('Use data from GitHub to monitor download statistics in real-time')); ?></li>
-                <li><?php p($l->t('The JSON data source can read data from external services')); ?></li>
-                <li><?php p($l->t('With the HTML-Grabber, almost any website data can be extracted')); ?></li>
-                <li><?php p($l->t('Read data from internal Nextcloud files to visualize them in real-time')); ?></li>
+                <li><?php p($l->t('Data is persisted in the database for maximum flexibility and performance')); ?></li>
+                <li><?php p($l->t('Monitor real-time download statistics with GitHub integration')); ?></li>
+                <li><?php p($l->t('Leverage the JSON data source to pull data from external services')); ?></li>
+                <li><?php p($l->t('Extract data from virtually any website using the HTML-Grabber')); ?></li>
+                <li><?php p($l->t('Visualize data from internal Nextcloud applications instantly')); ?></li>
             </ul>
         </div>
     </div>
@@ -127,14 +127,14 @@
                 src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
         </div>
         <div class="description">
-            <p id="wizardNewHeader4"><?php p($l->t('Automation')); ?></p>
+            <p id="wizardNewHeader4"><?php p($l->t('Automate your data workflows seamlessly')); ?></p>
             <ul>
-                <li><?php p($l->t('Any data source can be persisted in Nextcloud')); ?></li>
-                <li><?php p($l->t('Use timestamps to historize data')); ?></li>
-                <li><?php p($l->t('Full (deletion of old data) or delta loads')); ?></li>
-                <li><?php p($l->t('Schedule data loads in the background daily or hourly')); ?></li>
-                <li><?php p($l->t('Trigger data loads via scripts using the occ command')); ?></li>
-                <li><?php p($l->t('Use the REST API to push data into Analytics')); ?></li>
+                <li><?php p($l->t('Persist data from any source directly in Nextcloud')); ?></li>
+                <li><?php p($l->t('Utilize timestamps to create historical records')); ?></li>
+                <li><?php p($l->t('Perform full or incremental delta loads')); ?></li>
+                <li><?php p($l->t('Schedule automatic data loads in the background')); ?></li>
+                <li><?php p($l->t('Trigger data loads with scripts using the occ command')); ?></li>
+                <li><?php p($l->t('Push data into Analytics effortlessly via the REST API')); ?></li>
             </ul>
         </div>
     </div>
