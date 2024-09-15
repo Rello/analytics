@@ -1,31 +1,29 @@
-Connect data from different sources in one place.<br>
-Enable flexible reports and enjoy seamless Nextcloud integration.<br>
+Connect data from different sources in one place.
+Use flexible Panoramas and reports with seamless Nextcloud integration.
 Visualize and share anything, from financial analysis to IoT logs.
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo25.png" alt="Main" width="300" title="Analytics"> <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts25.png" alt="Main" width="300" title="Analytics">
+<img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Main" width="300" title="Analytics"> <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts.png" alt="Main" width="300" title="Analytics">
 </p>
 
 ## Features
+- Visualization: Panoramas, [charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables, filters
 - Data sources: 
   - csv, spreadsheet, [API](https://github.com/Rello/analytics/wiki/API), import, manual entry
-  - Nextcloud Forms, Nextcloud Tables 
-  - external: GitHub, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber)
-  , [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
+  - Nextcloud Files, Forms, Tables
+  - external: GitHub, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber), [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
 - [Register](https://github.com/Rello/analytics/wiki/Register-own-datasource) external data sources from other apps
 - Storage: real-time or database
 - Advanced data loads with [scheduling](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
-- Visualization: [combined charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), zoom, tables,
-  filters
 - Functions: trend, dis-/aggregation
 - [Thresholds](https://github.com/Rello/analytics/wiki/Thresholds) for alerts and color coding
+- Sharing: user, groups, link
 - Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), 
   Dashboard, Search, Smart picker, Translation
-- Sharing: user, groups, link
-
+- AI Assistant: Context Chat integration
 
 ## Architecture
-<p align="center"><img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture25.png" alt="Main" width="610" title="Analytics"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Main" width="610" title="Analytics"></p>
 
 ## Register datasource
 Apps can register own, external data sources via an event listener
