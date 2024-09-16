@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1 - 2024-09-16
+### Fixed
+- Database migration issue
+
 ## 5.0.0 - 2024-09-15
 ### Added
 - AI Assistant - Context Chat integration #403

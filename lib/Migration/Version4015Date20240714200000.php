@@ -69,7 +69,7 @@ class Version4015Date20240714200000 extends SimpleMigrationStep
 		$table = $schema->getTable('analytics_share');
 		if (!$table->hasColumn('item_type')) {
 			$table->addColumn('item_type', 'string', [
-				'notnull' => true,
+				'notnull' => false,
 				'length' => 64,
 			]);
 		}
