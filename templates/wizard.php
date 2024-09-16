@@ -76,7 +76,7 @@
                 src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
         </div>
         <div class="description">
-            <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with easy')); ?></p>
+            <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with ease')); ?></p>
             <ul>
                 <li><?php p($l->t('Showcase key insights with Panoramas')); ?></li>
                 <li><?php p($l->t('Various chart types, including lines, columns, and doughnuts')); ?></li>
