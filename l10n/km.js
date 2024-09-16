@@ -88,7 +88,6 @@ OC.L10N.register(
     "Chart" : "ក្រាប",
     "Chart type" : "ប្រភេទក្រាប",
     "Area" : "ផ្ទៃ",
-    "Advanced" : "កម្រិត​ខ្ពស់",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
     "Export" : "នាំចេញ",
     "Description" : "ការ​អធិប្បាយ",

@@ -67,7 +67,6 @@ OC.L10N.register(
     "Back" : "Back",
     "Settings" : "Settings",
     "Name" : "Name",
-    "Advanced" : "Advanced",
     "Open documentation" : "Open documentation",
     "Update" : "Update",
     "Export" : "Export",

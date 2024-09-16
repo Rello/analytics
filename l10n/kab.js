@@ -30,7 +30,6 @@ OC.L10N.register(
     "Back" : "Retour",
     "Settings" : "Iɣewwaṛen",
     "Name" : "Nom",
-    "Advanced" : "Talqayt",
     "Title" : "Azwel",
     "Copy" : "Nɣel",
     "Daily" : "S wass",

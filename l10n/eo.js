@@ -41,7 +41,6 @@ OC.L10N.register(
     "Settings" : "Agordoj",
     "Name" : "Nomo",
     "Display" : "Montrilo",
-    "Advanced" : "Progresinta",
     "Open documentation" : "Malfermi la dokumentaron",
     "Update" : "Ĝisdatigi",
     "Export" : "Eksporti",

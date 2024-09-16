@@ -95,7 +95,6 @@ OC.L10N.register(
     "Name" : "Tên",
     "Display" : "Hiển th",
     "Chart type" : "Loại biểu đồ",
-    "Advanced" : "Nâng cao",
     "Open documentation" : "Mở tài liệu",
     "Update" : "Cập nhật",
     "Export" : "Xuất ra",

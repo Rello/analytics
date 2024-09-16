@@ -191,7 +191,6 @@ OC.L10N.register(
     "Color" : "Color",
     "Data is processed inside Nextcloud." : "Los datos procésense dientro de Nextcloud.",
     "Open Source" : "Códigu abiertu",
-    "Interactive tables" : "Table interactives",
     "Get more information" : "Consiguir más información",
     "Nextcloud forum" : "Foru de Nextcloud",
     "General information" : "Información xeneral",
