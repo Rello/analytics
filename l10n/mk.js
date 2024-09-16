@@ -50,7 +50,6 @@ OC.L10N.register(
     "Name" : "Име",
     "Display" : "Прикажи",
     "Table" : "Табела",
-    "Advanced" : "Напредно",
     "Open documentation" : "Отвори ја документацијата",
     "Update" : "Ажурирај",
     "Export" : "Извези",

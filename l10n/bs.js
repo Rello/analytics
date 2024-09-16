@@ -25,7 +25,6 @@ OC.L10N.register(
     "Favorites" : "Favoriti",
     "Settings" : "Podešavanje",
     "Name" : "Ime",
-    "Advanced" : "Napredno",
     "Update" : "Ažuriraj",
     "Export" : "Izvezi",
     "Description" : "Opis",

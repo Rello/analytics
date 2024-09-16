@@ -32,7 +32,6 @@ OC.L10N.register(
     "Settings" : "Quraşdırmalar",
     "Name" : "Ad",
     "Display" : "Ekran",
-    "Advanced" : "İrəliləmiş",
     "Open documentation" : "Sənədləri aç",
     "Update" : "Yenilənmə",
     "Export" : "Çıxarış",

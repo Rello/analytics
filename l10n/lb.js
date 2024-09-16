@@ -27,7 +27,6 @@ OC.L10N.register(
     "Back" : "Zeréck",
     "Settings" : "Astellungen",
     "Name" : "Numm",
-    "Advanced" : "Erweidert",
     "Open documentation" : "Dokumentatioun opmaachen",
     "Update" : "Update",
     "Export" : "Exportéieren",

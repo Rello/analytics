@@ -54,7 +54,6 @@ OC.L10N.register(
     "Name" : "Vardas, pavardė",
     "Display" : "Ekranas",
     "Table" : "Lentelė",
-    "Advanced" : "Išplėstiniai",
     "Open documentation" : "Atverti dokumentaciją",
     "Update" : "Atnaujinti",
     "Export" : "Eksportuoti",

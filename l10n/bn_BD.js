@@ -30,7 +30,6 @@ OC.L10N.register(
     "Settings" : "সেটিংস",
     "Name" : "নাম",
     "Display" : "প্রদর্শন কর",
-    "Advanced" : "সুচারু",
     "Update" : "পরিবর্ধন",
     "Export" : "রপ্তানি",
     "Description" : "বিবরণ",

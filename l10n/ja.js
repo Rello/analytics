@@ -138,7 +138,6 @@ OC.L10N.register(
     "Display" : "表示",
     "Table" : "表",
     "Chart" : "チャート",
-    "Advanced" : "高度な",
     "Open documentation" : "ドキュメントを開く",
     "Update" : "更新",
     "Export" : "エクスポート",

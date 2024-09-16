@@ -42,7 +42,6 @@ OC.L10N.register(
     "Settings" : "Rregullimet",
     "Name" : "Emri",
     "Display" : "Ekran",
-    "Advanced" : "Të avancuara",
     "Open documentation" : "Dokumentacion i hapur",
     "Update" : "Përditëso",
     "Export" : "Eksport",

@@ -42,7 +42,6 @@ OC.L10N.register(
     "Back" : "Atpakaļ",
     "Settings" : "Iestatījumi",
     "Name" : "Vārds",
-    "Advanced" : "Paplašināti",
     "Open documentation" : "Atvērt dokumentāciju",
     "Update" : "Atjaunināt",
     "Export" : "Eksportēt",

@@ -28,7 +28,6 @@ OC.L10N.register(
     "Back" : "பின்னுக்கு",
     "Settings" : "அமைப்புகள்",
     "Name" : "பெயர்",
-    "Advanced" : "உயர்ந்த",
     "Update" : "இற்றைப்படுத்தல்",
     "Export" : "ஏற்றுமதி",
     "Description" : "விவரிப்பு",

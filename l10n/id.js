@@ -152,7 +152,6 @@ OC.L10N.register(
     "Name" : "Nama",
     "Display" : "Tampilkan",
     "Chart type" : "Jenis bagan",
-    "Advanced" : "Lanjutan",
     "Open documentation" : "Buka dokumentasi",
     "Update" : "Perbarui",
     "Export" : "Ekspor",

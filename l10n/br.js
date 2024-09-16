@@ -39,7 +39,6 @@ OC.L10N.register(
     "Back" : "Distro",
     "Settings" : "Arventennoù",
     "Name" : "Anv",
-    "Advanced" : "Araokadennet",
     "Open documentation" : "Digeriñ an dielvadur",
     "Update" : "Hizivaat",
     "Description" : "Deskrivadur",

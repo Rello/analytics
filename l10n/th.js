@@ -48,7 +48,6 @@ OC.L10N.register(
     "More information …" : "ข้อมูลเพิ่มเติม ...",
     "Name" : "ชื่อ",
     "Display" : "แสดงผล",
-    "Advanced" : "ขั้นสูง",
     "Open documentation" : "เปิดเอกสารประกอบ",
     "Update" : "อัปเดต",
     "Export" : "ส่งออก",
