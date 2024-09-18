@@ -351,6 +351,7 @@ OC.L10N.register(
     "Share your reports and insights" : "Comparta os seus informes e estimacións",
     "Fully integrated into Nextcloud" : "Totalmente integrado en Nextcloud",
     "Open Source" : "Código aberto",
+    "Visualize any data with ease" : "Vexa doadamente calquera dato",
     "Showcase key insights with Panoramas" : "Amose información clave con Panoramas",
     "Various chart types, including lines, columns, and doughnuts" : "Varios tipos de gráficos, incluíndo liñas, columnas e rosquillas",
     "Gain a comprehensive view of your data with Nextcloud Dashboard" : "Obteña unha vista completa dos teus datos co Taboleiro de Nextcloud",

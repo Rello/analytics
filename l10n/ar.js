@@ -351,6 +351,7 @@ OC.L10N.register(
     "Share your reports and insights" : "شارك تقاريرك و أفكارك",
     "Fully integrated into Nextcloud" : "متكاملٌ تمامًا مع نكست كلاود",
     "Open Source" : "مفتوح المصدر",
+    "Visualize any data with ease" : "تصوُّر أي بيانات بكل يُسرٍ",
     "Showcase key insights with Panoramas" : "عرض الأفكار الرئيسية باستخدام الصور البانورامية",
     "Various chart types, including lines, columns, and doughnuts" : "أنواع مختلفة من المخططات؛ بما في ذلك الخطوط والأعمدة والدونات",
     "Gain a comprehensive view of your data with Nextcloud Dashboard" : "أُحصُل على عرض شامل لبياناتك باستعمال \"لوحة المعلومات\" من نكست كلاود",

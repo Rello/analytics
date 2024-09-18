@@ -351,6 +351,7 @@ OC.L10N.register(
     "Share your reports and insights" : "分享您的報告和見解",
     "Fully integrated into Nextcloud" : "完全集成到 Nextcloud",
     "Open Source" : "開放源碼的",
+    "Visualize any data with ease" : "輕鬆視覺化任何數據",
     "Showcase key insights with Panoramas" : "透過全景圖展示重要見解",
     "Various chart types, including lines, columns, and doughnuts" : "各種圖表類型，包括折線圖、長條圖和圓環圖",
     "Gain a comprehensive view of your data with Nextcloud Dashboard" : "使用 Nextcloud Dashboard 全面了解您的數據",
