@@ -351,6 +351,7 @@ OC.L10N.register(
     "Share your reports and insights" : "Raporlarınızı ve öngörülerinizi paylaşın",
     "Fully integrated into Nextcloud" : "Nextcloud ile tam olarak bütünleştirilmiş",
     "Open Source" : "Açık kaynaklı",
+    "Visualize any data with ease" : "Herhangi bir veriyi kolayca görselleştirin",
     "Showcase key insights with Panoramas" : "Manzaralar ile önemli içgörüleri sergileyin",
     "Various chart types, including lines, columns, and doughnuts" : "Çizgi, sütun ya da halka gibi çeşitli çizelge türleri",
     "Gain a comprehensive view of your data with Nextcloud Dashboard" : "Nextcloud Pano ile verilerinizin kapsamlı bir görünümünü elde edin",
