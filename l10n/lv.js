@@ -41,7 +41,7 @@ OC.L10N.register(
     "Translate" : "Tulkot",
     "Back" : "Atpakaļ",
     "Settings" : "Iestatījumi",
-    "Name" : "Vārds",
+    "Name" : "Nosaukums",
     "Open documentation" : "Atvērt dokumentāciju",
     "Update" : "Atjaunināt",
     "Export" : "Eksportēt",
