@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "Set de date",
+    "Data" : "Date",
+    "Automation" : "Automatizare",
     "Value" : "Valoare",
     "Saved" : "Salvat",
     "Delete" : "Șterge",
