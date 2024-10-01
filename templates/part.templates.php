@@ -491,7 +491,7 @@
                 <span id="dataloadOCC"></span>
                 <br>
                 <br>
-                <a href="https://github.com/Rello/analytics/wiki/Scheduled-dataloads"
+                <a href="https://github.com/Rello/analytics/wiki/Automation-(load-&-delete)"
                    target="_blank"><?php p($l->t('More information …')); ?></a>
             </div>
         </div>

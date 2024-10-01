@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Marcel Scherello
 # SPDX-License-Identifier: AGPL-3.0-or-later
 version = 1
-SPDX-PackageName = "Marcel Scherello"
+SPDX-PackageName = "analytics"
 SPDX-PackageSupplier = "Marcel Scherello <analytics@scherello.de>"
 SPDX-PackageDownloadLocation = "https://github.com/rello/analytics"
 

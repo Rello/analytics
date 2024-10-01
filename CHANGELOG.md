@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- wrong info link in data load screen
+
 ## 5.0.1 - 2024-09-16
 ### Fixed
 - Database migration issue
