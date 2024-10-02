@@ -189,7 +189,7 @@ OC.L10N.register(
     "Ignore leading rows" : "Ignorar as filas de cabeceira",
     "Number of rows" : "Número de filas",
     "Select columns" : "Seleccionar columnas",
-    "e.g. 1,2,4 or leave empty" : "p.ex. 1,2,4 ou deixe en branco",
+    "e.g. 1,2,4 or leave empty" : "p. ex. 1,2,4 ou deixe en branco",
     "HTTP method" : "Método de HTTP",
     "Object path" : "Ruta ao obxecto",
     "More options" : "Máis opcións",
