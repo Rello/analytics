@@ -183,7 +183,7 @@ OC.L10N.register(
     "Total" : "المجموع",
     "External" : "خارجي",
     "External URL" : "عنوان URL خارجي",
-    "Header row" : "سطر الترويسة",
+    "Header row" : "سطر العنوان",
     "Yes" : "نعم",
     "No" : "لا",
     "Ignore leading rows" : "تجاهل الصفوف البادئة",
