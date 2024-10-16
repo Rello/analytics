@@ -64,6 +64,7 @@ OC.L10N.register(
     "Line" : "Lijn",
     "doughnut" : "donut",
     "Bar" : "Staaf",
+    "Select the format of the data and how it should be visualized" : "Selecteer het formaat van de gegevens en hoe ze gevisualiseerd moeten worden",
     "Drag fields here" : "Sleep velden hierheen",
     "New dataset" : "Nieuwe dataset",
     "New panorama" : "Nieuw panorama",
