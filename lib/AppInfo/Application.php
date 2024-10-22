@@ -11,13 +11,13 @@ namespace OCA\Analytics\AppInfo;
 use OCA\Analytics\ContextChat\ContentProvider;
 use OCA\Analytics\Dashboard\Widget;
 use OCA\Analytics\Flow\FlowOperation;
-// use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Listener\UserDeletedListener;
+use OCA\Analytics\ShareReview\ShareReviewListener;
 use OCA\Analytics\Notification\Notifier;
 use OCA\Analytics\Search\SearchProvider;
 use OCA\Analytics\Listener\ReferenceListener;
 use OCA\Analytics\Reference\ReferenceProvider;
-// use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\ShareReview\Sources\SourceEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -46,6 +46,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(RegisterOperationsEvent::class, FlowOperation::class);
 		$context->registerEventListener(ContentProviderRegisterEvent::class, ContentProvider::class);
+		$context->registerEventListener(SourceEvent::class, ShareReviewListener::class);
 
 		if (method_exists($context, 'registerReferenceProvider')) {
 			$context->registerReferenceProvider(ReferenceProvider::class);
