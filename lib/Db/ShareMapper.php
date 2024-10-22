@@ -144,6 +144,7 @@ class ShareMapper
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
                     'token' => $sql->createNamedParameter($token),
                     'parent' => $sql->createNamedParameter($parent),
+					'permissions' => $sql->createNamedParameter(1)
                 ]);
             $sql->executeStatement();
         }
@@ -174,7 +175,7 @@ class ShareMapper
         return $result;
     }
 
-    /**
+	/**
      * Get the all receivers of shares of a report
      * Used to derive who has to receive activities when a report changes
      * @param $reportId
@@ -232,13 +233,13 @@ class ShareMapper
         return true;
     }
 
-    /**
-     * Update the permissions of a share
-     * @param $shareId
-     * @param $permissions
-     * @return bool
-     * @throws Exception
-     */
+	/**
+	 * Update the permissions of a share
+	 * @param $shareId
+	 * @param $permissions
+	 * @return bool
+	 * @throws Exception
+	 */
     public function updateSharePermissions($shareId, $permissions)
     {
         // update the share itself
@@ -271,13 +272,14 @@ class ShareMapper
         return true;
     }
 
-    /**
-     * Delete all shares of a report
-     * Used during report deletion
-     * @param $reportId
-     * @return bool
-     * @throws Exception
-     */
+	/**
+	 * Delete all shares of a report
+	 * Used during report deletion
+	 * @param $item_type
+	 * @param $item_source
+	 * @return bool
+	 * @throws Exception
+	 */
     public function deleteSharesByItem($item_type, $item_source)
     {
         $sql = $this->db->getQueryBuilder();
@@ -304,5 +306,4 @@ class ShareMapper
         $sql->executeStatement();
         return true;
     }
-
 }
