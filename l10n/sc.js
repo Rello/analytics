@@ -63,6 +63,7 @@ OC.L10N.register(
     "Selection" : "Seletzione",
     "Title" : "Tìtulu",
     "Copy" : "Còpia",
+    "Schedule in background" : "Programma in segundu pranu",
     "Daily" : "Ogni die",
     "Hourly" : "Ogni ora",
     "Basic settings" : "Cunfiguratzione de base",
