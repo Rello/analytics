@@ -12,7 +12,6 @@ namespace OCA\Analytics\ShareReview;
 
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCA\Analytics\ShareReview\ShareReviewSource;
 use OCA\ShareReview\Sources\SourceEvent;
 
 class ShareReviewListener implements IEventListener {

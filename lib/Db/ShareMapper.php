@@ -134,6 +134,7 @@ class ShareMapper
             // multiple link shares (3) are possible
             return false;
         } else {
+			$currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
             $sql = $this->db->getQueryBuilder();
             $sql->insert(self::TABLE_NAME)
                 ->values([
@@ -144,7 +145,8 @@ class ShareMapper
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
                     'token' => $sql->createNamedParameter($token),
                     'parent' => $sql->createNamedParameter($parent),
-					'permissions' => $sql->createNamedParameter(1)
+					'permissions' => $sql->createNamedParameter(1),
+					'created_at' => $sql->createNamedParameter($currentDateTime),
                 ]);
             $sql->executeStatement();
         }
