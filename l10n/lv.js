@@ -37,7 +37,7 @@ OC.L10N.register(
     "copy" : "kopēt",
     "The password is wrong. Try again." : "Nepareiza parole. Mēģiniet vēlreiz.",
     "Password" : "Parole",
-    "Favorites" : "Favorīti",
+    "Favorites" : "Izlases vienumi",
     "Translate" : "Tulkot",
     "Back" : "Atpakaļ",
     "Settings" : "Iestatījumi",
