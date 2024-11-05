@@ -21,6 +21,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use OCP\IRequest;
+use OCP\IAppConfig;
 use Psr\Log\LoggerInterface;
 
 class DatasourceController extends Controller {
@@ -35,6 +36,8 @@ class DatasourceController extends Controller {
 	/** @var IEventDispatcher */
 	private $dispatcher;
 	private $l10n;
+	/** @var IAppConfig */
+	protected $appConfig;
 
 	const DATASET_TYPE_GROUP = 0;
 	const DATASET_TYPE_LOCAL_CSV = 1;
@@ -58,7 +61,8 @@ class DatasourceController extends Controller {
 		ExternalCsv      $ExternalCsvService,
 		LocalExcel       $LocalExcelService,
 		IL10N            $l10n,
-		IEventDispatcher $dispatcher
+		IEventDispatcher $dispatcher,
+		IAppConfig       $appConfig,
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
@@ -71,6 +75,7 @@ class DatasourceController extends Controller {
 		$this->LocalExcelService = $LocalExcelService;
 		$this->dispatcher = $dispatcher;
 		$this->l10n = $l10n;
+		$this->appConfig = $appConfig;
 	}
 
 	/**
@@ -79,17 +84,18 @@ class DatasourceController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function index() {
-		$datasources = array();
-		$result = array();
-		foreach ($this->getDatasources() as $key => $class) {
-			$datasources[$key] = $class->getName();
-		}
-		$result['datasources'] = $datasources;
+		$result = [];
+		$datasourceIndex = $this->getDatasources();
 
-		$options = array();
-		foreach ($this->getDatasources() as $key => $class) {
+		$datasources = [];
+		$options = [];
+
+		foreach ($datasourceIndex as $key => $class) {
+			$datasources[$key] = $class->getName();
 			$options[$key] = $class->getTemplate();
 		}
+
+		$result['datasources'] = $datasources;
 		$result['options'] = $options;
 
 		return $result;
@@ -170,11 +176,19 @@ class DatasourceController extends Controller {
 	}
 
 	/**
-	 * combine internal and registered datasources
+	 * combine internal and registered data sources
 	 * @return array
 	 */
 	private function getDatasources() {
-		return $this->getOwnDatasources() + $this->getRegisteredDatasources();
+		$datasources = $this->getOwnDatasources() + $this->getRegisteredDatasources();
+
+		// Data sources can be disabled globally by their ID
+		// occ config:app:set analytics disabledDataSources --type=string --value="1,3,4"
+		$disabledString = $this->appConfig->getValueString('analytics','disabledDataSources');
+		$disabledArray = explode(',', $disabledString);
+		$datasources = array_diff_key($datasources, array_flip($disabledArray));
+
+		return $datasources;
 	}
 
 	/**

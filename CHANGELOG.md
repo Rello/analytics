@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- disable single data sources globally #415
+
 ### Fixed
 - wrong info link in data load screen
 
