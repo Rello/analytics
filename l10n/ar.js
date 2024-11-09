@@ -39,7 +39,7 @@ OC.L10N.register(
     "Please select" : "اختر من فضلك",
     "Data source not available anymore" : "مصدر البيانات لم يعد متاحاً ",
     "Column Picker" : "لاقط العمود Column Picker",
-    "Add custom column" : "إضافة عمود مُخصّص",
+    "Add custom column" : "إضافة عمود مخصص",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "إختَر الأعمدة المطلوبة.<br>أعِد ترتيب التتابع عن طريق السحب و الإفلات.<br>إحذف كل ما تمّ تحديده لإعادة التعيين.<br>أضِف أعمدة مُخصّصة تشتمل على متغيرات نصّية للتواريخ. أنظُر {linkstart} الويكي {linkend}.",
     "Previous Values: " : "القيم السابقة:",
     "Enter the fixed value:" : "أدخِل القيمة الثابتة:",
