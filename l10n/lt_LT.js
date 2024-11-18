@@ -8,7 +8,7 @@ OC.L10N.register(
     "Done" : "Atlikta",
     "Loading" : "Įkeliama",
     "OK" : "Gerai",
-    "Cancel" : "Atšaukti",
+    "Cancel" : "Atsisakyti",
     "Filter" : "Filtras",
     "Add" : "Pridėti",
     "Bar" : "Baras",
