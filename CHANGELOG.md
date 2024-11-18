@@ -1,10 +1,12 @@
 # Changelog
 
+## 5.1.0
 ### Added
 - disable single data sources globally #415
 
 ### Fixed
 - wrong info link in data load screen
+- own data options not working #413
 
 ## 5.0.1 - 2024-09-16
 ### Fixed

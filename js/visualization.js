@@ -491,22 +491,14 @@ OCA.Analytics.Visualization = {
             chartOptions = cloner.deep.merge(chartOptions, userChartOptions);
         }
 
-        // todo was used in panorame
-        // never show any axis in the dashboard
-        // chartOptions.scales['secondary'].display = false;
-        //chartOptions.scales['primary'].display = true;
-
         // the user can modify dataset/series settings
         // these are merged with the data array coming from the backend
         // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
         // for doughnuts, no overwrites are allowed. Colors were taken care of before already
         let userDatasetOptions = jsondata.options.dataoptions;
         if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
-            let numberOfDatasets = datasets.length;
-            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
-            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
             datasets = cloner.deep.merge({}, datasets);
-            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
+            datasets = cloner.deep.merge(datasets, userDatasetOptions);
             datasets = Object.values(datasets);
         }
 

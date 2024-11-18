@@ -1276,7 +1276,7 @@ OCA.Analytics.Backend = {
                 ajaxData.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
             }
             if (typeof (OCA.Analytics.currentReportData.options.dataoptions) !== 'undefined') {
-                ajaxData.dataoptions = OCA.Analytics.currentReportData.options.dataoptions;
+                ajaxData.dataoptions = JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions);
             }
             if (typeof (OCA.Analytics.currentReportData.options.chartoptions) !== 'undefined') {
                 ajaxData.chartoptions = JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions);
@@ -1311,6 +1311,12 @@ OCA.Analytics.Backend = {
                     OCA.Analytics.currentReportData.options.chartoptions = JSON.parse(chartOptions);
                 } catch (e) {
                     OCA.Analytics.currentReportData.options.chartoptions = {};
+                }
+
+                try {
+                    OCA.Analytics.currentReportData.options.dataoptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+                } catch (e) {
+                    OCA.Analytics.currentReportData.options.dataoptions = {};
                 }
 
                 try {

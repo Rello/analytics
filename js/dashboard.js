@@ -332,7 +332,6 @@ OCA.Analytics.Dashboard = {
         if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
             let numberOfDatasets = datasets.length;
             let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
-            userDatasetOptionsCleaned.length = numberOfDatasets; // cut saved definitions if report now has less data sets
             datasets = cloner.deep.merge({}, datasets);
             datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
             datasets = Object.values(datasets);

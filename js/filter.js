@@ -406,11 +406,6 @@ OCA.Analytics.Filter = {
         let distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0);
         if (dataOptions === null) dataOptions = {};
 
-        // check if defined dataoptions don´t match the number of dataseries anymore
-        if (Object.keys(dataOptions).length !== Object.keys(distinctCategories).length) {
-            //dataOptions = '';
-        }
-
         // get the default chart type to preset the drop downs
         let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
 

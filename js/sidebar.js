@@ -628,8 +628,19 @@ OCA.Analytics.Sidebar.Report = {
                 let dataOptions = document.getElementById('sidebarReportDataOptions').value;
 
                 if (OCA.Analytics?.currentReportData?.options) {
-                    OCA.Analytics.currentReportData.options.chartoptions = chartOptions ? JSON.parse(chartOptions) : null;
-                    OCA.Analytics.currentReportData.options.dataoptions = dataOptions ? JSON.parse(dataOptions) : null;
+                    try {
+                        OCA.Analytics.currentReportData.options.chartoptions = chartOptions ? JSON.parse(chartOptions) : null;
+                    } catch (error) {
+                        OCA.Analytics.Notification.notification('error', t('analytics', 'Incorrect chart options'));
+                        OCA.Analytics.currentReportData.options.chartoptions = null;
+                    }
+
+                    try {
+                        OCA.Analytics.currentReportData.options.dataoptions = dataOptions ? JSON.parse(dataOptions) : null;
+                    } catch (error) {
+                        OCA.Analytics.Notification.notification('error', t('analytics', 'Incorrect data options'));
+                        OCA.Analytics.currentReportData.options.dataoptions = null;
+                    }
                 }
 
                 if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {

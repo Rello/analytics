@@ -1,8 +1,8 @@
 {
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
-  "name": "Analytics Test",
-  "url": "http://localhost:8130/",
+  "name": "Selenium NC Analytics",
+  "url": "http://localhost:8030/",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -435,7 +435,7 @@
     }]
   }, {
     "id": "481aca91-1337-422f-8748-81aa12f3dfc7",
-    "name": "20 Add Data",
+    "name": "14 Sidebar Add Data",
     "commands": [{
       "id": "bf9a3511-30fd-4530-baec-d9c053a3f07f",
       "comment": "",
@@ -1227,7 +1227,7 @@
     }]
   }, {
     "id": "cbabaf30-e391-4527-a43c-f8df729dc796",
-    "name": "15 Sidebar Threshold",
+    "name": "12 Sidebar Threshold",
     "commands": [{
       "id": "c96ba0f1-5166-4c36-a5ad-6b47d67fc4a1",
       "comment": "",
@@ -5672,6 +5672,171 @@
       ],
       "value": ""
     }]
+  }, {
+    "id": "f3d8bd06-309e-4c54-a5ca-4604aeda4e2c",
+    "name": "16 Sidebar Report Options",
+    "commands": [{
+      "id": "a4cafa3d-3ace-4559-ac4b-d597d2f5e0e2",
+      "comment": "",
+      "command": "open",
+      "target": "/apps/analytics",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0e33a8f2-3eab-43a1-babe-4fed1cd5333f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Testreport",
+      "targets": [
+        ["linkText=Neu", "linkText"],
+        ["css=li:nth-child(4) > .icon-projects", "css:finder"],
+        ["xpath=//a[contains(text(),'Neu')]", "xpath:link"],
+        ["xpath=//ul[@id='navigationDatasets']/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#/r/22')]", "xpath:href"],
+        ["xpath=//div[3]/div/ul/li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Neu')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6b074fa1-f2b4-4f46-9f8c-a3493dfd19d3",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@data-name='Testreport']",
+      "targets": [
+        ["css=li:nth-child(3) button", "css:finder"],
+        ["xpath=//ul[@id='navigationDatasets']/li[3]/div/ul/li/button", "xpath:idRelative"],
+        ["xpath=//li[3]/div/ul/li/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0d438831-49a7-4c1a-907d-78e2e70a264e",
+      "comment": "Basic Settings",
+      "command": "click",
+      "target": "css=.open .icon-rename",
+      "targets": [
+        ["linkText=Edit", "linkText"],
+        ["css=.open li:nth-child(1) > a", "css:finder"],
+        ["xpath=//ul[@id='navigationDatasets']/li[4]/div[2]/ul/li/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[17]", "xpath:href"],
+        ["xpath=//li[4]/div[2]/ul/li/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0d480dd7-ffb7-4c3f-bed6-905d0890c843",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=sidebarReportName",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "a9c13a5e-ff53-4a55-9309-396789322061",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportVisualizationSectionHeaderH3",
+      "targets": [
+        ["id=reportVisualizationSectionHeaderH3", "id"],
+        ["css=#reportVisualizationSectionHeaderH3", "css:finder"],
+        ["xpath=//h3[@id='reportVisualizationSectionHeaderH3']", "xpath:attributes"],
+        ["xpath=//div[@id='reportVisualizationSectionHeader']/h3", "xpath:idRelative"],
+        ["xpath=//div[6]/h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Visualization')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c9df0198-59da-4b2b-a0b5-d777adbe5409",
+      "comment": "",
+      "command": "type",
+      "target": "id=sidebarReportChartOptions",
+      "targets": [
+        ["id=sidebarThresholdDimension3", "id"],
+        ["css=#tableThreshold #sidebarThresholdDimension3", "css:finder"],
+        ["xpath=//input[@id='sidebarThresholdDimension3']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": "{\"scales\": {\"x\": {\"time\": {\"unit\" : \"month\"}}}}"
+    }, {
+      "id": "5b3d9693-7519-49dd-a842-df17af0d9447",
+      "comment": "",
+      "command": "type",
+      "target": "id=sidebarReportDataOptions",
+      "targets": [
+        ["id=sidebarThresholdDimension1", "id"],
+        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": "{\"0\": {\"type\":\"line\"}}"
+    }, {
+      "id": "bf6c970b-87d8-499e-b610-58115c507f02",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportUpdateButton",
+      "targets": [
+        ["id=createThresholdButton", "id"],
+        ["css=#tableThreshold > #createThresholdButton", "css:finder"],
+        ["xpath=//button[@id='createThresholdButton']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/button", "xpath:idRelative"],
+        ["xpath=//div[3]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save threshold')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c1f1f9ba-8de1-45dc-849a-86d99f9a6ec3",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "dca3d10e-1c98-4fae-af2d-2826a18daa7d",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "css=.toastify",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c75326d4-5cd9-4020-8ad3-33af09040bd8",
+      "comment": "",
+      "command": "type",
+      "target": "id=sidebarReportChartOptions",
+      "targets": [
+        ["id=sidebarThresholdDimension3", "id"],
+        ["css=#tableThreshold #sidebarThresholdDimension3", "css:finder"],
+        ["xpath=//input[@id='sidebarThresholdDimension3']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e5f6883e-3402-4cf1-8d06-04f08f1d492d",
+      "comment": "",
+      "command": "type",
+      "target": "id=sidebarReportDataOptions",
+      "targets": [
+        ["id=sidebarThresholdDimension1", "id"],
+        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "388f1622-049e-44ca-b048-6d3cec5b63c0",
+      "comment": "",
+      "command": "click",
+      "target": "id=sidebarReportUpdateButton",
+      "targets": [
+        ["id=createThresholdButton", "id"],
+        ["css=#tableThreshold > #createThresholdButton", "css:finder"],
+        ["xpath=//button[@id='createThresholdButton']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/button", "xpath:idRelative"],
+        ["xpath=//div[3]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save threshold')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
   }],
   "suites": [{
     "id": "a1d58086-f3d1-4a78-9485-4f571193f568",
@@ -5688,7 +5853,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/", "http://localhost:8130/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/", "http://localhost:8130/", "http://localhost:8030/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",
