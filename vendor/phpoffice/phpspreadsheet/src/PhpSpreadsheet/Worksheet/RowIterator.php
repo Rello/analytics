@@ -2,47 +2,42 @@
 
 namespace PhpOffice\PhpSpreadsheet\Worksheet;
 
-use Iterator;
+use Iterator as NativeIterator;
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 
-class RowIterator implements Iterator
+/**
+ * @implements NativeIterator<int, Row>
+ */
+class RowIterator implements NativeIterator
 {
     /**
      * Worksheet to iterate.
-     *
-     * @var Worksheet
      */
-    private $subject;
+    private Worksheet $subject;
 
     /**
      * Current iterator position.
-     *
-     * @var int
      */
-    private $position = 1;
+    private int $position = 1;
 
     /**
      * Start position.
-     *
-     * @var int
      */
-    private $startRow = 1;
+    private int $startRow = 1;
 
     /**
      * End position.
-     *
-     * @var int
      */
-    private $endRow = 1;
+    private int $endRow = 1;
 
     /**
      * Create a new row iterator.
      *
      * @param Worksheet $subject The worksheet to iterate over
      * @param int $startRow The row number at which to start iterating
-     * @param int $endRow Optionally, the row number at which to stop iterating
+     * @param ?int $endRow Optionally, the row number at which to stop iterating
      */
-    public function __construct(Worksheet $subject, $startRow = 1, $endRow = null)
+    public function __construct(Worksheet $subject, int $startRow = 1, ?int $endRow = null)
     {
         // Set subject
         $this->subject = $subject;
@@ -50,12 +45,9 @@ class RowIterator implements Iterator
         $this->resetStart($startRow);
     }
 
-    /**
-     * Destructor.
-     */
     public function __destruct()
     {
-        $this->subject = null;
+        unset($this->subject);
     }
 
     /**
@@ -65,10 +57,12 @@ class RowIterator implements Iterator
      *
      * @return $this
      */
-    public function resetStart($startRow = 1)
+    public function resetStart(int $startRow = 1): static
     {
         if ($startRow > $this->subject->getHighestRow()) {
-            throw new PhpSpreadsheetException("Start row ({$startRow}) is beyond highest row ({$this->subject->getHighestRow()})");
+            throw new PhpSpreadsheetException(
+                "Start row ({$startRow}) is beyond highest row ({$this->subject->getHighestRow()})"
+            );
         }
 
         $this->startRow = $startRow;
@@ -83,13 +77,13 @@ class RowIterator implements Iterator
     /**
      * (Re)Set the end row.
      *
-     * @param int $endRow The row number at which to stop iterating
+     * @param ?int $endRow The row number at which to stop iterating
      *
      * @return $this
      */
-    public function resetEnd($endRow = null)
+    public function resetEnd(?int $endRow = null): static
     {
-        $this->endRow = ($endRow) ? $endRow : $this->subject->getHighestRow();
+        $this->endRow = $endRow ?: $this->subject->getHighestRow();
 
         return $this;
     }
@@ -101,7 +95,7 @@ class RowIterator implements Iterator
      *
      * @return $this
      */
-    public function seek($row = 1)
+    public function seek(int $row = 1): static
     {
         if (($row < $this->startRow) || ($row > $this->endRow)) {
             throw new PhpSpreadsheetException("Row $row is out of range ({$this->startRow} - {$this->endRow})");
@@ -121,20 +115,16 @@ class RowIterator implements Iterator
 
     /**
      * Return the current row in this worksheet.
-     *
-     * @return Row
      */
-    public function current()
+    public function current(): Row
     {
         return new Row($this->subject, $this->position);
     }
 
     /**
      * Return the current iterator key.
-     *
-     * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
@@ -157,10 +147,8 @@ class RowIterator implements Iterator
 
     /**
      * Indicate if more rows exist in the worksheet range of rows that we're iterating.
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->position <= $this->endRow && $this->position >= $this->startRow;
     }

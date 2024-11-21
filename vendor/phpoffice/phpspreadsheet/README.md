@@ -11,11 +11,51 @@
 PhpSpreadsheet is a library written in pure PHP and offers a set of classes that
 allow you to read and write various spreadsheet file formats such as Excel and LibreOffice Calc.
 
+## Installation
+
+See the [install instructions](https://phpspreadsheet.readthedocs.io/en/latest/#installation).
+
 ## Documentation
 
 Read more about it, including install instructions, in the [official documentation](https://phpspreadsheet.readthedocs.io). Or check out the [API documentation](https://phpoffice.github.io/PhpSpreadsheet).
 
 Please ask your support questions on [StackOverflow](https://stackoverflow.com/questions/tagged/phpspreadsheet), or have a quick chat on [Gitter](https://gitter.im/PHPOffice/PhpSpreadsheet).
+
+## Patreon
+
+I am now running a [Patreon](https://www.patreon.com/MarkBaker) to support the work that I do on PhpSpreadsheet.
+
+Supporters will receive access to articles about working with PhpSpreadsheet, and how to use some of its more advanced features.
+
+Posts already available to Patreon supporters:
+ - The Dating Game
+   - A  look at how MS Excel (and PhpSpreadsheet) handle date and time values.
+- Looping the Loop
+    - Advice on Iterating through the rows and cells in a worksheet.
+
+And for Patrons at levels actively using PhpSpreadsheet:
+ - Behind the Mask
+   - A look at Number Format Masks.
+
+The Next Article (currently Work in Progress):
+ - Formula for Success
+   - How to debug formulae that don't produce the expected result.
+
+
+My aim is to post at least one article each month, taking a detailed look at some feature of MS Excel and how to use that feature in PhpSpreadsheet, or on how to perform different activities in PhpSpreadsheet.
+
+Planned posts for the future include topics like:
+ - Tables
+ - Structured References
+ - AutoFiltering
+ - Array Formulae
+ - Conditional Formatting
+ - Data Validation
+ - Value Binders
+ - Images
+ - Charts
+
+After a period of six months exclusive to Patreon supporters, articles will be incorporated into the public documentation for the library.
 
 ## PHPExcel vs PhpSpreadsheet ?
 

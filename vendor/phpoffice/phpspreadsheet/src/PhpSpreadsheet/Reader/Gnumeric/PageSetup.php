@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Reader\Gnumeric;
 
+use PhpOffice\PhpSpreadsheet\Reader\Gnumeric;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageMargins;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as WorksheetPageSetup;
@@ -9,38 +10,41 @@ use SimpleXMLElement;
 
 class PageSetup
 {
-    /**
-     * @var Spreadsheet
-     */
-    private $spreadsheet;
+    private Spreadsheet $spreadsheet;
 
-    /**
-     * @var string
-     */
-    private $gnm;
-
-    public function __construct(Spreadsheet $spreadsheet, string $gnm)
+    public function __construct(Spreadsheet $spreadsheet)
     {
         $this->spreadsheet = $spreadsheet;
-        $this->gnm = $gnm;
     }
 
     public function printInformation(SimpleXMLElement $sheet): self
     {
-        if (isset($sheet->PrintInformation)) {
+        if (isset($sheet->PrintInformation, $sheet->PrintInformation[0])) {
             $printInformation = $sheet->PrintInformation[0];
-            $scale = (string) $printInformation->Scale->attributes()['percentage'];
-            $pageOrder = (string) $printInformation->order;
-            $orientation = (string) $printInformation->orientation;
-            $horizontalCentered = (string) $printInformation->hcenter->attributes()['value'];
-            $verticalCentered = (string) $printInformation->vcenter->attributes()['value'];
+            $setup = $this->spreadsheet->getActiveSheet()->getPageSetup();
 
-            $this->spreadsheet->getActiveSheet()->getPageSetup()
-                ->setPageOrder($pageOrder === 'r_then_d' ? WorksheetPageSetup::PAGEORDER_OVER_THEN_DOWN : WorksheetPageSetup::PAGEORDER_DOWN_THEN_OVER)
-                ->setScale((int) $scale)
-                ->setOrientation($orientation ?? WorksheetPageSetup::ORIENTATION_DEFAULT)
-                ->setHorizontalCentered((bool) $horizontalCentered)
-                ->setVerticalCentered((bool) $verticalCentered);
+            $attributes = $printInformation->Scale->attributes();
+            if (isset($attributes['percentage'])) {
+                $setup->setScale((int) $attributes['percentage']);
+            }
+            $pageOrder = (string) $printInformation->order;
+            if ($pageOrder === 'r_then_d') {
+                $setup->setPageOrder(WorksheetPageSetup::PAGEORDER_OVER_THEN_DOWN);
+            } elseif ($pageOrder === 'd_then_r') {
+                $setup->setPageOrder(WorksheetPageSetup::PAGEORDER_DOWN_THEN_OVER);
+            }
+            $orientation = (string) $printInformation->orientation;
+            if ($orientation !== '') {
+                $setup->setOrientation($orientation);
+            }
+            $attributes = $printInformation->hcenter->attributes();
+            if (isset($attributes['value'])) {
+                $setup->setHorizontalCentered((bool) (string) $attributes['value']);
+            }
+            $attributes = $printInformation->vcenter->attributes();
+            if (isset($attributes['value'])) {
+                $setup->setVerticalCentered((bool) (string) $attributes['value']);
+            }
         }
 
         return $this;
@@ -68,7 +72,7 @@ class PageSetup
 
     private function buildMarginSet(SimpleXMLElement $sheet, array $marginSet): array
     {
-        foreach ($sheet->PrintInformation->Margins->children($this->gnm, true) as $key => $margin) {
+        foreach ($sheet->PrintInformation->Margins->children(Gnumeric::NAMESPACE_GNM) as $key => $margin) {
             $marginAttributes = $margin->attributes();
             $marginSize = ($marginAttributes['Points']) ?? 72; //    Default is 72pt
             // Convert value in points to inches

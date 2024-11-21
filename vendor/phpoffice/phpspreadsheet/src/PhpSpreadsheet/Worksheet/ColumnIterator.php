@@ -2,49 +2,44 @@
 
 namespace PhpOffice\PhpSpreadsheet\Worksheet;
 
-use Iterator;
+use Iterator as NativeIterator;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 
-class ColumnIterator implements Iterator
+/**
+ * @implements NativeIterator<string, Column>
+ */
+class ColumnIterator implements NativeIterator
 {
     /**
      * Worksheet to iterate.
-     *
-     * @var Worksheet
      */
-    private $worksheet;
+    private Worksheet $worksheet;
 
     /**
      * Current iterator position.
-     *
-     * @var int
      */
-    private $currentColumnIndex = 1;
+    private int $currentColumnIndex = 1;
 
     /**
      * Start position.
-     *
-     * @var int
      */
-    private $startColumnIndex = 1;
+    private int $startColumnIndex = 1;
 
     /**
      * End position.
-     *
-     * @var int
      */
-    private $endColumnIndex = 1;
+    private int $endColumnIndex = 1;
 
     /**
      * Create a new column iterator.
      *
      * @param Worksheet $worksheet The worksheet to iterate over
      * @param string $startColumn The column address at which to start iterating
-     * @param string $endColumn Optionally, the column address at which to stop iterating
+     * @param ?string $endColumn Optionally, the column address at which to stop iterating
      */
-    public function __construct(Worksheet $worksheet, $startColumn = 'A', $endColumn = null)
+    public function __construct(Worksheet $worksheet, string $startColumn = 'A', ?string $endColumn = null)
     {
         // Set subject
         $this->worksheet = $worksheet;
@@ -57,7 +52,7 @@ class ColumnIterator implements Iterator
      */
     public function __destruct()
     {
-        $this->worksheet = null;
+        unset($this->worksheet);
     }
 
     /**
@@ -67,11 +62,13 @@ class ColumnIterator implements Iterator
      *
      * @return $this
      */
-    public function resetStart($startColumn = 'A')
+    public function resetStart(string $startColumn = 'A'): static
     {
         $startColumnIndex = Coordinate::columnIndexFromString($startColumn);
         if ($startColumnIndex > Coordinate::columnIndexFromString($this->worksheet->getHighestColumn())) {
-            throw new Exception("Start column ({$startColumn}) is beyond highest column ({$this->worksheet->getHighestColumn()})");
+            throw new Exception(
+                "Start column ({$startColumn}) is beyond highest column ({$this->worksheet->getHighestColumn()})"
+            );
         }
 
         $this->startColumnIndex = $startColumnIndex;
@@ -86,13 +83,13 @@ class ColumnIterator implements Iterator
     /**
      * (Re)Set the end column.
      *
-     * @param string $endColumn The column address at which to stop iterating
+     * @param ?string $endColumn The column address at which to stop iterating
      *
      * @return $this
      */
-    public function resetEnd($endColumn = null)
+    public function resetEnd(?string $endColumn = null): static
     {
-        $endColumn = $endColumn ? $endColumn : $this->worksheet->getHighestColumn();
+        $endColumn = $endColumn ?: $this->worksheet->getHighestColumn();
         $this->endColumnIndex = Coordinate::columnIndexFromString($endColumn);
 
         return $this;
@@ -105,11 +102,13 @@ class ColumnIterator implements Iterator
      *
      * @return $this
      */
-    public function seek($column = 'A')
+    public function seek(string $column = 'A'): static
     {
         $column = Coordinate::columnIndexFromString($column);
         if (($column < $this->startColumnIndex) || ($column > $this->endColumnIndex)) {
-            throw new PhpSpreadsheetException("Column $column is out of range ({$this->startColumnIndex} - {$this->endColumnIndex})");
+            throw new PhpSpreadsheetException(
+                "Column $column is out of range ({$this->startColumnIndex} - {$this->endColumnIndex})"
+            );
         }
         $this->currentColumnIndex = $column;
 
@@ -126,20 +125,16 @@ class ColumnIterator implements Iterator
 
     /**
      * Return the current column in this worksheet.
-     *
-     * @return Column
      */
-    public function current()
+    public function current(): Column
     {
         return new Column($this->worksheet, Coordinate::stringFromColumnIndex($this->currentColumnIndex));
     }
 
     /**
      * Return the current iterator key.
-     *
-     * @return string
      */
-    public function key()
+    public function key(): string
     {
         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
     }
@@ -162,10 +157,8 @@ class ColumnIterator implements Iterator
 
     /**
      * Indicate if more columns exist in the worksheet range of columns that we're iterating.
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
     }

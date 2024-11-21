@@ -6,34 +6,26 @@ class SpgrContainer
 {
     /**
      * Parent Shape Group Container.
-     *
-     * @var \PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer
      */
-    private $parent;
+    private ?self $parent = null;
 
     /**
      * Shape Container collection.
-     *
-     * @var array
      */
-    private $children = [];
+    private array $children = [];
 
     /**
      * Set parent Shape Group Container.
-     *
-     * @param \PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer $parent
      */
-    public function setParent($parent): void
+    public function setParent(?self $parent): void
     {
         $this->parent = $parent;
     }
 
     /**
      * Get the parent Shape Group Container if any.
-     *
-     * @return null|\PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer
      */
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
@@ -41,9 +33,9 @@ class SpgrContainer
     /**
      * Add a child. This will be either spgrContainer or spContainer.
      *
-     * @param mixed $child
+     * @param SpgrContainer|SpgrContainer\SpContainer $child child to be added
      */
-    public function addChild($child): void
+    public function addChild(mixed $child): void
     {
         $this->children[] = $child;
         $child->setParent($this);
@@ -52,7 +44,7 @@ class SpgrContainer
     /**
      * Get collection of Shape Containers.
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -62,7 +54,7 @@ class SpgrContainer
      *
      * @return SpgrContainer\SpContainer[]
      */
-    public function getAllSpContainers()
+    public function getAllSpContainers(): array
     {
         $allSpContainers = [];
 

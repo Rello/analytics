@@ -4,7 +4,7 @@ namespace PhpOffice\PhpSpreadsheet\Reader\Xls\Color;
 
 class BuiltIn
 {
-    protected static $map = [
+    private const BUILTIN_COLOR_MAP = [
         0x00 => '000000',
         0x01 => 'FFFFFF',
         0x02 => 'FF0000',
@@ -21,15 +21,9 @@ class BuiltIn
      * Map built-in color to RGB value.
      *
      * @param int $color Indexed color
-     *
-     * @return array
      */
-    public static function lookup($color)
+    public static function lookup(int $color): array
     {
-        if (isset(self::$map[$color])) {
-            return ['rgb' => self::$map[$color]];
-        }
-
-        return ['rgb' => '000000'];
+        return ['rgb' => self::BUILTIN_COLOR_MAP[$color] ?? '000000'];
     }
 }

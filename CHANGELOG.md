@@ -4,6 +4,9 @@
 ### Added
 - disable single data sources globally #415
 
+### Changed
+- PhpSpreadsheet 3.4.0
+
 ### Fixed
 - wrong info link in data load screen
 - own data options not working #413

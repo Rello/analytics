@@ -17,4 +17,6 @@ abstract class Category
     const CATEGORY_STATISTICAL = 'Statistical';
     const CATEGORY_TEXT_AND_DATA = 'Text and Data';
     const CATEGORY_WEB = 'Web';
+    const CATEGORY_UNCATEGORISED = 'Uncategorised';
+    const CATEGORY_MICROSOFT_INTERNAL = 'MS Internal';
 }

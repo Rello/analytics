@@ -10,45 +10,33 @@ abstract class DefinedName
 
     /**
      * Name.
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Worksheet on which the defined name can be resolved.
-     *
-     * @var Worksheet
      */
-    protected $worksheet;
+    protected ?Worksheet $worksheet;
 
     /**
      * Value of the named object.
-     *
-     * @var string
      */
-    protected $value;
+    protected string $value;
 
     /**
      * Is the defined named local? (i.e. can only be used on $this->worksheet).
-     *
-     * @var bool
      */
-    protected $localOnly;
+    protected bool $localOnly;
 
     /**
      * Scope.
-     *
-     * @var Worksheet
      */
-    protected $scope;
+    protected ?Worksheet $scope;
 
     /**
      * Whether this is a named range or a named formula.
-     *
-     * @var bool
      */
-    protected $isFormula;
+    protected bool $isFormula;
 
     /**
      * Create a new Defined Name.
@@ -78,6 +66,12 @@ abstract class DefinedName
         $this->isFormula = self::testIfFormula($this->value);
     }
 
+    public function __destruct()
+    {
+        $this->worksheet = null;
+        $this->scope = null;
+    }
+
     /**
      * Create a new defined name, either a range or a formula.
      */
@@ -99,7 +93,7 @@ abstract class DefinedName
 
     public static function testIfFormula(string $value): bool
     {
-        if (substr($value, 0, 1) === '=') {
+        if (str_starts_with($value, '=')) {
             $value = substr($value, 1);
         }
 
@@ -110,9 +104,10 @@ abstract class DefinedName
         $segMatcher = false;
         foreach (explode("'", $value) as $subVal) {
             //    Only test in alternate array entries (the non-quoted blocks)
+            $segMatcher = $segMatcher === false;
             if (
-                ($segMatcher = !$segMatcher) &&
-                (preg_match('/' . self::REGEXP_IDENTIFY_FORMULA . '/miu', $subVal))
+                $segMatcher
+                && (preg_match('/' . self::REGEXP_IDENTIFY_FORMULA . '/miu', $subVal))
             ) {
                 return true;
             }
@@ -140,17 +135,19 @@ abstract class DefinedName
 
             // Re-attach
             if ($this->worksheet !== null) {
-                $this->worksheet->getParent()->removeNamedRange($this->name, $this->worksheet);
+                $this->worksheet->getParentOrThrow()->removeNamedRange($this->name, $this->worksheet);
             }
             $this->name = $name;
 
             if ($this->worksheet !== null) {
-                $this->worksheet->getParent()->addNamedRange($this);
+                $this->worksheet->getParentOrThrow()->addDefinedName($this);
             }
 
-            // New title
-            $newTitle = $this->name;
-            ReferenceHelper::getInstance()->updateNamedFormulas($this->worksheet->getParent(), $oldTitle, $newTitle);
+            if ($this->worksheet !== null) {
+                // New title
+                $newTitle = $this->name;
+                ReferenceHelper::getInstance()->updateNamedFormulae($this->worksheet->getParentOrThrow(), $oldTitle, $newTitle);
+            }
         }
 
         return $this;
@@ -167,9 +164,9 @@ abstract class DefinedName
     /**
      * Set worksheet.
      */
-    public function setWorksheet(?Worksheet $value): self
+    public function setWorksheet(?Worksheet $worksheet): self
     {
-        $this->worksheet = $value;
+        $this->worksheet = $worksheet;
 
         return $this;
     }
@@ -203,10 +200,10 @@ abstract class DefinedName
     /**
      * Set localOnly.
      */
-    public function setLocalOnly(bool $value): self
+    public function setLocalOnly(bool $localScope): self
     {
-        $this->localOnly = $value;
-        $this->scope = $value ? $this->worksheet : null;
+        $this->localOnly = $localScope;
+        $this->scope = $localScope ? $this->worksheet : null;
 
         return $this;
     }
@@ -222,10 +219,10 @@ abstract class DefinedName
     /**
      * Set scope.
      */
-    public function setScope(?Worksheet $value): self
+    public function setScope(?Worksheet $worksheet): self
     {
-        $this->scope = $value;
-        $this->localOnly = $value !== null;
+        $this->scope = $worksheet;
+        $this->localOnly = $worksheet !== null;
 
         return $this;
     }
@@ -241,9 +238,18 @@ abstract class DefinedName
     /**
      * Resolve a named range to a regular cell range or formula.
      */
-    public static function resolveName(string $pDefinedName, Worksheet $pSheet): ?self
+    public static function resolveName(string $definedName, Worksheet $worksheet, string $sheetName = ''): ?self
     {
-        return $pSheet->getParent()->getDefinedName($pDefinedName, $pSheet);
+        if ($sheetName === '') {
+            $worksheet2 = $worksheet;
+        } else {
+            $worksheet2 = $worksheet->getParentOrThrow()->getSheetByName($sheetName);
+            if ($worksheet2 === null) {
+                return null;
+            }
+        }
+
+        return $worksheet->getParentOrThrow()->getDefinedName($definedName, $worksheet2);
     }
 
     /**
