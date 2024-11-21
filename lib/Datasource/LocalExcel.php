@@ -177,6 +177,7 @@ class LocalExcel implements IDatasource {
 			"yyyy" => "Y",  // Four-digit year
 			"yy" => "y",    // Two-digit year
 			"MM" => "m",    // Two-digit month
+			"mmm" => "M",   // Three-letter month abbreviation
 			"mm" => "i",    // Two-digit minutes (lowercase)
 			"dd" => "d",    // Two-digit day
 			"d" => "j",     // Day without leading zeros
