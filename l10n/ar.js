@@ -116,6 +116,8 @@ OC.L10N.register(
     "The report name is missing" : "اسم التقرير ناقص",
     "The report type selection is missing" : "اختيار نوع التقرير ناقص",
     "At least one visualization selection is required" : "مطلوب تحديد تصور واحد على الأقل",
+    "Incorrect chart options" : "خيارات الشكل البياني غير صحيحة",
+    "Incorrect data options" : "خيارات البيانات غير صحيحة",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "كان هذا هو التقرير الأخير في مجموعة البيانات. هل تريد حذف مجموعة البيانات بما في ذلك جميع البيانات؟",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "متغيرات النص يمكن استعمالها في الأبعاد<br> سيتم استبدالها عند إضافة البيانات.",
     "REST API parameters" : "معاملات REST API",

@@ -116,6 +116,8 @@ OC.L10N.register(
     "The report name is missing" : "缺少報告名稱",
     "The report type selection is missing" : "缺少報告類型選擇",
     "At least one visualization selection is required" : "最少需要一個視覺化選項",
+    "Incorrect chart options" : "不正確的圖表選項",
+    "Incorrect data options" : "不正確的資料選項",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "這是該資料集的最後一份報告。是否要刪除包含所有資料的資料集？",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "文字變數可在欄位中使用。<br>其會在新增資料時被取代。",
     "REST API parameters" : "REST API 參數",
