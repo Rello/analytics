@@ -22,7 +22,7 @@ var myMoment = moment;
  * @namespace OCA.Analytics.Visualization
  */
 OCA.Analytics.Visualization = {
-    defaultColorPalette: ["#1A366C","#EA6A47","#a3acb9","#6AB187","#39a7db","#c85200","#57606c","#a3cce9","#ffbc79","#c8d0d9"],
+    defaultColorPalette: ["#1A366C", "#EA6A47", "#a3acb9", "#6AB187", "#39a7db", "#c85200", "#57606c", "#a3cce9", "#ffbc79", "#c8d0d9"],
 
     // *************
     // *** table ***
@@ -126,11 +126,18 @@ OCA.Analytics.Visualization = {
 
         if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
             // No special layout is defined: display all data in rows
-            columns = header.map((header, index) => ({title: header, className: index === 0 ? '' : 'dt-right'}));
+
+            // create the columns. default alignment is left
+            columns = header.map((header, index) => ({title: header, className: ''}));
             data = originalData.map(row =>
-                row.map((value, index) =>
-                    index === row.length - 1 && !isNaN(parseFloat(value)) ? parseFloat(value).toLocaleString() : value
-                )
+                row.map((value, index) => {
+                    if (!isNaN(parseFloat(value))) {
+                        // Any number gets aligned to the right and formated with locales
+                        columns[index].className = 'dt-right';
+                        return parseFloat(value).toLocaleString();
+                    }
+                    return value;
+                })
             );
         } else if (layoutConfig.rows && !layoutConfig.columns.length && !layoutConfig.measures.length) {
             // If only the row array is filled, it means that all data is in the rows, but just the sequence was changed
@@ -660,12 +667,12 @@ OCA.Analytics.Visualization = {
     },
 
     toggleFullscreen: function () {
-            document.getElementById('header').classList.toggle('analyticsFullscreen');
-            document.getElementById('app-navigation').classList.toggle('analyticsFullscreen');
-            document.getElementById('content').classList.toggle('analyticsFullscreen');
-            document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
+        document.getElementById('header').classList.toggle('analyticsFullscreen');
+        document.getElementById('app-navigation').classList.toggle('analyticsFullscreen');
+        document.getElementById('content').classList.toggle('analyticsFullscreen');
+        document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
 
-            document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreen');
-            document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreenExit');
+        document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreen');
+        document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreenExit');
     },
 }
