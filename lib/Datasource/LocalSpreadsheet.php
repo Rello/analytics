@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Psr\Log\LoggerInterface;
 
-class LocalExcel implements IDatasource {
+class LocalSpreadsheet implements IDatasource {
 	private $logger;
 	private $rootFolder;
 	private $l10n;
@@ -197,6 +197,18 @@ class LocalExcel implements IDatasource {
 				$rowNumber = $rowIndex + $startRow;
 				$coordinate = $columnLetter . $rowNumber;
 				$cell = $spreadsheet->getActiveSheet()->getCell($coordinate);
+
+				// Check if it's part of a merged range
+				if ($cell->isInMergeRange()) {
+					// Overwrite the cell with the top-left cell of the merged range
+					$mergedRange = $cell->getMergeRange();
+					$this->logger->info('$mergedRange: ' . $mergedRange);
+					[$startCell] = explode(':', $mergedRange);
+					$this->logger->info('$startCell: ' . $startCell);
+					$cell = $spreadsheet->getActiveSheet()->getCell($startCell);
+					$values[$rowIndex][$columnIndex] = $cell->getValue();
+				}
+
 				$excelFormat = $cell->getStyle()->getNumberFormat()->getFormatCode();
 
 				if (preg_match('/%/', $excelFormat)) {
@@ -204,6 +216,7 @@ class LocalExcel implements IDatasource {
 					$cellValue = $cell->getCalculatedValue();
 					$values[$rowIndex][$columnIndex] = round($cellValue, 2);
 				} elseif (Date::isDateTime($cell)) {
+					// handle date values
 					$excelFormat = rtrim($excelFormat, ";@");
 
 					// Check if it's a duration format (e.g., h:mm, [h]:mm, h:mm:ss)

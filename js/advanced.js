@@ -244,7 +244,7 @@ OCA.Analytics.Advanced.Dataload = {
 
         let typeINT = parseInt(dataload['datasource']);
         let typeIcon;
-        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE || typeINT === OCA.Analytics.TYPE_EXCEL) {
+        if (typeINT === OCA.Analytics.TYPE_INTERNAL_FILE || typeINT === OCA.Analytics.TYPE_SPREADSHEET) {
             typeIcon = 'icon-file';
         } else if (typeINT === OCA.Analytics.TYPE_INTERNAL_DB) {
             typeIcon = 'icon-projects';
@@ -516,7 +516,7 @@ OCA.Analytics.Advanced.Dataload = {
         let mime;
         if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
             mime = ['text/csv', 'text/plain'];
-        } else if (type === OCA.Analytics.TYPE_EXCEL) {
+        } else if (type === OCA.Analytics.TYPE_SPREADSHEET) {
             mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'application/vnd.oasis.opendocument.spreadsheet',
                 'application/vnd.ms-excel'];

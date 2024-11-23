@@ -43,7 +43,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     TYPE_GIT: 3,
     TYPE_EXTERNAL_FILE: 4,
     TYPE_EXTERNAL_REGEX: 5,
-    TYPE_EXCEL: 7,
+    TYPE_SPREADSHEET: 7,
     TYPE_SHARED: 99,
     SHARE_TYPE_USER: 0,
     SHARE_TYPE_GROUP: 1,
@@ -1224,7 +1224,7 @@ OCA.Analytics.Datasource = {
         let mime;
         if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
             mime = ['text/csv', 'text/plain'];
-        } else if (type === OCA.Analytics.TYPE_EXCEL) {
+        } else if (type === OCA.Analytics.TYPE_SPREADSHEET) {
             mime = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'application/vnd.oasis.opendocument.spreadsheet',
                 'application/vnd.ms-excel'];

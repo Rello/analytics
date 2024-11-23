@@ -13,7 +13,7 @@ use OCA\Analytics\Datasource\ExternalCsv;
 use OCA\Analytics\Datasource\ExternalJson;
 use OCA\Analytics\Datasource\Github;
 use OCA\Analytics\Datasource\LocalCsv;
-use OCA\Analytics\Datasource\LocalExcel;
+use OCA\Analytics\Datasource\LocalSpreadsheet;
 use OCA\Analytics\Datasource\LocalJson;
 use OCA\Analytics\Datasource\Regex;
 use OCP\AppFramework\Controller;
@@ -32,7 +32,7 @@ class DatasourceController extends Controller {
 	private $ExternalJsonService;
 	private $LocalJsonService;
 	private $LocalCsvService;
-	private $LocalExcelService;
+	private $LocalSpreadsheetService;
 	/** @var IEventDispatcher */
 	private $dispatcher;
 	private $l10n;
@@ -46,7 +46,7 @@ class DatasourceController extends Controller {
 	const DATASET_TYPE_EXTERNAL_CSV = 4;
 	const DATASET_TYPE_REGEX = 5;
 	const DATASET_TYPE_EXTERNAL_JSON = 6;
-	const DATASET_TYPE_LOCAL_EXCEL = 7;
+	const DATASET_TYPE_LOCAL_SPREADSHEET = 7;
 	const DATASET_TYPE_LOCAL_JSON = 8;
 
 	public function __construct(
@@ -59,7 +59,7 @@ class DatasourceController extends Controller {
 		ExternalJson     $ExternalJsonService,
 		LocalJson        $LocalJsonService,
 		ExternalCsv      $ExternalCsvService,
-		LocalExcel       $LocalExcelService,
+		LocalSpreadsheet       $LocalSpreadsheetService,
 		IL10N            $l10n,
 		IEventDispatcher $dispatcher,
 		IAppConfig       $appConfig,
@@ -72,7 +72,7 @@ class DatasourceController extends Controller {
 		$this->LocalCsvService = $LocalCsvService;
 		$this->ExternalJsonService = $ExternalJsonService;
 		$this->LocalJsonService = $LocalJsonService;
-		$this->LocalExcelService = $LocalExcelService;
+		$this->LocalSpreadsheetService = $LocalSpreadsheetService;
 		$this->dispatcher = $dispatcher;
 		$this->l10n = $l10n;
 		$this->appConfig = $appConfig;
@@ -198,7 +198,7 @@ class DatasourceController extends Controller {
 	private function getOwnDatasources() {
 		$dataSources = [];
 		$dataSources[self::DATASET_TYPE_LOCAL_CSV] = $this->LocalCsvService;
-		$dataSources[self::DATASET_TYPE_LOCAL_EXCEL] = $this->LocalExcelService;
+		$dataSources[self::DATASET_TYPE_LOCAL_SPREADSHEET] = $this->LocalSpreadsheetService;
 		$dataSources[self::DATASET_TYPE_GIT] = $this->GithubService;
 		$dataSources[self::DATASET_TYPE_EXTERNAL_CSV] = $this->ExternalCsvService;
 		$dataSources[self::DATASET_TYPE_REGEX] = $this->RegexService;
