@@ -116,6 +116,8 @@ OC.L10N.register(
     "The report name is missing" : "The report name is missing",
     "The report type selection is missing" : "The report type selection is missing",
     "At least one visualization selection is required" : "At least one visualization selection is required",
+    "Incorrect chart options" : "Incorrect chart options",
+    "Incorrect data options" : "Incorrect data options",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "This was the last report on the dataset. Do you want to delete the dataset including all data?",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Text variables can be used in the dimensions.<br>They are replaced when the data is added.",
     "REST API parameters" : "REST API parameters",
