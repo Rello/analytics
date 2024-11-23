@@ -125,6 +125,19 @@ OCA.Analytics.Panorama = {
                 '</div>' +
                 '</div>'
         },
+        {
+            id: 5, name: '1-1', layout: '<div class="flex-container">' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="flex-item" style="height: 50%;"></div>' +
+                '<div class="flex-item" style="height: 50%;"></div>' +
+                '</div>'
+        },
+        {
+            id: 6, name: '1', layout: '<div class="flex-container">' +
+                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="flex-item"></div>' +
+                '</div>'
+        },
     ],
 
     init: function () {
@@ -1083,6 +1096,7 @@ OCA.Analytics.Backend = {
                 // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
                 jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
                 jsondata.options.chartoptions = JSON.parse(jsondata.options.chartoptions)
+                jsondata.options.dataoptions = JSON.parse(jsondata.options.dataoptions)
                 jsondata.data = OCA.Analytics.Visualization.formatDates(jsondata.data);
                 OCA.Analytics.Panorama.setWidgetTypeReportContent(jsondata, itemId);
             }

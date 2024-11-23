@@ -3,6 +3,7 @@
 ## 5.1.0
 ### Added
 - disable single data sources globally #415
+- more Panorama layouts
 
 ### Changed
 - PhpSpreadsheet 3.4.0
