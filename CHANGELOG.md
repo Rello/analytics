@@ -8,6 +8,7 @@
 ### Changed
 - PhpSpreadsheet 3.4.0
 - local spreadsheet: handle ranges
+- header gradient
 
 ### Fixed
 - wrong info link in data load screen

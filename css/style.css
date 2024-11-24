@@ -241,7 +241,7 @@ content: inherit;
     color:white;
     padding: 8px 20px;
     width: 600px;
-    background: linear-gradient(to right, #1A366C, #F1F1F1);
+    background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%);
     margin: 10px 0 0 30px;
     display: block;
 }
@@ -277,7 +277,7 @@ content: inherit;
     color: #FFFFFF;
     padding: 0 0 8px 20px;
     width: 100%;
-    background: linear-gradient(to right, #1A366C, #F1F1F1);
+    background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%);
     background-size: 600px 100%;
     background-repeat: no-repeat;
     margin-left: 30px;
