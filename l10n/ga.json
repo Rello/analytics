@@ -114,6 +114,8 @@
     "The report name is missing" : "Tá ainm na tuarascála ar iarraidh",
     "The report type selection is missing" : "Tá rogha an chineáil tuairisce in easnamh",
     "At least one visualization selection is required" : "Tá rogha léirshamhlaithe amháin ar a laghad ag teastáil",
+    "Incorrect chart options" : "Roghanna cairteacha míchearta",
+    "Incorrect data options" : "Roghanna sonraí míchearta",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Ba é seo an tuarascáil dheireanach ar an tacar sonraí. Ar mhaith leat an tacar sonraí a scriosadh lena n-áirítear na sonraí go léir?",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Is féidir athróga téacs a úsáid sna toisí.<br>Cuirtear in ionad iad nuair a chuirtear na sonraí leis.",
     "REST API parameters" : "Paraiméadair REST API",
