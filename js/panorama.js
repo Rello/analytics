@@ -320,7 +320,7 @@ OCA.Analytics.Panorama = {
         //let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
         //return `<canvas id="myWidget${reportId}" class="chartContainer"></canvas>`;
         return `<div style="height: 30px;">
-                    <div id="analyticsWidgetReport${itemId}" style="padding-left: 10px;"></div>
+                    <div id="analyticsWidgetReport${itemId}" style="padding-left: 10px; font-weight: 500;"></div>
                     <!--<div id="analyticsWidgetSmall${itemId}"></div>-->
                 </div>
                 <div style="position: relative; height: calc(100% - 60px);">
