@@ -965,7 +965,8 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 #header.analyticsFullscreen,
-#app-navigation.analyticsFullscreen{
+#app-navigation.analyticsFullscreen,
+.panoramaSubHeaderRow.analyticsFullscreen{
     display:none !important;
 }
 

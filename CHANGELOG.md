@@ -14,6 +14,7 @@
 - wrong info link in data load screen
 - own data options not working #413
 - table: number formatting and string alignment
+- pdf export header
 
 ## 5.0.1 - 2024-09-16
 ### Fixed

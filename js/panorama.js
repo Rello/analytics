@@ -887,36 +887,42 @@ OCA.Analytics.Panorama = {
         );
 
         // getting the header
-        let headerElement = document.getElementById('panoramaHeader');
-        const headerCanvas = await html2canvas(headerElement, {scale: 2});
-        const headerData = headerCanvas.toDataURL('image/png');
+        // let headerElement = document.getElementById('panoramaHeader');
+        // let headerCanvas = await html2canvas(headerElement, {scale: 2});
+        // let headerData = headerCanvas.toDataURL('image/png');
+        let headerText = document.getElementById('panoramaHeader').textContent;
+
+        // hide the subheaders. will only take the text later
+        const elements = document.querySelectorAll('.panoramaSubHeaderRow');
+        elements.forEach(element => {
+            element.classList.add('analyticsFullscreen');
+        });
 
         // getting "by analytics"
-        let imgElement = document.getElementById('byAnalyticsImg');
-        let imgParent = document.getElementById('byAnalytics');
-        let hasClass = imgParent.classList.contains('analyticsFullscreen');
+        let byAnalyticsImg = document.getElementById('byAnalyticsImg');
+        let byAnalyticsElement = document.getElementById('byAnalytics');
+        let byAnalyticsClass = byAnalyticsElement.classList.contains('analyticsFullscreen');
 
-        if (!hasClass) {
-            imgParent.classList.add('analyticsFullscreen');
+        if (!byAnalyticsClass) {
+            byAnalyticsElement.classList.add('analyticsFullscreen');
         }
 
         // Temporarily reset styles
-        imgElement.style.width = imgElement.naturalWidth + 'px';
-        imgElement.style.height = imgElement.naturalHeight + 'px';
-        imgElement.style.transform = 'none';  // Remove any CSS transforms
+        byAnalyticsImg.style.width = byAnalyticsImg.naturalWidth + 'px';
+        byAnalyticsImg.style.height = byAnalyticsImg.naturalHeight + 'px';
+        byAnalyticsImg.style.transform = 'none';  // Remove any CSS transforms
 
-        let byCanvas = await html2canvas(imgElement, {scale: 1});
-        let byImgData = byCanvas.toDataURL('image/png');
+        let byAnalyticsCanvas = await html2canvas(byAnalyticsImg, {scale: 1});
+        let byAnalyticsRawData = byAnalyticsCanvas.toDataURL('image/png');
 
         // restore the previous status
-        imgElement.style.width = '33px';
-        imgElement.style.height = '33px';
-        if (!hasClass) {
-            imgParent.classList.remove('analyticsFullscreen');
+        byAnalyticsImg.style.width = '33px';
+        byAnalyticsImg.style.height = '33px';
+        if (!byAnalyticsClass) {
+            byAnalyticsElement.classList.remove('analyticsFullscreen');
         }
 
         try {
-            const headerText = document.getElementById('panoramaHeader').textContent;
             OCA.Analytics.Notification.htmlDialogUpdateAdd('header captured');
 
             // Set PDF metadata
@@ -928,6 +934,9 @@ OCA.Analytics.Panorama = {
                 creator:    'Analytics - Nextcloud'
             });
 
+            // Add the header text centered at the top of each PDF page
+            // pdf.setDrawColor(0);
+
             for (const [index, page] of pages.entries()) {
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'capturing page {pageCount}', {pageCount: index}));
                 const canvas = await html2canvas(page, {scale: 2});
@@ -938,18 +947,21 @@ OCA.Analytics.Panorama = {
                     pdf.addPage();
                 }
 
-                // Calculate the y position for the header
-                pdf.setFontSize(14); // Adjust as needed
-                const textYOffset = 23; // Adjust based on your headerHeight and padding
+                // draw the header
+                pdf.setFontSize(16); // Adjust as needed
+                let textYOffset = 23; // Adjust based on your headerHeight and padding
+                pdf.text(headerText, 40, textYOffset, { align: 'left' });
 
-                // Add the header text centered at the top of each PDF page
-                //pdf.setDrawColor(0);
-                //pdf.setFillColor(229, 239, 245);
-               // pdf.rect(1, 1, pdf.internal.pageSize.getWidth(), headerHeight, 'F');
-                //pdf.text(headerText, pdf.internal.pageSize.getWidth() / 2, textYOffset, { align: 'center' });
+                // draw the subheader
+                let subHeaderText = document.getElementById('panoramaSubHeader-' + index).textContent;
+                pdf.setFontSize(12); // Adjust as needed
+                pdf.text(subHeaderText, 40, 40, { align: 'left' });
+
+                // backup graphical header
+                // pdf.setFillColor(229, 239, 245);
+                // pdf.rect(1, 1, pdf.internal.pageSize.getWidth(), headerHeight, 'F');
                 // Add the page content centered and scaled
-                pdf.addImage(headerData, 'PNG', 28, 20, 380, 25, 200, 'FAST');
-
+                // pdf.addImage(headerData, 'PNG', 28, 20, 380, 25, 200, 'FAST');
 
                 // Determine the scale factor to fit the image within the PDF page size
                 const scaleX = pdf.internal.pageSize.getWidth() / canvas.width;
@@ -968,13 +980,19 @@ OCA.Analytics.Panorama = {
                 pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');
 
                 // Add the Analytics branding
-                pdf.addImage(byImgData, 'PNG', pdf.internal.pageSize.getWidth() - 100, pdf.internal.pageSize.getHeight() - 35, 30 , 30, 100, 'MEDIUM');
+                pdf.addImage(byAnalyticsRawData, 'PNG', pdf.internal.pageSize.getWidth() - 100, pdf.internal.pageSize.getHeight() - 35, 30 , 30, 100, 'MEDIUM');
                 pdf.setFontSize(8);
                 pdf.text('Created with', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 22);
                 pdf.text('Analytics', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 12);
 
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'page {pageCount} added to pdf', {pageCount: index}));
             }
+
+            // adding the subheaders again
+            const elements = document.querySelectorAll('.panoramaSubHeaderRow');
+            elements.forEach(element => {
+                element.classList.remove('analyticsFullscreen');
+            });
 
             OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'creating pdf'));
 
