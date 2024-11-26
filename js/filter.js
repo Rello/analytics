@@ -847,7 +847,7 @@ OCA.Analytics.Filter.Backend = {
         OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
 
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+        dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
 
         // function to check non standard legend selections during save
         dataOptions = OCA.Analytics.Filter.processChartLegendSelections(dataOptions);

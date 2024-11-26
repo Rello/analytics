@@ -1,13 +1,13 @@
 # Changelog
 
-## 5.1.0
+## 5.1.0 - 2024-11-26
 ### Added
 - disable single data sources globally #415
 - more Panorama layouts
 
 ### Changed
 - PhpSpreadsheet 3.4.0
-- local spreadsheet: handle ranges
+- local spreadsheet: connected cells
 - header gradient
 
 ### Fixed
