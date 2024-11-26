@@ -131,10 +131,15 @@ OCA.Analytics.Visualization = {
             columns = header.map((header, index) => ({title: header, className: ''}));
             data = originalData.map(row =>
                 row.map((value, index) => {
-                    if (!isNaN(parseFloat(value))) {
+                    if (!isNaN(parseFloat(value)) && index !== 0) {
                         // Any number gets aligned to the right and formated with locales
-                        columns[index].className = 'dt-right';
-                        return parseFloat(value).toLocaleString();
+                        if (parseInt(value) > 1950 && parseInt(value) < 2050 && index < 2) {
+                            // ToDo
+                            // do not format 4 digit year numbers in the first 2 columns. dirty hack until proper column formating is there
+                        } else {
+                            columns[index].className = 'dt-right';
+                            return parseFloat(value).toLocaleString();
+                        }
                     }
                     return value;
                 })
