@@ -116,6 +116,8 @@ OC.L10N.register(
     "The report name is missing" : "Chybí název výkazu",
     "The report type selection is missing" : "Chybí výběr typu výkazu",
     "At least one visualization selection is required" : "Je třeba zadat alespoň výběr vizualizace",
+    "Incorrect chart options" : "Neplatné předvolby grafu",
+    "Incorrect data options" : "Neplatné předvolby dat",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Toto byl poslední výkaz v sadě dat. Chcete smazat sadu dat včetně veškerých dat?",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Pro rozměry je možné použít textové proměnné. <br> Po přidání dat jsou nahrazeny.",
     "REST API parameters" : "parametry pro REST API",
