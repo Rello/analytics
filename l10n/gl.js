@@ -338,7 +338,7 @@ OC.L10N.register(
     "Not required" : "Non requirido",
     "Reset table" : "Restabelecer a táboa",
     "Calculated Columns" : "Columnas calculadas",
-    "Data format" : "Formato de data",
+    "Data format" : "Formato de datos",
     "Select how the raw data is structured" : "Seleccione como se estruturan os datos en bruto",
     "In rows" : "En filas",
     "A list of values. This is the default." : "Unha lista de valores. Isto é o predeterminado.",
