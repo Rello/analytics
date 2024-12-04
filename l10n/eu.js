@@ -77,6 +77,7 @@ OC.L10N.register(
     "Back to reports" : "Itzuli txostenetara",
     "Overview" : "Ikuspegi orokorra",
     "Reports" : "Txostenak",
+    "Panoramas" : "Panoramak",
     "Scheduled data load" : "Antolatutako datu-karga",
     "Data load" : "Datuen karga",
     "Remove from favorites" : "Kendu gogokoetatik",

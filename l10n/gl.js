@@ -136,7 +136,7 @@ OC.L10N.register(
     "Technical error. Please check the logs." : "Erro técnico. Consulte os ficheiros de rexistro.",
     "Demo: Thresholds" : "Demostración: Limiares",
     "Type" : "Tipo",
-    "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Pódense usar limiares para resaltar datos. Usando o limiar de notificación, envíanse mensaxes automáticas.",
+    "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Pódense usar limiares para resaltar datos. Usando o limiar de notificación, envíanse mensaxes emerxentes.",
     "Threshold" : "Limiar",
     "Normal value" : "Valor normal",
     "none" : "ningún",
