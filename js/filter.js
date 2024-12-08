@@ -409,7 +409,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Chart options'),
-            OCA.Analytics.Filter.processOptionsDialog
+            OCA.Analytics.Filter.processChartOptionsDialog
         );
 
         let drilldownRows = '';
@@ -477,7 +477,7 @@ OCA.Analytics.Filter = {
         }
     },
 
-    processOptionsDialog: function () {
+    processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions;
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
@@ -516,11 +516,11 @@ OCA.Analytics.Filter = {
             userDatasetOptions.push(optionObject);
         }
 
-        // decide of the dataseries array is relevant to be saved or not.
+        // decide of the data series array is relevant to be saved or not.
         // if all settings are default, all options can be removed can be removed completely
         // to keep the array clean, it will overwrite any existing settings.
         if (nonDefaultValues === true) {
-            dataOptions = JSON.stringify(userDatasetOptions);
+            dataOptions = userDatasetOptions;
         } else {
             dataOptions = '';
         }
