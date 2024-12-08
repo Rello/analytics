@@ -415,7 +415,7 @@ OCA.Analytics.Filter = {
         let drilldownRows = '';
         let dataOptions;
         try {
-            dataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+            dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         } catch (e) {
             dataOptions = '';
         }

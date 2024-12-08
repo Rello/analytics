@@ -673,10 +673,10 @@
         <p><?php p($l->t('Show totals')); ?></p>
         <div id="totalsSwitch">
             <label class="toggle-option">
-                <input type="radio" name="totalOption" value="true" checked><?php p($l->t('Yes')); ?>
+                <input type="radio" id="totalOption1" name="totalOption" value="true" checked><?php p($l->t('Yes')); ?>
             </label>
             <label class="toggle-option">
-                <input type="radio" name="totalOption" value="false"><?php p($l->t('No')); ?>
+                <input type="radio" id="totalOption2" name="totalOption" value="false"><?php p($l->t('No')); ?>
             </label></div>
     </div>
     <br>
@@ -684,10 +684,10 @@
         <p><?php p($l->t('Format all numbers in local format')); ?></p>
         <div id="totalsSwitch">
             <label class="toggle-option">
-                <input type="radio" name="formatLocalesOption" value="true" checked><?php p($l->t('Yes')); ?>
+                <input type="radio" id="formatLocalesOption1" name="formatLocalesOption" value="true" checked><?php p($l->t('Yes')); ?>
             </label>
             <label class="toggle-option">
-                <input type="radio" name="formatLocalesOption" value="false"><?php p($l->t('No')); ?>
+                <input type="radio" id="formatLocalesOption2" name="formatLocalesOption" value="false"><?php p($l->t('No')); ?>
             </label></div>
     </div>
     <br>

@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.0 - 2024-11-26
+## 5.2.0 - 2024-12-08
 ### Added
 - Integration to Share Review app
 - GitHub: report on releases, issues and pull requests
