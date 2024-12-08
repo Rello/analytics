@@ -159,11 +159,11 @@ class DataloadMapper
     public function copy(int $dataloadId)
     {
         $sql = $this->db->getQueryBuilder();
-        $selectSql = $sql->select('*')
+        $sql->select('*')
             ->from(self::TABLE_NAME)
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)));
-        $statement = $sql->executeQuery($selectSql);
+        $statement = $sql->executeQuery();
         $record = $statement->fetch();
 
         if ($record) {

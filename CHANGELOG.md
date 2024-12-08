@@ -6,6 +6,11 @@
 
 ### Changed
 - table options: disable locales formatting for content #423
+- NC 29 required due to app config dependency
+
+### Fixed
+- change chart options
+- copy data load not working
 
 ## 5.1.0 - 2024-11-26
 ### Added
