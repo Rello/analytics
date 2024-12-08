@@ -661,21 +661,36 @@
 				p($l->t('Measures')); ?></p>
             <div id="measures" class="columnSection"></div>
         </div>
-        <div id="tableOptionsLayoutTotals">
-            <p><?php p($l->t('Show totals')); ?></p>
-            <div id="totalsSwitch">
-                <label class="toggle-option">
-                    <input type="radio" name="totalOption" value="true" checked><?php p($l->t('Yes')); ?>
-                </label>
-                <label class="toggle-option">
-                    <input type="radio" name="totalOption" value="false"><?php p($l->t('No')); ?>
-                </label></div>
-        </div>
         <div id="tableOptionsLayoutAvailable">
             <p><?php p($l->t('Not required')); ?></p>
-            <div id="hidden" class="columnSection"></div>
+            <div id="notRequired" class="columnSection"></div>
         </div>
+        <div class="dummy2"></div>
     </div>
+
+    <br>
+    <div id="tableOptionsLayoutTotals">
+        <p><?php p($l->t('Show totals')); ?></p>
+        <div id="totalsSwitch">
+            <label class="toggle-option">
+                <input type="radio" name="totalOption" value="true" checked><?php p($l->t('Yes')); ?>
+            </label>
+            <label class="toggle-option">
+                <input type="radio" name="totalOption" value="false"><?php p($l->t('No')); ?>
+            </label></div>
+    </div>
+    <br>
+    <div id="tableOptionsFormatLocales">
+        <p><?php p($l->t('Format all numbers in local format')); ?></p>
+        <div id="totalsSwitch">
+            <label class="toggle-option">
+                <input type="radio" name="formatLocalesOption" value="true" checked><?php p($l->t('Yes')); ?>
+            </label>
+            <label class="toggle-option">
+                <input type="radio" name="formatLocalesOption" value="false"><?php p($l->t('No')); ?>
+            </label></div>
+    </div>
+    <br>
     <button id="tableOptionsResetState">
         <span class="icon-analytics-reset"></span>
         <span><?php p($l->t('Reset table')); ?></span>

@@ -867,7 +867,7 @@ div.dt-container .dt-paging .dt-paging-button {
     grid-template-areas:
       "dummy columns"
       "rows measures"
-      "hidden totals";
+      "notRequired dummy2";
     grid-template-columns: 1fr 2fr;
     grid-template-rows: auto; /* Define the height for rows and measures */
     gap: 10px;

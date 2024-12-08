@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.2.0 - 2024-11-26
+### Added
+- Integration to Share Review app
+
+### Changed
+- table options: disable locales formatting for content #423
+
 ## 5.1.0 - 2024-11-26
 ### Added
 - disable single data sources globally #415

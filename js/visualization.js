@@ -67,7 +67,7 @@ OCA.Analytics.Visualization = {
             },
         };
 
-        ({data, columns} = this.convertDataToDataTableFormat(jsondata.data, tableOptions.layout, jsondata.header));
+        ({data, columns} = this.convertDataToDataTableFormat(jsondata.data, tableOptions, jsondata.header));
         ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
 
         // Calculate column totals
@@ -118,7 +118,8 @@ OCA.Analytics.Visualization = {
         }
     },
 
-    convertDataToDataTableFormat: function (originalData, layoutConfig, header) {
+    convertDataToDataTableFormat: function (originalData, tableOptions, header) {
+        let layoutConfig = tableOptions.layout;
         let uniqueHeaders = new Set();
         let transformedData = {};
         let columns = [];
@@ -131,7 +132,7 @@ OCA.Analytics.Visualization = {
             columns = header.map((header, index) => ({title: header, className: ''}));
             data = originalData.map(row =>
                 row.map((value, index) => {
-                    if (!isNaN(parseFloat(value)) && index !== 0) {
+                    if (!isNaN(parseFloat(value)) && index !== 0 && tableOptions.formatLocales === undefined) {
                         // Any number gets aligned to the right and formated with locales
                         if (parseInt(value) > 1950 && parseInt(value) < 2050 && index < 2) {
                             // ToDo
@@ -140,6 +141,9 @@ OCA.Analytics.Visualization = {
                             columns[index].className = 'dt-right';
                             return parseFloat(value).toLocaleString();
                         }
+                    } else if (index === row.length - 1 && !isNaN(parseFloat(value))) {
+                        columns[index].className = 'dt-right';
+                        return parseFloat(value).toLocaleString();
                     }
                     return value;
                 })

@@ -309,6 +309,12 @@ OCA.Analytics.Filter = {
             container.querySelector('input[name="totalOption"][value="false"]').checked = true;
         }
 
+        if (tableOptions && tableOptions.formatLocales != undefined) {
+            container.querySelector('input[name="formatLocalesOption"][value="false"]').checked = true;
+        } else {
+            container.querySelector('input[name="formatLocalesOption"][value="true"]').checked = true;
+        }
+
         if (tableOptions && tableOptions.calculatedColumns) {
             container.getElementById('tableOptionsCalculatedColumns').value = tableOptions.calculatedColumns;
         }
@@ -332,13 +338,21 @@ OCA.Analytics.Filter = {
             tableOptions = {};
         }
 
-        const selectedRadio = document.querySelector('input[name="totalOption"]:checked');
-        const tableOptionTotalRow = selectedRadio ? selectedRadio.value : null;
-
-        if (tableOptionTotalRow === 'true') {
+        const showTotalsSelected = document.querySelector('input[name="totalOption"]:checked');
+        const showTotals = showTotalsSelected ? showTotalsSelected.value : null;
+        if (showTotals === 'true') {
             tableOptions.footer = true;
         } else if (tableOptions) {
             delete tableOptions.footer;
+        }
+
+        const formatLocalesSelected = document.querySelector('input[name="formatLocalesOption"]:checked');
+        const formatLocales = formatLocalesSelected ? formatLocalesSelected.value : null;
+        // default is, that the locales are calculated
+        if (formatLocales === 'false') {
+            tableOptions.formatLocales = false;
+        } else if (tableOptions) {
+            delete tableOptions.formatLocales;
         }
 
         let layout = {};
@@ -356,7 +370,7 @@ OCA.Analytics.Filter = {
         });
 
         const isSequential = (arr) => arr.every((val, i, array) => i === 0 || (val === array[i - 1] + 1));
-        if (layout.columns.length === 0 && layout.measures.length === 0 && layout.hidden.length === 0) {
+        if (layout.columns.length === 0 && layout.measures.length === 0 && layout.notRequired.length === 0) {
             if (!isSequential(layout.rows)) {
                 tableOptions.layout = layout;
             } else if (tableOptions && tableOptions.layout) {
@@ -385,6 +399,8 @@ OCA.Analytics.Filter = {
         if (OCA.Analytics.currentReportData.options.tableoptions !== null) {
             OCA.Analytics.currentReportData.options.tableoptions = null;
             OCA.Analytics.unsavedFilters = true;
+            OCA.Analytics.Backend.getData();
+            OCA.Analytics.Notification.dialogClose();
         }
     },
 
@@ -832,6 +848,10 @@ OCA.Analytics.Filter.Backend = {
         }
 
         // get the other states which are not related to the tableState itself
+        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.formatLocales === false) {
+            tableOptions.formatLocales = false;
+        }
+
         if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.footer === true) {
             tableOptions.footer = true;
         }
