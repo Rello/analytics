@@ -3,6 +3,7 @@
 ## 5.2.0 - 2024-11-26
 ### Added
 - Integration to Share Review app
+- GitHub: report on releases, issues and pull requests
 
 ### Changed
 - table options: disable locales formatting for content #423
