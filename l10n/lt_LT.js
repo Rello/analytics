@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Data" : "Duomenys",
     "Value" : "Reikšmė",
     "Saved" : "Įrašyta",
     "Are you sure?" : "Ar esate tikri?",

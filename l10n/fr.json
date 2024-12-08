@@ -114,6 +114,8 @@
     "The report name is missing" : "Le nom du rapport est manquant",
     "The report type selection is missing" : "Le type de rapport n'est pas sélectionné",
     "At least one visualization selection is required" : "Au moins une sélection de visualisation est requise",
+    "Incorrect chart options" : "Options de graphique incorrectes",
+    "Incorrect data options" : "Options de donnée incorrectes",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Il s'agissait du dernier rapport sur ce jeu de données. Voulez-vous supprimer le supprimer ainsi que toutes les données liées ?",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Les variables de texte peuvent utilisées dans les dimensions.<br>Elles sont remplacées lorsque les données sont ajoutées.",
     "REST API parameters" : "Paramètres de l'API REST",
