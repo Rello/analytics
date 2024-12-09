@@ -34,6 +34,8 @@ OC.L10N.register(
     "Yes" : "Já",
     "No" : "Nei",
     "Authentication" : "Auðkenning",
+    "Releases" : "Útgáfur",
+    "Issues" : "Vandamál",
     "Version" : "Útgáfa",
     "Local" : "Staðvært",
     "Announcements" : "Tilkynningar",

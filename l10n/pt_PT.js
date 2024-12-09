@@ -75,6 +75,8 @@ OC.L10N.register(
     "Yes" : "Sim",
     "No" : "Não",
     "Authentication" : "Autenticação",
+    "Releases" : "Lançamentos",
+    "Issues" : "Problemas",
     "Version" : "Versão",
     "Local" : "Local",
     "File" : "Ficheiro",

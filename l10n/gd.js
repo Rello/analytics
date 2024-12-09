@@ -15,6 +15,7 @@ OC.L10N.register(
     "Search" : "Lorg",
     "Yes" : "Tha",
     "No" : "Chan eil",
+    "Issues" : "Bugaichean",
     "Version" : "Tionndadh",
     "File" : "Faidhle",
     "Password" : "Facal-faire",

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Yes" : "Jah",
     "No" : "Ei",
     "Authentication" : "Autentimine",
+    "Releases" : "Versioonid",
     "Version" : "Versioon",
     "Local" : "Kohalik",
     "File" : "Fail",

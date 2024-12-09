@@ -21,6 +21,8 @@ OC.L10N.register(
     "Search" : "Chwilio",
     "Yes" : "Iawn",
     "No" : "No",
+    "Releases" : "Ryddhadau",
+    "Issues" : "Materion",
     "Version" : "Fersiwn",
     "Local" : "Lleol",
     "Password" : "Cyfrinair",

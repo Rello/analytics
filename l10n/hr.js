@@ -36,6 +36,8 @@ OC.L10N.register(
     "Yes" : "Da",
     "No" : "Ne",
     "Authentication" : "Autentifikacija",
+    "Releases" : "Izdanja",
+    "Issues" : "Poteškoće",
     "Version" : "Inačica",
     "File" : "Datoteka",
     "Announcements" : "Obavijesti",

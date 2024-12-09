@@ -55,6 +55,8 @@ OC.L10N.register(
     "No" : "No",
     "More options" : "More options",
     "Authentication" : "Authentication",
+    "Releases" : "Releases",
+    "Issues" : "Issues",
     "Version" : "Version",
     "Local" : "Local",
     "File" : "File",

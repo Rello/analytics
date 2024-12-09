@@ -168,6 +168,8 @@ OC.L10N.register(
     "More options" : "More options",
     "Authentication" : "احراز هویت",
     "Timestamp of data load" : "Timestamp of data load",
+    "Releases" : "ارائه‌ها",
+    "Issues" : "مسائل",
     "Limit" : "Limit",
     "Version" : "نسخه",
     "Download count" : "Download count",

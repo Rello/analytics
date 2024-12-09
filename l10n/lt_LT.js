@@ -40,6 +40,8 @@ OC.L10N.register(
     "Yes" : "Taip",
     "No" : "Ne",
     "Authentication" : "Tapatybės nustatymas",
+    "Releases" : "Laidos",
+    "Issues" : "Problemos",
     "Version" : "Versija",
     "Local" : "Vietinis",
     "File" : "Failas",

@@ -151,6 +151,8 @@ OC.L10N.register(
     "Object path" : "Път на обекта",
     "Authentication" : "Удостоверяване",
     "Timestamp of data load" : "Печат за време на зареждането на данни",
+    "Releases" : "Версии",
+    "Issues" : "Проблеми",
     "Limit" : "Ограничение",
     "Version" : "Версия",
     "Download count" : "Брой изтегляния",

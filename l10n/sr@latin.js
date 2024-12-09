@@ -19,6 +19,7 @@ OC.L10N.register(
     "Search" : "Traži",
     "Yes" : "Da",
     "No" : "Ne",
+    "Issues" : "Problemi",
     "Version" : "Verzija",
     "File" : "Fajl",
     "copy" : "kopiraj",

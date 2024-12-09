@@ -138,6 +138,8 @@ OC.L10N.register(
     "Yes" : "Ya",
     "No" : "Tidak",
     "Authentication" : "Otentikasi",
+    "Releases" : "Rilis",
+    "Issues" : "Isu",
     "Version" : "Versi",
     "Local" : "Lokal",
     "Announcements" : "Pengumuman",

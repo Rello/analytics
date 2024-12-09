@@ -159,6 +159,8 @@ OC.L10N.register(
     "More options" : "Más opciones",
     "Authentication" : "Autenticación",
     "Timestamp of data load" : "Marca de tiempo de carga de datos",
+    "Releases" : "Lanzamientos",
+    "Issues" : "Temas",
     "Limit" : "Límite",
     "Version" : "Versión",
     "Download count" : "Cantidad de descargas",

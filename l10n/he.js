@@ -40,6 +40,8 @@ OC.L10N.register(
     "Select columns" : "בחירת עמודות",
     "e.g. 1,2,4 or leave empty" : "למשל: 1,2,4 או להשאיר ריק",
     "Authentication" : "אימות",
+    "Releases" : "מהדורות",
+    "Issues" : "תקלות",
     "Version" : "גרסה",
     "Local" : "מקומי",
     "File" : "קובץ",
