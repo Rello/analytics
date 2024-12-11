@@ -1,7 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Automation" : "Automasi",
     "Delete" : "Padam",
+    "All data including all reports will be deleted!" : "Segala data termasuk semua laporan akan dipadam",
     "OK" : "OK",
     "Cancel" : "Batal",
     "Add" : "Tambah",
