@@ -15,6 +15,7 @@ OC.L10N.register(
     "New" : "Baru",
     "Share link" : "Share link",
     "Type" : "Jenis",
+    "Notification" : "Pemberitahuan",
     "Date" : "Date",
     "Search" : "Search",
     "Yes" : "Yes",
