@@ -118,6 +118,8 @@ OC.L10N.register(
     "HTTP method" : "HTTP-metodi",
     "Object path" : "Objektin polku",
     "Authentication" : "Tunnistautuminen",
+    "Releases" : "Julkaisut",
+    "Issues" : "Ongelmat",
     "Version" : "Versio",
     "Download count" : "Latausmäärä",
     "Local" : "Paikallinen",

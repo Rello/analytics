@@ -26,6 +26,8 @@ OC.L10N.register(
     "Yes" : "კი",
     "No" : "არა",
     "Authentication" : "აუტენტიფიკაცია",
+    "Releases" : "რელიზები",
+    "Issues" : "პრობლემები",
     "Version" : "ვერსია",
     "Local" : "ლოკალური",
     "File" : "ფაილი",

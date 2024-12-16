@@ -22,6 +22,7 @@ OC.L10N.register(
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",
+    "Issues" : "հայց",
     "Version" : "Տարբերակ",
     "Password" : "Գաղտնաբառ",
     "Favorites" : "Սիրվածներ",

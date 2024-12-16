@@ -81,6 +81,8 @@ OC.L10N.register(
     "e.g. 1,2,4 or leave empty" : "ví dụ: 1,2,4 hoặc để trống",
     "Authentication" : "Xác thực",
     "Timestamp of data load" : "Dấu thời gian của dữ liệu được tải",
+    "Releases" : "Các phiên bản",
+    "Issues" : "Vấn đề",
     "Version" : "Phiên bản",
     "Local" : "Cục bộ",
     "File" : "Tệp",

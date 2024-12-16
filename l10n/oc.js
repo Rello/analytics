@@ -42,6 +42,8 @@ OC.L10N.register(
     "No" : "Non",
     "HTTP method" : "Metòde HTTP",
     "Authentication" : "Autentificacion",
+    "Releases" : "Sortidas",
+    "Issues" : "Avarias",
     "Version" : "Version",
     "Local" : "Local",
     "File" : "Fichier",

@@ -36,6 +36,8 @@ OC.L10N.register(
     "More options" : "Mai multe opțiuni",
     "Authentication" : "Autentificare",
     "Timestamp of data load" : "Marca temporală a încărcării datelor",
+    "Releases" : "Versiuni",
+    "Issues" : "Probleme",
     "Version" : "Versiune",
     "Local" : "Local",
     "File" : "Fișier",

@@ -29,6 +29,8 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "Jo",
     "Authentication" : "Mirëfilltësim",
+    "Releases" : "Lançime",
+    "Issues" : "Çështjet",
     "Version" : "Versioni",
     "Local" : "Lokale",
     "File" : "Skedar ",

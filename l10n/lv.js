@@ -117,6 +117,7 @@ OC.L10N.register(
     "More options" : "Vairāk opciju",
     "Authentication" : "Autentifikācija",
     "Allow insecure connections" : "Atļaut nedrošus savienojumus",
+    "Releases" : "Laidieni",
     "Version" : "Versija",
     "Local" : "Lokāls",
     "File" : "Datne",

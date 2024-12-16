@@ -24,6 +24,7 @@ OC.L10N.register(
     "Total" : "Totaal",
     "Yes" : "Ja",
     "No" : "Nee",
+    "Releases" : "Vrystellings",
     "Version" : "Weergawe",
     "File" : "Lêer",
     "Announcements" : "Aankondigings",

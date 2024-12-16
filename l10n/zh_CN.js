@@ -180,6 +180,8 @@ OC.L10N.register(
     "More options" : "更多选项",
     "Authentication" : "身份认证",
     "Timestamp of data load" : "数据加载时间戳",
+    "Releases" : "发行版",
+    "Issues" : "问题",
     "Limit" : "限制",
     "Version" : "版本",
     "Download count" : "下载次数",

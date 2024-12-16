@@ -185,6 +185,8 @@ OC.L10N.register(
     "More options" : "Fler alternativ",
     "Authentication" : "Autentisering",
     "Timestamp of data load" : "Tidstämpel för datainläsning",
+    "Releases" : "Versioner",
+    "Issues" : "Problem",
     "Limit" : "Begränsning",
     "Version" : "Version",
     "Download count" : "Antal nedladdningar",

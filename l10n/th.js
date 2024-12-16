@@ -32,6 +32,7 @@ OC.L10N.register(
     "Yes" : "ใช่",
     "No" : "ไม่",
     "Authentication" : "การตรวจสอบสิทธิ์",
+    "Issues" : "ปัญหา",
     "Version" : "รุ่น",
     "Local" : "ต้นทาง",
     "File" : "ไฟล์",

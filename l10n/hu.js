@@ -162,6 +162,8 @@ OC.L10N.register(
     "More options" : "További lehetőségek",
     "Authentication" : "Hitelesítés",
     "Timestamp of data load" : "Az adatbetöltés időbélyege",
+    "Releases" : "Kiadások",
+    "Issues" : "Hibajegyek",
     "Limit" : "Korlát",
     "Version" : "Verzió",
     "Download count" : "Letöltések száma",

@@ -116,6 +116,8 @@ OC.L10N.register(
     "Number of rows" : "Númberu de fileres",
     "More options" : "Más opciones",
     "Authentication" : "Autenticación",
+    "Releases" : "Versiones",
+    "Issues" : "Problemes",
     "Limit" : "Llende",
     "Version" : "Versión",
     "Local" : "Llocal",

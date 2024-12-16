@@ -105,6 +105,8 @@ OC.L10N.register(
     "Select columns" : "열 선택",
     "e.g. 1,2,4 or leave empty" : "예) 1, 2, 4, 빈칸으로 두기",
     "Authentication" : "인증",
+    "Releases" : "릴리스",
+    "Issues" : "문제점",
     "Version" : "버전",
     "File" : "파일",
     "Announcements" : "공지",

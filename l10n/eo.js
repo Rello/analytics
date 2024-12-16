@@ -28,6 +28,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Authentication" : "Aŭtentigo",
+    "Releases" : "Eldonoj",
     "Version" : "Versio",
     "Local" : "Loka",
     "File" : "Dosiero",

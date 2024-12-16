@@ -164,6 +164,8 @@ OC.L10N.register(
     "More options" : "Περισσότερες επιλογές",
     "Authentication" : "Πιστοποίηση",
     "Timestamp of data load" : "Χρονική σήμανση φόρτωσης δεδομένων",
+    "Releases" : "Εκδόσεις",
+    "Issues" : "Ζητήματα",
     "Limit" : "'Οριο",
     "Version" : "Έκδοση",
     "Download count" : "Πλήθος λήψεων",
