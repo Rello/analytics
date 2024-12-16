@@ -485,7 +485,7 @@ class DataloadService
             $reportMetadata = array();
             $reportMetadata['link'] = $path;
             $reportMetadata['user_id'] = $this->userId;
-            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_FILE, $reportMetadata);
+            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $reportMetadata);
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {

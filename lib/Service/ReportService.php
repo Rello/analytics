@@ -239,7 +239,7 @@ class ReportService {
 			$subheader = $file;
 			$parent = 0;
 			$dataset = 0;
-			$type = DatasourceController::DATASET_TYPE_FILE;
+			$type = DatasourceController::DATASET_TYPE_LOCAL_CSV;
 			$link = $file;
 			$visualization = 'table';
 			$chart = 'line';

@@ -1,5 +1,8 @@
 # Changelog
 
+### FIXED
+- import data from file
+
 ## 5.2.0 - 2024-12-08
 ### Added
 - Integration to Share Review app
