@@ -63,7 +63,7 @@ class ContentProvider implements IContentProvider {
 	 * @since 1.1.0
 	 */
 	public function getItemUrl(string $id): string {
-		return $this->urlGenerator->linkToRouteAbsolute('analytics.page.index') . '#/r/' . $id;
+		return $this->urlGenerator->linkToRouteAbsolute('analytics.page.report') . 'r/' . $id;
 	}
 
 	/**

@@ -2,6 +2,7 @@
 
 ### FIXED
 - import data from file
+- fix links from integrations to reports
 
 ## 5.2.0 - 2024-12-08
 ### Added

@@ -170,7 +170,7 @@ class PageController extends Controller
         if (empty($share)) {
             // Dataset not shared or wrong token
             return new RedirectResponse($this->urlGenerator->linkToRoute('core.login.showLoginForm', [
-                'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.index', ['token' => $token]),
+                'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.report', ['token' => $token]),
             ]));
         } else {
             if ($share['password'] !== null) {
@@ -207,7 +207,7 @@ class PageController extends Controller
         if (empty($share)) {
             // Dataset not shared or wrong token
             return new RedirectResponse($this->urlGenerator->linkToRoute('core.login.showLoginForm', [
-                'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.index', ['token' => $token]),
+                'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.report', ['token' => $token]),
             ]));
         } else {
             if ($share['password'] !== null) {
