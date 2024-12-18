@@ -22,6 +22,7 @@ OC.L10N.register(
     "Back" : "Yzyna",
     "Settings" : "Sazlamalar",
     "Name" : "Ady",
+    "Update" : "Täzelemek",
     "Copy" : "Göçüriň",
     "Unshare" : "Paýlaşma",
     "Copy link" : "Link-y nusgalaň",

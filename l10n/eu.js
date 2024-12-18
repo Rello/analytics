@@ -116,6 +116,8 @@ OC.L10N.register(
     "The report name is missing" : "Txostenaren izena falta da",
     "The report type selection is missing" : "Txosten mota hautatzea falta da",
     "At least one visualization selection is required" : "Gutxienez bistaratzeko aukeraketa bat behar da",
+    "Incorrect chart options" : "Grafiko aukera okerrak",
+    "Incorrect data options" : "Datu aukera okerrak",
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Hau izan zen datu multzoari buruzko azken txostena. Datu-multzoa ezabatu nahi duzu datu guztiak barne?",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Testu-aldagaiak dimentsioetan erabil daitezke.<br> Datuak gehitzean ordezkatzen dira.",
     "REST API parameters" : "REST API parametroak",
