@@ -295,7 +295,7 @@ OC.L10N.register(
     "From file" : "Von Datei",
     "From clipboard" : "Von der Zwischenablage",
     "REST API" : "REST-API",
-    "Advanced configuration" : "Erweiterte Einrichtung",
+    "Advanced configuration" : "Erweiterte Konfiguration",
     "Thresholds can trigger notifications and color coding in reports." : "Schwellenwerte können Benachrichtigungen und Farbkodierungen in Berichten auslösen.",
     "single value or *" : "Einzelwert oder *",
     "= equal" : "= gleich",
