@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- GitHub: report on release assets
+
 ### FIXED
 - import data from file
 - fix links from integrations to reports
