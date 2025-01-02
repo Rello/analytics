@@ -46,9 +46,7 @@ OCA.Analytics.Visualization = {
         this.showElement('tableContainer');
 
         // get current table state
-        let tableOptions = JSON.parse(jsondata.options.tableoptions)
-            ? JSON.parse(jsondata.options.tableoptions)
-            : {};
+        let tableOptions = jsondata.options.tableoptions;
         let defaultOrder = [];
         let defaultLength = 10;
         let defaultColReorder = true;
@@ -119,7 +117,7 @@ OCA.Analytics.Visualization = {
     },
 
     convertDataToDataTableFormat: function (originalData, tableOptions, header) {
-        let layoutConfig = tableOptions.layout;
+        let layoutConfig = tableOptions.layout !== undefined ? tableOptions.layout : false;
         let uniqueHeaders = new Set();
         let transformedData = {};
         let columns = [];

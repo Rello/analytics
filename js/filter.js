@@ -296,12 +296,7 @@ OCA.Analytics.Filter = {
         });
         container.getElementById('tableOptionsResetState').addEventListener('click', OCA.Analytics.Filter.processTableOptionsReset);
 
-        let tableOptions;
-        try {
-            tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
-        } catch (e) {
-            tableOptions = {};
-        }
+        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions;
 
         if (tableOptions && tableOptions.footer) {
             container.querySelector('input[name="totalOption"][value="true"]').checked = true;
@@ -328,15 +323,7 @@ OCA.Analytics.Filter = {
     },
 
     processTableOptionsDialog: function () {
-        let tableOptions;
-        try {
-            tableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
-            if (tableOptions === null) {
-                tableOptions = {};
-            }
-        } catch (e) {
-            tableOptions = {};
-        }
+        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions;
 
         const showTotalsSelected = document.querySelector('input[name="totalOption"]:checked');
         const showTotals = showTotalsSelected ? showTotalsSelected.value : null;
@@ -385,11 +372,11 @@ OCA.Analytics.Filter = {
             tableOptions.calculatedColumns = calculatedColumns;
         }
 
-        if (OCA.Analytics.currentReportData.options.tableoptions !== JSON.stringify(tableOptions)) {
+        if (OCA.Analytics.currentReportData.options.tableoptions !== tableOptions) {
             delete tableOptions.colReorder;
         }
 
-        OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
+        OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
@@ -700,13 +687,7 @@ OCA.Analytics.Filter.Drag = {
     },
 
     initialize: function () {
-        let layoutConfig;
-        try {
-            layoutConfig = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
-        } catch (e) {
-            layoutConfig = null;
-        }
-
+        let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions.layout;
         let headerItems = OCA.Analytics.currentReportData.header;
         let rowsSection = document.getElementById('rows');
 
@@ -736,7 +717,7 @@ OCA.Analytics.Filter.Drag = {
             return div;
         };
 
-        if (!layoutConfig) {
+        if (layoutConfig === {} || layoutConfig === undefined) {
             // Fallback: Add all header items to the "rows" section
             headerItems.forEach((text, index) => {
                 let draggableItem = createDraggableItem(text, index);
@@ -824,7 +805,7 @@ OCA.Analytics.Filter.Backend = {
         if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
             OCA.Analytics.currentReportData.options.filteroptions = {};
         } else {
-            OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
+            OCA.Analytics.currentReportData.options.filteroptions = OCA.Analytics.currentReportData.options.filteroptions;
         }
 
         let tableOptions = {};
@@ -848,23 +829,23 @@ OCA.Analytics.Filter.Backend = {
         }
 
         // get the other states which are not related to the tableState itself
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.formatLocales === false) {
+        if ((OCA.Analytics.currentReportData.options.tableoptions)?.formatLocales === false) {
             tableOptions.formatLocales = false;
         }
 
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.footer === true) {
+        if ((OCA.Analytics.currentReportData.options.tableoptions)?.footer === true) {
             tableOptions.footer = true;
         }
 
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.layout) {
-            tableOptions.layout = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).layout;
+        if ((OCA.Analytics.currentReportData.options.tableoptions)?.layout) {
+            tableOptions.layout = OCA.Analytics.currentReportData.options.tableoptions.layout;
         }
 
-        if (JSON.parse(OCA.Analytics.currentReportData.options.tableoptions)?.calculatedColumns) {
-            tableOptions.calculatedColumns = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions).calculatedColumns;
+        if ((OCA.Analytics.currentReportData.options.tableoptions)?.calculatedColumns) {
+            tableOptions.calculatedColumns = OCA.Analytics.currentReportData.options.tableoptions.calculatedColumns;
         }
 
-        OCA.Analytics.currentReportData.options.tableoptions = JSON.stringify(tableOptions);
+        OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
 
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
@@ -886,8 +867,8 @@ OCA.Analytics.Filter.Backend = {
             body: JSON.stringify({
                 chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
                 dataoptions: JSON.stringify(dataOptions),
-                filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
-                tableoptions: OCA.Analytics.currentReportData.options.tableoptions,
+                filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
+                tableoptions: JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions),
             })
         })
             .then(response => response.json())

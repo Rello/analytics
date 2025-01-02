@@ -4,6 +4,7 @@
 - GitHub: report on release assets
 
 ### FIXED
+- handling of report options
 - import data from file
 - fix links from integrations to reports
 

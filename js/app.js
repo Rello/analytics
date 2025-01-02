@@ -1282,7 +1282,7 @@ OCA.Analytics.Backend = {
                 ajaxData.chartoptions = JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions);
             }
             if (typeof (OCA.Analytics.currentReportData.options.tableoptions) !== 'undefined') {
-                ajaxData.tableoptions = OCA.Analytics.currentReportData.options.tableoptions;
+                ajaxData.tableoptions = JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions);
             }
         }
 
@@ -1307,27 +1307,33 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.currentReportData = data;
                 try {
                     // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    let chartOptions = OCA.Analytics.currentReportData.options.chartoptions.replace(/xAxes/g, 'x');
-                    OCA.Analytics.currentReportData.options.chartoptions = JSON.parse(chartOptions);
+                    let parsedChartOptions = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions.replace(/xAxes/g, 'x'));
+                    OCA.Analytics.currentReportData.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
                 } catch (e) {
                     OCA.Analytics.currentReportData.options.chartoptions = {};
                 }
 
                 try {
-                    OCA.Analytics.currentReportData.options.dataoptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+                    let parsedDataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+                    OCA.Analytics.currentReportData.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
                 } catch (e) {
                     OCA.Analytics.currentReportData.options.dataoptions = {};
                 }
 
                 try {
-                    OCA.Analytics.currentReportData.options.filteroptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+                    let parsedFilterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+                    OCA.Analytics.currentReportData.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
                 } catch (e) {
                     OCA.Analytics.currentReportData.options.filteroptions = {};
                 }
-                if (OCA.Analytics.currentReportData.options.filteroptions === null) {
-                    OCA.Analytics.currentReportData.options.filteroptions = {};
-                }
 
+                try {
+                    let parsedTableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
+                    OCA.Analytics.currentReportData.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
+                } catch (e) {
+                    OCA.Analytics.currentReportData.options.tableoptions = {};
+                }
+                
                 document.getElementById('reportHeader').innerText = data.options.name;
                 if (data.options.subheader !== '') {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
