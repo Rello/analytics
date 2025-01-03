@@ -1,9 +1,10 @@
 # Changelog
 
+## 5.2.1 - 2025-01-03
 ### Added
 - GitHub: report on release assets
 
-### FIXED
+### Fixed
 - handling of report options
 - import data from file
 - fix links from integrations to reports

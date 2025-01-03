@@ -202,9 +202,7 @@ class LocalSpreadsheet implements IDatasource {
 				if ($cell->isInMergeRange()) {
 					// Overwrite the cell with the top-left cell of the merged range
 					$mergedRange = $cell->getMergeRange();
-					$this->logger->info('$mergedRange: ' . $mergedRange);
 					[$startCell] = explode(':', $mergedRange);
-					$this->logger->info('$startCell: ' . $startCell);
 					$cell = $spreadsheet->getActiveSheet()->getCell($startCell);
 					$values[$rowIndex][$columnIndex] = $cell->getValue();
 				}
