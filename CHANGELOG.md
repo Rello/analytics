@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.2 - 2025-01-xx
+### Fixed
+- report not displayed in panorama
+
 ## 5.2.1 - 2025-01-03
 ### Added
 - GitHub: report on release assets

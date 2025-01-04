@@ -93,10 +93,31 @@ OCA.Analytics.Dashboard = {
                 }
                 try {
                     // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    let chartOptions = jsondata.options.chartoptions.replace(/xAxes/g, 'x');
-                    jsondata.options.chartoptions = JSON.parse(chartOptions);
+                    let parsedChartOptions = JSON.parse(jsondata.options.chartoptions.replace(/xAxes/g, 'x'));
+                    jsondata.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
                 } catch (e) {
                     jsondata.options.chartoptions = {};
+                }
+
+                try {
+                    let parsedDataOptions = JSON.parse(jsondata.options.dataoptions);
+                    jsondata.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
+                } catch (e) {
+                    jsondata.options.dataoptions = {};
+                }
+
+                try {
+                    let parsedFilterOptions = JSON.parse(jsondata.options.filteroptions);
+                    jsondata.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
+                } catch (e) {
+                    jsondata.options.filteroptions = {};
+                }
+
+                try {
+                    let parsedTableOptions = JSON.parse(jsondata.options.tableoptions);
+                    jsondata.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
+                } catch (e) {
+                    jsondata.options.tableoptions = {};
                 }
                 OCA.Analytics.Dashboard.createWidgetContent(jsondata);
             }
