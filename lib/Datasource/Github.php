@@ -106,11 +106,15 @@ class Github implements IDatasource {
 
 			$data[] = [$this->l10n->t('Issues'), $issuesCleaned];
 
+			$header[] = $this->l10n->t('Type');
+			$header[] = $this->l10n->t('Count');
 		} else if ($option['data'] === 'pulls') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
 			$curlResult = $this->getCurlData($url);
 			$http_code = $curlResult['http_code'];
 			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
+			$header[] = $this->l10n->t('Type');
+			$header[] = $this->l10n->t('Count');
 		} else {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
 			$curlResult = $this->getCurlData($url);
@@ -119,21 +123,22 @@ class Github implements IDatasource {
 			$extensions = explode(',', $option['filter']); // ['gz', 'pkg', 'tbz', 'msi', 'AppImage']
 
 			foreach ($curlResult['data'] as $item) {
-				if (isset($option['limit']) and $option['limit'] !== '') {
-					if ($i === (int)$option['limit']) break;
-				}
 				foreach ($item['assets'] as $asset) {
 					$extension = pathinfo($asset['name'], PATHINFO_EXTENSION);
 					if (in_array($extension, $extensions) || $extensions === ['']) {
+						if (isset($option['limit']) and $option['limit'] !== '') {
+							if ($i === (int)$option['limit']) break;
+						}
 						$nc_value = $asset['download_count'];
 						if (isset($option['showAssets']) and $option['showAssets'] === 'true') {
 							$data[] = [$item['tag_name'], $asset['name'], $this->floatvalue($nc_value)];
 						} else {
 							$data[] = [$item['tag_name'], $this->floatvalue($nc_value)];
 						}
+						$i++;
 					}
 				}
-				$i++;
+
 			}
 
 			$header[] = $this->l10n->t('Version');

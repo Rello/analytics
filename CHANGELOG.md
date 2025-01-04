@@ -3,6 +3,7 @@
 ## 5.2.2 - 2025-01-xx
 ### Fixed
 - report not displayed in panorama
+- header missing in github report
 
 ## 5.2.1 - 2025-01-03
 ### Added
