@@ -4,6 +4,7 @@
 ### Fixed
 - report not displayed in panorama
 - header missing in github report
+- handling github rate limit error
 
 ## 5.2.1 - 2025-01-03
 ### Added

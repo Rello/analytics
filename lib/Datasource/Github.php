@@ -95,11 +95,23 @@ class Github implements IDatasource {
 		if ($option['data'] === 'issues') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'];
 			$curlResult = $this->getCurlData($url);
+			$http_code = $curlResult['http_code'];
+
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return [
+					'header' => [],
+					'dimensions' => [],
+					'data' => $http_code === 403 ? 'Rate Limit' : [],
+					'rawdata' => $curlResult,
+					'error' => 'HTTP response code: ' . $http_code,
+				];
+			}
+
 			$issuesTotal = $curlResult['data']['open_issues'];
 
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
 			$curlResult = $this->getCurlData($url);
-			$http_code = $curlResult['http_code'];
 			$pulls = count($curlResult['data']);
 
 			$issuesCleaned = $issuesTotal - $pulls;
@@ -112,6 +124,16 @@ class Github implements IDatasource {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
 			$curlResult = $this->getCurlData($url);
 			$http_code = $curlResult['http_code'];
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return [
+					'header' => [],
+					'dimensions' => [],
+					'data' => $http_code === 403 ? 'Rate Limit' : [],
+					'rawdata' => $curlResult,
+					'error' => 'HTTP response code: ' . $http_code,
+				];
+			}
 			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
 			$header[] = $this->l10n->t('Type');
 			$header[] = $this->l10n->t('Count');
@@ -119,10 +141,21 @@ class Github implements IDatasource {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
 			$curlResult = $this->getCurlData($url);
 			$http_code = $curlResult['http_code'];
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return [
+					'header' => [],
+					'dimensions' => [],
+					'data' => $http_code === 403 ? 'Rate Limit' : [],
+					'rawdata' => $curlResult,
+					'error' => 'HTTP response code: ' . $http_code,
+				];
+			}
 			$i = 0;
 			$extensions = explode(',', $option['filter']); // ['gz', 'pkg', 'tbz', 'msi', 'AppImage']
 
 			foreach ($curlResult['data'] as $item) {
+				$this->logger->info((json_encode($item)));
 				foreach ($item['assets'] as $asset) {
 					$extension = pathinfo($asset['name'], PATHINFO_EXTENSION);
 					if (in_array($extension, $extensions) || $extensions === ['']) {
