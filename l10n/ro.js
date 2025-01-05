@@ -38,6 +38,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Marca temporală a încărcării datelor",
     "Releases" : "Versiuni",
     "Issues" : "Probleme",
+    "Count" : "Număr",
     "Version" : "Versiune",
     "Local" : "Local",
     "File" : "Fișier",

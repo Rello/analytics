@@ -204,6 +204,7 @@ OC.L10N.register(
     "Limit" : "限制",
     "Filter release assets via extension" : "透過副檔名篩選釋出資產",
     "Show assets" : "顯示資產",
+    "Count" : "次數",
     "Version" : "版本",
     "Asset" : "資產",
     "Download count" : "下載次數",

@@ -204,6 +204,7 @@ OC.L10N.register(
     "Limit" : "Omezení",
     "Filter release assets via extension" : "Filtrovat majetky vydání prostřednictvím rozšíření",
     "Show assets" : "Zobrazit majetky",
+    "Count" : "Počet",
     "Version" : "Verze",
     "Asset" : "Majetek",
     "Download count" : "Počet stažení",

@@ -198,6 +198,7 @@ OC.L10N.register(
     "Releases" : "Utgivelser",
     "Issues" : "Problemer",
     "Limit" : "Grense",
+    "Count" : "Telle",
     "Version" : "Versjon",
     "Download count" : "Antall nedlastinger",
     "Local" : "Lokal",

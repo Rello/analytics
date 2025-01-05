@@ -202,6 +202,7 @@ OC.L10N.register(
     "Issues" : "Incidencias",
     "Pull Requests" : "Solicitudes de extracción",
     "Limit" : "Límite",
+    "Count" : "Conta",
     "Version" : "Versión",
     "Download count" : "Conta de descargas",
     "Local" : "Local",

@@ -197,6 +197,7 @@ OC.L10N.register(
     "Releases" : "Збірки",
     "Issues" : "Проблеми",
     "Limit" : "Ліміт",
+    "Count" : "Лічильник",
     "Version" : "Версія",
     "Download count" : "Кількість звантажень",
     "Local" : "Локально",

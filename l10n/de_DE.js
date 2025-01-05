@@ -204,6 +204,7 @@ OC.L10N.register(
     "Limit" : "Limit",
     "Filter release assets via extension" : "Release-Assets über die Erweiterung filtern",
     "Show assets" : "Assets anzeigen",
+    "Count" : "Anzahl",
     "Version" : "Version",
     "Asset" : "Asset",
     "Download count" : "Anzahl der Downloads",

@@ -183,6 +183,7 @@ OC.L10N.register(
     "Releases" : "发行版",
     "Issues" : "问题",
     "Limit" : "限制",
+    "Count" : "计数",
     "Version" : "版本",
     "Download count" : "下载次数",
     "Local" : "本地",

@@ -204,6 +204,7 @@ OC.L10N.register(
     "Limit" : "Teorainn",
     "Filter release assets via extension" : "Scag sócmhainní scaoilte tríd an síneadh",
     "Show assets" : "Taispeáin sócmhainní",
+    "Count" : "Áireamh",
     "Version" : "Leagan",
     "Asset" : "Sócmhainn",
     "Download count" : "Íosluchtaigh áireamhán",

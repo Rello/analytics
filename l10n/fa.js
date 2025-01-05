@@ -171,6 +171,7 @@ OC.L10N.register(
     "Releases" : "ارائه‌ها",
     "Issues" : "مسائل",
     "Limit" : "Limit",
+    "Count" : "تعداد",
     "Version" : "نسخه",
     "Download count" : "Download count",
     "Local" : "محلی",

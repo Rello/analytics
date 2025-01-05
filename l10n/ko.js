@@ -107,6 +107,7 @@ OC.L10N.register(
     "Authentication" : "인증",
     "Releases" : "릴리스",
     "Issues" : "문제점",
+    "Count" : "총수",
     "Version" : "버전",
     "File" : "파일",
     "Announcements" : "공지",
