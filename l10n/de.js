@@ -202,6 +202,7 @@ OC.L10N.register(
     "Issues" : "Probleme",
     "Pull Requests" : "Pull-Anforderungen",
     "Limit" : "Limit",
+    "Count" : "Anzahl",
     "Version" : "Version",
     "Download count" : "Anzahl der Downloads",
     "Local" : "Lokal",

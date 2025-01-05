@@ -199,6 +199,7 @@ OC.L10N.register(
     "Releases" : "تارقىتىلدى",
     "Issues" : "مەسىلىلەر",
     "Limit" : "چەك",
+    "Count" : "ساناپ بېقىڭ",
     "Version" : "نەشرى",
     "Download count" : "چۈشۈرۈش سانى",
     "Local" : "يەرلىك",

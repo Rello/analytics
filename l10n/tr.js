@@ -204,6 +204,7 @@ OC.L10N.register(
     "Limit" : "Sınır",
     "Filter release assets via extension" : "Eklentiye göre sürüm varlıklarını süz",
     "Show assets" : "Varlıkları görüntüle",
+    "Count" : "Sayı",
     "Version" : "Sürüm",
     "Asset" : "Varlık",
     "Download count" : "İndirilme sayısı",

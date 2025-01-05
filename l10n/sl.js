@@ -174,6 +174,7 @@ OC.L10N.register(
     "Releases" : "Objave",
     "Issues" : "Odzivi",
     "Limit" : "Omejitve",
+    "Count" : "Števec",
     "Version" : "Različica",
     "Download count" : "Števec prejemov",
     "Local" : "Krajevno",

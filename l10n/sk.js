@@ -182,6 +182,7 @@ OC.L10N.register(
     "Releases" : "Vydania",
     "Issues" : "Problémy",
     "Limit" : "Limit",
+    "Count" : "Počet",
     "Version" : "Verzia",
     "Download count" : "Počet stiahnutí",
     "Local" : "Lokálne",

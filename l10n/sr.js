@@ -202,6 +202,7 @@ OC.L10N.register(
     "Issues" : "Проблеми",
     "Pull Requests" : "Захтеви за повлачење",
     "Limit" : "Граница",
+    "Count" : "Бројач",
     "Version" : "Верзија",
     "Download count" : "Број преузимања",
     "Local" : "Локално",

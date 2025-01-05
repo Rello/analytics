@@ -185,6 +185,7 @@ OC.L10N.register(
     "Releases" : "Rilasci",
     "Issues" : "Problemi",
     "Limit" : "Limite",
+    "Count" : "Conto",
     "Version" : "Versione",
     "Download count" : "Conteggio scaricamenti",
     "Local" : "Locale",

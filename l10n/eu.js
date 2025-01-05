@@ -197,6 +197,7 @@ OC.L10N.register(
     "Releases" : "Bertsioak",
     "Issues" : "Arazoak",
     "Limit" : "Muga",
+    "Count" : "Kantitatea",
     "Version" : "Bertsioa",
     "Download count" : "Deskarga zenbakia",
     "Local" : "Lokala",

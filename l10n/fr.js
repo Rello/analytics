@@ -201,6 +201,7 @@ OC.L10N.register(
     "Releases" : "Versions",
     "Issues" : "Incidents",
     "Limit" : "Limite",
+    "Count" : "Nombre",
     "Version" : "Version",
     "Download count" : "Nombre de téléchargements",
     "Local" : "Local",

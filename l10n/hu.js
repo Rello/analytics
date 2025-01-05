@@ -165,6 +165,7 @@ OC.L10N.register(
     "Releases" : "Kiadások",
     "Issues" : "Hibajegyek",
     "Limit" : "Korlát",
+    "Count" : "Számlálás",
     "Version" : "Verzió",
     "Download count" : "Letöltések száma",
     "Local" : "Helyi",
