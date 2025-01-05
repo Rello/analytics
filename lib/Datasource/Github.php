@@ -74,6 +74,11 @@ class Github implements IDatasource {
 			'placeholder' => 'false-' . $this->l10n->t('No') . '/true-' . $this->l10n->t('Yes'),
 			'type' => 'tf'
 		];
+		$template[] = [
+			'id' => 'token',
+			'name' => $this->l10n->t('Personal access token'),
+			'placeholder' => $this->l10n->t('optional')
+		];
 		return $template;
 	}
 
@@ -83,79 +88,31 @@ class Github implements IDatasource {
 	 * @return array available options of the data source
 	 */
 	public function readData($option): array {
-		$http_code = '';
-		// old. no one should use it by now
-		// if (isset($option['link'])) $string = 'https://api.github.com/repos/' . $option['link'] . '/releases';
-		// else $string = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
-
 		$data = array();
 		$header = array();
-		$http_code = 0;
 
-		if ($option['data'] === 'issues') {
-			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'];
-			$curlResult = $this->getCurlData($url);
-			$http_code = $curlResult['http_code'];
-
-			// Check for HTTP error code
-			if ($http_code < 200 || $http_code >= 300) {
-				return [
-					'header' => [],
-					'dimensions' => [],
-					'data' => $http_code === 403 ? 'Rate Limit' : [],
-					'rawdata' => $curlResult,
-					'error' => 'HTTP response code: ' . $http_code,
-				];
-			}
-
-			$issuesTotal = $curlResult['data']['open_issues'];
-
-			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
-			$curlResult = $this->getCurlData($url);
-			$pulls = count($curlResult['data']);
-
-			$issuesCleaned = $issuesTotal - $pulls;
-
-			$data[] = [$this->l10n->t('Issues'), $issuesCleaned];
-
-			$header[] = $this->l10n->t('Type');
-			$header[] = $this->l10n->t('Count');
-		} else if ($option['data'] === 'pulls') {
-			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
-			$curlResult = $this->getCurlData($url);
-			$http_code = $curlResult['http_code'];
-			// Check for HTTP error code
-			if ($http_code < 200 || $http_code >= 300) {
-				return [
-					'header' => [],
-					'dimensions' => [],
-					'data' => $http_code === 403 ? 'Rate Limit' : [],
-					'rawdata' => $curlResult,
-					'error' => 'HTTP response code: ' . $http_code,
-				];
-			}
-			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
-			$header[] = $this->l10n->t('Type');
-			$header[] = $this->l10n->t('Count');
-		} else {
+		if (!isset($option['data']) || $option['data'] === 'release') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
-			$curlResult = $this->getCurlData($url);
+			$curlResult = $this->getCurlData($url, $option);
 			$http_code = $curlResult['http_code'];
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
 				return [
 					'header' => [],
 					'dimensions' => [],
-					'data' => $http_code === 403 ? 'Rate Limit' : [],
+					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
 					'rawdata' => $curlResult,
 					'error' => 'HTTP response code: ' . $http_code,
 				];
 			}
 			$i = 0;
-			$extensions = explode(',', $option['filter']); // ['gz', 'pkg', 'tbz', 'msi', 'AppImage']
+			if (isset($option['filter'])) {
+				$extensions = explode(',', $option['filter']); // ['gz', 'pkg', 'tbz', 'msi', 'AppImage']
+			} else {
+				$extensions = [''];
+			}
 
 			foreach ($curlResult['data'] as $item) {
-				$this->logger->info((json_encode($item)));
 				foreach ($item['assets'] as $asset) {
 					$extension = pathinfo($asset['name'], PATHINFO_EXTENSION);
 					if (in_array($extension, $extensions) || $extensions === ['']) {
@@ -171,16 +128,57 @@ class Github implements IDatasource {
 						$i++;
 					}
 				}
-
 			}
 
 			$header[] = $this->l10n->t('Version');
-
 			if (isset($option['showAssets']) and $option['showAssets'] === 'true') {
 				$header[] = $this->l10n->t('Asset');
 			}
-
 			$header[] = $this->l10n->t('Download count');
+		} else if ($option['data'] === 'issues') {
+			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'];
+			$curlResult = $this->getCurlData($url, $option);
+			$http_code = $curlResult['http_code'];
+
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return [
+					'header' => [],
+					'dimensions' => [],
+					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
+					'rawdata' => $curlResult,
+					'error' => 'HTTP response code: ' . $http_code,
+				];
+			}
+
+			$issuesTotal = $curlResult['data']['open_issues'];
+
+			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
+			$curlResult = $this->getCurlData($url, $option);
+			$pulls = count($curlResult['data']);
+
+			$issuesCleaned = $issuesTotal - $pulls;
+
+			$data[] = [$this->l10n->t('Issues'), $issuesCleaned];
+			$header[] = $this->l10n->t('Type');
+			$header[] = $this->l10n->t('Count');
+		} else if ($option['data'] === 'pulls') {
+			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
+			$curlResult = $this->getCurlData($url, $option);
+			$http_code = $curlResult['http_code'];
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return [
+					'header' => [],
+					'dimensions' => [],
+					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
+					'rawdata' => $curlResult,
+					'error' => 'HTTP response code: ' . $http_code,
+				];
+			}
+			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
+			$header[] = $this->l10n->t('Type');
+			$header[] = $this->l10n->t('Count');
 		}
 
 		usort($data, function ($a, $b) {
@@ -192,11 +190,11 @@ class Github implements IDatasource {
 			'dimensions' => array_slice($header, 0, count($header) - 1),
 			'data' => $data,
 			'rawdata' => $curlResult,
-			'error' => ($http_code >= 200 && $http_code < 300) ? 0 : 'HTTP response code: ' . $http_code,
+			'error' => 0,
 		];
 	}
 
-	private function getCurlData($url) {
+	private function getCurlData($url, $option) {
 		$ch = curl_init();
 		if ($ch !== false) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -206,6 +204,14 @@ class Github implements IDatasource {
 			curl_setopt($ch, CURLOPT_REFERER, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+			if (isset($option['token']) && $option['token'] !== '') {
+				$headers = [
+					'Authorization: token ' . $option['token'],
+					'User-Agent: YourAppName',
+					'Accept: application/vnd.github.v3+json'
+				];
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			}
 			$curlResult = curl_exec($ch);
 			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);

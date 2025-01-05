@@ -1,6 +1,9 @@
 # Changelog
 
 ## 5.2.2 - 2025-01-xx
+### Added
+- GitHub: personal access token to avoid rate limit
+
 ### Fixed
 - report not displayed in panorama
 - header missing in github report
