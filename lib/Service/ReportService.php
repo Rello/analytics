@@ -264,6 +264,7 @@ class ReportService {
 	 * @param $dimension2
 	 * @param $value
 	 * @return bool
+	 * @throws Exception
 	 */
 	public function update(
 		int $reportId,
@@ -280,8 +281,8 @@ class ReportService {
 			$value = null
 	) {
 		$array = json_decode($options, true);
-		foreach ($array as $key => $value) {
-			$array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+		foreach ($array as $key => $tmpValue) {
+			$array[$key] = htmlspecialchars($tmpValue, ENT_NOQUOTES, 'UTF-8');
 		}
 		$options = json_encode($array);
 

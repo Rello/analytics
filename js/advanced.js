@@ -484,7 +484,7 @@ OCA.Analytics.Advanced.Dataload = {
                     } else {
                         dialogContent = document.createElement('div');
                         dialogContent.innerHTML = '<textarea style="width: 500px;" cols="200" rows="15">'
-                            + new Option(data.rawdata).innerHTML + '</textarea>';
+                            + new Option(JSON.stringify(data.rawdata)).innerHTML + '</textarea>';
                         errorData = 'Error: ' + data.error;
                     }
                     OCA.Analytics.Notification.htmlDialogUpdate(
