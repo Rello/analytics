@@ -351,6 +351,7 @@ dataTablefooterCallback: function (api, tableOptions) {
             const numeratorSum = numeratorData.reduce((sum, value) => sum + parseFloat(value || 0), 0);
             const denominatorSum = denominatorData.reduce((sum, value) => sum + parseFloat(value || 1), 0);
             total = (numeratorSum / denominatorSum) * 100;
+            total = total.toFixed(2);
         } else {
             // Regular sum for non-percentage columns
             total = columnData.reduce((sum, curValue) => sum + parseFloat(curValue || 0), 0);
