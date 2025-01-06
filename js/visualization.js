@@ -324,38 +324,51 @@ OCA.Analytics.Visualization = {
         }
     },
 
-    dataTablefooterCallback: function (api, tableOptions) {
-        const footerRow = api.table().footer().querySelector('tr');
-        const colReorder = tableOptions.colReorder ? tableOptions.colReorder.order : [...Array(api.columns().count()).keys()];
+dataTablefooterCallback: function (api, tableOptions) {
+    const footerRow = api.table().footer().querySelector('tr');
+    const colReorder = tableOptions.colReorder ? tableOptions.colReorder.order : [...Array(api.columns().count()).keys()];
 
-        // If footer should not be displayed, empty the footer and return
-        if (tableOptions.footer !== true) {
-            while (footerRow.firstChild) {
-                footerRow.removeChild(footerRow.firstChild);
-            }
-            return;
+    if (tableOptions.footer !== true) {
+        while (footerRow.firstChild) {
+            footerRow.removeChild(footerRow.firstChild);
+        }
+        return;
+    }
+
+    colReorder.forEach((colIdx, displayIdx) => {
+        const columnData = api.column(colIdx).data().toArray();
+        let total;
+
+        // Check if this column is a percentage calculation
+        const calcColumn = tableOptions.calculatedColumns && JSON.parse('[' + tableOptions.calculatedColumns + ']').find(calc => calc.title === api.column(colIdx).header().textContent);
+
+        if (calcColumn && calcColumn.operation === "percentage") {
+            // Access the data for the numerator and denominator columns
+            const numeratorData = api.column(calcColumn.columns[0]).data().toArray();
+            const denominatorData = api.column(calcColumn.columns[1]).data().toArray();
+
+            // Calculate the sums for numerator and denominator
+            const numeratorSum = numeratorData.reduce((sum, value) => sum + parseFloat(value || 0), 0);
+            const denominatorSum = denominatorData.reduce((sum, value) => sum + parseFloat(value || 1), 0);
+            total = (numeratorSum / denominatorSum) * 100;
+        } else {
+            // Regular sum for non-percentage columns
+            total = columnData.reduce((sum, curValue) => sum + parseFloat(curValue || 0), 0);
         }
 
-        colReorder.forEach((colIdx, displayIdx) => {
-            const columnData = api.column(colIdx).data().toArray();
-            const total = columnData.reduce(function (sum, curValue) {
-                return sum + parseFloat(curValue || 0);
-            }, 0);
+        let cell = footerRow.querySelector('td:nth-child(' + (displayIdx + 1) + ')');
+        if (!cell) {
+            cell = footerRow.appendChild(document.createElement('td'));
+        }
 
-            let cell = footerRow.querySelector('td:nth-child(' + (displayIdx + 1) + ')');
-            // Append a new td if not exist
-            if (!cell) {
-                cell = footerRow.appendChild(document.createElement('td'));
-            }
-            // set cell value
-            if (displayIdx === 0) {
-                cell.innerHTML = 'Total';
-            } else {
-                cell.innerHTML = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() : '';
-                cell.classList.add('dt-right');
-            }
-        });
-    },
+        if (displayIdx === 0) {
+            cell.innerHTML = 'Total';
+        } else {
+            cell.innerHTML = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
+            cell.classList.add('dt-right');
+        }
+    });
+},
 
     resetTableState: function () {
         if (OCA.Analytics.tableObject !== null) {

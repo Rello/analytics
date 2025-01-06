@@ -38,7 +38,7 @@ class LocalJson implements IDatasource {
 	 * @return int digit unique datasource id
 	 */
 	public function getId(): int {
-		return 6;
+		return 2;
 	}
 
 	/**

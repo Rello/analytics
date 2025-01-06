@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- calculated columns: correct percentage formula in total row
+
 ## 5.2.2 - 2025-01-05
 ### Added
 - GitHub: personal access token to avoid rate limit
