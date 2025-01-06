@@ -162,6 +162,7 @@ OC.L10N.register(
     "Releases" : "Lanzamientos",
     "Issues" : "Temas",
     "Limit" : "Límite",
+    "Personal access token" : "Token de acceso personal",
     "Version" : "Versión",
     "Download count" : "Cantidad de descargas",
     "Local" : "Local",

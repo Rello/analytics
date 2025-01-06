@@ -140,6 +140,7 @@ OC.L10N.register(
     "Authentication" : "Otentikasi",
     "Releases" : "Rilis",
     "Issues" : "Isu",
+    "Personal access token" : "Token akses pribadi",
     "Version" : "Versi",
     "Local" : "Lokal",
     "Announcements" : "Pengumuman",

@@ -167,6 +167,7 @@ OC.L10N.register(
     "Releases" : "Εκδόσεις",
     "Issues" : "Ζητήματα",
     "Limit" : "'Οριο",
+    "Personal access token" : "Token προσωπικής πρόσβασης",
     "Version" : "Έκδοση",
     "Download count" : "Πλήθος λήψεων",
     "Local" : "Τοπικός",

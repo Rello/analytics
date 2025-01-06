@@ -154,6 +154,7 @@ OC.L10N.register(
     "Releases" : "Версии",
     "Issues" : "Проблеми",
     "Limit" : "Ограничение",
+    "Personal access token" : "Личен токен за достъп",
     "Version" : "Версия",
     "Download count" : "Брой изтегляния",
     "Local" : "Локален",
