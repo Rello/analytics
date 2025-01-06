@@ -120,6 +120,7 @@ OC.L10N.register(
     "Authentication" : "Tunnistautuminen",
     "Releases" : "Julkaisut",
     "Issues" : "Ongelmat",
+    "Personal access token" : "Henkilökohtainen valtuutustietue",
     "Version" : "Versio",
     "Download count" : "Latausmäärä",
     "Local" : "Paikallinen",

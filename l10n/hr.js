@@ -38,6 +38,7 @@ OC.L10N.register(
     "Authentication" : "Autentifikacija",
     "Releases" : "Izdanja",
     "Issues" : "Poteškoće",
+    "Personal access token" : "Osobni token za pristup",
     "Version" : "Inačica",
     "File" : "Datoteka",
     "Announcements" : "Obavijesti",

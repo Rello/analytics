@@ -207,6 +207,7 @@ OC.L10N.register(
     "Version" : "الإصدار",
     "Asset" : "الأصول",
     "Download count" : "عدد التنزيلات",
+    "Count" : "عدّاد",
     "Local" : "محلي",
     "File" : "File",
     "Sheet" : "صفحة",

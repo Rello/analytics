@@ -187,6 +187,7 @@ OC.L10N.register(
     "Releases" : "Releases",
     "Issues" : "Problemen",
     "Limit" : "Limiet",
+    "Personal access token" : "Persoonlijk access token",
     "Version" : "Versie",
     "Download count" : "Aantal downloads",
     "Local" : "Lokaal",

@@ -42,6 +42,7 @@ OC.L10N.register(
     "Authentication" : "אימות",
     "Releases" : "מהדורות",
     "Issues" : "תקלות",
+    "Personal access token" : "אסימון גישה פרטי",
     "Version" : "גרסה",
     "Local" : "מקומי",
     "File" : "קובץ",

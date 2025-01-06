@@ -38,6 +38,7 @@ OC.L10N.register(
     "Authentication" : "Autenticatzione",
     "Releases" : "Versiones",
     "Issues" : "Problemas",
+    "Personal access token" : "Token de intrada personale",
     "Version" : "Versione",
     "Local" : "Locale",
     "File" : "Archìviu",
