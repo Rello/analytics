@@ -768,8 +768,6 @@ OCA.Analytics.Filter.Backend = {
 
         if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
             OCA.Analytics.currentReportData.options.filteroptions = {};
-        } else {
-            OCA.Analytics.currentReportData.options.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
         }
 
         OCA.Analytics.unsavedFilters = false;
@@ -786,9 +784,9 @@ OCA.Analytics.Filter.Backend = {
             body: JSON.stringify({
                 reportId: reportId,
                 chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
-                dataoptions: OCA.Analytics.currentReportData.options.dataoptions,
-                filteroptions: OCA.Analytics.currentReportData.options.filteroptions,
-                tableoptions: OCA.Analytics.currentReportData.options.tableoptions,
+                dataoptions: JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions),
+                filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
+                tableoptions: JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions),
             })
         })
             .then(response => response.json())

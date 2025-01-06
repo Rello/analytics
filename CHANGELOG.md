@@ -2,6 +2,7 @@
 
 ### Fixed
 - calculated columns: correct percentage formula in total row
+- report copy is not taking over all properties
 
 ## 5.2.2 - 2025-01-05
 ### Added
