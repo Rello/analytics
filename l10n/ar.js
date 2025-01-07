@@ -204,6 +204,8 @@ OC.L10N.register(
     "Limit" : "الحد",
     "Filter release assets via extension" : "تصفية إصدارات الأصول بدلالة امتداد الملف",
     "Show assets" : "عرض الأصول",
+    "Personal access token" : "رمز التحقق المميز الشخصي للوصول",
+    "optional" : "إختياري",
     "Version" : "الإصدار",
     "Asset" : "الأصول",
     "Download count" : "عدد التنزيلات",

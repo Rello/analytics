@@ -203,6 +203,7 @@
     "Filter release assets via extension" : "透過副檔名篩選釋出資產",
     "Show assets" : "顯示資產",
     "Personal access token" : "個人存取權杖",
+    "optional" : "非強制的",
     "Version" : "版本",
     "Asset" : "資產",
     "Download count" : "下載次數",
