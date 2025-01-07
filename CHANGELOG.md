@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- KPI widget for Panorama #427
+
 ### Fixed
 - calculated columns: correct percentage formula in total row
 - report copy is not taking over all properties

@@ -973,3 +973,28 @@ div.dt-container .dt-paging .dt-paging-button {
 #byAnalytics.analyticsFullscreen {
     display: flex  !important;
 }
+
+.kpiWidget {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.kpiWidgetContent {
+    text-align: center;
+}
+
+.kpiWidgetTitel {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.kpiWidgetValue {
+    font-size: 3.5rem;
+    font-weight: 500;
+}

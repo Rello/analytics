@@ -366,10 +366,19 @@ OCA.Analytics.Panorama = {
             OCA.Analytics.Visualization.buildChart(ctx, jsondata, OCA.Analytics.UI.getDefaultChartOptions());
         } else {
             let canvasElement = document.getElementById(`myWidget${itemId}`);
-            let divElement = document.createElement('table');
-            divElement.id = `myWidget${itemId}`;
-            canvasElement.parentNode.replaceChild(divElement, canvasElement);
-            OCA.Analytics.Visualization.buildDataTable(document.getElementById('myWidget' + itemId), jsondata, false, itemId);
+            if (jsondata.data.length === 1) {
+                // KPI view
+                document.getElementById('analyticsWidgetReport' + itemId).innerText = '';
+                let divElement = document.createElement('div');
+                divElement.id = `myWidget${itemId}`;
+                canvasElement.parentNode.replaceChild(divElement, canvasElement);
+                OCA.Analytics.Visualization.buildKpiDisplay(document.getElementById('myWidget' + itemId), jsondata, false, itemId);
+            } else {
+                let divElement = document.createElement('table');
+                divElement.id = `myWidget${itemId}`;
+                canvasElement.parentNode.replaceChild(divElement, canvasElement);
+                OCA.Analytics.Visualization.buildDataTable(document.getElementById('myWidget' + itemId), jsondata, false, itemId);
+            }
         }
     },
     

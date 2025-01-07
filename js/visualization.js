@@ -324,52 +324,52 @@ OCA.Analytics.Visualization = {
         }
     },
 
-dataTablefooterCallback: function (api, tableOptions) {
-    const footerRow = api.table().footer().querySelector('tr');
-    const colReorder = tableOptions.colReorder ? tableOptions.colReorder.order : [...Array(api.columns().count()).keys()];
+    dataTablefooterCallback: function (api, tableOptions) {
+        const footerRow = api.table().footer().querySelector('tr');
+        const colReorder = tableOptions.colReorder ? tableOptions.colReorder.order : [...Array(api.columns().count()).keys()];
 
-    if (tableOptions.footer !== true) {
-        while (footerRow.firstChild) {
-            footerRow.removeChild(footerRow.firstChild);
-        }
-        return;
-    }
-
-    colReorder.forEach((colIdx, displayIdx) => {
-        const columnData = api.column(colIdx).data().toArray();
-        let total;
-
-        // Check if this column is a percentage calculation
-        const calcColumn = tableOptions.calculatedColumns && JSON.parse('[' + tableOptions.calculatedColumns + ']').find(calc => calc.title === api.column(colIdx).header().textContent);
-
-        if (calcColumn && calcColumn.operation === "percentage") {
-            // Access the data for the numerator and denominator columns
-            const numeratorData = api.column(calcColumn.columns[0]).data().toArray();
-            const denominatorData = api.column(calcColumn.columns[1]).data().toArray();
-
-            // Calculate the sums for numerator and denominator
-            const numeratorSum = numeratorData.reduce((sum, value) => sum + parseFloat(value || 0), 0);
-            const denominatorSum = denominatorData.reduce((sum, value) => sum + parseFloat(value || 1), 0);
-            total = (numeratorSum / denominatorSum) * 100;
-            total = total.toFixed(2);
-        } else {
-            // Regular sum for non-percentage columns
-            total = columnData.reduce((sum, curValue) => sum + parseFloat(curValue || 0), 0);
+        if (tableOptions.footer !== true) {
+            while (footerRow.firstChild) {
+                footerRow.removeChild(footerRow.firstChild);
+            }
+            return;
         }
 
-        let cell = footerRow.querySelector('td:nth-child(' + (displayIdx + 1) + ')');
-        if (!cell) {
-            cell = footerRow.appendChild(document.createElement('td'));
-        }
+        colReorder.forEach((colIdx, displayIdx) => {
+            const columnData = api.column(colIdx).data().toArray();
+            let total;
 
-        if (displayIdx === 0) {
-            cell.innerHTML = 'Total';
-        } else {
-            cell.innerHTML = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
-            cell.classList.add('dt-right');
-        }
-    });
-},
+            // Check if this column is a percentage calculation
+            const calcColumn = tableOptions.calculatedColumns && JSON.parse('[' + tableOptions.calculatedColumns + ']').find(calc => calc.title === api.column(colIdx).header().textContent);
+
+            if (calcColumn && calcColumn.operation === "percentage") {
+                // Access the data for the numerator and denominator columns
+                const numeratorData = api.column(calcColumn.columns[0]).data().toArray();
+                const denominatorData = api.column(calcColumn.columns[1]).data().toArray();
+
+                // Calculate the sums for numerator and denominator
+                const numeratorSum = numeratorData.reduce((sum, value) => sum + parseFloat(value || 0), 0);
+                const denominatorSum = denominatorData.reduce((sum, value) => sum + parseFloat(value || 1), 0);
+                total = (numeratorSum / denominatorSum) * 100;
+                total = total.toFixed(2);
+            } else {
+                // Regular sum for non-percentage columns
+                total = columnData.reduce((sum, curValue) => sum + parseFloat(curValue || 0), 0);
+            }
+
+            let cell = footerRow.querySelector('td:nth-child(' + (displayIdx + 1) + ')');
+            if (!cell) {
+                cell = footerRow.appendChild(document.createElement('td'));
+            }
+
+            if (displayIdx === 0) {
+                cell.innerHTML = 'Total';
+            } else {
+                cell.innerHTML = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
+                cell.classList.add('dt-right');
+            }
+        });
+    },
 
     resetTableState: function () {
         if (OCA.Analytics.tableObject !== null) {
@@ -388,6 +388,36 @@ dataTablefooterCallback: function (api, tableOptions) {
     handleDataTableChanged: function () {
         OCA.Analytics.unsavedFilters === true;
         document.getElementById('saveIcon').style.removeProperty('display');
+    },
+
+    buildKpiDisplay: function (domTarget, jsondata, ordering = true, uniqueId) {
+        domTarget.innerHTML = '';
+        let kpi = jsondata.data[0][0];
+        let value = jsondata.data[0][1];
+        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(kpi, value, jsondata.thresholds);
+
+        // Create the KPI content dynamically
+        const kpiContent = document.createElement('div');
+        kpiContent.classList.add('kpiWidgetContent');
+
+        // Create the KPI title
+        const kpiTitle = document.createElement('div');
+        kpiTitle.classList.add('kpiWidgetTitel');
+        kpiTitle.textContent = kpi; // Set the title text
+
+        // Create the KPI value
+        const kpiValue = document.createElement('div');
+        kpiValue.classList.add('kpiWidgetValue');
+        kpiValue.setAttribute('style', thresholdColor);
+        kpiValue.textContent = value; // Set the KPI value
+
+        // Append the title and value to the content container
+        kpiContent.appendChild(kpiTitle);
+        kpiContent.appendChild(kpiValue);
+
+        // Append the KPI content to the widget container
+        domTarget.appendChild(kpiContent);
+        domTarget.classList.add('kpiWidget');
     },
 
     // *************
@@ -458,8 +488,8 @@ dataTablefooterCallback: function (api, tableOptions) {
                 Chart.defaults.elements.line.fill = true;
             } else if (chartType === 'doughnut') {
                 // special array handling for doughnuts
-                if (jsondata.options.dataoptions !== null) {
-                    const arr = JSON.parse(jsondata.options.dataoptions);
+                if (jsondata.options.dataoptions !== null && Object.keys(jsondata.options.dataoptions).length !== 0) {
+                    const arr = jsondata.options.dataoptions;
                     let index = 0;
                     for (const obj of arr) {
                         if (obj.backgroundColor) {
@@ -531,7 +561,7 @@ dataTablefooterCallback: function (api, tableOptions) {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
-            plugins: [ChartDataLabels],
+            //plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
@@ -630,6 +660,10 @@ dataTablefooterCallback: function (api, tableOptions) {
         });
     },
 
+    // *************
+    // *** backend ***
+    // *************
+
     sortDates: function (data) {
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.scales?.x?.time?.parser !== undefined) {
@@ -671,6 +705,48 @@ dataTablefooterCallback: function (api, tableOptions) {
             }
         }
         return data;
+    },
+
+    validateThreshold: function (kpi, value, thresholds) {
+        const operators = {
+            '=': function (a, b) {
+                return a === b
+            },
+            '<': function (a, b) {
+                return a < b
+            },
+            '>': function (a, b) {
+                return a > b
+            },
+            '<=': function (a, b) {
+                return a <= b
+            },
+            '>=': function (a, b) {
+                return a >= b
+            },
+            '!=': function (a, b) {
+                return a !== b
+            },
+        };
+        let thresholdColor;
+
+        thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
+
+        for (let threshold of thresholds) {
+            const comparison = operators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
+            threshold['severity'] = parseInt(threshold['severity']);
+            if (comparison === true) {
+                if (threshold['severity'] === 2) {
+                    thresholdColor = 'color: red;';
+                } else if (threshold['severity'] === 3) {
+                    thresholdColor = 'color: orange;';
+                } else if (threshold['severity'] === 4) {
+                    thresholdColor = 'scolor: green;';
+                }
+            }
+        }
+
+        return thresholdColor;
     },
 
     showElement: function (element) {
