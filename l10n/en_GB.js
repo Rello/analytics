@@ -205,6 +205,7 @@ OC.L10N.register(
     "Filter release assets via extension" : "Filter release assets via extension",
     "Show assets" : "Show assets",
     "Personal access token" : "Personal access token",
+    "optional" : "optional",
     "Version" : "Version",
     "Asset" : "Asset",
     "Download count" : "Download count",

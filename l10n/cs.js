@@ -205,6 +205,7 @@ OC.L10N.register(
     "Filter release assets via extension" : "Filtrovat majetky vydání prostřednictvím rozšíření",
     "Show assets" : "Zobrazit majetky",
     "Personal access token" : "Osobní přístupový token",
+    "optional" : "volitelné",
     "Version" : "Verze",
     "Asset" : "Majetek",
     "Download count" : "Počet stažení",
