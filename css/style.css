@@ -989,12 +989,12 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .kpiWidgetTitel {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
 
 .kpiWidgetValue {
     font-size: 3.5rem;
-    font-weight: 500;
+    font-weight: 400;
 }

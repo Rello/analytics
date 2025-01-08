@@ -393,7 +393,18 @@ OCA.Analytics.Visualization = {
     buildKpiDisplay: function (domTarget, jsondata, ordering = true, uniqueId) {
         domTarget.innerHTML = '';
         let kpi = jsondata.data[0][0];
-        let value = jsondata.data[0][1];
+
+        let rawValue = parseFloat(jsondata.data[0][1]);
+        let value;
+
+        if (rawValue % 1 === 0) {
+            // If the number is an integer, format without decimals
+            value = rawValue.toLocaleString();
+        } else {
+            // Otherwise, format with decimals
+            value = rawValue.toLocaleString(undefined, { minimumFractionDigits: 2 });
+        }
+
         let thresholdColor = OCA.Analytics.Visualization.validateThreshold(kpi, value, jsondata.thresholds);
 
         // Create the KPI content dynamically
