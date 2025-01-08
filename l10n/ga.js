@@ -205,6 +205,7 @@ OC.L10N.register(
     "Filter release assets via extension" : "Scag sócmhainní scaoilte tríd an síneadh",
     "Show assets" : "Taispeáin sócmhainní",
     "Personal access token" : "Comhartha rochtana pearsanta",
+    "optional" : "roghnach",
     "Version" : "Leagan",
     "Asset" : "Sócmhainn",
     "Download count" : "Íosluchtaigh áireamhán",
