@@ -63,6 +63,7 @@ OC.L10N.register(
     "Line" : "线段",
     "doughnut" : "甜甜圈",
     "Bar" : "条形",
+    "Select the format of the data and how it should be visualized" : "选择数据格式和显示方式",
     "Drag fields here" : "将栏位拖到此处",
     "New dataset" : "新建数据集",
     "New panorama" : "新的概括",
