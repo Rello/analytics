@@ -6,6 +6,7 @@
 ### Fixed
 - calculated columns: correct percentage formula in total row
 - report copy is not taking over all properties
+- empty columns (e.g. manual input) need to be handled as null during database update
 
 ## 5.2.2 - 2025-01-05
 ### Added

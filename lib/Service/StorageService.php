@@ -123,6 +123,10 @@ class StorageService {
 		$dimension1 = $this->VariableService->replaceTextVariablesSingle($dimension1);
 		$dimension2 = $this->VariableService->replaceTextVariablesSingle($dimension2);
 
+		// in case a dimension is empty (e.g. manual data input), we properly null it as also null is coming from data loads
+		$dimension1 = $dimension1 === '' ? null : $dimension1;
+		$dimension2 = $dimension2 === '' ? null : $dimension2;
+
 		if ($value !== false) {
 			try {
 				$action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert, $aggregation);

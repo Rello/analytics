@@ -84,11 +84,16 @@ class StorageMapper
             $sql->update(self::TABLE_NAME)
                 ->set('timestamp', $sql->createNamedParameter($timestamp))
                 ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-                ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)))
-                ->andWhere($sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1)))
-                ->andWhere($sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2)));
+                ->andWhere($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
-            if ($aggregation === 'xxsummation') {
+			// if the dimension value is null, a different where clause is required
+			$expression1 = $dimension1 === null ? $sql->expr()->isNull('dimension1') : $sql->expr()->eq('dimension1', $sql->createNamedParameter($dimension1));
+			$expression2 = $dimension2 === null ? $sql->expr()->isNull('dimension2') : $sql->expr()->eq('dimension2', $sql->createNamedParameter($dimension2));
+
+			$sql->andWhere($expression1)
+				->andWhere($expression2);
+
+			if ($aggregation === 'xxsummation') {
                 // Feature not yet available
                 // $this->logger->error('old value: ' . $result['value']);
                 // $this->logger->error('new value: ' . $value + $result['value']);
