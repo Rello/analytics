@@ -1,5 +1,6 @@
 # Changelog
 
+## 5.2.3 - 2025-01-14
 ### Added
 - KPI widget for Panorama #427
 
