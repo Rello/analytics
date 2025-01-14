@@ -261,6 +261,7 @@ OC.L10N.register(
     "Update" : "Aktualizovať",
     "Export" : "Export",
     "Number of records" : "Počet záznamov",
+    "Nextcloud Assistant" : "Nextcloud Asistent",
     "Description" : "Popis",
     "Manual entry" : "Manuálne zadávanie",
     "Save data" : "Uložiť údaje",
