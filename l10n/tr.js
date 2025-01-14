@@ -205,6 +205,7 @@ OC.L10N.register(
     "Filter release assets via extension" : "Eklentiye göre sürüm varlıklarını süz",
     "Show assets" : "Varlıkları görüntüle",
     "Personal access token" : "Kişisel erişim kodu",
+    "optional" : "isteğe bağlı",
     "Version" : "Sürüm",
     "Asset" : "Varlık",
     "Download count" : "İndirilme sayısı",
