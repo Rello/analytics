@@ -568,7 +568,7 @@ OCA.Analytics.Sidebar.Report = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Wizard.close();
-                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.init(data);
             });
     },
 

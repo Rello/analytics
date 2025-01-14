@@ -232,7 +232,7 @@ class DataloadService
                 $error = $error + 1;
                 continue;
             }
-			$this->logger->info('before: ' .$row[0]. '_' . $row[1]. '_' . $row[2]);
+
 			// if data source only delivers 2 columns, the value is moved to the last one
 			// resulting in xxx, null , 123
             if (count($row) === 2) {

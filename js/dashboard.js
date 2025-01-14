@@ -44,6 +44,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  */
 OCA.Analytics.Dashboard = {
     init: function () {
+        document.getElementById('ulAnalytics').innerHTML = '';
         // show favorites when the Analytics app itself is loaded
         if (decodeURI(location.hash).length === 0) {
             OCA.Analytics.Dashboard.getFavorites();
