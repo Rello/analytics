@@ -83,7 +83,7 @@
         margin: 15px;
         padding: 15px;
         position: relative;
-        background-color: #FFFF;
+        background-color: var(--color-main-background);
         border-radius: 5px;
     }
 
@@ -93,7 +93,7 @@
         margin: 15px;
         padding: 15px;
         position: relative;
-        background-color: #FFFF;
+        background-color: var(--color-main-background);
         border-radius: 5px;
     }
 

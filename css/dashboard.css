@@ -92,8 +92,8 @@
     width: 170px;
     padding: 8px;
     border-radius: var(--border-radius-large);
-    box-shadow: 2px 2px 5px var(--color-background-darker);
-    background-color: #FFFFFF;
+    box-shadow: 3px 3px 5px var(--color-background-darker);
+    background-color: var(--color-background-darker);
     margin: 10px;
     display: inline-block;
     vertical-align: top;

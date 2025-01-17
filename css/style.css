@@ -311,7 +311,7 @@ content: inherit;
 }
 
 #myChart {
-    background-color: #FFFF;
+    background-color: var(--color-main-background);
     border-radius: 15px;
 }
 
@@ -320,7 +320,7 @@ content: inherit;
     min-width: 150px;
     height: 40vh;
     margin: 0 30px;
-    background-color: #FFFF;
+    background-color: var(--color-main-background);
     border-radius: 5px;
     padding: 10px;
 }
@@ -360,7 +360,7 @@ content: inherit;
 }
 
 #tableContainer > thead {
-    background-color: #eAeAeA;
+    background-color: var(--color-main-background);
 }
 
 #noDataContainer {
