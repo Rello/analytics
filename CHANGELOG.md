@@ -2,6 +2,7 @@
 
 ### Fixed
 - dark mode issues
+- align border in filter dialog
 
 ## 5.2.3 - 2025-01-14
 ### Added

@@ -505,6 +505,7 @@ OCA.Analytics.UI = {
         let ul = document.createElement('ul');
         ul.id = 'tmpList';
         ul.classList.add('dropDownList');
+        ul.style.width = '198px';
 
         // take over the class from the input field to ensure same size
         for (let className of inputField.classList) {
