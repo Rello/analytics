@@ -27,7 +27,7 @@ OC.L10N.register(
     "Report" : "Ataskaita",
     "New" : "Nauja",
     "More Information …" : "Daugiau informacijos…",
-    "Share link" : "Bendrinimo nuoroda",
+    "Share link" : "Viešinio nuoroda",
     "Link copied" : "Nuoroda nukopijuota",
     "Type" : "Tipas",
     "Notification" : "Pranešimas",
