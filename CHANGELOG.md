@@ -1,5 +1,6 @@
 # Changelog
 
+## 5.2.4 - 2025-01-20
 ### Fixed
 - dark mode issues
 - align border in filter dialog
