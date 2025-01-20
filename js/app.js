@@ -518,6 +518,7 @@ OCA.Analytics.UI = {
             let li = document.createElement('li');
             li.id = item;
             li.innerText = item;
+            li.title = item;
             listCount > listCountMax ? li.style.display = 'none' : li.style.display = '';
             ul.appendChild(li);
             listCount++;

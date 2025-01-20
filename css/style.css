@@ -822,7 +822,7 @@ div.dt-container .dt-paging .dt-paging-button {
     border-color: var(--color-primary-element) !important;
     position: absolute;
     z-index: 9999;
-    background-color: #fff;
+    background-color: var(--color-main-background);
     border-top: none !important;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -832,6 +832,9 @@ div.dt-container .dt-paging .dt-paging-button {
 .dropDownList > li {
     height: 30px;
     padding: 0 12px;
+    white-space: nowrap; /* Prevent line breaks */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for truncated text */
 }
 
 .dropDownList > li:hover {
