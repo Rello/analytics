@@ -528,6 +528,7 @@ OCA.Analytics.UI = {
         let liDummy = document.createElement('li');
         liDummy.innerText = '...';
         liDummy.id = 'dummy';
+        listCount <= listCountMax ? liDummy.style.display = 'none' : liDummy.style.display = '';
         ul.appendChild(liDummy);
 
         // add the list to the input field and "open" its border at the bottom
