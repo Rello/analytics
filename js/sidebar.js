@@ -217,7 +217,7 @@ OCA.Analytics.Sidebar.Report = {
 
                     // create the drop downs for Data source, grouping and possible data set
                     // need to do an await here, because the datasourceOptions is important for subsequent functions
-                    await OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource');
+                    await OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource', data['type']);
                     OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
                     OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
 

@@ -840,7 +840,7 @@ OCA.Analytics.Functions = {
 };
 
 OCA.Analytics.Datasource = {
-    buildDropdown: async function (target) {
+    buildDropdown: async function (target, filter) {
         let optionsInit = document.createDocumentFragment();
         let optionInit = document.createElement('option');
         optionInit.value = '';
@@ -849,8 +849,12 @@ OCA.Analytics.Datasource = {
         document.getElementById(target).innerHTML = '';
         document.getElementById(target).appendChild(optionsInit);
 
+        let filterDatasource = '';
+        if (filter) {
+            filterDatasource = '/' + filter;
+        }
         // need to offer an await here, because the datasourceOptions is important for subsequent functions in the sidebar
-        let requestUrl = OC.generateUrl('apps/analytics/datasource');
+        let requestUrl = OC.generateUrl('apps/analytics/datasource' + filterDatasource);
         let response = await fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers()
@@ -875,7 +879,7 @@ OCA.Analytics.Datasource = {
         document.getElementById(target).innerHTML = '';
         document.getElementById(target).appendChild(options);
         if (document.getElementById(target).dataset.typeId) {
-            // in case the value was set in the sidebar befor the dropdown was ready
+            // in case the value was set in the sidebar before the dropdown was ready
             document.getElementById(target).value = document.getElementById(target).dataset.typeId;
         }
     },

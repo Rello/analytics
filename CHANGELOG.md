@@ -5,6 +5,7 @@
 - align border in filter dialog
 - indicate more values (...) in filter dialog
 - catch sting column in tables data source
+- load only required data source details in sidebar
 
 ## 5.2.3 - 2025-01-14
 ### Added

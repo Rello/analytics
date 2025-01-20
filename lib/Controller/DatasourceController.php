@@ -82,10 +82,12 @@ class DatasourceController extends Controller {
 	 * get all data source ids + names
 	 *
 	 * @NoAdminRequired
+	 * @param int|null $datasourceType
+	 * @return array
 	 */
-	public function index() {
+	public function index(int $datasourceType = null) {
 		$result = [];
-		$datasourceIndex = $this->getDatasources();
+		$datasourceIndex = $this->getDatasources($datasourceType);
 
 		$datasources = [];
 		$options = [];
@@ -99,6 +101,17 @@ class DatasourceController extends Controller {
 		$result['options'] = $options;
 
 		return $result;
+	}
+
+	/**
+	 * get one data source
+	 *
+	 * @NoAdminRequired
+	 * @param int|null $datasourceType
+	 * @return array
+	 */
+	public function indexFiltered(int $datasourceType = null) {
+		return $this->index($datasourceType);
 	}
 
 	/**
@@ -177,10 +190,11 @@ class DatasourceController extends Controller {
 
 	/**
 	 * combine internal and registered data sources
+	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	private function getDatasources() {
-		$datasources = $this->getOwnDatasources() + $this->getRegisteredDatasources();
+	private function getDatasources(int $datasourceType = null) {
+		$datasources = $this->getOwnDatasources($datasourceType) + $this->getRegisteredDatasources($datasourceType);
 
 		// Data sources can be disabled globally by their ID
 		// occ config:app:set analytics disabledDataSources --type=string --value="1,3,4"
@@ -193,26 +207,36 @@ class DatasourceController extends Controller {
 
 	/**
 	 * map all internal data sources to their IDs
+	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	private function getOwnDatasources() {
+	private function getOwnDatasources(int $datasourceType = null) {
 		$dataSources = [];
-		$dataSources[self::DATASET_TYPE_LOCAL_CSV] = $this->LocalCsvService;
-		$dataSources[self::DATASET_TYPE_LOCAL_SPREADSHEET] = $this->LocalSpreadsheetService;
-		$dataSources[self::DATASET_TYPE_GIT] = $this->GithubService;
-		$dataSources[self::DATASET_TYPE_EXTERNAL_CSV] = $this->ExternalCsvService;
-		$dataSources[self::DATASET_TYPE_REGEX] = $this->RegexService;
-		$dataSources[self::DATASET_TYPE_EXTERNAL_JSON] = $this->ExternalJsonService;
-		$dataSources[self::DATASET_TYPE_LOCAL_JSON] = $this->LocalJsonService;
+		$serviceMapping = [
+			self::DATASET_TYPE_GIT => $this->GithubService,
+			self::DATASET_TYPE_LOCAL_CSV => $this->LocalCsvService,
+			self::DATASET_TYPE_LOCAL_SPREADSHEET => $this->LocalSpreadsheetService,
+			self::DATASET_TYPE_EXTERNAL_CSV => $this->ExternalCsvService,
+			self::DATASET_TYPE_REGEX => $this->RegexService,
+			self::DATASET_TYPE_EXTERNAL_JSON => $this->ExternalJsonService,
+			self::DATASET_TYPE_LOCAL_JSON => $this->LocalJsonService,
+		];
+
+		if ($datasourceType !== null && isset($serviceMapping[$datasourceType])) {
+			$dataSources[$datasourceType] = $serviceMapping[$datasourceType];
+		} elseif ($datasourceType === null) {
+			$dataSources = $serviceMapping;
+		}
 
 		return $dataSources;
 	}
 
 	/**
 	 * map all registered data sources to their IDs
+	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	private function getRegisteredDatasources() {
+	private function getRegisteredDatasources(int $datasourceType = null) {
 		$dataSources = [];
 		$event = new DatasourceEvent();
 		$this->dispatcher->dispatchTyped($event);
@@ -221,6 +245,9 @@ class DatasourceController extends Controller {
 			try {
 				$uniqueId = '99' . \OC::$server->get($class)->getId();
 
+				if ($datasourceType !== null && $datasourceType !== (int)$uniqueId) {
+					continue;
+				}
 				if (isset($dataSources[$uniqueId])) {
 					$this->logger->error(new \InvalidArgumentException('Data source with the same ID already registered: ' . \OC::$server->get($class)
 																																		 ->getName()));

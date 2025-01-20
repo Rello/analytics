@@ -97,6 +97,7 @@ return [
 
 		// Datasource
 		['name' => 'datasource#index', 'url' => '/datasource', 'verb' => 'GET'],
+		['name' => 'datasource#indexFiltered', 'url' => '/datasource/{datasourceType}', 'verb' => 'GET'],
 
 		// Share
 		['name' => 'share#create', 'url' => '/share', 'verb' => 'POST'],
