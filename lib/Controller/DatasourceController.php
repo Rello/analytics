@@ -300,8 +300,10 @@ class DatasourceController extends Controller {
 					if (!isset($aggregatedData[$key])) {
 						$aggregatedData[$key] = 0;
 					}
-					//$this->logger->info("Aggregating data for index $aggregatedData[$key]");
-					$aggregatedData[$key] += $value;
+					//$this->logger->info("Aggregating data for index $aggregatedData[$key] and $value");
+					if (is_float($value)) {
+						$aggregatedData[$key] += $value;
+					}
 				}
 				//$this->logger->info(json_encode($aggregatedData));
 
