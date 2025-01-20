@@ -820,7 +820,7 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .dropDownList {
     border-color: var(--color-primary-element) !important;
-    position: absolute;
+    /* position: absolute; hide so the full menu is being shown */
     z-index: 9999;
     background-color: var(--color-main-background);
     border-top: none !important;

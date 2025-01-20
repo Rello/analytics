@@ -524,6 +524,12 @@ OCA.Analytics.UI = {
             listCount++;
         }
 
+        // show a dummy element when the list is longer
+        let liDummy = document.createElement('li');
+        liDummy.innerText = '...';
+        liDummy.id = 'dummy';
+        ul.appendChild(liDummy);
+
         // add the list to the input field and "open" its border at the bottom
         inputField.insertAdjacentElement('afterend', ul);
         inputField.classList.add('dropDownListParentOpen');
@@ -556,6 +562,10 @@ OCA.Analytics.UI = {
                     let txtValue = li[i].textContent || li[i].innerText; // get the text in the li
                     // if the li text doesn't match the typed text, hide it
                     if (txtValue.toUpperCase().indexOf(filter) > -1 && listCount < listCountMax) {
+                        li[i].style.display = "";
+                        listCount++;
+                    } else if (li[i].id === 'dummy' && listCount >= listCountMax) {
+                        // always show the ... when there are more values available
                         li[i].style.display = "";
                         listCount++;
                     } else {
