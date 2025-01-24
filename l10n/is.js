@@ -57,6 +57,7 @@ OC.L10N.register(
     "Description" : "Lýsing",
     "Import" : "Flytja inn",
     "Others" : "Others",
+    "Selection" : "Val",
     "Setting" : "Stilling",
     "Title" : "Titill",
     "Copy" : "Afrita",
