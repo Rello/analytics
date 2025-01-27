@@ -5,6 +5,7 @@ OC.L10N.register(
     "Value" : "Reikšmė",
     "Saved" : "Įrašyta",
     "Are you sure?" : "Ar esate tikri?",
+    "Select file" : "Pasirinkti failą",
     "Delete" : "Ištrinti",
     "Done" : "Atlikta",
     "Reset zoom" : "Atstatyti mastelį",

@@ -208,6 +208,8 @@ OC.L10N.register(
     "Share chart for external website" : "Jaa kaavio ulkoiselle verkkosivulle",
     "Copy link" : "Kopioi linkki",
     "Domain of external site" : "Ulkoisen verkkosivun domain",
+    "Rows" : "Rivit",
+    "Columns" : "Sarakkeet",
     "Data series" : "Datasarjat",
     "Vertical axis" : "Pystyakseli",
     "Color" : "Väri",
