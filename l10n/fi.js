@@ -118,6 +118,7 @@ OC.L10N.register(
     "HTTP method" : "HTTP-metodi",
     "Object path" : "Objektin polku",
     "Authentication" : "Tunnistautuminen",
+    "Timestamp of data load" : "Tietojen lataamisen aikaleima",
     "Releases" : "Julkaisut",
     "Issues" : "Ongelmat",
     "Personal access token" : "Henkilökohtainen valtuutustietue",
