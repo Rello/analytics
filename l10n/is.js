@@ -5,6 +5,7 @@ OC.L10N.register(
     "Saved" : "Vistað",
     "Delete" : "Eyða",
     "Done" : "Lokið",
+    "Loading" : "Hleð inn",
     "OK" : "Í lagi",
     "Cancel" : "Hætta við",
     "Filter" : "Sía",
