@@ -3,6 +3,7 @@
 ## 5.3.0
 ### Fixed
 - Reading the third level in a json array #434
+- Undefined array key 2 at DataloadService.php#494 #433
 
 ## 5.2.4 - 2025-01-20
 ### Fixed

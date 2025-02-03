@@ -110,7 +110,12 @@ class LocalCsv implements IDatasource
             }
         } else {
             foreach ($rows as $row) {
-                $data[] = array_map('trim', str_getcsv($row, $delimiter));
+                $columns = array_map('trim', str_getcsv($row, $delimiter));
+				if (count($columns) < 3) {
+					$columns[2] = $columns[1];
+					$columns[1] = null;
+				}
+				$data[] = $columns;
             }
         }
         unset($rows);
