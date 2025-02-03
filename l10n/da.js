@@ -38,7 +38,7 @@ OC.L10N.register(
     "Loading" : "Loader",
     "Please select" : "Venligst vælg",
     "Data source not available anymore" : "Data kilde ikke tilgængelig",
-    "Column Picker" : "Kolonne Vælger",
+    "Column Picker" : "Kolonnevælger",
     "Add custom column" : "Tilføj brugerdefineret kolonne",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Vælg de krævede kolonner. <br>Omarrangér rækkefølgen med drag & drop. <br>Fjern alle områder for at nulstille. <br>Tilføj brugerdefinerede kolonner med tekst variabler for datoer. Se {linkstart}Wiki{linkend}.",
     "Previous Values: " : "Tidligere værdier:",
