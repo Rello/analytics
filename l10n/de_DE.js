@@ -221,7 +221,7 @@ OC.L10N.register(
     "Read file and add its data to an existing dataset" : "Datei auslesen und den Inhalt einem bestehenden Datensatz hinzufügen",
     "Announcements" : "Ankündigungen",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Bericht \"{report}\": {subject} hat den Schwellenwert von {rule} {value} erreicht",
-    "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Fehler beim Laden von Daten „{dataloadName}“ für Datensatz „{datasetName}“",
+    "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Fehler beim Laden von Daten \"{dataloadName}\" für Datensatz \"{datasetName}\"",
     "Analytics Report" : "Analytics-Bericht",
     "Report not found" : "Bericht nicht gefunden",
     "This report was removed or is not shared with you" : "Dieser Bericht wurde entfernt oder wird nicht mit Ihnen geteilt",
