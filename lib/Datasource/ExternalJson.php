@@ -117,20 +117,28 @@ class ExternalJson implements IDatasource
                 $json = $this->get_nested_array_value($json, $singlePath);
             }
 
-            // separate the fields of the array {BTC,tmsp,price}
-            $paths = explode(',', $matches[0][0]);
-            // fill up with dummies in case of missing columns
-            while (count($paths) < 3) {
-                array_unshift($paths, 'empty');
-            }
-            foreach ($json as $rowArray) {
-                // get the array fields from the json
-                // if no match is not found, the field name will be used as a constant string
-                $dim1 = $this->get_nested_array_value($rowArray, $paths[0]) ?: $paths[0];
-                $dim2 = $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
-                $val = $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
-                $data[] = [$dim1, $dim2, $val];
-            }
+			// separate the fields of the array {BTC,tmsp,price}
+			$paths = explode(',', $matches[0][0]);
+			// fill up with dummies in case of missing columns
+			while (count($paths) < 3) {
+				array_unshift($paths, 'empty');
+			}
+
+			$data = [];
+			if (is_array($json) && is_array(reset($json))) {
+				// the last clause checks if its an associative array
+				foreach ($json as $rowArray) {
+					$dim1 = $this->get_nested_array_value($rowArray, $paths[0]) ?: $paths[0];
+					$dim2 = $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
+					$val = $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
+					$data[] = [$dim1, $dim2, $val];
+				}
+			} else {
+				$dim1 = $this->get_nested_array_value($json, $paths[0]) ?: $paths[0];
+				$dim2 = $this->get_nested_array_value($json, $paths[1]) ?: $paths[1];
+				$val = $this->get_nested_array_value($json, $paths[2]) ?: $paths[2];
+				$data[] = [$dim1, $dim2, $val];
+			}
         } else {
             // single value extraction
             // e.g. data/currentHashrate,data/averageHashrate

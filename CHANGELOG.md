@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.3.0
+### Fixed
+- Reading the third level in a json array #434
+
 ## 5.2.4 - 2025-01-20
 ### Fixed
 - dark mode issues
