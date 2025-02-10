@@ -81,6 +81,8 @@ OC.L10N.register(
     "Unshare" : "Nustoti bendrinti",
     "Password protection" : "Apsauga slaptažodžiu",
     "Copy link" : "Kopijuoti nuorodą",
+    "Rows" : "Eilutės",
+    "Columns" : "Stulpeliai",
     "Color" : "Spalva",
     "Get more information" : "Gaukite daugiau informacijos",
     "Nextcloud forum" : "Nextcloud forumas",
