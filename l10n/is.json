@@ -1,6 +1,7 @@
 { "translations": {
     "Value" : "Gildi",
     "Saved" : "Vistað",
+    "Are you sure?" : "Ertu viss?",
     "Delete" : "Eyða",
     "Done" : "Lokið",
     "Loading" : "Hleð inn",
@@ -32,6 +33,7 @@
     "External" : "Utanaðkomandi",
     "Yes" : "Já",
     "No" : "Nei",
+    "More options" : "Fleiri valkostir",
     "Authentication" : "Auðkenning",
     "Releases" : "Útgáfur",
     "Issues" : "Vandamál",
