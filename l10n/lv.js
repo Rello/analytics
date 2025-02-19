@@ -10,7 +10,7 @@ OC.L10N.register(
     "Please select data source" : "Lūdzu, izvēlieties datu avotu",
     "Saved" : "Saglabāts",
     "Parameter missing" : "Iztrūkst parametrs",
-    "Are you sure?" : "Vai Jūs esat pārliecināts?",
+    "Are you sure?" : "Vai tiešām?",
     "Data source simulation" : "Datu avota simulācija",
     "records inserted" : "ieraksti ievietoti",
     "records updated" : "ieraksti atjaunināti",

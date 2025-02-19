@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Operator" : "Virki",
     "Value" : "Gildi",
     "Saved" : "Vistað",
     "Are you sure?" : "Ertu viss?",
