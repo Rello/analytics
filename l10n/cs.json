@@ -51,7 +51,7 @@
     "OK" : "OK",
     "Cancel" : "Storno",
     "Filter" : "Filtr",
-    "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dynamické textové proměnné je možné použít k výběru datumů.<br>Výběr je zapsán mezi dvěma znaky % (např. %last2months%).<br>Informace ohledně filtrů, které jsou k dispozici a alternativních formátech datumů jsou k dispozici ve {linkstart}Wiki{linkend}.",
+    "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "K výběru dat je možné použít dynamické textové proměnné.<br>Výběr se píše znaky % (např. %last2months%).<br>Informace o dostupných filtrech a alternativních formátech dat jsou k dispozici na {linkstart}Wiki{linkend}.",
     "Variables" : "Proměnné",
     "Add" : "Přidat",
     "Table options" : "Možnosti tabulky",
