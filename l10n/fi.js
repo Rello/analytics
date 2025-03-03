@@ -124,6 +124,7 @@ OC.L10N.register(
     "Personal access token" : "Henkilökohtainen valtuutustietue",
     "Version" : "Versio",
     "Download count" : "Latausmäärä",
+    "Count" : "Määrä",
     "Local" : "Paikallinen",
     "File" : "Tiedosto",
     "Cell range" : "Solualue",
