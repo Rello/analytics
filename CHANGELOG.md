@@ -1,16 +1,14 @@
 # Changelog
 
+## 5.3.0 - 2025-03-20
 ### Added
 - Beta: Compact visualization for table (for usage in panorama)
-- aggregate data also without value column
 
 ### Fixed
+- reading the third level in a json array #434
+- undefined array key 2 at DataloadService.php#494 #433
 - panorama pdf export layout
-
-## 5.3.0
-### Fixed
-- Reading the third level in a json array #434
-- Undefined array key 2 at DataloadService.php#494 #433
+- aggregate data also without value column
 
 ## 5.2.4 - 2025-01-20
 ### Fixed

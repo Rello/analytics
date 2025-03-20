@@ -338,7 +338,7 @@ OCA.Analytics.Visualization = {
 
             const firstCell = row.querySelector('td:first-child');
             if (firstCell) {
-                firstCell.style.fontWeight = 'bold';
+                //firstCell.style.fontWeight = 'bold';
             }
             const cells = row.querySelectorAll('td');
             cells.forEach(cell => {
