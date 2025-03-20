@@ -673,10 +673,10 @@
         <p><?php p($l->t('Show totals')); ?></p>
         <div id="totalsSwitch">
             <label class="toggle-option">
-                <input type="radio" id="totalOption1" name="totalOption" value="true" checked><?php p($l->t('Yes')); ?>
+                <input type="radio" id="totalOption1" name="totalOption" value="true"><?php p($l->t('Yes')); ?>
             </label>
             <label class="toggle-option">
-                <input type="radio" id="totalOption2" name="totalOption" value="false"><?php p($l->t('No')); ?>
+                <input type="radio" id="totalOption2" name="totalOption" value="false" checked><?php p($l->t('No')); ?>
             </label></div>
     </div>
     <br>
@@ -695,9 +695,24 @@
         <span class="icon-analytics-reset"></span>
         <span><?php p($l->t('Reset table')); ?></span>
     </button>
-    <br><br>
-    <h3><?php p($l->t('Calculated Columns')); ?> <span class="betaFlag">Beta</span></h3>
-    <textarea id="tableOptionsCalculatedColumns"></textarea>
+    <br>
+    <div class="sidebarHeaderClosed"><h3 id="tableOptionsSectionHeaderH3"
+                                         class="sidebarPointer"><?php p($l->t('Additional settings')); ?> <span class="betaFlag">Beta</span></h3></div>
+    <div id="tableOptionsSectionDisabled" style="display: none;">
+        <p><?php p($l->t('Calculated columns')); ?></p>
+        <textarea id="tableOptionsCalculatedColumns"></textarea>
+
+        <br>
+        <p><?php p($l->t('Compact visualization')); ?></p>
+        <div id="totalsSwitch">
+            <label class="toggle-option">
+                <input type="radio" id="compactDisplayOption1" name="compactDisplayOption" value="true"><?php p($l->t('Yes')); ?>
+            </label>
+            <label class="toggle-option">
+                <input type="radio" id="compactDisplayOption2" name="compactDisplayOption" value="false" checked><?php p($l->t('No')); ?>
+            </label></div>
+    </div>
+
 </template>
 
 <template id="templateChartOptions">

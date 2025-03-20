@@ -79,7 +79,10 @@ OCA.Analytics.Visualization = {
             });
         });
 
-        const isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
+        // check table length => show/hide navigation
+        let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
+        // never show table navigation in Panorama
+        if (OCA.Analytics.isPanorama) { isDataLengthGreaterThanDefault = false; }
 
         domTarget.createTFoot().insertRow(0);
         OCA.Analytics.tableObject[uniqueId] = new DataTable(domTarget, {
@@ -101,12 +104,19 @@ OCA.Analytics.Visualization = {
             columns: columns,
             language: language,
             rowCallback: function (row, data, index) {
-                OCA.Analytics.Visualization.dataTableRowCallback(row, data, index, jsondata.thresholds);
+                OCA.Analytics.Visualization.dataTableRowCallback(row, data, index, jsondata.thresholds, tableOptions);
             },
             footerCallback: function () {
                 OCA.Analytics.Visualization.dataTablefooterCallback(this.api(), tableOptions);
             }
         });
+
+        if (tableOptions.compactDisplay) {
+            const thead = domTarget.querySelector('thead');
+            if (thead) {
+                thead.classList.add('hidden'); // Add 'hidden' class to <thead>
+            }
+        }
 
         if (!OCA.Analytics.isPanorama) {
             // Listener for when the pagination length is changed, table sorted, columns re-ordered
@@ -275,7 +285,7 @@ OCA.Analytics.Visualization = {
         return {data, columns};
     },
 
-    dataTableRowCallback: function (row, data, index, thresholds) {
+    dataTableRowCallback: function (row, data, index, thresholds, tableOptions) {
         const operators = {
             '=': function (a, b) {
                 return a === b
@@ -321,6 +331,19 @@ OCA.Analytics.Visualization = {
                     row.childNodes.item(data.length - 1).style.color = color;
                 }
             }
+        }
+
+        // Compact view for table with less line space and bold first column
+        if (tableOptions.compactDisplay) {
+
+            const firstCell = row.querySelector('td:first-child');
+            if (firstCell) {
+                firstCell.style.fontWeight = 'bold';
+            }
+            const cells = row.querySelectorAll('td');
+            cells.forEach(cell => {
+                cell.style.padding = '0'; // Remove the padding
+            });
         }
     },
 

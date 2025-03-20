@@ -300,14 +300,14 @@ OCA.Analytics.Filter = {
 
         if (tableOptions && tableOptions.footer) {
             container.querySelector('input[name="totalOption"][value="true"]').checked = true;
-        } else {
-            container.querySelector('input[name="totalOption"][value="false"]').checked = true;
         }
 
-        if (tableOptions && tableOptions.formatLocales != undefined) {
+        if (tableOptions && tableOptions.formatLocales !== undefined) {
             container.querySelector('input[name="formatLocalesOption"][value="false"]').checked = true;
-        } else {
-            container.querySelector('input[name="formatLocalesOption"][value="true"]').checked = true;
+        }
+
+        if (tableOptions && tableOptions.compactDisplay !== undefined) {
+            container.querySelector('input[name="compactDisplayOption"][value="true"]').checked = true;
         }
 
         if (tableOptions && tableOptions.calculatedColumns) {
@@ -320,6 +320,8 @@ OCA.Analytics.Filter = {
         );
 
         OCA.Analytics.Filter.Drag.initialize();
+
+        OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
     },
 
     processTableOptionsDialog: function () {
@@ -340,6 +342,15 @@ OCA.Analytics.Filter = {
             tableOptions.formatLocales = false;
         } else if (tableOptions) {
             delete tableOptions.formatLocales;
+        }
+
+        // Compact view for table with less line space and bold first column
+        const compactDisplaySelected = document.querySelector('input[name="compactDisplayOption"]:checked');
+        const compactDisplay = compactDisplaySelected ? compactDisplaySelected.value : null;
+        if (compactDisplay === 'true') {
+            tableOptions.compactDisplay = true;
+        } else if (tableOptions) {
+            delete tableOptions.compactDisplay;
         }
 
         let layout = {};
@@ -833,6 +844,10 @@ OCA.Analytics.Filter.Backend = {
 
         if ((OCA.Analytics.currentReportData.options.tableoptions)?.footer === true) {
             tableOptions.footer = true;
+        }
+
+        if ((OCA.Analytics.currentReportData.options.tableoptions)?.compactDisplay === true) {
+            tableOptions.compactDisplay = true;
         }
 
         if ((OCA.Analytics.currentReportData.options.tableoptions)?.layout) {
