@@ -913,7 +913,7 @@ OCA.Analytics.Panorama = {
         // hide the subheaders. will only take the text later
         const elements = document.querySelectorAll('.panoramaSubHeaderRow');
         elements.forEach(element => {
-            //element.classList.add('analyticsFullscreen');
+            element.classList.add('analyticsFullscreen');
         });
 
         // getting "by analytics"
@@ -929,6 +929,11 @@ OCA.Analytics.Panorama = {
         byAnalyticsImg.style.width = byAnalyticsImg.naturalWidth + 'px';
         byAnalyticsImg.style.height = byAnalyticsImg.naturalHeight + 'px';
         byAnalyticsImg.style.transform = 'none';  // Remove any CSS transforms
+
+        // set the grey background for export
+        document.querySelectorAll('.flex-item').forEach(el => {
+            el.style.backgroundColor = '#f5f5f5'; // Set background-color
+        });
 
         let byAnalyticsCanvas = await html2canvas(byAnalyticsImg, {scale: 1});
         let byAnalyticsRawData = byAnalyticsCanvas.toDataURL('image/png');
@@ -964,11 +969,13 @@ OCA.Analytics.Panorama = {
                 }
 
                 // Pull page background color
-                pdf.setFillColor(r, g, b);
-                //pdf.rect(0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight(), 'F');
+                // not used for now as it does not look good
+                // pdf.setFillColor(r, g, b);
+                // pdf.rect(0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight(), 'F');
 
                 // Add graphical header
                 // Determine the scale factor to fit the image within the PDF page size
+/*
                 let scaleX = pdf.internal.pageSize.getWidth() / headerCanvas.width;
                 let scaleY = (pdf.internal.pageSize.getHeight() - headerHeight) / headerCanvas.height;
                 let scaleFactor = Math.min(scaleX, scaleY);
@@ -981,39 +988,39 @@ OCA.Analytics.Panorama = {
                 let xOffset = (pdf.internal.pageSize.getWidth() - scaledWidth) / 2;
                 let yOffset = (pdf.internal.pageSize.getHeight() - scaledHeight) / 2 + headerHeight;
                 pdf.addImage(headerData, 'PNG', xOffset+30, 20, 380, 25, 200, 'FAST');
+*/
 
                 // Add written header
-                // pdf.setFontSize(16); // Adjust as needed
-                // let textYOffset = 23; // Adjust based on your headerHeight and padding
-                // pdf.text(headerText, 40, textYOffset, { align: 'left' });
+                pdf.setFontSize(16); // Adjust as needed
+                let textYOffset = 23; // Adjust based on your headerHeight and padding
+                pdf.text(headerText, 40, textYOffset, { align: 'left' });
 
                 // getting the subheader
-                // let subHeaderElement = document.getElementById('panoramaSubHeader-' + index);
-                // let subHeaderCanvas = await html2canvas(subHeaderElement, {scale: 2});
-                // let subHeaderData = subHeaderCanvas.toDataURL('image/png');
+                let subHeaderElement = document.getElementById('panoramaSubHeader-' + index);
+                let subHeaderCanvas = await html2canvas(subHeaderElement, {scale: 2});
+                let subHeaderData = subHeaderCanvas.toDataURL('image/png');
                 // Add graphical header
                 // pdf.addImage(subHeaderData, 'PNG', 28, 40, 380, 25, 200, 'FAST');
 
                 // draw the subheader
-                //let subHeaderText = document.getElementById('panoramaSubHeader-' + index).textContent;
-                //pdf.setFontSize(12); // Adjust as needed
-                //pdf.text(subHeaderText, 60, 60, { align: 'left' });
+                let subHeaderText = document.getElementById('panoramaSubHeader-' + index).textContent;
+                pdf.setFontSize(12); // Adjust as needed
+                pdf.text(subHeaderText, 40, 44, { align: 'left' });
 
 
                 // Add the page content centered and scaled
-
                 // Determine the scale factor to fit the image within the PDF page size
-                scaleX = pdf.internal.pageSize.getWidth() / canvas.width;
-                scaleY = (pdf.internal.pageSize.getHeight() - headerHeight) / canvas.height;
-                scaleFactor = Math.min(scaleX, scaleY);
+                let scaleX = pdf.internal.pageSize.getWidth() / canvas.width;
+                let scaleY = (pdf.internal.pageSize.getHeight() - headerHeight) / canvas.height;
+                let scaleFactor = Math.min(scaleX, scaleY);
 
                 // Calculate the scaled dimensions
-                scaledWidth = canvas.width * scaleFactor;
-                scaledHeight = canvas.height * scaleFactor;
+                let scaledWidth = canvas.width * scaleFactor;
+                let scaledHeight = canvas.height * scaleFactor;
 
                 // Calculate the center position
-                xOffset = (pdf.internal.pageSize.getWidth() - scaledWidth) / 2;
-                yOffset = (pdf.internal.pageSize.getHeight() - scaledHeight) / 2 + headerHeight;
+                let xOffset = (pdf.internal.pageSize.getWidth() - scaledWidth) / 2;
+                let yOffset = (pdf.internal.pageSize.getHeight() - scaledHeight) / 2 + headerHeight;
 
                 // Add the page content centered and scaled
                 pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');
@@ -1031,6 +1038,11 @@ OCA.Analytics.Panorama = {
             const elements = document.querySelectorAll('.panoramaSubHeaderRow');
             elements.forEach(element => {
                 element.classList.remove('analyticsFullscreen');
+            });
+
+            // reset the grey background for export
+            document.querySelectorAll('.flex-item').forEach(el => {
+                el.style.backgroundColor = '';
             });
 
             OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'creating pdf'));

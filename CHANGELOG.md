@@ -4,6 +4,9 @@
 - Beta: Compact visualization for table (for usage in panorama)
 - aggregate data also without value column
 
+### Fixed
+- panorama pdf export layout
+
 ## 5.3.0
 ### Fixed
 - Reading the third level in a json array #434
