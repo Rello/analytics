@@ -52,6 +52,7 @@
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Οι δυναμικές μεταβλητές κειμένου μπορούν να χρησιμοποιηθούν για την επιλογή ημερομηνιών.<br>Η επιλογή γράφεται μεταξύ δύο % (π.χ. %last2months%).<br>Πληροφορίες σχετικά με διαθέσιμα φίλτρα και εναλλακτικές μορφές ημερομηνίας είναι διαθέσιμες στο {linkstart}Wiki{linkend}.",
     "Variables" : "Μεταβλητές",
     "Add" : "Προσθήκη",
+    "Table options" : "Επιλογές πίνακα",
     "Chart options" : "Επιλογές γραφήματος",
     "Primary" : "Πρωταρχικός",
     "Secondary" : "Δευτερεύον",

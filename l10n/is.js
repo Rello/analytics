@@ -1,8 +1,10 @@
 OC.L10N.register(
     "analytics",
     {
+    "Operator" : "Virki",
     "Value" : "Gildi",
     "Saved" : "Vistað",
+    "Are you sure?" : "Ertu viss?",
     "Delete" : "Eyða",
     "Done" : "Lokið",
     "Loading" : "Hleð inn",
@@ -34,6 +36,7 @@ OC.L10N.register(
     "External" : "Utanaðkomandi",
     "Yes" : "Já",
     "No" : "Nei",
+    "More options" : "Fleiri valkostir",
     "Authentication" : "Auðkenning",
     "Releases" : "Útgáfur",
     "Issues" : "Vandamál",

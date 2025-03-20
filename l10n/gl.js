@@ -133,7 +133,7 @@ OC.L10N.register(
     "3rd field must be a valid number" : "O 3.º campo debe ser un número válido",
     "Delete data" : "Eliminar datos",
     "Records to be deleted: " : "Rexistros a eliminar:",
-    "Technical error. Please check the logs." : "Erro técnico. Consulte os ficheiros de rexistro.",
+    "Technical error. Please check the logs." : "Produciuse un erro técnico. Consulte os ficheiros de rexistro.",
     "Demo: Thresholds" : "Demostración: Limiares",
     "Type" : "Tipo",
     "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Pódense usar limiares para resaltar datos. Usando o limiar de notificación, envíanse mensaxes emerxentes.",

@@ -4,7 +4,7 @@ OC.L10N.register(
     "Dataset" : "Jeu de données",
     "Data" : "Données",
     "Automation" : "Automatisation",
-    "Data maintenance is not possible for this type of report" : "La gestion des données n'est pas possible pour ce type de rapport",
+    "Data maintenance is not possible for this type of report" : "La maintenance des données n'est pas possible pour ce type de rapport",
     "Choose a data source from the dropdown and press \"+\"" : "Sélectionnez une source de données dans le menu déroulant et appuyez sur « + »",
     "Choose a data load from the list to change its settings" : "Choisissez un chargement de données dans la liste pour modifier ses paramètres",
     "Filter by" : "Filtrer par",

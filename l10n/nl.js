@@ -268,6 +268,7 @@ OC.L10N.register(
     "Update" : "Update",
     "Export" : "Exporteren",
     "Number of records" : "Aantal gegevens",
+    "Nextcloud Assistant" : "Nextcloud Assistent",
     "Description" : "Omschrijving",
     "Manual entry" : "Handmatige invoer",
     "Save data" : "Sla data op",
