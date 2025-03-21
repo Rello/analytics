@@ -103,6 +103,7 @@ OC.L10N.register(
     "Unshare" : "Lõpeta jagamine",
     "Password protection" : "Password protection",
     "Copy link" : "Kopeeri link",
+    "Additional settings" : "Lisaseaded",
     "Color" : "Värv",
     "Create" : "Loo"
 },

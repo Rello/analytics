@@ -298,6 +298,7 @@ OC.L10N.register(
     "Domain of external site" : "Domain of external site",
     "Rows" : "Rows",
     "Columns" : "Columns",
+    "Additional settings" : "تنظیمات اضافی",
     "Data series" : "Data series",
     "Vertical axis" : "Vertical axis",
     "Color" : "رنگ",

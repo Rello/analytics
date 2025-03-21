@@ -52,6 +52,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Additional settings" : "Configuraciones adicionales",
     "Color" : "Color",
     "Get more information" : "Obten más información",
     "Create" : "Crear"

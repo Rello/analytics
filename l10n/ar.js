@@ -347,7 +347,6 @@ OC.L10N.register(
     "Show totals" : "عرض المجموع",
     "Format all numbers in local format" : "تنسيق كل الأرقام بحسب النسق المحلي",
     "Reset table" : "إعادة ضبط الجدول",
-    "Calculated Columns" : "أعمدة محتسبة",
     "Data format" : "تنسيق البيانات",
     "Select how the raw data is structured" : "تحديد كيفية تركيب البيانات الخام",
     "In rows" : "سطريّاً",

@@ -67,6 +67,7 @@ OC.L10N.register(
     "Unshare" : "Prestani dijeliti",
     "Password protection" : "Zaštita zaporkom",
     "Copy link" : "Kopiraj poveznicu",
+    "Additional settings" : "Dodatne postavke",
     "Color" : "Boja",
     "Get more information" : "Dohvatite više informacija",
     "Nextcloud forum" : "Nextcloudov forum",

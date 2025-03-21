@@ -273,6 +273,7 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "За да включите диаграма във външен уеб сайт, домейнът трябва да бъде разрешен (според правилата на CSP)",
     "Copy link" : "Копиране на връзката",
     "Domain of external site" : "Домейн на външен сайт",
+    "Additional settings" : "Допълнителни настройки",
     "Data series" : "Серии от данни",
     "Vertical axis" : "Вертикална ос",
     "Color" : "Цвят",

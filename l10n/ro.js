@@ -67,6 +67,7 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "Password protection" : "Protecție parolă ",
     "Copy link" : "Copiază link",
+    "Additional settings" : "Setări adiționale",
     "Color" : "Culoare",
     "Create" : "Crează"
 },

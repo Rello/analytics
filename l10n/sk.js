@@ -314,7 +314,7 @@ OC.L10N.register(
     "Not required" : "Nevyžaduje sa",
     "Show totals" : "Zobraziť súčty",
     "Reset table" : "Obnoviť tabuľku",
-    "Calculated Columns" : "Vypočítané stĺpce",
+    "Additional settings" : "Ďalšie nastavenia",
     "Data series" : "Série údajov",
     "Vertical axis" : "Zvislá os",
     "Color" : "Farba",

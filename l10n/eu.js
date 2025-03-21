@@ -332,7 +332,7 @@ OC.L10N.register(
     "Not required" : "Ez da beharrezkoa",
     "Show totals" : "Erakutsi guztirakoak",
     "Reset table" : "Berrezarri taula",
-    "Calculated Columns" : "Kalkulatutako zutabeak",
+    "Additional settings" : "Ezarpen gehiago",
     "Data format" : "Datu formatua",
     "Select how the raw data is structured" : "Aukeratu nola egituratu datu gordinak",
     "In rows" : "Errenkadatan",

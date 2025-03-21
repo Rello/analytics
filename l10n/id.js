@@ -175,6 +175,7 @@ OC.L10N.register(
     "Unshare" : "Batalkan berbagi",
     "Password protection" : "Password protection",
     "Copy link" : "Salin tautan",
+    "Additional settings" : "Setelan tambahan",
     "Data series" : "Seri data",
     "Vertical axis" : "Sumbu vertikal",
     "Color" : "Warna",

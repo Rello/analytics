@@ -347,7 +347,7 @@ OC.L10N.register(
     "Show totals" : "Afficher les totaux",
     "Format all numbers in local format" : "Formater tous les nombres selon le format local",
     "Reset table" : "Réinitialiser le tableau",
-    "Calculated Columns" : "Colonnes calculées",
+    "Additional settings" : "Paramètres supplémentaires",
     "Data format" : "Format des données",
     "Select how the raw data is structured" : "Selectionner comment les données brutes sont structurées",
     "In rows" : "En ligne",

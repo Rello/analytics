@@ -62,6 +62,7 @@ OC.L10N.register(
     "Unshare" : "Fjern deling",
     "Password protection" : "Password protection",
     "Copy link" : "Kopier lenkje",
+    "Additional settings" : "Tilleggsinnstillingar",
     "Color" : "Farge",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"

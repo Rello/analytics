@@ -61,6 +61,7 @@ OC.L10N.register(
     "Unshare" : "เลิกแชร์",
     "Password protection" : "ป้องกันด้วยรหัสผ่าน",
     "Copy link" : "คัดลอกลิงก์",
+    "Additional settings" : "การตั้งค่าเพิ่มเติม",
     "Color" : "สี",
     "Get more information" : "รับข้อมูลเพิ่มเติม",
     "Create" : "สร้าง"

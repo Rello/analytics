@@ -153,6 +153,7 @@ OC.L10N.register(
     "Unshare" : "Cancelar partilha",
     "Password protection" : "Protegido por palavra-passe",
     "Copy link" : "Copiar hiperligação",
+    "Additional settings" : "Definições adicionais",
     "Color" : "Cor",
     "Get more information" : "Obter mais informação",
     "Create" : "Criar"

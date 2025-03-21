@@ -315,6 +315,7 @@ OC.L10N.register(
     "Domain of external site" : "Domän för extern sida",
     "Rows" : "Rader",
     "Columns" : "Kolumner",
+    "Additional settings" : "Övriga inställningar",
     "Data series" : "Dataserie",
     "Vertical axis" : "Vertikalaxel",
     "Color" : "Färg",

@@ -347,7 +347,7 @@ OC.L10N.register(
     "Show totals" : "Taispeáin iomláin",
     "Format all numbers in local format" : "Formáidigh na huimhreacha go léir i bhformáid áitiúil",
     "Reset table" : "Athshocraigh tábla",
-    "Calculated Columns" : "Colúin Ríomhtha",
+    "Additional settings" : "Socruithe breise",
     "Data format" : "Formáid sonraí",
     "Select how the raw data is structured" : "Roghnaigh conas a struchtúraítear na sonraí amh",
     "In rows" : "I sraitheanna",

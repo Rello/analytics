@@ -55,6 +55,7 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Password protection" : "Protektita per pasvorto",
     "Copy link" : "Kopii ligilon",
+    "Additional settings" : "Plia agordo",
     "Color" : "Koloro",
     "Get more information" : "Pli da informoj",
     "Create" : "Krei"

@@ -321,7 +321,7 @@ OC.L10N.register(
     "Not required" : "Niet verplicht",
     "Show totals" : "Toon totalen",
     "Reset table" : "zet tabel terug",
-    "Calculated Columns" : "Berekende kolommen",
+    "Additional settings" : "Aanvullende instellingen",
     "Data series" : "Dataserie",
     "Vertical axis" : "Verticale as",
     "Color" : "Kleur",

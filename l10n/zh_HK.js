@@ -347,7 +347,7 @@ OC.L10N.register(
     "Show totals" : "顯示總計",
     "Format all numbers in local format" : "將所有數字格式化為當地格式",
     "Reset table" : "重設數據庫表",
-    "Calculated Columns" : "計算縱列",
+    "Additional settings" : "其他設定",
     "Data format" : "數據格式",
     "Select how the raw data is structured" : "選擇原始資料的結構",
     "In rows" : "以行列的形式",

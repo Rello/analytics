@@ -152,6 +152,7 @@ OC.L10N.register(
     "Copy link" : "링크 복사",
     "Rows" : "행",
     "Columns" : "행",
+    "Additional settings" : "고급 설정",
     "Color" : "색",
     "Get more information" : "추가 정보 얻기",
     "Nextcloud forum" : "Nextcloud 포럼",

@@ -347,7 +347,7 @@ OC.L10N.register(
     "Show totals" : "Прикажи укупне вредности",
     "Format all numbers in local format" : "Форматирај све бројеве у локалном формату",
     "Reset table" : "Ресетуј табелу",
-    "Calculated Columns" : "Израчунате колоне",
+    "Additional settings" : "Додатне поставке",
     "Data format" : "Формат података",
     "Select how the raw data is structured" : "Изаберите структуру сирових података",
     "In rows" : "По редовима",

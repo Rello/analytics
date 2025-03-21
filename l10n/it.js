@@ -318,7 +318,7 @@ OC.L10N.register(
     "Not required" : "Non necessario",
     "Show totals" : "Mostra i totali",
     "Reset table" : "Reimposta tabella",
-    "Calculated Columns" : "Colonne calcolate",
+    "Additional settings" : "Impostazioni aggiuntive",
     "Data series" : "Serie di dati",
     "Vertical axis" : "Asse verticale",
     "Color" : "Colore",

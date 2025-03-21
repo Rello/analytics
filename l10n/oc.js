@@ -84,6 +84,7 @@ OC.L10N.register(
     "Unshare" : "Partejar pas mai",
     "Password protection" : "Proteccion per senhal",
     "Copy link" : "Copiar lo ligam",
+    "Additional settings" : "Paramètres addicionals",
     "Color" : "Color",
     "General information" : "Informacions generalas",
     "No Table" : "Cap de tablèu",

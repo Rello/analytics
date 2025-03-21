@@ -339,7 +339,7 @@ OC.L10N.register(
     "Not required" : "تەلەپ قىلىنمايدۇ",
     "Show totals" : "ئومۇمىي ساننى كۆرسەت",
     "Reset table" : "جەدۋەلنى ئەسلىگە كەلتۈرۈش",
-    "Calculated Columns" : "ھىسابلانغان ئىستون",
+    "Additional settings" : "قوشۇمچە تەڭشەكلەر",
     "Data format" : "سانلىق مەلۇمات فورماتى",
     "Select how the raw data is structured" : "خام سانلىق مەلۇماتنىڭ قانداق قۇرۇلمىسىنى تاللاڭ",
     "In rows" : "قۇرلاردا",

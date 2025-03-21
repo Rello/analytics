@@ -145,6 +145,7 @@ OC.L10N.register(
     "Unshare" : "Pārtraukt koplietošanu",
     "Password protection" : "Password protection",
     "Copy link" : "Kopēt saiti",
+    "Additional settings" : "Papildu iestatījumi",
     "Color" : "Krāsa",
     "Get more information" : "Iegūt vairāk informācijas",
     "Create" : "Izveidot"
