@@ -348,6 +348,8 @@ OC.L10N.register(
     "Format all numbers in local format" : "將所有數字格式化為當地格式",
     "Reset table" : "重設數據庫表",
     "Additional settings" : "其他設定",
+    "Calculated columns" : "計算縱列",
+    "Compact visualization" : "緊湊的視覺化",
     "Data format" : "數據格式",
     "Select how the raw data is structured" : "選擇原始資料的結構",
     "In rows" : "以行列的形式",

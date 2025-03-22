@@ -348,6 +348,8 @@ OC.L10N.register(
     "Format all numbers in local format" : "Форматирај све бројеве у локалном формату",
     "Reset table" : "Ресетуј табелу",
     "Additional settings" : "Додатне поставке",
+    "Calculated columns" : "Израчунате колоне",
+    "Compact visualization" : "Компактни приказ",
     "Data format" : "Формат података",
     "Select how the raw data is structured" : "Изаберите структуру сирових података",
     "In rows" : "По редовима",

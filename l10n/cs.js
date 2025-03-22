@@ -347,6 +347,8 @@ OC.L10N.register(
     "Format all numbers in local format" : "Formátovat veškerá čísla v místním formátu",
     "Reset table" : "Resetovat tabulku",
     "Additional settings" : "Další nastavení",
+    "Calculated columns" : "Spočítané sloupce",
+    "Compact visualization" : "Kompaktní vizualizace",
     "Data format" : "Formát dat",
     "Select how the raw data is structured" : "Vyberte jak jsou nezpracovaná data strukturována",
     "In rows" : "V řádcích",

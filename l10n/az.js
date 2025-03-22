@@ -45,6 +45,7 @@ OC.L10N.register(
     "Unshare" : "Paylaşımı durdur",
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
+    "Additional settings" : "Əlavə parametrlər",
     "Create" : "Yarat"
 },
 "nplurals=2; plural=(n != 1);");
