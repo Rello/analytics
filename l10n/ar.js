@@ -348,6 +348,8 @@ OC.L10N.register(
     "Format all numbers in local format" : "تنسيق كل الأرقام بحسب النسق المحلي",
     "Reset table" : "إعادة ضبط الجدول",
     "Additional settings" : "الإعدادات المتقدمة",
+    "Calculated columns" : "أعمدة محتسبة",
+    "Compact visualization" : "تصوُّر مُدمَج",
     "Data format" : "تنسيق البيانات",
     "Select how the raw data is structured" : "تحديد كيفية تركيب البيانات الخام",
     "In rows" : "سطريّاً",
