@@ -69,6 +69,7 @@ OC.L10N.register(
     "Notification" : "Teavitus",
     "Date" : "Kuupäev",
     "Year" : "Aasta",
+    "New in" : "Mida in uut",
     "View changelog" : "Vaata muudatuste logi",
     "Search" : "Otsi",
     "Total" : "Kokku",
