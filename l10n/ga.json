@@ -346,6 +346,8 @@
     "Format all numbers in local format" : "Formáidigh na huimhreacha go léir i bhformáid áitiúil",
     "Reset table" : "Athshocraigh tábla",
     "Additional settings" : "Socruithe breise",
+    "Calculated columns" : "Colúin ríofa",
+    "Compact visualization" : "Amharcléiriú dlúth",
     "Data format" : "Formáid sonraí",
     "Select how the raw data is structured" : "Roghnaigh conas a struchtúraítear na sonraí amh",
     "In rows" : "I sraitheanna",
