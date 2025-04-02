@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "Datumaro",
+    "Data" : "Datumoj",
+    "Automation" : "Aŭtomatigo",
     "Saved" : "Konservita",
     "Delete" : "Forigi",
     "Done" : "Farita",

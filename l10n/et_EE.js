@@ -55,6 +55,7 @@ OC.L10N.register(
     "Add" : "Lisa",
     "Line" : "Joon",
     "Overview" : "Ülevaade",
+    "Reports" : "Aruanded",
     "Remove from favorites" : "Eemalda lemmikutest",
     "Delete folder" : "Kustuta kaust",
     "Add to favorites" : "Lisa lemmikutesse",
