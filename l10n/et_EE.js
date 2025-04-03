@@ -80,6 +80,7 @@ OC.L10N.register(
     "Releases" : "Versioonid",
     "Issues" : "Veahaldus",
     "Version" : "Versioon",
+    "Count" : "Kokku",
     "Local" : "Kohalik",
     "File" : "Fail",
     "Announcements" : "Teated",
