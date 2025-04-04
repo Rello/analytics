@@ -76,6 +76,7 @@ OC.L10N.register(
     "Total" : "Kokku",
     "Yes" : "Jah",
     "No" : "Ei",
+    "More options" : "Täiendavad valikud",
     "Authentication" : "Autentimine",
     "Releases" : "Versioonid",
     "Issues" : "Veahaldus",
