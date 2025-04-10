@@ -2,11 +2,11 @@ OC.L10N.register(
     "analytics",
     {
     "Saved" : "Enrollet",
-    "Delete" : "Lemel",
+    "Delete" : "Dilemel",
     "Done" : "Graet",
     "Loading" : "Kargañ",
     "OK" : "OK",
-    "Cancel" : "Arrest",
+    "Cancel" : "Nullañ",
     "Filter" : "Filtre",
     "Add" : "Ouzhpennañ",
     "Bar" : "Tavarn",
