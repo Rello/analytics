@@ -3,7 +3,7 @@
     "Data" : "Дані",
     "Automation" : "Автоматизація",
     "Data maintenance is not possible for this type of report" : "Обробка даних неможлива для звіту цього типу",
-    "Choose a data source from the dropdown and press \"+\"" : "Виберіть джерело даних з випадаючого списку та натисніть \"+\"",
+    "Choose a data source from the dropdown and press \"+\"" : "Виберіть джерело даних зі спадаючого списку та натисніть \"+\"",
     "Choose a data load from the list to change its settings" : "Виберіть завантаження даних зі списку, щоб змінити його налаштування",
     "Filter by" : "Фільтрувати за",
     "Operator" : "Оператор",
