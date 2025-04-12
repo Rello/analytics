@@ -62,6 +62,7 @@ OC.L10N.register(
     "Share" : "Jaga",
     "Save" : "Salvesta",
     "Download" : "Laadi alla",
+    "Report" : "Teata",
     "New" : "Uus",
     "Share link" : "Jaga link",
     "Link copied" : "Link kopeeritud",
