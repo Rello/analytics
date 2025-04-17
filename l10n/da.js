@@ -348,6 +348,8 @@ OC.L10N.register(
     "Format all numbers in local format" : "Formater alle tal i lokalt format",
     "Reset table" : "Nulstil tabel",
     "Additional settings" : "Yderligere indstillinger",
+    "Calculated columns" : "Beregnede kolonner",
+    "Compact visualization" : "Kompakt visualisering",
     "Data format" : "Dataformat",
     "Select how the raw data is structured" : "Vælg hvordan rå data er struktureret",
     "In rows" : "I rækker",
