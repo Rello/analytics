@@ -1,5 +1,8 @@
 # Changelog
 
+### Changed
+- Chart.js  v4.4.9
+
 ## 5.3.0 - 2025-03-20
 ### Added
 - Beta: Compact visualization for table (for usage in panorama)
