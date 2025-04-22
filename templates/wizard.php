@@ -321,14 +321,14 @@
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
                         <div class="icon-analytics-chartNone icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartNone" class="radio" checked="checked" name="chart">
                             <label for="chartNone"><?php p($l->t('No Chart')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
                         <div class="icon-analytics-chartNone icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartTableNone" class="radio" checked="checked" name="table">
                             <label for="chartTableNone"><?php p($l->t('No Table')); ?></label>
                         </div>
@@ -337,14 +337,14 @@
                 <div style="display: table-row;">
                     <div style="display: table-cell; ">
                         <div class="icon-analytics-chartTime icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartTime" class="radio" name="chart" value="datetime">
                             <label for="chartTime"><?php p($l->t('Timeline (date in column 2)')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
                         <div class="icon-analytics-chartTable icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartTable" class="radio" name="table">
                             <label for="chartTable"><?php p($l->t('Table')); ?></label>
                         </div>
@@ -353,7 +353,7 @@
                 <div style="display: table-row;">
                     <div style="display: table-cell; ">
                         <div class="icon-analytics-chartLine icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartLine" class="radio" name="chart" value="line">
                             <label for="chartLine"><?php p($l->t('Line')); ?></label>
                         </div>
@@ -362,16 +362,25 @@
                 <div style="display: table-row;">
                     <div style="display: table-cell; ">
                         <div class="icon-analytics-chartArea icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartArea" class="radio" name="chart" value="area">
                             <label for="chartArea"><?php p($l->t('Area')); ?></label>
                         </div>
                     </div>
                 </div>
                 <div style="display: table-row;">
+                    <div style="display: table-cell; ">
+                        <div class="icon-analytics-chartFunnel icon-analytics-charts-wizard"></div>
+                        <div style="padding-top: 10px;">
+                            <input type="radio" id="chartFunnel" class="radio" name="chart" value="funnel">
+                            <label for="chartFunnel"><?php p($l->t('Funnel')); ?></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: table-row;">
                     <div style="display: table-cell;">
                         <div class="icon-analytics-chartBar icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartBar" class="radio" name="chart" value="column">
                             <label for="chartBar"><?php p($l->t('Bar')); ?></label>
                         </div>
@@ -383,7 +392,7 @@
                 <div style="display: table-row;">
                     <div style="display: table-cell;">
                         <div class="icon-analytics-chartDonut icon-analytics-charts-wizard"></div>
-                        <div style="padding-top: 13px;">
+                        <div style="padding-top: 10px;">
                             <input type="radio" id="chartDonut" class="radio" name="chart" value="doughnut">
                             <label for="chartDonut"><?php p($l->t('Doughnut')); ?></label>
                         </div>
