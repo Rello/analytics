@@ -28,6 +28,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     TYPE_SPREADSHEET: 7,
     TYPE_SHARED: 99,
     // flexible mapping depending on type required by the used chart library
+    // Add in all js files!
     chartTypeMapping: {
         'datetime': 'line',
         'column': 'bar',
@@ -35,7 +36,8 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         'columnSt100': 'bar', // map stacked type also to base type; needed in filter
         'area': 'line',
         'line': 'line',
-        'doughnut': 'doughnut'
+        'doughnut': 'doughnut',
+        'funnel': 'funnel'
     },
 });
 

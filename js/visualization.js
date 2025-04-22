@@ -504,7 +504,7 @@ OCA.Analytics.Visualization = {
             let j = i - (Math.floor(i / colors.length) * colors.length)
 
             // in only one dataset is being shown, create a fancy gradient fill
-            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
+            if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut' && chartType !== 'funnel') {
                 const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
                     , (m, r, g, b) => '#' + r + r + g + g + b + b)
                     .substring(1).match(/.{2}/g)
@@ -520,7 +520,7 @@ OCA.Analytics.Visualization = {
                 }
                 datasets[i].borderColor = colors[j];
                 Chart.defaults.elements.line.fill = true;
-            } else if (chartType === 'doughnut') {
+            } else if (chartType === 'doughnut' || chartType === 'funnel') {
                 // special array handling for doughnuts
                 if (jsondata.options.dataoptions !== null && Object.keys(jsondata.options.dataoptions).length !== 0) {
                     const arr = jsondata.options.dataoptions;
@@ -570,6 +570,15 @@ OCA.Analytics.Visualization = {
             chartOptions.rotation = -90;
             chartOptions.plugins.datalabels.display = true;
             chartOptions.plugins.datalabels.color = '#FFFFFF';
+        } else if (chartType === 'funnel') {
+            chartOptions.indexAxis = 'y';
+            delete chartOptions.scales;
+            chartOptions.plugins.datalabels.display = true;
+            chartOptions.plugins.datalabels.color = '#EEEEEE';
+            chartOptions.plugins.datalabels.formatter = (value, context) => {
+                const label = context.chart.data.labels[context.dataIndex];
+                return `${label}\n${(value).toLocaleString()}`;
+                }
         }
 
         // the user can add/overwrite chart options
@@ -595,7 +604,7 @@ OCA.Analytics.Visualization = {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
-            //plugins: [ChartDataLabels],
+            plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
@@ -656,7 +665,9 @@ OCA.Analytics.Visualization = {
                     datasetCounter++;
                 }
                 const dataset = labelMap.get(dataSeriesColumn);
-                if (chartType === 'doughnut') {
+
+                // doughnut & funnel chart do not need a x/y mapping
+                if (chartType === 'doughnut' || chartType === 'funnel') {
                     dataset.data.push(parseFloat(value));
                 } else {
                     dataset.data.push({x: characteristicColumn, y: parseFloat(value)});

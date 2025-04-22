@@ -90,6 +90,12 @@ SPDX-FileCopyrightText = "2016-2022 chartjs-plugin-zoom Contributors"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
+path = "js/3rdParty/chartjs-plugin-funnel.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 Samuel Gratzl"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
 path = "js/3rdParty/cloner.js"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Andrea Giammarchi - @WebReflection"

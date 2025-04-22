@@ -34,7 +34,8 @@ if (!OCA.Analytics) {
             'columnSt100': 'bar', // map stacked type also to base type; needed in filter
             'area': 'line',
             'line': 'line',
-            'doughnut': 'doughnut'
+            'doughnut': 'doughnut',
+            'funnel': 'funnel'
         },
         datasources: [],
         datasourceOptions: [],

@@ -18,6 +18,7 @@ Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'userGuidance');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.umd');
+Util::addScript('analytics', '3rdParty/chartjs-plugin-funnel.min');
 Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-zoom.min');

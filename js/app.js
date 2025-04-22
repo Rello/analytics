@@ -55,6 +55,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     chartObject: null,
     tableObject: [],
     // flexible mapping depending on type required by the used chart library
+    // Add in all js files!
     chartTypeMapping: {
         'datetime': 'line',
         'column': 'bar',
@@ -62,7 +63,8 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         'columnSt100': 'bar', // map stacked type also to base type; needed in filter
         'area': 'line',
         'line': 'line',
-        'doughnut': 'doughnut'
+        'doughnut': 'doughnut',
+        'funnel': 'funnel'
     },
     datasources: [],
     datasets: [],

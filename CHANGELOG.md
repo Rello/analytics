@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- funnel chart type
+
 ### Changed
 - Chart.js  v4.4.9
 

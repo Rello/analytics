@@ -114,6 +114,8 @@
 						p($l->t('Area - 100%%')); ?></option>
                     <option value="doughnut"><?php // TRANSLATORS Short description for a 'Doughnut Chart'
 						p($l->t('Doughnut')); ?></option>
+                    <option value="funnel"><?php // TRANSLATORS Short description for a 'funnel Chart'
+						p($l->t('Funnel')); ?></option>
                 </select>
             </div>
         </div>
