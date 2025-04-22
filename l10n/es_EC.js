@@ -282,6 +282,7 @@ OC.L10N.register(
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Para incluir un gráfico en un sitio web externo, se debe permitir ese dominio (política CSP)",
     "Copy link" : "Copiar liga",
     "Domain of external site" : "Dominio del sitio externo",
+    "Additional settings" : "Configuraciones adicionales",
     "Data series" : "Series de datos",
     "Vertical axis" : "Eje vertical",
     "Color" : "Color",

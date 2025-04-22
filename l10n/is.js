@@ -71,6 +71,7 @@ OC.L10N.register(
     "Unshare" : "Hætta deilingu",
     "Password protection" : "Verndun með lykilorði",
     "Copy link" : "Afrita tengil",
+    "Additional settings" : "Aukastillingar",
     "Color" : "Litur",
     "Get more information" : "Til að fá frekari upplýsingar",
     "Nextcloud forum" : "Nextcloud spjallsvæði",

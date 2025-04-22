@@ -73,6 +73,7 @@ OC.L10N.register(
     "Unshare" : "Annulla sa cumpartzidura",
     "Password protection" : "Bardiadura de sa crae",
     "Copy link" : "Còpia ligòngiu",
+    "Additional settings" : "Cunfiguratzione in agiunta",
     "Color" : "Colore",
     "Get more information" : "Otene àteras informatziones",
     "Nextcloud forum" : "Forum de Nextcloud",

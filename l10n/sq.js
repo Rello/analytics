@@ -58,6 +58,7 @@ OC.L10N.register(
     "Unshare" : "Hiqe ndarjen",
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",
+    "Additional settings" : "Konfigurime shtesë",
     "Color" : "Ngjyrë ",
     "Create" : "Krijo"
 },

@@ -329,7 +329,7 @@ OC.L10N.register(
     "Not required" : "Nie wymagane",
     "Show totals" : "Pokaż sumy",
     "Reset table" : "Zresetuj tabelę",
-    "Calculated Columns" : "Obliczone kolumny",
+    "Additional settings" : "Ustawienia dodatkowe",
     "Data format" : "Format danych",
     "In rows" : "W wierszach",
     "In columns" : "W kolumnach",

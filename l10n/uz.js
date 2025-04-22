@@ -347,7 +347,7 @@ OC.L10N.register(
     "Show totals" : "Jami ko'rsatish",
     "Format all numbers in local format" : "Barcha raqamlarni mahalliy formatda formatlash",
     "Reset table" : "Jadvalni tiklash",
-    "Calculated Columns" : "Hisoblangan ustunlar",
+    "Additional settings" : "Parol",
     "Data format" : "Ma'lumotlar formati",
     "Select how the raw data is structured" : "Xom ma'lumotlar qanday tuzilganligini tanlang",
     "In rows" : "Qatorlarda",

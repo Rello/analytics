@@ -305,7 +305,7 @@ OC.L10N.register(
     "Not required" : "Ni zahtevano",
     "Show totals" : "Pokaži skupne vrednosti",
     "Reset table" : "Ponastavi razpredelnico",
-    "Calculated Columns" : "Izračunani stolpci",
+    "Additional settings" : "Dodatne nastavitve",
     "Data format" : "Zapis datuma",
     "Select how the raw data is structured" : "Izbor načina strukturiranja surovih podatkov",
     "In rows" : "V vrsticah",

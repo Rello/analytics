@@ -53,6 +53,7 @@ OC.L10N.register(
     "Unshare" : "გაზიარების შეწყვეტა",
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",
+    "Additional settings" : "დამატებითი პარამეტრები",
     "Color" : "ფერი",
     "Create" : "შექმნა"
 },

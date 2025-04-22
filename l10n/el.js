@@ -270,6 +270,7 @@ OC.L10N.register(
     "Copy link" : "Αντιγραφή συνδέσμου",
     "Rows" : "Γραμμές",
     "Columns" : "Στήλες",
+    "Additional settings" : "Επιπρόσθετες ρυθμίσεις",
     "Data series" : "Σειρά δεδομένων",
     "Vertical axis" : "Κάθετος άξονας",
     "Color" : "Χρώμα",

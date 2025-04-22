@@ -83,6 +83,7 @@ OC.L10N.register(
     "Copy link" : "Kopijuoti nuorodą",
     "Rows" : "Eilutės",
     "Columns" : "Stulpeliai",
+    "Additional settings" : "Papildomi nustatymai",
     "Color" : "Spalva",
     "Get more information" : "Gaukite daugiau informacijos",
     "Nextcloud forum" : "Nextcloud forumas",

@@ -314,6 +314,7 @@ OC.L10N.register(
     "Rows" : "列",
     "Columns" : "栏",
     "Not required" : "不需要",
+    "Additional settings" : "其他设置",
     "Data series" : "数据系列",
     "Vertical axis" : "纵轴",
     "Color" : "颜色",

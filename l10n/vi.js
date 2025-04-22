@@ -114,6 +114,7 @@ OC.L10N.register(
     "Copy link" : "Sao chép liên kết",
     "Rows" : "Các hàng",
     "Columns" : "Các cột",
+    "Additional settings" : "Cài đặt bổ sung",
     "Color" : "Màu sắc",
     "Get more information" : "Có thêm thông tin",
     "Create" : "‎Tạo‎"

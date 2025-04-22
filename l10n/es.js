@@ -341,7 +341,7 @@ OC.L10N.register(
     "Not required" : "No requerido",
     "Show totals" : "Mostrar totales",
     "Reset table" : "Reinicializar tabla",
-    "Calculated Columns" : "Columnas calculadas",
+    "Additional settings" : "Ajustes adicionales",
     "Data format" : "Formato de datos",
     "Select how the raw data is structured" : "Selecciona cómo se estructuran los datos en bruto",
     "In rows" : "En filas",

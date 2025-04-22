@@ -347,7 +347,7 @@ OC.L10N.register(
     "Show totals" : "Összegzés megjelenítése",
     "Format all numbers in local format" : "Formázza az összes számot helyi formátumban",
     "Reset table" : "Táblázat visszaállítása",
-    "Calculated Columns" : "Számított oszlopok",
+    "Additional settings" : "További beállítások",
     "Data format" : "Adatformátum",
     "Select how the raw data is structured" : "Válassza ki a nyers adatok szerkezetét",
     "In rows" : "Sorokban",

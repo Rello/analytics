@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Dataset" : "Datumaro",
+    "Data" : "Datumoj",
+    "Automation" : "Aŭtomatigo",
     "Saved" : "Konservita",
     "Delete" : "Forigi",
     "Done" : "Farita",
@@ -55,6 +58,7 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Password protection" : "Protektita per pasvorto",
     "Copy link" : "Kopii ligilon",
+    "Additional settings" : "Plia agordo",
     "Color" : "Koloro",
     "Get more information" : "Pli da informoj",
     "Create" : "Krei"

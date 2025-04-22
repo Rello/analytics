@@ -187,7 +187,7 @@ OC.L10N.register(
     "Columns" : "Columnes",
     "Measures" : "Midíes",
     "Not required" : "Nun se rique",
-    "Calculated Columns" : "Columnes calculaes",
+    "Additional settings" : "Configuración adicional",
     "Data series" : "Series de datos",
     "Vertical axis" : "Exes verticales",
     "Color" : "Color",

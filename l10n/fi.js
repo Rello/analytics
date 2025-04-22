@@ -212,6 +212,7 @@ OC.L10N.register(
     "Domain of external site" : "Ulkoisen verkkosivun domain",
     "Rows" : "Rivit",
     "Columns" : "Sarakkeet",
+    "Additional settings" : "Lisäasetukset",
     "Data series" : "Datasarjat",
     "Vertical axis" : "Pystyakseli",
     "Color" : "Väri",

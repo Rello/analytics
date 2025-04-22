@@ -167,6 +167,7 @@ OC.L10N.register(
     "Copy link" : "リンクをコピー",
     "Rows" : "行",
     "Columns" : "カラム",
+    "Additional settings" : "追加設定",
     "Color" : "色",
     "Get more information" : "詳細情報の取得",
     "Nextcloud forum" : "Nextcloudフォーラム",
