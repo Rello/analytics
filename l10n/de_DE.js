@@ -284,6 +284,7 @@ OC.L10N.register(
     "Area" : "Fläche",
     "Area - 100%%" : "Bereich - 100%%",
     "Doughnut" : "Krapfen",
+    "Funnel" : "Trichter",
     "Open documentation" : "Dokumentation öffnen",
     "Data options" : "Datenoptionen",
     "Update" : "Aktualisieren",
