@@ -284,6 +284,7 @@ OC.L10N.register(
     "Area" : "Achar",
     "Area - 100%%" : "Achar - 100%%",
     "Doughnut" : "Taoschnó",
+    "Funnel" : "Tonnadóir",
     "Open documentation" : "Doiciméadú oscailte",
     "Data options" : "Roghanna sonraí",
     "Update" : "Nuashonrú",
