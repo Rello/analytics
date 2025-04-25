@@ -284,6 +284,7 @@ OC.L10N.register(
     "Area" : "Површина",
     "Area - 100%%" : "Површина - 100%%",
     "Doughnut" : "Крофна",
+    "Funnel" : "Левак",
     "Open documentation" : "Отвори документацију",
     "Data options" : "Опције података",
     "Update" : "Ажурирај",

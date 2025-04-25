@@ -284,6 +284,7 @@ OC.L10N.register(
     "Area" : "面積圖",
     "Area - 100%%" : "區域 - 100%%",
     "Doughnut" : "甜甜圈圖",
+    "Funnel" : "漏斗",
     "Open documentation" : "開啟文件",
     "Data options" : "資料選項",
     "Update" : "更新",

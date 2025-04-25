@@ -283,6 +283,7 @@ OC.L10N.register(
     "Area" : "Oblast",
     "Area - 100%%" : "Oblast  100%%",
     "Doughnut" : "Výsečový",
+    "Funnel" : "Nálevka",
     "Open documentation" : "Otevřít dokumentaci",
     "Data options" : "Předvolby pro data",
     "Update" : "Aktualizovat",
