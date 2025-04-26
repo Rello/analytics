@@ -438,8 +438,9 @@ OCA.Analytics.Filter = {
                 + '<div style="display: table-cell;">'
                 + '<select id="optionsChartType' + [i] + '" name="optionsChartType" class="optionsInput">'
                 + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>' + t('analytics', 'Line') + '</option>'
-                + '<option value="doughnut" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'doughnut', defaultChartType) + '>' + t('analytics', 'doughnut') + '</option>'
                 + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Bar') + '</option>'
+                + '<option value="doughnut" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'doughnut', defaultChartType) + '>' + t('analytics', 'Doughnut') + '</option>'
+                + '<option value="funnel" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'funnel', defaultChartType) + '>' + t('analytics', 'Funnel') + '</option>'
                 + '</select>'
                 + '</div>'
                 + '<div style="display: table-cell;">'
@@ -470,6 +471,11 @@ OCA.Analytics.Filter = {
         );
 
         let optionsColor = document.getElementsByName('optionsColor');
+        // Loop through each element and manually trigger the updateColor function
+        optionsColor.forEach((field) => {
+            OCA.Analytics.Filter.updateColor({ target: field });
+        });
+
         for (let i = 0; i < optionsColor.length; i++) {
             optionsColor[i].addEventListener('keyup', OCA.Analytics.Filter.updateColor);
         }
@@ -650,11 +656,35 @@ OCA.Analytics.Filter = {
         return dataOptions;
     },
 
-    // live update the background color of the input boxes
+    // live update the background and font color of the input boxes
     updateColor: function (evt) {
         let field = evt.target;
+        // Check if the selected color is valid (e.g., #RRGGBB format)
         if (field.value.length === 7 && field.value.charAt(0) === '#') {
             field.style.backgroundColor = field.value;
+
+            // Convert HEX to RGB
+            const hexToRgb = (hex) => {
+                hex = hex.replace('#', '');
+                let bigint = parseInt(hex, 16);
+                return {
+                    r: (bigint >> 16) & 255, // Extract red value
+                    g: (bigint >> 8) & 255,  // Extract green value
+                    b: bigint & 255,         // Extract blue value
+                };
+            };
+
+            // Calculate brightness based on luminance formula
+            const calculateBrightness = ({ r, g, b }) => {
+                return (0.299 * r + 0.587 * g + 0.114 * b);
+            };
+
+            const rgb = hexToRgb(field.value);
+            const brightness = calculateBrightness(rgb);
+
+            // Adjust font color based on brightness
+            // If brightness is below 128, set text to white; otherwise, set it to black
+            field.style.color = brightness < 128 ? '#FFFFFF' : '#000000';
         }
     }
 };

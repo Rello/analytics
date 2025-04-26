@@ -8,6 +8,7 @@
 
 ### Fixed
 - incorrect aggregation of Nextcloud Table data
+- dynamic font color in colored input fields
 
 ## 5.3.0 - 2025-03-20
 ### Added
