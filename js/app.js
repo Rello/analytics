@@ -350,6 +350,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportMenuTableOptions').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuDrilldown').disabled = false;
+            document.getElementById('reportMenuSort').disabled = false;
             document.getElementById('reportMenuDownload').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuTranslate').disabled = false;
@@ -419,6 +420,7 @@ OCA.Analytics.UI = {
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
         document.getElementById('reportMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('reportMenuDrilldown').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('reportMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
         document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
         document.getElementById('reportMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
 

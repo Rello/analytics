@@ -2,6 +2,7 @@
 
 ### Added
 - funnel chart type
+- option to sort by any column
 
 ### Changed
 - Chart.js  v4.4.9

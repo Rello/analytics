@@ -599,6 +599,11 @@ div.dt-container .dt-paging .dt-paging-button {
     filter: var(--background-invert-if-dark);
 }
 
+.icon-analytics-sort {
+    background-image: url(../img/sort.svg);
+    filter: var(--background-invert-if-dark);
+}
+
 .icon-analytics-gripLines {
     background-image: url(../img/gripLines.svg);
     filter: var(--background-invert-if-dark);

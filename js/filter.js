@@ -217,17 +217,22 @@ OCA.Analytics.Filter = {
     },
 
     processFilterDialog: function () {
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        let dimension = document.getElementById('filterDialogDimension').value;
-        if (filterOptions['filter'] === undefined) {
-            filterOptions['filter'] = {};
-        }
-        if (filterOptions['filter'][dimension] === undefined) {
-            filterOptions['filter'][dimension] = {};
-        }
-        filterOptions['filter'][dimension]['option'] = document.getElementById('filterDialogOption').value;
-        filterOptions['filter'][dimension]['value'] = document.getElementById('filterDialogValue').value.replace(', ', ',');
+        // Get filterOptions and dimension value
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
+        const dimension = document.getElementById('filterDialogDimension').value;
 
+        // Initialize filter if it doesn't exist
+        filterOptions.filter = filterOptions.filter || {};
+        filterOptions.filter[dimension] = filterOptions.filter[dimension] || {};
+
+        // Set option and value
+        const optionValue = document.getElementById('filterDialogOption').value;
+        const filterValue = document.getElementById('filterDialogValue').value.replace(', ', ',');
+
+        filterOptions.filter[dimension].option = optionValue;
+        filterOptions.filter[dimension].value = filterValue;
+
+        // Update global state
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
@@ -402,6 +407,83 @@ OCA.Analytics.Filter = {
         }
     },
 
+    openSortDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Sort'),
+            OCA.Analytics.Filter.processSortOptionsDialog
+        );
+
+        // Clone the DOM template
+        const container = document.importNode(document.getElementById('templateSortOptions').content, true);
+
+        // Get the header array
+        let headerArray = OCA.Analytics.currentReportData.header;
+
+        // Clear existing options
+        let sortOptionDimension = container.getElementById('sortOptionDimension');
+        sortOptionDimension.innerHTML = ''; // Clear existing options
+
+        // Create options for every available report header column
+        const fragment = document.createDocumentFragment();
+        headerArray.forEach((header, index) => {
+            const dimensionOption = new Option(header, index); // Create option directly
+            fragment.appendChild(dimensionOption);
+        });
+        sortOptionDimension.appendChild(fragment); // Append all options at once
+
+        // Define an array of options
+        const directionOptions = [
+            {value: 'def', text: t('analytics', 'Default')},
+            {value: 'asc', text: t('analytics', 'Ascending')},
+            {value: 'desc', text: t('analytics', 'Descending')}
+        ];
+
+        // Create options for sortOptionDirection
+        let sortOptionDirection = container.getElementById('sortOptionDirection');
+        directionOptions.forEach(({value, text}) => {
+            const directionOption = new Option(text, value); // Create option directly
+            sortOptionDirection.options.add(directionOption); // Add option to dropdown
+        });
+
+        // set current values
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (filterOptions !== null && filterOptions['sort'] !== undefined) {
+            container.getElementById('sortOptionDimension').value = filterOptions.sort.dimension;
+            container.getElementById('sortOptionDirection').value = filterOptions.sort.direction;
+        }
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Default sorting can be set for each dimension.')
+        );
+    },
+
+    processSortOptionsDialog: function () {
+        // Ensure filterOptions is initialized properly
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
+
+        // Initialize sort if it doesn't exist
+        if (!filterOptions.sort) {
+            filterOptions.sort = {};
+        }
+
+        // Set dimension and direction
+        filterOptions.sort.dimension = document.getElementById('sortOptionDimension').value;
+        filterOptions.sort.direction = document.getElementById('sortOptionDirection').value;
+
+        // Remove sort if direction is 'def'
+        if (filterOptions.sort.direction === 'def') {
+            delete filterOptions.sort;
+        }
+
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Notification.dialogClose();
+    },
+
     openChartOptionsDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -473,7 +555,7 @@ OCA.Analytics.Filter = {
         let optionsColor = document.getElementsByName('optionsColor');
         // Loop through each element and manually trigger the updateColor function
         optionsColor.forEach((field) => {
-            OCA.Analytics.Filter.updateColor({ target: field });
+            OCA.Analytics.Filter.updateColor({target: field});
         });
 
         for (let i = 0; i < optionsColor.length; i++) {
@@ -533,7 +615,7 @@ OCA.Analytics.Filter = {
 
         let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
         if (dataModel === 'accountModel') {
-            let enableModel = { analyticsModel: dataModel };
+            let enableModel = {analyticsModel: dataModel};
             try {
                 // if there are existing settings, merge them
                 chartOptionsObj = cloner.deep.merge(chartOptionsObj, enableModel);
@@ -554,7 +636,7 @@ OCA.Analytics.Filter = {
         // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
         // additional combinations for dataMode apply
         if (seondaryAxisRequired === true) {
-            let enableAxis = { scales: {secondary:{display:true}}};
+            let enableAxis = {scales: {secondary: {display: true}}};
             try {
                 // if there are existing settings, merge them
                 chartOptionsObj = cloner.deep.merge(chartOptionsObj, enableAxis);
@@ -675,7 +757,7 @@ OCA.Analytics.Filter = {
             };
 
             // Calculate brightness based on luminance formula
-            const calculateBrightness = ({ r, g, b }) => {
+            const calculateBrightness = ({r, g, b}) => {
                 return (0.299 * r + 0.587 * g + 0.114 * b);
             };
 
@@ -733,7 +815,7 @@ OCA.Analytics.Filter.Drag = {
         let rowsSection = document.getElementById('rows');
 
         // Clear existing sections
-        document.querySelectorAll('.section').forEach(function(section) {
+        document.querySelectorAll('.section').forEach(function (section) {
             section.innerHTML = '<p>' + section.id.charAt(0).toUpperCase() + section.id.slice(1) + '</p>';
         });
 
@@ -779,7 +861,7 @@ OCA.Analytics.Filter.Drag = {
         OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 
-    managePlaceholders: function() {
+    managePlaceholders: function () {
         // Function to create a placeholder div
         const createPlaceholder = () => {
             let placeholderDiv = document.createElement('div');

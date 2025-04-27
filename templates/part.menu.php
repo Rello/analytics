@@ -20,6 +20,12 @@
                 </button>
             </li>
             <li>
+                <button id="reportMenuSort">
+                    <span class="icon-analytics-sort"></span>
+                    <span><?php p($l->t('Sort')); ?></span>
+                </button>
+            </li>
+            <li>
                 <button id="reportMenuChartOptions">
                     <span class="icon-analytics-chart-options"></span>
                     <span><?php p($l->t('Chart options')); ?></span>

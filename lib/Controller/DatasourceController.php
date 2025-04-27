@@ -59,7 +59,7 @@ class DatasourceController extends Controller {
 		ExternalJson     $ExternalJsonService,
 		LocalJson        $LocalJsonService,
 		ExternalCsv      $ExternalCsvService,
-		LocalSpreadsheet       $LocalSpreadsheetService,
+		LocalSpreadsheet $LocalSpreadsheetService,
 		IL10N            $l10n,
 		IEventDispatcher $dispatcher,
 		IAppConfig       $appConfig,
@@ -198,7 +198,7 @@ class DatasourceController extends Controller {
 
 		// Data sources can be disabled globally by their ID
 		// occ config:app:set analytics disabledDataSources --type=string --value="1,3,4"
-		$disabledString = $this->appConfig->getValueString('analytics','disabledDataSources');
+		$disabledString = $this->appConfig->getValueString('analytics', 'disabledDataSources');
 		$disabledArray = explode(',', $disabledString);
 		$datasources = array_diff_key($datasources, array_flip($disabledArray));
 

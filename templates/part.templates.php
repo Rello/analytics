@@ -751,3 +751,23 @@
         </div>
     </div>
 </template>
+
+<template id="templateSortOptions">
+    <div class="table" style="display: table;" id="sortOptionsTable">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <label for="sortOptionDimension"><?php p($l->t('Sort by')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="sortOptionDirection"><?php p($l->t('Direction')); ?></label>
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <select id="sortOptionDimension" class="optionsInput"></select>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <select id="sortOptionDirection" class="optionsInput"></select>
+            </div>
+        </div>
+</template>
