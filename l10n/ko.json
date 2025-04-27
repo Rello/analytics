@@ -60,7 +60,6 @@
     "Primary" : "기본축",
     "Secondary" : "보조축",
     "Line" : "선",
-    "doughnut" : "도넛형",
     "Bar" : "막대",
     "Select the format of the data and how it should be visualized" : "데이터의 포맷과 어떻게 시각화되어야 하는지 선택하십시오.",
     "Drag fields here" : "필드를 여기로 드래그",
