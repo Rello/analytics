@@ -43,7 +43,6 @@ OC.L10N.register(
     "Table options" : "Tabulas iespējas",
     "Primary" : "Primāri",
     "Secondary" : "Sekundāri",
-    "doughnut" : "virtulis",
     "New dataset" : "Jauna datu kopa",
     "New report" : "Jauna atskaite",
     "New report group" : "Jauna atskaišu grupa",

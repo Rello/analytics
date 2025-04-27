@@ -59,7 +59,6 @@ OC.L10N.register(
     "Primary" : "Primário",
     "Secondary" : "Secundário",
     "Line" : "Linha",
-    "doughnut" : "donut",
     "Bar" : "Barra",
     "Select the format of the data and how it should be visualized" : "Selecione o formato dos dados e como devem ser visualizados",
     "Drag fields here" : "Arrastar campos para aqui",

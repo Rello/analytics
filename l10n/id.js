@@ -57,7 +57,6 @@ OC.L10N.register(
     "Primary" : "Primer",
     "Secondary" : "Sekunder",
     "Line" : "Garis",
-    "doughnut" : "donat",
     "Bar" : "Batang",
     "New dataset" : "Himpunan data baru",
     "New panorama" : "Panorama baru",
