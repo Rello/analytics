@@ -35,6 +35,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Batal",
     "Add" : "Tambah",
+    "Sort" : "Susun",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Kongsi",
@@ -61,6 +62,7 @@ OC.L10N.register(
     "Daily" : "Setiap hari",
     "Hourly" : "Setiap jam",
     "Password protection" : "Password protection",
+    "Sort by" : "Susun mengikut",
     "Create" : "Buat"
 },
 "nplurals=1; plural=0;");

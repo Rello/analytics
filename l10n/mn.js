@@ -46,6 +46,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Холбоос хуулах",
     "Color" : "Өнгө",
+    "Sort by" : "Эрэмбэлэх",
     "Create" : "Үүсгэх"
 },
 "nplurals=2; plural=(n != 1);");

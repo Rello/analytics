@@ -12,6 +12,8 @@ OC.L10N.register(
     "Cancel" : "Hætta við",
     "Filter" : "Sía",
     "Add" : "Bæta við",
+    "Sort" : "Flokka",
+    "Default" : "Sjálfgefið",
     "Line" : "Lína",
     "Bar" : "Bar",
     "Overview" : "Yfirlit",
@@ -73,6 +75,7 @@ OC.L10N.register(
     "Copy link" : "Afrita tengil",
     "Additional settings" : "Aukastillingar",
     "Color" : "Litur",
+    "Sort by" : "Raða sem",
     "Get more information" : "Til að fá frekari upplýsingar",
     "Nextcloud forum" : "Nextcloud spjallsvæði",
     "Create" : "Búa til"

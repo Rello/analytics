@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "Откажи",
     "Filter" : "Филтер",
     "Add" : "Додади",
+    "Sort" : "Сортирај",
+    "Default" : "Предефиниран",
     "Line" : "Линија",
     "Bar" : "Бар",
     "Overview" : "Преглед",
@@ -64,6 +66,7 @@ OC.L10N.register(
     "Copy link" : "Копирај линк",
     "Additional settings" : "Дополнителни параметри",
     "Color" : "Боја",
+    "Sort by" : "Сортирај по",
     "Get more information" : "Побарајте повеќе информации",
     "Nextcloud forum" : "Nextcloud форум",
     "Create" : "Креирај"

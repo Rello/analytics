@@ -6,6 +6,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Ofbriechen",
     "Add" : "Derbäimaachen",
+    "Sort" : "Zortéieren",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Dossier läschen",
     "Add to favorites" : "Add to favorites",
@@ -39,6 +40,7 @@ OC.L10N.register(
     "Unshare" : "Net méi deelen",
     "Password protection" : "Password protection",
     "Copy link" : "Link kopéieren",
+    "Sort by" : "Zortéieren no",
     "Create" : "Erstellen"
 },
 "nplurals=2; plural=(n != 1);");

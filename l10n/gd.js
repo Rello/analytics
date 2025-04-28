@@ -4,6 +4,8 @@ OC.L10N.register(
     "Delete" : "Sguab às",
     "OK" : "Ceart ma-thà",
     "Cancel" : "Sguir dheth",
+    "Sort" : "Seòrsaich",
+    "Default" : "Bunaiteach",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Share" : "Co-roinn",
     "Save" : "Sàbhail",
@@ -27,6 +29,7 @@ OC.L10N.register(
     "Copy" : "Dèan lethbhreac",
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
+    "Sort by" : "Seòrsaich a-rèir",
     "Create" : "Cruthaich"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

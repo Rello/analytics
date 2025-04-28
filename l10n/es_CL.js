@@ -45,6 +45,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
     "Add" : "Agregar",
+    "Sort" : "Ordenar",
     "Overview" : "Generalidades",
     "Remove from favorites" : "Eliminar de favoritos",
     "Delete folder" : "Borrar carpeta",
@@ -91,6 +92,7 @@ OC.L10N.register(
     "Copy link" : "Copiar liga",
     "Additional settings" : "Configuraciones adicionales",
     "Color" : "Color",
+    "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"
 },

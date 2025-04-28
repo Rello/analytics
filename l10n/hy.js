@@ -9,6 +9,7 @@ OC.L10N.register(
     "OK" : "Լավ",
     "Cancel" : "ընդհատել",
     "Add" : "Ավելացնել",
+    "Sort" : "Դասակարգել",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Կիսվել",
@@ -40,6 +41,7 @@ OC.L10N.register(
     "Unshare" : "Չկիսվել",
     "Password protection" : "Password protection",
     "Copy link" : "Պատճենել հղումը",
+    "Sort by" : "Դասակարգել ըստ",
     "Create" : "Ստեղծել"
 },
 "nplurals=2; plural=(n != 1);");

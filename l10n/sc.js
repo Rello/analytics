@@ -11,6 +11,8 @@ OC.L10N.register(
     "Cancel" : "Annulla",
     "Filter" : "Filtru",
     "Add" : "Agiunghe",
+    "Sort" : "Assenta",
+    "Default" : "Predefinidu",
     "Bar" : "Tzilleri",
     "Overview" : "Panoràmica",
     "Remove from favorites" : "Boga·nche dae preferidos",

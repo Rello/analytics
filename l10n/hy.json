@@ -7,6 +7,7 @@
     "OK" : "Լավ",
     "Cancel" : "ընդհատել",
     "Add" : "Ավելացնել",
+    "Sort" : "Դասակարգել",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Կիսվել",
@@ -38,6 +39,7 @@
     "Unshare" : "Չկիսվել",
     "Password protection" : "Password protection",
     "Copy link" : "Պատճենել հղումը",
+    "Sort by" : "Դասակարգել ըստ",
     "Create" : "Ստեղծել"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

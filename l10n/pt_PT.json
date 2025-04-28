@@ -53,6 +53,8 @@
     "Variables" : "Variáveis",
     "Add" : "Adicionar",
     "Table options" : "Opções da tabela",
+    "Sort" : "Ordenar",
+    "Default" : "Predefinido",
     "Chart options" : "Opções de gráfico",
     "Primary" : "Primário",
     "Secondary" : "Secundário",
@@ -152,6 +154,7 @@
     "Copy link" : "Copiar hiperligação",
     "Additional settings" : "Definições adicionais",
     "Color" : "Cor",
+    "Sort by" : "Ordenar por",
     "Get more information" : "Obter mais informação",
     "Create" : "Criar"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

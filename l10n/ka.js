@@ -32,6 +32,8 @@ OC.L10N.register(
     "Cancel" : "გაუქმება",
     "Filter" : "გაფილტრვა",
     "Add" : "დამატება",
+    "Sort" : "Sort",
+    "Default" : "Default",
     "Bar" : "Bar",
     "Doughnut" : "დონატი",
     "Overview" : "მიმოხილვა",
@@ -103,6 +105,7 @@ OC.L10N.register(
     "Copy link" : "Copy link",
     "Additional settings" : "Additional settings",
     "Color" : "Color",
+    "Sort by" : "Sort by",
     "Get more information" : "Get more information",
     "Create" : "Create"
 },

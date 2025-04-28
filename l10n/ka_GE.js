@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "უარყოფა",
     "Filter" : "ფილტრი",
     "Add" : "დამატება",
+    "Sort" : "განლაგება",
+    "Default" : "საწყისი პარამეტრები",
     "Overview" : "ზოგადი მიმოხილვა",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Delete folder" : "დირექტორიის გაუქმება",
@@ -55,6 +57,7 @@ OC.L10N.register(
     "Copy link" : "ბმულის კოპირება",
     "Additional settings" : "დამატებითი პარამეტრები",
     "Color" : "ფერი",
+    "Sort by" : "დაასორტირე",
     "Create" : "შექმნა"
 },
 "nplurals=2; plural=(n!=1);");

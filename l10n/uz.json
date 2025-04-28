@@ -56,6 +56,7 @@
     "Add" : "Qo'shish",
     "Table options" : "Jadval variantlari",
     "The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section." : "Jadvalni satr va ustunlarni joylashtirish orqali sozlash mumkin. <br>Agar klassik ro'yxat ko'rinishi kerak bo'lsa, barcha maydonlar qatorlar bo'limiga joylashtirilishi kerak.",
+    "Sort" : "Saralash",
     "Chart options" : "Grafik variantlari",
     "Primary" : "Dastlabki",
     "Secondary" : "Ikkilamchi",

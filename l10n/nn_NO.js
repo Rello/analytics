@@ -15,6 +15,7 @@ OC.L10N.register(
     "Filter" : "Filter",
     "Variables" : "Variablar",
     "Add" : "Legg til",
+    "Sort" : "Sorter",
     "Overview" : "Oversyn",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Slett mappe",
@@ -64,6 +65,7 @@ OC.L10N.register(
     "Copy link" : "Kopier lenkje",
     "Additional settings" : "Tilleggsinnstillingar",
     "Color" : "Farge",
+    "Sort by" : "Sorter på",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"
 },

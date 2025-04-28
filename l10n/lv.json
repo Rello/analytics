@@ -39,6 +39,7 @@
     "Variables" : "Vērtības",
     "Add" : "Pievienot",
     "Table options" : "Tabulas iespējas",
+    "Sort" : "Kārtot",
     "Primary" : "Primāri",
     "Secondary" : "Sekundāri",
     "New dataset" : "Jauna datu kopa",
@@ -146,6 +147,7 @@
     "Copy link" : "Kopēt saiti",
     "Additional settings" : "Papildu iestatījumi",
     "Color" : "Krāsa",
+    "Sort by" : "Kārtot pēc",
     "Get more information" : "Iegūt vairāk informācijas",
     "Create" : "Izveidot"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

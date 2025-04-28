@@ -51,6 +51,10 @@ OC.L10N.register(
     "Filter" : "フィルター",
     "Variables" : "変数",
     "Add" : "追加",
+    "Sort" : "並び替え",
+    "Default" : "デフォルト",
+    "Ascending" : "昇順",
+    "Descending" : "降順",
     "Primary" : "プライマリ",
     "Secondary" : "セカンダリ",
     "Line" : "線",
@@ -169,6 +173,7 @@ OC.L10N.register(
     "Columns" : "カラム",
     "Additional settings" : "追加設定",
     "Color" : "色",
+    "Sort by" : "ソート: ",
     "Get more information" : "詳細情報の取得",
     "Nextcloud forum" : "Nextcloudフォーラム",
     "Create" : "作成"

@@ -11,6 +11,8 @@ OC.L10N.register(
     "Cancel" : "Odustani",
     "Filter" : "Filtar",
     "Add" : "Dodaj",
+    "Sort" : "Razvrstaj",
+    "Default" : "Zadani",
     "Bar" : "Bar",
     "Overview" : "Pregled",
     "Remove from favorites" : "Ukloni iz favorita",
@@ -69,6 +71,7 @@ OC.L10N.register(
     "Copy link" : "Kopiraj poveznicu",
     "Additional settings" : "Dodatne postavke",
     "Color" : "Boja",
+    "Sort by" : "Razvrstaj prema",
     "Get more information" : "Dohvatite više informacija",
     "Nextcloud forum" : "Nextcloudov forum",
     "Create" : "Stvori"

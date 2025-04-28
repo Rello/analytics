@@ -5,6 +5,8 @@
     "Cancel" : "Sefsex",
     "Filter" : "Sizdeg",
     "Add" : "Rnu",
+    "Sort" : "Smizzwer",
+    "Default" : "Prédéfini(e)",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
     "Share" : "Bḍu",
@@ -33,6 +35,7 @@
     "Daily" : "S wass",
     "Hourly" : "S usrag",
     "Copy link" : "Nɣel aseɣwen",
+    "Sort by" : "Trier par",
     "Create" : "Snulfu-d"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

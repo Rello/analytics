@@ -51,7 +51,12 @@
     "Cancel" : "Loobu",
     "Filter" : "Filter",
     "Add" : "Lisa",
+    "Sort" : "Järjesta",
+    "Default" : "Vaikimisi",
+    "Ascending" : "Kasvavalt",
+    "Descending" : "Kahanevalt",
     "Line" : "Joon",
+    "Funnel" : "Lehterjoonis",
     "Overview" : "Ülevaade",
     "Reports" : "Aruanded",
     "Remove from favorites" : "Eemalda lemmikutest",
@@ -79,6 +84,7 @@
     "Authentication" : "Autentimine",
     "Releases" : "Versioonid",
     "Issues" : "Veahaldus",
+    "optional" : "valikuline",
     "Version" : "Versioon",
     "Count" : "Kokku",
     "Local" : "Kohalik",
@@ -109,7 +115,10 @@
     "Password protection" : "Password protection",
     "Copy link" : "Kopeeri link",
     "Additional settings" : "Lisaseaded",
+    "Calculated columns" : "Arvutuslikud veerud",
     "Color" : "Värv",
+    "Sort by" : "Sorteeri",
+    "Direction" : "Suund",
     "Create" : "Loo"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
