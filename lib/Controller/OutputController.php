@@ -170,7 +170,9 @@ class OutputController extends Controller {
 		}
 
 		// sort the data by a given column
-		$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
+		if ($filterOptions) {
+			$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
+		}
 
 		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset']);
 

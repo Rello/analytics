@@ -177,7 +177,6 @@ class DatasourceController extends Controller {
 				$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
 			}
 
-
 		} catch (\Error $e) {
 			$result['error'] = $e->getMessage();
 		}
@@ -349,8 +348,12 @@ class DatasourceController extends Controller {
 						$aKey = $this->l10n->t('Total');
 						// Add an empty column to the header because of the "total" row description
 						array_unshift($data['header'], '');
+					} else {
+						// Split the key into components
+						$components = explode('|', $aKey);
+						// Combine components with the aggregated value
+						$result[] = array_merge($components, [$aValue]);
 					}
-					$result[] = [$aKey, $aValue];
 				}
 				$data['data'] = $result;
 			}
