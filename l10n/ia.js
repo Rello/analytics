@@ -7,6 +7,7 @@ OC.L10N.register(
     "OK" : "Ok",
     "Cancel" : "Cancellar",
     "Add" : "Adder",
+    "Sort" : "Ordinar",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Deler dossier",
     "Add to favorites" : "Add to favorites",
@@ -42,6 +43,7 @@ OC.L10N.register(
     "Unshare" : "Cessa de compartir",
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
+    "Sort by" : "Ordinar per",
     "Create" : "Crear"
 },
 "nplurals=2; plural=(n != 1);");

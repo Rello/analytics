@@ -12,6 +12,8 @@ OC.L10N.register(
     "Cancel" : "Anulare",
     "Filter" : "Filtru",
     "Add" : "Adaugă",
+    "Sort" : "Sortează",
+    "Default" : "Implicită",
     "Line" : "Linie",
     "Overview" : "Prezentare generală",
     "Remove from favorites" : "Șterge din favorite",
@@ -69,6 +71,7 @@ OC.L10N.register(
     "Copy link" : "Copiază link",
     "Additional settings" : "Setări adiționale",
     "Color" : "Culoare",
+    "Sort by" : "Sortare după",
     "Create" : "Crează"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

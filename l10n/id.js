@@ -54,6 +54,8 @@ OC.L10N.register(
     "Variables" : "Variabel",
     "Add" : "Masukkan",
     "Table options" : "Pengaturan Tabel",
+    "Sort" : "Urutkan",
+    "Default" : "Default",
     "Primary" : "Primer",
     "Secondary" : "Sekunder",
     "Line" : "Garis",
@@ -178,6 +180,7 @@ OC.L10N.register(
     "Data series" : "Seri data",
     "Vertical axis" : "Sumbu vertikal",
     "Color" : "Warna",
+    "Sort by" : "Urutan",
     "Create" : "Buat"
 },
 "nplurals=1; plural=0;");

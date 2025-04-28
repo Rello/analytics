@@ -55,6 +55,8 @@ OC.L10N.register(
     "Variables" : "Variáveis",
     "Add" : "Adicionar",
     "Table options" : "Opções da tabela",
+    "Sort" : "Ordenar",
+    "Default" : "Predefinido",
     "Chart options" : "Opções de gráfico",
     "Primary" : "Primário",
     "Secondary" : "Secundário",
@@ -154,6 +156,7 @@ OC.L10N.register(
     "Copy link" : "Copiar hiperligação",
     "Additional settings" : "Definições adicionais",
     "Color" : "Cor",
+    "Sort by" : "Ordenar por",
     "Get more information" : "Obter mais informação",
     "Create" : "Criar"
 },

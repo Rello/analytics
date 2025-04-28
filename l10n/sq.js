@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "Filter" : "Filtro",
     "Add" : "Shto",
+    "Sort" : "Renditni",
+    "Default" : "Paraprake",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Fshini dosjen",
     "Add to favorites" : "Shtoje tek të parapëlqyerat",
@@ -60,6 +62,7 @@ OC.L10N.register(
     "Copy link" : "Kopjo linkun",
     "Additional settings" : "Konfigurime shtesë",
     "Color" : "Ngjyrë ",
+    "Sort by" : "Renditni sipas",
     "Create" : "Krijo"
 },
 "nplurals=2; plural=(n != 1);");

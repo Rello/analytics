@@ -52,6 +52,8 @@
     "Variables" : "Variabel",
     "Add" : "Masukkan",
     "Table options" : "Pengaturan Tabel",
+    "Sort" : "Urutkan",
+    "Default" : "Default",
     "Primary" : "Primer",
     "Secondary" : "Sekunder",
     "Line" : "Garis",
@@ -176,6 +178,7 @@
     "Data series" : "Seri data",
     "Vertical axis" : "Sumbu vertikal",
     "Color" : "Warna",
+    "Sort by" : "Urutan",
     "Create" : "Buat"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

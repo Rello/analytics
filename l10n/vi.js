@@ -35,6 +35,8 @@ OC.L10N.register(
     "Filter" : "Lọc",
     "Variables" : "Biến",
     "Add" : "Thêm",
+    "Ascending" : "Tăng dần",
+    "Descending" : "Giảm dần",
     "Chart options" : "Tuỳ chọn biểu đồ",
     "Primary" : "Chính",
     "Secondary" : "Phụ",

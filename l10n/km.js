@@ -19,6 +19,7 @@ OC.L10N.register(
     "Cancel" : "បោះបង់",
     "Variables" : "អញ្ញត្តិ",
     "Add" : "បញ្ចូល",
+    "Sort" : "តម្រៀប",
     "Chart options" : "ជម្រើសក្រាប",
     "Primary" : "ឯក",
     "Secondary" : "ទោ",
@@ -110,6 +111,7 @@ OC.L10N.register(
     "Copy link" : "ចម្លងតំណ",
     "Vertical axis" : "អ័ក្សឈរ",
     "Color" : "ព័ណ៌",
+    "Sort by" : "តម្រៀបដោយ",
     "Create" : "បង្កើត"
 },
 "nplurals=1; plural=0;");

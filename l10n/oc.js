@@ -12,6 +12,7 @@ OC.L10N.register(
     "OK" : "D’acòrdi",
     "Cancel" : "Anullar",
     "Add" : "Apondre",
+    "Sort" : "Triar",
     "Secondary" : "Segondari",
     "Line" : "Linha",
     "Overview" : "Vista d’ensemble",
@@ -86,6 +87,7 @@ OC.L10N.register(
     "Copy link" : "Copiar lo ligam",
     "Additional settings" : "Paramètres addicionals",
     "Color" : "Color",
+    "Sort by" : "Triar",
     "General information" : "Informacions generalas",
     "No Table" : "Cap de tablèu",
     "Create" : "Crear"

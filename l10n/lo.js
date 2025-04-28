@@ -5,6 +5,8 @@ OC.L10N.register(
     "OK" : "ຕົກລົງ",
     "Cancel" : "ຍົກເລີກ",
     "Add" : "ເພີ່ມ",
+    "Sort" : "ລຽງດຳດັບ",
+    "Default" : "ເລີ່ມຕົ້ນ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Delete folder" : "ລຶບໂຟນເດີ",
     "Add to favorites" : "ເພີ່ມລາຍການທີ່ມັກ",
@@ -36,6 +38,7 @@ OC.L10N.register(
     "Unshare" : "ຍົກເລີກການແບ່ງປັນ",
     "Password protection" : "ລະຫັດປ້ອງກັນ",
     "Copy link" : "ສຳເນົາລິງ",
+    "Sort by" : "ຈັດລຽງໂດຍ",
     "Create" : "ສ້າງ"
 },
 "nplurals=1; plural=0;");

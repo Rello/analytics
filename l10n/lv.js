@@ -41,6 +41,7 @@ OC.L10N.register(
     "Variables" : "Vērtības",
     "Add" : "Pievienot",
     "Table options" : "Tabulas iespējas",
+    "Sort" : "Kārtot",
     "Primary" : "Primāri",
     "Secondary" : "Sekundāri",
     "New dataset" : "Jauna datu kopa",
@@ -148,6 +149,7 @@ OC.L10N.register(
     "Copy link" : "Kopēt saiti",
     "Additional settings" : "Papildu iestatījumi",
     "Color" : "Krāsa",
+    "Sort by" : "Kārtot pēc",
     "Get more information" : "Iegūt vairāk informācijas",
     "Create" : "Izveidot"
 },

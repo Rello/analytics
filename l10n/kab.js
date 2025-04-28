@@ -7,6 +7,8 @@ OC.L10N.register(
     "Cancel" : "Sefsex",
     "Filter" : "Sizdeg",
     "Add" : "Rnu",
+    "Sort" : "Smizzwer",
+    "Default" : "Prédéfini(e)",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
     "Share" : "Bḍu",
@@ -35,6 +37,7 @@ OC.L10N.register(
     "Daily" : "S wass",
     "Hourly" : "S usrag",
     "Copy link" : "Nɣel aseɣwen",
+    "Sort by" : "Trier par",
     "Create" : "Snulfu-d"
 },
 "nplurals=2; plural=(n != 1);");

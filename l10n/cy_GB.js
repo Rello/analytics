@@ -6,6 +6,7 @@ OC.L10N.register(
     "OK" : "Iawn",
     "Cancel" : "Diddymu",
     "Add" : "Ychwanegu",
+    "Sort" : "Trefnu",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Rhannu",
@@ -41,6 +42,7 @@ OC.L10N.register(
     "Unshare" : "Dad-rannu",
     "Password protection" : "Password protection",
     "Copy link" : "Copïo dolen",
+    "Sort by" : "Trefnu yn ôl",
     "Create" : "Creu"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

@@ -11,6 +11,7 @@ OC.L10N.register(
     "OK" : "Bone",
     "Cancel" : "Nuligi",
     "Add" : "Aldoni",
+    "Sort" : "Ordigi",
     "Overview" : "Superrigardo",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Delete folder" : "Forigi dosierujon",
@@ -60,6 +61,7 @@ OC.L10N.register(
     "Copy link" : "Kopii ligilon",
     "Additional settings" : "Plia agordo",
     "Color" : "Koloro",
+    "Sort by" : "Ordigi laŭ",
     "Get more information" : "Pli da informoj",
     "Create" : "Krei"
 },

@@ -4,6 +4,7 @@
     "OK" : "OK",
     "Cancel" : "Ofbriechen",
     "Add" : "Derbäimaachen",
+    "Sort" : "Zortéieren",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Dossier läschen",
     "Add to favorites" : "Add to favorites",
@@ -37,6 +38,7 @@
     "Unshare" : "Net méi deelen",
     "Password protection" : "Password protection",
     "Copy link" : "Link kopéieren",
+    "Sort by" : "Zortéieren no",
     "Create" : "Erstellen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

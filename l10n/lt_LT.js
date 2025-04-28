@@ -16,6 +16,8 @@ OC.L10N.register(
     "Filter" : "Filtras",
     "Add" : "Pridėti",
     "Table options" : "Lentelės parinktys",
+    "Sort" : "Rikiuoti",
+    "Default" : "Numatytasis",
     "Overview" : "Apžvalga",
     "Remove from favorites" : "Šalinti iš mėgstamų",
     "Delete folder" : "Ištrinti aplanką",
@@ -85,6 +87,7 @@ OC.L10N.register(
     "Columns" : "Stulpeliai",
     "Additional settings" : "Papildomi nustatymai",
     "Color" : "Spalva",
+    "Sort by" : "Rikiuoti pagal",
     "Get more information" : "Gaukite daugiau informacijos",
     "Nextcloud forum" : "Nextcloud forumas",
     "Create" : "Sukurti"

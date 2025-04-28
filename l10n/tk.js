@@ -4,6 +4,8 @@ OC.L10N.register(
     "Delete" : "Pozmak",
     "OK" : "Bolýar",
     "Cancel" : "ýatyrmak",
+    "Sort" : "sortlamak",
+    "Default" : "Bellenen",
     "Add to favorites" : "Saýlananlara goşuň",
     "Share" : "Paýlaş",
     "Save" : "Saklamak",
