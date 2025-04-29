@@ -2,7 +2,7 @@
   "id": "dd2c11cd-d3fe-44b3-ab98-89561d3916e8",
   "version": "2.0",
   "name": "Selenium NC Analytics",
-  "url": "http://localhost:8030/",
+  "url": "http://localhost:8031/",
   "tests": [{
     "id": "76aecb95-a688-4add-ab2b-db736fcede58",
     "name": "71 Datasource: Git",
@@ -2685,11 +2685,11 @@
       "id": "de8d74a2-e802-4658-b20a-c9b02ffbe6a1",
       "comment": "",
       "command": "click",
-      "target": "css=li:nth-child(3) > #navigationMenuDelete > .icon-delete",
+      "target": "css=.open #navigationMenuDelete > span:nth-child(2)",
       "targets": [
-        ["css=li:nth-child(3) > #navigationMenuDelete > .icon-delete", "css:finder"],
-        ["xpath=(//a[@id='navigationMenuDelete']/span)[15]", "xpath:idRelative"],
-        ["xpath=//li[9]/div/div[2]/ul/li[3]/a/span", "xpath:position"]
+        ["css=.open #navigationMenuDelete > span:nth-child(2)", "css:finder"],
+        ["xpath=(//a[@id='navigationMenuDelete']/span[2])[25]", "xpath:idRelative"],
+        ["xpath=//li[18]/div/div[2]/ul/li[3]/a/span[2]", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -2829,7 +2829,7 @@
     }]
   }, {
     "id": "9833f9a7-630d-4ea4-890d-b84f0a2e3ca8",
-    "name": "22 Filter general",
+    "name": "21 Filter",
     "commands": [{
       "id": "e78dd293-0f55-423f-ad79-74285b348462",
       "comment": "",
@@ -2974,85 +2974,6 @@
       ],
       "value": ""
     }, {
-      "id": "76be5b20-d4d0-4ad8-9236-c2cb459b84f3",
-      "comment": "Open options menu",
-      "command": "click",
-      "target": "id=reportMenuIcon",
-      "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
-        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
-        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "a4699a56-f6e7-4d6e-9676-da66a2d9d645",
-      "comment": "",
-      "command": "click",
-      "target": "id=reportMenuDrilldown",
-      "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
-        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
-        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "1c4687fd-4e9d-4a45-ad42-8b370f35b8a9",
-      "comment": "remove column 2 drilldown",
-      "command": "click",
-      "target": "css=div:nth-child(3) > div > label",
-      "targets": [
-        ["css=div:nth-child(3) > div > label", "css:finder"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[3]/div[2]/label", "xpath:idRelative"],
-        ["xpath=//div[3]/div[2]/label", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "8e196a81-7f07-4622-8784-04cdb8f83559",
-      "comment": "",
-      "command": "click",
-      "target": "id=drilldownDialogGo",
-      "targets": [
-        ["id=drilldownDialogGo", "id"],
-        ["linkText=OK", "linkText"],
-        ["css=#drilldownDialogGo", "css:finder"],
-        ["xpath=//a[contains(text(),'OK')]", "xpath:link"],
-        ["xpath=//a[@id='drilldownDialogGo']", "xpath:attributes"],
-        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
-        ["xpath=//div[7]/div/div[2]/a", "xpath:position"],
-        ["xpath=//a[contains(.,'OK')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }, {
-      "id": "82f87b57-dffd-483a-86e7-9b123978adf8",
-      "comment": "",
-      "command": "waitForElementVisible",
-      "target": "id=reportSubHeader",
-      "targets": [
-        ["id=dataSubHeader", "id"],
-        ["css=#dataSubHeader", "css:finder"],
-        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
-        ["xpath=//h3", "xpath:position"],
-        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
-      ],
-      "value": "5000"
-    }, {
-      "id": "6104f398-3936-4f83-9bc4-0208102e4efd",
-      "comment": "column 2 should not be there",
-      "command": "assertNotText",
-      "target": "css=.dt-right:nth-child(2) > .dt-column-title",
-      "targets": [
-        ["css=.dt-right:nth-child(2) > .dt-column-title", "css:finder"],
-        ["xpath=//table[@id='tableContainer']/thead/tr/th[2]/span", "xpath:idRelative"],
-        ["xpath=//th[2]/span", "xpath:position"],
-        ["xpath=//span[contains(.,'Column 2')]", "xpath:innerText"]
-      ],
-      "value": "Column 2"
-    }, {
       "id": "e6c7df26-7027-41b4-a663-db7fd86326b5",
       "comment": "Open options menu",
       "command": "click",
@@ -3111,92 +3032,6 @@
         ["xpath=//td[contains(.,'Dimension 11')]", "xpath:innerText"]
       ],
       "value": ""
-    }, {
-      "id": "49e041f9-f6ab-43db-81b4-be37ca5ab459",
-      "comment": "Open options menu",
-      "command": "click",
-      "target": "id=reportMenuIcon",
-      "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
-        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
-        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "77f75cae-c7ae-421b-b417-36d0667cd18c",
-      "comment": "",
-      "command": "click",
-      "target": "id=reportMenuDrilldown",
-      "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
-        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
-        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "0fce80cf-46df-4f15-b1bb-f35cef85e29c",
-      "comment": "",
-      "command": "assertNotChecked",
-      "target": "xpath=//input[contains(@id,'drilldownColumn1')]",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "1042c9d9-399d-42f2-ba7d-1ac0d8bd8722",
-      "comment": "activate drilldown again",
-      "command": "click",
-      "target": "css=div:nth-child(3) > div > label",
-      "targets": [
-        ["css=div:nth-child(3) > div > label", "css:finder"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[3]/div[2]/label", "xpath:idRelative"],
-        ["xpath=//div[3]/div[2]/label", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "0680f926-d9e6-4631-b607-052dfa638ccd",
-      "comment": "",
-      "command": "click",
-      "target": "id=drilldownDialogGo",
-      "targets": [
-        ["id=drilldownDialogGo", "id"],
-        ["linkText=OK", "linkText"],
-        ["css=#drilldownDialogGo", "css:finder"],
-        ["xpath=//a[contains(text(),'OK')]", "xpath:link"],
-        ["xpath=//a[@id='drilldownDialogGo']", "xpath:attributes"],
-        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
-        ["xpath=//div[7]/div/div[2]/a", "xpath:position"],
-        ["xpath=//a[contains(.,'OK')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }, {
-      "id": "83d77fe7-e4b9-4fd3-89dd-39cae97b6543",
-      "comment": "",
-      "command": "waitForElementVisible",
-      "target": "id=reportSubHeader",
-      "targets": [
-        ["id=dataSubHeader", "id"],
-        ["css=#dataSubHeader", "css:finder"],
-        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
-        ["xpath=//h3", "xpath:position"],
-        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
-      ],
-      "value": "5000"
-    }, {
-      "id": "224e89ab-81a9-4d36-9503-452d1090ded0",
-      "comment": "column 2 should be there again",
-      "command": "assertText",
-      "target": "css=.dt-orderable-asc:nth-child(2) > .dt-column-title",
-      "targets": [
-        ["css=.dt-orderable-asc:nth-child(2) > .dt-column-title", "css:finder"],
-        ["xpath=//table[@id='tableContainer']/thead/tr/th[2]/span", "xpath:idRelative"],
-        ["xpath=//th[2]/span", "xpath:position"],
-        ["xpath=//span[contains(.,'Column 2')]", "xpath:innerText"]
-      ],
-      "value": "Column 2"
     }, {
       "id": "13848538-bd49-45a5-a3ef-918134b98826",
       "comment": "",
@@ -4262,11 +4097,11 @@
       "id": "865b83dc-b9c0-475c-a0b4-73aaf55773da",
       "comment": "",
       "command": "click",
-      "target": "css=div:nth-child(5) > div > div > label",
+      "target": "css=div:nth-child(6) label",
       "targets": [
-        ["css=div:nth-child(5) > div > div > label", "css:finder"],
-        ["xpath=//div[@id='wizardNewVisualPage']/div/div/div[5]/div/div[2]/label", "xpath:idRelative"],
-        ["xpath=//div[5]/div/div[2]/label", "xpath:position"],
+        ["css=div:nth-child(6) label", "css:finder"],
+        ["xpath=//div[@id='wizardNewVisualPage']/div/div/div[6]/div/div[2]/label", "xpath:idRelative"],
+        ["xpath=//div[6]/div/div[2]/label", "xpath:position"],
         ["xpath=//label[contains(.,'Bar')]", "xpath:innerText"]
       ],
       "value": ""
@@ -4479,9 +4314,9 @@
       "id": "2e048ea8-0197-4333-b043-cba53da0c342",
       "comment": "",
       "command": "click",
-      "target": "css=.notifications-button__icon > path:nth-child(1)",
+      "target": "css=.notifications-button__icon > svg",
       "targets": [
-        ["css=.notifications-button__icon > path:nth-child(1)", "css:finder"]
+        ["css=.notifications-button__icon > svg", "css:finder"]
       ],
       "value": ""
     }, {
@@ -4500,11 +4335,11 @@
       "id": "6a780078-58f2-486a-95dd-46250c17740e",
       "comment": "",
       "command": "click",
-      "target": "css=.dismiss-all",
+      "target": "css=.button-vue__text:nth-child(2)",
       "targets": [
-        ["css=.dismiss-all", "css:finder"],
-        ["xpath=//header[@id='header']/div[2]/div/div[2]/ul/li[2]/div", "xpath:idRelative"],
-        ["xpath=//li[2]/div", "xpath:position"]
+        ["css=.button-vue__text:nth-child(2)", "css:finder"],
+        ["xpath=//div[@id='header-menu-notifications']/div/div/div/button/span/span[2]", "xpath:idRelative"],
+        ["xpath=//span/span[2]", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -5425,12 +5260,12 @@
         ["xpath=//ul[@id='reportMenuSubTranslate']/li[2]/span/select", "xpath:idRelative"],
         ["xpath=//select", "xpath:position"]
       ],
-      "value": "value=DE"
+      "value": "value=de"
     }, {
       "id": "bd52e6c3-97c1-4c7e-b2fa-eb7ff80aa265",
       "comment": "",
       "command": "pause",
-      "target": "2000",
+      "target": "5000",
       "targets": [],
       "value": ""
     }, {
@@ -5460,7 +5295,7 @@
     }]
   }, {
     "id": "f9235cd3-a664-494b-8c32-6dae9ac52f66",
-    "name": "23 Filter Table/Chart only",
+    "name": "24 Filter Table/Chart only",
     "commands": [{
       "id": "52aae10d-c1f6-4366-97ee-7c2acee0b52d",
       "comment": "",
@@ -6303,6 +6138,437 @@
       ],
       "value": ""
     }]
+  }, {
+    "id": "957d82f9-2185-410d-8724-dcd304b8c84e",
+    "name": "22 Drilldown",
+    "commands": [{
+      "id": "cd3072b8-fdb9-4fbc-95c7-35d3aa43151e",
+      "comment": "",
+      "command": "open",
+      "target": "/apps/analytics",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7e639363-532a-41a7-9b2c-fb490fa8ada6",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Testreport",
+      "targets": [
+        ["linkText=Neu", "linkText"],
+        ["css=li:nth-child(4) > .icon-projects", "css:finder"],
+        ["xpath=//a[contains(text(),'Neu')]", "xpath:link"],
+        ["xpath=//ul[@id='navigationDatasets']/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#/r/22')]", "xpath:href"],
+        ["xpath=//div[3]/div/ul/li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Neu')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "199344b0-c9a9-47bd-b538-d77fdc549da1",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "f2329913-2f83-4b26-8e73-52f93a6a76a5",
+      "comment": "Open options menu",
+      "command": "click",
+      "target": "id=reportMenuIcon",
+      "targets": [
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9a3df7ab-c9de-44dc-8099-2dc62d69f04c",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportMenuDrilldown",
+      "targets": [
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f0a9e5dc-4553-47e2-b555-7e832f15ebe1",
+      "comment": "remove column 2 drilldown",
+      "command": "click",
+      "target": "css=div:nth-child(3) > div > label",
+      "targets": [
+        ["css=div:nth-child(3) > div > label", "css:finder"],
+        ["xpath=//div[@id='analytics_dialog']/div/div[3]/div[2]/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/label", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c3473f48-9c1a-4b0a-8096-0de045179ccf",
+      "comment": "",
+      "command": "click",
+      "target": "id=drilldownDialogGo",
+      "targets": [
+        ["id=drilldownDialogGo", "id"],
+        ["linkText=OK", "linkText"],
+        ["css=#drilldownDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'OK')]", "xpath:link"],
+        ["xpath=//a[@id='drilldownDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'OK')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8b62e7bc-9313-4daf-b068-abb75563dfcd",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "5ea2bde9-a201-4faa-a473-bd0475963336",
+      "comment": "column 2 should not be there",
+      "command": "assertNotText",
+      "target": "css=.dt-right:nth-child(2) > .dt-column-title",
+      "targets": [
+        ["css=.dt-right:nth-child(2) > .dt-column-title", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/thead/tr/th[2]/span", "xpath:idRelative"],
+        ["xpath=//th[2]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Column 2')]", "xpath:innerText"]
+      ],
+      "value": "Column 2"
+    }, {
+      "id": "40e50b13-2dc6-4f95-ae55-44bfbb77ed35",
+      "comment": "Open options menu",
+      "command": "click",
+      "target": "id=reportMenuIcon",
+      "targets": [
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "49592ca8-a6d5-4ba2-8640-4bf2679f8786",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportMenuDrilldown",
+      "targets": [
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "cafc2c97-c9ab-4fc7-a0a0-ad3f3774ebd7",
+      "comment": "",
+      "command": "assertNotChecked",
+      "target": "xpath=//input[contains(@id,'drilldownColumn1')]",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a69c320e-ca48-4091-9d60-cacba4975766",
+      "comment": "activate drilldown again",
+      "command": "click",
+      "target": "css=div:nth-child(3) > div > label",
+      "targets": [
+        ["css=div:nth-child(3) > div > label", "css:finder"],
+        ["xpath=//div[@id='analytics_dialog']/div/div[3]/div[2]/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/label", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fc1bef8d-7bfb-4dd2-b2a6-251ffb233ad3",
+      "comment": "",
+      "command": "click",
+      "target": "id=drilldownDialogGo",
+      "targets": [
+        ["id=drilldownDialogGo", "id"],
+        ["linkText=OK", "linkText"],
+        ["css=#drilldownDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'OK')]", "xpath:link"],
+        ["xpath=//a[@id='drilldownDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'OK')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b3753573-1c0c-4f01-a9d1-dee4746e8767",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "16a24dd8-cad3-458b-b320-6a56f30a2a96",
+      "comment": "column 2 should be there again",
+      "command": "assertText",
+      "target": "css=.dt-orderable-asc:nth-child(2) > .dt-column-title",
+      "targets": [
+        ["css=.dt-orderable-asc:nth-child(2) > .dt-column-title", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/thead/tr/th[2]/span", "xpath:idRelative"],
+        ["xpath=//th[2]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Column 2')]", "xpath:innerText"]
+      ],
+      "value": "Column 2"
+    }, {
+      "id": "e06ff444-cb70-4e59-99f1-7164f076c1ba",
+      "comment": "",
+      "command": "click",
+      "target": "id=saveIcon",
+      "targets": [
+        ["id=saveIcon", "id"],
+        ["css=#saveIcon", "css:finder"],
+        ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='optionContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "ee86fff5-a6a1-4661-bbaf-116ba8654a63",
+    "name": "23 Sort",
+    "commands": [{
+      "id": "1059ad80-4c8b-47f5-bbbe-7232aa97e37a",
+      "comment": "",
+      "command": "open",
+      "target": "/apps/analytics",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6d7f5f52-c562-431c-8b08-fde7c9117afd",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Testreport",
+      "targets": [
+        ["linkText=Neu", "linkText"],
+        ["css=li:nth-child(4) > .icon-projects", "css:finder"],
+        ["xpath=//a[contains(text(),'Neu')]", "xpath:link"],
+        ["xpath=//ul[@id='navigationDatasets']/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#/r/22')]", "xpath:href"],
+        ["xpath=//div[3]/div/ul/li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Neu')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "51088473-4beb-449b-bb29-64a04d55eb12",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "57371698-9c86-4b92-8c6d-55381e56b3eb",
+      "comment": "Open options menu",
+      "command": "click",
+      "target": "id=reportMenuIcon",
+      "targets": [
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d61755c2-5886-43f6-9623-1bc00e73e4bb",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportMenuSort",
+      "targets": [
+        ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
+        ["xpath=//li[2]/button/span[2]", "xpath:position"],
+        ["xpath=//span[contains(.,'Sort')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2e1ce2ec-d216-4344-83ca-0b5b17b73a55",
+      "comment": "",
+      "command": "select",
+      "target": "id=sortOptionDimension",
+      "targets": [
+        ["id=sortOptionDimension", "id"],
+        ["css=#sortOptionDimension", "css:finder"],
+        ["xpath=//select[@id='sortOptionDimension']", "xpath:attributes"],
+        ["xpath=//div[@id='sortOptionsTable']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div/select", "xpath:position"]
+      ],
+      "value": "label=Value"
+    }, {
+      "id": "6e4fe3a2-7d0f-48a8-90ae-a52c1a149e60",
+      "comment": "",
+      "command": "select",
+      "target": "id=sortOptionDirection",
+      "targets": [
+        ["id=sortOptionDimension", "id"],
+        ["css=#sortOptionDimension", "css:finder"],
+        ["xpath=//select[@id='sortOptionDimension']", "xpath:attributes"],
+        ["xpath=//div[@id='sortOptionsTable']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div/select", "xpath:position"]
+      ],
+      "value": "label=Descending\\n"
+    }, {
+      "id": "0fa21243-c6e7-4d98-bd0a-cdcc26062e75",
+      "comment": "",
+      "command": "click",
+      "target": "id=analyticsDialogBtnGo",
+      "targets": [
+        ["id=drilldownDialogGo", "id"],
+        ["linkText=OK", "linkText"],
+        ["css=#drilldownDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'OK')]", "xpath:link"],
+        ["xpath=//a[@id='drilldownDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'OK')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e85f727d-f84c-4a7b-8e72-210ced368ccf",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "bd7ebcfc-4f87-4930-af41-6cd72f1b80b5",
+      "comment": "value 2 should be on top",
+      "command": "assertText",
+      "target": "css=tbody > tr:nth-child(1) > .dt-type-numeric",
+      "targets": [
+        ["css=tbody > tr:nth-child(1) > .dt-type-numeric", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/tbody/tr/td[3]", "xpath:idRelative"],
+        ["xpath=//td[3]", "xpath:position"],
+        ["xpath=//td[contains(.,'2')]", "xpath:innerText"]
+      ],
+      "value": "2"
+    }, {
+      "id": "e222d8bd-e090-4094-a23f-77feeaa2b02e",
+      "comment": "Open options menu",
+      "command": "click",
+      "target": "id=reportMenuIcon",
+      "targets": [
+        ["id=reportMenuDrilldown", "id"],
+        ["css=#reportMenuDrilldown", "css:finder"],
+        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b50e06ed-159f-44da-90bb-850a1b36036f",
+      "comment": "",
+      "command": "click",
+      "target": "id=reportMenuSort",
+      "targets": [
+        ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
+        ["xpath=//li[2]/button/span[2]", "xpath:position"],
+        ["xpath=//span[contains(.,'Sort')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "eee3194a-706b-45d1-9d97-043152604cee",
+      "comment": "",
+      "command": "select",
+      "target": "id=sortOptionDirection",
+      "targets": [
+        ["id=sortOptionDimension", "id"],
+        ["css=#sortOptionDimension", "css:finder"],
+        ["xpath=//select[@id='sortOptionDimension']", "xpath:attributes"],
+        ["xpath=//div[@id='sortOptionsTable']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div/select", "xpath:position"]
+      ],
+      "value": "label=Default"
+    }, {
+      "id": "73839912-b4ce-4049-8fe0-d767654b51d1",
+      "comment": "",
+      "command": "click",
+      "target": "id=analyticsDialogBtnGo",
+      "targets": [
+        ["id=drilldownDialogGo", "id"],
+        ["linkText=OK", "linkText"],
+        ["css=#drilldownDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'OK')]", "xpath:link"],
+        ["xpath=//a[@id='drilldownDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'OK')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6d5b2a56-1b48-4e45-8993-c2408eb5fcbe",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "5449faf6-8631-46e6-a424-63239ec38d37",
+      "comment": "value 1,1 should be on top",
+      "command": "assertText",
+      "target": "css=tbody > tr:nth-child(1) > .dt-type-numeric",
+      "targets": [
+        ["css=tbody > tr:nth-child(1) > .dt-type-numeric", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/tbody/tr/td[3]", "xpath:idRelative"],
+        ["xpath=//td[3]", "xpath:position"],
+        ["xpath=//td[contains(.,'2')]", "xpath:innerText"]
+      ],
+      "value": "1,1"
+    }]
   }],
   "suites": [{
     "id": "a1d58086-f3d1-4a78-9485-4f571193f568",
@@ -6310,7 +6576,7 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["b32c2c90-64d1-4269-8133-c138a30246c1", "40f4f326-9374-44f8-b6f4-2f0750090edf", "cbabaf30-e391-4527-a43c-f8df729dc796", "481aca91-1337-422f-8748-81aa12f3dfc7", "f3d8bd06-309e-4c54-a5ca-4604aeda4e2c", "9833f9a7-630d-4ea4-890d-b84f0a2e3ca8", "f9235cd3-a664-494b-8c32-6dae9ac52f66", "f781ba01-4b2a-4198-8d19-4cdc733398aa", "a8931d78-a1d9-4b72-a548-d4951c309d4a", "0c055c34-1395-4a0b-9537-c3ce2f9d8337", "958b783e-1ac4-4f7e-885b-182a630fb95e", "fe7f1a7d-80a7-4cbd-b13d-95a6e28e7f83", "6d5e0b62-65c3-4d9f-b435-dc34a9c24433", "3ae1835d-71c6-43a1-96ac-e0716960f291", "76aecb95-a688-4add-ab2b-db736fcede58", "7ff62a8a-dbd8-4744-b3c2-f8c5a5efb37b", "4ece2116-edb7-40b3-9f7f-5079e9768219", "55628954-1c73-431c-ae25-2e45469c7883"]
+    "tests": ["b32c2c90-64d1-4269-8133-c138a30246c1", "40f4f326-9374-44f8-b6f4-2f0750090edf", "cbabaf30-e391-4527-a43c-f8df729dc796", "481aca91-1337-422f-8748-81aa12f3dfc7", "f3d8bd06-309e-4c54-a5ca-4604aeda4e2c", "9833f9a7-630d-4ea4-890d-b84f0a2e3ca8", "957d82f9-2185-410d-8724-dcd304b8c84e", "ee86fff5-a6a1-4661-bbaf-116ba8654a63", "f9235cd3-a664-494b-8c32-6dae9ac52f66", "91b7c9ef-7dae-4627-9920-1bdd21a96958", "f781ba01-4b2a-4198-8d19-4cdc733398aa", "a8931d78-a1d9-4b72-a548-d4951c309d4a", "9a96bf9b-852a-4707-981e-8bc87cfa6243", "0c055c34-1395-4a0b-9537-c3ce2f9d8337", "958b783e-1ac4-4f7e-885b-182a630fb95e", "fe7f1a7d-80a7-4cbd-b13d-95a6e28e7f83", "6d5e0b62-65c3-4d9f-b435-dc34a9c24433", "3ae1835d-71c6-43a1-96ac-e0716960f291", "76aecb95-a688-4add-ab2b-db736fcede58", "7ff62a8a-dbd8-4744-b3c2-f8c5a5efb37b", "4ece2116-edb7-40b3-9f7f-5079e9768219", "55628954-1c73-431c-ae25-2e45469c7883"]
   }, {
     "id": "e7d41dd2-a6af-41b0-8ccc-a7b3dfd52881",
     "name": "Cleanup",
@@ -6319,7 +6585,7 @@
     "timeout": 300,
     "tests": ["4d10c523-64cc-4d59-9afc-d6ac6d0fc4ec", "233490f0-b006-487b-9750-3071f90ac644", "5b2b0dbd-aaf1-467f-bcd4-db2eed694ef7"]
   }],
-  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/", "http://localhost:8130/", "http://localhost:8030/"],
+  "urls": ["https://nc17/", "https://nc18/", "https://nc19/", "https://nc20/", "https://nc21/", "https://nc22/", "https://nc23/", "https://nc23/nextcloud", "https://nc24/", "https://nc25/", "http://localhost:8080//", "http://localhost:8080/", "http://localhost:8081/", "http://localhost:8085/", "http://localhost:8027/", "http://localhost:8028/", "http://localhost:8130/", "http://localhost:8030/", "http://localhost:8031/"],
   "plugins": [{
     "id": "fbnkflkahhlmhdgkddaafgnnokifobik",
     "name": "Applitools",
