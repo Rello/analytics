@@ -7,6 +7,7 @@ OC.L10N.register(
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
     "Add" : "Əlavə etmək",
+    "Sort" : "Çeşidləmək",
     "Overview" : "İcmal",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Qovluğu sil",
@@ -46,6 +47,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
     "Additional settings" : "Əlavə parametrlər",
+    "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },
 "nplurals=2; plural=(n != 1);");
