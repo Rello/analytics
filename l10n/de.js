@@ -62,6 +62,7 @@ OC.L10N.register(
     "Default" : "Standard",
     "Ascending" : "Aufsteigend",
     "Descending" : "Absteigend",
+    "Default sorting can be set for each dimension." : "Für jede Dimension kann eine Standardsortierung festgelegt werden.",
     "Chart options" : "Diagrammoptionen",
     "Primary" : "Primär",
     "Secondary" : "Sekundär",

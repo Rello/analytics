@@ -62,6 +62,7 @@ OC.L10N.register(
     "Default" : "Подразумевано",
     "Ascending" : "растуће",
     "Descending" : "опадајуће",
+    "Default sorting can be set for each dimension." : "Подразумевано сортирање може да се постави за сваку димензију.",
     "Chart options" : "Опције графика",
     "Primary" : "Примарна",
     "Secondary" : "Секундарна",
