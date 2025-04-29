@@ -10,7 +10,7 @@ namespace OCA\Analytics\AppInfo;
 
 use OCA\Analytics\ContextChat\ContentProvider;
 use OCA\Analytics\Dashboard\Widget;
-use OCA\Analytics\Flow\FlowOperation;
+use OCA\Analytics\Flow\RegisterOperationsListener;
 use OCA\Analytics\Listener\UserDeletedListener;
 use OCA\Analytics\ShareReview\ShareReviewListener;
 use OCA\Analytics\Notification\Notifier;
@@ -44,7 +44,7 @@ class Application extends App implements IBootstrap {
 		// file actions are not working at the moment
 		// $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
-		$context->registerEventListener(RegisterOperationsEvent::class, FlowOperation::class);
+		$context->registerEventListener(RegisterOperationsEvent::class, RegisterOperationsListener::class);
 		$context->registerEventListener(ContentProviderRegisterEvent::class, ContentProvider::class);
 		$context->registerEventListener(SourceEvent::class, ShareReviewListener::class);
 

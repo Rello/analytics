@@ -11,6 +11,8 @@
 - incorrect aggregation of Nextcloud Table data
 - dynamic font color in colored input fields
 - aggregated values not shown correctly
+- Undefined array key "operation" FlowOperation #440
+
 
 ## 5.3.0 - 2025-03-20
 ### Added
