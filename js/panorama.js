@@ -167,6 +167,7 @@ OCA.Analytics.Panorama = {
 
         document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
+            document.getElementById('layoutModalGrid').innerHTML = '';
         });
 
         OCA.Analytics.Backend.getReports();
