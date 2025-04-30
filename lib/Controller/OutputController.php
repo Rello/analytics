@@ -258,16 +258,13 @@ class OutputController extends Controller {
 	 */
 	private function sortByColumn(array $data, string $filterOptions): array {
 		$filterOptions = json_decode($filterOptions, true);
-		$this->logger->info('trying to sort the data');
 		if (!isset($filterOptions['sort'])) {
 			return $data;
 		}
-		$this->logger->info('continuiing');
 
 		// Normalize direction
 		$direction = strtoupper($filterOptions['sort']['direction']);
 		$colIndex = $filterOptions['sort']['dimension'];
-		$this->logger->info($direction . ' ' . $colIndex);
 
 		usort($data, function (array $a, array $b) use ($colIndex, $direction) {
 			// If either row doesn't have that column, treat it as equal
