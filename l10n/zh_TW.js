@@ -62,6 +62,7 @@ OC.L10N.register(
     "Default" : "預設",
     "Ascending" : "遞增",
     "Descending" : "遞減",
+    "Default sorting can be set for each dimension." : "可為每個維度設定預設排序。",
     "Chart options" : "圖表選項",
     "Primary" : "主要",
     "Secondary" : "次要",

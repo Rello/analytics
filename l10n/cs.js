@@ -62,6 +62,7 @@ OC.L10N.register(
     "Default" : "Výchozí",
     "Ascending" : "Vzestupně",
     "Descending" : "Sestupně",
+    "Default sorting can be set for each dimension." : "Výchozí řazení je možné nastavit pro každý rozměr.",
     "Chart options" : "Předvolby pro graf",
     "Primary" : "Hlavní",
     "Secondary" : "Sekundární",
