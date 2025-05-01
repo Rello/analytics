@@ -734,6 +734,59 @@
       ],
       "value": ""
     }, {
+      "id": "ce44f107-70f2-4586-b272-2c646a69d4b5",
+      "comment": "",
+      "command": "type",
+      "target": "id=DataDimension1",
+      "targets": [
+        ["id=DataDimension1", "id"],
+        ["css=#tableData #DataDimension1", "css:finder"],
+        ["xpath=//input[@id='DataDimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='tableData']/div[2]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": "komma, string"
+    }, {
+      "id": "721c6584-987f-43db-8db8-659c62fe042d",
+      "comment": "",
+      "command": "type",
+      "target": "id=DataDimension2",
+      "targets": [
+        ["id=DataDimension2", "id"],
+        ["css=#tableData #DataDimension2", "css:finder"],
+        ["xpath=//input[@id='DataDimension2']", "xpath:attributes"],
+        ["xpath=//div[@id='tableData']/div[2]/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div[2]/input", "xpath:position"]
+      ],
+      "value": "123"
+    }, {
+      "id": "99661b97-b563-4b05-b343-aec53b8f2ccd",
+      "comment": "",
+      "command": "type",
+      "target": "id=DataValue",
+      "targets": [
+        ["id=DataDimension1", "id"],
+        ["css=#tableData #DataDimension1", "css:finder"],
+        ["xpath=//input[@id='DataDimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='tableData']/div[2]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": "1"
+    }, {
+      "id": "6d1552b1-12d7-456d-8ce4-f7d4d3860be4",
+      "comment": "",
+      "command": "click",
+      "target": "id=updateDataButton",
+      "targets": [
+        ["id=updateDataButton", "id"],
+        ["css=#tableData > #updateDataButton", "css:finder"],
+        ["xpath=//button[@id='updateDataButton']", "xpath:attributes"],
+        ["xpath=//div[@id='tableData']/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save data')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
       "id": "66840324-7f65-4580-98a0-94820d4b4946",
       "comment": "",
       "command": "waitForElementPresent",
@@ -937,13 +990,8 @@
       "id": "c0c22ad3-72c6-4c0f-9abe-ea6da4faea6a",
       "comment": "",
       "command": "assertElementNotPresent",
-      "target": "xpath=//table[@id='tableContainer']/tbody/tr[4]/td",
-      "targets": [
-        ["css=.even > .sorting_1", "css:finder"],
-        ["xpath=//table[@id='tableContainer']/tbody/tr[2]/td", "xpath:idRelative"],
-        ["xpath=//tr[2]/td", "xpath:position"],
-        ["xpath=//td[contains(.,'Dimension 11')]", "xpath:innerText"]
-      ],
+      "target": "xpath=//table[@id='tableContainer']/tbody/tr[5]/td[3]",
+      "targets": [],
       "value": ""
     }]
   }, {
@@ -2890,7 +2938,7 @@
       "id": "10ca2a08-dc9c-4fc2-b13e-fb13d4b658ca",
       "comment": "",
       "command": "assertText",
-      "target": "id=Dimension 11",
+      "target": "id='Dimension 11'",
       "targets": [
         ["id=Dimension 11", "id"],
         ["css=#Dimension\\ 11", "css:finder"],
@@ -3084,6 +3132,133 @@
         ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
         ["xpath=//div[@id='optionContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "95219758-de4a-480c-8333-ecc17c1e8131",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "05b04dd6-7a12-4595-89db-3ce89b022e77",
+      "comment": "Open filter dialog",
+      "command": "click",
+      "target": "id=addFilterIcon",
+      "targets": [
+        ["id=addFilterIcon", "id"],
+        ["css=#addFilterIcon", "css:finder"],
+        ["xpath=//div[@id='addFilterIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='filterContainer']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "dd4fe3fc-2668-4d9a-9275-c4111bf639a9",
+      "comment": "",
+      "command": "select",
+      "target": "id=filterDialogOption",
+      "targets": [
+        ["id=filterDialogOption", "id"],
+        ["css=#filterDialogOption", "css:finder"],
+        ["xpath=//select[@id='filterDialogOption']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics_dialog']/div[2]/div[2]/div[3]/select", "xpath:idRelative"],
+        ["xpath=//div[3]/select", "xpath:position"]
+      ],
+      "value": "label=list of values"
+    }, {
+      "id": "01e1e2e0-03dd-4245-844f-54713af5ad07",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogValue",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8306fc84-b132-40ce-b984-f2c21da3bde6",
+      "comment": "",
+      "command": "assertText",
+      "target": "id='komma, string'",
+      "targets": [
+        ["id=Dimension 11", "id"],
+        ["css=#Dimension\\ 11", "css:finder"],
+        ["xpath=//li[@id='Dimension 11']", "xpath:attributes"],
+        ["xpath=//ul[@id='tmpList']/li[2]", "xpath:idRelative"],
+        ["xpath=//div[4]/ul/li[2]", "xpath:position"],
+        ["xpath=//li[contains(.,'Dimension 11')]", "xpath:innerText"]
+      ],
+      "value": "komma, string"
+    }, {
+      "id": "a875a4c4-7dc9-4542-9356-046f41db91b7",
+      "comment": "",
+      "command": "type",
+      "target": "id=filterDialogValue",
+      "targets": [
+        ["id=filterDialogValue", "id"],
+        ["css=#filterDialogValue", "css:finder"],
+        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[5]/input", "xpath:idRelative"],
+        ["xpath=//div[5]/input", "xpath:position"]
+      ],
+      "value": "'komma, string'"
+    }, {
+      "id": "c6023f5c-c3f2-4eab-9800-c98d063454c7",
+      "comment": "",
+      "command": "click",
+      "target": "id=filterDialogGo",
+      "targets": [
+        ["id=filterDialogGo", "id"],
+        ["linkText=Add", "linkText"],
+        ["css=#filterDialogGo", "css:finder"],
+        ["xpath=//a[contains(text(),'Add')]", "xpath:link"],
+        ["xpath=//a[@id='filterDialogGo']", "xpath:attributes"],
+        ["xpath=//div[@id='buttons']/a", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "312c8d20-e267-4d1e-aaf7-de68b4492438",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=reportSubHeader",
+      "targets": [
+        ["id=dataSubHeader", "id"],
+        ["css=#dataSubHeader", "css:finder"],
+        ["xpath=//h3[@id='dataSubHeader']", "xpath:attributes"],
+        ["xpath=//div[@id='analytics-content']/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Subheader')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "fe6ea288-440c-4c80-9b68-40a0ca615bc2",
+      "comment": "\"komma, string\" should be there",
+      "command": "assertText",
+      "target": "xpath=//table[@id='tableContainer']/tbody/tr/td",
+      "targets": [
+        ["css=.sorting_1", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/tbody/tr/td", "xpath:idRelative"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'Dimension 1')]", "xpath:innerText"]
+      ],
+      "value": "komma, string"
+    }, {
+      "id": "817e32d6-b29f-47b9-ae7b-0425c9913deb",
+      "comment": "second row should not be there",
+      "command": "assertElementNotPresent",
+      "target": "xpath=//table[@id='tableContainer']/tbody/tr[4]/td",
+      "targets": [
+        ["css=.even > .sorting_1", "css:finder"],
+        ["xpath=//table[@id='tableContainer']/tbody/tr[2]/td", "xpath:idRelative"],
+        ["xpath=//tr[2]/td", "xpath:position"],
+        ["xpath=//td[contains(.,'Dimension 11')]", "xpath:innerText"]
       ],
       "value": ""
     }]
