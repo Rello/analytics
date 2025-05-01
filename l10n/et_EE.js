@@ -108,6 +108,7 @@ OC.L10N.register(
     "Open documentation" : "Ava dokumentatsioon",
     "Update" : "Uuenda",
     "Export" : "Ekspordi",
+    "Nextcloud Assistant" : "Nextcloudi Abiline",
     "Description" : "Kirjeldus",
     "Import" : "Impordi",
     "Selection" : "Valik",
