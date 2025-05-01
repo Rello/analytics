@@ -3,6 +3,7 @@
 ### Fixed
 - fix warning for importing less than 3 columns
 - new Panorama page button not working
+- Filter not working when text has "," #441
 
 ## 5.4.0 - 2025-04-29
 ### Added

@@ -274,16 +274,21 @@ class DatasourceController extends Controller {
 		if (isset($options['filter'])) {
 			foreach ($options['filter'] as $key => $value) {
 				$filterValue = $value['value'];
+				$filterValueNoQuotes = trim($value['value'], "'");
 				$filterOption = $value['option'];
 				$filtered = array();
 
 				foreach ($data['data'] as $record) {
-					if (($filterOption === 'EQ' && $record[$key] === $filterValue) || ($filterOption === 'GT' && $record[$key] > $filterValue) || ($filterOption === 'LT' && $record[$key] < $filterValue) || ($filterOption === 'LIKE' && strpos($record[$key], $filterValue) !== false)) {
-						array_push($filtered, $record);
+					if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && strpos($record[$key], $filterValueNoQuotes) !== false)) {
+						$filtered[] = $record;
 					} else if ($filterOption === 'IN') {
-						$filterValues = explode(',', $filterValue);
-						if (in_array($record[$key], $filterValues)) {
-							array_push($filtered, $record);
+						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
+						$valuesArray = array_map(function($v) {
+							return trim($v, " '");
+						}, $matches[0]);
+
+						if (in_array($record[$key], $valuesArray)) {
+							$filtered[] = $record;
 						}
 					}
 				}

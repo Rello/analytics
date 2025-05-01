@@ -150,7 +150,25 @@ class StorageMapper
         // add the where clauses depending on the filter selection of the
         if (isset($options['filter'])) {
             foreach ($options['filter'] as $key => $value) {
-                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
+				$valueNoQuotes = trim($value['value'], "'");
+				if ($value['option'] === 'EQ') {
+					$sql->andWhere($sql->expr()->eq($key, $sql->createNamedParameter($valueNoQuotes)));
+				} elseif ($value['option'] === 'GT') {
+					$sql->andWhere($sql->expr()->gt($key, $sql->createNamedParameter($valueNoQuotes)));
+				} elseif ($value['option'] === 'LT') {
+					$sql->andWhere($sql->expr()->lt($key, $sql->createNamedParameter($valueNoQuotes)));
+				} elseif ($value['option'] === 'IN') {
+					// Use regex to split by comma or semicolon, keeping quoted strings together
+					preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value['value'], $matches);
+					$valuesArray = array_map(function($v) {
+						return trim($v, " '");
+					}, $matches[0]);
+
+					$sql->andWhere($sql->expr()->in($key, $sql->createParameter('inValues')));
+					$sql->setParameter('inValues', $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
+				} elseif ($value['option'] === 'LIKE') {
+					$sql->andWhere($sql->expr()->like($key, $sql->createNamedParameter('%' . $valueNoQuotes . '%')));
+				}
             }
         }
 

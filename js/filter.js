@@ -227,7 +227,7 @@ OCA.Analytics.Filter = {
 
         // Set option and value
         const optionValue = document.getElementById('filterDialogOption').value;
-        const filterValue = document.getElementById('filterDialogValue').value.replace(', ', ',');
+        const filterValue = document.getElementById('filterDialogValue').value; //.replace(', ', ',');
 
         filterOptions.filter[dimension].option = optionValue;
         filterOptions.filter[dimension].value = filterValue;
