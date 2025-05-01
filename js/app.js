@@ -520,7 +520,7 @@ OCA.Analytics.UI = {
         let listCountMax = 4;
         for (let item of listValues) {
             let li = document.createElement('li');
-            li.id = "'" + item + "'";
+            li.id = /\s/.test(item) ? `'${item}'` : item;;
             li.innerText = item;
             li.title = item;
             listCount > listCountMax ? li.style.display = 'none' : li.style.display = '';
@@ -589,7 +589,7 @@ OCA.Analytics.UI = {
 
         // If the click is inside the list and the target is an LI
         if (isClickInside && event.target.tagName === 'LI') {
-            inputField.value = event.target.textContent;
+            inputField.value = event.target.id;
             OCA.Analytics.UI.hideDropDownList();
         }
         // If the click is outside the list, hide the list

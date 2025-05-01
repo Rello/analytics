@@ -170,7 +170,7 @@ class OutputController extends Controller {
 		}
 
 		// sort the data by a given column
-		if ($filterOptions) {
+		if ($filterOptions && isset($result['data'])) {
 			$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
 		}
 
