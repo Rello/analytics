@@ -62,6 +62,7 @@ OC.L10N.register(
     "Default" : "Réamhshocrú",
     "Ascending" : "Ag dul suas",
     "Descending" : "íslitheach",
+    "Default sorting can be set for each dimension." : "Is féidir sórtáil réamhshocraithe a shocrú do gach toise.",
     "Chart options" : "Roghanna cairteacha",
     "Primary" : "Príomha",
     "Secondary" : "Tánaisteach",
