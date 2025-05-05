@@ -83,6 +83,7 @@ OC.L10N.register(
     "View changelog" : "Vaata muudatuste logi",
     "Search" : "Otsi",
     "Total" : "Kokku",
+    "External" : "Väline",
     "Yes" : "Jah",
     "No" : "Ei",
     "More options" : "Täiendavad valikud",
