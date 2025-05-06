@@ -364,7 +364,7 @@ OC.L10N.register(
     "Data series" : "Datenreihe",
     "Vertical axis" : "Vertikale Achse",
     "Color" : "Farbe",
-    "Sort by" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Sort by" : "Sortieren nach",
     "Direction" : "Richtung",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics macht deine Daten sichtbar und unterstützt bei deren Analyse - von Finanzzahlen bis zu IoT-Protokollen.",
     "Give your numbers a meaning." : "Gib deinen Zahlen eine Bedeutung.",
