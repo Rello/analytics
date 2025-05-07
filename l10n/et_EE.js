@@ -59,6 +59,7 @@ OC.L10N.register(
     "Descending" : "Kahanevalt",
     "Default sorting can be set for each dimension." : "Iga dimensiooni jaoks saad määrata vaikimisi järjestuse.",
     "Line" : "Joon",
+    "Bar" : "Baar",
     "Funnel" : "Lehterjoonis",
     "Overview" : "Ülevaade",
     "Reports" : "Aruanded",
