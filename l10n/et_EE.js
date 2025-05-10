@@ -89,6 +89,7 @@ OC.L10N.register(
     "No" : "Ei",
     "More options" : "Täiendavad valikud",
     "Authentication" : "Autentimine",
+    "Timestamp of data load" : "Andmete laadimise ajatempel",
     "Releases" : "Versioonid",
     "Issues" : "Veahaldus",
     "optional" : "valikuline",
