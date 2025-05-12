@@ -85,6 +85,8 @@
     "External" : "Väline",
     "Yes" : "Jah",
     "No" : "Ei",
+    "Select columns" : "Vali veerud",
+    "e.g. 1,2,4 or leave empty" : "nt. 1,2,4 või jäta tühjaks",
     "More options" : "Täiendavad valikud",
     "Authentication" : "Autentimine",
     "Timestamp of data load" : "Andmete laadimise ajatempel",
