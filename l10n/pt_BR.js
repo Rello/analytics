@@ -323,7 +323,7 @@ OC.L10N.register(
     "New deletion" : "Nova exclusão",
     "Setting" : "Configurações",
     "Title" : "Título",
-    "Delete data before load" : "Exclua os dados antes de carregar",
+    "Delete data before load" : "Excluir os dados antes de carregar",
     "Copy" : "Copiar",
     "Execution" : "Execução",
     "Load now" : "Carregue agora",
