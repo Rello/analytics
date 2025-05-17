@@ -91,6 +91,7 @@ class LocalJson implements IDatasource {
 
 		// Check for array extraction pattern (e.g., {BTC,tmsp,price})
 		$arrayFields = $this->extractArrayFields($pathString);
+
 		if (!empty($arrayFields)) {
 			// Handle absolute path before array fields (e.g., data/data{from,to,intensity/forecast})
 			$json = $this->extractAbsolutePathIfPresent($json, $pathString);
@@ -183,7 +184,13 @@ class LocalJson implements IDatasource {
 	private function extractRow($rowArray, array $paths): array {
 		$row = [];
 		foreach ($paths as $path) {
-			$value = $this->get_nested_array_value($rowArray, $path) ?: $path;
+			$value = $this->get_nested_array_value($rowArray, $path);
+			// If value is null, use the path as a placeholder
+			if ($value === null) {
+				$value = $path;
+			} elseif (is_array($value)) {
+				$value = implode(', ', array_map('strval', $value));
+			}
 			$row[] = $value;
 		}
 		return $row;
@@ -224,11 +231,14 @@ class LocalJson implements IDatasource {
 	 * @param $path
 	 * @return array|string|null
 	 */
-	private function get_nested_array_value(&$array, $path) {
+	private function get_nested_array_value($array, $path) {
 		$pathParts = explode('/', $path);
-		$current = &$array;
+		$current = $array;
 		foreach ($pathParts as $key) {
-			$current = &$current[$key];
+			if (!is_array($current) || !array_key_exists($key, $current)) {
+				return null;
+			}
+			$current = $current[$key];
 		}
 		return $current;
 	}
