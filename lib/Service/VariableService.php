@@ -140,7 +140,10 @@ class VariableService {
 			$filteroptions = json_decode($reportMetadata['filteroptions'], true);
 			if (isset($filteroptions['filter'])) {
 				foreach ($filteroptions['filter'] as $key => $value) {
+					// get the parsed filter
 					$parsed = $this->parseFilter($value['value']);
+					// overwrite the filter option. Required for quarters => between
+					$filteroptions['filter'][$key]['option'] = $parsed['option'];
 
 					if (!$parsed) continue;
 
@@ -156,8 +159,15 @@ class VariableService {
 					// translate commonly known X timestamp format to U for php
 					if ($format === 'X') $format = 'U';
 
-					$filteroptions['filter'][$key]['value'] = date($format, $parsed['value']);
-					//$filteroptions['filter'][$key]['option'] = $parsed['option'];
+					if (is_array($parsed['value'])) {
+						// Format both start and end values for BETWEEN
+						$filteroptions['filter'][$key]['value'] = [
+							date($format, $parsed['value'][0]),
+							date($format, $parsed['value'][1])
+						];
+					} else {
+						$filteroptions['filter'][$key]['value'] = date($format, $parsed['value']);
+					}
 				}
 			}
 			$reportMetadata['filteroptions'] = json_encode($filteroptions);
@@ -175,9 +185,9 @@ class VariableService {
 		preg_match_all("/(?<=%).*(?=%)/", $filter, $matches);
 		if (count($matches[0]) > 0) {
 			$filter = $matches[0][0];
-			preg_match('/(last|next|current|to|yester)?/', $filter, $directionMatch); // direction
+			preg_match('/(first|second|third|fourth|last|next|current|to|yester)?/', $filter, $directionMatch); // direction
 			preg_match('/[0-9]+/', $filter, $offsetMatch); // how much
-			preg_match('/(day|days|week|weeks|month|months|year|years)$/', $filter, $unitMatch); // unit
+			preg_match('/(day|days|week|weeks|month|months|year|years|quarter|quarters)$/', $filter, $unitMatch); // unit
 
 			if (!$directionMatch[0] || !$unitMatch[0]) {
 				// no known text variables found
@@ -189,45 +199,111 @@ class VariableService {
 
 			// remove "s" to unify e.g. weeks => week
 			$unit = rtrim($unitMatch[0], 's');
+			$direction = strtolower($directionMatch[0]);
 
-			if ($directionMatch[0] === "last" || $directionMatch[0] === "yester") {
-				// go back
-				$direction = '-';
-			} elseif ($directionMatch[0] === "next") {
-				// go forward
-				$direction = '+';
+			if ($unit === 'quarter') {
+				$currentMonth = (int)date('n');
+				$currentYear = (int)date('Y');
+				$currentQuarter = (int)ceil($currentMonth / 3);
+
+				$targetQuarter = $currentQuarter;
+				$targetYear = $currentYear;
+
+				switch ($direction) {
+					case 'first':
+						$targetQuarter = 1;
+						break;
+					case 'second':
+						$targetQuarter = 2;
+						break;
+					case 'third':
+						$targetQuarter = 3;
+						break;
+					case 'fourth':
+						$targetQuarter = 4;
+						break;
+					case 'last':
+					case 'yester':
+						$targetQuarter = $currentQuarter - $offset;
+						while ($targetQuarter < 1) {
+							$targetQuarter += 4;
+							$targetYear -= 1;
+						}
+						break;
+					case 'next':
+						$targetQuarter = $currentQuarter + $offset;
+						while ($targetQuarter > 4) {
+							$targetQuarter -= 4;
+							$targetYear += 1;
+						}
+						break;
+					case 'current':
+					default:
+						// current quarter, do nothing
+						break;
+				}
+
+				// First month of the target quarter
+				$firstMonthOfQuarter = (($targetQuarter - 1) * 3) + 1;
+				$startTS = strtotime("{$targetYear}-{$firstMonthOfQuarter}-01");
+				$start = date("Y-m-d", $startTS);
+
+				// Last month of the target quarter
+				$lastMonthOfQuarter = $firstMonthOfQuarter + 2;
+				$endTS = strtotime("last day of {$targetYear}-{$lastMonthOfQuarter}-01 23:59:59");
+				$end = date("Y-m-d", $endTS);
+
+				$return = [
+					'value' => [$startTS, $endTS],
+					'option' => 'BETWEEN',
+					'1$filter' => $filter,
+					'2$direction' => $direction,
+					'3$target_quarter' => $targetQuarter,
+					'4$target_year' => $targetYear,
+					'5$startDate' => $start,
+					'6$startTS' => $startTS,
+					'7$endDate' => $end,
+					'8$endTS' => $endTS,
+				];
+				//$this->logger->info('parseFilter quarter: ' . json_encode($return));
 			} else {
-				// current
-				$direction = '+';
-				$offset = 0;
+				// Existing logic for other units
+				if ($direction === "last" || $direction === "yester") {
+					$dir = '-';
+				} elseif ($direction === "next") {
+					$dir = '+';
+				} else {
+					$dir = '+';
+					$offset = 0;
+				}
+				$timeString = $dir . $offset . ' ' . $unit;
+				$baseDate = strtotime($timeString);
+
+				if ($unit === 'day') {
+					$startString = 'today';
+				} elseif ($unit === 'month') {
+					$startString = 'first day of this month';
+				} elseif ($unit === 'year') {
+					$startString = 'first day of January';
+				} else {
+					$startString = 'first day of this ' . $unit;
+				}
+				$startTS = strtotime($startString, $baseDate);
+				$start = date("Y-m-d", $startTS);
+
+				$return = [
+					'value' => $startTS,
+					'option' => 'GT',
+					'1$filter' => $filter,
+					'2$timestring' => $timeString,
+					'3$target' => $baseDate,
+					'4$target_clean' => date("Y-m-d", $baseDate),
+					'5$startString' => $startString,
+					'6$startDate' => $start,
+					'7$startTS' => $startTS,
+				];
+				//$this->logger->info('parseFilter: ' . json_encode($return));
 			}
-
-			// create a usable string for php like "+3 days"
-			$timeString = $direction . $offset . ' ' . $unit;
-			// get a timestamp of the target date
-			$baseDate = strtotime($timeString);
-
-			// get the correct format depending of the unit. e.g. first day of the month in case unit is "month"
-			if ($unit === 'day') {
-				$startString = 'today';
-			} else {
-				$startString = 'first day of this ' . $unit;
-			}
-			$startTS = strtotime($startString, $baseDate);
-			$start = date("Y-m-d", $startTS);
-
-			$return = [
-				'value' => $startTS,
-				'option' => 'GT',
-				'1$filter' => $filter,
-				'2$timestring' => $timeString,
-				'3$target' => $baseDate,
-				'4$target_clean' => date("Y-m-d", $baseDate),
-				'5$startString' => $startString,
-				'6$startDate' => $start,
-				'7$startTS' => $startTS,
-			];
-			//$this->logger->debug('parseFilter: '. json_encode($return));
 		} else {
 			$return = false;
 		}

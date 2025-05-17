@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- dynamic filter for quarters (e.g. %last quarter%)
+
 ### Fixed
 - fix warning for importing less than 3 columns
 - new Panorama page button not working

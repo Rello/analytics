@@ -150,7 +150,18 @@ class StorageMapper
         // add the where clauses depending on the filter selection of the
         if (isset($options['filter'])) {
             foreach ($options['filter'] as $key => $value) {
-				$valueNoQuotes = trim($value['value'], "'");
+
+				// Remove quotes from each element
+				// quotes are required when filter has a comma e.g. 'home, office" and needs to be evaluated as one select
+				if (is_array($value['value'])) {
+					// Remove quotes from each element in the array
+					$valueNoQuotes = array_map(function($v) {
+						return trim($v, "'");
+					}, $value['value']);
+				} else {
+					$valueNoQuotes = trim($value['value'], "'");
+				}
+
 				if ($value['option'] === 'EQ') {
 					$sql->andWhere($sql->expr()->eq($key, $sql->createNamedParameter($valueNoQuotes)));
 				} elseif ($value['option'] === 'GT') {
@@ -168,6 +179,23 @@ class StorageMapper
 					$sql->setParameter('inValues', $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
 				} elseif ($value['option'] === 'LIKE') {
 					$sql->andWhere($sql->expr()->like($key, $sql->createNamedParameter('%' . $valueNoQuotes . '%')));
+				} elseif ($value['option'] === 'BETWEEN') {
+					// Between is used for filters on quarters
+					// Support both array and comma-separated string formats
+					if (is_array($value['value'])) {
+						$start = $value['value'][0];
+						$end = $value['value'][1];
+					} else {
+						list($start, $end) = explode(',', $valueNoQuotes, 2);
+						$start = trim($start);
+						$end = trim($end);
+					}
+					$sql->andWhere(
+						$sql->expr()->andX(
+							$sql->expr()->gte($key, $sql->createNamedParameter($start)),
+							$sql->expr()->lte($key, $sql->createNamedParameter($end))
+						)
+					);
 				}
             }
         }
