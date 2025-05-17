@@ -140,12 +140,13 @@ class VariableService {
 			$filteroptions = json_decode($reportMetadata['filteroptions'], true);
 			if (isset($filteroptions['filter'])) {
 				foreach ($filteroptions['filter'] as $key => $value) {
+
 					// get the parsed filter
 					$parsed = $this->parseFilter($value['value']);
+					if (!$parsed) continue;
 					// overwrite the filter option. Required for quarters => between
 					$filteroptions['filter'][$key]['option'] = $parsed['option'];
 
-					if (!$parsed) continue;
 
 					// if a parser is selected in the chart options, it should also be valid here automatically
 					if (isset($reportMetadata['chartoptions'])) {

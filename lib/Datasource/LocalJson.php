@@ -65,87 +65,155 @@ class LocalJson implements IDatasource {
 	/**
 	 * Read the Data
 	 * @param $option
-	 * @return array available options of the datasoure
+	 * @return array available options of the data soure
 	 */
 	public function readData($option): array {
-		$error = 0;
-		$path = $option['path'];
 		$file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
 		$rawResult = $file->getContent();
 
-		$json = json_decode($rawResult, true);
+		$return = $this->jsonParser($option, $rawResult);
+		$return['rawdata'] = $rawResult;
+		$return['error'] = 0;
 
-		// check if a specific array of values should be extracted
-		// e.g. {BTC,tmsp,price}
-		preg_match_all("/(?<={).*(?=})/", $path, $matches);
-		if (count($matches[0]) > 0) {
-			// array extraction
+		return $return;
+	}
 
-			// check if absolute path is in front of the array
-			// e.g. data/data{from,to,intensity/forecast}
-			$firstArray = strpos($path, '{');
-			if ($firstArray && $firstArray !== 0) {
-				$singlePath = substr($path, 0, $firstArray);
-				$json = $this->get_nested_array_value($json, $singlePath);
-			}
+	/**
+	 * Parses JSON data based on the provided options and raw input.
+	 *
+	 * @param array $option
+	 * @param string $rawResult
+	 * @return array
+	 */
+	private function jsonParser($option, $rawResult): array {
+		$pathString = $option['path'];
+		$json = $this->decodeJsonInput($rawResult);
 
-			// separate the fields of the array {BTC,tmsp,price}
-			$paths = explode(',', $matches[0][0]);
-			// fill up with dummies in case of missing columns
-			while (count($paths) < 3) {
-				array_unshift($paths, 'empty');
-			}
+		// Check for array extraction pattern (e.g., {BTC,tmsp,price})
+		$arrayFields = $this->extractArrayFields($pathString);
+		if (!empty($arrayFields)) {
+			// Handle absolute path before array fields (e.g., data/data{from,to,intensity/forecast})
+			$json = $this->extractAbsolutePathIfPresent($json, $pathString);
 
-			$data = [];
-			if (is_array($json) && is_array(reset($json))) {
-				// the last clause checks if its an associative array
-				foreach ($json as $rowArray) {
-					$dim1 = $this->get_nested_array_value($rowArray, $paths[0]) ?: $paths[0];
-					$dim2 = $this->get_nested_array_value($rowArray, $paths[1]) ?: $paths[1];
-					$val = $this->get_nested_array_value($rowArray, $paths[2]) ?: $paths[2];
-					$data[] = [$dim1, $dim2, $val];
-				}
-			} else {
-				$dim1 = $this->get_nested_array_value($json, $paths[0]) ?: $paths[0];
-				$dim2 = $this->get_nested_array_value($json, $paths[1]) ?: $paths[1];
-				$val = $this->get_nested_array_value($json, $paths[2]) ?: $paths[2];
-				$data[] = [$dim1, $dim2, $val];
-			}
+			// Normalize paths and ensure at least 3 columns
+			$paths = $this->normalizePaths($arrayFields, 3, 'empty');
+			$data = $this->extractRowsFromArray($json, $paths);
 		} else {
-			// single value extraction
-			// e.g. data/currentHashrate,data/averageHashrate
-			$paths = explode(',', $path);
-			foreach ($paths as $singlePath) {
-				// e.g. data/currentHashrate
-				$array = $this->get_nested_array_value($json, $singlePath);
-
-				if (is_array($array)) {
-					// if the target is an array itself
-					foreach ($array as $key => $value) {
-						$pathArray = explode('/', $singlePath);
-						$group = end($pathArray);
-						$data[] = [$group, $key, $value];
-					}
-				} else {
-					$pathArray = explode('/', $singlePath);
-					$key = end($pathArray);
-					$data[] = ['', $key, $array];
-				}
-			}
+			// Single value extraction (e.g., data/currentHashrate,data/averageHashrate)
+			$paths = array_map('trim', explode(',', $pathString));
+			$data = $this->extractSingleValues($json, $paths);
 		}
 
-		$header = array();
-		$header[0] = '';
-		$header[1] = 'Key';
-		$header[2] = 'Value';
+		// Derive header from paths (use last segment for each path)
+		$header = array_map([$this, 'getHeaderFromPath'], $paths);
 
 		return [
 			'header' => $header,
 			'dimensions' => array_slice($header, 0, count($header) - 1),
 			'data' => $data,
-			'rawdata' => $rawResult,
-			'error' => $error,
 		];
+	}
+
+	/**
+	 * Decode JSON input, supporting both standard and line-delimited JSON.
+	 */
+	private function decodeJsonInput(string $rawResult) {
+		$json = json_decode($rawResult, true);
+		if ($json === null && trim($rawResult) !== '') {
+			$json = [];
+			foreach (explode("\n", trim($rawResult)) as $line) {
+				$decoded = json_decode($line, true);
+				if ($decoded !== null) {
+					$json[] = $decoded;
+				}
+			}
+		}
+		return $json;
+	}
+
+	/**
+	 * Extracts fields inside curly braces from the path string.
+	 */
+	private function extractArrayFields(string $path): array {
+		preg_match_all("/(?<={).*(?=})/", $path, $matches);
+		return $matches[0] ?? [];
+	}
+
+	/**
+	 * If an absolute path precedes the array fields, extract the sub-array.
+	 */
+	private function extractAbsolutePathIfPresent($json, string $path) {
+		$firstBracePos = strpos($path, '{');
+		if ($firstBracePos !== false && $firstBracePos > 0) {
+			$absolutePath = substr($path, 0, $firstBracePos);
+			return $this->get_nested_array_value($json, $absolutePath);
+		}
+		return $json;
+	}
+
+	/**
+	 * Ensures the paths array has at least $minCount elements, padding with $fill if needed.
+	 */
+	private function normalizePaths(array $fields, int $minCount, string $fill): array {
+		$paths = array_map('trim', explode(',', $fields[0]));
+		while (count($paths) < $minCount) {
+			array_unshift($paths, $fill);
+		}
+		return $paths;
+	}
+
+	/**
+	 * Extracts rows from an array of arrays, using the provided paths.
+	 */
+	private function extractRowsFromArray($json, array $paths): array {
+		$data = [];
+		if (is_array($json) && is_array(reset($json))) {
+			foreach ($json as $rowArray) {
+				$data[] = $this->extractRow($rowArray, $paths);
+			}
+		} else {
+			$data[] = $this->extractRow($json, $paths);
+		}
+		return $data;
+	}
+
+	/**
+	 * Extracts a single row's values based on the given paths.
+	 */
+	private function extractRow($rowArray, array $paths): array {
+		$row = [];
+		foreach ($paths as $path) {
+			$value = $this->get_nested_array_value($rowArray, $path) ?: $path;
+			$row[] = $value;
+		}
+		return $row;
+	}
+
+	/**
+	 * Extracts single values for each path, handling arrays and scalars.
+	 */
+	private function extractSingleValues($json, array $paths): array {
+		$data = [];
+		foreach ($paths as $singlePath) {
+			$value = $this->get_nested_array_value($json, $singlePath);
+			$key = $this->getHeaderFromPath($singlePath);
+			if (is_array($value)) {
+				foreach ($value as $subKey => $subValue) {
+					$data[] = [$key, $subKey, $subValue];
+				}
+			} else {
+				$data[] = ['', $key, $value];
+			}
+		}
+		return $data;
+	}
+
+	/**
+	 * Gets the last segment of a path separated by '/'.
+	 */
+	private function getHeaderFromPath(string $path): string {
+		$parts = explode('/', $path);
+		return end($parts);
 	}
 
 	/**

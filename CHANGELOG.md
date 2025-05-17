@@ -3,6 +3,9 @@
 ### Added
 - dynamic filter for quarters (e.g. %last quarter%)
 
+### Changed
+- JSON data source: remove column limit
+
 ### Fixed
 - fix warning for importing less than 3 columns
 - new Panorama page button not working
