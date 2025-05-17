@@ -233,12 +233,13 @@ class DataloadService
                 continue;
             }
 
-			// if data source only delivers 2 columns, the value is moved to the last one
-			// resulting in xxx, null , 123
-            if (count($row) === 2) {
-                $row[2] = $row[1];
-                $row[1] = null;
-            }
+			if (count($row) === 2) {
+				// If only 2 columns, insert null in the middle and move value to the last column
+				$row = [$row[0], null, $row[1]];
+			} elseif (count($row) > 3) {
+				// If more than 3 columns, keep the first two and the last one
+				$row = [$row[0], $row[1], $row[count($row) - 1]];
+			}
 
             $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert, $aggregation);
             $insert = $insert + $action['insert'];
