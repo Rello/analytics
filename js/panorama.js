@@ -164,6 +164,7 @@ OCA.Analytics.Panorama = {
 
         document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
         document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Panorama.openFilterDialog);
 
         document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
@@ -206,6 +207,43 @@ OCA.Analytics.Panorama = {
         OCA.Analytics.Panorama.currentPanorama.pages.push({page: 0, name: 'New', reports: [], layout: ''});
         OCA.Analytics.Panorama.getPanorama('next');
         OCA.Analytics.Panorama.updateNavButtons();
+    },
+
+    openFilterDialog: function () {
+        let dimensions = {};
+        if (OCA.Analytics.Panorama.currentPanorama.pages) {
+            OCA.Analytics.Panorama.currentPanorama.pages.forEach(page => {
+                page.reports.forEach(rep => {
+                    if (rep.type === OCA.Analytics.Panorama.TYPE_REPORT) {
+                        let report = OCA.Analytics.reports.find(r => parseInt(r.id) === parseInt(rep.value));
+                        if (report && report.dimensions) {
+                            Object.entries(report.dimensions).forEach(([key, val]) => {
+                                dimensions[key] = val;
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        OCA.Analytics.currentReportData = OCA.Analytics.currentReportData || {};
+        OCA.Analytics.currentReportData.dimensions = dimensions;
+        OCA.Analytics.currentReportData.options = OCA.Analytics.currentReportData.options || {};
+        OCA.Analytics.currentReportData.options.filteroptions = OCA.Analytics.Panorama.currentPanorama.filters || {};
+        OCA.Analytics.Filter.openFilterDialog();
+    },
+
+    updateFiltersFromDialog: function (filterOptions) {
+        OCA.Analytics.Panorama.currentPanorama.filters = filterOptions;
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.Filter.refreshFilterVisualisation();
+
+        document.querySelectorAll('.flex-item').forEach(item => {
+            const reportId = item.getAttribute('data-chart');
+            if (reportId) {
+                OCA.Analytics.Backend.getReportData(reportId, item.id);
+            }
+        });
     },
     
     // get the panorama and loop all widgets
@@ -1157,8 +1195,14 @@ OCA.Analytics.Backend = {
     getReportData: function (datasetId, itemId) {
         const url = OC.generateUrl('apps/analytics/data/pa/' + datasetId, true);
 
+        let params = {};
+        if (OCA.Analytics.Panorama.currentPanorama.filters) {
+            params.filteroptions = JSON.stringify(OCA.Analytics.Panorama.currentPanorama.filters);
+        }
+        let requestUrl = `${url}?${new URLSearchParams(params)}`;
+
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
+        xhr.open('GET', requestUrl);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
 

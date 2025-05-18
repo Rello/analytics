@@ -21,6 +21,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - Integration: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), 
   Dashboard, Search, Smart picker, Translation
 - AI Assistant: Context Chat integration
+- [Panorama filter proposal](PANORAMA_FILTER_PROPOSAL.md)
 
 ## Architecture
 <p align="center"><img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Main" width="610" title="Analytics"></p>

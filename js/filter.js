@@ -101,7 +101,11 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        if (OCA.Analytics.isPanorama) {
+            OCA.Analytics.Panorama.updateFiltersFromDialog(filterOptions);
+        } else {
+            OCA.Analytics.Backend.getData();
+        }
         OCA.Analytics.Filter.close();
     },
 

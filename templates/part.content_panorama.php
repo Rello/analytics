@@ -368,6 +368,9 @@
         <div id="optionBtn" class="analytics-options icon-analytics-more has-tooltip"
              title="<?php p($l->t('Options')); ?>"></div>
         <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
+        <div id="addFilterIcon" class="analytics-options icon-analytics-filter-add has-tooltip"
+             title="<?php p($l->t('Filter')); ?>"></div>
+        <div id="filterVisualisation" style="display: inline-block; float: right;"></div>
     </div>
 
     <div id="panoramaHeaderRow" class="panoramaHeaderRow">
