@@ -83,6 +83,7 @@ class ExternalCsv implements IDatasource
             curl_close($ch);
         } else {
             $curlResult = '';
+            $http_code = 0;
         }
 
         $rows = str_getcsv($curlResult, "\n");
