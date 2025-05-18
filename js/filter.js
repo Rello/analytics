@@ -102,7 +102,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
-        OCA.Analytics.Notification.dialogClose();
+        OCA.Analytics.Filter.close();
     },
 
     openFilterDialog: function () {
@@ -146,9 +146,6 @@ OCA.Analytics.Filter = {
             }
         }
 
-        container.getElementById('filterDialogHint').addEventListener('click', OCA.Analytics.Filter.handleVariableHint);
-        container.getElementById('filterDialogCancel').addEventListener('click', OCA.Analytics.Notification.dialogClose);
-        container.getElementById('filterDialogGo').addEventListener('click', OCA.Analytics.Filter.processFilterDialog);
         container.getElementById('filterDialogValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
         container.getElementById('filterDialogValue').addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
@@ -158,12 +155,8 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            ''
+            t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
         );
-    },
-
-    handleVariableHint: function () {
-        OCA.Analytics.Visualization.showElement('filterDialogHintText');
     },
 
     processFilterDialog: function () {
@@ -186,7 +179,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
-        OCA.Analytics.Filter.close();
+        OCA.Analytics.Notification.dialogClose();
     },
 
     refreshFilterVisualisation: function () {
