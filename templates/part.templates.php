@@ -153,6 +153,52 @@
 
 </template>
 
+<template id="templateFilterDialog">
+    <span hidden id="filterDialogHintText" class="userGuidance">
+        <?php p($l->t('Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')); ?>
+        <br><br>
+    </span>
+    <div class="table" style="display: table;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 80px;"></div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="filterDialogDimension"><?php p($l->t('Filter by')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="filterDialogOption"><?php p($l->t('Operator')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 220px;">
+                <label for="filterDialogValue"><?php p($l->t('Value')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 20px;"></div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell;">
+                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'filteradd.svg'); ?>" alt="filter">
+            </div>
+            <div style="display: table-cell;">
+                <select id="filterDialogDimension" class="checkbox optionsInput"></select>
+            </div>
+            <div style="display: table-cell;">
+                <select id="filterDialogOption" class="checkbox optionsInput"></select>
+            </div>
+            <div style="display: table-cell;">
+                <input type="text" id="filterDialogValue" class="optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
+            </div>
+            <div style="display: table-cell;">
+                <a id="filterDialogHint" title="<?php p($l->t('Variables')); ?>">
+                    <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="analyticsDialogButtonrow" id="buttons">
+        <a class="button primary" id="filterDialogGo"><?php p($l->t('Add')); ?></a>
+        <a class="button" id="filterDialogCancel"><?php p($l->t('Cancel')); ?></a>
+    </div>
+</template>
+
 <template id="templateDataset">
     <div class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">

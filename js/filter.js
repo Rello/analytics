@@ -102,114 +102,64 @@ OCA.Analytics.Filter = {
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
-        OCA.Analytics.Filter.close();
+        OCA.Analytics.Notification.dialogClose();
     },
 
     openFilterDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
-        document.body.insertAdjacentHTML('beforeend',
-            '<div id="analytics_dialog_overlay" class="analyticsDialogDim"></div>'
-            + '<div id="analytics_dialog_container" class="analyticsDialog" style="position: fixed;">'
-            + '<div id="analytics_dialog">'
-            + '<a class="analyticsDialogClose" id="btnClose"></a>'
-            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
-            + t('analytics', 'Filter')
-            + '</span></div>'
-            + '<span hidden id="filterDialogHintText" class="userGuidance">'
-            + t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
-                .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#text-variables" target="_blank">')
-                .replace('{linkend}', '</a>')
-            + '<br><br></span>'
-            + '<div class="table" style="display: table;">'
-            + '<div style="display: table-row;">'
-            //+ '<div style="display: table-cell; width: 50px;"></div>'
-            + '<div style="display: table-cell; width: 80px;"></div>'
-            + '<div style="display: table-cell; width: 150px;">'
-            + '<label for="filterDialogDimension">' + t('analytics', 'Filter by') + '</label>'
-            + '</div>'
-            + '<div style="display: table-cell; width: 150px;">'
-            + '<label for="filterDialogOption">' + t('analytics', 'Operator') + '</label>'
-            + '</div>'
-            + '<div style="display: table-cell; width: 220px;">'
-            + '<label for="filterDialogValue">' + t('analytics', 'Value') + '</label>'
-            + '</div>'
-            + '<div style="display: table-cell; width: 20px;"></div>'
-            + '</div>'
-            + '<div style="display: table-row;">'
-            + '<div style="display: table-cell;">'
-            + '<img src="' + OC.imagePath('analytics', 'filteradd') + '" alt="filter">'
-            + '</div>'
-            //+ '<div style="display: table-cell;">'
-            //+ '<select id="filterDialogType" class="checkbox" disabled>'
-            //+ '<option value="and">' + t('analytics', 'and') + '</option>'
-            //+ '</select>'
-            //+ '</div>'
-            + '<div style="display: table-cell;">'
-            + '<select id="filterDialogDimension" class="checkbox optionsInput">'
-            + '</select>'
-            + '</div>'
-            + '<div style="display: table-cell;">'
-            + '<select id="filterDialogOption" class="checkbox optionsInput">'
-            + '</select>'
-            + '</div>'
-            + '<div style="display: table-cell;">'
-            + '<input type="text" id="filterDialogValue" class="optionsInputValue" autocomplete="off" data-dropDownListIndex="0">'
-            + '</div>'
-            + '<div style="display: table-cell;">'
-            + '<a id="filterDialogHint" title ="' + t('analytics', 'Variables') + '">'
-            + '<div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>'
-            + '</a></div>'
-            + '</div></div>'
-            + '<br>'
-            + '<div class="analyticsDialogButtonrow" id="buttons">'
-            + '<a class="button primary" id="filterDialogGo">' + t('analytics', 'Add') + '</a>'
-            + '<a class="button" id="filterDialogCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '</div>'
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Filter'),
+            OCA.Analytics.Filter.processFilterDialog
         );
 
-        // fill Dimension dropdown
-        let dimensionSelectOptions = '';
-        let availableDimensions = OCA.Analytics.currentReportData.dimensions;
-        for (let i = 0; i < Object.keys(availableDimensions).length; i++) {
-            dimensionSelectOptions = dimensionSelectOptions + '<option value="' + Object.keys(availableDimensions)[i] + '">' + Object.values(availableDimensions)[i] + '</option>';
-        }
-        document.getElementById('filterDialogDimension').innerHTML = dimensionSelectOptions;
-        document.getElementById('filterDialogDimension').addEventListener('change', function () {
-            document.getElementById('filterDialogValue').dataset.dropdownlistindex = document.getElementById('filterDialogDimension').selectedIndex;
+        let container = document.getElementById('templateFilterDialog').content;
+        container = document.importNode(container, true);
+
+        const dimensionSelect = container.getElementById('filterDialogDimension');
+        dimensionSelect.innerHTML = '';
+        const availableDimensions = OCA.Analytics.currentReportData.dimensions;
+        Object.keys(availableDimensions).forEach(key => {
+            const option = new Option(availableDimensions[key], key);
+            dimensionSelect.options.add(option);
+        });
+        dimensionSelect.addEventListener('change', function () {
+            container.getElementById('filterDialogValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
         });
 
-        // fill Options dropdown
-        let optionSelectOptions = '';
-        for (let i = 0; i < Object.keys(OCA.Analytics.Filter.optionTextsArray).length; i++) {
-            optionSelectOptions = optionSelectOptions + '<option value="' + Object.keys(OCA.Analytics.Filter.optionTextsArray)[i] + '">' + Object.values(OCA.Analytics.Filter.optionTextsArray)[i] + '</option>';
-        }
-        document.getElementById('filterDialogOption').innerHTML = optionSelectOptions;
+        const optionSelect = container.getElementById('filterDialogOption');
+        optionSelect.innerHTML = '';
+        Object.keys(OCA.Analytics.Filter.optionTextsArray).forEach(key => {
+            const opt = new Option(OCA.Analytics.Filter.optionTextsArray[key], key);
+            optionSelect.options.add(opt);
+        });
 
-        // preselect existing filter
-        // TODO: currently only one filter preset
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         if (filterOptions !== null && filterOptions['filter'] !== undefined) {
             for (let filterDimension of Object.keys(filterOptions['filter'])) {
                 let filterOption = filterOptions['filter'][filterDimension]['option'];
-                let filterValue = filterOptions['filter'][filterDimension]['value']
-                document.getElementById('filterDialogValue').value = filterValue;
-                document.getElementById('filterDialogOption').value = filterOption;
-                document.getElementById('filterDialogDimension').value = filterDimension;
-                document.getElementById('filterDialogValue').dataset.dropdownlistindex = document.getElementById('filterDialogDimension').selectedIndex;
+                let filterValue = filterOptions['filter'][filterDimension]['value'];
+                container.getElementById('filterDialogValue').value = filterValue;
+                optionSelect.value = filterOption;
+                dimensionSelect.value = filterDimension;
+                container.getElementById('filterDialogValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
             }
         }
 
-        document.getElementById('filterDialogHint').addEventListener('click', OCA.Analytics.Filter.handleVariableHint);
-        document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("filterDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("filterDialogGo").addEventListener("click", OCA.Analytics.Filter.processFilterDialog);
-        document.getElementById('filterDialogValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
-
-        document.getElementById('filterDialogValue').addEventListener('keydown', function (event) {
+        container.getElementById('filterDialogHint').addEventListener('click', OCA.Analytics.Filter.handleVariableHint);
+        container.getElementById('filterDialogCancel').addEventListener('click', OCA.Analytics.Notification.dialogClose);
+        container.getElementById('filterDialogGo').addEventListener('click', OCA.Analytics.Filter.processFilterDialog);
+        container.getElementById('filterDialogValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
+        container.getElementById('filterDialogValue').addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 OCA.Analytics.Filter.processFilterDialog();
             }
         });
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            ''
+        );
     },
 
     handleVariableHint: function () {
