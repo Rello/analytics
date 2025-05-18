@@ -153,6 +153,37 @@
 
 </template>
 
+<template id="templateFilterDialog">
+    <div class="table" style="display: table;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 80px;"></div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="filterDialogDimension"><?php p($l->t('Filter by')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="filterDialogOption"><?php p($l->t('Operator')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 220px;">
+                <label for="filterDialogValue"><?php p($l->t('Value')); ?></label>
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell;">
+                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'filteradd.svg'); ?>" alt="filter">
+            </div>
+            <div style="display: table-cell;">
+                <select id="filterDialogDimension" class="checkbox optionsInput"></select>
+            </div>
+            <div style="display: table-cell;">
+                <select id="filterDialogOption" class="checkbox optionsInput"></select>
+            </div>
+            <div style="display: table-cell;">
+                <input type="text" id="filterDialogValue" class="optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
+            </div>
+        </div>
+    </div>
+</template>
+
 <template id="templateDataset">
     <div class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
