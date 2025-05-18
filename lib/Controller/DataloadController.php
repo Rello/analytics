@@ -115,7 +115,7 @@ class DataloadController extends Controller
     }
 
     /**
-     * execute a dataload from datasource and store into dataset
+     * execute a dataload from data source and store into dataset
      *
      * @NoAdminRequired
      * @param int $dataloadId

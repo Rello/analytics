@@ -33,14 +33,14 @@ class LocalSpreadsheet implements IDatasource {
 	}
 
 	/**
-	 * @return string Display Name of the datasource
+         * @return string Display Name of the data source
 	 */
 	public function getName(): string {
 		return $this->l10n->t('Local') . ': Spreadsheet';
 	}
 
 	/**
-	 * @return int digit unique datasource id
+         * @return int digit unique data source id
 	 */
 	public function getId(): int {
 		return 7;

@@ -33,7 +33,7 @@ class ExternalCsv implements IDatasource
     }
 
     /**
-     * @return string Display Name of the datasource
+     * @return string Display Name of the data source
      */
     public function getName(): string
     {
@@ -49,7 +49,7 @@ class ExternalCsv implements IDatasource
     }
 
     /**
-     * @return array available options of the datasoure
+     * @return array available options of the data source
      */
     public function getTemplate(): array
     {
@@ -64,7 +64,7 @@ class ExternalCsv implements IDatasource
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the datasoure
+     * @return array available options of the data source
      */
     public function readData($option): array
     {

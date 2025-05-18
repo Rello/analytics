@@ -129,7 +129,7 @@ class DatasourceController extends Controller {
 	}
 
 	/**
-	 * Get the data from a datasource;
+     * Get the data from a data source;
 	 *
 	 * @NoAdminRequired
 	 * @param int $datasourceId

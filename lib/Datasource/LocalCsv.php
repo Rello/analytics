@@ -38,7 +38,7 @@ class LocalCsv implements IDatasource
     }
 
     /**
-     * @return string Display Name of the datasource
+     * @return string Display Name of the data source
      */
     public function getName(): string
     {
@@ -54,7 +54,7 @@ class LocalCsv implements IDatasource
     }
 
     /**
-     * @return array available options of the datasoure
+     * @return array available options of the data source
      */
     public function getTemplate(): array
     {
@@ -69,7 +69,7 @@ class LocalCsv implements IDatasource
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the datasoure
+     * @return array available options of the data source
      * @throws NotFoundException
      * @throws \OCP\Files\NotPermittedException
      */

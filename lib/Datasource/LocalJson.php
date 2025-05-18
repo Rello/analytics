@@ -28,21 +28,21 @@ class LocalJson implements IDatasource {
 	}
 
 	/**
-	 * @return string Display Name of the datasource
+         * @return string Display Name of the data source
 	 */
 	public function getName(): string {
 		return $this->l10n->t('Local') . ': JSON';
 	}
 
 	/**
-	 * @return int digit unique datasource id
+         * @return int digit unique data source id
 	 */
 	public function getId(): int {
 		return 2;
 	}
 
 	/**
-	 * @return array available options of the datasoure
+         * @return array available options of the data source
 	 */
 	public function getTemplate(): array {
 		$template = array();
@@ -65,7 +65,7 @@ class LocalJson implements IDatasource {
 	/**
 	 * Read the Data
 	 * @param $option
-	 * @return array available options of the data soure
+	 * @return array available options of the data source
 	 */
 	public function readData($option): array {
 		$file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
