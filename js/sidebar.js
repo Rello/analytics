@@ -216,7 +216,7 @@ OCA.Analytics.Sidebar.Report = {
                     document.getElementById('tabContainerReport').appendChild(table);
 
                     // create the drop downs for Data source, grouping and possible data set
-                    // need to do an await here, because the datasourceOptions is important for subsequent functions
+                    // need to do an await here, because the data source options are important for subsequent functions
                     await OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource', data['type']);
                     OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
                     OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
@@ -280,7 +280,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     fillDatasourceRelatedFields: function (data) {
-        // set the options for a datasource
+        // set the options for a data source
         if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
             let options = JSON.parse(data['link']);
             for (let option in options) {

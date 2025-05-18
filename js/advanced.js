@@ -201,16 +201,16 @@ OCA.Analytics.Advanced.Dataload = {
                 }
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = null;
 
-                // list all available datasources
+                // list all available data sources
                 OCA.Analytics.Datasource.buildDropdown('datasourceSelect');
 
-                // write dimension structure to datasource array [0] in case it is required for a deletion job later
+                // write dimension structure to data source array [0] in case it is required for a deletion job later
                 //OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
             });
     },
 
     updateDatasourceDeletionOption: function () {
-        // write dimension structure to datasource array [0] in case it is required for a deletion job later
+        // write dimension structure to data source array [0] in case it is required for a deletion job later
 
         // fill Options dropdown
         let optionSelectOptions = '';
@@ -266,7 +266,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     buildDataloadOptions: function (evt, id = null) {
-        // write dimension structure to datasource array [0] in case it is required for a deletion job later
+        // write dimension structure to data source array [0] in case it is required for a deletion job later
         OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
 
         let dataload;
@@ -289,11 +289,11 @@ OCA.Analytics.Advanced.Dataload = {
         document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
         document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload['id'];
 
-        // get all the options for a datasource
+        // get all the options for a data source
         document.getElementById('dataloadDetailItems').innerHTML = '';
         document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(dataload['datasource']));
 
-        // set the options for a datasource
+        // set the options for a data source
         let fieldValues = JSON.parse(dataload['option']);
         for (let fieldValue in fieldValues) {
             document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Advanced.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
@@ -362,7 +362,7 @@ OCA.Analytics.Advanced.Dataload = {
         const dataloadId = parseInt(document.getElementById('dataloadDetail').dataset.dataloadId);
         let option = {};
 
-        // loop all dynamic options of the selected datasource
+        // loop all dynamic options of the selected data source
         let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select, #dataloadDetailItems textarea, #dataloadDetailDelete select');
         for (let inputField of inputFields) {
             option[inputField['id']] = inputField['value'];

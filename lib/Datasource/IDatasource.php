@@ -18,13 +18,13 @@ interface IDatasource
 {
 
     /**
-     * @return string Display Name of the datasource
+     * @return string Display Name of the data source
      * @since 3.1.0
      */
     public function getName(): string;
 
     /**
-     * @return int 2 digit unique datasource id
+     * @return int 2 digit unique data source id
      * @since 3.1.0
      */
     public function getId(): int;
