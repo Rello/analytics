@@ -512,7 +512,7 @@ OCA.Analytics.Filter = {
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
         chartOptions === null ? chartOptions = [] : chartOptions;
         let userDatasetOptions = [];
-        let nonDefaultValues, seondaryAxisRequired = false;
+        let nonDefaultValues, secondaryAxisRequired = false;
         let optionObject;
 
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
@@ -530,7 +530,7 @@ OCA.Analytics.Filter = {
             optionObject = {};
             if (optionsYAxis[i].value !== defaultYAxis) {
                 optionObject['yAxisID'] = optionsYAxis[i].value;
-                seondaryAxisRequired = true;
+                secondaryAxisRequired = true;
             }
             if (optionsChartType[i].value !== defaultChartType) {
                 optionObject['type'] = optionsChartType[i].value;
@@ -578,7 +578,7 @@ OCA.Analytics.Filter = {
         // if any data series is tied to the secondary yAxis or not
         // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
         // additional combinations for dataMode apply
-        if (seondaryAxisRequired === true) {
+        if (secondaryAxisRequired === true) {
             let enableAxis = {scales: {secondary: {display: true}}};
             try {
                 // if there are existing settings, merge them
