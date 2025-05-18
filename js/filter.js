@@ -124,7 +124,7 @@ OCA.Analytics.Filter = {
             dimensionSelect.options.add(option);
         });
         dimensionSelect.addEventListener('change', function () {
-            container.getElementById('filterDialogValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+            document.getElementById('filterDialogValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
         });
 
         const optionSelect = container.getElementById('filterDialogOption');
