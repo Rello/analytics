@@ -2,5 +2,8 @@
   "require": {
     "php": "^8.0",
     "phpoffice/phpspreadsheet": "^1.29.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
   }
 }
