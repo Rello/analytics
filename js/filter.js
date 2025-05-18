@@ -526,7 +526,7 @@ OCA.Analytics.Filter = {
         let optionsColor = document.getElementsByName('optionsColor');
 
         for (let i = 0; i < optionsYAxis.length; i++) {
-            let j = i - (Math.floor(i / defaultColors.length) * defaultColors.length)
+            let j = i % defaultColors.length
             optionObject = {};
             if (optionsYAxis[i].value !== defaultYAxis) {
                 optionObject['yAxisID'] = optionsYAxis[i].value;
@@ -634,7 +634,7 @@ OCA.Analytics.Filter = {
     // function to define the color for a data series
     checkColor: function (array, index) {
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
-        let j = index - (Math.floor(index / colors.length) * colors.length)
+        let j = index % colors.length
         let field = 'backgroundColor';
         if (Array.isArray(array) && array.length && array[index]) {
             if (field in array[index]) {
