@@ -77,7 +77,8 @@ class ExternalJson implements IDatasource
         $headers = array_map('trim', $headers);
         $headers[] = 'OCS-APIRequest: true';
         $headers[] = 'Content-Type: ' . $contentType;
-        # VERITYHOST=0 to disable verification, 2 to enable. 1 is no longer a valid option.
+        # VERIFYHOST is used with CURLOPT_SSL_VERIFYHOST: 0 disables verification,
+        # 2 enables it. Value 1 is deprecated and should not be used.
         $verifyHost = intval($option['insecure']);
 
         $ch = curl_init();
