@@ -783,7 +783,7 @@ OCA.Analytics.Filter.Drag = {
             return div;
         };
 
-        if (layoutConfig === {} || layoutConfig === undefined) {
+        if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
             // Fallback: Add all header items to the "rows" section
             headerItems.forEach((text, index) => {
                 let draggableItem = createDraggableItem(text, index);
