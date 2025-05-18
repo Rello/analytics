@@ -797,14 +797,18 @@ OCA.Analytics.Visualization = {
     showElement: function (element) {
         if (document.getElementById(element)) {
             document.getElementById(element).hidden = false;
-            //document.getElementById(element).style.removeProperty('display');
+            if (element === 'tableContainer') {
+                document.getElementById('chartContainer').classList.remove('fullHeight');
+            }
         }
     },
 
     hideElement: function (element) {
         if (document.getElementById(element)) {
             document.getElementById(element).hidden = true;
-            //document.getElementById(element).style.display = 'none';
+            if (element === 'tableContainer') {
+                document.getElementById('chartContainer').classList.add('fullHeight');
+            }
         }
     },
 

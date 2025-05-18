@@ -325,6 +325,10 @@ content: inherit;
     padding: 10px;
 }
 
+#chartContainer.fullHeight {
+    height: 70vh;
+}
+
 #chartZoomReset {
     position: absolute;
     right: 20px;
