@@ -508,9 +508,13 @@ OCA.Analytics.Filter = {
 
     processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions;
+        if (dataOptions === '' || dataOptions === null) {
+            dataOptions = [];
+        }
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
-        chartOptions === null ? chartOptions = [] : chartOptions;
+        if (chartOptions === null) {
+            chartOptions = [];
+        }
         let userDatasetOptions = [];
         let nonDefaultValues, seondaryAxisRequired = false;
         let optionObject;
