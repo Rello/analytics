@@ -859,7 +859,8 @@ OCA.Analytics.Filter.Backend = {
             .then(data => {
                 OCA.Analytics.isNewObject = true;
                 OCA.Analytics.Navigation.init(data);
-            });
+            })
+            .catch(err => console.error(err));
     },
 
     saveReport: function () {
@@ -943,7 +944,8 @@ OCA.Analytics.Filter.Backend = {
             .then(data => {
                 delete OCA.Analytics.currentReportData.options;
                 OCA.Analytics.Backend.getData();
-            });
+            })
+            .catch(err => console.error(err));
     },
 
     saveRefresh: function (evt) {
@@ -969,6 +971,7 @@ OCA.Analytics.Filter.Backend = {
             .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Backend.startRefreshTimer(refresh);
-            });
+            })
+            .catch(err => console.error(err));
     },
-};
+}; 
