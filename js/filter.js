@@ -303,14 +303,14 @@ OCA.Analytics.Filter = {
 
         let layout = {};
         document.querySelectorAll('.columnSection').forEach(function (section) {
-            var sectionId = section.id;
+            const sectionId = section.id;
             // Initialize the layout[sectionId] as an empty array if undefined
             if (!layout[sectionId]) {
                 layout[sectionId] = [];
             }
-            var childNodes = section.getElementsByClassName('draggable');
-            for (var i = 0; i < childNodes.length; i++) {
-                var columnId = parseInt(childNodes[i].id.replace('column-', ''));
+            const childNodes = section.getElementsByClassName('draggable');
+            for (let i = 0; i < childNodes.length; i++) {
+                const columnId = parseInt(childNodes[i].id.replace('column-', ''));
                 layout[sectionId].push(columnId);
             }
         });
@@ -731,9 +731,9 @@ OCA.Analytics.Filter.Drag = {
 
     drop: function (ev) {
         ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        var draggedElement = document.getElementById(data);
-        var dropTarget = ev.target;
+        const data = ev.dataTransfer.getData("text");
+        const draggedElement = document.getElementById(data);
+        let dropTarget = ev.target;
 
         // Check if the drop target is within a section or is the section title
         while (!dropTarget.classList.contains('columnSection') && !dropTarget.classList.contains('draggable')) {
