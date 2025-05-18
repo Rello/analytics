@@ -85,6 +85,9 @@ OCA.Analytics.Panorama = {
     currentPanorama: {},
     currentPage: 0,
     editMode: false,
+    availableDimensions: {},
+    reportDimensions: {},
+    _backupCurrentReportData: null,
     layouts: [
         {
             id: 1, name: '2-1', layout: '<div class="flex-container">' +
@@ -164,6 +167,7 @@ OCA.Analytics.Panorama = {
 
         document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
         document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Panorama.openFilterDialog);
 
         document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
@@ -179,6 +183,9 @@ OCA.Analytics.Panorama = {
         //OCA.Analytics.Panorama.currentPanorama = OCA.Analytics.Panorama.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
         if (typeof OCA.Analytics.Panorama.currentPanorama.pages === 'string') {
             OCA.Analytics.Panorama.currentPanorama.pages = JSON.parse(OCA.Analytics.Panorama.currentPanorama.pages);
+        }
+        if (typeof OCA.Analytics.Panorama.currentPanorama.filters === 'string') {
+            OCA.Analytics.Panorama.currentPanorama.filters = JSON.parse(OCA.Analytics.Panorama.currentPanorama.filters);
         }
         OCA.Analytics.Panorama.editMode = false;
         OCA.Analytics.Panorama.removeEditableTextBoxes();
@@ -212,6 +219,7 @@ OCA.Analytics.Panorama = {
     getPanorama: function (targetPage) {
         // Reset existing pages
         document.getElementById('panoramaPages').innerHTML = '';
+        OCA.Analytics.Panorama.availableDimensions = {};
 
         // add an empty page if the panorama is empty/new
         if (OCA.Analytics.Panorama.currentPanorama.pages.length === 0) {
@@ -280,6 +288,8 @@ OCA.Analytics.Panorama = {
 
         // if still in edit mode, re-add the overlays over every item
         if (OCA.Analytics.Panorama.editMode) OCA.Analytics.Panorama.addEditOverlays();
+
+        OCA.Analytics.Panorama.refreshFilterVisualisation();
     },
 
     buildWidget: function (itemId) {
@@ -1155,7 +1165,22 @@ OCA.Analytics.Backend = {
     },
 
     getReportData: function (datasetId, itemId) {
-        const url = OC.generateUrl('apps/analytics/data/pa/' + datasetId, true);
+        let url = OC.generateUrl('apps/analytics/data/pa/' + datasetId, true);
+
+        // append panorama filters if dimensions match
+        let filterOptions = OCA.Analytics.Panorama.currentPanorama.filters;
+        let dims = OCA.Analytics.Panorama.reportDimensions[itemId];
+        if (filterOptions && filterOptions.filter && dims) {
+            let applicable = {};
+            for (let key in filterOptions.filter) {
+                if (dims[key] !== undefined) {
+                    applicable[key] = filterOptions.filter[key];
+                }
+            }
+            if (Object.keys(applicable).length > 0) {
+                url += '?filteroptions=' + encodeURIComponent(JSON.stringify({filter: applicable}));
+            }
+        }
 
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
@@ -1201,6 +1226,14 @@ OCA.Analytics.Backend = {
                     jsondata.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
                 } catch (e) {
                     jsondata.options.tableoptions = {};
+                }
+
+                // store dimensions for filter usage
+                OCA.Analytics.Panorama.reportDimensions[itemId] = jsondata.dimensions;
+                for (let key in jsondata.dimensions) {
+                    if (OCA.Analytics.Panorama.availableDimensions[key] === undefined) {
+                        OCA.Analytics.Panorama.availableDimensions[key] = jsondata.dimensions[key];
+                    }
                 }
 
                 OCA.Analytics.Panorama.setWidgetTypeReportContent(jsondata, itemId);
@@ -1270,6 +1303,94 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.Notification.notification('success', 'Document was saved');
             })
         },
+
+    openFilterDialog: function () {
+        OCA.Analytics.Panorama._backupCurrentReportData = OCA.Analytics.currentReportData;
+        OCA.Analytics.currentReportData = {
+            dimensions: OCA.Analytics.Panorama.availableDimensions,
+            options: {filteroptions: OCA.Analytics.Panorama.currentPanorama.filters || {}}
+        };
+
+        OCA.Analytics.Filter.openFilterDialog();
+        document.getElementById('filterDialogGo').removeEventListener('click', OCA.Analytics.Filter.processFilterDialog);
+        document.getElementById('filterDialogGo').addEventListener('click', OCA.Analytics.Panorama.processFilterDialog);
+        document.getElementById('filterDialogCancel').addEventListener('click', OCA.Analytics.Panorama.restoreCurrentReportData);
+        document.getElementById('btnClose').addEventListener('click', OCA.Analytics.Panorama.restoreCurrentReportData);
+    },
+
+    restoreCurrentReportData: function () {
+        if (OCA.Analytics.Panorama._backupCurrentReportData) {
+            OCA.Analytics.currentReportData = OCA.Analytics.Panorama._backupCurrentReportData;
+            OCA.Analytics.Panorama._backupCurrentReportData = null;
+        }
+    },
+
+    processFilterDialog: function () {
+        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
+        const dimension = document.getElementById('filterDialogDimension').value;
+        filterOptions.filter = filterOptions.filter || {};
+        filterOptions.filter[dimension] = filterOptions.filter[dimension] || {};
+        const optionValue = document.getElementById('filterDialogOption').value;
+        const filterValue = document.getElementById('filterDialogValue').value;
+        filterOptions.filter[dimension].option = optionValue;
+        filterOptions.filter[dimension].value = filterValue;
+
+        OCA.Analytics.Panorama.currentPanorama.filters = filterOptions;
+        OCA.Analytics.Panorama.restoreCurrentReportData();
+        OCA.Analytics.Panorama.refreshFilterVisualisation();
+        OCA.Analytics.Panorama.updateAllReports();
+        OCA.Analytics.Filter.close();
+    },
+
+    refreshFilterVisualisation: function () {
+        document.getElementById('filterVisualisation').innerHTML = '';
+        let dims = OCA.Analytics.Panorama.availableDimensions;
+        let filterOptions = OCA.Analytics.Panorama.currentPanorama.filters;
+        if (filterOptions && filterOptions.filter) {
+            for (let filterDimension of Object.keys(filterOptions.filter)) {
+                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions.filter[filterDimension].option];
+                let span = document.createElement('span');
+                let filterValue = filterOptions.filter[filterDimension].value;
+
+                if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
+                    optionText = '';
+                    filterValue = filterValue.replace(/%/g, '');
+                    filterValue = filterValue.replace(/\(.*?\)/g, '');
+                }
+                span.innerText = dims[filterDimension] + ' ' + optionText + ' ' + filterValue;
+                span.classList.add('filterVisualizationItem');
+                span.id = filterDimension;
+                span.addEventListener('click', OCA.Analytics.Panorama.removeFilter);
+                document.getElementById('filterVisualisation').appendChild(span);
+            }
+        }
+    },
+
+    removeFilter: function (evt) {
+        let filterDimension = evt.target.id;
+        let filterOptions = OCA.Analytics.Panorama.currentPanorama.filters;
+        if (filterOptions && filterOptions.filter) {
+            delete filterOptions.filter[filterDimension];
+            if (Object.keys(filterOptions.filter).length === 0) {
+                delete filterOptions.filter;
+            }
+        }
+        OCA.Analytics.Panorama.currentPanorama.filters = filterOptions;
+        OCA.Analytics.Panorama.refreshFilterVisualisation();
+        OCA.Analytics.Panorama.updateAllReports();
+    },
+
+    updateAllReports: function () {
+        OCA.Analytics.Panorama.availableDimensions = {};
+        OCA.Analytics.Panorama.currentPanorama.pages.forEach((page, pageIndex) => {
+            page.reports.forEach((item, idx) => {
+                if (item && item.type === OCA.Analytics.Panorama.TYPE_REPORT) {
+                    const itemId = pageIndex + '-' + idx;
+                    OCA.Analytics.Backend.getReportData(parseInt(item.value), itemId);
+                }
+            });
+        });
+    },
 }
 
 /**
