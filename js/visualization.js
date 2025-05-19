@@ -726,6 +726,54 @@ OCA.Analytics.Visualization = {
         return data;
     },
 
+    applyGrouping: function (data) {
+        const group = data.options.filteroptions?.group;
+        if (!group || group.type === 'none') {
+            return data;
+        }
+
+        const dimension = parseInt(group.dimension);
+        const n = parseInt(group.number);
+        if (isNaN(dimension) || isNaN(n)) {
+            return data;
+        }
+
+        const valueIndex = data.data[0].length - 1;
+
+        const totals = {};
+        data.data.forEach(row => {
+            const key = row[dimension];
+            const val = parseFloat(row[valueIndex]) || 0;
+            totals[key] = (totals[key] || 0) + val;
+        });
+
+        const entries = Object.entries(totals);
+        entries.sort((a, b) => group.type === 'top' ? b[1] - a[1] : a[1] - b[1]);
+        const keepKeys = entries.slice(0, n).map(e => e[0]);
+
+        const othersLabel = t('analytics', 'others');
+        const aggregated = {};
+        data.data.forEach(row => {
+            const newRow = row.slice();
+            if (!keepKeys.includes(row[dimension])) {
+                if (!group.others) {
+                    return;
+                }
+                newRow[dimension] = othersLabel;
+            }
+
+            const key = newRow.slice(0, valueIndex).join('\u0001');
+            if (aggregated[key]) {
+                aggregated[key][valueIndex] = (parseFloat(aggregated[key][valueIndex]) + parseFloat(newRow[valueIndex])).toString();
+            } else {
+                aggregated[key] = newRow;
+            }
+        });
+
+        data.data = Object.values(aggregated);
+        return data;
+    },
+
     formatDates: function (data) {
         let firstRow = data[0];
         let now;
