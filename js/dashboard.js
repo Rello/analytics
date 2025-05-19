@@ -259,7 +259,7 @@ OCA.Analytics.Dashboard = {
         Chart.defaults.plugins.legend.display = false;
 
         // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType);
+        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsondata.options);
 
         // do the color magic
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
@@ -433,8 +433,9 @@ OCA.Analytics.Dashboard = {
         };
     },
 
-    convertDataToChartJsFormat: function (data, chartType) {
+    convertDataToChartJsFormat: function (data, chartType, options) {
         const labelMap = new Map();
+        const isTopGrouping = options?.filteroptions?.group?.type === 'top';
         let datasetCounter = 0;
         let datasets = [], xAxisCategories = [];
         data.forEach((row) => {
@@ -459,7 +460,7 @@ OCA.Analytics.Dashboard = {
                 labelMap.set(dataSeriesColumn, {
                     ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}), // no label for doughnut charts
                     data: [],
-                    hidden: datasetCounter >= 4 // default hide > 4th series for better visibility
+                    hidden: datasetCounter >= 4 && !isTopGrouping // default hide > 4th series for better visibility
                 });
                 datasetCounter++;
             }
