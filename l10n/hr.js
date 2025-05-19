@@ -10,7 +10,6 @@ OC.L10N.register(
     "OK" : "U redu",
     "Cancel" : "Odustani",
     "Filter" : "Filtar",
-    "Add" : "Dodaj",
     "Sort" : "Razvrstaj",
     "Default" : "Zadani",
     "Bar" : "Bar",

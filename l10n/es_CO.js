@@ -12,7 +12,6 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Filter" : "Filtrar",
-    "Add" : "Agregar",
     "Sort" : "Ordenar",
     "Overview" : "Generalidades",
     "Remove from favorites" : "Eliminar de favoritos",

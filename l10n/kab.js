@@ -6,7 +6,6 @@ OC.L10N.register(
     "OK" : "IH",
     "Cancel" : "Sefsex",
     "Filter" : "Sizdeg",
-    "Add" : "Rnu",
     "Sort" : "Smizzwer",
     "Default" : "Prédéfini(e)",
     "Remove from favorites" : "Kkes-it seg ismal",

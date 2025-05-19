@@ -6,7 +6,6 @@ OC.L10N.register(
     "Done" : "Edildi",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
-    "Add" : "Əlavə etmək",
     "Sort" : "Çeşidləmək",
     "Overview" : "İcmal",
     "Remove from favorites" : "Remove from favorites",

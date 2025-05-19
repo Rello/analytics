@@ -7,7 +7,6 @@ OC.L10N.register(
     "OK" : "Goed",
     "Cancel" : "Kanselleer",
     "Filter" : "Filter",
-    "Add" : "Voeg by",
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Delete folder" : "Skrap vouer",
     "Add to favorites" : "Voeg by gunstelinge",

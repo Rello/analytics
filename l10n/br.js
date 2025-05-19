@@ -8,7 +8,6 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Nullañ",
     "Filter" : "Filtre",
-    "Add" : "Ouzhpennañ",
     "Sort" : "Urzhiañ",
     "Bar" : "Tavarn",
     "Overview" : "Taol-lagad",

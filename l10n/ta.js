@@ -7,7 +7,6 @@ OC.L10N.register(
     "Loading" : "Loading",
     "OK" : "சரி ",
     "Cancel" : "இரத்து செய்க",
-    "Add" : "சேர்க்க",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "கோப்பை அழிக்க",
     "Add to favorites" : "Add to favorites",

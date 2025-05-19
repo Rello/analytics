@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "Läschen",
     "OK" : "OK",
     "Cancel" : "Ofbriechen",
-    "Add" : "Derbäimaachen",
     "Sort" : "Zortéieren",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Dossier läschen",

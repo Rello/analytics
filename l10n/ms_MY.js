@@ -34,7 +34,6 @@ OC.L10N.register(
     "Trend" : "Trend",
     "OK" : "OK",
     "Cancel" : "Batal",
-    "Add" : "Tambah",
     "Sort" : "Susun",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",

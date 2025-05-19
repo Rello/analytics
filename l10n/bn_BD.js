@@ -6,7 +6,6 @@ OC.L10N.register(
     "Done" : "শেষ হলো",
     "OK" : "তথাস্তু",
     "Cancel" : "বাতির",
-    "Add" : "যোগ করুন",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "ফোল্ডার মোছ",
     "Add to favorites" : "Add to favorites",

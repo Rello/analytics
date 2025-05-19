@@ -11,7 +11,6 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Anulare",
     "Filter" : "Filtru",
-    "Add" : "Adaugă",
     "Sort" : "Sortează",
     "Default" : "Implicită",
     "Line" : "Linie",

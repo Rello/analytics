@@ -8,7 +8,6 @@ OC.L10N.register(
     "Delete" : "հեռացնել",
     "OK" : "Լավ",
     "Cancel" : "ընդհատել",
-    "Add" : "Ավելացնել",
     "Sort" : "Դասակարգել",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
