@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "Dileu",
     "OK" : "Iawn",
     "Cancel" : "Diddymu",
-    "Add" : "Ychwanegu",
     "Sort" : "Trefnu",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",

@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "﻿ಅಳಿಸಿ",
     "OK" : "ಸರಿ",
     "Cancel" : "﻿ರದ್ದು",
-    "Add" : "﻿ಸೇರಿಸಿ",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",

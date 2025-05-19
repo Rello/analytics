@@ -4,7 +4,6 @@ OC.L10N.register(
     "Delete" : "حذف کریں",
     "OK" : "اوکے",
     "Cancel" : "منسوخ کریں",
-    "Add" : "شامل کریں",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "تقسیم",

@@ -24,21 +24,21 @@ class Github implements IDatasource {
 	}
 
 	/**
-	 * @return string Display Name of the datasource
+    * @return string Display Name of the data source
 	 */
 	public function getName(): string {
 		return 'GitHub';
 	}
 
 	/**
-	 * @return int digit unique datasource id
+    * @return int digit unique data source id
 	 */
 	public function getId(): int {
 		return 3;
 	}
 
 	/**
-	 * @return array available options of the datasource
+    * @return array available options of the data source
 	 */
 	public function getTemplate(): array {
 		$template = array();

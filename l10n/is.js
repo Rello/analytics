@@ -11,7 +11,6 @@ OC.L10N.register(
     "OK" : "Í lagi",
     "Cancel" : "Hætta við",
     "Filter" : "Sía",
-    "Add" : "Bæta við",
     "Sort" : "Flokka",
     "Default" : "Sjálfgefið",
     "Line" : "Lína",

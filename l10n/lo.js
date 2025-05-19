@@ -4,7 +4,6 @@ OC.L10N.register(
     "Delete" : "ລຶບ",
     "OK" : "ຕົກລົງ",
     "Cancel" : "ຍົກເລີກ",
-    "Add" : "ເພີ່ມ",
     "Sort" : "ລຽງດຳດັບ",
     "Default" : "ເລີ່ມຕົ້ນ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",

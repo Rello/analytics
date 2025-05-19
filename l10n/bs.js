@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "Obriši",
     "OK" : "OK",
     "Cancel" : "Otkaži",
-    "Add" : "Dodaj",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Izbriši fasciklu",
     "Add to favorites" : "Add to favorites",

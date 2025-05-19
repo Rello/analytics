@@ -6,7 +6,6 @@ OC.L10N.register(
     "Done" : "Preste",
     "OK" : "Ok",
     "Cancel" : "Cancellar",
-    "Add" : "Adder",
     "Sort" : "Ordinar",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Deler dossier",

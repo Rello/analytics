@@ -5,7 +5,6 @@ OC.L10N.register(
     "Done" : "Gotovo",
     "OK" : "U redu",
     "Cancel" : "Otkaži",
-    "Add" : "Dodaj",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add to favorites" : "Dodaj u omiljene",
     "Share" : "Podeli",

@@ -4,7 +4,6 @@ OC.L10N.register(
     "Delete" : "Delete",
     "OK" : "OK",
     "Cancel" : "Cancel",
-    "Add" : "Add",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Падзяліцца",

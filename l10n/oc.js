@@ -11,7 +11,6 @@ OC.L10N.register(
     "less than" : "mens de",
     "OK" : "D’acòrdi",
     "Cancel" : "Anullar",
-    "Add" : "Apondre",
     "Sort" : "Triar",
     "Secondary" : "Segondari",
     "Line" : "Linha",

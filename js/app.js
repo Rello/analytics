@@ -857,7 +857,7 @@ OCA.Analytics.Datasource = {
         if (filter) {
             filterDatasource = '/' + filter;
         }
-        // need to offer an await here, because the datasourceOptions is important for subsequent functions in the sidebar
+        // need to offer an await here, because the data source options are important for subsequent functions in the sidebar
         let requestUrl = OC.generateUrl('apps/analytics/datasource' + filterDatasource);
         let response = await fetch(requestUrl, {
             method: 'GET',
@@ -916,7 +916,7 @@ OCA.Analytics.Datasource = {
         form.appendChild(OCA.Analytics.Datasource.buildOptionHidden('dataSourceType', datasource));
 
         for (let templateOption of template) {
-            // loop all options of the datasource template and create the input form
+            // loop all options of the data source template and create the input form
 
             // if it is a section, we don´t need the usual labels
             if (templateOption.type === 'section') {

@@ -11,7 +11,6 @@ OC.L10N.register(
     "OK" : "ตกลง",
     "Cancel" : "ยกเลิก",
     "Filter" : "ตัวกรอง",
-    "Add" : "เพิ่ม",
     "Sort" : "จัดเรียง",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Delete folder" : "ลบโฟลเดอร์",

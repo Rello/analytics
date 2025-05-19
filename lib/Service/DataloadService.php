@@ -166,10 +166,10 @@ class DataloadService
         $bulkInsert = null;
         $aggregation = null;
 
-        // get the data from the datasource
+        // get the data from the data source
         $result = $this->getDataFromDatasource($dataloadId);
 
-        // dont continue in case of datasource error
+        // dont continue in case of data source error
         if ($result['error'] !== 0) {
             return [
                 'insert' => $insert,
@@ -269,7 +269,7 @@ class DataloadService
     }
 
     /**
-     * get the data from datasource
+     * get the data from data source
      * to be used in simulation or execution
      *
      * @param int $dataloadId

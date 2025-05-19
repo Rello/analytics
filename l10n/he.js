@@ -14,7 +14,6 @@ OC.L10N.register(
     "OK" : "אישור",
     "Cancel" : "ביטול",
     "Filter" : "מסנן",
-    "Add" : "הוספה",
     "Sort" : "מיון",
     "Default" : "ברירת מחדל",
     "Bar" : "בר",

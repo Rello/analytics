@@ -303,14 +303,14 @@ OCA.Analytics.Filter = {
 
         let layout = {};
         document.querySelectorAll('.columnSection').forEach(function (section) {
-            var sectionId = section.id;
+            const sectionId = section.id;
             // Initialize the layout[sectionId] as an empty array if undefined
             if (!layout[sectionId]) {
                 layout[sectionId] = [];
             }
-            var childNodes = section.getElementsByClassName('draggable');
-            for (var i = 0; i < childNodes.length; i++) {
-                var columnId = parseInt(childNodes[i].id.replace('column-', ''));
+            const childNodes = section.getElementsByClassName('draggable');
+            for (let i = 0; i < childNodes.length; i++) {
+                const columnId = parseInt(childNodes[i].id.replace('column-', ''));
                 layout[sectionId].push(columnId);
             }
         });
@@ -508,11 +508,15 @@ OCA.Analytics.Filter = {
 
     processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions;
+        if (dataOptions === '' || dataOptions === null) {
+            dataOptions = [];
+        }
         let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
-        chartOptions === null ? chartOptions = [] : chartOptions;
+        if (chartOptions === null) {
+            chartOptions = [];
+        }
         let userDatasetOptions = [];
-        let nonDefaultValues, seondaryAxisRequired = false;
+        let nonDefaultValues, secondaryAxisRequired = false;
         let optionObject;
 
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
@@ -526,11 +530,11 @@ OCA.Analytics.Filter = {
         let optionsColor = document.getElementsByName('optionsColor');
 
         for (let i = 0; i < optionsYAxis.length; i++) {
-            let j = i - (Math.floor(i / defaultColors.length) * defaultColors.length)
+            let j = i % defaultColors.length
             optionObject = {};
             if (optionsYAxis[i].value !== defaultYAxis) {
                 optionObject['yAxisID'] = optionsYAxis[i].value;
-                seondaryAxisRequired = true;
+                secondaryAxisRequired = true;
             }
             if (optionsChartType[i].value !== defaultChartType) {
                 optionObject['type'] = optionsChartType[i].value;
@@ -578,7 +582,7 @@ OCA.Analytics.Filter = {
         // if any data series is tied to the secondary yAxis or not
         // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
         // additional combinations for dataMode apply
-        if (seondaryAxisRequired === true) {
+        if (secondaryAxisRequired === true) {
             let enableAxis = {scales: {secondary: {display: true}}};
             try {
                 // if there are existing settings, merge them
@@ -634,7 +638,7 @@ OCA.Analytics.Filter = {
     // function to define the color for a data series
     checkColor: function (array, index) {
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
-        let j = index - (Math.floor(index / colors.length) * colors.length)
+        let j = index % colors.length
         let field = 'backgroundColor';
         if (Array.isArray(array) && array.length && array[index]) {
             if (field in array[index]) {
@@ -727,9 +731,9 @@ OCA.Analytics.Filter.Drag = {
 
     drop: function (ev) {
         ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        var draggedElement = document.getElementById(data);
-        var dropTarget = ev.target;
+        const data = ev.dataTransfer.getData("text");
+        const draggedElement = document.getElementById(data);
+        let dropTarget = ev.target;
 
         // Check if the drop target is within a section or is the section title
         while (!dropTarget.classList.contains('columnSection') && !dropTarget.classList.contains('draggable')) {

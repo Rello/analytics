@@ -31,7 +31,6 @@ OC.L10N.register(
     "OK" : "კარგი",
     "Cancel" : "გაუქმება",
     "Filter" : "გაფილტრვა",
-    "Add" : "დამატება",
     "Sort" : "Sort",
     "Default" : "Default",
     "Bar" : "Bar",

@@ -26,7 +26,7 @@ class Regex implements IDatasource
     }
 
     /**
-     * @return string Display Name of the datasource
+     * @return string Display Name of the data source
      */
     public function getName(): string
     {
@@ -34,7 +34,7 @@ class Regex implements IDatasource
     }
 
     /**
-     * @return int digit unique datasource id
+     * @return int digit unique data source id
      */
     public function getId(): int
     {
@@ -42,7 +42,7 @@ class Regex implements IDatasource
     }
 
     /**
-     * @return array available options of the datasoure
+     * @return array available options of the data source
      */
     public function getTemplate(): array
     {
@@ -58,7 +58,7 @@ class Regex implements IDatasource
     /**
      * Read the Data
      * @param $option
-     * @return array available options of the data soure
+     * @return array available options of the data source
      */
     public function readData($option): array
     {

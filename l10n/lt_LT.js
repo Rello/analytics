@@ -14,7 +14,6 @@ OC.L10N.register(
     "OK" : "Gerai",
     "Cancel" : "Atsisakyti",
     "Filter" : "Filtras",
-    "Add" : "Pridėti",
     "Table options" : "Lentelės parinktys",
     "Sort" : "Rikiuoti",
     "Default" : "Numatytasis",

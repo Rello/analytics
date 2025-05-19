@@ -10,7 +10,6 @@ OC.L10N.register(
     "Loading" : "Ŝargado",
     "OK" : "Bone",
     "Cancel" : "Nuligi",
-    "Add" : "Aldoni",
     "Sort" : "Ordigi",
     "Overview" : "Superrigardo",
     "Remove from favorites" : "Forigi el pliŝataĵoj",

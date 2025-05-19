@@ -7,7 +7,6 @@ OC.L10N.register(
     "OK" : "ок",
     "Cancel" : "болиулах",
     "Filter" : "Шүүлтүүр",
-    "Add" : "нэмэх",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Хавтсыг устгах",
     "Add to favorites" : "Add to favorites",

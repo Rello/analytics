@@ -52,7 +52,6 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Loobu",
     "Filter" : "Filter",
-    "Add" : "Lisa",
     "Sort" : "Järjesta",
     "Default" : "Vaikimisi",
     "Ascending" : "Kasvavalt",

@@ -8,7 +8,6 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Anullo",
     "Filter" : "Filtro",
-    "Add" : "Shto",
     "Sort" : "Renditni",
     "Default" : "Paraprake",
     "Remove from favorites" : "Remove from favorites",
