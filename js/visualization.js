@@ -614,10 +614,11 @@ OCA.Analytics.Visualization = {
         });
     },
 
-    convertDataToChartJsFormat: function (data, chartType, modelType) {
+    convertDataToChartJsFormat: function (data, chartType) {
         let datasets = [], xAxisCategories = [];
         let dataModel = '';
         let header = data.header.slice(1);
+        const isTopGrouping = !!data.options?.filteroptions?.group;
 
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.analyticsModel !== undefined) {
@@ -643,7 +644,6 @@ OCA.Analytics.Visualization = {
         } else {
             // KPI-Model: Use existing logic
             const labelMap = new Map();
-            const isTopGrouping = data.options?.filteroptions?.group?.type === 'top';
             let datasetCounter = 0;
             data.forEach((row) => {
                 let dataSeriesColumn, characteristicColumn, value;

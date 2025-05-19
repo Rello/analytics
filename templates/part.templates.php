@@ -180,7 +180,8 @@
                 <input type="number" id="groupOptionNumber" class="optionsInput" min="1" />
             </div>
             <div style="display: table-cell; width: 100px;">
-                <input type="checkbox" id="groupOptionOthers" class="checkbox" />
+                <input type="checkbox" id="groupOptionOthers" class="checkbox" name="groupOptionOthers"/>
+                <label for="groupOptionOthers"></label>
             </div>
         </div>
     </div>

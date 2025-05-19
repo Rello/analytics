@@ -220,7 +220,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Results can be limited to Top or Flop N. Remaining values may be summarized with others.')
+            t('analytics', 'Results can be limited to Top or Flop N. Remaining values may be summarized as "others".')
         );
     },
 
@@ -241,6 +241,8 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        // remove all data options for which there is no dimension anymore
+        OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.group.number);
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
@@ -731,21 +733,18 @@ OCA.Analytics.Filter = {
                 }
             }
         }
-        return dataOptions;
+        // Convert to array without index numbers
+        return Object.values(dataOptions).slice(0, dataOptions.length);
     },
 
     cleanupDataOptionsArray: function (dataOptions) {
-        let lastNonDefaultValue = false;
-        let items = dataOptions.length;
-        for (let i = 0; i < items; i++) {
-            if (Object.entries(dataOptions[i]).length !== 0) lastNonDefaultValue = i;
+        // Get the correct number of items from the report
+        const itemCount = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
+        // Remove all array values beyond itemCount
+        if (Array.isArray(dataOptions)) {
+            dataOptions.splice(itemCount);
         }
 
-        if (lastNonDefaultValue !== false) {    // remove all tailing {}
-            dataOptions.splice(lastNonDefaultValue + 1, items - lastNonDefaultValue);
-        } else {                                // or reset the whole array if no setting at all exists
-            dataOptions = [];
-        }
         return dataOptions;
     },
 

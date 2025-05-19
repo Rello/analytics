@@ -259,7 +259,7 @@ OCA.Analytics.Dashboard = {
         Chart.defaults.plugins.legend.display = false;
 
         // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsondata.options);
+        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsaondata.options);
 
         // do the color magic
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
