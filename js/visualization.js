@@ -643,6 +643,7 @@ OCA.Analytics.Visualization = {
         } else {
             // KPI-Model: Use existing logic
             const labelMap = new Map();
+            const isTopGrouping = data.options?.filteroptions?.group?.type === 'top';
             let datasetCounter = 0;
             data.forEach((row) => {
                 let dataSeriesColumn, characteristicColumn, value;
@@ -659,7 +660,7 @@ OCA.Analytics.Visualization = {
                     labelMap.set(dataSeriesColumn, {
                         ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}),
                         data: [],
-                        hidden: datasetCounter >= 4,
+                        hidden: datasetCounter >= 4 && !isTopGrouping,
                         yAxisID: 'primary'
                     });
                     datasetCounter++;
