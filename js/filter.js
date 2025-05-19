@@ -242,7 +242,9 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         // remove all data options for which there is no dimension anymore
-        OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.group.number);
+        if (filterOptions.group) {
+            OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.group.number);
+        }
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
