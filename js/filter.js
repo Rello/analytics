@@ -182,6 +182,74 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    openGroupDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Grouping'),
+            OCA.Analytics.Filter.processGroupOptionsDialog
+        );
+
+        const container = document.importNode(document.getElementById('templateGroupOptions').content, true);
+
+        const headerArray = OCA.Analytics.currentReportData.header;
+        const dimensionSelect = container.getElementById('groupOptionDimension');
+        dimensionSelect.innerHTML = '';
+        headerArray.forEach((header, index) => {
+            dimensionSelect.options.add(new Option(header, index));
+        });
+
+        const typeSelect = container.getElementById('groupOptionType');
+        typeSelect.innerHTML = '';
+        const typeOptions = [
+            {value: 'none', text: t('analytics', 'none')},
+            {value: 'top', text: t('analytics', 'Top N')},
+            {value: 'flop', text: t('analytics', 'Flop N')}
+        ];
+        typeOptions.forEach(({value, text}) => {
+            typeSelect.options.add(new Option(text, value));
+        });
+
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (filterOptions !== null && filterOptions['group'] !== undefined) {
+            dimensionSelect.value = filterOptions.group.dimension;
+            typeSelect.value = filterOptions.group.type;
+            container.getElementById('groupOptionNumber').value = filterOptions.group.number;
+            container.getElementById('groupOptionOthers').checked = filterOptions.group.others === true;
+        }
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Results can be limited to Top or Flop N. Remaining values may be summarized as "others".')
+        );
+    },
+
+    processGroupOptionsDialog: function () {
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
+
+        if (!filterOptions.group) {
+            filterOptions.group = {};
+        }
+
+        filterOptions.group.dimension = document.getElementById('groupOptionDimension').value;
+        filterOptions.group.type = document.getElementById('groupOptionType').value;
+        filterOptions.group.number = parseInt(document.getElementById('groupOptionNumber').value);
+        filterOptions.group.others = document.getElementById('groupOptionOthers').checked;
+
+        if (filterOptions.group.type === 'none' || isNaN(filterOptions.group.number)) {
+            delete filterOptions.group;
+        }
+
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        // remove all data options for which there is no dimension anymore
+        if (filterOptions.group) {
+            OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.group.number);
+        }
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Notification.dialogClose();
+    },
+
     refreshFilterVisualisation: function () {
         document.getElementById('filterVisualisation').innerHTML = '';
         let filterDimensions = OCA.Analytics.currentReportData.dimensions;
@@ -667,21 +735,18 @@ OCA.Analytics.Filter = {
                 }
             }
         }
-        return dataOptions;
+        // Convert to array without index numbers
+        return Object.values(dataOptions).slice(0, dataOptions.length);
     },
 
     cleanupDataOptionsArray: function (dataOptions) {
-        let lastNonDefaultValue = false;
-        let items = dataOptions.length;
-        for (let i = 0; i < items; i++) {
-            if (Object.entries(dataOptions[i]).length !== 0) lastNonDefaultValue = i;
+        // Get the correct number of items from the report
+        const itemCount = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
+        // Remove all array values beyond itemCount
+        if (Array.isArray(dataOptions)) {
+            dataOptions.splice(itemCount);
         }
 
-        if (lastNonDefaultValue !== false) {    // remove all tailing {}
-            dataOptions.splice(lastNonDefaultValue + 1, items - lastNonDefaultValue);
-        } else {                                // or reset the whole array if no setting at all exists
-            dataOptions = [];
-        }
         return dataOptions;
     },
 

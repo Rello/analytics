@@ -26,6 +26,12 @@
                 </button>
             </li>
             <li>
+                <button id="reportMenuGroup">
+                    <span class="icon-analytics-group"></span>
+                    <span><?php p($l->t('Grouping')); ?></span>
+                </button>
+            </li>
+            <li>
                 <button id="reportMenuChartOptions">
                     <span class="icon-analytics-chart-options"></span>
                     <span><?php p($l->t('Chart options')); ?></span>

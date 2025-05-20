@@ -158,6 +158,7 @@ OCA.Analytics.UI = {
 
             // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
             OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
+            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyGrouping(OCA.Analytics.currentReportData);
 
             /*
             Sorting of integer values on x-axis #389
@@ -351,6 +352,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuDrilldown').disabled = false;
             document.getElementById('reportMenuSort').disabled = false;
+            document.getElementById('reportMenuGroup').disabled = false;
             document.getElementById('reportMenuDownload').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuTranslate').disabled = false;
@@ -421,6 +423,7 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('reportMenuDrilldown').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         document.getElementById('reportMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
+        document.getElementById('reportMenuGroup').addEventListener('click', OCA.Analytics.Filter.openGroupDialog);
         document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
         document.getElementById('reportMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
 

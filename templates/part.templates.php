@@ -153,6 +153,40 @@
 
 </template>
 
+<template id="templateGroupOptions">
+    <div class="table" style="display: table;" id="groupOptionsTable">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <label for="groupOptionDimension"><?php p($l->t('Group by')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="groupOptionType"><?php p($l->t('Option')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 100px;">
+                <label for="groupOptionNumber">N</label>
+            </div>
+            <div style="display: table-cell; width: 100px;">
+                <label for="groupOptionOthers"><?php p($l->t('with others')); ?></label>
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <select id="groupOptionDimension" class="optionsInput"></select>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <select id="groupOptionType" class="optionsInput"></select>
+            </div>
+            <div style="display: table-cell; width: 100px;">
+                <input type="number" id="groupOptionNumber" class="optionsInput" min="1" />
+            </div>
+            <div style="display: table-cell; width: 100px;">
+                <input type="checkbox" id="groupOptionOthers" class="checkbox" name="groupOptionOthers"/>
+                <label for="groupOptionOthers"></label>
+            </div>
+        </div>
+    </div>
+</template>
+
 <template id="templateFilterDialog">
     <div class="table" style="display: table;">
         <div style="display: table-row;">
