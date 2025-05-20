@@ -18,21 +18,21 @@
 // Workaround because NC still delivers moment but triggers a deprecated warning every time it is used
 var myMoment = moment;
 
-// operators used for threshold comparisons in multiple functions
-const thresholdOperators = {
-    '=': (a, b) => a === b,
-    '<': (a, b) => a < b,
-    '>': (a, b) => a > b,
-    '<=': (a, b) => a <= b,
-    '>=': (a, b) => a >= b,
-    '!=': (a, b) => a !== b,
-};
-
 /**
  * @namespace OCA.Analytics.Visualization
  */
 OCA.Analytics.Visualization = {
     defaultColorPalette: ["#1A366C", "#EA6A47", "#a3acb9", "#6AB187", "#39a7db", "#c85200", "#57606c", "#a3cce9", "#ffbc79", "#c8d0d9"],
+
+    // operators used for threshold comparisons in multiple functions
+    thresholdOperators : {
+        '=': (a, b) => a === b,
+        '<': (a, b) => a < b,
+        '>': (a, b) => a > b,
+        '<=': (a, b) => a <= b,
+        '>=': (a, b) => a >= b,
+        '!=': (a, b) => a !== b,
+    },
 
     // *************
     // *** table ***
@@ -292,7 +292,7 @@ OCA.Analytics.Visualization = {
         let severity;
         for (let threshold of thresholds) {
             // use the last column for comparison of the value
-            const comparison = thresholdOperators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
+            const comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
             severity = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (severity === 2) {
@@ -786,7 +786,7 @@ OCA.Analytics.Visualization = {
         thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            const comparison = thresholdOperators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
+            const comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
