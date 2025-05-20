@@ -1167,6 +1167,7 @@ OCA.Analytics.Backend = {
                 let jsondata = JSON.parse(xhr.response);
                 // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
                 jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
+                jsondata = OCA.Analytics.Visualization.applyTimeGrouping(jsondata);
                 jsondata = OCA.Analytics.Visualization.applyGrouping(jsondata);
                 if (parseInt(jsondata.error) !== 0) {
                     OCA.Analytics.Notification.notification('error', jsondata.error);

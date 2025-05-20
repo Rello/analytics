@@ -754,6 +754,106 @@ OCA.Analytics.Visualization = {
         return data;
     },
 
+    applyTimeGrouping: function (data) {
+        const tg = data.options.filteroptions?.timeGrouping;
+        if (!tg || tg.grouping === 'none') {
+            return data;
+        }
+
+        const dimension = parseInt(tg.dimension);
+        if (isNaN(dimension)) {
+            return data;
+        }
+
+        const grouping = tg.grouping;
+        const mode = tg.mode || 'summation';
+        const valueIndex = data.data[0].length - 1;
+
+        if (data.data.length === 0) {
+            return data;
+        }
+
+        const sample = data.data[0][dimension];
+        const isTimestamp = !isNaN(sample) && sample !== '';
+        const tsLength = isTimestamp ? String(sample).length : 0;
+        let parser = null;
+        if (!isTimestamp && data.options.chartoptions?.scales?.x?.time?.parser) {
+            parser = data.options.chartoptions.scales.x.time.parser;
+        }
+
+        const parseDate = val => {
+            if (isTimestamp) {
+                const num = parseInt(val, 10);
+                if (tsLength > 10) return new Date(num);
+                return new Date(num * 1000);
+            }
+            if (parser) {
+                return myMoment(val, parser).toDate();
+            }
+            return new Date(val);
+        };
+
+        const formatDate = (date, orig) => {
+            if (isTimestamp) {
+                if (tsLength > 10) return date.getTime().toString();
+                return Math.floor(date.getTime() / 1000).toString();
+            }
+            if (parser) {
+                return myMoment(date).format(parser);
+            }
+            if (typeof orig === 'string') {
+                const len = orig.length;
+                if (len === 10) return myMoment(date).format('YYYY-MM-DD');
+                if (len === 16 && orig.includes('T')) return myMoment(date).format('YYYY-MM-DDTHH:mm');
+                if (len === 16) return myMoment(date).format('YYYY-MM-DD HH:mm');
+                if (len === 19 && orig.includes('T')) return myMoment(date).format('YYYY-MM-DDTHH:mm:ss');
+                if (len === 19) return myMoment(date).format('YYYY-MM-DD HH:mm:ss');
+            }
+            return myMoment(date).format();
+        };
+
+        const sums = {};
+        const counts = {};
+
+        data.data.forEach(row => {
+            const original = row[dimension];
+            let date = parseDate(original);
+
+            if (grouping === 'day') {
+                date = myMoment(date).startOf('day').toDate();
+            } else if (grouping === 'week') {
+                date = myMoment(date).startOf('week').toDate();
+            } else if (grouping === 'month') {
+                date = myMoment(date).startOf('month').toDate();
+            } else if (grouping === 'year') {
+                date = myMoment(date).startOf('year').toDate();
+            }
+
+            const newTime = formatDate(date, original);
+            const newRow = row.slice();
+            newRow[dimension] = newTime;
+
+            const key = newRow.slice(0, valueIndex).join('\u0001');
+            const val = parseFloat(row[valueIndex]) || 0;
+
+            if (!sums[key]) {
+                sums[key] = val;
+                counts[key] = 1;
+            } else {
+                sums[key] += val;
+                counts[key] += 1;
+            }
+        });
+
+        data.data = Object.keys(sums).map(key => {
+            const parts = key.split('\u0001');
+            const value = mode === 'average' ? sums[key] / counts[key] : sums[key];
+            return [...parts, value.toString()];
+        });
+
+        return data;
+    },
+
     formatDates: function (data) {
         let firstRow = data[0];
         let now;

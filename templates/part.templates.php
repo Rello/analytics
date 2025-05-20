@@ -153,6 +153,33 @@
 
 </template>
 
+<template id="templateTimeGroupingOptions">
+    <div class="table" style="display: table;" id="timeGroupingOptionsTable">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <label for="timeGroupingDimension"><?php p($l->t('Time dimension')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="timeGroupingGrouping"><?php p($l->t('Grouping')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <label for="timeGroupingMode"><?php p($l->t('Mode')); ?></label>
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <select id="timeGroupingDimension" class="optionsInput"></select>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <select id="timeGroupingGrouping" class="optionsInput"></select>
+            </div>
+            <div style="display: table-cell; width: 150px;">
+                <select id="timeGroupingMode" class="optionsInput"></select>
+            </div>
+        </div>
+    </div>
+</template>
+
 <template id="templateGroupOptions">
     <div class="table" style="display: table;" id="groupOptionsTable">
         <div style="display: table-row;">
