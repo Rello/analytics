@@ -70,7 +70,9 @@ OCA.Analytics.Filter = {
             table.appendChild(row);
         });
 
-        OCA.Analytics.Notification.htmlDialogUpdate(container, '');
+        OCA.Analytics.Notification.htmlDialogUpdate(container,
+            t('analytics', 'Removing columns will aggregate the key figures.<br>This applies to the chart and table')
+        );
     },
 
     processDrilldownDialog: function () {

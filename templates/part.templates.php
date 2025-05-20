@@ -192,7 +192,7 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 150px;"></div>
             <div style="display: table-cell; width: 50px;">
-                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column'); ?>" style="height: 20px;" alt="column">
+                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>" style="height: 20px;" alt="column">
             </div>
         </div>
     </div>
