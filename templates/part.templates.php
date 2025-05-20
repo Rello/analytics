@@ -187,6 +187,17 @@
     </div>
 </template>
 
+<template id="templateDrilldownOptions">
+    <div class="table" style="display: table;" id="drilldownOptionsTable">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;"></div>
+            <div style="display: table-cell; width: 50px;">
+                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>" style="height: 20px;" alt="column">
+            </div>
+        </div>
+    </div>
+</template>
+
 <template id="templateFilterDialog">
     <div class="table" style="display: table;">
         <div style="display: table-row;">
