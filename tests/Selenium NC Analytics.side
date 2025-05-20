@@ -3238,16 +3238,16 @@
       "id": "8306fc84-b132-40ce-b984-f2c21da3bde6",
       "comment": "",
       "command": "assertText",
-      "target": "id='Year format check'",
+      "target": "id='komma, string'",
       "targets": [
-        ["id='Year format check'", "id"],
-        ["css=#\\'Year\\ format\\ check\\'", "css:finder"],
-        ["xpath=//li[@id=\"'Year format check'\"]", "xpath:attributes"],
+        ["id='komma, string'", "id"],
+        ["css=#\\'komma\\,\\ string\\'", "css:finder"],
+        ["xpath=//li[@id=\"'komma, string'\"]", "xpath:attributes"],
         ["xpath=//ul[@id='tmpList']/li[5]", "xpath:idRelative"],
         ["xpath=//div[4]/ul/li[5]", "xpath:position"],
-        ["xpath=//li[contains(.,'Year format check')]", "xpath:innerText"]
+        ["xpath=//li[contains(.,'komma, string')]", "xpath:innerText"]
       ],
-      "value": "Year format check"
+      "value": "komma, string"
     }, {
       "id": "a875a4c4-7dc9-4542-9356-046f41db91b7",
       "comment": "",
@@ -5335,7 +5335,7 @@
         ["xpath=//div[@id='oc-dialog-2-content']/div", "xpath:idRelative"],
         ["xpath=//div[7]/div/div", "xpath:position"]
       ],
-      "value": "{\"count\":1}"
+      "value": "{\"count\":2}"
     }, {
       "id": "7a2b1de4-d7b9-4963-ad13-ba663a8a7844",
       "comment": "",
@@ -6446,7 +6446,7 @@
       "id": "c3473f48-9c1a-4b0a-8096-0de045179ccf",
       "comment": "",
       "command": "click",
-      "target": "id=drilldownDialogGo",
+      "target": "id=analyticsDialogBtnGo",
       "targets": [
         ["id=drilldownDialogGo", "id"],
         ["linkText=OK", "linkText"],
@@ -6532,7 +6532,7 @@
       "id": "fc1bef8d-7bfb-4dd2-b2a6-251ffb233ad3",
       "comment": "",
       "command": "click",
-      "target": "id=drilldownDialogGo",
+      "target": "id=analyticsDialogBtnGo",
       "targets": [
         ["id=drilldownDialogGo", "id"],
         ["linkText=OK", "linkText"],
