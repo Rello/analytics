@@ -18,6 +18,16 @@
 // Workaround because NC still delivers moment but triggers a deprecated warning every time it is used
 var myMoment = moment;
 
+// operators used for threshold comparisons in multiple functions
+const thresholdOperators = {
+    '=': (a, b) => a === b,
+    '<': (a, b) => a < b,
+    '>': (a, b) => a > b,
+    '<=': (a, b) => a <= b,
+    '>=': (a, b) => a >= b,
+    '!=': (a, b) => a !== b,
+};
+
 /**
  * @namespace OCA.Analytics.Visualization
  */
@@ -36,11 +46,10 @@ OCA.Analytics.Visualization = {
             uniqueId = parseInt(uniqueId.replace(/[^0-9]+/g, ''), 10);
         }
 
-        if (OCA.Analytics.tableObject?.uniqueId) {
+        if (OCA.Analytics.tableObject?.[uniqueId]) {
             OCA.Analytics.tableObject[uniqueId].destroy();
             domTarget.innerHTML = '';
             OCA.Analytics.tableObject[uniqueId] = [];
-            //test
         }
 
         this.showElement('tableContainer');
@@ -68,16 +77,6 @@ OCA.Analytics.Visualization = {
         ({data, columns} = this.convertDataToDataTableFormat(jsondata.data, tableOptions, jsondata.header));
         ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
 
-        // Calculate column totals
-        let columnTotals = new Array(data[0].length).fill(0);
-        data.forEach(row => {
-            row.forEach((value, index) => {
-                let numericValue = value === null ? 0 : parseFloat(value);
-                if (!isNaN(numericValue)) {
-                    columnTotals[index] += numericValue;
-                }
-            });
-        });
 
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
@@ -137,7 +136,7 @@ OCA.Analytics.Visualization = {
             // No special layout is defined: display all data in rows
 
             // create the columns. default alignment is left
-            columns = header.map((header, index) => ({title: header, className: ''}));
+            columns = header.map((header, index) => ({title: _.escape(header), className: ''}));
             data = originalData.map(row =>
                 row.map((value, index) => {
                     if (!isNaN(parseFloat(value)) && index !== 0 && tableOptions.formatLocales === undefined) {
@@ -147,13 +146,13 @@ OCA.Analytics.Visualization = {
                             // do not format 4 digit year numbers in the first 2 columns. dirty hack until proper column formating is there
                         } else {
                             columns[index].className = 'dt-right';
-                            return parseFloat(value).toLocaleString();
+                            return _.escape(parseFloat(value).toLocaleString());
                         }
                     } else if (index === row.length - 1 && !isNaN(parseFloat(value))) {
                         columns[index].className = 'dt-right';
-                        return parseFloat(value).toLocaleString();
+                        return _.escape(parseFloat(value).toLocaleString());
                     }
-                    return value;
+                    return _.escape(value);
                 })
             );
         } else if (layoutConfig.rows && !layoutConfig.columns.length && !layoutConfig.measures.length) {
@@ -161,7 +160,7 @@ OCA.Analytics.Visualization = {
 
             // Use titles from the headers array based on the reordered sequence (indices)
             columns = layoutConfig.rows.map((index, i) => ({
-                title: header[index],
+                title: _.escape(header[index]),
                 className: i > 0 ? 'dt-right' : ''
             }));
 
@@ -170,7 +169,7 @@ OCA.Analytics.Visualization = {
             // Reorder the data according to the new column sequence
             data = originalData.map(row =>
                 layoutConfig.rows.map((index, i) =>
-                    i === rowsLength - 1 ? parseFloat(row[index]).toLocaleString() : row[index]
+                    i === rowsLength - 1 ? _.escape(parseFloat(row[index]).toLocaleString()) : _.escape(row[index])
                 )
             );
         } else {
@@ -195,16 +194,16 @@ OCA.Analytics.Visualization = {
             });
 
             // 3. Generate the columns array which contains the column header and formatting (e.g. numbers)
-            columns = [{title: header[layoutConfig.rows], className: ''}];
+            columns = [{title: _.escape(header[layoutConfig.rows]), className: ''}];
             uniqueHeaders.forEach(header => {
                 columns.push({
-                    title: header,
+                    title: _.escape(header),
                     className: 'dt-right',
                     render: function (data, type, row, meta) {
                         if (data === null || isNaN(parseFloat(data))) {
                             return '';
                         } else {
-                            return parseFloat(data).toLocaleString();
+                            return _.escape(parseFloat(data).toLocaleString());
                         }
                     }
                 });
@@ -212,7 +211,7 @@ OCA.Analytics.Visualization = {
 
             // Convert transformed data to array format
             data = Object.entries(transformedData).map(([key, values]) => {
-                return [key, ...uniqueHeaders.map(header => values[header] || null)];
+                return [_.escape(key), ...uniqueHeaders.map(header => _.escape(values[header] || ''))];
             });
         }
         return {data, columns};
@@ -231,14 +230,14 @@ OCA.Analytics.Visualization = {
                         return [...row, difference];
                     });
                     columns.push({
-                        title: calc.title,
+                        title: _.escape(calc.title),
                         className: 'dt-right',
                         calculationId: calcIndex, // Store the index of the calculation
                         render: function (data, type, row, meta) {
                             if (data === null || isNaN(parseFloat(data))) {
                                 return '';
                             } else {
-                                return parseFloat(data).toLocaleString();
+                                return _.escape(parseFloat(data).toLocaleString());
                             }
                         }
                     });
@@ -249,14 +248,14 @@ OCA.Analytics.Visualization = {
                         return [...row, sum];
                     });
                     columns.push({
-                        title: calc.title,
+                        title: _.escape(calc.title),
                         className: 'dt-right',
                         calculationId: calcIndex, // Store the index of the calculation
                         render: function (data, type, row, meta) {
                             if (data === null || isNaN(parseFloat(data))) {
                                 return '';
                             } else {
-                                return parseFloat(data).toLocaleString();
+                                return _.escape(parseFloat(data).toLocaleString());
                             }
                         }
                     });
@@ -267,14 +266,14 @@ OCA.Analytics.Visualization = {
                         return [...row, percentage.toFixed(2)];
                     });
                     columns.push({
-                        title: calc.title,
+                        title: _.escape(calc.title),
                         className: 'dt-right',
                         calculationId: calcIndex, // Store the index of the calculation
                         render: function (data, type, row, meta) {
                             if (data === null || isNaN(parseFloat(data))) {
                                 return '';
                             } else {
-                                return parseFloat(data).toLocaleString() + " %";
+                                return _.escape(parseFloat(data).toLocaleString() + " %");
                             }
                         }
                     });
@@ -286,26 +285,6 @@ OCA.Analytics.Visualization = {
     },
 
     dataTableRowCallback: function (row, data, index, thresholds, tableOptions) {
-        const operators = {
-            '=': function (a, b) {
-                return a === b
-            },
-            '<': function (a, b) {
-                return a < b
-            },
-            '>': function (a, b) {
-                return a > b
-            },
-            '<=': function (a, b) {
-                return a <= b
-            },
-            '>=': function (a, b) {
-                return a >= b
-            },
-            '!=': function (a, b) {
-                return a !== b
-            },
-        };
 
         thresholds = thresholds.filter(p => (p.dimension1 === data[0] || p.dimension1 === '*') && p.option !== 'new');
 
@@ -313,7 +292,7 @@ OCA.Analytics.Visualization = {
         let severity;
         for (let threshold of thresholds) {
             // use the last column for comparison of the value
-            const comparison = operators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
+            const comparison = thresholdOperators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
             severity = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (severity === 2) {
@@ -386,9 +365,9 @@ OCA.Analytics.Visualization = {
             }
 
             if (displayIdx === 0) {
-                cell.innerHTML = 'Total';
+                cell.textContent = 'Total';
             } else {
-                cell.innerHTML = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
+                cell.textContent = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
                 cell.classList.add('dt-right');
             }
         });
@@ -409,7 +388,7 @@ OCA.Analytics.Visualization = {
     },
 
     handleDataTableChanged: function () {
-        OCA.Analytics.unsavedFilters === true;
+        OCA.Analytics.unsavedFilters = true;
         document.getElementById('saveIcon').style.removeProperty('display');
     },
 
@@ -802,32 +781,12 @@ OCA.Analytics.Visualization = {
     },
 
     validateThreshold: function (kpi, value, thresholds) {
-        const operators = {
-            '=': function (a, b) {
-                return a === b
-            },
-            '<': function (a, b) {
-                return a < b
-            },
-            '>': function (a, b) {
-                return a > b
-            },
-            '<=': function (a, b) {
-                return a <= b
-            },
-            '>=': function (a, b) {
-                return a >= b
-            },
-            '!=': function (a, b) {
-                return a !== b
-            },
-        };
         let thresholdColor;
 
         thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
+            const comparison = thresholdOperators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
@@ -835,7 +794,7 @@ OCA.Analytics.Visualization = {
                 } else if (threshold['severity'] === 3) {
                     thresholdColor = 'color: orange;';
                 } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'scolor: green;';
+                    thresholdColor = 'color: green;';
                 }
             }
         }
