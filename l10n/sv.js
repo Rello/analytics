@@ -204,6 +204,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Tidstämpel för datainläsning",
     "Releases" : "Versioner",
     "Issues" : "Problem",
+    "Pull Requests" : "Pull-begäran",
     "Limit" : "Begränsning",
     "Show assets" : "Visa resurser",
     "Personal access token" : "Personlig åtkomst-token",
