@@ -28,54 +28,49 @@ OCA.Analytics.Filter = {
 
     openDrilldownDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
-        let drilldownRows = '';
-        let availableDimensions = OCA.Analytics.currentReportData.dimensions;
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
 
-        for (let i = 0; i < Object.keys(availableDimensions).length; i++) {
-            let checkboxStatus = 'checked';
-            if (filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][Object.keys(availableDimensions)[i]] !== undefined) {
-                checkboxStatus = '';
-            }
-            drilldownRows = drilldownRows + '<div style="display: table-row;">'
-                + '<div style="display: table-cell;">'
-                + Object.values(availableDimensions)[i]
-                + '</div>'
-                + '<div style="display: table-cell;">'
-                + '<input type="checkbox" id="drilldownColumn' + [i] + '" class="checkbox" name="drilldownColumn" value="' + Object.keys(availableDimensions)[i] + '" ' + checkboxStatus + '>'
-                + '<label for="drilldownColumn' + [i] + '"> </label>'
-                + '</div>'
-                + '</div>';
-        }
-
-        document.body.insertAdjacentHTML('beforeend',
-            '<div id="analytics_dialog_overlay" class="analyticsDialogDim"></div>'
-            + '<div id="analytics_dialog_container" class="analyticsDialog" style="position: fixed;">'
-            + '<div id="analytics_dialog">'
-            + '<a class="analyticsDialogClose" id="btnClose"></a>'
-            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
-            + t('analytics', 'Drilldown')
-            + '</span></div>'
-            + '<div class="table" style="display: table;">'
-
-            + '<div style="display: table-row;">'
-            + '<div style="display: table-cell; width: 150px;">'
-            + '</div>'
-            + '<div style="display: table-cell; width: 50px;">'
-            + '<img src="' + OC.imagePath('analytics', 'column') + '" style="height: 20px;" alt="column">'
-            + '</div>'
-            + '</div>'
-            + drilldownRows
-            + '</div>'
-            + '<div class="analyticsDialogButtonrow" id="buttons">'
-            + '<a class="button primary" id="drilldownDialogGo">' + t('analytics', 'OK') + '</a>'
-            + '<a class="button" id="drilldownDialogCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '</div>'
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Drilldown'),
+            OCA.Analytics.Filter.processDrilldownDialog
         );
 
-        document.getElementById("btnClose").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("drilldownDialogCancel").addEventListener("click", OCA.Analytics.Filter.close);
-        document.getElementById("drilldownDialogGo").addEventListener("click", OCA.Analytics.Filter.processDrilldownDialog);
+        const container = document.importNode(document.getElementById('templateDrilldownOptions').content, true);
+        const table = container.getElementById('drilldownOptionsTable');
+
+        const availableDimensions = OCA.Analytics.currentReportData.dimensions;
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+
+        Object.keys(availableDimensions).forEach((dimension, index) => {
+            const row = document.createElement('div');
+            row.style.display = 'table-row';
+
+            const cellLabel = document.createElement('div');
+            cellLabel.style.display = 'table-cell';
+            cellLabel.textContent = availableDimensions[dimension];
+            row.appendChild(cellLabel);
+
+            const cellCheckbox = document.createElement('div');
+            cellCheckbox.style.display = 'table-cell';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'drilldownColumn' + index;
+            checkbox.className = 'checkbox';
+            checkbox.name = 'drilldownColumn';
+            checkbox.value = dimension;
+            if (!(filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined)) {
+                checkbox.checked = true;
+            }
+            const label = document.createElement('label');
+            label.setAttribute('for', checkbox.id);
+            label.textContent = ' ';
+            cellCheckbox.appendChild(checkbox);
+            cellCheckbox.appendChild(label);
+            row.appendChild(cellCheckbox);
+
+            table.appendChild(row);
+        });
+
+        OCA.Analytics.Notification.htmlDialogUpdate(container, '');
     },
 
     processDrilldownDialog: function () {
@@ -102,7 +97,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
-        OCA.Analytics.Filter.close();
+        OCA.Analytics.Notification.dialogClose();
     },
 
     openFilterDialog: function () {
