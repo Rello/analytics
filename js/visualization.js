@@ -545,10 +545,10 @@ OCA.Analytics.Visualization = {
         let stacked100 = chartTypeFull.endsWith('St100');
         if (stacked === true) {
             chartOptions.scales['primary'].stacked = chartOptions.scales['x'].stacked = true;
-            chartOptions.scales['primary'].max = 100;
         }
         if (stacked100 === true) {
             datasets = this.calculateStacked100(datasets);
+            chartOptions.scales['primary'].max = 100;
         }
 
         // overwrite some default chart options depending on the chart type

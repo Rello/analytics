@@ -259,7 +259,7 @@ OCA.Analytics.Dashboard = {
         Chart.defaults.plugins.legend.display = false;
 
         // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsaondata.options);
+        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsondata.options);
 
         // do the color magic
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
@@ -309,10 +309,10 @@ OCA.Analytics.Dashboard = {
         let stacked100 = chartTypeFull.endsWith('St100');
         if (stacked === true) {
             chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
-            chartOptions.scales['primary'].max = 100;
         }
         if (stacked100 === true) {
             datasets = OCA.Analytics.UI.calculateStacked100(datasets);
+            chartOptions.scales['primary'].max = 100;
         }
 
         // overwrite some default chart options depending on the chart type
