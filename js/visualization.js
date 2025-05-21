@@ -34,6 +34,8 @@ OCA.Analytics.Visualization = {
         '!=': (a, b) => a !== b,
     },
 
+    dataTableInitialized: {},
+
     // *************
     // *** table ***
     // *************
@@ -118,10 +120,24 @@ OCA.Analytics.Visualization = {
         }
 
         if (!OCA.Analytics.isPanorama) {
+            // reset initialization flag for this table
+            OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = false;
+
             // Listener for when the pagination length is changed, table sorted, columns re-ordered
-            OCA.Analytics.tableObject[uniqueId].on('length.dt', this.handleDataTableChanged);
-            OCA.Analytics.tableObject[uniqueId].on('order.dt', this.handleDataTableChanged);
-            OCA.Analytics.tableObject[uniqueId].on('column-reorder', this.handleDataTableChanged);
+            OCA.Analytics.tableObject[uniqueId].on('length.dt', () => {
+                OCA.Analytics.Visualization.handleDataTableChanged();
+            });
+            OCA.Analytics.tableObject[uniqueId].on('order.dt', () => {
+                OCA.Analytics.Visualization.handleDataTableChanged();
+            });
+            OCA.Analytics.tableObject[uniqueId].on('column-reorder', () => {
+                OCA.Analytics.Visualization.handleDataTableChanged();
+            });
+
+            // mark the table as initialized after DataTables setup finished
+            OCA.Analytics.tableObject[uniqueId].on('init.dt', () => {
+                OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = true;
+            });
         }
     },
 
@@ -525,10 +541,10 @@ OCA.Analytics.Visualization = {
         let stacked100 = chartTypeFull.endsWith('St100');
         if (stacked === true) {
             chartOptions.scales['primary'].stacked = chartOptions.scales['x'].stacked = true;
-            chartOptions.scales['primary'].max = 100;
         }
         if (stacked100 === true) {
             datasets = this.calculateStacked100(datasets);
+            chartOptions.scales['primary'].max = 100;
         }
 
         // overwrite some default chart options depending on the chart type
@@ -693,19 +709,27 @@ OCA.Analytics.Visualization = {
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.scales?.x?.time?.parser !== undefined) {
                 let parser = data.options.chartoptions["scales"]["x"]["time"]["parser"];
+                let sortColumn = data.data.length > 0 ? data.data[0].length - 2 : 0;
+
+                // Pre-parse dates and attach to each row
+                data.data.forEach(row => {
+                    row._parsedDate = myMoment(row[sortColumn], parser).toDate();
+                });
+
                 data.data.sort(function (a, b) {
-                    let sortColumn = a.length - 2;
                     if (sortColumn === 0) {
-                        return myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
+                        return a._parsedDate - b._parsedDate;
                     } else {
-                        return a[0] - b[0] || myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
+                        return a[0] - b[0] || a._parsedDate - b._parsedDate;
                     }
                 });
+
+                // Optionally, clean up the temporary property
+                data.data.forEach(row => { delete row._parsedDate; });
             }
         }
         return data;
     },
-
     applyGrouping: function (data) {
         const group = data.options.filteroptions?.group;
         if (!group || group.type === 'none') {
@@ -720,37 +744,146 @@ OCA.Analytics.Visualization = {
 
         const valueIndex = data.data[0].length - 1;
 
+        // 1. Calculate totals
         const totals = {};
-        data.data.forEach(row => {
+        for (let i = 0; i < data.data.length; i++) {
+            const row = data.data[i];
             const key = row[dimension];
             const val = parseFloat(row[valueIndex]) || 0;
             totals[key] = (totals[key] || 0) + val;
-        });
+        }
 
+        // 2. Sort and select keys to keep
         const entries = Object.entries(totals);
-        entries.sort((a, b) => group.type === 'top' ? b[1] - a[1] : a[1] - b[1]);
-        const keepKeys = entries.slice(0, n).map(e => e[0]);
+        const isTop = group.type === 'top';
+        entries.sort((a, b) => isTop ? b[1] - a[1] : a[1] - b[1]);
+        const keepKeysSet = new Set(entries.slice(0, n).map(e => e[0]));
 
         const othersLabel = t('analytics', 'others');
         const aggregated = {};
-        data.data.forEach(row => {
-            const newRow = row.slice();
-            if (!keepKeys.includes(row[dimension])) {
-                if (!group.others) {
-                    return;
-                }
+
+        // 3. Aggregate rows
+        for (let i = 0; i < data.data.length; i++) {
+            const row = data.data[i];
+            let keyVal = row[dimension];
+            let newRow = row;
+
+            if (!keepKeysSet.has(keyVal)) {
+                if (!group.others) continue;
+                // Only clone if we need to modify
+                newRow = row.slice();
                 newRow[dimension] = othersLabel;
             }
 
-            const key = newRow.slice(0, valueIndex).join('\u0001');
-            if (aggregated[key]) {
-                aggregated[key][valueIndex] = (parseFloat(aggregated[key][valueIndex]) + parseFloat(newRow[valueIndex])).toString();
+            const aggKey = newRow.slice(0, valueIndex).join('\u0001');
+            if (aggregated[aggKey]) {
+                aggregated[aggKey][valueIndex] = (parseFloat(aggregated[aggKey][valueIndex]) + parseFloat(newRow[valueIndex])).toString();
             } else {
-                aggregated[key] = newRow;
+                aggregated[aggKey] = newRow;
+            }
+        }
+
+        data.data = Object.values(aggregated);
+        return data;
+    },
+
+    applyTimeGrouping: function (data) {
+        const tg = data.options.filteroptions?.timeGrouping;
+        if (!tg || tg.grouping === 'none') {
+            return data;
+        }
+
+        const dimension = parseInt(tg.dimension.match(/\d+$/)?.[0], 10) - 1;
+        if (isNaN(dimension)) {
+            return data;
+        }
+
+        const grouping = tg.grouping;
+        const mode = tg.mode || 'summation';
+        const valueIndex = data.data[0].length - 1;
+
+        if (data.data.length === 0) {
+            return data;
+        }
+
+        const sample = data.data[0][dimension];
+        const isTimestamp = !isNaN(sample) && sample !== '';
+        const tsLength = isTimestamp ? String(sample).length : 0;
+        let parser = null;
+        if (!isTimestamp && data.options.chartoptions?.scales?.x?.time?.parser) {
+            parser = data.options.chartoptions.scales.x.time.parser;
+        }
+
+        const parseDate = val => {
+            if (isTimestamp) {
+                const num = parseInt(val, 10);
+                if (tsLength > 10) return new Date(num);
+                return new Date(num * 1000);
+            }
+            if (parser) {
+                return myMoment(val, parser).toDate();
+            }
+            return new Date(val);
+        };
+
+        const formatDate = (date, orig) => {
+            if (isTimestamp) {
+                if (tsLength > 10) return date.getTime().toString();
+                return Math.floor(date.getTime() / 1000).toString();
+            }
+            if (parser) {
+                return myMoment(date).format(parser);
+            }
+            if (typeof orig === 'string') {
+                const len = orig.length;
+                if (len === 10) return myMoment(date).format('YYYY-MM-DD');
+                if (len === 16 && orig.includes('T')) return myMoment(date).format('YYYY-MM-DDTHH:mm');
+                if (len === 16) return myMoment(date).format('YYYY-MM-DD HH:mm');
+                if (len === 19 && orig.includes('T')) return myMoment(date).format('YYYY-MM-DDTHH:mm:ss');
+                if (len === 19) return myMoment(date).format('YYYY-MM-DD HH:mm:ss');
+            }
+            return myMoment(date).format();
+        };
+
+        const sums = {};
+        const counts = {};
+
+        data.data.forEach(row => {
+            const original = row[dimension];
+            let date = parseDate(original);
+
+            if (grouping === 'day') {
+                date = myMoment(date).startOf('day').toDate();
+            } else if (grouping === 'week') {
+                date = myMoment(date).startOf('week').toDate();
+            } else if (grouping === 'month') {
+                date = myMoment(date).startOf('month').toDate();
+            } else if (grouping === 'year') {
+                date = myMoment(date).startOf('year').toDate();
+            }
+
+            const newTime = formatDate(date, original);
+            const newRow = row.slice();
+            newRow[dimension] = newTime;
+
+            const key = newRow.slice(0, valueIndex).join('\u0001');
+            const val = parseFloat(row[valueIndex]) || 0;
+
+            if (!sums[key]) {
+                sums[key] = val;
+                counts[key] = 1;
+            } else {
+                sums[key] += val;
+                counts[key] += 1;
             }
         });
 
-        data.data = Object.values(aggregated);
+        data.data = Object.keys(sums).map(key => {
+            const parts = key.split('\u0001');
+            const value = mode === 'average' ? sums[key] / counts[key] : sums[key];
+            return [...parts, value.toString()];
+        });
+
         return data;
     },
 

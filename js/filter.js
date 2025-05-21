@@ -247,6 +247,69 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    openTimeGroupingDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Time grouping'),
+            OCA.Analytics.Filter.processTimeGroupingDialog
+        );
+
+        const container = document.importNode(document.getElementById('templateTimeGroupingOptions').content, true);
+
+        const dimensions = OCA.Analytics.currentReportData.dimensions;
+        const dimSelect = container.getElementById('timeGroupingDimension');
+        dimSelect.innerHTML = '';
+        Object.keys(dimensions).forEach(key => {
+            dimSelect.options.add(new Option(dimensions[key], key));
+        });
+
+        const groupingSelect = container.getElementById('timeGroupingGrouping');
+        ['none', 'day', 'week', 'month', 'year'].forEach(val => {
+            groupingSelect.options.add(new Option(t('analytics', val), val));
+        });
+
+        const modeSelect = container.getElementById('timeGroupingMode');
+        [{value: 'summation', text: t('analytics', 'summation')}, {value: 'average', text: t('analytics', 'average')}].forEach(({value, text}) => {
+            modeSelect.options.add(new Option(text, value));
+        });
+
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (filterOptions && filterOptions.timeGrouping) {
+            dimSelect.value = filterOptions.timeGrouping.dimension;
+            groupingSelect.value = filterOptions.timeGrouping.grouping;
+            modeSelect.value = filterOptions.timeGrouping.mode;
+        }
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Group time values to day, week, month or year. Values will be aggregated accordingly.')
+        );
+    },
+
+    processTimeGroupingDialog: function () {
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
+
+        const grouping = document.getElementById('timeGroupingGrouping').value;
+
+        if (!filterOptions.timeGrouping) {
+            filterOptions.timeGrouping = {};
+        }
+
+        filterOptions.timeGrouping.dimension = document.getElementById('timeGroupingDimension').value;
+        filterOptions.timeGrouping.grouping = grouping;
+        filterOptions.timeGrouping.mode = document.getElementById('timeGroupingMode').value;
+
+        if (grouping === 'none') {
+            delete filterOptions.timeGrouping;
+        }
+
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Notification.dialogClose();
+    },
+
     refreshFilterVisualisation: function () {
         document.getElementById('filterVisualisation').innerHTML = '';
         let filterDimensions = OCA.Analytics.currentReportData.dimensions;

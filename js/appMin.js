@@ -61,6 +61,7 @@ OCA.Analytics.UI = {
         OCA.Analytics.currentReportData = JSON.parse(document.getElementById('data').value);
         // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
         OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
+        OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeGrouping(OCA.Analytics.currentReportData);
         OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyGrouping(OCA.Analytics.currentReportData);
         OCA.Analytics.currentReportData.data = OCA.Analytics.Visualization.formatDates(OCA.Analytics.currentReportData.data);
 

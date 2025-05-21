@@ -32,6 +32,12 @@
                 </button>
             </li>
             <li>
+                <button id="reportMenuTimeGroup">
+                    <span class="icon-analytics-chartTime"></span>
+                    <span><?php p($l->t('Time grouping')); ?></span>
+                </button>
+            </li>
+            <li>
                 <button id="reportMenuChartOptions">
                     <span class="icon-analytics-chart-options"></span>
                     <span><?php p($l->t('Chart options')); ?></span>

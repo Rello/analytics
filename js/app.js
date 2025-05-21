@@ -69,7 +69,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     datasources: [],
     datasets: [],
     reports: [],
-    unsavedFilters: null,
+    unsavedFilters: false,
     refreshTimer: null,
     currentXhrRequest: null,
     translationAvailable: false,
@@ -158,6 +158,7 @@ OCA.Analytics.UI = {
 
             // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
             OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
+            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeGrouping(OCA.Analytics.currentReportData);
             OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyGrouping(OCA.Analytics.currentReportData);
 
             /*
@@ -326,6 +327,8 @@ OCA.Analytics.UI = {
         } else {
             let key = Object.keys(OCA.Analytics.tableObject)[0];
             if (key !== undefined) {
+                // Remove the event listener for 'order.dt' first
+                OCA.Analytics.tableObject[key].off('length.dt order.dt column-reorder');
                 OCA.Analytics.tableObject[key].destroy();
             }
 
@@ -353,6 +356,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportMenuDrilldown').disabled = false;
             document.getElementById('reportMenuSort').disabled = false;
             document.getElementById('reportMenuGroup').disabled = false;
+            document.getElementById('reportMenuTimeGroup').disabled = false;
             document.getElementById('reportMenuDownload').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuTranslate').disabled = false;
@@ -424,6 +428,7 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuDrilldown').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
         document.getElementById('reportMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
         document.getElementById('reportMenuGroup').addEventListener('click', OCA.Analytics.Filter.openGroupDialog);
+        document.getElementById('reportMenuTimeGroup').addEventListener('click', OCA.Analytics.Filter.openTimeGroupingDialog);
         document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
         document.getElementById('reportMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
 
