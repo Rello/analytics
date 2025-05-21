@@ -40,6 +40,14 @@ OCA.Analytics.Visualization = {
     // *** table ***
     // *************
 
+    /**
+     * Build and initialize a DataTable instance on the provided DOM element.
+     *
+     * @param {HTMLElement} domTarget - Target table element
+     * @param {Object} jsondata - Data and configuration from the backend
+     * @param {boolean} [ordering=true] - Enable column ordering
+     * @param {string|number} uniqueId - Unique identifier of the table
+     */
     buildDataTable: function (domTarget, jsondata, ordering = true, uniqueId) {
 
         if (!uniqueId) {
@@ -141,6 +149,14 @@ OCA.Analytics.Visualization = {
         }
     },
 
+    /**
+     * Convert raw backend data into the structure expected by DataTables.
+     *
+     * @param {Array} originalData - Raw matrix style data rows
+     * @param {Object} tableOptions - DataTable related options
+     * @param {Array} header - Original header row
+     * @returns {{data: Array, columns: Array}}
+     */
     convertDataToDataTableFormat: function (originalData, tableOptions, header) {
         let layoutConfig = tableOptions.layout !== undefined ? tableOptions.layout : false;
         let uniqueHeaders = new Set();
@@ -233,6 +249,14 @@ OCA.Analytics.Visualization = {
         return {data, columns};
     },
 
+    /**
+     * Add calculated columns such as sums or percentages to a data table.
+     *
+     * @param {Array} data - Data table rows
+     * @param {Array} columns - Existing column definitions
+     * @param {Object} tableOptions - Options containing calculation definitions
+     * @returns {{data: Array, columns: Array}}
+     */
     dataTableCalculatedColumns: function (data, columns, tableOptions) {
         let userCalculations = tableOptions.calculatedColumns ? JSON.parse('[' + tableOptions.calculatedColumns + ']') : [];
         userCalculations.forEach((calc, calcIndex) => {
@@ -300,6 +324,15 @@ OCA.Analytics.Visualization = {
         return {data, columns};
     },
 
+    /**
+     * Callback invoked for each table row to apply threshold coloring.
+     *
+     * @param {HTMLElement} row - Current table row
+     * @param {Array} data - Row data
+     * @param {number} index - Row index
+     * @param {Array} thresholds - Defined threshold rules
+     * @param {Object} tableOptions - Current table options
+     */
     dataTableRowCallback: function (row, data, index, thresholds, tableOptions) {
 
         thresholds = thresholds.filter(p => (p.dimension1 === data[0] || p.dimension1 === '*') && p.option !== 'new');
@@ -342,6 +375,12 @@ OCA.Analytics.Visualization = {
         }
     },
 
+    /**
+     * Calculate and render footer totals for a DataTable.
+     *
+     * @param {Object} api - DataTables API instance
+     * @param {Object} tableOptions - Options controlling footer display
+     */
     dataTablefooterCallback: function (api, tableOptions) {
         const footerRow = api.table().footer().querySelector('tr');
         const colReorder = tableOptions.colReorder ? tableOptions.colReorder.order : [...Array(api.columns().count()).keys()];
@@ -389,6 +428,9 @@ OCA.Analytics.Visualization = {
         });
     },
 
+    /**
+     * Reset table sorting, pagination and show the report menu again.
+     */
     resetTableState: function () {
         if (OCA.Analytics.tableObject !== null) {
             OCA.Analytics.tableObject
@@ -403,11 +445,20 @@ OCA.Analytics.Visualization = {
         OCA.Analytics.UI.hideReportMenu();
     },
 
+    /**
+     * Mark filters as changed so the save icon becomes visible.
+     */
     handleDataTableChanged: function () {
         OCA.Analytics.unsavedFilters = true;
         document.getElementById('saveIcon').style.removeProperty('display');
     },
 
+    /**
+     * Render a KPI widget showing a single value with optional threshold color.
+     *
+     * @param {HTMLElement} domTarget - Container element
+     * @param {Object} jsondata - Data describing the KPI
+     */
     buildKpiDisplay: function (domTarget, jsondata, ordering = true, uniqueId) {
         domTarget.innerHTML = '';
         let kpi = jsondata.data[0][0];
@@ -453,6 +504,13 @@ OCA.Analytics.Visualization = {
     // *** chart ***
     // *************
 
+    /**
+     * Create a Chart.js chart based on backend data and user options.
+     *
+     * @param {CanvasRenderingContext2D} ctx - Context of the canvas
+     * @param {Object} jsondata - Chart data and configuration
+     * @param {Object} chartOptions - Default chart options
+     */
     buildChart: function (ctx, jsondata, chartOptions) {
         const defaultLegendClickHandler = Chart.defaults.plugins.legend.onClick;
         const pieDoughnutLegendClickHandler = Chart.controllers.doughnut.overrides.plugins.legend.onClick;
@@ -609,6 +667,13 @@ OCA.Analytics.Visualization = {
         });
     },
 
+    /**
+     * Transform backend data into the dataset format expected by Chart.js.
+     *
+     * @param {Object} data - Backend data including header and options
+     * @param {string} chartType - Target chart type
+     * @returns {Array} [categories, datasets]
+     */
     convertDataToChartJsFormat: function (data, chartType) {
         let datasets = [], xAxisCategories = [];
         let dataModel = '';
@@ -674,6 +739,12 @@ OCA.Analytics.Visualization = {
         return [xAxisCategories, datasets];
     },
 
+    /**
+     * Convert datasets to percentages for 100% stacked charts.
+     *
+     * @param {Array} rawData - Chart.js datasets
+     * @returns {Array} Transformed datasets
+     */
     calculateStacked100: function (rawData) {
         // Create a map to store total y-values for each x-label
         const totalMap = {};
@@ -705,6 +776,12 @@ OCA.Analytics.Visualization = {
     // *** backend ***
     // *************
 
+    /**
+     * Sort rows by date using optional parser information.
+     *
+     * @param {Object} data - Data returned from backend
+     * @returns {Object} Sorted data object
+     */
     sortDates: function (data) {
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.scales?.x?.time?.parser !== undefined) {
@@ -730,6 +807,12 @@ OCA.Analytics.Visualization = {
         }
         return data;
     },
+    /**
+     * Apply top/bottom grouping to reduce the number of categories.
+     *
+     * @param {Object} data - Backend data with grouping options
+     * @returns {Object} Modified data object
+     */
     applyGrouping: function (data) {
         const group = data.options.filteroptions?.group;
         if (!group || group.type === 'none') {
@@ -787,6 +870,12 @@ OCA.Analytics.Visualization = {
         return data;
     },
 
+    /**
+     * Group time based dimensions by day/week/month/year.
+     *
+     * @param {Object} data - Backend data with grouping configuration
+     * @returns {Object} Grouped data object
+     */
     applyTimeGrouping: function (data) {
         const tg = data.options.filteroptions?.timeGrouping;
         if (!tg || tg.grouping === 'none') {
@@ -887,6 +976,12 @@ OCA.Analytics.Visualization = {
         return data;
     },
 
+    /**
+     * Convert all ISO date strings in the data to the local timezone.
+     *
+     * @param {Array} data - Raw data rows
+     * @returns {Array} Updated rows
+     */
     formatDates: function (data) {
         let firstRow = data[0];
         let now;
@@ -913,6 +1008,14 @@ OCA.Analytics.Visualization = {
         return data;
     },
 
+    /**
+     * Check a value against threshold rules and return a color style.
+     *
+     * @param {string} kpi - Name of the metric
+     * @param {number|string} value - Value to check
+     * @param {Array} thresholds - Threshold definitions
+     * @returns {string|undefined} CSS color style
+     */
     validateThreshold: function (kpi, value, thresholds) {
         let thresholdColor;
 
@@ -935,6 +1038,11 @@ OCA.Analytics.Visualization = {
         return thresholdColor;
     },
 
+    /**
+     * Unhide an element in the DOM.
+     *
+     * @param {string} element - Element ID
+     */
     showElement: function (element) {
         if (document.getElementById(element)) {
             document.getElementById(element).hidden = false;
@@ -944,6 +1052,11 @@ OCA.Analytics.Visualization = {
         }
     },
 
+    /**
+     * Hide an element in the DOM.
+     *
+     * @param {string} element - Element ID
+     */
     hideElement: function (element) {
         if (document.getElementById(element)) {
             document.getElementById(element).hidden = true;
@@ -953,6 +1066,9 @@ OCA.Analytics.Visualization = {
         }
     },
 
+    /**
+     * Toggle fullscreen mode for the analytics view.
+     */
     toggleFullscreen: function () {
         document.getElementById('header').classList.toggle('analyticsFullscreen');
         document.getElementById('app-navigation').classList.toggle('analyticsFullscreen');
