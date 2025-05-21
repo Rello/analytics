@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Delete" : "Obriši",
     "Done" : "Gotovo",
-    "OK" : "U redu",
-    "Cancel" : "Otkaži",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add to favorites" : "Dodaj u omiljene",
     "Share" : "Podeli",
@@ -15,6 +13,8 @@ OC.L10N.register(
     "Link copied" : "Veza iskopirana",
     "Type" : "Tip",
     "Date" : "Date",
+    "OK" : "U redu",
+    "Cancel" : "Otkaži",
     "Search" : "Traži",
     "Yes" : "Da",
     "No" : "Ne",

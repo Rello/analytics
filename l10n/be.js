@@ -2,8 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Delete",
-    "OK" : "OK",
-    "Cancel" : "Cancel",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Падзяліцца",
@@ -11,6 +9,8 @@ OC.L10N.register(
     "Type" : "Type",
     "Notification" : "Абвестка",
     "Date" : "Date",
+    "OK" : "OK",
+    "Cancel" : "Cancel",
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",

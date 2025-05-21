@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "﻿ಉಳಿಸಿದ",
     "Delete" : "﻿ಅಳಿಸಿ",
-    "OK" : "ಸರಿ",
-    "Cancel" : "﻿ರದ್ದು",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
@@ -14,6 +12,8 @@ OC.L10N.register(
     "Share link" : "ಸಂಪರ್ಕ ಕೊಂಡಿಯನ್ನು  ﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು",
     "Type" : "Type",
     "Date" : "Date",
+    "OK" : "ಸರಿ",
+    "Cancel" : "﻿ರದ್ದು",
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",

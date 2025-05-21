@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Spremljeno",
     "Delete" : "Obriši",
-    "OK" : "OK",
-    "Cancel" : "Otkaži",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Izbriši fasciklu",
     "Add to favorites" : "Add to favorites",
@@ -15,6 +13,8 @@ OC.L10N.register(
     "Share link" : "Podijelite vezu",
     "Type" : "Type",
     "Date" : "Date",
+    "OK" : "OK",
+    "Cancel" : "Otkaži",
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",

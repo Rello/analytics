@@ -2,8 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Pozmak",
-    "OK" : "Bolýar",
-    "Cancel" : "ýatyrmak",
     "Sort" : "sortlamak",
     "Default" : "Bellenen",
     "Add to favorites" : "Saýlananlara goşuň",
@@ -14,6 +12,8 @@ OC.L10N.register(
     "Share link" : "Baglanyşyk paýlaş",
     "Link copied" : "Link-yň nusgasy alyndy",
     "Type" : "Görnüşi",
+    "OK" : "Bolýar",
+    "Cancel" : "ýatyrmak",
     "Search" : "Gözlemek",
     "Yes" : "Hawa",
     "No" : "Ýok",

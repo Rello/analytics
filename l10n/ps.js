@@ -2,8 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "ړنګول",
-    "OK" : "سمه ده",
-    "Cancel" : "پرېښول",
     "Remove from favorites" : "له نښو ويستل",
     "Add to favorites" : "په نښه کول",
     "Share" : "شریکول",
@@ -11,6 +9,8 @@ OC.L10N.register(
     "Download" : "ښکته کول",
     "New" : "نوی",
     "Share link" : "د شرېکېدو لېنک",
+    "OK" : "سمه ده",
+    "Cancel" : "پرېښول",
     "Yes" : "هو",
     "No" : "نه",
     "Announcements" : "اعلانونه",

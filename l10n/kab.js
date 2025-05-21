@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Delete" : "Kkes",
     "Done" : "Immed",
-    "OK" : "IH",
-    "Cancel" : "Sefsex",
     "Filter" : "Sizdeg",
     "Sort" : "Smizzwer",
     "Default" : "Prédéfini(e)",
@@ -18,6 +16,8 @@ OC.L10N.register(
     "Link copied" : "Aseɣwen yettwanɣel",
     "Type" : "Anaw",
     "Notification" : "Alɣu",
+    "OK" : "IH",
+    "Cancel" : "Sefsex",
     "Search" : "Nadi",
     "Yes" : "Oui",
     "No" : "Uhu",
