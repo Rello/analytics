@@ -3,6 +3,7 @@
 ### Added
 - dynamic filter for quarters (e.g. %last quarter%)
 - Add Top N + others grouping #460
+- Add time grouping feature #464
 
 ### Changed
 - JSON data source: remove column limit
