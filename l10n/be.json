@@ -1,7 +1,5 @@
 { "translations": {
     "Delete" : "Delete",
-    "OK" : "OK",
-    "Cancel" : "Cancel",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Падзяліцца",
@@ -9,6 +7,8 @@
     "Type" : "Type",
     "Notification" : "Абвестка",
     "Date" : "Date",
+    "OK" : "OK",
+    "Cancel" : "Cancel",
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",

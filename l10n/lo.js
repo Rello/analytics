@@ -2,8 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "ລຶບ",
-    "OK" : "ຕົກລົງ",
-    "Cancel" : "ຍົກເລີກ",
     "Sort" : "ລຽງດຳດັບ",
     "Default" : "ເລີ່ມຕົ້ນ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
@@ -20,6 +18,8 @@ OC.L10N.register(
     "Date" : "ວັນທີ",
     "New in" : "ໃຫມ່",
     "View changelog" : "ເບິ່ງການປ່ຽນແປງ",
+    "OK" : "ຕົກລົງ",
+    "Cancel" : "ຍົກເລີກ",
     "Search" : "ຄົ້ນຫາ",
     "Yes" : "ແມ່ນແລ້ວ",
     "No" : "ບໍ່",

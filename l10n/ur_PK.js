@@ -2,8 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "حذف کریں",
-    "OK" : "اوکے",
-    "Cancel" : "منسوخ کریں",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "تقسیم",
@@ -12,6 +10,8 @@ OC.L10N.register(
     "Share link" : "اشتراک لنک",
     "Type" : "Type",
     "Date" : "Date",
+    "OK" : "اوکے",
+    "Cancel" : "منسوخ کریں",
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",

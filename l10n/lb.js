@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Gespäichert",
     "Delete" : "Läschen",
-    "OK" : "OK",
-    "Cancel" : "Ofbriechen",
     "Sort" : "Zortéieren",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Dossier läschen",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "Link copied" : "Link kopéiert",
     "Type" : "Typ",
     "Date" : "Date",
+    "OK" : "OK",
+    "Cancel" : "Ofbriechen",
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",

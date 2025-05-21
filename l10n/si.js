@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Value" : "අගය",
     "Loading" : "පූරණය වෙමින්",
-    "OK" : "හරි",
-    "Cancel" : "අවලංගු කරන්න",
     "Filter" : "පෙරහන",
     "Share" : "බෙදාගන්න",
     "Download" : "බාගන්න",
@@ -12,6 +10,8 @@ OC.L10N.register(
     "Link copied" : "සබැඳිය පිටපත් කළා",
     "Date" : "දිනය",
     "Year" : "වර්ෂය",
+    "OK" : "හරි",
+    "Cancel" : "අවලංගු කරන්න",
     "Search" : "සොයන්න",
     "Yes" : "ඔව්",
     "No" : "නැහැ",

@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Wedi'u cadw",
     "Delete" : "Dileu",
-    "OK" : "Iawn",
-    "Cancel" : "Diddymu",
     "Sort" : "Trefnu",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
@@ -18,6 +16,8 @@ OC.L10N.register(
     "Notification" : "Hysbysiad",
     "Date" : "Date",
     "Year" : "Blwyddyn",
+    "OK" : "Iawn",
+    "Cancel" : "Diddymu",
     "Search" : "Chwilio",
     "Yes" : "Iawn",
     "No" : "No",
