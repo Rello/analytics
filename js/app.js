@@ -75,6 +75,9 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     translationAvailable: false,
     isNewObject: false,
 
+    /**
+     * Build common request headers for backend calls
+     */
     headers: function () {
         let headers = new Headers();
         headers.append('requesttoken', OC.requestToken);
@@ -87,6 +90,9 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  * @namespace OCA.Analytics.Core
  */
 OCA.Analytics.Core = {
+    /**
+     * Initialize navigation and register UI handlers
+     */
     init: function () {
         if (document.getElementById('sharingToken').value !== '') {
             document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
@@ -115,6 +121,9 @@ OCA.Analytics.Core = {
         }
     },
 
+    /**
+     * Return unique values of a given column
+     */
     getDistinctValues: function (array, index) {
         let unique = [];
         let distinct = [];
@@ -130,6 +139,9 @@ OCA.Analytics.Core = {
         return distinct;
     },
 
+    /**
+     * Read a value from the initial state injected by PHP
+     */
     getInitialState: function (key) {
         const app = 'analytics';
         const elem = document.querySelector('#initial-state-' + app + '-' + key);
@@ -139,6 +151,9 @@ OCA.Analytics.Core = {
         return JSON.parse(atob(elem.value))
     },
 
+    /**
+     * Open project wiki in a new browser tab
+     */
     openWiki: function () {
         window.open('https://github.com/rello/analytics/wiki', '_blank');
     }
@@ -146,6 +161,9 @@ OCA.Analytics.Core = {
 
 OCA.Analytics.UI = {
 
+    /**
+     * Render report data as chart or table
+     */
     buildReport: function () {
         document.getElementById('reportHeader').innerText = OCA.Analytics.currentReportData.options.name;
         if (OCA.Analytics.currentReportData.options.subheader !== '') {
@@ -196,6 +214,9 @@ OCA.Analytics.UI = {
 
     },
 
+    /**
+     * Provide default configuration for Chart.js
+     */
     getDefaultChartOptions: function () {
         return {
             maintainAspectRatio: false,
@@ -299,20 +320,32 @@ OCA.Analytics.UI = {
         };
     },
 
+    /**
+     * Show zoom reset button when chart is zoomed
+     */
     toggleZoomResetButton: function () {
         OCA.Analytics.Visualization.showElement('chartZoomReset');
     },
 
+    /**
+     * Reset chart zoom level
+     */
     handleZoomResetButton: function () {
         OCA.Analytics.chartObject.resetZoom();
         OCA.Analytics.Visualization.hideElement('chartZoomReset');
     },
 
+    /**
+     * Toggle visibility of the chart legend
+     */
     toggleChartLegend: function () {
         OCA.Analytics.chartObject.legend.options.display = !OCA.Analytics.chartObject.legend.options.display
         OCA.Analytics.chartObject.update();
     },
 
+    /**
+     * Trigger download of the current chart image
+     */
     downloadChart: function () {
         OCA.Analytics.UI.hideReportMenu();
         document.getElementById('downloadChartLink').href = OCA.Analytics.chartObject.toBase64Image();
@@ -320,6 +353,9 @@ OCA.Analytics.UI = {
         document.getElementById('downloadChartLink').click();
     },
 
+    /**
+     * Clear current chart and table elements
+     */
     resetContentArea: function () {
         if (OCA.Analytics.isDataset) {
             OCA.Analytics.Visualization.showElement('analytics-intro');
@@ -363,6 +399,9 @@ OCA.Analytics.UI = {
         }
     },
 
+    /**
+     * Enable or disable report menu entries
+     */
     buildReportOptions: function () {
         let currentReport = OCA.Analytics.currentReportData;
         let canUpdate = parseInt(currentReport.options['permissions']) === OC.PERMISSION_UPDATE;
@@ -419,6 +458,9 @@ OCA.Analytics.UI = {
         OCA.Analytics.Filter.refreshFilterVisualisation();
     },
 
+    /**
+     * Attach click handlers for report menu elements
+     */
     reportOptionsEventlisteners: function () {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
         document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
@@ -454,12 +496,18 @@ OCA.Analytics.UI = {
         }
     },
 
+    /**
+     * Close the report menu overlay
+     */
     hideReportMenu: function () {
         if (document.getElementById('reportMenu') !== null) {
             document.getElementById('reportMenu').classList.remove('open');
         }
     },
 
+    /**
+     * Toggle visibility of the report menu
+     */
     toggleReportMenu: function () {
         document.getElementById('reportMenu').classList.toggle('open');
         document.getElementById('reportMenuMain').style.removeProperty('display');
@@ -468,26 +516,41 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuSubTranslate').style.setProperty('display', 'none', 'important');
     },
 
+    /**
+     * Toggle the table options menu
+     */
     toggleTableMenu: function () {
         document.getElementById('tableMenu').classList.toggle('open');
         document.getElementById('tableMenuMain').style.removeProperty('display');
     },
 
+    /**
+     * Display analysis related options
+     */
     showReportMenuAnalysis: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuSubAnalysis').style.removeProperty('display');
     },
 
+    /**
+     * Display refresh interval options
+     */
     showReportMenuRefresh: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuSubRefresh').style.removeProperty('display');
     },
 
+    /**
+     * Display translation options
+     */
     showReportMenuTranslate: function () {
         document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuSubTranslate').style.removeProperty('display');
     },
 
+    /**
+     * Return to the main report menu view
+     */
     showReportMenuMain: function () {
         document.getElementById('reportMenuSubAnalysis').style.setProperty('display', 'none', 'important');
         document.getElementById('reportMenuSubRefresh').style.setProperty('display', 'none', 'important');
@@ -495,10 +558,16 @@ OCA.Analytics.UI = {
         document.getElementById('reportMenuMain').style.removeProperty('display');
     },
 
+    /**
+     * Search inside the DataTable
+     */
     tableSearch: function () {
         OCA.Analytics.tableObject.search(this.value).draw();
     },
 
+    /**
+     * Build and display a dropdown for filter values
+     */
     showDropDownList: function (evt) {
         if (document.getElementById('tmpList')) {
             return;
@@ -589,6 +658,9 @@ OCA.Analytics.UI = {
         });
     },
 
+    /**
+     * Handle selection or closing of dropdown list
+     */
     handleDropDownListClicked: function (event) {
         let dropDownList = document.getElementById('tmpList');
         let inputField = dropDownList.previousElementSibling;
@@ -606,6 +678,9 @@ OCA.Analytics.UI = {
         }
     },
 
+    /**
+     * Remove dropdown list from the DOM
+     */
     hideDropDownList: function () {
         // remove the global event listener again
         document.removeEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
@@ -617,6 +692,9 @@ OCA.Analytics.UI = {
 };
 
 OCA.Analytics.Translation = {
+    /**
+     * Send current report text to translation service
+     */
     translate: function () {
         let name = OCA.Analytics.currentReportData.options.name;
         let subheader = OCA.Analytics.currentReportData.options.subheader;
@@ -667,6 +745,9 @@ OCA.Analytics.Translation = {
 
     },
 
+    /**
+     * Populate translation language selector
+     */
     languages: function () {
         const elem = document.querySelector('#initial-state-analytics-translationLanguages');
         let translateLanguage = document.getElementById('translateLanguage');
@@ -692,6 +773,9 @@ OCA.Analytics.Translation = {
 
 OCA.Analytics.Functions = {
 
+    /**
+     * Add a linear trend line to the visible datasets
+     */
     trend: function () {
         OCA.Analytics.Visualization.showElement('chartLegendContainer');
         OCA.Analytics.UI.hideReportMenu();
@@ -752,6 +836,9 @@ OCA.Analytics.Functions = {
         OCA.Analytics.chartObject.update();
     },
 
+    /**
+     * Calculate slope and intercept for linear regression
+     */
     regressionFunction: function (x, y) {
         const n = y.length;
         let sx = 0;
@@ -777,16 +864,25 @@ OCA.Analytics.Functions = {
         return {slope, intercept};
     },
 
+    /**
+     * Add an aggregated data series
+     */
     aggregate: function () {
         OCA.Analytics.Functions.aggregationFunction('aggregate');
         // const cumulativeSum = (sum => value => sum += value)(0);
         // datasets[0]['data'] = datasets[0]['data'].map(cumulativeSum)
     },
 
+    /**
+     * Reverse aggregation of a data series
+     */
     disAggregate: function () {
         OCA.Analytics.Functions.aggregationFunction('disaggregate');
     },
 
+    /**
+     * Internal helper to (dis-)aggregate datasets
+     */
     aggregationFunction: function (mode) {
         OCA.Analytics.Visualization.showElement('chartLegendContainer');
         OCA.Analytics.UI.hideReportMenu();
@@ -852,6 +948,9 @@ OCA.Analytics.Functions = {
 };
 
 OCA.Analytics.Datasource = {
+    /**
+     * Load data source list and fill dropdown element
+     */
     buildDropdown: async function (target, filter) {
         let optionsInit = document.createDocumentFragment();
         let optionInit = document.createElement('option');
@@ -896,6 +995,9 @@ OCA.Analytics.Datasource = {
         }
     },
 
+    /**
+     * Sort object keys alphabetically by value
+     */
     sortOptions: function (obj) {
         let sortable = [];
         for (let key in obj)
@@ -909,6 +1011,9 @@ OCA.Analytics.Datasource = {
         return sortable;
     },
 
+    /**
+     * Generate configuration form for the selected data source
+     */
     buildDatasourceRelatedForm: function (datasource) {
         let template = OCA.Analytics.datasources.options[datasource];
         let form = document.createElement('div');
@@ -966,6 +1071,9 @@ OCA.Analytics.Datasource = {
         return form;
     },
 
+    /**
+     * Create hidden form field used for options
+     */
     buildOptionHidden: function (id, value) {
         let dataSourceType = document.createElement('input');
         dataSourceType.hidden = true;
@@ -974,6 +1082,9 @@ OCA.Analytics.Datasource = {
         return dataSourceType;
     },
 
+    /**
+     * Create input element based on template definition
+     */
     buildOptionsInput: function (templateOption) {
         let type = templateOption.type && templateOption.type === 'longtext' ? 'textarea' : 'input';
         let input = document.createElement(type);
@@ -992,6 +1103,9 @@ OCA.Analytics.Datasource = {
         return input;
     },
 
+    /**
+     * Create collapsible section header
+     */
     buildOptionsSection: function (templateOption) {
         let tableRow = document.createElement('div');
         tableRow.classList.add('sidebarHeaderClosed');
@@ -1005,6 +1119,9 @@ OCA.Analytics.Datasource = {
         return tableRow;
     },
 
+    /**
+     * Create checkbox with editable label indicator
+     */
     buildOptionsCheckboxIndicator: function (templateOption) {
         let input = document.createElement('input');
         input.type = 'checkbox'
@@ -1026,6 +1143,9 @@ OCA.Analytics.Datasource = {
         return div;
     },
 
+    /**
+     * Create select box from placeholder string
+     */
     buildOptionsSelect: function (templateOption) {
         let input = document.createElement('select');
         let text, value;
@@ -1053,6 +1173,9 @@ OCA.Analytics.Datasource = {
         return input;
     },
 
+    /**
+     * Reveal additional options in the sidebar
+     */
     showHiddenOptions: function () {
         const dataSourceOptionsDiv = document.getElementById("dataSourceOptions");
         const divElements = dataSourceOptionsDiv.children;
@@ -1065,6 +1188,9 @@ OCA.Analytics.Datasource = {
         document.getElementById('optionSectionHeader').parentElement.remove();
     },
 
+    /**
+     * Request data preview and show column picker dialog
+     */
     handleColumnPicker: function () {
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Column Picker'),
@@ -1104,6 +1230,9 @@ OCA.Analytics.Datasource = {
             });
     },
 
+    /**
+     * Render the column picker list from provided data
+     */
     createColumnPickerContent: function (data) {
         // Array of items
         const items = data.data[0].map((value, index) => {
@@ -1175,6 +1304,9 @@ OCA.Analytics.Datasource = {
         );
     },
 
+    /**
+     * Append a new custom column to the picker
+     */
     addFixedColumn: function () {
         const currentColumns = document.querySelector('input[data-type="columnPicker"]').value;
         const preText = t('analytics', 'Previous Values: ');
@@ -1191,6 +1323,9 @@ OCA.Analytics.Datasource = {
         sortableList.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
     },
 
+    /**
+     * Build a draggable list row for the column picker
+     */
     buildColumnPickerRow: function (item) {
         const li = document.createElement("li");
         li.style.display = 'flex';
@@ -1225,6 +1360,9 @@ OCA.Analytics.Datasource = {
         return li;
     },
 
+    /**
+     * Collect chosen columns from the picker dialog
+     */
     processColumnPickerDialog: function () {
         //get the list and sequence of the selected items
         const checkboxList = document.querySelectorAll('#sortable-list input[type="checkbox"]');
@@ -1247,6 +1385,9 @@ OCA.Analytics.Datasource = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Open a file picker dialog for selecting a file path
+     */
     handleFilepicker: function () {
         let type = parseInt(document.getElementById('dataSourceType').innerText);
 
@@ -1272,6 +1413,9 @@ OCA.Analytics.Datasource = {
 
 OCA.Analytics.Backend = {
 
+    /**
+     * Convert parameter object to query string
+     */
     formatParams: function (params) {
         return "?" + Object
             .keys(params)
@@ -1281,6 +1425,9 @@ OCA.Analytics.Backend = {
             .join("&")
     },
 
+    /**
+     * Fetch report data from the backend
+     */
     getData: function () {
         if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
         OCA.Analytics.UI.resetContentArea();
@@ -1378,6 +1525,9 @@ OCA.Analytics.Backend = {
         xhr.send();
     },
 
+    /**
+     * Retrieve available dataset templates from server
+     */
     getDatasetDefinitions: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataset');
         fetch(requestUrl, {
@@ -1390,6 +1540,9 @@ OCA.Analytics.Backend = {
             });
     },
 
+    /**
+     * Continuously refresh data in given interval
+     */
     startRefreshTimer(minutes) {
         if (minutes !== 0 && !isNaN(minutes)) {
             if (OCA.Analytics.refreshTimer === null) {
