@@ -34,6 +34,8 @@ OCA.Analytics.Visualization = {
         '!=': (a, b) => a !== b,
     },
 
+    dataTableInitialized: {},
+
     // *************
     // *** table ***
     // *************
@@ -118,10 +120,24 @@ OCA.Analytics.Visualization = {
         }
 
         if (!OCA.Analytics.isPanorama) {
+            // reset initialization flag for this table
+            OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = false;
+
             // Listener for when the pagination length is changed, table sorted, columns re-ordered
-            OCA.Analytics.tableObject[uniqueId].on('length.dt', this.handleDataTableChanged);
-            OCA.Analytics.tableObject[uniqueId].on('order.dt', this.handleDataTableChanged);
-            OCA.Analytics.tableObject[uniqueId].on('column-reorder', this.handleDataTableChanged);
+            OCA.Analytics.tableObject[uniqueId].on('length.dt', () => {
+                OCA.Analytics.Visualization.handleDataTableChanged(uniqueId);
+            });
+            OCA.Analytics.tableObject[uniqueId].on('order.dt', () => {
+                OCA.Analytics.Visualization.handleDataTableChanged(uniqueId);
+            });
+            OCA.Analytics.tableObject[uniqueId].on('column-reorder', () => {
+                OCA.Analytics.Visualization.handleDataTableChanged(uniqueId);
+            });
+
+            // mark the table as initialized after DataTables setup finished
+            OCA.Analytics.tableObject[uniqueId].on('init.dt', () => {
+                OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = true;
+            });
         }
     },
 
@@ -387,7 +403,11 @@ OCA.Analytics.Visualization = {
         OCA.Analytics.UI.hideReportMenu();
     },
 
-    handleDataTableChanged: function () {
+    handleDataTableChanged: function (uniqueId) {
+        if (!OCA.Analytics.Visualization.dataTableInitialized[uniqueId]) {
+            // ignore events fired during DataTables initialisation
+            return;
+        }
         OCA.Analytics.unsavedFilters = true;
         document.getElementById('saveIcon').style.removeProperty('display');
     },
