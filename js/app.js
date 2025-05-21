@@ -69,7 +69,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     datasources: [],
     datasets: [],
     reports: [],
-    unsavedFilters: null,
+    unsavedFilters: false,
     refreshTimer: null,
     currentXhrRequest: null,
     translationAvailable: false,
@@ -327,6 +327,8 @@ OCA.Analytics.UI = {
         } else {
             let key = Object.keys(OCA.Analytics.tableObject)[0];
             if (key !== undefined) {
+                // Remove the event listener for 'order.dt' first
+                OCA.Analytics.tableObject[key].off('length.dt order.dt column-reorder');
                 OCA.Analytics.tableObject[key].destroy();
             }
 

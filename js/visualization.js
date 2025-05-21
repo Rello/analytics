@@ -125,13 +125,13 @@ OCA.Analytics.Visualization = {
 
             // Listener for when the pagination length is changed, table sorted, columns re-ordered
             OCA.Analytics.tableObject[uniqueId].on('length.dt', () => {
-                OCA.Analytics.Visualization.handleDataTableChanged(uniqueId);
+                OCA.Analytics.Visualization.handleDataTableChanged();
             });
             OCA.Analytics.tableObject[uniqueId].on('order.dt', () => {
-                OCA.Analytics.Visualization.handleDataTableChanged(uniqueId);
+                OCA.Analytics.Visualization.handleDataTableChanged();
             });
             OCA.Analytics.tableObject[uniqueId].on('column-reorder', () => {
-                OCA.Analytics.Visualization.handleDataTableChanged(uniqueId);
+                OCA.Analytics.Visualization.handleDataTableChanged();
             });
 
             // mark the table as initialized after DataTables setup finished
@@ -403,11 +403,7 @@ OCA.Analytics.Visualization = {
         OCA.Analytics.UI.hideReportMenu();
     },
 
-    handleDataTableChanged: function (uniqueId) {
-        if (!OCA.Analytics.Visualization.dataTableInitialized[uniqueId]) {
-            // ignore events fired during DataTables initialisation
-            return;
-        }
+    handleDataTableChanged: function () {
         OCA.Analytics.unsavedFilters = true;
         document.getElementById('saveIcon').style.removeProperty('display');
     },
@@ -713,19 +709,27 @@ OCA.Analytics.Visualization = {
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.scales?.x?.time?.parser !== undefined) {
                 let parser = data.options.chartoptions["scales"]["x"]["time"]["parser"];
+                let sortColumn = data.data.length > 0 ? data.data[0].length - 2 : 0;
+
+                // Pre-parse dates and attach to each row
+                data.data.forEach(row => {
+                    row._parsedDate = myMoment(row[sortColumn], parser).toDate();
+                });
+
                 data.data.sort(function (a, b) {
-                    let sortColumn = a.length - 2;
                     if (sortColumn === 0) {
-                        return myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
+                        return a._parsedDate - b._parsedDate;
                     } else {
-                        return a[0] - b[0] || myMoment(a[sortColumn], parser).toDate() - myMoment(b[sortColumn], parser).toDate();
+                        return a[0] - b[0] || a._parsedDate - b._parsedDate;
                     }
                 });
+
+                // Optionally, clean up the temporary property
+                data.data.forEach(row => { delete row._parsedDate; });
             }
         }
         return data;
     },
-
     applyGrouping: function (data) {
         const group = data.options.filteroptions?.group;
         if (!group || group.type === 'none') {
@@ -740,35 +744,44 @@ OCA.Analytics.Visualization = {
 
         const valueIndex = data.data[0].length - 1;
 
+        // 1. Calculate totals
         const totals = {};
-        data.data.forEach(row => {
+        for (let i = 0; i < data.data.length; i++) {
+            const row = data.data[i];
             const key = row[dimension];
             const val = parseFloat(row[valueIndex]) || 0;
             totals[key] = (totals[key] || 0) + val;
-        });
+        }
 
+        // 2. Sort and select keys to keep
         const entries = Object.entries(totals);
-        entries.sort((a, b) => group.type === 'top' ? b[1] - a[1] : a[1] - b[1]);
-        const keepKeys = entries.slice(0, n).map(e => e[0]);
+        const isTop = group.type === 'top';
+        entries.sort((a, b) => isTop ? b[1] - a[1] : a[1] - b[1]);
+        const keepKeysSet = new Set(entries.slice(0, n).map(e => e[0]));
 
         const othersLabel = t('analytics', 'others');
         const aggregated = {};
-        data.data.forEach(row => {
-            const newRow = row.slice();
-            if (!keepKeys.includes(row[dimension])) {
-                if (!group.others) {
-                    return;
-                }
+
+        // 3. Aggregate rows
+        for (let i = 0; i < data.data.length; i++) {
+            const row = data.data[i];
+            let keyVal = row[dimension];
+            let newRow = row;
+
+            if (!keepKeysSet.has(keyVal)) {
+                if (!group.others) continue;
+                // Only clone if we need to modify
+                newRow = row.slice();
                 newRow[dimension] = othersLabel;
             }
 
-            const key = newRow.slice(0, valueIndex).join('\u0001');
-            if (aggregated[key]) {
-                aggregated[key][valueIndex] = (parseFloat(aggregated[key][valueIndex]) + parseFloat(newRow[valueIndex])).toString();
+            const aggKey = newRow.slice(0, valueIndex).join('\u0001');
+            if (aggregated[aggKey]) {
+                aggregated[aggKey][valueIndex] = (parseFloat(aggregated[aggKey][valueIndex]) + parseFloat(newRow[valueIndex])).toString();
             } else {
-                aggregated[key] = newRow;
+                aggregated[aggKey] = newRow;
             }
-        });
+        }
 
         data.data = Object.values(aggregated);
         return data;
@@ -780,7 +793,7 @@ OCA.Analytics.Visualization = {
             return data;
         }
 
-        const dimension = parseInt(tg.dimension);
+        const dimension = parseInt(tg.dimension.match(/\d+$/)?.[0], 10) - 1;
         if (isNaN(dimension)) {
             return data;
         }
