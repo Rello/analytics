@@ -57,6 +57,7 @@ OC.L10N.register(
     "Open documentation" : "Deschide documentația",
     "Update" : "Actualizare",
     "Export" : "Exportă",
+    "Mode" : "Mod",
     "Description" : "Descriere",
     "Import" : "Importă",
     "Setting" : "Setare",

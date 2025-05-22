@@ -291,6 +291,7 @@ OC.L10N.register(
     "Data options" : "Veri seçenekleri",
     "Update" : "Güncelle",
     "Export" : "Dışa aktar",
+    "Mode" : "Kip",
     "Option" : "Seçenek",
     "Number of records" : "Kayıt sayısı",
     "Nextcloud Assistant" : "Nextcloud Yardımcısı",

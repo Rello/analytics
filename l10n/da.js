@@ -288,6 +288,7 @@ OC.L10N.register(
     "Data options" : "Dataindstillinger",
     "Update" : "Opdater",
     "Export" : "Eksporter",
+    "Mode" : "Mode",
     "Option" : "Valgmulighed",
     "Number of records" : "Antal poster",
     "Nextcloud Assistant" : "Nextcloud assistent",

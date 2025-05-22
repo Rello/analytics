@@ -152,6 +152,7 @@ OC.L10N.register(
     "Open documentation" : "문서 열기",
     "Update" : "업데이트",
     "Export" : "내보내기",
+    "Mode" : "모드",
     "Option" : "옵션",
     "Nextcloud Assistant" : "Nextcloud 어시스턴트",
     "Description" : "설명",

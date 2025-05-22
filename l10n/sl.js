@@ -256,6 +256,7 @@ OC.L10N.register(
     "Data options" : "Možnosti podatkov",
     "Update" : "Posodobi",
     "Export" : "Izvozi",
+    "Mode" : "Način",
     "Option" : "Možnosti",
     "Number of records" : "Število zapisov",
     "Description" : "Opis",

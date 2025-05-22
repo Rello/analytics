@@ -252,6 +252,7 @@ OC.L10N.register(
     "Data options" : "Data options",
     "Update" : "به‌روزرسانی",
     "Export" : "گرفتن خروجی",
+    "Mode" : "حالت",
     "Option" : "Option",
     "Number of records" : "Number of records",
     "Nextcloud Assistant" : "Nextcloud Assistant",

@@ -292,6 +292,7 @@ OC.L10N.register(
     "Data options" : "Roghanna sonraí",
     "Update" : "Nuashonrú",
     "Export" : "Easpórtáil",
+    "Mode" : "Mód",
     "Option" : "Rogha",
     "Number of records" : "Uimhir na dtaifead",
     "Nextcloud Assistant" : "Cúntóir Nextcloud",

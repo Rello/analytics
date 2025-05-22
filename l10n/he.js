@@ -62,6 +62,7 @@ OC.L10N.register(
     "Open documentation" : "פתיחת תיעוד",
     "Update" : "עדכון",
     "Export" : "ייצוא",
+    "Mode" : "מצב",
     "Description" : "תיאור",
     "Import" : "ייבוא",
     "Others" : "חרים",

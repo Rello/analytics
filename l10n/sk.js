@@ -290,6 +290,7 @@ OC.L10N.register(
     "Data options" : "Možnosti údajov",
     "Update" : "Aktualizovať",
     "Export" : "Export",
+    "Mode" : "Režim",
     "Option" : "Možnosť",
     "Number of records" : "Počet záznamov",
     "Nextcloud Assistant" : "Nextcloud Asistent",

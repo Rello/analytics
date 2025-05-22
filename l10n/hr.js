@@ -57,6 +57,7 @@ OC.L10N.register(
     "Open documentation" : "Otvori dokumentaciju",
     "Update" : "Ažuriraj",
     "Export" : "Izvoz",
+    "Mode" : "Način rada",
     "Description" : "Opis",
     "Import" : "Uvezi",
     "Others" : "Ostalo",

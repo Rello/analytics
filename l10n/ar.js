@@ -290,6 +290,7 @@ OC.L10N.register(
     "Data options" : "خيارات البيانات",
     "Update" : "تحديث",
     "Export" : "تصدير",
+    "Option" : "خيار",
     "Number of records" : "عدد السجلات",
     "Nextcloud Assistant" : "مُساعِد نكست كلاود Nextcloud Assistant",
     "Context Chat is required" : "سياقة المحادثة مطلوب",

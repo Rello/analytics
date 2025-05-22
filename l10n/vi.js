@@ -101,6 +101,7 @@ OC.L10N.register(
     "Open documentation" : "Mở tài liệu",
     "Update" : "Cập nhật",
     "Export" : "Xuất ra",
+    "Mode" : "Chế độ",
     "Nextcloud Assistant" : "Trợ lý Nextcloud",
     "Description" : "Mô tả",
     "Import" : "Nhập vào",

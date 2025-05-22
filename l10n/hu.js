@@ -290,6 +290,7 @@ OC.L10N.register(
     "Data options" : "Adatbeállítások",
     "Update" : "Frissítés",
     "Export" : "Exportálás",
+    "Mode" : "Mód",
     "Option" : "Option",
     "Number of records" : "Rekordok száma",
     "Nextcloud Assistant" : "Nextcloud Asszisztens",

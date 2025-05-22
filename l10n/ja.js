@@ -151,6 +151,7 @@ OC.L10N.register(
     "Open documentation" : "ドキュメントを開く",
     "Update" : "更新",
     "Export" : "エクスポート",
+    "Mode" : "モード",
     "Option" : "Option",
     "Nextcloud Assistant" : "Nextcloud アシスタント",
     "Description" : "説明",

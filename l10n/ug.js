@@ -283,6 +283,7 @@ OC.L10N.register(
     "Data options" : "سانلىق مەلۇمات تاللانمىلىرى",
     "Update" : "يېڭىلا",
     "Export" : "چىقار",
+    "Mode" : "Mode",
     "Option" : "تاللاش",
     "Number of records" : "خاتىرە سانى",
     "Nextcloud Assistant" : "Nextcloud ياردەمچىسى",

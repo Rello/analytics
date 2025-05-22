@@ -280,6 +280,7 @@ OC.L10N.register(
     "Data options" : "Datuen aukerak",
     "Update" : "Eguneratu",
     "Export" : "Esportatu",
+    "Mode" : "Modua",
     "Option" : "Aukera",
     "Number of records" : "Erregistro kopurua",
     "Nextcloud Assistant" : "Nextcloud Assistant",

@@ -42,6 +42,7 @@ OC.L10N.register(
     "Name" : "Anv",
     "Open documentation" : "Digeriñ an dielvadur",
     "Update" : "Hizivaat",
+    "Mode" : "Mod",
     "Description" : "Deskrivadur",
     "Import" : "Emporzhiañ ",
     "Title" : "Titl",

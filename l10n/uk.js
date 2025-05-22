@@ -281,6 +281,7 @@ OC.L10N.register(
     "Data options" : "Параметри даних",
     "Update" : "Оновлення",
     "Export" : "Експорт",
+    "Mode" : "Режим",
     "Option" : "Варіант",
     "Number of records" : "Кількість записів",
     "Nextcloud Assistant" : "Асистент Nextcloud",

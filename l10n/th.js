@@ -52,6 +52,7 @@ OC.L10N.register(
     "Open documentation" : "เปิดเอกสารประกอบ",
     "Update" : "อัปเดต",
     "Export" : "ส่งออก",
+    "Mode" : "โหมด",
     "Description" : "คำอธิบาย",
     "Import" : "นำเข้า",
     "Title" : "ชื่อเรื่อง",

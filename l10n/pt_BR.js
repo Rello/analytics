@@ -292,6 +292,7 @@ OC.L10N.register(
     "Data options" : "Opções de dados",
     "Update" : "Atualizar",
     "Export" : "Exportar",
+    "Mode" : "Modo",
     "Option" : "Opção",
     "Number of records" : "Número de registros",
     "Nextcloud Assistant" : "Nextcloud Assistente",

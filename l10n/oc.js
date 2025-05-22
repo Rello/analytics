@@ -69,6 +69,7 @@ OC.L10N.register(
     "Open documentation" : "Dobrir la documentacion",
     "Update" : "Actualizar",
     "Export" : "Exportar",
+    "Mode" : "Mòde",
     "Description" : "Descripcion",
     "Import" : "Importar",
     "> greater" : "> superior",

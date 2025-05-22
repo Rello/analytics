@@ -54,6 +54,7 @@ OC.L10N.register(
     "Open documentation" : "Отвори ја документацијата",
     "Update" : "Ажурирај",
     "Export" : "Извези",
+    "Mode" : "Мод",
     "Option" : "Опции",
     "Import" : "Увези",
     "Others" : "Останати",

@@ -230,6 +230,8 @@ OC.L10N.register(
     "Data options" : "Опции за данни",
     "Update" : "Обновяване",
     "Export" : "Експорт",
+    "Mode" : "Режим",
+    "Option" : "Опция",
     "Number of records" : "Брой записи",
     "Manual entry" : "Ръчно въвеждане",
     "Save data" : "Запиши дата",

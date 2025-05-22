@@ -237,6 +237,7 @@ OC.L10N.register(
     "Data options" : "Opciones de datos",
     "Update" : "Actualizar",
     "Export" : "Exportar",
+    "Mode" : "Modo",
     "Option" : "Opción",
     "Number of records" : "Número de registros",
     "Description" : "Descripción",

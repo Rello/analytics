@@ -58,6 +58,7 @@ OC.L10N.register(
     "Open documentation" : "Opna hjálparskjöl",
     "Update" : "Uppfæra",
     "Export" : "Flytja út",
+    "Mode" : "Hamur",
     "Option" : "Valkostur",
     "Nextcloud Assistant" : "Nextcloud Aðstoð",
     "Description" : "Lýsing",

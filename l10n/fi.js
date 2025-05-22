@@ -181,6 +181,7 @@ OC.L10N.register(
     "Data options" : "Datavalinnat",
     "Update" : "Päivitä",
     "Export" : "Vie",
+    "Mode" : "Tila",
     "Nextcloud Assistant" : "Nextcloud-avustaja",
     "Description" : "Kuvaus",
     "Save data" : "Tallenna tiedot",

@@ -44,6 +44,7 @@ OC.L10N.register(
     "Open documentation" : "ღია დოკუმენტაცია",
     "Update" : "განახლება",
     "Export" : "ექსპორტი",
+    "Mode" : "რეჟიმი",
     "Description" : "აღწერილობა",
     "Import" : "იმპორტი",
     "Setting" : "პარამეტრი",

@@ -132,6 +132,7 @@ OC.L10N.register(
     "Open documentation" : "Atvērt dokumentāciju",
     "Update" : "Atjaunināt",
     "Export" : "Izgūt",
+    "Mode" : "Režīms",
     "Description" : "Apraksts",
     "Import" : "Importēt",
     "From file" : "No datnes",

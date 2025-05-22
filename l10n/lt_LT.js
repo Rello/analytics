@@ -66,6 +66,7 @@ OC.L10N.register(
     "Open documentation" : "Atverti dokumentaciją",
     "Update" : "Atnaujinti",
     "Export" : "Eksportuoti",
+    "Mode" : "Veiksena",
     "Description" : "Aprašas",
     "Import" : "Importuoti",
     "From file" : "Iš failo",

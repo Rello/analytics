@@ -234,6 +234,7 @@ OC.L10N.register(
     "Data options" : "Επιλογές ημερομηνίας",
     "Update" : "Ενημέρωση",
     "Export" : "Εξαγωγή",
+    "Mode" : "Κατάσταση",
     "Number of records" : "Αριθμός εγγραφών",
     "Nextcloud Assistant" : "Βοηθός Nextcloud",
     "Description" : "Περιγραφή",

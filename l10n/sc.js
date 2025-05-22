@@ -61,6 +61,7 @@ OC.L10N.register(
     "Open documentation" : "Aberi sa documentatzione",
     "Update" : "Agiorna",
     "Export" : "Esporta",
+    "Mode" : "Modalidade",
     "Description" : "Descritzione",
     "Import" : "Importa",
     "Others" : "Àtere",

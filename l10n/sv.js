@@ -290,6 +290,7 @@ OC.L10N.register(
     "Data options" : "Dataalternativ",
     "Update" : "Uppdatera",
     "Export" : "Exportera",
+    "Mode" : "Läge",
     "Option" : "Alternativ",
     "Number of records" : "Antal poster",
     "Nextcloud Assistant" : "Nextcloud Assistant",
