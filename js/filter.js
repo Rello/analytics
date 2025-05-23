@@ -26,6 +26,10 @@ OCA.Analytics.Filter = {
         'IN': t('analytics', 'list of values'),
     },
 
+    /**
+     * Display the drilldown configuration dialog allowing the user
+     * to enable or disable individual dimensions for aggregation.
+     */
     openDrilldownDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -40,6 +44,7 @@ OCA.Analytics.Filter = {
         const availableDimensions = OCA.Analytics.currentReportData.dimensions;
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
 
+        const fragment = document.createDocumentFragment();
         Object.keys(availableDimensions).forEach((dimension, index) => {
             const row = document.createElement('div');
             row.style.display = 'table-row';
@@ -67,14 +72,18 @@ OCA.Analytics.Filter = {
             cellCheckbox.appendChild(label);
             row.appendChild(cellCheckbox);
 
-            table.appendChild(row);
+            fragment.appendChild(row);
         });
+        table.appendChild(fragment);
 
         OCA.Analytics.Notification.htmlDialogUpdate(container,
             t('analytics', 'Removing columns will aggregate the key figures.<br>This applies to the chart and table')
         );
     },
 
+    /**
+     * Persist the drilldown dialog selections and reload the report.
+     */
     processDrilldownDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         let drilldownColumns = document.getElementsByName('drilldownColumn');
@@ -102,6 +111,10 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Show the filter dialog where a dimension, comparison operator
+     * and value can be selected for report filtering.
+     */
     openFilterDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -156,6 +169,9 @@ OCA.Analytics.Filter = {
         );
     },
 
+    /**
+     * Store filter dialog settings to the current report and reload data.
+     */
     processFilterDialog: function () {
         // Get filterOptions and dimension value
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
@@ -179,6 +195,10 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Open the grouping dialog used to limit results to top/flop lists
+     * or to group remaining values under an "others" category.
+     */
     openGroupDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -221,6 +241,9 @@ OCA.Analytics.Filter = {
         );
     },
 
+    /**
+     * Apply grouping settings from the dialog and refresh the report.
+     */
     processGroupOptionsDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
 
@@ -247,6 +270,9 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Display the dialog for grouping time based dimensions.
+     */
     openTimeGroupingDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -287,6 +313,9 @@ OCA.Analytics.Filter = {
         );
     },
 
+    /**
+     * Save the selected time grouping configuration and refresh data.
+     */
     processTimeGroupingDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
 
@@ -310,37 +339,44 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Render the currently active filters as clickable labels.
+     */
     refreshFilterVisualisation: function () {
-        document.getElementById('filterVisualisation').innerHTML = '';
-        let filterDimensions = OCA.Analytics.currentReportData.dimensions;
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        if (filterOptions !== null && filterOptions['filter'] !== undefined) {
-            for (let filterDimension of Object.keys(filterOptions['filter'])) {
-                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions['filter'][filterDimension]['option']];
-                let span = document.createElement('span');
-                let filterValue = filterOptions['filter'][filterDimension]['value'];
-
+        const visContainer = document.getElementById("filterVisualisation");
+        visContainer.innerHTML = "";
+        const fragment = document.createDocumentFragment();
+        const filterDimensions = OCA.Analytics.currentReportData.dimensions;
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (filterOptions && filterOptions["filter"]) {
+            for (const filterDimension of Object.keys(filterOptions["filter"])) {
+                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions["filter"][filterDimension]["option"]];
+                const span = document.createElement("span");
+                let filterValue = filterOptions["filter"][filterDimension]["value"];
                 if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
-                    // text variable used
-                    optionText = '';
-                    filterValue = filterValue.replace(/%/g, '');
-                    filterValue = filterValue.replace(/\(.*?\)/g, '');
+                    optionText = "";
+                    filterValue = filterValue.replace(/%/g, "");
+                    filterValue = filterValue.replace(/\(.*?\)/g, "");
                 }
-                span.innerText = filterDimensions[filterDimension] + ' ' + optionText + ' ' + filterValue;
-                span.classList.add('filterVisualizationItem');
+                span.innerText = filterDimensions[filterDimension] + " " + optionText + " " + filterValue;
+                span.classList.add("filterVisualizationItem");
                 span.id = filterDimension;
-                span.addEventListener('click', OCA.Analytics.Filter.removeFilter)
-                document.getElementById('filterVisualisation').appendChild(span);
+                span.addEventListener("click", OCA.Analytics.Filter.removeFilter);
+                fragment.appendChild(span);
             }
         }
+        visContainer.appendChild(fragment);
+        const saveIcon = document.getElementById("saveIcon");
         if (OCA.Analytics.unsavedFilters === true) {
-            document.getElementById('saveIcon').style.removeProperty('display');
+            saveIcon.style.removeProperty("display");
         } else {
-            document.getElementById('saveIcon').style.display = 'none';
+            saveIcon.style.display = "none";
         }
-
     },
 
+    /**
+     * Remove a single active filter label and reload the data.
+     */
     removeFilter: function (evt) {
         let filterDimension = evt.target.id;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
@@ -353,6 +389,10 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Backend.getData();
     },
 
+    /**
+     * Launch the table options dialog for configuring layout and
+     * appearance of the table visualization.
+     */
     openTableOptionsDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -400,6 +440,10 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
     },
 
+    /**
+     * Read the values from the table options dialog and apply them
+     * to the current report before requesting fresh data.
+     */
     processTableOptionsDialog: function () {
         let tableOptions = OCA.Analytics.currentReportData.options.tableoptions;
 
@@ -469,6 +513,9 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Reset all saved table settings to their defaults.
+     */
     processTableOptionsReset: function () {
         if (OCA.Analytics.currentReportData.options.tableoptions !== null) {
             OCA.Analytics.currentReportData.options.tableoptions = null;
@@ -478,6 +525,10 @@ OCA.Analytics.Filter = {
         }
     },
 
+    /**
+     * Open the sort configuration dialog used to define default
+     * sort direction and dimension.
+     */
     openSortDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -531,6 +582,9 @@ OCA.Analytics.Filter = {
         );
     },
 
+    /**
+     * Save the chosen sorting dimension and direction and refresh the report.
+     */
     processSortOptionsDialog: function () {
         // Ensure filterOptions is initialized properly
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
@@ -555,6 +609,10 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Open the dialog used to configure chart specific options such
+     * as chart type, axis and colors for every data series.
+     */
     openChartOptionsDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
@@ -563,50 +621,81 @@ OCA.Analytics.Filter = {
             OCA.Analytics.Filter.processChartOptionsDialog
         );
 
-        let drilldownRows = '';
         let dataOptions;
         try {
             dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         } catch (e) {
             dataOptions = '';
         }
-        let distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0);
+        const distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0);
         if (dataOptions === null) dataOptions = {};
-
-        // get the default chart type to preset the drop downs
-        let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
-
-        for (let i = 0; i < Object.keys(distinctCategories).length; i++) {
-            let color = OCA.Analytics.Filter.checkColor(dataOptions, i);
-            drilldownRows = drilldownRows + '<div style="display: table-row;">'
-                + '<div style="display: table-cell;" id="optionsTitle' + i + '">'
-                + Object.values(distinctCategories)[i]
-                + '</div>'
-                + '<div style="display: table-cell;">'
-                + '<select id="optionsYAxis' + [i] + '" name="optionsYAxis" class="optionsInput">'
-                + '<option value="primary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') + '>' + t('analytics', 'Primary') + '</option>'
-                + '<option value="secondary" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') + '>' + t('analytics', 'Secondary') + '</option>'
-                + '</select>'
-                + '</div>'
-                + '<div style="display: table-cell;">'
-                + '<select id="optionsChartType' + [i] + '" name="optionsChartType" class="optionsInput">'
-                + '<option value="line" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) + '>' + t('analytics', 'Line') + '</option>'
-                + '<option value="bar" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) + '>' + t('analytics', 'Bar') + '</option>'
-                + '<option value="doughnut" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'doughnut', defaultChartType) + '>' + t('analytics', 'Doughnut') + '</option>'
-                + '<option value="funnel" ' + OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'funnel', defaultChartType) + '>' + t('analytics', 'Funnel') + '</option>'
-                + '</select>'
-                + '</div>'
-                + '<div style="display: table-cell;">'
-                + '<input id="optionsColor' + [i] + '" name="optionsColor" value=' + color + ' style="background-color:' + color + ';" class="optionsInput">'
-                + '</div>'
-                + '</div>';
-        }
 
         // clone the DOM template
         let container = document.getElementById('templateChartOptions').content;
         container = document.importNode(container, true);
+        const table = container.getElementById('chartOptionsTable');
 
-        container.getElementById('chartOptionsTable').insertAdjacentHTML('beforeend', drilldownRows);
+        // get the default chart type to preset the drop downs
+        const defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+
+        const fragment = document.createDocumentFragment();
+        Object.values(distinctCategories).forEach((category, i) => {
+            const color = OCA.Analytics.Filter.checkColor(dataOptions, i);
+
+            const row = document.createElement('div');
+            row.style.display = 'table-row';
+
+            const titleCell = document.createElement('div');
+            titleCell.style.display = 'table-cell';
+            titleCell.id = 'optionsTitle' + i;
+            titleCell.textContent = category;
+            row.appendChild(titleCell);
+
+            const yAxisCell = document.createElement('div');
+            yAxisCell.style.display = 'table-cell';
+            const yAxisSelect = document.createElement('select');
+            yAxisSelect.id = 'optionsYAxis' + i;
+            yAxisSelect.name = 'optionsYAxis';
+            yAxisSelect.className = 'optionsInput';
+            yAxisSelect.appendChild(new Option(t('analytics', 'Primary'), 'primary'));
+            yAxisSelect.appendChild(new Option(t('analytics', 'Secondary'), 'secondary'));
+            yAxisSelect.value = OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') ? 'primary' :
+                (OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') ? 'secondary' : 'primary');
+            yAxisCell.appendChild(yAxisSelect);
+            row.appendChild(yAxisCell);
+
+            const typeCell = document.createElement('div');
+            typeCell.style.display = 'table-cell';
+            const typeSelect = document.createElement('select');
+            typeSelect.id = 'optionsChartType' + i;
+            typeSelect.name = 'optionsChartType';
+            typeSelect.className = 'optionsInput';
+            typeSelect.appendChild(new Option(t('analytics', 'Line'), 'line'));
+            typeSelect.appendChild(new Option(t('analytics', 'Bar'), 'bar'));
+            typeSelect.appendChild(new Option(t('analytics', 'Doughnut'), 'doughnut'));
+            typeSelect.appendChild(new Option(t('analytics', 'Funnel'), 'funnel'));
+            typeSelect.value = OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) ? 'line' :
+                (OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) ? 'bar' :
+                    (OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'doughnut', defaultChartType) ? 'doughnut' :
+                        (OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'funnel', defaultChartType) ? 'funnel' : defaultChartType)));
+            typeCell.appendChild(typeSelect);
+            row.appendChild(typeCell);
+
+            const colorCell = document.createElement('div');
+            colorCell.style.display = 'table-cell';
+            const colorInput = document.createElement('input');
+            colorInput.id = 'optionsColor' + i;
+            colorInput.name = 'optionsColor';
+            colorInput.className = 'optionsInput';
+            colorInput.value = color;
+            colorInput.style.backgroundColor = color;
+            colorCell.appendChild(colorInput);
+            row.appendChild(colorCell);
+
+            fragment.appendChild(row);
+        });
+
+        table.appendChild(fragment);
 
         let dataModel;
         try {
@@ -623,17 +712,17 @@ OCA.Analytics.Filter = {
             t('analytics', 'Select the format of the data and how it should be visualized')
         );
 
-        let optionsColor = document.getElementsByName('optionsColor');
-        // Loop through each element and manually trigger the updateColor function
-        optionsColor.forEach((field) => {
+        const optionsColor = container.querySelectorAll('[name="optionsColor"]');
+        optionsColor.forEach(field => {
             OCA.Analytics.Filter.updateColor({target: field});
+            field.addEventListener('keyup', OCA.Analytics.Filter.updateColor);
         });
-
-        for (let i = 0; i < optionsColor.length; i++) {
-            optionsColor[i].addEventListener('keyup', OCA.Analytics.Filter.updateColor);
-        }
     },
 
+    /**
+     * Read all user configured chart options, merge them with any
+     * existing settings and trigger a reload of the report.
+     */
     processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         if (dataOptions === '' || dataOptions === null) {
@@ -739,6 +828,9 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.dialogClose();
     },
 
+    /**
+     * Close the currently opened dialog and clean up global listeners.
+     */
     close: function () {
         document.getElementById('analytics_dialog_container').remove();
         document.getElementById('analytics_dialog_overlay').remove();
@@ -747,6 +839,10 @@ OCA.Analytics.Filter = {
     },
 
     // function for shorter coding of the dialog creation
+    /**
+     * Helper used by option dialogs to preselect dropdown values based
+     * on existing configuration objects.
+     */
     checkOption: function (array, index, field, check, defaultChartType) {
         if (Array.isArray(array) && array.length && array[index]) {
             if (field in array[index]) {
@@ -764,6 +860,10 @@ OCA.Analytics.Filter = {
     },
 
     // function to define the color for a data series
+    /**
+     * Return the configured color for a dataset or a fallback from
+     * the default palette when none is set.
+     */
     checkColor: function (array, index) {
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
         let j = index % colors.length
@@ -780,6 +880,10 @@ OCA.Analytics.Filter = {
     },
 
     // function to check non standard legend selections during save
+    /**
+     * Ensure custom legend visibility settings are stored and
+     * obsolete entries removed before persisting chart options.
+     */
     processChartLegendSelections: function (dataOptions) {
         if (OCA.Analytics.chartObject !== null) {
             let legendItems = OCA.Analytics.chartObject.legend.legendItems;
@@ -799,6 +903,10 @@ OCA.Analytics.Filter = {
         return Object.values(dataOptions).slice(0, dataOptions.length);
     },
 
+    /**
+     * Remove obsolete dataset option entries exceeding the number of
+     * available categories in the current result set.
+     */
     cleanupDataOptionsArray: function (dataOptions) {
         // Get the correct number of items from the report
         const itemCount = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
@@ -811,6 +919,10 @@ OCA.Analytics.Filter = {
     },
 
     // live update the background and font color of the input boxes
+    /**
+     * Update the color preview inputs while the user types and adjust
+     * text color for readability.
+     */
     updateColor: function (evt) {
         let field = evt.target;
         // Check if the selected color is valid (e.g., #RRGGBB format)
@@ -844,16 +956,25 @@ OCA.Analytics.Filter = {
 };
 
 OCA.Analytics.Filter.Drag = {
+    /**
+     * Allow dropping an element during drag and drop operations.
+     */
     allowDrop: function (ev) {
         ev.preventDefault();
     },
 
+    /**
+     * Handle start of a drag event and update placeholders.
+     */
     drag: function (ev) {
         ev.dataTransfer.setData("text", ev.target.id);
         // Manage placeholders after updating layout
         OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 
+    /**
+     * Drop handler used for rearranging table layout items.
+     */
     drop: function (ev) {
         ev.preventDefault();
         const data = ev.dataTransfer.getData("text");
@@ -881,6 +1002,10 @@ OCA.Analytics.Filter.Drag = {
         OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 
+    /**
+     * Build the drag and drop table layout from current configuration
+     * and attach all necessary event handlers.
+     */
     initialize: function () {
         let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions.layout;
         let headerItems = OCA.Analytics.currentReportData.header;
@@ -933,6 +1058,10 @@ OCA.Analytics.Filter.Drag = {
         OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 
+    /**
+     * Insert or remove drag-and-drop placeholders depending on section
+     * content to guide the user during layout editing.
+     */
     managePlaceholders: function () {
         // Function to create a placeholder div
         const createPlaceholder = () => {
@@ -958,6 +1087,9 @@ OCA.Analytics.Filter.Drag = {
 };
 
 OCA.Analytics.Filter.Backend = {
+    /**
+     * Create a copy of the current report on the server and load it.
+     */
     newReport: function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
 
@@ -992,6 +1124,9 @@ OCA.Analytics.Filter.Backend = {
             .catch(err => console.error(err));
     },
 
+    /**
+     * Persist all current filter and option settings for the report.
+     */
     saveReport: function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
         OCA.Analytics.unsavedFilters = false;
@@ -1077,6 +1212,9 @@ OCA.Analytics.Filter.Backend = {
             .catch(err => console.error(err));
     },
 
+    /**
+     * Save and start the automatic refresh timer with the given interval.
+     */
     saveRefresh: function (evt) {
         OCA.Analytics.UI.hideReportMenu();
         let refresh = evt.target.id;
