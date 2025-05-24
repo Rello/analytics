@@ -164,6 +164,7 @@ OC.L10N.register(
     "Open documentation" : "Abrir la documentación",
     "Update" : "Anovar",
     "Export" : "Esportar",
+    "Mode" : "Mou",
     "Option" : "Opción",
     "Number of records" : "Númberu de rexistros",
     "Nextcloud Assistant" : "Asistente de Nextcloud",
