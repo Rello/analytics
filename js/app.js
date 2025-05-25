@@ -174,11 +174,6 @@ OCA.Analytics.UI = {
         document.title = OCA.Analytics.currentReportData.options.name + ' - ' + OCA.Analytics.initialDocumentTitle;
         if (OCA.Analytics.currentReportData.status !== 'nodata' && parseInt(OCA.Analytics.currentReportData.error) === 0) {
 
-            // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
-            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeGrouping(OCA.Analytics.currentReportData);
-            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyGrouping(OCA.Analytics.currentReportData);
-
             /*
             Sorting of integer values on x-axis #389
             Natural sorting needs to be selectable with a report or column parameter (drilldown dialog)
@@ -389,10 +384,10 @@ OCA.Analytics.UI = {
             document.getElementById('reportMenuChartOptions').disabled = false;
             document.getElementById('reportMenuTableOptions').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
-            document.getElementById('reportMenuDrilldown').disabled = false;
+            document.getElementById('reportMenuColumnSelection').disabled = false;
             document.getElementById('reportMenuSort').disabled = false;
-            document.getElementById('reportMenuGroup').disabled = false;
-            document.getElementById('reportMenuTimeGroup').disabled = false;
+            document.getElementById('reportMenuTopN').disabled = false;
+            document.getElementById('reportMenuTimeAggregation').disabled = false;
             document.getElementById('reportMenuDownload').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuTranslate').disabled = false;
@@ -467,10 +462,10 @@ OCA.Analytics.UI = {
         //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleTableMenu);
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
         document.getElementById('reportMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
-        document.getElementById('reportMenuDrilldown').addEventListener('click', OCA.Analytics.Filter.openDrilldownDialog);
+        document.getElementById('reportMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
         document.getElementById('reportMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
-        document.getElementById('reportMenuGroup').addEventListener('click', OCA.Analytics.Filter.openGroupDialog);
-        document.getElementById('reportMenuTimeGroup').addEventListener('click', OCA.Analytics.Filter.openTimeGroupingDialog);
+        document.getElementById('reportMenuTopN').addEventListener('click', OCA.Analytics.Filter.openTopNDialog);
+        document.getElementById('reportMenuTimeAggregation').addEventListener('click', OCA.Analytics.Filter.openTimeAggregationDialog);
         document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
         document.getElementById('reportMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
 
@@ -1480,6 +1475,7 @@ OCA.Analytics.Backend = {
 
                 OCA.Analytics.Visualization.hideElement('analytics-loading');
                 OCA.Analytics.Visualization.showElement('analytics-content');
+
                 OCA.Analytics.currentReportData = data;
                 try {
                     // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
@@ -1515,6 +1511,11 @@ OCA.Analytics.Backend = {
                     document.getElementById('reportSubHeader').innerText = data.options.subheader;
                     OCA.Analytics.Visualization.showElement('reportSubHeader');
                 }
+
+                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
+                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeAggregation(OCA.Analytics.currentReportData);
+                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTopN(OCA.Analytics.currentReportData);
 
                 OCA.Analytics.UI.buildReport();
 

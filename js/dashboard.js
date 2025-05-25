@@ -122,6 +122,12 @@ OCA.Analytics.Dashboard = {
                 } catch (e) {
                     jsondata.options.tableoptions = {};
                 }
+
+                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+                jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
+                jsondata = OCA.Analytics.Visualization.applyTimeAggregation(jsondata);
+                jsondata = OCA.Analytics.Visualization.applyTopN(jsondata);
+
                 OCA.Analytics.Dashboard.createWidgetContent(jsondata);
             }
         };

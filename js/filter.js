@@ -30,12 +30,12 @@ OCA.Analytics.Filter = {
      * Display the drilldown configuration dialog allowing the user
      * to enable or disable individual dimensions for aggregation.
      */
-    openDrilldownDialog: function () {
+    openColumnsSelectionDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Drilldown'),
-            OCA.Analytics.Filter.processDrilldownDialog
+            t('analytics', 'Column selection'),
+            OCA.Analytics.Filter.processColumnsSelectionDialog
         );
 
         const container = document.importNode(document.getElementById('templateDrilldownOptions').content, true);
@@ -84,7 +84,7 @@ OCA.Analytics.Filter = {
     /**
      * Persist the drilldown dialog selections and reload the report.
      */
-    processDrilldownDialog: function () {
+    processColumnsSelectionDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         let drilldownColumns = document.getElementsByName('drilldownColumn');
 
@@ -196,18 +196,18 @@ OCA.Analytics.Filter = {
     },
 
     /**
-     * Open the grouping dialog used to limit results to top/flop lists
+     * Open the Top N dialog used to limit results to top/flop lists
      * or to group remaining values under an "others" category.
      */
-    openGroupDialog: function () {
+    openTopNDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Grouping'),
-            OCA.Analytics.Filter.processGroupOptionsDialog
+            t('analytics', 'Top N'),
+            OCA.Analytics.Filter.processTopNDialog
         );
 
-        const container = document.importNode(document.getElementById('templateGroupOptions').content, true);
+        const container = document.importNode(document.getElementById('templateTopNOptions').content, true);
 
         const headerArray = OCA.Analytics.currentReportData.header;
         const dimensionSelect = container.getElementById('groupOptionDimension');
@@ -228,11 +228,11 @@ OCA.Analytics.Filter = {
         });
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        if (filterOptions !== null && filterOptions['group'] !== undefined) {
-            dimensionSelect.value = filterOptions.group.dimension;
-            typeSelect.value = filterOptions.group.type;
-            container.getElementById('groupOptionNumber').value = filterOptions.group.number;
-            container.getElementById('groupOptionOthers').checked = filterOptions.group.others === true;
+        if (filterOptions !== null && filterOptions['topN'] !== undefined) {
+            dimensionSelect.value = filterOptions.topN.dimension;
+            typeSelect.value = filterOptions.topN.type;
+            container.getElementById('groupOptionNumber').value = filterOptions.topN.number;
+            container.getElementById('groupOptionOthers').checked = filterOptions.topN.others === true;
         }
 
         OCA.Analytics.Notification.htmlDialogUpdate(
@@ -244,26 +244,26 @@ OCA.Analytics.Filter = {
     /**
      * Apply grouping settings from the dialog and refresh the report.
      */
-    processGroupOptionsDialog: function () {
+    processTopNDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
 
-        if (!filterOptions.group) {
-            filterOptions.group = {};
+        if (!filterOptions.topN) {
+            filterOptions.topN = {};
         }
 
-        filterOptions.group.dimension = document.getElementById('groupOptionDimension').value;
-        filterOptions.group.type = document.getElementById('groupOptionType').value;
-        filterOptions.group.number = parseInt(document.getElementById('groupOptionNumber').value);
-        filterOptions.group.others = document.getElementById('groupOptionOthers').checked;
+        filterOptions.topN.dimension = document.getElementById('groupOptionDimension').value;
+        filterOptions.topN.type = document.getElementById('groupOptionType').value;
+        filterOptions.topN.number = parseInt(document.getElementById('groupOptionNumber').value);
+        filterOptions.topN.others = document.getElementById('groupOptionOthers').checked;
 
-        if (filterOptions.group.type === 'none' || isNaN(filterOptions.group.number)) {
-            delete filterOptions.group;
+        if (filterOptions.topN.type === 'none' || isNaN(filterOptions.topN.number)) {
+            delete filterOptions.topN;
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         // remove all data options for which there is no dimension anymore
-        if (filterOptions.group) {
-            OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.group.number);
+        if (filterOptions.topN) {
+            OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.topN.number);
         }
         OCA.Analytics.unsavedFilters = true;
         OCA.Analytics.Backend.getData();
@@ -273,15 +273,15 @@ OCA.Analytics.Filter = {
     /**
      * Display the dialog for grouping time based dimensions.
      */
-    openTimeGroupingDialog: function () {
+    openTimeAggregationDialog: function () {
         OCA.Analytics.UI.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Time grouping'),
-            OCA.Analytics.Filter.processTimeGroupingDialog
+            t('analytics', 'Time aggregation'),
+            OCA.Analytics.Filter.processTimeAggregationDialog
         );
 
-        const container = document.importNode(document.getElementById('templateTimeGroupingOptions').content, true);
+        const container = document.importNode(document.getElementById('templateTimeAggregationOptions').content, true);
 
         const dimensions = OCA.Analytics.currentReportData.dimensions;
         const dimSelect = container.getElementById('timeGroupingDimension');
@@ -301,36 +301,36 @@ OCA.Analytics.Filter = {
         });
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        if (filterOptions && filterOptions.timeGrouping) {
-            dimSelect.value = filterOptions.timeGrouping.dimension;
-            groupingSelect.value = filterOptions.timeGrouping.grouping;
-            modeSelect.value = filterOptions.timeGrouping.mode;
+        if (filterOptions && filterOptions.timeAggregation) {
+            dimSelect.value = filterOptions.timeAggregation.dimension;
+            groupingSelect.value = filterOptions.timeAggregation.grouping;
+            modeSelect.value = filterOptions.timeAggregation.mode;
         }
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Group time values to day, week, month or year. Values will be aggregated accordingly.')
+            t('analytics', 'Aggregate daily data into weeks, months, or years')
         );
     },
 
     /**
      * Save the selected time grouping configuration and refresh data.
      */
-    processTimeGroupingDialog: function () {
+    processTimeAggregationDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
 
         const grouping = document.getElementById('timeGroupingGrouping').value;
 
-        if (!filterOptions.timeGrouping) {
-            filterOptions.timeGrouping = {};
+        if (!filterOptions.timeAggregation) {
+            filterOptions.timeAggregation = {};
         }
 
-        filterOptions.timeGrouping.dimension = document.getElementById('timeGroupingDimension').value;
-        filterOptions.timeGrouping.grouping = grouping;
-        filterOptions.timeGrouping.mode = document.getElementById('timeGroupingMode').value;
+        filterOptions.timeAggregation.dimension = document.getElementById('timeGroupingDimension').value;
+        filterOptions.timeAggregation.grouping = grouping;
+        filterOptions.timeAggregation.mode = document.getElementById('timeGroupingMode').value;
 
         if (grouping === 'none') {
-            delete filterOptions.timeGrouping;
+            delete filterOptions.timeAggregation;
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
@@ -533,7 +533,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.UI.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Sort'),
+            t('analytics', 'Sort order'),
             OCA.Analytics.Filter.processSortOptionsDialog
         );
 
@@ -578,7 +578,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Default sorting can be set for each dimension.')
+            t('analytics', 'Sort data ascending or descending')
         );
     },
 

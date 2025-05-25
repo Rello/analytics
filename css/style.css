@@ -659,6 +659,11 @@ div.dt-container .dt-paging .dt-paging-button {
     filter: var(--background-invert-if-dark);
 }
 
+.icon-analytics-timeAggregation {
+    background-image: url(../img/timeAggregation.svg);
+    filter: var(--background-invert-if-dark);
+}
+
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
     padding: 5px;

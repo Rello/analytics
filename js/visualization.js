@@ -813,8 +813,8 @@ OCA.Analytics.Visualization = {
      * @param {Object} data - Backend data with grouping options
      * @returns {Object} Modified data object
      */
-    applyGrouping: function (data) {
-        const group = data.options.filteroptions?.group;
+    applyTopN: function (data) {
+        const group = data.options.filteroptions?.topN;
         if (!group || group.type === 'none') {
             return data;
         }
@@ -876,8 +876,8 @@ OCA.Analytics.Visualization = {
      * @param {Object} data - Backend data with grouping configuration
      * @returns {Object} Grouped data object
      */
-    applyTimeGrouping: function (data) {
-        const tg = data.options.filteroptions?.timeGrouping;
+    applyTimeAggregation: function (data) {
+        const tg = data.options.filteroptions?.timeAggregation;
         if (!tg || tg.grouping === 'none') {
             return data;
         }

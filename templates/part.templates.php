@@ -153,7 +153,7 @@
 
 </template>
 
-<template id="templateTimeGroupingOptions">
+<template id="templateTimeAggregationOptions">
     <div class="table" style="display: table;" id="timeGroupingOptionsTable">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 150px;">
@@ -180,7 +180,7 @@
     </div>
 </template>
 
-<template id="templateGroupOptions">
+<template id="templateTopNOptions">
     <div class="table" style="display: table;" id="groupOptionsTable">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 150px;">

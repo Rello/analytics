@@ -3080,9 +3080,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -3167,9 +3167,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -4659,10 +4659,10 @@
       "id": "73203f11-8be8-47bb-a728-817ce2af78c5",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuDrilldown > span:nth-child(2)",
+      "target": "css=#reportMenuColumnSelection > span:nth-child(2)",
       "targets": [
-        ["css=#reportMenuDrilldown > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuDrilldown']/span[2]", "xpath:idRelative"],
+        ["css=#reportMenuColumnSelection > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='reportMenuColumnSelection']/span[2]", "xpath:idRelative"],
         ["xpath=//button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Drilldown')]", "xpath:innerText"]
       ],
@@ -6411,9 +6411,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6422,11 +6422,11 @@
       "id": "9a3df7ab-c9de-44dc-8099-2dc62d69f04c",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuDrilldown",
+      "target": "id=reportMenuColumnSelection",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6490,9 +6490,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6501,11 +6501,11 @@
       "id": "49592ca8-a6d5-4ba2-8640-4bf2679f8786",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuDrilldown",
+      "target": "id=reportMenuColumnSelection",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6629,9 +6629,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6722,9 +6722,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6842,9 +6842,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6853,7 +6853,7 @@
       "id": "ccff9d6c-5a3e-4c7c-8494-6d37552fb1d0",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuGroup",
+      "target": "id=reportMenuTopN",
       "targets": [
         ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
         ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
@@ -6938,9 +6938,9 @@
       "command": "click",
       "target": "id=reportMenuIcon",
       "targets": [
-        ["id=reportMenuDrilldown", "id"],
-        ["css=#reportMenuDrilldown", "css:finder"],
-        ["xpath=//div[@id='reportMenuDrilldown']", "xpath:attributes"],
+        ["id=reportMenuColumnSelection", "id"],
+        ["css=#reportMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6949,7 +6949,7 @@
       "id": "fbdef382-f365-4f21-b573-3452602f4c42",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuGroup",
+      "target": "id=reportMenuTopN",
       "targets": [
         ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
         ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
