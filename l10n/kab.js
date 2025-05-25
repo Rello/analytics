@@ -4,7 +4,6 @@ OC.L10N.register(
     "Delete" : "Kkes",
     "Done" : "Immed",
     "Filter" : "Sizdeg",
-    "Sort" : "Smizzwer",
     "Default" : "Prédéfini(e)",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",

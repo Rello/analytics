@@ -6,7 +6,6 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Done" : "დასრულდა",
     "Filter" : "ფილტრი",
-    "Sort" : "განლაგება",
     "Default" : "საწყისი პარამეტრები",
     "Overview" : "ზოგადი მიმოხილვა",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",

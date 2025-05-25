@@ -4,7 +4,6 @@ OC.L10N.register(
     "Saved" : "Saxlanıldı",
     "Delete" : "Sil",
     "Done" : "Edildi",
-    "Sort" : "Çeşidləmək",
     "Overview" : "İcmal",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Qovluğu sil",

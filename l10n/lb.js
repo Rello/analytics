@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Gespäichert",
     "Delete" : "Läschen",
-    "Sort" : "Zortéieren",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Dossier läschen",
     "Add to favorites" : "Add to favorites",

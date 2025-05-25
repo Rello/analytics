@@ -4,7 +4,6 @@ OC.L10N.register(
     "Saved" : "Salveguardate",
     "Delete" : "Deler",
     "Done" : "Preste",
-    "Sort" : "Ordinar",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Deler dossier",
     "Add to favorites" : "Add to favorites",

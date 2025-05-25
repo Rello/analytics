@@ -40,7 +40,6 @@
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Seleccionar las columnas requeridas. <br> Reorganizar la secuencia con arrastrar y soltar. <br> Eliminar todas las selecciones a restablecer. <br> Agregar columnas personalizadas, incluyendo variables de texto para fechas. Consulta la {linkstart}Wiki{linkend}.",
     "Previous Values: " : "Valores previos:",
     "Filter" : "Filtrar",
-    "Sort" : "Ordenar",
     "Overview" : "Generalidades",
     "Remove from favorites" : "Eliminar de favoritos",
     "Delete folder" : "Borrar carpeta",

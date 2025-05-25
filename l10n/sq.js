@@ -6,7 +6,6 @@ OC.L10N.register(
     "Delete" : "Fshij",
     "Done" : "U bë",
     "Filter" : "Filtro",
-    "Sort" : "Renditni",
     "Default" : "Paraprake",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Fshini dosjen",

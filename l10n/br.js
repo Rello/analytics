@@ -6,7 +6,6 @@ OC.L10N.register(
     "Done" : "Graet",
     "Loading" : "Kargañ",
     "Filter" : "Filtre",
-    "Sort" : "Urzhiañ",
     "Bar" : "Tavarn",
     "Overview" : "Taol-lagad",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",

@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "ລຶບ",
-    "Sort" : "ລຽງດຳດັບ",
     "Default" : "ເລີ່ມຕົ້ນ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Delete folder" : "ລຶບໂຟນເດີ",

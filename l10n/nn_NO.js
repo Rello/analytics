@@ -12,7 +12,6 @@ OC.L10N.register(
     "contains" : "inneheld",
     "Filter" : "Filter",
     "none" : "ingen",
-    "Sort" : "Sorter",
     "Overview" : "Oversyn",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Slett mappe",

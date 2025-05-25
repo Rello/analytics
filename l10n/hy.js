@@ -6,7 +6,6 @@ OC.L10N.register(
     "Automation" : "Ավտոմատացում",
     "Saved" : "Պահված",
     "Delete" : "հեռացնել",
-    "Sort" : "Դասակարգել",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Կիսվել",

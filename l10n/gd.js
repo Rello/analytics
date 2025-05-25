@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Sguab às",
-    "Sort" : "Seòrsaich",
     "Default" : "Bunaiteach",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Share" : "Co-roinn",

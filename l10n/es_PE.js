@@ -5,7 +5,6 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
-    "Sort" : "Ordenar",
     "Remove from favorites" : "Eliminar de favoritos",
     "Delete folder" : "Borrar carpeta",
     "Add to favorites" : "Agregar a tus favoritos",
