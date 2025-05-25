@@ -668,17 +668,22 @@ div.dt-container .dt-paging .dt-paging-button {
     background-color: var(--color-background-dark);
     padding: 5px;
     border-radius: 15px;
-    padding-left: 34px;
-    background-position: 10px center;
-    background-image: var(--icon-close-dark);
-    background-repeat: no-repeat;
     opacity: .5;
     font-size: smaller;
-    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
 }
 
 .filterVisualizationItem:hover {
     opacity: 1;
+}
+
+.filterVisualizationRemove {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    background: var(--icon-close-dark) no-repeat center;
+    cursor: pointer;
 }
 
 .whatsNewPopover {
