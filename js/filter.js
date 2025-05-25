@@ -406,18 +406,27 @@ OCA.Analytics.Filter = {
         if (filterOptions && filterOptions["filter"]) {
             for (const filterDimension of Object.keys(filterOptions["filter"])) {
                 let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions["filter"][filterDimension]["option"]];
-                const span = document.createElement("span");
+                const container = document.createElement("span");
                 let filterValue = filterOptions["filter"][filterDimension]["value"];
                 if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
                     optionText = "";
                     filterValue = filterValue.replace(/%/g, "");
                     filterValue = filterValue.replace(/\(.*?\)/g, "");
                 }
-                span.innerText = filterDimensions[filterDimension] + " " + optionText + " " + filterValue;
-                span.classList.add("filterVisualizationItem");
-                span.id = filterDimension;
-                span.addEventListener("click", OCA.Analytics.Filter.removeFilter);
-                fragment.appendChild(span);
+
+                const removeIcon = document.createElement("span");
+                removeIcon.classList.add("filterVisualizationRemove", "icon-close");
+                removeIcon.addEventListener("click", OCA.Analytics.Filter.removeFilter);
+
+                const textSpan = document.createElement("span");
+                textSpan.innerText = filterDimensions[filterDimension] + " " + optionText + " " + filterValue;
+
+                container.classList.add("filterVisualizationItem");
+                container.id = filterDimension;
+                container.appendChild(removeIcon);
+                container.appendChild(textSpan);
+
+                fragment.appendChild(container);
             }
         }
         visContainer.appendChild(fragment);
@@ -433,7 +442,8 @@ OCA.Analytics.Filter = {
      * Remove a single active filter label and reload the data.
      */
     removeFilter: function (evt) {
-        let filterDimension = evt.target.id;
+        const parent = evt.target.closest('.filterVisualizationItem');
+        let filterDimension = parent ? parent.id : evt.target.id;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         delete filterOptions['filter'][filterDimension];
         if (Object.keys(filterOptions['filter']).length === 0) {
