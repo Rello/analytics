@@ -16,7 +16,6 @@ OC.L10N.register(
     "contains" : "មានផ្ទុក",
     "list of values" : "បញ្ជីនៃតម្លៃ",
     "none" : "មិនមាន",
-    "Sort" : "តម្រៀប",
     "Chart options" : "ជម្រើសក្រាប",
     "Primary" : "ឯក",
     "Secondary" : "ទោ",

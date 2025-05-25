@@ -13,7 +13,6 @@ OC.L10N.register(
     "Are you sure?" : "¿Estás seguro?",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
-    "Sort" : "Ordenar",
     "Overview" : "Resumen",
     "Remove from favorites" : "Eliminar de favoritos",
     "Delete folder" : "Borrar carpeta",

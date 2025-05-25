@@ -32,7 +32,6 @@ OC.L10N.register(
     "Reset zoom" : "Set semula zum",
     "Choose language" : "Pilih Bahasa",
     "Trend" : "Trend",
-    "Sort" : "Susun",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Kongsi",

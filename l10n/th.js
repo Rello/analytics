@@ -9,7 +9,6 @@ OC.L10N.register(
     "Delete" : "ลบ",
     "Loading" : "กำลังโหลด",
     "Filter" : "ตัวกรอง",
-    "Sort" : "จัดเรียง",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Delete folder" : "ลบโฟลเดอร์",
     "Add to favorites" : "เพิ่มในรายการโปรด",

@@ -102,6 +102,7 @@ OC.L10N.register(
     "Update" : "Cập nhật",
     "Export" : "Xuất ra",
     "Mode" : "Chế độ",
+    "Remove filter" : "Xoá bộ lọc",
     "Nextcloud Assistant" : "Trợ lý Nextcloud",
     "Description" : "Mô tả",
     "Import" : "Nhập vào",

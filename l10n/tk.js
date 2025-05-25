@@ -2,7 +2,6 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Pozmak",
-    "Sort" : "sortlamak",
     "Default" : "Bellenen",
     "Add to favorites" : "Saýlananlara goşuň",
     "Share" : "Paýlaş",

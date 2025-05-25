@@ -38,7 +38,6 @@ OC.L10N.register(
     "list of values" : "vērtību sarakstu",
     "none" : "nav",
     "Table options" : "Tabulas iespējas",
-    "Sort" : "Kārtot",
     "Primary" : "Primāri",
     "Secondary" : "Sekundāri",
     "New dataset" : "Jauna datu kopa",

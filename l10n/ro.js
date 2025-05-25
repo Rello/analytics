@@ -9,7 +9,6 @@ OC.L10N.register(
     "Delete" : "Șterge",
     "Done" : "Realizat",
     "Filter" : "Filtru",
-    "Sort" : "Sortează",
     "Default" : "Implicită",
     "Line" : "Linie",
     "Overview" : "Prezentare generală",

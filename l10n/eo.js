@@ -8,7 +8,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Done" : "Farita",
     "Loading" : "Ŝargado",
-    "Sort" : "Ordigi",
     "Overview" : "Superrigardo",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Delete folder" : "Forigi dosierujon",

@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Wedi'u cadw",
     "Delete" : "Dileu",
-    "Sort" : "Trefnu",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Rhannu",

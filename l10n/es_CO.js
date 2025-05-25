@@ -10,7 +10,6 @@ OC.L10N.register(
     "Select file" : "Seleccionar archivo",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
-    "Sort" : "Ordenar",
     "Overview" : "Generalidades",
     "Remove from favorites" : "Eliminar de favoritos",
     "Delete folder" : "Borrar carpeta",
