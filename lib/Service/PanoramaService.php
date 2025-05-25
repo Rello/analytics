@@ -69,6 +69,8 @@ class PanoramaService {
 		// get shared reports and remove duplicates
 		foreach ($sharedPanoramas as $sharedPanorama) {
 			if (!array_search($sharedPanorama['id'], array_column($ownPanorama, 'id'))) {
+				// ToDo: panoramas do not have an edit logic. to be added later
+				$sharedPanorama['permissions'] = \OCP\Constants::PERMISSION_READ;
 				// just keep the necessary fields
 				$ownPanorama[] = array_intersect_key($sharedPanorama, array_flip($keysToKeep));;
 			}
