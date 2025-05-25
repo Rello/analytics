@@ -290,6 +290,7 @@ OC.L10N.register(
     "Export" : "Eksporter",
     "Mode" : "Mode",
     "Option" : "Valgmulighed",
+    "Remove filter" : "Fjern filter",
     "Number of records" : "Antal poster",
     "Nextcloud Assistant" : "Nextcloud assistent",
     "Context Chat is required" : "Kontekstchat er krævet",

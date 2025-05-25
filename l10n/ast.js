@@ -164,6 +164,7 @@ OC.L10N.register(
     "Export" : "Esportar",
     "Mode" : "Mou",
     "Option" : "Opción",
+    "Remove filter" : "Quitar la peñera",
     "Number of records" : "Númberu de rexistros",
     "Nextcloud Assistant" : "Asistente de Nextcloud",
     "Description" : "Descripción",

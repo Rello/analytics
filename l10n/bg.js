@@ -46,6 +46,7 @@ OC.L10N.register(
     "Filter" : "Филтър",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Динамичните променливи на текста, могат да се използват за избор на дати.<br>Селекцията е изписана между два % (например %последни 2 месеца%).<br>Информация за наличните филтри и алтернативни формати за дата е налична в {linkstart}Уики{linkend}.",
     "none" : "няма",
+    "Sort order" : "Сортиране на реда",
     "Default" : "По подразбиране",
     "Chart options" : "Опции за диаграма",
     "Primary" : "Първи",

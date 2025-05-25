@@ -304,6 +304,7 @@ OC.L10N.register(
     "Group by" : "Seskupit podle",
     "Option" : "Volba",
     "with others" : "s ostatními",
+    "Remove filter" : "Odebrat filtr",
     "Number of records" : "Počet záznamů",
     "Nextcloud Assistant" : "Nextcloud Asistent",
     "Context Chat is required" : "Je zapotřebí kontextový chat",
