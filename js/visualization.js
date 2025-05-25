@@ -518,6 +518,14 @@ OCA.Analytics.Visualization = {
             const index = legendItem.datasetIndex;
             const type = legend.chart.config.type;
 
+            if (index === -1) {
+                legend.chart.data.datasets.forEach(ds => {
+                    ds.hidden = false;
+                });
+                legend.chart.update();
+                return;
+            }
+
             // Do the original logic
             if (type === 'pie' || type === 'doughnut') {
                 pieDoughnutLegendClickHandler(e, legendItem, legend)
@@ -525,6 +533,19 @@ OCA.Analytics.Visualization = {
                 defaultLegendClickHandler(e, legendItem, legend);
             }
             document.getElementById('saveIcon')?.style.removeProperty('display');
+        };
+
+        const defaultGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+        Chart.defaults.plugins.legend.labels.generateLabels = function (chart) {
+            const labels = defaultGenerateLabels(chart);
+            labels.push({
+                text: t('analytics', 'Show all'),
+                fillStyle: 'transparent',
+                strokeStyle: 'transparent',
+                hidden: false,
+                datasetIndex: -1
+            });
+            return labels;
         };
 
         this.showElement('tableSeparatorContainer');
