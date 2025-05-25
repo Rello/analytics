@@ -47,6 +47,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     SHARE_TYPE_GROUP: 1,
     SHARE_TYPE_LINK: 3,
     SHARE_TYPE_ROOM: 10,
+    SHARE_PERMISSION_UPDATE: 2,
     tableObject: [],
     isDataset: false,
     currentReportData: {},
@@ -212,6 +213,8 @@ OCA.Analytics.Panorama = {
     getPanorama: function (targetPage) {
         // Reset existing pages
         document.getElementById('panoramaPages').innerHTML = '';
+
+        OCA.Analytics.Panorama.updateOptionsMenuContent();
 
         // add an empty page if the panorama is empty/new
         if (OCA.Analytics.Panorama.currentPanorama.pages.length === 0) {
@@ -384,7 +387,19 @@ OCA.Analytics.Panorama = {
             }
         }
     },
-    
+
+    updateOptionsMenuContent: function () {
+        if (OCA.Analytics.Panorama.currentPanorama.permissions && parseInt(OCA.Analytics.Panorama.currentPanorama.permissions) === OCA.Analytics.SHARE_PERMISSION_UPDATE) {
+            document.getElementById('optionMenuEdit').disabled = false;
+            document.getElementById('optionMenuLayout').disabled = false;
+            document.getElementById('optionMenuDeletePage').disabled = false;
+        } else {
+            document.getElementById('optionMenuEdit').disabled = true;
+            document.getElementById('optionMenuLayout').disabled = true;
+            document.getElementById('optionMenuDeletePage').disabled = true;
+        }
+    },
+
     toggleOptionMenu: function () {
         OCA.Analytics.Panorama.toggleEditSaveButtonDisplay();
         document.getElementById('optionMenu').classList.toggle('open');

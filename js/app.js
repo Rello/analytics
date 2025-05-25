@@ -49,6 +49,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     SHARE_TYPE_GROUP: 1,
     SHARE_TYPE_LINK: 3,
     SHARE_TYPE_ROOM: 10,
+    SHARE_PERMISSION_UPDATE: 2,
     initialDocumentTitle: null,
     isDataset: false,
     currentReportData: {},

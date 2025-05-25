@@ -274,6 +274,9 @@ OCA.Analytics.Navigation = {
         a.dataset.name = data['name'];
         a.dataset.parent = data['parent'];
         a.dataset.item_type = data['item_type'];
+        if (data['permissions']) {
+            a.dataset.permissons = data['permissions'];
+        }
         li.appendChild(navigationEntryDiv);
         navigationEntryDiv.appendChild(a);
 
@@ -436,6 +439,7 @@ OCA.Analytics.Navigation = {
             deleteReport.parentElement.remove();
             dataset.parentElement.remove();
             newGroup.parentElement.remove();
+            share.parentElement.remove();
             if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
                 edit.parentElement.remove();
             }

@@ -64,7 +64,7 @@ class PanoramaService {
 	public function index(): array {
 		$ownPanorama = $this->PanoramaMapper->index();
 		$sharedPanoramas = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA);
-		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId');
+		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId', 'permissions');
 
 		// get shared reports and remove duplicates
 		foreach ($sharedPanoramas as $sharedPanorama) {
