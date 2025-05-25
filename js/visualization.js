@@ -518,6 +518,14 @@ OCA.Analytics.Visualization = {
             const index = legendItem.datasetIndex;
             const type = legend.chart.config.type;
 
+            if (index === -1) {
+                legend.chart.data.datasets.forEach(ds => {
+                    ds.hidden = false;
+                });
+                legend.chart.update();
+                return;
+            }
+
             // Do the original logic
             if (type === 'pie' || type === 'doughnut') {
                 pieDoughnutLegendClickHandler(e, legendItem, legend)
@@ -525,6 +533,22 @@ OCA.Analytics.Visualization = {
                 defaultLegendClickHandler(e, legendItem, legend);
             }
             document.getElementById('saveIcon')?.style.removeProperty('display');
+        };
+
+        const defaultGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+        const customGenerateLabels = function (chart) {
+            const labels = defaultGenerateLabels(chart);
+            const showAllNeeded = labels.length > 4 && chart.data.datasets.some(ds => ds.hidden);
+            if (showAllNeeded) {
+                labels.push({
+                    text: t('analytics', 'Show all'),
+                    fillStyle: 'transparent',
+                    strokeStyle: 'transparent',
+                    hidden: false,
+                    datasetIndex: -1
+                });
+            }
+            return labels;
         };
 
         this.showElement('tableSeparatorContainer');
@@ -542,8 +566,6 @@ OCA.Analytics.Visualization = {
         Chart.defaults.elements.line.tension = 0.1;
         Chart.defaults.elements.line.fill = false;
         Chart.defaults.elements.point.radius = 0.5;
-        Chart.defaults.plugins.legend.position = 'bottom';
-        Chart.defaults.plugins.legend.onClick = newLegendClickHandler;
 
         // convert the data array
         let [xAxisCategories, datasets] = this.convertDataToChartJsFormat(jsondata, chartType);
@@ -655,6 +677,13 @@ OCA.Analytics.Visualization = {
             datasets = cloner.deep.merge(datasets, userDatasetOptions);
             datasets = Object.values(datasets);
         }
+
+        chartOptions.plugins ??= {};
+        chartOptions.plugins.legend ??= {};
+        chartOptions.plugins.legend.position = 'bottom';
+        chartOptions.plugins.legend.onClick = newLegendClickHandler;
+        chartOptions.plugins.legend.labels ??= {};
+        chartOptions.plugins.legend.labels.generateLabels = customGenerateLabels;
 
         OCA.Analytics.chartObject = new Chart(ctx, {
             plugins: [ChartDataLabels],

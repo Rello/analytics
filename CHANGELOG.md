@@ -4,6 +4,7 @@
 - dynamic filter for quarters (e.g. %last quarter%)
 - Add Top N + others grouping #460
 - Add time grouping feature #464
+- Show all button in chart legend #473
 - Support multiple rows in filter dialog #472
 
 ### Changed
