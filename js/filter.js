@@ -126,41 +126,93 @@ OCA.Analytics.Filter = {
         let container = document.getElementById('templateFilterDialog').content;
         container = document.importNode(container, true);
 
-        const dimensionSelect = container.getElementById('filterDialogDimension');
-        dimensionSelect.innerHTML = '';
         const availableDimensions = OCA.Analytics.currentReportData.dimensions;
-        Object.keys(availableDimensions).forEach(key => {
-            const option = new Option(availableDimensions[key], key);
-            dimensionSelect.options.add(option);
-        });
-        dimensionSelect.addEventListener('change', function () {
-            document.getElementById('filterDialogValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
-        });
+        const optionTexts = OCA.Analytics.Filter.optionTextsArray;
+        const table = container.getElementById('filterDialogTable');
+        const addButton = container.getElementById('addFilterRowButton');
 
-        const optionSelect = container.getElementById('filterDialogOption');
-        optionSelect.innerHTML = '';
-        Object.keys(OCA.Analytics.Filter.optionTextsArray).forEach(key => {
-            const opt = new Option(OCA.Analytics.Filter.optionTextsArray[key], key);
-            optionSelect.options.add(opt);
-        });
+        const initRow = function (row, dimension = '', option = '', value = '') {
+            const dimSelect = row.querySelector('.filterDialogDimension');
+            dimSelect.innerHTML = '';
+            Object.keys(availableDimensions).forEach(key => {
+                dimSelect.options.add(new Option(availableDimensions[key], key));
+            });
+            if (dimension) {
+                dimSelect.value = dimension;
+            }
+            dimSelect.dataset.prevValue = dimSelect.value;
+            dimSelect.addEventListener('change', function (evt) {
+                // prevent duplicate dimensions
+                const selected = evt.target.value;
+                let count = 0;
+                container.querySelectorAll('.filterDialogDimension').forEach(sel => {
+                    if (sel.value === selected) {
+                        count++;
+                    }
+                });
+                if (count > 1) {
+                    evt.target.value = evt.target.dataset.prevValue;
+                    return;
+                }
+                evt.target.dataset.prevValue = selected;
+                row.querySelector('.filterDialogValue').dataset.dropdownlistindex = evt.target.selectedIndex;
+            });
+
+            const optSelect = row.querySelector('.filterDialogOption');
+            optSelect.innerHTML = '';
+            Object.keys(optionTexts).forEach(key => {
+                optSelect.options.add(new Option(optionTexts[key], key));
+            });
+            if (option) {
+                optSelect.value = option;
+            }
+
+            const valueInput = row.querySelector('.filterDialogValue');
+            valueInput.value = value;
+            valueInput.addEventListener('click', OCA.Analytics.UI.showDropDownList);
+            valueInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    OCA.Analytics.Filter.processFilterDialog();
+                }
+            });
+            valueInput.dataset.dropdownlistindex = dimSelect.selectedIndex;
+
+            const removeIcon = row.querySelector('.icon-analytics-filterRow-remove');
+            if (removeIcon) {
+                removeIcon.addEventListener('click', function () {
+                    row.remove();
+                });
+            }
+        };
+
+        const addRow = function (dimension = '', option = '', value = '') {
+            const rowTemplate = document.getElementById('templateFilterDialogRow').content;
+            const newRow = document.importNode(rowTemplate, true).firstElementChild;
+            table.appendChild(newRow);
+            initRow(newRow, dimension, option, value);
+        };
+
+        // initialize first row
+        const firstRow = table.querySelector('.filterRow');
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        if (filterOptions !== null && filterOptions['filter'] !== undefined) {
-            for (let filterDimension of Object.keys(filterOptions['filter'])) {
-                let filterOption = filterOptions['filter'][filterDimension]['option'];
-                let filterValue = filterOptions['filter'][filterDimension]['value'];
-                container.getElementById('filterDialogValue').value = filterValue;
-                optionSelect.value = filterOption;
-                dimensionSelect.value = filterDimension;
-                container.getElementById('filterDialogValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
-            }
+        let existing = [];
+        if (filterOptions && filterOptions.filter) {
+            existing = Object.entries(filterOptions.filter);
         }
 
-        container.getElementById('filterDialogValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
-        container.getElementById('filterDialogValue').addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                OCA.Analytics.Filter.processFilterDialog();
-            }
+        if (existing.length > 0) {
+            const [firstDim, firstData] = existing.shift();
+            initRow(firstRow, firstDim, firstData.option, firstData.value);
+            existing.forEach(([d, data]) => {
+                addRow(d, data.option, data.value);
+            });
+        } else {
+            initRow(firstRow);
+        }
+
+        addButton.addEventListener('click', function () {
+            addRow();
         });
 
         OCA.Analytics.Notification.htmlDialogUpdate(
@@ -173,20 +225,23 @@ OCA.Analytics.Filter = {
      * Store filter dialog settings to the current report and reload data.
      */
     processFilterDialog: function () {
-        // Get filterOptions and dimension value
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
-        const dimension = document.getElementById('filterDialogDimension').value;
+        filterOptions.filter = {};
 
-        // Initialize filter if it doesn't exist
-        filterOptions.filter = filterOptions.filter || {};
-        filterOptions.filter[dimension] = filterOptions.filter[dimension] || {};
+        const rows = document.querySelectorAll('#filterDialogTable .filterRow');
+        rows.forEach(row => {
+            const dimension = row.querySelector('.filterDialogDimension').value;
+            if (dimension === '') {
+                return;
+            }
+            const optionValue = row.querySelector('.filterDialogOption').value;
+            const filterValue = row.querySelector('.filterDialogValue').value;
+            filterOptions.filter[dimension] = {option: optionValue, value: filterValue};
+        });
 
-        // Set option and value
-        const optionValue = document.getElementById('filterDialogOption').value;
-        const filterValue = document.getElementById('filterDialogValue').value; //.replace(', ', ',');
-
-        filterOptions.filter[dimension].option = optionValue;
-        filterOptions.filter[dimension].value = filterValue;
+        if (Object.keys(filterOptions.filter).length === 0) {
+            delete filterOptions.filter;
+        }
 
         // Update global state
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
@@ -351,18 +406,27 @@ OCA.Analytics.Filter = {
         if (filterOptions && filterOptions["filter"]) {
             for (const filterDimension of Object.keys(filterOptions["filter"])) {
                 let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions["filter"][filterDimension]["option"]];
-                const span = document.createElement("span");
+                const container = document.createElement("span");
                 let filterValue = filterOptions["filter"][filterDimension]["value"];
                 if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
                     optionText = "";
                     filterValue = filterValue.replace(/%/g, "");
                     filterValue = filterValue.replace(/\(.*?\)/g, "");
                 }
-                span.innerText = filterDimensions[filterDimension] + " " + optionText + " " + filterValue;
-                span.classList.add("filterVisualizationItem");
-                span.id = filterDimension;
-                span.addEventListener("click", OCA.Analytics.Filter.removeFilter);
-                fragment.appendChild(span);
+
+                const removeIcon = document.createElement("span");
+                removeIcon.classList.add("filterVisualizationRemove", "icon-close");
+                removeIcon.addEventListener("click", OCA.Analytics.Filter.removeFilter);
+
+                const textSpan = document.createElement("span");
+                textSpan.innerText = filterDimensions[filterDimension] + " " + optionText + " " + filterValue;
+
+                container.classList.add("filterVisualizationItem");
+                container.id = filterDimension;
+                container.appendChild(removeIcon);
+                container.appendChild(textSpan);
+
+                fragment.appendChild(container);
             }
         }
         visContainer.appendChild(fragment);
@@ -378,7 +442,8 @@ OCA.Analytics.Filter = {
      * Remove a single active filter label and reload the data.
      */
     removeFilter: function (evt) {
-        let filterDimension = evt.target.id;
+        const parent = evt.target.closest('.filterVisualizationItem');
+        let filterDimension = parent ? parent.id : evt.target.id;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         delete filterOptions['filter'][filterDimension];
         if (Object.keys(filterOptions['filter']).length === 0) {
