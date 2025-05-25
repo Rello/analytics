@@ -226,32 +226,52 @@
 </template>
 
 <template id="templateFilterDialog">
-    <div class="table" style="display: table;">
+    <div class="table" style="display: table;" id="filterDialogTable">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 80px;"></div>
             <div style="display: table-cell; width: 150px;">
-                <label for="filterDialogDimension"><?php p($l->t('Filter by')); ?></label>
+                <label><?php p($l->t('Filter by')); ?></label>
             </div>
             <div style="display: table-cell; width: 150px;">
-                <label for="filterDialogOption"><?php p($l->t('Operator')); ?></label>
+                <label><?php p($l->t('Operator')); ?></label>
             </div>
             <div style="display: table-cell; width: 220px;">
-                <label for="filterDialogValue"><?php p($l->t('Value')); ?></label>
+                <label><?php p($l->t('Value')); ?></label>
             </div>
         </div>
-        <div style="display: table-row;">
+        <div style="display: table-row;" class="filterRow">
             <div style="display: table-cell;">
                 <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'filteradd.svg'); ?>" alt="filter">
             </div>
             <div style="display: table-cell;">
-                <select id="filterDialogDimension" class="checkbox optionsInput"></select>
+                <select class="filterDialogDimension checkbox optionsInput"></select>
             </div>
             <div style="display: table-cell;">
-                <select id="filterDialogOption" class="checkbox optionsInput"></select>
+                <select class="filterDialogOption checkbox optionsInput"></select>
             </div>
             <div style="display: table-cell;">
-                <input type="text" id="filterDialogValue" class="optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
+                <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
             </div>
+        </div>
+    </div>
+    <div style="margin-top: 5px;">
+        <div id="addFilterRowButton" class="icon-add icon" title="<?php p($l->t('Add filter')); ?>"></div>
+    </div>
+</template>
+
+<template id="templateFilterDialogRow">
+    <div style="display: table-row;" class="filterRow">
+        <div style="display: table-cell;">
+            <span class="icon-analytics-filter-remove filterRowRemove"></span>
+        </div>
+        <div style="display: table-cell;">
+            <select class="filterDialogDimension checkbox optionsInput"></select>
+        </div>
+        <div style="display: table-cell;">
+            <select class="filterDialogOption checkbox optionsInput"></select>
+        </div>
+        <div style="display: table-cell;">
+            <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
         </div>
     </div>
 </template>

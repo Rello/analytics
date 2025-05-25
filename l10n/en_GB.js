@@ -10,6 +10,7 @@ OC.L10N.register(
     "Filter by" : "Filter by",
     "Operator" : "Operator",
     "Value" : "Value",
+    "Add filter" : "Add filter",
     "Please select data source" : "Please select data source",
     "Saved" : "Saved",
     "Data load copied" : "Data load copied",
