@@ -487,8 +487,8 @@ div.dt-container .dt-paging .dt-paging-button {
     filter: var(--background-invert-if-dark);
 }
 
-.icon-analytics-filter-add {
-    background-image: url(../img/filteradd.svg);
+.icon-analytics-filter {
+    background-image: url(../img/filter.svg);
     filter: var(--background-invert-if-dark);
 }
 
@@ -589,13 +589,30 @@ div.dt-container .dt-paging .dt-paging-button {
     float: left;
 }
 
-.icon-analytics-filter-remove {
+.icon-analytics-filterRow-remove {
     background-image: url(../img/filterremove.svg);
     filter: var(--background-invert-if-dark);
     height: 25px;
     width: 25px;
     display: inline-block;
-    margin-left: 10px;
+    cursor: pointer;
+}
+
+.icon-analytics-filterRow-add {
+    background-image: url(../img/add.svg);
+    filter: var(--background-invert-if-dark);
+    height: 25px;
+    width: 25px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.icon-analytics-filterRow {
+    background-image: url(../img/filter.svg);
+    filter: var(--background-invert-if-dark);
+    height: 25px;
+    width: 25px;
+    display: inline-block;
 }
 
 .icon-analytics-drilldown {

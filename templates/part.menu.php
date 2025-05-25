@@ -165,7 +165,7 @@
     <div id="saveIcon" class="analytics-options icon-analytics-save-warning has-tooltip"
          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
 
-    <div id="addFilterIcon" class="analytics-options icon-analytics-filter-add has-tooltip"
+    <div id="addFilterIcon" class="analytics-options icon-analytics-filter has-tooltip"
          title="<?php p($l->t('Filter')); ?>"></div>
     <div id="filterVisualisation" style="display: inline-block; float: right;"></div>
 </div>
