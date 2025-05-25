@@ -9,6 +9,7 @@
 - JSON data source: remove column limit
 - Refactor filter dialog to use Notification framework #452
 - Refactor drilldown dialog to use Notification framework #462
+- UI optimization for existing filter
 
 ### Fixed
 - fix warning for importing less than 3 columns

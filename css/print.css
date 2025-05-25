@@ -65,6 +65,10 @@
         padding-left: 5px !important;
     }
 
+    .filterVisualizationRemove {
+        display: none !important;
+    }
+
     /* Layout */
     @page {
         size: A4 portrait;
