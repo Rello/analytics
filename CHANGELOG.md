@@ -4,11 +4,13 @@
 - dynamic filter for quarters (e.g. %last quarter%)
 - Add Top N + others grouping #460
 - Add time grouping feature #464
+- Support multiple rows in filter dialog #472
 
 ### Changed
 - JSON data source: remove column limit
 - Refactor filter dialog to use Notification framework #452
 - Refactor drilldown dialog to use Notification framework #462
+- Limit filter removal action to icon #470
 
 ### Fixed
 - fix warning for importing less than 3 columns

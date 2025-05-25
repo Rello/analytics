@@ -241,7 +241,7 @@
         </div>
         <div style="display: table-row;" class="filterRow">
             <div style="display: table-cell;">
-                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'filteradd.svg'); ?>" alt="filter">
+                <span class="icon-analytics-filterRow"></span>
             </div>
             <div style="display: table-cell;">
                 <select class="filterDialogDimension checkbox optionsInput"></select>
@@ -255,14 +255,14 @@
         </div>
     </div>
     <div style="margin-top: 5px;">
-        <div id="addFilterRowButton" class="icon-add icon" title="<?php p($l->t('Add filter')); ?>"></div>
+        <span id="addFilterRowButton" class="icon-analytics-filterRow-add" title="<?php p($l->t('Add filter')); ?>"></span>
     </div>
 </template>
 
 <template id="templateFilterDialogRow">
     <div style="display: table-row;" class="filterRow">
         <div style="display: table-cell;">
-            <span class="icon-analytics-filter-remove filterRowRemove"></span>
+            <span class="icon-analytics-filterRow-remove" title="<?php p($l->t('Remove filter')); ?>"></span>
         </div>
         <div style="display: table-cell;">
             <select class="filterDialogDimension checkbox optionsInput"></select>

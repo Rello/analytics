@@ -177,7 +177,7 @@ OCA.Analytics.Filter = {
             });
             valueInput.dataset.dropdownlistindex = dimSelect.selectedIndex;
 
-            const removeIcon = row.querySelector('.filterRowRemove');
+            const removeIcon = row.querySelector('.icon-analytics-filterRow-remove');
             if (removeIcon) {
                 removeIcon.addEventListener('click', function () {
                     row.remove();
