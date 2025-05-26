@@ -36,8 +36,8 @@ class Version5005Date20250520100000 extends SimpleMigrationStep {
 		$query->insert('analytics_whats_new')->values([
 				'version' => $query->createNamedParameter('5.5.0'),
 				'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
-"en":{"regular":["Top N (+others) grouping"],"admin":["New Features apply to users"]},
-"de":{"regular":["Top N (+andere) Gruppierung"],"admin":["Nur User Features"]}
+"en":{"regular":["Top N (+others) grouping", "Time aggregation to days/weeks/months", "Enhanced filter dialog"],"admin":["New Features apply to users"]},
+"de":{"regular":["Top N (+andere) Gruppierung", "Zeitliche Aggregation auf Tage/Wochen/Monate", "Verbesserter Filter-Dialog"],"admin":["Nur User Features"]}
 }}'),
 			])->executeStatement();
 	}
