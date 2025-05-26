@@ -96,7 +96,7 @@
             <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data with precision')); ?></p>
             <ul>
                 <li><?php p($l->t('Apply flexible filters, including dynamic date variables')); ?></li>
-                <li><?php p($l->t('Adjust drill-down views by removing columns effortlessly')); ?></li>
+                <li><?php p($l->t('Top N, sorting and time aggregation')); ?></li>
                 <li><?php p($l->t('Customize charts with primary and secondary axes')); ?></li>
                 <li><?php p($l->t('Mix and match chart types for each data series')); ?></li>
                 <li><?php p($l->t('Save default filters for quick access to your preferred views')); ?></li>

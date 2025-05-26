@@ -2984,8 +2984,13 @@
       "id": "a3b250ff-e60f-4330-a47f-8a0ef2c75673",
       "comment": "",
       "command": "click",
-      "target": "id=filterDialogValue",
-      "targets": [],
+      "target": "css=.filterDialogValue",
+      "targets": [
+        ["css=.filterDialogValue", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div[4]/input", "xpath:position"]
+      ],
       "value": ""
     }, {
       "id": "10ca2a08-dc9c-4fc2-b13e-fb13d4b658ca",
@@ -3005,13 +3010,12 @@
       "id": "90024739-1b37-4aa0-9afd-5a6de1f1432b",
       "comment": "",
       "command": "type",
-      "target": "id=filterDialogValue",
+      "target": "css=.filterDialogValue",
       "targets": [
-        ["id=filterDialogValue", "id"],
-        ["css=#filterDialogValue", "css:finder"],
-        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[5]/input", "xpath:idRelative"],
-        ["xpath=//div[5]/input", "xpath:position"]
+        ["css=.filterDialogValue", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div[4]/input", "xpath:position"]
       ],
       "value": "Dimension 1"
     }, {
@@ -3137,8 +3141,12 @@
       "id": "13848538-bd49-45a5-a3ef-918134b98826",
       "comment": "",
       "command": "click",
-      "target": "id=dimension1",
-      "targets": [],
+      "target": "css=.filterVisualizationRemove",
+      "targets": [
+        ["css=.filterVisualizationRemove", "css:finder"],
+        ["xpath=//span[@id='dimension1']/span", "xpath:idRelative"],
+        ["xpath=//div[6]/span/span", "xpath:position"]
+      ],
       "value": ""
     }, {
       "id": "aeed38d2-d9c6-486a-af7f-002cf89246f2",
@@ -3218,12 +3226,10 @@
       "id": "dd4fe3fc-2668-4d9a-9275-c4111bf639a9",
       "comment": "",
       "command": "select",
-      "target": "id=filterDialogOption",
+      "target": "css=.filterDialogOption",
       "targets": [
-        ["id=filterDialogOption", "id"],
-        ["css=#filterDialogOption", "css:finder"],
-        ["xpath=//select[@id='filterDialogOption']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics_dialog']/div[2]/div[2]/div[3]/select", "xpath:idRelative"],
+        ["css=.filterDialogOption", "css:finder"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[3]/select", "xpath:idRelative"],
         ["xpath=//div[3]/select", "xpath:position"]
       ],
       "value": "label=list of values"
@@ -3231,8 +3237,13 @@
       "id": "01e1e2e0-03dd-4245-844f-54713af5ad07",
       "comment": "",
       "command": "click",
-      "target": "id=filterDialogValue",
-      "targets": [],
+      "target": "css=.filterDialogValue",
+      "targets": [
+        ["css=.filterDialogValue", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div[4]/input", "xpath:position"]
+      ],
       "value": ""
     }, {
       "id": "8306fc84-b132-40ce-b984-f2c21da3bde6",
@@ -3252,13 +3263,12 @@
       "id": "a875a4c4-7dc9-4542-9356-046f41db91b7",
       "comment": "",
       "command": "type",
-      "target": "id=filterDialogValue",
+      "target": "css=.filterDialogValue",
       "targets": [
-        ["id=filterDialogValue", "id"],
-        ["css=#filterDialogValue", "css:finder"],
-        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[5]/input", "xpath:idRelative"],
-        ["xpath=//div[5]/input", "xpath:position"]
+        ["css=.filterDialogValue", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div[4]/input", "xpath:position"]
       ],
       "value": "'komma, string'"
     }, {
@@ -5669,13 +5679,12 @@
       "id": "d13a0edb-84bf-43c6-baab-c9e7198f1100",
       "comment": "",
       "command": "click",
-      "target": "id=filterDialogValue",
+      "target": "css=.filterDialogValue",
       "targets": [
-        ["id=filterDialogValue", "id"],
-        ["css=#filterDialogValue", "css:finder"],
-        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[4]/input", "xpath:idRelative"],
-        ["xpath=//div[4]/input", "xpath:position"]
+        ["css=.filterDialogValue", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div[4]/input", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -5738,14 +5747,11 @@
       "id": "1a0cb9f2-c4da-4cce-9ae1-8e40e4e3d67d",
       "comment": "",
       "command": "click",
-      "target": "id=dimension1",
+      "target": "css=.filterVisualizationRemove",
       "targets": [
-        ["id=dimension1", "id"],
-        ["css=#dimension1", "css:finder"],
-        ["xpath=//span[@id='dimension1']", "xpath:attributes"],
-        ["xpath=//div[@id='filterVisualisation']/span", "xpath:idRelative"],
-        ["xpath=//div[4]/span", "xpath:position"],
-        ["xpath=//span[contains(.,'Column 1 equal to Dimension 1')]", "xpath:innerText"]
+        ["css=.filterVisualizationRemove", "css:finder"],
+        ["xpath=//span[@id='dimension1']/span", "xpath:idRelative"],
+        ["xpath=//div[6]/span/span", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -5846,13 +5852,12 @@
       "id": "9d5e8974-3a28-4c56-ab02-24aefe382bbe",
       "comment": "",
       "command": "click",
-      "target": "id=filterDialogValue",
+      "target": "css=.filterDialogValue",
       "targets": [
-        ["id=filterDialogValue", "id"],
-        ["css=#filterDialogValue", "css:finder"],
-        ["xpath=//input[@id='filterDialogValue']", "xpath:attributes"],
-        ["xpath=//div[@id='analytics_dialog']/div/div[2]/div[4]/input", "xpath:idRelative"],
-        ["xpath=//div[4]/input", "xpath:position"]
+        ["css=.filterDialogValue", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='filterDialogTable']/div[2]/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div[4]/input", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -5915,14 +5920,11 @@
       "id": "e5644299-f520-447f-887c-ad4c3b2a20fa",
       "comment": "",
       "command": "click",
-      "target": "id=dimension1",
+      "target": "css=.filterVisualizationRemove",
       "targets": [
-        ["id=dimension1", "id"],
-        ["css=#dimension1", "css:finder"],
-        ["xpath=//span[@id='dimension1']", "xpath:attributes"],
-        ["xpath=//div[@id='filterVisualisation']/span", "xpath:idRelative"],
-        ["xpath=//div[4]/span", "xpath:position"],
-        ["xpath=//span[contains(.,'Column 1 equal to Dimension 1')]", "xpath:innerText"]
+        ["css=.filterVisualizationRemove", "css:finder"],
+        ["xpath=//span[@id='dimension1']/span", "xpath:idRelative"],
+        ["xpath=//div[6]/span/span", "xpath:position"]
       ],
       "value": ""
     }, {

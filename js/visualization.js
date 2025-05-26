@@ -707,7 +707,7 @@ OCA.Analytics.Visualization = {
         let datasets = [], xAxisCategories = [];
         let dataModel = '';
         let header = data.header.slice(1);
-        const isTopGrouping = !!data.options?.filteroptions?.group;
+        const isTopGrouping = !!data.options?.filteroptions?.topN;
 
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.analyticsModel !== undefined) {

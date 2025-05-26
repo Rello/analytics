@@ -313,11 +313,21 @@ OCA.Analytics.Filter = {
 
         if (filterOptions.topN.type === 'none' || isNaN(filterOptions.topN.number)) {
             delete filterOptions.topN;
+            // cleanup old legend settings where all items were displayed in a top N
+            let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+
+            // Keep only the first 4 elements
+            dataOptions = dataOptions.length > 4 ? dataOptions.slice(0, 4) : dataOptions;
+
+            // Check if all first 4 elements are empty objects
+            const allEmpty = dataOptions.length > 0 && dataOptions.every(obj => Object.keys(obj).length === 0 && obj.constructor === Object);
+
+            OCA.Analytics.currentReportData.options.dataoptions = allEmpty ? [] : dataOptions;
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         // remove all data options for which there is no dimension anymore
-        if (filterOptions.topN) {
+        if (filterOptions.topN && OCA.Analytics.currentReportData.options.dataoptions >> filterOptions.topN.number) {
             OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.topN.number);
         }
         OCA.Analytics.unsavedFilters = true;
@@ -980,7 +990,9 @@ OCA.Analytics.Filter = {
             dataOptions.splice(itemCount);
         }
 
-        return dataOptions;
+        const allEmpty = dataOptions.length > 0 && dataOptions.every(obj => Object.keys(obj).length === 0 && obj.constructor === Object);
+
+        return allEmpty ? [] : dataOptions;
     },
 
     // live update the background and font color of the input boxes
