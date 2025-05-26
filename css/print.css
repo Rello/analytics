@@ -19,6 +19,13 @@
         display: none !important;
     }
 
+    #app-content,
+    #content,
+    body {
+        background-color: white !important;
+        background-image: none !important;
+    }
+
     #body-user #content {
         margin: 0;
         padding: 0;
@@ -42,10 +49,6 @@
         width: auto !important;
     }
 
-    #tableContainer {
-        width: auto !important;
-    }
-
     div#app-navigation-toggle.icon-menu {
         display: block;
         width: 0;
@@ -53,10 +56,15 @@
         background: none;
     }
 
-    .icon-analytics-filter-add,
-    .icon-analytics-drilldown,
-    .icon-analytics-options,
-    #chartLegend {
+    #reportMenuIcon,
+    #fullscreenToggle,
+    #addFilterIcon,
+    #chartLegend,
+    .dt-length,
+    .dt-search,
+    .dt-info,
+    .dt-paging
+    {
         display: none;
     }
 

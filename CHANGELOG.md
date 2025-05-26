@@ -19,6 +19,7 @@
 - Filter not working when text has "," #441
 - Adjust chart height when table hidden #445d
 - Shared Panorama permission handling #428
+- Print layout #302
 
 ## 5.4.0 - 2025-04-29
 ### Added

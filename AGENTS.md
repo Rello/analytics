@@ -1,11 +1,19 @@
+
 # Project Agents.md Guide for OpenAI Codex
 
-This Agents.md file provides comprehensive guidance for OpenAI Codex and other AI agents working with this codebase.
+This `AGENTS.md` file provides guidelines for OpenAI Codex and other AI agents interacting with this codebase, including which directories are safe to read from or write to.
 
-## Project Structure with special handling
-- `/vendor`: External plugins. Can be used to understand data sources. They should not be modified by an agent
-- `/l10n`: Translations coming form Transifex. They should not be modified by an agent
-- `/js/3rdParty`: External javascript plugins. They should not be modified by an agent
-- `/css/3rdParty`: External javascript plugins. They should not be modified by an agent
-- `/sample_data`: Not relevant for any agent
-- `/screenshots`: Not relevant for any agent
+## Project Structure: AI Agent Handling Guidelines
+
+| Directory         | Description                                           | Agent Action         |
+|-------------------|-------------------------------------------------------|----------------------|
+| `/vendor`         | External plugins; may help understand data sources.   | Do not modify        |
+| `/l10n`           | Translation files from Transifex.                     | Do not modify        |
+| `/js/3rdParty`    | Third-party JavaScript plugins.                       | Do not modify        |
+| `/css/3rdParty`   | Third-party CSS plugins.                              | Do not modify        |
+| `/sample_data`    | Example data for human reference.                     | Irrelevant to agents |
+| `/screenshots`    | UI images for documentation purposes.                 | Irrelevant to agents |
+
+## General Guidance
+
+Agents should focus on the core application logic and ignore files or folders marked as third-party, sample, or media-related. All changes should preserve the integrity of external dependencies and translations.
