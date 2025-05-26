@@ -112,13 +112,14 @@ class Provider implements IProvider {
 		}
 
 		$event->setRichSubject($parsedSubject, [
-				'report' => [
-					'type' => 'highlight',
-					'id' => (string)$event->getObjectId(),
-					'name' => '"' . basename($event->getObjectName()) . '"',
-					'link' => $this->Url($event->getObjectId()),
-				]
-			]);
+			'report' => [
+				'type' => 'highlight',
+				'id' => (string)$event->getObjectId(),
+				'name' => '"' . basename($event->getObjectName()) . '"',
+				'link' => $this->Url($event->getObjectId()),
+			]
+		])
+			  ->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'app-dark.svg')));
 
 		return $event;
 	}
