@@ -1,8 +1,9 @@
 # Changelog
 
+## 5.5.0 - 2025-05-26
 ### Added
 - dynamic filter for quarters (e.g. %last quarter%)
-- Add Top N + others grouping #460
+- Add Top N +others grouping #460
 - Add time grouping feature #464
 - Show all button in chart legend #473
 - Support multiple rows in filter dialog #472
@@ -20,6 +21,7 @@
 - Adjust chart height when table hidden #445d
 - Shared Panorama permission handling #428
 - Print layout #302
+- Activities not shown correctly
 
 ## 5.4.0 - 2025-04-29
 ### Added
