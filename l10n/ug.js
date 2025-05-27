@@ -370,7 +370,6 @@ OC.L10N.register(
     "Set thresholds to highlight exceptions and receive Nextcloud notifications" : "چەكلىمىنى بەلگىلەڭ ھەمدە مۇستەسنالىقنى گەۋدىلەندۈرۈڭ ۋە Nextcloud ئۇقتۇرۇشىنى تاپشۇرۇۋېلىڭ",
     "Slice and dice your data with precision" : "سانلىق مەلۇماتلىرىڭىزنى توغرىلاپ توغرىلاڭ",
     "Apply flexible filters, including dynamic date variables" : "ھەرىكەتچان چېسلا ئۆزگەرگۈچى مىقدارنى ئۆز ئىچىگە ئالغان جانلىق سۈزگۈچ ئىشلىتىڭ",
-    "Adjust drill-down views by removing columns effortlessly" : "تۈۋرۈكلەرنى جاپالىق ھالدا چىقىرىپ تاشلاش ئارقىلىق كۆرۈنۈشنى تەڭشەڭ",
     "Customize charts with primary and secondary axes" : "دەسلەپكى ۋە ئىككىلەمچى ئوق بىلەن دىئاگراممىنى خاسلاشتۇرۇڭ",
     "Mix and match chart types for each data series" : "ھەر بىر سانلىق مەلۇمات يۈرۈشلۈكلىرىنىڭ جەدۋەل تىپلىرىنى ئارىلاشتۇرۇڭ ۋە ماسلاشتۇرۇڭ",
     "Save default filters for quick access to your preferred views" : "ياقتۇرىدىغان كۆرۈنۈشلىرىڭىزنى تېز زىيارەت قىلىش ئۈچۈن سۈكۈتتىكى سۈزگۈچلەرنى ساقلاڭ",

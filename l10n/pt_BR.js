@@ -385,7 +385,6 @@ OC.L10N.register(
     "Set thresholds to highlight exceptions and receive Nextcloud notifications" : "Defina limites para destacar exceções e receber notificações do Nextcloud",
     "Slice and dice your data with precision" : "Defina limites para destacar exceções e receber notificações do Nextcloud",
     "Apply flexible filters, including dynamic date variables" : "Aplique filtros flexíveis, incluindo variáveis ​​de data dinâmicas",
-    "Adjust drill-down views by removing columns effortlessly" : "Ajuste as visualizações detalhadas removendo colunas sem esforço",
     "Customize charts with primary and secondary axes" : "Personalize gráficos com eixos primários e secundários",
     "Mix and match chart types for each data series" : "Misture e combine tipos de gráficos para cada série de dados",
     "Save default filters for quick access to your preferred views" : "Misture e combine tipos de gráficos para cada série de dados",

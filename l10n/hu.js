@@ -377,7 +377,6 @@ OC.L10N.register(
     "Set thresholds to highlight exceptions and receive Nextcloud notifications" : "Állítson be küszöbértékeket a kivételek kiemeléséhez és a Nextcloud értesítéseinek fogadásához",
     "Slice and dice your data with precision" : "Válassza szét és rendezze adatait precízitással",
     "Apply flexible filters, including dynamic date variables" : "Alkalmazzon rugalmas szűrőket, beleértve a dinamikus dátumváltozókat",
-    "Adjust drill-down views by removing columns effortlessly" : "Állítson be részletező nézeteket az oszlopok egyszerű eltávolításával",
     "Customize charts with primary and secondary axes" : "Szabja személyre a diagrammokat elsődleges és másodlagos tengelyekkel",
     "Mix and match chart types for each data series" : "Keverje össze és egyeztesse a diagramtípusokat az egyes adatsorokhoz",
     "Save default filters for quick access to your preferred views" : "Mentse el az alapértelmezett szűrőket a kívánt nézetek gyors eléréséhez",
