@@ -26,12 +26,39 @@ OCA.Analytics.Visualization = {
 
     // operators used for threshold comparisons in multiple functions
     thresholdOperators : {
-        '=': (a, b) => a === b,
-        '<': (a, b) => a < b,
-        '>': (a, b) => a > b,
-        '<=': (a, b) => a <= b,
-        '>=': (a, b) => a >= b,
-        '!=': (a, b) => a !== b,
+        '=': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x === y),
+        'EQ': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x === y),
+        '!=': (a, b) => !OCA.Analytics.Visualization.thresholdOperators['EQ'](a, b),
+        'NE': (a, b) => !OCA.Analytics.Visualization.thresholdOperators['EQ'](a, b),
+        '<': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x < y),
+        'LT': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x < y),
+        '>': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x > y),
+        'GT': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x > y),
+        '<=': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x <= y),
+        'LE': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x <= y),
+        '>=': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x >= y),
+        'GE': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x >= y),
+        'LIKE': (a, b) => String(a).toLowerCase().includes(String(b).toLowerCase()),
+        'IN': (a, b) => String(b).split(',').map(v => v.trim()).includes(String(a)),
+    },
+
+    /**
+     * Compare two values either numerically or alphabetically depending on the
+     * input. If both values are valid numbers the numeric comparison function
+     * will be used. Otherwise, the values are compared as lowercase strings.
+     *
+     * @param {number|string} a
+     * @param {number|string} b
+     * @param {function} fn - Comparison function (>, <, >=, <=)
+     * @returns {boolean}
+     */
+    compareValues: function (a, b, fn) {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
+            return fn(numA, numB);
+        }
+        return fn(String(a).toLowerCase(), String(b).toLowerCase());
     },
 
     dataTableInitialized: {},
@@ -337,19 +364,31 @@ OCA.Analytics.Visualization = {
 
         thresholds = thresholds.filter(p => p.option !== 'new');
 
-        let color;
-        let severity;
         for (let threshold of thresholds) {
-            const dimIndex = parseInt(threshold['dimension2']);
-            const cellValue = data[dimIndex];
-            let comparison;
-            if (['<', '>', '<=', '>='].includes(threshold['option'])) {
-                comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](parseFloat(cellValue), parseFloat(threshold['value']));
-            } else {
-                comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](cellValue, threshold['value']);
+            const dimIndex = parseInt(threshold['dimension'] ?? threshold['dimension2']);
+            if (Number.isNaN(dimIndex)) {
+                continue;
             }
-            severity = parseInt(threshold['severity']);
+
+            const cellValue = data[dimIndex];
+            let option = String(threshold['option']).toUpperCase();
+
+            // allow old option values
+            const optionMap = {
+                '=': 'EQ',
+                '>': 'GT',
+                '<': 'LT',
+                '>=': 'GE',
+                '<=': 'LE',
+                '!=': 'NE',
+            };
+            option = optionMap[option] || option;
+
+            const comparison = OCA.Analytics.Visualization.thresholdOperators[option](cellValue, threshold['value']);
+
+            const severity = parseInt(threshold['severity']);
             if (comparison === true) {
+                let color;
                 if (severity === 2) {
                     color = 'red';
                 } else if (severity === 3) {
@@ -358,11 +397,13 @@ OCA.Analytics.Visualization = {
                     color = 'green';
                 }
 
-                if (data.length > 3) {
-                    // external data source
+                if (threshold['coloring'] === 'row') {
                     row.style.color = color;
                 } else {
-                    row.childNodes.item(dimIndex).style.color = color;
+                    const cell = row.childNodes.item(dimIndex);
+                    if (cell) {
+                        cell.style.color = color;
+                    }
                 }
             }
         }
@@ -1057,7 +1098,18 @@ OCA.Analytics.Visualization = {
         thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
 
         for (let threshold of thresholds) {
-            const comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
+            let option = String(threshold['option']).toUpperCase();
+            const optionMap = {
+                '=': 'EQ',
+                '>': 'GT',
+                '<': 'LT',
+                '>=': 'GE',
+                '<=': 'LE',
+                '!=': 'NE',
+            };
+            option = optionMap[option] || option;
+
+            const comparison = OCA.Analytics.Visualization.thresholdOperators[option](value, threshold['value']);
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
