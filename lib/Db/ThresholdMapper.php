@@ -33,14 +33,15 @@ class ThresholdMapper
     /**
      * @throws Exception
      */
-    public function create($reportId, $dimension1, $value, $option, $severity)
+    public function create($reportId, $dimension, $dimensionName, $value, $option, $severity)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
                 'user_id' => $sql->createNamedParameter($this->userId),
                 'report' => $sql->createNamedParameter($reportId),
-                'dimension1' => $sql->createNamedParameter($dimension1),
+                'dimension1' => $sql->createNamedParameter($dimensionName),
+                'dimension2' => $sql->createNamedParameter($dimension),
                 'value' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($severity),

@@ -447,11 +447,10 @@
     <div class="table" style="display: table;">
         <div style="display: table-row;">
             <div id="sidebarThresholdTextDimension1"
-                 style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
+                 style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?></div>
             <div style="display: table-cell;">
-                <input id="sidebarThresholdDimension1" class="sidebarInput"
-                       placeholder="<?php p($l->t('single value or *')); ?>" autocomplete="off"
-                       data-dropDownListIndex="0"></div>
+                <select id="sidebarThresholdDimension" class="sidebarInput"></select>
+            </div>
             <div style="display: table-cell;">
                 <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
@@ -479,7 +478,7 @@
         <div style="display: table-row;">
             <div id="sidebarThresholdTextValue"
                  style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarThresholdValue" class="sidebarInput"></div>
+            <div style="display: table-cell;"><input id="sidebarThresholdValue" class="sidebarInput" autocomplete="off" data-dropDownListIndex="0"></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>

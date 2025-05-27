@@ -69,10 +69,10 @@ class ThresholdService {
 	 * @param int $severity
 	 * @return int
 	 */
-	public function create(int $reportId, $dimension1, $option, $value, int $severity) {
-		$value = $this->floatvalue($value);
-		return $this->ThresholdMapper->create($reportId, $dimension1, $value, $option, $severity);
-	}
+        public function create(int $reportId, $dimension, $dimensionName, $option, $value, int $severity) {
+                $value = $this->floatvalue($value);
+                return $this->ThresholdMapper->create($reportId, $dimension, $dimensionName, $value, $option, $severity);
+        }
 
 	private function floatvalue($val) {
 		// if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
@@ -113,32 +113,55 @@ class ThresholdService {
 	 * @return string
 	 * @throws \Exception
 	 */
-	public function validate(int $reportId, $dimension1, $dimension2, $value, int $insert = 0) {
-		$result = '';
-		$thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
-		$datasetMetadata = $this->ReportMapper->read($reportId);
+        public function validate(int $reportId, $dimension1, $dimension2, $value, int $insert = 0) {
+                $result = '';
+                $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
+                $datasetMetadata = $this->ReportMapper->read($reportId);
 
-		foreach ($thresholds as $threshold) {
-			if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
-				if ($threshold['option'] === 'new' && $insert != 0) {
-					$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
-						'report' => $datasetMetadata['name'],
-						'subject' => $dimension1,
-						'rule' => $this->l10n->t('new record'),
-						'value' => ''
-					], $threshold['user_id']);
-					$result = 'Threshold value met';
-				} elseif (version_compare(floatval($value), floatval($threshold['value']), $threshold['option'])) {
-					$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
-						'report' => $datasetMetadata['name'],
-						'subject' => $dimension1,
-						'rule' => $threshold['option'],
-						'value' => $threshold['value']
-					], $threshold['user_id']);
-					$result = 'Threshold value met';
-				}
-			}
-		}
-		return $result;
-	}
+                foreach ($thresholds as $threshold) {
+                        $dimIndex = intval($threshold['dimension2']);
+                        switch ($dimIndex) {
+                                case 0:
+                                        $compare = $dimension1;
+                                        $subject = $datasetMetadata['dimension1'];
+                                        break;
+                                case 1:
+                                        $compare = $dimension2;
+                                        $subject = $datasetMetadata['dimension2'];
+                                        break;
+                                default:
+                                        $compare = $value;
+                                        $subject = $datasetMetadata['value'];
+                        }
+
+                        if ($threshold['option'] === 'new' && $insert != 0) {
+                                $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
+                                        'report' => $datasetMetadata['name'],
+                                        'subject' => $subject,
+                                        'rule' => $this->l10n->t('new record'),
+                                        'value' => ''
+                                ], $threshold['user_id']);
+                                $result = 'Threshold value met';
+                        } else {
+                                if (in_array($threshold['option'], ['<','>','<=','>='])) {
+                                        $comparison = version_compare(floatval($compare), floatval($threshold['value']), $threshold['option']);
+                                } elseif ($threshold['option'] === '=') {
+                                        $comparison = ($compare == $threshold['value']);
+                                } else {
+                                        $comparison = ($compare != $threshold['value']);
+                                }
+
+                                if ($comparison) {
+                                        $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
+                                                'report' => $datasetMetadata['name'],
+                                                'subject' => $subject,
+                                                'rule' => $threshold['option'],
+                                                'value' => $threshold['value']
+                                        ], $threshold['user_id']);
+                                        $result = 'Threshold value met';
+                                }
+                        }
+                }
+                return $result;
+        }
 }

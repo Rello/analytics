@@ -47,15 +47,16 @@ class ThresholdController extends Controller
      *
      * @NoAdminRequired
      * @param int $reportId
-     * @param $dimension1
+     * @param $dimension
+     * @param $dimensionName
      * @param $option
      * @param $value
      * @param int $severity
      * @return int
      */
-    public function create(int $reportId, $dimension1, $option, $value, int $severity)
+    public function create(int $reportId, $dimension, $dimensionName, $option, $value, int $severity)
     {
-        return $this->ThresholdService->create($reportId, $dimension1, $option, $value, $severity);
+        return $this->ThresholdService->create($reportId, $dimension, $dimensionName, $option, $value, $severity);
     }
 
     /**

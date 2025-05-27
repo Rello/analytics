@@ -335,13 +335,19 @@ OCA.Analytics.Visualization = {
      */
     dataTableRowCallback: function (row, data, index, thresholds, tableOptions) {
 
-        thresholds = thresholds.filter(p => (p.dimension1 === data[0] || p.dimension1 === '*') && p.option !== 'new');
+        thresholds = thresholds.filter(p => p.option !== 'new');
 
         let color;
         let severity;
         for (let threshold of thresholds) {
-            // use the last column for comparison of the value
-            const comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](parseFloat(data[data.length - 1]), parseFloat(threshold['value']));
+            const dimIndex = parseInt(threshold['dimension2']);
+            const cellValue = data[dimIndex];
+            let comparison;
+            if (['<', '>', '<=', '>='].includes(threshold['option'])) {
+                comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](parseFloat(cellValue), parseFloat(threshold['value']));
+            } else {
+                comparison = OCA.Analytics.Visualization.thresholdOperators[threshold['option']](cellValue, threshold['value']);
+            }
             severity = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (severity === 2) {
@@ -356,7 +362,7 @@ OCA.Analytics.Visualization = {
                     // external data source
                     row.style.color = color;
                 } else {
-                    row.childNodes.item(data.length - 1).style.color = color;
+                    row.childNodes.item(dimIndex).style.color = color;
                 }
             }
         }
