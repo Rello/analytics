@@ -121,7 +121,8 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;  width: 100%; vertical-align: middle;"><?php p($l->t('Chart options')); ?></div>
-            <div style="display: table-cell;"><textarea id="sidebarReportChartOptions" class="sidebarInput" row="1"></textarea>
+            <div style="display: table-cell;"><textarea id="sidebarReportChartOptions" class="sidebarInput"
+                                                        row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
@@ -131,7 +132,8 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%; vertical-align: middle;"><?php p($l->t('Data options')); ?></div>
-            <div style="display: table-cell;"><textarea id="sidebarReportDataOptions" class="sidebarInput" row="1"></textarea>
+            <div style="display: table-cell;"><textarea id="sidebarReportDataOptions" class="sidebarInput"
+                                                        row="1"></textarea>
             </div>
             <div style="display: table-cell; vertical-align: middle;">
                 <a target="_blank" rel="noreferrer noopener" title="<?php p($l->t('Open documentation')); ?>"
@@ -204,7 +206,7 @@
                 <select id="groupOptionType" class="optionsInput"></select>
             </div>
             <div style="display: table-cell; width: 100px;">
-                <input type="number" id="groupOptionNumber" class="optionsInput" min="1" />
+                <input type="number" id="groupOptionNumber" class="optionsInput" min="1"/>
             </div>
             <div style="display: table-cell; width: 100px;">
                 <input type="checkbox" id="groupOptionOthers" class="checkbox" name="groupOptionOthers"/>
@@ -219,7 +221,8 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 150px;"></div>
             <div style="display: table-cell; width: 50px;">
-                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>" style="height: 20px;" alt="column">
+                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>"
+                     style="height: 20px;" alt="column">
             </div>
         </div>
     </div>
@@ -250,12 +253,14 @@
                 <select class="filterDialogOption checkbox optionsInput"></select>
             </div>
             <div style="display: table-cell;">
-                <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
+                <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off"
+                       data-dropDownListIndex="0">
             </div>
         </div>
     </div>
     <div style="margin-top: 5px;">
-        <span id="addFilterRowButton" class="icon-analytics-filterRow-add" title="<?php p($l->t('Add filter')); ?>"></span>
+        <span id="addFilterRowButton" class="icon-analytics-filterRow-add"
+              title="<?php p($l->t('Add filter')); ?>"></span>
     </div>
 </template>
 
@@ -271,7 +276,8 @@
             <select class="filterDialogOption checkbox optionsInput"></select>
         </div>
         <div style="display: table-cell;">
-            <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off" data-dropDownListIndex="0">
+            <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off"
+                   data-dropDownListIndex="0">
         </div>
     </div>
 </template>
@@ -316,27 +322,29 @@
         <br>
     </div>
     <div class="sidebarHeaderClosed"><h3 id="datasetAiSectionHeaderH3"
-                                         class="sidebarPointer"><?php p($l->t('Nextcloud Assistant')); ?> <span class="betaFlag">Beta</span></h3></div>
+                                         class="sidebarPointer"><?php p($l->t('Nextcloud Assistant')); ?> <span
+                    class="betaFlag">Beta</span></h3></div>
     <div id="datasetAiSectionDisabled" class="userGuidance" style="display: none;">
 		<?php
-        // TRANSLATORS "Context Chat" is a product name. Do not translate
-        p($l->t('Context Chat is required')); ?>
+		// TRANSLATORS "Context Chat" is a product name. Do not translate
+		p($l->t('Context Chat is required')); ?>
     </div>
     <div id="datasetAiSection" class="table" style="display: none; width: 100%; max-width: 500px;">
-            <div style="display: table-row;">
-                <div style="display: table-cell; width: 100%; vertical-align: middle;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%; vertical-align: middle;">
                     <span>
                         <?php p($l->t('Description')); ?>
                     </span><br><span class="userGuidance">
                         <?php p($l->t('Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing.')); ?>
                     </span>
-                </div>
-                <textarea rows="5" style="display: table-cell;" id="sidebarDatasetSubheader" class="sidebarInput"></textarea>
             </div>
+            <textarea rows="5" style="display: table-cell;" id="sidebarDatasetSubheader"
+                      class="sidebarInput"></textarea>
+        </div>
         <div style="display: table-row;">
             <div style="display: table-cell; "><?php
 				// TRANSLATORS "Context Chat" is a product name. Do not translate
-                p($l->t('Context Chat relevant')); ?></div>
+				p($l->t('Context Chat relevant')); ?></div>
             <div style="display: table-cell; width: 200px;">
                 <input type="checkbox" id="sidebarDatasetAiIndex" class="checkbox">
                 <label for="sidebarDatasetAiIndex"></label>
@@ -446,51 +454,52 @@
     <br>
     <div class="table" style="display: table;">
         <div style="display: table-row;">
-            <div id="sidebarThresholdTextDimension1"
-                 style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?></div>
-            <div style="display: table-cell;">
-                <select id="sidebarThresholdDimension" class="sidebarInput"></select>
-            </div>
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?></div>
+            <select style="display: table-cell;" id="sidebarThresholdDimension" class="sidebarInput"></select>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
+
+            <select style="display: table-cell;" id="sidebarThresholdOption" class="sidebarInput">
+                <option value="EQ" selected><?php // TRANSLATORS description in a dropdown; limited space
+					p($l->t('equal to')); ?></option>
+                <option value="GT"><?php // TRANSLATORS description in a dropdown; limited space
+					p($l->t('greater than')); ?></option>
+                <option value="LT"><?php // TRANSLATORS description in a dropdown; limited space
+					p($l->t('less than')); ?></option>
+                <option value="LIKE"><?php // TRANSLATORS description in a dropdown; limited space
+					p($l->t('contains')); ?></option>
+                <option value="IN"><?php // TRANSLATORS description in a dropdown; limited space
+					p($l->t('list of values')); ?></option>
+             </select>
+
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
+            <input style="display: table-cell;" id="sidebarThresholdValue" class="sidebarInput" autocomplete="off"
+                   data-dropDownListIndex="0">
             <div style="display: table-cell;">
                 <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
-            <div style="display: table-cell;">
-                <select id="sidebarThresholdOption" class="sidebarInput">
-                    <option value="=" selected><?php // TRANSLATORS description in a dropdown; limited space
-						p($l->t('= equal')); ?></option>
-                    <option value=">"><?php // TRANSLATORS description in a dropdown; limited space
-						p($l->t('> greater')); ?></option>
-                    <option value="<"><?php // TRANSLATORS description in a dropdown; limited space
-						p($l->t('< less')); ?></option>
-                    <option value="<="><?php // TRANSLATORS description in a dropdown; limited space
-						p($l->t('<= less equal')); ?></option>
-                    <option value=">="><?php // TRANSLATORS description in a dropdown; limited space
-						p($l->t('>= greater equal')); ?></option>
-                    <option value="!="><?php // TRANSLATORS description in a dropdown; limited space
-						p($l->t('!= not equal')); ?></option>
-                </select>
-            </div>
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Severity')); ?></div>
+            <select style="display: table-cell;" id="sidebarThresholdSeverity" class="sidebarInput">
+                <option value="1" selected><?php p($l->t('Notification')); ?></option>
+                <option value="2"><?php p($l->t('Red')); ?></option>
+                <option value="3"><?php p($l->t('Yellow')); ?></option>
+                <option value="4"><?php p($l->t('Green')); ?></option>
+            </select>
         </div>
         <div style="display: table-row;">
-            <div id="sidebarThresholdTextValue"
-                 style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
-            <div style="display: table-cell;"><input id="sidebarThresholdValue" class="sidebarInput" autocomplete="off" data-dropDownListIndex="0"></div>
+            <div style="display: table-cell; width: 100%;"><?php p($l->t('Coloring in table')); ?></div>
+            <select style="display: table-cell;" id="sidebarThresholdColoring" class="sidebarInput">
+                <option value="value" selected><?php p($l->t('Single value')); ?></option>
+                <option value="row"><?php p($l->t('Row')); ?></option>
+            </select>
         </div>
-        <div style="display: table-row;">
-            <div style="display: table-cell;"><?php p($l->t('Severity')); ?></div>
-            <div style="display: table-cell;">
-                <select id="sidebarThresholdSeverity" class="sidebarInput">
-                    <option value="1" selected><?php p($l->t('Notification')); ?></option>
-                    <option value="2"><?php p($l->t('Red')); ?></option>
-                    <option value="3"><?php p($l->t('Yellow')); ?></option>
-                    <option value="4"><?php p($l->t('Green')); ?></option>
-                </select>
-            </div>
-        </div>
+
     </div>
     <br>
     <button id="sidebarThresholdCreateButton" type="button" class="primary">
@@ -626,11 +635,15 @@
 <template id="templateNavigationMenu">
     <div id="navigationMenu" class="app-navigation-entry-menu">
         <ul>
-            <li><a href="#" id="navigationMenuEdit"><span class="icon-rename"></span><span><?php p($l->t('Basic settings')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuEdit"><span
+                            class="icon-rename"></span><span><?php p($l->t('Basic settings')); ?></span></a></li>
             <li><a href="#" id="navigationMenuAdvanced"><span
-                            class="icon-category-customization"></span><span><?php p($l->t('Dataset maintenance')); ?></span></a></li>
-            <li><a href="#" id="navigationMenuShare"><span class="icon-share"></span><span><?php p($l->t('Share')); ?></span></a></li>
-            <li><a href="#" id="navigationMenuNewGroup"><span class="icon-add"></span><span><?php p($l->t('Add to new group')); ?></span></a></li>
+                            class="icon-category-customization"></span><span><?php p($l->t('Dataset maintenance')); ?></span></a>
+            </li>
+            <li><a href="#" id="navigationMenuShare"><span
+                            class="icon-share"></span><span><?php p($l->t('Share')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuNewGroup"><span
+                            class="icon-add"></span><span><?php p($l->t('Add to new group')); ?></span></a></li>
             <li>
                 <a href="#" id="navigationMenueFavorite">
                     <span class="icon icon-star"></span>
@@ -808,10 +821,12 @@
         <p><?php p($l->t('Format all numbers in local format')); ?></p>
         <div id="totalsSwitch">
             <label class="toggle-option">
-                <input type="radio" id="formatLocalesOption1" name="formatLocalesOption" value="true" checked><?php p($l->t('Yes')); ?>
+                <input type="radio" id="formatLocalesOption1" name="formatLocalesOption" value="true"
+                       checked><?php p($l->t('Yes')); ?>
             </label>
             <label class="toggle-option">
-                <input type="radio" id="formatLocalesOption2" name="formatLocalesOption" value="false"><?php p($l->t('No')); ?>
+                <input type="radio" id="formatLocalesOption2" name="formatLocalesOption"
+                       value="false"><?php p($l->t('No')); ?>
             </label></div>
     </div>
     <br>
@@ -821,7 +836,8 @@
     </button>
     <br>
     <div class="sidebarHeaderClosed"><h3 id="tableOptionsSectionHeaderH3"
-                                         class="sidebarPointer"><?php p($l->t('Additional settings')); ?> <span class="betaFlag">Beta</span></h3></div>
+                                         class="sidebarPointer"><?php p($l->t('Additional settings')); ?> <span
+                    class="betaFlag">Beta</span></h3></div>
     <div id="tableOptionsSectionDisabled" style="display: none;">
         <p><?php p($l->t('Calculated columns')); ?></p>
         <textarea id="tableOptionsCalculatedColumns"></textarea>
@@ -830,10 +846,12 @@
         <p><?php p($l->t('Compact visualization')); ?></p>
         <div id="totalsSwitch">
             <label class="toggle-option">
-                <input type="radio" id="compactDisplayOption1" name="compactDisplayOption" value="true"><?php p($l->t('Yes')); ?>
+                <input type="radio" id="compactDisplayOption1" name="compactDisplayOption"
+                       value="true"><?php p($l->t('Yes')); ?>
             </label>
             <label class="toggle-option">
-                <input type="radio" id="compactDisplayOption2" name="compactDisplayOption" value="false" checked><?php p($l->t('No')); ?>
+                <input type="radio" id="compactDisplayOption2" name="compactDisplayOption" value="false"
+                       checked><?php p($l->t('No')); ?>
             </label></div>
     </div>
 

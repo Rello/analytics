@@ -35,7 +35,7 @@ class VariableService {
 	 */
 	public function replaceThresholdsVariables($thresholds) {
 		foreach ($thresholds as &$threshold) {
-			$fields = ['dimension1', 'dimension2'];
+			$fields = ['value'];
 			foreach ($fields as $field) {
 				isset($threshold[$field]) ? $name = $threshold[$field] : $name = '';
 				$parsed = $this->parseFilter($name);

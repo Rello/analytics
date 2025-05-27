@@ -11,6 +11,7 @@ namespace OCA\Analytics\Service;
 use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
+use OCP\DB\Exception;
 use Psr\Log\LoggerInterface;
 use OCP\IL10N;
 
@@ -63,15 +64,16 @@ class ThresholdService {
 	 * create new threshold for dataset
 	 *
 	 * @param int $reportId
-	 * @param $dimension1
+	 * @param $dimension
 	 * @param $option
 	 * @param $value
 	 * @param int $severity
+	 * @param $coloring
 	 * @return int
+	 * @throws Exception
 	 */
-        public function create(int $reportId, $dimension, $dimensionName, $option, $value, int $severity) {
-                $value = $this->floatvalue($value);
-                return $this->ThresholdMapper->create($reportId, $dimension, $dimensionName, $value, $option, $severity);
+        public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring) {
+                return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
         }
 
 	private function floatvalue($val) {

@@ -42,21 +42,21 @@ class ThresholdController extends Controller
         return $this->ThresholdService->readRaw($reportId);
     }
 
-    /**
-     * create new threshold for dataset
-     *
-     * @NoAdminRequired
-     * @param int $reportId
-     * @param $dimension
-     * @param $dimensionName
-     * @param $option
-     * @param $value
-     * @param int $severity
-     * @return int
-     */
-    public function create(int $reportId, $dimension, $dimensionName, $option, $value, int $severity)
+	/**
+	 * create new threshold for dataset
+	 *
+	 * @NoAdminRequired
+	 * @param int $reportId
+	 * @param $dimension
+	 * @param $option
+	 * @param $value
+	 * @param int $severity
+	 * @param $coloring
+	 * @return int
+	 */
+    public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring)
     {
-        return $this->ThresholdService->create($reportId, $dimension, $dimensionName, $option, $value, $severity);
+        return $this->ThresholdService->create($reportId, $dimension, $option, $value, $severity, $coloring);
     }
 
     /**

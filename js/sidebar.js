@@ -1238,17 +1238,13 @@ OCA.Analytics.Sidebar.Threshold = {
                 table.id = 'tableThreshold';
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);
-                document.getElementById('sidebarThresholdTextDimension1').innerText = t('analytics', 'Column');
-                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Value');
 
                 const dimensionSelect = document.getElementById('sidebarThresholdDimension');
-                const dimensions = [];
-                if (data.dimension1) dimensions.push(data.dimension1);
-                if (data.dimension2) dimensions.push(data.dimension2);
-                if (data.value) dimensions.push(data.value);
+                const dimensions = OCA.Analytics.currentReportData.header;
                 dimensions.forEach((dim, idx) => {
                     dimensionSelect.options.add(new Option(dim, idx));
                 });
+
                 document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
                 dimensionSelect.addEventListener('change', function (evt) {
                     document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = evt.target.value;
@@ -1358,11 +1354,9 @@ OCA.Analytics.Sidebar.Threshold = {
 
         let text = document.createElement('div');
         text.classList.add('thresholdText');
-        let displayValue = data.value;
-        if (!isNaN(parseFloat(data.value))) {
-            displayValue = parseFloat(data.value).toLocaleString();
-        }
-        text.innerText = data.dimension1 + ' ' + data.option + ' ' + displayValue;
+
+        let dimension = OCA.Analytics.currentReportData.header[data.dimension];
+        text.innerText = dimension + ' ' + data.option + ' ' + data.value;
 
         let tDelete = document.createElement('div');
         tDelete.classList.add('icon-close');
@@ -1384,13 +1378,6 @@ OCA.Analytics.Sidebar.Threshold = {
             return;
         }
 
-        const op = document.getElementById('sidebarThresholdOption').value;
-        if (['<', '>', '<=', '>='].includes(op) &&
-            isNaN(document.getElementById('sidebarThresholdValue').value.replace(',', '.'))) {
-            OCA.Analytics.Notification.notification('error', t('analytics', '3rd field must be a valid number'));
-            return;
-        }
-
         let requestUrl = OC.generateUrl('apps/analytics/threshold');
         fetch(requestUrl, {
             method: 'POST',
@@ -1398,10 +1385,10 @@ OCA.Analytics.Sidebar.Threshold = {
             body: JSON.stringify({
                 reportId: reportId,
                 dimension: document.getElementById('sidebarThresholdDimension').value,
-                dimensionName: document.getElementById('sidebarThresholdDimension').options[document.getElementById('sidebarThresholdDimension').selectedIndex].text,
                 option: document.getElementById('sidebarThresholdOption').value,
                 value: document.getElementById('sidebarThresholdValue').value,
                 severity: document.getElementById('sidebarThresholdSeverity').value,
+                coloring: document.getElementById('sidebarThresholdColoring').value,
             })
         })
             .then(response => response.json())
