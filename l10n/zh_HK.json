@@ -396,6 +396,7 @@
     "Set thresholds to highlight exceptions and receive Nextcloud notifications" : "設定閾值以突出顯示異常並接收 Nextcloud 通知",
     "Slice and dice your data with precision" : "精確地分割您的數據",
     "Apply flexible filters, including dynamic date variables" : "應用靈活的過濾器，包括動態日期變量",
+    "Top N, sorting and time aggregation" : "前 N 名、排序和時間聚合",
     "Customize charts with primary and secondary axes" : "自訂帶有主軸和次軸的圖表",
     "Mix and match chart types for each data series" : "為每個資料系列混合搭配圖表類型",
     "Save default filters for quick access to your preferred views" : "儲存預設篩選器以便快速存取您喜歡的視圖",
