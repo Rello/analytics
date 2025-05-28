@@ -121,7 +121,7 @@ class ThresholdService {
                 $datasetMetadata = $this->ReportMapper->read($reportId);
 
                 foreach ($thresholds as $threshold) {
-                        $dimIndex = intval($threshold['dimension2']);
+                        $dimIndex = intval($threshold['dimension']);
                         switch ($dimIndex) {
                                 case 0:
                                         $compare = $dimension1;
