@@ -82,7 +82,7 @@ OC.L10N.register(
     "Delete data" : "Izdzēst datus",
     "Technical error. Please check the logs." : "Tehniska kļūda. Lūdzu, pārbaudiet žurnālus.",
     "Type" : "Veids",
-    "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Sliekšņi var tikt izmantoti, lai izceltu datus. Izmantojot paziņojumu slieksni tiks nosūtīti pašpiegādes ziņojumi.",
+    "Thresholds can be used to highlight data. Using the notification threshold, push messages are being sent." : "Sliekšņi var tikt izmantoti, lai izceltu datus. Kad tiek izmantots paziņojumu slieksnis, tiks nosūtīti pašpiegādes ziņojumi.",
     "Threshold" : "Slieksnis",
     "Normal value" : "Normāla vērtība",
     "Green" : "Zaļš",
