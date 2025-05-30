@@ -1238,13 +1238,22 @@ OCA.Analytics.Sidebar.Threshold = {
                 table.id = 'tableThreshold';
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);
-                document.getElementById('sidebarThresholdTextDimension1').innerText = data.dimension1 || t('analytics', 'Column') + ' 1';
-                document.getElementById('sidebarThresholdTextValue').innerText = data.value || t('analytics', 'Value');
+
+                const dimensionSelect = document.getElementById('sidebarThresholdDimension');
+                const dimensions = OCA.Analytics.currentReportData.header;
+                dimensions.forEach((dim, idx) => {
+                    dimensionSelect.options.add(new Option(dim, idx));
+                });
+
+                document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+                dimensionSelect.addEventListener('change', function (evt) {
+                    document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = evt.target.value;
+                });
+                document.getElementById('sidebarThresholdValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
                 document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
                 document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
 
                 document.getElementById('sidebarThresholdHint').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdHint);
-                document.getElementById('sidebarThresholdDimension1').addEventListener('click', OCA.Analytics.UI.showDropDownList);
 
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);
@@ -1345,7 +1354,9 @@ OCA.Analytics.Sidebar.Threshold = {
 
         let text = document.createElement('div');
         text.classList.add('thresholdText');
-        text.innerText = data.dimension1 + ' ' + data.option + ' ' + parseFloat(data.value).toLocaleString();
+
+        let dimension = OCA.Analytics.currentReportData.header[data.dimension];
+        text.innerText = dimension + ' ' + data.option + ' ' + data.value;
 
         let tDelete = document.createElement('div');
         tDelete.classList.add('icon-close');
@@ -1362,14 +1373,8 @@ OCA.Analytics.Sidebar.Threshold = {
     createThreashold: function () {
         const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
 
-        if (document.getElementById('sidebarThresholdDimension1').value === '' ||
-            document.getElementById('sidebarThresholdValue').value === '') {
+        if (document.getElementById('sidebarThresholdValue').value === '') {
             OCA.Analytics.Notification.notification('error', t('analytics', 'Missing data'));
-            return;
-        }
-
-        if (isNaN(document.getElementById('sidebarThresholdValue').value.replace(',', '.'))) {
-            OCA.Analytics.Notification.notification('error', t('analytics', '3rd field must be a valid number'));
             return;
         }
 
@@ -1379,10 +1384,11 @@ OCA.Analytics.Sidebar.Threshold = {
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
-                dimension1: document.getElementById('sidebarThresholdDimension1').value,
+                dimension: document.getElementById('sidebarThresholdDimension').value,
                 option: document.getElementById('sidebarThresholdOption').value,
                 value: document.getElementById('sidebarThresholdValue').value,
                 severity: document.getElementById('sidebarThresholdSeverity').value,
+                coloring: document.getElementById('sidebarThresholdColoring').value,
             })
         })
             .then(response => response.json())
