@@ -172,6 +172,7 @@ OC.L10N.register(
     "Color" : "Värv",
     "Sort by" : "Sorteeri",
     "Direction" : "Suund",
+    "Nextcloud forum" : "Nextcloudi foorum",
     "Create" : "Loo"
 },
 "nplurals=2; plural=(n != 1);");
