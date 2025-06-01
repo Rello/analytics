@@ -502,8 +502,8 @@
 
     </div>
     <br>
-    <button id="sidebarThresholdCreateButton" type="button" class="primary">
-		<?php p($l->t('Save threshold')); ?>
+    <button id="sidebarThresholdCreateButton" type="button" class="primary" data-id="">
+                <?php p($l->t('Save threshold')); ?>
     </button>
     <br>
     <br>
