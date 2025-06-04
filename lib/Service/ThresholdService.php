@@ -76,22 +76,36 @@ class ThresholdService {
                 return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
         }
 
-	private function floatvalue($val) {
-		// if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
-		if (preg_match('/(?<=\b0)\,(?=\d{3}\b)/', $val) === 0 && preg_match('/(?<=\b0)\.(?=\d{3}\b)/', $val) === 0) {
-			// remove , as 1000 separator
-			$val = preg_replace('/(?<=\d)\,(?=\d{3}\b)/', '', $val);
-			// remove . as 1000 separator
-			$val = preg_replace('/(?<=\d)\.(?=\d{3}\b)/', '', $val);
-		}
-		// convert remaining comma to decimal point
-		$val = str_replace(",", ".", $val);
-		if (is_numeric($val)) {
-			return number_format(floatval($val), 2, '.', '');
-		} else {
-			return false;
-		}
-	}
+       private function floatvalue($val) {
+               // if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
+               if (preg_match('/(?<=\b0)\,(?=\d{3}\b)/', $val) === 0 && preg_match('/(?<=\b0)\.(?=\d{3}\b)/', $val) === 0) {
+                       // remove , as 1000 separator
+                       $val = preg_replace('/(?<=\d)\,(?=\d{3}\b)/', '', $val);
+                       // remove . as 1000 separator
+                       $val = preg_replace('/(?<=\d)\.(?=\d{3}\b)/', '', $val);
+               }
+               // convert remaining comma to decimal point
+               $val = str_replace(",", ".", $val);
+               if (is_numeric($val)) {
+                       return number_format(floatval($val), 2, '.', '');
+               } else {
+                       return false;
+               }
+       }
+
+       /**
+        * Compare two values and return comparison result similar to spaceship operator
+        *
+        * @param $a
+        * @param $b
+        * @return int
+        */
+       private function compareValues($a, $b) {
+               if (is_numeric($a) && is_numeric($b)) {
+                       return floatval($a) <=> floatval($b);
+               }
+               return strcmp((string)$a, (string)$b);
+       }
 
 	/**
 	 * Delete threshold
@@ -136,33 +150,73 @@ class ThresholdService {
                                         $subject = $datasetMetadata['value'];
                         }
 
-                        if ($threshold['option'] === 'new' && $insert != 0) {
-                                $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
-                                        'report' => $datasetMetadata['name'],
-                                        'subject' => $subject,
-                                        'rule' => $this->l10n->t('new record'),
-                                        'value' => ''
-                                ], $threshold['user_id']);
-                                $result = 'Threshold value met';
-                        } else {
-                                if (in_array($threshold['option'], ['<','>','<=','>='])) {
-                                        $comparison = version_compare(floatval($compare), floatval($threshold['value']), $threshold['option']);
-                                } elseif ($threshold['option'] === '=') {
-                                        $comparison = ($compare == $threshold['value']);
-                                } else {
-                                        $comparison = ($compare != $threshold['value']);
-                                }
+                       if ($threshold['option'] === 'new' && $insert != 0) {
+                               $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
+                                       'report' => $datasetMetadata['name'],
+                                       'subject' => $subject,
+                                       'rule' => $this->l10n->t('new record'),
+                                       'value' => ''
+                               ], $threshold['user_id']);
+                               $result = 'Threshold value met';
+                       } else {
+                               $option = strtoupper($threshold['option']);
 
-                                if ($comparison) {
-                                        $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
-                                                'report' => $datasetMetadata['name'],
-                                                'subject' => $subject,
-                                                'rule' => $threshold['option'],
-                                                'value' => $threshold['value']
-                                        ], $threshold['user_id']);
-                                        $result = 'Threshold value met';
-                                }
-                        }
+                               // map legacy symbolic options to the new textual ones
+                               $legacyMap = [
+                                       '='  => 'EQ',
+                                       '>'  => 'GT',
+                                       '<'  => 'LT',
+                                       '>=' => 'GE',
+                                       '<=' => 'LE',
+                                       '!=' => 'NE',
+                               ];
+                               if (isset($legacyMap[$option])) {
+                                       $option = $legacyMap[$option];
+                               }
+
+                               switch ($option) {
+                                       case 'EQ':
+                                               $comparison = $this->compareValues($compare, $threshold['value']) === 0;
+                                               break;
+                                       case 'NE':
+                                               $comparison = $this->compareValues($compare, $threshold['value']) !== 0;
+                                               break;
+                                       case 'GT':
+                                               $comparison = $this->compareValues($compare, $threshold['value']) > 0;
+                                               break;
+                                       case 'GE':
+                                               $comparison = $this->compareValues($compare, $threshold['value']) >= 0;
+                                               break;
+                                       case 'LT':
+                                               $comparison = $this->compareValues($compare, $threshold['value']) < 0;
+                                               break;
+                                       case 'LE':
+                                               $comparison = $this->compareValues($compare, $threshold['value']) <= 0;
+                                               break;
+                                       case 'LIKE':
+                                               $comparison = (strpos((string)$compare, (string)$threshold['value']) !== false);
+                                               break;
+                                       case 'IN':
+                                               preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $threshold['value'], $matches);
+                                               $valuesArray = array_map(function($v) {
+                                                       return trim($v, " '");
+                                               }, $matches[0]);
+                                               $comparison = in_array((string)$compare, $valuesArray, true);
+                                               break;
+                                       default:
+                                               $comparison = false;
+                               }
+
+                               if ($comparison) {
+                                       $this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
+                                               'report' => $datasetMetadata['name'],
+                                               'subject' => $subject,
+                                               'rule' => $threshold['option'],
+                                               'value' => $threshold['value']
+                                       ], $threshold['user_id']);
+                                       $result = 'Threshold value met';
+                               }
+                       }
                 }
                 return $result;
         }
