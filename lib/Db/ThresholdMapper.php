@@ -35,6 +35,13 @@ class ThresholdMapper
      */
     public function create($reportId, $dimension, $value, $option, $severity, $coloring)
     {
+        $get = $this->db->getQueryBuilder();
+        $get->selectAlias('MAX(sequence)', 'max_seq')
+            ->from(self::TABLE_NAME)
+            ->where($get->expr()->eq('report', $get->createNamedParameter($reportId)));
+        $max = $get->executeQuery()->fetchOne();
+        $sequence = ($max === null) ? 1 : ((int)$max + 1);
+
         $sql = $this->db->getQueryBuilder();
         $sql->insert(self::TABLE_NAME)
             ->values([
@@ -44,8 +51,9 @@ class ThresholdMapper
                 'target' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($severity),
-				'coloring' => $sql->createNamedParameter($coloring),
-				]);
+                'coloring' => $sql->createNamedParameter($coloring),
+                'sequence' => $sql->createNamedParameter($sequence),
+            ]);
         $sql->executeStatement();
         return (int)$sql->getLastInsertId();
     }
@@ -64,9 +72,10 @@ class ThresholdMapper
             ->addSelect('option')
             ->addSelect('severity')
             ->addSelect('user_id')
+            ->addSelect('sequence')
             ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
             ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-        ;
+            ->orderBy('sequence', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -82,7 +91,8 @@ class ThresholdMapper
         $sql->from(self::TABLE_NAME)
             ->select('*')
             ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)))
-            ->andWhere($sql->expr()->eq('severity', $sql->createNamedParameter('1')));
+            ->andWhere($sql->expr()->eq('severity', $sql->createNamedParameter('1')))
+            ->orderBy('sequence', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -110,6 +120,24 @@ class ThresholdMapper
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('report', $sql->createNamedParameter($reportId)));
+        $sql->executeStatement();
+        return true;
+    }
+
+    /**
+     * Update the sequence of one threshold
+     *
+     * @param int $thresholdId
+     * @param int $sequence
+     * @return bool
+     * @throws Exception
+     */
+    public function updateSequence(int $thresholdId, int $sequence)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('sequence', $sql->createNamedParameter($sequence))
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($thresholdId)));
         $sql->executeStatement();
         return true;
     }

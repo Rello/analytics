@@ -99,10 +99,25 @@ class ThresholdService {
 	 * @param int $thresholdId
 	 * @return bool
 	 */
-	public function delete(int $thresholdId) {
-		$this->ThresholdMapper->deleteThreshold($thresholdId);
-		return true;
-	}
+    public function delete(int $thresholdId) {
+        $this->ThresholdMapper->deleteThreshold($thresholdId);
+        return true;
+    }
+
+    /**
+     * Update sequence of multiple thresholds
+     *
+     * @param array $orderedIds
+     * @return bool
+     */
+    public function reorder(array $orderedIds): bool {
+        $position = 1;
+        foreach ($orderedIds as $id) {
+            $this->ThresholdMapper->updateSequence((int)$id, $position);
+            $position++;
+        }
+        return true;
+    }
 
 	/**
 	 * validate notification thresholds per report
