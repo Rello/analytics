@@ -1216,6 +1216,7 @@ OCA.Analytics.Sidebar.Share = {
 };
 
 OCA.Analytics.Sidebar.Threshold = {
+    draggedItem: null,
 
     tabContainerThreshold: function () {
         const reportId = document.getElementById('app-sidebar').dataset.id;
@@ -1360,6 +1361,14 @@ OCA.Analytics.Sidebar.Threshold = {
 
         let item = document.createElement('div');
         item.classList.add('thresholdItem');
+        item.dataset.id = data.id;
+        item.draggable = true;
+        item.addEventListener('dragstart', OCA.Analytics.Sidebar.Threshold.handleDragStart);
+        item.addEventListener('dragover', OCA.Analytics.Sidebar.Threshold.handleDragOver);
+        item.addEventListener('drop', OCA.Analytics.Sidebar.Threshold.handleDrop);
+
+        let grip = document.createElement('div');
+        grip.classList.add('icon-analytics-gripLines', 'sidebarPointer');
 
         let colorIcon = document.createElement('img');
         colorIcon.classList.add('thresholdColorIcon');
@@ -1384,6 +1393,7 @@ OCA.Analytics.Sidebar.Threshold = {
         tDelete.dataset.id = data.id;
         tDelete.addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdDeleteButton);
 
+        item.appendChild(grip);
         item.appendChild(bullet);
         item.appendChild(colorIcon);
         item.appendChild(text);
@@ -1445,6 +1455,44 @@ OCA.Analytics.Sidebar.Threshold = {
             .then(data => {
                 document.querySelector('.tabHeader.selected').click();
             });
+    },
+
+    handleDragStart: function (e) {
+        OCA.Analytics.Sidebar.Threshold.draggedItem = this;
+        e.dataTransfer.effectAllowed = 'move';
+    },
+
+    handleDragOver: function (e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    },
+
+    handleDrop: function (e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+        if (OCA.Analytics.Sidebar.Threshold.draggedItem !== this) {
+            this.parentNode.insertBefore(OCA.Analytics.Sidebar.Threshold.draggedItem, this);
+        }
+        OCA.Analytics.Sidebar.Threshold.saveOrder();
+        return false;
+    },
+
+    saveOrder: function () {
+        const ids = [];
+        document.querySelectorAll('#sidebarThresholdList > div').forEach(item => {
+            ids.push(item.dataset.id);
+        });
+        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        let requestUrl = OC.generateUrl('apps/analytics/threshold/order/') + reportId;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({order: ids})
+        });
     },
 };
 

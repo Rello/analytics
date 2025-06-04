@@ -73,6 +73,23 @@ class ThresholdController extends Controller
     }
 
     /**
+     * Update threshold order
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param array $order
+     * @return bool
+     */
+    public function reorder(int $reportId, $order): bool
+    {
+        if (is_string($order)) {
+            $order = json_decode($order, true);
+        }
+        $this->ThresholdService->reorder($order);
+        return true;
+    }
+
+    /**
      * validate threshold
      *
      * @NoAdminRequired
