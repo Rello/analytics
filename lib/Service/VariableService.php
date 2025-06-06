@@ -87,8 +87,8 @@ class VariableService {
 	}
 
 	/**
-	 * replace variables in single field
-	 * used in: API
+	 * replace variables in single field or dimension
+	 * used in StorageService when data is loaded or entered manually
 	 *
 	 * @param $field
 	 * @return array

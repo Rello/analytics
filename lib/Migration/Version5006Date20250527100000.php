@@ -57,6 +57,12 @@ class Version5006Date20250527100000 extends SimpleMigrationStep {
 			]);
 		}
 
+		if (!$table->hasColumn('sequence')) {
+			$table->addColumn('sequence', 'integer', [
+				'notnull' => false,
+			]);
+		}
+
 		if ($table->hasColumn('dimension2')) {
 			$table->dropColumn('dimension2');
 		}
@@ -80,10 +86,11 @@ class Version5006Date20250527100000 extends SimpleMigrationStep {
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {
 
 		$update = $this->connection->getQueryBuilder();
-		$update->update('analytics_threshold')->set('dimension', $update->createParameter('dimension'))
+		$update->update('analytics_threshold')
+			   ->set('dimension', $update->createParameter('dimension'))
 			   ->set('coloring', $update->createParameter('coloring'))
-			   ->set('target', $update->createParameter('target'))->where($update->expr()
-																				 ->eq('id', $update->createParameter('id')));
+			   ->set('target', $update->createParameter('target'))
+			   ->where($update->expr()->eq('id', $update->createParameter('id')));
 
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['id', 'value'])->from('analytics_threshold');

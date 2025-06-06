@@ -36,9 +36,11 @@ class ThresholdMapper
     public function create($reportId, $dimension, $value, $option, $severity, $coloring)
     {
         $get = $this->db->getQueryBuilder();
-        $get->selectAlias('MAX(sequence)', 'max_seq')
+        $get->select('sequence')
             ->from(self::TABLE_NAME)
-            ->where($get->expr()->eq('report', $get->createNamedParameter($reportId)));
+            ->where($get->expr()->eq('report', $get->createNamedParameter($reportId)))
+			->orderBy('sequence', 'DESC')
+			->setMaxResults(1);
         $max = $get->executeQuery()->fetchOne();
         $sequence = ($max === null) ? 1 : ((int)$max + 1);
 

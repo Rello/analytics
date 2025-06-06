@@ -447,10 +447,9 @@
 </template>
 
 <template id="templateThreshold">
-    <h1><?php p($l->t('Thresholds can trigger notifications and color coding in reports.')); ?></h1>
-    <a href="https://github.com/Rello/analytics/wiki/Thresholds"
-       target="_blank"><?php p($l->t('More information …')); ?></a>
-    <br>
+    <div class="userGuidance"><?php p($l->t('Thresholds can trigger notifications and color coding in reports.')); ?>
+    <a class="userGuidance" href="https://github.com/Rello/analytics/wiki/Thresholds"
+       target="_blank"><?php p($l->t('More information …')); ?></a></div>
     <br>
     <div class="table" style="display: table;">
         <div style="display: table-row;">
@@ -486,17 +485,17 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Severity')); ?></div>
             <select style="display: table-cell;" id="sidebarThresholdSeverity" class="sidebarInput">
-                <option value="1" selected><?php p($l->t('Notification')); ?></option>
+                <option value="1"><?php p($l->t('Notification')); ?></option>
                 <option value="2"><?php p($l->t('Red')); ?></option>
                 <option value="3"><?php p($l->t('Yellow')); ?></option>
-                <option value="4"><?php p($l->t('Green')); ?></option>
+                <option value="4" selected><?php p($l->t('Green')); ?></option>
             </select>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Coloring in table')); ?></div>
             <select style="display: table-cell;" id="sidebarThresholdColoring" class="sidebarInput">
                 <option value="value" selected><?php p($l->t('Single value')); ?></option>
-                <option value="row"><?php p($l->t('Row')); ?></option>
+                <option value="row"><?php p($l->t('Table row')); ?></option>
             </select>
         </div>
 
@@ -505,14 +504,14 @@
     <button id="sidebarThresholdCreateButton" type="button" class="primary" data-id="">
                 <?php p($l->t('Save threshold')); ?>
     </button>
-    <br>
-    <br>
-    <div id="sidebarThresholdCreateNewHeader"><h3><?php // TRANSLATORS Noun shown in a button. German "Weitere"
-			p($l->t('Others')); ?></h3></div>
     <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
 		<?php p($l->t('Notification for new records')); ?>
     </button>
     <br>
+    <br>
+    <br>
+    <div class="userGuidance"><?php
+			p($l->t('Existing thresholds will be evaluated in the order shown below. The order can be changed by drag & drop.')); ?></div>
     <br>
     <div id="sidebarThresholdList"></div>
 </template>

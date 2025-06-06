@@ -389,17 +389,24 @@ OCA.Analytics.Visualization = {
             const severity = parseInt(threshold['severity']);
             if (comparison === true) {
                 let color;
-                if (severity === 2) { // red
-                    color = 'LightCoral';
-                } else if (severity === 3) { // orange
-                    color = 'LightSalmon';
-                } else if (severity === 4) { // green
-                    color = 'LightGreen';
-                }
 
                 if (threshold['coloring'] === 'row') {
+                    if (severity === 2) { // red
+                        color = 'LightCoral';
+                    } else if (severity === 3) { // orange
+                        color = 'Moccasin';
+                    } else if (severity === 4) { // green
+                        color = 'LightGreen';
+                    }
                     row.style.backgroundColor = color;
                 } else {
+                    if (severity === 2) { // red
+                        color = 'Crimson';
+                    } else if (severity === 3) { // orange
+                        color = 'Gold';
+                    } else if (severity === 4) { // green
+                        color = 'Green';
+                    }
                     const cell = row.childNodes.item(dimIndex);
                     if (cell) {
                         cell.style.color = color;
