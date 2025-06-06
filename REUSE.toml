@@ -6,19 +6,13 @@ SPDX-PackageSupplier = "Marcel Scherello <analytics@scherello.de>"
 SPDX-PackageDownloadLocation = "https://github.com/rello/analytics"
 
 [[annotations]]
-path = "vendor1/**"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2021 Nextcloud GmbH and Nextcloud contributors"
-SPDX-License-Identifier = "MIT"
-
-[[annotations]]
 path = "l10n/**"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019-2024 Nextcloud translators"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = [".**", "**.md", "**.json", "**.code-workspace", "tests/**", "sample_data/**", "screenshots/**", "vendor/autoload.php"]
+path = [".**", "**.md", "**.json", "**.code-workspace", "tests/**", "sample_data/**", "screenshots/**", "vendor/autoload.php", "phpunit.xml"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
