@@ -383,6 +383,13 @@ table.dataTable tbody tr {
     height: 12px;
 }
 
+.thresholdColorIcon {
+    margin-top: 10px;
+    width: 12px;
+    height: 12px;
+    opacity: 0.7;
+}
+
 .thresholdItem {
     display: inline-flex;
     width: 100%;
@@ -394,7 +401,9 @@ table.dataTable tbody tr {
 
 .thresholdText {
     margin-top: 6px;
-    width: 50%;
+    margin-left: 10px;
+    width: 80%;
+    cursor: pointer;
 }
 
 .thresholdDelete {

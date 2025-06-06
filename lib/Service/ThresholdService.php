@@ -11,6 +11,7 @@ namespace OCA\Analytics\Service;
 use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\ThresholdMapper;
 use OCA\Analytics\Notification\NotificationManager;
+use OCP\DB\Exception;
 use Psr\Log\LoggerInterface;
 use OCP\IL10N;
 
@@ -23,12 +24,12 @@ class ThresholdService {
 	private $l10n;
 
 	public function __construct(
-		LoggerInterface $logger,
-		ThresholdMapper $ThresholdMapper,
+		LoggerInterface     $logger,
+		ThresholdMapper     $ThresholdMapper,
 		NotificationManager $NotificationManager,
-		ReportMapper $ReportMapper,
-		VariableService $VariableService,
-		IL10N $l10n
+		ReportMapper        $ReportMapper,
+		VariableService     $VariableService,
+		IL10N               $l10n
 	) {
 		$this->logger = $logger;
 		$this->ThresholdMapper = $ThresholdMapper;
@@ -63,15 +64,16 @@ class ThresholdService {
 	 * create new threshold for dataset
 	 *
 	 * @param int $reportId
-	 * @param $dimension1
+	 * @param $dimension
 	 * @param $option
 	 * @param $value
 	 * @param int $severity
+	 * @param $coloring
 	 * @return int
+	 * @throws Exception
 	 */
-	public function create(int $reportId, $dimension1, $option, $value, int $severity) {
-		$value = $this->floatvalue($value);
-		return $this->ThresholdMapper->create($reportId, $dimension1, $value, $option, $severity);
+	public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring) {
+		return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
 	}
 
 	private function floatvalue($val) {
@@ -92,6 +94,20 @@ class ThresholdService {
 	}
 
 	/**
+	 * Compare two values and return comparison result similar to spaceship operator
+	 *
+	 * @param $a
+	 * @param $b
+	 * @return int
+	 */
+	private function compareValues($a, $b) {
+		if (is_numeric($a) && is_numeric($b)) {
+			return floatval($a) <=> floatval($b);
+		}
+		return strcmp((string)$a, (string)$b);
+	}
+
+	/**
 	 * Delete threshold
 	 *
 	 * @param int $thresholdId
@@ -99,6 +115,21 @@ class ThresholdService {
 	 */
 	public function delete(int $thresholdId) {
 		$this->ThresholdMapper->deleteThreshold($thresholdId);
+		return true;
+	}
+
+	/**
+	 * Update sequence of multiple thresholds
+	 *
+	 * @param array $orderedIds
+	 * @return bool
+	 */
+	public function reorder(array $orderedIds): bool {
+		$position = 1;
+		foreach ($orderedIds as $id) {
+			$this->ThresholdMapper->updateSequence((int)$id, $position);
+			$position++;
+		}
 		return true;
 	}
 
@@ -114,24 +145,88 @@ class ThresholdService {
 	 * @throws \Exception
 	 */
 	public function validate(int $reportId, $dimension1, $dimension2, $value, int $insert = 0) {
-		$result = '';
+		$result = null;
 		$thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
+		$thresholds = $this->VariableService->replaceThresholdsVariables($thresholds);
 		$datasetMetadata = $this->ReportMapper->read($reportId);
 
 		foreach ($thresholds as $threshold) {
-			if ($threshold['dimension1'] === $dimension1 or $threshold['dimension1'] === '*') {
-				if ($threshold['option'] === 'new' && $insert != 0) {
+			$dimIndex = intval($threshold['dimension']);
+			switch ($dimIndex) {
+				case 0:
+					$compare = $dimension1;
+					$subject = $datasetMetadata['dimension1'];
+					break;
+				case 1:
+					$compare = $dimension2;
+					$subject = $datasetMetadata['dimension2'];
+					break;
+				default:
+					$compare = $value;
+					$subject = $datasetMetadata['value'];
+			}
+
+			if ($threshold['option'] === 'new' && $insert != 0) {
+				$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
+					'report' => $datasetMetadata['name'],
+					'subject' => $subject,
+					'rule' => $this->l10n->t('new record'),
+					'value' => ''
+				], $threshold['user_id']);
+				$result = 'Threshold value met';
+			} else {
+				$option = strtoupper($threshold['option']);
+
+				// map legacy symbolic options to the new textual ones
+				$legacyMap = [
+					'=' => 'EQ',
+					'>' => 'GT',
+					'<' => 'LT',
+					'>=' => 'GE',
+					'<=' => 'LE',
+					'!=' => 'NE',
+				];
+				if (isset($legacyMap[$option])) {
+					$option = $legacyMap[$option];
+				}
+
+				switch ($option) {
+					case 'EQ':
+						$comparison = $this->compareValues($compare, $threshold['value']) === 0;
+						break;
+					case 'NE':
+						$comparison = $this->compareValues($compare, $threshold['value']) !== 0;
+						break;
+					case 'GT':
+						$comparison = $this->compareValues($compare, $threshold['value']) > 0;
+						break;
+					case 'GE':
+						$comparison = $this->compareValues($compare, $threshold['value']) >= 0;
+						break;
+					case 'LT':
+						$comparison = $this->compareValues($compare, $threshold['value']) < 0;
+						break;
+					case 'LE':
+						$comparison = $this->compareValues($compare, $threshold['value']) <= 0;
+						break;
+					case 'LIKE':
+						$comparison = (strpos((string)$compare, (string)$threshold['value']) !== false);
+						break;
+					case 'IN':
+						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $threshold['value'], $matches);
+						$valuesArray = array_map(function ($v) {
+							return trim($v, " '");
+						}, $matches[0]);
+						$comparison = in_array((string)$compare, $valuesArray, true);
+						break;
+					default:
+						$comparison = false;
+				}
+
+				if ($comparison) {
 					$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
 						'report' => $datasetMetadata['name'],
-						'subject' => $dimension1,
-						'rule' => $this->l10n->t('new record'),
-						'value' => ''
-					], $threshold['user_id']);
-					$result = 'Threshold value met';
-				} elseif (version_compare(floatval($value), floatval($threshold['value']), $threshold['option'])) {
-					$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
-						'report' => $datasetMetadata['name'],
-						'subject' => $dimension1,
+						'subject' => $subject,
 						'rule' => $threshold['option'],
 						'value' => $threshold['value']
 					], $threshold['user_id']);

@@ -35,7 +35,7 @@ class VariableService {
 	 */
 	public function replaceThresholdsVariables($thresholds) {
 		foreach ($thresholds as &$threshold) {
-			$fields = ['dimension1', 'dimension2'];
+			$fields = ['value'];
 			foreach ($fields as $field) {
 				isset($threshold[$field]) ? $name = $threshold[$field] : $name = '';
 				$parsed = $this->parseFilter($name);
@@ -87,8 +87,8 @@ class VariableService {
 	}
 
 	/**
-	 * replace variables in single field
-	 * used in: API
+	 * replace variables in single field or dimension
+	 * used in StorageService when data is loaded or entered manually
 	 *
 	 * @param $field
 	 * @return array

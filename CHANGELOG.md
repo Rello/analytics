@@ -7,6 +7,7 @@
 - Add time grouping feature #464
 - Show all button in chart legend #473
 - Support multiple rows in filter dialog #472
+- Order of thresholds can be arranged with drag & drop #474
 
 ### Changed
 - JSON data source: remove column limit

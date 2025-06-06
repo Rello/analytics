@@ -42,20 +42,21 @@ class ThresholdController extends Controller
         return $this->ThresholdService->readRaw($reportId);
     }
 
-    /**
-     * create new threshold for dataset
-     *
-     * @NoAdminRequired
-     * @param int $reportId
-     * @param $dimension1
-     * @param $option
-     * @param $value
-     * @param int $severity
-     * @return int
-     */
-    public function create(int $reportId, $dimension1, $option, $value, int $severity)
+	/**
+	 * create new threshold for dataset
+	 *
+	 * @NoAdminRequired
+	 * @param int $reportId
+	 * @param $dimension
+	 * @param $option
+	 * @param $value
+	 * @param int $severity
+	 * @param $coloring
+	 * @return int
+	 */
+    public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring)
     {
-        return $this->ThresholdService->create($reportId, $dimension1, $option, $value, $severity);
+        return $this->ThresholdService->create($reportId, $dimension, $option, $value, $severity, $coloring);
     }
 
     /**
@@ -68,6 +69,23 @@ class ThresholdController extends Controller
     public function delete(int $thresholdId)
     {
         $this->ThresholdService->delete($thresholdId);
+        return true;
+    }
+
+    /**
+     * Update threshold order
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param array $order
+     * @return bool
+     */
+    public function reorder(int $reportId, $order): bool
+    {
+        if (is_string($order)) {
+            $order = json_decode($order, true);
+        }
+        $this->ThresholdService->reorder($order);
         return true;
     }
 

@@ -108,8 +108,9 @@ return [
 
 		// Threshold
 		['name' => 'threshold#create', 'url' => '/threshold', 'verb' => 'POST'],
-		['name' => 'threshold#read', 'url' => '/threshold/{reportId}', 'verb' => 'GET'],
-		['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
+                ['name' => 'threshold#read', 'url' => '/threshold/{reportId}', 'verb' => 'GET'],
+                ['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
+                ['name' => 'threshold#reorder', 'url' => '/threshold/order/{reportId}', 'verb' => 'PUT'],
 
 		// API
 		// V1
