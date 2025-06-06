@@ -5,14 +5,15 @@ This `AGENTS.md` file provides guidelines for OpenAI Codex and other AI agents i
 
 ## Project Structure: AI Agent Handling Guidelines
 
-| Directory         | Description                                           | Agent Action         |
-|-------------------|-------------------------------------------------------|----------------------|
-| `/vendor`         | External plugins; may help understand data sources.   | Do not modify        |
-| `/l10n`           | Translation files from Transifex.                     | Do not modify        |
-| `/js/3rdParty`    | Third-party JavaScript plugins.                       | Do not modify        |
-| `/css/3rdParty`   | Third-party CSS plugins.                              | Do not modify        |
-| `/sample_data`    | Example data for human reference.                     | Irrelevant to agents |
-| `/screenshots`    | UI images for documentation purposes.                 | Irrelevant to agents |
+| Directory       | Description                                         | Agent Action         |
+|-----------------|-----------------------------------------------------|----------------------|
+| `/vendor`       | External plugins; may help understand data sources. | Do not modify        |
+| `/l10n`         | Translation files from Transifex.                   | Do not modify        |
+| `/js/3rdParty`  | Third-party JavaScript plugins.                     | Do not modify        |
+| `/css/3rdParty` | Third-party CSS plugins.                            | Do not modify        |
+| `/sample_data`  | Example data for human reference.                   | Irrelevant to agents |
+| `/screenshots`  | UI images for documentation purposes.               | Irrelevant to agents |
+| `/tests`        | phpUnit and SeleniumIDE test cases                  | use if possible      |
 
 ## General Guidance
 
