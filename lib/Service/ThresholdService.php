@@ -145,7 +145,7 @@ class ThresholdService {
 	 * @throws \Exception
 	 */
         public function validate(int $reportId, $dimension1, $dimension2, $value, int $insert = 0) {
-                $result = '';
+                $result = null;
                 $thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
                 $datasetMetadata = $this->ReportMapper->read($reportId);
 
