@@ -35,6 +35,7 @@ class VariableService {
 	 */
 	public function replaceThresholdsVariables($thresholds) {
 		foreach ($thresholds as &$threshold) {
+			print_r('thresholds 3: '.json_encode($thresholds));
 			$fields = ['value'];
 			foreach ($fields as $field) {
 				isset($threshold[$field]) ? $name = $threshold[$field] : $name = '';
