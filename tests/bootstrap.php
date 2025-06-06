@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
+        'Psr\\Log\\' => __DIR__ . '/Stubs/Psr/Log/',
 $prefixes = [
 	'Psr\\Log\\' => __DIR__.'/Stubs/Psr/Log/',
 ];
