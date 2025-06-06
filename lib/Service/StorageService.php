@@ -142,7 +142,7 @@ class StorageService {
 		if ($error === 0) {
 			foreach ($this->ReportService->reportsForDataset($datasetId) as $report) {
 				$validateResult = $this->ThresholdService->validate($report['id'], $dimension1, $dimension2, $value, $insert);
-				if ($validateResult !== '') $validate = $validateResult;
+				if ($validateResult !== null) $validate = $validateResult;
 			}
 		}
 
