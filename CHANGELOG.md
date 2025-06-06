@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- API v4 for will add %currentDate% as Y-m-d
+
 ## 5.5.0 - 2025-05-26
 ### Added
 - dynamic filter for quarters (e.g. %last quarter%)

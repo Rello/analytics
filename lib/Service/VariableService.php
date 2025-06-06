@@ -100,7 +100,7 @@ class VariableService {
 				foreach ($matches[0] as $match) {
 					$replace = null;
 					if ($match === '%currentDate%') {
-						$replace = $this->IDateTimeFormatter->formatDate(time(), 'short');
+						$replace = date("Y-m-d");
 					} elseif ($match === '%currentTime%') {
 						$replace = $this->IDateTimeFormatter->formatTime(time(), 'short');
 					} elseif ($match === '%now%') {

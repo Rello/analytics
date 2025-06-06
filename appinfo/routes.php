@@ -146,6 +146,15 @@ return [
 		['name' => 'ApiData#reportIndexV3', 'url' => '/api/3.0/reports', 'verb' => 'GET'],
 		['name' => 'ApiData#reportDetailV3', 'url' => '/api/3.0/report/{reportId}', 'verb' => 'GET'],
 
+		// V4
+		[
+			'name' => 'ApiData#preflighted_cors',
+			'url' => '/api/4.0/{path}',
+			'verb' => 'OPTIONS',
+			'requirements' => ['path' => '.+']
+		],
+		['name' => 'ApiData#addDataV4', 'url' => '/api/4.0/data/{datasetId}/add', 'verb' => 'POST'],
+
 		// wizard
 		['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],
 
