@@ -64,17 +64,33 @@ class ThresholdServiceTest extends TestCase {
 	public function validationData()
 	{
 		return [
-			'GT greater than threshold' => [
+			// Threshold
+			// Report Metadata
+			// Data row column1;column2;value
+			// expected true/false
+			'Numeric Value GT' => [
 				[['id' => 1, 'dimension' => 0, 'option' => 'GT', 'value' => '10', 'user_id' => 'u1']],
 				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
 				15, 15, 25,
 				true,
 			],
-			'EQ Date' => [
+			'Date equal %today%' => [
 				[['id' => 1, 'dimension' => 0, 'option' => 'GT', 'value' => '%today%', 'user_id' => 'u1']],
 				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
-				'2025-06-07', 15, 25,
+				date('YYYY-m-d'), 15, 25,
 				true,
+			],
+			'String GT true' => [
+				[['id' => 1, 'dimension' => 0, 'option' => 'GT', 'value' => 'ABB', 'user_id' => 'u1']],
+				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
+				'ABC', 15, 25,
+				true,
+			],
+			'String GT false' => [
+				[['id' => 1, 'dimension' => 0, 'option' => 'GT', 'value' => 'ABD', 'user_id' => 'u1']],
+				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
+				'ABC', 15, 25,
+				false,
 			],
 			'LT no notification' => [
 				[['id' => 1, 'dimension' => 0, 'option' => 'LT', 'value' => '10', 'user_id' => 'u1']],

@@ -148,7 +148,6 @@ class ThresholdService {
 		$result = null;
 		$thresholds = $this->ThresholdMapper->getSevOneThresholdsByReport($reportId);
 		$thresholds = $this->VariableService->replaceThresholdsVariables($thresholds);
-		print_r('thresholds 1: '.json_encode($thresholds));
 		$datasetMetadata = $this->ReportMapper->read($reportId);
 
 		foreach ($thresholds as $threshold) {
