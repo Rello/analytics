@@ -2,6 +2,7 @@
 
 ### Added
 - API v4 for will add %currentDate% as Y-m-d
+- Add legend selection for reports in panoramas #482
 
 ## 5.5.0 - 2025-05-26
 ### Added

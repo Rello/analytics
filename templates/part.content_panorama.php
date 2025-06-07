@@ -270,8 +270,21 @@
 
     .overlayText {
         background-color: white;
-        padding: 5px; /* Adjust padding as needed */
+        padding: 10px;
         cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .overlayOptions {
+        border-radius: 10px;
+        position: absolute;
+        bottom: 10px;
+        background-color: rgba(255,255,255,0.8);
+        font-size: 12px;
+        padding: 2px 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px; /* Optional: adds space between checkbox and label */
     }
 
     #reportSelectorContainer {

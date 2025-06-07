@@ -369,7 +369,19 @@ OCA.Analytics.Panorama = {
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
             let ctx = document.getElementById('myWidget' + itemId).getContext('2d');
-            OCA.Analytics.Visualization.buildChart(ctx, jsondata, OCA.Analytics.UI.getDefaultChartOptions());
+
+            // get display options for the item
+            let chartOptions = OCA.Analytics.UI.getDefaultChartOptions();
+            let pageId = itemId.split('-')[0];
+            let itemIndex = itemId.split('-')[1];
+            let itemContent = OCA.Analytics.Panorama.currentPanorama.pages[pageId].reports[itemIndex];
+
+            // legend = true
+            if (itemContent?.options?.legend !== undefined) {
+                chartOptions.plugins.legend.display = itemContent.options.legend;
+            }
+
+            OCA.Analytics.Visualization.buildChart(ctx, jsondata, chartOptions);
         } else {
             let canvasElement = document.getElementById(`myWidget${itemId}`);
             if (jsondata.data.length === 1) {
@@ -472,6 +484,10 @@ OCA.Analytics.Panorama = {
         overlayText.innerText = t('analytics', 'select to edit');
         overlayText.id = 'overlayText';
         overlay.appendChild(overlayText);
+
+        // add item specific extra options to overlay
+        OCA.Analytics.Panorama.addDisplayOptionsToOverlay(overlay, flexItem);
+
         flexItem.appendChild(overlay);
 
         overlay.addEventListener('click', function (evt) {
@@ -489,6 +505,53 @@ OCA.Analytics.Panorama = {
             // when the item was drawn after a report change, the overlay needs to be added again
             //overlay.classList.add('active');
             //overlay.firstChild.innerText = '';
+        }
+    },
+
+    /**
+     * Adds display options to the overlay depending on the item type.
+     * Extend this function to support more types/options in the future.
+     */
+    addDisplayOptionsToOverlay: function(overlay, flexItem) {
+        let itemId = flexItem.id;
+        let pageId = itemId.split('-')[0];
+        let itemIndex = itemId.split('-')[1];
+        let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
+        let itemContent = page.reports[itemIndex];
+
+        // legend true/false for reports
+        if (itemContent && parseInt(itemContent.type) === OCA.Analytics.Panorama.TYPE_REPORT) {
+            let optionsContainer = document.createElement('div');
+            optionsContainer.classList.add('overlayOptions');
+
+            let legendCheckbox = document.createElement('input');
+            legendCheckbox.type = 'checkbox';
+            legendCheckbox.id = `legend-${itemId}`;
+            legendCheckbox.checked = !(itemContent.options && itemContent.options.legend === false);
+            legendCheckbox.addEventListener('change', function (e) {
+                let showLegend = e.target.checked;
+                page.reports[itemIndex].options ??= {};
+                if (showLegend) {
+                    delete page.reports[itemIndex].options.legend;
+                } else {
+                    page.reports[itemIndex].options.legend = false;
+                }
+                if (Object.keys(page.reports[itemIndex].options).length === 0) {
+                    delete page.reports[itemIndex].options;
+                }
+                // rebuild widget to reflect legend change
+                if (page.reports[itemIndex].type === OCA.Analytics.Panorama.TYPE_REPORT) {
+                    OCA.Analytics.Backend.getReportData(page.reports[itemIndex].value, itemId);
+                }
+            });
+
+            let legendLabel = document.createElement('label');
+            legendLabel.setAttribute('for', `legend-${itemId}`);
+            legendLabel.innerText = t('analytics', 'Show legend');
+
+            optionsContainer.appendChild(legendCheckbox);
+            optionsContainer.appendChild(legendLabel);
+            overlay.appendChild(optionsContainer);
         }
     },
 
@@ -643,6 +706,7 @@ OCA.Analytics.Panorama = {
                     'type': OCA.Analytics.Panorama.TYPE_TEXT,
                     'value': document.getElementById('textInputContent').value
                 };
+                delete reportsArr[reportIndex].options;
                 //page.reports = reportsArr.join(',');
                 OCA.Analytics.Panorama.buildWidget(itemId);
                 OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
@@ -715,7 +779,11 @@ OCA.Analytics.Panorama = {
                 targetItem.setAttribute('data-chart', reportId);
                 let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
                 let reportsArr = page.reports;
+                let existingOptions = reportsArr[reportIndex]?.options;
                 reportsArr[reportIndex] = {'type': OCA.Analytics.Panorama.TYPE_REPORT, 'value': reportId};
+                if (existingOptions && Object.keys(existingOptions).length > 0) {
+                    reportsArr[reportIndex].options = existingOptions;
+                }
                 OCA.Analytics.Panorama.buildWidget(itemId);
                 OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
 
@@ -745,6 +813,7 @@ OCA.Analytics.Panorama = {
                     //let reportsArr = page.reports.split(',');
                     let reportsArr = page.reports;
                     reportsArr[reportIndex] = {'type': OCA.Analytics.Panorama.TYPE_PICTURE, 'value': fileInfo.id};
+                    delete reportsArr[reportIndex].options;
                     //page.reports = reportsArr.join(',');
                     OCA.Analytics.Panorama.buildWidget(itemId);
                     OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
