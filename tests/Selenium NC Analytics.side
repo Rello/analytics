@@ -1654,7 +1654,7 @@
       "id": "b5f6a169-13cc-4f90-991c-6529099c47ba",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "id=sidebarThresholdDimension1",
+      "target": "id=sidebarThresholdDimension",
       "targets": [
         ["id=sidebarThresholdDimension1", "id"],
         ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
@@ -1666,16 +1666,10 @@
     }, {
       "id": "086e42c3-3916-4f55-a887-c4c97079f8a5",
       "comment": "",
-      "command": "type",
-      "target": "id=sidebarThresholdDimension1",
-      "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
-        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
-      ],
-      "value": "Dimension 1"
+      "command": "select",
+      "target": "id=sidebarThresholdDimension",
+      "targets": [],
+      "value": "label=Column 2"
     }, {
       "id": "a2830b41-0990-4a6c-ad87-72fe85740fe3",
       "comment": "",
@@ -1688,7 +1682,7 @@
         ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
       ],
-      "value": "1"
+      "value": "Dimension 2"
     }, {
       "id": "c49468d9-5786-4fb4-8741-d72723cb4201",
       "comment": "",
@@ -1733,7 +1727,7 @@
         ["xpath=//div[@id='sidebarThresholdList']/div/div[2]", "xpath:idRelative"],
         ["xpath=//div[3]/div/div[3]/div/div[2]", "xpath:position"]
       ],
-      "value": "Dimension 1 = 1"
+      "value": "Column 2 = Dimension 2"
     }, {
       "id": "cbcf1461-6a80-4ec0-9ca5-b735bee81de2",
       "comment": "",
@@ -1763,7 +1757,7 @@
       "id": "d2bdfae3-00f5-4028-b7ee-968748d2bb93",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "id=sidebarThresholdDimension1",
+      "target": "id=sidebarThresholdDimension",
       "targets": [
         ["id=sidebarThresholdDimension1", "id"],
         ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
@@ -1789,16 +1783,10 @@
     }, {
       "id": "30f78571-c8c4-4d4a-97ab-9bae3b72226a",
       "comment": "",
-      "command": "type",
-      "target": "id=sidebarThresholdDimension1",
-      "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
-        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
-      ],
-      "value": "Dimension 11"
+      "command": "select",
+      "target": "id=sidebarThresholdDimension",
+      "targets": [],
+      "value": "label=Column 1"
     }, {
       "id": "63076fcf-6129-4f23-8844-25de8abcc7f2",
       "comment": "",
@@ -1811,14 +1799,21 @@
         ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
       ],
-      "value": "2"
+      "value": "Dimension 11"
     }, {
-      "id": "0c16907c-b22b-4e85-8820-305af0d47609",
+      "id": "3a79c513-955a-41a7-ad58-7bb2397a07d7",
       "comment": "",
       "command": "select",
       "target": "id=sidebarThresholdSeverity",
       "targets": [],
       "value": "value=1"
+    }, {
+      "id": "0c16907c-b22b-4e85-8820-305af0d47609",
+      "comment": "",
+      "command": "select",
+      "target": "id=sidebarThresholdColoring",
+      "targets": [],
+      "value": "value=row"
     }, {
       "id": "929dc585-65b0-417b-97a8-ce05195a407c",
       "comment": "",
@@ -4561,11 +4556,11 @@
       "id": "982d7df2-acc5-4fba-bca5-69a32cff4587",
       "comment": "",
       "command": "assertText",
-      "target": "css=.rich-text--component:nth-child(2)",
+      "target": "css=.rich-text--component:nth-child(4)",
       "targets": [
-        ["css=.rich-text--component:nth-child(2)", "css:finder"],
-        ["xpath=//header[@id='header']/div[2]/div/div[2]/ul/li/div/div[2]/div/div/p/strong", "xpath:idRelative"],
-        ["xpath=//p/strong", "xpath:position"],
+        ["css=.rich-text--component:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='header-menu-notifications']/div/div/ul/li/div[2]/div/div/strong[3]", "xpath:idRelative"],
+        ["xpath=//strong[3]", "xpath:position"],
         ["xpath=//strong[contains(.,'Dimension 11')]", "xpath:innerText"]
       ],
       "value": "Dimension 11"

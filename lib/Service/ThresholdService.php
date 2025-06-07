@@ -192,28 +192,28 @@ class ThresholdService {
 
 				switch ($option) {
 					case 'EQ':
-						$comparison = $this->compareValues($compare, $threshold['value']) === 0;
+						$comparison = $this->compareValues($compare, $threshold['target']) === 0;
 						break;
 					case 'NE':
-						$comparison = $this->compareValues($compare, $threshold['value']) !== 0;
+						$comparison = $this->compareValues($compare, $threshold['target']) !== 0;
 						break;
 					case 'GT':
-						$comparison = $this->compareValues($compare, $threshold['value']) > 0;
+						$comparison = $this->compareValues($compare, $threshold['target']) > 0;
 						break;
 					case 'GE':
-						$comparison = $this->compareValues($compare, $threshold['value']) >= 0;
+						$comparison = $this->compareValues($compare, $threshold['target']) >= 0;
 						break;
 					case 'LT':
-						$comparison = $this->compareValues($compare, $threshold['value']) < 0;
+						$comparison = $this->compareValues($compare, $threshold['target']) < 0;
 						break;
 					case 'LE':
-						$comparison = $this->compareValues($compare, $threshold['value']) <= 0;
+						$comparison = $this->compareValues($compare, $threshold['target']) <= 0;
 						break;
 					case 'LIKE':
-						$comparison = (strpos((string)$compare, (string)$threshold['value']) !== false);
+						$comparison = (strpos((string)$compare, (string)$threshold['target']) !== false);
 						break;
 					case 'IN':
-						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $threshold['value'], $matches);
+						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $threshold['target'], $matches);
 						$valuesArray = array_map(function ($v) {
 							return trim($v, " '");
 						}, $matches[0]);
@@ -228,7 +228,7 @@ class ThresholdService {
 						'report' => $datasetMetadata['name'],
 						'subject' => $subject,
 						'rule' => $threshold['option'],
-						'value' => $threshold['value']
+						'value' => $threshold['target']
 					], $threshold['user_id']);
 					$result = 'Threshold value met';
 				}

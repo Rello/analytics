@@ -460,11 +460,11 @@
             <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
 
             <select style="display: table-cell;" id="sidebarThresholdOption" class="sidebarInput">
-                <option value="EQ" selected><?php // TRANSLATORS description in a dropdown; limited space
+                <option value="=" selected><?php // TRANSLATORS description in a dropdown; limited space
 					p($l->t('equal to')); ?></option>
-                <option value="GT"><?php // TRANSLATORS description in a dropdown; limited space
+                <option value=">"><?php // TRANSLATORS description in a dropdown; limited space
 					p($l->t('greater than')); ?></option>
-                <option value="LT"><?php // TRANSLATORS description in a dropdown; limited space
+                <option value="<"><?php // TRANSLATORS description in a dropdown; limited space
 					p($l->t('less than')); ?></option>
                 <option value="LIKE"><?php // TRANSLATORS description in a dropdown; limited space
 					p($l->t('contains')); ?></option>
