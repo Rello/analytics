@@ -63,6 +63,12 @@ class PanoramaService {
 	 */
 	public function index(): array {
 		$ownPanorama = $this->PanoramaMapper->index();
+		// Set permissions for all own panoramas
+		foreach ($ownPanorama as &$panorama) {
+			$panorama['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+		}
+		unset($panorama);
+
 		$sharedPanoramas = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA);
 		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId', 'permissions');
 

@@ -369,13 +369,18 @@ OCA.Analytics.Panorama = {
             divElement.id = `myWidget${itemId}`;
             canvasElement.parentNode.replaceChild(divElement, canvasElement);
             let ctx = document.getElementById('myWidget' + itemId).getContext('2d');
+
+            // get display options for the item
             let chartOptions = OCA.Analytics.UI.getDefaultChartOptions();
             let pageId = itemId.split('-')[0];
             let itemIndex = itemId.split('-')[1];
             let itemContent = OCA.Analytics.Panorama.currentPanorama.pages[pageId].reports[itemIndex];
+
+            // legend = true
             if (itemContent?.options?.legend !== undefined) {
                 chartOptions.plugins.legend.display = itemContent.options.legend;
             }
+
             OCA.Analytics.Visualization.buildChart(ctx, jsondata, chartOptions);
         } else {
             let canvasElement = document.getElementById(`myWidget${itemId}`);
@@ -480,12 +485,41 @@ OCA.Analytics.Panorama = {
         overlayText.id = 'overlayText';
         overlay.appendChild(overlayText);
 
-        // add item specific options to overlay
+        // add item specific extra options to overlay
+        OCA.Analytics.Panorama.addDisplayOptionsToOverlay(overlay, flexItem);
+
+        flexItem.appendChild(overlay);
+
+        overlay.addEventListener('click', function (evt) {
+            // Remove the active state from any previous flex-item
+            OCA.Analytics.Panorama.resetEditOverlays();
+
+            // indicate now active overlay
+            evt.currentTarget.classList.add('active');
+            evt.currentTarget.firstChild.innerText = t('analytics', 'choose the content');
+
+            OCA.Analytics.Panorama.showWidgetContentSelector(evt.currentTarget.dataset.itemId); // Position the menu items in a circle
+        });
+
+        if (isActive) {
+            // when the item was drawn after a report change, the overlay needs to be added again
+            //overlay.classList.add('active');
+            //overlay.firstChild.innerText = '';
+        }
+    },
+
+    /**
+     * Adds display options to the overlay depending on the item type.
+     * Extend this function to support more types/options in the future.
+     */
+    addDisplayOptionsToOverlay: function(overlay, flexItem) {
         let itemId = flexItem.id;
         let pageId = itemId.split('-')[0];
         let itemIndex = itemId.split('-')[1];
         let page = OCA.Analytics.Panorama.currentPanorama.pages[pageId];
         let itemContent = page.reports[itemIndex];
+
+        // legend true/false for reports
         if (itemContent && parseInt(itemContent.type) === OCA.Analytics.Panorama.TYPE_REPORT) {
             let optionsContainer = document.createElement('div');
             optionsContainer.classList.add('overlayOptions');
@@ -518,24 +552,6 @@ OCA.Analytics.Panorama = {
             optionsContainer.appendChild(legendCheckbox);
             optionsContainer.appendChild(legendLabel);
             overlay.appendChild(optionsContainer);
-        }
-        flexItem.appendChild(overlay);
-
-        overlay.addEventListener('click', function (evt) {
-            // Remove the active state from any previous flex-item
-            OCA.Analytics.Panorama.resetEditOverlays();
-
-            // indicate now active overlay
-            evt.currentTarget.classList.add('active');
-            evt.currentTarget.firstChild.innerText = t('analytics', 'choose the content');
-
-            OCA.Analytics.Panorama.showWidgetContentSelector(evt.currentTarget.dataset.itemId); // Position the menu items in a circle
-        });
-
-        if (isActive) {
-            // when the item was drawn after a report change, the overlay needs to be added again
-            //overlay.classList.add('active');
-            //overlay.firstChild.innerText = '';
         }
     },
 
