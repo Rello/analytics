@@ -274,6 +274,15 @@
         cursor: pointer;
     }
 
+    .overlayOptions {
+        position: absolute;
+        left: 5px;
+        bottom: 5px;
+        background-color: rgba(255,255,255,0.8);
+        font-size: 12px;
+        padding: 2px 4px;
+    }
+
     #reportSelectorContainer {
         max-height: 280px; /* Adjust the max height as needed */
         overflow-y: auto; /* Enables vertical scrolling when content overflows */
