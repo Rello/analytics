@@ -591,7 +591,26 @@ OCA.Analytics.Visualization = {
 
         const defaultGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
         const customGenerateLabels = function (chart) {
-            const labels = defaultGenerateLabels(chart);
+            let labels;
+
+            // Chart.js does not generate category labels for doughnuts when only
+            // a single dataset without label is present. Build them manually.
+            if (chart.config.type === 'doughnut') {
+                const data = chart.data;
+                const dataset = data.datasets[0] || {};
+                const colors = dataset.backgroundColor || [];
+                labels = data.labels.map((label, index) => ({
+                    text: label,
+                    fillStyle: colors[index],
+                    strokeStyle: colors[index],
+                    hidden: false,
+                    datasetIndex: 0,
+                    index: index
+                }));
+            } else {
+                labels = defaultGenerateLabels(chart);
+            }
+
             const showAllNeeded = labels.length > 4 && chart.data.datasets.some(ds => ds.hidden);
             if (showAllNeeded) {
                 labels.push({
@@ -699,6 +718,7 @@ OCA.Analytics.Visualization = {
             chartOptions.rotation = -90;
             chartOptions.plugins.datalabels.display = true;
             chartOptions.plugins.datalabels.color = '#FFFFFF';
+            chartOptions.plugins.legend.display = true;
         } else if (chartType === 'funnel') {
             chartOptions.indexAxis = 'y';
             delete chartOptions.scales;
