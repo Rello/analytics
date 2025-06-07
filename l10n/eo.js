@@ -49,7 +49,6 @@ OC.L10N.register(
     "Export" : "Eksporti",
     "Description" : "Priskribo",
     "Import" : "Importi",
-    "Others" : "Aliaj",
     "Title" : "Titolo",
     "Daily" : "Ĉiutage",
     "Hourly" : "Ĉiuhore",

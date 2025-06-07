@@ -57,7 +57,6 @@ OC.L10N.register(
     "Mode" : "Мод",
     "Option" : "Опции",
     "Import" : "Увези",
-    "Others" : "Останати",
     "Title" : "Наслов",
     "Daily" : "Дневно",
     "Hourly" : "Часовно",

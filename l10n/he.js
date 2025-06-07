@@ -66,7 +66,6 @@ OC.L10N.register(
     "Mode" : "מצב",
     "Description" : "תיאור",
     "Import" : "ייבוא",
-    "Others" : "חרים",
     "Setting" : "הגדרות",
     "Title" : "תפקיד",
     "Copy" : "העתקה",

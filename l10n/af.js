@@ -39,7 +39,6 @@ OC.L10N.register(
     "Export" : "Voer uit",
     "Description" : "Beskrywing",
     "Import" : "Voer In",
-    "Others" : "Ander",
     "Setting" : "Instelling",
     "Title" : "Titel",
     "Daily" : "Daagliks",

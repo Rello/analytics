@@ -64,7 +64,6 @@ OC.L10N.register(
     "Nextcloud Assistant" : "Nextcloud Aðstoð",
     "Description" : "Lýsing",
     "Import" : "Flytja inn",
-    "Others" : "Others",
     "Selection" : "Val",
     "Setting" : "Stilling",
     "Title" : "Titill",

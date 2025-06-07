@@ -28,7 +28,6 @@ OC.L10N.register(
     "Name" : "නම",
     "Update" : "යාවත්කාල",
     "Description" : "විස්තරය",
-    "Others" : "වෙනත්",
     "Daily" : "දිනපතා",
     "Password protection" : "මුරපද ආරක්ෂාව",
     "Copy link" : "සබැඳිය පිටපත් කරන්න",

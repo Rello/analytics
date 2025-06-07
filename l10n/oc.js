@@ -72,8 +72,6 @@ OC.L10N.register(
     "Mode" : "Mòde",
     "Description" : "Descripcion",
     "Import" : "Importar",
-    "> greater" : "> superior",
-    "< less" : "< mens",
     "Severity" : "Severitat",
     "Selection" : "Seleccion",
     "Setting" : "Paramètres",

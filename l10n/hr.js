@@ -61,7 +61,6 @@ OC.L10N.register(
     "Mode" : "Način rada",
     "Description" : "Opis",
     "Import" : "Uvezi",
-    "Others" : "Ostalo",
     "Title" : "Naslov",
     "Copy" : "Kopirajte",
     "Daily" : "Svaki dan",

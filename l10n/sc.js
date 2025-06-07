@@ -65,7 +65,6 @@ OC.L10N.register(
     "Mode" : "Modalidade",
     "Description" : "Descritzione",
     "Import" : "Importa",
-    "Others" : "Àtere",
     "Selection" : "Seletzione",
     "Title" : "Tìtulu",
     "Copy" : "Còpia",
