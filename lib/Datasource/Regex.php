@@ -60,43 +60,81 @@ class Regex implements IDatasource
      * @param $option
      * @return array available options of the data source
      */
-    public function readData($option): array
-    {
-        $regex = htmlspecialchars_decode($option['regex'], ENT_NOQUOTES);
-        $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
+	public function readData($option): array
+	{
+		$regex = isset($option['regex']) ? htmlspecialchars_decode($option['regex'], ENT_NOQUOTES) : '';
+		$url = isset($option['url']) ? htmlspecialchars_decode($option['url'], ENT_NOQUOTES) : '';
 
-        $context = stream_context_create(
-            array(
-                "http" => array(
-                    "header" => "User-Agent: NextCloud Analytics APP"
-                )
-            )
-        );
+		// Fetch HTML content using cURL
+		[$curlResult, $httpCode] = $this->fetchUrlContent($url);
 
-        $html = file_get_contents($url, false, $context);
-        preg_match_all($regex, $html, $matches);
+		$header = ['', 'Dimension2', 'Count'];
 
-        $data = array();
-        $count = count($matches['dimension']);
-        for ($i = 0; $i < $count; $i++) {
-            if (isset($option['limit'])) {
-                if ($i === (int)$option['limit'] and (int)$option['limit'] !== 0) break;
-            }
-            $data[] = [$option['name'], $matches['dimension'][$i], $matches['value'][$i]];
-        }
+		// Early return on HTTP error
+		if ($httpCode < 200 || $httpCode >= 300) {
+			return [
+				'header' => $header,
+				'dimensions' => ['', 'Dimension2'],
+				'data' => [],
+				'error' => 'HTTP response code: ' . $httpCode,
+				'rawData' => $curlResult,
+				'URL' => $url,
+			];
+		}
 
-        $header = array();
-        $header[0] = '';
-        $header[1] = 'Dimension2';
-        $header[2] = 'Count';
+		// Apply regex and build data
+		preg_match_all($regex, $curlResult, $matches);
 
-        return [
-            'header' => $header,
-            'dimensions' => array_slice($header, 0, count($header) - 1),
-            'data' => $data,
-            'error' => 0,
-            'rawData' => $html,
-            'URL' => $url,
-        ];
-    }
+		$dimensions = $matches['dimension'] ?? [];
+		$values = $matches['value'] ?? [];
+		$limit = isset($option['limit']) && (int)$option['limit'] > 0 ? (int)$option['limit'] : count($dimensions);
+
+		// Use array_map for efficient data construction
+		$data = [];
+		for ($i = 0; $i < min($limit, count($dimensions), count($values)); $i++) {
+			$data[] = [
+				$option['name'] ?? '',
+				$dimensions[$i],
+				$values[$i]
+			];
+		}
+
+		return [
+			'header' => $header,
+			'dimensions' => array_slice($header, 0, count($header) - 1),
+			'data' => $data,
+			'error' => 0,
+			'rawData' => $curlResult,
+			'URL' => $url,
+		];
+	}
+
+	/**
+	 * Fetches the content of a URL using cURL.
+	 * @param string $url
+	 * @return array [string $content, int $httpCode]
+	 */
+	private function fetchUrlContent(string $url): array
+	{
+		$ch = curl_init();
+		if ($ch === false) {
+			return ['', 0];
+		}
+
+		curl_setopt_array($ch, [
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_HEADER => false,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_URL => $url,
+			CURLOPT_REFERER => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'
+		]);
+
+		$result = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+
+		return [$result !== false ? $result : '', $httpCode];
+	}
 }

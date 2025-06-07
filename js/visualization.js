@@ -718,7 +718,10 @@ OCA.Analytics.Visualization = {
             chartOptions.rotation = -90;
             chartOptions.plugins.datalabels.display = true;
             chartOptions.plugins.datalabels.color = '#FFFFFF';
-            chartOptions.plugins.legend.display = true;
+            if (!OCA.Analytics.isPanorama) {
+                // always show legend in report mode
+                chartOptions.plugins.legend.display = true;
+            }
         } else if (chartType === 'funnel') {
             chartOptions.indexAxis = 'y';
             delete chartOptions.scales;

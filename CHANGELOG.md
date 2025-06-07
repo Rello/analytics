@@ -1,8 +1,19 @@
 # Changelog
 
 ### Added
-- API v4 for will add %currentDate% as Y-m-d
+- Ordering of thresholds (validation sequence) #479
+- Enable editing of existing thresholds #477
 - Add legend selection for reports in panoramas #482
+
+### Changed
+- Allow thresholds on any column #474
+  **Attention**: existing thresholds are affected. See change #474 for details
+- API v4 for will add %currentDate% as Y-m-d
+  see wiki
+- Change HTML grabber datasource to curl
+
+### Fixed
+- legend "undefined" in doughnut chart
 
 ## 5.5.0 - 2025-05-26
 ### Added
