@@ -804,7 +804,7 @@ OCA.Analytics.Sidebar.Data = {
                     document.getElementById('DataApiDataset').innerText = data['dataset'];
                     const apiUrl = OC.generateUrl('/apps/analytics/api/3.0/data/') + data['dataset'] + '/add';
                     document.getElementById('apiLinkText').innerText = apiUrl;
-                    document.getElementById('apiLinkClipboard').value = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + apiUrl;
+                    document.getElementById('apiLink').dataset.link = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + apiUrl;
                     //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
                     document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
                     document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
@@ -864,7 +864,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataApiButton: function (evt) {
-        let link = evt.target.nextElementSibling.value;
+        let link = evt.target.dataset.link;
         evt.target.classList.replace('icon-clippy', 'icon-checkmark-color');
         let textArea = document.createElement('textArea');
         textArea.value = link;
