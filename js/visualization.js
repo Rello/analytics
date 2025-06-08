@@ -785,6 +785,7 @@ OCA.Analytics.Visualization = {
         let dataModel = '';
         let header = data.header.slice(1);
         const isTopGrouping = !!data.options?.filteroptions?.topN;
+        let datasetCounter = 0;
 
         if (data.options.chartoptions !== null) {
             if (data.options.chartoptions?.analyticsModel !== undefined) {
@@ -807,10 +808,24 @@ OCA.Analytics.Visualization = {
                 }));
                 datasets.push({label: label, data: dataPoints, yAxisID: 'primary'});
             });
+        } else if (dataModel === 'timeSeriesModel') {
+            xAxisCategories = data.map(row => row[0]);
+            header.forEach((seriesName, index) => {
+                const dataset = {
+                    label: seriesName,
+                    data: [],
+                    hidden: datasetCounter >= 4 && !isTopGrouping,
+                    yAxisID: 'primary'
+                };
+                data.forEach(row => {
+                    dataset.data.push({x: row[0], y: parseFloat(row[index + 1])});
+                });
+                datasets.push(dataset);
+                datasetCounter++;
+            });
         } else {
             // KPI-Model: Use existing logic
             const labelMap = new Map();
-            let datasetCounter = 0;
             data.forEach((row) => {
                 let dataSeriesColumn, characteristicColumn, value;
                 if (row.length >= 3) {

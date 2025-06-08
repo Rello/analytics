@@ -872,6 +872,11 @@
                 <label for="opt2"> <?php p($l->t('In columns')); ?></label><br>
                 <span class="userGuidance"><?php p($l->t('One line per topic with the values in the columns')); ?></span>
             </div>
+            <div style="display: table-cell; width: 200px; text-align: center;">
+                <input type="radio" id="analyticsModelOpt3" name="analyticsModel" value="timeSeriesModel"/><br>
+                <label for="opt3"> <?php p($l->t('Timestamps in first column')); ?></label><br>
+                <span class="userGuidance"><?php p($l->t('One line per timestamp with the series in the columns')); ?></span>
+            </div>
         </div>
     </div>
     <br>
