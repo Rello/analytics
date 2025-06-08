@@ -802,6 +802,9 @@ OCA.Analytics.Sidebar.Data = {
                     document.getElementById('DataTextDimension2').innerText = data['dimension2'];
                     document.getElementById('DataTextValue').innerText = data['value'];
                     document.getElementById('DataApiDataset').innerText = data['dataset'];
+                    const apiUrl = OC.generateUrl('/apps/analytics/api/4.0/data/') + data['dataset'] + '/add';
+                    document.getElementById('apiLinkText').innerText = apiUrl;
+                    document.getElementById('apiLink').dataset.link = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + apiUrl;
                     //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
                     document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
                     document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
@@ -860,16 +863,16 @@ OCA.Analytics.Sidebar.Data = {
         document.getElementById('importDataClipboardButtonGo').addEventListener('click', OCA.Analytics.Sidebar.Backend.importCsvData);
     },
 
-    handleDataApiButton: function () {
-        let header = t('analytics', 'REST API parameters');
-        let text = OC.generateUrl('/apps/analytics/api/3.0/data/')
-            + document.getElementById('DataApiDataset').innerText
-            + '/add<br><br>'
-            + '<a href="https://github.com/rello/analytics/wiki/API" target="_blank">'
-            + t('analytics', 'More Information …')
-            + '</a>';
-        let guidance = t('analytics', 'Use this endpoint to submit data via an API:');
-        OCA.Analytics.Notification.info(header, text, guidance);
+    handleDataApiButton: function (evt) {
+        let link = evt.target.dataset.link;
+        evt.target.classList.replace('icon-clippy', 'icon-checkmark-color');
+        let textArea = document.createElement('textArea');
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        OCA.Analytics.Notification.notification('success', t('analytics', 'Link copied'));
     },
 
     handleDataAdvancedButton: function () {

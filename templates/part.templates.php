@@ -433,7 +433,15 @@
     <div class="sidebarHeaderClosed"><h3 id="dataApiSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('REST API')); ?></h3></div>
     <div id="dataApiSection" style="display: none; width: 100%; max-width: 500px;">
-        <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
+        <div><?php p($l->t('Use this endpoint to submit data via an API:')); ?></div>
+        <br><br>
+        <div style="display: flex; align-items: center;">
+            <span id="apiLinkText" style="word-break: break-all;"></span>
+            <a id="apiLink" class="clipboard-button icon icon-clippy" style="margin-left: 5px;"></a>
+        </div>
+        <br><br>
+        <a class="userGuidance" href="https://github.com/Rello/analytics/wiki/API"
+           target="_blank"><?php p($l->t('More Information …')); ?></a>
         <input type="hidden" id="DataApiDataset">
         <br>
     </div>
@@ -448,8 +456,8 @@
 
 <template id="templateThreshold">
     <div class="userGuidance"><?php p($l->t('Thresholds can trigger notifications and color coding in reports.')); ?>
-    <a class="userGuidance" href="https://github.com/Rello/analytics/wiki/Thresholds"
-       target="_blank"><?php p($l->t('More information …')); ?></a></div>
+        <a class="userGuidance" href="https://github.com/Rello/analytics/wiki/Thresholds"
+           target="_blank"><?php p($l->t('More information …')); ?></a></div>
     <br>
     <div class="table" style="display: table;">
         <div style="display: table-row;">
@@ -470,7 +478,7 @@
 					p($l->t('contains')); ?></option>
                 <option value="IN"><?php // TRANSLATORS description in a dropdown; limited space
 					p($l->t('list of values')); ?></option>
-             </select>
+            </select>
 
         </div>
         <div style="display: table-row;">
@@ -502,7 +510,7 @@
     </div>
     <br>
     <button id="sidebarThresholdCreateButton" type="button" class="primary" data-id="">
-                <?php p($l->t('Save threshold')); ?>
+		<?php p($l->t('Save threshold')); ?>
     </button>
     <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
 		<?php p($l->t('Notification for new records')); ?>
@@ -511,7 +519,7 @@
     <br>
     <br>
     <div class="userGuidance"><?php
-			p($l->t('Existing thresholds will be evaluated in the order shown below. The order can be changed by drag & drop.')); ?></div>
+		p($l->t('Existing thresholds will be evaluated in the order shown below. The order can be changed by drag & drop.')); ?></div>
     <br>
     <div id="sidebarThresholdList"></div>
 </template>
