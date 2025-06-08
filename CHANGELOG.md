@@ -6,6 +6,7 @@
 - Add legend selection for reports in panoramas #482
 - Add timeSeries data model for e.g. Health data #483
 - Add active option indicators in report menu #485
+- Various unit tests
 
 ### Changed
 - Allow thresholds on any column #474
