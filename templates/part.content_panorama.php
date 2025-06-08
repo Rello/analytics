@@ -302,6 +302,11 @@
         color: var(--color-primary-text);
     }
 
+    .reportSelectorItem.selected {
+        background-color: var(--color-primary-element-hover);
+        color: var(--color-primary-text);
+    }
+
     /* Layout Selector */
     .layoutModal {
         position: fixed;

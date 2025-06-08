@@ -664,6 +664,9 @@ OCA.Analytics.Panorama = {
                                 },
                             })
                         }
+                        if (modalId === 'modalReport') {
+                            OCA.Analytics.Panorama.highlightSelectedReport(modal.dataset.itemId);
+                        }
                     }
                 }
             });
@@ -757,6 +760,26 @@ OCA.Analytics.Panorama = {
                 });
             }
         });
+    },
+
+    highlightSelectedReport: function (itemId) {
+        const items = document.querySelectorAll('#reportSelectorContainer .reportSelectorItem');
+        items.forEach(i => i.classList.remove('selected'));
+
+        if (!itemId) {
+            return;
+        }
+        const pageId = itemId.split('-')[0];
+        const reportIndex = itemId.split('-')[1];
+        const report = OCA.Analytics.Panorama.currentPanorama.pages[pageId]?.reports[reportIndex];
+        if (!report || report.type !== OCA.Analytics.Panorama.TYPE_REPORT) {
+            return;
+        }
+        const reportId = report.value;
+        const selected = document.querySelector(`#reportSelectorContainer .reportSelectorItem[reportId='${reportId}']`);
+        if (selected) {
+            selected.classList.add('selected');
+        }
     },
 
     // Helper function to create report item element
