@@ -1,0 +1,27 @@
+OC.L10N.register(
+    "analytics",
+    {
+    "Delete" : "حذف کریں",
+    "Remove from favorites" : "Remove from favorites",
+    "Add to favorites" : "Add to favorites",
+    "Share" : "تقسیم",
+    "Save" : "حفظ",
+    "Download" : "ڈاؤن لوڈ",
+    "Share link" : "اشتراک لنک",
+    "Type" : "Type",
+    "Date" : "Date",
+    "OK" : "اوکے",
+    "Cancel" : "منسوخ کریں",
+    "Search" : "Search",
+    "Yes" : "Yes",
+    "No" : "No",
+    "Password" : "پاسورڈ",
+    "Favorites" : "Favorites",
+    "Settings" : "سیٹینگز",
+    "Name" : "اسم",
+    "Description" : "تصریح",
+    "Title" : "عنوان",
+    "Unshare" : "شئیرنگ ختم کریں",
+    "Password protection" : "Password protection"
+},
+"nplurals=2; plural=(n != 1);");
