@@ -12,6 +12,7 @@
 - API v4 for will add %currentDate% as Y-m-d
   see wiki
 - Change HTML grabber datasource to curl
+- Highlight selected report in panorama modal #484
 
 ### Fixed
 - legend "undefined" in doughnut chart
