@@ -777,6 +777,8 @@ OCA.Analytics.Filter = {
             dataModel = OCA.Analytics.currentReportData.options.chartoptions["analyticsModel"];
             if (dataModel === 'accountModel') {
                 container.getElementById('analyticsModelOpt2').checked = true;
+            } else if (dataModel === 'timeSeriesModel') {
+                container.getElementById('analyticsModelOpt3').checked = true;
             }
         } catch (e) {
             dataModel = '';
@@ -853,7 +855,7 @@ OCA.Analytics.Filter = {
         let chartOptionsObj = (chartOptions && chartOptions.length !== 0) ? chartOptions : {};
 
         let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
-        if (dataModel === 'accountModel') {
+        if (dataModel === 'accountModel' || dataModel === 'timeSeriesModel') {
             let enableModel = {analyticsModel: dataModel};
             try {
                 // if there are existing settings, merge them
