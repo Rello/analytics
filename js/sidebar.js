@@ -802,7 +802,7 @@ OCA.Analytics.Sidebar.Data = {
                     document.getElementById('DataTextDimension2').innerText = data['dimension2'];
                     document.getElementById('DataTextValue').innerText = data['value'];
                     document.getElementById('DataApiDataset').innerText = data['dataset'];
-                    const apiUrl = OC.generateUrl('/apps/analytics/api/3.0/data/') + data['dataset'] + '/add';
+                    const apiUrl = OC.generateUrl('/apps/analytics/api/4.0/data/') + data['dataset'] + '/add';
                     document.getElementById('apiLinkText').innerText = apiUrl;
                     document.getElementById('apiLink').dataset.link = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + apiUrl;
                     //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
