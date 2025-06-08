@@ -1063,8 +1063,8 @@ div.dt-container .dt-paging .dt-paging-button {
 .report-option-active span:first-child::after {
     content: "";
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: 14px;
+    right: 27px;
     width: 6px;
     height: 6px;
     background-color: var(--color-primary);
