@@ -272,11 +272,11 @@
         background-color: white;
         padding: 10px;
         cursor: pointer;
-        border-radius: 5px;
+        border-radius: var(--border-radius-element, var(--border-radius-pill));
     }
 
     .overlayOptions {
-        border-radius: 10px;
+        border-radius: var(--border-radius-element, var(--border-radius-pill));
         position: absolute;
         bottom: 10px;
         background-color: rgba(255,255,255,0.8);
@@ -294,20 +294,20 @@
 
     .reportSelectorItem {
         padding: 1px;
-        border-radius: 5px;
+        border-radius: var(--border-radius-element, var(--border-radius-pill));
     }
 
     .reportSelectorItem:hover {
         cursor: pointer;
         background-color: var(--color-primary-element-hover);
         color: var(--color-primary-text);
-        border-radius: 5px;
+        border-radius: var(--border-radius-element, var(--border-radius-pill));
     }
 
     .reportSelectorItem.selected {
-        background-color: var(--color-primary-element-hover);
-        color: var(--color-primary-text);
-        border-radius: 5px;
+        background-color: var(--color-primary-element-light);
+        color: var(--color-main-text);
+        border-radius: var(--border-radius-element, var(--border-radius-pill));
     }
 
     /* Layout Selector */
@@ -410,7 +410,7 @@
         <div id="modalReport" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Choose a report</h2><br>
+                <h2>Choose a report</h2>
                 <div id="reportSelectorContainer"></div>
             </div>
         </div>
