@@ -27,6 +27,36 @@ OCA.Analytics.Filter = {
     },
 
     /**
+     * Update indicator state of report menu options
+     */
+    updateReportMenuIndicators: function () {
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
+        const map = {
+            drilldown: 'reportMenuColumnSelection',
+            sort: 'reportMenuSort',
+            topN: 'reportMenuTopN',
+            timeAggregation: 'reportMenuTimeAggregation'
+        };
+        for (const [key, id] of Object.entries(map)) {
+            const el = document.getElementById(id);
+            if (!el) {
+                continue;
+            }
+            let active;
+            if (key === 'drilldown') {
+                active = !!(filterOptions.drilldown && Object.keys(filterOptions.drilldown).length);
+            } else {
+                active = filterOptions[key] !== undefined;
+            }
+            if (active) {
+                el.classList.add('report-option-active');
+            } else {
+                el.classList.remove('report-option-active');
+            }
+        }
+    },
+
+    /**
      * Display the drilldown configuration dialog allowing the user
      * to enable or disable individual dimensions for aggregation.
      */
@@ -446,6 +476,9 @@ OCA.Analytics.Filter = {
         } else {
             saveIcon.style.display = "none";
         }
+
+        // update report menu indicators for active options
+        OCA.Analytics.Filter.updateReportMenuIndicators();
     },
 
     /**
