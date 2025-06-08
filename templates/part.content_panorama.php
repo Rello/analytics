@@ -293,18 +293,21 @@
     }
 
     .reportSelectorItem {
-        padding: 5px;
+        padding: 1px;
+        border-radius: 5px;
     }
 
     .reportSelectorItem:hover {
         cursor: pointer;
         background-color: var(--color-primary-element-hover);
         color: var(--color-primary-text);
+        border-radius: 5px;
     }
 
     .reportSelectorItem.selected {
         background-color: var(--color-primary-element-hover);
         color: var(--color-primary-text);
+        border-radius: 5px;
     }
 
     /* Layout Selector */

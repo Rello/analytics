@@ -749,7 +749,7 @@ OCA.Analytics.Panorama = {
 
         // Iterate and build the list
         rootReports.forEach(report => {
-            let reportItem = OCA.Analytics.Panorama.buildWidgetContentReportSelectorItem(report, 0);
+            let reportItem = OCA.Analytics.Panorama.buildWidgetContentReportSelectorItem(report, 5);
             reportSelectorContainer.appendChild(reportItem);
 
             // Add children for folders
