@@ -1056,3 +1056,17 @@ div.dt-container .dt-paging .dt-paging-button {
     font-size: 3.5rem;
     font-weight: 400;
 }
+/* indicator for report options when filters are active */
+.report-option-active span:first-child {
+    position: relative;
+}
+.report-option-active span:first-child::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+}
