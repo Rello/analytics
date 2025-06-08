@@ -4,6 +4,7 @@
 - Ordering of thresholds (validation sequence) #479
 - Enable editing of existing thresholds #477
 - Add legend selection for reports in panoramas #482
+- Add timeSeries data model for e.g. Health data #483
 
 ### Changed
 - Allow thresholds on any column #474
