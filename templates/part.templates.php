@@ -433,7 +433,17 @@
     <div class="sidebarHeaderClosed"><h3 id="dataApiSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('REST API')); ?></h3></div>
     <div id="dataApiSection" style="display: none; width: 100%; max-width: 500px;">
-        <div id="apiLink" class="clipboard-button icon icon-clippy" style="width: 20px;"></div>
+        <div class="userGuidance"><?php p($l->t('Use this endpoint to submit data via an API:')); ?></div>
+        <div class="table" style="display: table; width: 100%;">
+            <div style="display: table-row;">
+                <span id="apiLinkText" style="display: table-cell; word-break: break-all;"></span>
+                <span style="display: table-cell; width: 20px;">
+                    <a id="apiLink" class="clipboard-button icon icon-clippy"></a>
+                    <textarea id="apiLinkClipboard" hidden></textarea>
+                </span>
+            </div>
+        </div>
+        <a class="userGuidance" href="https://github.com/Rello/analytics/wiki/API" target="_blank"><?php p($l->t('More Information …')); ?></a>
         <input type="hidden" id="DataApiDataset">
         <br>
     </div>
