@@ -93,6 +93,14 @@ class ThresholdService {
 		}
 	}
 
+	private function normalizeNumberString(string $str): string {
+		// Remove thousands separators (e.g., '.')
+		$str = str_replace('.', '', $str);
+		// Replace decimal separator (e.g., ',') with '.'
+		$str = str_replace(',', '.', $str);
+		return $str;
+	}
+
 	/**
 	 * Compare two values and return comparison result similar to spaceship operator
 	 *
@@ -102,7 +110,9 @@ class ThresholdService {
 	 */
 	private function compareValues($a, $b) {
 		if (is_numeric($a) && is_numeric($b)) {
-			return floatval($a) <=> floatval($b);
+			$normA = $this->normalizeNumberString((string)$a);
+			$normB = $this->normalizeNumberString((string)$b);
+			return floatval($normA) <=> floatval($normB);
 		}
 		return strcmp((string)$a, (string)$b);
 	}

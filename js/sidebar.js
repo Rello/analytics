@@ -1261,7 +1261,6 @@ OCA.Analytics.Sidebar.Threshold = {
 
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
                     document.getElementById('sidebarThresholdSeverity').remove(0);
-                    document.getElementById('sidebarThresholdCreateNewHeader').hidden = true;
                     document.getElementById('sidebarThresholdCreateNewButton').hidden = true;
                 }
 

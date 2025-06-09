@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.6.01 - 2025-06-09
+### Fixed
+- Threshold validation for numbers with thousands separator
+
 ## 5.6.0 - 2025-06-09
 ### Added
 - Ordering of thresholds (validation sequence) #479

@@ -95,7 +95,19 @@ class ThresholdServiceTest extends TestCase {
 			'LT no notification' => [
 				[['id' => 1, 'dimension' => 0, 'option' => 'LT', 'target' => '10', 'user_id' => 'u1']],
 				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
-				20, 20, 20,
+				'20', '20', '20',
+				false,
+			],
+			'decimal true' => [
+				[['id' => 1, 'dimension' => 0, 'option' => 'GT', 'target' => '10', 'user_id' => 'u1']],
+				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
+				'10.11', 20, 20,
+				true,
+			],
+			'decimal false' => [
+				[['id' => 1, 'dimension' => 0, 'option' => 'LT', 'target' => '10', 'user_id' => 'u1']],
+				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
+				'10.11', 20, 20,
 				false,
 			],
 			// Add more scenarios here …

@@ -42,19 +42,21 @@ OCA.Analytics.Visualization = {
         'IN': (a, b) => String(b).split(',').map(v => v.trim()).includes(String(a)),
     },
 
-    /**
-     * Compare two values either numerically or alphabetically depending on the
-     * input. If both values are valid numbers the numeric comparison function
-     * will be used. Otherwise, the values are compared as lowercase strings.
-     *
-     * @param {number|string} a
-     * @param {number|string} b
-     * @param {function} fn - Comparison function (>, <, >=, <=)
-     * @returns {boolean}
-     */
-    compareValues: function (a, b, fn) {
-        const numA = parseFloat(a);
-        const numB = parseFloat(b);
+    compareValues: function(a, b, fn) {
+        function normalizeNumberString(str) {
+            if (typeof str !== "string") return str;
+            // Remove all '.' as thousands separator
+            let cleaned = str.replace(/\./g, '');
+            // Replace ',' with '.' as decimal separator for parseFloat
+            cleaned = cleaned.replace(/,/g, '.');
+            return cleaned;
+        }
+
+        const normA = normalizeNumberString(String(a));
+        const normB = normalizeNumberString(String(b));
+        const numA = parseFloat(normA);
+        const numB = parseFloat(normB);
+
         if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
             return fn(numA, numB);
         }
