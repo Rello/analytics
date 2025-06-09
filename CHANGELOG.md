@@ -1,5 +1,6 @@
 # Changelog
 
+## 5.6.0 - 2025-06-09
 ### Added
 - Ordering of thresholds (validation sequence) #479
 - Enable editing of existing thresholds #477
