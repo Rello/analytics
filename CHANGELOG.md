@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.6.01 - 2025-06-09
+## 5.6.1 - 2025-06-09
 ### Fixed
 - Threshold validation for numbers with thousands separator
 
