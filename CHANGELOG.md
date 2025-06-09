@@ -11,9 +11,8 @@
 
 ### Changed
 - Allow thresholds on any column #474
-  **Attention**: existing thresholds are affected. See change #474 for details
-- API v4 for will add %currentDate% as Y-m-d
-  see wiki
+- **Attention**: existing thresholds are affected. See change #474 for details
+- API v4 for will add %currentDate% as Y-m-d - see wiki
 - Change HTML grabber datasource to curl
 - Highlight selected report in panorama modal #484
 
