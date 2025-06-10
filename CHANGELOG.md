@@ -1,5 +1,7 @@
 # Changelog
 
+## 5.6.2 - 2025-06-10
+### Fixed
 - Date thresholds now evaluate correctly in tables
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
