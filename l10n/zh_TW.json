@@ -373,6 +373,8 @@
     "A list of values. This is the default." : "值清單。這是預設值。",
     "In columns" : "以欄的形式",
     "One line per topic with the values in the columns" : "每個主題一行，欄中包含值",
+    "Timestamps in first column" : "第一欄中的時間戳",
+    "One line per timestamp with the series in the columns" : "每個時間戳一行，欄中包含系列",
     "Data series" : "資料序列",
     "Vertical axis" : "縱軸",
     "Color" : "顏色",
