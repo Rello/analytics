@@ -1317,6 +1317,10 @@ OCA.Analytics.Sidebar.Threshold = {
             .then(response => response.json())
             .then(data => {
                 document.querySelector('.tabHeader.selected').click();
+                if (!OCA.Analytics.isDataset) {
+                    OCA.Analytics.UI.resetContentArea();
+                    OCA.Analytics.Backend.getData();
+                }
             });
     },
 
@@ -1432,6 +1436,10 @@ OCA.Analytics.Sidebar.Threshold = {
                 .then(data => {
                     delete button.dataset.id;
                     document.querySelector('.tabHeader.selected').click();
+                    if (!OCA.Analytics.isDataset) {
+                        OCA.Analytics.UI.resetContentArea();
+                        OCA.Analytics.Backend.getData();
+                    }
                 });
         };
 
@@ -1456,6 +1464,10 @@ OCA.Analytics.Sidebar.Threshold = {
             .then(response => response.json())
             .then(data => {
                 document.querySelector('.tabHeader.selected').click();
+                if (!OCA.Analytics.isDataset) {
+                    OCA.Analytics.UI.resetContentArea();
+                    OCA.Analytics.Backend.getData();
+                }
             });
     },
 
