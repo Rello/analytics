@@ -57,7 +57,13 @@ OCA.Analytics.Visualization = {
         const numA = parseFloat(normA);
         const numB = parseFloat(normB);
 
-        if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
+        const numericRegex = /^-?\d+(?:\.\d+)?$/;
+        const isNumA = numericRegex.test(normA);
+        const isNumB = numericRegex.test(normB);
+
+        if (isNumA && isNumB) {
+            const numA = parseFloat(normA);
+            const numB = parseFloat(normB);
             return fn(numA, numB);
         }
         return fn(String(a).toLowerCase(), String(b).toLowerCase());

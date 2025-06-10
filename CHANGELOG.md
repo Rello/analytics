@@ -1,5 +1,7 @@
 # Changelog
 
+- Date thresholds now evaluate correctly in tables
+
 ## 5.6.1 - 2025-06-09
 ### Fixed
 - Threshold validation for numbers with thousands separator
