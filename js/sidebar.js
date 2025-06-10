@@ -1329,13 +1329,31 @@ OCA.Analytics.Sidebar.Threshold = {
         OCA.Analytics.Sidebar.Threshold.deleteThreshold(thresholdId);
     },
 
-    editThreshold: function (data) {
+    editThreshold: function (data, element) {
         document.getElementById('sidebarThresholdDimension').value = data.dimension;
         document.getElementById('sidebarThresholdOption').value = data.option;
         document.getElementById('sidebarThresholdValue').value = data.value;
         document.getElementById('sidebarThresholdSeverity').value = data.severity;
         document.getElementById('sidebarThresholdColoring').value = data.coloring;
         document.getElementById('sidebarThresholdCreateButton').dataset.id = data.id;
+
+        document.querySelectorAll('#sidebarThresholdList .thresholdItem.selected').forEach(item => {
+            item.classList.remove('selected');
+        });
+        if (element) {
+            element.classList.add('selected');
+        }
+    },
+
+    resetThresholdInputs: function () {
+        const dimensionSelect = document.getElementById('sidebarThresholdDimension');
+        dimensionSelect.selectedIndex = 0;
+        document.getElementById('sidebarThresholdOption').value = '=';
+        document.getElementById('sidebarThresholdValue').value = '';
+        document.getElementById('sidebarThresholdSeverity').value = '4';
+        document.getElementById('sidebarThresholdColoring').value = 'value';
+        delete document.getElementById('sidebarThresholdCreateButton').dataset.id;
+        document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
     },
 
     buildThresholdRow: function (data) {
@@ -1390,7 +1408,13 @@ OCA.Analytics.Sidebar.Threshold = {
         let dimension = OCA.Analytics.currentReportData.header[data.dimension];
         text.innerText = dimension + ' ' + data.option + ' ' + data.value;
         text.addEventListener('click', function () {
-            OCA.Analytics.Sidebar.Threshold.editThreshold(data);
+            const row = this.parentNode;
+            if (row.classList.contains('selected')) {
+                row.classList.remove('selected');
+                OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
+            } else {
+                OCA.Analytics.Sidebar.Threshold.editThreshold(data, row);
+            }
         });
 
         let tDelete = document.createElement('div');

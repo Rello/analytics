@@ -395,6 +395,10 @@ table.dataTable tbody tr {
     width: 100%;
 }
 
+.thresholdItem.selected {
+    background-color: var(--color-primary-element-light);
+}
+
 .thresholdItem > .icon-close {
     cursor: pointer;
 }
