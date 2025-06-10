@@ -180,6 +180,8 @@ OC.L10N.register(
     "Additional settings" : "Lisaseaded",
     "Calculated columns" : "Arvutuslikud veerud",
     "Compact visualization" : "Kompaktne välimus",
+    "Timestamps in first column" : "Ajatemplid esimeses veerus",
+    "One line per timestamp with the series in the columns" : "Üks rida ajatempli kohta nii, et andmejada on veergudes",
     "Color" : "Värv",
     "Sort by" : "Sorteeri",
     "Direction" : "Suund",

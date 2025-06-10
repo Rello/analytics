@@ -373,6 +373,8 @@
     "A list of values. This is the default." : "Eine Liste von Werten. Dies ist der Standard.",
     "In columns" : "In Spalten",
     "One line per topic with the values in the columns" : "Pro Thema eine Zeile mit den Werten in den Spalten",
+    "Timestamps in first column" : "Zeitstempel in der ersten Spalte",
+    "One line per timestamp with the series in the columns" : "Eine Zeile pro Zeitstempel mit der Serie in den Spalten",
     "Data series" : "Datenreihe",
     "Vertical axis" : "Vertikale Achse",
     "Color" : "Farbe",
