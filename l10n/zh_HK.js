@@ -375,6 +375,8 @@ OC.L10N.register(
     "A list of values. This is the default." : "值列表。 這是預設",
     "In columns" : "以縱列的形式",
     "One line per topic with the values in the columns" : "每個主題一行，意義位於同一行",
+    "Timestamps in first column" : "第一縱列中的時間戳記",
+    "One line per timestamp with the series in the columns" : "每個時間戳記一行，系列位於縱列中\n1:35 ",
     "Data series" : "數據系列",
     "Vertical axis" : "縱軸",
     "Color" : "顏色",

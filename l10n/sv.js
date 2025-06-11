@@ -160,7 +160,7 @@ OC.L10N.register(
     "Segment" : "Segment",
     "Year" : "År",
     "Sales and revenue of the last years." : "Försäljning och omsättning senaste åren.",
-    "New in" : "Ny i",
+    "New in" : "Nytt i",
     "View changelog" : "Visa ändringslogg",
     "OK" : "OK",
     "Cancel" : "Avbryt",
