@@ -3,10 +3,12 @@ OC.L10N.register(
     {
     "Delete" : "Futa",
     "Done" : "Imefanyika",
+    "Delete folder" : "Futa kisanduku",
     "Share" : "Shirikisha",
     "Save" : "Hifadhi",
     "Download" : "Pakua",
     "Share link" : "Shirikisha kiungo",
+    "Type" : "Aina",
     "Notification" : "Taarifa",
     "Date" : "Tarehe",
     "Year" : "Mwaka",
@@ -20,14 +22,17 @@ OC.L10N.register(
     "File" : "Faili",
     "copy" : "Nakili",
     "Options" : "Chaguzi",
+    "Favorites" : "Vipendwa",
     "Back" : "Rudi",
     "Settings" : "Mipangilio",
     "Name" : "Jina",
     "Update" : "Sasisha",
     "Export" : "Safirisha",
+    "Remove filter" : "Ondoa kichujio",
     "Description" : "Maelezo",
     "Copy" : "Nakili",
     "Daily" : "Kila siku",
-    "Copy link" : "Nakili kiungio"
+    "Copy link" : "Nakili kiungio",
+    "Create" : "Tengeneza"
 },
 "nplurals=2; plural=(n != 1);");

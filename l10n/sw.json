@@ -1,10 +1,12 @@
 { "translations": {
     "Delete" : "Futa",
     "Done" : "Imefanyika",
+    "Delete folder" : "Futa kisanduku",
     "Share" : "Shirikisha",
     "Save" : "Hifadhi",
     "Download" : "Pakua",
     "Share link" : "Shirikisha kiungo",
+    "Type" : "Aina",
     "Notification" : "Taarifa",
     "Date" : "Tarehe",
     "Year" : "Mwaka",
@@ -18,14 +20,17 @@
     "File" : "Faili",
     "copy" : "Nakili",
     "Options" : "Chaguzi",
+    "Favorites" : "Vipendwa",
     "Back" : "Rudi",
     "Settings" : "Mipangilio",
     "Name" : "Jina",
     "Update" : "Sasisha",
     "Export" : "Safirisha",
+    "Remove filter" : "Ondoa kichujio",
     "Description" : "Maelezo",
     "Copy" : "Nakili",
     "Daily" : "Kila siku",
-    "Copy link" : "Nakili kiungio"
+    "Copy link" : "Nakili kiungio",
+    "Create" : "Tengeneza"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
