@@ -5,6 +5,8 @@
 - Date thresholds now evaluate correctly in tables
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
+### Changed
+- Combine column, sorting and other dimension options in a single dialog
 
 ## 5.6.1 - 2025-06-09
 ### Fixed

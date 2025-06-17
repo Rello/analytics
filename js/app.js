@@ -385,10 +385,7 @@ OCA.Analytics.UI = {
             document.getElementById('reportMenuChartOptions').disabled = false;
             document.getElementById('reportMenuTableOptions').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
-            document.getElementById('reportMenuColumnSelection').disabled = false;
-            document.getElementById('reportMenuSort').disabled = false;
-            document.getElementById('reportMenuTopN').disabled = false;
-            document.getElementById('reportMenuTimeAggregation').disabled = false;
+            document.getElementById('reportMenuDimensionOptions').disabled = false;
             document.getElementById('reportMenuDownload').disabled = false;
             document.getElementById('reportMenuAnalysis').disabled = false;
             document.getElementById('reportMenuTranslate').disabled = false;
@@ -463,10 +460,7 @@ OCA.Analytics.UI = {
         //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleTableMenu);
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
         document.getElementById('reportMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
-        document.getElementById('reportMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
-        document.getElementById('reportMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
-        document.getElementById('reportMenuTopN').addEventListener('click', OCA.Analytics.Filter.openTopNDialog);
-        document.getElementById('reportMenuTimeAggregation').addEventListener('click', OCA.Analytics.Filter.openTimeAggregationDialog);
+        document.getElementById('reportMenuDimensionOptions').addEventListener('click', OCA.Analytics.Filter.openDimensionOptionsDialog);
         document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
         document.getElementById('reportMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
 

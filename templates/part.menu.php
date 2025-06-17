@@ -14,27 +14,9 @@
     <div id="reportMenu" class="popovermenu" style="top: 40px; right: 22px;">
         <ul id="reportMenuMain">
             <li>
-                <button id="reportMenuColumnSelection" class="has-tooltip" title="<?php p($l->t('Select columns')); ?>">
+                <button id="reportMenuDimensionOptions" class="has-tooltip" title="<?php p($l->t('Configure dimension options')); ?>">
                     <span class="icon-analytics-drilldown"></span>
-                    <span><?php p($l->t('Column selection')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="reportMenuSort" class="has-tooltip" title="<?php p($l->t('Sort data ascending or descending')); ?>">
-                    <span class="icon-analytics-sort"></span>
-                    <span><?php p($l->t('Sort order')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="reportMenuTopN" class="has-tooltip" title="<?php p($l->t('Show top N items and group others together')); ?>">
-                    <span class="icon-analytics-group"></span>
-                    <span><?php p($l->t('Top N')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="reportMenuTimeAggregation" class="has-tooltip" title="<?php p($l->t('Aggregate daily data into weeks, months, or years')); ?>">
-                    <span class="icon-analytics-timeAggregation"></span>
-                    <span><?php p($l->t('Time aggregation')); ?></span>
+                    <span><?php p($l->t('Dimension options')); ?></span>
                 </button>
             </li>
             <li class="action-separator"></li>
