@@ -3,10 +3,13 @@ OC.L10N.register(
     {
     "Delete" : "Futa",
     "Done" : "Imefanyika",
+    "Remove from favorites" : "Ondoa kutoka katika pendwa",
     "Delete folder" : "Futa kisanduku",
+    "Add to favorites" : "Ongeza kwenye pendwa",
     "Share" : "Shirikisha",
     "Save" : "Hifadhi",
     "Download" : "Pakua",
+    "New" : "Mpya",
     "Share link" : "Shirikisha kiungo",
     "Type" : "Aina",
     "Notification" : "Taarifa",
@@ -30,9 +33,11 @@ OC.L10N.register(
     "Export" : "Safirisha",
     "Remove filter" : "Ondoa kichujio",
     "Description" : "Maelezo",
+    "Selection" : "Machaguo",
     "Copy" : "Nakili",
     "Daily" : "Kila siku",
     "Copy link" : "Nakili kiungio",
+    "Additional settings" : "Mipangilio ya nyongeza",
     "Create" : "Tengeneza"
 },
 "nplurals=2; plural=(n != 1);");
