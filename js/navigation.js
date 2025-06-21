@@ -28,25 +28,40 @@ OCA.Analytics.Navigation = {
     },
 
     getNavigationContent: function (navigationId) {
-        let datatype;
+        let requests = [];
         if (OCA.Analytics.isDataset) {
-            datatype = 'dataset';
-        } else if (OCA.Analytics.isPanorama) {
-            datatype = 'panorama';
+            requests.push(fetch(OC.generateUrl('apps/analytics/dataset'), {
+                method: 'GET',
+                headers: OCA.Analytics.headers()
+            }));
         } else {
-            datatype = 'report';
+            requests.push(fetch(OC.generateUrl('apps/analytics/report'), {
+                method: 'GET',
+                headers: OCA.Analytics.headers()
+            }));
+            requests.push(fetch(OC.generateUrl('apps/analytics/panorama'), {
+                method: 'GET',
+                headers: OCA.Analytics.headers()
+            }));
         }
 
-        let requestUrl = OC.generateUrl('apps/analytics/' + datatype);
-        fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (OCA.Analytics.isPanorama) {
-                    OCA.Analytics.Panorama.stories = data;
+        Promise.all(requests)
+            .then(responses => Promise.all(responses.map(r => r.json())))
+            .then(responseData => {
+                let data = [];
+                if (OCA.Analytics.isDataset) {
+                    data = responseData[0];
+                } else {
+                    const reports = responseData[0];
+                    const panoramas = responseData[1];
+                    if (Array.isArray(panoramas)) {
+                        OCA.Analytics.Panorama.stories = panoramas;
+                        data = panoramas.concat(reports);
+                    } else {
+                        data = reports;
+                    }
                 }
+
                 if (!OCA.Analytics.isDataset && navigationId === undefined) {
                     OCA.Analytics.Dashboard.init();
                 }
@@ -221,7 +236,7 @@ OCA.Analytics.Navigation = {
         let datatype;
         if (OCA.Analytics.isDataset) {
             datatype = 'd';
-        } else if (OCA.Analytics.isPanorama) {
+        } else if (data['item_type'] === 'panorama') {
             datatype = 'pa';
         } else {
             datatype = 'r';
@@ -456,7 +471,7 @@ OCA.Analytics.Navigation = {
             dataset.parentElement.remove();
         }
 
-        if (OCA.Analytics.isPanorama) {
+        if (data['item_type'] === 'panorama') {
             edit.parentElement.remove();
             newGroup.parentElement.remove(); // re-add later
         } else {
@@ -525,11 +540,14 @@ OCA.Analytics.Navigation = {
         }
 
         let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
+        const itemType = evt.target.dataset.item_type;
         if (handler) {
             handler(evt);
         } else if (OCA.Analytics.isDataset) {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
+        } else if (itemType === 'panorama') {
+            OCA.Analytics.Panorama.handleNavigationClicked(evt);
         } else {
             document.getElementById('filterVisualisation').innerHTML = '';
             if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
@@ -648,6 +666,8 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['delete'];
         if (handler) {
             handler(evt);
+        } else if (evt.target.parentNode.dataset.item_type === 'panorama') {
+            OCA.Analytics.Panorama.handleDeletePanoramaButton(evt);
         } else {
             OCA.Analytics.Sidebar.Report.handleDeleteButton(evt);
         }

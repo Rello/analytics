@@ -6,6 +6,9 @@
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
 
+### Added
+- Unified navigation showing panoramas and reports together
+
 ## 5.6.1 - 2025-06-09
 ### Fixed
 - Threshold validation for numbers with thousands separator
