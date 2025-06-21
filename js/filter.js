@@ -31,28 +31,20 @@ OCA.Analytics.Filter = {
      */
     updateReportMenuIndicators: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
-        const map = {
-            drilldown: 'reportMenuColumnSelection',
-            sort: 'reportMenuSort',
-            topN: 'reportMenuTopN',
-            timeAggregation: 'reportMenuTimeAggregation'
-        };
-        for (const [key, id] of Object.entries(map)) {
-            const el = document.getElementById(id);
-            if (!el) {
-                continue;
-            }
-            let active;
-            if (key === 'drilldown') {
-                active = !!(filterOptions.drilldown && Object.keys(filterOptions.drilldown).length);
-            } else {
-                active = filterOptions[key] !== undefined;
-            }
-            if (active) {
-                el.classList.add('report-option-active');
-            } else {
-                el.classList.remove('report-option-active');
-            }
+        const dimensionEl = document.getElementById('reportMenuDimensionOptions');
+        if (!dimensionEl) {
+            return;
+        }
+        const active = !!(
+            (filterOptions.drilldown && Object.keys(filterOptions.drilldown).length) ||
+            filterOptions.sort !== undefined ||
+            filterOptions.topN !== undefined ||
+            filterOptions.timeAggregation !== undefined
+        );
+        if (active) {
+            dimensionEl.classList.add('report-option-active');
+        } else {
+            dimensionEl.classList.remove('report-option-active');
         }
     },
 
@@ -426,6 +418,242 @@ OCA.Analytics.Filter = {
 
         if (grouping === 'none') {
             delete filterOptions.timeAggregation;
+        }
+
+        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
+        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.Backend.getData();
+        OCA.Analytics.Notification.dialogClose();
+    },
+
+    /**
+     * Combined dialog in a grid layout where each dimension forms
+     * a row and the available options are provided as columns.
+     */
+    openDimensionOptionsDialog: function () {
+        OCA.Analytics.UI.hideReportMenu();
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Dimension options'),
+            OCA.Analytics.Filter.processDimensionOptionsDialog
+        );
+
+        const dims = OCA.Analytics.currentReportData.dimensions;
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
+
+        const table = document.createElement('div');
+        table.id = 'dimensionOptionsTable';
+        table.style.display = 'table';
+        table.classList.add('table');
+
+        const headerRow = document.createElement('div');
+        headerRow.style.display = 'table-row';
+
+        const headers = [
+            '',
+            '',
+            t('analytics', 'Sort'),
+            t('analytics', 'Option'),
+            'N',
+            t('analytics', 'with others'),
+            t('analytics', 'Grouping'),
+            t('analytics', 'Mode')
+        ];
+
+        headers.forEach((text, idx) => {
+            const cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            if (idx === 1) {
+                const img = document.createElement('img');
+                img.src = OC.imagePath('analytics', 'column.svg');
+                img.style.height = '20px';
+                cell.appendChild(img);
+            } else {
+                cell.textContent = text;
+            }
+            headerRow.appendChild(cell);
+        });
+        table.appendChild(headerRow);
+
+        Object.keys(dims).forEach((dim, index) => {
+            const row = document.createElement('div');
+            row.style.display = 'table-row';
+
+            let cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            cell.textContent = dims[dim];
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.id = 'dimensionColumn' + index;
+            cb.className = 'checkbox';
+            cb.value = dim;
+            if (!(filterOptions.drilldown && filterOptions.drilldown[dim] !== undefined)) {
+                cb.checked = true;
+            }
+            const lbl = document.createElement('label');
+            lbl.setAttribute('for', cb.id);
+            cell.appendChild(cb);
+            cell.appendChild(lbl);
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const sortSel = document.createElement('select');
+            sortSel.id = 'dimensionSort' + index;
+            sortSel.className = 'optionsInput';
+            [{value: 'def', text: '-'}, {value: 'asc', text: t('analytics', 'Ascending')}, {value: 'desc', text: t('analytics', 'Descending')}]
+                .forEach(opt => sortSel.appendChild(new Option(opt.text, opt.value)));
+            if (filterOptions.sort && parseInt(filterOptions.sort.dimension) === index) {
+                sortSel.value = filterOptions.sort.direction;
+            }
+            cell.appendChild(sortSel);
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const typeSel = document.createElement('select');
+            typeSel.id = 'dimensionTopType' + index;
+            typeSel.className = 'optionsInput';
+            [{value: 'none', text: t('analytics', 'none')}, {value: 'top', text: t('analytics', 'Top N')}, {value: 'flop', text: t('analytics', 'Flop N')}]
+                .forEach(opt => typeSel.appendChild(new Option(opt.text, opt.value)));
+            if (filterOptions.topN && parseInt(filterOptions.topN.dimension) === index) {
+                typeSel.value = filterOptions.topN.type;
+            }
+            cell.appendChild(typeSel);
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const numInput = document.createElement('input');
+            numInput.type = 'number';
+            numInput.className = 'optionsInput';
+            numInput.min = 1;
+            numInput.id = 'dimensionTopNNumber' + index;
+            if (filterOptions.topN && parseInt(filterOptions.topN.dimension) === index) {
+                numInput.value = filterOptions.topN.number;
+            }
+            cell.appendChild(numInput);
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const othersCb = document.createElement('input');
+            othersCb.type = 'checkbox';
+            othersCb.className = 'checkbox';
+            othersCb.id = 'dimensionTopNOthers' + index;
+            if (filterOptions.topN && parseInt(filterOptions.topN.dimension) === index && filterOptions.topN.others === true) {
+                othersCb.checked = true;
+            }
+            const othersLbl = document.createElement('label');
+            othersLbl.setAttribute('for', othersCb.id);
+            cell.appendChild(othersCb);
+            cell.appendChild(othersLbl);
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const groupingSel = document.createElement('select');
+            groupingSel.id = 'dimensionGrouping' + index;
+            groupingSel.className = 'optionsInput';
+            ['none', 'day', 'week', 'month', 'year'].forEach(val => {
+                groupingSel.options.add(new Option(t('analytics', val), val));
+            });
+            if (filterOptions.timeAggregation && filterOptions.timeAggregation.dimension === dim) {
+                groupingSel.value = filterOptions.timeAggregation.grouping;
+            }
+            cell.appendChild(groupingSel);
+            row.appendChild(cell);
+
+            cell = document.createElement('div');
+            cell.style.display = 'table-cell';
+            const modeSel = document.createElement('select');
+            modeSel.id = 'dimensionMode' + index;
+            modeSel.className = 'optionsInput';
+            [{value: 'summation', text: t('analytics', 'summation')}, {value: 'average', text: t('analytics', 'average')}]
+                .forEach(opt => modeSel.options.add(new Option(opt.text, opt.value)));
+            if (filterOptions.timeAggregation && filterOptions.timeAggregation.dimension === dim) {
+                modeSel.value = filterOptions.timeAggregation.mode;
+            }
+            cell.appendChild(modeSel);
+            row.appendChild(cell);
+
+            table.appendChild(row);
+        });
+
+        const container = document.createElement('div');
+        container.appendChild(table);
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Configure how dimensions are displayed')
+        );
+    },
+
+    /**
+     * Process the combined dimension dialog and reload the report.
+     */
+    processDimensionOptionsDialog: function () {
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
+
+        const dims = Object.keys(OCA.Analytics.currentReportData.dimensions);
+
+        delete filterOptions.drilldown;
+        delete filterOptions.sort;
+        delete filterOptions.topN;
+        delete filterOptions.timeAggregation;
+
+        dims.forEach((dim, index) => {
+            const colCb = document.getElementById('dimensionColumn' + index);
+            if (colCb && !colCb.checked) {
+                if (!filterOptions.drilldown) {
+                    filterOptions.drilldown = {};
+                }
+                filterOptions.drilldown[dim] = false;
+            }
+
+            const sortSel = document.getElementById('dimensionSort' + index);
+            if (sortSel && sortSel.value !== 'def') {
+                filterOptions.sort = {dimension: String(index), direction: sortSel.value};
+            }
+
+            const typeSel = document.getElementById('dimensionTopType' + index);
+            const numInput = document.getElementById('dimensionTopNNumber' + index);
+            const othersCb = document.getElementById('dimensionTopNOthers' + index);
+            if (typeSel && typeSel.value !== 'none' && numInput && !isNaN(parseInt(numInput.value))) {
+                filterOptions.topN = {
+                    dimension: String(index),
+                    type: typeSel.value,
+                    number: parseInt(numInput.value),
+                    others: othersCb ? othersCb.checked : false
+                };
+            }
+
+            const groupingSel = document.getElementById('dimensionGrouping' + index);
+            const modeSel = document.getElementById('dimensionMode' + index);
+            if (groupingSel && groupingSel.value !== 'none') {
+                filterOptions.timeAggregation = {
+                    dimension: dim,
+                    grouping: groupingSel.value,
+                    mode: modeSel ? modeSel.value : 'summation'
+                };
+            }
+        });
+
+        if (filterOptions.drilldown && Object.keys(filterOptions.drilldown).length === 0) {
+            delete filterOptions.drilldown;
+        }
+
+        if (!filterOptions.topN) {
+            let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+            dataOptions = dataOptions.length > 4 ? dataOptions.slice(0, 4) : dataOptions;
+            const allEmpty = dataOptions.length > 0 && dataOptions.every(obj => Object.keys(obj).length === 0 && obj.constructor === Object);
+            OCA.Analytics.currentReportData.options.dataoptions = allEmpty ? [] : dataOptions;
+        } else if (OCA.Analytics.currentReportData.options.dataoptions >> filterOptions.topN.number) {
+            OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.topN.number);
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;

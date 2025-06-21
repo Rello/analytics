@@ -5,6 +5,8 @@
 - Date thresholds now evaluate correctly in tables
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
+### Changed
+- Consolidate column, sort, Top N and time aggregation settings in a grid layout
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
