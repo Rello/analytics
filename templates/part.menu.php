@@ -7,83 +7,111 @@
  */
 
 ?>
-<div id="reportMenuBar">
-    <div id="reportMenuIcon" class="analytics-options icon-analytics-more has-tooltip"
+<div id="menuBar">
+    <div id="optionsMenuIcon" class="analytics-options icon-analytics-more has-tooltip"
          title="<?php p($l->t('Options')); ?>"></div>
     <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
-    <div id="reportMenu" class="popovermenu" style="top: 40px; right: 22px;">
-        <ul id="reportMenuMain">
+
+    <div id="optionsMenu" class="popovermenu">
+        <ul id="optionsMenuMainReport" style="display: none !important;">
             <li>
-                <button id="reportMenuColumnSelection" class="has-tooltip" title="<?php p($l->t('Select columns')); ?>">
+                <button id="optionsMenuColumnSelection" class="has-tooltip" title="<?php p($l->t('Select columns')); ?>">
                     <span class="icon-analytics-drilldown"></span>
                     <span><?php p($l->t('Column selection')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuSort" class="has-tooltip" title="<?php p($l->t('Sort data ascending or descending')); ?>">
+                <button id="optionsMenuSort" class="has-tooltip" title="<?php p($l->t('Sort data ascending or descending')); ?>">
                     <span class="icon-analytics-sort"></span>
                     <span><?php p($l->t('Sort order')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuTopN" class="has-tooltip" title="<?php p($l->t('Show top N items and group others together')); ?>">
+                <button id="optionsMenuTopN" class="has-tooltip" title="<?php p($l->t('Show top N items and group others together')); ?>">
                     <span class="icon-analytics-group"></span>
                     <span><?php p($l->t('Top N')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuTimeAggregation" class="has-tooltip" title="<?php p($l->t('Aggregate daily data into weeks, months, or years')); ?>">
+                <button id="optionsMenuTimeAggregation" class="has-tooltip" title="<?php p($l->t('Aggregate daily data into weeks, months, or years')); ?>">
                     <span class="icon-analytics-timeAggregation"></span>
                     <span><?php p($l->t('Time aggregation')); ?></span>
                 </button>
             </li>
             <li class="action-separator"></li>
             <li>
-                <button id="reportMenuChartOptions">
+                <button id="optionsMenuChartOptions">
                     <span class="icon-analytics-chart-options"></span>
                     <span><?php p($l->t('Chart options')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuTableOptions">
+                <button id="optionsMenuTableOptions">
                     <span class="icon-analytics-tableOptions"></span>
                     <span><?php p($l->t('Table options')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuAnalysis">
+                <button id="optionsMenuAnalysis">
                     <span class="icon-analytics-forecast"></span>
                     <span><?php p($l->t('Analysis')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuTranslate">
+                <button id="optionsMenuTranslate">
                     <span class="icon-analytics-translate"></span>
                     <span><?php p($l->t('Translate')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="reportMenuRefresh">
+                <button id="optionsMenuRefresh">
                     <span class="icon-analytics-refresh"></span>
                     <span><?php p($l->t('Auto refresh')); ?></span>
                 </button>
             </li>
             <li class="action-separator"></li>
             <li>
-                <button id="reportMenuDownload">
+                <button id="optionsMenuDownload">
                     <span class="icon-analytics-download"></span>
                     <span><?php p($l->t('Download chart')); ?></span>
                     <a id="downloadChartLink" href='' download="Chart.png" hidden>-</a>
                 </button>
             </li>
-            <li id="reportMenuSave">
+            <li id="optionsMenuSave">
                 <button>
                     <span class="icon-add" title="<?php p($l->t('Save as new report')); ?>"></span>
                     <span><?php p($l->t('Save as new report')); ?></span>
                 </button>
             </li>
         </ul>
-        <ul id="reportMenuSubAnalysis" style="display: none !important;">
+        <ul id="optionsMenuMainPanorama" style="display: none !important;">
+            <li>
+                <button id="optionsMenuEdit">
+                    <span id="optionsMenuEditIcon" class="icon-rename"></span>
+                    <span id="optionsMenuEditText"><?php p($l->t('Edit')); ?></span>
+                </button>
+            </li>
+            <li>
+                <button id="optionsMenuLayout">
+                    <span class="icon-analytics-drilldown"></span>
+                    <span><?php p($l->t('Change layout')); ?></span>
+                </button>
+            </li>
+            <li>
+                <button id="optionsMenuDeletePage">
+                    <span class="icon-delete"></span>
+                    <span><?php p($l->t('Delete current page')); ?></span>
+                </button>
+            </li>
+            <li>
+                <button id="optionsMenuPdf">
+                    <span class="icon-analytics-pdf"></span>
+                    <span><?php p($l->t('Export as PDF')); ?></span>
+                </button>
+            </li>
+
+        </ul>
+        <ul id="optionsMenuSubAnalysis" style="display: none !important;">
             <li id="backIcon">
                 <button>
                     <span class="icon-view-previous"></span>
@@ -111,7 +139,7 @@
                 </button>
             </li>
         </ul>
-        <ul id="reportMenuSubRefresh" style="display: none !important;">
+        <ul id="optionsMenuSubRefresh" style="display: none !important;">
             <li id="backIcon2">
                 <button href="#">
                     <span class="icon-view-previous"></span>
@@ -147,7 +175,7 @@
                 </span>
             </li>
         </ul>
-        <ul id="reportMenuSubTranslate" style="display: none !important;">
+        <ul id="optionsMenuSubTranslate" style="display: none !important;">
             <li id="backIcon3">
                 <button>
                     <span class="icon-view-previous"></span>
@@ -162,7 +190,7 @@
             </li>
         </ul>
     </div>
-    <div id="saveIcon" class="analytics-options icon-analytics-save-warning has-tooltip"
+    <div id="saveIcon" style="display: none;" class="analytics-options icon-analytics-save-warning has-tooltip"
          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
 
     <div id="addFilterIcon" class="analytics-options icon-analytics-filter has-tooltip"

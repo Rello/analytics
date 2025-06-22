@@ -24,7 +24,7 @@ OCA.Analytics.Navigation = {
     init: function (navigationItem) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getNavigationContent(navigationItem);
-        OCA.Analytics.Backend?.getDatasetDefinitions?.();
+        OCA.Analytics.Report?.Backend?.getDatasetDefinitions?.();
     },
 
     getNavigationContent: function (navigationId) {
@@ -45,11 +45,15 @@ OCA.Analytics.Navigation = {
             .then(response => response.json())
             .then(data => {
                 if (OCA.Analytics.isPanorama) {
-                    OCA.Analytics.Panorama.stories = data;
+                    OCA.Analytics.stories = data;
                 }
-                if (!OCA.Analytics.isDataset && navigationId === undefined) {
+
+                if (OCA.Analytics.isPanorama && navigationId === undefined) {
+                    OCA.Analytics.Panorama.Dashboard.init();
+                } else if (OCA.Analytics.isReport && navigationId === undefined) {
                     OCA.Analytics.Dashboard.init();
                 }
+
                 OCA.Analytics.reports = data;
                 OCA.Analytics.Navigation.buildNavigation(data);
                 if (navigationId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationId))) !== -1) {
@@ -536,14 +540,14 @@ OCA.Analytics.Navigation = {
                 // reset any user-filters and display the filters stored for the report
                 delete OCA.Analytics.currentReportData.options;
             }
-            OCA.Analytics.unsavedFilters = false;
+            OCA.Analytics.unsavedChanges = false;
             OCA.Analytics.Sidebar.close();
-            OCA.Analytics.Backend.getData();
+            OCA.Analytics.Report.Backend.getData();
         }
     },
 
     handleOptionsClicked: function (evt) {
-        OCA.Analytics.UI?.hideReportMenu?.();
+        OCA.Analytics.Report?.hideReportMenu?.();
         let openMenu;
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             openMenu = document.querySelector('.app-navigation-entry-menu.open').previousElementSibling.firstElementChild.firstElementChild.firstElementChild.dataset.id;

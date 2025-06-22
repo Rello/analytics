@@ -499,19 +499,19 @@ OCA.Analytics.Visualization = {
                 .order([])
                 .page.len(10)
                 .draw();
-            OCA.Analytics.unsavedFilters = true;
+            OCA.Analytics.unsavedChanges = true;
             document.getElementById('saveIcon')?.style.removeProperty('display');
             document.getElementById('tableContainer_length')?.style.removeProperty('display');
             document.getElementById('tableContainer_filter')?.style.removeProperty('display');
         }
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
     },
 
     /**
      * Mark filters as changed so the save icon becomes visible.
      */
     handleDataTableChanged: function () {
-        OCA.Analytics.unsavedFilters = true;
+        OCA.Analytics.unsavedChanges = true;
         document.getElementById('saveIcon').style.removeProperty('display');
     },
 

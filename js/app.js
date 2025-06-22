@@ -19,6 +19,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
     OCA.Analytics.Visualization.hideElement('analytics-warning');
+    OCA.Analytics.Visualization.showElement('analytics-intro');
 
     if (document.getElementById('advanced').value === 'true') {
         OCA.Analytics.isDataset = true;
@@ -26,17 +27,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
 
-    // Todo:
-    // register handlers for the navigation bar as in panorama
-
-    window.addEventListener("beforeprint", function () {
-        //document.getElementById('chartContainer').style.height = document.getElementById('myChart').style.height;
-    });
-
     OCA.Analytics.Core.init();
 });
 
-OCA.Analytics = Object.assign({}, OCA.Analytics, {
+OCA = OCA || {};
+
+OCA.Analytics = OCA.Analytics || {};
+Object.assign(OCA.Analytics, {
     TYPE_GROUP: 0,
     TYPE_INTERNAL_FILE: 1,
     TYPE_INTERNAL_DB: 2,
@@ -50,11 +47,34 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     SHARE_TYPE_LINK: 3,
     SHARE_TYPE_ROOM: 10,
     SHARE_PERMISSION_UPDATE: 2,
+
+    PANORAMA_CONTENT_TYPE_REPORT: 0,
+    PANORAMA_CONTENT_TYPE_TEXT: 1,
+    PANORAMA_CONTENT_TYPE_PICTURE: 2,
+
     initialDocumentTitle: null,
+    isReport: true,
     isDataset: false,
-    currentReportData: {},
+    isPanorama: false,
+
     chartObject: null,
     tableObject: [],
+    datasources: [],
+    datasets: [],
+    reports: [],
+    stories: [],
+
+    currentReportData: {},
+    currentPanorama: {},
+    currentPage: 0,
+
+    unsavedChanges: false,
+    editMode: false,
+    refreshTimer: null,
+    currentXhrRequest: null,
+    translationAvailable: false,
+    isNewObject: false,
+
     // flexible mapping depending on type required by the used chart library
     // Add in all js files!
     chartTypeMapping: {
@@ -67,14 +87,6 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         'doughnut': 'doughnut',
         'funnel': 'funnel'
     },
-    datasources: [],
-    datasets: [],
-    reports: [],
-    unsavedFilters: false,
-    refreshTimer: null,
-    currentXhrRequest: null,
-    translationAvailable: false,
-    isNewObject: false,
 
     /**
      * Build common request headers for backend calls
@@ -87,17 +99,16 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         return headers;
     }
 });
-/**
- * @namespace OCA.Analytics.Core
- */
-OCA.Analytics.Core = {
+
+OCA.Analytics.Core = OCA.Analytics.Core || {};
+Object.assign(OCA.Analytics.Core = {
     /**
      * Initialize navigation and register UI handlers
      */
     init: function () {
         if (document.getElementById('sharingToken').value !== '') {
             document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
-            OCA.Analytics.Backend.getData();
+            OCA.Analytics.Report.Backend.getData();
             return;
         }
 
@@ -112,9 +123,8 @@ OCA.Analytics.Core = {
             // Dashboard has to be loaded from the navigation as it depends on the report index
         }
 
-        OCA.Analytics.Visualization.showElement('analytics-intro');
         if (!OCA.Analytics.isDataset) {
-            OCA.Analytics.UI.reportOptionsEventlisteners();
+            OCA.Analytics.Report.reportOptionsEventlisteners();
             document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
             document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
             document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
@@ -158,9 +168,10 @@ OCA.Analytics.Core = {
     openWiki: function () {
         window.open('https://github.com/rello/analytics/wiki', '_blank');
     }
-};
+});
 
-OCA.Analytics.UI = {
+OCA.Analytics.Report = OCA.Analytics.Report || {};
+Object.assign(OCA.Analytics.Report, {
 
     /**
      * Render report data as chart or table
@@ -192,12 +203,12 @@ OCA.Analytics.UI = {
             let visualization = OCA.Analytics.currentReportData.options.visualization;
             if (visualization === 'chart') {
                 let ctx = document.getElementById('myChart').getContext('2d');
-                OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.UI.getDefaultChartOptions());
+                OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.Report.getDefaultChartOptions());
             } else if (visualization === 'table') {
                 OCA.Analytics.Visualization.buildDataTable(document.getElementById("tableContainer"), OCA.Analytics.currentReportData);
             } else {
                 let ctx = document.getElementById('myChart').getContext('2d');
-                OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.UI.getDefaultChartOptions());
+                OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.Report.getDefaultChartOptions());
                 OCA.Analytics.Visualization.buildDataTable(document.getElementById("tableContainer"), OCA.Analytics.currentReportData);
             }
         } else {
@@ -206,7 +217,7 @@ OCA.Analytics.UI = {
                 OCA.Analytics.Notification.notification('error', OCA.Analytics.currentReportData.error);
             }
         }
-        OCA.Analytics.UI.buildReportOptions();
+        OCA.Analytics.Report.buildReportOptions();
 
     },
 
@@ -343,7 +354,7 @@ OCA.Analytics.UI = {
      * Trigger download of the current chart image
      */
     downloadChart: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
         document.getElementById('downloadChartLink').href = OCA.Analytics.chartObject.toBase64Image();
         document.getElementById('downloadChartLink').setAttribute('download', OCA.Analytics.currentReportData.options.name + '.png');
         document.getElementById('downloadChartLink').click();
@@ -369,7 +380,7 @@ OCA.Analytics.UI = {
             OCA.Analytics.Visualization.hideElement('chartLegendContainer');
             document.getElementById('chartContainer').innerHTML = '';
             document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
-            document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.UI.handleZoomResetButton);
+            document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
             OCA.Analytics.Visualization.hideElement('tableContainer');
             OCA.Analytics.Visualization.hideElement('tableSeparatorContainer');
             //OCA.Analytics.Visualization.hideElement('tableMenuBar');
@@ -380,18 +391,18 @@ OCA.Analytics.UI = {
             document.getElementById('reportHeader').innerHTML = '';
             document.getElementById('reportSubHeader').innerHTML = '';
 
-            OCA.Analytics.Visualization.showElement('reportMenuBar');
-            OCA.Analytics.UI.hideReportMenu();
-            document.getElementById('reportMenuChartOptions').disabled = false;
-            document.getElementById('reportMenuTableOptions').disabled = false;
-            document.getElementById('reportMenuAnalysis').disabled = false;
-            document.getElementById('reportMenuColumnSelection').disabled = false;
-            document.getElementById('reportMenuSort').disabled = false;
-            document.getElementById('reportMenuTopN').disabled = false;
-            document.getElementById('reportMenuTimeAggregation').disabled = false;
-            document.getElementById('reportMenuDownload').disabled = false;
-            document.getElementById('reportMenuAnalysis').disabled = false;
-            document.getElementById('reportMenuTranslate').disabled = false;
+            OCA.Analytics.Visualization.showElement('menuBar');
+            OCA.Analytics.Report.hideReportMenu();
+            document.getElementById('optionsMenuChartOptions').disabled = false;
+            document.getElementById('optionsMenuTableOptions').disabled = false;
+            document.getElementById('optionsMenuAnalysis').disabled = false;
+            document.getElementById('optionsMenuColumnSelection').disabled = false;
+            document.getElementById('optionsMenuSort').disabled = false;
+            document.getElementById('optionsMenuTopN').disabled = false;
+            document.getElementById('optionsMenuTimeAggregation').disabled = false;
+            document.getElementById('optionsMenuDownload').disabled = false;
+            document.getElementById('optionsMenuAnalysis').disabled = false;
+            document.getElementById('optionsMenuTranslate').disabled = false;
         }
     },
 
@@ -406,45 +417,45 @@ OCA.Analytics.UI = {
 
         if (isExternalShare) {
             if (canUpdate) {
-                OCA.Analytics.Visualization.hideElement('reportMenuIcon');
+                OCA.Analytics.Visualization.hideElement('optionsMenuIcon');
                 OCA.Analytics.Filter.refreshFilterVisualisation();
             } else {
-                //document.getElementById('reportMenuBar').remove();
-                OCA.Analytics.Visualization.hideElement('reportMenuBar');
-                //document.getElementById('reportMenuBar').id = 'reportMenuBarHidden';
+                //document.getElementById('menuBar').remove();
+                OCA.Analytics.Visualization.hideElement('menuBar');
+                //document.getElementById('menuBar').id = 'menuBarHidden';
             }
             return;
         }
 
         if (!canUpdate) {
-            OCA.Analytics.Visualization.hideElement('reportMenuBar');
+            OCA.Analytics.Visualization.hideElement('menuBar');
         }
 
         if (isInternalShare) {
-            OCA.Analytics.Visualization.showElement('reportMenuIcon');
+            OCA.Analytics.Visualization.showElement('optionsMenuIcon');
         }
 
         if (!OCA.Analytics.translationAvailable) {
-            document.getElementById('reportMenuTranslate').disabled = true;
+            document.getElementById('optionsMenuTranslate').disabled = true;
         } else {
             document.getElementById('translateLanguage').value = (OC.getLanguage() === 'en') ? 'en-gb' : OC.getLanguage();
             OCA.Analytics.Translation.languages();
         }
 
         if (currentReport.options.chart === 'doughnut') {
-            document.getElementById('reportMenuAnalysis').disabled = true;
+            document.getElementById('optionsMenuAnalysis').disabled = true;
         }
 
         let visualization = currentReport.options.visualization;
         if (visualization === 'table') {
-            document.getElementById('reportMenuChartOptions').disabled = true;
-            document.getElementById('reportMenuTableOptions').disabled = false;
-            document.getElementById('reportMenuAnalysis').disabled = true;
-            document.getElementById('reportMenuDownload').disabled = true;
+            document.getElementById('optionsMenuChartOptions').disabled = true;
+            document.getElementById('optionsMenuTableOptions').disabled = false;
+            document.getElementById('optionsMenuAnalysis').disabled = true;
+            document.getElementById('optionsMenuDownload').disabled = true;
         }
 
         if (visualization === 'chart') {
-            document.getElementById('reportMenuTableOptions').disabled = true;
+            document.getElementById('optionsMenuTableOptions').disabled = true;
         }
 
         let refresh = parseInt(currentReport.options.refresh);
@@ -459,32 +470,32 @@ OCA.Analytics.UI = {
      */
     reportOptionsEventlisteners: function () {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
-        document.getElementById('reportMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleReportMenu);
-        //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.UI.toggleTableMenu);
+        document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Report.toggleReportMenu);
+        //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.Report.toggleTableMenu);
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
-        document.getElementById('reportMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
-        document.getElementById('reportMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
-        document.getElementById('reportMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
-        document.getElementById('reportMenuTopN').addEventListener('click', OCA.Analytics.Filter.openTopNDialog);
-        document.getElementById('reportMenuTimeAggregation').addEventListener('click', OCA.Analytics.Filter.openTimeAggregationDialog);
-        document.getElementById('reportMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
-        document.getElementById('reportMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
+        document.getElementById('optionsMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
+        document.getElementById('optionsMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
+        document.getElementById('optionsMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
+        document.getElementById('optionsMenuTopN').addEventListener('click', OCA.Analytics.Filter.openTopNDialog);
+        document.getElementById('optionsMenuTimeAggregation').addEventListener('click', OCA.Analytics.Filter.openTimeAggregationDialog);
+        document.getElementById('optionsMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
+        document.getElementById('optionsMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
 
-        document.getElementById('reportMenuAnalysis').addEventListener('click', OCA.Analytics.UI.showReportMenuAnalysis);
-        document.getElementById('reportMenuRefresh').addEventListener('click', OCA.Analytics.UI.showReportMenuRefresh);
-        document.getElementById('reportMenuTranslate').addEventListener('click', OCA.Analytics.UI.showReportMenuTranslate);
+        document.getElementById('optionsMenuAnalysis').addEventListener('click', OCA.Analytics.Report.showReportMenuAnalysis);
+        document.getElementById('optionsMenuRefresh').addEventListener('click', OCA.Analytics.Report.showReportMenuRefresh);
+        document.getElementById('optionsMenuTranslate').addEventListener('click', OCA.Analytics.Report.showReportMenuTranslate);
         document.getElementById('translateLanguage').addEventListener('change', OCA.Analytics.Translation.translate);
-        document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Functions.trend);
-        document.getElementById('disAggregateIcon').addEventListener('click', OCA.Analytics.Functions.disAggregate);
-        document.getElementById('aggregateIcon').addEventListener('click', OCA.Analytics.Functions.aggregate);
-        //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Functions.linearRegression);
-        document.getElementById('backIcon').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-        document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-        document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.UI.showReportMenuMain);
-        document.getElementById('reportMenuDownload').addEventListener('click', OCA.Analytics.UI.downloadChart);
-        document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.UI.toggleChartLegend);
+        document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Report.Functions.trend);
+        document.getElementById('disAggregateIcon').addEventListener('click', OCA.Analytics.Report.Functions.disAggregate);
+        document.getElementById('aggregateIcon').addEventListener('click', OCA.Analytics.Report.Functions.aggregate);
+        //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Report.Functions.linearRegression);
+        document.getElementById('backIcon').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
+        document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
+        document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
+        document.getElementById('optionsMenuDownload').addEventListener('click', OCA.Analytics.Report.downloadChart);
+        document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.Report.toggleChartLegend);
 
-        //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.UI.tableSearch);
+        //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.Report.tableSearch);
 
         let refresh = document.getElementsByName('refresh');
         for (let i = 0; i < refresh.length; i++) {
@@ -496,8 +507,8 @@ OCA.Analytics.UI = {
      * Close the report menu overlay
      */
     hideReportMenu: function () {
-        if (document.getElementById('reportMenu') !== null) {
-            document.getElementById('reportMenu').classList.remove('open');
+        if (document.getElementById('optionsMenu') !== null) {
+            document.getElementById('optionsMenu').classList.remove('open');
         }
     },
 
@@ -505,12 +516,16 @@ OCA.Analytics.UI = {
      * Toggle visibility of the report menu
      */
     toggleReportMenu: function () {
-        document.getElementById('reportMenu').classList.toggle('open');
-        document.getElementById('reportMenuMain').style.removeProperty('display');
-        document.getElementById('reportMenuSubAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubRefresh').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubTranslate').style.setProperty('display', 'none', 'important');
-    },
+        if (OCA.Analytics.isPanorama) {
+            document.getElementById('optionsMenuMainPanorama').style.removeProperty('display');
+        } else {
+            document.getElementById('optionsMenuMainReport').style.removeProperty('display');
+        }
+        document.getElementById('optionsMenu').classList.toggle('open');
+        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
+     },
 
     /**
      * Toggle the table options menu
@@ -524,34 +539,34 @@ OCA.Analytics.UI = {
      * Display analysis related options
      */
     showReportMenuAnalysis: function () {
-        document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubAnalysis').style.removeProperty('display');
+        document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubAnalysis').style.removeProperty('display');
     },
 
     /**
      * Display refresh interval options
      */
     showReportMenuRefresh: function () {
-        document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubRefresh').style.removeProperty('display');
+        document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubRefresh').style.removeProperty('display');
     },
 
     /**
      * Display translation options
      */
     showReportMenuTranslate: function () {
-        document.getElementById('reportMenuMain').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubTranslate').style.removeProperty('display');
+        document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubTranslate').style.removeProperty('display');
     },
 
     /**
      * Return to the main report menu view
      */
     showReportMenuMain: function () {
-        document.getElementById('reportMenuSubAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubRefresh').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuSubTranslate').style.setProperty('display', 'none', 'important');
-        document.getElementById('reportMenuMain').style.removeProperty('display');
+        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuMainReport').style.removeProperty('display');
     },
 
     /**
@@ -613,7 +628,7 @@ OCA.Analytics.UI = {
         inputField.classList.add('dropDownListParentOpen');
 
         // create an event listener on document level to recognize a click outside the list
-        document.addEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
+        document.addEventListener('click', OCA.Analytics.Report.handleDropDownListClicked);
 
         inputField.addEventListener('keyup', function (event) {
             let li = document.getElementById('tmpList').getElementsByTagName('li');
@@ -627,7 +642,7 @@ OCA.Analytics.UI = {
                     // if the li is visible, set the input value to its text and hide the list
                     if (li[i].style.display !== 'none') {
                         inputField.value = li[i].textContent;
-                        OCA.Analytics.UI.hideDropDownList();
+                        OCA.Analytics.Report.hideDropDownList();
                         break; // exit the loop after finding the first visible li
                     }
                 }
@@ -666,11 +681,11 @@ OCA.Analytics.UI = {
         // If the click is inside the list and the target is an LI
         if (isClickInside && event.target.tagName === 'LI') {
             inputField.value = event.target.id;
-            OCA.Analytics.UI.hideDropDownList();
+            OCA.Analytics.Report.hideDropDownList();
         }
         // If the click is outside the list, hide the list
         else if (!isClickInside && !isClickOnInput) {
-            OCA.Analytics.UI.hideDropDownList();
+            OCA.Analytics.Report.hideDropDownList();
         }
     },
 
@@ -679,15 +694,16 @@ OCA.Analytics.UI = {
      */
     hideDropDownList: function () {
         // remove the global event listener again
-        document.removeEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
+        document.removeEventListener('click', OCA.Analytics.Report.handleDropDownListClicked);
         let dropDownList = document.getElementById('tmpList');
         let inputField = dropDownList.previousElementSibling;
         inputField.classList.remove('dropDownListParentOpen');
         dropDownList.remove();
     }
-};
+});
 
-OCA.Analytics.Translation = {
+OCA.Analytics.Translation = OCA.Analytics.Translation || {};
+Object.assign(OCA.Analytics.Translation = {
     /**
      * Send current report text to translation service
      */
@@ -732,8 +748,8 @@ OCA.Analytics.Translation = {
                 OCA.Analytics.currentReportData.options.subheader = text[1];
                 OCA.Analytics.currentReportData.header = text[2].split(',');
                 OCA.Analytics.currentReportData.dimensions = JSON.parse(text[3]);
-                OCA.Analytics.UI.resetContentArea();
-                OCA.Analytics.UI.buildReport();
+                OCA.Analytics.Report.resetContentArea();
+                OCA.Analytics.Report.buildReport();
             })
             .catch(error => {
                 console.log('There has been a problem with your fetch operation: ', error);
@@ -765,16 +781,17 @@ OCA.Analytics.Translation = {
             }
         }
     }
-};
+});
 
-OCA.Analytics.Functions = {
+OCA.Analytics.Report.Functions = OCA.Analytics.Report.Functions || {};
+Object.assign(OCA.Analytics.Report.Functions = {
 
     /**
      * Add a linear trend line to the visible datasets
      */
     trend: function () {
         OCA.Analytics.Visualization.showElement('chartLegendContainer');
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
         let datasetType = 'time';
@@ -803,7 +820,7 @@ OCA.Analytics.Functions = {
                 xValues.push(i);
             }
 
-            let regression = OCA.Analytics.Functions.regressionFunction(xValues, yValues);
+            let regression = OCA.Analytics.Report.Functions.regressionFunction(xValues, yValues);
             let ylast = ((dataset.data.length) * regression["slope"]) + regression["intercept"];
 
             let data = [];
@@ -864,7 +881,7 @@ OCA.Analytics.Functions = {
      * Add an aggregated data series
      */
     aggregate: function () {
-        OCA.Analytics.Functions.aggregationFunction('aggregate');
+        OCA.Analytics.Report.Functions.aggregationFunction('aggregate');
         // const cumulativeSum = (sum => value => sum += value)(0);
         // datasets[0]['data'] = datasets[0]['data'].map(cumulativeSum)
     },
@@ -873,7 +890,7 @@ OCA.Analytics.Functions = {
      * Reverse aggregation of a data series
      */
     disAggregate: function () {
-        OCA.Analytics.Functions.aggregationFunction('disaggregate');
+        OCA.Analytics.Report.Functions.aggregationFunction('disaggregate');
     },
 
     /**
@@ -881,7 +898,7 @@ OCA.Analytics.Functions = {
      */
     aggregationFunction: function (mode) {
         OCA.Analytics.Visualization.showElement('chartLegendContainer');
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
         let newLabel;
@@ -941,9 +958,10 @@ OCA.Analytics.Functions = {
         OCA.Analytics.chartObject.update();
     },
 
-};
+});
 
-OCA.Analytics.Datasource = {
+OCA.Analytics.Datasource = OCA.Analytics.Datasource || {};
+Object.assign(OCA.Analytics.Datasource = {
     /**
      * Load data source list and fill dropdown element
      */
@@ -1405,28 +1423,17 @@ OCA.Analytics.Datasource = {
             true,
             1);
     },
-};
+});
 
-OCA.Analytics.Backend = {
-
-    /**
-     * Convert parameter object to query string
-     */
-    formatParams: function (params) {
-        return "?" + Object
-            .keys(params)
-            .map(function (key) {
-                return key + "=" + encodeURIComponent(params[key])
-            })
-            .join("&")
-    },
+OCA.Analytics.Report.Backend = OCA.Analytics.Report.Backend || {};
+Object.assign(OCA.Analytics.Report.Backend = {
 
     /**
      * Fetch report data from the backend
      */
     getData: function () {
         if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
-        OCA.Analytics.UI.resetContentArea();
+        OCA.Analytics.Report.resetContentArea();
         OCA.Analytics.Visualization.hideElement('analytics-intro');
         OCA.Analytics.Visualization.hideElement('analytics-content');
         OCA.Analytics.Visualization.showElement('analytics-loading');
@@ -1518,10 +1525,10 @@ OCA.Analytics.Backend = {
                 OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeAggregation(OCA.Analytics.currentReportData);
                 OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTopN(OCA.Analytics.currentReportData);
 
-                OCA.Analytics.UI.buildReport();
+                OCA.Analytics.Report.buildReport();
 
                 let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
-                OCA.Analytics.Backend.startRefreshTimer(refresh);
+                OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
             }
         };
         xhr.send();
@@ -1548,11 +1555,11 @@ OCA.Analytics.Backend = {
     startRefreshTimer(minutes) {
         if (minutes !== 0 && !isNaN(minutes)) {
             if (OCA.Analytics.refreshTimer === null) {
-                OCA.Analytics.refreshTimer = setTimeout(OCA.Analytics.Backend.getData, minutes * 60 * 1000)
+                OCA.Analytics.refreshTimer = setTimeout(OCA.Analytics.Report.Backend.getData, minutes * 60 * 1000)
             } else {
                 clearTimeout(OCA.Analytics.refreshTimer)
                 OCA.Analytics.refreshTimer = null
-                OCA.Analytics.Backend.startRefreshTimer(minutes);
+                OCA.Analytics.Report.Backend.startRefreshTimer(minutes);
             }
         } else {
             if (OCA.Analytics.refreshTimer !== null) {
@@ -1561,4 +1568,4 @@ OCA.Analytics.Backend = {
             }
         }
     },
-};
+});
