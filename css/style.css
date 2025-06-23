@@ -45,12 +45,14 @@ content: inherit;
 
 /* show the ... icon when the navigation row is hovered */
 #app-navigation > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button,
-#app-navigation > ul > li > ul > li > div  > a:hover + .app-navigation-entry-utils > ul > li > button {
+#app-navigation > ul > li > ul > li > div  > a:hover + .app-navigation-entry-utils > ul > li > button,
+#app-navigation > ul > li > ul > li > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button {
     opacity: 0.5;
 }
 
 /* show the ... icon when the icon itself is hovered */
-#app-navigation > ul > li > ul > li > .app-navigation-entry-utils:hover {
+#app-navigation > ul > li > ul > li > .app-navigation-entry-utils:hover,
+#app-navigation > ul > li > ul > li > ul > li > .app-navigation-entry-utils:hover {
     opacity: 1;
 }
 
@@ -95,7 +97,9 @@ content: inherit;
 }
 
 #app-navigation > ul > li > div > a,
-#app-navigation > ul > li > ul > li > div  > a {
+#app-navigation > ul > li > ul > li > div  > a,
+#app-navigation > ul > li > ul > li > ul > li > div > a,
+#app-navigation > ul > li > ul > li > ul > li > ul > li > div > a {
     background-size: 18px 18px;
     background-position: 14px center;
     background-repeat: no-repeat;
@@ -195,7 +199,9 @@ content: inherit;
 }
 
 #app-navigation>ul>li.deleted>ul,
-#app-navigation>ul>li.collapsible:not(.open)>ul {
+#app-navigation>ul>li.collapsible:not(.open)>ul,
+#app-navigation>ul>li>ul>li.collapsible:not(.open)>ul,
+#app-navigation>ul>li>ul>li>ul>li.collapsible:not(.open)>ul {
     display: none;
 }
 
