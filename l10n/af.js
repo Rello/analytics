@@ -9,7 +9,6 @@ OC.L10N.register(
     "Delete folder" : "Skrap vouer",
     "Add to favorites" : "Voeg by gunstelinge",
     "Share" : "Deel",
-    "Save" : "Stoor",
     "Download" : "Laai af",
     "New" : "Nuut",
     "Link copied" : "Skakel gekopieer",

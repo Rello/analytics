@@ -9,7 +9,6 @@ OC.L10N.register(
     "Delete folder" : "Qovluğu sil",
     "Add to favorites" : "Add to favorites",
     "Share" : "Paylaş",
-    "Save" : "Saxla",
     "Download" : "Yüklə",
     "New" : "Yeni",
     "Link copied" : "Link kopyalandı",

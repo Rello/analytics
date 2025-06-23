@@ -8,7 +8,6 @@ OC.L10N.register(
     "Delete folder" : "ফোল্ডার মোছ",
     "Add to favorites" : "Add to favorites",
     "Share" : "ভাগাভাগি কর",
-    "Save" : "সংরক্ষণ",
     "Download" : "ডাউনলোড",
     "New" : "নতুন",
     "Share link" : "লিংক ভাগাভাগি করেন",

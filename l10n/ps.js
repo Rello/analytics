@@ -5,7 +5,6 @@ OC.L10N.register(
     "Remove from favorites" : "له نښو ويستل",
     "Add to favorites" : "په نښه کول",
     "Share" : "شریکول",
-    "Save" : "ساتل",
     "Download" : "ښکته کول",
     "New" : "نوی",
     "Share link" : "د شرېکېدو لېنک",
