@@ -85,21 +85,30 @@ OCA.Analytics.Navigation = {
 
     buildNavigation: function (data) {
         OCA.Analytics.Sidebar?.close?.();
-        document.getElementById('navigationDatasets').innerHTML = '';
+        const nav = document.getElementById('navigationDatasets');
+        nav.innerHTML = '';
 
-        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildOverviewButton());
+        nav.appendChild(OCA.Analytics.Navigation.buildOverviewButton());
         if (data === undefined || data.length === 0) {
-            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildIntroRow());
+            nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
+        } else if (!OCA.Analytics.isDataset) {
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas'));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports'));
+
+            for (let navigation of data) {
+                const rootId = navigation.item_type === 'panorama' ? 'section-panoramas' : 'section-reports';
+                OCA.Analytics.Navigation.buildNavigationRow(navigation, rootId);
+            }
         } else {
             for (let navigation of data) {
                 OCA.Analytics.Navigation.buildNavigationRow(navigation);
             }
         }
 
-        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
-        document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
+        nav.appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
+        nav.appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
         if (!OCA.Analytics.isDataset && !OCA.Analytics.isPanorama) {
-            document.getElementById('navigationDatasets').appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
+            nav.appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
         }
     },
 
@@ -226,7 +235,25 @@ OCA.Analytics.Navigation = {
         return li;
     },
 
-    buildNavigationRow: function (data) {
+    buildSection: function (title, id) {
+        let li = document.createElement('li');
+        li.classList.add('collapsible', 'open');
+        let div = document.createElement('div');
+        div.classList.add('app-navigation-entry');
+        let a = document.createElement('a');
+        a.classList.add('icon-folder');
+        a.innerText = title;
+        a.setAttribute('href', '#');
+        a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
+        div.appendChild(a);
+        li.appendChild(div);
+        let ul = document.createElement('ul');
+        ul.id = id;
+        li.appendChild(ul);
+        return li;
+    },
+
+    buildNavigationRow: function (data, rootListId = 'navigationDatasets') {
         let li = document.createElement('li');
         let navigationEntryDiv = document.createElement('div');
         navigationEntryDiv.classList.add('app-navigation-entry');
@@ -329,9 +356,9 @@ OCA.Analytics.Navigation = {
             categoryList = document.getElementById('dataset-' + data['parent']);
             categoryList.appendChild(li);
         } else {
-            categoryList = document.getElementById('navigationDatasets');
+            categoryList = document.getElementById(rootListId);
             if (parseInt(data['favorite']) === 1) {
-                categoryList.insertBefore(li, categoryList.children[2]);
+                categoryList.prepend(li);
             } else {
                 categoryList.appendChild(li);
             }
