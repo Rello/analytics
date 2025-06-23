@@ -92,11 +92,15 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else if (!OCA.Analytics.isDataset) {
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports'));
 
             for (let navigation of data) {
-                const rootId = navigation.item_type === 'panorama' ? 'section-panoramas' : 'section-reports';
+                let rootId = navigation.item_type === 'panorama' ? 'section-panoramas' : 'section-reports';
+                if (parseInt(navigation.favorite) === 1) {
+                    rootId = 'section-favorites';
+                }
                 OCA.Analytics.Navigation.buildNavigationRow(navigation, rootId);
             }
         } else {

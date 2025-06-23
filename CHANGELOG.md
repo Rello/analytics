@@ -8,7 +8,8 @@
 
 ### Added
 - Unified navigation showing panoramas and reports together
-- Collapsible sections for panoramas and reports with favorites on top
+- Collapsible sections for favorites, panoramas and reports
+- Improved CSS styling for multi-level navigation
 
 ## 5.6.1 - 2025-06-09
 ### Fixed

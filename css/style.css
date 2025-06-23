@@ -181,8 +181,17 @@ content: inherit;
     position: relative;
 }
 
-#app-navigation > ul > li > ul > li > div {
+#app-navigation ul ul > li > div {
     padding-left: 24px;
+}
+#app-navigation ul ul ul > li > div {
+    padding-left: 48px;
+}
+#app-navigation ul ul ul ul > li > div {
+    padding-left: 72px;
+}
+#app-navigation ul ul ul ul ul > li > div {
+    padding-left: 96px;
 }
 
 #app-navigation>ul>li.deleted>ul,
