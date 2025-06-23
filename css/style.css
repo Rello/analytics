@@ -117,6 +117,11 @@ content: inherit;
     z-index: 100;
 }
 
+#app-navigation a.no-icon {
+    background-image: none !important;
+    padding-left: 24px;
+}
+
 #app-navigation .app-navigation-entry-utils {
     flex: 0 1 auto;
 }

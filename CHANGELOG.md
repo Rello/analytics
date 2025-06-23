@@ -14,6 +14,7 @@
 ### Changed
 - Extend collapsed state CSS to cover nested groups
 - Default sections collapsed except Favorites
+- Section headers now use analytics icons and the top Panoramas button was removed
 
 ## 5.6.1 - 2025-06-09
 ### Fixed

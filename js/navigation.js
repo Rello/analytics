@@ -93,9 +93,9 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else if (!OCA.Analytics.isDataset) {
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', true));
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas'));
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports'));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-folder', true));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas', 'icon-analytics-panorama'));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports', 'icon-analytics-report'));
 
             for (let navigation of data) {
                 let rootId = navigation.item_type === 'panorama' ? 'section-panoramas' : 'section-reports';
@@ -207,7 +207,6 @@ OCA.Analytics.Navigation = {
 
         let li = document.createElement('li');
         li.style.marginBottom = "20px";
-        const isReport = !OCA.Analytics.isDataset && !OCA.Analytics.isPanorama;
 
         const datatype = OCA.Analytics.isPanorama ? 'pa' : '';
         const hrefPrimary = OC.generateUrl('apps/analytics/' + datatype);
@@ -217,31 +216,10 @@ OCA.Analytics.Navigation = {
 
         li.appendChild(createNavEntry('overviewButton', hrefPrimary, primaryClass, primaryText, primaryEvent));
 
-        const datatypeSecondary = OCA.Analytics.isDataset ? '' : OCA.Analytics.isPanorama ? '' : 'pa';
-        const hrefSecondary = OC.generateUrl('apps/analytics/' + datatypeSecondary);
-
-        // Determine the secondary button text and class based on conditions
-        const secondaryText = OCA.Analytics.isPanorama
-            ? t('analytics', 'Reports')
-            : isReport
-                // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
-                ? t('analytics', 'Panoramas')
-                : '';
-
-        const secondaryClass = OCA.Analytics.isPanorama
-            ? 'icon-analytics-report'
-            : isReport
-                ? 'icon-analytics-panorama'
-                : '';
-
-        if (secondaryText && secondaryClass) {
-            li.appendChild(createNavEntry('overviewButton', hrefSecondary, secondaryClass, secondaryText, null));
-        }
-
         return li;
     },
 
-    buildSection: function (title, id, open = false) {
+    buildSection: function (title, id, icon = 'icon-folder', open = false) {
         let li = document.createElement('li');
         li.classList.add('collapsible');
         if (open) {
@@ -251,7 +229,7 @@ OCA.Analytics.Navigation = {
         let div = document.createElement('div');
         div.classList.add('app-navigation-entry');
         let a = document.createElement('a');
-        a.classList.add('icon-folder');
+        a.classList.add(icon, 'svg');
         a.innerText = title;
         a.setAttribute('href', '#');
         a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
@@ -316,8 +294,12 @@ OCA.Analytics.Navigation = {
             //data['type'] = OCA.Analytics.TYPE_SHARED;
         }
 
-        a.classList.add(typeIcon);
-        a.classList.add('svg');
+        if (!OCA.Analytics.isDataset && rootListId !== 'section-favorites' && typeINT !== OCA.Analytics.TYPE_GROUP) {
+            a.classList.add('no-icon');
+        } else {
+            a.classList.add(typeIcon);
+            a.classList.add('svg');
+        }
 
         // also add items to the navigation menu
         a.innerText = data['name'];
