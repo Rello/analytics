@@ -10,8 +10,10 @@
 - Unified navigation showing panoramas and reports together
 - Collapsible sections for favorites, panoramas and reports
 - Improved CSS styling for multi-level navigation
+- Persist navigation open state
 ### Changed
 - Extend collapsed state CSS to cover nested groups
+- Default sections collapsed except Favorites
 
 ## 5.6.1 - 2025-06-09
 ### Fixed

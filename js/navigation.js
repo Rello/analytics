@@ -79,6 +79,7 @@ OCA.Analytics.Navigation = {
                     } else {
                         navigationItem.click();
                     }
+                    OCA.Analytics.Navigation.saveOpenState();
                 }
             });
     },
@@ -92,7 +93,7 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else if (!OCA.Analytics.isDataset) {
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites'));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', true));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports'));
 
@@ -114,6 +115,7 @@ OCA.Analytics.Navigation = {
         if (!OCA.Analytics.isDataset && !OCA.Analytics.isPanorama) {
             nav.appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
         }
+        OCA.Analytics.Navigation.restoreOpenState();
     },
 
     buildNewButton: function () {
@@ -239,9 +241,13 @@ OCA.Analytics.Navigation = {
         return li;
     },
 
-    buildSection: function (title, id) {
+    buildSection: function (title, id, open = false) {
         let li = document.createElement('li');
-        li.classList.add('collapsible', 'open');
+        li.classList.add('collapsible');
+        if (open) {
+            li.classList.add('open');
+        }
+        li.dataset.sectionId = id;
         let div = document.createElement('div');
         div.classList.add('app-navigation-entry');
         let a = document.createElement('a');
@@ -349,6 +355,7 @@ OCA.Analytics.Navigation = {
 
         if (typeINT === OCA.Analytics.TYPE_GROUP) {
             li.appendChild(ulSublist);
+            li.dataset.id = data['id'];
             a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
         } else {
             a.addEventListener('click', OCA.Analytics.Navigation.handleNavigationClicked);
@@ -662,11 +669,13 @@ OCA.Analytics.Navigation = {
     },
 
     handleGroupClicked: function (evt) {
-        if (evt.target.parentNode.parentNode.classList.contains('open')) {
-            evt.target.parentNode.parentNode.classList.remove('open');
+        const li = evt.target.parentNode.parentNode;
+        if (li.classList.contains('open')) {
+            li.classList.remove('open');
         } else {
-            evt.target.parentNode.parentNode.classList.add('open');
+            li.classList.add('open');
         }
+        OCA.Analytics.Navigation.saveOpenState();
         evt.preventDefault();
         history.pushState(null, '', evt.target.href);
     },
@@ -707,6 +716,8 @@ OCA.Analytics.Navigation = {
     handleUnshareButton: function (evt) {
         let shareId = evt.target.parentNode.dataset.shareId;
 
+        OCA.Analytics.Navigation.saveOpenState();
+
         let xhr = new XMLHttpRequest();
         xhr.open('DELETE', OC.generateUrl('apps/analytics/share/' + shareId, true), true);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
@@ -720,6 +731,38 @@ OCA.Analytics.Navigation = {
         };
 
         xhr.send();
+    },
+
+    saveOpenState: function () {
+        const openNodes = [];
+        document.querySelectorAll('#navigationDatasets li.collapsible.open').forEach(li => {
+            if (li.dataset.id) {
+                openNodes.push('g-' + li.dataset.id);
+            } else if (li.dataset.sectionId) {
+                openNodes.push('s-' + li.dataset.sectionId);
+            }
+        });
+        localStorage.setItem('analyticsNavState', JSON.stringify(openNodes));
+    },
+
+    restoreOpenState: function () {
+        let saved;
+        try {
+            saved = JSON.parse(localStorage.getItem('analyticsNavState')) || [];
+        } catch (e) {
+            saved = [];
+        }
+        saved.forEach(id => {
+            if (id.startsWith('g-')) {
+                const gid = id.slice(2);
+                const li = document.querySelector('#navigationDatasets li.collapsible[data-id="' + gid + '"]');
+                if (li) li.classList.add('open');
+            } else if (id.startsWith('s-')) {
+                const sid = id.slice(2);
+                const li = document.querySelector('#navigationDatasets li.collapsible[data-section-id="' + sid + '"]');
+                if (li) li.classList.add('open');
+            }
+        });
     },
 
     favoriteUpdate: function (datasetId, isFavorite) {
@@ -827,6 +870,7 @@ OCA.Analytics.Navigation.Drag = {
     },
 
     addReportToGroup: function (groupId, reportId) {
+        OCA.Analytics.Navigation.saveOpenState();
         let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId + '/group';
         fetch(requestUrl, {
             method: 'POST',
