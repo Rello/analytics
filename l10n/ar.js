@@ -249,6 +249,7 @@ OC.L10N.register(
     "Auto refresh" : "تحديث تلقائي",
     "Download chart" : "تنزيل الرسم البياني",
     "Save as new report" : "حفظ كتقرير جديد",
+    "Edit" : "تحرير",
     "Change layout" : "غيِّر مُخطّط العرض",
     "Delete current page" : "حذف الصفحة الحالية",
     "Back" : "عودة",

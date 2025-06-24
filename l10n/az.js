@@ -26,6 +26,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Şifrə yalnışdır. Yenidən cəhd edin.",
     "Password" : "Şifrə",
     "Favorites" : "Sevimlilər",
+    "Edit" : "Dəyişiklik et",
     "Back" : "Geri",
     "Settings" : "Quraşdırmalar",
     "Name" : "Ad",

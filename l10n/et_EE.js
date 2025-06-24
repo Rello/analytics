@@ -82,6 +82,7 @@ OC.L10N.register(
     "Incorrect data options" : "Vigased andmevalikud",
     "Link copied" : "Link kopeeritud",
     "Share link" : "Jaga link",
+    "Missing data" : "Andmed puuduvad",
     "Delete data" : "Kustuta andmed",
     "Type" : "Tüüp",
     "Notification" : "Teavitus",
