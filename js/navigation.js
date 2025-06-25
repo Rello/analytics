@@ -294,12 +294,8 @@ OCA.Analytics.Navigation = {
             //data['type'] = OCA.Analytics.TYPE_SHARED;
         }
 
-        if (!OCA.Analytics.isDataset && rootListId !== 'section-favorites' && typeINT !== OCA.Analytics.TYPE_GROUP) {
-            a.classList.add('no-icon');
-        } else {
-            a.classList.add(typeIcon);
-            a.classList.add('svg');
-        }
+        a.classList.add(typeIcon);
+        a.classList.add('svg');
 
         // also add items to the navigation menu
         a.innerText = data['name'];
