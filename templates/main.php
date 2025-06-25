@@ -20,6 +20,8 @@ Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'filter');
+Util::addScript('analytics', 'report');
+Util::addScript('analytics', 'panorama');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.umd');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-funnel.min');

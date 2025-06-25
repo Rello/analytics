@@ -10,85 +10,26 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    OCA.Analytics.initialDocumentTitle = document.title;
-    OCA.Analytics.Visualization.hideElement('analytics-warning');
-    OCA.Analytics.Visualization.showElement('analytics-intro');
 
     // register handlers for the navigation bar
-    OCA.Analytics.Navigation.registerHandler('create', function () {
+    OCA.Analytics.Navigation.registerHandler('create', 'panorama', function () {
         OCA.Analytics.Panorama.newPanorama();
     });
 
-    OCA.Analytics.Navigation.registerHandler('navigationClicked', function (event) {
+    OCA.Analytics.Navigation.registerHandler('navigationClicked', 'panorama', function (event) {
         OCA.Analytics.Panorama.handleNavigationClicked(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('delete', function (event) {
+    OCA.Analytics.Navigation.registerHandler('delete', 'panorama', function (event) {
         OCA.Analytics.Panorama.handleDeletePanoramaButton(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', function (id, isFavorite) {
+    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'panorama', function (id, isFavorite) {
         OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
     });
-
-    OCA.Analytics.Panorama.init();
 })
 
 OCA = OCA || {};
-
-OCA.Analytics = OCA.Analytics || {};
-Object.assign(OCA.Analytics, {
-    TYPE_GROUP: 0,
-    TYPE_INTERNAL_FILE: 1,
-    TYPE_INTERNAL_DB: 2,
-    TYPE_GIT: 3,
-    TYPE_EXTERNAL_FILE: 4,
-    TYPE_EXTERNAL_REGEX: 5,
-    TYPE_SPREADSHEET: 7,
-    TYPE_SHARED: 99,
-    SHARE_TYPE_USER: 0,
-    SHARE_TYPE_GROUP: 1,
-    SHARE_TYPE_LINK: 3,
-    SHARE_TYPE_ROOM: 10,
-    SHARE_PERMISSION_UPDATE: 2,
-
-    PANORAMA_CONTENT_TYPE_REPORT: 0,
-    PANORAMA_CONTENT_TYPE_TEXT: 1,
-    PANORAMA_CONTENT_TYPE_PICTURE: 2,
-
-    tableObject: [],
-    reports: [],
-    stories: [],
-    isDataset: false,
-    currentReportData: {},
-    currentPanorama: {},
-    currentPage: 0,
-    
-    isPanorama: true,
-    unsavedChanges: false,
-    editMode: false,
-
-    // flexible mapping depending on type required by the used chart library
-    // Add in all js files!
-    chartTypeMapping: {
-        'datetime': 'line',
-        'column': 'bar',
-        'columnSt': 'bar', // map stacked type also to base type; needed in filter
-        'columnSt100': 'bar', // map stacked type also to base type; needed in filter
-        'area': 'line',
-        'line': 'line',
-        'doughnut': 'doughnut',
-        'funnel': 'funnel'
-    },
-
-    headers: function () {
-        let headers = new Headers();
-        headers.append('requesttoken', OC.requestToken);
-        headers.append('OCS-APIREQUEST', 'true');
-        headers.append('Content-Type', 'application/json');
-        return headers;
-    },
-});
 
 OCA.Analytics.Panorama = OCA.Analytics.Panorama || {};
 Object.assign(OCA.Analytics.Panorama = {

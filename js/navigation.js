@@ -9,6 +9,10 @@
 /** global: OCP */
 /** global: OC */
 'use strict';
+
+OCA.Analytics.Panorama = {
+    stories: {},
+}
 /**
  * @namespace OCA.Analytics.Navigation
  */
@@ -17,8 +21,11 @@ OCA.Analytics.Navigation = {
     quickstartId: 0,
     handlers: {},
 
-    registerHandler: function (context, handlerFunction) {
-        OCA.Analytics.Navigation.handlers[context] = handlerFunction;
+    registerHandler: function (context, type, handlerFunction) {
+        if (!OCA.Analytics.Navigation.handlers[context]) {
+            OCA.Analytics.Navigation.handlers[context] = {};
+        }
+        OCA.Analytics.Navigation.handlers[context][type] = handlerFunction;
     },
 
     init: function (navigationItem) {
@@ -482,15 +489,6 @@ OCA.Analytics.Navigation = {
                 ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
             ];
             OCA.Analytics.Wizard.show();
-        } else {
-            OCA.Analytics.Sidebar.close();
-            OCA.Analytics.Wizard.sildeArray = [
-                ['', ''],
-                ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizard],
-                ['wizardNewType', ''],
-                ['wizardNewVisual', '']
-            ];
-            OCA.Analytics.Wizard.show();
         }
     },
 
@@ -534,15 +532,6 @@ OCA.Analytics.Navigation = {
         } else if (OCA.Analytics.isDataset) {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
-        } else {
-            document.getElementById('filterVisualisation').innerHTML = '';
-            if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
-                // reset any user-filters and display the filters stored for the report
-                delete OCA.Analytics.currentReportData.options;
-            }
-            OCA.Analytics.unsavedChanges = false;
-            OCA.Analytics.Sidebar.close();
-            OCA.Analytics.Report.Backend.getData();
         }
     },
 
@@ -605,8 +594,6 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['favoriteUpdate'];
         if (handler) {
             handler(datasetId, isFavorite);
-        } else {
-            OCA.Analytics.Navigation.favoriteUpdate(datasetId, isFavorite);
         }
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
     },
@@ -647,13 +634,9 @@ OCA.Analytics.Navigation = {
     },
 
     handleDeleteButton: function (evt) {
-        // ToDo: change app.js to register handler
-
         let handler = OCA.Analytics.Navigation.handlers['delete'];
         if (handler) {
             handler(evt);
-        } else {
-            OCA.Analytics.Sidebar.Report.handleDeleteButton(evt);
         }
     },
 
@@ -675,6 +658,7 @@ OCA.Analytics.Navigation = {
         xhr.send();
     },
 
+    // TOdo: can be deleted
     favoriteUpdate: function (datasetId, isFavorite) {
         let params = 'favorite=' + isFavorite;
         let xhr = new XMLHttpRequest();
