@@ -556,14 +556,11 @@ OCA.Analytics.Navigation = {
         }
 
         let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
-        const itemType = evt.target.dataset.item_type;
         if (handler) {
             handler(evt);
         } else if (OCA.Analytics.isDataset) {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
-        } else if (itemType === 'panorama') {
-            OCA.Analytics.Panorama.handleNavigationClicked(evt);
         } else {
             document.getElementById('filterVisualisation').innerHTML = '';
             if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
@@ -684,8 +681,6 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['delete'];
         if (handler) {
             handler(evt);
-        } else if (evt.target.parentNode.dataset.item_type === 'panorama') {
-            OCA.Analytics.Panorama.handleDeletePanoramaButton(evt);
         } else {
             OCA.Analytics.Sidebar.Report.handleDeleteButton(evt);
         }

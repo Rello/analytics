@@ -5,6 +5,7 @@
 - Date thresholds now evaluate correctly in tables
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
+- Remove duplicate panorama handlers from navigation logic
 
 ### Added
 - Unified navigation showing panoramas and reports together
