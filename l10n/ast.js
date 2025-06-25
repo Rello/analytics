@@ -140,6 +140,7 @@ OC.L10N.register(
     "Analysis" : "Análisis",
     "Translate" : "Traducir",
     "Auto refresh" : "Anovar automáticamente",
+    "Edit" : "Editar",
     "Delete current page" : "Desaniciar la páxina actual",
     "Back" : "Atrás",
     "Linear Regression" : "Regresión llinial",

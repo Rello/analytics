@@ -262,7 +262,7 @@ OC.L10N.register(
     "Auto refresh" : "Automatisch aktualisieren",
     "Download chart" : "Download-Diagramm",
     "Save as new report" : "Als neuen Bericht speichern",
-    "Edit" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Edit" : "Bearbeiten",
     "Change layout" : "Layout ändern",
     "Delete current page" : "Aktuelle Seite löschen",
     "Back" : "Zurück",
