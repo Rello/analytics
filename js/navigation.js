@@ -29,12 +29,13 @@ OCA.Analytics.Navigation = {
 
     getNavigationContent: function (navigationId) {
         let requests = [];
-        if (OCA.Analytics.isDataset) {
-            requests.push(fetch(OC.generateUrl('apps/analytics/dataset'), {
-                method: 'GET',
-                headers: OCA.Analytics.headers()
-            }));
-        } else {
+        // always fetch datasets so they can be listed together with reports
+        requests.push(fetch(OC.generateUrl('apps/analytics/dataset'), {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        }));
+
+        if (!OCA.Analytics.isDataset) {
             requests.push(fetch(OC.generateUrl('apps/analytics/report'), {
                 method: 'GET',
                 headers: OCA.Analytics.headers()
@@ -51,21 +52,25 @@ OCA.Analytics.Navigation = {
                 let data = [];
                 if (OCA.Analytics.isDataset) {
                     data = responseData[0];
+                    OCA.Analytics.datasets = data;
                 } else {
-                    const reports = responseData[0];
-                    const panoramas = responseData[1];
+                    const datasets = responseData[0];
+                    const reports = responseData[1];
+                    const panoramas = responseData[2];
+                    OCA.Analytics.datasets = datasets;
                     if (Array.isArray(panoramas)) {
                         OCA.Analytics.Panorama.stories = panoramas;
-                        data = panoramas.concat(reports);
+                        data = panoramas.concat(reports, datasets);
                     } else {
-                        data = reports;
+                        data = reports.concat(datasets);
                     }
+                    // keep reports without datasets for existing logic
+                    OCA.Analytics.reports = panoramas ? panoramas.concat(reports) : reports;
                 }
 
                 if (!OCA.Analytics.isDataset && navigationId === undefined) {
                     OCA.Analytics.Dashboard.init();
                 }
-                OCA.Analytics.reports = data;
                 OCA.Analytics.Navigation.buildNavigation(data);
                 if (navigationId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationId))) !== -1) {
                     OCA.Analytics.Sidebar?.close?.();
@@ -80,6 +85,8 @@ OCA.Analytics.Navigation = {
                         navigationItem.click();
                     }
                     OCA.Analytics.Navigation.saveOpenState();
+                } else if (!navigationId) {
+                    document.getElementById('overviewButton').parentElement.classList.add('active');
                 }
             });
     },
@@ -96,9 +103,15 @@ OCA.Analytics.Navigation = {
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-folder', true));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas', 'icon-analytics-panorama'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports', 'icon-analytics-report'));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Datasets'), 'section-datasets', 'icon-analytics-dataset'));
 
             for (let navigation of data) {
-                let rootId = navigation.item_type === 'panorama' ? 'section-panoramas' : 'section-reports';
+                let rootId = 'section-reports';
+                if (navigation.item_type === 'panorama') {
+                    rootId = 'section-panoramas';
+                } else if (navigation.item_type === 'dataset') {
+                    rootId = 'section-datasets';
+                }
                 if (parseInt(navigation.favorite) === 1) {
                     rootId = 'section-favorites';
                 }
@@ -112,9 +125,7 @@ OCA.Analytics.Navigation = {
 
         nav.appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
         nav.appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
-        if (!OCA.Analytics.isDataset && !OCA.Analytics.isPanorama) {
-            nav.appendChild(OCA.Analytics.Navigation.buildDatasetMaintenanceButton()); // second pinned
-        }
+        // no secondary pinned buttons
         OCA.Analytics.Navigation.restoreOpenState();
     },
 
@@ -140,19 +151,6 @@ OCA.Analytics.Navigation = {
         return li;
     },
 
-    buildDatasetMaintenanceButton: function () {
-        let li = document.createElement('li');
-        li.classList.add('pinned', 'second-pinned');
-        let navigationEntrydiv = document.createElement('div');
-        navigationEntrydiv.classList.add('app-navigation-entry');
-        let a = document.createElement('a');
-        a.classList.add('icon-category-customization');
-        a.innerText = t('analytics', 'Dataset maintenance');
-        a.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-        li.appendChild(navigationEntrydiv);
-        navigationEntrydiv.appendChild(a);
-        return li;
-    },
 
     buildNewGroupPlaceholder: function () {
         let li = document.createElement('li');
@@ -192,7 +190,6 @@ OCA.Analytics.Navigation = {
         const createNavEntry = (id, href, className, text, eventHandler) => {
             let div = document.createElement('div');
             div.classList.add('app-navigation-entry');
-            div.style.width = "50%";
 
             let a = document.createElement('a');
             a.id = id;
@@ -210,11 +207,10 @@ OCA.Analytics.Navigation = {
 
         const datatype = OCA.Analytics.isPanorama ? 'pa' : '';
         const hrefPrimary = OC.generateUrl('apps/analytics/' + datatype);
-        const primaryClass = OCA.Analytics.isDataset ? 'icon-view-previous' : 'icon-analytics-overview';
-        const primaryText = OCA.Analytics.isDataset ? t('analytics', 'Back to reports') : t('analytics', 'Overview');
-        const primaryEvent = OCA.Analytics.isDataset ? OCA.Analytics.Navigation.handleBackToReportClicked : OCA.Analytics.Navigation.handleOverviewButton;
+        const primaryClass = 'icon-analytics-overview';
+        const primaryText = t('analytics', 'Overview');
 
-        li.appendChild(createNavEntry('overviewButton', hrefPrimary, primaryClass, primaryText, primaryEvent));
+        li.appendChild(createNavEntry('overviewButton', hrefPrimary, primaryClass, primaryText, OCA.Analytics.Navigation.handleOverviewButton));
 
         return li;
     },
@@ -638,10 +634,6 @@ OCA.Analytics.Navigation = {
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
     },
 
-    handleBackToReportClicked: function (evt) {
-        window.location = OC.generateUrl('apps/analytics/');
-        evt.stopPropagation();
-    },
 
     handleGroupClicked: function (evt) {
         const li = evt.target.parentNode.parentNode;

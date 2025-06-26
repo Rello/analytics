@@ -12,11 +12,13 @@
 - Collapsible sections for favorites, panoramas and reports
 - Improved CSS styling for multi-level navigation
 - Persist navigation open state
+- Datasets listed in their own navigation section
 ### Changed
 - Extend collapsed state CSS to cover nested groups
 - Default sections collapsed except Favorites
 - Section headers now use analytics icons and the top Panoramas button was removed
 - Reports and panoramas always display their icons
+- Overview moved into the navigation and highlights when no item is selected
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
