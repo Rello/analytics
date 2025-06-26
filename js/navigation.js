@@ -589,6 +589,14 @@ OCA.Analytics.Navigation = {
     handleFavoriteClicked: function (evt) {
         let datasetId = evt.target.closest('div').dataset.id;
         let icon = evt.target.parentNode.firstElementChild;
+        const isSection = !!li.dataset.sectionId;
+            if (isSection) {
+                document.querySelectorAll('#navigationDatasets > li.collapsible.open').forEach(other => {
+                    if (other !== li && other.dataset.sectionId) {
+                        other.classList.remove('open');
+                    }
+                });
+            }
         let isFavorite = 'false';
 
         if (icon.classList.contains('icon-star')) {

@@ -20,6 +20,7 @@
 - Reports and panoramas always display their icons
 - Overview moved into the navigation and highlights when no item is selected
 - Removed dataset maintenance mode; datasets are fetched with reports and panoramas
+- Only one navigation section can be open at a time
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
