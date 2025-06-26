@@ -21,6 +21,7 @@ OC.L10N.register(
     "Local" : "Lokalno",
     "Password" : "Lozinka",
     "Favorites" : "Favoriti",
+    "Edit" : "Izmjeni",
     "Settings" : "Podešavanje",
     "Name" : "Ime",
     "Update" : "Ažuriraj",

@@ -35,6 +35,7 @@ OC.L10N.register(
     "Password" : "Ger-tremen",
     "Favorites" : "Pennrolloù",
     "Translate" : "Treiñ",
+    "Edit" : "Embann",
     "Back" : "Distro",
     "Settings" : "Arventennoù",
     "Name" : "Anv",
