@@ -75,6 +75,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
     currentXhrRequest: null,
     translationAvailable: false,
     isNewObject: false,
+    stories: [],
 
     /**
      * Build common request headers for backend calls

@@ -12,6 +12,11 @@
 /**
  * @namespace OCA.Analytics.Navigation
  */
+
+OCA.Analytics.Panorama = {
+    stories : {}
+};
+
 OCA.Analytics.Navigation = {
     quickstartValue: '',
     quickstartId: 0,
@@ -79,8 +84,6 @@ OCA.Analytics.Navigation = {
                         navigationItem.click();
                     }
                     OCA.Analytics.Navigation.saveOpenState();
-                } else if (!navigationId) {
-                    document.getElementById('overviewButton').parentElement.classList.add('active');
                 }
             });
     },
@@ -94,7 +97,7 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-folder', true));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-analytics-star', true));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas', 'icon-analytics-panorama'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports', 'icon-analytics-report'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Datasets'), 'section-datasets', 'icon-analytics-dataset'));
