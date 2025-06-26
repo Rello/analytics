@@ -41,13 +41,13 @@ if (!OCA.Analytics) {
         datasourceOptions: [],
         datasets: [],
         reports: [],
-        unsavedFilters: null,
+        unsavedChanges: null,
         refreshTimer: null,
         currentXhrRequest: null,
     };
 }
 
-OCA.Analytics.UI = {
+OCA.Analytics.Report = {
 
     initApplication: function () {
         OCA.Analytics.Visualization.hideElement('analytics-intro');
@@ -56,7 +56,7 @@ OCA.Analytics.UI = {
         OCA.Analytics.Visualization.showElement('analytics-content');
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>Reset Zoom</button><canvas id="myChart" ></canvas>';
-        document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.UI.handleZoomResetButton);
+        document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
 
         OCA.Analytics.currentReportData = JSON.parse(document.getElementById('data').value);
         // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
@@ -66,7 +66,7 @@ OCA.Analytics.UI = {
         OCA.Analytics.currentReportData.data = OCA.Analytics.Visualization.formatDates(OCA.Analytics.currentReportData.data);
 
         let ctx = document.getElementById('myChart').getContext('2d');
-        OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.UI.getDefaultChartOptions());
+        OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.Report.getDefaultChartOptions());
     },
 
     getDefaultChartOptions: function () {
@@ -156,6 +156,6 @@ OCA.Analytics.UI = {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    OCA.Analytics.UI.initApplication();
+    OCA.Analytics.Report.initApplication();
     OCA.Analytics.Visualization.hideElement('analytics-warning');
 });

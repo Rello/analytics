@@ -9,150 +9,12 @@
 ?>
 
 <style>
-    .panoramaHeaderRow {
-        padding-top: 20px;
-    }
 
-    .panoramaHeader {
-        /*font-weight: bold;
-        font-size: 22px;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        color:white;
-        padding: 8px 20px;
-        width: 600px;
-        background: linear-gradient(to right, #1A366C, #F1F1F1);
-        margin-left: 30px;*/
-    }
-
-    .panoramaSubHeaderRow {
-    }
-
-    .panoramaSubHeader {
-        /*font-size: 16px;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        color: #FFFFFF;
-        padding: 0 0 8px 20px;
-        width: 600px;
-        background: linear-gradient(to right, #1A366C, #F1F1F1); */
-        margin-left: 15px !important;
-    }
-
-    .panoramaHeaderRow .editable,
-    .panoramaSubHeaderRow .editable {
-        /*padding: 1px;*/
-    }
-
-
-    .panoramaSubHeader[contenteditable="true"] {
-
-    }
-    .container {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        margin-top: -72px;
-        padding-top: 72px;
-    }
-
-    .pages {
-        display: flex;
-        width: 200%;
-        transition: margin-left 0.5s ease;
-        height: calc(100% - 69px);
-        /*margin: 10px;*/
-    }
-
-    .flex-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        padding: 0 15px 15px 15px;
-    }
-
-    .flex-row {
-        flex: 1;
-        display: flex;
-    }
-
-    .flex-item {
-        flex: 1;
-        position: relative;
-        margin: 15px;
-        padding: 15px;
-        position: relative;
-        background-color: var(--color-main-background);
-        border-radius: 5px;
-    }
-
-    .flex-item-tall {
-        flex-grow: 2;
-        position: relative;
-        margin: 15px;
-        padding: 15px;
-        position: relative;
-        background-color: var(--color-main-background);
-        border-radius: 5px;
-    }
-
-    .textContainer {
-        flex-direction: column;
-        display: flex;
-        height: 100%;
-        justify-content: center;
-        padding-left: 50px;
-    }
-
-    .textContainer ul {
-        list-style: initial;
-        padding-left: 40px;
-    }
-
-    .textContainer h1 {
-        font-weight: bold;
-        font-size: 25px;
-    }
-
-    .hintBox {
-        display: flex;
-        height: 100%;
-        justify-content: center;
-        align-items: center;
-    }
 
     .bg-azure {
         background-color: azure;
     }
 
-    .navigation {
-        z-index: 9999;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        font-size: 24px;
-    }
-
-    .nav-item {
-        margin: 0 10px;
-        cursor: pointer;
-        font-weight: 500;
-    }
-
-    .nav-item:hover {
-        opacity: 1;
-    }
-
-    .nav-item.disabled {
-        opacity: 0.1;
-        cursor: not-allowed;
-    }
-
-    .nav-item.highlighted {
-        color: var(--color-warning);
-        opacity: 0.8;
-    }
 
     #optionBtnContainer {
         z-index: 9999;
@@ -385,11 +247,8 @@
     }
 </style>
 <div id="analytics-content" hidden>
-    <div id="optionBtnContainer" class="edit">
-        <div id="optionBtn" class="analytics-options icon-analytics-more has-tooltip"
-             title="<?php p($l->t('Options')); ?>"></div>
-        <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
-    </div>
+
+	<?php print_unescaped($this->inc('part.menu')); ?>
 
     <div id="panoramaHeaderRow" class="panoramaHeaderRow">
         <div id="panoramaHeader" class="reportHeader editable"></div>
@@ -441,39 +300,9 @@
         </div>
     </div>
 
-    <div id="navBtnContainer" class="navigation">
-        <span class="nav-item" id="prevBtn"><</span>
-        <span class="nav-item" id="nextBtn">></span>
-    </div>
-
-    <div id="optionMenu" class="popovermenu" style="top: 50px; right: 10px;">
-        <ul id="optionMenuMain">
-            <li>
-                <button id="optionMenuEdit">
-                    <span id="optionMenuEditIcon" class="icon-rename"></span>
-                    <span id="optionMenuEditText"></span>
-                </button>
-            </li>
-            <li>
-                <button id="optionMenuLayout">
-                    <span class="icon-analytics-drilldown"></span>
-                    <span><?php p($l->t('Change layout')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="optionMenuDeletePage">
-                    <span class="icon-delete"></span>
-                    <span><?php p($l->t('Delete current page')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="optionMenuPdf">
-                    <span class="icon-analytics-pdf"></span>
-                    <span><?php p($l->t('Export as PDF')); ?></span>
-                </button>
-            </li>
-
-        </ul>
+    <div id="pageScrollContainer" class="pageScrollContainer">
+        <span class="pageScroll" id="prevBtn"><</span>
+        <span class="pageScroll" id="nextBtn">></span>
     </div>
 
     <!-- LayoutChooser -->

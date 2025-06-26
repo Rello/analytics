@@ -325,7 +325,7 @@ OCA.Analytics.Sidebar.Report = {
             t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data will be deleted!'),
             function () {
                 OCA.Analytics.Sidebar.Report.delete(id);
-                OCA.Analytics.UI.resetContentArea();
+                OCA.Analytics.Report.resetContentArea();
                 OCA.Analytics.Sidebar.close();
                 OCA.Analytics.Notification.dialogClose();
             }
@@ -471,7 +471,7 @@ OCA.Analytics.Sidebar.Report = {
         option.innerText = t('analytics', 'Please select');
         tableParent.add(option);
 
-        OCA.Analytics.Backend.getDatasetDefinitions();
+        OCA.Analytics.Report.Backend.getDatasetDefinitions();
         for (let dataset of OCA.Analytics.datasets) {
             option = document.createElement('option');
             option.text = dataset.name;
@@ -646,11 +646,11 @@ OCA.Analytics.Sidebar.Report = {
                 if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Report.metadataChanged = false;
                     OCA.Analytics.Navigation.init(reportId);
-                    OCA.Analytics.Backend.getDatasetDefinitions();
+                    OCA.Analytics.Report.Backend.getDatasetDefinitions();
                 } else {
                     if (!OCA.Analytics.isDataset) {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
+                        OCA.Analytics.Report.resetContentArea();
+                        OCA.Analytics.Report.Backend.getData();
                     } else {
                         OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                     }
@@ -815,8 +815,8 @@ OCA.Analytics.Sidebar.Data = {
 
                     document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
                     document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
-                    document.getElementById('DataDimension1').addEventListener('click', OCA.Analytics.UI.showDropDownList);
-                    document.getElementById('DataDimension2').addEventListener('click', OCA.Analytics.UI.showDropDownList);
+                    document.getElementById('DataDimension1').addEventListener('click', OCA.Analytics.Report.showDropDownList);
+                    document.getElementById('DataDimension2').addEventListener('click', OCA.Analytics.Report.showDropDownList);
 
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
@@ -1253,7 +1253,7 @@ OCA.Analytics.Sidebar.Threshold = {
                 dimensionSelect.addEventListener('change', function (evt) {
                     document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = evt.target.value;
                 });
-                document.getElementById('sidebarThresholdValue').addEventListener('click', OCA.Analytics.UI.showDropDownList);
+                document.getElementById('sidebarThresholdValue').addEventListener('click', OCA.Analytics.Report.showDropDownList);
                 document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
                 document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
 
@@ -1318,8 +1318,8 @@ OCA.Analytics.Sidebar.Threshold = {
             .then(data => {
                 document.querySelector('.tabHeader.selected').click();
                 if (!OCA.Analytics.isDataset) {
-                    OCA.Analytics.UI.resetContentArea();
-                    OCA.Analytics.Backend.getData();
+                    OCA.Analytics.Report.resetContentArea();
+                    OCA.Analytics.Report.Backend.getData();
                 }
             });
     },
@@ -1461,8 +1461,8 @@ OCA.Analytics.Sidebar.Threshold = {
                     delete button.dataset.id;
                     document.querySelector('.tabHeader.selected').click();
                     if (!OCA.Analytics.isDataset) {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
+                        OCA.Analytics.Report.resetContentArea();
+                        OCA.Analytics.Report.Backend.getData();
                     }
                 });
         };
@@ -1489,8 +1489,8 @@ OCA.Analytics.Sidebar.Threshold = {
             .then(data => {
                 document.querySelector('.tabHeader.selected').click();
                 if (!OCA.Analytics.isDataset) {
-                    OCA.Analytics.UI.resetContentArea();
-                    OCA.Analytics.Backend.getData();
+                    OCA.Analytics.Report.resetContentArea();
+                    OCA.Analytics.Report.Backend.getData();
                 }
             });
     },
@@ -1560,8 +1560,8 @@ OCA.Analytics.Sidebar.Backend = {
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isDataset) {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
+                        OCA.Analytics.Report.resetContentArea();
+                        OCA.Analytics.Report.Backend.getData();
                     }
                 } else {
                     OCA.Analytics.Notification.notification('error', data.error);
@@ -1620,8 +1620,8 @@ OCA.Analytics.Sidebar.Backend = {
                 button.classList.remove('loading');
                 button.disabled = false;
                 if (!OCA.Analytics.isDataset) {
-                    OCA.Analytics.UI.resetContentArea();
-                    OCA.Analytics.Backend.getData();
+                    OCA.Analytics.Report.resetContentArea();
+                    OCA.Analytics.Report.Backend.getData();
                 }
             });
     },
@@ -1649,8 +1649,8 @@ OCA.Analytics.Sidebar.Backend = {
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isDataset) {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
+                        OCA.Analytics.Report.resetContentArea();
+                        OCA.Analytics.Report.Backend.getData();
                     }
                 } else {
                     OCA.Analytics.Notification.notification('error', data.error);
@@ -1686,8 +1686,8 @@ OCA.Analytics.Sidebar.Backend = {
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isDataset) {
-                        OCA.Analytics.UI.resetContentArea();
-                        OCA.Analytics.Backend.getData();
+                        OCA.Analytics.Report.resetContentArea();
+                        OCA.Analytics.Report.Backend.getData();
                     }
                 } else {
                     OCA.Analytics.Notification.notification('error', data.error);

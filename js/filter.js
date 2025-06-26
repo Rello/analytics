@@ -32,10 +32,10 @@ OCA.Analytics.Filter = {
     updateReportMenuIndicators: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
         const map = {
-            drilldown: 'reportMenuColumnSelection',
-            sort: 'reportMenuSort',
-            topN: 'reportMenuTopN',
-            timeAggregation: 'reportMenuTimeAggregation'
+            drilldown: 'optionsMenuColumnSelection',
+            sort: 'optionsMenuSort',
+            topN: 'optionsMenuTopN',
+            timeAggregation: 'optionsMenuTimeAggregation'
         };
         for (const [key, id] of Object.entries(map)) {
             const el = document.getElementById(id);
@@ -61,7 +61,7 @@ OCA.Analytics.Filter = {
      * to enable or disable individual dimensions for aggregation.
      */
     openColumnsSelectionDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Column selection'),
@@ -136,8 +136,8 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -146,7 +146,7 @@ OCA.Analytics.Filter = {
      * and value can be selected for report filtering.
      */
     openFilterDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Filter'),
@@ -199,7 +199,7 @@ OCA.Analytics.Filter = {
 
             const valueInput = row.querySelector('.filterDialogValue');
             valueInput.value = value;
-            valueInput.addEventListener('click', OCA.Analytics.UI.showDropDownList);
+            valueInput.addEventListener('click', OCA.Analytics.Report.showDropDownList);
             valueInput.addEventListener('keydown', function (event) {
                 if (event.key === 'Enter') {
                     OCA.Analytics.Filter.processFilterDialog();
@@ -275,8 +275,8 @@ OCA.Analytics.Filter = {
 
         // Update global state
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -285,7 +285,7 @@ OCA.Analytics.Filter = {
      * or to group remaining values under an "others" category.
      */
     openTopNDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Top N'),
@@ -360,8 +360,8 @@ OCA.Analytics.Filter = {
         if (filterOptions.topN && OCA.Analytics.currentReportData.options.dataoptions >> filterOptions.topN.number) {
             OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.topN.number);
         }
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -369,7 +369,7 @@ OCA.Analytics.Filter = {
      * Display the dialog for grouping time based dimensions.
      */
     openTimeAggregationDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Time aggregation'),
@@ -429,8 +429,8 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -471,14 +471,19 @@ OCA.Analytics.Filter = {
         }
         visContainer.appendChild(fragment);
         const saveIcon = document.getElementById("saveIcon");
-        if (OCA.Analytics.unsavedFilters === true) {
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
+
+        // update report menu indicators for active options
+        OCA.Analytics.Filter.updateReportMenuIndicators();
+    },
+
+    toggleSaveButtonDisplay: function () {
+        const saveIcon = document.getElementById("saveIcon");
+        if (OCA.Analytics.unsavedChanges === true) {
             saveIcon.style.removeProperty("display");
         } else {
             saveIcon.style.display = "none";
         }
-
-        // update report menu indicators for active options
-        OCA.Analytics.Filter.updateReportMenuIndicators();
     },
 
     /**
@@ -493,8 +498,8 @@ OCA.Analytics.Filter = {
             delete filterOptions['filter'];
         }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
     },
 
     /**
@@ -502,7 +507,7 @@ OCA.Analytics.Filter = {
      * appearance of the table visualization.
      */
     openTableOptionsDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Table options'),
@@ -616,8 +621,8 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -627,8 +632,8 @@ OCA.Analytics.Filter = {
     processTableOptionsReset: function () {
         if (OCA.Analytics.currentReportData.options.tableoptions !== null) {
             OCA.Analytics.currentReportData.options.tableoptions = null;
-            OCA.Analytics.unsavedFilters = true;
-            OCA.Analytics.Backend.getData();
+            OCA.Analytics.unsavedChanges = true;
+            OCA.Analytics.Report.Backend.getData();
             OCA.Analytics.Notification.dialogClose();
         }
     },
@@ -638,7 +643,7 @@ OCA.Analytics.Filter = {
      * sort direction and dimension.
      */
     openSortDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Sort order'),
@@ -712,8 +717,8 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -722,7 +727,7 @@ OCA.Analytics.Filter = {
      * as chart type, axis and colors for every data series.
      */
     openChartOptionsDialog: function () {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Chart options'),
@@ -933,8 +938,8 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
         OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObj;
-        OCA.Analytics.unsavedFilters = true;
-        OCA.Analytics.Backend.getData();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
     },
 
@@ -945,7 +950,7 @@ OCA.Analytics.Filter = {
         document.getElementById('analytics_dialog_container').remove();
         document.getElementById('analytics_dialog_overlay').remove();
         // remove the global event listener which was added by the drop down lists
-        document.removeEventListener('click', OCA.Analytics.UI.handleDropDownListClicked);
+        document.removeEventListener('click', OCA.Analytics.Report.handleDropDownListClicked);
     },
 
     // function for shorter coding of the dialog creation
@@ -1209,7 +1214,7 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = {};
         }
 
-        OCA.Analytics.unsavedFilters = false;
+        OCA.Analytics.unsavedChanges = false;
 
         let requestUrl = OC.generateUrl('apps/analytics/report/copy');
         let headers = new Headers();
@@ -1241,7 +1246,7 @@ OCA.Analytics.Filter.Backend = {
      */
     saveReport: function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
-        OCA.Analytics.unsavedFilters = false;
+        OCA.Analytics.unsavedChanges = false;
 
         if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
             OCA.Analytics.currentReportData.options.filteroptions = {};
@@ -1319,7 +1324,7 @@ OCA.Analytics.Filter.Backend = {
             .then(response => response.json())
             .then(data => {
                 delete OCA.Analytics.currentReportData.options;
-                OCA.Analytics.Backend.getData();
+                OCA.Analytics.Report.Backend.getData();
             })
             .catch(err => console.error(err));
     },
@@ -1328,7 +1333,7 @@ OCA.Analytics.Filter.Backend = {
      * Save and start the automatic refresh timer with the given interval.
      */
     saveRefresh: function (evt) {
-        OCA.Analytics.UI.hideReportMenu();
+        OCA.Analytics.Report.hideReportMenu();
         let refresh = evt.target.id;
         refresh = parseInt(refresh.substring(7));
         const datasetId = parseInt(OCA.Analytics.currentReportData.options.id);
@@ -1349,7 +1354,7 @@ OCA.Analytics.Filter.Backend = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-                OCA.Analytics.Backend.startRefreshTimer(refresh);
+                OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
             })
             .catch(err => console.error(err));
     },

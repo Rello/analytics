@@ -1345,7 +1345,7 @@
       "id": "20a43f99-8917-4895-b769-49a876015dd6",
       "comment": "",
       "command": "//assert element not present",
-      "target": "id=reportMenuBar",
+      "target": "id=menuBar",
       "targets": [],
       "value": ""
     }, {
@@ -1450,7 +1450,7 @@
       "id": "0ea17e90-6dd8-4cf6-9e7b-3fcc7eadc089",
       "comment": "",
       "command": "assertElementPresent",
-      "target": "id=reportMenuBar",
+      "target": "id=menuBar",
       "targets": [],
       "value": ""
     }, {
@@ -3077,11 +3077,11 @@
       "id": "e6c7df26-7027-41b4-a663-db7fd86326b5",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -3168,11 +3168,11 @@
       "id": "c7fe3915-29f3-4ae0-84fe-11934ee995dc",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -4027,12 +4027,12 @@
       "id": "49917649-5f42-4a60-a068-5db97ed059de",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4040,10 +4040,10 @@
       "id": "13ffb638-bbd3-4fea-afa5-9704d6e1381a",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuRefresh > span:nth-child(2)",
+      "target": "css=#optionsMenuRefresh > span:nth-child(2)",
       "targets": [
-        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -4066,7 +4066,7 @@
       "target": "css=li:nth-child(3) label",
       "targets": [
         ["css=li:nth-child(3) label", "css:finder"],
-        ["xpath=//ul[@id='reportMenuRefresh']/li[3]/span/label", "xpath:idRelative"],
+        ["xpath=//ul[@id='optionsMenuRefresh']/li[3]/span/label", "xpath:idRelative"],
         ["xpath=//li[3]/span/label", "xpath:position"],
         ["xpath=//label[contains(.,'1 min')]", "xpath:innerText"]
       ],
@@ -4097,12 +4097,12 @@
       "id": "d75dddac-afc6-4a13-b34a-fb513b0ccd3d",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4110,10 +4110,10 @@
       "id": "bdc76de2-c2cf-4282-8077-2d40b7b62fe9",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuRefresh > span:nth-child(2)",
+      "target": "css=#optionsMenuRefresh > span:nth-child(2)",
       "targets": [
-        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -4125,7 +4125,7 @@
       "target": "xpath=//*[@id=\"refresh1\"]",
       "targets": [
         ["css=li:nth-child(3) label", "css:finder"],
-        ["xpath=//ul[@id='reportMenuRefresh']/li[3]/span/label", "xpath:idRelative"],
+        ["xpath=//ul[@id='optionsMenuRefresh']/li[3]/span/label", "xpath:idRelative"],
         ["xpath=//li[3]/span/label", "xpath:position"],
         ["xpath=//label[contains(.,'1 min')]", "xpath:innerText"]
       ],
@@ -4137,7 +4137,7 @@
       "target": "css=li:nth-child(2) label",
       "targets": [
         ["css=li:nth-child(2) label", "css:finder"],
-        ["xpath=//ul[@id='reportMenuRefresh']/li[2]/span/label", "xpath:idRelative"],
+        ["xpath=//ul[@id='optionsMenuRefresh']/li[2]/span/label", "xpath:idRelative"],
         ["xpath=//span/label", "xpath:position"],
         ["xpath=//label[contains(.,'none')]", "xpath:innerText"]
       ],
@@ -4146,12 +4146,12 @@
       "id": "071f4b75-2892-4382-a0ba-314a5c7fc62c",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4159,10 +4159,10 @@
       "id": "584e1c4e-0eb9-4890-b7de-fd3b8b31aa87",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuRefresh > span:nth-child(2)",
+      "target": "css=#optionsMenuRefresh > span:nth-child(2)",
       "targets": [
-        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -4174,7 +4174,7 @@
       "target": "xpath=//*[@id=\"refresh0\"]",
       "targets": [
         ["css=li:nth-child(3) label", "css:finder"],
-        ["xpath=//ul[@id='reportMenuRefresh']/li[3]/span/label", "xpath:idRelative"],
+        ["xpath=//ul[@id='optionsMenuRefresh']/li[3]/span/label", "xpath:idRelative"],
         ["xpath=//li[3]/span/label", "xpath:position"],
         ["xpath=//label[contains(.,'1 min')]", "xpath:innerText"]
       ],
@@ -4644,12 +4644,12 @@
       "id": "9aec7e3f-f85c-4b8f-ac81-e3b9e671461a",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4664,10 +4664,10 @@
       "id": "73203f11-8be8-47bb-a728-817ce2af78c5",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuColumnSelection > span:nth-child(2)",
+      "target": "css=#optionsMenuColumnSelection > span:nth-child(2)",
       "targets": [
-        ["css=#reportMenuColumnSelection > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuColumnSelection']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuColumnSelection > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuColumnSelection']/span[2]", "xpath:idRelative"],
         ["xpath=//button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Drilldown')]", "xpath:innerText"]
       ],
@@ -4699,12 +4699,12 @@
       "id": "8e60515d-c4fc-4891-8a53-45307f16cf5e",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4712,10 +4712,10 @@
       "id": "54f5a425-3fbd-4c5b-8ed4-c171d173955c",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuChartOptions > span:nth-child(2)",
+      "target": "css=#optionsMenuChartOptions > span:nth-child(2)",
       "targets": [
-        ["css=#reportMenuChartOptions > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuChartOptions']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuChartOptions > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuChartOptions']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Chart options')]", "xpath:innerText"]
       ],
@@ -4747,12 +4747,12 @@
       "id": "ef133a59-a64b-48bf-8db6-98968ef34d1e",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4925,12 +4925,12 @@
       "id": "760ebfca-96dc-4d57-90b2-6bd6ab60997e",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -4938,10 +4938,10 @@
       "id": "f06fbafc-0036-4989-9d5d-f8a68b36cae7",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuChartOptions",
+      "target": "id=optionsMenuChartOptions",
       "targets": [
-        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -5028,12 +5028,12 @@
       "id": "de7b4535-eae3-49c9-bbe9-5581da9d1f3c",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -5041,10 +5041,10 @@
       "id": "c6feb686-8ec3-4846-9b03-627579086e23",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuChartOptions",
+      "target": "id=optionsMenuChartOptions",
       "targets": [
-        ["css=#reportMenuChartOptions > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuChartOptions']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuChartOptions > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuChartOptions']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Chart options')]", "xpath:innerText"]
       ],
@@ -5450,12 +5450,12 @@
       "id": "5a5c1fb4-ce06-4b93-b499-845bd4294da2",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -5463,10 +5463,10 @@
       "id": "f751149f-db97-4e60-811e-b6b0ba4c39c9",
       "comment": "",
       "command": "click",
-      "target": "css=#reportMenuTranslate > .icon-analytics-translate",
+      "target": "css=#optionsMenuTranslate > .icon-analytics-translate",
       "targets": [
-        ["css=#reportMenuTranslate > .icon-analytics-translate", "css:finder"],
-        ["xpath=//button[@id='reportMenuTranslate']/span", "xpath:idRelative"],
+        ["css=#optionsMenuTranslate > .icon-analytics-translate", "css:finder"],
+        ["xpath=//button[@id='optionsMenuTranslate']/span", "xpath:idRelative"],
         ["xpath=//li[4]/button/span", "xpath:position"]
       ],
       "value": ""
@@ -5490,7 +5490,7 @@
         ["id=translateLanguage", "id"],
         ["css=#translateLanguage", "css:finder"],
         ["xpath=//select[@id='translateLanguage']", "xpath:attributes"],
-        ["xpath=//ul[@id='reportMenuSubTranslate']/li[2]/span/select", "xpath:idRelative"],
+        ["xpath=//ul[@id='optionsMenuSubTranslate']/li[2]/span/select", "xpath:idRelative"],
         ["xpath=//select", "xpath:position"]
       ],
       "value": "value=de"
@@ -5666,7 +5666,7 @@
         ["id=addFilterIcon", "id"],
         ["css=#addFilterIcon", "css:finder"],
         ["xpath=//div[@id='addFilterIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/div[3]", "xpath:idRelative"],
+        ["xpath=//div[@id='menuBar']/div[3]", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[3]", "xpath:position"]
       ],
       "value": ""
@@ -5720,7 +5720,7 @@
         ["id=saveIcon", "id"],
         ["css=#saveIcon", "css:finder"],
         ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[@id='menuBar']/div[2]", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
       ],
       "value": ""
@@ -5758,7 +5758,7 @@
         ["id=saveIcon", "id"],
         ["css=#saveIcon", "css:finder"],
         ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[@id='menuBar']/div[2]", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
       ],
       "value": ""
@@ -5839,7 +5839,7 @@
         ["id=addFilterIcon", "id"],
         ["css=#addFilterIcon", "css:finder"],
         ["xpath=//div[@id='addFilterIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/div[3]", "xpath:idRelative"],
+        ["xpath=//div[@id='menuBar']/div[3]", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[3]", "xpath:position"]
       ],
       "value": ""
@@ -5893,7 +5893,7 @@
         ["id=saveIcon", "id"],
         ["css=#saveIcon", "css:finder"],
         ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[@id='menuBar']/div[2]", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
       ],
       "value": ""
@@ -5931,7 +5931,7 @@
         ["id=saveIcon", "id"],
         ["css=#saveIcon", "css:finder"],
         ["xpath=//div[@id='saveIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[@id='menuBar']/div[2]", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]", "xpath:position"]
       ],
       "value": ""
@@ -6204,12 +6204,12 @@
       "id": "c9e4b432-a721-4333-9dd2-573380e60a0a",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -6217,10 +6217,10 @@
       "id": "87d99d03-320f-4f1e-9744-019ced92a84a",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuTableOptions",
+      "target": "id=optionsMenuTableOptions",
       "targets": [
-        ["css=#reportMenuRefresh > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuRefresh']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuRefresh > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuRefresh']/span[2]", "xpath:idRelative"],
         ["xpath=//li[5]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Auto refresh')]", "xpath:innerText"]
       ],
@@ -6297,12 +6297,12 @@
       "id": "67ce26ec-2a27-43ce-9803-35cf4b3367e2",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuIcon", "id"],
-        ["css=#reportMenuIcon", "css:finder"],
-        ["xpath=//span[@id='reportMenuIcon']", "xpath:attributes"],
-        ["xpath=//div[@id='reportMenuBar']/span", "xpath:idRelative"],
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//span[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/span", "xpath:idRelative"],
         ["xpath=//div[2]/span", "xpath:position"]
       ],
       "value": ""
@@ -6310,10 +6310,10 @@
       "id": "a2457ebb-da2f-49b9-925a-f252cb47ab5b",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuTableOptions",
+      "target": "id=optionsMenuTableOptions",
       "targets": [
-        ["css=#reportMenuChartOptions > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuChartOptions']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuChartOptions > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuChartOptions']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Chart options')]", "xpath:innerText"]
       ],
@@ -6406,11 +6406,11 @@
       "id": "f2329913-2f83-4b26-8e73-52f93a6a76a5",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6419,11 +6419,11 @@
       "id": "9a3df7ab-c9de-44dc-8099-2dc62d69f04c",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuColumnSelection",
+      "target": "id=optionsMenuColumnSelection",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6485,11 +6485,11 @@
       "id": "40e50b13-2dc6-4f95-ae55-44bfbb77ed35",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6498,11 +6498,11 @@
       "id": "49592ca8-a6d5-4ba2-8640-4bf2679f8786",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuColumnSelection",
+      "target": "id=optionsMenuColumnSelection",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6624,11 +6624,11 @@
       "id": "57371698-9c86-4b92-8c6d-55381e56b3eb",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6637,10 +6637,10 @@
       "id": "d61755c2-5886-43f6-9623-1bc00e73e4bb",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuSort",
+      "target": "id=optionsMenuSort",
       "targets": [
-        ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuSort > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuSort']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Sort')]", "xpath:innerText"]
       ],
@@ -6717,11 +6717,11 @@
       "id": "e222d8bd-e090-4094-a23f-77feeaa2b02e",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6730,10 +6730,10 @@
       "id": "b50e06ed-159f-44da-90bb-850a1b36036f",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuSort",
+      "target": "id=optionsMenuSort",
       "targets": [
-        ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuSort > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuSort']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Sort')]", "xpath:innerText"]
       ],
@@ -6837,11 +6837,11 @@
       "id": "b02a9af2-9d2b-4d77-8330-dc8bfa7fddad",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6850,10 +6850,10 @@
       "id": "ccff9d6c-5a3e-4c7c-8494-6d37552fb1d0",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuTopN",
+      "target": "id=optionsMenuTopN",
       "targets": [
-        ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuSort > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuSort']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Sort')]", "xpath:innerText"]
       ],
@@ -6933,11 +6933,11 @@
       "id": "2deeda56-b427-474a-80d9-181352a302d7",
       "comment": "Open options menu",
       "command": "click",
-      "target": "id=reportMenuIcon",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["id=reportMenuColumnSelection", "id"],
-        ["css=#reportMenuColumnSelection", "css:finder"],
-        ["xpath=//div[@id='reportMenuColumnSelection']", "xpath:attributes"],
+        ["id=optionsMenuColumnSelection", "id"],
+        ["css=#optionsMenuColumnSelection", "css:finder"],
+        ["xpath=//div[@id='optionsMenuColumnSelection']", "xpath:attributes"],
         ["xpath=//div[@id='filterContainer']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[2]/div[2]/div", "xpath:position"]
       ],
@@ -6946,10 +6946,10 @@
       "id": "fbdef382-f365-4f21-b573-3452602f4c42",
       "comment": "",
       "command": "click",
-      "target": "id=reportMenuTopN",
+      "target": "id=optionsMenuTopN",
       "targets": [
-        ["css=#reportMenuSort > span:nth-child(2)", "css:finder"],
-        ["xpath=//button[@id='reportMenuSort']/span[2]", "xpath:idRelative"],
+        ["css=#optionsMenuSort > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuSort']/span[2]", "xpath:idRelative"],
         ["xpath=//li[2]/button/span[2]", "xpath:position"],
         ["xpath=//span[contains(.,'Sort')]", "xpath:innerText"]
       ],

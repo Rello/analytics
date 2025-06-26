@@ -9,6 +9,10 @@
 /** global: OCP */
 /** global: OC */
 'use strict';
+
+OCA.Analytics.Panorama = {
+    stories: {},
+}
 /**
  * @namespace OCA.Analytics.Navigation
  */
@@ -22,14 +26,17 @@ OCA.Analytics.Navigation = {
     quickstartId: 0,
     handlers: {},
 
-    registerHandler: function (context, handlerFunction) {
-        OCA.Analytics.Navigation.handlers[context] = handlerFunction;
+    registerHandler: function (context, type, handlerFunction) {
+        if (!OCA.Analytics.Navigation.handlers[context]) {
+            OCA.Analytics.Navigation.handlers[context] = {};
+        }
+        OCA.Analytics.Navigation.handlers[context][type] = handlerFunction;
     },
 
     init: function (navigationItem) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getNavigationContent(navigationItem);
-        OCA.Analytics.Backend?.getDatasetDefinitions?.();
+        OCA.Analytics.Report?.Backend?.getDatasetDefinitions?.();
     },
 
     getNavigationContent: function (navigationId) {
@@ -43,6 +50,7 @@ OCA.Analytics.Navigation = {
         requests.push(fetch(OC.generateUrl('apps/analytics/report'), {
             method: 'GET',
             headers: OCA.Analytics.headers()
+
         }));
         requests.push(fetch(OC.generateUrl('apps/analytics/panorama'), {
             method: 'GET',
@@ -70,6 +78,7 @@ OCA.Analytics.Navigation = {
                 if (navigationId === undefined) {
                     OCA.Analytics.Dashboard.init();
                 }
+
                 OCA.Analytics.Navigation.buildNavigation(data);
                 if (navigationId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationId))) !== -1) {
                     OCA.Analytics.Sidebar?.close?.();
@@ -485,13 +494,10 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['create'];
         if (handler) {
             handler();
-        } else {
-            OCA.Analytics.Sidebar.close();
+        } else if (OCA.Analytics.isDataset) {
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
-                ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizard],
-                ['wizardNewType', ''],
-                ['wizardNewVisual', '']
+                ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
             ];
             OCA.Analytics.Wizard.show();
         }
@@ -537,20 +543,11 @@ OCA.Analytics.Navigation = {
         } else if (evt.target.dataset.item_type === 'dataset') {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
-        } else {
-            document.getElementById('filterVisualisation').innerHTML = '';
-            if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
-                // reset any user-filters and display the filters stored for the report
-                delete OCA.Analytics.currentReportData.options;
-            }
-            OCA.Analytics.unsavedFilters = false;
-            OCA.Analytics.Sidebar.close();
-            OCA.Analytics.Backend.getData();
         }
     },
 
     handleOptionsClicked: function (evt) {
-        OCA.Analytics.UI?.hideReportMenu?.();
+        OCA.Analytics.Report?.hideReportMenu?.();
         let openMenu;
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
             openMenu = document.querySelector('.app-navigation-entry-menu.open').previousElementSibling.firstElementChild.firstElementChild.firstElementChild.dataset.id;
@@ -616,8 +613,6 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['favoriteUpdate'];
         if (handler) {
             handler(datasetId, isFavorite);
-        } else {
-            OCA.Analytics.Navigation.favoriteUpdate(datasetId, isFavorite);
         }
         document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
     },
@@ -656,13 +651,9 @@ OCA.Analytics.Navigation = {
     },
 
     handleDeleteButton: function (evt) {
-        // ToDo: change app.js to register handler
-
         let handler = OCA.Analytics.Navigation.handlers['delete'];
         if (handler) {
             handler(evt);
-        } else {
-            OCA.Analytics.Sidebar.Report.handleDeleteButton(evt);
         }
     },
 
@@ -718,6 +709,7 @@ OCA.Analytics.Navigation = {
         });
     },
 
+    // TOdo: can be deleted
     favoriteUpdate: function (datasetId, isFavorite) {
         let params = 'favorite=' + isFavorite;
         let xhr = new XMLHttpRequest();

@@ -23,6 +23,7 @@ OC.L10N.register(
     "Password" : "මුර පදය",
     "Favorites" : "ප්‍රියතම",
     "Translate" : "පරිවර්තනය",
+    "Edit" : "සංස්කරණය",
     "Back" : "ආපසු",
     "Settings" : "සැකසුම්",
     "Name" : "නම",

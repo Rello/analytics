@@ -266,10 +266,7 @@ content: inherit;
     border: 1px dashed blue;
     font-weight: bold;
     font-size: 22px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: 5px 5px 0 0;
     padding: 8px 20px;
     width: 600px;
     background: white;
@@ -277,12 +274,16 @@ content: inherit;
     margin: 10px 0 0 30px;
 }
 
-#reportMenuBar {
-    margin-bottom: 7px;
+#menuBar {
+    z-index: 9999;
     position: relative;
     height: 24px;
-    padding-top: 5px;
-    padding-right: 20px;
+    top: 5px;
+    right: 20px;
+}
+
+#optionsMenu {
+    top: 40px;
 }
 
 .reportSubHeader,
@@ -293,9 +294,8 @@ content: inherit;
     color: #FFFFFF;
     padding: 0 0 8px 20px;
     width: 100%;
-    background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%);
     background-size: 600px 100%;
-    background-repeat: no-repeat;
+    background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%) no-repeat;
     margin-left: 30px;
     display: block;
     margin-bottom: 10px;
@@ -305,10 +305,7 @@ content: inherit;
     border: 1px dashed blue;
     font-weight: bold;
     font-size: 16px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 0 0 5px 5px;
     padding: 8px 20px;
     width: 600px;
     background: white;
@@ -1094,4 +1091,105 @@ div.dt-container .dt-paging .dt-paging-button {
     height: 6px;
     background-color: var(--color-primary);
     border-radius: 50%;
+}
+
+/* === Panorama === */
+
+.panoramaSubHeader {
+    margin-left: 15px !important;
+}
+
+.panoramaHeaderRow {
+    padding-top: 20px;
+}
+
+.pages {
+    display: flex;
+    width: 200%;
+    transition: margin-left 0.5s ease;
+    height: calc(100% - 69px);
+}
+
+.flex-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0 15px 15px 15px;
+}
+
+.flex-row {
+    flex: 1;
+    display: flex;
+}
+
+.flex-item {
+    flex: 1;
+    position: relative;
+    margin: 15px;
+    padding: 15px;
+    background-color: var(--color-main-background);
+    border-radius: 5px;
+}
+
+.flex-item-tall {
+    flex-grow: 2;
+    position: relative;
+    margin: 15px;
+    padding: 15px;
+    background-color: var(--color-main-background);
+    border-radius: 5px;
+}
+
+.textContainer {
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    padding-left: 50px;
+}
+
+.textContainer ul {
+    list-style: initial;
+    padding-left: 40px;
+}
+
+.textContainer h1 {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.hintBox {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.pageScrollContainer {
+    z-index: 9999;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 24px;
+}
+
+.pageScroll {
+    margin: 0 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.pageScroll:hover {
+    opacity: 1;
+}
+
+.pageScroll.disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+}
+
+.pageScroll.highlighted {
+    color: var(--color-warning);
+    opacity: 0.8;
 }

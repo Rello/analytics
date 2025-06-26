@@ -317,7 +317,7 @@ OCA.Analytics.Dashboard = {
             chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
         }
         if (stacked100 === true) {
-            datasets = OCA.Analytics.UI.calculateStacked100(datasets);
+            datasets = OCA.Analytics.Report.calculateStacked100(datasets);
             chartOptions.scales['primary'].max = 100;
         }
 
