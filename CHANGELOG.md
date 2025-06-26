@@ -19,6 +19,7 @@
 - Section headers now use analytics icons and the top Panoramas button was removed
 - Reports and panoramas always display their icons
 - Overview moved into the navigation and highlights when no item is selected
+- Removed dataset maintenance mode; datasets are fetched with reports and panoramas
 
 ## 5.6.1 - 2025-06-09
 ### Fixed

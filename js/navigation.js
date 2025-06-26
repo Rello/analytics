@@ -35,40 +35,34 @@ OCA.Analytics.Navigation = {
             headers: OCA.Analytics.headers()
         }));
 
-        if (!OCA.Analytics.isDataset) {
-            requests.push(fetch(OC.generateUrl('apps/analytics/report'), {
-                method: 'GET',
-                headers: OCA.Analytics.headers()
-            }));
-            requests.push(fetch(OC.generateUrl('apps/analytics/panorama'), {
-                method: 'GET',
-                headers: OCA.Analytics.headers()
-            }));
-        }
+        requests.push(fetch(OC.generateUrl('apps/analytics/report'), {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        }));
+        requests.push(fetch(OC.generateUrl('apps/analytics/panorama'), {
+            method: 'GET',
+            headers: OCA.Analytics.headers()
+        }));
 
         Promise.all(requests)
             .then(responses => Promise.all(responses.map(r => r.json())))
             .then(responseData => {
-                let data = [];
-                if (OCA.Analytics.isDataset) {
-                    data = responseData[0];
-                    OCA.Analytics.datasets = data;
+                const datasets = responseData[0];
+                const reports = responseData[1];
+                const panoramas = responseData[2];
+
+                OCA.Analytics.datasets = datasets;
+                let data;
+                if (Array.isArray(panoramas)) {
+                    OCA.Analytics.Panorama.stories = panoramas;
+                    OCA.Analytics.reports = panoramas.concat(reports);
+                    data = panoramas.concat(reports, datasets);
                 } else {
-                    const datasets = responseData[0];
-                    const reports = responseData[1];
-                    const panoramas = responseData[2];
-                    OCA.Analytics.datasets = datasets;
-                    if (Array.isArray(panoramas)) {
-                        OCA.Analytics.Panorama.stories = panoramas;
-                        data = panoramas.concat(reports, datasets);
-                    } else {
-                        data = reports.concat(datasets);
-                    }
-                    // keep reports without datasets for existing logic
-                    OCA.Analytics.reports = panoramas ? panoramas.concat(reports) : reports;
+                    OCA.Analytics.reports = reports;
+                    data = reports.concat(datasets);
                 }
 
-                if (!OCA.Analytics.isDataset && navigationId === undefined) {
+                if (navigationId === undefined) {
                     OCA.Analytics.Dashboard.init();
                 }
                 OCA.Analytics.Navigation.buildNavigation(data);
@@ -99,7 +93,7 @@ OCA.Analytics.Navigation = {
         nav.appendChild(OCA.Analytics.Navigation.buildOverviewButton());
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
-        } else if (!OCA.Analytics.isDataset) {
+        } else {
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-folder', true));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas', 'icon-analytics-panorama'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports', 'icon-analytics-report'));
@@ -116,10 +110,6 @@ OCA.Analytics.Navigation = {
                     rootId = 'section-favorites';
                 }
                 OCA.Analytics.Navigation.buildNavigationRow(navigation, rootId);
-            }
-        } else {
-            for (let navigation of data) {
-                OCA.Analytics.Navigation.buildNavigationRow(navigation);
             }
         }
 
@@ -138,9 +128,7 @@ OCA.Analytics.Navigation = {
         a.classList.add('icon-add', 'svg');
         a.id = 'newReportButton';
         a.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-        if (OCA.Analytics.isDataset) {
-            a.innerText = t('analytics', 'New dataset');
-        } else if (OCA.Analytics.isPanorama) {
+        if (OCA.Analytics.isPanorama) {
             // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
             a.innerText = t('analytics', 'New panorama');
         } else {
@@ -169,9 +157,7 @@ OCA.Analytics.Navigation = {
 
     buildIntroRow: function () {
         let text;
-        if (OCA.Analytics.isDataset) {
-            text = t('analytics', 'No dataset yet');
-        } else if (OCA.Analytics.isPanorama) {
+        if (OCA.Analytics.isPanorama) {
             // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
             text = t('analytics', 'No panorama yet');
         } else {
@@ -186,6 +172,8 @@ OCA.Analytics.Navigation = {
         return li;
     },
 
+    // Overview remains a standalone entry. Using buildSection would add a collapsible
+    // wrapper which does not fit this single-link element.
     buildOverviewButton: function () {
         const createNavEntry = (id, href, className, text, eventHandler) => {
             let div = document.createElement('div');
@@ -245,7 +233,7 @@ OCA.Analytics.Navigation = {
         let typeINT = parseInt(data['type']);
 
         let datatype;
-        if (OCA.Analytics.isDataset) {
+        if (data['item_type'] === 'dataset') {
             datatype = 'd';
         } else if (data['item_type'] === 'panorama') {
             datatype = 'pa';
@@ -282,12 +270,7 @@ OCA.Analytics.Navigation = {
         }
 
         if (data['isShare'] === 1) {
-            if (OCA.Analytics.isDataset) {
-                // don´t show shared reports in advanced config mode at all as no config is possible
-                return;
-            }
             typeIcon = 'icon-shared';
-            //data['type'] = OCA.Analytics.TYPE_SHARED;
         }
 
         a.classList.add(typeIcon);
@@ -314,7 +297,7 @@ OCA.Analytics.Navigation = {
             a.appendChild(divFav);
         }
 
-        if (OCA.Analytics.isDataset) {
+        if (data['item_type'] === 'dataset') {
             let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
             navigationEntryDiv.appendChild(divUtils);
         } else {
@@ -499,12 +482,6 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['create'];
         if (handler) {
             handler();
-        } else if (OCA.Analytics.isDataset) {
-            OCA.Analytics.Wizard.sildeArray = [
-                ['', ''],
-                ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
-            ];
-            OCA.Analytics.Wizard.show();
         } else {
             OCA.Analytics.Sidebar.close();
             OCA.Analytics.Wizard.sildeArray = [
@@ -554,7 +531,7 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
         if (handler) {
             handler(evt);
-        } else if (OCA.Analytics.isDataset) {
+        } else if (evt.target.dataset.item_type === 'dataset') {
             OCA.Analytics.Advanced.showSidebar(evt);
             evt.stopPropagation();
         } else {
@@ -852,7 +829,7 @@ OCA.Analytics.Navigation.Drag = {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!OCA.Analytics.isDataset && !OCA.Analytics.isPanorama) {
+    if (!OCA.Analytics.isPanorama) {
         OCA.Analytics.WhatsNew.whatsnew();
         if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
             OCA.Analytics.Wizard.showFirstStart();
