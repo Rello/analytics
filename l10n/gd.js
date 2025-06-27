@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Delete" : "Sguab às",
     "Default" : "Bunaiteach",
+    "Favorites" : "Annsachdan",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Share" : "Co-roinn",
     "Download" : "Luchdaich a-nuas",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Version" : "Tionndadh",
     "File" : "Faidhle",
     "Password" : "Facal-faire",
-    "Favorites" : "Annsachdan",
     "Translate" : "Eadar-theangaich",
     "Edit" : "Deasaich",
     "Back" : "Air ais",

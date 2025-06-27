@@ -1,6 +1,7 @@
 { "translations": {
     "Delete" : "Obriši",
     "Done" : "Gotovo",
+    "Favorites" : "Omiljene",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add to favorites" : "Dodaj u omiljene",
     "Share" : "Podeli",
@@ -20,7 +21,6 @@
     "File" : "Fajl",
     "copy" : "kopiraj",
     "Password" : "Lozinka",
-    "Favorites" : "Omiljene",
     "Translate" : "Prevedi",
     "Edit" : "Izmeni",
     "Back" : "Nazad",

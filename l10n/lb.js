@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Gespäichert",
     "Delete" : "Läschen",
+    "Favorites" : "Favoriten",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Dossier läschen",
     "Add to favorites" : "Add to favorites",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "No" : "No",
     "The password is wrong. Try again." : "Den Passwuert ass incorrect. Probeier ed nach eng keier.",
     "Password" : "Passwuert",
-    "Favorites" : "Favoriten",
     "Translate" : "Iwwersetzen",
     "Edit" : "Änneren",
     "Back" : "Zeréck",

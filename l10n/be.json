@@ -1,5 +1,6 @@
 { "translations": {
     "Delete" : "Delete",
+    "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Падзяліцца",
@@ -14,7 +15,6 @@
     "No" : "No",
     "copy" : "капіяваць",
     "Password" : "Password",
-    "Favorites" : "Favorites",
     "Settings" : "Налады",
     "Title" : "Title",
     "Copy" : "Капіяваць",

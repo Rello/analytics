@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Wedi'u cadw",
     "Delete" : "Dileu",
+    "Favorites" : "Ffefrynnau",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Rhannu",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Version" : "Fersiwn",
     "Local" : "Lleol",
     "Password" : "Cyfrinair",
-    "Favorites" : "Ffefrynnau",
     "Translate" : "Cyfieithu",
     "Edit" : "Golygu",
     "Back" : "Nôl",

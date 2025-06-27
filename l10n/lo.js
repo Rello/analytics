@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Delete" : "ລຶບ",
     "Default" : "ເລີ່ມຕົ້ນ",
+    "Favorites" : "ລາຍການທີ່ມັກ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Delete folder" : "ລຶບໂຟນເດີ",
     "Add to favorites" : "ເພີ່ມລາຍການທີ່ມັກ",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "File" : "ຟາຍ",
     "The password is wrong. Try again." : "ລະຫັດບໍ່ຖືກຕ້ອງ. ລອງໃໝ່ອີກຄັ້ງ.",
     "Password" : "ລະຫັດຜ່ານ",
-    "Favorites" : "ລາຍການທີ່ມັກ",
     "Translate" : "ແປ",
     "Edit" : "ແກ້ໄຂ",
     "Back" : "ຫຼັງ",

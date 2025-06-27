@@ -1,5 +1,6 @@
 { "translations": {
     "Delete" : "حذف کریں",
+    "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "تقسیم",
@@ -13,7 +14,6 @@
     "Yes" : "Yes",
     "No" : "No",
     "Password" : "پاسورڈ",
-    "Favorites" : "Favorites",
     "Edit" : "تدوین کریں",
     "Settings" : "سیٹینگز",
     "Name" : "اسم",
