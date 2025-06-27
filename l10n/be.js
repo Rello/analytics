@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "Delete",
+    "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "Падзяліцца",
@@ -16,7 +17,6 @@ OC.L10N.register(
     "No" : "No",
     "copy" : "капіяваць",
     "Password" : "Password",
-    "Favorites" : "Favorites",
     "Settings" : "Налады",
     "Title" : "Title",
     "Copy" : "Капіяваць",

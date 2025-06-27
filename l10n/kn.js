@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "﻿ಉಳಿಸಿದ",
     "Delete" : "﻿ಅಳಿಸಿ",
+    "Favorites" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Version" : "﻿ಆವೃತ್ತಿ",
     "Local" : "ಸ್ಥಳೀಯ",
     "Password" : "ಗುಪ್ತ ಪದ",
-    "Favorites" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "Edit" : "ಸಂಪಾದಿಸು",
     "Settings" : "ಆಯ್ಕೆ",
     "Name" : "﻿ಹೆಸರು",

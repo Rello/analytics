@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Delete" : "Pozmak",
     "Default" : "Bellenen",
+    "Favorites" : "Halanýanlar",
     "Add to favorites" : "Saýlananlara goşuň",
     "Share" : "Paýlaş",
     "Download" : "Göçürip almak",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "No" : "Ýok",
     "File" : "Faýl",
     "Password" : "Açarsöz",
-    "Favorites" : "Halanýanlar",
     "Translate" : "Terjime et",
     "Edit" : "Redaktirläň",
     "Back" : "Yzyna",

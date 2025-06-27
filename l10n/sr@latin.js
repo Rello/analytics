@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Delete" : "Obriši",
     "Done" : "Gotovo",
+    "Favorites" : "Omiljene",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add to favorites" : "Dodaj u omiljene",
     "Share" : "Podeli",
@@ -22,7 +23,6 @@ OC.L10N.register(
     "File" : "Fajl",
     "copy" : "kopiraj",
     "Password" : "Lozinka",
-    "Favorites" : "Omiljene",
     "Translate" : "Prevedi",
     "Edit" : "Izmeni",
     "Back" : "Nazad",

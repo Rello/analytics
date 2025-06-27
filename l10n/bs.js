@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Spremljeno",
     "Delete" : "Obriši",
+    "Favorites" : "Favoriti",
     "Remove from favorites" : "Remove from favorites",
     "Delete folder" : "Izbriši fasciklu",
     "Add to favorites" : "Add to favorites",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Version" : "Verzija",
     "Local" : "Lokalno",
     "Password" : "Lozinka",
-    "Favorites" : "Favoriti",
     "Edit" : "Izmjeni",
     "Settings" : "Podešavanje",
     "Name" : "Ime",

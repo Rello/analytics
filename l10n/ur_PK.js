@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Delete" : "حذف کریں",
+    "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Share" : "تقسیم",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Password" : "پاسورڈ",
-    "Favorites" : "Favorites",
     "Edit" : "تدوین کریں",
     "Settings" : "سیٹینگز",
     "Name" : "اسم",
