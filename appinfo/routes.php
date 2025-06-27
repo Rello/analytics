@@ -9,7 +9,6 @@
 
 return [
 	'routes' => [
-		['name' => 'page#report', 'url' => '/', 'verb' => 'GET'],
 		[
 			'name' => 'page#report',
 			'url' => '/r/{id}',
@@ -20,7 +19,7 @@ return [
 			]
 		],
 		[
-			'name' => 'page#advanced',
+			'name' => 'page#report',
 			'url' => '/d/{id}',
 			'verb' => 'GET',
 			'defaults' => [
@@ -28,13 +27,14 @@ return [
 			]
 		],
 		[
-			'name' => 'page#panorama',
+			'name' => 'page#report',
 			'url' => '/pa/{id}',
 			'verb' => 'GET',
 			'defaults' => [
 				'id' => '',
 			]
 		],
+		['name' => 'page#report', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
 		['name' => 'page#indexPublicMin', 'url' => '/pm/{token}', 'verb' => 'GET'],
 		['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],

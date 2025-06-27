@@ -16,11 +16,6 @@ OCA.Analytics.Panorama = {
 /**
  * @namespace OCA.Analytics.Navigation
  */
-
-OCA.Analytics.Panorama = {
-    stories : {}
-};
-
 OCA.Analytics.Navigation = {
     quickstartValue: '',
     quickstartId: 0,
@@ -39,7 +34,7 @@ OCA.Analytics.Navigation = {
         OCA.Analytics.Report?.Backend?.getDatasetDefinitions?.();
     },
 
-    getNavigationContent: function (navigationId) {
+    getNavigationContent: function (navigationItem) {
         let requests = [];
         // always fetch datasets so they can be listed together with reports
         requests.push(fetch(OC.generateUrl('apps/analytics/dataset'), {
@@ -67,7 +62,7 @@ OCA.Analytics.Navigation = {
                 OCA.Analytics.datasets = datasets;
                 let data;
                 if (Array.isArray(panoramas)) {
-                    OCA.Analytics.Panorama.stories = panoramas;
+                    OCA.Analytics.stories = panoramas;
                     OCA.Analytics.reports = panoramas.concat(reports);
                     data = panoramas.concat(reports, datasets);
                 } else {
@@ -75,24 +70,44 @@ OCA.Analytics.Navigation = {
                     data = reports.concat(datasets);
                 }
 
-                if (navigationId === undefined) {
-                    OCA.Analytics.Dashboard.init();
-                }
-
                 OCA.Analytics.Navigation.buildNavigation(data);
-                if (navigationId && data.indexOf(data.find(o => parseInt(o.id) === parseInt(navigationId))) !== -1) {
-                    OCA.Analytics.Sidebar?.close?.();
-                    let navigationItem = document.querySelector('#navigationDatasets [data-id="' + navigationId + '"]');
-                    if (navigationItem.parentElement.parentElement.parentElement.classList.contains('collapsible')) {
-                        navigationItem.parentElement.parentElement.parentElement.classList.add('open');
+
+                if (navigationItem === undefined) {
+                    OCA.Analytics.Dashboard.init();
+                } else {
+                    let navigationType = navigationItem[1]; // r, pa, d
+                    let navigationId = navigationItem[2];
+                    // Map short type to real item_type
+                    const typeMap = {r: 'report', pa: 'panorama', d: 'dataset'};
+                    const mappedType = typeMap[navigationType] || navigationType;
+
+                    // Find the item with both id and item_type
+                    const foundItem = data.find(
+                        o => parseInt(o.id) === parseInt(navigationId) && o.item_type === mappedType
+                    );
+
+                    if (navigationId && foundItem) {
+                        OCA.Analytics.Sidebar?.close?.();
+                        // QuerySelector for both id and item_type
+                        let navigationItemElem = document.querySelector(
+                            '#navigationDatasets [data-id="' + navigationId + '"][data-item_type="' + mappedType + '"]'
+                        );
+                        if (
+                            navigationItemElem &&
+                            navigationItemElem.parentElement.parentElement.parentElement.classList.contains('collapsible')
+                        ) {
+                            navigationItemElem.parentElement.parentElement.parentElement.classList.add('open');
+                        }
+                        if (OCA.Analytics.isNewObject) {
+                            OCA.Analytics.isNewObject = false;
+                            document.querySelector(
+                                '#navigationDatasets [data-id="' + navigationId + '"][data-item_type="' + mappedType + '"] #navigationMenuEdit'
+                            ).click();
+                        } else if (navigationItemElem) {
+                            navigationItemElem.click();
+                        }
+                        OCA.Analytics.Navigation.saveOpenState();
                     }
-                    if (OCA.Analytics.isNewObject) {
-                        OCA.Analytics.isNewObject = false;
-                        document.querySelector('#navigationDatasets [data-id="' + navigationId + '"] #navigationMenuEdit').click();
-                    } else {
-                        navigationItem.click();
-                    }
-                    OCA.Analytics.Navigation.saveOpenState();
                 }
             });
     },
@@ -513,12 +528,9 @@ OCA.Analytics.Navigation = {
         if (document.querySelector('#navigationDatasets .active')) {
             document.querySelector('#navigationDatasets .active').classList.remove('active');
         }
-        OCA.Analytics.Visualization.hideElement('analytics-content');
-        OCA.Analytics.Visualization.showElement('analytics-intro');
         // ToDo: Do not reload DB all the time as it is already in the background
         document.getElementById('ulAnalytics').innerHTML = '';
-        OCA.Analytics.Dashboard?.init?.();
-        OCA.Analytics.Panorama?.Dashboard?.init?.();
+        OCA.Analytics.Dashboard.init();
     },
 
     handleNavigationClicked: function (evt) {
@@ -537,7 +549,8 @@ OCA.Analytics.Navigation = {
             evt.target.parentElement.classList.add('active');
         }
 
-        let handler = OCA.Analytics.Navigation.handlers['navigationClicked'];
+        let type = evt.target.dataset.item_type;
+        let handler = OCA.Analytics.Navigation.handlers['navigationClicked']?.[type];
         if (handler) {
             handler(evt);
         } else if (evt.target.dataset.item_type === 'dataset') {
@@ -587,13 +600,13 @@ OCA.Analytics.Navigation = {
         let datasetId = evt.target.closest('div').dataset.id;
         let icon = evt.target.parentNode.firstElementChild;
         const isSection = !!li.dataset.sectionId;
-            if (isSection) {
-                document.querySelectorAll('#navigationDatasets > li.collapsible.open').forEach(other => {
-                    if (other !== li && other.dataset.sectionId) {
-                        other.classList.remove('open');
-                    }
-                });
-            }
+        if (isSection) {
+            document.querySelectorAll('#navigationDatasets > li.collapsible.open').forEach(other => {
+                if (other !== li && other.dataset.sectionId) {
+                    other.classList.remove('open');
+                }
+            });
+        }
         let isFavorite = 'false';
 
         if (icon.classList.contains('icon-star')) {
@@ -832,12 +845,11 @@ OCA.Analytics.Navigation.Drag = {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!OCA.Analytics.isPanorama) {
-        OCA.Analytics.WhatsNew.whatsnew();
-        if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
-            OCA.Analytics.Wizard.showFirstStart();
-        }
+    OCA.Analytics.WhatsNew.whatsnew();
+    if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
+        OCA.Analytics.Wizard.showFirstStart();
     }
+
     document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
     document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
     document.getElementById('appSettingsButton').addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);

@@ -40,12 +40,14 @@ Util::addScript('analytics', 'userGuidance');
 </div>
 
 <div id="app-content">
-    <div id="loading">
-        <i class="ioc-spinner ioc-spin"></i>
+    <div id="analytics-content-loading" style="width:100%; padding: 100px 5%;" hidden>
+        <div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>
     </div>
 
 	<?php print_unescaped($this->inc('part.intro')); ?>
-    <?php print_unescaped($this->inc('part.content')); ?>
+    <?php print_unescaped($this->inc('part.report')); ?>
+	<?php print_unescaped($this->inc('part.panorama')); ?>
+	<?php print_unescaped($this->inc('part.dataset')); ?>
 
     <div id="analytics-warning" style="width:50%; padding: 50px">
         <h2><?php p($l->t('Analytics')); ?></h2>

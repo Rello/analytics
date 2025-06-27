@@ -1218,4 +1218,14 @@ OCA.Analytics.Visualization = {
         document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreen');
         document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreenExit');
     },
+
+    showContentByType: function (type) {
+        if (OCA.Analytics.currentContentType !== type) {
+            Array.from(document.querySelectorAll('[id^="analytics-content-"]'))
+                .map(el => el.id)
+                .forEach(id => OCA.Analytics.Visualization.hideElement(id));
+            OCA.Analytics.Visualization.showElement('analytics-content-' + type);
+            OCA.Analytics.currentContentType = type;
+        }
+     }
 }

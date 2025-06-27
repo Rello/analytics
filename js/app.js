@@ -67,6 +67,7 @@ Object.assign(OCA.Analytics, {
     currentReportData: {},
     currentPanorama: {},
     currentPage: 0,
+    currentContentType: null,
 
     unsavedChanges: false,
     editMode: false,
@@ -106,6 +107,7 @@ Object.assign(OCA.Analytics.Core = {
      * Initialize navigation and register UI handlers
      */
     init: function () {
+        // shared report?
         if (document.getElementById('sharingToken').value !== '') {
             document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
             OCA.Analytics.Report.Backend.getData();
@@ -113,11 +115,13 @@ Object.assign(OCA.Analytics.Core = {
         }
 
         // URL semantic is analytics/*type*/id
+        // match[1] = type
+        // match[2] = id
         let regex = /\/analytics\/([a-zA-Z0-9]+)\/(\d+)/;
         let match = window.location.href.match(regex);
 
         if (match) {
-            OCA.Analytics.Navigation.init(parseInt(match[2]));
+            OCA.Analytics.Navigation.init(match);
         } else {
             OCA.Analytics.Navigation.init();
             // Dashboard has to be loaded from the navigation as it depends on the report index
@@ -713,150 +717,5 @@ Object.assign(OCA.Analytics.Datasource = {
             mime,
             true,
             1);
-    },
-});
-
-OCA.Analytics.Report.Backend = OCA.Analytics.Report.Backend || {};
-Object.assign(OCA.Analytics.Report.Backend = {
-
-    /**
-     * Fetch report data from the backend
-     */
-    getData: function () {
-        if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
-        OCA.Analytics.Report.resetContentArea();
-        OCA.Analytics.Visualization.hideElement('analytics-intro');
-        OCA.Analytics.Visualization.hideElement('analytics-content');
-        OCA.Analytics.Visualization.showElement('analytics-loading');
-
-        let url;
-        if (document.getElementById('sharingToken').value === '') {
-            const reportId = document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
-            url = OC.generateUrl('apps/analytics/data/') + reportId;
-        } else {
-            const token = document.getElementById('sharingToken').value;
-            url = OC.generateUrl('apps/analytics/data/public/') + token;
-        }
-
-        // send user current filter options to the data request;
-        // if nothing is changed by the user, the filter which is stored for the report, will be used
-        let ajaxData = {};
-        if (typeof (OCA.Analytics.currentReportData.options) !== 'undefined') {
-            if (typeof (OCA.Analytics.currentReportData.options.filteroptions) !== 'undefined') {
-                ajaxData.filteroptions = JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions);
-            }
-            if (typeof (OCA.Analytics.currentReportData.options.dataoptions) !== 'undefined') {
-                ajaxData.dataoptions = JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions);
-            }
-            if (typeof (OCA.Analytics.currentReportData.options.chartoptions) !== 'undefined') {
-                ajaxData.chartoptions = JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions);
-            }
-            if (typeof (OCA.Analytics.currentReportData.options.tableoptions) !== 'undefined') {
-                ajaxData.tableoptions = JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions);
-            }
-        }
-
-        // using xmlhttprequest in this place as long running requests need to be aborted
-        // abort() is not possible for fetch()
-        let xhr = new XMLHttpRequest();
-        let params = new URLSearchParams(ajaxData);
-        let requestUrl = `${url}?${params}`;
-
-        xhr.open('GET', requestUrl, true);
-        xhr.setRequestHeader('requesttoken', OC.requestToken);
-        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText);
-
-                // Do something with the data here
-
-                OCA.Analytics.Visualization.hideElement('analytics-loading');
-                OCA.Analytics.Visualization.showElement('analytics-content');
-
-                OCA.Analytics.currentReportData = data;
-                try {
-                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    let parsedChartOptions = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions.replace(/xAxes/g, 'x'));
-                    OCA.Analytics.currentReportData.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.chartoptions = {};
-                }
-
-                try {
-                    let parsedDataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
-                    OCA.Analytics.currentReportData.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.dataoptions = {};
-                }
-
-                try {
-                    let parsedFilterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
-                    OCA.Analytics.currentReportData.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.filteroptions = {};
-                }
-
-                try {
-                    let parsedTableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
-                    OCA.Analytics.currentReportData.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.tableoptions = {};
-                }
-                
-                document.getElementById('reportHeader').innerText = data.options.name;
-                if (data.options.subheader !== '') {
-                    document.getElementById('reportSubHeader').innerText = data.options.subheader;
-                    OCA.Analytics.Visualization.showElement('reportSubHeader');
-                }
-
-                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
-                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeAggregation(OCA.Analytics.currentReportData);
-                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTopN(OCA.Analytics.currentReportData);
-
-                OCA.Analytics.Report.buildReport();
-
-                let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
-                OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
-            }
-        };
-        xhr.send();
-    },
-
-    /**
-     * Retrieve available dataset templates from server
-     */
-    getDatasetDefinitions: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/dataset');
-        fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.datasets = data;
-            });
-    },
-
-    /**
-     * Continuously refresh data in given interval
-     */
-    startRefreshTimer(minutes) {
-        if (minutes !== 0 && !isNaN(minutes)) {
-            if (OCA.Analytics.refreshTimer === null) {
-                OCA.Analytics.refreshTimer = setTimeout(OCA.Analytics.Report.Backend.getData, minutes * 60 * 1000)
-            } else {
-                clearTimeout(OCA.Analytics.refreshTimer)
-                OCA.Analytics.refreshTimer = null
-                OCA.Analytics.Report.Backend.startRefreshTimer(minutes);
-            }
-        } else {
-            if (OCA.Analytics.refreshTimer !== null) {
-                clearTimeout(OCA.Analytics.refreshTimer)
-                OCA.Analytics.refreshTimer = null
-            }
-        }
     },
 });

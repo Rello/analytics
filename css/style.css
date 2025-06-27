@@ -210,13 +210,16 @@ content: inherit;
     background-color: var(--color-background-hover) !important;
 }
 
-#analytics-content {
+#analytics-content-into,
+#analytics-content-report,
+#analytics-content-panorama,
+#analytics-content-dataset {
     width: 100%;
     height: 100%;
     /*padding: 20px 30px;*/
 }
 
-#analytics-intro {
+#analytics-content-intro {
     padding: 30px;
     display: flex;
     flex-direction: column;

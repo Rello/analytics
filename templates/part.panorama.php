@@ -9,12 +9,9 @@
 ?>
 
 <style>
-
-
     .bg-azure {
         background-color: azure;
     }
-
 
     #optionBtnContainer {
         z-index: 9999;
@@ -246,7 +243,7 @@
         display: none !important;
     }
 </style>
-<div id="analytics-content" hidden>
+<div id="analytics-content-panorama" hidden>
 
 	<?php print_unescaped($this->inc('part.menu')); ?>
 

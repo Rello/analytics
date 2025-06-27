@@ -7,8 +7,7 @@
  */
 
 ?>
-<h3 style="text-align: center; background-color: var(--color-primary-light);"><?php p($l->t('Dataset maintenance')); ?></h3>
-<div id="analytics-content" hidden>
+<div id="analytics-content-dataset" hidden>
     <input type="hidden" name="sharingToken" value="" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="true" id="advanced">
@@ -19,10 +18,4 @@
         <div class="tabsContainer">
         </div>
     </div>
-</div>
-<div id="analytics-intro" hidden>
-    <span><?php p($l->t('This section is used for dataset maintenance and data load configurations.')); ?></span>
-    <br>
-    <br>
-    <span><?php p($l->t('Please select a dataset')); ?></span>
 </div>

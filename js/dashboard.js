@@ -46,6 +46,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  */
 OCA.Analytics.Dashboard = {
     init: function () {
+        OCA.Analytics.Visualization?.showContentByType('intro');
         document.getElementById('ulAnalytics').innerHTML = '';
         // show favorites when the Analytics app itself is loaded
         if (decodeURI(location.hash).length === 0) {
@@ -65,6 +66,7 @@ OCA.Analytics.Dashboard = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.response !== '[]') {
+                    document.getElementById('ulAnalytics').innerHTML = '';
                     for (let dataset of JSON.parse(xhr.response)) {
                         let li = '<li id="analyticsWidgetItem' + dataset + '" class="analyticsWidgetItem"></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);

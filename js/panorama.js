@@ -34,6 +34,7 @@ OCA = OCA || {};
 OCA.Analytics.Panorama = OCA.Analytics.Panorama || {};
 Object.assign(OCA.Analytics.Panorama = {
 
+    stories: {},
     emptyPageTemplate: {page: 0, name: 'New', reports: [], layout: ''},
     layouts: [
         {
@@ -188,6 +189,9 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     handleNavigationClicked: function (evt) {
+
+        OCA.Analytics.Visualization.showContentByType('loading');
+
         const foundItem = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
         OCA.Analytics.currentPanorama = JSON.parse(JSON.stringify(foundItem));
         //OCA.Analytics.currentPanorama = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
@@ -202,8 +206,7 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     newPanorama: function () {
-        OCA.Analytics.Visualization.hideElement('analytics-intro');
-        OCA.Analytics.Visualization.showElement('analytics-content');
+        OCA.Analytics.Visualization.showContentByType('panorama');
         OCA.Analytics.currentPanorama = [];
         OCA.Analytics.Panorama.Backend.create();
     },
@@ -269,10 +272,6 @@ Object.assign(OCA.Analytics.Panorama = {
             document.getElementById('panoramaPages').appendChild(flexContainer);
         });
 
-
-        OCA.Analytics.Visualization.hideElement('analytics-intro');
-        OCA.Analytics.Visualization.showElement('analytics-content');
-
         // update the visibility of the next/prev buttons
         OCA.Analytics.Panorama.updateNavButtons();
         // updated the scrolling for multi pages
@@ -296,6 +295,8 @@ Object.assign(OCA.Analytics.Panorama = {
 
         // if still in edit mode, re-add the overlays over every item
         if (OCA.Analytics.editMode) OCA.Analytics.Panorama.addEditOverlays();
+
+        OCA.Analytics.Visualization.showContentByType('panorama');
     },
 
     buildWidget: function (itemId) {
@@ -320,7 +321,7 @@ Object.assign(OCA.Analytics.Panorama = {
             let widget = document.getElementById(itemId);
             widget.innerHTML = '';
 
-            if (contentType === OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE) {
+            if (contentType === OCA.Analytics.PANORAMA_CONTENT_TYPE_REPORT) {
                 let itemWidget = OCA.Analytics.Panorama.buildWidgetTypeReport(parseInt(contentValue), itemId);
                 widget.setAttribute('data-chart', contentValue);
                 widget.insertAdjacentHTML('beforeend', itemWidget);

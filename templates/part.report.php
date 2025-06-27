@@ -7,7 +7,7 @@
  */
 
 ?>
-<div id="analytics-content" hidden>
+<div id="analytics-content-report" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
@@ -31,7 +31,4 @@
         <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;margin-left: 10px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
         <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
     </div>
-</div>
-<div id="analytics-loading" style="width:100%; padding: 100px 5%;" hidden>
-    <div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>
 </div>

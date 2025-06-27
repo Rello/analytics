@@ -37,7 +37,7 @@ Util::addScript('analytics', 'panorama');
     <?php print_unescaped($this->inc('part.settings')); ?>
 </div>
 
-<div id="app-content">
+<div id="app-content">panorama old
     <div id="loading">
         <i class="ioc-spinner ioc-spin"></i>
     </div>
