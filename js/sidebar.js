@@ -882,6 +882,8 @@ OCA.Analytics.Sidebar.Data = {
 };
 
 OCA.Analytics.Sidebar.Share = {
+    searchTimeout: null,
+    searchDelay: 300,
 
     tabContainerShare: function () {
         let item_source = document.getElementById('app-sidebar').dataset.id;
@@ -1167,52 +1169,84 @@ OCA.Analytics.Sidebar.Share = {
     },
 
     searchShareeAPI: function () {
-        let shareInput = document.getElementById('shareInput').value;
-        document.getElementById('shareSearchResult').innerHTML = '';
+        clearTimeout(OCA.Analytics.Sidebar.Share.searchTimeout);
+        OCA.Analytics.Sidebar.Share.searchTimeout = setTimeout(OCA.Analytics.Sidebar.Share._executeShareSearch, OCA.Analytics.Sidebar.Share.searchDelay);
+    },
+
+    _executeShareSearch: function () {
+        const shareInput = document.getElementById('shareInput').value;
+        const resultElement = document.getElementById('shareSearchResult');
         if (shareInput === '') {
-            document.getElementById('shareSearchResult').style.display = 'none';
+            resultElement.innerHTML = '';
+            resultElement.style.display = 'none';
             return;
         }
-        let URL = OC.linkToOCS('apps/files_sharing/api/v1/sharees').slice(0, -1);
 
-        let params = 'format=json'
+        const URL = OC.linkToOCS('apps/files_sharing/api/v1/sharees').slice(0, -1);
+        const params = 'format=json'
             + '&itemType=file'
             + '&search=' + shareInput
             + '&lookup=false&perPage=200'
             + '&shareType[]=0&shareType[]=1';
-        //    + '&shareType[]=10';
 
-        let requestUrl = URL + '?' + params;
+        const requestUrl = URL + '?' + params;
         fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers(),
         })
             .then(response => response.json())
             .then(data => {
-                let jsondata = data;
+                const jsondata = data;
                 if (jsondata['ocs']['meta']['status'] === 'ok') {
-                    document.getElementById('shareSearchResult').style.display = '';
+                    resultElement.style.display = '';
+
+                    const existingItems = resultElement.querySelectorAll('li.shareSearchResultItem');
+                    const existingMap = {};
+                    existingItems.forEach(li => {
+                        const username = li.querySelector('#username').dataset.user;
+                        const type = li.querySelector('#username').dataset.shareType;
+                        existingMap[type + '|' + username] = li;
+                    });
+
+                    const newKeys = new Set();
+                    const addItem = (shareWith, label, type) => {
+                        const key = type + '|' + shareWith;
+                        newKeys.add(key);
+                        if (!existingMap[key]) {
+                            const sharee = OCA.Analytics.Sidebar.Share.buildShareeRow(0, shareWith, label, type, true);
+                            resultElement.appendChild(sharee);
+                        } else {
+                            const elem = existingMap[key].querySelector('#username');
+                            if (elem.innerText !== label && type === OCA.Analytics.SHARE_TYPE_USER) {
+                                elem.innerText = label;
+                            }
+                        }
+                    };
+
                     for (let user of jsondata['ocs']['data']['users']) {
-                        let sharee = OCA.Analytics.Sidebar.Share.buildShareeRow(0, user['value']['shareWith'], user['label'], OCA.Analytics.SHARE_TYPE_USER, true);
-                        document.getElementById('shareSearchResult').appendChild(sharee);
+                        addItem(user['value']['shareWith'], user['label'], OCA.Analytics.SHARE_TYPE_USER);
                     }
                     for (let exactUser of jsondata['ocs']['data']['exact']['users']) {
-                        let sharee = OCA.Analytics.Sidebar.Share.buildShareeRow(0, exactUser['value']['shareWith'], exactUser['label'], OCA.Analytics.SHARE_TYPE_USER, true);
-                        document.getElementById('shareSearchResult').appendChild(sharee);
+                        addItem(exactUser['value']['shareWith'], exactUser['label'], OCA.Analytics.SHARE_TYPE_USER);
                     }
                     for (let group of jsondata['ocs']['data']['groups']) {
-                        let sharee = OCA.Analytics.Sidebar.Share.buildShareeRow(0, group['value']['shareWith'], group['label'], OCA.Analytics.SHARE_TYPE_GROUP, true);
-                        document.getElementById('shareSearchResult').appendChild(sharee);
+                        addItem(group['value']['shareWith'], group['label'], OCA.Analytics.SHARE_TYPE_GROUP);
                     }
                     for (let exactGroup of jsondata['ocs']['data']['exact']['groups']) {
-                        let sharee = OCA.Analytics.Sidebar.Share.buildShareeRow(0, exactGroup['value']['shareWith'], exactGroup['label'], OCA.Analytics.SHARE_TYPE_GROUP, true);
-                        document.getElementById('shareSearchResult').appendChild(sharee);
+                        addItem(exactGroup['value']['shareWith'], exactGroup['label'], OCA.Analytics.SHARE_TYPE_GROUP);
                     }
                     for (let room of jsondata['ocs']['data']['rooms']) {
-                        let sharee = OCA.Analytics.Sidebar.Share.buildShareeRow(0, room['value']['shareWith'], room['label'], OCA.Analytics.SHARE_TYPE_ROOM, true);
-                        document.getElementById('shareSearchResult').appendChild(sharee);
+                        addItem(room['value']['shareWith'], room['label'], OCA.Analytics.SHARE_TYPE_ROOM);
                     }
+
+                    Object.keys(existingMap).forEach(key => {
+                        if (!newKeys.has(key)) {
+                            existingMap[key].remove();
+                        }
+                    });
                 } else {
+                    resultElement.style.display = 'none';
+                    resultElement.innerHTML = '';
                 }
             });
     },
