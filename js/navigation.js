@@ -611,6 +611,15 @@ OCA.Analytics.Navigation = {
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         }
         evt.stopPropagation();
+
+        const menu = evt.target.closest('#navigationMenu');
+        const id = menu.dataset.id;
+        const type = menu.dataset.item_type;
+        const anchor = document.querySelector(
+            '#navigationDatasets a[data-id="' + id + '"][data-item_type="' + type + '"]'
+        );
+        anchor?.click();
+
         OCA.Analytics.Sidebar?.showSidebar?.(evt);
     },
 

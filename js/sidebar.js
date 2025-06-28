@@ -20,26 +20,20 @@ OCA.Analytics.Sidebar = {
         let datasetType = navigationItem.dataset.type;
         let appsidebar = document.getElementById('app-sidebar');
 
-        if (appsidebar.dataset.id === datasetId && !OCA.Analytics.isDataset) {
+        if (appsidebar.dataset.id === datasetId) {
             OCA.Analytics.Sidebar.close();
         } else {
             document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
             OCA.Analytics.Sidebar.constructTabs(parseInt(datasetType));
 
-            if (!OCA.Analytics.isDataset) {
-                if (appsidebar.dataset.id === '') {
-                    document.getElementById('sidebarClose').addEventListener('click', OCA.Analytics.Sidebar.close);
-                    // OC.Apps not working anymore
-                    appsidebar.classList.remove('disappear');
-                }
-            } else {
-                OCA.Analytics.Visualization.hideElement('analytics-intro');
-                OCA.Analytics.Visualization.showElement('analytics-content');
-                appsidebar.classList.remove('disappear');
+            if (appsidebar.dataset.id === '') {
+                document.getElementById('sidebarClose').addEventListener('click', OCA.Analytics.Sidebar.close);
+                // OC.Apps not working anymore
             }
             appsidebar.dataset.id = datasetId;
             appsidebar.dataset.type = datasetType;
             appsidebar.dataset.item_type = navigationItem.dataset.item_type;
+            appsidebar.classList.remove('disappear');
 
             document.getElementById('tabHeaderReport').classList.add('selected');
             document.querySelector('.tabHeader.selected').click();

@@ -7,6 +7,7 @@
 - Highlight selected threshold row in sidebar
 - Remove duplicate panorama handlers from navigation logic
 - Favorite items now remain in their original sections and update without reloading
+- Load correct report when opening sidebar via navigation menu edit
 
 ### Added
 - Unified navigation showing panoramas and reports together
