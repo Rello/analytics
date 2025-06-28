@@ -6,6 +6,7 @@
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
 - Remove duplicate panorama handlers from navigation logic
+- Favorite items now remain in their original sections and update without reloading
 
 ### Added
 - Unified navigation showing panoramas and reports together

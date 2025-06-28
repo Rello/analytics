@@ -133,10 +133,15 @@ OCA.Analytics.Navigation = {
                 } else if (navigation.item_type === 'dataset') {
                     rootId = 'section-datasets';
                 }
-                if (parseInt(navigation.favorite) === 1) {
-                    rootId = 'section-favorites';
-                }
+
+                // always render the item in its original section
                 OCA.Analytics.Navigation.buildNavigationRow(navigation, rootId);
+
+                // additionally show favorites in the favorites section
+                if (parseInt(navigation.favorite) === 1 &&
+                    parseInt(navigation.type) !== OCA.Analytics.TYPE_GROUP) {
+                    OCA.Analytics.Navigation.buildNavigationRow(navigation, 'section-favorites');
+                }
             }
         }
 
@@ -597,16 +602,10 @@ OCA.Analytics.Navigation = {
     },
 
     handleFavoriteClicked: function (evt) {
-        let datasetId = evt.target.closest('div').dataset.id;
+        const menu = evt.target.closest('div');
+        const datasetId = menu.dataset.id;
+        const itemType = menu.dataset.item_type;
         let icon = evt.target.parentNode.firstElementChild;
-        const isSection = !!li.dataset.sectionId;
-        if (isSection) {
-            document.querySelectorAll('#navigationDatasets > li.collapsible.open').forEach(other => {
-                if (other !== li && other.dataset.sectionId) {
-                    other.classList.remove('open');
-                }
-            });
-        }
         let isFavorite = 'false';
 
         if (icon.classList.contains('icon-star')) {
@@ -614,16 +613,30 @@ OCA.Analytics.Navigation = {
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Remove from favorites');
             isFavorite = 'true';
 
-            let divFav = OCA.Analytics.Navigation.buildFavoriteIcon(datasetId, '');
-            evt.target.closest('div').parentElement.firstElementChild.appendChild(divFav);
+            // add visual marker
+            const divFav = OCA.Analytics.Navigation.buildFavoriteIcon(datasetId, '');
+            menu.parentElement.firstElementChild.appendChild(divFav);
+
+            // add item to favorites section
+            const entry = OCA.Analytics.reports.find(x =>
+                parseInt(x.id) === parseInt(datasetId) && x.item_type === itemType
+            );
+            if (entry) {
+                OCA.Analytics.Navigation.buildNavigationRow(entry, 'section-favorites');
+            }
 
         } else {
             icon.classList.replace('icon-starred', 'icon-star');
             evt.target.parentNode.children[1].innerHTML = t('analytics', 'Add to favorites');
-            document.getElementById('fav-' + datasetId).remove();
+            const favIcon = document.getElementById('fav-' + datasetId);
+            if (favIcon) favIcon.remove();
+
+            // remove item from favorites section
+            const favItem = document.querySelector('#section-favorites [data-id="' + datasetId + '"][data-item_type="' + itemType + '"]');
+            if (favItem) favItem.parentElement.remove();
         }
 
-        let handler = OCA.Analytics.Navigation.handlers['favoriteUpdate'];
+        const handler = OCA.Analytics.Navigation.handlers['favoriteUpdate']?.[itemType];
         if (handler) {
             handler(datasetId, isFavorite);
         }
