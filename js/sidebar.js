@@ -29,11 +29,11 @@ OCA.Analytics.Sidebar = {
             if (appsidebar.dataset.id === '') {
                 document.getElementById('sidebarClose').addEventListener('click', OCA.Analytics.Sidebar.close);
                 // OC.Apps not working anymore
-                appsidebar.classList.remove('disappear');
             }
             appsidebar.dataset.id = datasetId;
             appsidebar.dataset.type = datasetType;
             appsidebar.dataset.item_type = navigationItem.dataset.item_type;
+            appsidebar.classList.remove('disappear');
 
             document.getElementById('tabHeaderReport').classList.add('selected');
             document.querySelector('.tabHeader.selected').click();

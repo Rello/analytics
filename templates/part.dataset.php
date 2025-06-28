@@ -12,10 +12,10 @@
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="true" id="advanced">
     <h3 id="sidebarTitle" style="text-align: center;"></h3>
-    <div id="app-sidebar" class="details-view scroll-container disappear" data-id="" data-type="">
+<!--    <div id="app-sidebar" class="details-view scroll-container disappear" data-id="" data-type="">
         <ul class="tabHeaders">
         </ul>
         <div class="tabsContainer">
         </div>
     </div>
-</div>
+--></div>

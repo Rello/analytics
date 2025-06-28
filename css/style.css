@@ -296,7 +296,7 @@ content: inherit;
     border-bottom-right-radius: 5px;
     color: #FFFFFF;
     padding: 0 0 8px 20px;
-    width: 100%;
+    width: 600px;
     background-size: 600px 100%;
     background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%) no-repeat;
     margin-left: 30px;
@@ -1100,10 +1100,6 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .panoramaSubHeader {
     margin-left: 15px !important;
-}
-
-.panoramaHeaderRow {
-    padding-top: 20px;
 }
 
 .pages {
