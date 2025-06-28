@@ -7,7 +7,6 @@
 - Highlight selected threshold row in sidebar
 - Remove duplicate panorama handlers from navigation logic
 - Favorite items now remain in their original sections and update without reloading
-- Favorite star icons update in both original and Favorites rows
 
 ### Added
 - Unified navigation showing panoramas and reports together

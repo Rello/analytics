@@ -636,6 +636,7 @@ OCA.Analytics.Navigation = {
         const datasetId = menu.dataset.id;
         const itemType = menu.dataset.item_type;
         const isAdding = evt.target.parentNode.firstElementChild.classList.contains('icon-star');
+
         let isFavorite = 'false';
 
         if (isAdding) {
@@ -653,6 +654,7 @@ OCA.Analytics.Navigation = {
             }
 
         } else {
+
             // remove item from favorites section
             const favItem = document.querySelector('#section-favorites [data-id="' + datasetId + '"][data-item_type="' + itemType + '"]');
             if (favItem) favItem.parentElement.remove();
