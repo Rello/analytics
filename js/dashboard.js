@@ -55,31 +55,43 @@ OCA.Analytics.Dashboard = {
     },
 
     getFavorites: function () {
-        const url = OC.generateUrl('apps/analytics/favorites', true);
+        const requests = [];
+        requests.push(fetch(OC.generateUrl('apps/analytics/favorites'), {
+            method: 'GET',
+            headers: OCA.Analytics.headers(),
+        }));
+        requests.push(fetch(OC.generateUrl('apps/analytics/panoramaFavorites'), {
+            method: 'GET',
+            headers: OCA.Analytics.headers(),
+        }));
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.setRequestHeader('requesttoken', OC.requestToken);
-        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        Promise.all(requests)
+            .then(responses => Promise.all(responses.map(r => r.json())))
+            .then(responseData => {
+                const reportFavorites = Array.isArray(responseData[0]) ? responseData[0] : [];
+                const panoramaFavorites = Array.isArray(responseData[1]) ? responseData[1] : [];
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.response !== '[]') {
+                if (reportFavorites.length > 0 || panoramaFavorites.length > 0) {
                     document.getElementById('ulAnalytics').innerHTML = '';
-                    for (let dataset of JSON.parse(xhr.response)) {
+
+                    for (let dataset of reportFavorites) {
                         let li = '<li id="analyticsWidgetItem' + dataset + '" class="analyticsWidgetItem"></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
                         OCA.Analytics.Dashboard.getData(dataset);
+                    }
+
+                    for (let panorama of panoramaFavorites) {
+                        let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
+                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem" style="height: 50px;text-align: center;">';
+                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">' + story.name + '</a></li>';
+                        document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
                     }
                 } else {
                     document.getElementById('ulAnalytics').innerHTML = '<div>'
                         + t('analytics', 'Add a report to the favorites to be shown here.')
                         + '</div>';
                 }
-            }
-        };
-        xhr.send();
+            });
     },
 
     getData: function (datasetId) {
