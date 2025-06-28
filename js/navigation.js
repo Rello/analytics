@@ -376,6 +376,36 @@ OCA.Analytics.Navigation = {
         return divFav;
     },
 
+    updateFavoriteUI: function (datasetId, itemType, isFavorite) {
+        const anchors = document.querySelectorAll(
+            '#navigationDatasets a[data-id="' + datasetId + '"][data-item_type="' + itemType + '"]'
+        );
+        anchors.forEach(anchor => {
+            const favMark = anchor.querySelector('#fav-' + datasetId);
+            if (isFavorite === 'true') {
+                if (!favMark) {
+                    anchor.appendChild(OCA.Analytics.Navigation.buildFavoriteIcon(datasetId, ''));
+                }
+            } else if (favMark) {
+                favMark.remove();
+            }
+        });
+
+        const menus = document.querySelectorAll(
+            '.app-navigation-entry-menu[data-id="' + datasetId + '"][data-item_type="' + itemType + '"] #navigationMenueFavorite'
+        );
+        menus.forEach(menuItem => {
+            const icon = menuItem.firstElementChild;
+            if (isFavorite === 'true') {
+                icon.classList.replace('icon-star', 'icon-starred');
+                menuItem.children[1].innerHTML = t('analytics', 'Remove from favorites');
+            } else {
+                icon.classList.replace('icon-starred', 'icon-star');
+                menuItem.children[1].innerHTML = t('analytics', 'Add to favorites');
+            }
+        });
+    },
+
     buildNavigationUtilsDataset: function (data) {
         let divUtils = document.createElement('div');
         divUtils.classList.add('app-navigation-entry-utils');
@@ -605,36 +635,32 @@ OCA.Analytics.Navigation = {
         const menu = evt.target.closest('div');
         const datasetId = menu.dataset.id;
         const itemType = menu.dataset.item_type;
-        let icon = evt.target.parentNode.firstElementChild;
+        const isAdding = evt.target.parentNode.firstElementChild.classList.contains('icon-star');
+
         let isFavorite = 'false';
 
-        if (icon.classList.contains('icon-star')) {
-            icon.classList.replace('icon-star', 'icon-starred');
-            evt.target.parentNode.children[1].innerHTML = t('analytics', 'Remove from favorites');
+        if (isAdding) {
             isFavorite = 'true';
 
-            // add visual marker
-            const divFav = OCA.Analytics.Navigation.buildFavoriteIcon(datasetId, '');
-            menu.parentElement.firstElementChild.appendChild(divFav);
-
-            // add item to favorites section
-            const entry = OCA.Analytics.reports.find(x =>
-                parseInt(x.id) === parseInt(datasetId) && x.item_type === itemType
-            );
-            if (entry) {
-                OCA.Analytics.Navigation.buildNavigationRow(entry, 'section-favorites');
+            // add item to favorites section if not present
+            const existing = document.querySelector('#section-favorites [data-id="' + datasetId + '"][data-item_type="' + itemType + '"]');
+            if (!existing) {
+                const entry = OCA.Analytics.reports.find(x =>
+                    parseInt(x.id) === parseInt(datasetId) && x.item_type === itemType
+                );
+                if (entry) {
+                    OCA.Analytics.Navigation.buildNavigationRow(entry, 'section-favorites');
+                }
             }
 
         } else {
-            icon.classList.replace('icon-starred', 'icon-star');
-            evt.target.parentNode.children[1].innerHTML = t('analytics', 'Add to favorites');
-            const favIcon = document.getElementById('fav-' + datasetId);
-            if (favIcon) favIcon.remove();
 
             // remove item from favorites section
             const favItem = document.querySelector('#section-favorites [data-id="' + datasetId + '"][data-item_type="' + itemType + '"]');
             if (favItem) favItem.parentElement.remove();
         }
+
+        OCA.Analytics.Navigation.updateFavoriteUI(datasetId, itemType, isAdding ? 'true' : 'false');
 
         const handler = OCA.Analytics.Navigation.handlers['favoriteUpdate']?.[itemType];
         if (handler) {
