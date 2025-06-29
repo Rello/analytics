@@ -82,7 +82,7 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function report()
+    public function main()
     {
         $params = array();
         $params['token'] = '';
@@ -110,7 +110,11 @@ class PageController extends Controller
             $translationLanguages
         );
 
-        return new TemplateResponse($this->appName, 'main', $params);
+		if (class_exists(LoadEditor::class)) {
+			$this->eventDispatcher->dispatchTyped(new LoadEditor());
+		}
+
+		return new TemplateResponse($this->appName, 'main', $params);
     }
 
     /**
@@ -135,10 +139,7 @@ class PageController extends Controller
      */
     public function panorama()
     {
-        if (class_exists(LoadEditor::class)) {
-            $this->eventDispatcher->dispatchTyped(new LoadEditor());
-        }
-        return new TemplateResponse($this->appName, 'main_panorama');
+        return $this->main();
     }
 
     /**

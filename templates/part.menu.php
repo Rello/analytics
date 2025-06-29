@@ -86,25 +86,25 @@
         </ul>
         <ul id="optionsMenuMainPanorama" style="display: none !important;">
             <li>
-                <button id="optionsMenuEdit">
+                <button id="optionsMenuPanoramaEdit">
                     <span id="optionsMenuEditIcon" class="icon-rename"></span>
                     <span id="optionsMenuEditText"><?php p($l->t('Edit')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="optionsMenuLayout">
+                <button id="optionsMenuPanoramaLayout">
                     <span class="icon-analytics-drilldown"></span>
                     <span><?php p($l->t('Change layout')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="optionsMenuDeletePage">
+                <button id="optionsMenuPanoramaDeletePage">
                     <span class="icon-delete"></span>
                     <span><?php p($l->t('Delete current page')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="optionsMenuPdf">
+                <button id="optionsMenuPanoramaPdf">
                     <span class="icon-analytics-pdf"></span>
                     <span><?php p($l->t('Export as PDF')); ?></span>
                 </button>

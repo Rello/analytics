@@ -63,6 +63,7 @@ Object.assign(OCA.Analytics, {
     datasets: [],
     reports: [],
     stories: [],
+    handlers: {},
 
     currentReportData: {},
     currentPanorama: {},
@@ -98,7 +99,15 @@ Object.assign(OCA.Analytics, {
         headers.append('OCS-APIREQUEST', 'true');
         headers.append('Content-Type', 'application/json');
         return headers;
-    }
+    },
+
+    registerHandler: function (context, type, handlerFunction) {
+        if (!OCA.Analytics.handlers[context]) {
+            OCA.Analytics.handlers[context] = {};
+        }
+        OCA.Analytics.handlers[context][type] = handlerFunction;
+    },
+
 });
 
 OCA.Analytics.Core = OCA.Analytics.Core || {};
@@ -127,13 +136,28 @@ Object.assign(OCA.Analytics.Core = {
             // Dashboard has to be loaded from the navigation as it depends on the report index
         }
 
-        if (!OCA.Analytics.isDataset) {
-            OCA.Analytics.Report.reportOptionsEventlisteners();
-            document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-            document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
-            document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
-            document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+        OCA.Analytics.Report.reportOptionsEventlisteners();
+        OCA.Analytics.Panorama.reportOptionsEventlisteners();
+        document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
+        document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
+        document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
+        document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+
+        document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Core.toggleOptionsMenu);
+    },
+
+    toggleOptionsMenu: function () {
+        if (OCA.Analytics.currentContentType === 'panorama') {
+            document.getElementById('optionsMenuMainPanorama').style.removeProperty('display');
+            document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
+        } else if (OCA.Analytics.currentContentType === 'report') {
+            document.getElementById('optionsMenuMainPanorama').style.setProperty('display', 'none', 'important');
+            document.getElementById('optionsMenuMainReport').style.removeProperty('display');
         }
+        document.getElementById('optionsMenu').classList.toggle('open');
+        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
+        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
     },
 
     /**

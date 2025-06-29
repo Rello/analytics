@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'report', function (id, isFavorite) {
         OCA.Analytics.Report.favoriteUpdate(id, isFavorite);
     });
+
+    OCA.Analytics.registerHandler('saveIcon', 'report', function () {
+        OCA.Analytics.Filter.Backend.saveReport();
+    });
+
 })
 
 OCA = OCA || {};
@@ -54,6 +59,7 @@ Object.assign(OCA.Analytics.Report, {
 
     handleNavigationClicked: function () {
 
+        OCA.Analytics.currentContentType = 'report';
         OCA.Analytics.Visualization.showContentByType('loading');
 
         document.getElementById('filterVisualisation').innerHTML = '';
@@ -267,46 +273,42 @@ Object.assign(OCA.Analytics.Report, {
      * Clear current chart and table elements
      */
     resetContentArea: function () {
-        if (OCA.Analytics.isDataset) {
-            OCA.Analytics.Visualization.showElement('analytics-intro');
-            document.getElementById('app-sidebar').classList.add('disappear');
-        } else {
-            let key = Object.keys(OCA.Analytics.tableObject)[0];
-            if (key !== undefined) {
-                // Remove the event listener for 'order.dt' first
-                OCA.Analytics.tableObject[key].off('length.dt order.dt column-reorder');
-                OCA.Analytics.tableObject[key].destroy();
-            }
-
-            OCA.Analytics.tableObject = [];
-            OCA.Analytics.Visualization.hideElement('chartContainer');
-            OCA.Analytics.Visualization.hideElement('chartLegendContainer');
-            document.getElementById('chartContainer').innerHTML = '';
-            document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
-            document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
-            OCA.Analytics.Visualization.hideElement('tableContainer');
-            OCA.Analytics.Visualization.hideElement('tableSeparatorContainer');
-            //OCA.Analytics.Visualization.hideElement('tableMenuBar');
-            document.getElementById('tableContainer').innerHTML = '';
-
-            OCA.Analytics.Visualization.hideElement('reportSubHeader');
-            OCA.Analytics.Visualization.hideElement('noDataContainer');
-            document.getElementById('reportHeader').innerHTML = '';
-            document.getElementById('reportSubHeader').innerHTML = '';
-
-            OCA.Analytics.Visualization.showElement('menuBar');
-            OCA.Analytics.Report.hideReportMenu();
-            document.getElementById('optionsMenuChartOptions').disabled = false;
-            document.getElementById('optionsMenuTableOptions').disabled = false;
-            document.getElementById('optionsMenuAnalysis').disabled = false;
-            document.getElementById('optionsMenuColumnSelection').disabled = false;
-            document.getElementById('optionsMenuSort').disabled = false;
-            document.getElementById('optionsMenuTopN').disabled = false;
-            document.getElementById('optionsMenuTimeAggregation').disabled = false;
-            document.getElementById('optionsMenuDownload').disabled = false;
-            document.getElementById('optionsMenuAnalysis').disabled = false;
-            document.getElementById('optionsMenuTranslate').disabled = false;
+        let key = Object.keys(OCA.Analytics.tableObject)[0];
+        if (key !== undefined) {
+            // Remove the event listener for 'order.dt' first
+            OCA.Analytics.tableObject[key].off('length.dt order.dt column-reorder');
+            OCA.Analytics.tableObject[key].destroy();
         }
+
+        OCA.Analytics.tableObject = [];
+        OCA.Analytics.Visualization.hideElement('chartContainer');
+        OCA.Analytics.Visualization.hideElement('chartLegendContainer');
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
+        document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
+        OCA.Analytics.Visualization.hideElement('tableContainer');
+        OCA.Analytics.Visualization.hideElement('tableSeparatorContainer');
+        document.getElementById('tableContainer').innerHTML = '';
+
+        OCA.Analytics.Visualization.showElement('menuBar');
+        OCA.Analytics.Visualization.showElement('addFilterIcon');
+        OCA.Analytics.Visualization.showElement('filterVisualisation');
+        OCA.Analytics.Visualization.hideElement('reportSubHeader');
+        OCA.Analytics.Visualization.hideElement('noDataContainer');
+        document.getElementById('reportHeader').innerHTML = '';
+        document.getElementById('reportSubHeader').innerHTML = '';
+
+        OCA.Analytics.Report.hideReportMenu();
+        document.getElementById('optionsMenuChartOptions').disabled = false;
+        document.getElementById('optionsMenuTableOptions').disabled = false;
+        document.getElementById('optionsMenuAnalysis').disabled = false;
+        document.getElementById('optionsMenuColumnSelection').disabled = false;
+        document.getElementById('optionsMenuSort').disabled = false;
+        document.getElementById('optionsMenuTopN').disabled = false;
+        document.getElementById('optionsMenuTimeAggregation').disabled = false;
+        document.getElementById('optionsMenuDownload').disabled = false;
+        document.getElementById('optionsMenuAnalysis').disabled = false;
+        document.getElementById('optionsMenuTranslate').disabled = false;
     },
 
     /**
@@ -323,9 +325,7 @@ Object.assign(OCA.Analytics.Report, {
                 OCA.Analytics.Visualization.hideElement('optionsMenuIcon');
                 OCA.Analytics.Filter.refreshFilterVisualisation();
             } else {
-                //document.getElementById('menuBar').remove();
                 OCA.Analytics.Visualization.hideElement('menuBar');
-                //document.getElementById('menuBar').id = 'menuBarHidden';
             }
             return;
         }
@@ -373,9 +373,6 @@ Object.assign(OCA.Analytics.Report, {
      */
     reportOptionsEventlisteners: function () {
         document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
-        document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Report.toggleReportMenu);
-        //document.getElementById('tableMenuIcon').addEventListener('click', OCA.Analytics.Report.toggleTableMenu);
-        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.Backend.saveReport);
         document.getElementById('optionsMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('optionsMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
         document.getElementById('optionsMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
@@ -413,21 +410,6 @@ Object.assign(OCA.Analytics.Report, {
         if (document.getElementById('optionsMenu') !== null) {
             document.getElementById('optionsMenu').classList.remove('open');
         }
-    },
-
-    /**
-     * Toggle visibility of the report menu
-     */
-    toggleReportMenu: function () {
-        if (OCA.Analytics.isPanorama) {
-            document.getElementById('optionsMenuMainPanorama').style.removeProperty('display');
-        } else {
-            document.getElementById('optionsMenuMainReport').style.removeProperty('display');
-        }
-        document.getElementById('optionsMenu').classList.toggle('open');
-        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
     },
 
     /**
@@ -511,7 +493,8 @@ Object.assign(OCA.Analytics.Report, {
         let listCountMax = 4;
         for (let item of listValues) {
             let li = document.createElement('li');
-            li.id = /\s/.test(item) ? `'${item}'` : item;;
+            li.id = /\s/.test(item) ? `'${item}'` : item;
+            ;
             li.innerText = item;
             li.title = item;
             listCount > listCountMax ? li.style.display = 'none' : li.style.display = '';

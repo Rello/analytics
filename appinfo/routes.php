@@ -10,7 +10,7 @@
 return [
 	'routes' => [
 		[
-			'name' => 'page#report',
+			'name' => 'page#main',
 			'url' => '/r/{id}',
 			'verb' => 'GET',
 			'postfix' => 'index',
@@ -19,7 +19,7 @@ return [
 			]
 		],
 		[
-			'name' => 'page#report',
+			'name' => 'page#main',
 			'url' => '/d/{id}',
 			'verb' => 'GET',
 			'defaults' => [
@@ -27,14 +27,14 @@ return [
 			]
 		],
 		[
-			'name' => 'page#report',
+			'name' => 'page#panorama',
 			'url' => '/pa/{id}',
 			'verb' => 'GET',
 			'defaults' => [
 				'id' => '',
 			]
 		],
-		['name' => 'page#report', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#main', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
 		['name' => 'page#indexPublicMin', 'url' => '/pm/{token}', 'verb' => 'GET'],
 		['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],

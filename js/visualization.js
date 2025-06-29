@@ -1227,5 +1227,10 @@ OCA.Analytics.Visualization = {
             OCA.Analytics.Visualization.showElement('analytics-content-' + type);
             OCA.Analytics.currentContentType = type;
         }
+        if (type === 'intro' || type === 'warning') {
+            OCA.Analytics.Visualization.hideElement('menuBar');
+        } else {
+            OCA.Analytics.Visualization.showElement('menuBar');
+        }
      }
 }

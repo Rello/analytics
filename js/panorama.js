@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'panorama', function (id, isFavorite) {
         OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
     });
+
+    OCA.Analytics.registerHandler('saveIcon', 'panorama', function () {
+        OCA.Analytics.Panorama.Backend.savePanorama();
+    });
+
+
 })
 
 OCA = OCA || {};
@@ -92,37 +98,24 @@ Object.assign(OCA.Analytics.Panorama = {
                 '</div>'
         },
     ],
-
-    init: function () {
-        // URL semantic is analytics/*type*/id
-        let regex = /\/analytics\/([a-zA-Z0-9]+)\/(\d+)/;
-        let match = window.location.href.match(regex);
-
-        if (match) {
-            OCA.Analytics.Navigation.init(parseInt(match[2]));
-        } else {
-            OCA.Analytics.Navigation.init();
-            // Dashboard has to be loaded from the navigation as it depends on the report index
-        }
+    
+    /**
+     * Attach click handlers for report menu elements
+     */
+    reportOptionsEventlisteners: function () {
+        document.getElementById('optionsMenuPanoramaEdit').addEventListener('click', OCA.Analytics.Panorama.handleEditButton);
+        document.getElementById('optionsMenuPanoramaLayout').addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector);
+        document.getElementById('optionsMenuPanoramaDeletePage').addEventListener('click', OCA.Analytics.Panorama.handleDeletePageButton);
+        document.getElementById('optionsMenuPanoramaPdf').addEventListener('click', OCA.Analytics.Panorama.handlePdfButton);
 
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
         document.getElementById('nextBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('next'));
-        document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Panorama.toggleOptionMenu);
-        document.getElementById('optionsMenuEdit').addEventListener('click', OCA.Analytics.Panorama.handleEditButton);
-        document.getElementById('optionsMenuLayout').addEventListener('click', OCA.Analytics.Panorama.buildLayoutSelector);
-        document.getElementById('optionsMenuDeletePage').addEventListener('click', OCA.Analytics.Panorama.handleDeletePageButton);
-        document.getElementById('optionsMenuPdf').addEventListener('click', OCA.Analytics.Panorama.handlePdfButton);
-        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Panorama.Backend.savePanorama);
-
-        document.getElementById("infoBoxReport").addEventListener('click', OCA.Analytics.Panorama.newPanorama);
-        document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
-
+        
         document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
             document.getElementById('layoutModalGrid').innerHTML = '';
         });
 
-        OCA.Analytics.Panorama.Backend.getReports();
     },
 
     getDefaultChartOptions: function () {
@@ -189,7 +182,9 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     handleNavigationClicked: function (evt) {
-
+        OCA.Analytics.currentContentType = 'report';
+        OCA.Analytics.Visualization.hideElement('addFilterIcon');
+        OCA.Analytics.Visualization.hideElement('filterVisualisation');
         OCA.Analytics.Visualization.showContentByType('loading');
 
         const foundItem = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
@@ -416,26 +411,14 @@ Object.assign(OCA.Analytics.Panorama = {
 
     updateOptionsMenuContent: function () {
         if (OCA.Analytics.currentPanorama.permissions && parseInt(OCA.Analytics.currentPanorama.permissions) === OCA.Analytics.SHARE_PERMISSION_UPDATE) {
-            document.getElementById('optionsMenuEdit').disabled = false;
-            document.getElementById('optionsMenuLayout').disabled = false;
-            document.getElementById('optionsMenuDeletePage').disabled = false;
+            document.getElementById('optionsMenuPanoramaEdit').disabled = false;
+            document.getElementById('optionsMenuPanoramaLayout').disabled = false;
+            document.getElementById('optionsMenuPanoramaDeletePage').disabled = false;
         } else {
-            document.getElementById('optionsMenuEdit').disabled = true;
-            document.getElementById('optionsMenuLayout').disabled = true;
-            document.getElementById('optionsMenuDeletePage').disabled = true;
+            document.getElementById('optionsMenuPanoramaEdit').disabled = true;
+            document.getElementById('optionsMenuPanoramaLayout').disabled = true;
+            document.getElementById('optionsMenuPanoramaDeletePage').disabled = true;
         }
-    },
-
-    toggleOptionMenu: function () {
-        if (OCA.Analytics.isPanorama) {
-            document.getElementById('optionsMenuMainPanorama').style.removeProperty('display');
-        } else {
-            document.getElementById('optionsMenuMainReport').style.removeProperty('display');
-        }
-        document.getElementById('optionsMenu').classList.toggle('open');
-        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
     },
 
     hideOptionMenu: function () {
@@ -1287,6 +1270,11 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
+                if (xhr.status === 404) {
+                    document.getElementById('analyticsWidgetReport' + itemId).innerText = '';
+                    document.getElementById('myWidget' + itemId).innerText = t('analytics', 'The report is not available anymore');
+                    return;
+                }
                 let jsondata = JSON.parse(xhr.response);
                 // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
                 if (parseInt(jsondata.error) !== 0) {

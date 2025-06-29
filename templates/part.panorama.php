@@ -245,8 +245,6 @@
 </style>
 <div id="analytics-content-panorama" hidden>
 
-	<?php print_unescaped($this->inc('part.menu')); ?>
-
     <div id="panoramaHeaderRow" class="panoramaHeaderRow">
         <div id="panoramaHeader" class="reportHeader editable"></div>
     </div>

@@ -12,7 +12,6 @@
     <input type="hidden" name="dataset" value="" id="datasetId">
     <input type="hidden" name="advanced" value="false" id="advanced">
     <input type="hidden" name="panorama" value="false" id="panorama">
-	<?php print_unescaped($this->inc('part.menu')); ?>
     <span id="reportHeader" class="reportHeader"></span>
     <span id="reportSubHeader" class="reportSubHeader" hidden></span>
     <div id="reportPlaceholder"></div>

@@ -43,6 +43,7 @@ Util::addScript('analytics', 'userGuidance');
     <div id="analytics-content-loading" style="width:100%; padding: 100px 5%;" hidden>
         <div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>
     </div>
+	<?php print_unescaped($this->inc('part.menu')); ?>
 
 	<?php print_unescaped($this->inc('part.intro')); ?>
     <?php print_unescaped($this->inc('part.report')); ?>
