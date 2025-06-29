@@ -19,7 +19,7 @@ return [
 			]
 		],
 		[
-			'name' => 'page#main',
+			'name' => 'page#dataset',
 			'url' => '/d/{id}',
 			'verb' => 'GET',
 			'defaults' => [

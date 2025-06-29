@@ -216,7 +216,10 @@ content: inherit;
 #analytics-content-dataset {
     width: 100%;
     height: 100%;
-    /*padding: 20px 30px;*/
+}
+
+#analytics-content-dataset {
+    padding: 20px 30px;
 }
 
 #analytics-content-intro {
@@ -1191,4 +1194,57 @@ div.dt-container .dt-paging .dt-paging-button {
 .pageScroll.highlighted {
     color: var(--color-warning);
     opacity: 0.8;
+}
+
+/* === Datsets === */
+.datasetTabHeaders {
+    display: flex;
+    width: 100%;
+    list-style: none;
+    background-color: var(--color-main-background);
+    margin-bottom: 16px;
+}
+
+.datasetTabContainer {
+    background-color: var(--color-main-background);
+    padding-top: 16px;
+    height: 90%;
+}
+
+.tabHeader {
+    flex: 1;
+    text-align: center;
+}
+
+.tabHeader.selected {
+    border-bottom: 4px solid #1A366C;
+}
+
+.tabHeader a {
+    display: block;
+    padding: 10px 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.datasetTabContainer .tab {
+    padding: 0 15px 15px;
+}
+
+.dataloadHeader {
+    text-align: center;
+    margin-top: 15px;
+    min-height: 26px;
+    border-bottom: 1px solid var(--color-border-dark);
+    border-top: 1px solid var(--color-border-dark);
+}
+
+.dataloadItem > a {
+    background-position: 14px center;
+    line-height: 44px;
+    padding: 0 12px 0 44px;
+}
+
+#dataloadDetail, #dataloadRun {
+    padding-top: 30px;
 }

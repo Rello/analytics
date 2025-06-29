@@ -547,7 +547,7 @@ OCA.Analytics.Navigation = {
         } else if (OCA.Analytics.isDataset) {
             OCA.Analytics.Wizard.sildeArray = [
                 ['', ''],
-                ['wizardDatasetGeneral', OCA.Analytics.Advanced.Dataset.wizard],
+                ['wizardDatasetGeneral', OCA.Analytics.Dataset.Dataset.wizard],
             ];
             OCA.Analytics.Wizard.show();
         }
@@ -588,9 +588,6 @@ OCA.Analytics.Navigation = {
         let handler = OCA.Analytics.Navigation.handlers['navigationClicked']?.[type];
         if (handler) {
             handler(evt);
-        } else if (evt.target.dataset.item_type === 'dataset') {
-            OCA.Analytics.Advanced.showSidebar(evt);
-            evt.stopPropagation();
         }
     },
 

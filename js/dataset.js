@@ -10,41 +10,44 @@
 /** global: OC */
 'use strict';
 
-/**
- * @namespace OCA.Analytics.Advanced
- */
-OCA.Analytics.Advanced = {
+document.addEventListener('DOMContentLoaded', function () {
+    // register handlers for the navigation bar
+    OCA.Analytics.Navigation.registerHandler('create', 'dataset', function () {
+        OCA.Analytics.Panorama.newPanorama();
+    });
+
+    OCA.Analytics.Navigation.registerHandler('navigationClicked', 'dataset', function (event) {
+        OCA.Analytics.Dataset.handleNavigationClicked(event);
+    });
+
+    OCA.Analytics.Navigation.registerHandler('delete', 'dataset', function (event) {
+        OCA.Analytics.Panorama.handleDeletePanoramaButton(event);
+    });
+
+    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'dataset', function (id, isFavorite) {
+        OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
+    });
+})
+
+OCA = OCA || {};
+
+OCA.Analytics.Dataset = OCA.Analytics.Dataset || {};
+Object.assign(OCA.Analytics.Dataset = {
     sidebar_tabs: {},
 
-    showSidebar: function (evt) {
+    handleNavigationClicked: function (evt) {
+        OCA.Analytics.Visualization.showContentByType('dataset');
+        OCA.Analytics.Visualization.hideElement('menuBar');
+
         let navigationItem = evt.target;
         if (navigationItem.dataset.id === undefined) navigationItem = evt.target.closest('div');
-        const datasetId = navigationItem.dataset.id;
-        const datasetType = navigationItem.dataset.type;
-        let appsidebar = document.getElementById('app-sidebar');
+        OCA.Analytics.currentDataset = navigationItem.dataset.id;
+        OCA.Analytics.currentDatasetType = navigationItem.dataset.type;
 
-        if (appsidebar.dataset.id === datasetId && document.getElementById('advanced').value === 'false') {
-            OCA.Analytics.Advanced.hideSidebar();
-        } else {
-            document.getElementById('sidebarTitle').innerText = navigationItem.dataset.name;
-            OCA.Analytics.Advanced.constructTabs(datasetType);
+        OCA.Analytics.Dataset.constructTabs();
 
-            if (document.getElementById('advanced').value === 'false') {
-                if (appsidebar.dataset.id === '') {
-                    document.getElementById("sidebarClose").addEventListener("click", OCA.Analytics.Advanced.hideSidebar);
-                    appsidebar.classList.remove('disappear');
-                }
-            } else {
-                OCA.Analytics.Visualization.hideElement('analytics-intro');
-                OCA.Analytics.Visualization.showElement('analytics-content');
-                appsidebar.classList.remove('disappear');
-            }
-            appsidebar.dataset.id = datasetId;
-            appsidebar.dataset.type = datasetType;
-
-            document.getElementById('tabHeaderDataset').classList.add('selected');
-            document.querySelector('.tabHeader.selected').click();
-        }
+        document.getElementById('tabHeaderDataset').classList.add('selected');
+        document.querySelector('.tabHeader.selected').click();
     },
 
     registerSidebarTab: function (tab) {
@@ -53,18 +56,18 @@ OCA.Analytics.Advanced = {
     },
 
     constructTabs: function () {
-        document.querySelector('.tabHeaders').innerHTML = '';
-        document.querySelector('.tabsContainer').innerHTML = '';
+        document.querySelector('.datasetTabHeaders').innerHTML = '';
+        document.querySelector('.datasetTabContainer').innerHTML = '';
 
-        OCA.Analytics.Advanced.registerSidebarTab({
+        OCA.Analytics.Dataset.registerSidebarTab({
             id: 'tabHeaderDataset',
             class: 'tabContainerDataset',
             tabindex: '1',
             name: t('analytics', 'Dataset'),
-            action: OCA.Analytics.Advanced.Dataset.tabContainerDataset,
+            action: OCA.Analytics.Dataset.Dataset.tabContainerDataset,
         });
 
-        OCA.Analytics.Advanced.registerSidebarTab({
+        OCA.Analytics.Dataset.registerSidebarTab({
             id: 'tabHeaderData',
             class: 'tabContainerData',
             tabindex: '2',
@@ -72,19 +75,20 @@ OCA.Analytics.Advanced = {
             action: OCA.Analytics.Sidebar.Data.tabContainerData,
         });
 
-        OCA.Analytics.Advanced.registerSidebarTab({
+        OCA.Analytics.Dataset.registerSidebarTab({
             id: 'tabHeaderDataload',
             class: 'tabContainerDataload',
             tabindex: '2',
             name: t('analytics', 'Automation'),
-            action: OCA.Analytics.Advanced.Dataload.tabContainerDataload,
+            action: OCA.Analytics.Dataset.Dataload.tabContainerDataload,
         });
 
-        let items = _.map(OCA.Analytics.Advanced.sidebar_tabs, function (item) {
+        let items = _.map(OCA.Analytics.Dataset.sidebar_tabs, function (item) {
             return item;
         });
-        items.sort(OCA.Analytics.Advanced.sortByName);
+        items.sort(OCA.Analytics.Dataset.sortByName);
 
+        let tabHeaders = document.querySelector('.datasetTabHeaders');
         for (let tab in items) {
             let li = document.createElement('li');
             li.classList.add('tabHeader');
@@ -94,28 +98,20 @@ OCA.Analytics.Advanced = {
             atag.textContent = items[tab].name;
             atag.setAttribute('title', items[tab].name);
             li.append(atag);
-            let tabHeaders = document.querySelector('.tabHeaders');
             tabHeaders.appendChild(li);
 
             let div = document.createElement('div');
             div.classList.add('tab', items[tab].class);
             div.setAttribute('id', items[tab].class);
-            let tabsContainer = document.querySelector('.tabsContainer');
-            tabsContainer.appendChild(div);
+            let tabContainer = document.querySelector('.datasetTabContainer');
+            tabContainer.appendChild(div);
             document.getElementById(items[tab].id).addEventListener('click', items[tab].action);
         }
     },
 
-    hideSidebar: function () {
-        document.getElementById('app-sidebar').dataset.id = '';
-        document.getElementById('app-sidebar').classList.add('disappear');
-        document.querySelector('.tabHeaders').innerHTML = '';
-        document.querySelector('.tabsContainer').innerHTML = '';
-    },
-
     resetView: function () {
         document.querySelector('.tabHeader.selected').classList.remove('selected');
-        let tabs = document.querySelectorAll('.tabsContainer .tab');
+        let tabs = document.querySelectorAll('.datasetTabContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;
             tabs[i].innerHTML = '';
@@ -128,23 +124,21 @@ OCA.Analytics.Advanced = {
         const bName = b.tabindex;
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
-};
+});
 
-/**
- * @namespace OCA.Analytics.Advanced.Dataload
- */
-OCA.Analytics.Advanced.Dataload = {
+OCA.Analytics.Dataset.Dataload = OCA.Analytics.Dataset.Dataload || {};
+Object.assign(OCA.Analytics.Dataset.Dataload = {
     dataloadArray: [],
 
     tabContainerDataload: function () {
-        const datasetId = document.getElementById('app-sidebar').dataset.id;
+        const datasetId = OCA.Analytics.currentDataset;
 
-        OCA.Analytics.Advanced.resetView();
+        OCA.Analytics.Dataset.resetView();
         document.getElementById('tabHeaderDataload').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerDataload');
         document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
-        if (parseInt(document.getElementById('app-sidebar').dataset.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
+        if (parseInt(OCA.Analytics.currentDatasetType) !== OCA.Analytics.TYPE_INTERNAL_DB) {
             let message = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'Data maintenance is not possible for this type of report') + '</p></div>';
             document.getElementById('tabContainerDataload').innerHTML = message;
             return;
@@ -164,28 +158,28 @@ OCA.Analytics.Advanced.Dataload = {
                 table.id = 'tableDataload';
                 document.getElementById('tabContainerDataload').innerHTML = '';
                 document.getElementById('tabContainerDataload').appendChild(table);
-                document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCreateButton);
-                document.getElementById('createDataDeletionButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCreateDataDeletionButton);
+                document.getElementById('createDataloadButton').addEventListener('click', OCA.Analytics.Dataset.Dataload.handleCreateButton);
+                document.getElementById('createDataDeletionButton').addEventListener('click', OCA.Analytics.Dataset.Dataload.handleCreateDataDeletionButton);
                 document.getElementById('dataLoadList').innerHTML = '';
                 document.getElementById('dataDeleteList').innerHTML = '';
 
-                OCA.Analytics.Advanced.Dataload.dataloadArray = [];
+                OCA.Analytics.Dataset.Dataload.dataloadArray = [];
 
                 // list all available data loads for dataset
                 for (let dataload of data['dataloads']) {
                     if (parseInt(dataload['datasource']) === 0) {
-                        document.getElementById('dataDeleteList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
+                        document.getElementById('dataDeleteList').appendChild(OCA.Analytics.Dataset.Dataload.buildDataloadRow(dataload));
                     } else {
-                        document.getElementById('dataLoadList').appendChild(OCA.Analytics.Advanced.Dataload.buildDataloadRow(dataload));
+                        document.getElementById('dataLoadList').appendChild(OCA.Analytics.Dataset.Dataload.buildDataloadRow(dataload));
                     }
                     // keys need to be int; some instances deliver strings from the backend
                     dataload['dataset'] = parseInt(dataload['dataset']);
                     dataload['datasource'] = parseInt(dataload['datasource']);
                     dataload['id'] = parseInt(dataload['id']);
                     // store reulable array
-                    OCA.Analytics.Advanced.Dataload.dataloadArray.push(dataload);
+                    OCA.Analytics.Dataset.Dataload.dataloadArray.push(dataload);
                 }
-                if (OCA.Analytics.Advanced.Dataload.dataloadArray.length === 0) {
+                if (OCA.Analytics.Dataset.Dataload.dataloadArray.length === 0) {
                     document.getElementById('dataLoadList').innerHTML = '<span class="userGuidance">'
                         + t('analytics', 'Choose a data source from the dropdown and press "+"')
                         + '</span><br>';
@@ -197,7 +191,7 @@ OCA.Analytics.Advanced.Dataload = {
 
                 let dataLoadCreated = document.getElementById('app-sidebar').dataset.dataLoadCreated;
                 if (dataLoadCreated !== 'null' && typeof (dataLoadCreated) !== 'undefined') {
-                    OCA.Analytics.Advanced.Dataload.buildDataloadOptions(null, dataLoadCreated);
+                    OCA.Analytics.Dataset.Dataload.buildDataloadOptions(null, dataLoadCreated);
                 }
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = null;
 
@@ -205,7 +199,7 @@ OCA.Analytics.Advanced.Dataload = {
                 OCA.Analytics.Datasource.buildDropdown('datasourceSelect');
 
                 // write dimension structure to data source array [0] in case it is required for a deletion job later
-                //OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
+                //OCA.Analytics.Dataset.Dataload.updateDatasourceDeletionOption();
             });
     },
 
@@ -218,7 +212,7 @@ OCA.Analytics.Advanced.Dataload = {
             optionSelectOptions = optionSelectOptions + Object.keys(OCA.Analytics.Filter.optionTextsArray)[i] + '-' + Object.values(OCA.Analytics.Filter.optionTextsArray)[i] + '/';
         }
 
-        const datasetId = document.getElementById('app-sidebar').dataset.id;
+        const datasetId = OCA.Analytics.currentDataset;
         let dataset = OCA.Analytics.datasets.find(x => parseInt(x.id) === parseInt(datasetId));
 
         let datasetOptions = [];
@@ -256,24 +250,24 @@ OCA.Analytics.Advanced.Dataload = {
         a.innerText = dataload['name'];
         a.dataset.dataloadId = parseInt(dataload['id']);
         a.dataset.datasourceId = parseInt(dataload['datasource']);
-        a.addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDataloadSelect);
+        a.addEventListener('click', OCA.Analytics.Dataset.Dataload.handleDataloadSelect);
         item.appendChild(a);
         return item;
     },
 
     handleDataloadSelect: function (evt) {
-        OCA.Analytics.Advanced.Dataload.buildDataloadOptions(evt);
+        OCA.Analytics.Dataset.Dataload.buildDataloadOptions(evt);
     },
 
     buildDataloadOptions: function (evt, id = null) {
         // write dimension structure to data source array [0] in case it is required for a deletion job later
-        OCA.Analytics.Advanced.Dataload.updateDatasourceDeletionOption();
+        OCA.Analytics.Dataset.Dataload.updateDatasourceDeletionOption();
 
         let dataload;
         if (id === null) {
-            dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.dataloadId));
+            dataload = OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(evt.target.dataset.dataloadId));
         } else {
-            dataload = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(id));
+            dataload = OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(id));
         }
 
         document.getElementById('dataloadDetail').dataset.dataloadId = dataload['id'];
@@ -282,11 +276,11 @@ OCA.Analytics.Advanced.Dataload = {
         OCA.Analytics.Visualization.showElement('dataloadDetailHeader');
         OCA.Analytics.Visualization.showElement('dataloadDetailButtons');
         OCA.Analytics.Visualization.showElement('dataloadDetailDelete');
-        document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleUpdateButton);
-        document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleDeleteButton);
-        document.getElementById('dataloadCopyButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleCopyButton);
+        document.getElementById('dataloadUpdateButton').addEventListener('click', OCA.Analytics.Dataset.Dataload.handleUpdateButton);
+        document.getElementById('dataloadDeleteButton').addEventListener('click', OCA.Analytics.Dataset.Dataload.handleDeleteButton);
+        document.getElementById('dataloadCopyButton').addEventListener('click', OCA.Analytics.Dataset.Dataload.handleCopyButton);
         document.getElementById('dataloadSchedule').value = dataload['schedule'];
-        document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Advanced.Dataload.updateDataload);
+        document.getElementById('dataloadSchedule').addEventListener('change', OCA.Analytics.Dataset.Dataload.updateDataload);
         document.getElementById('dataloadOCC').innerText = 'occ analytics:load ' + dataload['id'];
 
         // get all the options for a data source
@@ -296,7 +290,7 @@ OCA.Analytics.Advanced.Dataload = {
         // set the options for a data source
         let fieldValues = JSON.parse(dataload['option']);
         for (let fieldValue in fieldValues) {
-            document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Advanced.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
+            document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Dataset.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
         }
 
         if (dataload['datasource'] === 0) {
@@ -305,14 +299,14 @@ OCA.Analytics.Advanced.Dataload = {
         }
 
         OCA.Analytics.Visualization.showElement('dataloadRun');
-        document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Advanced.Dataload.handleExecuteButton);
+        document.getElementById('dataloadExecuteButton').addEventListener('click', OCA.Analytics.Dataset.Dataload.handleExecuteButton);
     },
 
     handleCreateButton: function () {
         if (document.getElementById('datasourceSelect').value === '') {
             OCA.Analytics.Notification.notification('error', t('analytics', 'Please select data source'));
         } else {
-            OCA.Analytics.Advanced.Dataload.createDataload();
+            OCA.Analytics.Dataset.Dataload.createDataload();
         }
     },
 
@@ -322,7 +316,7 @@ OCA.Analytics.Advanced.Dataload = {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
-                datasetId: parseInt(document.getElementById('app-sidebar').dataset.id),
+                datasetId: parseInt(OCA.Analytics.currentDataset),
                 datasourceId: document.getElementById('datasourceSelect').value,
             })
         })
@@ -334,7 +328,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     handleCreateDataDeletionButton: function () {
-        OCA.Analytics.Advanced.Dataload.createDataDelete();
+        OCA.Analytics.Dataset.Dataload.createDataDelete();
     },
 
     createDataDelete: function () {
@@ -343,7 +337,7 @@ OCA.Analytics.Advanced.Dataload = {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
-                datasetId: parseInt(document.getElementById('app-sidebar').dataset.id),
+                datasetId: parseInt(OCA.Analytics.currentDataset),
                 datasourceId: 0,
             })
         })
@@ -355,7 +349,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     handleUpdateButton: function () {
-        OCA.Analytics.Advanced.Dataload.updateDataload();
+        OCA.Analytics.Dataset.Dataload.updateDataload();
     },
 
     updateDataload: function () {
@@ -382,15 +376,15 @@ OCA.Analytics.Advanced.Dataload = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['schedule'] = document.getElementById('dataloadSchedule').value;
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
-                OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
+                OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['schedule'] = document.getElementById('dataloadSchedule').value;
+                OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
+                OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
                 document.querySelector('[data-dataload-id="' + dataloadId + '"]').innerHTML = document.getElementById('dataloadName').value;
             });
     },
 
     handleCopyButton: function () {
-        OCA.Analytics.Advanced.Dataload.copyDataload();
+        OCA.Analytics.Dataset.Dataload.copyDataload();
     },
 
     copyDataload: function () {
@@ -424,7 +418,7 @@ OCA.Analytics.Advanced.Dataload = {
             t('analytics', 'Delete data load'),
             t('analytics', 'Are you sure?'),
             function (e) {
-                OCA.Analytics.Advanced.Dataload.deleteDataload();
+                OCA.Analytics.Dataset.Dataload.deleteDataload();
                 OCA.Analytics.Notification.dialogClose();
             }
         );
@@ -443,7 +437,7 @@ OCA.Analytics.Advanced.Dataload = {
     },
 
     handleExecuteButton: function () {
-        OCA.Analytics.Advanced.Dataload.executeDataload();
+        OCA.Analytics.Dataset.Dataload.executeDataload();
     },
 
     executeDataload: function () {
@@ -511,7 +505,7 @@ OCA.Analytics.Advanced.Dataload = {
 
     handleFilepicker: function () {
         let dataloadId = document.getElementById('dataloadDetail').dataset.dataloadId;
-        let type = OCA.Analytics.Advanced.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId))['datasource'];
+        let type = OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => parseInt(x.id) === parseInt(dataloadId))['datasource'];
 
         let mime;
         if (type === OCA.Analytics.TYPE_INTERNAL_FILE) {
@@ -546,15 +540,16 @@ OCA.Analytics.Advanced.Dataload = {
         });
     },
 
-};
+});
 
-OCA.Analytics.Advanced.Dataset = {
+OCA.Analytics.Dataset.Dataset = OCA.Analytics.Dataset.Dataset || {};
+Object.assign(OCA.Analytics.Dataset.Dataset = {
     dataloadArray: [],
 
     tabContainerDataset: function () {
-        const datasetId = document.getElementById('app-sidebar').dataset.id;
+        const datasetId = OCA.Analytics.currentDataset;
 
-        OCA.Analytics.Advanced.resetView();
+        OCA.Analytics.Dataset.resetView();
         document.getElementById('tabHeaderDataset').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerDataset');
         document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
@@ -582,19 +577,19 @@ OCA.Analytics.Advanced.Dataset = {
                     document.getElementById('sidebarDatasetValue').value = data['value'];
                     document.getElementById('sidebarDatasetAiIndex').checked = parseInt(data['ai_index']) === 1;
 
-                    document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleDeleteButton);
-                    document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleUpdateButton);
-                    document.getElementById('sidebarDatasetAiUpdateButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleAiUpdateButton);
+                    document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Dataset.Dataset.handleDeleteButton);
+                    document.getElementById('sidebarDatasetUpdateButton').addEventListener('click', OCA.Analytics.Dataset.Dataset.handleUpdateButton);
+                    document.getElementById('sidebarDatasetAiUpdateButton').addEventListener('click', OCA.Analytics.Dataset.Dataset.handleAiUpdateButton);
 
                     if (OCA.Analytics.Core.getInitialState('contextChatAvailable') === true) {
                         document.getElementById('datasetAiSectionDisabled').remove();
                     }
 
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
-                    //document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Advanced.Dataset.handleExportButton);
+                    //document.getElementById('sidebarDatasetExportButton').addEventListener('click', OCA.Analytics.Dataset.Dataset.handleExportButton);
 
                     // get status information like report and data count
-                    OCA.Analytics.Advanced.Dataset.getStatus();
+                    OCA.Analytics.Dataset.Dataset.getStatus();
                 } else {
                     table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
                     document.getElementById('tabContainerDataset').innerHTML = table;
@@ -605,9 +600,8 @@ OCA.Analytics.Advanced.Dataset = {
 
     getStatus: function () {
         // get status information like report and data count
-        const datasetId = document.getElementById('app-sidebar').dataset.id;
 
-        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + datasetId + '/status';
+        let requestUrl = OC.generateUrl('apps/analytics/dataset/') + OCA.Analytics.currentDataset + '/status';
         fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers()
@@ -627,33 +621,32 @@ OCA.Analytics.Advanced.Dataset = {
 
     handleDeleteButton: function (evt) {
         let id = evt.target.parentNode.dataset.id;
-        if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
+        if (id === undefined) id = OCA.Analytics.currentDataset;
 
         OCA.Analytics.Notification.confirm(
             t('analytics', 'Delete'),
             t('analytics', 'Are you sure?') + ' ' + t('analytics', 'All data including all reports will be deleted!'),
             function (e) {
-                OCA.Analytics.Advanced.Dataset.delete(id);
-                OCA.Analytics.Advanced.hideSidebar();
+                OCA.Analytics.Dataset.Dataset.delete(id);
                 OCA.Analytics.Notification.dialogClose();
             }
         );
     },
 
     handleUpdateButton: function () {
-        OCA.Analytics.Advanced.Dataset.update();
+        OCA.Analytics.Dataset.Dataset.update();
     },
 
     handleAiUpdateButton: function () {
-        OCA.Analytics.Advanced.Dataset.aiUpdate();
+        OCA.Analytics.Dataset.Dataset.aiUpdate();
     },
 
     handleExportButton: function () {
-        OCA.Analytics.Advanced.Dataset.export();
+        OCA.Analytics.Dataset.Dataset.export();
     },
 
     wizard: function () {
-        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Advanced.Dataset.create);
+        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Dataset.Dataset.create);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
     },
 
@@ -703,12 +696,11 @@ OCA.Analytics.Advanced.Dataset = {
     },
 
     export: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
-        window.open(OC.generateUrl('apps/analytics/report/dataset/') + reportId, '_blank')
+        window.open(OC.generateUrl('apps/analytics/report/dataset/') + OCA.Analytics.currentDataset, '_blank')
     },
 
     aiUpdate: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId + '/provider';
         fetch(requestUrl, {
             method: 'POST',
@@ -721,7 +713,7 @@ OCA.Analytics.Advanced.Dataset = {
     },
 
     update: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('sidebarDatasetUpdateButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -748,4 +740,4 @@ OCA.Analytics.Advanced.Dataset = {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
             });
     },
-};
+});

@@ -110,6 +110,11 @@ class PageController extends Controller
             $translationLanguages
         );
 
+		$this->initialState->provideInitialState(
+			'contextChatAvailable',
+			$this->appManager->isEnabledForUser('context_chat')
+		);
+
 		if (class_exists(LoadEditor::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadEditor());
 		}
@@ -121,16 +126,9 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function advanced()
+    public function dataset()
     {
-		$params = array();
-
-		$this->initialState->provideInitialState(
-			'contextChatAvailable',
-			$this->appManager->isEnabledForUser('context_chat')
-		);
-
-        return new TemplateResponse($this->appName, 'main_advanced', $params);
+		return $this->main();
     }
 
     /**

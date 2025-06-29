@@ -10,7 +10,6 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-
     // register handlers for the navigation bar
     OCA.Analytics.Navigation.registerHandler('create', 'panorama', function () {
         OCA.Analytics.Panorama.newPanorama();
@@ -31,8 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.registerHandler('saveIcon', 'panorama', function () {
         OCA.Analytics.Panorama.Backend.savePanorama();
     });
-
-
 })
 
 OCA = OCA || {};
@@ -182,7 +179,6 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     handleNavigationClicked: function (evt) {
-        OCA.Analytics.currentContentType = 'report';
         OCA.Analytics.Visualization.hideElement('addFilterIcon');
         OCA.Analytics.Visualization.hideElement('filterVisualisation');
         OCA.Analytics.Visualization.showContentByType('loading');

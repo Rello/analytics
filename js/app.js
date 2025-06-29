@@ -67,6 +67,8 @@ Object.assign(OCA.Analytics, {
 
     currentReportData: {},
     currentPanorama: {},
+    currentDataset: null,
+    currentDatasetType: null,
     currentPage: 0,
     currentContentType: null,
 

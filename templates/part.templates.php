@@ -359,7 +359,7 @@
             </div>
         </div>
     </div>
-    <div style="width:100%; float: left;">
+    <div style="width:100%;">
         <br>
         <button id="sidebarDatasetUpdateButton" type="button" class="primary">
 			<?php p($l->t('Update')); ?>
@@ -527,7 +527,7 @@
 <template id="templateDataload">
     <div style="display: flex;">
         <div style="width: 25%;">
-            <div class="wizardHeader"><?php p($l->t('Selection')); ?></div>
+            <div class="dataloadHeader"><?php p($l->t('Selection')); ?></div>
             <h3 style="padding-top: 20px;"><?php p($l->t('Data load')); ?></h3>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
@@ -557,10 +557,10 @@
                target="_blank"><?php p($l->t('More information …')); ?></a>
         </div>
         <div style="width: 5%;">
-            <div class="wizardHeader icon-view-next"></div>
+            <div class="dataloadHeader icon-view-next"></div>
         </div>
         <div style="width: 40%;">
-            <div class="wizardHeader"><?php p($l->t('Setting')); ?></div>
+            <div class="dataloadHeader"><?php p($l->t('Setting')); ?></div>
             <div id="dataloadDetail">
                 <div id="dataloadDetailHeader" hidden>
                     <div style="display: table-row;">
@@ -606,10 +606,10 @@
             </div>
         </div>
         <div style="width: 5%;">
-            <div class="wizardHeader icon-view-next"></div>
+            <div class="dataloadHeader icon-view-next"></div>
         </div>
         <div style="width: 24%;">
-            <div class="wizardHeader"><?php p($l->t('Execution')); ?></div>
+            <div class="dataloadHeader"><?php p($l->t('Execution')); ?></div>
             <div id="dataloadRun" hidden>
                 <button id="dataloadExecuteButton"><?php p($l->t('Load now')); ?></button>
                 <input type="checkbox" id="testrunCheckbox" class="checkbox" checked><label
