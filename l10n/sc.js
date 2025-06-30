@@ -1,12 +1,12 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Carrighende",
     "Data" : "Datos",
     "Value" : "Balore",
     "Saved" : "Sarvadu",
     "Are you sure?" : "A beru boles sighire?",
     "Delete" : "Cantzella",
-    "Loading" : "Carrighende",
     "Column selection" : "Seletzione de colunnas",
     "Filter" : "Filtru",
     "Default" : "Predefinidu",

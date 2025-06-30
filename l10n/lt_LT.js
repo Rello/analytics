@@ -1,15 +1,15 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Įkeliama",
+    "Please select" : "Pasirinkite",
+    "Select file" : "Pasirinkti failą",
     "Data" : "Duomenys",
     "Value" : "Reikšmė",
     "Saved" : "Įrašyta",
     "Are you sure?" : "Ar esate tikri?",
-    "Select file" : "Pasirinkti failą",
     "Delete" : "Ištrinti",
     "Done" : "Atlikta",
-    "Loading" : "Įkeliama",
-    "Please select" : "Pasirinkite",
     "Filter" : "Filtras",
     "Table options" : "Lentelės parinktys",
     "Sort order" : "Rikiavimo tvarka",
