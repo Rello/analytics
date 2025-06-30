@@ -765,19 +765,20 @@ OCA.Analytics.Sidebar.Report = {
 OCA.Analytics.Sidebar.Data = {
 
     tabContainerData: function () {
-        const reportId = document.getElementById('app-sidebar').dataset.id;
+        let reportId;
+        if (OCA.Analytics.currentContentType === 'dataset') {
+            reportId = OCA.Analytics.currentDataset;
+            OCA.Analytics.Dataset.resetView();
+        } else {
+            reportId = document.getElementById('app-sidebar').dataset.id;
+            OCA.Analytics.Sidebar.resetView();
+        }
 
-        OCA.Analytics.Sidebar.resetView();
         document.getElementById('tabHeaderData').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerData');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
-        let type = 'report';
-        if (OCA.Analytics.isDataset) {
-            type = 'dataset';
-        }
-
-        let requestUrl = OC.generateUrl('apps/analytics/' + type + '/') + reportId;
+        let requestUrl = OC.generateUrl('apps/analytics/' + OCA.Analytics.currentContentType + '/') + reportId;
         fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers()
