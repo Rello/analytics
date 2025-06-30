@@ -1618,7 +1618,7 @@ OCA.Analytics.Sidebar.Backend = {
             .then(data => {
                 OCA.Analytics.Notification.confirm(
                     t('analytics', 'Delete data'),
-                    t('analytics', 'Are you sure?') + '<br>' + t('analytics', 'Records to be deleted: ') + data.delete.count,
+                    t('analytics', 'Are you sure?') + '<br>' + t('analytics', 'Records to be deleted:') + ' ' + data.delete.count,
                     function (e) {
                         OCA.Analytics.Sidebar.Backend.deleteData();
                         OCA.Analytics.Notification.dialogClose();
