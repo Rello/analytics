@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Ŝargado",
     "Dataset" : "Datumaro",
     "Data" : "Datumoj",
     "Automation" : "Aŭtomatigo",
     "Saved" : "Konservita",
     "Delete" : "Forigi",
     "Done" : "Farita",
-    "Loading" : "Ŝargado",
     "Favorites" : "Pliŝataĵoj",
     "Overview" : "Superrigardo",
     "Remove from favorites" : "Forigi el pliŝataĵoj",

@@ -1,10 +1,10 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Cargando",
     "Value" : "Valor",
     "Saved" : "Guardado",
     "Delete" : "Borrar",
-    "Loading" : "Cargando",
     "Filter" : "Filtrar",
     "Favorites" : "Favoritos",
     "Overview" : "Generalidades",

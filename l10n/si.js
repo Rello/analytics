@@ -1,8 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
-    "Value" : "අගය",
     "Loading" : "පූරණය වෙමින්",
+    "Value" : "අගය",
     "Filter" : "පෙරහන",
     "Favorites" : "ප්‍රියතම",
     "Share" : "බෙදාගන්න",

@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Hleð inn",
     "Operator" : "Virki",
     "Value" : "Gildi",
     "Saved" : "Vistað",
     "Are you sure?" : "Ertu viss?",
     "Delete" : "Eyða",
     "Done" : "Lokið",
-    "Loading" : "Hleð inn",
     "Filter" : "Sía",
     "Default" : "Sjálfgefið",
     "Line" : "Lína",

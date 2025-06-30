@@ -1,12 +1,12 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Cargament",
+    "Select file" : "Seleccionar fichièr",
     "Value" : "Valor",
     "Saved" : "Enregistrat",
     "Are you sure?" : "Ne sètz segur ?",
-    "Select file" : "Seleccionar fichièr",
     "Delete" : "Suprimir",
-    "Loading" : "Cargament",
     "equal to" : "egal a ",
     "less than" : "mens de",
     "none" : "pas cap",

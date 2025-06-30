@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Select file" : "Seleccionar archivo",
     "Dataset" : "Conjunto de datos",
     "Data" : "Datos",
     "Data maintenance is not possible for this type of report" : "El mantenimiento de datos no es posible para este tipo de informe",
     "Value" : "Valor",
     "Saved" : "Guardado",
     "Are you sure?" : "¿Estás seguro?",
-    "Select file" : "Seleccionar archivo",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Favorites" : "Favoritos",

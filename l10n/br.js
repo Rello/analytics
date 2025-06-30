@@ -1,10 +1,10 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Kargañ",
     "Saved" : "Enrollet",
     "Delete" : "Dilemel",
     "Done" : "Graet",
-    "Loading" : "Kargañ",
     "Filter" : "Filtre",
     "Bar" : "Tavarn",
     "Favorites" : "Pennrolloù",

@@ -1,12 +1,12 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Učitavanje",
     "Data" : "Podaci",
     "Filter by" : "Filtriraj prema",
     "Value" : "Vrijednost",
     "Saved" : "Spremljeno",
     "Delete" : "Izbriši",
-    "Loading" : "Učitavanje",
     "Column selection" : "Odabir stupca",
     "Filter" : "Filtar",
     "Default" : "Zadani",

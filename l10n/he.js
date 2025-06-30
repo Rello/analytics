@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "בטעינה",
     "Data" : "נתונים",
     "Choose a data source from the dropdown and press \"+\"" : "בחר מקום מידע מהתפריט הנפתח ולחץ על כפתור ה\"+\"",
     "Value" : "ערך",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "Load started" : "טעינה החלה",
     "Delete" : "מחיקה",
     "Done" : "הסתיים",
-    "Loading" : "בטעינה",
     "Column selection" : "בחירת עמודות",
     "Filter" : "מסנן",
     "Default" : "ברירת מחדל",

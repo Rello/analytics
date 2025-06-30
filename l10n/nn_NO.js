@@ -1,11 +1,11 @@
 OC.L10N.register(
     "analytics",
     {
+    "Select file" : "Vel fil",
     "Data" : "Data",
     "Value" : "Verdi",
     "Saved" : "Lagra",
     "errors" : "feil",
-    "Select file" : "Vel fil",
     "Delete" : "Slett",
     "greater than" : "større enn",
     "less than" : "mindre enn",

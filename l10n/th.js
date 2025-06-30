@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "กำลังโหลด",
     "Dataset" : "ชุดข้อมูล",
     "Data" : "ข้อมูล",
     "Automation" : "อัตโนมัติ",
     "Saved" : "บันทึกแล้ว",
     "Are you sure?" : "คุณแน่ใจหรือไม่?",
     "Delete" : "ลบ",
-    "Loading" : "กำลังโหลด",
     "Filter" : "ตัวกรอง",
     "Favorites" : "รายการโปรด",
     "Remove from favorites" : "เอาออกจากรายการโปรด",

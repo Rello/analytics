@@ -1,10 +1,10 @@
 OC.L10N.register(
     "analytics",
     {
+    "Loading" : "Loading",
     "Value" : "Value",
     "Delete" : "நீக்குக",
     "Done" : "Done",
-    "Loading" : "Loading",
     "Favorites" : "விருப்பங்கள்",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
