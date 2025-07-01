@@ -179,6 +179,7 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     handleNavigationClicked: function (evt) {
+        OCA.Analytics.Sidebar.close();
         OCA.Analytics.Visualization.hideElement('addFilterIcon');
         OCA.Analytics.Visualization.hideElement('filterVisualisation');
         OCA.Analytics.Visualization.showContentByType('loading');

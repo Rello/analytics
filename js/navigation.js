@@ -476,7 +476,7 @@ OCA.Analytics.Navigation = {
         newGroup.dataset.id = data.id;
 
         let share = navigationMenu.getElementById('navigationMenuShare');
-        share.addEventListener('click', OCA.Analytics.Navigation.buildShareModal);
+        share.addEventListener('click', OCA.Analytics.Share.buildShareModal);
         share.dataset.testing = 'share' + data.name;
         share.dataset.id = data.id;
 
@@ -777,44 +777,6 @@ OCA.Analytics.Navigation = {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(params);
     },
-
-    buildShareModal: function (evt) {
-        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
-            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
-        }
-        let navigationItem = evt.target.closest('div');
-
-        document.getElementById('app-sidebar').dataset.id = navigationItem.dataset.id;
-        document.getElementById('app-sidebar').dataset.item_type = navigationItem.dataset.item_type;
-
-        OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Share') + ' ' + navigationItem.dataset.name,
-            OCA.Analytics.Notification.dialogClose
-        );
-        OCA.Analytics.Navigation.updateShareModal();
-    },
-
-    updateShareModal: function () {
-        const dummy = document.createElement('div');
-        dummy.id = 'tabHeaderShare';
-        dummy.classList.add('tabHeaders', 'tabHeader', 'selected');
-        dummy.addEventListener('click', OCA.Analytics.Navigation.updateShareModal);
-
-        const container = document.createElement('div');
-        container.id = 'tabContainerShare';
-
-        const content = document.createDocumentFragment();
-        content.appendChild(dummy);
-        content.appendChild(container);
-
-        OCA.Analytics.Notification.htmlDialogUpdate(
-            content,
-            t('analytics', 'Select the share receiver')
-        );
-
-        OCA.Analytics.Sidebar.Share.tabContainerShare();
-
-    }
 
 };
 /**

@@ -745,3 +745,397 @@ Object.assign(OCA.Analytics.Datasource = {
             1);
     },
 });
+
+OCA.Analytics.Share = OCA.Analytics.Share || {};
+Object.assign(OCA.Analytics.Share = {
+
+    searchTimeout: null,
+    searchDelay: 300,
+
+    buildShareModal: function (evt) {
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
+
+        let navigationItem = evt.target.closest('div');
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Share') + ' ' + navigationItem.dataset.name,
+            OCA.Analytics.Notification.dialogClose
+        );
+
+        OCA.Analytics.Share.updateShareModal(navigationItem.dataset.item_type, navigationItem.dataset.id);
+    },
+
+    updateShareModal: function (itemType, itemId) {
+        if (!itemType) {
+            itemType = document.getElementById('shareItemType').value;
+        }
+        if (!itemId) {
+            itemId = document.getElementById('shareItemId').value;
+        }
+
+        // clone the DOM template
+        let template = document.getElementById('templateShareModal').content;
+        template = document.importNode(template, true);
+        template.getElementById('linkShareList').appendChild(OCA.Analytics.Share.buildShareLinkRow(0, 0, true));
+        template.getElementById('shareInput').addEventListener('keyup', OCA.Analytics.Share.searchShareeAPI);
+
+        template.getElementById('shareItemType').value = itemType;
+        template.getElementById('shareItemId').value = itemId;
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            template,
+            t('analytics', 'Select the share receiver')
+        );
+
+        let requestUrl = OC.generateUrl('apps/analytics/share/') + itemType + '/' + itemId;
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data !== false) {
+                    for (let share of data) {
+                        if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
+                            let li = OCA.Analytics.Share.buildShareLinkRow(parseInt(share['id']), share['token'], false, (String(share['pass']) === "true"), parseInt(share['permissions']), share['domain']);
+                            document.getElementById('linkShareList').appendChild(li);
+                        } else {
+                            if (!share['displayName']) {
+                                share['displayName'] = share['uid_owner'];
+                            }
+                            let li = OCA.Analytics.Share.buildShareeRow(parseInt(share['id']), share['uid_owner'], share['displayName'], parseInt(share['type']), false, parseInt(share['permissions']));
+                            document.getElementById('shareeList').appendChild(li);
+                        }
+                    }
+               } else {
+                    let table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
+                    //document.getElementById('tabContainerShare').innerHTML = table;
+                }
+            });
+
+    },
+
+    buildShareLinkRow: function (id, token, add = false, pw = false, permissions = OC.PERMISSION_READ, domain = false) {
+
+        // clone the DOM template
+        let linkRow = document.getElementById('templateSidebarShareLinkRow').content;
+        linkRow = document.importNode(linkRow, true);
+
+        linkRow.getElementById('row').dataset.id = id;
+        if (add) linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Add share link');
+        else linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Share link');
+
+        if (add) {
+            linkRow.getElementById('sharingOptionsGroupMenu').remove();
+            linkRow.getElementById('newLinkShare').addEventListener('click', OCA.Analytics.Share.createShare);
+        } else {
+            linkRow.getElementById('sharingOptionsGroupNew').remove();
+            linkRow.getElementById('shareOpenDirect').href = OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('shareClipboardLink').value = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('shareClipboard').addEventListener('click', OCA.Analytics.Share.handleShareClipboard)
+            linkRow.getElementById('moreIcon').addEventListener('click', OCA.Analytics.Share.showShareMenu);
+            linkRow.getElementById('showPassword').addEventListener('click', OCA.Analytics.Share.showPassMenu);
+            linkRow.getElementById('showPassword').nextElementSibling.htmlFor = 'showPassword' + id;
+            linkRow.getElementById('showPassword').id = 'showPassword' + id;
+
+            linkRow.getElementById('shareChart').addEventListener('click', OCA.Analytics.Share.showChartMenu);
+            linkRow.getElementById('shareChart').nextElementSibling.htmlFor = 'shareChart' + id;
+            linkRow.getElementById('shareChart').id = 'shareChart' + id;
+            linkRow.getElementById('shareChartDomain').id = 'shareChartDomain' + id;
+            linkRow.getElementById('shareChartLink').value = OC.getProtocol() + '://' + OC.getHostName() + OC.generateUrl('/apps/analytics/pm/') + token;
+            linkRow.getElementById('shareChartClipboard').addEventListener('click', OCA.Analytics.Share.handleShareChartClipboard)
+
+            linkRow.getElementById('linkPassSubmit').addEventListener('click', OCA.Analytics.Share.updateSharePassword);
+            linkRow.getElementById('linkPassSubmit').dataset.id = id;
+            linkRow.getElementById('shareChartSubmit').addEventListener('click', OCA.Analytics.Share.updateShareDomain);
+            linkRow.getElementById('shareChartSubmit').dataset.id = id;
+            linkRow.getElementById('deleteShareIcon').addEventListener('click', OCA.Analytics.Share.removeShare);
+            linkRow.getElementById('deleteShare').dataset.id = id;
+            if (pw) {
+                linkRow.getElementById('linkPassMenu').classList.remove('hidden');
+                linkRow.getElementById('showPassword' + id).checked = true;
+            }
+            if (domain) {
+                linkRow.getElementById('shareChart' + id).click();
+                linkRow.getElementById('shareChartDomain' + id).value = domain;
+            }
+            linkRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Share.updateShareCanEdit);
+            linkRow.getElementById('shareEditing').dataset.id = id;
+            linkRow.getElementById('shareEditing').nextElementSibling.htmlFor = 'shareEditing' + id;
+            linkRow.getElementById('shareEditing').id = 'shareEditing' + id;
+            if (permissions === OC.PERMISSION_UPDATE) {
+                linkRow.getElementById('shareEditing' + id).checked = true;
+            }
+
+        }
+        return linkRow;
+    },
+
+    buildShareeRow: function (id, uid_owner, user_label, shareType = null, isSearch = false, permissions = OC.PERMISSION_READ) {
+
+        // clone the DOM template
+        let shareeRow = document.getElementById('templateSidebarShareShareeRow').content;
+        shareeRow = document.importNode(shareeRow, true);
+
+        shareeRow.getElementById('row').dataset.id = id;
+        shareeRow.getElementById('avatar').innerText = uid_owner.charAt(0);
+        shareeRow.getElementById('username').dataset.shareType = shareType;
+        shareeRow.getElementById('username').dataset.user = uid_owner;
+        shareeRow.getElementById('icon-more').addEventListener('click', OCA.Analytics.Share.showShareMenu);
+        shareeRow.getElementById('deleteShare').addEventListener('click', OCA.Analytics.Share.removeShare);
+        shareeRow.getElementById('deleteShare').dataset.id = id;
+        shareeRow.getElementById('shareEditing').addEventListener('click', OCA.Analytics.Share.updateShareCanEdit);
+        shareeRow.getElementById('shareEditing').dataset.id = id;
+        shareeRow.getElementById('shareEditing').nextElementSibling.htmlFor = 'shareEditing' + id;
+        shareeRow.getElementById('shareEditing').id = 'shareEditing' + id;
+        if (permissions === OC.PERMISSION_UPDATE) {
+            shareeRow.getElementById('shareEditing' + id).checked = true;
+        }
+
+        if (isSearch) {
+            shareeRow.getElementById('username').addEventListener('click', OCA.Analytics.Share.createShare);
+            shareeRow.getElementById('row').classList.add('shareSearchResultItem');
+            shareeRow.getElementById('shareMenu').style.visibility = 'hidden';
+        }
+        if (shareType === OCA.Analytics.SHARE_TYPE_GROUP) {
+            shareeRow.getElementById('icon').classList.add('icon-group');
+            shareeRow.getElementById('username').innerText = user_label + ' (group)';
+        } else if (shareType === OCA.Analytics.SHARE_TYPE_ROOM) {
+            shareeRow.getElementById('icon').classList.add('icon-room');
+            shareeRow.getElementById('username').innerText = user_label + ' (conversation)';
+        } else if (shareType === OCA.Analytics.SHARE_TYPE_USER) {
+            shareeRow.getElementById('username').innerText = user_label;
+            let userIcon = document.createElement('img');
+            userIcon.setAttribute('src', OC.generateUrl('/avatar/' + uid_owner + '/32'));
+            shareeRow.getElementById('avatar').innerText = '';
+            shareeRow.getElementById('avatar').appendChild(userIcon);
+        }
+
+        //shareType !== null ? li.appendChild(ShareIconGroup) : li.appendChild(ShareOptionsGroup);
+        return shareeRow;
+    },
+
+    handleShareClipboard: function (evt) {
+        let link = evt.target.nextElementSibling.value;
+        evt.target.classList.replace('icon-clippy', 'icon-checkmark-color');
+        let textArea = document.createElement('textArea');
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        OCA.Analytics.Notification.notification('success', t('analytics', 'Link copied'));
+    },
+
+    handleShareChartClipboard: function (evt) {
+        let link = evt.target.nextElementSibling.value;
+        let textArea = document.createElement('textArea');
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        OCA.Analytics.Notification.notification('success', t('analytics', 'Link copied'));
+    },
+
+    showShareMenu: function (evt) {
+        const toggleState = evt.target.nextElementSibling.style.display;
+        if (toggleState === 'none') evt.target.nextElementSibling.style.display = 'block';
+        else evt.target.nextElementSibling.style.display = 'none';
+    },
+
+    showPassMenu: function (evt) {
+        const toggleState = evt.target.checked;
+        if (toggleState === true) evt.target.parentNode.parentNode.nextElementSibling.classList.remove('hidden');
+        else evt.target.parentNode.parentNode.nextElementSibling.classList.add('hidden');
+    },
+
+    showChartMenu: function (evt) {
+        const toggleState = evt.target.checked;
+        if (toggleState === true) {
+            evt.target.parentNode.parentNode.nextElementSibling.classList.remove('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.classList.remove('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.classList.remove('hidden');
+        } else {
+            evt.target.parentNode.parentNode.nextElementSibling.classList.add('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.classList.add('hidden');
+            evt.target.parentNode.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.classList.add('hidden');
+        }
+    },
+
+    createShare: function (evt) {
+        let itemType = document.getElementById('shareItemType').value;
+        let itemId = document.getElementById('shareItemId').value;
+
+        let shareType = evt.target.dataset.shareType;
+        let shareUser = evt.target.dataset.user;
+
+        let requestUrl = OC.generateUrl('apps/analytics/share');
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                item_type: itemType,
+                item_source: itemId,
+                type: shareType,
+                user: shareUser,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Share.updateShareModal();
+            });
+    },
+
+    removeShare: function (evt) {
+        let shareId = evt.target.parentNode.dataset.id;
+        let requestUrl = OC.generateUrl('apps/analytics/share/') + shareId;
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Share.updateShareModal();
+            });
+    },
+
+    updateSharePassword: function (evt) {
+       const shareId = evt.target.dataset.id;
+        const password = evt.target.previousElementSibling.value;
+
+        let requestUrl = OC.generateUrl('apps/analytics/share/') + shareId;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                password: password
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Share.updateShareModal();
+            });
+    },
+
+    updateShareDomain: function (evt) {
+        const shareId = evt.target.dataset.id;
+        const domain = evt.target.previousElementSibling.value;
+
+        let requestUrl = OC.generateUrl('apps/analytics/share/') + shareId;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                domain: domain
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Share.updateShareModal();
+            });
+    },
+
+    updateShareCanEdit: function (evt) {
+        const shareId = evt.target.dataset.id;
+        const canEdit = evt.target.checked;
+
+        let requestUrl = OC.generateUrl('apps/analytics/share/') + shareId;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                canEdit: canEdit
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Share.updateShareModal();
+            });
+    },
+
+    searchShareeAPI: function () {
+        clearTimeout(OCA.Analytics.Share.searchTimeout);
+        OCA.Analytics.Share.searchTimeout = setTimeout(OCA.Analytics.Share._executeShareSearch, OCA.Analytics.Share.searchDelay);
+    },
+
+    _executeShareSearch: function () {
+        const shareInput = document.getElementById('shareInput').value;
+        const resultElement = document.getElementById('shareSearchResult');
+        if (shareInput === '') {
+            resultElement.innerHTML = '';
+            resultElement.style.display = 'none';
+            return;
+        }
+
+        const URL = OC.linkToOCS('apps/files_sharing/api/v1/sharees').slice(0, -1);
+        const params = 'format=json'
+            + '&itemType=file'
+            + '&search=' + shareInput
+            + '&lookup=false&perPage=200'
+            + '&shareType[]=0&shareType[]=1';
+
+        const requestUrl = URL + '?' + params;
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                const jsondata = data;
+                if (jsondata['ocs']['meta']['status'] === 'ok') {
+                    resultElement.style.display = '';
+
+                    const existingItems = resultElement.querySelectorAll('li.shareSearchResultItem');
+                    const existingMap = {};
+                    existingItems.forEach(li => {
+                        const username = li.querySelector('#username').dataset.user;
+                        const type = li.querySelector('#username').dataset.shareType;
+                        existingMap[type + '|' + username] = li;
+                    });
+
+                    const newKeys = new Set();
+                    const addItem = (shareWith, label, type) => {
+                        const key = type + '|' + shareWith;
+                        newKeys.add(key);
+                        if (!existingMap[key]) {
+                            const sharee = OCA.Analytics.Share.buildShareeRow(0, shareWith, label, type, true);
+                            resultElement.appendChild(sharee);
+                        } else {
+                            const elem = existingMap[key].querySelector('#username');
+                            if (elem.innerText !== label && type === OCA.Analytics.SHARE_TYPE_USER) {
+                                elem.innerText = label;
+                            }
+                        }
+                    };
+
+                    for (let user of jsondata['ocs']['data']['users']) {
+                        addItem(user['value']['shareWith'], user['label'], OCA.Analytics.SHARE_TYPE_USER);
+                    }
+                    for (let exactUser of jsondata['ocs']['data']['exact']['users']) {
+                        addItem(exactUser['value']['shareWith'], exactUser['label'], OCA.Analytics.SHARE_TYPE_USER);
+                    }
+                    for (let group of jsondata['ocs']['data']['groups']) {
+                        addItem(group['value']['shareWith'], group['label'], OCA.Analytics.SHARE_TYPE_GROUP);
+                    }
+                    for (let exactGroup of jsondata['ocs']['data']['exact']['groups']) {
+                        addItem(exactGroup['value']['shareWith'], exactGroup['label'], OCA.Analytics.SHARE_TYPE_GROUP);
+                    }
+                    for (let room of jsondata['ocs']['data']['rooms']) {
+                        addItem(room['value']['shareWith'], room['label'], OCA.Analytics.SHARE_TYPE_ROOM);
+                    }
+
+                    Object.keys(existingMap).forEach(key => {
+                        if (!newKeys.has(key)) {
+                            existingMap[key].remove();
+                        }
+                    });
+                } else {
+                    resultElement.style.display = 'none';
+                    resultElement.innerHTML = '';
+                }
+            });
+    },
+})

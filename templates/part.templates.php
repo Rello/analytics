@@ -666,7 +666,9 @@
     </div>
 </template>
 
-<template id="templateSidebarShare">
+<template id="templateShareModal">
+    <input type="hidden" id="shareItemType">
+    <input type="hidden" id="shareItemId">
     <input type="text" id="shareInput" placeholder="<?php p($l->t('Name')); ?>"
            style="width: 100%; margin-bottom: 0px;" ;>
     <ul id="shareSearchResult" class="shareWithList" style="display: none;">
@@ -678,7 +680,7 @@
     <div class="shareeListView subView">
         <div id="shareeList" class="shareWithList"></div>
     </div>
-    <div style="height: 150px"></div>
+    <div style="height: 50px"></div>
 </template>
 
 <template id="templateSidebarShareShareeRow">

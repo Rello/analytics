@@ -36,6 +36,7 @@ Object.assign(OCA.Analytics.Dataset = {
     sidebar_tabs: {},
 
     handleNavigationClicked: function (evt) {
+        OCA.Analytics.Sidebar.close();
         OCA.Analytics.Visualization.showContentByType('dataset');
         OCA.Analytics.Visualization.hideElement('menuBar');
 

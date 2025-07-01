@@ -15,7 +15,9 @@
 - Improved CSS styling for multi-level navigation
 - Persist navigation open state
 - Datasets listed in their own navigation section
+
 ### Changed
+- move share dialog from sidebar to own popup
 - Extend collapsed state CSS to cover nested groups
 - Default sections collapsed except Favorites
 - Section headers now use analytics icons and the top Panoramas button was removed
