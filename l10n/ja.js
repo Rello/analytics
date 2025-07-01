@@ -82,7 +82,6 @@ OC.L10N.register(
     "Add share link" : "共有リンクを追加",
     "Share link" : "リンクを共有",
     "Delete data" : "データを削除",
-    "Records to be deleted: " : "削除するレコード :",
     "Technical error. Please check the logs." : "テクニカルエラーです。ログを確認してください。",
     "Type" : "タイプ",
     "Green" : "緑",

@@ -8,7 +8,6 @@
     "Parameter missing" : "Falta parámetro",
     "Add custom column" : "Agregar columna personalizada",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Seleccionar las columnas requeridas. <br> Reorganizar la secuencia con arrastrar y soltar. <br> Eliminar todas las selecciones a restablecer. <br> Agregar columnas personalizadas, incluyendo variables de texto para fechas. Consulta la {linkstart}Wiki{linkend}.",
-    "Previous Values: " : "Valores previos:",
     "Select file" : "Seleccione archivo",
     "Dataset" : "Conjunto de datos",
     "Data" : "Datos",

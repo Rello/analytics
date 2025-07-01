@@ -35,6 +35,7 @@ OC.L10N.register(
     "Issues" : "Masuala",
     "Version" : "Toleo",
     "Count" : "Hesabu",
+    "Local" : "Kawaida",
     "File" : "Faili",
     "copy" : "Nakili",
     "Password" : "Nenosiri",
@@ -53,8 +54,10 @@ OC.L10N.register(
     "Copy" : "Nakili",
     "Daily" : "Kila siku",
     "Unshare" : "Usishirikishe",
+    "Password protection" : "Password protection",
     "Copy link" : "Nakili kiungio",
     "Additional settings" : "Mipangilio ya nyongeza",
+    "Sort by" : "Panga kwa ",
     "Create" : "Tengeneza"
 },
 "nplurals=2; plural=(n != 1);");
