@@ -904,9 +904,10 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .analyticsDialogButtonrow {
-    justify-content: space-between;
+    justify-content: flex-end;
     position: relative;
     display: flex;
+    gap: 8px;
     padding-top: 10px;
 }
 

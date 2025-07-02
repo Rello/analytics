@@ -3,6 +3,7 @@
 ## 5.6.3 - 2025-07-02
 ### Changed
 - Refreshed modal dialog styling with subtle animations
+- Primary action button moved to the right side of dialog
 
 ## 5.6.2 - 2025-06-10
 ### Fixed
