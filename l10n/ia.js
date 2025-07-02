@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Compartir",
+    "Share link" : "Compartir ligamine",
     "Saved" : "Salveguardate",
     "Delete" : "Deler",
     "Done" : "Preste",
@@ -8,10 +10,8 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Deler dossier",
-    "Share" : "Compartir",
     "Download" : "Discargar",
     "New" : "Nove",
-    "Share link" : "Compartir ligamine",
     "Type" : "Typo",
     "Date" : "Date",
     "OK" : "Ok",

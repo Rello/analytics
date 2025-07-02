@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Compartir",
+    "Share link" : "Compartir liga",
     "Value" : "Valor",
     "Saved" : "Guardado",
     "Delete" : "Borrar",
@@ -9,10 +11,8 @@ OC.L10N.register(
     "Remove from favorites" : "Eliminar de favoritos",
     "Add to favorites" : "Agregar a tus favoritos",
     "Delete folder" : "Borrar carpeta",
-    "Share" : "Compartir",
     "Download" : "Descargar",
     "New" : "Nuevo",
-    "Share link" : "Compartir liga",
     "Type" : "Tipo",
     "Notification" : "Notificación",
     "Date" : "Fecha",

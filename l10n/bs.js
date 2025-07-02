@@ -1,16 +1,16 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Podjeli",
+    "Share link" : "Podijelite vezu",
     "Saved" : "Spremljeno",
     "Delete" : "Obriši",
     "Favorites" : "Favoriti",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Izbriši fasciklu",
-    "Share" : "Podjeli",
     "Download" : "Preuzmi",
     "New" : "Novo",
-    "Share link" : "Podijelite vezu",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "OK",

@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Shpërndaje",
+    "Share link" : "Lidhje ndarjeje",
+    "Link copied" : "Linku u kopjua",
     "Value" : "Vlerë",
     "Saved" : "Ruajtur",
     "Delete" : "Fshij",
@@ -11,12 +14,9 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Shtoje tek të parapëlqyerat",
     "Delete folder" : "Fshini dosjen",
-    "Share" : "Shpërndaje",
     "Download" : "Shkarko",
     "Report" : "Raporto",
     "New" : "I ri",
-    "Link copied" : "Linku u kopjua",
-    "Share link" : "Lidhje ndarjeje",
     "Type" : "Shtyp",
     "Notification" : "Njoftim",
     "Date" : "Data",

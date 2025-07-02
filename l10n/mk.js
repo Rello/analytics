@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Сподели",
+    "Share link" : "Сподели линк",
+    "Link copied" : "Линкот е копиран",
     "Value" : "Вредност",
     "Saved" : "Зачувано",
     "Delete" : "Избриши",
@@ -14,12 +17,9 @@ OC.L10N.register(
     "Remove from favorites" : "Отстрани од фаворити",
     "Add to favorites" : "Додади во фаворити",
     "Delete folder" : "Избриши папка",
-    "Share" : "Сподели",
     "Download" : "Преземи",
     "Report" : "Пријави",
     "New" : "Ново",
-    "Link copied" : "Линкот е копиран",
-    "Share link" : "Сподели линк",
     "Type" : "Вид",
     "Notification" : "Известување",
     "Date" : "Датум",

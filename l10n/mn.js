@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Түгээх",
+    "Share link" : "Холбоос хуваалцах",
     "Value" : "Үнийн дүн",
     "Saved" : "Хадгалах",
     "Delete" : "Устгах",
@@ -9,10 +11,8 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Хавтсыг устгах",
-    "Share" : "Түгээх",
     "Download" : "Татах",
     "New" : "Шинэ",
-    "Share link" : "Холбоос хуваалцах",
     "Type" : "Төрөл",
     "Notification" : "Мэдэгдэл",
     "Date" : "Он сар өдөр",

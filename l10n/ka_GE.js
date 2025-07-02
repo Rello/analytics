@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "გაზიარება",
+    "Share link" : "ბმულის გაზიარება",
     "Value" : "მნიშვნელობა",
     "Saved" : "შენახულია",
     "Delete" : "წაშლა",
@@ -12,10 +14,8 @@ OC.L10N.register(
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Add to favorites" : "რჩეულებში დამატება",
     "Delete folder" : "დირექტორიის გაუქმება",
-    "Share" : "გაზიარება",
     "Download" : "ჩამოტვირთვა",
     "New" : "ახალი",
-    "Share link" : "ბმულის გაზიარება",
     "Type" : "სახეობა",
     "Notification" : "შეტყობინება",
     "Date" : "თარიღი",

@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "ভাগাভাগি কর",
+    "Share link" : "লিংক ভাগাভাগি করেন",
     "Saved" : "সংরক্ষণ করা হলো",
     "Delete" : "মুছে",
     "Done" : "শেষ হলো",
@@ -8,10 +10,8 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "ফোল্ডার মোছ",
-    "Share" : "ভাগাভাগি কর",
     "Download" : "ডাউনলোড",
     "New" : "নতুন",
-    "Share link" : "লিংক ভাগাভাগি করেন",
     "Type" : "ধরণ",
     "Notification" : "নোটিফিকেশন ",
     "Date" : "Date",

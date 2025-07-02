@@ -1,15 +1,15 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
+    "Share link" : "ಸಂಪರ್ಕ ಕೊಂಡಿಯನ್ನು  ﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು",
     "Saved" : "﻿ಉಳಿಸಿದ",
     "Delete" : "﻿ಅಳಿಸಿ",
     "Favorites" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
-    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
     "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
     "New" : "﻿ಹೊಸ",
-    "Share link" : "ಸಂಪರ್ಕ ಕೊಂಡಿಯನ್ನು  ﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "ಸರಿ",

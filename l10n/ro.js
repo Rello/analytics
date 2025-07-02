@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Partajează",
+    "Share link" : "Partajează link-ul",
+    "Link copied" : "Link copiat",
     "Dataset" : "Set de date",
     "Data" : "Date",
     "Automation" : "Automatizare",
@@ -16,12 +19,9 @@ OC.L10N.register(
     "Remove from favorites" : "Șterge din favorite",
     "Add to favorites" : "Adăugați la favorite",
     "Delete folder" : "Șterge director",
-    "Share" : "Partajează",
     "Download" : "Descărcare",
     "Report" : "Raport",
     "New" : "Nou",
-    "Link copied" : "Link copiat",
-    "Share link" : "Partajează link-ul",
     "Type" : "Tip",
     "Notification" : "Notificări",
     "Date" : "Date",

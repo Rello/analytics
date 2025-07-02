@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Bḍu",
+    "Share link" : "Fren aseɣwen",
+    "Link copied" : "Aseɣwen yettwanɣel",
     "Delete" : "Kkes",
     "Done" : "Immed",
     "Filter" : "Sizdeg",
@@ -8,11 +11,8 @@ OC.L10N.register(
     "Favorites" : "Imenyafen",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
-    "Share" : "Bḍu",
     "Download" : "Sider",
     "Report" : "Aneqqis",
-    "Link copied" : "Aseɣwen yettwanɣel",
-    "Share link" : "Fren aseɣwen",
     "Type" : "Anaw",
     "Notification" : "Alɣu",
     "OK" : "IH",
