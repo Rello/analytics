@@ -20,3 +20,5 @@ This `AGENTS.md` file provides guidelines for OpenAI Codex and other AI agents i
 Agents should focus on the core application logic and ignore files or folders marked as third-party, sample, or media-related. All changes should preserve the integrity of external dependencies and translations.
 
 For every change, add a meaningful one-liner to the corresponding section (Added, Changed, Fixed) in CHANGELOG.md.
+
+No nodejs or vue components are used. Everything is plain Javascript.
