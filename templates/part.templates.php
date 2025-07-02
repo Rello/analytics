@@ -669,7 +669,7 @@
 <template id="templateShareModal">
     <input type="hidden" id="shareItemType">
     <input type="hidden" id="shareItemId">
-    <input type="text" id="shareInput" placeholder="<?php p($l->t('Name')); ?>"
+    <input type="text" id="shareInput" class="sidebarInput" placeholder="<?php p($l->t('Name')); ?>"
            style="width: 100%; margin-bottom: 0px;" ;>
     <ul id="shareSearchResult" class="shareWithList" style="display: none;">
     </ul>
@@ -740,7 +740,7 @@
                         <li id="linkPassMenu" class="linkPassMenu hidden">
                             <span class="menuitem icon-password">
                                 <input type="password" placeholder="<?php p($l->t('Password')); ?>"
-                                       class="linkPassText">
+                                       class="sidebarInput linkPassText">
                                 <input id="linkPassSubmit" type="submit" value="" class="icon-confirm share-pass-submit"
                                        style="width: auto !important">
                             </span>

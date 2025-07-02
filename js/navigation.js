@@ -531,8 +531,6 @@ OCA.Analytics.Navigation = {
         if (data['item_type'] === 'panorama') {
             edit.parentElement.remove();
             newGroup.parentElement.remove(); // re-add later
-        } else {
-            share.parentElement.remove();
         }
 
         return navigationMenu;

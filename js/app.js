@@ -21,10 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Visualization.hideElement('analytics-warning');
     OCA.Analytics.Visualization.showElement('analytics-intro');
 
-    if (document.getElementById('advanced').value === 'true') {
-        OCA.Analytics.isDataset = true;
-    }
-
     OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
 
     OCA.Analytics.Core.init();
