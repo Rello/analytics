@@ -30,6 +30,7 @@
 - Debounce share search results and update list smoothly
 
 - Modernized sidebar input styling with material-like underline
+- Sidebar inputs now override Nextcloud global form rules
 
 ## 5.6.1 - 2025-06-09
 ### Fixed

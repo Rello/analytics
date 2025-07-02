@@ -450,17 +450,26 @@ table.dataTable tbody tr {
 
 .sidebarInput, .menueInput, .optionsInputValue {
     width: 200px;
-    border: none;
-    border-bottom: 1px solid var(--color-border-dark);
+}
+
+input.sidebarInput,
+input.menueInput,
+input.optionsInputValue {
+    border: none !important;
+    border-bottom: 1px solid var(--color-border-dark) !important;
     border-radius: 0;
     background-color: transparent;
     padding: 4px 0;
     transition: border-color .2s;
+    appearance: none;
+    box-shadow: none;
 }
 
-.sidebarInput:focus, .menueInput:focus, .optionsInputValue:focus {
+input.sidebarInput:focus,
+input.menueInput:focus,
+input.optionsInputValue:focus {
     outline: none;
-    border-bottom: 2px solid var(--color-primary-element);
+    border-bottom: 2px solid var(--color-primary-element) !important;
 }
 
 .dt-input {
@@ -469,7 +478,8 @@ table.dataTable tbody tr {
     border-radius: var(--border-radius-large);
 }
 
-.sidebarInput:hover, .menueInput:hover {
+input.sidebarInput:hover,
+input.menueInput:hover {
     border-bottom-color: var(--color-primary-element) !important;
 }
 
