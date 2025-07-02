@@ -444,8 +444,6 @@ table.dataTable tbody tr {
 
 .optionsInput {
     width: 130px;
-    border: 1px solid var(--color-border-dark) !important;
-    border-radius: var(--border-radius-large);
 }
 
 .sidebarInput, .menueInput, .optionsInputValue {
@@ -453,7 +451,11 @@ table.dataTable tbody tr {
 }
 
 input.sidebarInput,
+select.sidebarInput,
 input.menueInput,
+select.menueInput,
+input.optionsInput,
+select.optionsInput,
 input.optionsInputValue {
     border: none !important;
     border-bottom: 1px solid var(--color-border-dark) !important;
@@ -466,7 +468,11 @@ input.optionsInputValue {
 }
 
 input.sidebarInput:focus,
+select.sidebarInput:focus,
 input.menueInput:focus,
+select.menueInput:focus,
+input.optionsInput:focus,
+select.optionsInput:focus,
 input.optionsInputValue:focus {
     outline: none;
     border-bottom: 2px solid var(--color-primary-element) !important;
@@ -479,7 +485,11 @@ input.optionsInputValue:focus {
 }
 
 input.sidebarInput:hover,
-input.menueInput:hover {
+select.sidebarInput:hover,
+input.menueInput:hover,
+select.menueInput:hover,
+input.optionsInput:hover,
+select.optionsInput:hover {
     border-bottom-color: var(--color-primary-element) !important;
 }
 
