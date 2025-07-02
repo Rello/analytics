@@ -515,10 +515,10 @@ OCA.Analytics.Sidebar.Report = {
         }
         let link = JSON.stringify(option);
 
-        if (document.getElementById('wizardNewTypeStored').classList.contains('primary')) {
+        if (document.getElementById('wizardNewTypeStored').classList.contains('analyticsPrimary')) {
             type = OCA.Analytics.TYPE_INTERNAL_DB;
         }
-        if (document.getElementById('wizardNewTypeStoredNew').classList.contains('primary')) {
+        if (document.getElementById('wizardNewTypeStoredNew').classList.contains('analyticsPrimary')) {
             dataset = 0;
         }
 
@@ -729,30 +729,30 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('wizardNewTypeDatasourceRow').style.display = 'table-row';
             document.getElementById('wizardNewTypeDatasetRow').style.display = 'none';
             document.getElementById('wizardNewTypeStoredRow').style.display = 'none';
-            document.getElementById('wizardNewTypeRealtime').classList.add('primary');
-            document.getElementById('wizardNewTypeStored').classList.remove('primary');
+            document.getElementById('wizardNewTypeRealtime').classList.add('analyticsPrimary');
+            document.getElementById('wizardNewTypeStored').classList.remove('analyticsPrimary');
         });
         document.getElementById('wizardNewTypeStored').addEventListener('click', function () {
             document.getElementById('wizardNewTypeDatasourceRow').style.display = 'none';
             document.getElementById('wizardNewTypeOptionsRow').style.display = 'none';
             document.getElementById('wizardNewTypeStoredRow').style.display = 'table-row';
             document.getElementById('wizardNewTypeDatasetRow').style.display = 'none';
-            document.getElementById('wizardNewTypeStored').classList.add('primary');
-            document.getElementById('wizardNewTypeRealtime').classList.remove('primary');
+            document.getElementById('wizardNewTypeStored').classList.add('analyticsPrimary');
+            document.getElementById('wizardNewTypeRealtime').classList.remove('analyticsPrimary');
         })
 
         document.getElementById('wizardNewTypeStoredNew').addEventListener('click', function () {
             document.getElementById('wizardNewTypeDatasetRow').style.display = 'none';
             document.getElementById('wizardNewTypeDimensionRow').style.display = 'table-row';
-            document.getElementById('wizardNewTypeStoredNew').classList.add('primary');
-            document.getElementById('wizardNewTypeStoredOld').classList.remove('primary');
+            document.getElementById('wizardNewTypeStoredNew').classList.add('analyticsPrimary');
+            document.getElementById('wizardNewTypeStoredOld').classList.remove('analyticsPrimary');
         })
 
         document.getElementById('wizardNewTypeStoredOld').addEventListener('click', function () {
             document.getElementById('wizardNewTypeDatasetRow').style.display = 'table-row';
             document.getElementById('wizardNewTypeDimensionRow').style.display = 'none';
-            document.getElementById('wizardNewTypeStoredNew').classList.remove('primary');
-            document.getElementById('wizardNewTypeStoredOld').classList.add('primary');
+            document.getElementById('wizardNewTypeStoredNew').classList.remove('analyticsPrimary');
+            document.getElementById('wizardNewTypeStoredOld').classList.add('analyticsPrimary');
         })
 
         OCA.Analytics.Datasource.buildDropdown('wizardNewDatasource');

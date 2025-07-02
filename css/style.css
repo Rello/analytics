@@ -911,6 +911,22 @@ div.dt-container .dt-paging .dt-paging-button {
     padding-top: 10px;
 }
 
+/* primary-style buttons */
+.analyticsPrimary {
+    background-color: var(--color-primary-element-light);
+}
+.analyticsPrimary:hover {
+    background-color: var(--color-primary-element-light-hover);
+}
+
+.analyticsDialogButtonrow .button:not(.analyticsPrimary) {
+    background-color: transparent;
+}
+
+.analyticsDialogButtonrow .button:not(.analyticsPrimary):hover {
+    background-color: var(--color-background-hover);
+}
+
 .dropDownList {
     border-color: var(--color-primary-element) !important;
     /* position: absolute; hide so the full menu is being shown */

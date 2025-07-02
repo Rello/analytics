@@ -267,7 +267,7 @@ OCA.Analytics.Notification = {
             + '<div id="analyticsDialogContent">'
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
-            + '<a class="button primary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
             + '</div></div>'
         );
         document.getElementById('analyticsDialogGuidance').innerHTML = guidance;
@@ -289,7 +289,7 @@ OCA.Analytics.Notification = {
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
             + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '<a class="button primary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
             + '</div></div>'
         );
         document.getElementById('analyticsDialogContent').innerHTML = text;
@@ -335,7 +335,7 @@ OCA.Analytics.Notification = {
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
             + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '<a class="button primary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
             + '</div></div>'
         );
 
