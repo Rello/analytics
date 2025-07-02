@@ -452,10 +452,13 @@ table.dataTable tbody tr {
 
 input.sidebarInput,
 select.sidebarInput,
+textarea.sidebarInput,
 input.menueInput,
 select.menueInput,
+textarea.menueInput,
 input.optionsInput,
 select.optionsInput,
+textarea.optionsInput,
 input.optionsInputValue {
     border: none !important;
     border-bottom: 1px solid var(--color-border-dark) !important;
@@ -469,10 +472,13 @@ input.optionsInputValue {
 
 input.sidebarInput:focus,
 select.sidebarInput:focus,
+textarea.sidebarInput:focus,
 input.menueInput:focus,
 select.menueInput:focus,
+textarea.menueInput:focus,
 input.optionsInput:focus,
 select.optionsInput:focus,
+textarea.optionsInput:focus,
 input.optionsInputValue:focus {
     outline: none;
     border-bottom: 2px solid var(--color-primary-element) !important;
@@ -486,10 +492,13 @@ input.optionsInputValue:focus {
 
 input.sidebarInput:hover,
 select.sidebarInput:hover,
+textarea.sidebarInput:hover,
 input.menueInput:hover,
 select.menueInput:hover,
+textarea.menueInput:hover,
 input.optionsInput:hover,
-select.optionsInput:hover {
+select.optionsInput:hover,
+textarea.optionsInput:hover {
     border-bottom-color: var(--color-primary-element) !important;
 }
 

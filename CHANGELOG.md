@@ -33,6 +33,7 @@
 - Sidebar inputs now override Nextcloud global form rules
 - Dropdown suggestion lists now have borders and background matching inputs
 - Select inputs use the same material underline styling
+- Textarea fields now share the material underline style
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
