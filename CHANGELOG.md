@@ -28,12 +28,8 @@
 - Dashboard favorites list now also shows panoramas
 - Favorites are fetched in parallel for improved load times
 - Debounce share search results and update list smoothly
+- Material design for input field across the whole app
 
-- Modernized sidebar input styling with material-like underline
-- Sidebar inputs now override Nextcloud global form rules
-- Dropdown suggestion lists now have borders and background matching inputs
-- Select inputs use the same material underline styling
-- Textarea fields now share the material underline style
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
