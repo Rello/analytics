@@ -1,13 +1,13 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "تقسیم",
+    "Share link" : "اشتراک لنک",
     "Delete" : "حذف کریں",
     "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
-    "Share" : "تقسیم",
     "Download" : "ڈاؤن لوڈ",
-    "Share link" : "اشتراک لنک",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "اوکے",

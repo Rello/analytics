@@ -1,12 +1,12 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Падзяліцца",
+    "Share link" : "Share link",
     "Delete" : "Delete",
     "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
-    "Share" : "Падзяліцца",
-    "Share link" : "Share link",
     "Type" : "Type",
     "Notification" : "Абвестка",
     "Date" : "Date",

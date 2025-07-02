@@ -1,5 +1,7 @@
 { "translations": {
     "Loading" : "Loading",
+    "Share" : "பகிர்வு",
+    "Share link" : "Share link",
     "Value" : "Value",
     "Delete" : "நீக்குக",
     "Done" : "Done",
@@ -7,10 +9,8 @@
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "கோப்பை அழிக்க",
-    "Share" : "பகிர்வு",
     "Download" : "பதிவிறக்குக",
     "New" : "புதிய",
-    "Share link" : "Share link",
     "Type" : "வகை",
     "Date" : "Date",
     "OK" : "சரி ",

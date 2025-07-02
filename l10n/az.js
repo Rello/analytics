@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Paylaş",
+    "Share link" : "Linki yayımla",
+    "Link copied" : "Link kopyalandı",
     "Saved" : "Saxlanıldı",
     "Delete" : "Sil",
     "Done" : "Edildi",
@@ -9,11 +12,8 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Qovluğu sil",
-    "Share" : "Paylaş",
     "Download" : "Yüklə",
     "New" : "Yeni",
-    "Link copied" : "Link kopyalandı",
-    "Share link" : "Linki yayımla",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "Oldu",

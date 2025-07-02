@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Shirikisha",
+    "Share link" : "Shirikisha kiungo",
     "Are you sure?" : "Una uhakika?",
     "Delete" : "Futa",
     "Done" : "Imefanyika",
@@ -8,12 +10,10 @@ OC.L10N.register(
     "Remove from favorites" : "Ondoa kutoka katika pendwa",
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Delete folder" : "Futa kisanduku",
-    "Share" : "Shirikisha",
     "Download" : "Pakua",
     "Request could not be processed" : "Ombi halikuweza kuchakatwa",
     "Report" : "Toa taarifa",
     "New" : "Mpya",
-    "Share link" : "Shirikisha kiungo",
     "Type" : "Aina",
     "Notification" : "Taarifa",
     "Date" : "Tarehe",

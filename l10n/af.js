@@ -1,6 +1,9 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Deel",
+    "Share link" : "Deel skakel",
+    "Link copied" : "Skakel gekopieer",
     "Value" : "Waarde",
     "Saved" : "Bewaar",
     "Delete" : "Skrap",
@@ -9,11 +12,8 @@ OC.L10N.register(
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Add to favorites" : "Voeg by gunstelinge",
     "Delete folder" : "Skrap vouer",
-    "Share" : "Deel",
     "Download" : "Laai af",
     "New" : "Nuut",
-    "Link copied" : "Skakel gekopieer",
-    "Share link" : "Deel skakel",
     "Type" : "Tipe",
     "Notification" : "Kennisgewing",
     "Date" : "Datum",

@@ -1,6 +1,8 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Կիսվել",
+    "Share link" : "Կիսվել հղմամբ",
     "Dataset" : "Տվյալների հավաքածու",
     "Data" : "Տվյալ",
     "Automation" : "Ավտոմատացում",
@@ -9,10 +11,8 @@ OC.L10N.register(
     "Favorites" : "Սիրվածներ",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
-    "Share" : "Կիսվել",
     "Download" : "Ներբեռնել",
     "New" : "Նոր",
-    "Share link" : "Կիսվել հղմամբ",
     "Type" : "Տիպ",
     "Notification" : "Ծանուցում",
     "Date" : "Date",

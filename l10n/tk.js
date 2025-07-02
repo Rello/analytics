@@ -1,15 +1,15 @@
 OC.L10N.register(
     "analytics",
     {
+    "Share" : "Paýlaş",
+    "Share link" : "Baglanyşyk paýlaş",
+    "Link copied" : "Link-yň nusgasy alyndy",
     "Delete" : "Pozmak",
     "Default" : "Bellenen",
     "Favorites" : "Halanýanlar",
     "Add to favorites" : "Saýlananlara goşuň",
-    "Share" : "Paýlaş",
     "Download" : "Göçürip almak",
     "Report" : "Hasabat ugradyň",
-    "Link copied" : "Link-yň nusgasy alyndy",
-    "Share link" : "Baglanyşyk paýlaş",
     "Type" : "Görnüşi",
     "OK" : "Bolýar",
     "Cancel" : "ýatyrmak",
