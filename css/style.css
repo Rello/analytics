@@ -444,14 +444,44 @@ table.dataTable tbody tr {
 
 .optionsInput {
     width: 130px;
-    border: 1px solid var(--color-border-dark) !important;
-    border-radius: var(--border-radius-large);
 }
 
 .sidebarInput, .menueInput, .optionsInputValue {
     width: 200px;
-    border: 1px solid var(--color-border-dark) !important;
-    border-radius: var(--border-radius-large);
+}
+
+input.sidebarInput,
+select.sidebarInput,
+textarea.sidebarInput,
+input.menueInput,
+select.menueInput,
+textarea.menueInput,
+input.optionsInput,
+select.optionsInput,
+textarea.optionsInput,
+input.optionsInputValue {
+    border: none !important;
+    border-bottom: 1px solid var(--color-border-dark) !important;
+    border-radius: 0;
+    background-color: transparent;
+    padding: 4px 0;
+    transition: border-color .2s;
+    appearance: none;
+    box-shadow: none;
+}
+
+input.sidebarInput:focus,
+select.sidebarInput:focus,
+textarea.sidebarInput:focus,
+input.menueInput:focus,
+select.menueInput:focus,
+textarea.menueInput:focus,
+input.optionsInput:focus,
+select.optionsInput:focus,
+textarea.optionsInput:focus,
+input.optionsInputValue:focus {
+    outline: none;
+    border-bottom: 2px solid var(--color-primary-element) !important;
 }
 
 .dt-input {
@@ -460,7 +490,19 @@ table.dataTable tbody tr {
     border-radius: var(--border-radius-large);
 }
 
-.sidebarInput:hover, .menueInput:hover, .dt-input:hover {
+input.sidebarInput:hover,
+select.sidebarInput:hover,
+textarea.sidebarInput:hover,
+input.menueInput:hover,
+select.menueInput:hover,
+textarea.menueInput:hover,
+input.optionsInput:hover,
+select.optionsInput:hover,
+textarea.optionsInput:hover {
+    border-bottom-color: var(--color-primary-element) !important;
+}
+
+.dt-input:hover {
     border-color: var(--color-primary-element) !important;
 }
 
@@ -902,14 +944,14 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .dropDownList {
-    border-color: var(--color-primary-element) !important;
-    /* position: absolute; hide so the full menu is being shown */
-    z-index: 9999;
-    background-color: var(--color-main-background);
+    list-style: none;
+    margin: -3px 0 0;
+    padding: 0;
+    border: 1px solid var(--color-border-dark) !important;
     border-top: none !important;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    margin-top: -3px;
+    border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+    background-color: var(--color-main-background);
+    z-index: 9999;
 }
 
 .dropDownList > li {
@@ -926,10 +968,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .dropDownListParentOpen {
-    border-color: var(--color-primary-element) !important;
     border-bottom: none !important;
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
 }
 
 .dragAndDropPlaceholder {

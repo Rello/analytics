@@ -28,6 +28,8 @@
 - Dashboard favorites list now also shows panoramas
 - Favorites are fetched in parallel for improved load times
 - Debounce share search results and update list smoothly
+- Material design for input field across the whole app
+
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
