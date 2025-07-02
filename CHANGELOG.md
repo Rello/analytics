@@ -29,6 +29,8 @@
 - Favorites are fetched in parallel for improved load times
 - Debounce share search results and update list smoothly
 
+- Modernized sidebar input styling with material-like underline
+
 ## 5.6.1 - 2025-06-09
 ### Fixed
 - Threshold validation for numbers with thousands separator

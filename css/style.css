@@ -450,8 +450,17 @@ table.dataTable tbody tr {
 
 .sidebarInput, .menueInput, .optionsInputValue {
     width: 200px;
-    border: 1px solid var(--color-border-dark) !important;
-    border-radius: var(--border-radius-large);
+    border: none;
+    border-bottom: 1px solid var(--color-border-dark);
+    border-radius: 0;
+    background-color: transparent;
+    padding: 4px 0;
+    transition: border-color .2s;
+}
+
+.sidebarInput:focus, .menueInput:focus, .optionsInputValue:focus {
+    outline: none;
+    border-bottom: 2px solid var(--color-primary-element);
 }
 
 .dt-input {
@@ -460,7 +469,11 @@ table.dataTable tbody tr {
     border-radius: var(--border-radius-large);
 }
 
-.sidebarInput:hover, .menueInput:hover, .dt-input:hover {
+.sidebarInput:hover, .menueInput:hover {
+    border-bottom-color: var(--color-primary-element) !important;
+}
+
+.dt-input:hover {
     border-color: var(--color-primary-element) !important;
 }
 
