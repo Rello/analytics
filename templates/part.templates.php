@@ -535,7 +535,7 @@
                     </div>
                 </div>
                 <div style="display: table-cell;">
-                    <select id="datasourceSelect" class="input150">
+                    <select id="datasourceSelect" class="siebarInput">
                     </select>
                 </div>
             </div>

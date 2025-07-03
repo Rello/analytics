@@ -35,7 +35,7 @@ OCA.Analytics.Sidebar = {
             appsidebar.dataset.item_type = navigationItem.dataset.item_type;
             appsidebar.classList.remove('disappear');
 
-            document.getElementById('tabHeaderReport').classList.add('selected', 'analyticsPrimary');
+            document.getElementById('tabHeaderReport').classList.add('selected');
             document.querySelector('.tabHeader.selected').click();
         }
     },
@@ -139,7 +139,7 @@ OCA.Analytics.Sidebar = {
     },
 
     resetView: function () {
-        document.querySelector('.tabHeader.selected').classList.remove('selected', 'analyticsPrimary');
+        document.querySelector('.tabHeader.selected').classList.remove('selected');
         let tabs = document.querySelectorAll('.tabsContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;
@@ -185,7 +185,7 @@ OCA.Analytics.Sidebar.Report = {
         OCA.Analytics.Sidebar.Report.metadataChanged = false;
 
         OCA.Analytics.Sidebar.resetView();
-        document.getElementById('tabHeaderReport').classList.add('selected', 'analyticsPrimary');
+        document.getElementById('tabHeaderReport').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerReport');
         document.getElementById('tabContainerReport').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
