@@ -47,7 +47,7 @@ Object.assign(OCA.Analytics.Dataset = {
 
         OCA.Analytics.Dataset.constructTabs();
 
-        document.getElementById('tabHeaderDataset').classList.add('selected');
+        document.getElementById('tabHeaderDataset').classList.add('selected', 'analyticsPrimary');
         document.querySelector('.tabHeader.selected').click();
     },
 
@@ -111,7 +111,7 @@ Object.assign(OCA.Analytics.Dataset = {
     },
 
     resetView: function () {
-        document.querySelector('.tabHeader.selected').classList.remove('selected');
+        document.querySelector('.tabHeader.selected').classList.remove('selected', 'analyticsPrimary');
         let tabs = document.querySelectorAll('.datasetTabContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;
@@ -135,7 +135,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         const datasetId = OCA.Analytics.currentDataset;
 
         OCA.Analytics.Dataset.resetView();
-        document.getElementById('tabHeaderDataload').classList.add('selected');
+        document.getElementById('tabHeaderDataload').classList.add('selected', 'analyticsPrimary');
         OCA.Analytics.Visualization.showElement('tabContainerDataload');
         document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
@@ -551,7 +551,7 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         const datasetId = OCA.Analytics.currentDataset;
 
         OCA.Analytics.Dataset.resetView();
-        document.getElementById('tabHeaderDataset').classList.add('selected');
+        document.getElementById('tabHeaderDataset').classList.add('selected', 'analyticsPrimary');
         OCA.Analytics.Visualization.showElement('tabContainerDataset');
         document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 

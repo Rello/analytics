@@ -919,10 +919,12 @@ div.dt-container .dt-paging .dt-paging-button {
     background-color: var(--color-primary-element-light-hover);
 }
 
+div[id^="analytics-content"] .button:not(.analyticsPrimary),
 .analyticsDialogButtonrow .button:not(.analyticsPrimary) {
     background-color: transparent;
 }
 
+div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .analyticsDialogButtonrow .button:not(.analyticsPrimary):hover {
     background-color: var(--color-background-hover);
 }
@@ -1240,15 +1242,20 @@ div.dt-container .dt-paging .dt-paging-button {
 .tabHeader {
     flex: 1;
     text-align: center;
+    border-radius: var(--border-radius-pill);
 }
 
 .tabHeader.selected {
-    border-bottom: 4px solid #1A366C;
+    background-color: var(--color-primary-element-light);
+}
+
+.tabHeader:hover {
+    background-color: var(--color-background-hover);
 }
 
 .tabHeader a {
     display: block;
-    padding: 10px 0;
+    padding: 10px 12px;
     text-decoration: none;
     color: inherit;
 }

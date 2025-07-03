@@ -35,7 +35,7 @@ OCA.Analytics.Sidebar = {
             appsidebar.dataset.item_type = navigationItem.dataset.item_type;
             appsidebar.classList.remove('disappear');
 
-            document.getElementById('tabHeaderReport').classList.add('selected');
+            document.getElementById('tabHeaderReport').classList.add('selected', 'analyticsPrimary');
             document.querySelector('.tabHeader.selected').click();
         }
     },
@@ -139,7 +139,7 @@ OCA.Analytics.Sidebar = {
     },
 
     resetView: function () {
-        document.querySelector('.tabHeader.selected').classList.remove('selected');
+        document.querySelector('.tabHeader.selected').classList.remove('selected', 'analyticsPrimary');
         let tabs = document.querySelectorAll('.tabsContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;
@@ -185,7 +185,7 @@ OCA.Analytics.Sidebar.Report = {
         OCA.Analytics.Sidebar.Report.metadataChanged = false;
 
         OCA.Analytics.Sidebar.resetView();
-        document.getElementById('tabHeaderReport').classList.add('selected');
+        document.getElementById('tabHeaderReport').classList.add('selected', 'analyticsPrimary');
         OCA.Analytics.Visualization.showElement('tabContainerReport');
         document.getElementById('tabContainerReport').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
@@ -776,7 +776,7 @@ OCA.Analytics.Sidebar.Data = {
             OCA.Analytics.Sidebar.resetView();
         }
 
-        document.getElementById('tabHeaderData').classList.add('selected');
+        document.getElementById('tabHeaderData').classList.add('selected', 'analyticsPrimary');
         OCA.Analytics.Visualization.showElement('tabContainerData');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
@@ -885,7 +885,7 @@ OCA.Analytics.Sidebar.Threshold = {
         const reportId = document.getElementById('app-sidebar').dataset.id;
 
         OCA.Analytics.Sidebar.resetView();
-        document.getElementById('tabHeaderThreshold').classList.add('selected');
+        document.getElementById('tabHeaderThreshold').classList.add('selected', 'analyticsPrimary');
         OCA.Analytics.Visualization.showElement('tabContainerThreshold');
         document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 

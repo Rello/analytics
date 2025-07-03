@@ -167,7 +167,7 @@
             </div>
             <br><br>
             <div class="description-block">
-                <button id="wizardEnd" class="primary modal-default-button">
+                <button id="wizardEnd" class="analyticsPrimary modal-default-button">
                     <?php p($l->t('Start using Analytics')); ?>
                 </button>
             </div>
@@ -398,7 +398,7 @@
                         </div>
                     </div>
                     <div style="display: table-cell;">
-                        <button id="wizardNewCreate" type="button" class="primary">
+                        <button id="wizardNewCreate" type="button" class="analyticsPrimary">
                             <?php p($l->t('Create')); ?>
                         </button>
                     </div>
@@ -427,7 +427,7 @@
                     </div>
                     <div style="display: table-cell;">
                         <br>
-                        <button id="wizardNewCreate" type="button" class="primary">
+                        <button id="wizardNewCreate" type="button" class="analyticsPrimary">
                             <?php p($l->t('Create')); ?>
                         </button>
                         <button id="wizardNewCancel" type="button">
