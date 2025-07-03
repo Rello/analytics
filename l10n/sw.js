@@ -3,10 +3,13 @@ OC.L10N.register(
     {
     "Share" : "Shirikisha",
     "Share link" : "Shirikisha kiungo",
+    "Saved" : "Imehifadhiwa",
     "Are you sure?" : "Una uhakika?",
     "Delete" : "Futa",
     "Done" : "Imefanyika",
+    "Filter" : "Chujio",
     "Favorites" : "Vipendwa",
+    "Reports" : "Taarifa",
     "Remove from favorites" : "Ondoa kutoka katika pendwa",
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Delete folder" : "Futa kisanduku",
