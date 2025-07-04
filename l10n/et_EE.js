@@ -174,6 +174,7 @@ OC.L10N.register(
     "Delete current page" : "Kustuta see leht",
     "Back" : "Tagasi",
     "Report was changed - Press here to save the current state" : "Aruanne on muudetud - viimase oleku salvestamiseks klõpsi siin",
+    "Legend" : "Legend",
     "No data found" : "Andmeid ei leidu",
     "Settings" : "Seaded",
     "Import report" : "Impordi aruanne",

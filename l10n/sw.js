@@ -46,6 +46,7 @@ OC.L10N.register(
     "Translate" : "Tafsiri",
     "Edit" : "Hariri",
     "Back" : "Rudi",
+    "Legend" : "Hadithi",
     "Settings" : "Mipangilio",
     "Name" : "Jina",
     "Update" : "Sasisha",
@@ -60,6 +61,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Nakili kiungio",
     "Additional settings" : "Mipangilio ya nyongeza",
+    "Color" : "Rangi",
     "Sort by" : "Panga kwa ",
     "Create" : "Tengeneza"
 },
