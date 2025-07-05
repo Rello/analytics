@@ -952,6 +952,13 @@ div.dt-container .dt-paging .dt-paging-button {
     gap: 8px;
     padding-top: 10px;
 }
+.sidebarButtonRow {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
 
 /* primary-style buttons */
 .analyticsPrimary {

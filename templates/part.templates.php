@@ -143,15 +143,17 @@
         </div>
     </div>
     <br>
-    <button id="sidebarReportUpdateButton" type="button" class="analyticsPrimary">
-                <?php p($l->t('Update')); ?>
-    </button>
-    <button id="sidebarReportDeleteButton" type="button">
-		<?php p($l->t('Delete')); ?>
-    </button>
-    <button id="sidebarReportExportButton" type="button">
-		<?php p($l->t('Export')); ?>
-    </button>
+    <div class="sidebarButtonRow">
+        <button id="sidebarReportUpdateButton" type="button" class="analyticsPrimary">
+            <?php p($l->t('Update')); ?>
+        </button>
+        <button id="sidebarReportDeleteButton" type="button">
+            <?php p($l->t('Delete')); ?>
+        </button>
+        <button id="sidebarReportExportButton" type="button">
+            <?php p($l->t('Export')); ?>
+        </button>
+    </div>
 
 </template>
 
@@ -359,13 +361,13 @@
             </div>
         </div>
     </div>
-    <div style="width:100%;">
-        <br>
+    <br>
+    <div class="sidebarButtonRow" style="width:100%;">
         <button id="sidebarDatasetUpdateButton" type="button" class="analyticsPrimary">
-                        <?php p($l->t('Update')); ?>
+            <?php p($l->t('Update')); ?>
         </button>
         <button id="sidebarDatasetDeleteButton" type="button">
-			<?php p($l->t('Delete')); ?>
+            <?php p($l->t('Delete')); ?>
         </button>
     </div>
 </template>
@@ -401,12 +403,14 @@
             </div>
         </div>
         <br>
-        <button id="updateDataButton" type="button" class="analyticsPrimary">
-                        <?php p($l->t('Save data')); ?>
-        </button>
-        <button id="deleteDataButton" type="button">
-			<?php p($l->t('Delete data')); ?>
-        </button>
+        <div class="sidebarButtonRow">
+            <button id="updateDataButton" type="button" class="analyticsPrimary">
+                <?php p($l->t('Save data')); ?>
+            </button>
+            <button id="deleteDataButton" type="button">
+                <?php p($l->t('Delete data')); ?>
+            </button>
+        </div>
         <br>
         <br>
     </div>
@@ -414,19 +418,23 @@
                                          class="sidebarPointer"><?php // TRANSLATORS Noun shown in a button
 			p($l->t('Import')); ?></h3></div>
     <div id="dataImportSection" style="display: none; width: 100%; max-width: 500px;">
-        <button id="importDataFileButton" type="button">
-			<?php p($l->t('From file')); ?>
-        </button>
-        <button id="importDataClipboardButton" type="button">
-			<?php p($l->t('From clipboard')); ?>
-        </button>
+        <div class="sidebarButtonRow">
+            <button id="importDataFileButton" type="button">
+                <?php p($l->t('From file')); ?>
+            </button>
+            <button id="importDataClipboardButton" type="button">
+                <?php p($l->t('From clipboard')); ?>
+            </button>
+        </div>
         <br>
         <textarea id="importDataClipboardText" rows="5" cols="150" hidden></textarea>
         <br>
-        <button id="importDataClipboardButtonGo" type="button" hidden>
-			<?php // TRANSLATORS Noun shown in a button
-			p($l->t('Import')); ?>
-        </button>
+        <div class="sidebarButtonRow">
+            <button id="importDataClipboardButtonGo" type="button" hidden>
+                <?php // TRANSLATORS Noun shown in a button
+                p($l->t('Import')); ?>
+            </button>
+        </div>
         <br>
     </div>
 
@@ -448,7 +456,8 @@
     <div class="sidebarHeaderClosed"><h3 id="dataAdvancedSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('Data load')); ?></h3></div>
     <div id="dataAdvancedSection" style="display: none; width: 100%; max-width: 500px;">
-        <button id="advancedButton" type="button">
+        <div class="sidebarButtonRow">
+            <button id="advancedButton" type="button">
 			<?php p($l->t('Advanced configuration')); ?>
         </button>
     </div>
@@ -509,12 +518,14 @@
 
     </div>
     <br>
-    <button id="sidebarThresholdCreateButton" type="button" class="analyticsPrimary" data-id="">
-                <?php p($l->t('Save threshold')); ?>
-    </button>
-    <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
-		<?php p($l->t('Notification for new records')); ?>
-    </button>
+    <div class="sidebarButtonRow">
+        <button id="sidebarThresholdCreateButton" type="button" class="analyticsPrimary" data-id="">
+            <?php p($l->t('Save threshold')); ?>
+        </button>
+        <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
+            <?php p($l->t('Notification for new records')); ?>
+        </button>
+    </div>
     <br>
     <br>
     <br>
@@ -595,7 +606,7 @@
                         <div style="display: table-cell; min-width: 20px;"></div>
                     </div>
                 </div>
-                <div id="dataloadDetailButtons" hidden>
+                <div id="dataloadDetailButtons" hidden class="sidebarButtonRow">
                     <button id="dataloadDeleteButton" style="padding: 15px;" title="<?php p($l->t('Delete')); ?>"
                             class="icon-delete"></button>
                     <button id="dataloadCopyButton" style="padding: 15px;" title="<?php p($l->t('Copy')); ?>"
@@ -849,10 +860,12 @@
             </label></div>
     </div>
     <br>
-    <button id="tableOptionsResetState">
-        <span class="icon-analytics-reset"></span>
-        <span><?php p($l->t('Reset table')); ?></span>
-    </button>
+    <div class="sidebarButtonRow">
+        <button id="tableOptionsResetState">
+            <span class="icon-analytics-reset"></span>
+            <span><?php p($l->t('Reset table')); ?></span>
+        </button>
+    </div>
     <br>
     <div class="sidebarHeaderClosed"><h3 id="tableOptionsSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('Additional settings')); ?> <span

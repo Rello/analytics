@@ -10,6 +10,9 @@
 ### Fixed
 - Correctly create and delete items according to their selected type and show the dropdown above the New button
 - Navigation updates instantly when items are created or deleted without reloading
+- Navigation keeps Favorites open and only one other section expands at a time
+- Dataset maintenance from the navigation now opens the dataset in place
+- Sidebar buttons across all tabs now align to the right
 
 ## 5.6.2 - 2025-06-10
 ### Fixed
