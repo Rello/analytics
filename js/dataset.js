@@ -13,7 +13,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     // register handlers for the navigation bar
     OCA.Analytics.Navigation.registerHandler('create', 'dataset', function () {
-        OCA.Analytics.Panorama.newPanorama();
+        OCA.Analytics.Wizard.sildeArray = [
+            ['', ''],
+            ['wizardDatasetGeneral', OCA.Analytics.Dataset.Dataset.wizard],
+        ];
+        OCA.Analytics.Wizard.show();
     });
 
     OCA.Analytics.Navigation.registerHandler('navigationClicked', 'dataset', function (event) {
@@ -21,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     OCA.Analytics.Navigation.registerHandler('delete', 'dataset', function (event) {
-        OCA.Analytics.Panorama.handleDeletePanoramaButton(event);
+        OCA.Analytics.Dataset.Dataset.handleDeleteButton(event);
     });
 
     OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'dataset', function (id, isFavorite) {

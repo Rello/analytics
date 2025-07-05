@@ -732,7 +732,9 @@ OCA.Analytics.Navigation = {
     },
 
     handleDeleteButton: function (evt) {
-        let handler = OCA.Analytics.Navigation.handlers['delete'];
+        const menu = evt.target.closest('#navigationMenu');
+        const type = menu?.dataset.item_type;
+        const handler = OCA.Analytics.Navigation.handlers['delete']?.[type];
         if (handler) {
             handler(evt);
         }

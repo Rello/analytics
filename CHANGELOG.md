@@ -7,6 +7,8 @@
 - Introduced custom analyticsPrimary button style and updated dialog buttons
 - Sidebar action buttons and tabs now use analyticsPrimary styling
 - "New report" button renamed to a generic "New" selector with type options
+### Fixed
+- Correctly create and delete items according to their selected type and show the dropdown above the New button
 
 ## 5.6.2 - 2025-06-10
 ### Fixed
