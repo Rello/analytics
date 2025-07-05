@@ -64,7 +64,7 @@ Object.assign(OCA.Analytics.Dataset = {
             id: 'tabHeaderDataset',
             class: 'tabContainerDataset',
             tabindex: '1',
-            name: t('analytics', 'Dataset'),
+            name: t('analytics', 'Settings'),
             action: OCA.Analytics.Dataset.Dataset.tabContainerDataset,
         });
 

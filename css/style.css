@@ -905,7 +905,12 @@ div.dt-container .dt-paging .dt-paging-button {
     padding: 25px;
     background: var(--icon-close-dark) no-repeat center;
     opacity: .5;
+    transition: opacity .2s;
     border-radius: var(--border-radius-pill);
+}
+
+.analyticsDialogClose:hover {
+    opacity: 1;
 }
 
 .analyticsDialog {
@@ -924,10 +929,14 @@ div.dt-container .dt-paging .dt-paging-button {
     max-width: calc(100% - 20px);
     overflow: auto;
     position: fixed;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    animation: analyticsDialogEnter .25s ease-out;
 }
 
 .analyticsDialogDim {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    animation: analyticsDialogDimEnter .2s ease-out;
     z-index: 9999;
     position: fixed;
     top: 0;
@@ -937,10 +946,29 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .analyticsDialogButtonrow {
-    justify-content: space-between;
+    justify-content: flex-end;
     position: relative;
     display: flex;
+    gap: 8px;
     padding-top: 10px;
+}
+
+/* primary-style buttons */
+.analyticsPrimary {
+    background-color: var(--color-primary-element-light);
+}
+.analyticsPrimary:hover {
+    background-color: var(--color-primary-element-light-hover);
+}
+
+div[id^="analytics-content"] .button:not(.analyticsPrimary),
+.analyticsDialogButtonrow .button:not(.analyticsPrimary) {
+    background-color: transparent;
+}
+
+div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
+.analyticsDialogButtonrow .button:not(.analyticsPrimary):hover {
+    background-color: var(--color-background-hover);
 }
 
 .dropDownList {
@@ -1286,4 +1314,24 @@ div.dt-container .dt-paging .dt-paging-button {
 
 #dataloadDetail, #dataloadRun {
     padding-top: 30px;
+}
+
+@keyframes analyticsDialogEnter {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%) scale(.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes analyticsDialogDimEnter {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

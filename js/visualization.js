@@ -1220,13 +1220,15 @@ OCA.Analytics.Visualization = {
     },
 
     showContentByType: function (type) {
-        if (OCA.Analytics.currentContentType !== type) {
+        //if (OCA.Analytics.currentContentType !== type) {
             Array.from(document.querySelectorAll('[id^="analytics-content-"]'))
                 .map(el => el.id)
                 .forEach(id => OCA.Analytics.Visualization.hideElement(id));
             OCA.Analytics.Visualization.showElement('analytics-content-' + type);
-            OCA.Analytics.currentContentType = type;
-        }
+            if (type !== 'loading') {
+                OCA.Analytics.currentContentType = type;
+            }
+        //}
         if (type === 'intro' || type === 'warning') {
             OCA.Analytics.Visualization.hideElement('menuBar');
         } else {

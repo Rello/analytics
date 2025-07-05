@@ -143,8 +143,8 @@
         </div>
     </div>
     <br>
-    <button id="sidebarReportUpdateButton" type="button" class="primary">
-		<?php p($l->t('Update')); ?>
+    <button id="sidebarReportUpdateButton" type="button" class="analyticsPrimary">
+                <?php p($l->t('Update')); ?>
     </button>
     <button id="sidebarReportDeleteButton" type="button">
 		<?php p($l->t('Delete')); ?>
@@ -361,8 +361,8 @@
     </div>
     <div style="width:100%;">
         <br>
-        <button id="sidebarDatasetUpdateButton" type="button" class="primary">
-			<?php p($l->t('Update')); ?>
+        <button id="sidebarDatasetUpdateButton" type="button" class="analyticsPrimary">
+                        <?php p($l->t('Update')); ?>
         </button>
         <button id="sidebarDatasetDeleteButton" type="button">
 			<?php p($l->t('Delete')); ?>
@@ -401,8 +401,8 @@
             </div>
         </div>
         <br>
-        <button id="updateDataButton" type="button" class="primary">
-			<?php p($l->t('Save data')); ?>
+        <button id="updateDataButton" type="button" class="analyticsPrimary">
+                        <?php p($l->t('Save data')); ?>
         </button>
         <button id="deleteDataButton" type="button">
 			<?php p($l->t('Delete data')); ?>
@@ -509,8 +509,8 @@
 
     </div>
     <br>
-    <button id="sidebarThresholdCreateButton" type="button" class="primary" data-id="">
-		<?php p($l->t('Save threshold')); ?>
+    <button id="sidebarThresholdCreateButton" type="button" class="analyticsPrimary" data-id="">
+                <?php p($l->t('Save threshold')); ?>
     </button>
     <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
 		<?php p($l->t('Notification for new records')); ?>
@@ -535,7 +535,7 @@
                     </div>
                 </div>
                 <div style="display: table-cell;">
-                    <select id="datasourceSelect" class="input150">
+                    <select id="datasourceSelect" class="siebarInput">
                     </select>
                 </div>
             </div>

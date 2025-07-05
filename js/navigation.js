@@ -613,7 +613,9 @@ OCA.Analytics.Navigation = {
         const anchor = document.querySelector(
             '#navigationDatasets a[data-id="' + id + '"][data-item_type="' + type + '"]'
         );
-        anchor?.click();
+        if (anchor.parentElement.classList.contains('active') === false) {
+            anchor?.click();
+        }
 
         OCA.Analytics.Sidebar?.showSidebar?.(evt);
     },

@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.6.3 - 2025-07-02
+### Changed
+- Refreshed modal dialog styling with subtle animations
+- Primary action button moved to the right side of dialog
+- Introduced custom analyticsPrimary button style and updated dialog buttons
+- Sidebar action buttons and tabs now use analyticsPrimary styling
+
 ## 5.6.2 - 2025-06-10
 ### Fixed
 - Date thresholds now evaluate correctly in tables
