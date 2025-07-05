@@ -6,6 +6,7 @@
 - Primary action button moved to the right side of dialog
 - Introduced custom analyticsPrimary button style and updated dialog buttons
 - Sidebar action buttons and tabs now use analyticsPrimary styling
+- Navigation keeps Favorites open and only one other section expands at a time
 - Dataset maintenance from the navigation now opens the dataset in place
 - Sidebar buttons across all tabs now align to the right
 
