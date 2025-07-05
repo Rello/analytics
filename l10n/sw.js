@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share" : "Shirikisha",
     "Share link" : "Shirikisha kiungo",
+    "Value" : "Thamani",
     "Saved" : "Imehifadhiwa",
     "Are you sure?" : "Una uhakika?",
     "Delete" : "Futa",
@@ -40,6 +41,7 @@ OC.L10N.register(
     "Count" : "Hesabu",
     "Local" : "Kawaida",
     "File" : "Faili",
+    "Announcements" : "Matangazo",
     "copy" : "Nakili",
     "Password" : "Nenosiri",
     "Options" : "Chaguzi",

@@ -1,6 +1,7 @@
 { "translations": {
     "Share" : "Shirikisha",
     "Share link" : "Shirikisha kiungo",
+    "Value" : "Thamani",
     "Saved" : "Imehifadhiwa",
     "Are you sure?" : "Una uhakika?",
     "Delete" : "Futa",
@@ -38,6 +39,7 @@
     "Count" : "Hesabu",
     "Local" : "Kawaida",
     "File" : "Faili",
+    "Announcements" : "Matangazo",
     "copy" : "Nakili",
     "Password" : "Nenosiri",
     "Options" : "Chaguzi",
