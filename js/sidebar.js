@@ -673,8 +673,7 @@ OCA.Analytics.Sidebar.Report = {
                         true
                     );
                 }
-                document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.removeNavigationItem(reportId, 'report');
                 OCA.Analytics.Navigation.handleOverviewButton();
             })
             .catch(error => {

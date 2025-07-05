@@ -1342,3 +1342,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
         opacity: 1;
     }
 }
+#app-navigation #newMenu{
+    top:auto;
+    bottom:44px;
+}

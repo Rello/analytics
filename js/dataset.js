@@ -13,7 +13,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     // register handlers for the navigation bar
     OCA.Analytics.Navigation.registerHandler('create', 'dataset', function () {
-        OCA.Analytics.Panorama.newPanorama();
+        OCA.Analytics.Wizard.sildeArray = [
+            ['', ''],
+            ['wizardDatasetGeneral', OCA.Analytics.Dataset.Dataset.wizard],
+        ];
+        OCA.Analytics.Wizard.show();
     });
 
     OCA.Analytics.Navigation.registerHandler('navigationClicked', 'dataset', function (event) {
@@ -21,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     OCA.Analytics.Navigation.registerHandler('delete', 'dataset', function (event) {
-        OCA.Analytics.Panorama.handleDeletePanoramaButton(event);
+        OCA.Analytics.Dataset.Dataset.handleDeleteButton(event);
     });
 
     OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'dataset', function (id, isFavorite) {
@@ -676,15 +680,22 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
             })
         })
             .then(response => response.json())
+            .then(id => {
+                return fetch(OC.generateUrl('apps/analytics/dataset/') + id, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                });
+            })
+            .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Wizard.close();
-                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.addNavigationItem(data);
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="dataset"]');
+                anchor?.click();
             });
     },
 
     delete: function (reportId) {
-        document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
-
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId;
         fetch(requestUrl, {
             method: 'DELETE',
@@ -692,7 +703,8 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.removeNavigationItem(reportId, 'dataset');
+                OCA.Analytics.Navigation.handleOverviewButton();
             });
     },
 

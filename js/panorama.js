@@ -1331,8 +1331,17 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
             })
         })
             .then(response => response.json())
+            .then(id => {
+                return fetch(OC.generateUrl('apps/analytics/panorama/') + id, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                });
+            })
+            .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init(data);
+                OCA.Analytics.Navigation.addNavigationItem(data);
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="panorama"]');
+                anchor?.click();
             });
     },
 
@@ -1358,7 +1367,8 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init();
+                OCA.Analytics.Navigation.removeNavigationItem(id, 'panorama');
+                OCA.Analytics.Navigation.handleOverviewButton();
             })
             .catch(error => {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'))
