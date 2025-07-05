@@ -630,11 +630,30 @@ OCA.Analytics.Navigation = {
 
 
     handleAdvancedClicked: function (evt) {
-        let datasetId = evt.target.parentNode.dataset.dataset;
-        let datasetUrl = '';
-        if (datasetId !== undefined) datasetUrl = '/' + datasetId
-        window.location = OC.generateUrl('apps/analytics/d') + datasetUrl;
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
         evt.stopPropagation();
+
+        const datasetId = evt.target.closest('a').dataset.dataset;
+        const anchor = document.querySelector(
+            '#navigationDatasets a[data-id="' + datasetId + '"][data-item_type="dataset"]'
+        );
+
+        if (anchor) {
+            let parent = anchor.parentElement;
+            while (parent && parent.id !== 'navigationDatasets') {
+                if (parent.classList && parent.classList.contains('collapsible')) {
+                    parent.classList.add('open');
+                }
+                parent = parent.parentElement;
+            }
+            anchor.click();
+            OCA.Analytics.Navigation.saveOpenState();
+        } else if (datasetId !== undefined) {
+            const datasetUrl = '/' + datasetId;
+            window.location = OC.generateUrl('apps/analytics/d') + datasetUrl;
+        }
     },
 
     handleFavoriteClicked: function (evt) {
