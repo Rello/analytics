@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     OCA.Analytics.Navigation.registerHandler('delete', 'report', function (event) {
-        OCA.Analytics.Report.handleDeleteButton(event);
+        OCA.Analytics.Sidebar.Report.handleDeleteButton(event);
     });
 
     OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'report', function (id, isFavorite) {
