@@ -1242,20 +1242,15 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .tabHeader {
     flex: 1;
     text-align: center;
-    border-radius: var(--border-radius-pill);
 }
 
 .tabHeader.selected {
-    background-color: var(--color-primary-element-light);
-}
-
-.tabHeader:hover {
-    background-color: var(--color-background-hover);
+    border-bottom: 4px solid #1A366C;
 }
 
 .tabHeader a {
     display: block;
-    padding: 10px 12px;
+    padding: 10px 0;
     text-decoration: none;
     color: inherit;
 }

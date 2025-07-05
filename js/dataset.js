@@ -47,7 +47,7 @@ Object.assign(OCA.Analytics.Dataset = {
 
         OCA.Analytics.Dataset.constructTabs();
 
-        document.getElementById('tabHeaderDataset').classList.add('selected', 'analyticsPrimary');
+        document.getElementById('tabHeaderDataset').classList.add('selected');
         document.querySelector('.tabHeader.selected').click();
     },
 
@@ -64,7 +64,7 @@ Object.assign(OCA.Analytics.Dataset = {
             id: 'tabHeaderDataset',
             class: 'tabContainerDataset',
             tabindex: '1',
-            name: t('analytics', 'Dataset'),
+            name: t('analytics', 'Settings'),
             action: OCA.Analytics.Dataset.Dataset.tabContainerDataset,
         });
 
@@ -111,7 +111,7 @@ Object.assign(OCA.Analytics.Dataset = {
     },
 
     resetView: function () {
-        document.querySelector('.tabHeader.selected').classList.remove('selected', 'analyticsPrimary');
+        document.querySelector('.tabHeader.selected').classList.remove('selected');
         let tabs = document.querySelectorAll('.datasetTabContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;
@@ -135,7 +135,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         const datasetId = OCA.Analytics.currentDataset;
 
         OCA.Analytics.Dataset.resetView();
-        document.getElementById('tabHeaderDataload').classList.add('selected', 'analyticsPrimary');
+        document.getElementById('tabHeaderDataload').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerDataload');
         document.getElementById('tabContainerDataload').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
@@ -551,7 +551,7 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         const datasetId = OCA.Analytics.currentDataset;
 
         OCA.Analytics.Dataset.resetView();
-        document.getElementById('tabHeaderDataset').classList.add('selected', 'analyticsPrimary');
+        document.getElementById('tabHeaderDataset').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerDataset');
         document.getElementById('tabContainerDataset').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 

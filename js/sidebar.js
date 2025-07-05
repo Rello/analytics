@@ -776,7 +776,7 @@ OCA.Analytics.Sidebar.Data = {
             OCA.Analytics.Sidebar.resetView();
         }
 
-        document.getElementById('tabHeaderData').classList.add('selected', 'analyticsPrimary');
+        document.getElementById('tabHeaderData').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerData');
         document.getElementById('tabContainerData').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
@@ -885,7 +885,7 @@ OCA.Analytics.Sidebar.Threshold = {
         const reportId = document.getElementById('app-sidebar').dataset.id;
 
         OCA.Analytics.Sidebar.resetView();
-        document.getElementById('tabHeaderThreshold').classList.add('selected', 'analyticsPrimary');
+        document.getElementById('tabHeaderThreshold').classList.add('selected');
         OCA.Analytics.Visualization.showElement('tabContainerThreshold');
         document.getElementById('tabContainerThreshold').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
 
