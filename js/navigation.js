@@ -160,15 +160,32 @@ OCA.Analytics.Navigation = {
         a.classList.add('icon-add', 'svg');
         a.id = 'newReportButton';
         a.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-        if (OCA.Analytics.isPanorama) {
-            // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
-            a.innerText = t('analytics', 'New panorama');
-        } else {
-            a.innerText = t('analytics', 'New report');
-        }
+        a.innerText = t('analytics', 'New');
+
         li.appendChild(navigationEntrydiv);
         navigationEntrydiv.appendChild(a);
+        navigationEntrydiv.appendChild(OCA.Analytics.Navigation.buildNewMenu());
         return li;
+    },
+
+    buildNewMenu: function () {
+        let menu = document.importNode(document.getElementById('templateNewMenu').content, true);
+        menu = menu.firstElementChild;
+
+        menu.querySelector('#newMenuReport').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleNewMenu('report');
+        });
+        menu.querySelector('#newMenuPanorama').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleNewMenu('panorama');
+        });
+        menu.querySelector('#newMenuDataset').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleNewMenu('dataset');
+        });
+
+        return menu;
     },
 
 
@@ -536,18 +553,24 @@ OCA.Analytics.Navigation = {
         return navigationMenu;
     },
 
-    handleNewButton: function () {
-        // ToDo: change app.js to register handler
+    handleNewButton: function (evt) {
+        evt?.preventDefault();
+        const openMenu = document.querySelector('.app-navigation-entry-menu.open');
+        if (openMenu && openMenu.id !== 'newMenu') {
+            openMenu.classList.remove('open');
+        }
 
-        let handler = OCA.Analytics.Navigation.handlers['create'];
+        const menu = document.getElementById('newMenu');
+        menu.classList.toggle('open');
+    },
+
+    handleNewMenu: function (type) {
+        const menu = document.getElementById('newMenu');
+        menu.classList.remove('open');
+
+        const handler = OCA.Analytics.Navigation.handlers['create']?.[type];
         if (handler) {
             handler();
-        } else if (OCA.Analytics.isDataset) {
-            OCA.Analytics.Wizard.sildeArray = [
-                ['', ''],
-                ['wizardDatasetGeneral', OCA.Analytics.Dataset.Dataset.wizard],
-            ];
-            OCA.Analytics.Wizard.show();
         }
     },
 
@@ -708,8 +731,45 @@ OCA.Analytics.Navigation = {
         document.getElementById('app-settings').classList.toggle('open');
     },
 
+    addNavigationItem: function (item) {
+        if (item.item_type === 'dataset') {
+            OCA.Analytics.datasets.push(item);
+        } else if (item.item_type === 'panorama') {
+            OCA.Analytics.stories.push(item);
+            OCA.Analytics.reports.push(item);
+        } else {
+            OCA.Analytics.reports.push(item);
+        }
+
+        let section = 'section-reports';
+        if (item.item_type === 'panorama') {
+            section = 'section-panoramas';
+        } else if (item.item_type === 'dataset') {
+            section = 'section-datasets';
+        }
+        OCA.Analytics.Navigation.buildNavigationRow(item, section);
+    },
+
+    removeNavigationItem: function (id, itemType) {
+        document.querySelectorAll('#navigationDatasets a[data-id="' + id + '"][data-item_type="' + itemType + '"]').forEach(anchor => {
+            const li = anchor.closest('li');
+            if (li) li.remove();
+        });
+
+        if (itemType === 'dataset') {
+            OCA.Analytics.datasets = OCA.Analytics.datasets.filter(d => parseInt(d.id) !== parseInt(id));
+        } else if (itemType === 'panorama') {
+            OCA.Analytics.stories = OCA.Analytics.stories.filter(p => parseInt(p.id) !== parseInt(id));
+            OCA.Analytics.reports = OCA.Analytics.reports.filter(r => !(parseInt(r.id) === parseInt(id) && r.item_type === 'panorama'));
+        } else {
+            OCA.Analytics.reports = OCA.Analytics.reports.filter(r => !(parseInt(r.id) === parseInt(id) && r.item_type !== 'panorama'));
+        }
+    },
+
     handleDeleteButton: function (evt) {
-        let handler = OCA.Analytics.Navigation.handlers['delete'];
+        const menu = evt.target.closest('#navigationMenu');
+        const type = menu?.dataset.item_type;
+        const handler = OCA.Analytics.Navigation.handlers['delete']?.[type];
         if (handler) {
             handler(evt);
         }

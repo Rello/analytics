@@ -639,6 +639,16 @@
 
 </template>
 
+<template id="templateNewMenu">
+    <div id="newMenu" class="app-navigation-entry-menu">
+        <ul>
+            <li><a href="#" id="newMenuReport" data-type="report"><span class="icon-analytics-report"></span><span><?php p($l->t('Report')); ?></span></a></li>
+            <li><a href="#" id="newMenuPanorama" data-type="panorama"><span class="icon-analytics-panorama"></span><span><?php p($l->t('Panorama')); ?></span></a></li>
+            <li><a href="#" id="newMenuDataset" data-type="dataset"><span class="icon-analytics-dataset"></span><span><?php p($l->t('Dataset')); ?></span></a></li>
+        </ul>
+    </div>
+</template>
+
 <template id="templateNavigationMenu">
     <div id="navigationMenu" class="app-navigation-entry-menu">
         <ul>
