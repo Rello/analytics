@@ -160,15 +160,32 @@ OCA.Analytics.Navigation = {
         a.classList.add('icon-add', 'svg');
         a.id = 'newReportButton';
         a.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
-        if (OCA.Analytics.isPanorama) {
-            // TRANSLATORS "Panorama" will be a product name. Do not translate, just capitalize if required
-            a.innerText = t('analytics', 'New panorama');
-        } else {
-            a.innerText = t('analytics', 'New report');
-        }
+        a.innerText = t('analytics', 'New');
+
         li.appendChild(navigationEntrydiv);
         navigationEntrydiv.appendChild(a);
+        navigationEntrydiv.appendChild(OCA.Analytics.Navigation.buildNewMenu());
         return li;
+    },
+
+    buildNewMenu: function () {
+        let menu = document.importNode(document.getElementById('templateNewMenu').content, true);
+        menu = menu.firstElementChild;
+
+        menu.querySelector('#newMenuReport').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleNewMenu('report');
+        });
+        menu.querySelector('#newMenuPanorama').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleNewMenu('panorama');
+        });
+        menu.querySelector('#newMenuDataset').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleNewMenu('dataset');
+        });
+
+        return menu;
     },
 
 
@@ -536,18 +553,24 @@ OCA.Analytics.Navigation = {
         return navigationMenu;
     },
 
-    handleNewButton: function () {
-        // ToDo: change app.js to register handler
+    handleNewButton: function (evt) {
+        evt?.preventDefault();
+        const openMenu = document.querySelector('.app-navigation-entry-menu.open');
+        if (openMenu && openMenu.id !== 'newMenu') {
+            openMenu.classList.remove('open');
+        }
 
-        let handler = OCA.Analytics.Navigation.handlers['create'];
+        const menu = document.getElementById('newMenu');
+        menu.classList.toggle('open');
+    },
+
+    handleNewMenu: function (type) {
+        const menu = document.getElementById('newMenu');
+        menu.classList.remove('open');
+
+        const handler = OCA.Analytics.Navigation.handlers['create']?.[type];
         if (handler) {
             handler();
-        } else if (OCA.Analytics.isDataset) {
-            OCA.Analytics.Wizard.sildeArray = [
-                ['', ''],
-                ['wizardDatasetGeneral', OCA.Analytics.Dataset.Dataset.wizard],
-            ];
-            OCA.Analytics.Wizard.show();
         }
     },
 

@@ -6,6 +6,7 @@
 - Primary action button moved to the right side of dialog
 - Introduced custom analyticsPrimary button style and updated dialog buttons
 - Sidebar action buttons and tabs now use analyticsPrimary styling
+- "New report" button renamed to a generic "New" selector with type options
 
 ## 5.6.2 - 2025-06-10
 ### Fixed
