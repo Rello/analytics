@@ -82,8 +82,23 @@ OCA.Analytics.Dashboard = {
 
                     for (let panorama of panoramaFavorites) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
-                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem" style="height: 50px;text-align: center;">';
-                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">' + story.name + '</a></li>';
+                        let pages = story?.pages;
+                        if (typeof pages === 'string') {
+                            try {
+                                pages = JSON.parse(pages);
+                            } catch (e) {
+                                pages = [];
+                            }
+                        }
+                        let layout = '';
+                        if (Array.isArray(pages) && pages.length > 0) {
+                            layout = pages[0].layout || '';
+                        }
+                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem">';
+                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">';
+                        li += '<div class="layoutModalGridPreview">' + layout + '</div>';
+                        li += '<div class="analyticsWidgetReport">' + story.name + '</div>';
+                        li += '</a></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
                     }
                 } else {

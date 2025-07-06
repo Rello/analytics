@@ -110,3 +110,19 @@
     width: 150px;
     height:100px
 }
+
+#analytics-content-intro .layoutModalGridPreview {
+    height: 100px;
+    overflow: hidden;
+}
+
+#analytics-content-intro .layoutModalGridPreview .flex-item {
+    padding: 0;
+    margin: 2px;
+    border: 1px solid #888;
+}
+
+#analytics-content-intro .heading-anchor,
+#analytics-content-intro .text-readonly-bar {
+    display: none !important;
+}

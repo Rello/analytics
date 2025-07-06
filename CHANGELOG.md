@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.6.4 - 2025-07-03
+### Added
+- Show layout preview for panorama favorites on the dashboard
+
 ## 5.6.3 - 2025-07-02
 ### Changed
 - Refreshed modal dialog styling with subtle animations
