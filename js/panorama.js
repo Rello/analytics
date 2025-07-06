@@ -1437,9 +1437,11 @@ Object.assign(OCA.Analytics.Panorama.Dashboard = {
                     for (let panorama of JSON.parse(xhr.response)) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
 
-                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem" style="height: 50px;text-align: center;">';
-                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">' + story.name + '</a></li>';
+                        let li = '<li id="analyticsWidgetItem-panorama-' + panorama + '" class="analyticsWidgetItem"></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
+                        let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
+                        document.getElementById('analyticsWidgetItem-panorama-' + panorama).insertAdjacentHTML('beforeend', widgetRow);
+                        document.getElementById('analyticsWidgetItem-panorama-' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
                     }
                 } else {

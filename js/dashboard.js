@@ -49,7 +49,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         headers.append('Content-Type', 'application/json');
         return headers;
     },
-
+    stories: [],
 });
 
 /**
@@ -86,17 +86,21 @@ OCA.Analytics.Dashboard = {
                     document.getElementById('ulAnalytics').innerHTML = '';
 
                     for (let dataset of reportFavorites) {
-                        let li = '<li id="analyticsWidgetItem' + dataset + '" class="analyticsWidgetItem"></li>';
+                        let li = '<li id="analyticsWidgetItem-report-' + dataset + '" class="analyticsWidgetItem"></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
                         OCA.Analytics.Dashboard.getData(dataset);
                     }
 
                     for (let panorama of panoramaFavorites) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
-                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem" style="height: 50px;text-align: center;">';
-                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">' + story.name + '</a></li>';
-                        document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
-                    }
+                        if (story !== undefined) {
+                            let li = '<li id="analyticsWidgetItem-panorama-' + panorama + '" class="analyticsWidgetItem"></li>';
+                            document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
+                            let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
+                            document.getElementById('analyticsWidgetItem-panorama-' + panorama).insertAdjacentHTML('beforeend', widgetRow);
+                            document.getElementById('analyticsWidgetItem-panorama-' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
+                        }
+                   }
                 } else {
                     document.getElementById('ulAnalytics').innerHTML = '<div>'
                         + t('analytics', 'Add a report to the favorites to be shown here.')
@@ -180,8 +184,8 @@ OCA.Analytics.Dashboard = {
         }
 
         let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds);
-        document.getElementById('analyticsWidgetItem' + reportId).insertAdjacentHTML('beforeend', widgetRow);
-        document.getElementById('analyticsWidgetItem' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
+        document.getElementById('analyticsWidgetItem-report-' + reportId).insertAdjacentHTML('beforeend', widgetRow);
+        document.getElementById('analyticsWidgetItem-report-' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
         if (type !== 'table') {
             document.getElementById('kpi' + reportId).remove();
@@ -212,6 +216,19 @@ OCA.Analytics.Dashboard = {
                    <div id="chartContainer${reportId}">
                         <canvas id="myChart${reportId}" class="chartContainer"></canvas>
                     </div>
+                </div>
+            </a>`;
+    },
+
+    buildPanoramaRow: function (name, panoramaId) {
+        let href = OC.generateUrl('apps/analytics/pa/' + panoramaId);
+
+        return `<a href="${href}">
+                <div class="analyticsWidgetContent1">
+                    <div class="analyticsWidgetReport">${name}</div>
+                </div>
+                <div class="analyticsWidgetContent2">
+                    <span class="analyticsWidgetIcon icon-analytics-panorama"></span>
                 </div>
             </a>`;
     },
@@ -538,9 +555,12 @@ OCA.Analytics.Dashboard = {
             history.pushState(null, '', evt.target.href);
         }
 
-        let reportId = evt.target.closest('a').parentElement.id.replace('analyticsWidgetItem', '');
-        if (document.querySelector('#navigationDatasets [data-id="' + reportId + '"]') !== null) {
-            document.querySelector('#navigationDatasets [data-id="' + reportId + '"]').click();
+        let liId = evt.target.closest('a').parentElement.id;
+        let itemType = liId.includes('panorama') ? 'panorama' : 'report';
+        let id = liId.replace('analyticsWidgetItem-' + itemType + '-', '');
+        let selector = '#navigationDatasets [data-id="' + id + '"][data-item_type="' + itemType + '"]';
+        if (document.querySelector(selector) !== null) {
+            document.querySelector(selector).click();
         }
     },
 }
