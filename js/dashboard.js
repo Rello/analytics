@@ -93,9 +93,11 @@ OCA.Analytics.Dashboard = {
 
                     for (let panorama of panoramaFavorites) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
-                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem" style="height: 50px;text-align: center;">';
-                        li += '<a href="' + OC.generateUrl('apps/analytics/pa/' + parseInt(panorama)) + '">' + story.name + '</a></li>';
+                        let li = '<li id="analyticsWidgetItem' + panorama + '" class="analyticsWidgetItem"></li>';
                         document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
+                        let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
+                        document.getElementById('analyticsWidgetItem' + panorama).insertAdjacentHTML('beforeend', widgetRow);
+                        document.getElementById('analyticsWidgetItem' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
                     }
                 } else {
                     document.getElementById('ulAnalytics').innerHTML = '<div>'
@@ -212,6 +214,19 @@ OCA.Analytics.Dashboard = {
                    <div id="chartContainer${reportId}">
                         <canvas id="myChart${reportId}" class="chartContainer"></canvas>
                     </div>
+                </div>
+            </a>`;
+    },
+
+    buildPanoramaRow: function (name, panoramaId) {
+        let href = OC.generateUrl('apps/analytics/pa/' + panoramaId);
+
+        return `<a href="${href}">
+                <div class="analyticsWidgetContent1">
+                    <div class="analyticsWidgetReport">${name}</div>
+                </div>
+                <div class="analyticsWidgetContent2">
+                    <span class="analyticsWidgetIcon icon-analytics-panorama"></span>
                 </div>
             </a>`;
     },

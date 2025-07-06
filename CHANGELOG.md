@@ -7,6 +7,7 @@
 - Introduced custom analyticsPrimary button style and updated dialog buttons
 - Sidebar action buttons and tabs now use analyticsPrimary styling
 - "New report" button renamed to a generic "New" selector with type options
+- Panorama widgets on the dashboard now show an icon instead of a chart preview
 ### Fixed
 - Correctly create and delete items according to their selected type and show the dropdown above the New button
 - Navigation updates instantly when items are created or deleted without reloading
