@@ -1,51 +1,31 @@
 # Changelog
 
-## 5.6.3 - 2025-07-02
+## 5.6.3 - 2025-07-xx
+### Added
+- Unified navigation showing panoramas and reports together
+- Collapsible sections for favorites, panoramas and reports
+- Improved CSS styling for multi-level navigation
+- Persist navigation open state
+- Dashboard favorites list now also shows panoramas
+
 ### Changed
 - Refreshed modal dialog styling with subtle animations
 - Primary action button moved to the right side of dialog
-- Introduced custom analyticsPrimary button style and updated dialog buttons
-- Sidebar action buttons and tabs now use analyticsPrimary styling
 - "New report" button renamed to a generic "New" selector with type options
+- move share dialog from sidebar to own popup
+- Only one navigation section can be open at a time
+- Favorites are fetched in parallel for improved load times
+
 ### Fixed
-- Correctly create and delete items according to their selected type and show the dropdown above the New button
 - Navigation updates instantly when items are created or deleted without reloading
 - Navigation keeps Favorites open and only one other section expands at a time
-- Dataset maintenance from the navigation now opens the dataset in place
-- Sidebar buttons across all tabs now align to the right
 - Newly created items open immediately and appear in the correct navigation section
-- Newly added items expand their section and parent groups automatically
 
 ## 5.6.2 - 2025-06-10
 ### Fixed
 - Date thresholds now evaluate correctly in tables
 - Reload report after threshold modifications
 - Highlight selected threshold row in sidebar
-- Remove duplicate panorama handlers from navigation logic
-- Favorite items now remain in their original sections and update without reloading
-- Load correct report when opening sidebar via navigation menu edit
-
-### Added
-- Unified navigation showing panoramas and reports together
-- Collapsible sections for favorites, panoramas and reports
-- Improved CSS styling for multi-level navigation
-- Persist navigation open state
-- Datasets listed in their own navigation section
-
-### Changed
-- move share dialog from sidebar to own popup
-- Extend collapsed state CSS to cover nested groups
-- Default sections collapsed except Favorites
-- Section headers now use analytics icons and the top Panoramas button was removed
-- Reports and panoramas always display their icons
-- Overview moved into the navigation and highlights when no item is selected
-- Removed dataset maintenance mode; datasets are fetched with reports and panoramas
-- Only one navigation section can be open at a time
-- Dashboard favorites list now also shows panoramas
-- Favorites are fetched in parallel for improved load times
-- Debounce share search results and update list smoothly
-- Material design for input field across the whole app
-
 
 ## 5.6.1 - 2025-06-09
 ### Fixed
