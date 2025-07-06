@@ -1234,9 +1234,19 @@ OCA.Analytics.Filter.Backend = {
             })
         })
             .then(response => response.json())
+            .then(id => {
+                return fetch(OC.generateUrl('apps/analytics/report/') + id, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                });
+            })
+            .then(response => response.json())
             .then(data => {
-                OCA.Analytics.isNewObject = true;
-                OCA.Analytics.Navigation.init(data);
+                data.item_type = 'report';
+                OCA.Analytics.isNewObject = false;
+                OCA.Analytics.Navigation.addNavigationItem(data);
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
+                anchor?.click();
             })
             .catch(err => console.error(err));
     },

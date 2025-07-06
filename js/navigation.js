@@ -766,6 +766,8 @@ OCA.Analytics.Navigation = {
     },
 
     addNavigationItem: function (item) {
+        if (!item.item_type) item.item_type = 'report';
+
         if (item.item_type === 'dataset') {
             OCA.Analytics.datasets.push(item);
         } else if (item.item_type === 'panorama') {

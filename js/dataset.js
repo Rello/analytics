@@ -689,6 +689,7 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Wizard.close();
+                data.item_type = 'dataset';
                 OCA.Analytics.Navigation.addNavigationItem(data);
                 const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="dataset"]');
                 anchor?.click();

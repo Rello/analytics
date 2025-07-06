@@ -1339,6 +1339,7 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
             })
             .then(response => response.json())
             .then(data => {
+                data.item_type = 'panorama';
                 OCA.Analytics.Navigation.addNavigationItem(data);
                 const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="panorama"]');
                 anchor?.click();
