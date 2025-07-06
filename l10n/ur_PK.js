@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share" : "تقسیم",
     "Share link" : "اشتراک لنک",
+    "Settings" : "سیٹینگز",
     "Delete" : "حذف کریں",
     "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "No" : "No",
     "Password" : "پاسورڈ",
     "Edit" : "تدوین کریں",
-    "Settings" : "سیٹینگز",
     "Name" : "اسم",
     "Description" : "تصریح",
     "Title" : "عنوان",
