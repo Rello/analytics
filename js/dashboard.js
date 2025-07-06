@@ -39,6 +39,17 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         'doughnut': 'doughnut',
         'funnel': 'funnel'
     },
+    /**
+     * Build common request headers for backend calls
+     */
+    headers: function () {
+        let headers = new Headers();
+        headers.append('requesttoken', OC.requestToken);
+        headers.append('OCS-APIREQUEST', 'true');
+        headers.append('Content-Type', 'application/json');
+        return headers;
+    },
+
 });
 
 /**

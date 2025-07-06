@@ -122,7 +122,16 @@ class PageController extends Controller
 		return new TemplateResponse($this->appName, 'main', $params);
     }
 
-    /**
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function report()
+	{
+		return $this->main();
+	}
+
+	/**
      * @NoAdminRequired
      * @NoCSRFRequired
      */

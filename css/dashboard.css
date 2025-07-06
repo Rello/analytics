@@ -91,7 +91,6 @@
     height: 170px;
     width: 170px;
     padding: 8px;
-    border-radius: var(--border-radius-large);
     box-shadow: 3px 3px 5px var(--color-background-darker);
     background-color: var(--color-background-darker);
     margin: 10px;

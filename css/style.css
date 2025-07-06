@@ -840,7 +840,6 @@ div.dt-container .dt-paging .dt-paging-button {
     background-color: #FFFFFF;
     padding: 5px;
     box-shadow: 2px 2px 5px var(--color-background-darker);
-    border-radius: var(--border-radius-large);
     width: 170px;
     margin: 0 auto;
 }
@@ -916,7 +915,6 @@ div.dt-container .dt-paging .dt-paging-button {
 .analyticsDialog {
     background: var(--color-main-background);
     color: var(--color-main-text);
-    border-radius: var(--border-radius-large);
     padding: 24px;
     z-index: 10000;
     font-size: 100%;
