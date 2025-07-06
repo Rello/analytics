@@ -490,8 +490,18 @@ OCA.Analytics.Sidebar.Report = {
             })
         })
             .then(response => response.json())
+            .then(id => {
+                return fetch(OC.generateUrl('apps/analytics/report/') + id, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                });
+            })
+            .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init(data);
+                data.item_type = 'report';
+                OCA.Analytics.Navigation.addNavigationItem(data);
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
+                anchor?.click();
             });
     },
 
@@ -562,9 +572,19 @@ OCA.Analytics.Sidebar.Report = {
             })
         })
             .then(response => response.json())
+            .then(id => {
+                return fetch(OC.generateUrl('apps/analytics/report/') + id, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                });
+            })
+            .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Wizard.close();
-                OCA.Analytics.Navigation.init(data);
+                data.item_type = 'report';
+                OCA.Analytics.Navigation.addNavigationItem(data);
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
+                anchor?.click();
             });
     },
 
@@ -578,8 +598,18 @@ OCA.Analytics.Sidebar.Report = {
             })
         })
             .then(response => response.json())
+            .then(id => {
+                return fetch(OC.generateUrl('apps/analytics/report/') + id, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                });
+            })
+            .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init(data);
+                data.item_type = 'report';
+                OCA.Analytics.Navigation.addNavigationItem(data);
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
+                anchor?.click();
             });
     },
 

@@ -766,6 +766,8 @@ OCA.Analytics.Navigation = {
     },
 
     addNavigationItem: function (item) {
+        if (!item.item_type) item.item_type = 'report';
+
         if (item.item_type === 'dataset') {
             OCA.Analytics.datasets.push(item);
         } else if (item.item_type === 'panorama') {
@@ -782,6 +784,31 @@ OCA.Analytics.Navigation = {
             section = 'section-datasets';
         }
         OCA.Analytics.Navigation.buildNavigationRow(item, section);
+
+        const rootLi = document.querySelector('#navigationDatasets li.collapsible[data-section-id="' + section + '"]');
+        if (rootLi) {
+            document.querySelectorAll('#navigationDatasets > li.collapsible[data-section-id]')
+                .forEach(node => {
+                    if (node !== rootLi && node.dataset.sectionId !== 'section-favorites') {
+                        node.classList.remove('open');
+                    }
+                });
+            rootLi.classList.add('open');
+        }
+
+        let parent = item.parent;
+        while (parent && parseInt(parent) !== 0) {
+            const groupLi = document.querySelector('#navigationDatasets li.collapsible[data-id="' + parent + '"]');
+            if (groupLi) {
+                groupLi.classList.add('open');
+                const anchor = groupLi.querySelector('a');
+                parent = anchor ? anchor.dataset.parent : 0;
+            } else {
+                break;
+            }
+        }
+
+        OCA.Analytics.Navigation.saveOpenState();
     },
 
     removeNavigationItem: function (id, itemType) {
