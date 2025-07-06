@@ -121,7 +121,7 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-analytics-star', true, false));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-analytics-star', true, true));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas', 'icon-analytics-panorama'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports', 'icon-analytics-report'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Datasets'), 'section-datasets', 'icon-analytics-dataset'));
@@ -722,11 +722,11 @@ OCA.Analytics.Navigation = {
 
     handleGroupClicked: function (evt) {
         const li = evt.target.parentNode.parentNode;
-        if (li.dataset.sectionId === 'section-favorites') {
+        /*if (li.dataset.sectionId === 'section-favorites') {
             // favorites are always open and not collapsible
             evt.preventDefault();
             return;
-        }
+        }*/
 
         if (li.classList.contains('open')) {
             li.classList.remove('open');
@@ -734,7 +734,8 @@ OCA.Analytics.Navigation = {
             // close other root sections except favorites
             document.querySelectorAll('#navigationDatasets > li.collapsible[data-section-id]')
                 .forEach(node => {
-                    if (node !== li && node.dataset.sectionId !== 'section-favorites') {
+                    // if (node !== li && node.dataset.sectionId !== 'section-favorites') {
+                    if (node !== li) {
                         node.classList.remove('open');
                     }
                 });

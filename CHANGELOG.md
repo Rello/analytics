@@ -10,11 +10,12 @@
 
 ### Changed
 - Refreshed modal dialog styling with subtle animations
-- Primary action button moved to the right side of dialog
 - "New report" button renamed to a generic "New" selector with type options
-- move share dialog from sidebar to own popup
+- Move share dialog from sidebar to own popup
 - Only one navigation section can be open at a time
 - Favorites are fetched in parallel for improved load times
+- New icons
+- UI cleanup
 
 ### Fixed
 - Navigation updates instantly when items are created or deleted without reloading

@@ -171,6 +171,7 @@ content: inherit;
 #app-navigation .app-navigation-entry-menu,
 #app-navigation .app-navigation-entry-menu {
     top: 44px;
+    border-radius: 0 !important;
 }
 
 #app-navigation > ul > li.pinned.first-pinned {
@@ -1343,4 +1344,13 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 #app-navigation #newMenu{
     top:auto;
     bottom:44px;
+}
+
+.popovermenu {
+    border-radius: 0 !important;
+}
+
+.popovermenu:after,
+.app-navigation-entry-menu:after {
+    display: none;
 }
