@@ -49,7 +49,7 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
         headers.append('Content-Type', 'application/json');
         return headers;
     },
-
+    stories: [],
 });
 
 /**
@@ -93,12 +93,14 @@ OCA.Analytics.Dashboard = {
 
                     for (let panorama of panoramaFavorites) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
-                        let li = '<li id="analyticsWidgetItem-panorama-' + panorama + '" class="analyticsWidgetItem"></li>';
-                        document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
-                        let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
-                        document.getElementById('analyticsWidgetItem-panorama-' + panorama).insertAdjacentHTML('beforeend', widgetRow);
-                        document.getElementById('analyticsWidgetItem-panorama-' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
-                    }
+                        if (story !== undefined) {
+                            let li = '<li id="analyticsWidgetItem-panorama-' + panorama + '" class="analyticsWidgetItem"></li>';
+                            document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
+                            let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
+                            document.getElementById('analyticsWidgetItem-panorama-' + panorama).insertAdjacentHTML('beforeend', widgetRow);
+                            document.getElementById('analyticsWidgetItem-panorama-' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
+                        }
+                   }
                 } else {
                     document.getElementById('ulAnalytics').innerHTML = '<div>'
                         + t('analytics', 'Add a report to the favorites to be shown here.')
