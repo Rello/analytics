@@ -14,6 +14,7 @@
 - Dataset maintenance from the navigation now opens the dataset in place
 - Sidebar buttons across all tabs now align to the right
 - Newly created items open immediately and appear in the correct navigation section
+- Newly added items expand their section and parent groups automatically
 
 ## 5.6.2 - 2025-06-10
 ### Fixed
