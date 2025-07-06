@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share" : "Падзяліцца",
     "Share link" : "Share link",
+    "Settings" : "Налады",
     "Delete" : "Delete",
     "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "No" : "No",
     "copy" : "капіяваць",
     "Password" : "Password",
-    "Settings" : "Налады",
     "Title" : "Title",
     "Copy" : "Капіяваць",
     "Daily" : "Штодзень",
