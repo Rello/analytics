@@ -14,6 +14,7 @@
 - Navigation keeps Favorites open and only one other section expands at a time
 - Dataset maintenance from the navigation now opens the dataset in place
 - Sidebar buttons across all tabs now align to the right
+- Dashboard widget IDs now include the item type and panorama icons match chart preview dimensions
 
 ## 5.6.2 - 2025-06-10
 ### Fixed

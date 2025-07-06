@@ -70,11 +70,12 @@
 }
 
 .analyticsWidgetIcon {
-    float: left;
-     margin-right: 10px;
-     background-size: 20px;
-     width: 20px;
-     height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 154px;
+    height: 100px;
+    margin: 0 auto;
 }
 
 .empty-content {
