@@ -11,19 +11,19 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     // register handlers for the navigation bar
-    OCA.Analytics.Navigation.registerHandler('create', 'panorama', function () {
+    OCA.Analytics.registerHandler('create', 'panorama', function () {
         OCA.Analytics.Panorama.newPanorama();
     });
 
-    OCA.Analytics.Navigation.registerHandler('navigationClicked', 'panorama', function (event) {
+    OCA.Analytics.registerHandler('navigationClicked', 'panorama', function (event) {
         OCA.Analytics.Panorama.handleNavigationClicked(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('delete', 'panorama', function (event) {
+    OCA.Analytics.registerHandler('delete', 'panorama', function (event) {
         OCA.Analytics.Panorama.handleDeletePanoramaButton(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'panorama', function (id, isFavorite) {
+    OCA.Analytics.registerHandler('favoriteUpdate', 'panorama', function (id, isFavorite) {
         OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
     });
 
@@ -95,7 +95,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 '</div>'
         },
     ],
-    
+
     /**
      * Attach click handlers for report menu elements
      */
@@ -107,7 +107,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
         document.getElementById('nextBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('next'));
-        
+
         document.getElementById('layoutModalClose').addEventListener('click', function () {
             document.getElementById('layoutModal').style.display = 'none';
             document.getElementById('layoutModalGrid').innerHTML = '';
@@ -441,15 +441,6 @@ Object.assign(OCA.Analytics.Panorama = {
         }
     },
 
-    toggleSaveButtonDisplay: function () {
-        const saveIcon = document.getElementById("saveIcon");
-        if (OCA.Analytics.unsavedChanges === true) {
-            saveIcon.style.removeProperty("display");
-        } else {
-            saveIcon.style.display = "none";
-        }
-    },
-
     // create grey overlays to indicate the editable areas
     addEditOverlays: function () {
         const flexItems = document.querySelectorAll('.flex-item');
@@ -496,6 +487,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
     /**
      * Adds display options to the overlay depending on the item type.
+     * e.g. choose legends for charts
      * Extend this function to support more types/options in the future.
      */
     addDisplayOptionsToOverlay: function (overlay, flexItem) {
@@ -506,7 +498,7 @@ Object.assign(OCA.Analytics.Panorama = {
         let itemContent = page.reports[itemIndex];
 
         // legend true/false for reports
-        if (itemContent && parseInt(itemContent.type) === OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE) {
+        if (itemContent && parseInt(itemContent.type) === OCA.Analytics.PANORAMA_CONTENT_TYPE_REPORT) {
             let optionsContainer = document.createElement('div');
             optionsContainer.classList.add('overlayOptions');
 
@@ -526,7 +518,7 @@ Object.assign(OCA.Analytics.Panorama = {
                     delete page.reports[itemIndex].options;
                 }
                 // rebuild widget to reflect legend change
-                if (page.reports[itemIndex].type === OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE) {
+                if (page.reports[itemIndex].type === OCA.Analytics.PANORAMA_CONTENT_TYPE_REPORT) {
                     OCA.Analytics.Panorama.Backend.getReportData(page.reports[itemIndex].value, itemId);
                 }
             });
@@ -651,6 +643,7 @@ Object.assign(OCA.Analytics.Panorama = {
                             })
                         }
                         if (modalId === 'modalReport') {
+                            OCA.Analytics.Panorama.buildWidgetContentReportSelector();
                             OCA.Analytics.Panorama.highlightSelectedReport(modal.dataset.itemId);
                         }
                     }
@@ -713,19 +706,22 @@ Object.assign(OCA.Analytics.Panorama = {
     buildWidgetContentReportSelector: function () {
         // Populate report selection menu with all available reports
         let reportSelectorContainer = document.getElementById('reportSelectorContainer');
+        reportSelectorContainer.innerText = '';
         let reportMap = new Map();
         let rootReports = [];
 
         // Separate reports into root-level and child reports
         OCA.Analytics.reports.forEach(report => {
-            if (report.parent === 0) {
-                rootReports.push(report);
-                if (report.type === 0) {
-                    reportMap.set(report.id, []);
-                }
-            } else {
-                if (reportMap.has(report.parent)) {
-                    reportMap.get(report.parent).push(report);
+            if (report.item_type === 'report') {
+                if (report.parent === 0) {
+                    rootReports.push(report);
+                    if (report.type === 0) {
+                        reportMap.set(report.id, []);
+                    }
+                } else {
+                    if (reportMap.has(report.parent)) {
+                        reportMap.get(report.parent).push(report);
+                    }
                 }
             }
         });
@@ -758,7 +754,7 @@ Object.assign(OCA.Analytics.Panorama = {
         const pageId = itemId.split('-')[0];
         const reportIndex = itemId.split('-')[1];
         const report = OCA.Analytics.currentPanorama.pages[pageId]?.reports[reportIndex];
-        if (!report || report.type !== OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE) {
+        if (!report || report.type !== OCA.Analytics.PANORAMA_CONTENT_TYPE_REPORT) {
             return;
         }
         const reportId = report.value;
@@ -789,7 +785,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 let page = OCA.Analytics.currentPanorama.pages[pageId];
                 let reportsArr = page.reports;
                 let existingOptions = reportsArr[reportIndex]?.options;
-                reportsArr[reportIndex] = {'type': OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE, 'value': reportId};
+                reportsArr[reportIndex] = {'type': OCA.Analytics.PANORAMA_CONTENT_TYPE_REPORT, 'value': reportId};
                 if (existingOptions && Object.keys(existingOptions).length > 0) {
                     reportsArr[reportIndex].options = existingOptions;
                 }
@@ -798,7 +794,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
                 // show the save icon
                 OCA.Analytics.unsavedChanges = true;
-                OCA.Analytics.Panorama.toggleSaveButtonDisplay();
+                OCA.Analytics.Filter.toggleSaveButtonDisplay();
 
                 document.getElementById('modalReport').style.display = 'none';
             });
@@ -825,7 +821,10 @@ Object.assign(OCA.Analytics.Panorama = {
                     let page = OCA.Analytics.currentPanorama.pages[pageId];
                     //let reportsArr = page.reports.split(',');
                     let reportsArr = page.reports;
-                    reportsArr[reportIndex] = {'type': OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE, 'value': fileInfo.id};
+                    reportsArr[reportIndex] = {
+                        'type': OCA.Analytics.PANORAMA_CONTENT_TYPE_PICTURE,
+                        'value': fileInfo.id
+                    };
                     delete reportsArr[reportIndex].options;
                     //page.reports = reportsArr.join(',');
                     OCA.Analytics.Panorama.buildWidget(itemId);
@@ -833,7 +832,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
                     // show the save icon
                     OCA.Analytics.unsavedChanges = true;
-                    OCA.Analytics.Panorama.toggleSaveButtonDisplay();
+                    OCA.Analytics.Filter.toggleSaveButtonDisplay();
 
                     document.getElementById('modalPicture').style.display = 'none';
                 })
@@ -868,7 +867,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
                 // show the save icon
                 OCA.Analytics.unsavedChanges = true;
-                OCA.Analytics.Panorama.toggleSaveButtonDisplay();
+                OCA.Analytics.Filter.toggleSaveButtonDisplay();
             });
 
             // Add the layout preview
@@ -898,7 +897,7 @@ Object.assign(OCA.Analytics.Panorama = {
         OCA.Analytics.Panorama.updateNavButtons();
         // show the save icon
         OCA.Analytics.unsavedChanges = true;
-        OCA.Analytics.Panorama.toggleSaveButtonDisplay();
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
     handleDeletePanoramaButton: function (evt) {
@@ -1244,18 +1243,18 @@ Object.assign(OCA.Analytics.Panorama = {
 
 OCA.Analytics.Panorama.Backend = OCA.Analytics.Panorama.Backend || {};
 Object.assign(OCA.Analytics.Panorama.Backend = {
-    getReports: function () {
-        let requestUrl = OC.generateUrl('apps/analytics/report');
-        fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.reports = data;
-                OCA.Analytics.Panorama.buildWidgetContentReportSelector();
-            });
-    },
+    /*    getReports: function () {
+            let requestUrl = OC.generateUrl('apps/analytics/report');
+            fetch(requestUrl, {
+                method: 'GET',
+                headers: OCA.Analytics.headers()
+            })
+                .then(response => response.json())
+                .then(data => {
+                    OCA.Analytics.reports = data;
+                    OCA.Analytics.Panorama.buildWidgetContentReportSelector();
+                });
+        },*/
 
     getReportData: function (datasetId, itemId) {
         const url = OC.generateUrl('apps/analytics/data/pa/' + datasetId, true);
@@ -1395,7 +1394,6 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
 
     savePanorama: function () {
         OCA.Analytics.unsavedChanges = false;
-
         OCA.Analytics.currentPanorama.name = document.getElementById('panoramaHeader').innerText;
 
         OCA.Analytics.Panorama.removeEditOverlays();
@@ -1410,7 +1408,7 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
         });
         OCA.Analytics.Panorama.Backend.update();
 
-        OCA.Analytics.Panorama.toggleSaveButtonDisplay();
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
         OCA.Analytics.Panorama.updateNavButtons();
         OCA.Analytics.Panorama.hideOptionMenu();
     },

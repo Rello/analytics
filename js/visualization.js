@@ -500,7 +500,7 @@ OCA.Analytics.Visualization = {
                 .page.len(10)
                 .draw();
             OCA.Analytics.unsavedChanges = true;
-            document.getElementById('saveIcon')?.style.removeProperty('display');
+            OCA.Analytics.Filter.toggleSaveButtonDisplay();
             document.getElementById('tableContainer_length')?.style.removeProperty('display');
             document.getElementById('tableContainer_filter')?.style.removeProperty('display');
         }
@@ -512,7 +512,7 @@ OCA.Analytics.Visualization = {
      */
     handleDataTableChanged: function () {
         OCA.Analytics.unsavedChanges = true;
-        document.getElementById('saveIcon').style.removeProperty('display');
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
     /**
@@ -594,7 +594,8 @@ OCA.Analytics.Visualization = {
             } else {
                 defaultLegendClickHandler(e, legendItem, legend);
             }
-            document.getElementById('saveIcon')?.style.removeProperty('display');
+            OCA.Analytics.unsavedChanges = true;
+            OCA.Analytics.Filter.toggleSaveButtonDisplay();
         };
 
         const defaultGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;

@@ -19,14 +19,6 @@ OCA.Analytics.Panorama = {
 OCA.Analytics.Navigation = {
     quickstartValue: '',
     quickstartId: 0,
-    handlers: {},
-
-    registerHandler: function (context, type, handlerFunction) {
-        if (!OCA.Analytics.Navigation.handlers[context]) {
-            OCA.Analytics.Navigation.handlers[context] = {};
-        }
-        OCA.Analytics.Navigation.handlers[context][type] = handlerFunction;
-    },
 
     init: function (navigationItem) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
@@ -570,7 +562,7 @@ OCA.Analytics.Navigation = {
         const menu = document.getElementById('newMenu');
         menu.classList.remove('open');
 
-        const handler = OCA.Analytics.Navigation.handlers['create']?.[type];
+        const handler = OCA.Analytics.handlers['create']?.[type];
         if (handler) {
             handler();
         }
@@ -608,7 +600,7 @@ OCA.Analytics.Navigation = {
         }
 
         let type = evt.target.dataset.item_type;
-        let handler = OCA.Analytics.Navigation.handlers['navigationClicked']?.[type];
+        let handler = OCA.Analytics.handlers['navigationClicked']?.[type];
         if (handler) {
             handler(evt);
         }
@@ -712,7 +704,7 @@ OCA.Analytics.Navigation = {
 
         OCA.Analytics.Navigation.updateFavoriteUI(datasetId, itemType, isAdding ? 'true' : 'false');
 
-        const handler = OCA.Analytics.Navigation.handlers['favoriteUpdate']?.[itemType];
+        const handler = OCA.Analytics.handlers['favoriteUpdate']?.[itemType];
         if (handler) {
             handler(datasetId, isFavorite);
         }
@@ -831,7 +823,7 @@ OCA.Analytics.Navigation = {
     handleDeleteButton: function (evt) {
         const menu = evt.target.closest('#navigationMenu');
         const type = menu?.dataset.item_type;
-        const handler = OCA.Analytics.Navigation.handlers['delete']?.[type];
+        const handler = OCA.Analytics.handlers['delete']?.[type];
         if (handler) {
             handler(evt);
         }

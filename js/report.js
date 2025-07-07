@@ -19,19 +19,19 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // register handlers for the navigation bar
-    OCA.Analytics.Navigation.registerHandler('create', 'report', function () {
+    OCA.Analytics.registerHandler('create', 'report', function () {
         OCA.Analytics.Report.newReport();
     });
 
-    OCA.Analytics.Navigation.registerHandler('navigationClicked', 'report', function (event) {
+    OCA.Analytics.registerHandler('navigationClicked', 'report', function (event) {
         OCA.Analytics.Report.handleNavigationClicked(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('delete', 'report', function (event) {
+    OCA.Analytics.registerHandler('delete', 'report', function (event) {
         OCA.Analytics.Sidebar.Report.handleDeleteButton(event);
     });
 
-    OCA.Analytics.Navigation.registerHandler('favoriteUpdate', 'report', function (id, isFavorite) {
+    OCA.Analytics.registerHandler('favoriteUpdate', 'report', function (id, isFavorite) {
         OCA.Analytics.Report.favoriteUpdate(id, isFavorite);
     });
 

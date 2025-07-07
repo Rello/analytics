@@ -105,7 +105,6 @@ Object.assign(OCA.Analytics, {
         }
         OCA.Analytics.handlers[context][type] = handlerFunction;
     },
-
 });
 
 OCA.Analytics.Core = OCA.Analytics.Core || {};
@@ -140,6 +139,7 @@ Object.assign(OCA.Analytics.Core = {
         document.getElementById("infoBoxIntro").addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
         document.getElementById("infoBoxWiki").addEventListener('click', OCA.Analytics.Core.openWiki);
         document.getElementById('fullscreenToggle').addEventListener('click', OCA.Analytics.Visualization.toggleFullscreen);
+        document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.handleSaveButton);
 
         document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Core.toggleOptionsMenu);
     },

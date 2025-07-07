@@ -470,7 +470,6 @@ OCA.Analytics.Filter = {
             }
         }
         visContainer.appendChild(fragment);
-        const saveIcon = document.getElementById("saveIcon");
         OCA.Analytics.Filter.toggleSaveButtonDisplay();
 
         // update report menu indicators for active options
@@ -483,6 +482,14 @@ OCA.Analytics.Filter = {
             saveIcon.style.removeProperty("display");
         } else {
             saveIcon.style.display = "none";
+        }
+    },
+
+    handleSaveButton: function (evt) {
+        const type = OCA.Analytics.currentContentType;
+        const handler = OCA.Analytics.handlers['saveIcon']?.[type];
+        if (handler) {
+            handler(evt);
         }
     },
 
