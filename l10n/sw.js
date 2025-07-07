@@ -53,6 +53,7 @@ OC.L10N.register(
     "Name" : "Jina",
     "Update" : "Sasisha",
     "Export" : "Safirisha",
+    "Mode" : "Hali",
     "Remove filter" : "Ondoa kichujio",
     "Description" : "Maelezo",
     "Selection" : "Machaguo",
