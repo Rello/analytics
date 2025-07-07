@@ -212,6 +212,7 @@ OC.L10N.register(
     "Schedule in background" : "Ajasta töötluseks taustal",
     "Daily" : "Iga päev",
     "Hourly" : "Iga tund",
+    "Panorama" : "Panoraam",
     "Basic settings" : "Põhiseaded",
     "Dataset maintenance" : "Andmestiku hooldus",
     "Add to new group" : "Lisa uude gruppi",
