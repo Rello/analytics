@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.6.3 - 2025-07-xx
+## 5.6.3 - 2025-07-06
 ### Added
 - Unified navigation showing panoramas and reports together
 - Collapsible sections for favorites, panoramas and reports
