@@ -1355,7 +1355,26 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.init();
+                const id = OCA.Analytics.currentPanorama.id;
+                const name = OCA.Analytics.currentPanorama.name;
+
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + id + '"][data-item_type="panorama"]');
+                if (anchor) {
+                    anchor.dataset.name = name;
+                    if (anchor.firstChild) {
+                        anchor.firstChild.textContent = name;
+                    } else {
+                        anchor.textContent = name;
+                    }
+                }
+
+                let story = OCA.Analytics.stories.find(p => parseInt(p.id) === parseInt(id));
+                if (story) {
+                    story.name = name;
+                    story.pages = OCA.Analytics.currentPanorama.pages;
+                }
+
+                anchor?.click();
             });
     },
 
