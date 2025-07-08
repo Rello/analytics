@@ -343,6 +343,7 @@ OC.L10N.register(
     "Daily - Start of day" : "每天 - 每天開始時",
     "Hourly" : "每小時",
     "Load via OCC command:" : "透過 OCC 指令載入：",
+    "Panorama" : "全景",
     "Basic settings" : "基本設定",
     "Dataset maintenance" : "資料集維護",
     "Add to new group" : "新增至新群組",

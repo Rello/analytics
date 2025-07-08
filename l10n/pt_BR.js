@@ -343,6 +343,7 @@ OC.L10N.register(
     "Daily - Start of day" : "Diariamente - Início do dia",
     "Hourly" : "Cada hora",
     "Load via OCC command:" : "Carregar via comando OCC:",
+    "Panorama" : "Panorama",
     "Basic settings" : "Configurações básicas",
     "Dataset maintenance" : "Manutenção de conjuntos de dados",
     "Add to new group" : "Adicionar ao novo grupo",

@@ -56,6 +56,7 @@ OC.L10N.register(
     "Export" : "Извези",
     "Mode" : "Мод",
     "Option" : "Опции",
+    "Remove filter" : "Острани филтер",
     "Import" : "Увези",
     "Title" : "Наслов",
     "Daily" : "Дневно",

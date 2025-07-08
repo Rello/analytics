@@ -342,6 +342,7 @@ OC.L10N.register(
     "Daily - Start of day" : "Dagligen - Början av dagen",
     "Hourly" : "Varje timme",
     "Load via OCC command:" : "Ladda via OCC-kommando:",
+    "Panorama" : "Panorama",
     "Basic settings" : "Grundinställningar",
     "Dataset maintenance" : "Underhåll av datamängd",
     "Add to new group" : "Lägg till i ny grupp",
