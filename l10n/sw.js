@@ -54,6 +54,7 @@ OC.L10N.register(
     "Do you like this app?" : "Do you like this app?",
     "More information …" : "More information …",
     "Name" : "Jina",
+    "Open documentation" : "Open documentation",
     "Update" : "Sasisha",
     "Export" : "Safirisha",
     "Mode" : "Hali",
