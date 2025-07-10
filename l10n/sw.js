@@ -19,6 +19,7 @@ OC.L10N.register(
     "Download" : "Pakua",
     "Request could not be processed" : "Ombi halikuweza kuchakatwa",
     "Report" : "Toa taarifa",
+    "Missing data" : "Missing data",
     "Type" : "Aina",
     "Notification" : "Taarifa",
     "Date" : "Tarehe",
