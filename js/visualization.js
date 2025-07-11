@@ -824,7 +824,8 @@ OCA.Analytics.Visualization = {
                     label: seriesName,
                     data: [],
                     hidden: datasetCounter >= 4 && !isTopGrouping,
-                    yAxisID: 'primary'
+                    yAxisID: 'primary',
+                    pointHitRadius: 20,
                 };
                 data.forEach(row => {
                     dataset.data.push({x: row[0], y: parseFloat(row[index + 1])});
@@ -851,7 +852,8 @@ OCA.Analytics.Visualization = {
                         ...(chartType !== 'doughnut' && {label: dataSeriesColumn || undefined}),
                         data: [],
                         hidden: datasetCounter >= 4 && !isTopGrouping,
-                        yAxisID: 'primary'
+                        yAxisID: 'primary',
+                        pointHitRadius: 20,
                     });
                     datasetCounter++;
                 }

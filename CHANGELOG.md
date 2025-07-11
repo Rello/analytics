@@ -9,13 +9,14 @@
 - Dashboard favorites list now also shows panoramas
 
 ### Changed
+- UI cleanup
 - Refreshed modal dialog styling with subtle animations
 - "New report" button renamed to a generic "New" selector with type options
 - Move share dialog from sidebar to own popup
 - Only one navigation section can be open at a time
 - Favorites are fetched in parallel for improved load times
 - New icons
-- UI cleanup
+- Bigger tooltip hover distance #492
 
 ### Fixed
 - Navigation updates instantly when items are created or deleted without reloading
