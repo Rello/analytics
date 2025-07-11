@@ -342,6 +342,7 @@ OC.L10N.register(
     "Daily - Start of day" : "Každý den – na jeho začátku",
     "Hourly" : "Každou hodinu",
     "Load via OCC command:" : "Načíst pomocí OCC příkazu:",
+    "Panorama" : "Panorama",
     "Basic settings" : "Základní nastavení",
     "Dataset maintenance" : "Údržba souboru dat",
     "Add to new group" : "Přidat do nové skupiny",
