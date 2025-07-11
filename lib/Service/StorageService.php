@@ -76,6 +76,7 @@ class StorageService {
 		}
 
 		return empty($data) ? [
+			'header' => $header,
 			'dimensions' => $availableDimensions,
 			'status' => 'nodata',
 			'error' => 0

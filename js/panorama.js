@@ -559,6 +559,11 @@ Object.assign(OCA.Analytics.Panorama = {
             if (!editableElement.hasAttribute('contenteditable')) {
                 editableElement.setAttribute('contenteditable', 'true');
             }
+            // add listener only once per element
+            if (editableElement.getAttribute('listenerAdded') !== 'true') {
+                editableElement.addEventListener('input', OCA.Analytics.Panorama.handleEditableChange);
+                editableElement.setAttribute('listenerAdded', 'true');
+            }
         });
     },
 
@@ -568,7 +573,16 @@ Object.assign(OCA.Analytics.Panorama = {
             if (editableElement.hasAttribute('contenteditable')) {
                 editableElement.removeAttribute('contenteditable');
             }
+            if (editableElement.getAttribute('listenerAdded') === 'true') {
+                editableElement.removeEventListener('input', OCA.Analytics.Panorama.handleEditableChange);
+                editableElement.removeAttribute('listenerAdded');
+            }
         });
+    },
+
+    handleEditableChange: function () {
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
     // show the flower style content selector menu when an overlay is clicked

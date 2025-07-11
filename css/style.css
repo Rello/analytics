@@ -1354,3 +1354,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .app-navigation-entry-menu:after {
     display: none;
 }
+
+#body-public #content {
+    padding-block-end: initial; !important;
+}

@@ -37,6 +37,21 @@
       ],
       "value": ""
     }, {
+      "id": "14c81473-22c4-4254-b24a-dcb264ee2e6e",
+      "comment": "",
+      "command": "click",
+      "target": "id=newMenuReport",
+      "targets": [
+        ["id=newMenuReport", "id"],
+        ["linkText=Report", "linkText"],
+        ["css=#newMenuReport", "css:finder"],
+        ["xpath=//a[@id='newMenuReport']", "xpath:attributes"],
+        ["xpath=//div[@id='newMenu']/ul/li/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[197]", "xpath:href"],
+        ["xpath=//div/ul/li[7]/div/div/ul/li/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
       "id": "fd3b8703-ec7e-4b35-8795-ba1c951d7ca1",
       "comment": "",
       "command": "type",
@@ -81,6 +96,13 @@
       "comment": "",
       "command": "click",
       "target": "id=wizardNewDatasource",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4605be3c-37b0-4798-b531-5241abf8fddc",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
       "targets": [],
       "value": ""
     }, {
@@ -473,7 +495,7 @@
       "id": "477ee6f9-6d6c-4d75-8f64-e70e3d16e416",
       "comment": "Basic Settings",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -888,7 +910,7 @@
         ["xpath=//td[3]", "xpath:position"],
         ["xpath=//td[contains(.,'1.10')]", "xpath:innerText"]
       ],
-      "value": "1,1"
+      "value": "1.1"
     }, {
       "id": "d47c4042-efa7-4284-9bd4-9bd4697039a8",
       "comment": "",
@@ -912,7 +934,7 @@
         ["xpath=//td[2]", "xpath:position"],
         ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
       ],
-      "value": "2.024"
+      "value": "2,024"
     }, {
       "id": "02eb200b-7b3a-4a78-b739-4c23765d170e",
       "comment": "",
@@ -1094,33 +1116,13 @@
       "id": "e5e7e840-11cf-4dbe-992f-acee2fb1820e",
       "comment": "Basic Settings",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Share",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
         ["xpath=//ul[@id='navigationDatasets']/li[4]/div[2]/ul/li/a", "xpath:idRelative"],
         ["xpath=(//a[contains(@href, '#')])[17]", "xpath:href"],
         ["xpath=//li[4]/div[2]/ul/li/a", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "77f61039-e942-451d-aef7-5597c4fe0876",
-      "comment": "",
-      "command": "waitForElementVisible",
-      "target": "id=sidebarReportName",
-      "targets": [],
-      "value": "5000"
-    }, {
-      "id": "1412c16c-adaa-4650-8b5e-0482f5db9d68",
-      "comment": "",
-      "command": "click",
-      "target": "linkText=Share",
-      "targets": [
-        ["linkText=Data", "linkText"],
-        ["css=#tabHeaderData > a", "css:finder"],
-        ["xpath=(//a[contains(text(),'Data')])[3]", "xpath:link"],
-        ["xpath=//li[@id='tabHeaderData']/a", "xpath:idRelative"],
-        ["xpath=//div[3]/ul/li[2]/a", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -1620,7 +1622,7 @@
       "id": "2613ab7c-2364-4d82-8687-682b9f6698de",
       "comment": "Basic Settings",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -1668,7 +1670,13 @@
       "comment": "",
       "command": "select",
       "target": "id=sidebarThresholdDimension",
-      "targets": [],
+      "targets": [
+        ["id=sidebarThresholdDimension", "id"],
+        ["css=#sidebarThresholdDimension", "css:finder"],
+        ["xpath=//select[@id='sidebarThresholdDimension']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerThreshold']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div/select", "xpath:position"]
+      ],
       "value": "label=Column 2"
     }, {
       "id": "a2830b41-0990-4a6c-ad87-72fe85740fe3",
@@ -1851,11 +1859,26 @@
     "id": "958b783e-1ac4-4f7e-885b-182a630fb95e",
     "name": "50 Automation Dataload (csv; column picker)",
     "commands": [{
-      "id": "c0594c62-c044-4aef-bb55-5fb60f0a1708",
-      "comment": "Advance Settings via URL",
+      "id": "305ab008-594e-4d88-9e62-53860211b336",
+      "comment": "",
       "command": "open",
-      "target": "/apps/analytics/d",
+      "target": "/apps/analytics",
       "targets": [],
+      "value": ""
+    }, {
+      "id": "b30d754c-e9a3-4738-b330-433bb4e04d08",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Datasets",
+      "targets": [
+        ["linkText=Datasets", "linkText"],
+        ["css=.collapsible > .app-navigation-entry > .icon-analytics-dataset", "css:finder"],
+        ["xpath=//a[contains(text(),'Datasets')]", "xpath:link"],
+        ["xpath=//ul[@id='navigationDatasets']/li[5]/div/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[196]", "xpath:href"],
+        ["xpath=//div[5]/div/ul/li[5]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Datasets')]", "xpath:innerText"]
+      ],
       "value": ""
     }, {
       "id": "0c4b6487-626a-404b-b309-344f32abf6f9",
@@ -1903,8 +1926,14 @@
       "id": "fc2a4067-e7f4-4b0b-a7ec-0b99098ab422",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "css=.wizardHeader",
-      "targets": [],
+      "target": "id=datasourceSelect",
+      "targets": [
+        ["id=datasourceSelect", "id"],
+        ["css=#datasourceSelect", "css:finder"],
+        ["xpath=//select[@id='datasourceSelect']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerDataload']/div/div/div[2]/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
       "value": "5000"
     }, {
       "id": "00d2b26c-bf03-4141-8d42-3cae88417f0b",
@@ -2305,8 +2334,14 @@
       "id": "06ff053a-7354-42fb-b38c-ae6a68d2445d",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "css=.wizardHeader",
-      "targets": [],
+      "target": "id=datasourceSelect",
+      "targets": [
+        ["id=datasourceSelect", "id"],
+        ["css=#datasourceSelect", "css:finder"],
+        ["xpath=//select[@id='datasourceSelect']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerDataload']/div/div/div[2]/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
       "value": "5000"
     }, {
       "id": "31e26bc5-2f07-4943-b4c7-91237429aa71",
@@ -2320,10 +2355,10 @@
     "id": "6d5e0b62-65c3-4d9f-b435-dc34a9c24433",
     "name": "72 Datasource: json",
     "commands": [{
-      "id": "5c342d81-e827-4902-a452-a464c510a23e",
-      "comment": "Advance Settings via URL",
+      "id": "87948172-0af7-42e7-b749-cc9642bac46b",
+      "comment": "",
       "command": "open",
-      "target": "/apps/analytics/d",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -2372,7 +2407,7 @@
       "id": "94ce8477-a894-46b2-af56-e1983b11593f",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "css=.wizardHeader",
+      "target": "id=datasourceSelect",
       "targets": [],
       "value": "5000"
     }, {
@@ -2393,7 +2428,13 @@
       "comment": "",
       "command": "select",
       "target": "id=datasourceSelect",
-      "targets": [],
+      "targets": [
+        ["id=datasourceSelect", "id"],
+        ["css=#datasourceSelect", "css:finder"],
+        ["xpath=//select[@id='datasourceSelect']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerDataload']/div/div/div[2]/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
       "value": "label=External: JSON"
     }, {
       "id": "032e70f1-b55a-4b6c-8200-d113317be2e6",
@@ -2602,7 +2643,7 @@
       "id": "0f5c8457-ce66-4da5-98e3-de975572cade",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -2660,7 +2701,7 @@
       "id": "edfacd1f-9920-4258-ad5e-f57caaaa9f66",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -2711,7 +2752,7 @@
       "id": "5582eddc-de06-42ae-a6bf-9336ab2ba1e3",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -2781,11 +2822,11 @@
       "id": "de8d74a2-e802-4658-b20a-c9b02ffbe6a1",
       "comment": "",
       "command": "click",
-      "target": "css=.open #navigationMenuDelete > span:nth-child(2)",
+      "target": "css=.collapsible:nth-child(16) .icon-delete",
       "targets": [
-        ["css=.open #navigationMenuDelete > span:nth-child(2)", "css:finder"],
-        ["xpath=(//a[@id='navigationMenuDelete']/span[2])[25]", "xpath:idRelative"],
-        ["xpath=//li[18]/div/div[2]/ul/li[3]/a/span[2]", "xpath:position"]
+        ["css=.collapsible:nth-child(16) .icon-delete", "css:finder"],
+        ["xpath=(//a[@id='navigationMenuDelete']/span)[65]", "xpath:idRelative"],
+        ["xpath=//li[16]/div/div[2]/ul/li[4]/a/span", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -3324,10 +3365,10 @@
     "id": "3ae1835d-71c6-43a1-96ac-e0716960f291",
     "name": "73 Datasource: csv",
     "commands": [{
-      "id": "d1caead3-9976-4e71-91f6-a42aec05bdaf",
-      "comment": "Advance Settings via URL",
+      "id": "c16ab37f-9a2c-4e7a-b6e1-2d7032392791",
+      "comment": "",
       "command": "open",
-      "target": "/apps/analytics/d",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -3376,7 +3417,7 @@
       "id": "ba82c135-c22d-43af-9889-7cad02926f6d",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "css=.wizardHeader",
+      "target": "id=datasourceSelect",
       "targets": [],
       "value": "5000"
     }, {
@@ -3826,11 +3867,11 @@
       "id": "155981ec-0502-4304-bd23-825541295a73",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-star",
+      "target": "css=.active > #navigationMenu .icon",
       "targets": [
         ["css=.active > #navigationMenu .icon", "css:finder"],
-        ["xpath=(//a[@id='navigationMenueFavorite']/span)[53]", "xpath:idRelative"],
-        ["xpath=//li[13]/div[2]/ul/li[3]/a/span", "xpath:position"]
+        ["xpath=(//a[@id='navigationMenueFavorite']/span)[61]", "xpath:idRelative"],
+        ["xpath=//li[17]/div/div[2]/ul/li[5]/a/span", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -3944,13 +3985,16 @@
       "id": "8d5aaf27-2252-4763-b700-cf7315639070",
       "comment": "",
       "command": "click",
-      "target": "linkText=Overview",
+      "target": "id=overviewButton",
       "targets": [
+        ["id=overviewButton", "id"],
         ["linkText=Overview", "linkText"],
-        ["css=.icon-toggle-pictures", "css:finder"],
+        ["css=#overviewButton", "css:finder"],
         ["xpath=//a[contains(text(),'Overview')]", "xpath:link"],
-        ["xpath=//ul[@id='navigationDatasets']/li/a", "xpath:idRelative"],
-        ["xpath=//div[3]/div/ul/li/a", "xpath:position"],
+        ["xpath=//a[@id='overviewButton']", "xpath:attributes"],
+        ["xpath=//ul[@id='navigationDatasets']/li/div/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/apps/analytics/')])[2]", "xpath:href"],
+        ["xpath=//div[5]/div/ul/li/div/a", "xpath:position"],
         ["xpath=//a[contains(.,'Overview')]", "xpath:innerText"]
       ],
       "value": ""
@@ -4207,6 +4251,21 @@
       ],
       "value": ""
     }, {
+      "id": "16bf98c7-869a-4099-a301-1aba687bcb50",
+      "comment": "",
+      "command": "click",
+      "target": "id=newMenuReport",
+      "targets": [
+        ["id=newMenuReport", "id"],
+        ["linkText=Report", "linkText"],
+        ["css=#newMenuReport", "css:finder"],
+        ["xpath=//a[@id='newMenuReport']", "xpath:attributes"],
+        ["xpath=//div[@id='newMenu']/ul/li/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[197]", "xpath:href"],
+        ["xpath=//div/ul/li[7]/div/div/ul/li/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
       "id": "90ea2b83-b4b7-4fa9-b388-4fd8a19da80a",
       "comment": "",
       "command": "type",
@@ -4417,7 +4476,7 @@
       "id": "2c9f9883-fa28-4e4b-9b67-57923c51761e",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -5154,10 +5213,10 @@
     "id": "fe7f1a7d-80a7-4cbd-b13d-95a6e28e7f83",
     "name": "51 Automation Deletion",
     "commands": [{
-      "id": "a054ffbd-a407-42e9-885b-df4573260c98",
-      "comment": "Advance Settings via URL",
+      "id": "e7564dfd-c13e-4d0f-9722-388c9f71cd9d",
+      "comment": "",
       "command": "open",
-      "target": "/apps/analytics/d",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -5206,8 +5265,14 @@
       "id": "f3830908-8d53-4623-8c4c-5812cafc0774",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "css=.wizardHeader",
-      "targets": [],
+      "target": "id=datasourceSelect",
+      "targets": [
+        ["id=datasourceSelect", "id"],
+        ["css=#datasourceSelect", "css:finder"],
+        ["xpath=//select[@id='datasourceSelect']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerDataload']/div/div/div[2]/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
       "value": "5000"
     }, {
       "id": "eb726d5e-43d6-4211-b2d6-f8762ca1abd1",
@@ -5396,8 +5461,14 @@
       "id": "eccabadb-69b5-4ec4-83f0-6673d4c5bdae",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "css=.wizardHeader",
-      "targets": [],
+      "target": "id=datasourceSelect",
+      "targets": [
+        ["id=datasourceSelect", "id"],
+        ["css=#datasourceSelect", "css:finder"],
+        ["xpath=//select[@id='datasourceSelect']", "xpath:attributes"],
+        ["xpath=//div[@id='tabContainerDataload']/div/div/div[2]/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
       "value": "5000"
     }, {
       "id": "976ddcec-9cb1-4844-96b7-eb7240b927bd",
@@ -5580,7 +5651,7 @@
       "id": "e8c166d3-f20a-4fc0-b9fd-42c884683dad",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -6024,7 +6095,7 @@
       "id": "0d438831-49a7-4c1a-907d-78e2e70a264e",
       "comment": "Basic Settings",
       "command": "click",
-      "target": "css=.open .icon-rename",
+      "target": "linkText=Basic settings",
       "targets": [
         ["linkText=Edit", "linkText"],
         ["css=.open li:nth-child(1) > a", "css:finder"],
@@ -6199,7 +6270,7 @@
         ["xpath=//td[2]", "xpath:position"],
         ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
       ],
-      "value": "1.234.567"
+      "value": "1,234,567"
     }, {
       "id": "c9e4b432-a721-4333-9dd2-573380e60a0a",
       "comment": "",
@@ -6292,7 +6363,7 @@
         ["xpath=//td[3]", "xpath:position"],
         ["xpath=//td[contains(.,'4')]", "xpath:innerText"]
       ],
-      "value": "10"
+      "value": "10.1"
     }, {
       "id": "67ce26ec-2a27-43ce-9803-35cf4b3367e2",
       "comment": "",
@@ -6792,7 +6863,7 @@
         ["xpath=//td[3]", "xpath:position"],
         ["xpath=//td[contains(.,'2')]", "xpath:innerText"]
       ],
-      "value": "1,1"
+      "value": "1.1"
     }]
   }, {
     "id": "add619eb-0aed-4308-990c-068b0c6533e9",

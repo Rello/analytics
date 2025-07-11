@@ -325,7 +325,7 @@ Object.assign(OCA.Analytics.Report, {
                 OCA.Analytics.Visualization.hideElement('optionsMenuIcon');
                 OCA.Analytics.Filter.refreshFilterVisualisation();
             } else {
-                OCA.Analytics.Visualization.hideElement('menuBar');
+                document.getElementById('menuBar').style.visibility = 'hidden';
             }
             return;
         }

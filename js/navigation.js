@@ -723,14 +723,15 @@ OCA.Analytics.Navigation = {
         if (li.classList.contains('open')) {
             li.classList.remove('open');
         } else {
-            // close other root sections except favorites
-            document.querySelectorAll('#navigationDatasets > li.collapsible[data-section-id]')
-                .forEach(node => {
-                    // if (node !== li && node.dataset.sectionId !== 'section-favorites') {
-                    if (node !== li) {
-                        node.classList.remove('open');
-                    }
-                });
+            // Only close other root sections when toggling a root section
+            if (li.dataset.sectionId) {
+                document.querySelectorAll('#navigationDatasets > li.collapsible[data-section-id]')
+                    .forEach(node => {
+                        if (node !== li) {
+                            node.classList.remove('open');
+                        }
+                    });
+            }
             li.classList.add('open');
         }
         OCA.Analytics.Navigation.saveOpenState();
@@ -889,17 +890,6 @@ OCA.Analytics.Navigation = {
                 openSections[i].classList.remove('open');
             }
         }
-    },
-
-    // TOdo: can be deleted
-    favoriteUpdate: function (datasetId, isFavorite) {
-        let params = 'favorite=' + isFavorite;
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', OC.generateUrl('apps/analytics/favorite/' + datasetId, true), true);
-        xhr.setRequestHeader('requesttoken', OC.requestToken);
-        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send(params);
     },
 
 };

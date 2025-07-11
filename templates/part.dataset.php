@@ -8,14 +8,10 @@
 
 ?>
 <div id="analytics-content-dataset" hidden>
-    <input type="hidden" name="sharingToken" value="" id="sharingToken">
-    <input type="hidden" name="dataset" value="" id="datasetId">
-    <input type="hidden" name="advanced" value="true" id="advanced">
 
     <ul class="datasetTabHeaders">
     </ul>
     <div class="datasetTabContainer">
-
     </div>
 
 </div>
