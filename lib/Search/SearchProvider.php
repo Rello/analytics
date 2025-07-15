@@ -61,7 +61,7 @@ class SearchProvider implements IProvider
                 $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')),
                 $dataset['name'],
                 '',
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.report') . 'r/' . $dataset['id']),
+                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.main') . 'r/' . $dataset['id']),
                 ''
             );
         }

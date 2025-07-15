@@ -125,6 +125,6 @@ class Provider implements IProvider {
 	}
 
 	public function Url($endpoint) {
-		return $this->urlGenerator->linkToRouteAbsolute('analytics.page.report') . 'r/' . $endpoint;
+		return $this->urlGenerator->linkToRouteAbsolute('analytics.page.main') . 'r/' . $endpoint;
 	}
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.7.1 - pending
+### Fixed
+- Smart picker not work #513
+
 ## 5.7.0 - 2025-07-11
 ### Added
 - Unified navigation showing panoramas and reports together

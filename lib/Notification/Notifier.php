@@ -89,7 +89,7 @@ class Notifier implements INotifier
         switch ($notification->getObjectType()) {
             case NotificationManager::SUBJECT_THRESHOLD:
                 $parsedSubject = $l->t("Report '{report}': {subject} reached the threshold of {rule} {value}");
-                $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.report') . 'r/' . $notification->getObjectId();
+                $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.main') . 'r/' . $notification->getObjectId();
 
                 $notification->setRichSubject(
                     $parsedSubject,
@@ -121,7 +121,7 @@ class Notifier implements INotifier
                 break;
             case NotificationManager::DATALOAD_ERROR:
                 $parsedSubject = $l->t("Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" );
-                $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.advanced') . 'd/' . $notification->getObjectId();
+                $link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.main') . 'd/' . $notification->getObjectId();
 
                 $notification->setRichSubject(
                     $parsedSubject,
