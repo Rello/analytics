@@ -2,6 +2,7 @@
 
 ## 5.7.1 - 2025-07-11
 ### Fixed
+- Analytics not starting due to not executed migration #514
 - Smart picker not working #513
 - Context Chat issue
 - Old database migration was not executed
