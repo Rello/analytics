@@ -181,6 +181,17 @@ class PanoramaMapper
         return true;
     }
 
+    public function updateGroup(int $id, int $groupId)
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('parent', $sql->createNamedParameter($groupId))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->executeStatement();
+        return true;
+    }
+
     /**
      * search reports by search string
      * @param $searchString

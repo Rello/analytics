@@ -105,17 +105,40 @@ class DatasetController extends Controller {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function update(
-		int $datasetId,
-			$name,
+        public function update(
+                int $datasetId,
+                        $name,
 			$subheader = null,
 			$dimension1 = null,
 			$dimension2 = null,
 			$value = null,
 			$aiIndex = null
 	) {
-		return $this->DatasetService->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
-	}
+                return $this->DatasetService->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+        }
+
+        /**
+         * create dataset group
+         *
+         * @NoAdminRequired
+         * @param int $parent
+         * @return int
+         */
+        public function createGroup(int $parent) {
+                return $this->DatasetService->createGroup($parent);
+        }
+
+        /**
+         * update dataset group assignment
+         *
+         * @NoAdminRequired
+         * @param int $datasetId
+         * @param int $groupId
+         * @return bool
+         */
+        public function updateGroup(int $datasetId, int $groupId) {
+                return $this->DatasetService->updateGroup($datasetId, $groupId);
+        }
 
 	/**
 	 * get status of the dataset

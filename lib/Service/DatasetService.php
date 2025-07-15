@@ -182,16 +182,24 @@ class DatasetService {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
-		$dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+        public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
+                $dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
 
 		if ($aiIndex === 1) {
 			$this->provider($datasetId);
 		} else {
 			$this->providerRemove($datasetId);
 		}
-		return $dbUpdate;
-	}
+                return $dbUpdate;
+        }
+
+        public function createGroup(int $parent = 0): int {
+                return $this->DatasetMapper->createGroup($this->l10n->t('New'), $parent);
+        }
+
+        public function updateGroup(int $datasetId, int $groupId): bool {
+                return $this->DatasetMapper->updateGroup($datasetId, $groupId);
+        }
 
 	/**
 	 * Export Dataset

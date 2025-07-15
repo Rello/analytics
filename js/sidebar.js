@@ -476,32 +476,60 @@ OCA.Analytics.Sidebar.Report = {
         }
     },
 
-    createGroup: function (addReport = null) {
-        let requestUrl = OC.generateUrl('apps/analytics/report');
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
+    createGroup: function (addItem = null) {
+        let itemType = 'report';
+        if (addItem && addItem.itemType) {
+            itemType = addItem.itemType;
+        }
+
+        let requestUrl = OC.generateUrl('apps/analytics/');
+        let body = {};
+        if (itemType === 'panorama') {
+            requestUrl += 'panorama/group';
+            body = { parent: 0 };
+        } else if (itemType === 'dataset') {
+            requestUrl += 'dataset/group';
+            body = { name: t('analytics', 'New'), parent: 0 };
+        } else {
+            requestUrl += 'report';
+            body = {
                 name: t('analytics', 'New'),
                 parent: 0,
                 type: OCA.Analytics.TYPE_GROUP,
                 dataset: 0,
-                addReport: addReport,
-            })
+            };
+        }
+
+        if (addItem && addItem.id) {
+            body.addReport = addItem.id; // will be ignored by non-report types
+        }
+
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify(body)
         })
             .then(response => response.json())
             .then(id => {
-                return fetch(OC.generateUrl('apps/analytics/report/') + id, {
-                    method: 'GET',
-                    headers: OCA.Analytics.headers(),
-                });
+                let detailUrl = OC.generateUrl('apps/analytics/');
+                if (itemType === 'panorama') {
+                    detailUrl += 'panorama/' + id;
+                } else if (itemType === 'dataset') {
+                    detailUrl += 'dataset/' + id;
+                } else {
+                    detailUrl += 'report/' + id;
+                }
+                return fetch(detailUrl, { method: 'GET', headers: OCA.Analytics.headers() });
             })
             .then(response => response.json())
             .then(data => {
-                data.item_type = 'report';
+                data.item_type = itemType;
                 OCA.Analytics.Navigation.addNavigationItem(data);
-                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
+                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="' + itemType + '"]');
                 anchor?.click();
+                if (addItem && itemType !== 'report') {
+                    OCA.Analytics.Navigation.Drag.addItemToGroup(data.id, itemType, addItem.id);
+                }
             });
     },
 

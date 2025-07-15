@@ -151,9 +151,17 @@ class PanoramaService {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function update(int $id, $name, int $type, int $parent, $pages) {
-		return $this->PanoramaMapper->update($id, $name, $type, $parent, $pages);
-	}
+    public function update(int $id, $name, int $type, int $parent, $pages) {
+        return $this->PanoramaMapper->update($id, $name, $type, $parent, $pages);
+    }
+
+    public function createGroup(int $parent = 0): int {
+        return $this->PanoramaMapper->create($this->l10n->t('New'), self::REPORT_TYPE_GROUP, $parent, '[]');
+    }
+
+    public function updateGroup(int $panoramaId, int $groupId): bool {
+        return $this->PanoramaMapper->updateGroup($panoramaId, $groupId);
+    }
 
 	/**
 	 * Delete Dataset and all depending objects

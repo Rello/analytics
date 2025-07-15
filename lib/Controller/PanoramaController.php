@@ -108,6 +108,31 @@ class PanoramaController extends Controller
     }
 
     /**
+     * create panorama group
+     *
+     * @NoAdminRequired
+     * @param int $parent
+     * @return DataResponse
+     */
+    public function createGroup(int $parent)
+    {
+        return new DataResponse($this->PanoramaService->createGroup($parent));
+    }
+
+    /**
+     * update panorama group assignment
+     *
+     * @NoAdminRequired
+     * @param int $panoramaId
+     * @param int $groupId
+     * @return DataResponse
+     */
+    public function updateGroup(int $panoramaId, int $groupId)
+    {
+        return new DataResponse($this->PanoramaService->updateGroup($panoramaId, $groupId));
+    }
+
+    /**
      * get own reports which are marked as favorites
      *
      * @NoAdminRequired

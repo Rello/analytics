@@ -3,6 +3,10 @@
 ## 5.7.1 - pending
 ### Fixed
 - Smart picker not work #513
+### Changed
+- Navigation placeholder now shows "New group" with proper styling
+### Added
+- Panoramas and datasets can be organized into groups via drag & drop
 
 ## 5.7.0 - 2025-07-11
 ### Added
