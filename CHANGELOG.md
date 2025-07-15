@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.7.1 - 2025-07-11
+## 5.7.1 - 2025-07-15
 ### Fixed
 - Analytics not starting due to not executed migration #514
 - Smart picker not working #513
