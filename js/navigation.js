@@ -304,16 +304,16 @@ OCA.Analytics.Navigation = {
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_report_handler);
         }
 
-        if (data['item_type'] === 'dataset') {
-            typeIcon = 'icon-analytics-dataset';
-        } else if (data['item_type'] === 'panorama') {
-            typeIcon = 'icon-analytics-panorama';
-        } else if (typeINT === OCA.Analytics.TYPE_GROUP) {
+        if (typeINT === OCA.Analytics.TYPE_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
             a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_handler);
             a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
+        } else if (data['item_type'] === 'dataset') {
+            typeIcon = 'icon-analytics-dataset';
+        } else if (data['item_type'] === 'panorama') {
+            typeIcon = 'icon-analytics-panorama';
         } else {
             typeIcon = 'icon-analytics-report';
         }
