@@ -1,8 +1,11 @@
 # Changelog
 
-## 5.7.1 - pending
+## 5.7.1 - 2025-07-11
 ### Fixed
-- Smart picker not work #513
+- Smart picker not working #513
+- Context Chat issue
+- Old database migration was not executed
+- Favorite reports in subfolders appearing twice
 
 ## 5.7.0 - 2025-07-11
 ### Added
