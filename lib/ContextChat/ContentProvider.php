@@ -12,13 +12,14 @@ use OCA\ContextChat\Public\IContentProvider;
 use OCP\IURLGenerator;
 use OCA\ContextChat\Event\ContentProviderRegisterEvent;
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 
 /**
  * This interface defines methods to implement a content provider
  * @since 1.1.0
  */
-class ContentProvider implements IContentProvider {
+class ContentProvider implements IContentProvider, IEventDispatcher  {
 	private $logger;
 
 	public function __construct(
