@@ -800,13 +800,7 @@ OCA.Analytics.Visualization = {
             return { annotations };
         }
 
-        // Filter thresholds that apply to the value dimension (usually dimension 2 for y-axis)
-        const valueThresholds = thresholds.filter(threshold => {
-            const dimension = parseInt(threshold.dimension || threshold.dimension2 || 2);
-            return dimension === 2; // Value dimension
-        });
-
-        valueThresholds.forEach((threshold, index) => {
+        thresholds.forEach((threshold, index) => {
             const thresholdValue = parseFloat(threshold.value || threshold.target);
             if (isNaN(thresholdValue)) return;
 
@@ -832,7 +826,7 @@ OCA.Analytics.Visualization = {
                 borderWidth: 2,
                 borderDash: [5, 5], // Dashed line to distinguish from data
                 label: {
-                    content: threshold.option ? `${threshold.option} ${thresholdValue}` : `${thresholdValue}`,
+                    content: threshold.option ? `${threshold.option} ${thresholdValue.toLocaleString()}` : `${thresholdValue.toLocaleString()}`,
                     enabled: true,
                     position: 'end',
                     backgroundColor: borderColor,
