@@ -771,6 +771,11 @@ OCA.Analytics.Visualization = {
         chartOptions.plugins.legend.labels ??= {};
         chartOptions.plugins.legend.labels.generateLabels = customGenerateLabels;
 
+        // Add threshold annotations for supported chart types
+        if (chartType !== 'doughnut' && chartType !== 'funnel') {
+            chartOptions.plugins.annotation = this.buildThresholdAnnotations(jsondata.thresholds, chartType);
+        }
+
         OCA.Analytics.chartObject = new Chart(ctx, {
             plugins: [ChartDataLabels],
             type: OCA.Analytics.chartTypeMapping[chartType],
@@ -780,6 +785,68 @@ OCA.Analytics.Visualization = {
             },
             options: chartOptions,
         });
+    },
+    /**
+     * Build threshold annotations for Chart.js charts.
+     *
+     * @param {Array} thresholds - Threshold definitions from backend
+     * @param {string} chartType - Chart type being rendered
+     * @returns {Object} Annotation configuration object
+     */
+    buildThresholdAnnotations: function (thresholds, chartType) {
+        const annotations = {};
+        
+        if (!thresholds || !Array.isArray(thresholds)) {
+            return { annotations };
+        }
+
+        // Filter thresholds that apply to the value dimension (usually dimension 2 for y-axis)
+        const valueThresholds = thresholds.filter(threshold => {
+            const dimension = parseInt(threshold.dimension || threshold.dimension2 || 2);
+            return dimension === 2; // Value dimension
+        });
+
+        valueThresholds.forEach((threshold, index) => {
+            const thresholdValue = parseFloat(threshold.value || threshold.target);
+            if (isNaN(thresholdValue)) return;
+
+            const severity = parseInt(threshold.severity);
+            let borderColor = '#cccccc'; // default gray
+            
+            // Use the same color scheme as existing threshold functionality
+            if (severity === 2) { // red
+                borderColor = '#dc3545';
+            } else if (severity === 3) { // orange
+                borderColor = '#fd7e14';
+            } else if (severity === 4) { // green
+                borderColor = '#28a745';
+            }
+
+            const annotationId = `threshold_${index}`;
+            annotations[annotationId] = {
+                type: 'line',
+                display: true,
+                scaleID: 'primary', // Use primary y-axis
+                value: thresholdValue,
+                borderColor: borderColor,
+                borderWidth: 2,
+                borderDash: [5, 5], // Dashed line to distinguish from data
+                label: {
+                    content: threshold.option ? `${threshold.option} ${thresholdValue}` : `${thresholdValue}`,
+                    enabled: true,
+                    position: 'end',
+                    backgroundColor: borderColor,
+                    color: '#ffffff',
+                    font: {
+                        size: 11,
+                        family: 'Arial'
+                    },
+                    padding: 4
+                }
+            };
+        });
+
+        return { annotations };
     },
 
     /**
