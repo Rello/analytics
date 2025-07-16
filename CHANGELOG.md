@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.7.2 - 2025-07-16
+### Added
+- Threshold lines in charts using Chart.js annotation plugin
+- Visual representation of threshold values as horizontal lines on charts
+- Color-coded threshold lines matching existing severity system (red, orange, green)
+- Smart threshold labels showing operators and values
+- Support for line, bar, and area chart types (excludes doughnut/funnel)
+
 ## 5.7.1 - 2025-07-15
 ### Fixed
 - Analytics not starting due to not executed migration #514
