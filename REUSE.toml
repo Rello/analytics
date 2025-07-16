@@ -54,7 +54,7 @@ SPDX-FileCopyrightText = "Copyright (c) 2010-2021 James Hall, https://github.com
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = "js/3rdParty/chart.umd.js"
+path = ["js/3rdParty/chart.umd.js", "js/3rdParty/chartjs-plugin-annotation.min.js"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2022 Chart.js Contributors"
 SPDX-License-Identifier = "MIT"
