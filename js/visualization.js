@@ -24,6 +24,14 @@ var myMoment = moment;
 OCA.Analytics.Visualization = {
     defaultColorPalette: ["#1A366C", "#EA6A47", "#a3acb9", "#6AB187", "#39a7db", "#c85200", "#57606c", "#a3cce9", "#ffbc79", "#c8d0d9"],
 
+    thresholdColorAreaRed: 'LightCoral',
+    thresholdColorAreaOrange: 'Moccasin',
+    thresholdColorAreaGreen: 'LightGreen',
+
+    thresholdColorNumberRed: 'Crimson',
+    thresholdColorNumberOrange: 'Gold',
+    thresholdColorNumberGreen: 'Green',
+
     // operators used for threshold comparisons in multiple functions
     thresholdOperators : {
         '=': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x === y),
@@ -400,20 +408,20 @@ OCA.Analytics.Visualization = {
 
                 if (threshold['coloring'] === 'row') {
                     if (severity === 2) { // red
-                        color = 'LightCoral';
+                        color = OCA.Analytics.Visualization.thresholdColorAreaRed;
                     } else if (severity === 3) { // orange
-                        color = 'Moccasin';
+                        color = OCA.Analytics.Visualization.thresholdColorAreaOrange;
                     } else if (severity === 4) { // green
-                        color = 'LightGreen';
+                        color = OCA.Analytics.Visualization.thresholdColorAreaGreen;
                     }
                     row.style.backgroundColor = color;
                 } else {
                     if (severity === 2) { // red
-                        color = 'Crimson';
+                        color = OCA.Analytics.Visualization.thresholdColorNumberRed;
                     } else if (severity === 3) { // orange
-                        color = 'Gold';
+                        color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
                     } else if (severity === 4) { // green
-                        color = 'Green';
+                        color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
                     }
                     const cell = row.childNodes.item(dimIndex);
                     if (cell) {
@@ -809,11 +817,11 @@ OCA.Analytics.Visualization = {
             
             // Use the same color scheme as existing threshold functionality
             if (severity === 2) { // red
-                borderColor = '#dc3545';
+                borderColor = OCA.Analytics.Visualization.thresholdColorNumberRed;
             } else if (severity === 3) { // orange
-                borderColor = '#fd7e14';
+                borderColor = OCA.Analytics.Visualization.thresholdColorNumberOrange;
             } else if (severity === 4) { // green
-                borderColor = '#28a745';
+                borderColor = OCA.Analytics.Visualization.thresholdColorNumberGreen;
             }
 
             const annotationId = `threshold_${index}`;
@@ -1230,11 +1238,11 @@ OCA.Analytics.Visualization = {
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
-                    thresholdColor = 'color: red;';
+                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberRed;
                 } else if (threshold['severity'] === 3) {
-                    thresholdColor = 'color: orange;';
+                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberOrange;
                 } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'color: green;';
+                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberGreen;
                 }
             }
         }
