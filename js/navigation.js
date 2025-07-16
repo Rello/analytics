@@ -187,7 +187,7 @@ OCA.Analytics.Navigation = {
         li.id = 'NewGroupPlaceholder';
         let a = document.createElement('a');
         a.classList.add('icon-folder', 'svg');
-        a.innerText = t('analytics', 'New report group');
+        a.innerText = t('analytics', 'New group');
         a.style.fontStyle = 'italic';
         a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_newGroup_handler);
         a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
@@ -903,6 +903,7 @@ OCA.Analytics.Navigation.Drag = {
 
     dragstart_handler: function (ev) {
         ev.dataTransfer.setData("id", ev.target.dataset.id);
+        ev.dataTransfer.setData("item_type", ev.target.dataset.item_type);
         ev.effectAllowed = "copyMove";
         OCA.Analytics.Navigation.Drag.dragObject = ev.target;
         document.getElementById('NewGroupPlaceholder').style.visibility = 'initial';
@@ -914,13 +915,13 @@ OCA.Analytics.Navigation.Drag = {
 
     drop_handler: function (ev) {
         ev.preventDefault();
-        OCA.Analytics.Navigation.Drag.addReportToGroup(this.dataset.id, ev.dataTransfer.getData("id"));
+        OCA.Analytics.Navigation.Drag.addItemToGroup(this.dataset.id, ev.dataTransfer.getData("id"), ev.dataTransfer.getData("item_type"));
         ev.currentTarget.style.background = "";
     },
 
     drop_onReport_handler: function (ev) {
         ev.preventDefault();
-        OCA.Analytics.Navigation.Drag.addReportToGroup(this.dataset.parent, ev.dataTransfer.getData("id"));
+        OCA.Analytics.Navigation.Drag.addItemToGroup(this.dataset.parent, ev.dataTransfer.getData("id"), ev.dataTransfer.getData("item_type"));
         ev.currentTarget.style.background = "";
     },
 
@@ -950,9 +951,23 @@ OCA.Analytics.Navigation.Drag = {
         ev.preventDefault();
     },
 
-    addReportToGroup: function (groupId, reportId) {
+    addItemToGroup: function (groupId, itemId, itemType) {
         OCA.Analytics.Navigation.saveOpenState();
-        let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId + '/group';
+        
+        // Default to 'report' for backward compatibility if no item type is provided
+        itemType = itemType || 'report';
+        
+        // Use the same endpoint pattern for all item types
+        // The backend should support this if the parent field is generic
+        const endpointMap = {
+            'report': 'report',
+            'panorama': 'panorama', 
+            'dataset': 'dataset'
+        };
+        
+        const endpoint = endpointMap[itemType] || 'report';
+        let requestUrl = OC.generateUrl('apps/analytics/' + endpoint + '/') + itemId + '/group';
+        
         fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
@@ -963,7 +978,17 @@ OCA.Analytics.Navigation.Drag = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Navigation.init(groupId);
+            })
+            .catch(error => {
+                console.error('Error updating item group:', error);
+                // If there's an error, still try to refresh the navigation
+                OCA.Analytics.Navigation.init(groupId);
             });
+    },
+
+    addReportToGroup: function (groupId, reportId) {
+        // Keep this function for backward compatibility
+        return OCA.Analytics.Navigation.Drag.addItemToGroup(groupId, reportId, 'report');
     },
 }
 

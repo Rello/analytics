@@ -1358,3 +1358,8 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 #body-public #content {
     padding-block-end: initial; !important;
 }
+
+/* Fix for NewGroupPlaceholder text overlap with folder icon */
+#NewGroupPlaceholder a {
+    padding-left: 44px !important;
+}
