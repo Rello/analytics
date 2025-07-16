@@ -29,7 +29,7 @@ OC.L10N.register(
     "Filter by" : "Filter nach",
     "Operator" : "Bedingung",
     "Value" : "Wert",
-    "Please select data source" : "Bitte wähle eine Datenquelle aus.",
+    "Please select data source" : "Bitte eine Datenquelle auswählen.",
     "Saved" : "Gespeichert",
     "Data load copied" : "Datenladung kopiert",
     "Delete data load" : "Datenladung löschen",

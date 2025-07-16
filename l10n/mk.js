@@ -58,6 +58,7 @@ OC.L10N.register(
     "Option" : "Опции",
     "Remove filter" : "Острани филтер",
     "Import" : "Увези",
+    "Selection" : "Селектирање",
     "Title" : "Наслов",
     "Daily" : "Дневно",
     "Hourly" : "Часовно",
