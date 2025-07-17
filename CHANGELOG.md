@@ -5,6 +5,7 @@
 - Smart picker not work #513
 - Panorama groups now use the folder icon
 - Dataset service correctly injects localization
+- Panorama items now appear under their groups
 ### Changed
 - Navigation placeholder now shows "New group" with proper styling
 ### Added
