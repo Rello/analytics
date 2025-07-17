@@ -110,10 +110,15 @@ class PageController extends Controller
             $translationLanguages
         );
 
-		$this->initialState->provideInitialState(
-			'contextChatAvailable',
-			$this->appManager->isEnabledForUser('context_chat')
-		);
+        $this->initialState->provideInitialState(
+            'installedVersion',
+            $this->config->getAppValue($this->appName, 'installed_version', '')
+        );
+
+        $this->initialState->provideInitialState(
+            'contextChatAvailable',
+            $this->appManager->isEnabledForUser('context_chat')
+        );
 
 		if (class_exists(LoadEditor::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadEditor());

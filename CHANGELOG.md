@@ -3,6 +3,7 @@
 ## 5.7.2 - 2025-07-16
 ### Added
 - Threshold lines in charts using Chart.js annotation plugin
+- Show installed version in settings
 
 ## 5.7.1 - 2025-07-15
 ### Fixed
