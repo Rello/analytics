@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Visualization.showElement('analytics-intro');
 
     OCA.Analytics.translationAvailable = OCA.Analytics.Core.getInitialState('translationAvailable');
+    OCA.Analytics.installedVersion = OCA.Analytics.Core.getInitialState('installedVersion');
+    const versionElem = document.getElementById('analytics-version');
+    if (versionElem) {
+        versionElem.innerText = t('analytics', 'Version') + ': ' + OCA.Analytics.installedVersion;
+    }
 
     OCA.Analytics.Core.init();
 });
@@ -73,6 +78,7 @@ Object.assign(OCA.Analytics, {
     refreshTimer: null,
     currentXhrRequest: null,
     translationAvailable: false,
+    installedVersion: '',
     isNewObject: false,
 
     // flexible mapping depending on type required by the used chart library
