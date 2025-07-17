@@ -48,6 +48,7 @@ OC.L10N.register(
     "Translate" : "Преведи",
     "Edit" : "Уреди",
     "Back" : "Назад",
+    "Legend" : "Легенда",
     "Name" : "Име",
     "Display" : "Прикажи",
     "Table" : "Табела",
