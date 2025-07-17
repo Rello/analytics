@@ -371,6 +371,7 @@ OCA.Analytics.Navigation = {
         // add navigation row to navigation list or to an existing parent node
         let categoryList;
         if (
+            rootListId !== 'section-favorites' &&
             parseInt(data['parent']) !== 0 &&
             document.getElementById('dataset-' + data['item_type'] + '-' + data['parent'])
         ) {

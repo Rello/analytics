@@ -7,6 +7,8 @@
 - Dataset service correctly injects localization
 - Panorama items now appear under their groups
 - Group sublist IDs include the item type to avoid cross-type collisions
+- Dataset groups were filtered out of the navigation
+- Favorites no longer duplicate items inside groups
 ### Changed
 - Navigation placeholder now shows "New group" with proper styling
 ### Added

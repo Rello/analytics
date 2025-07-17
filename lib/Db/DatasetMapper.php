@@ -39,9 +39,17 @@ class DatasetMapper {
 	 */
 	public function index(): array {
 		$sql = $this->db->getQueryBuilder();
-		$sql->from(self::TABLE_NAME)->select('id')->addSelect('name')->addSelect('dimension1')->addSelect('dimension2')
-			->addSelect('value')->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-			->andWhere($sql->expr()->eq('type', $sql->createNamedParameter('2')))->addOrderBy('name', 'ASC');
+               $sql->from(self::TABLE_NAME)
+                       ->select('id')
+                       ->addSelect('name')
+                       ->addSelect('dimension1')
+                       ->addSelect('dimension2')
+                       ->addSelect('value')
+                       ->addSelect('type')
+                       ->addSelect('parent')
+                       ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+                       ->orderBy('parent', 'ASC')
+                       ->addOrderBy('name', 'ASC');
 		$statement = $sql->executeQuery();
 		$result = $statement->fetchAll();
 		$statement->closeCursor();
