@@ -339,7 +339,7 @@ OCA.Analytics.Navigation = {
         navigationEntryDiv.appendChild(a);
 
         let ulSublist = document.createElement('ul');
-        ulSublist.id = 'dataset-' + data['id'];
+        ulSublist.id = 'dataset-' + data['item_type'] + '-' + data['id'];
 
         if (parseInt(data['favorite']) === 1) {
             let divFav = OCA.Analytics.Navigation.buildFavoriteIcon(data['id'], data['name'])
@@ -362,6 +362,7 @@ OCA.Analytics.Navigation = {
         if (typeINT === OCA.Analytics.TYPE_GROUP) {
             li.appendChild(ulSublist);
             li.dataset.id = data['id'];
+            li.dataset.item_type = data['item_type'];
             a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
         } else {
             a.addEventListener('click', OCA.Analytics.Navigation.handleNavigationClicked);
@@ -369,8 +370,11 @@ OCA.Analytics.Navigation = {
 
         // add navigation row to navigation list or to an existing parent node
         let categoryList;
-        if (parseInt(data['parent']) !== 0 && document.getElementById('dataset-' + data['parent'])) {
-            categoryList = document.getElementById('dataset-' + data['parent']);
+        if (
+            parseInt(data['parent']) !== 0 &&
+            document.getElementById('dataset-' + data['item_type'] + '-' + data['parent'])
+        ) {
+            categoryList = document.getElementById('dataset-' + data['item_type'] + '-' + data['parent']);
             categoryList.appendChild(li);
         } else {
             categoryList = document.getElementById(rootListId);
@@ -863,7 +867,7 @@ OCA.Analytics.Navigation = {
         const openNodes = [];
         document.querySelectorAll('#navigationDatasets li.collapsible.open').forEach(li => {
             if (li.dataset.id) {
-                openNodes.push('g-' + li.dataset.id);
+                openNodes.push('g-' + li.dataset.item_type + '-' + li.dataset.id);
             } else if (li.dataset.sectionId) {
                 openNodes.push('s-' + li.dataset.sectionId);
             }
@@ -880,8 +884,10 @@ OCA.Analytics.Navigation = {
         }
         saved.forEach(id => {
             if (id.startsWith('g-')) {
-                const gid = id.slice(2);
-                const li = document.querySelector('#navigationDatasets li.collapsible[data-id="' + gid + '"]');
+                const parts = id.slice(2).split('-', 2);
+                const itemType = parts[0];
+                const gid = parts[1];
+                const li = document.querySelector('#navigationDatasets li.collapsible[data-id="' + gid + '"][data-item_type="' + itemType + '"]');
                 if (li) li.classList.add('open');
             } else if (id.startsWith('s-')) {
                 const sid = id.slice(2);

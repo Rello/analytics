@@ -6,6 +6,7 @@
 - Panorama groups now use the folder icon
 - Dataset service correctly injects localization
 - Panorama items now appear under their groups
+- Group sublist IDs include the item type to avoid cross-type collisions
 ### Changed
 - Navigation placeholder now shows "New group" with proper styling
 ### Added
