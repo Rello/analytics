@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versio",
     "Translation error. Possibly wrong ISO code?" : "Käännösvirhe. Mahdollisesti väärä ISO-koodi?",
     "Choose language" : "Valitse kieli",
     "Loading" : "Ladataan",
@@ -116,7 +117,6 @@ OC.L10N.register(
     "Releases" : "Julkaisut",
     "Issues" : "Ongelmat",
     "Personal access token" : "Henkilökohtainen valtuutustietue",
-    "Version" : "Versio",
     "Download count" : "Latausmäärä",
     "Count" : "Määrä",
     "Local" : "Paikallinen",

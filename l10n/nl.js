@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versie",
     "Translation error. Possibly wrong ISO code?" : "Vertaalfout. Mogelijk verkeerde ISO-code?",
     "Choose language" : "Kies taal",
     "Loading" : "Laden",
@@ -10,6 +11,7 @@ OC.L10N.register(
     "Parameter missing" : "Parameter ontbreekt",
     "Add custom column" : "Voeg aangepaste kolom toe",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Selecteer de gewenste kolommen.<br>Herschik de volgorde met drag & drop.<br>Verwijder alle selecties om terug te zetten.<br>Voeg eigen  kolommen tie inclusief variabelen voor datums. Zie de {linkstart}Wiki{linkend}.",
+    "Previous Values:" : "Vorige waarden:",
     "Enter the fixed value:" : "Geef de vaste waarde in:",
     "Select file" : "Selecteer bestand",
     "Share" : "Delen",
@@ -209,7 +211,6 @@ OC.L10N.register(
     "Show assets" : "Toon aanwinsten",
     "Personal access token" : "Persoonlijk access token",
     "optional" : "optioneel",
-    "Version" : "Versie",
     "Asset" : "Aanwinst",
     "Download count" : "Aantal downloads",
     "Count" : "Aantal",

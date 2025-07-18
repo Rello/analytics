@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Verzija",
     "Share" : "Podjeli",
     "Share link" : "Podijelite vezu",
     "Settings" : "Podešavanje",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",
-    "Version" : "Verzija",
     "Local" : "Lokalno",
     "Password" : "Lozinka",
     "Edit" : "Izmjeni",

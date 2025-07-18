@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Έκδοση",
     "Translation error. Possibly wrong ISO code?" : "Σφάλμα μετάφρασης. Πιθανός λανθασμένος κωδικός ISO;",
     "Choose language" : "Επιλέξτε γλώσσα",
     "Loading" : "Γίνεται φόρτωση",
@@ -158,7 +159,6 @@ OC.L10N.register(
     "Issues" : "Ζητήματα",
     "Limit" : "'Οριο",
     "Personal access token" : "Token προσωπικής πρόσβασης",
-    "Version" : "Έκδοση",
     "Download count" : "Πλήθος λήψεων",
     "Local" : "Τοπικός",
     "File" : "Αρχείο",

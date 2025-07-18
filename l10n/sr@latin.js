@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Verzija",
     "Share" : "Podeli",
     "Share link" : "Podeli vezu",
     "Link copied" : "Veza iskopirana",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Yes" : "Da",
     "No" : "Ne",
     "Issues" : "Problemi",
-    "Version" : "Verzija",
     "File" : "Fajl",
     "copy" : "kopiraj",
     "Password" : "Lozinka",

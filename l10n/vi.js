@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Phiên bản",
     "Loading" : "Đang tải",
     "Please select" : "Hãy chọn",
     "Select file" : "Chọn tập tin",
@@ -80,7 +81,6 @@ OC.L10N.register(
     "Timestamp of data load" : "Dấu thời gian của dữ liệu được tải",
     "Releases" : "Các phiên bản",
     "Issues" : "Vấn đề",
-    "Version" : "Phiên bản",
     "Local" : "Cục bộ",
     "File" : "Tệp",
     "Announcements" : "Các thông báo",

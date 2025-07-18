@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Versiune",
     "Share" : "Partajează",
     "Share link" : "Partajează link-ul",
     "Link copied" : "Link copiat",
@@ -37,7 +38,6 @@
     "Timestamp of data load" : "Marca temporală a încărcării datelor",
     "Releases" : "Versiuni",
     "Issues" : "Probleme",
-    "Version" : "Versiune",
     "Count" : "Număr",
     "Local" : "Local",
     "File" : "Fișier",

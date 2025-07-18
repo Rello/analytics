@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Útgáfa",
     "Loading" : "Hleð inn",
     "Share" : "Deila",
     "Share link" : "Deila tengli",
@@ -42,7 +43,6 @@ OC.L10N.register(
     "Authentication" : "Auðkenning",
     "Releases" : "Útgáfur",
     "Issues" : "Vandamál",
-    "Version" : "Útgáfa",
     "Local" : "Staðvært",
     "Announcements" : "Tilkynningar",
     "copy" : "afrita",

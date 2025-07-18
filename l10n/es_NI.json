@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Versión",
     "Loading" : "Cargando",
     "Share" : "Compartir",
     "Share link" : "Compartir liga",
@@ -25,7 +26,6 @@
     "Authentication" : "Autenticación",
     "Releases" : "Lanzamientos",
     "Issues" : "Temas",
-    "Version" : "Versión",
     "Local" : "Local",
     "File" : "Archivo",
     "Announcements" : "Anuncios",

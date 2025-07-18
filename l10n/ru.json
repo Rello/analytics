@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Версия",
     "Translation error. Possibly wrong ISO code?" : "Ошибка перевода. Возможно, неправильный код ISO?",
     "Choose language" : "Выберите язык",
     "Loading" : "Загрузка",
@@ -192,7 +193,6 @@
     "Limit" : "Лимит",
     "Filter release assets via extension" : "Отфильтровать ресурсы через расширение",
     "Personal access token" : "Личный токен доступа",
-    "Version" : "Версия",
     "Download count" : "Счетчик загрузок",
     "Count" : "Считать",
     "Local" : "Локальный",

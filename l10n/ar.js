@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "الإصدار",
     "Translation error. Possibly wrong ISO code?" : "خطأ في الترجمة؟ هل يمكن أن يكون كود ISO غير صحيح؟",
     "Choose language" : "إختَر اللغة",
     "Loading" : "التحميل جارٍ",
@@ -196,7 +197,6 @@ OC.L10N.register(
     "Show assets" : "عرض الأصول",
     "Personal access token" : "رمز التحقق المميز الشخصي للوصول",
     "optional" : "إختياري",
-    "Version" : "الإصدار",
     "Asset" : "الأصول",
     "Download count" : "عدد التنزيلات",
     "Count" : "عدّاد",

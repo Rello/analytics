@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Bertsioa",
     "Translation error. Possibly wrong ISO code?" : "Itzulpen-errorea. Baliteke ISO kodea okerra izatea?",
     "Choose language" : "Aukeratu hizkuntza",
     "Loading" : "Kargatzen",
@@ -188,7 +189,6 @@ OC.L10N.register(
     "Issues" : "Arazoak",
     "Limit" : "Muga",
     "Personal access token" : "Sarbide token pertsonala",
-    "Version" : "Bertsioa",
     "Download count" : "Deskarga zenbakia",
     "Count" : "Kantitatea",
     "Local" : "Lokala",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versione",
     "Loading" : "Carrighende",
     "Share" : "Cumpartzidura",
     "Share link" : "Cumpartzi ligòngiu",
@@ -42,7 +43,6 @@ OC.L10N.register(
     "Releases" : "Versiones",
     "Issues" : "Problemas",
     "Personal access token" : "Token de intrada personale",
-    "Version" : "Versione",
     "Local" : "Locale",
     "File" : "Archìviu",
     "Announcements" : "Comunicatziones",

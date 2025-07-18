@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Έκδοση",
     "Translation error. Possibly wrong ISO code?" : "Σφάλμα μετάφρασης. Πιθανός λανθασμένος κωδικός ISO;",
     "Choose language" : "Επιλέξτε γλώσσα",
     "Loading" : "Γίνεται φόρτωση",
@@ -156,7 +157,6 @@
     "Issues" : "Ζητήματα",
     "Limit" : "'Οριο",
     "Personal access token" : "Token προσωπικής πρόσβασης",
-    "Version" : "Έκδοση",
     "Download count" : "Πλήθος λήψεων",
     "Local" : "Τοπικός",
     "File" : "Αρχείο",

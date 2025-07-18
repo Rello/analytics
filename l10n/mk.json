@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Верзија",
     "Share" : "Сподели",
     "Share link" : "Сподели линк",
     "Link copied" : "Линкот е копиран",
@@ -35,7 +36,6 @@
     "No" : "Не",
     "More options" : "Повеќе опции ",
     "Authentication" : "Автентикација",
-    "Version" : "Верзија",
     "Local" : "Локално",
     "File" : "Датотека",
     "Announcements" : "Објави",

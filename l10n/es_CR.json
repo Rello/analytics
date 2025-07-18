@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Versión",
     "Loading" : "Cargando",
     "Parameter missing" : "Falta el parámetro",
     "Select file" : "Seleccionar archivo",
@@ -47,7 +48,6 @@
     "Authentication" : "Autenticación",
     "Releases" : "Lanzamientos",
     "Issues" : "Temas",
-    "Version" : "Versión",
     "Local" : "Local",
     "File" : "Archivo",
     "Announcements" : "Anuncios",

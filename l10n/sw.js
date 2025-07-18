@@ -1,8 +1,10 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Toleo",
     "Share" : "Shirikisha",
     "Share link" : "Shirikisha kiungo",
+    "Link copied" : "Kiungo kimenakiliwa",
     "Settings" : "Mipangilio",
     "Value" : "Thamani",
     "Saved" : "Imehifadhiwa",
@@ -39,7 +41,6 @@ OC.L10N.register(
     "Authentication" : "Uthibitisho",
     "Timestamp of data load" : "Muhuri wa muda wa upakiaji wa data",
     "Issues" : "Masuala",
-    "Version" : "Toleo",
     "Count" : "Hesabu",
     "Local" : "Kawaida",
     "File" : "Faili",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Version",
     "Share" : "Compartir",
     "Share link" : "Compartir ligamine",
     "Settings" : "Configurationes",
@@ -22,7 +23,6 @@ OC.L10N.register(
     "Yes" : "Si",
     "No" : "No",
     "Authentication" : "Authentication",
-    "Version" : "Version",
     "Local" : "Local",
     "Announcements" : "Annucios",
     "The password is wrong. Try again." : "Le contrasigno es incorrecte. Tenta de novo.",

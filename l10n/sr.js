@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Верзија",
     "Translation error. Possibly wrong ISO code?" : "Грешка у преводу. Можда је погрешан ISO кôд?",
     "Choose language" : "Изаберите језик",
     "Loading" : "Учитавам",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Show assets" : "Прикажи ресурсе",
     "Personal access token" : "Лични приступни жетон",
     "optional" : "необавезно",
-    "Version" : "Верзија",
     "Asset" : "Ресурс",
     "Download count" : "Број преузимања",
     "Count" : "Бројач",

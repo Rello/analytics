@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Версия",
     "Translation error. Possibly wrong ISO code?" : "Ошибка перевода. Возможно, неправильный код ISO?",
     "Choose language" : "Выберите язык",
     "Loading" : "Загрузка",
@@ -194,7 +195,6 @@ OC.L10N.register(
     "Limit" : "Лимит",
     "Filter release assets via extension" : "Отфильтровать ресурсы через расширение",
     "Personal access token" : "Личный токен доступа",
-    "Version" : "Версия",
     "Download count" : "Счетчик загрузок",
     "Count" : "Считать",
     "Local" : "Локальный",

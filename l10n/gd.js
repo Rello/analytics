@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Tionndadh",
     "Share" : "Co-roinn",
     "Share link" : "Ceangal co-roinnidh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh",
@@ -18,7 +19,6 @@ OC.L10N.register(
     "Yes" : "Tha",
     "No" : "Chan eil",
     "Issues" : "Bugaichean",
-    "Version" : "Tionndadh",
     "File" : "Faidhle",
     "Password" : "Facal-faire",
     "Translate" : "Eadar-theangaich",

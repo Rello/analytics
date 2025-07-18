@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Útgáfa",
     "Loading" : "Hleð inn",
     "Share" : "Deila",
     "Share link" : "Deila tengli",
@@ -40,7 +41,6 @@
     "Authentication" : "Auðkenning",
     "Releases" : "Útgáfur",
     "Issues" : "Vandamál",
-    "Version" : "Útgáfa",
     "Local" : "Staðvært",
     "Announcements" : "Tilkynningar",
     "copy" : "afrita",

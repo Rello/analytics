@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "버전",
     "Translation error. Possibly wrong ISO code?" : "번역 오류. 잘못된 ISO 코드",
     "Choose language" : "언어 선택",
     "Loading" : "불러오는 중",
@@ -115,7 +116,6 @@ OC.L10N.register(
     "Timestamp of data load" : "데이터 로드 시 타임스탬프",
     "Releases" : "릴리스",
     "Issues" : "문제점",
-    "Version" : "버전",
     "Count" : "총수",
     "File" : "파일",
     "Announcements" : "공지",

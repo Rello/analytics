@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "﻿ಆವೃತ್ತಿ",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
     "Share link" : "ಸಂಪರ್ಕ ಕೊಂಡಿಯನ್ನು  ﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು",
     "Settings" : "ಆಯ್ಕೆ",
@@ -18,7 +19,6 @@ OC.L10N.register(
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",
-    "Version" : "﻿ಆವೃತ್ತಿ",
     "Local" : "ಸ್ಥಳೀಯ",
     "Password" : "ಗುಪ್ತ ಪದ",
     "Edit" : "ಸಂಪಾದಿಸು",

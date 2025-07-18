@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versiya",
     "Translation error. Possibly wrong ISO code?" : "Tarjima xatosi. Ehtimol noto'g'ri ISO kodi?",
     "Choose language" : "Tilni tanlang",
     "Loading" : "Yuklanmoqda",
@@ -190,7 +191,6 @@ OC.L10N.register(
     "Show assets" : "Aktivlarni ko'rsatish",
     "Personal access token" : "Shaxsiy kirish belgisi",
     "optional" : "ixtiyoriy",
-    "Version" : "Versiya",
     "Asset" : "Faol",
     "Download count" : "Yuklab olish soni",
     "Count" : "Hisoblash",

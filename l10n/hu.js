@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Verzió",
     "Translation error. Possibly wrong ISO code?" : "Fordítási hiba. Valószínűleg hibás ISO kód?",
     "Choose language" : "Nyelv kiválasztása",
     "Loading" : "Betöltés",
@@ -198,7 +199,6 @@ OC.L10N.register(
     "Show assets" : "Erőforrások megjelenítése",
     "Personal access token" : "Személyes hozzáférési token",
     "optional" : "nem kötelező",
-    "Version" : "Verzió",
     "Asset" : "Erőforrás",
     "Download count" : "Letöltések száma",
     "Count" : "Darabszám",

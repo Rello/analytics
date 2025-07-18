@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versi",
     "Translation error. Possibly wrong ISO code?" : "Galat terjemahan. Mungkin kode ISO salah?",
     "Choose language" : "Pilih bahasa",
     "Loading" : "Memuat",
@@ -204,7 +205,6 @@ OC.L10N.register(
     "Releases" : "Rilis",
     "Issues" : "Isu",
     "Personal access token" : "Token akses pribadi",
-    "Version" : "Versi",
     "Local" : "Lokal",
     "Announcements" : "Pengumuman",
     "3rd field must be a valid number" : "bidang ke-3 harus berupa angka yang valid",

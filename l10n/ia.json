@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Version",
     "Share" : "Compartir",
     "Share link" : "Compartir ligamine",
     "Settings" : "Configurationes",
@@ -20,7 +21,6 @@
     "Yes" : "Si",
     "No" : "No",
     "Authentication" : "Authentication",
-    "Version" : "Version",
     "Local" : "Local",
     "Announcements" : "Annucios",
     "The password is wrong. Try again." : "Le contrasigno es incorrecte. Tenta de novo.",

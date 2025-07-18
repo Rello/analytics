@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Stumm",
     "Loading" : "Kargañ",
     "Share" : "Rannan",
     "Share link" : "Lodañ al liamm",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Search" : "Klask",
     "Yes" : "Ya",
     "No" : "Nann",
-    "Version" : "Stumm",
     "Local" : "Diabarzh",
     "File" : "Restr",
     "copy" : "eilañ",

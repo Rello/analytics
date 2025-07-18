@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Različica",
     "Translation error. Possibly wrong ISO code?" : "Napaka prevajanja. Je to napaka kode ISO?",
     "Choose language" : "Izbor jezika",
     "Loading" : "Poteka nalaganje ...",
@@ -169,7 +170,6 @@ OC.L10N.register(
     "Issues" : "Odzivi",
     "Limit" : "Omejitve",
     "Personal access token" : "Osebni žeton za dostop",
-    "Version" : "Različica",
     "Download count" : "Števec prejemov",
     "Count" : "Števec",
     "Local" : "Krajevno",

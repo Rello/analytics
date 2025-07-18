@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Weergawe",
     "Share" : "Deel",
     "Share link" : "Deel skakel",
     "Link copied" : "Skakel gekopieer",
@@ -23,7 +24,6 @@
     "Yes" : "Ja",
     "No" : "Nee",
     "Releases" : "Vrystellings",
-    "Version" : "Weergawe",
     "File" : "Lêer",
     "Announcements" : "Aankondigings",
     "copy" : "kopie",

@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Verzia",
     "Translation error. Possibly wrong ISO code?" : "Chyba prekladu. Možno nesprávny kód ISO?",
     "Choose language" : "Vyberte jazyk",
     "Loading" : "Načítava sa",
@@ -194,7 +195,6 @@
     "Show assets" : "Zobraziť majetky",
     "Personal access token" : "Osobný prístupový token",
     "optional" : "voliteľné",
-    "Version" : "Verzia",
     "Asset" : "Majetok",
     "Download count" : "Počet stiahnutí",
     "Count" : "Počet",

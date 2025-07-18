@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Տարբերակ",
     "Share" : "Կիսվել",
     "Share link" : "Կիսվել հղմամբ",
     "Settings" : "կարգավորումներ",
@@ -21,7 +22,6 @@
     "Yes" : "Yes",
     "No" : "No",
     "Issues" : "հայց",
-    "Version" : "Տարբերակ",
     "Password" : "Գաղտնաբառ",
     "Translate" : "Թարգմանել",
     "Edit" : "մշակել",

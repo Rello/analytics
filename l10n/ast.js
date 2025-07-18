@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versión",
     "Translation error. Possibly wrong ISO code?" : "Hebo un error de traducción. ¿El códigu ISO ta mal?",
     "Choose language" : "Escoyer la llingua",
     "Loading" : "Cargando",
@@ -110,7 +111,6 @@ OC.L10N.register(
     "Releases" : "Versiones",
     "Issues" : "Problemes",
     "Limit" : "Llende",
-    "Version" : "Versión",
     "Local" : "Llocal",
     "File" : "Ficheru",
     "Sheet" : "Fueya",

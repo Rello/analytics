@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versjon",
     "Translation error. Possibly wrong ISO code?" : "Oversettelse feil. Muligens feil ISO-kode?",
     "Choose language" : "Velg språk",
     "Loading" : "Lasting",
@@ -189,7 +190,6 @@ OC.L10N.register(
     "Issues" : "Problemer",
     "Limit" : "Grense",
     "Personal access token" : "Personlig tilgangstoken",
-    "Version" : "Versjon",
     "Download count" : "Antall nedlastinger",
     "Count" : "Telle",
     "Local" : "Lokal",

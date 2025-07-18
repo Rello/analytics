@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Fersiwn",
     "Share" : "Rhannu",
     "Share link" : "Rhannu dolen",
     "Link copied" : "Dolen wedi'i gopïo",
@@ -23,7 +24,6 @@ OC.L10N.register(
     "No" : "No",
     "Releases" : "Ryddhadau",
     "Issues" : "Materion",
-    "Version" : "Fersiwn",
     "Local" : "Lleol",
     "Password" : "Cyfrinair",
     "Translate" : "Cyfieithu",

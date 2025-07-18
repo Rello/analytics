@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Верзија",
     "Share" : "Сподели",
     "Share link" : "Сподели линк",
     "Link copied" : "Линкот е копиран",
@@ -37,7 +38,6 @@ OC.L10N.register(
     "No" : "Не",
     "More options" : "Повеќе опции ",
     "Authentication" : "Автентикација",
-    "Version" : "Верзија",
     "Local" : "Локално",
     "File" : "Датотека",
     "Announcements" : "Објави",

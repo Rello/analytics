@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "төрөл",
     "Share" : "Түгээх",
     "Share link" : "Холбоос хуваалцах",
     "Settings" : "Тохиргоо",
@@ -21,7 +22,6 @@
     "Total" : "Нийт",
     "Yes" : "Тийм",
     "No" : "Үгүй",
-    "Version" : "төрөл",
     "Announcements" : "Мэдээллүүд",
     "copy" : "Хуулах ",
     "Password" : "Нууц үг",

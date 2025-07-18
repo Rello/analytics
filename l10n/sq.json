@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Versioni",
     "Share" : "Shpërndaje",
     "Share link" : "Lidhje ndarjeje",
     "Link copied" : "Linku u kopjua",
@@ -30,7 +31,6 @@
     "Authentication" : "Mirëfilltësim",
     "Releases" : "Lançime",
     "Issues" : "Çështjet",
-    "Version" : "Versioni",
     "Local" : "Lokale",
     "File" : "Skedar ",
     "Announcements" : "Lajmërimet",

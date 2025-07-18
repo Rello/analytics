@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versiune",
     "Share" : "Partajează",
     "Share link" : "Partajează link-ul",
     "Link copied" : "Link copiat",
@@ -39,7 +40,6 @@ OC.L10N.register(
     "Timestamp of data load" : "Marca temporală a încărcării datelor",
     "Releases" : "Versiuni",
     "Issues" : "Probleme",
-    "Version" : "Versiune",
     "Count" : "Număr",
     "Local" : "Local",
     "File" : "Fișier",
