@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "ვერსია",
     "Share" : "გაზიარება",
     "Share link" : "ბმულის გაზიარება",
     "Settings" : "პარამეტრები",
@@ -27,7 +28,6 @@
     "Authentication" : "აუტენტიფიკაცია",
     "Releases" : "რელიზები",
     "Issues" : "პრობლემები",
-    "Version" : "ვერსია",
     "Local" : "ლოკალური",
     "File" : "ფაილი",
     "Announcements" : "განცხადებები",

@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Različica",
     "Translation error. Possibly wrong ISO code?" : "Napaka prevajanja. Je to napaka kode ISO?",
     "Choose language" : "Izbor jezika",
     "Loading" : "Poteka nalaganje ...",
@@ -167,7 +168,6 @@
     "Issues" : "Odzivi",
     "Limit" : "Omejitve",
     "Personal access token" : "Osebni žeton za dostop",
-    "Version" : "Različica",
     "Download count" : "Števec prejemov",
     "Count" : "Števec",
     "Local" : "Krajevno",

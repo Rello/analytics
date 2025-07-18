@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "版本",
     "Translation error. Possibly wrong ISO code?" : "转换错误。可能提供了错误的ISO编码？",
     "Choose language" : "选择语言",
     "Loading" : "加载中",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Show assets" : "显示资产",
     "Personal access token" : "个人访问令牌",
     "optional" : "可选的选项",
-    "Version" : "版本",
     "Asset" : "资产",
     "Download count" : "下载次数",
     "Count" : "计数",

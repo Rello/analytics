@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "ভার্সন",
     "Share" : "ভাগাভাগি কর",
     "Share link" : "লিংক ভাগাভাগি করেন",
     "Settings" : "সেটিংস",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",
-    "Version" : "ভার্সন",
     "Local" : "স্থানীয়",
     "The password is wrong. Try again." : "কুটশব্দটি ভুল। আবার চেষ্টা করুন।",
     "Password" : "কূটশব্দ",

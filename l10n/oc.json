@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Version",
     "Loading" : "Cargament",
     "Select file" : "Seleccionar fichièr",
     "Share" : "Partejar",
@@ -43,7 +44,6 @@
     "Authentication" : "Autentificacion",
     "Releases" : "Sortidas",
     "Issues" : "Avarias",
-    "Version" : "Version",
     "Local" : "Local",
     "File" : "Fichier",
     "Sheet" : "Fuèlh",

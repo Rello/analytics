@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "төрөл",
     "Share" : "Түгээх",
     "Share link" : "Холбоос хуваалцах",
     "Settings" : "Тохиргоо",
@@ -23,7 +24,6 @@ OC.L10N.register(
     "Total" : "Нийт",
     "Yes" : "Тийм",
     "No" : "Үгүй",
-    "Version" : "төрөл",
     "Announcements" : "Мэдээллүүд",
     "copy" : "Хуулах ",
     "Password" : "Нууц үг",

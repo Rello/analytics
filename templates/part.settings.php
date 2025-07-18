@@ -40,6 +40,9 @@
                     <?php p($l->t('More information …')); ?>
                 </a>
             </li>
+            <li class="analytics-settings-item icon-info">
+                <span id="analytics-version" style="padding: 0 25px;"></span>
+            </li>
         </ul>
     </div>
 </div>

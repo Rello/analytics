@@ -1,19 +1,16 @@
 # Changelog
 
-## 5.7.1 - pending
-### Fixed
-- Smart picker not work #513
-- Panorama groups now use the folder icon
-- Dataset service correctly injects localization
-- Panorama items now appear under their groups
-- Group sublist IDs include the item type to avoid cross-type collisions
-- Dataset groups were filtered out of the navigation
-- Dataset and panorama groups use the folder icon
-- Favorites no longer duplicate items inside groups
-### Changed
-- Navigation placeholder now shows "New group" with proper styling
+## 5.7.2 - 2025-07-16
 ### Added
-- Panoramas and datasets can be organized into groups via drag & drop
+- Threshold lines in charts using Chart.js annotation plugin
+- Show installed version in settings
+
+## 5.7.1 - 2025-07-15
+### Fixed
+- Analytics not starting due to not executed migration #514
+- Smart picker not working #513
+- Context Chat issue
+- Favorite reports in subfolders appearing twice
 
 ## 5.7.0 - 2025-07-11
 ### Added

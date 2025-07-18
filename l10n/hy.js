@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Տարբերակ",
     "Share" : "Կիսվել",
     "Share link" : "Կիսվել հղմամբ",
     "Settings" : "կարգավորումներ",
@@ -23,7 +24,6 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Issues" : "հայց",
-    "Version" : "Տարբերակ",
     "Password" : "Գաղտնաբառ",
     "Translate" : "Թարգմանել",
     "Edit" : "մշակել",

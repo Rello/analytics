@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Utgåve",
     "Select file" : "Vel fil",
     "Share" : "Del",
     "Share link" : "Del lenkje",
@@ -36,7 +37,6 @@
     "Yes" : "Ja",
     "No" : "Nei",
     "Authentication" : "Godkjenning",
-    "Version" : "Utgåve",
     "Local" : "Lokal",
     "File" : "Fil",
     "The password is wrong. Try again." : "Passordet er gale. Prøv igjen.",

@@ -34,7 +34,7 @@ class Version5007Date20250711100000 extends SimpleMigrationStep {
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('analytics_whats_new')->values([
-				'version' => $query->createNamedParameter('5.7.0'),
+				'version' => $query->createNamedParameter('5.7.1'),
 				'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
 "en":{"regular":["Find everything in the new and unified navigation", "Cleaner dialogs with less distraction"],"admin":["New Features apply to users"]},
 "de":{"regular":["Finde alles in der neuen, einheitlichen Navigation", "Einfachere Dialoge mit weniger Ablenkung"],"admin":["Nur User Features"]}

@@ -18,9 +18,9 @@ use OCP\Migration\SimpleMigrationStep;
 
 /**
  * Auto-generated migration step: Please modify to your needs!
- * sudo -u www-data php occ migrations:execute analytics 5006Date20250527100000
+ * sudo -u www-data php occ migrations:execute analytics 5007Date20250714100000
  */
-class Version5006Date20250527100000 extends SimpleMigrationStep {
+class Version5007Date20250714100000 extends SimpleMigrationStep {
 	public function __construct(
 		private IDBConnection $connection,
 	) {
@@ -31,13 +31,15 @@ class Version5006Date20250527100000 extends SimpleMigrationStep {
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 * @param array $options
 	 * @return null|ISchemaWrapper
+	 * @throws \Doctrine\DBAL\Schema\SchemaException
 	 */
-	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
 		$table = $schema->getTable('analytics_threshold');
 		if (!$table->hasColumn('dimension')) {
+
 			$table->addColumn('dimension', 'integer', [
 				'notnull' => false
 			]);
@@ -105,6 +107,5 @@ class Version5006Date20250527100000 extends SimpleMigrationStep {
 				   ->setParameter('target', $row['value']);
 			$update->executeStatement();
 		}
-
 	}
 }

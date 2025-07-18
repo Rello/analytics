@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "កំណែ",
     "Please select" : "សូមជ្រើសរើស",
     "Select file" : "ជ្រើសរើសឯកសារ",
     "Share" : "ចែក​រំលែក",
@@ -54,7 +55,6 @@ OC.L10N.register(
     "Select columns" : "ជ្រើសរើសជួរឈរ",
     "e.g. 1,2,4 or leave empty" : "ឧទា. 1,2,4 ឬទុកចោល",
     "Limit" : "កំណត់",
-    "Version" : "កំណែ",
     "File" : "ឯកសារ",
     "e.g. A1:C3,A5:C5" : "ឧទា. A1:C3,A5:C5",
     "Announcements" : "សេចក្តីប្រកាស",

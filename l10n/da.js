@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Version",
     "Translation error. Possibly wrong ISO code?" : "Oversættelse fejl. Mulig forkert ISO kode?",
     "Choose language" : "Vælg sprog",
     "Loading" : "Loader",
@@ -193,7 +194,6 @@ OC.L10N.register(
     "Show assets" : "Vis assets",
     "Personal access token" : "Personligt adgangstoken",
     "optional" : "valgfri",
-    "Version" : "Version",
     "Asset" : "Asset",
     "Download count" : "Antal download",
     "Count" : "Antal",

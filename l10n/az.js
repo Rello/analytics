@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versiya",
     "Share" : "Paylaş",
     "Share link" : "Linki yayımla",
     "Link copied" : "Link kopyalandı",
@@ -23,7 +24,6 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Authentication" : "Autentifikasiya",
-    "Version" : "Versiya",
     "Local" : "Yerli",
     "The password is wrong. Try again." : "Şifrə yalnışdır. Yenidən cəhd edin.",
     "Password" : "Şifrə",

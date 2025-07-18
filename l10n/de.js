@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Version",
     "Translation error. Possibly wrong ISO code?" : "Übersetzungsfehler. Ist vielleicht der ISO-Code falsch?",
     "Choose language" : "Sprache auswählen",
     "Loading" : "Lade",
@@ -29,7 +30,7 @@ OC.L10N.register(
     "Filter by" : "Filter nach",
     "Operator" : "Bedingung",
     "Value" : "Wert",
-    "Please select data source" : "Bitte wähle eine Datenquelle aus.",
+    "Please select data source" : "Bitte eine Datenquelle auswählen.",
     "Saved" : "Gespeichert",
     "Data load copied" : "Datenladung kopiert",
     "Delete data load" : "Datenladung löschen",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Show assets" : "Assets anzeigen",
     "Personal access token" : "Persönlicher Zugriffstoken",
     "optional" : "Optional",
-    "Version" : "Version",
     "Asset" : "Asset",
     "Download count" : "Anzahl der Downloads",
     "Count" : "Anzahl",

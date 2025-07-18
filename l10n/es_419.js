@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versión",
     "Share" : "Compartir",
     "Share link" : "Compartir liga",
     "Settings" : "Ajustes",
@@ -35,7 +36,6 @@ OC.L10N.register(
     "Authentication" : "Autenticación",
     "Releases" : "Lanzamientos",
     "Issues" : "Temas",
-    "Version" : "Versión",
     "Local" : "Local",
     "File" : "Archivo",
     "Announcements" : "Anuncios",

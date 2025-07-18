@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "גרסה",
     "Loading" : "בטעינה",
     "Share" : "שתף",
     "Share link" : "קישור שיתוף",
@@ -46,7 +47,6 @@ OC.L10N.register(
     "Releases" : "מהדורות",
     "Issues" : "תקלות",
     "Personal access token" : "אסימון גישה פרטי",
-    "Version" : "גרסה",
     "Local" : "מקומי",
     "File" : "קובץ",
     "Announcements" : "הכרזות",

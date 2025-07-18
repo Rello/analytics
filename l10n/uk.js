@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Версія",
     "Translation error. Possibly wrong ISO code?" : "Помилка перекладу. Можливо, неправильний код ISO?",
     "Choose language" : "Виберіть мову",
     "Loading" : "Завантаження",
@@ -187,7 +188,6 @@ OC.L10N.register(
     "Issues" : "Проблеми",
     "Limit" : "Ліміт",
     "optional" : "необов'язково",
-    "Version" : "Версія",
     "Asset" : "Ресурс",
     "Download count" : "Кількість звантажень",
     "Count" : "Лічильник",

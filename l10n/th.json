@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "รุ่น",
     "Loading" : "กำลังโหลด",
     "Share" : "แชร์",
     "Share link" : "แชร์ลิงก์",
@@ -31,7 +32,6 @@
     "No" : "ไม่",
     "Authentication" : "การตรวจสอบสิทธิ์",
     "Issues" : "ปัญหา",
-    "Version" : "รุ่น",
     "Local" : "ต้นทาง",
     "File" : "ไฟล์",
     "Announcements" : "ประกาศ",

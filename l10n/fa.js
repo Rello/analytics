@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "نسخه",
     "Translation error. Possibly wrong ISO code?" : "Translation error. Possibly wrong ISO code?",
     "Choose language" : "انتخاب زبان",
     "Loading" : "Loading",
@@ -162,7 +163,6 @@ OC.L10N.register(
     "Issues" : "مسائل",
     "Limit" : "Limit",
     "Personal access token" : "Personal access token",
-    "Version" : "نسخه",
     "Download count" : "Download count",
     "Count" : "تعداد",
     "Local" : "محلی",

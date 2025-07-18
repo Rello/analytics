@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Versio",
     "Loading" : "Ŝargado",
     "Share" : "Kunhavigi",
     "Share link" : "Kunhavigi ligilon",
@@ -30,7 +31,6 @@
     "No" : "No",
     "Authentication" : "Aŭtentigo",
     "Releases" : "Eldonoj",
-    "Version" : "Versio",
     "Local" : "Loka",
     "File" : "Dosiero",
     "Announcements" : "Anoncoj",

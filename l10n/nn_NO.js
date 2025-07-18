@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Utgåve",
     "Select file" : "Vel fil",
     "Share" : "Del",
     "Share link" : "Del lenkje",
@@ -38,7 +39,6 @@ OC.L10N.register(
     "Yes" : "Ja",
     "No" : "Nei",
     "Authentication" : "Godkjenning",
-    "Version" : "Utgåve",
     "Local" : "Lokal",
     "File" : "Fil",
     "The password is wrong. Try again." : "Passordet er gale. Prøv igjen.",

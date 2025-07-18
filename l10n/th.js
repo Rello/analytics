@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "รุ่น",
     "Loading" : "กำลังโหลด",
     "Share" : "แชร์",
     "Share link" : "แชร์ลิงก์",
@@ -33,7 +34,6 @@ OC.L10N.register(
     "No" : "ไม่",
     "Authentication" : "การตรวจสอบสิทธิ์",
     "Issues" : "ปัญหา",
-    "Version" : "รุ่น",
     "Local" : "ต้นทาง",
     "File" : "ไฟล์",
     "Announcements" : "ประกาศ",

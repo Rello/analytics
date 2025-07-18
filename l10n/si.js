@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "අනුවාදය",
     "Loading" : "පූරණය වෙමින්",
     "Share" : "බෙදාගන්න",
     "Link copied" : "සබැඳිය පිටපත් කළා",
@@ -18,7 +19,6 @@ OC.L10N.register(
     "Yes" : "ඔව්",
     "No" : "නැහැ",
     "Authentication" : "සත්‍යාපනය",
-    "Version" : "අනුවාදය",
     "File" : "ගොනුව",
     "Announcements" : "නිවේදන",
     "copy" : "පිටපත්",

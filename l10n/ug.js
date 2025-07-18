@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "نەشرى",
     "Translation error. Possibly wrong ISO code?" : "تەرجىمە خاتالىقى. ISO كودى خاتا بولۇشى مۇمكىن؟",
     "Choose language" : "تىل تاللاڭ",
     "Loading" : "يۈكلەۋاتىدۇ",
@@ -190,7 +191,6 @@ OC.L10N.register(
     "Issues" : "مەسىلىلەر",
     "Limit" : "چەك",
     "Personal access token" : "شەخسىي زىيارەت بەلگىسى",
-    "Version" : "نەشرى",
     "Download count" : "چۈشۈرۈش سانى",
     "Count" : "ساناپ بېقىڭ",
     "Local" : "يەرلىك",

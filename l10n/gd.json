@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Tionndadh",
     "Share" : "Co-roinn",
     "Share link" : "Ceangal co-roinnidh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh",
@@ -16,7 +17,6 @@
     "Yes" : "Tha",
     "No" : "Chan eil",
     "Issues" : "Bugaichean",
-    "Version" : "Tionndadh",
     "File" : "Faidhle",
     "Password" : "Facal-faire",
     "Translate" : "Eadar-theangaich",

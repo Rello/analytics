@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Inačica",
     "Loading" : "Učitavanje",
     "Share" : "Dijeli",
     "Share link" : "Dijeli poveznicu",
@@ -42,7 +43,6 @@ OC.L10N.register(
     "Releases" : "Izdanja",
     "Issues" : "Poteškoće",
     "Personal access token" : "Osobni token za pristup",
-    "Version" : "Inačica",
     "File" : "Datoteka",
     "Announcements" : "Obavijesti",
     "copy" : "kopiraj",

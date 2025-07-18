@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "バージョン",
     "Translation error. Possibly wrong ISO code?" : "翻訳エラー。ISOコードを確認。",
     "Choose language" : "言語を選択",
     "Loading" : "読み込み中",
@@ -114,7 +115,6 @@ OC.L10N.register(
     "Releases" : "リリース",
     "Issues" : "問題",
     "Limit" : "制限",
-    "Version" : "バージョン",
     "Local" : "ローカル",
     "File" : "ファイル",
     "Sheet" : "シート",

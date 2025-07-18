@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Verzia",
     "Translation error. Possibly wrong ISO code?" : "Chyba prekladu. Možno nesprávny kód ISO?",
     "Choose language" : "Vyberte jazyk",
     "Loading" : "Načítava sa",
@@ -196,7 +197,6 @@ OC.L10N.register(
     "Show assets" : "Zobraziť majetky",
     "Personal access token" : "Osobný prístupový token",
     "optional" : "voliteľné",
-    "Version" : "Verzia",
     "Asset" : "Majetok",
     "Download count" : "Počet stiahnutí",
     "Count" : "Počet",

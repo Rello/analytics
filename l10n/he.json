@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "גרסה",
     "Loading" : "בטעינה",
     "Share" : "שתף",
     "Share link" : "קישור שיתוף",
@@ -44,7 +45,6 @@
     "Releases" : "מהדורות",
     "Issues" : "תקלות",
     "Personal access token" : "אסימון גישה פרטי",
-    "Version" : "גרסה",
     "Local" : "מקומי",
     "File" : "קובץ",
     "Announcements" : "הכרזות",

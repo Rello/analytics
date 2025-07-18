@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versioon",
     "Translation error. Possibly wrong ISO code?" : "Tõlkeviga. Võimalik, et vale ISO kood?",
     "Choose language" : "Vali keel",
     "Loading" : "Laadin andmeid",
@@ -148,7 +149,6 @@ OC.L10N.register(
     "Issues" : "Veahaldus",
     "Personal access token" : "Isiklik tunnusluba ligipääsuks",
     "optional" : "valikuline",
-    "Version" : "Versioon",
     "Count" : "Kokku",
     "Local" : "Kohalik",
     "File" : "Fail",

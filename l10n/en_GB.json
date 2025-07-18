@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Version",
     "Translation error. Possibly wrong ISO code?" : "Translation error. Possibly wrong ISO code?",
     "Choose language" : "Choose language",
     "Loading" : "Loading",
@@ -210,7 +211,6 @@
     "Show assets" : "Show assets",
     "Personal access token" : "Personal access token",
     "optional" : "optional",
-    "Version" : "Version",
     "Asset" : "Asset",
     "Download count" : "Download count",
     "Count" : "Count",

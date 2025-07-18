@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versija",
     "Loading" : "Įkeliama",
     "Please select" : "Pasirinkite",
     "Select file" : "Pasirinkti failą",
@@ -45,7 +46,6 @@ OC.L10N.register(
     "Authentication" : "Tapatybės nustatymas",
     "Releases" : "Laidos",
     "Issues" : "Problemos",
-    "Version" : "Versija",
     "Local" : "Vietinis",
     "File" : "Failas",
     "Announcements" : "Skelbimai",

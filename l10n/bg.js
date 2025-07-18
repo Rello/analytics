@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Версия",
     "Translation error. Possibly wrong ISO code?" : "Грешка при превода. Възможно ли е ISO кода да е грешен?",
     "Choose language" : "Избери език",
     "Loading" : "Зареждане",
@@ -208,7 +209,6 @@ OC.L10N.register(
     "Show assets" : "Покажи активите",
     "Personal access token" : "Личен токен за достъп",
     "optional" : "по избор",
-    "Version" : "Версия",
     "Asset" : "Актив",
     "Download count" : "Брой изтегляния",
     "Count" : "Брой",

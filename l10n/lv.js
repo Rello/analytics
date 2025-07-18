@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versija",
     "Translation error. Possibly wrong ISO code?" : "Tulkošanas kļūda. Iespējams nepareizs ISO kods?",
     "Choose language" : "Izvēlieties valodu",
     "Loading" : "Ielādē",
@@ -108,7 +109,6 @@ OC.L10N.register(
     "Authentication" : "Autentifikācija",
     "Allow insecure connections" : "Atļaut nedrošus savienojumus",
     "Releases" : "Laidieni",
-    "Version" : "Versija",
     "Local" : "Vietējs",
     "File" : "Datne",
     "Announcements" : "Paziņojumi",

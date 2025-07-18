@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Weergawe",
     "Share" : "Deel",
     "Share link" : "Deel skakel",
     "Link copied" : "Skakel gekopieer",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Yes" : "Ja",
     "No" : "Nee",
     "Releases" : "Vrystellings",
-    "Version" : "Weergawe",
     "File" : "Lêer",
     "Announcements" : "Aankondigings",
     "copy" : "kopie",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "ვერსია",
     "Share" : "გაზიარება",
     "Share link" : "ბმულის გაზიარება",
     "Settings" : "პარამეტრები",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Authentication" : "აუტენტიფიკაცია",
     "Releases" : "რელიზები",
     "Issues" : "პრობლემები",
-    "Version" : "ვერსია",
     "Local" : "ლოკალური",
     "File" : "ფაილი",
     "Announcements" : "განცხადებები",

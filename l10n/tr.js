@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Sürüm",
     "Translation error. Possibly wrong ISO code?" : "Çeviri sorunu. ISO kodu yanlış olabilir mi?",
     "Choose language" : "Dil seçin",
     "Loading" : "Yükleniyor",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Show assets" : "Varlıkları görüntüle",
     "Personal access token" : "Kişisel erişim kodu",
     "optional" : "isteğe bağlı",
-    "Version" : "Sürüm",
     "Asset" : "Varlık",
     "Download count" : "İndirilme sayısı",
     "Count" : "Sayı",

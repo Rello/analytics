@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versio",
     "Loading" : "Ŝargado",
     "Share" : "Kunhavigi",
     "Share link" : "Kunhavigi ligilon",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "No" : "No",
     "Authentication" : "Aŭtentigo",
     "Releases" : "Eldonoj",
-    "Version" : "Versio",
     "Local" : "Loka",
     "File" : "Dosiero",
     "Announcements" : "Anoncoj",

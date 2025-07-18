@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Version",
     "Loading" : "Cargament",
     "Select file" : "Seleccionar fichièr",
     "Share" : "Partejar",
@@ -45,7 +46,6 @@ OC.L10N.register(
     "Authentication" : "Autentificacion",
     "Releases" : "Sortidas",
     "Issues" : "Avarias",
-    "Version" : "Version",
     "Local" : "Local",
     "File" : "Fichier",
     "Sheet" : "Fuèlh",

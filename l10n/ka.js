@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "ვერსია",
     "Loading" : "ითვირთება",
     "Parameter missing" : "პარამეტრი არ არის",
     "Select file" : "აირჩიეთ ფაილი",
@@ -59,7 +60,6 @@ OC.L10N.register(
     "Authentication" : "Authentication",
     "Releases" : "გამოცემები",
     "Issues" : "Issues",
-    "Version" : "ვერსია",
     "Local" : "Local",
     "File" : "ფაილი",
     "Announcements" : "Announcements",

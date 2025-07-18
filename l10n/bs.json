@@ -1,4 +1,5 @@
 { "translations": {
+    "Version" : "Verzija",
     "Share" : "Podjeli",
     "Share link" : "Podijelite vezu",
     "Settings" : "Podešavanje",
@@ -17,7 +18,6 @@
     "Search" : "Search",
     "Yes" : "Yes",
     "No" : "No",
-    "Version" : "Verzija",
     "Local" : "Lokalno",
     "Password" : "Lozinka",
     "Edit" : "Izmjeni",

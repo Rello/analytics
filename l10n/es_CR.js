@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versión",
     "Loading" : "Cargando",
     "Parameter missing" : "Falta el parámetro",
     "Select file" : "Seleccionar archivo",
@@ -49,7 +50,6 @@ OC.L10N.register(
     "Authentication" : "Autenticación",
     "Releases" : "Lanzamientos",
     "Issues" : "Temas",
-    "Version" : "Versión",
     "Local" : "Local",
     "File" : "Archivo",
     "Announcements" : "Anuncios",

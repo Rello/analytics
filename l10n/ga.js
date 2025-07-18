@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Leagan",
     "Translation error. Possibly wrong ISO code?" : "Earráid aistriúcháin. Cód ISO mícheart b'fhéidir?",
     "Choose language" : "Roghnaigh teanga",
     "Loading" : "Ag lódáil",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Show assets" : "Taispeáin sócmhainní",
     "Personal access token" : "Comhartha rochtana pearsanta",
     "optional" : "roghnach",
-    "Version" : "Leagan",
     "Asset" : "Sócmhainn",
     "Download count" : "Íosluchtaigh áireamhán",
     "Count" : "Áireamh",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Верзија",
     "Share" : "Сподели",
     "Share link" : "Сподели линк",
     "Link copied" : "Линкот е копиран",
@@ -37,7 +38,6 @@ OC.L10N.register(
     "No" : "Не",
     "More options" : "Повеќе опции ",
     "Authentication" : "Автентикација",
-    "Version" : "Верзија",
     "Local" : "Локално",
     "File" : "Датотека",
     "Announcements" : "Објави",
@@ -48,6 +48,7 @@ OC.L10N.register(
     "Translate" : "Преведи",
     "Edit" : "Уреди",
     "Back" : "Назад",
+    "Legend" : "Легенда",
     "Name" : "Име",
     "Display" : "Прикажи",
     "Table" : "Табела",
@@ -58,6 +59,7 @@ OC.L10N.register(
     "Option" : "Опции",
     "Remove filter" : "Острани филтер",
     "Import" : "Увези",
+    "Selection" : "Селектирање",
     "Title" : "Наслов",
     "Daily" : "Дневно",
     "Hourly" : "Часовно",

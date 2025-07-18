@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versão",
     "Translation error. Possibly wrong ISO code?" : "Erro de tradução. Possivelmente código ISO errado?",
     "Choose language" : "Escolher idioma",
     "Loading" : "Carregando",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Show assets" : "Mostrar recursos",
     "Personal access token" : "Token de acesso pessoal",
     "optional" : "opcional",
-    "Version" : "Versão",
     "Asset" : "Recurso",
     "Download count" : "Número de downloads",
     "Count" : "Número",

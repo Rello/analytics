@@ -1,6 +1,7 @@
 OC.L10N.register(
     "analytics",
     {
+    "Version" : "Versioni",
     "Share" : "Shpërndaje",
     "Share link" : "Lidhje ndarjeje",
     "Link copied" : "Linku u kopjua",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Authentication" : "Mirëfilltësim",
     "Releases" : "Lançime",
     "Issues" : "Çështjet",
-    "Version" : "Versioni",
     "Local" : "Lokale",
     "File" : "Skedar ",
     "Announcements" : "Lajmërimet",
