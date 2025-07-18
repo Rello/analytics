@@ -185,14 +185,20 @@ OCA.Analytics.Navigation = {
         let li = document.createElement('li');
         li.style.visibility = 'hidden';
         li.id = 'NewGroupPlaceholder';
+
+        const div = document.createElement('div');
+        div.classList.add('app-navigation-entry');
+
         let a = document.createElement('a');
         a.classList.add('icon-folder', 'svg');
-        a.innerText = t('analytics', 'New report group');
+        a.innerText = t('analytics', 'New group');
         a.style.fontStyle = 'italic';
         a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_newGroup_handler);
         a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
         a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
-        li.appendChild(a);
+
+        div.appendChild(a);
+        li.appendChild(div);
         return li;
     },
 
@@ -298,18 +304,20 @@ OCA.Analytics.Navigation = {
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_report_handler);
         }
 
-        if (data['item_type'] === 'dataset') {
-            typeIcon = 'icon-analytics-dataset';
-        } else if (data['item_type'] === 'panorama') {
-            typeIcon = 'icon-analytics-panorama';
-        } else if (typeINT === OCA.Analytics.TYPE_GROUP) {
+        if (typeINT === OCA.Analytics.TYPE_GROUP) {
             typeIcon = 'icon-folder';
             li.classList.add('collapsible');
             a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_handler);
             a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
         } else {
-            typeIcon = 'icon-analytics-report';
+            if (data['item_type'] === 'dataset') {
+                typeIcon = 'icon-analytics-dataset';
+            } else if (data['item_type'] === 'panorama') {
+                typeIcon = 'icon-analytics-panorama';
+            } else {
+                typeIcon = 'icon-analytics-report';
+            }
         }
 
         if (data['isShare'] === 1) {
@@ -333,7 +341,7 @@ OCA.Analytics.Navigation = {
         navigationEntryDiv.appendChild(a);
 
         let ulSublist = document.createElement('ul');
-        ulSublist.id = 'dataset-' + data['id'];
+        ulSublist.id = 'dataset-' + data['item_type'] + '-' + data['id'];
 
         if (parseInt(data['favorite']) === 1) {
             let divFav = OCA.Analytics.Navigation.buildFavoriteIcon(data['id'], data['name'])
@@ -356,6 +364,7 @@ OCA.Analytics.Navigation = {
         if (typeINT === OCA.Analytics.TYPE_GROUP) {
             li.appendChild(ulSublist);
             li.dataset.id = data['id'];
+            li.dataset.item_type = data['item_type'];
             a.addEventListener('click', OCA.Analytics.Navigation.handleGroupClicked);
         } else {
             a.addEventListener('click', OCA.Analytics.Navigation.handleNavigationClicked);
@@ -363,10 +372,13 @@ OCA.Analytics.Navigation = {
 
         // add navigation row to navigation list or to an existing parent node
         let categoryList;
-        if (rootListId !== 'section-favorites' &&
+
+        if (
+            rootListId !== 'section-favorites' &&
             parseInt(data['parent']) !== 0 &&
-            document.getElementById('dataset-' + data['parent'])) {
-            categoryList = document.getElementById('dataset-' + data['parent']);
+            document.getElementById('dataset-' + data['item_type'] + '-' + data['parent'])
+        ) {
+            categoryList = document.getElementById('dataset-' + data['item_type'] + '-' + data['parent']);
             categoryList.appendChild(li);
         } else {
             categoryList = document.getElementById(rootListId);
@@ -644,7 +656,10 @@ OCA.Analytics.Navigation = {
             document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
         }
         evt.stopPropagation();
-        OCA.Analytics.Sidebar.Report.createGroup(evt.target.parentElement.dataset.id);
+        OCA.Analytics.Sidebar.Report.createGroup({
+            id: evt.target.parentElement.dataset.id,
+            itemType: evt.target.parentElement.dataset.item_type,
+        });
     },
 
 
@@ -856,7 +871,7 @@ OCA.Analytics.Navigation = {
         const openNodes = [];
         document.querySelectorAll('#navigationDatasets li.collapsible.open').forEach(li => {
             if (li.dataset.id) {
-                openNodes.push('g-' + li.dataset.id);
+                openNodes.push('g-' + li.dataset.item_type + '-' + li.dataset.id);
             } else if (li.dataset.sectionId) {
                 openNodes.push('s-' + li.dataset.sectionId);
             }
@@ -873,8 +888,10 @@ OCA.Analytics.Navigation = {
         }
         saved.forEach(id => {
             if (id.startsWith('g-')) {
-                const gid = id.slice(2);
-                const li = document.querySelector('#navigationDatasets li.collapsible[data-id="' + gid + '"]');
+                const parts = id.slice(2).split('-', 2);
+                const itemType = parts[0];
+                const gid = parts[1];
+                const li = document.querySelector('#navigationDatasets li.collapsible[data-id="' + gid + '"][data-item_type="' + itemType + '"]');
                 if (li) li.classList.add('open');
             } else if (id.startsWith('s-')) {
                 const sid = id.slice(2);
@@ -903,6 +920,9 @@ OCA.Analytics.Navigation.Drag = {
 
     dragstart_handler: function (ev) {
         ev.dataTransfer.setData("id", ev.target.dataset.id);
+        if (ev.target.dataset.item_type) {
+            ev.dataTransfer.setData("item_type", ev.target.dataset.item_type);
+        }
         ev.effectAllowed = "copyMove";
         OCA.Analytics.Navigation.Drag.dragObject = ev.target;
         document.getElementById('NewGroupPlaceholder').style.visibility = 'initial';
@@ -914,19 +934,31 @@ OCA.Analytics.Navigation.Drag = {
 
     drop_handler: function (ev) {
         ev.preventDefault();
-        OCA.Analytics.Navigation.Drag.addReportToGroup(this.dataset.id, ev.dataTransfer.getData("id"));
+        OCA.Analytics.Navigation.Drag.addItemToGroup(
+            this.dataset.id,
+            ev.dataTransfer.getData("item_type"),
+            ev.dataTransfer.getData("id")
+        );
         ev.currentTarget.style.background = "";
     },
 
     drop_onReport_handler: function (ev) {
         ev.preventDefault();
-        OCA.Analytics.Navigation.Drag.addReportToGroup(this.dataset.parent, ev.dataTransfer.getData("id"));
+        OCA.Analytics.Navigation.Drag.addItemToGroup(
+            this.dataset.parent,
+            ev.dataTransfer.getData("item_type"),
+            ev.dataTransfer.getData("id")
+        );
         ev.currentTarget.style.background = "";
     },
 
     drop_newGroup_handler: function (ev) {
         ev.preventDefault();
-        OCA.Analytics.Sidebar.Report.createGroup(ev.dataTransfer.getData("id"));
+        const item = {
+            id: ev.dataTransfer.getData("id"),
+            itemType: ev.dataTransfer.getData("item_type"),
+        };
+        OCA.Analytics.Sidebar.Report.createGroup(item);
         ev.currentTarget.style.background = "";
     },
 
@@ -951,8 +983,21 @@ OCA.Analytics.Navigation.Drag = {
     },
 
     addReportToGroup: function (groupId, reportId) {
+        OCA.Analytics.Navigation.Drag.addItemToGroup(groupId, 'report', reportId);
+    },
+
+    addItemToGroup: function (groupId, itemType, itemId) {
         OCA.Analytics.Navigation.saveOpenState();
-        let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId + '/group';
+        let baseUrl = 'apps/analytics/';
+        if (itemType === 'panorama') {
+            baseUrl += 'panorama/';
+        } else if (itemType === 'dataset') {
+            baseUrl += 'dataset/';
+        } else {
+            baseUrl += 'report/';
+        }
+
+        let requestUrl = OC.generateUrl(baseUrl) + itemId + '/group';
         fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
@@ -961,7 +1006,7 @@ OCA.Analytics.Navigation.Drag = {
             })
         })
             .then(response => response.json())
-            .then(data => {
+            .then(() => {
                 OCA.Analytics.Navigation.init(groupId);
             });
     },

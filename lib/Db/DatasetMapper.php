@@ -39,9 +39,17 @@ class DatasetMapper {
 	 */
 	public function index(): array {
 		$sql = $this->db->getQueryBuilder();
-		$sql->from(self::TABLE_NAME)->select('id')->addSelect('name')->addSelect('dimension1')->addSelect('dimension2')
-			->addSelect('value')->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
-			->andWhere($sql->expr()->eq('type', $sql->createNamedParameter('2')))->addOrderBy('name', 'ASC');
+               $sql->from(self::TABLE_NAME)
+                       ->select('id')
+                       ->addSelect('name')
+                       ->addSelect('dimension1')
+                       ->addSelect('dimension2')
+                       ->addSelect('value')
+                       ->addSelect('type')
+                       ->addSelect('parent')
+                       ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+                       ->orderBy('parent', 'ASC')
+                       ->addOrderBy('name', 'ASC');
 		$statement = $sql->executeQuery();
 		$result = $statement->fetchAll();
 		$statement->closeCursor();
@@ -148,6 +156,32 @@ class DatasetMapper {
 		return true;
 	}
 
+
+        public function createGroup(string $name, int $parent): int {
+                $sql = $this->db->getQueryBuilder();
+                $sql->insert(self::TABLE_NAME)->values([
+                        'user_id' => $sql->createNamedParameter($this->userId),
+                        'name' => $sql->createNamedParameter($name),
+                        'parent' => $sql->createNamedParameter($parent),
+                        'type' => $sql->createNamedParameter('0'),
+                        'dimension1' => $sql->createNamedParameter(''),
+                        'dimension2' => $sql->createNamedParameter(''),
+                        'value' => $sql->createNamedParameter(''),
+                        'ai_index' => $sql->createNamedParameter('0'),
+                ]);
+                $sql->executeStatement();
+                return (int)$sql->getLastInsertId();
+        }
+
+        public function updateGroup(int $id, int $groupId): bool {
+                $sql = $this->db->getQueryBuilder();
+                $sql->update(self::TABLE_NAME)
+                        ->set('parent', $sql->createNamedParameter($groupId))
+                        ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+                        ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+                $sql->executeStatement();
+                return true;
+        }
 	/**
 	 * delete dataset
 	 * @param $id
