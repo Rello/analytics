@@ -84,7 +84,6 @@ OC.L10N.register(
     "Reports" : "Raporlar",
     "Datasets" : "Veri kümeleri",
     "New" : "Yeni",
-    "New report group" : "Yeni rapor grubu",
     "No panorama yet" : "Henüz bir manzara yok",
     "No report yet" : "Henüz bir rapor yok",
     "Overview" : "Özet",

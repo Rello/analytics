@@ -84,7 +84,6 @@ OC.L10N.register(
     "Reports" : "Laporan",
     "Datasets" : "Himpunan data",
     "New" : "Baru",
-    "New report group" : "Laporan grup baru",
     "No panorama yet" : "Belum ada panorama",
     "No report yet" : "Belum ada laporan",
     "Overview" : "Ringkasan",

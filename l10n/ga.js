@@ -84,7 +84,6 @@ OC.L10N.register(
     "Reports" : "Tuairiscí",
     "Datasets" : "Tacair sonraí",
     "New" : "Nua",
-    "New report group" : "Grúpa tuairisce nua",
     "No panorama yet" : "Gan lánléargas fós",
     "No report yet" : "Níl aon tuairisc fós",
     "Overview" : "Forbhreathnú",

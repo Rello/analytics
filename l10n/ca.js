@@ -70,7 +70,6 @@ OC.L10N.register(
     "Panoramas" : "Panoramas",
     "Reports" : "Informes",
     "New" : "Nou",
-    "New report group" : "Nou grup d'informes",
     "No panorama yet" : "Encara no hi ha panorama",
     "No report yet" : "Encara no hi ha cap informe",
     "Overview" : "Resum",

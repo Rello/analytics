@@ -70,7 +70,6 @@ OC.L10N.register(
     "Reports" : "Aruanded",
     "Datasets" : "Andmestikud",
     "New" : "Uus",
-    "New report group" : "Uus aruannete grupp",
     "No report yet" : "Aruannet veel pole",
     "Overview" : "Ülevaade",
     "Remove from favorites" : "Eemalda lemmikutest",

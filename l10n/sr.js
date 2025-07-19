@@ -84,7 +84,6 @@ OC.L10N.register(
     "Reports" : "Извештај",
     "Datasets" : "Скупови података",
     "New" : "Нов",
-    "New report group" : "Нова група извештаја",
     "No panorama yet" : "Још увек нема панораме",
     "No report yet" : "Још увек нема извештаја",
     "Overview" : "Преглед",

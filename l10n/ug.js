@@ -72,7 +72,6 @@ OC.L10N.register(
     "Panoramas" : "Panoramas",
     "Reports" : "دوكلات",
     "New" : "يېڭى",
-    "New report group" : "يېڭى دوكلات گۇرۇپپىسى",
     "No panorama yet" : "ھازىرچە پۈتۈن مەنزىرە يوق",
     "No report yet" : "ھازىرچە دوكلات يوق",
     "Overview" : "ئومۇمىي چۈشەنچە",

@@ -84,7 +84,6 @@ OC.L10N.register(
     "Reports" : "报告",
     "Datasets" : "数据集",
     "New" : "新建",
-    "New report group" : "新的报告群组",
     "No panorama yet" : "尚无Panorama",
     "No report yet" : "尚无报告",
     "Overview" : "概览",

@@ -72,7 +72,6 @@ OC.L10N.register(
     "Panoramas" : "Panorámy",
     "Reports" : "Zostavy",
     "New" : "Nový",
-    "New report group" : "Nová skupina zostáv",
     "No panorama yet" : "Zatiaľ žiadna panoráma",
     "No report yet" : "Zatiaľ žiadna správa",
     "Overview" : "Prehľad",

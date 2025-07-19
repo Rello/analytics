@@ -63,7 +63,6 @@ OC.L10N.register(
     "Favorites" : "Αγαπημένα",
     "Reports" : "Αναφορές",
     "New" : "Νέα",
-    "New report group" : "Νέα ομάδα αναφοράς",
     "No panorama yet" : "Κανένα πανόραμα ακόμη",
     "No report yet" : "Δεν υπάρχουν αναφορές ακόμη",
     "Overview" : "Επισκόπηση",

@@ -66,7 +66,6 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Reports" : "Reportes",
     "New" : "Nuevo",
-    "New report group" : "Nuevo grupo de informes",
     "No panorama yet" : "Aún no hay un panorama",
     "No report yet" : "Aún no hay un reporte",
     "Overview" : "Visión general",

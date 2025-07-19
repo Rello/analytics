@@ -67,7 +67,6 @@ OC.L10N.register(
     "Panoramas" : "Panorama",
     "Reports" : "Hisobotlar",
     "New" : "Yangi",
-    "New report group" : "Yangi hisobot guruhi",
     "No panorama yet" : "Hali panorama yo'q",
     "No report yet" : "Hali hisobot yo'q",
     "Overview" : "Umumiy koʻrinish",

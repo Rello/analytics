@@ -62,7 +62,6 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Reports" : "Informes",
     "New" : "Nuevo",
-    "New report group" : "Nuevo grupo de informes",
     "Overview" : "Generalidades",
     "Remove from favorites" : "Eliminar de favoritos",
     "Add to favorites" : "Agregar a tus favoritos",

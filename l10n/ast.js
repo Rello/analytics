@@ -51,7 +51,6 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Reports" : "Informes",
     "New" : "Nuevu",
-    "New report group" : "Grupu d'informes nuevu",
     "No panorama yet" : "Nun hai nengún panorama",
     "No report yet" : "Nun hai nengún informe",
     "Overview" : "Vista xeneral",

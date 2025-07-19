@@ -72,7 +72,6 @@ OC.L10N.register(
     "Panoramas" : "Panoramak",
     "Reports" : "Txostenak",
     "New" : "Berria",
-    "New report group" : "Txosten talde berria",
     "No panorama yet" : "Oraindik ez dago panoramarik",
     "No report yet" : "Ez dago txostenik oraindik",
     "Overview" : "Ikuspegi orokorra",

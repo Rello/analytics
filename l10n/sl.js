@@ -68,7 +68,6 @@ OC.L10N.register(
     "Favorites" : "Priljubljeno",
     "Reports" : "Poročila",
     "New" : "Novo",
-    "New report group" : "Nova skupina poročil",
     "No report yet" : "Ni še pripravljenih poročil",
     "Overview" : "Splošni pregled",
     "Remove from favorites" : "Odstrani iz priljubljenih",

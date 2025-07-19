@@ -71,7 +71,6 @@ OC.L10N.register(
     "Favorites" : "Favoritter",
     "Reports" : "Rapporter",
     "New" : "Ny",
-    "New report group" : "Ny rapportgruppe",
     "No panorama yet" : "Ingen panorama enda",
     "No report yet" : "Ingen rapport enda",
     "Overview" : "Oversikt",

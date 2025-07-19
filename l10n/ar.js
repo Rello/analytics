@@ -72,7 +72,6 @@ OC.L10N.register(
     "Panoramas" : "نظرات شاملة",
     "Reports" : "تقارير",
     "New" : "جديد",
-    "New report group" : "مجموعة تقارير جديدة",
     "No panorama yet" : "لا توجد أي بانوراما حتى الآن",
     "No report yet" : "لا يوجد أيّ تقرير حتى الآن",
     "Overview" : "نظرة شاملة",

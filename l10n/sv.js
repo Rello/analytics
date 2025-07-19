@@ -84,7 +84,6 @@ OC.L10N.register(
     "Reports" : "Rapporter",
     "Datasets" : "Datamängder",
     "New" : "Ny",
-    "New report group" : "Ny rapportgrupp",
     "No panorama yet" : "Ingen panorama än",
     "No report yet" : "Ingen rapport än",
     "Overview" : "Översikt",

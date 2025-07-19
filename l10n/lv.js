@@ -47,7 +47,6 @@ OC.L10N.register(
     "Favorites" : "Izlases vienumi",
     "Reports" : "Atskaites",
     "New" : "Jauns",
-    "New report group" : "Jauna atskaišu grupa",
     "No report yet" : "Vēl nav atskaites",
     "Overview" : "Pārskats",
     "Remove from favorites" : "Noņemt no izlases",
