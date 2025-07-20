@@ -5,6 +5,8 @@
 - Threshold lines in charts using Chart.js annotation plugin
 - Show installed version in settings
 - Inline rename for all navigation items
+### Fixed
+- OK/Cancel icons now visible during inline rename and Escape cancels edit
 
 ## 5.7.1 - 2025-07-15
 ### Fixed

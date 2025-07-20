@@ -842,6 +842,17 @@ div.dt-container .dt-paging .dt-paging-button {
     margin-right: 5px;
 }
 
+#navigationDatasets a[data-editing="true"] {
+    overflow: visible;
+    display: inline-flex;
+    align-items: center;
+}
+#navigationDatasets a[data-editing="true"] .icon {
+    margin-left: 5px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
 .infoBox {
     background-color: #FFFFFF;
     padding: 5px;

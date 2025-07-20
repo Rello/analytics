@@ -888,6 +888,9 @@ OCA.Analytics.Navigation = {
     makeNameEditable: function (anchor) {
         if (anchor.dataset.editing === 'true') return;
         anchor.dataset.editing = 'true';
+        anchor.style.overflow = 'visible';
+        anchor.style.display = 'inline-flex';
+        anchor.style.alignItems = 'center';
         anchor.dataset.oldHtml = anchor.innerHTML;
         const fav = anchor.querySelector('.favorite-mark');
         if (fav) {
@@ -899,7 +902,13 @@ OCA.Analytics.Navigation = {
         input.type = 'text';
         input.value = anchor.dataset.name || anchor.textContent.trim();
         input.classList.add('navigationRenameInput');
-        input.addEventListener('keydown', function(e){ if (e.key === 'Enter') OCA.Analytics.Navigation.confirmRename(anchor); });
+        input.addEventListener('keydown', function(e){
+            if (e.key === 'Enter') {
+                OCA.Analytics.Navigation.confirmRename(anchor);
+            } else if (e.key === 'Escape') {
+                OCA.Analytics.Navigation.cancelRename(anchor);
+            }
+        });
 
         const ok = document.createElement('span');
         ok.classList.add('icon', 'icon-checkmark');
@@ -934,10 +943,16 @@ OCA.Analytics.Navigation = {
         }
         anchor.dataset.editing = 'false';
         anchor.dataset.favHtml = '';
+        anchor.style.overflow = '';
+        anchor.style.display = '';
+        anchor.style.alignItems = '';
     },
 
     cancelRename: function (anchor) {
         anchor.innerHTML = anchor.dataset.oldHtml;
+        anchor.style.overflow = '';
+        anchor.style.display = '';
+        anchor.style.alignItems = '';
         anchor.dataset.editing = 'false';
         anchor.dataset.favHtml = '';
     },
