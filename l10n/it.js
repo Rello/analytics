@@ -70,6 +70,7 @@ OC.L10N.register(
     "Favorites" : "Preferiti",
     "Reports" : "Reports",
     "New" : "Nuovo",
+    "New group" : "Nuovo gruppo",
     "No panorama yet" : "Ancora nessun panorama",
     "No report yet" : "Ancora nessun report",
     "Overview" : "Panoramica",

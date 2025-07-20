@@ -61,6 +61,7 @@ OC.L10N.register(
     "Favorites" : "Suosikit",
     "Reports" : "Raportit",
     "New" : "Uusi",
+    "New group" : "Uusi ryhmä",
     "No panorama yet" : "Panoramaa ei ole",
     "No report yet" : "Raporttia ei ole",
     "Overview" : "Yleiskuvaus",

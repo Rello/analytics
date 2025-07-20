@@ -72,6 +72,7 @@ OC.L10N.register(
     "Panoramas" : "Панорамы",
     "Reports" : "Отчёты",
     "New" : "Новый",
+    "New group" : "Новая группа",
     "No panorama yet" : "Пока что нет панорам",
     "No report yet" : "Пока что нет отчётов",
     "Overview" : "Общие сведения",

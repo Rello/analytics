@@ -67,6 +67,7 @@ OC.L10N.register(
     "Favorites" : "مورد علاقه‌ها",
     "Reports" : "Reports",
     "New" : "جدید",
+    "New group" : "گروه جدید",
     "No panorama yet" : "هنوز پانورامایی وجود ندارد",
     "No report yet" : "هنوز گزارشی وجود ندارد",
     "Overview" : "بررسی اجمالی",

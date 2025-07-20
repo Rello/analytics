@@ -73,6 +73,7 @@ OC.L10N.register(
     "Panoramas" : "Panorámák",
     "Reports" : "Jelentések",
     "New" : "Új",
+    "New group" : "Új csoport",
     "No panorama yet" : "Még nincs panoráma",
     "No report yet" : "Még nincs jelentés",
     "Overview" : "Áttekintés",

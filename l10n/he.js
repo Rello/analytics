@@ -22,6 +22,7 @@ OC.L10N.register(
     "Bar" : "בר",
     "Favorites" : "מועדפים",
     "New" : "חדש",
+    "New group" : "קבוצה חדשה",
     "Overview" : "סקירה",
     "Remove from favorites" : "הסרה מהמועדפים",
     "Add to favorites" : "הוספה למועדפים",

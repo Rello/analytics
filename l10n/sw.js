@@ -34,6 +34,7 @@ OC.L10N.register(
     "Show _MENU_ entries" : "Onesha mwongozo wa maingizo",
     "Showing _START_ to _END_ of _TOTAL_ entries" : "Inaonesha_mwanzo_mpaka_mwisho_wa_maingizo ya jumla",
     "Showing 0 to 0 of 0 entries" : "Inaonesha 0 kwa 0 ya 0 maingizo",
+    "Total" : "Jumla",
     "External" : "Nje",
     "Yes" : "Ndiyo",
     "No" : "Hapana",
