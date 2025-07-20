@@ -7,6 +7,7 @@
 - Inline rename for all navigation items
 ### Fixed
 - OK/Cancel icons now visible during inline rename and Escape cancels edit
+- Cancel button no longer reloads navigation and menu button hides while editing
 
 ## 5.7.1 - 2025-07-15
 ### Fixed

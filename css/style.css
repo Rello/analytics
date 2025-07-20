@@ -852,6 +852,9 @@ div.dt-container .dt-paging .dt-paging-button {
     cursor: pointer;
     opacity: 0.7;
 }
+#navigationDatasets a[data-editing="true"] ~ .app-navigation-entry-utils .menuButton {
+    display: none;
+}
 
 .infoBox {
     background-color: #FFFFFF;

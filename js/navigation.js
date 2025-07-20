@@ -349,16 +349,16 @@ OCA.Analytics.Navigation = {
         }
 
         if (data['item_type'] === 'dataset') {
-            let divUtils = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
+            let divUtilsDataset = OCA.Analytics.Navigation.buildNavigationUtilsDataset(data);
+            navigationEntryDiv.appendChild(divUtilsDataset);
+        }
+
+        let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
+        let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
+        if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
+            // do not add an empty menu. can occur for e.g. shared group folders
             navigationEntryDiv.appendChild(divUtils);
-        } else {
-            let divUtils = OCA.Analytics.Navigation.buildNavigationUtils(data);
-            let divMenu = OCA.Analytics.Navigation.buildNavigationMenu(data);
-            if (divMenu.firstElementChild.firstElementChild.childElementCount !== 0) {
-                // do not add an empty menu. can occur for e.g. shared group folders
-                navigationEntryDiv.appendChild(divUtils);
-                navigationEntryDiv.appendChild(divMenu);
-            }
+            navigationEntryDiv.appendChild(divMenu);
         }
 
         if (typeINT === OCA.Analytics.TYPE_GROUP) {
@@ -898,25 +898,41 @@ OCA.Analytics.Navigation = {
             fav.remove();
         }
 
+        const menuBtn = anchor.parentElement.querySelector('.menuButton');
+        if (menuBtn) {
+            anchor.dataset.menuDisplay = menuBtn.style.display;
+            menuBtn.style.display = 'none';
+        }
+
         const input = document.createElement('input');
         input.type = 'text';
         input.value = anchor.dataset.name || anchor.textContent.trim();
         input.classList.add('navigationRenameInput');
         input.addEventListener('keydown', function(e){
             if (e.key === 'Enter') {
+                e.preventDefault();
                 OCA.Analytics.Navigation.confirmRename(anchor);
             } else if (e.key === 'Escape') {
+                e.preventDefault();
                 OCA.Analytics.Navigation.cancelRename(anchor);
             }
         });
 
         const ok = document.createElement('span');
         ok.classList.add('icon', 'icon-checkmark');
-        ok.addEventListener('click', function(){ OCA.Analytics.Navigation.confirmRename(anchor); });
+        ok.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            OCA.Analytics.Navigation.confirmRename(anchor);
+        });
 
         const cancel = document.createElement('span');
         cancel.classList.add('icon', 'icon-close');
-        cancel.addEventListener('click', function(){ OCA.Analytics.Navigation.cancelRename(anchor); });
+        cancel.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            OCA.Analytics.Navigation.cancelRename(anchor);
+        });
 
         anchor.innerHTML = '';
         anchor.appendChild(input);
@@ -941,8 +957,13 @@ OCA.Analytics.Navigation = {
         if (anchor.dataset.favHtml) {
             anchor.insertAdjacentHTML('beforeend', anchor.dataset.favHtml);
         }
+        const menuBtn = anchor.parentElement.querySelector('.menuButton');
+        if (menuBtn) {
+            menuBtn.style.display = anchor.dataset.menuDisplay || '';
+        }
         anchor.dataset.editing = 'false';
         anchor.dataset.favHtml = '';
+        anchor.dataset.menuDisplay = '';
         anchor.style.overflow = '';
         anchor.style.display = '';
         anchor.style.alignItems = '';
@@ -950,11 +971,16 @@ OCA.Analytics.Navigation = {
 
     cancelRename: function (anchor) {
         anchor.innerHTML = anchor.dataset.oldHtml;
+        const menuBtn = anchor.parentElement.querySelector('.menuButton');
+        if (menuBtn) {
+            menuBtn.style.display = anchor.dataset.menuDisplay || '';
+        }
         anchor.style.overflow = '';
         anchor.style.display = '';
         anchor.style.alignItems = '';
         anchor.dataset.editing = 'false';
         anchor.dataset.favHtml = '';
+        anchor.dataset.menuDisplay = '';
     },
 
     renameBackend: async function (itemType, id, newName) {
