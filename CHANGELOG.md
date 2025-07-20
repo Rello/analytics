@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.7.3 - 2025-07-19
+### Changed
+- Speed up dataset and report indexing using hashed lookups
+- Batch share modal DOM updates for faster rendering
+- Cache context chat availability checks
+
 ## 5.7.2 - 2025-07-16
 ### Added
 - Threshold lines in charts using Chart.js annotation plugin

@@ -799,18 +799,22 @@ Object.assign(OCA.Analytics.Share = {
             .then(response => response.json())
             .then(data => {
                 if (data !== false) {
+                    const linkFrag = document.createDocumentFragment();
+                    const shareeFrag = document.createDocumentFragment();
                     for (let share of data) {
                         if (parseInt(share.type) === OCA.Analytics.SHARE_TYPE_LINK) {
                             let li = OCA.Analytics.Share.buildShareLinkRow(parseInt(share['id']), share['token'], false, (String(share['pass']) === "true"), parseInt(share['permissions']), share['domain']);
-                            document.getElementById('linkShareList').appendChild(li);
+                            linkFrag.appendChild(li);
                         } else {
                             if (!share['displayName']) {
                                 share['displayName'] = share['uid_owner'];
                             }
                             let li = OCA.Analytics.Share.buildShareeRow(parseInt(share['id']), share['uid_owner'], share['displayName'], parseInt(share['type']), false, parseInt(share['permissions']));
-                            document.getElementById('shareeList').appendChild(li);
+                            shareeFrag.appendChild(li);
                         }
                     }
+                    document.getElementById('linkShareList').appendChild(linkFrag);
+                    document.getElementById('shareeList').appendChild(shareeFrag);
                } else {
                     let table = '<div style="margin-left: 2em;" class="get-metadata"><p>' + t('analytics', 'No changes possible') + '</p></div>';
                     //document.getElementById('tabContainerShare').innerHTML = table;
