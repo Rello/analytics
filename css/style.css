@@ -837,6 +837,11 @@ div.dt-container .dt-paging .dt-paging-button {
     opacity: 0.5;
 }
 
+.navigationRenameInput {
+    width: 150px;
+    margin-right: 5px;
+}
+
 .infoBox {
     background-color: #FFFFFF;
     padding: 5px;

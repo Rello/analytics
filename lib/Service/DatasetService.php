@@ -207,6 +207,20 @@ class DatasetService {
                 return $this->DatasetMapper->updateGroup($datasetId, $groupId);
         }
 
+        /**
+         * rename dataset
+         *
+         * @param int $datasetId
+         * @param string $name
+         * @return bool
+         */
+        public function rename(int $datasetId, string $name): bool {
+                if ($this->isOwn($datasetId)) {
+                        return $this->DatasetMapper->updateName($datasetId, $name);
+                }
+                return false;
+        }
+
 	/**
 	 * Export Dataset
 	 *

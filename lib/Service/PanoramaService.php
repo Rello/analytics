@@ -163,6 +163,20 @@ class PanoramaService {
         return $this->PanoramaMapper->updateGroup($panoramaId, $groupId);
     }
 
+    /**
+     * rename panorama
+     *
+     * @param int $panoramaId
+     * @param string $name
+     * @return bool
+     */
+    public function rename(int $panoramaId, string $name): bool {
+        if ($this->isOwn($panoramaId)) {
+            return $this->PanoramaMapper->updateName($panoramaId, $name);
+        }
+        return false;
+    }
+
 	/**
 	 * Delete Dataset and all depending objects
 	 *

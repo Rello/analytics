@@ -670,6 +670,8 @@
             </li>
             <li><a href="#" id="navigationMenuShare"><span
                             class="icon-share"></span><span><?php p($l->t('Share')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuRename"><span
+                            class="icon-rename"></span><span><?php p($l->t('Rename')); ?></span></a></li>
             <li><a href="#" id="navigationMenuNewGroup"><span
                             class="icon-add"></span><span><?php p($l->t('Add to new group')); ?></span></a></li>
             <li>

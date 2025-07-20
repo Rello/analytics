@@ -510,6 +510,10 @@ OCA.Analytics.Navigation = {
         dataset.dataset.testing = 'advanced' + data.name;
         dataset.dataset.dataset = data.dataset;
 
+        let rename = navigationMenu.getElementById('navigationMenuRename');
+        rename.addEventListener('click', OCA.Analytics.Navigation.handleRenameClicked);
+        rename.dataset.testing = 'rename' + data.name;
+
         let favorite = navigationMenu.getElementById('navigationMenueFavorite');
         favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
         favorite.dataset.testing = 'fav' + data.name;
@@ -547,6 +551,7 @@ OCA.Analytics.Navigation = {
         if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
             favorite.parentElement.remove();
             newGroup.parentElement.remove();
+            edit.parentElement.remove();
             deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
         }
         if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
@@ -865,6 +870,100 @@ OCA.Analytics.Navigation = {
         };
 
         xhr.send();
+    },
+
+    handleRenameClicked: function (evt) {
+        evt.preventDefault();
+        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        }
+        const menu = evt.target.closest('#navigationMenu');
+        const id = menu.dataset.id;
+        const itemType = menu.dataset.item_type;
+        const anchor = document.querySelector('#navigationDatasets a[data-id="' + id + '"][data-item_type="' + itemType + '"]');
+        if (!anchor) return;
+        OCA.Analytics.Navigation.makeNameEditable(anchor);
+    },
+
+    makeNameEditable: function (anchor) {
+        if (anchor.dataset.editing === 'true') return;
+        anchor.dataset.editing = 'true';
+        anchor.dataset.oldHtml = anchor.innerHTML;
+        const fav = anchor.querySelector('.favorite-mark');
+        if (fav) {
+            anchor.dataset.favHtml = fav.outerHTML;
+            fav.remove();
+        }
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = anchor.dataset.name || anchor.textContent.trim();
+        input.classList.add('navigationRenameInput');
+        input.addEventListener('keydown', function(e){ if (e.key === 'Enter') OCA.Analytics.Navigation.confirmRename(anchor); });
+
+        const ok = document.createElement('span');
+        ok.classList.add('icon', 'icon-checkmark');
+        ok.addEventListener('click', function(){ OCA.Analytics.Navigation.confirmRename(anchor); });
+
+        const cancel = document.createElement('span');
+        cancel.classList.add('icon', 'icon-close');
+        cancel.addEventListener('click', function(){ OCA.Analytics.Navigation.cancelRename(anchor); });
+
+        anchor.innerHTML = '';
+        anchor.appendChild(input);
+        anchor.appendChild(ok);
+        anchor.appendChild(cancel);
+        input.focus();
+    },
+
+    confirmRename: async function (anchor) {
+        const input = anchor.querySelector('input');
+        const newName = input.value.trim();
+        if (newName === '') {
+            OCA.Analytics.Navigation.cancelRename(anchor);
+            return;
+        }
+        const id = anchor.dataset.id;
+        const itemType = anchor.dataset.item_type;
+        await OCA.Analytics.Navigation.renameBackend(itemType, id, newName);
+
+        anchor.dataset.name = newName;
+        anchor.innerHTML = newName;
+        if (anchor.dataset.favHtml) {
+            anchor.insertAdjacentHTML('beforeend', anchor.dataset.favHtml);
+        }
+        anchor.dataset.editing = 'false';
+        anchor.dataset.favHtml = '';
+    },
+
+    cancelRename: function (anchor) {
+        anchor.innerHTML = anchor.dataset.oldHtml;
+        anchor.dataset.editing = 'false';
+        anchor.dataset.favHtml = '';
+    },
+
+    renameBackend: async function (itemType, id, newName) {
+        try {
+            const url = OC.generateUrl('apps/analytics/' + itemType + '/' + id + '/rename');
+            await fetch(url, {
+                method: 'PUT',
+                headers: OCA.Analytics.headers(),
+                body: JSON.stringify({name: newName})
+            });
+
+            if (itemType === 'dataset') {
+                const ds = OCA.Analytics.datasets.find(d => parseInt(d.id) === parseInt(id));
+                if (ds) ds.name = newName;
+            } else if (itemType === 'panorama') {
+                const st = OCA.Analytics.stories.find(p => parseInt(p.id) === parseInt(id));
+                if (st) st.name = newName;
+                const rep = OCA.Analytics.reports.find(r => parseInt(r.id) === parseInt(id) && r.item_type === 'panorama');
+                if (rep) rep.name = newName;
+            } else {
+                const rep = OCA.Analytics.reports.find(r => parseInt(r.id) === parseInt(id) && r.item_type !== 'panorama');
+                if (rep) rep.name = newName;
+            }
+        } catch (e) {}
     },
 
     saveOpenState: function () {
