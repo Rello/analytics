@@ -84,6 +84,7 @@ OC.L10N.register(
     "Reports" : "Reports",
     "Datasets" : "Datasets",
     "New" : "New",
+    "New group" : "New group",
     "No panorama yet" : "No panorama yet",
     "No report yet" : "No report yet",
     "Overview" : "Overview",
