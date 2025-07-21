@@ -1,10 +1,13 @@
 # Changelog
 
-## 5.7.2 - pending
+## 5.8.0 - pending
 ### Added
 - Threshold lines in charts using Chart.js annotation plugin
 - Show installed version in settings
 - Inline rename for all navigation items
+
+### Changed
+- Performance tweaks
 
 ## 5.7.1 - 2025-07-15
 ### Fixed

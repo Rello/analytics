@@ -84,6 +84,7 @@ OC.L10N.register(
     "Reports" : "Výkazy",
     "Datasets" : "Sady dat",
     "New" : "Nový",
+    "New group" : "Nová skupina",
     "No panorama yet" : "Zatím žádné panorama",
     "No report yet" : "Zatím žádný výkaz",
     "Overview" : "Přehled",

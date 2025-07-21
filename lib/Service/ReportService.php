@@ -85,29 +85,35 @@ class ReportService {
 		$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
 		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
 
-		// get shared reports and remove duplicates
-		foreach ($sharedReports as $sharedReport) {
-			if (!array_search($sharedReport['id'], array_column($ownReports, 'id'))) {
-				// just keep the necessary fields
-				$ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));;
-			}
-		}
-		if (count($ownReports) === 0) return $ownReports;
+                // get shared reports and remove duplicates
+                $existingIds = array_flip(array_column($ownReports, 'id'));
+                foreach ($sharedReports as $sharedReport) {
+                        if (!isset($existingIds[$sharedReport['id']])) {
+                                // just keep the necessary fields
+                                $ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));
+                                $existingIds[$sharedReport['id']] = true;
+                        }
+                }
+                if (count($ownReports) === 0) return $ownReports;
 
-		// get data load indicators for icons shown in the advanced screen
-		$dataloads = $this->DataloadMapper->getAllDataloadMetadata();
-		foreach ($dataloads as $dataload) {
-			$key = array_search($dataload['dataset'], array_column($ownReports, 'dataset'));
-			if ($key !== '') {
-				if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
-					$dataload['schedules'] = 1;
-				} else {
-					$dataload['schedules'] = 0;
-				}
-				$ownReports[$key]['dataloads'] = $dataload['dataloads'];
-				$ownReports[$key]['schedules'] = $dataload['schedules'];
-			}
-		}
+                // get data load indicators for icons shown in the advanced screen
+                $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
+                $datasetIndex = [];
+                foreach ($ownReports as $i => $report) {
+                        $datasetIndex[$report['dataset']] = $i;
+                }
+                foreach ($dataloads as $dataload) {
+                        if (isset($datasetIndex[$dataload['dataset']])) {
+                                $key = $datasetIndex[$dataload['dataset']];
+                                if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
+                                        $dataload['schedules'] = 1;
+                                } else {
+                                        $dataload['schedules'] = 0;
+                                }
+                                $ownReports[$key]['dataloads'] = $dataload['dataloads'];
+                                $ownReports[$key]['schedules'] = $dataload['schedules'];
+                        }
+                }
 
 		$favorites = $this->tagManager->load('analytics')->getFavorites();
 		foreach ($ownReports as &$ownReport) {

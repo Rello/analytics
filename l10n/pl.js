@@ -82,6 +82,7 @@ OC.L10N.register(
     "Panoramas" : "Panoramas",
     "Reports" : "Raporty",
     "New" : "Nowy",
+    "New group" : "Nowa grupa",
     "No panorama yet" : "Nie ma jeszcze panoramy",
     "No report yet" : "Nie ma jeszcze raportu",
     "Overview" : "Przegląd",

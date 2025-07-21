@@ -84,6 +84,7 @@ OC.L10N.register(
     "Reports" : "Berichte",
     "Datasets" : "Datensätze",
     "New" : "Neu",
+    "New group" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
     "No panorama yet" : "Noch kein Panorama vorhanden",
     "No report yet" : "Noch kein Bericht vorhanden",
     "Overview" : "Übersicht",

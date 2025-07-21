@@ -37,6 +37,7 @@ class DatasetService {
         private $VariableService;
         private $ReportMapper;
         private $contextChatManager;
+        private static $contextChatAvailable = null;
         private $l10n;
 
         public function __construct(
@@ -77,20 +78,24 @@ class DatasetService {
 	public function index() {
 		$ownDatasets = $this->DatasetMapper->index();
 
-		// get data load indicators for icons shown in the advanced screen
-		$dataloads = $this->DataloadMapper->getAllDataloadMetadata();
-		foreach ($dataloads as $dataload) {
-			$key = array_search($dataload['dataset'], array_column($ownDatasets, 'id'));
-			if ($key !== '') {
-				if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
-					$dataload['schedules'] = 1;
-				} else {
-					$dataload['schedules'] = 0;
-				}
-				$ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
-				$ownDatasets[$key]['schedules'] = $dataload['schedules'];
-			}
-		}
+                // get data load indicators for icons shown in the advanced screen
+                $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
+                $datasetIndex = [];
+                foreach ($ownDatasets as $i => $dataset) {
+                        $datasetIndex[$dataset['id']] = $i;
+                }
+                foreach ($dataloads as $dataload) {
+                        if (isset($datasetIndex[$dataload['dataset']])) {
+                                $key = $datasetIndex[$dataload['dataset']];
+                                if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
+                                        $dataload['schedules'] = 1;
+                                } else {
+                                        $dataload['schedules'] = 0;
+                                }
+                                $ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
+                                $ownDatasets[$key]['schedules'] = $dataload['schedules'];
+                        }
+                }
 
                foreach ($ownDatasets as &$ownDataset) {
                        if (!isset($ownDataset['type'])) {
@@ -251,13 +256,16 @@ class DatasetService {
 	 * @param int $datasetId
 	 * @return bool
 	 */
-	public function provider(int $datasetId) {
-		if (class_exists('OCA\ContextChat\Public\ContentManager')) {
-			$this->contextChatManager = \OC::$server->query('OCA\Analytics\ContextChat\ContextChatManager');
-			$this->contextChatManager->submitContent($datasetId);
-		}
-		return true;
-	}
+        public function provider(int $datasetId) {
+                if (self::$contextChatAvailable === null) {
+                        self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
+                }
+                if (self::$contextChatAvailable) {
+                        $this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+                        $this->contextChatManager->submitContent($datasetId);
+                }
+                return true;
+        }
 
 	/**
 	 * Remove dataset from context chat
@@ -266,13 +274,16 @@ class DatasetService {
 	 * @param int $datasetId
 	 * @return bool
 	 */
-	private function providerRemove(int $datasetId) {
-		if (class_exists('OCA\ContextChat\Public\ContentManager')) {
-			$this->contextChatManager = \OC::$server->query('OCA\Analytics\ContextChat\ContextChatManager');
-			$this->contextChatManager->removeContentByDataset($datasetId);
-		}
-		return true;
-	}
+        private function providerRemove(int $datasetId) {
+                if (self::$contextChatAvailable === null) {
+                        self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
+                }
+                if (self::$contextChatAvailable) {
+                        $this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+                        $this->contextChatManager->removeContentByDataset($datasetId);
+                }
+                return true;
+        }
 
 	/**
 	 * Remove user from context chat
@@ -281,13 +292,16 @@ class DatasetService {
 	 * @param string $userId
 	 * @return bool
 	 */
-	private function providerRemoveByUser(string $userId) {
-		if (class_exists('OCA\ContextChat\Public\ContentManager')) {
-			$this->contextChatManager = \OC::$server->query('OCA\Analytics\ContextChat\ContextChatManager');
-			$this->contextChatManager->removeContentByUser($userId);
-		}
-		return true;
-	}
+        private function providerRemoveByUser(string $userId) {
+                if (self::$contextChatAvailable === null) {
+                        self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
+                }
+                if (self::$contextChatAvailable) {
+                        $this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+                        $this->contextChatManager->removeContentByUser($userId);
+                }
+                return true;
+        }
 
 	/**
 	 * Delete Dataset and all depending objects

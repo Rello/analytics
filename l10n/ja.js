@@ -65,6 +65,7 @@ OC.L10N.register(
     "Favorites" : "お気に入り",
     "Reports" : "報告",
     "New" : "新規作成",
+    "New group" : "新規グループ",
     "Overview" : "概要",
     "Remove from favorites" : "お気に入りから削除",
     "Add to favorites" : "お気に入りに追加",

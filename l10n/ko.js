@@ -68,6 +68,7 @@ OC.L10N.register(
     "Panoramas" : "Panorama",
     "Reports" : "리포트들",
     "New" : "새로 만들기",
+    "New group" : "새 그룹",
     "No panorama yet" : "Panorama 없음",
     "No report yet" : "보고서 없음",
     "Overview" : "개요",

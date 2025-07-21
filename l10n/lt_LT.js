@@ -21,6 +21,7 @@ OC.L10N.register(
     "Default" : "Numatytasis",
     "Favorites" : "Mėgstami",
     "New" : "Nauja",
+    "New group" : "Nauja grupė",
     "Overview" : "Apžvalga",
     "Remove from favorites" : "Šalinti iš mėgstamų",
     "Add to favorites" : "Pridėti į mėgstamus",

@@ -84,6 +84,7 @@ OC.L10N.register(
     "Reports" : "報告",
     "Datasets" : "資料集",
     "New" : "新增",
+    "New group" : "新群組",
     "No panorama yet" : "尚無全景",
     "No report yet" : "尚無報告",
     "Overview" : "概覽",

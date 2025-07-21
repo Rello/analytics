@@ -18,6 +18,7 @@ OC.L10N.register(
     "Bar" : "Bar",
     "Favorites" : "Favoriti",
     "New" : "Novo",
+    "New group" : "Nova grupa",
     "Overview" : "Pregled",
     "Remove from favorites" : "Ukloni iz favorita",
     "Add to favorites" : "Dodaj u favorite",
