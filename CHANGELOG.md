@@ -4,6 +4,7 @@
 ### Added
 - Threshold lines in charts using Chart.js annotation plugin
 - Show installed version in settings
+- Inline rename for all navigation items
 
 ### Changed
 - Performance tweaks

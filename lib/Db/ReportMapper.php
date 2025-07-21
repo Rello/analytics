@@ -283,6 +283,18 @@ class ReportMapper
         return true;
     }
 
+    public function updateName(int $id, string $name): bool
+    {
+        $name = $this->truncate($name, 64);
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('name', $sql->createNamedParameter($name))
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        $sql->executeStatement();
+        return true;
+    }
+
     /**
      * read report options
      * @param $id

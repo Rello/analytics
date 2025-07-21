@@ -514,9 +514,23 @@ class ReportService {
 	 * @param $groupId
 	 * @return bool
 	 */
-	public function updateGroup(int $reportId, $groupId) {
-		return $this->ReportMapper->updateGroup($reportId, $groupId);
-	}
+        public function updateGroup(int $reportId, $groupId) {
+                return $this->ReportMapper->updateGroup($reportId, $groupId);
+        }
+
+        /**
+         * rename report
+         *
+         * @param int $reportId
+         * @param string $name
+         * @return bool
+         */
+        public function rename(int $reportId, string $name) {
+                if ($this->isOwn($reportId)) {
+                        return $this->ReportMapper->updateName($reportId, $name);
+                }
+                return false;
+        }
 
 	/**
 	 * search for reports

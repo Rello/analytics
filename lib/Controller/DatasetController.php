@@ -140,6 +140,18 @@ class DatasetController extends Controller {
                 return $this->DatasetService->updateGroup($datasetId, $groupId);
         }
 
+        /**
+         * rename dataset
+         *
+         * @NoAdminRequired
+         * @param int $datasetId
+         * @param string $name
+         * @return bool
+         */
+        public function rename(int $datasetId, string $name) {
+                return $this->DatasetService->rename($datasetId, $name);
+        }
+
 	/**
 	 * get status of the dataset
 	 *

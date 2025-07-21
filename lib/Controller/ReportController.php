@@ -190,6 +190,19 @@ class ReportController extends Controller
     }
 
     /**
+     * rename report
+     *
+     * @NoAdminRequired
+     * @param int $reportId
+     * @param string $name
+     * @return DataResponse
+     */
+    public function rename(int $reportId, string $name)
+    {
+        return new DataResponse($this->ReportService->rename($reportId, $name));
+    }
+
+    /**
      * get own reports which are marked as favorites
      *
      * @NoAdminRequired

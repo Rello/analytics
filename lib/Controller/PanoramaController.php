@@ -133,6 +133,19 @@ class PanoramaController extends Controller
     }
 
     /**
+     * rename panorama
+     *
+     * @NoAdminRequired
+     * @param int $panoramaId
+     * @param string $name
+     * @return DataResponse
+     */
+    public function rename(int $panoramaId, string $name)
+    {
+        return new DataResponse($this->PanoramaService->rename($panoramaId, $name));
+    }
+
+    /**
      * get own reports which are marked as favorites
      *
      * @NoAdminRequired
