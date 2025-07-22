@@ -145,13 +145,13 @@
     <br>
     <div class="sidebarButtonRow">
         <button id="sidebarReportUpdateButton" type="button" class="analyticsPrimary">
-            <?php p($l->t('Update')); ?>
+			<?php p($l->t('Update')); ?>
         </button>
         <button id="sidebarReportDeleteButton" type="button">
-            <?php p($l->t('Delete')); ?>
+			<?php p($l->t('Delete')); ?>
         </button>
         <button id="sidebarReportExportButton" type="button">
-            <?php p($l->t('Export')); ?>
+			<?php p($l->t('Export')); ?>
         </button>
     </div>
 
@@ -364,10 +364,10 @@
     <br>
     <div class="sidebarButtonRow" style="width:100%;">
         <button id="sidebarDatasetUpdateButton" type="button" class="analyticsPrimary">
-            <?php p($l->t('Update')); ?>
+			<?php p($l->t('Update')); ?>
         </button>
         <button id="sidebarDatasetDeleteButton" type="button">
-            <?php p($l->t('Delete')); ?>
+			<?php p($l->t('Delete')); ?>
         </button>
     </div>
 </template>
@@ -405,10 +405,10 @@
         <br>
         <div class="sidebarButtonRow">
             <button id="updateDataButton" type="button" class="analyticsPrimary">
-                <?php p($l->t('Save data')); ?>
+				<?php p($l->t('Save data')); ?>
             </button>
             <button id="deleteDataButton" type="button">
-                <?php p($l->t('Delete data')); ?>
+				<?php p($l->t('Delete data')); ?>
             </button>
         </div>
         <br>
@@ -420,10 +420,10 @@
     <div id="dataImportSection" style="display: none; width: 100%; max-width: 500px;">
         <div class="sidebarButtonRow">
             <button id="importDataFileButton" type="button">
-                <?php p($l->t('From file')); ?>
+				<?php p($l->t('From file')); ?>
             </button>
             <button id="importDataClipboardButton" type="button">
-                <?php p($l->t('From clipboard')); ?>
+				<?php p($l->t('From clipboard')); ?>
             </button>
         </div>
         <br>
@@ -431,8 +431,8 @@
         <br>
         <div class="sidebarButtonRow">
             <button id="importDataClipboardButtonGo" type="button" hidden>
-                <?php // TRANSLATORS Noun shown in a button
-                p($l->t('Import')); ?>
+				<?php // TRANSLATORS Noun shown in a button
+				p($l->t('Import')); ?>
             </button>
         </div>
         <br>
@@ -458,9 +458,9 @@
     <div id="dataAdvancedSection" style="display: none; width: 100%; max-width: 500px;">
         <div class="sidebarButtonRow">
             <button id="advancedButton" type="button">
-			<?php p($l->t('Advanced configuration')); ?>
-        </button>
-    </div>
+				<?php p($l->t('Advanced configuration')); ?>
+            </button>
+        </div>
 </template>
 
 <template id="templateThreshold">
@@ -520,10 +520,10 @@
     <br>
     <div class="sidebarButtonRow">
         <button id="sidebarThresholdCreateButton" type="button" class="analyticsPrimary" data-id="">
-            <?php p($l->t('Save threshold')); ?>
+			<?php p($l->t('Save threshold')); ?>
         </button>
         <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
-            <?php p($l->t('Notification for new records')); ?>
+			<?php p($l->t('Notification for new records')); ?>
         </button>
     </div>
     <br>
@@ -653,9 +653,12 @@
 <template id="templateNewMenu">
     <div id="newMenu" class="app-navigation-entry-menu">
         <ul>
-            <li><a href="#" id="newMenuReport" data-type="report"><span class="icon-analytics-report"></span><span><?php p($l->t('Report')); ?></span></a></li>
-            <li><a href="#" id="newMenuPanorama" data-type="panorama"><span class="icon-analytics-panorama"></span><span><?php p($l->t('Panorama')); ?></span></a></li>
-            <li><a href="#" id="newMenuDataset" data-type="dataset"><span class="icon-analytics-dataset"></span><span><?php p($l->t('Dataset')); ?></span></a></li>
+            <li><a href="#" id="newMenuReport" data-type="report"><span
+                            class="icon-analytics-report"></span><span><?php p($l->t('Report')); ?></span></a></li>
+            <li><a href="#" id="newMenuPanorama" data-type="panorama"><span
+                            class="icon-analytics-panorama"></span><span><?php p($l->t('Panorama')); ?></span></a></li>
+            <li><a href="#" id="newMenuDataset" data-type="dataset"><span
+                            class="icon-analytics-dataset"></span><span><?php p($l->t('Dataset')); ?></span></a></li>
         </ul>
     </div>
 </template>
@@ -665,11 +668,6 @@
         <ul>
             <li><a href="#" id="navigationMenuEdit"><span
                             class="icon-rename"></span><span><?php p($l->t('Basic settings')); ?></span></a></li>
-            <li><a href="#" id="navigationMenuAdvanced"><span
-                            class="icon-category-customization"></span><span><?php p($l->t('Dataset maintenance')); ?></span></a>
-            </li>
-            <li><a href="#" id="navigationMenuShare"><span
-                            class="icon-share"></span><span><?php p($l->t('Share')); ?></span></a></li>
             <li><a href="#" id="navigationMenuRename"><span
                             class="icon-rename"></span><span><?php p($l->t('Rename')); ?></span></a></li>
             <li><a href="#" id="navigationMenuNewGroup"><span
@@ -679,6 +677,11 @@
                     <span class="icon icon-star"></span>
                     <span><?php p($l->t('Add to favorites')); ?></span>
                 </a>
+            </li>
+            <li><a href="#" id="navigationMenuShare"><span
+                            class="icon-share"></span><span><?php p($l->t('Share')); ?></span></a></li>
+            <li><a href="#" id="navigationMenuAdvanced"><span
+                            class="icon-category-customization"></span><span><?php p($l->t('Dataset maintenance')); ?></span></a>
             </li>
             <li id="navigationMenueSeparator" class="action-separator"></li>
             <li><a href="#" id="navigationMenuDelete"><span
