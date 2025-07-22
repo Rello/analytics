@@ -58,6 +58,7 @@ OC.L10N.register(
     "Copy" : "คัดลอก",
     "Daily" : "รายวัน",
     "Hourly" : "รายชั่วโมง",
+    "Rename" : "เปลี่ยนชื่อ",
     "Unshare" : "เลิกแชร์",
     "Password protection" : "ป้องกันด้วยรหัสผ่าน",
     "Copy link" : "คัดลอกลิงก์",

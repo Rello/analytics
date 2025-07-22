@@ -25,6 +25,7 @@ OC.L10N.register(
     "Name" : "Ady",
     "Update" : "Täzelemek",
     "Copy" : "Göçüriň",
+    "Rename" : "Adyny üýtgetmek",
     "Unshare" : "Paýlaşma",
     "Copy link" : "Link-y nusgalaň",
     "Create" : "Dörediň"

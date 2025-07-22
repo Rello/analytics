@@ -324,6 +324,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Betöltés OCC parancs segítségével:",
     "Basic settings" : "Alapvető beállítások",
     "Dataset maintenance" : "Adatkészlet-karbantartás",
+    "Rename" : "Átnevezés",
     "Add to new group" : "Hozzáadás az új csoporthoz",
     "Unshare" : "Megosztás visszavonása",
     "can navigate" : "navigálhat",

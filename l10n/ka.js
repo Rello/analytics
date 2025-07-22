@@ -93,6 +93,7 @@ OC.L10N.register(
     "Daily" : "Daily",
     "Hourly" : "Hourly",
     "Basic settings" : "Basic settings",
+    "Rename" : "Rename",
     "Unshare" : "Unshare",
     "Password protection" : "Password protection",
     "Copy link" : "Copy link",

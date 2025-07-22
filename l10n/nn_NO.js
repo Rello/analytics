@@ -58,6 +58,7 @@ OC.L10N.register(
     "Copy" : "Kopier",
     "Daily" : "Kvar dag",
     "Hourly" : "Kvar time",
+    "Rename" : "Endra namn",
     "Unshare" : "Fjern deling",
     "Password protection" : "Password protection",
     "Copy link" : "Kopier lenkje",

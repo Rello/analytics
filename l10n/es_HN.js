@@ -49,6 +49,7 @@ OC.L10N.register(
     "Daily" : "Diariamente",
     "Hourly" : "Cada hora",
     "Basic settings" : "Configuraciones  básicas",
+    "Rename" : "Renombrar",
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",

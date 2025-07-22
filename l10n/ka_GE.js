@@ -51,6 +51,7 @@ OC.L10N.register(
     "Daily" : "ყოველდღიური",
     "Hourly" : "საათობრივი",
     "Basic settings" : "ძირითადი პარამეტრები",
+    "Rename" : "სახელის შეცვლა",
     "Unshare" : "გაზიარების შეწყვეტა",
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",

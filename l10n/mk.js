@@ -64,6 +64,7 @@ OC.L10N.register(
     "Daily" : "Дневно",
     "Hourly" : "Часовно",
     "Basic settings" : "Основни параметри",
+    "Rename" : "Преименувај",
     "Unshare" : "Отстрани споделување",
     "Password protection" : "Заштитено со лозинка",
     "Copy link" : "Копирај линк",

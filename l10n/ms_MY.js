@@ -59,6 +59,7 @@ OC.L10N.register(
     "Title" : "Judul",
     "Daily" : "Setiap hari",
     "Hourly" : "Setiap jam",
+    "Rename" : "Namakan",
     "Password protection" : "Password protection",
     "Sort by" : "Susun mengikut",
     "Create" : "Buat"

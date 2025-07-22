@@ -311,6 +311,7 @@ OC.L10N.register(
     "Load via OCC command:" : "OCC بۇيرۇقى ئارقىلىق يۈكلەڭ:",
     "Basic settings" : "ئاساسىي تەڭشەكلەر",
     "Dataset maintenance" : "سانلىق مەلۇمات ئاسراش",
+    "Rename" : "ئىسىم ئۆزگەرتىش",
     "Add to new group" : "يېڭى گۇرۇپپىغا قوشۇڭ",
     "Unshare" : "ھەمبەھىرلىمە",
     "can navigate" : "يول يۈرەلەيدۇ",

@@ -343,6 +343,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Laad via OCC commando:",
     "Basic settings" : "Basis-instellingen",
     "Dataset maintenance" : "Dataset onderhoud",
+    "Rename" : "Hernoemen",
     "Add to new group" : "Toevoegen aan nieuwe groep",
     "Unshare" : "Delen stoppen",
     "can navigate" : "kan navigeren",

@@ -38,6 +38,7 @@ OC.L10N.register(
     "Title" : "Titulo",
     "Daily" : "Cata die",
     "Hourly" : "Cata hora",
+    "Rename" : "Renominar",
     "Unshare" : "Cessa de compartir",
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",

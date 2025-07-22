@@ -316,6 +316,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Indlæs via OCC-kommando:",
     "Basic settings" : "Grundlæggende indstillinger",
     "Dataset maintenance" : "Dataset vedligeholdelse",
+    "Rename" : "Omdøb",
     "Add to new group" : "Tilføj til ny gruppe",
     "Unshare" : "Ophæv deling",
     "can navigate" : "kan navigere",

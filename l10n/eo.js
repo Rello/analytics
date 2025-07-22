@@ -53,6 +53,7 @@ OC.L10N.register(
     "Daily" : "Ĉiutage",
     "Hourly" : "Ĉiuhore",
     "Basic settings" : "Baza agordo",
+    "Rename" : "Alinomi",
     "Unshare" : "Malkunhavigi",
     "Password protection" : "Protektita per pasvorto",
     "Copy link" : "Kopii ligilon",

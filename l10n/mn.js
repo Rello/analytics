@@ -41,6 +41,7 @@ OC.L10N.register(
     "Copy" : "хуулах",
     "Daily" : "Өдөр бүр",
     "Hourly" : "Цаг бүр",
+    "Rename" : "Нэрлэнэ үү",
     "Unshare" : "Түгээлтийг зогсоох",
     "Password protection" : "Password protection",
     "Copy link" : "Холбоос хуулах",

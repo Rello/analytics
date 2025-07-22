@@ -160,6 +160,7 @@ OC.L10N.register(
     "Hourly" : "1시간마다",
     "Basic settings" : "기본 설정",
     "Dataset maintenance" : "데이터셋 관리",
+    "Rename" : "이름 바꾸기",
     "Unshare" : "공유 해제",
     "Password protection" : "암호 보호",
     "Copy link" : "링크 복사",

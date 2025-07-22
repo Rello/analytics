@@ -345,6 +345,7 @@ OC.L10N.register(
     "Load via OCC command:" : "OCC komutu ile yükle:",
     "Basic settings" : "Temel ayarlar",
     "Dataset maintenance" : "Veri kümesi bakımı",
+    "Rename" : "Yeniden adlandır",
     "Add to new group" : "Yeni gruba ekle",
     "Unshare" : "Paylaşımdan kaldır",
     "can navigate" : "gezinebilir",

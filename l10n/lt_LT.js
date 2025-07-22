@@ -81,6 +81,7 @@ OC.L10N.register(
     "Daily" : "Kas dieną",
     "Hourly" : "Kas valandą",
     "Basic settings" : "Pagrindiniai nustatymai",
+    "Rename" : "Pervadinti",
     "Unshare" : "Nustoti bendrinti",
     "Password protection" : "Apsauga slaptažodžiu",
     "Copy link" : "Kopijuoti nuorodą",

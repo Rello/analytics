@@ -319,6 +319,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Cargar mediante a orden OCC:",
     "Basic settings" : "Axustes básicos",
     "Dataset maintenance" : "Mantemento do conxunto de datos",
+    "Rename" : "Cambiar o nome",
     "Add to new group" : "Engadir a un novo grupo",
     "Unshare" : "Deixar de compartir",
     "can navigate" : "pode navegar",

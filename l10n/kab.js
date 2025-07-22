@@ -34,6 +34,7 @@ OC.L10N.register(
     "Copy" : "Nɣel",
     "Daily" : "S wass",
     "Hourly" : "S usrag",
+    "Rename" : "Beddel isem",
     "Copy link" : "Nɣel aseɣwen",
     "Sort by" : "Trier par",
     "Create" : "Snulfu-d"

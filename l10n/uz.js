@@ -309,6 +309,7 @@ OC.L10N.register(
     "Load via OCC command:" : "OCC buyrug'i orqali yuklang:",
     "Basic settings" : "Asosiy sozlamalar",
     "Dataset maintenance" : "Ma'lumotlar to'plamiga texnik xizmat ko'rsatish",
+    "Rename" : "Nomini o'zgartirish",
     "Add to new group" : "Yangi guruhga qo'shing",
     "Unshare" : "Ulashishni bekor qilish",
     "can navigate" : "navigatsiya qila oladi",

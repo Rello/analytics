@@ -32,6 +32,7 @@ OC.L10N.register(
     "Description" : "விவரிப்பு",
     "Import" : "இறக்குமதி",
     "Title" : "தலைப்பு",
+    "Rename" : "பெயர்மாற்றம்",
     "Unshare" : "பகிரப்படாதது",
     "Password protection" : "Password protection",
     "Create" : "உருவாக்குக"

@@ -251,6 +251,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Φόρτωση μέσω της εντολής OCC:",
     "Basic settings" : "Βασικές ρυθμίσεις",
     "Dataset maintenance" : "Συντήρηση συνόλου δεδομένων",
+    "Rename" : "Μετονομασία",
     "Add to new group" : "Προσθήκη σε νέα ομάδα",
     "Unshare" : "Αναίρεση διαμοιρασμού",
     "can navigate" : "μπορεί να πλοηγηθεί",

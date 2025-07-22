@@ -55,6 +55,7 @@ OC.L10N.register(
     "Daily" : "Përditë",
     "Hourly" : "Çdo orë",
     "Basic settings" : "Konfigurime bazike",
+    "Rename" : "Riemërtoje",
     "Unshare" : "Hiqe ndarjen",
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",

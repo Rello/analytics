@@ -298,6 +298,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Cargar a través del comando OCC:",
     "Basic settings" : "Configuraciones  básicas",
     "Dataset maintenance" : "Mantenimiento de datos",
+    "Rename" : "Renombrar",
     "Add to new group" : "Agregar a nuevo grupo",
     "Unshare" : "No compartir",
     "can navigate" : "puede navegar",

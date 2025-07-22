@@ -36,6 +36,7 @@ OC.L10N.register(
     "Copy" : "Պատճենել",
     "Daily" : "Օրական",
     "Hourly" : "Ժամային",
+    "Rename" : "Վերանվանել",
     "Unshare" : "Չկիսվել",
     "Password protection" : "Password protection",
     "Copy link" : "Պատճենել հղումը",

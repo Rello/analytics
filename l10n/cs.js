@@ -345,6 +345,7 @@ OC.L10N.register(
     "Panorama" : "Panorama",
     "Basic settings" : "Základní nastavení",
     "Dataset maintenance" : "Údržba souboru dat",
+    "Rename" : "Přejmenovat",
     "Add to new group" : "Přidat do nové skupiny",
     "Unshare" : "Přestat sdílet",
     "can navigate" : "může se pohybovat po",

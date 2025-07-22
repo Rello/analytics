@@ -316,6 +316,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Загрузка через команду OCC:",
     "Basic settings" : "Основные параметры",
     "Dataset maintenance" : "Ведение базы данных",
+    "Rename" : "Переименовать",
     "Add to new group" : "Добавить новую группу",
     "Unshare" : "Закрыть доступ",
     "can navigate" : "может перемещаться",

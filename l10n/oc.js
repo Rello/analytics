@@ -80,6 +80,7 @@ OC.L10N.register(
     "Daily" : "Quotidian",
     "Hourly" : "Cada ora",
     "Basic settings" : "Paramètres de basa",
+    "Rename" : "Tornar nommar",
     "Unshare" : "Partejar pas mai",
     "Password protection" : "Proteccion per senhal",
     "Copy link" : "Copiar lo ligam",

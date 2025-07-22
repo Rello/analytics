@@ -281,6 +281,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Naloži z ukazom OCC:",
     "Basic settings" : "Osnovne nastavitve",
     "Dataset maintenance" : "Upravljanje podatkovne množice",
+    "Rename" : "Preimenuj",
     "Add to new group" : "Dodaj v novo skupino",
     "Unshare" : "Prekini souporabo",
     "can navigate" : "Mogoče upravljati",

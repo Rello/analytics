@@ -108,6 +108,7 @@ OC.L10N.register(
     "Daily" : "Hằng ngày",
     "Hourly" : "Hằng giờ",
     "Basic settings" : "Thiết lập cơ bản",
+    "Rename" : "Đổi tên",
     "Add to new group" : "Thêm vào nhóm mới",
     "Unshare" : "Bỏ chia sẻ",
     "Password protection" : "Password protection",

@@ -71,6 +71,7 @@ OC.L10N.register(
     "Daily" : "Daglega",
     "Hourly" : "Klukkutíma fresti",
     "Basic settings" : "Grunnstillingar",
+    "Rename" : "Endurnefna",
     "Unshare" : "Hætta deilingu",
     "Password protection" : "Verndun með lykilorði",
     "Copy link" : "Afrita tengil",

@@ -346,6 +346,7 @@ OC.L10N.register(
     "Panorama" : "Panorama",
     "Basic settings" : "Configurações básicas",
     "Dataset maintenance" : "Manutenção de conjuntos de dados",
+    "Rename" : "Renomear",
     "Add to new group" : "Adicionar ao novo grupo",
     "Unshare" : "Descompartilhar",
     "can navigate" : "pode navegar",

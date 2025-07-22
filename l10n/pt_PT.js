@@ -145,6 +145,7 @@ OC.L10N.register(
     "Hourly" : "Hora a hora",
     "Basic settings" : "Definições básicas",
     "Dataset maintenance" : "Manutenção do conjunto de dados",
+    "Rename" : "Renomear",
     "Unshare" : "Cancelar partilha",
     "Password protection" : "Protegido por palavra-passe",
     "Copy link" : "Copiar hiperligação",

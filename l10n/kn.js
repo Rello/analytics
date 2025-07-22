@@ -27,6 +27,7 @@ OC.L10N.register(
     "Import" : "ಆಮದು",
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "Copy" : "ನಕಲಿಸಿ",
+    "Rename" : "﻿ಮರುಹೆಸರಿಸು",
     "Unshare" : "ಹಂಚಿಕೆಯನ್ನು ಹಿಂತೆಗೆ",
     "Password protection" : "Password protection",
     "Create" : "ಸೃಷ್ಟಿಸಿ"

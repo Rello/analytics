@@ -65,6 +65,7 @@ OC.L10N.register(
     "Daily" : "Zilnic",
     "Hourly" : "La oră",
     "Basic settings" : "Setări de bază",
+    "Rename" : "Redenumire",
     "Unshare" : "Oprește partajarea",
     "Password protection" : "Protecție parolă ",
     "Copy link" : "Copiază link",

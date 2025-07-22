@@ -36,6 +36,7 @@ OC.L10N.register(
     "Copy" : "Kopiraj",
     "Daily" : "дневно",
     "Hourly" : "сваки сат",
+    "Rename" : "Preimenuj",
     "Unshare" : "Ukini deljenje",
     "Password protection" : "Password protection",
     "Copy link" : "Kopiraj vezu",

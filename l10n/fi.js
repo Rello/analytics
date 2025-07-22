@@ -194,6 +194,7 @@ OC.L10N.register(
     "Hourly" : "Tunneittain",
     "Basic settings" : "Perusasetukset",
     "Dataset maintenance" : "Huolla tietojoukkoa",
+    "Rename" : "Nimeä uudelleen",
     "Add to new group" : "Lisää uuteen joukkoon",
     "Unshare" : "Poista jako",
     "Password protection" : "Salasanasuojaus",

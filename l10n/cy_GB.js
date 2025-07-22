@@ -37,6 +37,7 @@ OC.L10N.register(
     "Title" : "Teitl",
     "Daily" : "Dyddiol",
     "Hourly" : "Pob awr",
+    "Rename" : "Ailenwi",
     "Unshare" : "Dad-rannu",
     "Password protection" : "Password protection",
     "Copy link" : "Copïo dolen",

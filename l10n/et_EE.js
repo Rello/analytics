@@ -232,6 +232,7 @@ OC.L10N.register(
     "Panorama" : "Panoraam",
     "Basic settings" : "Põhiseaded",
     "Dataset maintenance" : "Andmestiku hooldus",
+    "Rename" : "Muuda nime",
     "Add to new group" : "Lisa uude gruppi",
     "Unshare" : "Lõpeta jagamine",
     "Password protection" : "Kaitstud salasõnaga",

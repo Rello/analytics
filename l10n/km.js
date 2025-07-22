@@ -96,6 +96,7 @@ OC.L10N.register(
     "Daily" : "រាល់ថ្ងៃ",
     "Hourly" : "រាល់​ម៉ោង",
     "Basic settings" : "ការកំណត់ទូទៅ",
+    "Rename" : "ប្ដូរ​ឈ្មោះ",
     "Unshare" : "លែង​ចែក​រំលែក",
     "Password protection" : "Password protection",
     "Copy link" : "ចម្លងតំណ",

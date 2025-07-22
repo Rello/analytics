@@ -310,6 +310,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Last inn via OCC-kommando:",
     "Basic settings" : "Grunninnstillinger",
     "Dataset maintenance" : "Vedlikehold av datasett",
+    "Rename" : "Endre navn",
     "Add to new group" : "Legg til i ny gruppe",
     "Unshare" : "Opphev deling",
     "can navigate" : "kan navigere",

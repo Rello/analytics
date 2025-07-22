@@ -305,6 +305,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Kargatu OCC komando bidez:",
     "Basic settings" : "Oinarrizko ezarpenak",
     "Dataset maintenance" : "Datu-sorta mantenua",
+    "Rename" : "Berrizendatu",
     "Add to new group" : "Gehitu talde berrian",
     "Unshare" : "Ez partekatu",
     "can navigate" : "nabigatu daiteke",

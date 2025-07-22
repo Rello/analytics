@@ -73,6 +73,7 @@ OC.L10N.register(
     "Daily" : "יומי",
     "Hourly" : "שעתי",
     "Basic settings" : "הגדרות בסיסיות",
+    "Rename" : "שינוי שם",
     "Unshare" : "ביטול שיתוף",
     "Password protection" : "הגנה בססמה",
     "Copy link" : "העתקת קישור",

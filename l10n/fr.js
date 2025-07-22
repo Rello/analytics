@@ -345,6 +345,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Charger via la commande OCC :",
     "Basic settings" : "Paramètres de base",
     "Dataset maintenance" : "Gestion des jeux de données",
+    "Rename" : "Renommer",
     "Add to new group" : "Ajouter à un nouveau groupe",
     "Unshare" : "Ne plus partager",
     "can navigate" : "peut parcourir",

@@ -35,6 +35,7 @@ OC.L10N.register(
     "Copy" : "Kopie",
     "Daily" : "All Dag",
     "Hourly" : "All Stonn",
+    "Rename" : "Ëmbenennen",
     "Unshare" : "Net méi deelen",
     "Password protection" : "Password protection",
     "Copy link" : "Link kopéieren",

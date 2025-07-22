@@ -346,6 +346,7 @@ OC.L10N.register(
     "Panorama" : "Панорама",
     "Basic settings" : "Основне поставке",
     "Dataset maintenance" : "Одржавање скупа података",
+    "Rename" : "Преименуј",
     "Add to new group" : "Додај у нову групу",
     "Unshare" : "Укини дељење",
     "can navigate" : "може да се креће",

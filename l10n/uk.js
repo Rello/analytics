@@ -305,6 +305,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Звантажити за допомогою команди OCC:",
     "Basic settings" : "Основні налаштування",
     "Dataset maintenance" : "Обслуговування набору даних",
+    "Rename" : "Перейменувати",
     "Add to new group" : "Додати до нової групи",
     "Unshare" : "Закрити доступ",
     "can navigate" : "може орієнтуватися",

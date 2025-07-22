@@ -232,6 +232,7 @@ OC.L10N.register(
     "Hourly" : "Setiap jam",
     "Basic settings" : "Setelan dasar",
     "Dataset maintenance" : "Pemeliharaan himpunan data",
+    "Rename" : "Ubah nama",
     "Add to new group" : "Tambahkan ke grup baru",
     "Unshare" : "Batalkan berbagi",
     "Password protection" : "Password protection",

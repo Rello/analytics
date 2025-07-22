@@ -346,6 +346,7 @@ OC.L10N.register(
     "Panorama" : "全景",
     "Basic settings" : "基础设置",
     "Dataset maintenance" : "数据集维护",
+    "Rename" : "重命名",
     "Add to new group" : "添加到新群组",
     "Unshare" : "取消共享",
     "can navigate" : "可以导航",

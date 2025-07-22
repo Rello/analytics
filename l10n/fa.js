@@ -275,6 +275,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Load via OCC command:",
     "Basic settings" : "تنظیمات پایه",
     "Dataset maintenance" : "Dataset maintenance",
+    "Rename" : "تغییرنام",
     "Add to new group" : "Add to new group",
     "Unshare" : "لغو اشتراک‌گذاری",
     "can navigate" : "can navigate",

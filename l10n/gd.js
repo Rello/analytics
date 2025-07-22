@@ -26,6 +26,7 @@ OC.L10N.register(
     "Back" : "Air ais",
     "Name" : "Ainm",
     "Copy" : "Dèan lethbhreac",
+    "Rename" : "Thoir ainm ùr air",
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
     "Sort by" : "Seòrsaich a-rèir",

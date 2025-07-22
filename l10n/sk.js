@@ -319,6 +319,7 @@ OC.L10N.register(
     "Load via OCC command:" : "Nahrať cez OCC príkaz:",
     "Basic settings" : "Základné nastavenia",
     "Dataset maintenance" : "Spravovanie súboru dát",
+    "Rename" : "Premenovať",
     "Add to new group" : "Pridať do novej skupiny",
     "Unshare" : "Zrušiť zdieľanie",
     "can navigate" : "môže navigovať",

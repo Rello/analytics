@@ -135,6 +135,7 @@ OC.L10N.register(
     "Daily" : "Katru dienu",
     "Hourly" : "Ik stundu",
     "Basic settings" : "Pamata iestatījumi",
+    "Rename" : "Pārdēvēt",
     "Unshare" : "Pārtraukt koplietošanu",
     "Password protection" : "Password protection",
     "Copy link" : "Ievietot saiti starpliktuvē",

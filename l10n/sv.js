@@ -345,6 +345,7 @@ OC.L10N.register(
     "Panorama" : "Panorama",
     "Basic settings" : "Grundinställningar",
     "Dataset maintenance" : "Underhåll av datamängd",
+    "Rename" : "Byt namn",
     "Add to new group" : "Lägg till i ny grupp",
     "Unshare" : "Sluta dela",
     "can navigate" : "kan navigera",
