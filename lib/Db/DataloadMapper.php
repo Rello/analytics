@@ -105,6 +105,20 @@ class DataloadMapper
         return $result;
     }
 
+    public function getScheduleMetadata()
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('dataset')
+            ->selectAlias($sql->func()->max('schedule'), 'schedules')
+            ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->addgroupBy('dataset');
+        $statement = $sql->executeQuery();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
+    }
+
     /**
      * get all data load & schedule metadata
      *

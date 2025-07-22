@@ -78,8 +78,8 @@ class DatasetService {
 	public function index() {
 		$ownDatasets = $this->DatasetMapper->index();
 
-                // get data load indicators for icons shown in the advanced screen
-                $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
+                // get schedule indicators for icons shown in the navigation
+                $dataloads = $this->DataloadMapper->getScheduleMetadata();
                 $datasetIndex = [];
                 foreach ($ownDatasets as $i => $dataset) {
                         $datasetIndex[$dataset['id']] = $i;
@@ -92,7 +92,6 @@ class DatasetService {
                                 } else {
                                         $dataload['schedules'] = 0;
                                 }
-                                $ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
                                 $ownDatasets[$key]['schedules'] = $dataload['schedules'];
                         }
                 }
