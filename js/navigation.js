@@ -436,22 +436,13 @@ OCA.Analytics.Navigation = {
         divUtils.classList.add('app-navigation-entry-utils');
         let ulUtils = document.createElement('ul');
 
-        // add indicators when a data load or schedule is existing
+        // add indicator when a schedule is existing
         if (data.schedules && parseInt(data.schedules) !== 0) {
             let liScheduleButton = document.createElement('li');
-            liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
+            liScheduleButton.classList.add('app-navigation-entry-utils-menu-button', 'scheduled-indicator');
             let ScheduleButton = document.createElement('button');
             ScheduleButton.classList.add('icon-history', 'toolTip');
             ScheduleButton.setAttribute('title', t('analytics', 'Scheduled data load'));
-            liScheduleButton.appendChild(ScheduleButton);
-            ulUtils.appendChild(liScheduleButton);
-        }
-        if (data.dataloads && parseInt(data.dataloads) !== 0) {
-            let liScheduleButton = document.createElement('li');
-            liScheduleButton.classList.add('app-navigation-entry-utils-menu-button');
-            let ScheduleButton = document.createElement('button');
-            ScheduleButton.classList.add('icon-category-workflow', 'toolTip');
-            ScheduleButton.setAttribute('title', t('analytics', 'Data load'));
             liScheduleButton.appendChild(ScheduleButton);
             ulUtils.appendChild(liScheduleButton);
         }
@@ -486,37 +477,37 @@ OCA.Analytics.Navigation = {
         let navigationMenu = document.importNode(document.getElementById('templateNavigationMenu').content, true);
 
         let menu = navigationMenu.getElementById('navigationMenu');
-        menu.dataset.id = data.id;
-        menu.dataset.type = data.type;
-        menu.dataset.name = data.name;
-        menu.dataset.item_type = data.item_type;
+        menu.dataset.id = data['id'];
+        menu.dataset.type = data['type'];
+        menu.dataset.name = data['name'];
+        menu.dataset.item_type = data['item_type'];
 
         let edit = navigationMenu.getElementById('navigationMenuEdit');
         edit.addEventListener('click', OCA.Analytics.Navigation.handleBasicSettingsClicked);
-        edit.dataset.testing = 'basic' + data.name;
+        edit.dataset.testing = 'basic' + data['name'];
 
         let newGroup = navigationMenu.getElementById('navigationMenuNewGroup');
         newGroup.addEventListener('click', OCA.Analytics.Navigation.handleNewGroupClicked);
-        newGroup.dataset.testing = 'newGroup' + data.name;
-        newGroup.dataset.id = data.id;
+        newGroup.dataset.testing = 'newGroup' + data['name'];
+        newGroup.dataset.id = data['id'];
 
         let share = navigationMenu.getElementById('navigationMenuShare');
         share.addEventListener('click', OCA.Analytics.Share.buildShareModal);
-        share.dataset.testing = 'share' + data.name;
-        share.dataset.id = data.id;
+        share.dataset.testing = 'share' + data['name'];
+        share.dataset.id = data['id'];
 
         let dataset = navigationMenu.getElementById('navigationMenuAdvanced');
         dataset.addEventListener('click', OCA.Analytics.Navigation.handleAdvancedClicked);
-        dataset.dataset.testing = 'advanced' + data.name;
+        dataset.dataset.testing = 'advanced' + data['name'];
         dataset.dataset.dataset = data.dataset;
 
         let rename = navigationMenu.getElementById('navigationMenuRename');
         rename.addEventListener('click', OCA.Analytics.Navigation.handleRenameClicked);
-        rename.dataset.testing = 'rename' + data.name;
+        rename.dataset.testing = 'rename' + data['name'];
 
         let favorite = navigationMenu.getElementById('navigationMenueFavorite');
         favorite.addEventListener('click', OCA.Analytics.Navigation.handleFavoriteClicked);
-        favorite.dataset.testing = 'fav' + data.name;
+        favorite.dataset.testing = 'fav' + data['name'];
 
         if (parseInt(data.favorite) === 1) {
             favorite.firstElementChild.classList.replace('icon-star', 'icon-starred');
@@ -524,7 +515,7 @@ OCA.Analytics.Navigation = {
         }
 
         let deleteReport = navigationMenu.getElementById('navigationMenuDelete');
-        deleteReport.dataset.id = data.id;
+        deleteReport.dataset.id = data['id'];
         deleteReport.addEventListener('click', OCA.Analytics.Navigation.handleDeleteButton);
 
         let unshareReport = navigationMenu.getElementById('navigationMenuUnshare');
@@ -533,9 +524,15 @@ OCA.Analytics.Navigation = {
 
         let separator = navigationMenu.getElementById('navigationMenueSeparator');
 
-        if (data['isShare'] === undefined) {
+        // not shared
+        if (data['isShare'] === undefined
+            || parseInt(data['isShare']) === OCA.Analytics.SHARE_TYPE_GROUP )
+        {
             unshareReport.parentElement.remove();
-        } else if (data['isShare'] !== undefined) {
+        }
+
+        // is shared
+        if (data['isShare'] !== undefined) {
             separator.remove();
             deleteReport.parentElement.remove();
             dataset.parentElement.remove();
@@ -544,22 +541,23 @@ OCA.Analytics.Navigation = {
             if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
                 edit.parentElement.remove();
             }
-            if (parseInt(data['isShare']) === OCA.Analytics.SHARE_TYPE_GROUP) {
-                unshareReport.parentElement.remove();
-            }
         }
-        if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
-            favorite.parentElement.remove();
-            newGroup.parentElement.remove();
-            edit.parentElement.remove();
-            deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
-        }
+
         if (parseInt(data['type']) !== OCA.Analytics.TYPE_INTERNAL_DB) {
             dataset.parentElement.remove();
         }
 
-        if (data['item_type'] === 'panorama') {
+        if (parseInt(data['type']) === OCA.Analytics.TYPE_GROUP) {
             edit.parentElement.remove();
+            favorite.parentElement.remove();
+            newGroup.parentElement.remove();
+            deleteReport.children[1].innerHTML = t('analytics', 'Delete folder');
+        } else if (data['item_type'] === 'panorama') {
+            edit.parentElement.remove();
+        } else if (data['item_type'] === 'dataset') {
+            edit.parentElement.remove();
+            share.parentElement.remove();
+            dataset.parentElement.remove();
         }
 
         return navigationMenu;
@@ -907,7 +905,7 @@ OCA.Analytics.Navigation = {
         input.type = 'text';
         input.value = anchor.dataset.name || anchor.textContent.trim();
         input.classList.add('navigationRenameInput');
-        input.addEventListener('keydown', function(e){
+        input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 OCA.Analytics.Navigation.confirmRename(anchor);
@@ -919,7 +917,7 @@ OCA.Analytics.Navigation = {
 
         const ok = document.createElement('span');
         ok.classList.add('icon', 'icon-checkmark');
-        ok.addEventListener('click', function(e){
+        ok.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             OCA.Analytics.Navigation.confirmRename(anchor);
@@ -927,7 +925,7 @@ OCA.Analytics.Navigation = {
 
         const cancel = document.createElement('span');
         cancel.classList.add('icon', 'icon-close');
-        cancel.addEventListener('click', function(e){
+        cancel.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             OCA.Analytics.Navigation.cancelRename(anchor);
@@ -1003,7 +1001,8 @@ OCA.Analytics.Navigation = {
                 const rep = OCA.Analytics.reports.find(r => parseInt(r.id) === parseInt(id) && r.item_type !== 'panorama');
                 if (rep) rep.name = newName;
             }
-        } catch (e) {}
+        } catch (e) {
+        }
     },
 
     saveOpenState: function () {

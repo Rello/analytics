@@ -8,6 +8,7 @@
 
 ### Changed
 - Performance tweaks
+- Always show scheduled dataload indicator in dataset navigation and remove obsolete dataload icon
 
 ## 5.7.1 - 2025-07-15
 ### Fixed

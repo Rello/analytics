@@ -61,6 +61,10 @@ content: inherit;
     opacity: 0;
 }
 
+#app-navigation .app-navigation-entry-utils .scheduled-indicator > button {
+    opacity: .5;
+}
+
 /* take over from core >NC28*/
 
 #app-navigation > ul {

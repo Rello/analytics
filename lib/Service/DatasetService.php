@@ -24,51 +24,51 @@ use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
 class DatasetService {
-        private $userId;
-        private $logger;
-        private $tagManager;
-        private $ShareService;
-        private $StorageMapper;
-        private $DatasetMapper;
-        private $ThresholdService;
-        private $DataloadMapper;
-        private $ActivityManager;
-        private $rootFolder;
-        private $VariableService;
-        private $ReportMapper;
-        private $contextChatManager;
-        private static $contextChatAvailable = null;
-        private $l10n;
+	private $userId;
+	private $logger;
+	private $tagManager;
+	private $ShareService;
+	private $StorageMapper;
+	private $DatasetMapper;
+	private $ThresholdService;
+	private $DataloadMapper;
+	private $ActivityManager;
+	private $rootFolder;
+	private $VariableService;
+	private $ReportMapper;
+	private $contextChatManager;
+	private static $contextChatAvailable = null;
+	private $l10n;
 
-        public function __construct(
-                $userId,
-                IL10N $l10n,
-                LoggerInterface $logger,
-                ITagManager $tagManager,
-                ShareService $ShareService,
-                StorageMapper $StorageMapper,
-                DatasetMapper $DatasetMapper,
-                ThresholdService $ThresholdService,
-                DataloadMapper $DataloadMapper,
-                ActivityManager $ActivityManager,
-                IRootFolder $rootFolder,
-                VariableService $VariableService,
-                ReportMapper $ReportMapper
-        ) {
-                $this->userId = $userId;
-                $this->logger = $logger;
-                $this->tagManager = $tagManager;
-                $this->ShareService = $ShareService;
-                $this->ThresholdService = $ThresholdService;
+	public function __construct(
+		$userId,
+		IL10N $l10n,
+		LoggerInterface $logger,
+		ITagManager $tagManager,
+		ShareService $ShareService,
+		StorageMapper $StorageMapper,
+		DatasetMapper $DatasetMapper,
+		ThresholdService $ThresholdService,
+		DataloadMapper $DataloadMapper,
+		ActivityManager $ActivityManager,
+		IRootFolder $rootFolder,
+		VariableService $VariableService,
+		ReportMapper $ReportMapper
+	) {
+		$this->userId = $userId;
+		$this->logger = $logger;
+		$this->tagManager = $tagManager;
+		$this->ShareService = $ShareService;
+		$this->ThresholdService = $ThresholdService;
 		$this->StorageMapper = $StorageMapper;
 		$this->DatasetMapper = $DatasetMapper;
 		$this->DataloadMapper = $DataloadMapper;
 		$this->ActivityManager = $ActivityManager;
 		$this->rootFolder = $rootFolder;
 		$this->VariableService = $VariableService;
-                $this->ReportMapper = $ReportMapper;
-                $this->l10n = $l10n;
-        }
+		$this->ReportMapper = $ReportMapper;
+		$this->l10n = $l10n;
+	}
 
 	/**
 	 * get all datasets
@@ -78,32 +78,31 @@ class DatasetService {
 	public function index() {
 		$ownDatasets = $this->DatasetMapper->index();
 
-                // get data load indicators for icons shown in the advanced screen
-                $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
-                $datasetIndex = [];
-                foreach ($ownDatasets as $i => $dataset) {
-                        $datasetIndex[$dataset['id']] = $i;
-                }
-                foreach ($dataloads as $dataload) {
-                        if (isset($datasetIndex[$dataload['dataset']])) {
-                                $key = $datasetIndex[$dataload['dataset']];
-                                if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
-                                        $dataload['schedules'] = 1;
-                                } else {
-                                        $dataload['schedules'] = 0;
-                                }
-                                $ownDatasets[$key]['dataloads'] = $dataload['dataloads'];
-                                $ownDatasets[$key]['schedules'] = $dataload['schedules'];
-                        }
-                }
+		// get schedule indicators for icons shown in the navigation
+		$dataloads = $this->DataloadMapper->getScheduleMetadata();
+		$datasetIndex = [];
+		foreach ($ownDatasets as $i => $dataset) {
+			$datasetIndex[$dataset['id']] = $i;
+		}
+		foreach ($dataloads as $dataload) {
+			if (isset($datasetIndex[$dataload['dataset']])) {
+				$key = $datasetIndex[$dataload['dataset']];
+				if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
+					$dataload['schedules'] = 1;
+				} else {
+					$dataload['schedules'] = 0;
+				}
+				$ownDatasets[$key]['schedules'] = $dataload['schedules'];
+			}
+		}
 
-               foreach ($ownDatasets as &$ownDataset) {
-                       if (!isset($ownDataset['type'])) {
-                               $ownDataset['type'] = DatasourceController::DATASET_TYPE_INTERNAL_DB;
-                       }
-                       $ownDataset['item_type'] = ShareService::SHARE_ITEM_TYPE_DATASET;
-                       $ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
-               }
+		foreach ($ownDatasets as &$ownDataset) {
+			if (!isset($ownDataset['type'])) {
+				$ownDataset['type'] = DatasourceController::DATASET_TYPE_INTERNAL_DB;
+			}
+			$ownDataset['item_type'] = ShareService::SHARE_ITEM_TYPE_DATASET;
+			$ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
+		}
 
 		return $ownDatasets;
 	}
@@ -193,38 +192,38 @@ class DatasetService {
 	 * @return bool
 	 * @throws Exception
 	 */
-        public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
-                $dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+	public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
+		$dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
 
 		if ($aiIndex === 1) {
 			$this->provider($datasetId);
 		} else {
 			$this->providerRemove($datasetId);
 		}
-                return $dbUpdate;
-        }
+		return $dbUpdate;
+	}
 
-        public function createGroup(int $parent = 0): int {
-                return $this->DatasetMapper->createGroup($this->l10n->t('New'), $parent);
-        }
+	public function createGroup(int $parent = 0): int {
+		return $this->DatasetMapper->createGroup($this->l10n->t('New'), $parent);
+	}
 
-        public function updateGroup(int $datasetId, int $groupId): bool {
-                return $this->DatasetMapper->updateGroup($datasetId, $groupId);
-        }
+	public function updateGroup(int $datasetId, int $groupId): bool {
+		return $this->DatasetMapper->updateGroup($datasetId, $groupId);
+	}
 
-        /**
-         * rename dataset
-         *
-         * @param int $datasetId
-         * @param string $name
-         * @return bool
-         */
-        public function rename(int $datasetId, string $name): bool {
-                if ($this->isOwn($datasetId)) {
-                        return $this->DatasetMapper->updateName($datasetId, $name);
-                }
-                return false;
-        }
+	/**
+	 * rename dataset
+	 *
+	 * @param int $datasetId
+	 * @param string $name
+	 * @return bool
+	 */
+	public function rename(int $datasetId, string $name): bool {
+		if ($this->isOwn($datasetId)) {
+			return $this->DatasetMapper->updateName($datasetId, $name);
+		}
+		return false;
+	}
 
 	/**
 	 * Export Dataset
@@ -256,16 +255,16 @@ class DatasetService {
 	 * @param int $datasetId
 	 * @return bool
 	 */
-        public function provider(int $datasetId) {
-                if (self::$contextChatAvailable === null) {
-                        self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
-                }
-                if (self::$contextChatAvailable) {
-                        $this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
-                        $this->contextChatManager->submitContent($datasetId);
-                }
-                return true;
-        }
+	public function provider(int $datasetId) {
+		if (self::$contextChatAvailable === null) {
+			self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
+		}
+		if (self::$contextChatAvailable) {
+			$this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+			$this->contextChatManager->submitContent($datasetId);
+		}
+		return true;
+	}
 
 	/**
 	 * Remove dataset from context chat
@@ -274,16 +273,16 @@ class DatasetService {
 	 * @param int $datasetId
 	 * @return bool
 	 */
-        private function providerRemove(int $datasetId) {
-                if (self::$contextChatAvailable === null) {
-                        self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
-                }
-                if (self::$contextChatAvailable) {
-                        $this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
-                        $this->contextChatManager->removeContentByDataset($datasetId);
-                }
-                return true;
-        }
+	private function providerRemove(int $datasetId) {
+		if (self::$contextChatAvailable === null) {
+			self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
+		}
+		if (self::$contextChatAvailable) {
+			$this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+			$this->contextChatManager->removeContentByDataset($datasetId);
+		}
+		return true;
+	}
 
 	/**
 	 * Remove user from context chat
@@ -292,16 +291,16 @@ class DatasetService {
 	 * @param string $userId
 	 * @return bool
 	 */
-        private function providerRemoveByUser(string $userId) {
-                if (self::$contextChatAvailable === null) {
-                        self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
-                }
-                if (self::$contextChatAvailable) {
-                        $this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
-                        $this->contextChatManager->removeContentByUser($userId);
-                }
-                return true;
-        }
+	private function providerRemoveByUser(string $userId) {
+		if (self::$contextChatAvailable === null) {
+			self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
+		}
+		if (self::$contextChatAvailable) {
+			$this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+			$this->contextChatManager->removeContentByUser($userId);
+		}
+		return true;
+	}
 
 	/**
 	 * Delete Dataset and all depending objects

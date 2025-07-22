@@ -85,35 +85,16 @@ class ReportService {
 		$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
 		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
 
-                // get shared reports and remove duplicates
-                $existingIds = array_flip(array_column($ownReports, 'id'));
-                foreach ($sharedReports as $sharedReport) {
-                        if (!isset($existingIds[$sharedReport['id']])) {
-                                // just keep the necessary fields
-                                $ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));
-                                $existingIds[$sharedReport['id']] = true;
-                        }
-                }
-                if (count($ownReports) === 0) return $ownReports;
-
-                // get data load indicators for icons shown in the advanced screen
-                $dataloads = $this->DataloadMapper->getAllDataloadMetadata();
-                $datasetIndex = [];
-                foreach ($ownReports as $i => $report) {
-                        $datasetIndex[$report['dataset']] = $i;
-                }
-                foreach ($dataloads as $dataload) {
-                        if (isset($datasetIndex[$dataload['dataset']])) {
-                                $key = $datasetIndex[$dataload['dataset']];
-                                if ($dataload['schedules'] !== '' and $dataload['schedules'] !== null) {
-                                        $dataload['schedules'] = 1;
-                                } else {
-                                        $dataload['schedules'] = 0;
-                                }
-                                $ownReports[$key]['dataloads'] = $dataload['dataloads'];
-                                $ownReports[$key]['schedules'] = $dataload['schedules'];
-                        }
-                }
+		// get shared reports and remove duplicates
+		$existingIds = array_flip(array_column($ownReports, 'id'));
+		foreach ($sharedReports as $sharedReport) {
+			if (!isset($existingIds[$sharedReport['id']])) {
+				// just keep the necessary fields
+				$ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));
+				$existingIds[$sharedReport['id']] = true;
+			}
+		}
+		if (count($ownReports) === 0) return $ownReports;
 
 		$favorites = $this->tagManager->load('analytics')->getFavorites();
 		foreach ($ownReports as &$ownReport) {
@@ -514,23 +495,23 @@ class ReportService {
 	 * @param $groupId
 	 * @return bool
 	 */
-        public function updateGroup(int $reportId, $groupId) {
-                return $this->ReportMapper->updateGroup($reportId, $groupId);
-        }
+	public function updateGroup(int $reportId, $groupId) {
+		return $this->ReportMapper->updateGroup($reportId, $groupId);
+	}
 
-        /**
-         * rename report
-         *
-         * @param int $reportId
-         * @param string $name
-         * @return bool
-         */
-        public function rename(int $reportId, string $name) {
-                if ($this->isOwn($reportId)) {
-                        return $this->ReportMapper->updateName($reportId, $name);
-                }
-                return false;
-        }
+	/**
+	 * rename report
+	 *
+	 * @param int $reportId
+	 * @param string $name
+	 * @return bool
+	 */
+	public function rename(int $reportId, string $name) {
+		if ($this->isOwn($reportId)) {
+			return $this->ReportMapper->updateName($reportId, $name);
+		}
+		return false;
+	}
 
 	/**
 	 * search for reports
