@@ -36,6 +36,7 @@ OC.L10N.register(
     "Title" : "শিরোনাম",
     "Daily" : "দৈনিক",
     "Hourly" : "ঘনটাভিততিক",
+    "Rename" : "পূনঃনামকরণ",
     "Unshare" : "ভাগাভাগি বাতিল ",
     "Password protection" : "Password protection",
     "Copy link" : "লিঙ্ক কপি করো",

@@ -31,6 +31,7 @@ OC.L10N.register(
     "Title" : "Naslov",
     "Daily" : "Dnevno",
     "Hourly" : "Svakog sata",
+    "Rename" : "Preimenuj",
     "Unshare" : "Prestani  dijeliti",
     "Password protection" : "Password protection",
     "Create" : "Ustvari"

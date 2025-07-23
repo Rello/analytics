@@ -64,6 +64,7 @@ OC.L10N.register(
     "Mode" : "Hali",
     "Remove filter" : "Ondoa kichujio",
     "Description" : "Maelezo",
+    "Import" : "Import",
     "Selection" : "Machaguo",
     "Title" : "Kichwa cha habari",
     "Copy" : "Nakili",
