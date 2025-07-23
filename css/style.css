@@ -1304,7 +1304,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .datasetTabContainer {
     background-color: var(--color-main-background);
     padding-top: 16px;
-    height: 90%;
 }
 
 .tabHeader {
