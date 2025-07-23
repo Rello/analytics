@@ -1,0 +1,27 @@
+OC.L10N.register(
+    "analytics",
+    {
+    "Share" : "شریکول",
+    "Share link" : "د شرېکېدو لېنک",
+    "Settings" : "سمونې",
+    "Delete" : "ړنګول",
+    "Favorites" : "په نښه شوي",
+    "New" : "نوی",
+    "Remove from favorites" : "له نښو ويستل",
+    "Add to favorites" : "په نښه کول",
+    "Download" : "ښکته کول",
+    "OK" : "سمه ده",
+    "Cancel" : "پرېښول",
+    "Yes" : "هو",
+    "No" : "نه",
+    "Announcements" : "اعلانونه",
+    "copy" : "کاپي",
+    "Password" : "پاسورډ",
+    "Name" : "نوم",
+    "Daily" : "روزانه",
+    "Hourly" : "ساعت وار",
+    "Rename" : "نوم بدلول",
+    "Unshare" : "له شرېکوالي ويستل",
+    "Copy link" : "لېنک کاپي کول"
+},
+"nplurals=2; plural=(n != 1);");

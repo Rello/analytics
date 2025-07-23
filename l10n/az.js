@@ -41,6 +41,7 @@ OC.L10N.register(
     "Daily" : "Günlük",
     "Hourly" : "Saatlıq",
     "Basic settings" : "İlkin parametrlər",
+    "Rename" : "Adı dəyiş",
     "Unshare" : "Paylaşımı durdur",
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",

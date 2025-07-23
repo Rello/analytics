@@ -48,6 +48,7 @@ OC.L10N.register(
     "Daily" : "Pemdeziek",
     "Hourly" : "Bep eurvezh",
     "Basic settings" : "Stummoù diazez",
+    "Rename" : "Adenvel",
     "Unshare" : "Na eskemm ken",
     "Password protection" : "Gwareziñ gant ur ger-tremen",
     "Copy link" : "Kopiañ al liamm",

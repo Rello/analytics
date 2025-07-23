@@ -6,6 +6,7 @@ OC.L10N.register(
     "Share" : "Абагуліць",
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
+    "Saved" : "Захавана",
     "Delete" : "Выдаліць",
     "Done" : "Гатова",
     "Favorites" : "Абранае",
@@ -22,6 +23,7 @@ OC.L10N.register(
     "Search" : "Пошук",
     "Yes" : "Так",
     "No" : "Не",
+    "Authentication" : "Аўтэнтыфікацыя",
     "File" : "Файл",
     "copy" : "копія",
     "Password" : "Пароль",
@@ -33,6 +35,7 @@ OC.L10N.register(
     "Copy" : "Капіяваць",
     "Daily" : "Штодня",
     "Hourly" : "Штогадзіну",
+    "Rename" : "Перайменаваць",
     "Password protection" : "Абарона паролем",
     "Sort by" : "Сартаваць па",
     "Create" : "Стварыць"
