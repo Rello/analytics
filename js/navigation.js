@@ -1158,5 +1158,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
     document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
-    document.getElementById('appSettingsButton').addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);
 });
