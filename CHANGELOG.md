@@ -3,12 +3,12 @@
 ## 5.8.0 - pending
 ### Added
 - Threshold lines in charts using Chart.js annotation plugin
-- Show installed version in settings
+- Show installed version in navigation bar
 - Inline rename for all navigation items
+- Group sharing for panoramas
 
 ### Changed
 - Performance tweaks
-- Always show scheduled dataload indicator in dataset navigation and remove obsolete dataload icon
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients
