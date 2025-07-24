@@ -23,7 +23,6 @@ OCA.Analytics.Navigation = {
     init: function (navigationItem) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getNavigationContent(navigationItem);
-        OCA.Analytics.Report?.Backend?.getDatasetDefinitions?.();
     },
 
     getNavigationContent: function (navigationItem) {
@@ -533,6 +532,7 @@ OCA.Analytics.Navigation = {
 
         // is shared
         if (data['isShare'] !== undefined) {
+            rename.remove();
             separator.remove();
             deleteReport.parentElement.remove();
             dataset.parentElement.remove();

@@ -206,6 +206,33 @@ class PanoramaMapper
     }
 
     /**
+     * get panoramas by group
+     * @param int $groupId
+     * @return array
+     * @throws Exception
+     */
+    public function getPanoramasByGroup(int $groupId): array
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->from(self::TABLE_NAME)
+            ->select('*')
+            ->where($sql->expr()->eq('parent', $sql->createNamedParameter($groupId)));
+        $statement = $sql->executeQuery();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+
+        if ($result !== false && is_array($result)) {
+            foreach ($result as &$row) {
+                $row['type'] = (int) $row['type'];
+                $row['parent'] = (int) $row['parent'];
+            }
+            unset($row);
+        }
+
+        return $result;
+    }
+
+    /**
      * search reports by search string
      * @param $searchString
      * @return array
