@@ -31,6 +31,7 @@ OC.L10N.register(
     "Back" : "Назад",
     "Name" : "Назва",
     "Remove filter" : "Выдаліць фільтр",
+    "Import" : "Імпарт",
     "Title" : "Загаловак",
     "Copy" : "Капіяваць",
     "Daily" : "Штодня",
