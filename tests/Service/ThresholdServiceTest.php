@@ -104,13 +104,19 @@ class ThresholdServiceTest extends TestCase {
 				'10.11', 20, 20,
 				true,
 			],
-			'decimal false' => [
-				[['id' => 1, 'dimension' => 0, 'option' => 'LT', 'target' => '10', 'user_id' => 'u1']],
-				['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
-				'10.11', 20, 20,
-				false,
-			],
-			// Add more scenarios here …
-		];
-	}
+                        'decimal false' => [
+                                [['id' => 1, 'dimension' => 0, 'option' => 'LT', 'target' => '10', 'user_id' => 'u1']],
+                                ['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
+                                '10.11', 20, 20,
+                                false,
+                        ],
+                        'thousands comma' => [
+                                [['id' => 1, 'dimension' => 0, 'option' => 'GT', 'target' => '5000', 'user_id' => 'u1']],
+                                ['id' => 1, 'name' => 'Report A', 'dimension1' => 'amount', 'dimension2' => '', 'value' => ''],
+                                '6,063', 20, 20,
+                                true,
+                        ],
+                        // Add more scenarios here …
+                ];
+        }
 }

@@ -53,11 +53,36 @@ OCA.Analytics.Visualization = {
     compareValues: function(a, b, fn) {
         function normalizeNumberString(str) {
             if (typeof str !== "string") return str;
-            // Remove all '.' as thousands separator
-            let cleaned = str.replace(/\./g, '');
-            // Replace ',' with '.' as decimal separator for parseFloat
-            cleaned = cleaned.replace(/,/g, '.');
-            return cleaned;
+            str = str.trim();
+            const hasComma = str.includes(',');
+            const hasDot = str.includes('.');
+
+            if (hasComma && hasDot) {
+                if (str.lastIndexOf(',') > str.lastIndexOf('.')) {
+                    // comma as decimal separator
+                    str = str.replace(/\./g, '');
+                    str = str.replace(',', '.');
+                } else {
+                    // dot as decimal separator
+                    str = str.replace(/,/g, '');
+                }
+            } else if (hasComma) {
+                const idx = str.lastIndexOf(',');
+                const digits = str.length - idx - 1;
+                if (digits <= 2) {
+                    str = str.replace(',', '.');
+                } else {
+                    str = str.replace(/,/g, '');
+                }
+            } else if (hasDot) {
+                const idx = str.lastIndexOf('.');
+                const digits = str.length - idx - 1;
+                if (digits > 2) {
+                    str = str.replace(/\./g, '');
+                }
+            }
+
+            return str.replace(/\s/g, '');
         }
 
         const normA = normalizeNumberString(String(a));
