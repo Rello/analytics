@@ -855,6 +855,9 @@ OCA.Analytics.Filter = {
 
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
 
+        // store report ID on the dialog for later updates
+        document.getElementById('analyticsDialogContainer').dataset.reportId = reportId;
+
         fetch(OC.generateUrl('apps/analytics/report/') + reportId, {
             method: 'GET',
             headers: OCA.Analytics.headers(),

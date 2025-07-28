@@ -1010,7 +1010,7 @@ OCA.Analytics.Sidebar.Threshold = {
     },
 
     handleThresholdCreateNewButton: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
         let requestUrl = OC.generateUrl('apps/analytics/threshold');
         fetch(requestUrl, {
             method: 'POST',
@@ -1025,7 +1025,8 @@ OCA.Analytics.Sidebar.Threshold = {
         })
             .then(response => response.json())
             .then(data => {
-                document.querySelector('.tabHeader.selected').click();
+                OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
                 if (!OCA.Analytics.isDataset) {
                     OCA.Analytics.Report.resetContentArea();
                     OCA.Analytics.Report.Backend.getData();
@@ -1141,7 +1142,7 @@ OCA.Analytics.Sidebar.Threshold = {
     },
 
     createThreashold: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
 
         if (document.getElementById('sidebarThresholdValue').value === '') {
             OCA.Analytics.Notification.notification('error', t('analytics', 'Missing data'));
@@ -1168,7 +1169,8 @@ OCA.Analytics.Sidebar.Threshold = {
                 .then(response => response.json())
                 .then(data => {
                     delete button.dataset.id;
-                    document.querySelector('.tabHeader.selected').click();
+                    OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
+                    OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
                     if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.Report.resetContentArea();
                         OCA.Analytics.Report.Backend.getData();
@@ -1190,13 +1192,15 @@ OCA.Analytics.Sidebar.Threshold = {
 
     deleteThreshold: function (thresholdId) {
         let requestUrl = OC.generateUrl('apps/analytics/threshold/') + thresholdId;
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
         fetch(requestUrl, {
             method: 'DELETE',
             headers: OCA.Analytics.headers(),
         })
             .then(response => response.json())
             .then(data => {
-                document.querySelector('.tabHeader.selected').click();
+                OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
                 if (!OCA.Analytics.isDataset) {
                     OCA.Analytics.Report.resetContentArea();
                     OCA.Analytics.Report.Backend.getData();
@@ -1233,7 +1237,7 @@ OCA.Analytics.Sidebar.Threshold = {
         document.querySelectorAll('#sidebarThresholdList > div').forEach(item => {
             ids.push(item.dataset.id);
         });
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
         let requestUrl = OC.generateUrl('apps/analytics/threshold/order/') + reportId;
         fetch(requestUrl, {
             method: 'PUT',
