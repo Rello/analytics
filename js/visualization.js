@@ -421,7 +421,7 @@ OCA.Analytics.Visualization = {
                     } else if (severity === 3) { // orange
                         color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
                     } else if (severity === 4) { // green
-                        color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
+                        color = OCA.Analytics.Visualization.thresholdColorNumberGreen;
                     }
                     const cell = row.childNodes.item(dimIndex);
                     if (cell) {
@@ -1238,11 +1238,11 @@ OCA.Analytics.Visualization = {
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
-                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberRed;
+                    thresholdColor = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberRed;
                 } else if (threshold['severity'] === 3) {
-                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberOrange;
+                    thresholdColor = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberOrange;
                 } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberGreen;
+                    thresholdColor = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberGreen;
                 }
             }
         }
