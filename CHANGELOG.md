@@ -15,6 +15,7 @@
 - Shared panorama folders now display their contained panoramas for share recipients
 - Thresholds again highlight matching values in data tables
 - Localized numbers with comma separators now evaluate correctly in thresholds
+- Dashboard widget thresholds now share logic with tables
 
 ## 5.7.1 - 2025-07-15
 ### Fixed

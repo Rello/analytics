@@ -247,45 +247,8 @@ OCA.Analytics.Dashboard = {
     },
 
     validateThreshold: function (kpi, value, thresholds) {
-        const operators = {
-            '=': function (a, b) {
-                return a === b
-            },
-            '<': function (a, b) {
-                return a < b
-            },
-            '>': function (a, b) {
-                return a > b
-            },
-            '<=': function (a, b) {
-                return a <= b
-            },
-            '>=': function (a, b) {
-                return a >= b
-            },
-            '!=': function (a, b) {
-                return a !== b
-            },
-        };
-        let thresholdColor;
-
-        thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
-
-        for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
-            threshold['severity'] = parseInt(threshold['severity']);
-            if (comparison === true) {
-                if (threshold['severity'] === 2) {
-                    thresholdColor = 'style="color: red;"';
-                } else if (threshold['severity'] === 3) {
-                    thresholdColor = 'style="color: orange;"';
-                } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'style="color: green;"';
-                }
-            }
-        }
-
-        return thresholdColor;
+        const colorStyle = OCA.Analytics.Visualization.validateThreshold(kpi, value, thresholds);
+        return colorStyle ? `style="${colorStyle}"` : '';
     },
 
     buildChart: function (jsondata) {
