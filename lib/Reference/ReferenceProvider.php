@@ -59,7 +59,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 
     public function getTitle(): string
     {
-        return $this->l10n->t('Analytics Report');
+        return $this->l10n->t('Analytics');
     }
 
     public function getOrder(): int
@@ -96,14 +96,16 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
             if ($isPanorama) {
                 $item = $this->PanoramaService->read((int)$matches[0]);
                 $icon = 'panorama.svg';
+				$type = $this->l10n->t('Panorama');
             } else {
                 $item = $this->ReportService->read((int)$matches[0]);
                 $icon = 'report.svg';
+				$type = $this->l10n->t('Report');
             }
             if (!empty($item)) {
                 $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', $icon));
-                $name = $item['name'];
-                $subheader = $item['subheader'] ?? '';
+                $name = $this->l10n->t('Analytics') . ' ' . $type;
+                $subheader = $item['name'];
             } else {
                 $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'noReport.svg'));
                 $name = $this->l10n->t('Report not found');
