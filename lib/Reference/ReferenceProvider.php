@@ -9,6 +9,7 @@
 namespace OCA\Analytics\Reference;
 
 use OCA\Analytics\Service\ReportService;
+use OCA\Analytics\Service\PanoramaService;
 use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
@@ -30,6 +31,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
     private IURLGenerator $urlGenerator;
     private LoggerInterface $logger;
     private ReportService $ReportService;
+    private PanoramaService $PanoramaService;
 
     public function __construct(IConfig          $config,
                                 LoggerInterface  $logger,
@@ -37,6 +39,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
                                 IURLGenerator    $urlGenerator,
                                 ReferenceManager $referenceManager,
                                 ReportService    $ReportService,
+                                PanoramaService  $PanoramaService,
                                 ?string          $userId)
     {
         $this->userId = $userId;
@@ -46,6 +49,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
         $this->l10n = $l10n;
         $this->urlGenerator = $urlGenerator;
         $this->ReportService = $ReportService;
+        $this->PanoramaService = $PanoramaService;
     }
 
     public function getId(): string
@@ -55,7 +59,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 
     public function getTitle(): string
     {
-        return $this->l10n->t('Analytics Report');
+        return $this->l10n->t('Analytics');
     }
 
     public function getOrder(): int
@@ -81,18 +85,27 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
         if (!$adminLinkPreviewEnabled) {
             //return false;
         }
-        return preg_match('~/apps/analytics/#/r/~', $referenceText) === 1;
+        return preg_match('~/apps/analytics/(?:r|pa)/~', $referenceText) === 1;
     }
 
     public function resolveReference(string $referenceText): ?IReference
     {
         if ($this->matchReference($referenceText)) {
             preg_match("/\d+$/", $referenceText, $matches); // get the last integer
-            $reportMetadata = $this->ReportService->read((int)$matches[0]);
-            if (!empty($reportMetadata)) {
-                $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg'));
-                $name = $reportMetadata['name'];
-                $subheader = $reportMetadata['subheader'];
+            $isPanorama = str_contains($referenceText, '/pa/');
+            if ($isPanorama) {
+                $item = $this->PanoramaService->read((int)$matches[0]);
+                $icon = 'panorama.svg';
+				$type = $this->l10n->t('Panorama');
+            } else {
+                $item = $this->ReportService->read((int)$matches[0]);
+                $icon = 'report.svg';
+				$type = $this->l10n->t('Report');
+            }
+            if (!empty($item)) {
+                $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', $icon));
+                $name = $this->l10n->t('Analytics') . ' ' . $type;
+                $subheader = $item['name'];
             } else {
                 $imageUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'noReport.svg'));
                 $name = $this->l10n->t('Report not found');

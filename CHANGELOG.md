@@ -6,6 +6,7 @@
 - Show installed version in navigation bar
 - Inline rename for all navigation items
 - Group sharing for panoramas
+- Smart picker shows panoramas and reports with distinct icons
 
 ### Changed
 - Performance tweaks

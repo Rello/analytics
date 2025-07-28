@@ -33,6 +33,6 @@ OCA.Analytics.Reference = {
                 + '<div>' + richObject.subheader + '</div>'
                 //+ '<div style="color: var(--color-text-maxcontrast);">' + richObject.url + '</div>'
                 + '</div></a>';
-        });
+        }, () => {}, { hasInteractiveView: false });
     },
 }
