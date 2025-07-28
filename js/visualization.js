@@ -53,11 +53,36 @@ OCA.Analytics.Visualization = {
     compareValues: function(a, b, fn) {
         function normalizeNumberString(str) {
             if (typeof str !== "string") return str;
-            // Remove all '.' as thousands separator
-            let cleaned = str.replace(/\./g, '');
-            // Replace ',' with '.' as decimal separator for parseFloat
-            cleaned = cleaned.replace(/,/g, '.');
-            return cleaned;
+            str = str.trim();
+            const hasComma = str.includes(',');
+            const hasDot = str.includes('.');
+
+            if (hasComma && hasDot) {
+                if (str.lastIndexOf(',') > str.lastIndexOf('.')) {
+                    // comma as decimal separator
+                    str = str.replace(/\./g, '');
+                    str = str.replace(',', '.');
+                } else {
+                    // dot as decimal separator
+                    str = str.replace(/,/g, '');
+                }
+            } else if (hasComma) {
+                const idx = str.lastIndexOf(',');
+                const digits = str.length - idx - 1;
+                if (digits <= 2) {
+                    str = str.replace(',', '.');
+                } else {
+                    str = str.replace(/,/g, '');
+                }
+            } else if (hasDot) {
+                const idx = str.lastIndexOf('.');
+                const digits = str.length - idx - 1;
+                if (digits > 2) {
+                    str = str.replace(/\./g, '');
+                }
+            }
+
+            return str.replace(/\s/g, '');
         }
 
         const normA = normalizeNumberString(String(a));
@@ -421,7 +446,7 @@ OCA.Analytics.Visualization = {
                     } else if (severity === 3) { // orange
                         color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
                     } else if (severity === 4) { // green
-                        color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
+                        color = OCA.Analytics.Visualization.thresholdColorNumberGreen;
                     }
                     const cell = row.childNodes.item(dimIndex);
                     if (cell) {
@@ -544,7 +569,8 @@ OCA.Analytics.Visualization = {
             value = rawValue.toLocaleString(undefined, { minimumFractionDigits: 2 });
         }
 
-        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(kpi, value, jsondata.thresholds);
+        let dimension = jsondata.data[0].length - 1
+        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, value, jsondata.thresholds);
 
         // Create the KPI content dynamically
         const kpiContent = document.createElement('div');
@@ -1212,15 +1238,15 @@ OCA.Analytics.Visualization = {
     /**
      * Check a value against threshold rules and return a color style.
      *
-     * @param {string} kpi - Name of the metric
+     * @param {string} dimension - Column index
      * @param {number|string} value - Value to check
      * @param {Array} thresholds - Threshold definitions
      * @returns {string|undefined} CSS color style
      */
-    validateThreshold: function (kpi, value, thresholds) {
+    validateThreshold: function (dimension, value, thresholds) {
         let thresholdColor;
 
-        thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
+        thresholds = thresholds.filter(p => p.dimension === dimension);
 
         for (let threshold of thresholds) {
             let option = String(threshold['option']).toUpperCase();
@@ -1238,11 +1264,11 @@ OCA.Analytics.Visualization = {
             threshold['severity'] = parseInt(threshold['severity']);
             if (comparison === true) {
                 if (threshold['severity'] === 2) {
-                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberRed;
+                    thresholdColor = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberRed;
                 } else if (threshold['severity'] === 3) {
-                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberOrange;
+                    thresholdColor = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberOrange;
                 } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'color: ' . OCA.Analytics.Visualization.thresholdColorNumberGreen;
+                    thresholdColor = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberGreen;
                 }
             }
         }

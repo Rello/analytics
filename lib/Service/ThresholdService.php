@@ -93,13 +93,38 @@ class ThresholdService {
 		}
 	}
 
-	private function normalizeNumberString(string $str): string {
-		// Remove thousands separators (e.g., '.')
-		$str = str_replace('.', '', $str);
-		// Replace decimal separator (e.g., ',') with '.'
-		$str = str_replace(',', '.', $str);
-		return $str;
-	}
+       private function normalizeNumberString(string $str): string {
+               $str = trim($str);
+               $hasComma = str_contains($str, ',');
+               $hasDot   = str_contains($str, '.');
+
+               if ($hasComma && $hasDot) {
+                       if (strrpos($str, ',') > strrpos($str, '.')) {
+                               // comma as decimal separator
+                               $str = str_replace('.', '', $str);
+                               $str = str_replace(',', '.', $str);
+                       } else {
+                               // dot as decimal separator
+                               $str = str_replace(',', '', $str);
+                       }
+               } elseif ($hasComma) {
+                       $idx = strrpos($str, ',');
+                       $digits = strlen($str) - $idx - 1;
+                       if ($digits <= 2) {
+                               $str = str_replace(',', '.', $str);
+                       } else {
+                               $str = str_replace(',', '', $str);
+                       }
+               } elseif ($hasDot) {
+                       $idx = strrpos($str, '.');
+                       $digits = strlen($str) - $idx - 1;
+                       if ($digits > 2) {
+                               $str = str_replace('.', '', $str);
+                       }
+               }
+
+               return str_replace(' ', '', $str);
+       }
 
 	/**
 	 * Compare two values and return comparison result similar to spaceship operator

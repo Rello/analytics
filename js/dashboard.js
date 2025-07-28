@@ -183,7 +183,8 @@ OCA.Analytics.Dashboard = {
             type = 'table';
         }
 
-        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds);
+        // pass the last dimension index for threshold evaluation
+        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds, data.length - 1);
         document.getElementById('analyticsWidgetItem-report-' + reportId).insertAdjacentHTML('beforeend', widgetRow);
         document.getElementById('analyticsWidgetItem-report-' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
@@ -198,8 +199,8 @@ OCA.Analytics.Dashboard = {
         }
     },
 
-    buildWidgetRow: function (report, reportId, subheader, value, thresholds) {
-        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(subheader, value, thresholds);
+    buildWidgetRow: function (report, reportId, subheader, value, thresholds, dimension) {
+        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, value, thresholds);
         //value = parseFloat(value).toLocaleString();
         value = OCA.Analytics.Dashboard.nFormatter(value);
         let href = OC.generateUrl('apps/analytics/r/' + reportId);
@@ -211,7 +212,7 @@ OCA.Analytics.Dashboard = {
                 </div>
                 <div class="analyticsWidgetContent2">
                      <div id="kpi${reportId}">
-                        <div ${thresholdColor} class="analyticsWidgetValue">${value}</div>
+                        <div style="${thresholdColor}" class="analyticsWidgetValue">${value}</div>
                     </div>
                    <div id="chartContainer${reportId}">
                         <canvas id="myChart${reportId}" class="chartContainer"></canvas>
@@ -244,48 +245,6 @@ OCA.Analytics.Dashboard = {
             return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
         }
         return num;
-    },
-
-    validateThreshold: function (kpi, value, thresholds) {
-        const operators = {
-            '=': function (a, b) {
-                return a === b
-            },
-            '<': function (a, b) {
-                return a < b
-            },
-            '>': function (a, b) {
-                return a > b
-            },
-            '<=': function (a, b) {
-                return a <= b
-            },
-            '>=': function (a, b) {
-                return a >= b
-            },
-            '!=': function (a, b) {
-                return a !== b
-            },
-        };
-        let thresholdColor;
-
-        thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
-
-        for (let threshold of thresholds) {
-            const comparison = operators[threshold['option']](parseFloat(value), parseFloat(threshold['value']));
-            threshold['severity'] = parseInt(threshold['severity']);
-            if (comparison === true) {
-                if (threshold['severity'] === 2) {
-                    thresholdColor = 'style="color: red;"';
-                } else if (threshold['severity'] === 3) {
-                    thresholdColor = 'style="color: orange;"';
-                } else if (threshold['severity'] === 4) {
-                    thresholdColor = 'style="color: green;"';
-                }
-            }
-        }
-
-        return thresholdColor;
     },
 
     buildChart: function (jsondata) {
