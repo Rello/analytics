@@ -24,13 +24,13 @@ SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["img/star.svg", "img/arrow**.svg", "img/chart**.svg", "img/column.svg", "img/copy.svg", "img/download.svg", "img/filteradd.svg", "img/filterremove.svg", "img/forecast.svg", "img/gripLines.svg", "img/noReport.svg", "img/options.svg", "img/pdf.svg", "img/refresh.svg", "img/reset.svg", "img/row.svg", "img/sort.svg", "img/tableOptions.svg", "img/translate.svg", "img/dataset.svg", "img/overview.svg", "img/panorama.svg", "img/report.svg", "img/fullscreen.svg", "img/fullscreenExit.svg", "img/more.svg", "img/group.svg", "img/timeAggregation.svg", "img/filter.svg", "img/add.svg"]
+path = ["img/star.svg", "img/arrow**.svg", "img/chart**.svg", "img/column.svg", "img/copy.svg", "img/download.svg", "img/filteradd.svg", "img/filterremove.svg", "img/forecast.svg", "img/gripLines.svg", "img/noReport.svg", "img/options.svg", "img/pdf.svg", "img/refresh.svg", "img/reset.svg", "img/row.svg", "img/sort.svg", "img/tableOptions.svg", "img/translate.svg", "img/dataset.svg", "img/overview.svg", "img/panorama.svg", "img/report.svg", "img/more.svg", "img/group.svg", "img/timeAggregation.svg", "img/filter.svg", "img/add.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2018-2024 Google LLC"
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
-path = "img/threshold.svg"
+path = ["img/threshold.svg", "img/fullscreen.svg", "img/fullscreenExit.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Siemens"
 SPDX-License-Identifier = "MIT"
