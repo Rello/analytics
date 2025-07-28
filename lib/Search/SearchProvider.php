@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace OCA\Analytics\Search;
 
 use OCA\Analytics\Service\ReportService;
+use OCA\Analytics\Service\PanoramaService;
 use OCP\App\IAppManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -30,16 +31,19 @@ class SearchProvider implements IProvider
     /** @var IURLGenerator */
     private $urlGenerator;
     private $ReportService;
+    private $PanoramaService;
 
     public function __construct(IAppManager $appManager,
                                 IL10N $l10n,
                                 IURLGenerator $urlGenerator,
-                                ReportService $ReportService)
+                                ReportService $ReportService,
+                                PanoramaService $PanoramaService)
     {
         $this->appManager = $appManager;
         $this->l10n = $l10n;
         $this->urlGenerator = $urlGenerator;
         $this->ReportService = $ReportService;
+        $this->PanoramaService = $PanoramaService;
     }
 
     public function getId(): string
@@ -53,15 +57,26 @@ class SearchProvider implements IProvider
             return SearchResult::complete($this->getName(), []);
         }
 
-        $datasets = $this->ReportService->search($query->getTerm());
+        $reports = $this->ReportService->search($query->getTerm());
+        $panoramas = $this->PanoramaService->search($query->getTerm());
         $result = [];
 
-        foreach ($datasets as $dataset) {
+        foreach ($reports as $report) {
             $result[] = new SearchResultEntry(
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'app-dark.svg')),
-                $dataset['name'],
+                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'report.svg')),
+                $report['name'],
                 '',
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.main') . 'r/' . $dataset['id']),
+                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.report', ['id' => $report['id']])),
+                ''
+            );
+        }
+
+        foreach ($panoramas as $panorama) {
+            $result[] = new SearchResultEntry(
+                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'panorama.svg')),
+                $panorama['name'],
+                '',
+                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.panorama', ['id' => $panorama['id']])),
                 ''
             );
         }
