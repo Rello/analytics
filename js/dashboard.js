@@ -183,7 +183,8 @@ OCA.Analytics.Dashboard = {
             type = 'table';
         }
 
-        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds);
+        // pass dimension index 0 for threshold evaluation
+        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds, 0);
         document.getElementById('analyticsWidgetItem-report-' + reportId).insertAdjacentHTML('beforeend', widgetRow);
         document.getElementById('analyticsWidgetItem-report-' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
@@ -198,8 +199,8 @@ OCA.Analytics.Dashboard = {
         }
     },
 
-    buildWidgetRow: function (report, reportId, subheader, value, thresholds) {
-        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(subheader, value, thresholds);
+    buildWidgetRow: function (report, reportId, subheader, value, thresholds, dimension) {
+        let thresholdColor = OCA.Analytics.Dashboard.validateThreshold(dimension, value, thresholds);
         //value = parseFloat(value).toLocaleString();
         value = OCA.Analytics.Dashboard.nFormatter(value);
         let href = OC.generateUrl('apps/analytics/r/' + reportId);
@@ -246,8 +247,30 @@ OCA.Analytics.Dashboard = {
         return num;
     },
 
-    validateThreshold: function (kpi, value, thresholds) {
-        const colorStyle = OCA.Analytics.Visualization.validateThreshold(kpi, value, thresholds);
+    // Evaluate thresholds for the given dimension index and return inline style
+    validateThreshold: function (dimension, value, thresholds) {
+        thresholds = thresholds.filter(t => parseInt(t.dimension) === dimension);
+        let colorStyle;
+
+        for (let threshold of thresholds) {
+            let option = String(threshold.option).toUpperCase();
+            const map = {'=':'EQ','>':'GT','<':'LT','>=':'GE','<=':'LE','!=':'NE'};
+            option = map[option] || option;
+
+            const comparison = OCA.Analytics.Visualization.thresholdOperators[option](value, threshold.value);
+            const severity = parseInt(threshold.severity);
+
+            if (comparison === true) {
+                if (severity === 2) {
+                    colorStyle = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberRed;
+                } else if (severity === 3) {
+                    colorStyle = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberOrange;
+                } else if (severity === 4) {
+                    colorStyle = 'color: ' + OCA.Analytics.Visualization.thresholdColorNumberGreen;
+                }
+            }
+        }
+
         return colorStyle ? `style="${colorStyle}"` : '';
     },
 
