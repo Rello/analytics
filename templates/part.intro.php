@@ -23,7 +23,7 @@
                 <div class="infoBox" id="infoBoxReport"><img height="80px" width="80px"
                                                              src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
                                                              alt="infoReport">
-                    <div class="infoBoxHeader"><?php p($l->t('New Report')); ?></div>
+                    <div class="infoBoxHeader"><?php p($l->t('New')); ?></div>
                 </div>
             </li>
             <li style="display: inline-block; margin: 10px;">
