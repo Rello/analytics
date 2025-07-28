@@ -52,6 +52,12 @@
                 </button>
             </li>
             <li>
+                <button id="optionsMenuThreshold" class="has-tooltip" title="<?php p($l->t('Maintain thresholds for notifications')); ?>">
+                    <span class="icon-analytics-threshold"></span>
+                    <span><?php p($l->t('Thresholds')); ?></span>
+                </button>
+            </li>
+            <li>
                 <button id="optionsMenuAnalysis">
                     <span class="icon-analytics-forecast"></span>
                     <span><?php p($l->t('Analysis')); ?></span>

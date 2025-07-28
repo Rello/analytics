@@ -6,10 +6,11 @@
 - Show installed version in navigation bar
 - Inline rename for all navigation items
 - Group sharing for panoramas
-- Smart picker shows panoramas and reports with distinct icons
+- Smart picker shows panoramas and reports
 
 ### Changed
 - Performance tweaks
+- Threshold configuration moved to modal dialog
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients
