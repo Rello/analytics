@@ -464,7 +464,8 @@ textarea.menueInput,
 input.optionsInput,
 select.optionsInput,
 textarea.optionsInput,
-input.optionsInputValue {
+input.optionsInputValue,
+input.navigationRenameInput {
     border: none !important;
     border-bottom: 1px solid var(--color-border-dark) !important;
     border-radius: 0;
@@ -484,7 +485,8 @@ textarea.menueInput:focus,
 input.optionsInput:focus,
 select.optionsInput:focus,
 textarea.optionsInput:focus,
-input.optionsInputValue:focus {
+input.optionsInputValue:focus,
+input.navigationRenameInput:focus {
     outline: none;
     border-bottom: 2px solid var(--color-primary-element) !important;
 }
@@ -503,7 +505,8 @@ select.menueInput:hover,
 textarea.menueInput:hover,
 input.optionsInput:hover,
 select.optionsInput:hover,
-textarea.optionsInput:hover {
+textarea.optionsInput:hover,
+input.navigationRenameInput:hover {
     border-bottom-color: var(--color-primary-element) !important;
 }
 
@@ -762,6 +765,11 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-timeAggregation {
     background-image: url(../img/timeAggregation.svg);
+    filter: var(--background-invert-if-dark);
+}
+
+.icon-analytics-rename {
+    background-image: url(../img/rename.svg);
     filter: var(--background-invert-if-dark);
 }
 

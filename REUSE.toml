@@ -18,7 +18,7 @@ SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["img/app.svg", "img/app-dark.svg", "img/app-color.svg", "img/infoIntro.svg", "img/infoReport.svg", "img/infoWiki.svg", "img/save.svg", "img/warning.svg", "img/**.png", "img/**.gif", "img/logo.svg"]
+path = ["img/app.svg", "img/app-dark.svg", "img/app-color.svg", "img/infoIntro.svg", "img/infoReport.svg", "img/infoWiki.svg", "img/save.svg", "img/warning.svg", "img/**.png", "img/**.gif", "img/logo.svg", "img/rename.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

@@ -669,7 +669,7 @@
             <li><a href="#" id="navigationMenuEdit"><span
                             class="icon-rename"></span><span><?php p($l->t('Basic settings')); ?></span></a></li>
             <li><a href="#" id="navigationMenuRename"><span
-                            class="icon-rename"></span><span><?php p($l->t('Rename')); ?></span></a></li>
+                            class="icon-analytics-rename"></span><span><?php p($l->t('Rename')); ?></span></a></li>
             <li><a href="#" id="navigationMenuNewGroup"><span
                             class="icon-add"></span><span><?php p($l->t('Add to new group')); ?></span></a></li>
             <li>
