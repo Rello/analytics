@@ -54,6 +54,16 @@ OCA.Analytics.Filter = {
                 el.classList.remove('report-option-active');
             }
         }
+
+        const thresholdEl = document.getElementById('optionsMenuThreshold');
+        if (thresholdEl) {
+            const thresholds = OCA.Analytics.currentReportData.thresholds || [];
+            if (Array.isArray(thresholds) && thresholds.length > 0) {
+                thresholdEl.classList.add('report-option-active');
+            } else {
+                thresholdEl.classList.remove('report-option-active');
+            }
+        }
     },
 
     /**
