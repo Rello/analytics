@@ -842,6 +842,53 @@ OCA.Analytics.Filter = {
     },
 
     /**
+     * Open the threshold dialog used to maintain notifications and
+     * coloring rules for the current report.
+     */
+    openThresholdDialog: function () {
+        OCA.Analytics.Report.hideReportMenu();
+
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Thresholds'),
+            OCA.Analytics.Notification.dialogClose
+        );
+
+        const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
+
+        fetch(OC.generateUrl('apps/analytics/report/') + reportId, {
+            method: 'GET',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                let container = document.importNode(document.getElementById('templateThreshold').content, true);
+                OCA.Analytics.Notification.htmlDialogUpdate(container, '');
+
+                const dimensionSelect = document.getElementById('sidebarThresholdDimension');
+                const dimensions = OCA.Analytics.currentReportData.header;
+                dimensions.forEach((dim, idx) => {
+                    dimensionSelect.options.add(new Option(dim, idx));
+                });
+
+                document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+                dimensionSelect.addEventListener('change', function (evt) {
+                    document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = evt.target.value;
+                });
+                document.getElementById('sidebarThresholdValue').addEventListener('click', OCA.Analytics.Report.showDropDownList);
+                document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
+                document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
+                document.getElementById('sidebarThresholdHint').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdHint);
+
+                if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
+                    document.getElementById('sidebarThresholdSeverity').remove(0);
+                    document.getElementById('sidebarThresholdCreateNewButton').hidden = true;
+                }
+
+                OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
+            });
+    },
+
+    /**
      * Read all user configured chart options, merge them with any
      * existing settings and trigger a reload of the report.
      */

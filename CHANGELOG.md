@@ -10,6 +10,7 @@
 
 ### Changed
 - Performance tweaks
+- Threshold configuration moved to modal dialog
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients

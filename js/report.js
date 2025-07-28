@@ -320,6 +320,14 @@ Object.assign(OCA.Analytics.Report, {
         let isInternalShare = currentReport.options['isShare'] !== undefined;
         let isExternalShare = document.getElementById('sharingToken').value !== '';
 
+        const active = document.querySelector('#navigationDatasets .active a');
+        const itemType = active ? active.dataset.item_type : '';
+        if (itemType === 'report') {
+            OCA.Analytics.Visualization.showElement('optionsMenuThreshold');
+        } else {
+            OCA.Analytics.Visualization.hideElement('optionsMenuThreshold');
+        }
+
         if (isExternalShare) {
             if (canUpdate) {
                 OCA.Analytics.Visualization.hideElement('optionsMenuIcon');
@@ -380,6 +388,7 @@ Object.assign(OCA.Analytics.Report, {
         document.getElementById('optionsMenuTimeAggregation').addEventListener('click', OCA.Analytics.Filter.openTimeAggregationDialog);
         document.getElementById('optionsMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
         document.getElementById('optionsMenuTableOptions').addEventListener('click', OCA.Analytics.Filter.openTableOptionsDialog);
+        document.getElementById('optionsMenuThreshold').addEventListener('click', OCA.Analytics.Filter.openThresholdDialog);
 
         document.getElementById('optionsMenuAnalysis').addEventListener('click', OCA.Analytics.Report.showReportMenuAnalysis);
         document.getElementById('optionsMenuRefresh').addEventListener('click', OCA.Analytics.Report.showReportMenuRefresh);

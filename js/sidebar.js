@@ -70,15 +70,7 @@ OCA.Analytics.Sidebar = {
             excludeTypes: [],
         });
 
-        OCA.Analytics.Sidebar.registerSidebarTab({
-            id: 'tabHeaderThreshold',
-            class: 'tabContainerThreshold',
-            tabindex: '3',
-            name: t('analytics', 'Thresholds'),
-            action: OCA.Analytics.Sidebar.Threshold.tabContainerThreshold,
-            validTypes: [],
-            excludeTypes: [OCA.Analytics.TYPE_GROUP],
-        });
+        // Thresholds are maintained via modal dialog
 
 /*
         OCA.Analytics.Sidebar.registerSidebarTab({
