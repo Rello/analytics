@@ -6,16 +6,14 @@
 - Show installed version in navigation bar
 - Inline rename for all navigation items
 - Group sharing for panoramas
-- Smart picker shows panoramas and reports with distinct icons
+- Smart picker shows panoramas and reports
 
 ### Changed
 - Performance tweaks
 - Threshold configuration moved to modal dialog
-- Threshold option shows active indicator when thresholds exist
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients
-- Threshold dialog refreshes list without relying on sidebar
 
 ## 5.7.1 - 2025-07-15
 ### Fixed

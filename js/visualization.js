@@ -421,7 +421,7 @@ OCA.Analytics.Visualization = {
                     } else if (severity === 3) { // orange
                         color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
                     } else if (severity === 4) { // green
-                        color = OCA.Analytics.Visualization.thresholdColorNumberOrange;
+                        color = OCA.Analytics.Visualization.thresholdColorNumberGreen;
                     }
                     const cell = row.childNodes.item(dimIndex);
                     if (cell) {

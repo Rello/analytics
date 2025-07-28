@@ -741,7 +741,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .icon-analytics-threshold {
-    background-image: url(../img/warning.svg);
+    background-image: url(../img/threshold.svg);
     filter: var(--background-invert-if-dark);
 }
 
