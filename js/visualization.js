@@ -569,7 +569,8 @@ OCA.Analytics.Visualization = {
             value = rawValue.toLocaleString(undefined, { minimumFractionDigits: 2 });
         }
 
-        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(kpi, value, jsondata.thresholds);
+        let dimension = jsondata.data[0].length - 1
+        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, value, jsondata.thresholds);
 
         // Create the KPI content dynamically
         const kpiContent = document.createElement('div');
@@ -1237,15 +1238,15 @@ OCA.Analytics.Visualization = {
     /**
      * Check a value against threshold rules and return a color style.
      *
-     * @param {string} kpi - Name of the metric
+     * @param {string} dimension - Column index
      * @param {number|string} value - Value to check
      * @param {Array} thresholds - Threshold definitions
      * @returns {string|undefined} CSS color style
      */
-    validateThreshold: function (kpi, value, thresholds) {
+    validateThreshold: function (dimension, value, thresholds) {
         let thresholdColor;
 
-        thresholds = thresholds.filter(p => p.dimension1 === kpi || p.dimension1 === '*');
+        thresholds = thresholds.filter(p => p.dimension === dimension);
 
         for (let threshold of thresholds) {
             let option = String(threshold['option']).toUpperCase();
