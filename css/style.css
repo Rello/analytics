@@ -1390,6 +1390,23 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: none;
 }
 
+.popovermenu,
+.app-navigation-entry-menu {
+    animation: analyticsMenuEnter .15s ease-out;
+    transform-origin: top;
+}
+
+@keyframes analyticsMenuEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 #body-public #content {
     padding-block-end: initial; !important;
 }
