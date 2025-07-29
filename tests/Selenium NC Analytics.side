@@ -10,7 +10,7 @@
       "id": "18faf15c-39e7-4b1a-92b9-140e4f45b558",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -346,7 +346,7 @@
       "id": "5996d79b-20a6-4684-851e-714d08408649",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -581,7 +581,7 @@
         ["xpath=//div[@id='tableData']/div[2]/div/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
       ],
-      "value": "1,1"
+      "value": "1.1"
     }, {
       "id": "2f37835c-b1b5-4906-a01f-83d545c6c922",
       "comment": "",
@@ -910,7 +910,7 @@
         ["xpath=//td[3]", "xpath:position"],
         ["xpath=//td[contains(.,'1.10')]", "xpath:innerText"]
       ],
-      "value": "1.1"
+      "value": "1,1"
     }, {
       "id": "d47c4042-efa7-4284-9bd4-9bd4697039a8",
       "comment": "",
@@ -934,7 +934,7 @@
         ["xpath=//td[2]", "xpath:position"],
         ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
       ],
-      "value": "2,024"
+      "value": "2.024"
     }, {
       "id": "02eb200b-7b3a-4a78-b739-4c23765d170e",
       "comment": "",
@@ -1611,59 +1611,33 @@
       "id": "708e4c22-93bd-442a-a82b-31b6616679ac",
       "comment": "",
       "command": "click",
-      "target": "xpath=//button[@data-name='Testreport']",
+      "target": "id=optionsMenuIcon",
       "targets": [
-        ["css=li:nth-child(3) button", "css:finder"],
-        ["xpath=//ul[@id='navigationDatasets']/li[3]/div/ul/li/button", "xpath:idRelative"],
-        ["xpath=//li[3]/div/ul/li/button", "xpath:position"]
+        ["id=optionsMenuIcon", "id"],
+        ["css=#optionsMenuIcon", "css:finder"],
+        ["xpath=//div[@id='optionsMenuIcon']", "xpath:attributes"],
+        ["xpath=//div[@id='menuBar']/div", "xpath:idRelative"],
+        ["xpath=//div[5]/div[2]/div[3]/div", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "2613ab7c-2364-4d82-8687-682b9f6698de",
-      "comment": "Basic Settings",
+      "comment": "",
       "command": "click",
-      "target": "linkText=Basic settings",
+      "target": "css=#optionsMenuThreshold > span:nth-child(2)",
       "targets": [
-        ["linkText=Edit", "linkText"],
-        ["css=.open li:nth-child(1) > a", "css:finder"],
-        ["xpath=//ul[@id='navigationDatasets']/li[4]/div[2]/ul/li/a", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '#')])[17]", "xpath:href"],
-        ["xpath=//li[4]/div[2]/ul/li/a", "xpath:position"]
+        ["css=#optionsMenuThreshold > span:nth-child(2)", "css:finder"],
+        ["xpath=//button[@id='optionsMenuThreshold']/span[2]", "xpath:idRelative"],
+        ["xpath=//li[8]/button/span[2]", "xpath:position"],
+        ["xpath=//span[contains(.,'Thresholds')]", "xpath:innerText"]
       ],
       "value": ""
     }, {
       "id": "3f512706-710d-472b-b5c2-6cc0774f6e2c",
       "comment": "",
       "command": "waitForElementVisible",
-      "target": "id=sidebarReportName",
+      "target": "id=analyticsDialogHeader",
       "targets": [],
-      "value": "5000"
-    }, {
-      "id": "cfe0b2dc-7edb-4eee-90b6-6c9e31871131",
-      "comment": "",
-      "command": "click",
-      "target": "linkText=Thresholds",
-      "targets": [
-        ["linkText=Thresholds", "linkText"],
-        ["css=#tabHeaderThreshold > a", "css:finder"],
-        ["xpath=//a[contains(text(),'Thresholds')]", "xpath:link"],
-        ["xpath=//li[@id='tabHeaderThreshold']/a", "xpath:idRelative"],
-        ["xpath=//div[2]/div[3]/div/ul/li[3]/a", "xpath:position"],
-        ["xpath=//a[contains(.,'Thresholds')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }, {
-      "id": "b5f6a169-13cc-4f90-991c-6529099c47ba",
-      "comment": "",
-      "command": "waitForElementPresent",
-      "target": "id=sidebarThresholdDimension",
-      "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
-        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
-      ],
       "value": "5000"
     }, {
       "id": "086e42c3-3916-4f55-a887-c4c97079f8a5",
@@ -1737,49 +1711,15 @@
       ],
       "value": "Column 2 = Dimension 2"
     }, {
-      "id": "cbcf1461-6a80-4ec0-9ca5-b735bee81de2",
+      "id": "a3ddb8f9-9906-4a87-bba7-0a89a2d75bff",
       "comment": "",
       "command": "click",
       "target": "css=.analyticsTesting",
       "targets": [
-        ["css=.icon-close", "css:finder"],
-        ["xpath=//div[@id='sidebarThresholdList']/div/div[3]", "xpath:idRelative"],
-        ["xpath=//div[3]/div/div[3]/div/div[3]", "xpath:position"]
+        ["css=.analyticsTesting", "css:finder"],
+        ["xpath=//div[@id='sidebarThresholdList']/div/div[4]", "xpath:idRelative"],
+        ["xpath=//div[2]/div[5]/div/div[4]", "xpath:position"]
       ],
-      "value": ""
-    }, {
-      "id": "22988eb8-d088-482a-8e9c-8831ab854e45",
-      "comment": "",
-      "command": "click",
-      "target": "linkText=Thresholds",
-      "targets": [
-        ["linkText=Thresholds", "linkText"],
-        ["css=#tabHeaderThreshold > a", "css:finder"],
-        ["xpath=//a[contains(text(),'Thresholds')]", "xpath:link"],
-        ["xpath=//li[@id='tabHeaderThreshold']/a", "xpath:idRelative"],
-        ["xpath=//div[2]/div[3]/div/ul/li[3]/a", "xpath:position"],
-        ["xpath=//a[contains(.,'Thresholds')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }, {
-      "id": "d2bdfae3-00f5-4028-b7ee-968748d2bb93",
-      "comment": "",
-      "command": "waitForElementPresent",
-      "target": "id=sidebarThresholdDimension",
-      "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
-        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
-      ],
-      "value": "5000"
-    }, {
-      "id": "6f43aa86-737d-43f2-acad-be921e7e842a",
-      "comment": "",
-      "command": "assertElementNotPresent",
-      "target": "css=.thresholdText",
-      "targets": [],
       "value": ""
     }, {
       "id": "43fd122c-81d4-42d4-9f08-90a810c4a5f8",
@@ -1788,6 +1728,13 @@
       "target": "",
       "targets": [],
       "value": "1000"
+    }, {
+      "id": "6f43aa86-737d-43f2-acad-be921e7e842a",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "css=.thresholdText",
+      "targets": [],
+      "value": ""
     }, {
       "id": "30f78571-c8c4-4d4a-97ab-9bae3b72226a",
       "comment": "",
@@ -2685,102 +2632,59 @@
       "command": "click",
       "target": "xpath=//button[@data-name='New']",
       "targets": [
-        ["css=li:nth-child(3) button", "css:finder"],
-        ["xpath=//ul[@id='navigationDatasets']/li[3]/div/ul/li/button", "xpath:idRelative"],
-        ["xpath=//li[3]/div/ul/li/button", "xpath:position"]
+        ["css=.collapsible:nth-child(6) .menuButton", "css:finder"],
+        ["xpath=//ul[@id='section-reports']/li[6]/div/div/ul/li/button", "xpath:idRelative"],
+        ["xpath=//li[4]/ul/li[6]/div/div/ul/li/button", "xpath:position"]
       ],
-      "value": ""
-    }, {
-      "id": "4e5c38da-6a31-4c38-ad8b-a3cb4729d174",
-      "comment": "",
-      "command": "pause",
-      "target": "1000",
-      "targets": [],
       "value": ""
     }, {
       "id": "edfacd1f-9920-4258-ad5e-f57caaaa9f66",
       "comment": "",
       "command": "click",
-      "target": "linkText=Basic settings",
+      "target": "linkText=Rename",
       "targets": [
-        ["linkText=Edit", "linkText"],
-        ["css=.open li:nth-child(1) > a", "css:finder"],
-        ["xpath=//ul[@id='navigationDatasets']/li[4]/div[2]/ul/li/a", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '#')])[17]", "xpath:href"],
-        ["xpath=//li[4]/div[2]/ul/li/a", "xpath:position"]
+        ["css=.collapsible:nth-child(6) .icon-analytics-rename", "css:finder"],
+        ["xpath=(//a[@id='navigationMenuRename']/span)[47]", "xpath:idRelative"],
+        ["xpath=//li[4]/ul/li[6]/div/div[2]/ul/li/a/span", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "57c21ce1-b014-4a79-9209-67957462b78e",
       "comment": "",
       "command": "type",
-      "target": "id=sidebarReportName",
+      "target": "css=.navigationRenameInput",
       "targets": [
-        ["id=sidebarReportName", "id"],
-        ["css=#sidebarReportName", "css:finder"],
-        ["xpath=//input[@id='sidebarReportName']", "xpath:attributes"],
-        ["xpath=//div[@id='tabContainerReport']/div/div/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div/div/input", "xpath:position"]
+        ["css=.navigationRenameInput", "css:finder"],
+        ["xpath=(//input[@type='text'])[2]", "xpath:attributes"],
+        ["xpath=//ul[@id='section-reports']/li[6]/div/a/input", "xpath:idRelative"],
+        ["xpath=//a/input", "xpath:position"]
       ],
       "value": "Testgroup"
     }, {
       "id": "6918cd57-150a-4bc7-bc5c-201a38603179",
       "comment": "",
       "command": "click",
-      "target": "id=sidebarReportUpdateButton",
+      "target": "css=.icon-checkmark",
       "targets": [
-        ["id=sidebarReportUpdateButton", "id"],
-        ["css=#sidebarReportUpdateButton", "css:finder"],
-        ["xpath=//button[@id='sidebarReportUpdateButton']", "xpath:attributes"],
-        ["xpath=//div[@id='tabContainerReport']/button", "xpath:idRelative"],
-        ["xpath=//div[2]/div/button", "xpath:position"],
-        ["xpath=//button[contains(.,'Update')]", "xpath:innerText"]
+        ["css=.icon-checkmark", "css:finder"],
+        ["xpath=//ul[@id='section-reports']/li[6]/div/a/span", "xpath:idRelative"],
+        ["xpath=//li[6]/div/a/span", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "5d3e3d2b-d374-4229-8568-8ac9420beecb",
       "comment": "",
-      "command": "click",
-      "target": "xpath=//button[@data-name='Testgroup']",
+      "command": "assertText",
+      "target": "linkText=Testgroup",
       "targets": [
-        ["css=li:nth-child(3) button", "css:finder"],
-        ["xpath=//ul[@id='navigationDatasets']/li[3]/div/ul/li/button", "xpath:idRelative"],
-        ["xpath=//li[3]/div/ul/li/button", "xpath:position"]
+        ["linkText=New", "linkText"],
+        ["css=.collapsible:nth-child(6) .icon-folder", "css:finder"],
+        ["xpath=(//a[contains(text(),'New')])[2]", "xpath:link"],
+        ["xpath=//ul[@id='section-reports']/li[6]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/apps/analytics/r/146')]", "xpath:href"],
+        ["xpath=//li[4]/ul/li[6]/div/a", "xpath:position"]
       ],
       "value": ""
-    }, {
-      "id": "5582eddc-de06-42ae-a6bf-9336ab2ba1e3",
-      "comment": "",
-      "command": "click",
-      "target": "linkText=Basic settings",
-      "targets": [
-        ["linkText=Edit", "linkText"],
-        ["css=.open li:nth-child(1) > a", "css:finder"],
-        ["xpath=//ul[@id='navigationDatasets']/li[4]/div[2]/ul/li/a", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '#')])[17]", "xpath:href"],
-        ["xpath=//li[4]/div[2]/ul/li/a", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "6a96608d-1d80-4c95-a56e-503f1bc23539",
-      "comment": "",
-      "command": "waitForElementPresent",
-      "target": "id=sidebarReportName",
-      "targets": [],
-      "value": "5000"
-    }, {
-      "id": "0ee9f36c-a1d5-4e86-a175-82a44759cea5",
-      "comment": "",
-      "command": "waitForElementVisible",
-      "target": "id=sidebarReportName",
-      "targets": [
-        ["id=sidebarDatasetName", "id"],
-        ["css=#sidebarDataset #sidebarDatasetName", "css:finder"],
-        ["xpath=//input[@id='sidebarDatasetName']", "xpath:attributes"],
-        ["xpath=//div[@id='sidebarDataset']/div/div/div[2]/input", "xpath:idRelative"],
-        ["xpath=//div[2]/input", "xpath:position"]
-      ],
-      "value": "Testgroup"
     }]
   }, {
     "id": "233490f0-b006-487b-9750-3071f90ac644",
@@ -2789,7 +2693,7 @@
       "id": "43a9e71e-7234-429c-86b6-2d5b651e6071",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -2822,11 +2726,11 @@
       "id": "de8d74a2-e802-4658-b20a-c9b02ffbe6a1",
       "comment": "",
       "command": "click",
-      "target": "css=.collapsible:nth-child(16) .icon-delete",
+      "target": "css=.collapsible:nth-child(9) #navigationMenuDelete > span:nth-child(2)",
       "targets": [
-        ["css=.collapsible:nth-child(16) .icon-delete", "css:finder"],
-        ["xpath=(//a[@id='navigationMenuDelete']/span)[65]", "xpath:idRelative"],
-        ["xpath=//li[16]/div/div[2]/ul/li[4]/a/span", "xpath:position"]
+        ["css=.collapsible:nth-child(9) #navigationMenuDelete > span:nth-child(2)", "css:finder"],
+        ["xpath=(//a[@id='navigationMenuDelete']/span[2])[29]", "xpath:idRelative"],
+        ["xpath=//li[9]/div/div[2]/ul/li[4]/a/span[2]", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -2879,7 +2783,7 @@
       "id": "40ad49ee-23eb-4938-8a41-484f70780c19",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -3633,7 +3537,7 @@
       "id": "d76cbf69-0bf8-4d77-ae56-82781f1f1eda",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -3834,7 +3738,7 @@
       "id": "1dc68d75-9a35-4829-97db-4a9b8cf725e9",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -3967,11 +3871,11 @@
       "id": "fcef480b-8435-4cd1-9d08-d63f96508356",
       "comment": "",
       "command": "click",
-      "target": "css=.open .icon-starred",
+      "target": "css=.active > #navigationMenu .icon",
       "targets": [
-        ["css=.active > #navigationMenu .icon", "css:finder"],
-        ["xpath=(//a[@id='navigationMenueFavorite']/span)[53]", "xpath:idRelative"],
-        ["xpath=//li[13]/div[2]/ul/li[3]/a/span", "xpath:position"]
+        ["css=li:nth-child(4) > .app-navigation-entry > #navigationMenu .icon-starred", "css:finder"],
+        ["xpath=(//a[@id='navigationMenueFavorite']/span)[7]", "xpath:idRelative"],
+        ["xpath=//li[4]/div/div[2]/ul/li[4]/a/span", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -4599,7 +4503,7 @@
       "id": "a276e929-8687-40c7-9944-ab77208e39d9",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -5485,7 +5389,7 @@
       "id": "0f500ce7-5bb2-4901-99f3-8e157a0ed9d6",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -5604,7 +5508,7 @@
       "id": "52aae10d-c1f6-4366-97ee-7c2acee0b52d",
       "comment": "",
       "command": "open",
-      "target": "/apps/analytics/#/r/",
+      "target": "/apps/analytics",
       "targets": [],
       "value": ""
     }, {
@@ -6270,7 +6174,7 @@
         ["xpath=//td[2]", "xpath:position"],
         ["xpath=//td[contains(.,'Dimension 2')]", "xpath:innerText"]
       ],
-      "value": "1,234,567"
+      "value": "1.234.567"
     }, {
       "id": "c9e4b432-a721-4333-9dd2-573380e60a0a",
       "comment": "",
@@ -6863,7 +6767,7 @@
         ["xpath=//td[3]", "xpath:position"],
         ["xpath=//td[contains(.,'2')]", "xpath:innerText"]
       ],
-      "value": "1.1"
+      "value": "1,1"
     }]
   }, {
     "id": "add619eb-0aed-4308-990c-068b0c6533e9",
