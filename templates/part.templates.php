@@ -471,12 +471,12 @@
     <div class="table" style="display: table;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?></div>
-            <select style="display: table-cell;" id="sidebarThresholdDimension" class="sidebarInput"></select>
+            <select style="display: table-cell;" id="thresholdDimension" class="sidebarInput"></select>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell;"><?php p($l->t('Operator')); ?></div>
 
-            <select style="display: table-cell;" id="sidebarThresholdOption" class="sidebarInput">
+            <select style="display: table-cell;" id="thresholdOption" class="sidebarInput">
                 <option value="=" selected><?php // TRANSLATORS description in a dropdown; limited space
 					p($l->t('equal to')); ?></option>
                 <option value=">"><?php // TRANSLATORS description in a dropdown; limited space
@@ -492,16 +492,16 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
-            <input style="display: table-cell;" id="sidebarThresholdValue" class="sidebarInput" autocomplete="off"
+            <input style="display: table-cell;" id="thresholdValue" class="sidebarInput" autocomplete="off"
                    data-dropDownListIndex="0">
             <div style="display: table-cell;">
-                <a id="sidebarThresholdHint" title="<?php p($l->t('Variables')); ?>">
+                <a id="thresholdHint" title="<?php p($l->t('Variables')); ?>">
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Severity')); ?></div>
-            <select style="display: table-cell;" id="sidebarThresholdSeverity" class="sidebarInput">
+            <select style="display: table-cell;" id="thresholdSeverity" class="sidebarInput">
                 <option value="1"><?php p($l->t('Notification')); ?></option>
                 <option value="2"><?php p($l->t('Red')); ?></option>
                 <option value="3"><?php p($l->t('Yellow')); ?></option>
@@ -510,7 +510,7 @@
         </div>
         <div style="display: table-row;">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Coloring in table')); ?></div>
-            <select style="display: table-cell;" id="sidebarThresholdColoring" class="sidebarInput">
+            <select style="display: table-cell;" id="thresholdColoring" class="sidebarInput">
                 <option value="value" selected><?php p($l->t('Single value')); ?></option>
                 <option value="row"><?php p($l->t('Table row')); ?></option>
             </select>
@@ -519,10 +519,10 @@
     </div>
     <br>
     <div class="sidebarButtonRow">
-        <button id="sidebarThresholdCreateButton" type="button" class="analyticsPrimary" data-id="">
+        <button id="thresholdCreateButton" type="button" class="analyticsPrimary" data-id="">
 			<?php p($l->t('Save threshold')); ?>
         </button>
-        <button id="sidebarThresholdCreateNewButton" type="button" class="secondary">
+        <button id="thresholdCreateNewButton" type="button" class="secondary">
 			<?php p($l->t('Notification for new records')); ?>
         </button>
     </div>
@@ -532,7 +532,7 @@
     <div class="userGuidance"><?php
 		p($l->t('Existing thresholds will be evaluated in the order shown below. The order can be changed by drag & drop.')); ?></div>
     <br>
-    <div id="sidebarThresholdList"></div>
+    <div id="thresholdList"></div>
 </template>
 
 <template id="templateDataload">

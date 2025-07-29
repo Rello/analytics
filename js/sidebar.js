@@ -927,7 +927,7 @@ OCA.Analytics.Sidebar.Data = {
 
 };
 
-OCA.Analytics.Sidebar.Threshold = {
+OCA.Analytics.Threshold = {
     draggedItem: null,
 
     tabContainerThreshold: function () {
@@ -952,28 +952,28 @@ OCA.Analytics.Sidebar.Threshold = {
                 document.getElementById('tabContainerThreshold').innerHTML = '';
                 document.getElementById('tabContainerThreshold').appendChild(table);
 
-                const dimensionSelect = document.getElementById('sidebarThresholdDimension');
+                const dimensionSelect = document.getElementById('thresholdDimension');
                 const dimensions = OCA.Analytics.currentReportData.header;
                 dimensions.forEach((dim, idx) => {
                     dimensionSelect.options.add(new Option(dim, idx));
                 });
 
-                document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+                document.getElementById('thresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
                 dimensionSelect.addEventListener('change', function (evt) {
-                    document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = evt.target.value;
+                    document.getElementById('thresholdValue').dataset.dropdownlistindex = evt.target.value;
                 });
-                document.getElementById('sidebarThresholdValue').addEventListener('click', OCA.Analytics.Report.showDropDownList);
-                document.getElementById('sidebarThresholdCreateButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateButton);
-                document.getElementById('sidebarThresholdCreateNewButton').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdCreateNewButton);
+                document.getElementById('thresholdValue').addEventListener('click', OCA.Analytics.Report.showDropDownList);
+                document.getElementById('thresholdCreateButton').addEventListener('click', OCA.Analytics.Threshold.handleThresholdCreateButton);
+                document.getElementById('thresholdCreateNewButton').addEventListener('click', OCA.Analytics.Threshold.handleThresholdCreateNewButton);
 
-                document.getElementById('sidebarThresholdHint').addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdHint);
+                document.getElementById('thresholdHint').addEventListener('click', OCA.Analytics.Threshold.handleThresholdHint);
 
                 if (parseInt(data.type) !== OCA.Analytics.TYPE_INTERNAL_DB) {
-                    document.getElementById('sidebarThresholdSeverity').remove(0);
-                    document.getElementById('sidebarThresholdCreateNewButton').hidden = true;
+                    document.getElementById('thresholdSeverity').remove(0);
+                    document.getElementById('thresholdCreateNewButton').hidden = true;
                 }
 
-                OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Threshold.getThreholdList(reportId);
             });
 
 
@@ -988,10 +988,10 @@ OCA.Analytics.Sidebar.Threshold = {
             .then(response => response.json())
             .then(data => {
                 if (data !== false) {
-                    document.getElementById('sidebarThresholdList').innerHTML = '';
+                    document.getElementById('thresholdList').innerHTML = '';
                     for (let threshold of data) {
-                        const li = OCA.Analytics.Sidebar.Threshold.buildThresholdRow(threshold);
-                        document.getElementById('sidebarThresholdList').appendChild(li);
+                        const li = OCA.Analytics.Threshold.buildThresholdRow(threshold);
+                        document.getElementById('thresholdList').appendChild(li);
                     }
                 }
             });
@@ -1006,7 +1006,7 @@ OCA.Analytics.Sidebar.Threshold = {
     },
 
     handleThresholdCreateButton: function () {
-        OCA.Analytics.Sidebar.Threshold.createThreashold();
+        OCA.Analytics.Threshold.createThreashold();
     },
 
     handleThresholdCreateNewButton: function () {
@@ -1025,8 +1025,8 @@ OCA.Analytics.Sidebar.Threshold = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
-                OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
+                OCA.Analytics.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Threshold.resetThresholdInputs();
                 if (!OCA.Analytics.isDataset) {
                     OCA.Analytics.Report.resetContentArea();
                     OCA.Analytics.Report.Backend.getData();
@@ -1036,18 +1036,18 @@ OCA.Analytics.Sidebar.Threshold = {
 
     handleThresholdDeleteButton: function (evt) {
         const thresholdId = evt.target.dataset.id;
-        OCA.Analytics.Sidebar.Threshold.deleteThreshold(thresholdId);
+        OCA.Analytics.Threshold.deleteThreshold(thresholdId);
     },
 
     editThreshold: function (data, element) {
-        document.getElementById('sidebarThresholdDimension').value = data.dimension;
-        document.getElementById('sidebarThresholdOption').value = data.option;
-        document.getElementById('sidebarThresholdValue').value = data.value;
-        document.getElementById('sidebarThresholdSeverity').value = data.severity;
-        document.getElementById('sidebarThresholdColoring').value = data.coloring;
-        document.getElementById('sidebarThresholdCreateButton').dataset.id = data.id;
+        document.getElementById('thresholdDimension').value = data.dimension;
+        document.getElementById('thresholdOption').value = data.option;
+        document.getElementById('thresholdValue').value = data.value;
+        document.getElementById('thresholdSeverity').value = data.severity;
+        document.getElementById('thresholdColoring').value = data.coloring;
+        document.getElementById('thresholdCreateButton').dataset.id = data.id;
 
-        document.querySelectorAll('#sidebarThresholdList .thresholdItem.selected').forEach(item => {
+        document.querySelectorAll('#thresholdList .thresholdItem.selected').forEach(item => {
             item.classList.remove('selected');
         });
         if (element) {
@@ -1056,14 +1056,14 @@ OCA.Analytics.Sidebar.Threshold = {
     },
 
     resetThresholdInputs: function () {
-        const dimensionSelect = document.getElementById('sidebarThresholdDimension');
+        const dimensionSelect = document.getElementById('thresholdDimension');
         dimensionSelect.selectedIndex = 0;
-        document.getElementById('sidebarThresholdOption').value = '=';
-        document.getElementById('sidebarThresholdValue').value = '';
-        document.getElementById('sidebarThresholdSeverity').value = '4';
-        document.getElementById('sidebarThresholdColoring').value = 'value';
-        delete document.getElementById('sidebarThresholdCreateButton').dataset.id;
-        document.getElementById('sidebarThresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+        document.getElementById('thresholdOption').value = '=';
+        document.getElementById('thresholdValue').value = '';
+        document.getElementById('thresholdSeverity').value = '4';
+        document.getElementById('thresholdColoring').value = 'value';
+        delete document.getElementById('thresholdCreateButton').dataset.id;
+        document.getElementById('thresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
     },
 
     buildThresholdRow: function (data) {
@@ -1097,9 +1097,9 @@ OCA.Analytics.Sidebar.Threshold = {
         item.classList.add('thresholdItem');
         item.dataset.id = data.id;
         item.draggable = true;
-        item.addEventListener('dragstart', OCA.Analytics.Sidebar.Threshold.handleDragStart);
-        item.addEventListener('dragover', OCA.Analytics.Sidebar.Threshold.handleDragOver);
-        item.addEventListener('drop', OCA.Analytics.Sidebar.Threshold.handleDrop);
+        item.addEventListener('dragstart', OCA.Analytics.Threshold.handleDragStart);
+        item.addEventListener('dragover', OCA.Analytics.Threshold.handleDragOver);
+        item.addEventListener('drop', OCA.Analytics.Threshold.handleDrop);
 
         let grip = document.createElement('div');
         grip.classList.add('icon-analytics-gripLines', 'sidebarPointer');
@@ -1121,9 +1121,9 @@ OCA.Analytics.Sidebar.Threshold = {
             const row = this.parentNode;
             if (row.classList.contains('selected')) {
                 row.classList.remove('selected');
-                OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
+                OCA.Analytics.Threshold.resetThresholdInputs();
             } else {
-                OCA.Analytics.Sidebar.Threshold.editThreshold(data, row);
+                OCA.Analytics.Threshold.editThreshold(data, row);
             }
         });
 
@@ -1131,7 +1131,7 @@ OCA.Analytics.Sidebar.Threshold = {
         tDelete.classList.add('icon-close');
         tDelete.classList.add('analyticsTesting');
         tDelete.dataset.id = data.id;
-        tDelete.addEventListener('click', OCA.Analytics.Sidebar.Threshold.handleThresholdDeleteButton);
+        tDelete.addEventListener('click', OCA.Analytics.Threshold.handleThresholdDeleteButton);
 
         item.appendChild(grip);
         item.appendChild(bullet);
@@ -1144,12 +1144,12 @@ OCA.Analytics.Sidebar.Threshold = {
     createThreashold: function () {
         const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
 
-        if (document.getElementById('sidebarThresholdValue').value === '') {
+        if (document.getElementById('thresholdValue').value === '') {
             OCA.Analytics.Notification.notification('error', t('analytics', 'Missing data'));
             return;
         }
 
-        const button = document.getElementById('sidebarThresholdCreateButton');
+        const button = document.getElementById('thresholdCreateButton');
         const currentId = button.dataset.id;
 
         const create = () => {
@@ -1159,18 +1159,18 @@ OCA.Analytics.Sidebar.Threshold = {
                 headers: OCA.Analytics.headers(),
                 body: JSON.stringify({
                     reportId: reportId,
-                    dimension: document.getElementById('sidebarThresholdDimension').value,
-                    option: document.getElementById('sidebarThresholdOption').value,
-                    value: document.getElementById('sidebarThresholdValue').value,
-                    severity: document.getElementById('sidebarThresholdSeverity').value,
-                    coloring: document.getElementById('sidebarThresholdColoring').value,
+                    dimension: document.getElementById('thresholdDimension').value,
+                    option: document.getElementById('thresholdOption').value,
+                    value: document.getElementById('thresholdValue').value,
+                    severity: document.getElementById('thresholdSeverity').value,
+                    coloring: document.getElementById('thresholdColoring').value,
                 })
             })
                 .then(response => response.json())
                 .then(data => {
                     delete button.dataset.id;
-                    OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
-                    OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
+                    OCA.Analytics.Threshold.getThreholdList(reportId);
+                    OCA.Analytics.Threshold.resetThresholdInputs();
                     if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.Report.resetContentArea();
                         OCA.Analytics.Report.Backend.getData();
@@ -1199,8 +1199,8 @@ OCA.Analytics.Sidebar.Threshold = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Sidebar.Threshold.getThreholdList(reportId);
-                OCA.Analytics.Sidebar.Threshold.resetThresholdInputs();
+                OCA.Analytics.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Threshold.resetThresholdInputs();
                 if (!OCA.Analytics.isDataset) {
                     OCA.Analytics.Report.resetContentArea();
                     OCA.Analytics.Report.Backend.getData();
@@ -1209,7 +1209,7 @@ OCA.Analytics.Sidebar.Threshold = {
     },
 
     handleDragStart: function (e) {
-        OCA.Analytics.Sidebar.Threshold.draggedItem = this;
+        OCA.Analytics.Threshold.draggedItem = this;
         e.dataTransfer.effectAllowed = 'move';
     },
 
@@ -1225,16 +1225,16 @@ OCA.Analytics.Sidebar.Threshold = {
         if (e.stopPropagation) {
             e.stopPropagation();
         }
-        if (OCA.Analytics.Sidebar.Threshold.draggedItem !== this) {
-            this.parentNode.insertBefore(OCA.Analytics.Sidebar.Threshold.draggedItem, this);
+        if (OCA.Analytics.Threshold.draggedItem !== this) {
+            this.parentNode.insertBefore(OCA.Analytics.Threshold.draggedItem, this);
         }
-        OCA.Analytics.Sidebar.Threshold.saveOrder();
+        OCA.Analytics.Threshold.saveOrder();
         return false;
     },
 
     saveOrder: function () {
         const ids = [];
-        document.querySelectorAll('#sidebarThresholdList > div').forEach(item => {
+        document.querySelectorAll('#thresholdList > div').forEach(item => {
             ids.push(item.dataset.id);
         });
         const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);

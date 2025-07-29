@@ -11,7 +11,6 @@
 ### Changed
 - Performance tweaks
 - Threshold configuration moved to modal dialog
-- Short opening animation for menus and popovers
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients

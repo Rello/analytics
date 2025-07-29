@@ -1640,14 +1640,41 @@
       "targets": [],
       "value": "5000"
     }, {
+      "id": "cfe0b2dc-7edb-4eee-90b6-6c9e31871131",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Thresholds",
+      "targets": [
+        ["linkText=Thresholds", "linkText"],
+        ["css=#tabHeaderThreshold > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Thresholds')]", "xpath:link"],
+        ["xpath=//li[@id='tabHeaderThreshold']/a", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div/ul/li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Thresholds')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b5f6a169-13cc-4f90-991c-6529099c47ba",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "id=thresholdDimension",
+      "targets": [
+        ["id=thresholdDimension1", "id"],
+        ["css=#tableThreshold #thresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": "5000"
+    }, {
       "id": "086e42c3-3916-4f55-a887-c4c97079f8a5",
       "comment": "",
       "command": "select",
-      "target": "id=sidebarThresholdDimension",
+      "target": "id=thresholdDimension",
       "targets": [
-        ["id=sidebarThresholdDimension", "id"],
-        ["css=#sidebarThresholdDimension", "css:finder"],
-        ["xpath=//select[@id='sidebarThresholdDimension']", "xpath:attributes"],
+        ["id=thresholdDimension", "id"],
+        ["css=#thresholdDimension", "css:finder"],
+        ["xpath=//select[@id='thresholdDimension']", "xpath:attributes"],
         ["xpath=//div[@id='tabContainerThreshold']/div[2]/div/select", "xpath:idRelative"],
         ["xpath=//div/select", "xpath:position"]
       ],
@@ -1656,11 +1683,11 @@
       "id": "a2830b41-0990-4a6c-ad87-72fe85740fe3",
       "comment": "",
       "command": "type",
-      "target": "id=sidebarThresholdValue",
+      "target": "id=thresholdValue",
       "targets": [
-        ["id=sidebarThresholdDimension3", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension3", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension3']", "xpath:attributes"],
+        ["id=thresholdDimension3", "id"],
+        ["css=#tableThreshold #thresholdDimension3", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension3']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
       ],
@@ -1669,14 +1696,14 @@
       "id": "c49468d9-5786-4fb4-8741-d72723cb4201",
       "comment": "",
       "command": "select",
-      "target": "id=sidebarThresholdSeverity",
+      "target": "id=thresholdSeverity",
       "targets": [],
       "value": "value=2"
     }, {
       "id": "557040f8-ea41-4566-9aaf-5217c3b97d9c",
       "comment": "",
       "command": "click",
-      "target": "id=sidebarThresholdCreateButton",
+      "target": "id=thresholdCreateButton",
       "targets": [
         ["id=createThresholdButton", "id"],
         ["css=#tableThreshold > #createThresholdButton", "css:finder"],
@@ -1692,9 +1719,9 @@
       "command": "waitForElementPresent",
       "target": "css=.thresholdItem",
       "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
+        ["id=thresholdDimension1", "id"],
+        ["css=#tableThreshold #thresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension1']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
       ],
@@ -1706,7 +1733,7 @@
       "target": "css=.thresholdText",
       "targets": [
         ["css=.thresholdText", "css:finder"],
-        ["xpath=//div[@id='sidebarThresholdList']/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[@id='thresholdList']/div/div[2]", "xpath:idRelative"],
         ["xpath=//div[3]/div/div[3]/div/div[2]", "xpath:position"]
       ],
       "value": "Column 2 = Dimension 2"
@@ -1716,18 +1743,38 @@
       "command": "click",
       "target": "css=.analyticsTesting",
       "targets": [
-        ["css=.analyticsTesting", "css:finder"],
-        ["xpath=//div[@id='sidebarThresholdList']/div/div[4]", "xpath:idRelative"],
-        ["xpath=//div[2]/div[5]/div/div[4]", "xpath:position"]
+        ["css=.icon-close", "css:finder"],
+        ["xpath=//div[@id='thresholdList']/div/div[3]", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[3]/div/div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "22988eb8-d088-482a-8e9c-8831ab854e45",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Thresholds",
+      "targets": [
+        ["linkText=Thresholds", "linkText"],
+        ["css=#tabHeaderThreshold > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Thresholds')]", "xpath:link"],
+        ["xpath=//li[@id='tabHeaderThreshold']/a", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div/ul/li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Thresholds')]", "xpath:innerText"]
       ],
       "value": ""
     }, {
       "id": "43fd122c-81d4-42d4-9f08-90a810c4a5f8",
       "comment": "",
-      "command": "pause",
-      "target": "",
-      "targets": [],
-      "value": "1000"
+      "command": "waitForElementPresent",
+      "target": "id=thresholdDimension",
+      "targets": [
+        ["id=thresholdDimension1", "id"],
+        ["css=#tableThreshold #thresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension1']", "xpath:attributes"],
+        ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": "5000"
     }, {
       "id": "6f43aa86-737d-43f2-acad-be921e7e842a",
       "comment": "",
@@ -1739,18 +1786,18 @@
       "id": "30f78571-c8c4-4d4a-97ab-9bae3b72226a",
       "comment": "",
       "command": "select",
-      "target": "id=sidebarThresholdDimension",
+      "target": "id=thresholdDimension",
       "targets": [],
       "value": "label=Column 1"
     }, {
       "id": "63076fcf-6129-4f23-8844-25de8abcc7f2",
       "comment": "",
       "command": "type",
-      "target": "id=sidebarThresholdValue",
+      "target": "id=thresholdValue",
       "targets": [
-        ["id=sidebarThresholdDimension3", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension3", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension3']", "xpath:attributes"],
+        ["id=thresholdDimension3", "id"],
+        ["css=#tableThreshold #thresholdDimension3", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension3']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
       ],
@@ -1759,21 +1806,21 @@
       "id": "3a79c513-955a-41a7-ad58-7bb2397a07d7",
       "comment": "",
       "command": "select",
-      "target": "id=sidebarThresholdSeverity",
+      "target": "id=thresholdSeverity",
       "targets": [],
       "value": "value=1"
     }, {
       "id": "0c16907c-b22b-4e85-8820-305af0d47609",
       "comment": "",
       "command": "select",
-      "target": "id=sidebarThresholdColoring",
+      "target": "id=thresholdColoring",
       "targets": [],
       "value": "value=row"
     }, {
       "id": "929dc585-65b0-417b-97a8-ce05195a407c",
       "comment": "",
       "command": "click",
-      "target": "id=sidebarThresholdCreateButton",
+      "target": "id=thresholdCreateButton",
       "targets": [
         ["id=createThresholdButton", "id"],
         ["css=#tableThreshold > #createThresholdButton", "css:finder"],
@@ -1790,7 +1837,7 @@
       "target": "css=.thresholdItem",
       "targets": [
         ["css=.thresholdItem", "css:finder"],
-        ["xpath=//div[@id='sidebarThresholdList']/div", "xpath:idRelative"],
+        ["xpath=//div[@id='thresholdList']/div", "xpath:idRelative"],
         ["xpath=//div[3]/div[3]/div", "xpath:position"]
       ],
       "value": "5000"
@@ -4806,7 +4853,7 @@
       "id": "3de6d203-2a17-43ca-a0b5-9da118440f76",
       "comment": "",
       "command": "waitForElementPresent",
-      "target": "id=sidebarThresholdDimension1",
+      "target": "id=thresholdDimension1",
       "targets": [],
       "value": "30000"
     }, {
@@ -6035,9 +6082,9 @@
       "command": "type",
       "target": "id=sidebarReportChartOptions",
       "targets": [
-        ["id=sidebarThresholdDimension3", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension3", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension3']", "xpath:attributes"],
+        ["id=thresholdDimension3", "id"],
+        ["css=#tableThreshold #thresholdDimension3", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension3']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
       ],
@@ -6048,9 +6095,9 @@
       "command": "type",
       "target": "id=sidebarReportDataOptions",
       "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
+        ["id=thresholdDimension1", "id"],
+        ["css=#tableThreshold #thresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension1']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
       ],
@@ -6089,9 +6136,9 @@
       "command": "type",
       "target": "id=sidebarReportChartOptions",
       "targets": [
-        ["id=sidebarThresholdDimension3", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension3", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension3']", "xpath:attributes"],
+        ["id=thresholdDimension3", "id"],
+        ["css=#tableThreshold #thresholdDimension3", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension3']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div[3]/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div[3]/div[2]/input", "xpath:position"]
       ],
@@ -6102,9 +6149,9 @@
       "command": "type",
       "target": "id=sidebarReportDataOptions",
       "targets": [
-        ["id=sidebarThresholdDimension1", "id"],
-        ["css=#tableThreshold #sidebarThresholdDimension1", "css:finder"],
-        ["xpath=//input[@id='sidebarThresholdDimension1']", "xpath:attributes"],
+        ["id=thresholdDimension1", "id"],
+        ["css=#tableThreshold #thresholdDimension1", "css:finder"],
+        ["xpath=//input[@id='thresholdDimension1']", "xpath:attributes"],
         ["xpath=//div[@id='tableThreshold']/div[2]/div/div[2]/input", "xpath:idRelative"],
         ["xpath=//div[2]/div/div[2]/input", "xpath:position"]
       ],
