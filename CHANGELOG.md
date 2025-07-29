@@ -11,6 +11,7 @@
 ### Changed
 - Performance tweaks
 - Threshold configuration moved to modal dialog
+- Renamed threshold modal elements and JS functions removing sidebar prefix
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients
