@@ -122,7 +122,6 @@ OC.L10N.register(
     "Password" : "Contraseña",
     "More Information …" : "Más información…",
     "Quickstart" : "Aniciu rápidu",
-    "New Report" : "Informe nuevu",
     "Intro" : "Introducción",
     "Wiki" : "Wiki",
     "Options" : "Opciones",
