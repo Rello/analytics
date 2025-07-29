@@ -1353,12 +1353,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     padding: 0 12px 0 44px;
 }
 
-#appSettingsButton {
-    background: var(--icon-settings-dark) no-repeat 14px center;
-    line-height: 44px;
-    padding: 0 12px 0 44px;
-}
-
 #dataloadDetail, #dataloadRun {
     padding-top: 30px;
 }
