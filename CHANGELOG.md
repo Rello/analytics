@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.8.0 - pending
+## 5.8.0 - 2025-07-29
 ### Added
 - Threshold lines in charts using Chart.js annotation plugin
 - Show installed version in navigation bar
@@ -10,15 +10,10 @@
 
 ### Changed
 - Performance tweaks
-- Threshold configuration moved to modal dialog
+- Threshold configuration moved to report menu
 
 ### Fixed
-- Shared panorama folders now display their contained panoramas for share recipients
-- Thresholds again highlight matching values in data tables
 - Localized numbers with comma separators now evaluate correctly in thresholds
-- Dashboard widget thresholds now share logic with tables
-- Fixed wrong parameter in widget threshold validation
-- Settings button now aligns label with icon correctly
 
 ## 5.7.1 - 2025-07-15
 ### Fixed
