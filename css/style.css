@@ -921,17 +921,17 @@ div.dt-container .dt-paging .dt-paging-button {
     font-size: 22px;
     font-weight: bold;
     margin-bottom: 12px;
-    line-height: 23px;
+    line-height: 30px;
 }
 
 .analyticsDialogHeaderIcon {
     background-image: url(../img/app-color.svg);
     filter: var(--background-invert-if-dark);
-    background-size: 23px 23px;
+    background-size: 30px 30px;
     background-position: 0;
     background-repeat: no-repeat;
-    width: 23px;
-    height: 23px;
+    width: 30px;
+    height: 30px;
 }
 
 .analyticsDialogClose {
@@ -1388,6 +1388,23 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .popovermenu:after,
 .app-navigation-entry-menu:after {
     display: none;
+}
+
+.popovermenu,
+.app-navigation-entry-menu {
+    animation: analyticsMenuEnter .15s ease-out;
+    transform-origin: top;
+}
+
+@keyframes analyticsMenuEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 #body-public #content {
