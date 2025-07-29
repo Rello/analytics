@@ -137,7 +137,6 @@ OC.L10N.register(
     "The EasyPrivacy list is blocking some scripts because of a wildcard filter for *analytics*." : "EasyPrivacy-lista estää joitain skriptejä suodattimella *analytics*.",
     "More Information …" : "Lisää tietoa…",
     "Quickstart" : "Pika-aloitus",
-    "New Report" : "Uusi raportti",
     "Intro" : "Johdanto",
     "Wiki" : "Wiki",
     "Options" : "Valinnat",
