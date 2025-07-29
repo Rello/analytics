@@ -11,6 +11,7 @@
 ### Changed
 - Performance tweaks
 - Threshold configuration moved to modal dialog
+- Short opening animation for menus and popovers
 
 ### Fixed
 - Shared panorama folders now display their contained panoramas for share recipients
@@ -18,6 +19,7 @@
 - Localized numbers with comma separators now evaluate correctly in thresholds
 - Dashboard widget thresholds now share logic with tables
 - Fixed wrong parameter in widget threshold validation
+- Settings button now aligns label with icon correctly
 
 ## 5.7.1 - 2025-07-15
 ### Fixed
