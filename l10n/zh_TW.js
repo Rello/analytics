@@ -248,6 +248,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Options" : "選項",
     "Show top N items and group others together" : "顯示前 N 個項目，並將其他項目歸類為一組",
+    "Maintain thresholds for notifications" : "維護通知的閾值",
     "Analysis" : "分析",
     "Translate" : "翻譯",
     "Auto refresh" : "自動重新整理",
