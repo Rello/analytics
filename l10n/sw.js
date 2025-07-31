@@ -248,6 +248,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Options" : "Chaguzi",
     "Show top N items and group others together" : "Onyesha vipengere vya juu vya N na uvipange vingine pamoja",
+    "Maintain thresholds for notifications" : "Dumisha vizingiti vya arifa",
     "Analysis" : "Uchambuzi",
     "Translate" : "Tafsiri",
     "Auto refresh" : "Onesha upya kiotomatiki",

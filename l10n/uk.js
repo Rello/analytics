@@ -248,6 +248,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Options" : "Параметри",
     "Show top N items and group others together" : "Показати перші N елементів і згрупувати інші разом",
+    "Maintain thresholds for notifications" : "Підтримуйте порогові значення для сповіщень",
     "Analysis" : "Аналіз",
     "Translate" : "Перекласти",
     "Auto refresh" : "Автоматичне оновлення",

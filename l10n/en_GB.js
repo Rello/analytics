@@ -248,6 +248,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Options" : "Options",
     "Show top N items and group others together" : "Show top N items and group others together",
+    "Maintain thresholds for notifications" : "Maintain thresholds for notifications",
     "Analysis" : "Analysis",
     "Translate" : "Translate",
     "Auto refresh" : "Auto refresh",

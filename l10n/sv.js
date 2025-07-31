@@ -247,6 +247,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Options" : "Alternativ",
     "Show top N items and group others together" : "Visa de N främsta objekten och gruppera övriga tillsammans",
+    "Maintain thresholds for notifications" : "Hantera tröskelvärden för aviseringar",
     "Analysis" : "Analys",
     "Translate" : "Översätt",
     "Auto refresh" : "Automatisk uppdatering",

@@ -247,6 +247,7 @@ OC.L10N.register(
     "Wiki" : "Wiki",
     "Options" : "Předvolby",
     "Show top N items and group others together" : "Zobrazit N nej položek a seskupit k sobě ostatní",
+    "Maintain thresholds for notifications" : "Udržovat prahy pro notifikace",
     "Analysis" : "Analýza",
     "Translate" : "Překládání",
     "Auto refresh" : "Automaticky znovu načítat",
