@@ -899,7 +899,7 @@ OCA.Analytics.Sidebar.Data = {
     },
 
     handleDataImportFileButton: function () {
-        const mimeparts = ['text/csv', 'text/plain'];
+        const mimeparts = ['text/csv', 'text/plain', 'application/vnd.oasis.opendocument.spreadsheet'];
         OC.dialogs.filepicker(t('analytics', 'Select file'), OCA.Analytics.Sidebar.Backend.importFileData.bind(this), false, mimeparts, true, 1);
     },
 
