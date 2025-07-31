@@ -248,6 +248,7 @@ OC.L10N.register(
     "Wiki" : "Vicí",
     "Options" : "Roghanna",
     "Show top N items and group others together" : "Taispeáin na N míreanna is fearr agus grúpáil cinn eile le chéile",
+    "Maintain thresholds for notifications" : "Coinnigh tairseacha le haghaidh fógraí",
     "Analysis" : "Anailís",
     "Translate" : "Aistrigh",
     "Auto refresh" : "Athnuachan uathoibríoch",
