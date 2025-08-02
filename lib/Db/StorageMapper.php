@@ -49,7 +49,7 @@ class StorageMapper
      * @return string
      * @throws Exception
      */
-    public function create(int $datasetId, $dimension1, $dimension2, $value, string $user_id = null, $timestamp = null, $bulkInsert = null, $aggregation = null)
+    public function create(int $datasetId, $dimension1, $dimension2, $value, ?string $user_id = null, $timestamp = null, $bulkInsert = null, $aggregation = null)
     {
         $dimension1 = $dimension1 !== null ? str_replace('*', '', $dimension1) : null;
         $dimension2 = $dimension2 !== null ? str_replace('*', '', $dimension2) : null;
@@ -220,7 +220,7 @@ class StorageMapper
      * @return bool
      * @throws Exception
      */
-    public function delete(int $datasetId, $dimension1, $dimension2, string $user_id = null)
+    public function delete(int $datasetId, $dimension1, $dimension2, ?string $user_id = null)
     {
         if ($user_id) $this->userId = $user_id;
 
@@ -346,7 +346,7 @@ class StorageMapper
      * @return array
      * @throws Exception
      */
-    public function getRecordCount(int $datasetId, string $user_id = null)
+    public function getRecordCount(int $datasetId, ?string $user_id = null)
     {
         if ($user_id) $this->userId = $user_id;
         $sql = $this->db->getQueryBuilder();

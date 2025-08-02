@@ -74,7 +74,7 @@ class ActivityManager
      * @param $eventSubject
      * @param string|null $user_id
      */
-    public function triggerEvent($datasetId, $eventType, $eventSubject, string $user_id = null)
+    public function triggerEvent($datasetId, $eventType, $eventSubject, ?string $user_id = null)
     {
         try {
             $event = $this->createEvent($datasetId, $eventType, $eventSubject, $user_id);
@@ -95,7 +95,7 @@ class ActivityManager
      * @return IEvent
      * @throws \OCP\DB\Exception
      */
-    private function createEvent($objectId, $eventType, $eventSubject, string $user_id = null)
+    private function createEvent($objectId, $eventType, $eventSubject, ?string $user_id = null)
     {
         if ($eventType === ActivityManager::OBJECT_REPORT) {
             $name = $objectId !== 0 ? $this->ReportMapper->readOwn($objectId)['name'] : '';

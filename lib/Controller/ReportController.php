@@ -248,7 +248,7 @@ class ReportController extends Controller
      * @throws \OCP\Files\NotFoundException
      * @throws \OCP\Files\NotPermittedException
      */
-    public function import(string $path = null, string $raw = null)
+    public function import(?string $path = null, ?string $raw = null)
     {
         return new DataResponse($this->ReportService->import($path, $raw));
     }
