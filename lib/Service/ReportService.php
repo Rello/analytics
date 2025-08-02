@@ -364,7 +364,7 @@ class ReportService {
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws \OCP\Files\NotPermittedException
 	 */
-	public function import(string $path = null, string $raw = null) {
+	public function import(?string $path = null, ?string $raw = null) {
 		if ($path !== '' and $path !== null) {
 			$file = $this->rootFolder->getUserFolder($this->userId)->get($path);
 			$data = $file->getContent();

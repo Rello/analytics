@@ -107,7 +107,7 @@ class StorageService {
 			   $dimension1,
 			   $dimension2,
 			   $value,
-		string $user_id = null,
+			   ?string $user_id = null,
 			   $bulkInsert = null,
 			   $aggregation = null
 	) {
@@ -165,7 +165,7 @@ class StorageService {
 	 * @param string|null $user_id
 	 * @return bool
 	 */
-	public function delete(int $datasetId, $dimension1, $dimension2, string $user_id = null) {
+	public function delete(int $datasetId, $dimension1, $dimension2, ?string $user_id = null) {
 		return $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
 	}
 
@@ -189,7 +189,7 @@ class StorageService {
 	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @param $filter
-	 * @return bool
+	 * @return int
 	 * @throws Exception
 	 */
 	public function deleteWithFilter(int $datasetId, $filter) {
@@ -215,7 +215,7 @@ class StorageService {
 	 * @param string|null $user_id
 	 * @return array
 	 */
-	public function getRecordCount(int $datasetId, string $user_id = null) {
+	public function getRecordCount(int $datasetId, ?string $user_id = null) {
 		return $this->StorageMapper->getRecordCount($datasetId, $user_id);
 	}
 

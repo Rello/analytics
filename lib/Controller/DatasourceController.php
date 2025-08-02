@@ -85,7 +85,7 @@ class DatasourceController extends Controller {
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	public function index(int $datasourceType = null) {
+	public function index(?int $datasourceType = null) {
 		$result = [];
 		$datasourceIndex = $this->getDatasources($datasourceType);
 
@@ -110,7 +110,7 @@ class DatasourceController extends Controller {
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	public function indexFiltered(int $datasourceType = null) {
+	public function indexFiltered(?int $datasourceType = null) {
 		return $this->index($datasourceType);
 	}
 
@@ -192,7 +192,7 @@ class DatasourceController extends Controller {
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	private function getDatasources(int $datasourceType = null) {
+	private function getDatasources(?int $datasourceType = null) {
 		$datasources = $this->getOwnDatasources($datasourceType) + $this->getRegisteredDatasources($datasourceType);
 
 		// Data sources can be disabled globally by their ID
@@ -209,7 +209,7 @@ class DatasourceController extends Controller {
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	private function getOwnDatasources(int $datasourceType = null) {
+	private function getOwnDatasources(?int $datasourceType = null) {
 		$dataSources = [];
 		$serviceMapping = [
 			self::DATASET_TYPE_GIT => $this->GithubService,
@@ -235,7 +235,7 @@ class DatasourceController extends Controller {
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
-	private function getRegisteredDatasources(int $datasourceType = null) {
+	private function getRegisteredDatasources(?int $datasourceType = null) {
 		$dataSources = [];
 		$event = new DatasourceEvent();
 		$this->dispatcher->dispatchTyped($event);
