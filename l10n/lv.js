@@ -112,7 +112,7 @@ OC.L10N.register(
     "File" : "Datne",
     "Announcements" : "Paziņojumi",
     "copy" : "kopēt",
-    "The password is wrong. Try again." : "Nepareiza parole. Mēģiniet vēlreiz.",
+    "The password is wrong. Try again." : "Parole ir nepareiza. Jāmēģina vēlreiz.",
     "Password" : "Parole",
     "More Information …" : "Vairāk informācijas ...",
     "Translate" : "Tulkot",
