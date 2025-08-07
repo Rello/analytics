@@ -393,7 +393,7 @@
     "Leverage the JSON data source to pull data from external services" : "Aprovecha las fuentes de datos JSON para obtener datos de servicios externos",
     "Extract data from virtually any website using the HTML-Grabber" : "Extrae datos de virtualmente cualquier sitio web usando el HTML-Grabber",
     "Visualize data from internal Nextcloud applications instantly" : "Visualiza instantaneamente datos de aplicaciones internas de Nextcloud",
-    "Automate your data workflows seamlessly" : "Automatiza sin esfuerzo tus flujos de trabajo",
+    "Automate your data workflows seamlessly" : "Automatice de manera transparente sus flujos de trabajo de datos",
     "Persist data from any source directly in Nextcloud" : "Alamcena datos de cualquier origen directamente en Nextcloud",
     "Utilize timestamps to create historical records" : "Utiliza marcas de hora para crear registros históricos",
     "Perform full or incremental delta loads" : "Realiza cargas de datos completos o delta incrementales",
