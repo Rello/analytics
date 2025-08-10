@@ -785,12 +785,29 @@ Object.assign(OCA.Analytics.Report.Backend = {
         OCA.Analytics.Report.resetContentArea();
 
         let url;
+        let cacheKey;
         if (document.getElementById('sharingToken').value === '') {
             const reportId = document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
             url = OC.generateUrl('apps/analytics/data/') + reportId;
+            cacheKey = `analytics-report-${reportId}`;
         } else {
             const token = document.getElementById('sharingToken').value;
             url = OC.generateUrl('apps/analytics/data/public/') + token;
+            cacheKey = `analytics-report-public-${token}`;
+        }
+
+        // read cached data and timestamp from local storage
+        let cachedData = null;
+        let cachedTimestamp = null;
+        const cachedEntry = localStorage.getItem(cacheKey);
+        if (cachedEntry) {
+            try {
+                const parsed = JSON.parse(cachedEntry);
+                cachedData = parsed.data;
+                cachedTimestamp = parsed.lastModified;
+            } catch (e) {
+                // ignore invalid cache entries
+            }
         }
 
         // send user current filter options to the data request;
@@ -820,63 +837,98 @@ Object.assign(OCA.Analytics.Report.Backend = {
         xhr.open('GET', requestUrl, true);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        if (cachedTimestamp) {
+            xhr.setRequestHeader('If-Modified-Since', cachedTimestamp);
+        }
+        OCA.Analytics.currentXhrRequest = xhr;
+
+        const handleData = function (data) {
+            // Do something with the data here
+
+            OCA.Analytics.Visualization.hideElement('analytics-loading');
+            OCA.Analytics.Visualization.showElement('analytics-content-report');
+
+            OCA.Analytics.currentReportData = data;
+            try {
+                // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
+                let parsedChartOptions = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions.replace(/xAxes/g, 'x'));
+                OCA.Analytics.currentReportData.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
+            } catch (e) {
+                OCA.Analytics.currentReportData.options.chartoptions = {};
+            }
+
+            try {
+                let parsedDataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
+                OCA.Analytics.currentReportData.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
+            } catch (e) {
+                OCA.Analytics.currentReportData.options.dataoptions = {};
+            }
+
+            try {
+                let parsedFilterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
+                OCA.Analytics.currentReportData.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
+            } catch (e) {
+                OCA.Analytics.currentReportData.options.filteroptions = {};
+            }
+
+            try {
+                let parsedTableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
+                OCA.Analytics.currentReportData.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
+            } catch (e) {
+                OCA.Analytics.currentReportData.options.tableoptions = {};
+            }
+
+            document.getElementById('reportHeader').innerText = data.options.name;
+            if (data.options.subheader !== '') {
+                document.getElementById('reportSubHeader').innerText = data.options.subheader;
+                OCA.Analytics.Visualization.showElement('reportSubHeader');
+            }
+
+            // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
+            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeAggregation(OCA.Analytics.currentReportData);
+            OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTopN(OCA.Analytics.currentReportData);
+
+            OCA.Analytics.Report.buildReport();
+
+            let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
+            OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
+        };
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText);
-
-                // Do something with the data here
-
-                OCA.Analytics.Visualization.hideElement('analytics-loading');
-                OCA.Analytics.Visualization.showElement('analytics-content-report');
-
-                OCA.Analytics.currentReportData = data;
-                try {
-                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    let parsedChartOptions = JSON.parse(OCA.Analytics.currentReportData.options.chartoptions.replace(/xAxes/g, 'x'));
-                    OCA.Analytics.currentReportData.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.chartoptions = {};
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    const lastMod = xhr.getResponseHeader('Last-Modified');
+                    if (lastMod) {
+                        localStorage.setItem(cacheKey, JSON.stringify({ data: data, lastModified: lastMod }));
+                    }
+                    handleData(data);
+                } else if (xhr.status === 304) {
+                    if (cachedData) {
+                        handleData(cachedData);
+                    } else {
+                        localStorage.removeItem(cacheKey);
+                        let fallbackXhr = new XMLHttpRequest();
+                        fallbackXhr.open('GET', requestUrl, true);
+                        fallbackXhr.setRequestHeader('requesttoken', OC.requestToken);
+                        fallbackXhr.setRequestHeader('OCS-APIREQUEST', 'true');
+                        fallbackXhr.onreadystatechange = function () {
+                            if (fallbackXhr.readyState === 4 && fallbackXhr.status === 200) {
+                                let data = JSON.parse(fallbackXhr.responseText);
+                                const lastMod = fallbackXhr.getResponseHeader('Last-Modified');
+                                if (lastMod) {
+                                    localStorage.setItem(cacheKey, JSON.stringify({ data: data, lastModified: lastMod }));
+                                }
+                                handleData(data);
+                            }
+                        };
+                        fallbackXhr.send();
+                    }
                 }
-
-                try {
-                    let parsedDataOptions = JSON.parse(OCA.Analytics.currentReportData.options.dataoptions);
-                    OCA.Analytics.currentReportData.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.dataoptions = {};
-                }
-
-                try {
-                    let parsedFilterOptions = JSON.parse(OCA.Analytics.currentReportData.options.filteroptions);
-                    OCA.Analytics.currentReportData.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.filteroptions = {};
-                }
-
-                try {
-                    let parsedTableOptions = JSON.parse(OCA.Analytics.currentReportData.options.tableoptions);
-                    OCA.Analytics.currentReportData.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
-                } catch (e) {
-                    OCA.Analytics.currentReportData.options.tableoptions = {};
-                }
-
-                document.getElementById('reportHeader').innerText = data.options.name;
-                if (data.options.subheader !== '') {
-                    document.getElementById('reportSubHeader').innerText = data.options.subheader;
-                    OCA.Analytics.Visualization.showElement('reportSubHeader');
-                }
-
-                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
-                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeAggregation(OCA.Analytics.currentReportData);
-                OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTopN(OCA.Analytics.currentReportData);
-
-                OCA.Analytics.Report.buildReport();
-
-                let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
-                OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
             }
         };
+
         xhr.send();
     },
 
