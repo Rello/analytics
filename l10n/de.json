@@ -227,7 +227,7 @@
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Fehler beim Laden der Daten \"{dataloadName}\" für den Datensatz \"{datasetName}\"",
     "Panorama" : "Panorama",
     "Report not found" : "Bericht wurde nicht gefunden",
-    "This report was removed or is not shared with you" : "Dieser Bericht wurde entfernt oder wird nicht mit Ihnen geteilt",
+    "This report was removed or is not shared with you" : "Dieser Bericht wurde entfernt oder wird nicht mit dir geteilt",
     "3rd field must be a valid number" : "Das 3. Feld muss eine gültige Zahl sein",
     "No data" : "Keine Daten",
     "Last field must be a valid number" : "Das letzte Feld muss eine gültige Zahl sein",
