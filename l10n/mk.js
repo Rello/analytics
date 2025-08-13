@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Version" : "Верзија",
+    "Loading" : "Се вчитува",
     "Share" : "Сподели",
     "Share link" : "Сподели линк",
     "Link copied" : "Линкот е копиран",
