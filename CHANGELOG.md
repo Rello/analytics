@@ -1,5 +1,8 @@
 # Changelog
 
+### Added
+- Warn about unsaved changes before leaving a report
+
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
 

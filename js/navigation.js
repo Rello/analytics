@@ -584,42 +584,76 @@ OCA.Analytics.Navigation = {
         }
     },
 
-    handleOverviewButton: function (evt) {
-        if (evt) {
-            evt.preventDefault();
-            history.pushState(null, '', evt.target.href);
-        }
+    /**
+     * Warn about unsaved changes before leaving the current view
+     * and offer to save the report using the existing notification system.
+     *
+     * @param {Function} callback function to execute when the user continues
+     */
+    confirmNavigation: function (callback) {
+        if (OCA.Analytics.unsavedChanges === true) {
+            OCA.Analytics.Notification.confirm(
+                t('analytics', 'Unsaved changes'),
+                t('analytics', 'Do you want to save your changes?'),
+                function () {
+                    OCA.Analytics.Filter.handleSaveButton();
+                    OCA.Analytics.Notification.dialogClose();
+                    callback();
+                }
+            );
 
-        OCA.Analytics.Sidebar?.close?.();
-        if (document.querySelector('#navigationDatasets .active')) {
-            document.querySelector('#navigationDatasets .active').classList.remove('active');
+            document.getElementById('analyticsDialogBtnGo').innerText = t('analytics', 'Save');
+            const cancelBtn = document.getElementById('analyticsDialogBtnCancel');
+            cancelBtn.innerText = t('analytics', 'Continue');
+            cancelBtn.addEventListener('click', callback, { once: true });
+        } else {
+            callback();
         }
-        // ToDo: Do not reload DB all the time as it is already in the background
-        document.getElementById('ulAnalytics').innerHTML = '';
-        OCA.Analytics.Dashboard.init();
+    },
+
+    handleOverviewButton: function (evt) {
+        const navigate = () => {
+            if (evt) {
+                history.pushState(null, '', evt.target.href);
+            }
+            OCA.Analytics.Sidebar?.close?.();
+            if (document.querySelector('#navigationDatasets .active')) {
+                document.querySelector('#navigationDatasets .active').classList.remove('active');
+            }
+            // ToDo: Do not reload DB all the time as it is already in the background
+            document.getElementById('ulAnalytics').innerHTML = '';
+            OCA.Analytics.Dashboard.init();
+        };
+
+        evt?.preventDefault();
+        OCA.Analytics.Navigation.confirmNavigation(navigate);
     },
 
     handleNavigationClicked: function (evt) {
         // ToDo: change app.js to register handler
-        evt.preventDefault();
-        history.pushState(null, '', evt.target.href);
+        const navigate = () => {
+            history.pushState(null, '', evt.target.href);
 
-        if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
-            document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
-        }
-        let activeCategory = document.querySelector('#navigationDatasets .active');
-        if (evt) {
-            if (activeCategory) {
-                activeCategory.classList.remove('active');
+            if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
+                document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
             }
-            evt.target.parentElement.classList.add('active');
-        }
+            let activeCategory = document.querySelector('#navigationDatasets .active');
+            if (evt) {
+                if (activeCategory) {
+                    activeCategory.classList.remove('active');
+                }
+                evt.target.parentElement.classList.add('active');
+            }
 
-        let type = evt.target.dataset.item_type;
-        let handler = OCA.Analytics.handlers['navigationClicked']?.[type];
-        if (handler) {
-            handler(evt);
-        }
+            let type = evt.target.dataset.item_type;
+            let handler = OCA.Analytics.handlers['navigationClicked']?.[type];
+            if (handler) {
+                handler(evt);
+            }
+        };
+
+        evt.preventDefault();
+        OCA.Analytics.Navigation.confirmNavigation(navigate);
     },
 
     handleOptionsClicked: function (evt) {
