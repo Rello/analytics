@@ -83,14 +83,14 @@ class ReportService {
 	public function index(): array {
 		$ownReports = $this->ReportMapper->index();
 		$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
-		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'isShare', 'shareId');
+		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'item_type', 'isShare', 'shareId', 'version');
 
 		// get shared reports and remove duplicates
 		$existingIds = array_flip(array_column($ownReports, 'id'));
 		foreach ($sharedReports as $sharedReport) {
 			if (!isset($existingIds[$sharedReport['id']])) {
 				// just keep the necessary fields
-				$ownReports[] = array_intersect_key($sharedReport, array_flip($keysToKeep));
+				$ownReports[] = $sharedReport;
 				$existingIds[$sharedReport['id']] = true;
 			}
 		}
@@ -105,6 +105,11 @@ class ReportService {
 			$ownReport['favorite'] = $hasTag;
 			$ownReport['item_type'] = ShareService::SHARE_ITEM_TYPE_REPORT;
 			$ownReport = $this->VariableService->replaceTextVariables($ownReport);
+		}
+
+		// Final column filter
+		foreach ($ownReports as &$ownReport) {
+			$ownReport = array_intersect_key($ownReport, array_flip($keysToKeep));
 		}
 
 		return $ownReports;

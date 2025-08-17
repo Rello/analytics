@@ -101,11 +101,10 @@ class ReportController extends Controller
      * @param int $reportId
      * @return DataResponse
      */
-    public function read(int $reportId)
-    {
-        return new DataResponse($this->ReportService->read($reportId, false));
-    }
-
+	public function read(int $reportId)
+	{
+		return new DataResponse($this->ReportService->read($reportId, false));
+	}
     /**
      * Delete report and all depending objects
      *

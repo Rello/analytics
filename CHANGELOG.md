@@ -1,10 +1,10 @@
 # Changelog
 
+## 5.9.0 - 2025-08-xx
 ### Added
-- Cache report data using `If-Modified-Since` to avoid unnecessary processing
+- Cache report data in the browser (using ETag & If-None-Match) #535
 
 ### Fixed
-- Refetch report data if the server responds with `304 Not Modified` but no cache is present
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
 
 ## 5.8.0 - 2025-07-29

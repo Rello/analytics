@@ -22,8 +22,8 @@ return [
 		['name' => 'report#create', 'url' => '/report', 'verb' => 'POST'],
 		['name' => 'report#read', 'url' => '/report/{reportId}', 'verb' => 'GET'],
 		['name' => 'report#delete', 'url' => '/report/{reportId}', 'verb' => 'DELETE'],
-                ['name' => 'report#update', 'url' => '/report/{reportId}', 'verb' => 'PUT'],
-                ['name' => 'report#rename', 'url' => '/report/{reportId}/rename', 'verb' => 'PUT'],
+		['name' => 'report#update', 'url' => '/report/{reportId}', 'verb' => 'PUT'],
+		['name' => 'report#rename', 'url' => '/report/{reportId}/rename', 'verb' => 'PUT'],
 		['name' => 'report#createCopy', 'url' => '/report/copy', 'verb' => 'POST'],
 		['name' => 'report#createFromDataFile', 'url' => '/report/file', 'verb' => 'POST'],
 		['name' => 'report#updateOptions', 'url' => '/report/{reportId}/options', 'verb' => 'POST'],
@@ -38,24 +38,24 @@ return [
 		['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
 		['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
 		['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
-                ['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
-                ['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
-                ['name' => 'dataset#rename', 'url' => '/dataset/{datasetId}/rename', 'verb' => 'PUT'],
-                ['name' => 'dataset#updateGroup', 'url' => '/dataset/{datasetId}/group', 'verb' => 'POST'],
-                ['name' => 'dataset#createGroup', 'url' => '/dataset/group', 'verb' => 'POST'],
-                ['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
-                ['name' => 'dataset#provider', 'url' => '/dataset/{datasetId}/provider', 'verb' => 'POST'],
+		['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
+		['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
+		['name' => 'dataset#rename', 'url' => '/dataset/{datasetId}/rename', 'verb' => 'PUT'],
+		['name' => 'dataset#updateGroup', 'url' => '/dataset/{datasetId}/group', 'verb' => 'POST'],
+		['name' => 'dataset#createGroup', 'url' => '/dataset/group', 'verb' => 'POST'],
+		['name' => 'dataset#status', 'url' => '/dataset/{datasetId}/status', 'verb' => 'GET'],
+		['name' => 'dataset#provider', 'url' => '/dataset/{datasetId}/provider', 'verb' => 'POST'],
 
 		// Panorama
 		['name' => 'panorama#index', 'url' => '/panorama', 'verb' => 'GET'],
 		['name' => 'panorama#create', 'url' => '/panorama', 'verb' => 'POST'],
 		['name' => 'panorama#read', 'url' => '/panorama/{panoramaId}', 'verb' => 'GET'],
-                ['name' => 'panorama#delete', 'url' => '/panorama/{panoramaId}', 'verb' => 'DELETE'],
-                ['name' => 'panorama#update', 'url' => '/panorama/{panoramaId}', 'verb' => 'PUT'],
-                ['name' => 'panorama#rename', 'url' => '/panorama/{panoramaId}/rename', 'verb' => 'PUT'],
-                ['name' => 'panorama#updateGroup', 'url' => '/panorama/{panoramaId}/group', 'verb' => 'POST'],
-                ['name' => 'panorama#createGroup', 'url' => '/panorama/group', 'verb' => 'POST'],
-                ['name' => 'panorama#getOwnFavoriteReports', 'url' => '/panoramaFavorites', 'verb' => 'GET'],
+		['name' => 'panorama#delete', 'url' => '/panorama/{panoramaId}', 'verb' => 'DELETE'],
+		['name' => 'panorama#update', 'url' => '/panorama/{panoramaId}', 'verb' => 'PUT'],
+		['name' => 'panorama#rename', 'url' => '/panorama/{panoramaId}/rename', 'verb' => 'PUT'],
+		['name' => 'panorama#updateGroup', 'url' => '/panorama/{panoramaId}/group', 'verb' => 'POST'],
+		['name' => 'panorama#createGroup', 'url' => '/panorama/group', 'verb' => 'POST'],
+		['name' => 'panorama#getOwnFavoriteReports', 'url' => '/panoramaFavorites', 'verb' => 'GET'],
 		['name' => 'panorama#setFavorite', 'url' => '/panoramaFavorite/{panoramaId}', 'verb' => 'POST'],
 
 		// Data Output
@@ -93,9 +93,9 @@ return [
 
 		// Threshold
 		['name' => 'threshold#create', 'url' => '/threshold', 'verb' => 'POST'],
-                ['name' => 'threshold#read', 'url' => '/threshold/{reportId}', 'verb' => 'GET'],
-                ['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
-                ['name' => 'threshold#reorder', 'url' => '/threshold/order/{reportId}', 'verb' => 'PUT'],
+		['name' => 'threshold#read', 'url' => '/threshold/{reportId}', 'verb' => 'GET'],
+		['name' => 'threshold#delete', 'url' => '/threshold/{thresholdId}', 'verb' => 'DELETE'],
+		['name' => 'threshold#reorder', 'url' => '/threshold/order/{reportId}', 'verb' => 'PUT'],
 
 		// API
 		// V1
