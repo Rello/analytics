@@ -33,12 +33,12 @@ class ShareService {
 	/** @var IUserSession */
 	private $userSession;
 	/** @var LoggerInterface */
-        private $logger;
-        /** @var ShareMapper */
-        private $ShareMapper;
-        private $ReportMapper;
-        private $PanoramaMapper;
-        private $secureRandom;
+	private $logger;
+	/** @var ShareMapper */
+	private $ShareMapper;
+	private $ReportMapper;
+	private $PanoramaMapper;
+	private $secureRandom;
 	private $ActivityManager;
 	/** @var IGroupManager */
 	private $groupManager;
@@ -50,9 +50,9 @@ class ShareService {
 		IUserSession    $userSession,
 		LoggerInterface $logger,
 		ShareMapper     $ShareMapper,
-                ReportMapper    $ReportMapper,
-                PanoramaMapper  $PanoramaMapper,
-                ActivityManager $ActivityManager,
+		ReportMapper    $ReportMapper,
+		PanoramaMapper  $PanoramaMapper,
+		ActivityManager $ActivityManager,
 		IGroupManager   $groupManager,
 		ISecureRandom   $secureRandom,
 		IUserManager    $userManager,
@@ -61,8 +61,8 @@ class ShareService {
 		$this->userSession = $userSession;
 		$this->logger = $logger;
 		$this->ShareMapper = $ShareMapper;
-                $this->ReportMapper = $ReportMapper;
-                $this->PanoramaMapper = $PanoramaMapper;
+		$this->ReportMapper = $ReportMapper;
+		$this->PanoramaMapper = $PanoramaMapper;
 		$this->secureRandom = $secureRandom;
 		$this->groupManager = $groupManager;
 		$this->ActivityManager = $ActivityManager;
@@ -197,33 +197,33 @@ class ShareService {
 			}
 		}
 
-                if ($item_type === self::SHARE_ITEM_TYPE_PANORAMA) {
-                        foreach ($reports as $report) {
-                                if ((int)$report['type'] === PanoramaService::REPORT_TYPE_GROUP) {
-                                        $subreport = $this->PanoramaMapper->getPanoramasByGroup($report['id']);
-                                        $subreport = array_map(function ($pano) {
-                                                $pano['isShare'] = self::SHARE_TYPE_GROUP;
-                                                return $pano;
-                                        }, $subreport);
+		if ($item_type === self::SHARE_ITEM_TYPE_PANORAMA) {
+			foreach ($reports as $report) {
+				if ((int)$report['type'] === PanoramaService::REPORT_TYPE_GROUP) {
+					$subreport = $this->PanoramaMapper->getPanoramasByGroup($report['id']);
+					$subreport = array_map(function ($pano) {
+						$pano['isShare'] = self::SHARE_TYPE_GROUP;
+						return $pano;
+					}, $subreport);
 
-                                        $reports = array_merge($reports, $subreport);
-                                }
-                        }
-                } else {
-                        foreach ($reports as $report) {
-                                if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
-                                        $subreport = $this->ReportMapper->getReportsByGroup($report['id']);
-                                        $subreport = array_map(function ($report) {
-                                                $report['isShare'] = self::SHARE_TYPE_GROUP;
-                                                return $report;
-                                        }, $subreport);
+					$reports = array_merge($reports, $subreport);
+				}
+			}
+		} else {
+			foreach ($reports as $report) {
+				if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
+					$subreport = $this->ReportMapper->getReportsByGroup($report['id']);
+					$subreport = array_map(function ($report) {
+						$report['isShare'] = self::SHARE_TYPE_GROUP;
+						return $report;
+					}, $subreport);
 
-                                        $reports = array_merge($reports, $subreport);
-                                }
-                        }
-                }
-                return $reports;
-        }
+					$reports = array_merge($reports, $subreport);
+				}
+			}
+		}
+		return $reports;
+	}
 
 	/**
 	 * get metadata of a report, shared with current user

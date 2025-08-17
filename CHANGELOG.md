@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.9.0 - 2025-08-xx
+### Added
+- Cache report data in the browser (using ETag & If-None-Match) #535
+
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
 
