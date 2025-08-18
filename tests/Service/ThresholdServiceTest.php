@@ -119,4 +119,73 @@ class ThresholdServiceTest extends TestCase {
                         // Add more scenarios here …
                 ];
         }
+
+	/**
+	 * Test that copyThresholds correctly copies thresholds from one report to another
+	 */
+	public function testCopyThresholds()
+	{
+		$sourceReportId = 1;
+		$targetReportId = 2;
+		
+		// Mock thresholds that exist on source report
+		$sourceThresholds = [
+			[
+				'id' => 1,
+				'dimension' => 0,
+				'coloring' => 'red',
+				'value' => '100', // This is 'target' aliased as 'value'
+				'option' => 'GT',
+				'severity' => 1,
+				'user_id' => 'testuser',
+				'sequence' => 1
+			],
+			[
+				'id' => 2,
+				'dimension' => 1,
+				'coloring' => 'green',
+				'value' => '50',
+				'option' => 'LT',
+				'severity' => 2,
+				'user_id' => 'testuser',
+				'sequence' => 2
+			]
+		];
+
+		$thresholdMapper = $this->createMock(ThresholdMapper::class);
+		$thresholdMapper->method('getThresholdsByReport')
+			->with($sourceReportId)
+			->willReturn($sourceThresholds);
+
+		// Expect create to be called for each threshold
+		$thresholdMapper->expects($this->exactly(2))
+			->method('create')
+			->withConsecutive(
+				[$targetReportId, 0, '100', 'GT', 1, 'red'],
+				[$targetReportId, 1, '50', 'LT', 2, 'green']
+			);
+
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$notification = $this->createMock(NotificationManager::class);
+		$datasetMapper = $this->createMock(\OCA\Analytics\Db\DatasetMapper::class);
+		$dateFormatter = $this->createMock(IDateTimeFormatter::class);
+
+		$variableService = new VariableService(
+			new NullLogger(),
+			$datasetMapper,
+			$dateFormatter
+		);
+
+		$service = new ThresholdService(
+			new NullLogger(),
+			$thresholdMapper,
+			$notification,
+			$reportMapper,
+			$variableService,
+			new FakeL10N()
+		);
+
+		$result = $service->copyThresholds($sourceReportId, $targetReportId);
+		$this->assertTrue($result);
+	}
 }

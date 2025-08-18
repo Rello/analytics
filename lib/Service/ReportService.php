@@ -214,6 +214,20 @@ class ReportService {
 		$newId = $this->ReportMapper->create(// TRANSLATORS Noun
 			$template['name'] . ' - ' . $this->l10n->t('copy'), $template['subheader'], $template['parent'], $template['type'], $template['dataset'], $template['link'], $template['visualization'], $template['chart'], $template['dimension1'], $template['dimension2'], $template['value']);
 		$this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
+		
+		// Copy thresholds from original report to the new copy
+		$sourceThresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
+		foreach ($sourceThresholds as $threshold) {
+			$this->ThresholdMapper->create(
+				$newId,
+				$threshold['dimension'],
+				$threshold['value'], // This is 'target' aliased as 'value' in the query
+				$threshold['option'],
+				$threshold['severity'],
+				$threshold['coloring']
+			);
+		}
+		
 		return $newId;
 	}
 

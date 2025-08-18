@@ -271,4 +271,29 @@ class ThresholdService {
 		}
 		return $result;
 	}
+
+	/**
+	 * Copy all thresholds from one report to another
+	 *
+	 * @param int $sourceReportId
+	 * @param int $targetReportId
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function copyThresholds(int $sourceReportId, int $targetReportId): bool {
+		$sourceThresholds = $this->ThresholdMapper->getThresholdsByReport($sourceReportId);
+		
+		foreach ($sourceThresholds as $threshold) {
+			$this->ThresholdMapper->create(
+				$targetReportId,
+				$threshold['dimension'],
+				$threshold['value'], // This is 'target' aliased as 'value' in the query
+				$threshold['option'],
+				$threshold['severity'],
+				$threshold['coloring']
+			);
+		}
+		
+		return true;
+	}
 }
