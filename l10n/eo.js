@@ -18,6 +18,7 @@ OC.L10N.register(
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Add to favorites" : "Aldoni al pliŝataĵoj",
     "Delete folder" : "Forigi dosierujon",
+    "Save" : "Konservi",
     "Download" : "Elŝuti",
     "Dataset" : "Datumaro",
     "Type" : "Tipo",

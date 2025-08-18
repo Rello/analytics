@@ -17,6 +17,8 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Shtoje tek të parapëlqyerat",
     "Delete folder" : "Fshini dosjen",
+    "Save" : "Ruaje",
+    "Discard" : "Hidh poshtë",
     "Download" : "Shkarko",
     "Report" : "Raporto",
     "Type" : "Shtyp",

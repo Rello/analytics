@@ -13,6 +13,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Deler dossier",
+    "Save" : "Salveguardar",
     "Download" : "Discargar",
     "Type" : "Typo",
     "Date" : "Date",

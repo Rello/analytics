@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "新增收藏",
     "Scheduled data load" : "預定數據加載",
     "Delete folder" : "刪除資料夾",
+    "Save" : "保存",
+    "Discard" : "取消",
     "choose a layout" : "選擇佈局",
     "select to edit" : "選取以編輯",
     "choose the content" : "選擇內容",

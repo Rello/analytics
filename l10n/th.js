@@ -18,6 +18,7 @@ OC.L10N.register(
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Add to favorites" : "เพิ่มในรายการโปรด",
     "Delete folder" : "ลบโฟลเดอร์",
+    "Save" : "บันทึก",
     "Download" : "ดาวน์โหลด",
     "Report" : "รายงาน",
     "Dataset" : "ชุดข้อมูล",

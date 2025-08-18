@@ -70,6 +70,8 @@ OC.L10N.register(
     "Remove from favorites" : "お気に入りから削除",
     "Add to favorites" : "お気に入りに追加",
     "Delete folder" : "フォルダーを削除",
+    "Save" : "保存する",
+    "Discard" : "破棄",
     "choose a layout" : "レイアウトを選択",
     "choose the content" : "コンテンツを選択",
     "Download" : "ダウンロード",

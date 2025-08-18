@@ -23,6 +23,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Legg til i favorittar",
     "Delete folder" : "Slett mappe",
+    "Save" : "Lagre",
     "All data will be deleted!" : "Alle data vert sletta",
     "Download" : "Last ned",
     "Delete data" : "Slett data",

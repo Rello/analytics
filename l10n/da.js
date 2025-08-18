@@ -84,6 +84,8 @@ OC.L10N.register(
     "Add to favorites" : "Tilføj til favoritter",
     "Scheduled data load" : "Planlagte dataload",
     "Delete folder" : "Slet mappe",
+    "Save" : "Gem",
+    "Discard" : "Kasser",
     "choose a layout" : "Vælg layout",
     "select to edit" : "Vælg for at redigere",
     "choose the content" : "Vælg indhold",

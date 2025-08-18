@@ -12,6 +12,7 @@ OC.L10N.register(
     "Favorites" : "Imenyafen",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
+    "Save" : "Sekles",
     "Download" : "Sider",
     "Report" : "Aneqqis",
     "Type" : "Anaw",

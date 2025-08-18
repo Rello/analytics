@@ -31,6 +31,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "លុប​ថត",
+    "Save" : "រក្សាទុក",
     "All data will be deleted!" : "គ្រប់ទិន្នន័យនឹងត្រូវបានលុប",
     "Download" : "ទាញយក",
     "Report" : "របាយការណ៍",

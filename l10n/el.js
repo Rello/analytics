@@ -72,6 +72,8 @@ OC.L10N.register(
     "Add to favorites" : "Προσθήκη στα αγαπημένα ",
     "Scheduled data load" : "Προγραμματισμένη φόρτωση δεδομένων",
     "Delete folder" : "Διαγραφή φακέλου",
+    "Save" : "Αποθήκευση",
+    "Discard" : "Απόρριψη",
     "All data will be deleted!" : "Όλα τα δεδομένα θα διαγραφούν!",
     "Download" : "Λήψη",
     "Export as PDF" : "Εξαγωγή σε PDF",

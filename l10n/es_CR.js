@@ -37,6 +37,7 @@ OC.L10N.register(
     "Remove from favorites" : "Eliminar de favoritos",
     "Add to favorites" : "Agregar a tus favoritos",
     "Delete folder" : "Borrar carpeta",
+    "Save" : "Guardar",
     "Dataset" : "Conjunto de datos",
     "Type" : "Tipo",
     "Notification" : "Notificación",

@@ -91,6 +91,8 @@ OC.L10N.register(
     "Add to favorites" : "Dodaj do ulubionych",
     "Scheduled data load" : "Zaplanowane wczytywanie danych",
     "Delete folder" : "Usuń katalog",
+    "Save" : "Zapisz",
+    "Discard" : "Odrzuć",
     "choose a layout" : "wybierz układ",
     "select to edit" : "wybierz do edycji",
     "choose the content" : "wybierz treść",

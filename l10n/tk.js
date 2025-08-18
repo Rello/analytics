@@ -9,6 +9,7 @@ OC.L10N.register(
     "Default" : "Bellenen",
     "Favorites" : "Halanýanlar",
     "Add to favorites" : "Saýlananlara goşuň",
+    "Save" : "Saklamak",
     "Download" : "Göçürip almak",
     "Report" : "Hasabat ugradyň",
     "Type" : "Görnüşi",

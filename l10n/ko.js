@@ -75,6 +75,8 @@ OC.L10N.register(
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Add to favorites" : "즐겨찾기에 추가",
     "Delete folder" : "폴더 삭제",
+    "Save" : "저장",
+    "Discard" : "무시",
     "choose a layout" : "레이아웃 선택",
     "All data will be deleted!" : "모든 데이터가 삭제됩니다!",
     "Download" : "다운로드",

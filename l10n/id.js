@@ -92,6 +92,8 @@ OC.L10N.register(
     "Add to favorites" : "Tambah ke favorit",
     "Scheduled data load" : "Pemuatan data yang dijadwalkan",
     "Delete folder" : "Hapus folder",
+    "Save" : "Simpan",
+    "Discard" : "Abaikan",
     "choose a layout" : "pilih tata letak",
     "select to edit" : "Pilih untuk mengedit",
     "choose the content" : "pilih konten",

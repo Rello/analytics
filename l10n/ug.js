@@ -80,6 +80,8 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Scheduled data load" : "پىلانلانغان سانلىق مەلۇمات يۈكى",
     "Delete folder" : "قىسقۇچ ئۆچۈر",
+    "Save" : "ساقلاش",
+    "Discard" : "تاشلىۋېتىش",
     "choose a layout" : "ئورۇنلاشتۇرۇشنى تاللاڭ",
     "select to edit" : "تەھرىرلەشنى تاللاڭ",
     "choose the content" : "مەزمۇننى تاللاڭ",

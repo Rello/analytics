@@ -68,6 +68,8 @@ OC.L10N.register(
     "Remove from favorites" : "Poista suosikeista",
     "Add to favorites" : "Lisää suosikkeihin",
     "Delete folder" : "Poista kansio",
+    "Save" : "Tallenna",
+    "Discard" : "Hylkää",
     "All data will be deleted!" : "Kaikki tiedot poistetaan!",
     "Download" : "Lataa",
     "Request could not be processed" : "Pyyntöä ei voitu käsitellä",

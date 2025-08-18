@@ -11,6 +11,7 @@ OC.L10N.register(
     "New" : "﻿ಹೊಸ",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "﻿ಉಳಿಸಿ",
     "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
     "Type" : "Type",
     "Date" : "Date",

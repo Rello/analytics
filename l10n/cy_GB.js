@@ -12,6 +12,7 @@ OC.L10N.register(
     "New" : "Newydd",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "Cadw",
     "Download" : "Llwytho i lawr",
     "Type" : "Math",
     "Notification" : "Hysbysiad",

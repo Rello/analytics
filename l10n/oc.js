@@ -24,6 +24,7 @@ OC.L10N.register(
     "Remove from favorites" : "Tirar dels favorits",
     "Add to favorites" : "Apondre als favorits",
     "Delete folder" : "Suprimir dossièr",
+    "Save" : "Enregistrar",
     "Download" : "Teledescargar",
     "Delete data" : "Suprimir donada",
     "Type" : "Tipe",

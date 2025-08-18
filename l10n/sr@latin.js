@@ -12,6 +12,7 @@ OC.L10N.register(
     "New" : "Nov",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add to favorites" : "Dodaj u omiljene",
+    "Save" : "Sačuvaj",
     "Report" : "Prijavi",
     "Type" : "Tip",
     "Date" : "Date",

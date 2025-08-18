@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Cuir le ceanáin",
     "Scheduled data load" : "Ualach sonraí sceidealta",
     "Delete folder" : "Scrios fillteán",
+    "Save" : "Sábháil",
+    "Discard" : "Caith amach",
     "choose a layout" : "roghnaigh leagan amach",
     "select to edit" : "roghnaigh a chur in eagar",
     "choose the content" : "roghnaigh an t-ábhar",

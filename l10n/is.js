@@ -23,6 +23,8 @@ OC.L10N.register(
     "Remove from favorites" : "Fjarlægja úr eftirlætum",
     "Add to favorites" : "Bæta í Eftirlæti",
     "Delete folder" : "Eyða möppu",
+    "Save" : "Vista",
+    "Discard" : "Fleygja",
     "Download" : "Sækja",
     "Report" : "Skýrsla",
     "Type" : "Tegund",

@@ -52,6 +52,8 @@ OC.L10N.register(
     "Remove from favorites" : "Noņemt no izlases",
     "Add to favorites" : "Pievienot izlasei",
     "Delete folder" : "Izdzēst mapi",
+    "Save" : "Saglabāt",
+    "Discard" : "Atmest",
     "choose a layout" : "izvēlieties izkārtojumu",
     "select to edit" : "izvēlieties labošanai",
     "choose the content" : "izvēlieties saturu",

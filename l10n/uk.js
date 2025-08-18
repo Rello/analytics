@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Додати зірочку",
     "Scheduled data load" : "Завантаження даних за розкладом",
     "Delete folder" : "Вилучити каталог",
+    "Save" : "Зберегти",
+    "Discard" : "Відхилити",
     "choose a layout" : "виберіть макет",
     "select to edit" : "виберіть, щоб відредагувати",
     "choose the content" : "виберіть вміст",

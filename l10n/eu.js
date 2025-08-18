@@ -81,6 +81,8 @@ OC.L10N.register(
     "Add to favorites" : "Gehitu gogokoetara",
     "Scheduled data load" : "Antolatutako datu-karga",
     "Delete folder" : "Ezabatu karpeta",
+    "Save" : "Gorde",
+    "Discard" : "Baztertu",
     "choose a layout" : "aukeratu diseinua",
     "select to edit" : "hautatu editatzeko",
     "choose the content" : "aukeratu edukia",

@@ -26,6 +26,8 @@ OC.L10N.register(
     "Remove from favorites" : "Šalinti iš mėgstamų",
     "Add to favorites" : "Pridėti į mėgstamus",
     "Delete folder" : "Ištrinti aplanką",
+    "Save" : "Įrašyti",
+    "Discard" : "Atmesti",
     "Save to selected folder" : "Įrašyti į pasirinktą aplanką",
     "Download" : "Atsisiųsti",
     "Reset zoom" : "Atstatyti mastelį",

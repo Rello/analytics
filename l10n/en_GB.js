@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Add to favourites",
     "Scheduled data load" : "Scheduled data load",
     "Delete folder" : "Delete folder",
+    "Save" : "Save",
+    "Discard" : "Discard",
     "choose a layout" : "choose a layout",
     "select to edit" : "select to edit",
     "choose the content" : "choose the content",

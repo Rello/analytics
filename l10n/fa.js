@@ -76,6 +76,8 @@ OC.L10N.register(
     "Add to favorites" : "افزودن‌ به مورد علاقه‌ها",
     "Scheduled data load" : "Scheduled data load",
     "Delete folder" : "حذف پوشه",
+    "Save" : "ذخیره",
+    "Discard" : "لغو تغییرات",
     "choose a layout" : "انتخاب یک طرح‌بندی",
     "All data will be deleted!" : "All data will be deleted!",
     "Download" : "بارگیری",

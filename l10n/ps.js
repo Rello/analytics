@@ -9,6 +9,7 @@ OC.L10N.register(
     "New" : "نوی",
     "Remove from favorites" : "له نښو ويستل",
     "Add to favorites" : "په نښه کول",
+    "Save" : "ساتل",
     "Download" : "ښکته کول",
     "OK" : "سمه ده",
     "Cancel" : "پرېښول",

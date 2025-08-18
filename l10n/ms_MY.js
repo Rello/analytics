@@ -36,6 +36,7 @@ OC.L10N.register(
     "New" : "Baru",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "Simpan",
     "Download" : "Muat turun",
     "Reset zoom" : "Set semula zum",
     "Trend" : "Trend",

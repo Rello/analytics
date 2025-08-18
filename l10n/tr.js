@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Sık kullanılanlara ekle",
     "Scheduled data load" : "Zamanlanmış veri yüklemesi",
     "Delete folder" : "Klasörü sil",
+    "Save" : "Kaydet",
+    "Discard" : "Yok say",
     "choose a layout" : "bir yerleşim seçin",
     "select to edit" : "düzenlemek için seçin",
     "choose the content" : "içeriği seçin",

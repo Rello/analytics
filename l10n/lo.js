@@ -11,6 +11,7 @@ OC.L10N.register(
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Add to favorites" : "ເພີ່ມລາຍການທີ່ມັກ",
     "Delete folder" : "ລຶບໂຟນເດີ",
+    "Save" : "ບັນທຶກ",
     "Download" : "ດາວໂຫລດ",
     "Report" : "ລາຍງານ",
     "Type" : "ພິມ",

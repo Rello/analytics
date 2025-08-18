@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Zu Favoriten hinzufügen",
     "Scheduled data load" : "Geplante Datenladung",
     "Delete folder" : "Ordner löschen",
+    "Save" : "Speichern",
+    "Discard" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
     "choose a layout" : "Ein Layout auswählen",
     "select to edit" : "Auswählen zum Bearbeiten",
     "choose the content" : "Den Inhalt auswählen",

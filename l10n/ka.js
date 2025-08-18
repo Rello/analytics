@@ -42,6 +42,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Delete folder",
+    "Save" : "დამახსოვრება",
     "Download" : "გადმოწერა",
     "Report" : "Report",
     "Dataset" : "მონაცემთა კრებული",

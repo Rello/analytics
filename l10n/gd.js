@@ -10,6 +10,7 @@ OC.L10N.register(
     "Default" : "Bunaiteach",
     "Favorites" : "Annsachdan",
     "Add to favorites" : "Cuir ris na h-annsachdan",
+    "Save" : "Sàbhail",
     "Download" : "Luchdaich a-nuas",
     "Report" : "Dèan aithris air",
     "Type" : "Seòrsa",

@@ -75,6 +75,8 @@ OC.L10N.register(
     "Add to favorites" : "Sevimlilarga qo'shing",
     "Scheduled data load" : "Rejalashtirilgan ma'lumotlarni yuklash",
     "Delete folder" : "Jildni o'chirish",
+    "Save" : "Saqlash",
+    "Discard" : "Bekor qilish",
     "choose a layout" : "tartibni tanlang",
     "select to edit" : "tahrirlash uchun tanlang",
     "choose the content" : "mazmunini tanlang",

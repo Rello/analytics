@@ -13,6 +13,7 @@ OC.L10N.register(
     "New" : "Նոր",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "Պահպանել",
     "Download" : "Ներբեռնել",
     "Dataset" : "Տվյալների հավաքածու",
     "Type" : "Տիպ",

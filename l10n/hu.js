@@ -82,6 +82,8 @@ OC.L10N.register(
     "Add to favorites" : "Hozzáadás a kedvencekhez",
     "Scheduled data load" : "Ütemezett adatbetöltés",
     "Delete folder" : "Mappa törlése",
+    "Save" : "Mentés",
+    "Discard" : "Elvetés",
     "choose a layout" : "válasszon elrendezést",
     "select to edit" : "válassza ki a szerkesztéshez",
     "choose the content" : "válassza ki a tartalmat",

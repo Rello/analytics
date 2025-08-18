@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Lägg till i favoriter",
     "Scheduled data load" : "Schemalagd datainläsning",
     "Delete folder" : "Radera mapp",
+    "Save" : "Spara",
+    "Discard" : "Ignorera",
     "choose a layout" : "Välj en layout",
     "select to edit" : "Välj att redigera",
     "choose the content" : "Välj innehåll",

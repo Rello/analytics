@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Scheduled data load" : "Upakiaji wa data uliopangwa",
     "Delete folder" : "Futa kisanduku",
+    "Save" : "Hifadhi",
+    "Discard" : "Tupilia ",
     "choose a layout" : "chagua mpangilio",
     "select to edit" : "chagua kuhariri",
     "choose the content" : "chagua yaliyomo",

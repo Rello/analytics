@@ -14,6 +14,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Хавтсыг устгах",
+    "Save" : "Хадгалах",
     "Download" : "Татах",
     "Type" : "Төрөл",
     "Notification" : "Мэдэгдэл",

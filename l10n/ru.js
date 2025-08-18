@@ -81,6 +81,8 @@ OC.L10N.register(
     "Add to favorites" : "Добавить в избранное",
     "Scheduled data load" : "Запланированная загрузка данных",
     "Delete folder" : "Удалить папку",
+    "Save" : "Сохранить",
+    "Discard" : "Отмена",
     "choose a layout" : "выберите макет",
     "select to edit" : "выберите для редактирования",
     "choose the content" : "выберите содержание",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
+    "Save" : "حفظ",
     "Download" : "ڈاؤن لوڈ",
     "Type" : "Type",
     "Date" : "Date",
