@@ -593,8 +593,8 @@ OCA.Analytics.Navigation = {
     confirmNavigation: function (callback) {
         if (OCA.Analytics.unsavedChanges === true) {
             OCA.Analytics.Notification.confirm(
-                t('analytics', 'Unsaved changes'),
-                t('analytics', 'Do you want to save your changes?'),
+                t('analytics', 'Leaving this report?'),
+                t('analytics', 'You have unsaved changes. If you leave now, your changes will be lost.'),
                 function () {
                     OCA.Analytics.Filter.handleSaveButton();
                     OCA.Analytics.Notification.dialogClose();
@@ -604,7 +604,7 @@ OCA.Analytics.Navigation = {
 
             document.getElementById('analyticsDialogBtnGo').innerText = t('analytics', 'Save');
             const cancelBtn = document.getElementById('analyticsDialogBtnCancel');
-            cancelBtn.innerText = t('analytics', 'Continue');
+            cancelBtn.innerText = t('analytics', 'Discard');
             cancelBtn.addEventListener('click', callback, { once: true });
         } else {
             callback();
