@@ -66,6 +66,7 @@ class OutputController extends Controller {
 
 	/**
 	 * get the data when requested from internal page
+	 * If-None-Match and eTags are being handled
 	 *
 	 * @NoAdminRequired
 	 * @param int $reportId
@@ -82,8 +83,17 @@ class OutputController extends Controller {
 
 		if (!empty($reportMetadata)) {
 			$reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
-			$result = $this->getData($reportMetadata);
-			return new DataResponse($result, HTTP::STATUS_OK);
+
+			// evaluate if the etag matches the report version
+			// in that case, a 304 is returned and the data retrieval from the backend is not executed
+			$response = $this->evaluateIfNoneMatch($reportMetadata);
+			if ($response instanceof DataResponse) {
+				return $response;
+			}
+
+			// if the etag does not match the version, read data from backend
+			// and add corresponding heders
+			return $this->returnDataWithCacheableHeader($reportMetadata);
 		} else {
 			return new NotFoundResponse();
 		}
@@ -91,6 +101,8 @@ class OutputController extends Controller {
 
 	/**
 	 * get the data when requested from a panorama
+	 * Special checks are performed to ensure, that the report is really part of the shared panorama
+	 * If-None-Match and eTags are being handled
 	 *
 	 * @NoAdminRequired
 	 * @param int $reportIds
@@ -102,10 +114,45 @@ class OutputController extends Controller {
 		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
 
 		if (!empty($reportMetadata)) {
-			$result = $this->getData($reportMetadata);
-			return new DataResponse($result, HTTP::STATUS_OK);
+			// evaluate if the etag matches the report version
+			// in that case, a 304 is returned and the data retrieval from the backend is not executed
+			$response = $this->evaluateIfNoneMatch($reportMetadata);
+			if ($response instanceof DataResponse) {
+				return $response;
+			}
+
+			// if the etag does not match the version, read data from backend
+			// and add corresponding heders
+			return $this->returnDataWithCacheableHeader($reportMetadata);
 		} else {
 			return new NotFoundResponse();
+		}
+	}
+
+	private function returnDataWithCacheableHeader($reportMetadata) {
+		$result = $this->getData($reportMetadata);
+		$response = new DataResponse($result, HTTP::STATUS_OK);
+
+		// only internal reports are cacheable
+		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+			$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
+			$response->addHeader('X-Analytics-Cacheable', 'true');
+		} else {
+			$response->addHeader('X-Analytics-Cacheable', 'false');
+		}
+		return $response;
+	}
+
+	private function evaluateIfNoneMatch($reportMetadata) {
+		$clientETag = $this->request->getHeader('If-None-Match');
+		if ($clientETag !== null && $clientETag !== '') {
+			$clientETag = (int)trim($clientETag, '"');
+			// Compare with your current version/etag
+			if ($clientETag === (int)$reportMetadata['version']) {
+				$response = new DataResponse(null, HTTP::STATUS_NOT_MODIFIED);
+				$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
+				return $response;
+			}
 		}
 	}
 

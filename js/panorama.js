@@ -1257,77 +1257,64 @@ Object.assign(OCA.Analytics.Panorama = {
 
 OCA.Analytics.Panorama.Backend = OCA.Analytics.Panorama.Backend || {};
 Object.assign(OCA.Analytics.Panorama.Backend = {
-    /*    getReports: function () {
-            let requestUrl = OC.generateUrl('apps/analytics/report');
-            fetch(requestUrl, {
-                method: 'GET',
-                headers: OCA.Analytics.headers()
-            })
-                .then(response => response.json())
-                .then(data => {
-                    OCA.Analytics.reports = data;
-                    OCA.Analytics.Panorama.buildWidgetContentReportSelector();
-                });
-        },*/
 
-    getReportData: function (datasetId, itemId) {
-        const url = OC.generateUrl('apps/analytics/data/pa/' + datasetId, true);
+    getReportData: function (reportId, itemId) {
+        let url = OC.generateUrl('apps/analytics/data/pa/' + reportId, true);
+        let cacheKey = `analytics-report-${reportId}`;
+
+        // Retrieve cached data and version
+        let cachedData = null;
+        let cachedVersion = null;
+        try {
+            const cachedEntry = localStorage.getItem(cacheKey);
+            if (cachedEntry) {
+                const parsed = JSON.parse(cachedEntry);
+                cachedData = parsed.data;
+                cachedVersion = parsed.version;
+            }
+        } catch (e) {
+            localStorage.removeItem(cacheKey);
+        }
 
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
 
+        // if data for that report is cached locally, send the version to the backend
+        if (cachedVersion) {
+            xhr.setRequestHeader('If-None-Match', cachedVersion);
+        }
+
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 404) {
                     document.getElementById('analyticsWidgetReport' + itemId).innerText = '';
                     document.getElementById('myWidget' + itemId).innerText = t('analytics', 'The report is not available anymore');
-                    return;
+                } else if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    // derive new version from ETag
+                    const newVersion = xhr.getResponseHeader('ETag') || null;
+                    // data needs to be marked as cacheable
+                    const cacheable = xhr.getResponseHeader('X-Analytics-Cacheable') === 'true';
+
+                    // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+                    if (parseInt(data.error) !== 0) {
+                        OCA.Analytics.Notification.notification('error', data.error);
+                        return;
+                    }
+
+                    if (cacheable && newVersion) {
+                        localStorage.setItem(cacheKey, JSON.stringify({ data, version: newVersion }));
+                    }
+
+                    data = OCA.Analytics.Report.Backend.processReceivedData(data);
+                    OCA.Analytics.Panorama.setWidgetTypeReportContent(data, itemId);
+                } else if (xhr.status === 304 && cachedData) {
+                    // backend confirmed no change → reuse cached data
+                    let data = OCA.Analytics.Report.Backend.processReceivedData(cachedData);
+                    OCA.Analytics.Panorama.setWidgetTypeReportContent(data, itemId);
                 }
-                let jsondata = JSON.parse(xhr.response);
-                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-                if (parseInt(jsondata.error) !== 0) {
-                    OCA.Analytics.Notification.notification('error', jsondata.error);
-                    return;
-                }
-
-                jsondata.data = OCA.Analytics.Visualization.formatDates(jsondata.data);
-
-                try {
-                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    let parsedChartOptions = JSON.parse(jsondata.options.chartoptions.replace(/xAxes/g, 'x'));
-                    jsondata.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
-                } catch (e) {
-                    jsondata.options.chartoptions = {};
-                }
-
-                try {
-                    let parsedDataOptions = JSON.parse(jsondata.options.dataoptions);
-                    jsondata.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
-                } catch (e) {
-                    jsondata.options.dataoptions = {};
-                }
-
-                try {
-                    let parsedFilterOptions = JSON.parse(jsondata.options.filteroptions);
-                    jsondata.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
-                } catch (e) {
-                    jsondata.options.filteroptions = {};
-                }
-
-                try {
-                    let parsedTableOptions = JSON.parse(jsondata.options.tableoptions);
-                    jsondata.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
-                } catch (e) {
-                    jsondata.options.tableoptions = {};
-                }
-
-                jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
-                jsondata = OCA.Analytics.Visualization.applyTimeAggregation(jsondata);
-                jsondata = OCA.Analytics.Visualization.applyTopN(jsondata);
-
-                OCA.Analytics.Panorama.setWidgetTypeReportContent(jsondata, itemId);
             }
         };
         xhr.send();

@@ -1,6 +1,8 @@
 # Changelog
 
+## 5.9.0 - 2025-08-xx
 ### Added
+- Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
 
 ### Fixed
