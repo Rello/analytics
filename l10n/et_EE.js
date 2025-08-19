@@ -78,6 +78,8 @@ OC.L10N.register(
     "Remove from favorites" : "Eemalda lemmikutest",
     "Add to favorites" : "Lisa lemmikutesse",
     "Delete folder" : "Kustuta kaust",
+    "Leaving this report?" : "Kas soovid väljuda sellest aruandest?",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "Sul on salvestamata muudatusi, Kui lahkus, siis muudatused lähevad kaduma.",
     "Save" : "Salvesta",
     "Discard" : "Loobu",
     "choose a layout" : "vali küljenduse paigutus",

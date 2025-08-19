@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Scheduled data load" : "Upakiaji wa data uliopangwa",
     "Delete folder" : "Futa kisanduku",
+    "Leaving this report?" : "Ungependa kuacha ripoti hii?",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "Una mabadiliko ambayo hayajahifadhiwa. Ukiondoka sasa, mabadiliko yako yatapotea.",
     "Save" : "Hifadhi",
     "Discard" : "Tupilia ",
     "choose a layout" : "chagua mpangilio",

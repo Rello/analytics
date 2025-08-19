@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "新增收藏",
     "Scheduled data load" : "預定數據加載",
     "Delete folder" : "刪除資料夾",
+    "Leaving this report?" : "離開此報告？",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "您有未保存的更改。如果您現在離開，您的更改將會丟失。",
     "Save" : "保存",
     "Discard" : "取消",
     "choose a layout" : "選擇佈局",

@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Añadir a favoritos",
     "Scheduled data load" : "Carga de datos programada",
     "Delete folder" : "Eliminar carpeta",
+    "Leaving this report?" : "¿Abandona este reporte?",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "Tiene cambios sin guardar. Si abandona ahora, sus cambios se perderán.",
     "Save" : "Guardar",
     "Discard" : "Descartar",
     "choose a layout" : "elija un diseño",

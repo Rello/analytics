@@ -80,6 +80,8 @@ OC.L10N.register(
     "Add to favorites" : "إضافة إلى المفضلة",
     "Scheduled data load" : "حِمل بيانات مجدول",
     "Delete folder" : "حذف المجلد",
+    "Save" : "حفظ",
+    "Discard" : "تجاهل",
     "choose a layout" : "إختَر مُخطَّطاً للعرض",
     "select to edit" : "إختَر للتعديل",
     "choose the content" : "إختَر المحتوى",
