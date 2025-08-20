@@ -192,24 +192,27 @@ class DatasetService {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
-		$dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+        public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
+                $dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+               $this->ReportMapper->increaseVersionByDataset($datasetId);
 
-		if ($aiIndex === 1) {
-			$this->provider($datasetId);
-		} else {
-			$this->providerRemove($datasetId);
-		}
-		return $dbUpdate;
-	}
+               if ($aiIndex === 1) {
+                       $this->provider($datasetId);
+               } else {
+                       $this->providerRemove($datasetId);
+               }
+               return $dbUpdate;
+        }
 
 	public function createGroup(int $parent = 0): int {
 		return $this->DatasetMapper->createGroup($this->l10n->t('New'), $parent);
 	}
 
-	public function updateGroup(int $datasetId, int $groupId): bool {
-		return $this->DatasetMapper->updateGroup($datasetId, $groupId);
-	}
+        public function updateGroup(int $datasetId, int $groupId): bool {
+               $result = $this->DatasetMapper->updateGroup($datasetId, $groupId);
+               $this->ReportMapper->increaseVersionByDataset($datasetId);
+               return $result;
+        }
 
 	/**
 	 * rename dataset
@@ -218,12 +221,14 @@ class DatasetService {
 	 * @param string $name
 	 * @return bool
 	 */
-	public function rename(int $datasetId, string $name): bool {
-		if ($this->isOwn($datasetId)) {
-			return $this->DatasetMapper->updateName($datasetId, $name);
-		}
-		return false;
-	}
+        public function rename(int $datasetId, string $name): bool {
+                if ($this->isOwn($datasetId)) {
+                       $result = $this->DatasetMapper->updateName($datasetId, $name);
+                       $this->ReportMapper->increaseVersionByDataset($datasetId);
+                       return $result;
+                }
+                return false;
+        }
 
 	/**
 	 * Export Dataset

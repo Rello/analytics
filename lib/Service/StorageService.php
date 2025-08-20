@@ -103,13 +103,13 @@ class StorageService {
 	 * @throws Exception
 	 */
 	public function update(
-		int    $datasetId,
-			   $dimension1,
-			   $dimension2,
-			   $value,
-			   ?string $user_id = null,
-			   $bulkInsert = null,
-			   $aggregation = null
+		int     $datasetId,
+				$dimension1,
+				$dimension2,
+				$value,
+		?string $user_id = null,
+				$bulkInsert = null,
+				$aggregation = null
 	) {
 		TODO:
 		//dates in both columns
@@ -135,6 +135,9 @@ class StorageService {
 				$error = 1;
 			}
 			if ($action === 'insert') $insert = 1; elseif ($action === 'update') $update = 1;
+			if ($action === 'insert' || $action === 'update') {
+				$this->ReportService->increaseVersionByDataset($datasetId);
+			}
 		} else {
 			$error = 1;
 		}
@@ -166,7 +169,9 @@ class StorageService {
 	 * @return bool
 	 */
 	public function delete(int $datasetId, $dimension1, $dimension2, ?string $user_id = null) {
-		return $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
+		$result = $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
+		$this->ReportService->increaseVersionByDataset($datasetId);
+		return $result;
 	}
 
 	/**
@@ -193,7 +198,11 @@ class StorageService {
 	 * @throws Exception
 	 */
 	public function deleteWithFilter(int $datasetId, $filter) {
-		return $this->StorageMapper->deleteWithFilter($datasetId, $filter);
+		$deleted = $this->StorageMapper->deleteWithFilter($datasetId, $filter);
+		if ($deleted > 0) {
+			$this->ReportService->increaseVersionByDataset($datasetId);
+		}
+		return $deleted;
 	}
 
 	/**

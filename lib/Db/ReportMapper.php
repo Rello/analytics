@@ -217,6 +217,7 @@ class ReportMapper
             ->set('dimension1', $sql->createNamedParameter($dimension1))
             ->set('dimension2', $sql->createNamedParameter($dimension2))
             ->set('value', $sql->createNamedParameter($value))
+            ->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         if ($filteroptions !== null) $sql->set('filteroptions', $sql->createNamedParameter($filteroptions));
@@ -242,6 +243,7 @@ class ReportMapper
             ->set('dataoptions', $sql->createNamedParameter($dataoptions))
             ->set('filteroptions', $sql->createNamedParameter($filteroptions))
             ->set('tableoptions', $sql->createNamedParameter($tableoptions))
+            ->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->executeStatement();
@@ -290,6 +292,7 @@ class ReportMapper
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('name', $sql->createNamedParameter($name))
+			->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->executeStatement();
@@ -423,6 +426,22 @@ class ReportMapper
         $result = $statement->fetchAll();
         $statement->closeCursor();
         return $result;
+    }
+
+    /**
+     * increase version for all reports of a dataset
+     * @param int $datasetId
+     * @return bool
+     * @throws Exception
+     */
+    public function increaseVersionByDataset(int $datasetId): bool
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->update(self::TABLE_NAME)
+            ->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
+            ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+        $sql->executeStatement();
+        return true;
     }
 
     /**
