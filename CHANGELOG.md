@@ -4,6 +4,7 @@
 ### Added
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
+- GitHub Community SLA data source
 
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
