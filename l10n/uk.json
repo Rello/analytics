@@ -91,6 +91,8 @@
     "Add to favorites" : "Додати зірочку",
     "Scheduled data load" : "Завантаження даних за розкладом",
     "Delete folder" : "Вилучити каталог",
+    "Leaving this report?" : "Виходите з цього звіту?",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "У вас є незбережені зміни. Якщо ви вийдете зараз, ваші зміни будуть втрачені.",
     "Save" : "Зберегти",
     "Discard" : "Відхилити",
     "choose a layout" : "виберіть макет",

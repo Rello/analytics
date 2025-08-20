@@ -93,6 +93,7 @@ OC.L10N.register(
     "Add to favorites" : "Přidat do oblíbených",
     "Scheduled data load" : "Naplánované načtení dat",
     "Delete folder" : "Smazat složku",
+    "Leaving this report?" : "Opustit toto hlášení?",
     "Save" : "Uložit",
     "Discard" : "Zahodit",
     "choose a layout" : "zvolte rozvržení",

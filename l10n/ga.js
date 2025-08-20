@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Cuir le ceanáin",
     "Scheduled data load" : "Ualach sonraí sceidealta",
     "Delete folder" : "Scrios fillteán",
+    "Leaving this report?" : "An bhfuil tú ag fágáil na tuarascála seo?",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "Tá athruithe neamhshábháilte agat. Má fhágann tú anois, caillfear do chuid athruithe.",
     "Save" : "Sábháil",
     "Discard" : "Caith amach",
     "choose a layout" : "roghnaigh leagan amach",
