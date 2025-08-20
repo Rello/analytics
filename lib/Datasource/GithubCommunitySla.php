@@ -65,6 +65,11 @@ class GithubCommunitySla implements IDatasource {
             'name' => $this->l10n->t('Personal access token'),
             'placeholder' => $this->l10n->t('optional')
         ];
+        $template[] = [
+            'id' => 'days',
+            'name' => $this->l10n->t('Updated since (days)'),
+            'placeholder' => '30'
+        ];
         return $template;
     }
 
@@ -85,9 +90,12 @@ class GithubCommunitySla implements IDatasource {
         ];
         $data = [];
 
+        $daysFilter = isset($option['days']) && (int)$option['days'] > 0 ? (int)$option['days'] : 30;
+        $sinceDate = date(DATE_ATOM, time() - ($daysFilter * 86400));
+
         foreach ($this->repositories as $repo) {
             // Issues
-            $issuesUrl = 'https://api.github.com/repos/' . $repo . '/issues?state=all&per_page=100';
+            $issuesUrl = 'https://api.github.com/repos/' . $repo . '/issues?state=all&per_page=100&since=' . $sinceDate;
             $curlResult = $this->getCurlData($issuesUrl, $option);
             if ($curlResult['http_code'] < 200 || $curlResult['http_code'] >= 300) {
                 return [
@@ -100,6 +108,9 @@ class GithubCommunitySla implements IDatasource {
             }
 
             foreach ($curlResult['data'] as $issue) {
+                if (isset($issue['updated_at']) && $issue['updated_at'] < $sinceDate) {
+                    continue;
+                }
                 if (isset($issue['pull_request'])) {
                     // skip pull requests in issue endpoint
                     continue;
@@ -112,7 +123,10 @@ class GithubCommunitySla implements IDatasource {
                 $eventsCurl = $this->getCurlData($eventsUrl, $option);
                 if ($eventsCurl['http_code'] >= 200 && $eventsCurl['http_code'] < 300) {
                     foreach ($eventsCurl['data'] as $event) {
-                        if ($event['event'] === 'labeled' && isset($event['label']['name']) && $event['label']['name'] === '1. to develop') {
+                        if (
+                            ($event['event'] === 'unlabeled' && isset($event['label']['name']) && $event['label']['name'] === '0. Needs triage') ||
+                            ($event['event'] === 'labeled' && isset($event['label']['name']) && $event['label']['name'] === '1. to develop')
+                        ) {
                             $triagedAt = $event['created_at'];
                             break;
                         }
@@ -124,7 +138,7 @@ class GithubCommunitySla implements IDatasource {
             }
 
             // Pull requests
-            $pullsUrl = 'https://api.github.com/repos/' . $repo . '/pulls?state=all&per_page=100';
+            $pullsUrl = 'https://api.github.com/repos/' . $repo . '/pulls?state=all&per_page=100&sort=updated&direction=desc';
             $pullsCurl = $this->getCurlData($pullsUrl, $option);
             if ($pullsCurl['http_code'] < 200 || $pullsCurl['http_code'] >= 300) {
                 return [
@@ -137,6 +151,9 @@ class GithubCommunitySla implements IDatasource {
             }
 
             foreach ($pullsCurl['data'] as $pr) {
+                if (isset($pr['updated_at']) && $pr['updated_at'] < $sinceDate) {
+                    continue;
+                }
                 if (in_array($pr['user']['login'], $this->excludedAuthors, true)) {
                     continue;
                 }

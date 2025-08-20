@@ -6,6 +6,9 @@
 - Warn about unsaved changes before leaving a report
 - GitHub Community SLA data source
 
+### Changed
+- Detect triage when removing "0. Needs triage" label and support updated-since filtering in GitHub Community SLA data source
+
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
 
