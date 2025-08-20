@@ -103,13 +103,13 @@ class StorageService {
 	 * @throws Exception
 	 */
 	public function update(
-		int    $datasetId,
-			   $dimension1,
-			   $dimension2,
-			   $value,
-			   ?string $user_id = null,
-			   $bulkInsert = null,
-			   $aggregation = null
+		int     $datasetId,
+				$dimension1,
+				$dimension2,
+				$value,
+		?string $user_id = null,
+				$bulkInsert = null,
+				$aggregation = null
 	) {
 		TODO:
 		//dates in both columns
@@ -128,19 +128,19 @@ class StorageService {
 		$dimension1 = $dimension1 === '' ? null : $dimension1;
 		$dimension2 = $dimension2 === '' ? null : $dimension2;
 
-                if ($value !== false) {
-                        try {
-                                $action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert, $aggregation);
-                        } catch (\Exception $e) {
-                                $error = 1;
-                        }
-                        if ($action === 'insert') $insert = 1; elseif ($action === 'update') $update = 1;
-                        if ($action === 'insert' || $action === 'update') {
-                                $this->ReportService->increaseVersionByDataset($datasetId);
-                        }
-                } else {
-                        $error = 1;
-                }
+		if ($value !== false) {
+			try {
+				$action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert, $aggregation);
+			} catch (\Exception $e) {
+				$error = 1;
+			}
+			if ($action === 'insert') $insert = 1; elseif ($action === 'update') $update = 1;
+			if ($action === 'insert' || $action === 'update') {
+				$this->ReportService->increaseVersionByDataset($datasetId);
+			}
+		} else {
+			$error = 1;
+		}
 
 		// get all reports for the dataset and evaluate their thresholds for push notifications
 		if ($error === 0) {
@@ -168,11 +168,11 @@ class StorageService {
 	 * @param string|null $user_id
 	 * @return bool
 	 */
-        public function delete(int $datasetId, $dimension1, $dimension2, ?string $user_id = null) {
-               $result = $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
-               $this->ReportService->increaseVersionByDataset($datasetId);
-               return $result;
-        }
+	public function delete(int $datasetId, $dimension1, $dimension2, ?string $user_id = null) {
+		$result = $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
+		$this->ReportService->increaseVersionByDataset($datasetId);
+		return $result;
+	}
 
 	/**
 	 * Simulate delete data
@@ -197,13 +197,13 @@ class StorageService {
 	 * @return int
 	 * @throws Exception
 	 */
-        public function deleteWithFilter(int $datasetId, $filter) {
-               $deleted = $this->StorageMapper->deleteWithFilter($datasetId, $filter);
-               if ($deleted > 0) {
-                       $this->ReportService->increaseVersionByDataset($datasetId);
-               }
-               return $deleted;
-        }
+	public function deleteWithFilter(int $datasetId, $filter) {
+		$deleted = $this->StorageMapper->deleteWithFilter($datasetId, $filter);
+		if ($deleted > 0) {
+			$this->ReportService->increaseVersionByDataset($datasetId);
+		}
+		return $deleted;
+	}
 
 	/**
 	 * Simulate delete data with variables; used for data deletion jobs

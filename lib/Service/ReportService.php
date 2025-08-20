@@ -83,7 +83,18 @@ class ReportService {
 	public function index(): array {
 		$ownReports = $this->ReportMapper->index();
 		$sharedReports = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_REPORT);
-		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'item_type', 'isShare', 'shareId', 'version');
+		$keysToKeep = array(
+			'id',
+			'name',
+			'dataset',
+			'favorite',
+			'parent',
+			'type',
+			'item_type',
+			'isShare',
+			'shareId',
+			'version'
+		);
 
 		// get shared reports and remove duplicates
 		$existingIds = array_flip(array_column($ownReports, 'id'));
@@ -368,6 +379,7 @@ class ReportService {
 	 * @return int
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws \OCP\Files\NotPermittedException
+	 * @throws Exception
 	 */
 	public function import(?string $path = null, ?string $raw = null) {
 		if ($path !== '' and $path !== null) {
@@ -531,19 +543,19 @@ class ReportService {
 	/**
 	 * @throws Exception
 	 */
-        public function reportsForDataset($datasetId) {
-                return $this->ReportMapper->reportsForDataset($datasetId);
-        }
+	public function reportsForDataset($datasetId) {
+		return $this->ReportMapper->reportsForDataset($datasetId);
+	}
 
-       /**
-        * increase version for all reports of a dataset
-        * @param int $datasetId
-        * @return bool
-        * @throws Exception
-        */
-       public function increaseVersionByDataset(int $datasetId): bool {
-               return $this->ReportMapper->increaseVersionByDataset($datasetId);
-       }
+	/**
+	 * increase version for all reports of a dataset
+	 * @param int $datasetId
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function increaseVersionByDataset(int $datasetId): bool {
+		return $this->ReportMapper->increaseVersionByDataset($datasetId);
+	}
 
 	private function floatvalue($val) {
 		// if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
