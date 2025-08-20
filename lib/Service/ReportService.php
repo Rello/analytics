@@ -531,9 +531,19 @@ class ReportService {
 	/**
 	 * @throws Exception
 	 */
-	public function reportsForDataset($datasetId) {
-		return $this->ReportMapper->reportsForDataset($datasetId);
-	}
+        public function reportsForDataset($datasetId) {
+                return $this->ReportMapper->reportsForDataset($datasetId);
+        }
+
+       /**
+        * increase version for all reports of a dataset
+        * @param int $datasetId
+        * @return bool
+        * @throws Exception
+        */
+       public function increaseVersionByDataset(int $datasetId): bool {
+               return $this->ReportMapper->increaseVersionByDataset($datasetId);
+       }
 
 	private function floatvalue($val) {
 		// if value is a 3 digit comma number with one leading zero like 0,111, it should not go through the 1000 separator removal
