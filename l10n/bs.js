@@ -12,6 +12,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "Izbriši fasciklu",
+    "Save" : "Spremi",
     "Download" : "Preuzmi",
     "Type" : "Type",
     "Date" : "Date",

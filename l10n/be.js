@@ -33,6 +33,7 @@ OC.L10N.register(
     "Edit" : "Рэдагаваць",
     "Back" : "Назад",
     "Name" : "Назва",
+    "Open documentation" : "Адкрыць дакументацыю",
     "Update" : "Абнавіць",
     "Remove filter" : "Выдаліць фільтр",
     "Description" : "Апісанне",

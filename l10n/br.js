@@ -18,6 +18,7 @@ OC.L10N.register(
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
     "Add to favorites" : "Ouzhpennañ er pennrolloù",
     "Delete folder" : "Dilemel an teuliad",
+    "Save" : "Enrollañ",
     "Download" : "Pellgargañ",
     "Report" : "Kemmenn",
     "Type" : "Seurt",

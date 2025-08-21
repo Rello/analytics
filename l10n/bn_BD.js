@@ -13,6 +13,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Delete folder" : "ফোল্ডার মোছ",
+    "Save" : "সংরক্ষণ",
     "Download" : "ডাউনলোড",
     "Type" : "ধরণ",
     "Notification" : "নোটিফিকেশন ",

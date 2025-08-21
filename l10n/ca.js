@@ -79,6 +79,7 @@ OC.L10N.register(
     "Add to favorites" : "Afegeix a preferits",
     "Scheduled data load" : "Càrrega de dades planificada",
     "Delete folder" : "Suprimeix la carpeta",
+    "Save" : "Desar",
     "Discard" : "Descarta'l",
     "choose a layout" : "trieu un diseny",
     "select to edit" : "seleccioneu per editar",

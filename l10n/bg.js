@@ -91,6 +91,7 @@ OC.L10N.register(
     "Add to favorites" : "Добавяне към любими",
     "Scheduled data load" : "Планирано зареждане на данни",
     "Delete folder" : "Изтриване на папка",
+    "Save" : "Запиши",
     "Discard" : "Отхвърляне",
     "choose a layout" : "Избери разположението",
     "select to edit" : "Избери за промяна",
