@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Version" : "Версія",
+    "Choose language" : "Выберыце мову",
     "Loading" : "Загрузка",
     "Share" : "Абагуліць",
     "Share link" : "Абагуліць спасылку",
@@ -12,6 +13,7 @@ OC.L10N.register(
     "Done" : "Гатова",
     "Favorites" : "Абранае",
     "New" : "Новы",
+    "Overview" : "Агляд",
     "Remove from favorites" : "Выдаліць з абранага",
     "Add to favorites" : "У абранае",
     "Delete folder" : "Выдаліць папку",
@@ -42,8 +44,10 @@ OC.L10N.register(
     "Copy" : "Капіяваць",
     "Daily" : "Штодня",
     "Hourly" : "Штогадзіну",
+    "Basic settings" : "Асноўныя налады",
     "Rename" : "Перайменаваць",
     "Password protection" : "Абарона паролем",
+    "Additional settings" : "Дадатковыя налады",
     "Sort by" : "Сартаваць па",
     "Create" : "Стварыць"
 },

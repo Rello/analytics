@@ -1,5 +1,6 @@
 { "translations": {
     "Version" : "Версія",
+    "Choose language" : "Выберыце мову",
     "Loading" : "Загрузка",
     "Share" : "Абагуліць",
     "Share link" : "Абагуліць спасылку",
@@ -10,6 +11,7 @@
     "Done" : "Гатова",
     "Favorites" : "Абранае",
     "New" : "Новы",
+    "Overview" : "Агляд",
     "Remove from favorites" : "Выдаліць з абранага",
     "Add to favorites" : "У абранае",
     "Delete folder" : "Выдаліць папку",
@@ -40,8 +42,10 @@
     "Copy" : "Капіяваць",
     "Daily" : "Штодня",
     "Hourly" : "Штогадзіну",
+    "Basic settings" : "Асноўныя налады",
     "Rename" : "Перайменаваць",
     "Password protection" : "Абарона паролем",
+    "Additional settings" : "Дадатковыя налады",
     "Sort by" : "Сартаваць па",
     "Create" : "Стварыць"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
