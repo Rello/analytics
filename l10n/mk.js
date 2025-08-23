@@ -63,6 +63,7 @@ OC.L10N.register(
     "Import" : "Увези",
     "Selection" : "Селектирање",
     "Title" : "Наслов",
+    "Copy" : "Копирај",
     "Daily" : "Дневно",
     "Hourly" : "Часовно",
     "Basic settings" : "Основни параметри",
