@@ -94,10 +94,40 @@ class GithubCommunitySla implements IDatasource {
         $sinceDate = date(DATE_ATOM, time() - ($daysFilter * 86400));
 
         foreach ($this->repositories as $repo) {
-            // Issues
-            $issuesUrl = 'https://api.github.com/repos/' . $repo . '/issues?state=all&per_page=100&since=' . $sinceDate;
-            $curlResult = $this->getCurlData($issuesUrl, $option);
-            if ($curlResult['http_code'] < 200 || $curlResult['http_code'] >= 300) {
+            [$owner, $name] = explode('/', $repo, 2);
+            $query = <<<'GRAPHQL'
+query($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    issues(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN, CLOSED]) {
+      nodes {
+        number
+        createdAt
+        updatedAt
+        author { login }
+        timelineItems(first: 100, itemTypes: [LABELED_EVENT, UNLABELED_EVENT]) {
+          nodes {
+            __typename
+            ... on LabeledEvent { createdAt label { name } }
+            ... on UnlabeledEvent { createdAt label { name } }
+          }
+        }
+      }
+    }
+    pullRequests(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN, MERGED, CLOSED]) {
+      nodes {
+        number
+        createdAt
+        mergedAt
+        updatedAt
+        author { login }
+      }
+    }
+  }
+}
+GRAPHQL;
+
+            $curlResult = $this->getGraphqlData($query, ['owner' => $owner, 'name' => $name], $option);
+            if ($curlResult['http_code'] < 200 || $curlResult['http_code'] >= 300 || isset($curlResult['data']['errors'])) {
                 return [
                     'header' => [],
                     'dimensions' => [],
@@ -107,60 +137,41 @@ class GithubCommunitySla implements IDatasource {
                 ];
             }
 
-            foreach ($curlResult['data'] as $issue) {
-                if (isset($issue['updated_at']) && $issue['updated_at'] < $sinceDate) {
+            $repoData = $curlResult['data']['data']['repository'];
+
+            foreach ($repoData['issues']['nodes'] as $issue) {
+                if ($issue['updatedAt'] < $sinceDate) {
                     continue;
                 }
-                if (isset($issue['pull_request'])) {
-                    // skip pull requests in issue endpoint
-                    continue;
-                }
-                if (in_array($issue['user']['login'], $this->excludedAuthors, true)) {
+                if (in_array($issue['author']['login'], $this->excludedAuthors, true)) {
                     continue;
                 }
                 $triagedAt = '';
-                $eventsUrl = 'https://api.github.com/repos/' . $repo . '/issues/' . $issue['number'] . '/events';
-                $eventsCurl = $this->getCurlData($eventsUrl, $option);
-                if ($eventsCurl['http_code'] >= 200 && $eventsCurl['http_code'] < 300) {
-                    foreach ($eventsCurl['data'] as $event) {
-                        if (
-                            ($event['event'] === 'unlabeled' && isset($event['label']['name']) && $event['label']['name'] === '0. Needs triage') ||
-                            ($event['event'] === 'labeled' && isset($event['label']['name']) && $event['label']['name'] === '1. to develop')
-                        ) {
-                            $triagedAt = $event['created_at'];
-                            break;
-                        }
+                foreach ($issue['timelineItems']['nodes'] as $event) {
+                    if (
+                        ($event['__typename'] === 'UnlabeledEvent' && isset($event['label']['name']) && $event['label']['name'] === '0. Needs triage') ||
+                        ($event['__typename'] === 'LabeledEvent' && isset($event['label']['name']) && $event['label']['name'] === '1. to develop')
+                    ) {
+                        $triagedAt = $event['createdAt'];
+                        break;
                     }
                 }
-                $days = $this->daysBetween($issue['created_at'], $triagedAt ?: date(DATE_ATOM));
+                $days = $this->daysBetween($issue['createdAt'], $triagedAt ?: date(DATE_ATOM));
                 $slaMet = $triagedAt !== '' && $days <= 14;
-                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['created_at'], $triagedAt, $days, $slaMet ? 1 : 0];
+                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $triagedAt, $days, $slaMet ? 1 : 0];
             }
 
-            // Pull requests
-            $pullsUrl = 'https://api.github.com/repos/' . $repo . '/pulls?state=all&per_page=100&sort=updated&direction=desc';
-            $pullsCurl = $this->getCurlData($pullsUrl, $option);
-            if ($pullsCurl['http_code'] < 200 || $pullsCurl['http_code'] >= 300) {
-                return [
-                    'header' => [],
-                    'dimensions' => [],
-                    'data' => $pullsCurl['http_code'] === 403 ? 'Rate limit exceeded' : [],
-                    'rawdata' => $pullsCurl,
-                    'error' => 'HTTP response code: ' . $pullsCurl['http_code'],
-                ];
-            }
-
-            foreach ($pullsCurl['data'] as $pr) {
-                if (isset($pr['updated_at']) && $pr['updated_at'] < $sinceDate) {
+            foreach ($repoData['pullRequests']['nodes'] as $pr) {
+                if ($pr['updatedAt'] < $sinceDate) {
                     continue;
                 }
-                if (in_array($pr['user']['login'], $this->excludedAuthors, true)) {
+                if (in_array($pr['author']['login'], $this->excludedAuthors, true)) {
                     continue;
                 }
-                $mergedAt = $pr['merged_at'] ?? '';
-                $days = $this->daysBetween($pr['created_at'], $mergedAt ?: date(DATE_ATOM));
+                $mergedAt = $pr['mergedAt'] ?? '';
+                $days = $this->daysBetween($pr['createdAt'], $mergedAt ?: date(DATE_ATOM));
                 $slaMet = $mergedAt !== '' && $days <= 14;
-                $data[] = [$repo, 'pr', (int)$pr['number'], $pr['created_at'], $mergedAt, $days, $slaMet ? 1 : 0];
+                $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $mergedAt, $days, $slaMet ? 1 : 0];
             }
         }
 
@@ -173,24 +184,24 @@ class GithubCommunitySla implements IDatasource {
         ];
     }
 
-    protected function getCurlData($url, $option): array {
-        $ch = curl_init();
+    protected function getGraphqlData(string $query, array $variables, array $option): array {
+        $ch = curl_init('https://api.github.com/graphql');
         if ($ch !== false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_REFERER, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['query' => $query, 'variables' => $variables]));
+            $headers = [
+                'Content-Type: application/json',
+                'User-Agent: AnalyticsApp'
+            ];
             if (isset($option['token']) && $option['token'] !== '') {
-                $headers = [
-                    'Authorization: token ' . $option['token'],
-                    'User-Agent: AnalyticsApp',
-                    'Accept: application/vnd.github.v3+json'
-                ];
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                $headers[] = 'Authorization: bearer ' . $option['token'];
             }
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             $curlResult = curl_exec($ch);
             $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);

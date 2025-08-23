@@ -8,6 +8,7 @@
 
 ### Changed
 - Detect triage when removing "0. Needs triage" label and support updated-since filtering in GitHub Community SLA data source
+- Use GitHub GraphQL API for more efficient Community SLA queries
 
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)

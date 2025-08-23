@@ -12,26 +12,64 @@ class GithubCommunitySlaTest extends TestCase {
             protected array $repositories = ['owner/repo1'];
             protected array $excludedAuthors = ['employee1'];
 
-            protected function getCurlData($url, $option): array {
-                if (str_contains($url, '/issues/1/events')) {
-                    return ['data' => [
-                        ['event' => 'unlabeled', 'label' => ['name' => '0. Needs triage'], 'created_at' => '2025-01-05T00:00:00Z']
-                    ], 'http_code' => 200];
-                }
-                if (str_contains($url, '/issues?')) {
-                    return ['data' => [
-                        ['number' => 1, 'created_at' => '2025-01-01T00:00:00Z', 'updated_at' => '2025-01-05T00:00:00Z', 'user' => ['login' => 'communityUser']],
-                        ['number' => 2, 'created_at' => '2025-01-05T00:00:00Z', 'updated_at' => '2025-01-06T00:00:00Z', 'user' => ['login' => 'employee1']]
-                    ], 'http_code' => 200];
-                }
-                if (str_contains($url, '/pulls?')) {
-                    return ['data' => [
-                        ['number' => 10, 'created_at' => '2025-01-01T00:00:00Z', 'merged_at' => '2025-01-20T00:00:00Z', 'updated_at' => '2025-01-20T00:00:00Z', 'user' => ['login' => 'communityUser']],
-                        ['number' => 11, 'created_at' => '2025-01-02T00:00:00Z', 'merged_at' => null, 'updated_at' => '2025-01-02T00:00:00Z', 'user' => ['login' => 'employee1']],
-                        ['number' => 12, 'created_at' => '2000-01-01T00:00:00Z', 'merged_at' => '2000-01-02T00:00:00Z', 'updated_at' => '2000-01-02T00:00:00Z', 'user' => ['login' => 'communityUser']]
-                    ], 'http_code' => 200];
-                }
-                return ['data' => [], 'http_code' => 200];
+            protected function getGraphqlData(string $query, array $variables, array $option): array {
+                return ['data' => [
+                    'data' => [
+                        'repository' => [
+                            'issues' => [
+                                'nodes' => [
+                                    [
+                                        'number' => 1,
+                                        'createdAt' => '2025-01-01T00:00:00Z',
+                                        'updatedAt' => '2025-01-05T00:00:00Z',
+                                        'author' => ['login' => 'communityUser'],
+                                        'timelineItems' => [
+                                            'nodes' => [
+                                                [
+                                                    '__typename' => 'UnlabeledEvent',
+                                                    'label' => ['name' => '0. Needs triage'],
+                                                    'createdAt' => '2025-01-05T00:00:00Z'
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                    [
+                                        'number' => 2,
+                                        'createdAt' => '2025-01-05T00:00:00Z',
+                                        'updatedAt' => '2025-01-06T00:00:00Z',
+                                        'author' => ['login' => 'employee1'],
+                                        'timelineItems' => ['nodes' => []]
+                                    ]
+                                ]
+                            ],
+                            'pullRequests' => [
+                                'nodes' => [
+                                    [
+                                        'number' => 10,
+                                        'createdAt' => '2025-01-01T00:00:00Z',
+                                        'mergedAt' => '2025-01-20T00:00:00Z',
+                                        'updatedAt' => '2025-01-20T00:00:00Z',
+                                        'author' => ['login' => 'communityUser']
+                                    ],
+                                    [
+                                        'number' => 11,
+                                        'createdAt' => '2025-01-02T00:00:00Z',
+                                        'mergedAt' => null,
+                                        'updatedAt' => '2025-01-02T00:00:00Z',
+                                        'author' => ['login' => 'employee1']
+                                    ],
+                                    [
+                                        'number' => 12,
+                                        'createdAt' => '2000-01-01T00:00:00Z',
+                                        'mergedAt' => '2000-01-02T00:00:00Z',
+                                        'updatedAt' => '2000-01-02T00:00:00Z',
+                                        'author' => ['login' => 'communityUser']
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ], 'http_code' => 200];
             }
         };
 
