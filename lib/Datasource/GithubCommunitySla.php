@@ -52,7 +52,7 @@ class GithubCommunitySla implements IDatasource {
      * @return int digit unique data source id
      */
     public function getId(): int {
-        return 8;
+        return 9;
     }
 
     /**
