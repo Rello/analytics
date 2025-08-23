@@ -47,7 +47,8 @@ class GithubCommunitySlaTest extends TestCase {
                                     [
                                         'number' => 10,
                                         'createdAt' => '2025-01-01T00:00:00Z',
-                                        'mergedAt' => '2025-01-20T00:00:00Z',
+                                        'mergedAt' => null,
+                                        'closedAt' => '2025-01-20T00:00:00Z',
                                         'updatedAt' => '2025-01-20T00:00:00Z',
                                         'author' => ['login' => 'communityUser']
                                     ],
@@ -55,6 +56,7 @@ class GithubCommunitySlaTest extends TestCase {
                                         'number' => 11,
                                         'createdAt' => '2025-01-02T00:00:00Z',
                                         'mergedAt' => null,
+                                        'closedAt' => null,
                                         'updatedAt' => '2025-01-02T00:00:00Z',
                                         'author' => ['login' => 'employee1']
                                     ],
@@ -62,6 +64,7 @@ class GithubCommunitySlaTest extends TestCase {
                                         'number' => 12,
                                         'createdAt' => '2000-01-01T00:00:00Z',
                                         'mergedAt' => '2000-01-02T00:00:00Z',
+                                        'closedAt' => '2000-01-02T00:00:00Z',
                                         'updatedAt' => '2000-01-02T00:00:00Z',
                                         'author' => ['login' => 'communityUser']
                                     ]
@@ -75,7 +78,7 @@ class GithubCommunitySlaTest extends TestCase {
 
         $result = $datasource->readData(['days' => 30]);
         $this->assertCount(2, $result['data']);
-        $this->assertSame(['owner/repo1','issue',1,'2025-01-01T00:00:00Z','2025-01-05T00:00:00Z',4,1], $result['data'][0]);
-        $this->assertSame(['owner/repo1','pr',10,'2025-01-01T00:00:00Z','2025-01-20T00:00:00Z',19,0], $result['data'][1]);
+        $this->assertSame(['owner/repo1','issue',1,'2025-01-01T00:00:00Z','2025-01-05T00:00:00Z',4,1,1], $result['data'][0]);
+        $this->assertSame(['owner/repo1','pr',10,'2025-01-01T00:00:00Z','2025-01-20T00:00:00Z',19,0,1], $result['data'][1]);
     }
 }

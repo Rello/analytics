@@ -86,7 +86,8 @@ class GithubCommunitySla implements IDatasource {
             $this->l10n->t('Created'),
             $this->l10n->t('Completed'),
             $this->l10n->t('Days'),
-            $this->l10n->t('SLA met')
+            $this->l10n->t('SLA met'),
+            $this->l10n->t('Counter')
         ];
         $data = [];
 
@@ -118,6 +119,7 @@ query($owner: String!, $name: String!) {
         number
         createdAt
         mergedAt
+        closedAt
         updatedAt
         author { login }
       }
@@ -158,7 +160,7 @@ GRAPHQL;
                 }
                 $days = $this->daysBetween($issue['createdAt'], $triagedAt ?: date(DATE_ATOM));
                 $slaMet = $triagedAt !== '' && $days <= 14;
-                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $triagedAt, $days, $slaMet ? 1 : 0];
+                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $triagedAt, $days, $slaMet ? 1 : 0, 1];
             }
 
             foreach ($repoData['pullRequests']['nodes'] as $pr) {
@@ -168,16 +170,16 @@ GRAPHQL;
                 if (in_array($pr['author']['login'], $this->excludedAuthors, true)) {
                     continue;
                 }
-                $mergedAt = $pr['mergedAt'] ?? '';
-                $days = $this->daysBetween($pr['createdAt'], $mergedAt ?: date(DATE_ATOM));
-                $slaMet = $mergedAt !== '' && $days <= 14;
-                $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $mergedAt, $days, $slaMet ? 1 : 0];
+                $completedAt = $pr['mergedAt'] ?? $pr['closedAt'] ?? '';
+                $days = $this->daysBetween($pr['createdAt'], $completedAt ?: date(DATE_ATOM));
+                $slaMet = $completedAt !== '' && $days <= 14;
+                $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
             }
         }
 
         return [
             'header' => $header,
-            'dimensions' => array_slice($header, 0, count($header) - 1),
+            'dimensions' => array_slice($header, 0, count($header) - 2),
             'data' => $data,
             'rawdata' => [],
             'error' => 0,

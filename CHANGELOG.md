@@ -10,6 +10,7 @@
 - Detect triage when removing "0. Needs triage" label and support updated-since filtering in GitHub Community SLA data source
 - Use GitHub GraphQL API for more efficient Community SLA queries
 - Register GitHub Community SLA data source with ID 9
+- Include counter column and use merge/close dates for PR SLA calculation in GitHub Community SLA data source
 
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
