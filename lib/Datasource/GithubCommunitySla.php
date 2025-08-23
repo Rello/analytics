@@ -66,9 +66,26 @@ class GithubCommunitySla implements IDatasource {
             'placeholder' => $this->l10n->t('optional')
         ];
         $template[] = [
+            'id' => 'repo',
+            'name' => $this->l10n->t('Repositories'),
+            'placeholder' => 'owner/repo1,owner/repo2'
+        ];
+        $template[] = [
+            'id' => 'exclude',
+            'name' => $this->l10n->t('Exclude authors'),
+            'placeholder' => 'user1,user2'
+        ];
+        $template[] = [
+            'id' => 'sla',
+            'name' => $this->l10n->t('SLA days'),
+            'placeholder' => '14',
+            'type' => 'number'
+        ];
+        $template[] = [
             'id' => 'days',
             'name' => $this->l10n->t('Updated since (days)'),
-            'placeholder' => '30'
+            'placeholder' => '30',
+            'type' => 'number'
         ];
         return $template;
     }
@@ -91,10 +108,17 @@ class GithubCommunitySla implements IDatasource {
         ];
         $data = [];
 
+        $repositories = isset($option['repo']) && $option['repo'] !== ''
+            ? array_map('trim', explode(',', $option['repo']))
+            : $this->repositories;
+        $excludedAuthors = isset($option['exclude']) && $option['exclude'] !== ''
+            ? array_map('trim', explode(',', $option['exclude']))
+            : $this->excludedAuthors;
+        $slaDays = isset($option['sla']) && (int)$option['sla'] > 0 ? (int)$option['sla'] : 14;
         $daysFilter = isset($option['days']) && (int)$option['days'] > 0 ? (int)$option['days'] : 30;
         $sinceDate = date(DATE_ATOM, time() - ($daysFilter * 86400));
 
-        foreach ($this->repositories as $repo) {
+        foreach ($repositories as $repo) {
             [$owner, $name] = explode('/', $repo, 2);
             $query = <<<'GRAPHQL'
 query($owner: String!, $name: String!) {
@@ -145,7 +169,7 @@ GRAPHQL;
                 if ($issue['updatedAt'] < $sinceDate) {
                     continue;
                 }
-                if (in_array($issue['author']['login'], $this->excludedAuthors, true)) {
+                if (in_array($issue['author']['login'], $excludedAuthors, true)) {
                     continue;
                 }
                 $triagedAt = '';
@@ -159,7 +183,7 @@ GRAPHQL;
                     }
                 }
                 $days = $this->daysBetween($issue['createdAt'], $triagedAt ?: date(DATE_ATOM));
-                $slaMet = $triagedAt !== '' && $days <= 14;
+                $slaMet = $triagedAt !== '' && $days <= $slaDays;
                 $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $triagedAt, $days, $slaMet ? 1 : 0, 1];
             }
 
@@ -167,12 +191,12 @@ GRAPHQL;
                 if ($pr['updatedAt'] < $sinceDate) {
                     continue;
                 }
-                if (in_array($pr['author']['login'], $this->excludedAuthors, true)) {
+                if (in_array($pr['author']['login'], $excludedAuthors, true)) {
                     continue;
                 }
                 $completedAt = $pr['mergedAt'] ?? $pr['closedAt'] ?? '';
                 $days = $this->daysBetween($pr['createdAt'], $completedAt ?: date(DATE_ATOM));
-                $slaMet = $completedAt !== '' && $days <= 14;
+                $slaMet = $completedAt !== '' && $days <= $slaDays;
                 $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
             }
         }

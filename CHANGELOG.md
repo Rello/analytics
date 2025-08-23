@@ -5,6 +5,7 @@
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
 - GitHub Community SLA data source
+- Configure excluded authors, repositories, and SLA days via GitHub Community SLA options
 
 ### Changed
 - Detect triage when removing "0. Needs triage" label and support updated-since filtering in GitHub Community SLA data source

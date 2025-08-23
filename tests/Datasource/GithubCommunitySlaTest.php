@@ -9,9 +9,6 @@ use Psr\Log\NullLogger;
 class GithubCommunitySlaTest extends TestCase {
     public function testReadDataCalculatesSla(): void {
         $datasource = new class(new FakeL10N(), new NullLogger()) extends GithubCommunitySla {
-            protected array $repositories = ['owner/repo1'];
-            protected array $excludedAuthors = ['employee1'];
-
             protected function getGraphqlData(string $query, array $variables, array $option): array {
                 return ['data' => [
                     'data' => [
@@ -76,7 +73,12 @@ class GithubCommunitySlaTest extends TestCase {
             }
         };
 
-        $result = $datasource->readData(['days' => 30]);
+        $result = $datasource->readData([
+            'days' => 30,
+            'repo' => 'owner/repo1',
+            'exclude' => 'employee1',
+            'sla' => 14,
+        ]);
         $this->assertCount(2, $result['data']);
         $this->assertSame(['owner/repo1','issue',1,'2025-01-01T00:00:00Z','2025-01-05T00:00:00Z',4,1,1], $result['data'][0]);
         $this->assertSame(['owner/repo1','pr',10,'2025-01-01T00:00:00Z','2025-01-20T00:00:00Z',19,0,1], $result['data'][1]);
