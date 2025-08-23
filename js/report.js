@@ -86,8 +86,7 @@ Object.assign(OCA.Analytics.Report, {
      * Render report data as chart or table
      */
     buildReport: function () {
-        OCA.Analytics.Visualization.hideElement('analytics-loading');
-        OCA.Analytics.Visualization.showElement('analytics-content-report');
+        OCA.Analytics.Visualization.showContentByType('report');
 
         document.getElementById('reportHeader').innerText = OCA.Analytics.currentReportData.options.name;
         if (OCA.Analytics.currentReportData.options.subheader !== '') {
@@ -130,7 +129,6 @@ Object.assign(OCA.Analytics.Report, {
             }
         }
         OCA.Analytics.Report.buildReportOptions();
-        OCA.Analytics.Visualization.showContentByType('report');
     },
 
     /**

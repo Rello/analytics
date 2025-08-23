@@ -586,7 +586,7 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-save-warning {
     background-image: url(../img/save.svg);
-    filter: var(--background-invert-if-dark);
+    filter: none;
 }
 
 .icon-analytics-chart-options {
