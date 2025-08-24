@@ -8,7 +8,7 @@
 - Configure excluded authors, repositories, and SLA days via GitHub Community SLA options
 
 ### Changed
-- Detect triage when removing "0. Needs triage" label and support updated-since filtering in GitHub Community SLA data source
+- Treat issues as triaged when the "0. Needs triage" label is removed or the issue is closed and evaluate open items against the current date in GitHub Community SLA data source
 - Use GitHub GraphQL API for more efficient Community SLA queries
 - Register GitHub Community SLA data source with ID 9
 - Include counter column and use merge/close dates for PR SLA calculation in GitHub Community SLA data source

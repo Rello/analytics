@@ -128,11 +128,11 @@ query($owner: String!, $name: String!) {
         number
         createdAt
         updatedAt
+        closedAt
         author { login }
-        timelineItems(first: 100, itemTypes: [LABELED_EVENT, UNLABELED_EVENT]) {
+        timelineItems(first: 100, itemTypes: [UNLABELED_EVENT]) {
           nodes {
             __typename
-            ... on LabeledEvent { createdAt label { name } }
             ... on UnlabeledEvent { createdAt label { name } }
           }
         }
@@ -172,19 +172,19 @@ GRAPHQL;
                 if (in_array($issue['author']['login'], $excludedAuthors, true)) {
                     continue;
                 }
-                $triagedAt = '';
+                $completedAt = '';
                 foreach ($issue['timelineItems']['nodes'] as $event) {
-                    if (
-                        ($event['__typename'] === 'UnlabeledEvent' && isset($event['label']['name']) && $event['label']['name'] === '0. Needs triage') ||
-                        ($event['__typename'] === 'LabeledEvent' && isset($event['label']['name']) && $event['label']['name'] === '1. to develop')
-                    ) {
-                        $triagedAt = $event['createdAt'];
+                    if ($event['__typename'] === 'UnlabeledEvent' && isset($event['label']['name']) && $event['label']['name'] === '0. Needs triage') {
+                        $completedAt = $event['createdAt'];
                         break;
                     }
                 }
-                $days = $this->daysBetween($issue['createdAt'], $triagedAt ?: date(DATE_ATOM));
-                $slaMet = $triagedAt !== '' && $days <= $slaDays;
-                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $triagedAt, $days, $slaMet ? 1 : 0, 1];
+                if ($completedAt === '' && isset($issue['closedAt']) && $issue['closedAt'] !== null) {
+                    $completedAt = $issue['closedAt'];
+                }
+                $days = $this->daysBetween($issue['createdAt'], $completedAt ?: date(DATE_ATOM));
+                $slaMet = $days <= $slaDays;
+                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
             }
 
             foreach ($repoData['pullRequests']['nodes'] as $pr) {
@@ -196,7 +196,7 @@ GRAPHQL;
                 }
                 $completedAt = $pr['mergedAt'] ?? $pr['closedAt'] ?? '';
                 $days = $this->daysBetween($pr['createdAt'], $completedAt ?: date(DATE_ATOM));
-                $slaMet = $completedAt !== '' && $days <= $slaDays;
+                $slaMet = $days <= $slaDays;
                 $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
             }
         }
