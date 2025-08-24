@@ -18,6 +18,7 @@ OC.L10N.register(
     "Add to favorites" : "У абранае",
     "Delete folder" : "Выдаліць папку",
     "Save" : "Захаваць",
+    "Discard" : "Адхіліць",
     "Download" : "Спампаваць",
     "Type" : "Тып",
     "Notification" : "Апавяшчэнне",
