@@ -411,7 +411,11 @@ OCA.Analytics.Filter = {
         const header = OCA.Analytics.currentReportData.header || [];
         const selectedCols = filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1];
         header.forEach((name, index) => {
-            const div = document.createElement('div');
+            const label = document.createElement('label');
+            label.style.whiteSpace = 'nowrap';
+            label.style.marginRight = '10px';
+            label.style.display = 'inline-block';
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = 'timeGroupingColumn' + index;
@@ -420,12 +424,10 @@ OCA.Analytics.Filter = {
             if (selectedCols.includes(index)) {
                 checkbox.checked = true;
             }
-            const label = document.createElement('label');
-            label.setAttribute('for', checkbox.id);
-            label.textContent = name;
-            div.appendChild(checkbox);
-            div.appendChild(label);
-            columnsContainer.appendChild(div);
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(name));
+            columnsContainer.appendChild(label);
         });
 
         if (filterOptions && filterOptions.timeAggregation) {
