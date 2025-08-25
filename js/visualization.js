@@ -33,7 +33,7 @@ OCA.Analytics.Visualization = {
     thresholdColorNumberGreen: 'Green',
 
     // operators used for threshold comparisons in multiple functions
-    thresholdOperators : {
+    thresholdOperators: {
         '=': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x === y),
         'EQ': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x === y),
         '!=': (a, b) => !OCA.Analytics.Visualization.thresholdOperators['EQ'](a, b),
@@ -50,7 +50,7 @@ OCA.Analytics.Visualization = {
         'IN': (a, b) => String(b).split(',').map(v => v.trim()).includes(String(a)),
     },
 
-    compareValues: function(a, b, fn) {
+    compareValues: function (a, b, fn) {
         function normalizeNumberString(str) {
             if (typeof str !== "string") return str;
             str = str.trim();
@@ -159,7 +159,9 @@ OCA.Analytics.Visualization = {
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
         // never show table navigation in Panorama
-        if (OCA.Analytics.isPanorama) { isDataLengthGreaterThanDefault = false; }
+        if (OCA.Analytics.isPanorama) {
+            isDataLengthGreaterThanDefault = false;
+        }
 
         domTarget.createTFoot().insertRow(0);
         OCA.Analytics.tableObject[uniqueId] = new DataTable(domTarget, {
@@ -566,7 +568,7 @@ OCA.Analytics.Visualization = {
             value = rawValue.toLocaleString();
         } else {
             // Otherwise, format with decimals
-            value = rawValue.toLocaleString(undefined, { minimumFractionDigits: 2 });
+            value = rawValue.toLocaleString(undefined, {minimumFractionDigits: 2});
         }
 
         let dimension = jsondata.data[0].length - 1
@@ -773,7 +775,7 @@ OCA.Analytics.Visualization = {
             chartOptions.plugins.datalabels.formatter = (value, context) => {
                 const label = context.chart.data.labels[context.dataIndex];
                 return `${label}\n${(value).toLocaleString()}`;
-                }
+            }
         }
 
         // the user can add/overwrite chart options
@@ -829,9 +831,9 @@ OCA.Analytics.Visualization = {
      */
     buildThresholdAnnotations: function (thresholds, chartType) {
         const annotations = {};
-        
+
         if (!thresholds || !Array.isArray(thresholds)) {
-            return { annotations };
+            return {annotations};
         }
 
         thresholds.forEach((threshold, index) => {
@@ -840,7 +842,7 @@ OCA.Analytics.Visualization = {
 
             const severity = parseInt(threshold.severity);
             let borderColor = '#cccccc'; // default gray
-            
+
             // Use the same color scheme as existing threshold functionality
             if (severity === 2) { // red
                 borderColor = OCA.Analytics.Visualization.thresholdColorNumberRed;
@@ -874,7 +876,7 @@ OCA.Analytics.Visualization = {
             };
         });
 
-        return { annotations };
+        return {annotations};
     },
 
     /**
@@ -1029,7 +1031,9 @@ OCA.Analytics.Visualization = {
                 });
 
                 // Optionally, clean up the temporary property
-                data.data.forEach(row => { delete row._parsedDate; });
+                data.data.forEach(row => {
+                    delete row._parsedDate;
+                });
             }
         }
         return data;
@@ -1210,25 +1214,35 @@ OCA.Analytics.Visualization = {
      * @returns {Array} Updated rows
      */
     formatDates: function (data) {
-        let firstRow = data[0];
         let now;
-        for (let i = 0; i < firstRow.length; i++) {
-            // loop columns and check for a valid date
-            if (!isNaN(new Date(firstRow[i]).valueOf()) && firstRow[i] !== null && firstRow[i].length >= 19) {
-                // column contains a valid date
-                // then loop all rows for this column and convert to local time
+        for (let i = 0; i < data[0].length; i++) {
+            // Find a valid date in the column
+            let validDateFound = false;
+            for (let j = 0; j < data.length; j++) {
+                if (!isNaN(new Date(data[j][i]).valueOf()) && data[j][i] !== null && data[j][i].length >= 19) {
+                    validDateFound = true;
+                    break;
+                }
+            }
+
+            // If a valid date is found, convert all dates in the column
+            if (validDateFound) {
                 for (let j = 0; j < data.length; j++) {
                     if (data[j][i].length === 19) {
                         // values are assumed to have a timezone or are used as UTC
                         data[j][i] = data[j][i] + 'Z';
                     }
                     now = new Date(data[j][i]);
-                    data[j][i] = now.getFullYear()
-                        + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1) //getMonth will start with Jan = 0
-                        + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
-                        + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
-                        + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
-                        + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds()
+                    if (!isNaN(now.valueOf())) {
+                        data[j][i] = now.getFullYear()
+                            + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1)
+                            + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
+                            + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
+                            + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+                            + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
+                    } else {
+                        data[j][i] = ''; // Set to empty string if date is invalid
+                    }
                 }
             }
         }
@@ -1319,18 +1333,18 @@ OCA.Analytics.Visualization = {
 
     showContentByType: function (type) {
         //if (OCA.Analytics.currentContentType !== type) {
-            Array.from(document.querySelectorAll('[id^="analytics-content-"]'))
-                .map(el => el.id)
-                .forEach(id => OCA.Analytics.Visualization.hideElement(id));
-            OCA.Analytics.Visualization.showElement('analytics-content-' + type);
-            if (type !== 'loading') {
-                OCA.Analytics.currentContentType = type;
-            }
+        Array.from(document.querySelectorAll('[id^="analytics-content-"]'))
+            .map(el => el.id)
+            .forEach(id => OCA.Analytics.Visualization.hideElement(id));
+        OCA.Analytics.Visualization.showElement('analytics-content-' + type);
+        if (type !== 'loading') {
+            OCA.Analytics.currentContentType = type;
+        }
         //}
         if (type === 'intro' || type === 'warning') {
             OCA.Analytics.Visualization.hideElement('menuBar');
         } else {
             OCA.Analytics.Visualization.showElement('menuBar');
         }
-     }
+    }
 }
