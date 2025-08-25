@@ -134,7 +134,7 @@ class OutputController extends Controller {
 		$response = new DataResponse($result, HTTP::STATUS_OK);
 
 		// only internal reports are cacheable
-		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+		if ($reportMetadata['type'] !== DatasourceController::DATASET_TYPE_INTERNAL_DB) {
 			$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 		} else {

@@ -1116,7 +1116,8 @@ OCA.Analytics.Visualization = {
 
         const grouping = tg.grouping;
         const mode = tg.mode || 'summation';
-        const valueIndex = data.data[0].length - 1;
+        const valueIndex1 = data.data[0].length - 2; // Second last column
+        const valueIndex2 = data.data[0].length - 1; // Last column
 
         if (data.data.length === 0) {
             return data;
@@ -1161,7 +1162,8 @@ OCA.Analytics.Visualization = {
             return myMoment(date).format();
         };
 
-        const sums = {};
+        const sums1 = {};
+        const sums2 = {};
         const counts = {};
 
         data.data.forEach(row => {
@@ -1182,22 +1184,26 @@ OCA.Analytics.Visualization = {
             const newRow = row.slice();
             newRow[dimension] = newTime;
 
-            const key = newRow.slice(0, valueIndex).join('\u0001');
-            const val = parseFloat(row[valueIndex]) || 0;
+            const key = newRow.slice(0, valueIndex1).join('\u0001');
+            const val1 = parseFloat(row[valueIndex1]) || 0;
+            const val2 = parseFloat(row[valueIndex2]) || 0;
 
-            if (!sums[key]) {
-                sums[key] = val;
+            if (!sums1[key]) {
+                sums1[key] = val1;
+                sums2[key] = val2;
                 counts[key] = 1;
             } else {
-                sums[key] += val;
+                sums1[key] += val1;
+                sums2[key] += val2;
                 counts[key] += 1;
             }
         });
 
-        data.data = Object.keys(sums).map(key => {
+        data.data = Object.keys(sums1).map(key => {
             const parts = key.split('\u0001');
-            const value = mode === 'average' ? sums[key] / counts[key] : sums[key];
-            return [...parts, value.toString()];
+            const value1 = mode === 'average' ? sums1[key] / counts[key] : sums1[key];
+            const value2 = mode === 'average' ? sums2[key] / counts[key] : sums2[key];
+            return [...parts, value1.toString(), value2.toString()];
         });
 
         return data;
@@ -1210,31 +1216,42 @@ OCA.Analytics.Visualization = {
      * @returns {Array} Updated rows
      */
     formatDates: function (data) {
-        let firstRow = data[0];
         let now;
-        for (let i = 0; i < firstRow.length; i++) {
-            // loop columns and check for a valid date
-            if (!isNaN(new Date(firstRow[i]).valueOf()) && firstRow[i] !== null && firstRow[i].length >= 19) {
-                // column contains a valid date
-                // then loop all rows for this column and convert to local time
+        for (let i = 0; i < data[0].length; i++) {
+            // Find a valid date in the column
+            let validDateFound = false;
+            for (let j = 0; j < data.length; j++) {
+                if (!isNaN(new Date(data[j][i]).valueOf()) && data[j][i] !== null && data[j][i].length >= 19) {
+                    validDateFound = true;
+                    break;
+                }
+            }
+
+            // If a valid date is found, convert all dates in the column
+            if (validDateFound) {
                 for (let j = 0; j < data.length; j++) {
                     if (data[j][i].length === 19) {
                         // values are assumed to have a timezone or are used as UTC
                         data[j][i] = data[j][i] + 'Z';
                     }
                     now = new Date(data[j][i]);
-                    data[j][i] = now.getFullYear()
-                        + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1) //getMonth will start with Jan = 0
-                        + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
-                        + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
-                        + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
-                        + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds()
+                    if (!isNaN(now.valueOf())) {
+                        data[j][i] = now.getFullYear()
+                            + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1)
+                            + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
+                            + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
+                            + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+                            + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
+                    } else {
+                        data[j][i] = ''; // Set to empty string if date is invalid
+                    }
                 }
             }
         }
         return data;
     },
 
+    
     /**
      * Check a value against threshold rules and return a color style.
      *

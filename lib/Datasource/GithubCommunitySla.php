@@ -29,8 +29,7 @@ class GithubCommunitySla implements IDatasource {
      * @var array<int,string>
      */
     protected array $repositories = [
-        'nextcloud/server',
-        'nextcloud/analytics',
+        'nextcloud/desktop',
     ];
 
     public function __construct(
@@ -120,10 +119,11 @@ class GithubCommunitySla implements IDatasource {
 
         foreach ($repositories as $repo) {
             [$owner, $name] = explode('/', $repo, 2);
-            $query = <<<'GRAPHQL'
-query($owner: String!, $name: String!) {
+
+            $issuesQuery = <<<'GRAPHQL'
+query($owner: String!, $name: String!, $after: String, $since: DateTime) {
   repository(owner: $owner, name: $name) {
-    issues(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN, CLOSED]) {
+    issues(first: 100, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN, CLOSED], filterBy: { since: $since }) {
       nodes {
         number
         createdAt
@@ -135,10 +135,44 @@ query($owner: String!, $name: String!) {
             __typename
             ... on UnlabeledEvent { createdAt label { name } }
           }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+GRAPHQL;
+
+            $issueEventsPageQuery = <<<'GRAPHQL'
+query($owner: String!, $name: String!, $issueNumber: Int!, $after: String) {
+  repository(owner: $owner, name: $name) {
+    issue(number: $issueNumber) {
+      timelineItems(first: 100, after: $after, itemTypes: [UNLABELED_EVENT]) {
+        nodes {
+          __typename
+          ... on UnlabeledEvent { createdAt label { name } }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
         }
       }
     }
-    pullRequests(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN, MERGED, CLOSED]) {
+  }
+}
+GRAPHQL;
+
+            $pullsQuery = <<<'GRAPHQL'
+query($owner: String!, $name: String!, $after: String) {
+  repository(owner: $owner, name: $name) {
+    pullRequests(first: 100, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN, MERGED, CLOSED]) {
       nodes {
         number
         createdAt
@@ -147,58 +181,119 @@ query($owner: String!, $name: String!) {
         updatedAt
         author { login }
       }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 }
 GRAPHQL;
 
-            $curlResult = $this->getGraphqlData($query, ['owner' => $owner, 'name' => $name], $option);
-            if ($curlResult['http_code'] < 200 || $curlResult['http_code'] >= 300 || isset($curlResult['data']['errors'])) {
-                return [
-                    'header' => [],
-                    'dimensions' => [],
-                    'data' => $curlResult['http_code'] === 403 ? 'Rate limit exceeded' : [],
-                    'rawdata' => $curlResult,
-                    'error' => 'HTTP response code: ' . $curlResult['http_code'],
-                ];
-            }
-
-            $repoData = $curlResult['data']['data']['repository'];
-
-            foreach ($repoData['issues']['nodes'] as $issue) {
-                if ($issue['updatedAt'] < $sinceDate) {
-                    continue;
+            // Fetch issues with pagination
+            $issuesAfter = null;
+            do {
+                $variables = ['owner' => $owner, 'name' => $name, 'after' => $issuesAfter, 'since' => $sinceDate];
+                $curlResult = $this->getGraphqlData($issuesQuery, $variables, $option);
+                if ($curlResult['http_code'] < 200 || $curlResult['http_code'] >= 300 || isset($curlResult['data']['errors'])) {
+                    return [
+                        'header' => [],
+                        'dimensions' => [],
+                        'data' => $curlResult['http_code'] === 403 ? 'Rate limit exceeded' : [],
+                        'rawdata' => $curlResult,
+                        'error' => 'HTTP response code: ' . $curlResult['http_code'],
+                    ];
                 }
-                if (in_array($issue['author']['login'], $excludedAuthors, true)) {
-                    continue;
-                }
-                $completedAt = '';
-                foreach ($issue['timelineItems']['nodes'] as $event) {
-                    if ($event['__typename'] === 'UnlabeledEvent' && isset($event['label']['name']) && $event['label']['name'] === '0. Needs triage') {
-                        $completedAt = $event['createdAt'];
-                        break;
+                $repoData = $curlResult['data']['data']['repository'];
+                $issuesEdge = $repoData['issues'];
+
+                foreach ($issuesEdge['nodes'] as $issue) {
+                    if ($issue['createdAt'] < $sinceDate) {
+                        continue;
                     }
+                    if (in_array($issue['author']['login'], $excludedAuthors, true)) {
+                        continue;
+                    }
+                    $completedAt = '';
+                    $events = $issue['timelineItems']['nodes'];
+                    $eventsPageInfo = $issue['timelineItems']['pageInfo'];
+                    // Search for "0. Needs triage" label with case-insensitive comparison
+                    $foundTriage = false;
+                    foreach ($events as $event) {
+                        if ($event['__typename'] === 'UnlabeledEvent' && isset($event['label']['name']) && strcasecmp($event['label']['name'], '0. Needs triage') === 0) {
+                            $completedAt = $event['createdAt'];
+                            $foundTriage = true;
+                            break;
+                        }
+                    }
+                    // If not found and there are more timeline pages, paginate through timeline items
+                    $afterTimeline = $eventsPageInfo['endCursor'] ?? null;
+                    while (!$foundTriage && $eventsPageInfo['hasNextPage'] && $afterTimeline !== null) {
+                        $variablesEvents = ['owner' => $owner, 'name' => $name, 'issueNumber' => (int)$issue['number'], 'after' => $afterTimeline];
+                        $eventsResult = $this->getGraphqlData($issueEventsPageQuery, $variablesEvents, $option);
+                        if ($eventsResult['http_code'] < 200 || $eventsResult['http_code'] >= 300 || isset($eventsResult['data']['errors'])) {
+                            break;
+                        }
+                        $eventsPage = $eventsResult['data']['data']['repository']['issue']['timelineItems'];
+                        foreach ($eventsPage['nodes'] as $event) {
+                            if ($event['__typename'] === 'UnlabeledEvent' && isset($event['label']['name']) && strcasecmp($event['label']['name'], '0. Needs triage') === 0) {
+                                $completedAt = $event['createdAt'];
+                                $foundTriage = true;
+                                break 2;
+                            }
+                        }
+                        $eventsPageInfo = $eventsPage['pageInfo'];
+                        $afterTimeline = $eventsPageInfo['endCursor'] ?? null;
+                    }
+                    if ($completedAt === '' && isset($issue['closedAt']) && $issue['closedAt'] !== null) {
+                        $completedAt = $issue['closedAt'];
+                    }
+                    $days = $this->daysBetween($issue['createdAt'], $completedAt ?: date(DATE_ATOM));
+                    $slaMet = $days <= $slaDays;
+                    $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
                 }
-                if ($completedAt === '' && isset($issue['closedAt']) && $issue['closedAt'] !== null) {
-                    $completedAt = $issue['closedAt'];
-                }
-                $days = $this->daysBetween($issue['createdAt'], $completedAt ?: date(DATE_ATOM));
-                $slaMet = $days <= $slaDays;
-                $data[] = [$repo, 'issue', (int)$issue['number'], $issue['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
-            }
+                $issuesAfter = $issuesEdge['pageInfo']['endCursor'] ?? null;
+            } while ($issuesEdge['pageInfo']['hasNextPage']);
 
-            foreach ($repoData['pullRequests']['nodes'] as $pr) {
-                if ($pr['updatedAt'] < $sinceDate) {
-                    continue;
+            // Fetch pull requests with pagination
+            $prsAfter = null;
+            $continuePaging = true;
+            do {
+                $variables = ['owner' => $owner, 'name' => $name, 'after' => $prsAfter];
+                $curlResult = $this->getGraphqlData($pullsQuery, $variables, $option);
+                if ($curlResult['http_code'] < 200 || $curlResult['http_code'] >= 300 || isset($curlResult['data']['errors'])) {
+                    return [
+                        'header' => [],
+                        'dimensions' => [],
+                        'data' => $curlResult['http_code'] === 403 ? 'Rate limit exceeded' : [],
+                        'rawdata' => $curlResult,
+                        'error' => 'HTTP response code: ' . $curlResult['http_code'],
+                    ];
                 }
-                if (in_array($pr['author']['login'], $excludedAuthors, true)) {
-                    continue;
+                $repoData = $curlResult['data']['data']['repository'];
+                $prsEdge = $repoData['pullRequests'];
+
+                $pageHasRecent = false;
+                foreach ($prsEdge['nodes'] as $pr) {
+                    $isRecent = ($pr['updatedAt'] >= $sinceDate);
+                    if (!$isRecent) {
+                        continue;
+                    }
+                    $pageHasRecent = true;
+                    if (in_array($pr['author']['login'], $excludedAuthors, true)) {
+                        continue;
+                    }
+                    $completedAt = $pr['mergedAt'] ?? $pr['closedAt'] ?? '';
+                    $days = $this->daysBetween($pr['createdAt'], $completedAt ?: date(DATE_ATOM));
+                    $slaMet = $days <= $slaDays;
+                    $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
                 }
-                $completedAt = $pr['mergedAt'] ?? $pr['closedAt'] ?? '';
-                $days = $this->daysBetween($pr['createdAt'], $completedAt ?: date(DATE_ATOM));
-                $slaMet = $days <= $slaDays;
-                $data[] = [$repo, 'pr', (int)$pr['number'], $pr['createdAt'], $completedAt, $days, $slaMet ? 1 : 0, 1];
-            }
+                if (!$pageHasRecent) {
+                    $continuePaging = false;
+                }
+                $prsAfter = $prsEdge['pageInfo']['endCursor'] ?? null;
+                $morePrPages = ($prsEdge['pageInfo']['hasNextPage'] ?? false) && $continuePaging;
+            } while ($morePrPages);
         }
 
         return [
