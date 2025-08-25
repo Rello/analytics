@@ -407,27 +407,17 @@ OCA.Analytics.Filter = {
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
 
-        const columnsContainer = container.getElementById('timeGroupingColumns');
+        const columnsSelect = container.getElementById('timeGroupingColumns');
         const header = OCA.Analytics.currentReportData.header || [];
         const selectedCols = filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1];
         header.forEach((name, index) => {
-            const label = document.createElement('label');
-            label.style.whiteSpace = 'nowrap';
-            label.style.marginRight = '10px';
-            label.style.display = 'inline-block';
-
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = 'timeGroupingColumn' + index;
-            checkbox.name = 'timeGroupingColumn';
-            checkbox.value = index;
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = name;
             if (selectedCols.includes(index)) {
-                checkbox.checked = true;
+                option.selected = true;
             }
-
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(name));
-            columnsContainer.appendChild(label);
+            columnsSelect.appendChild(option);
         });
 
         if (filterOptions && filterOptions.timeAggregation) {
@@ -436,19 +426,19 @@ OCA.Analytics.Filter = {
             modeSelect.value = filterOptions.timeAggregation.mode;
         }
 
-        const updateColumnCheckboxes = () => {
+        const updateColumnOptions = () => {
             const dimIdx = parseInt(dimSelect.value.match(/\d+$/)?.[0], 10) - 1;
-            columnsContainer.querySelectorAll('input[name="timeGroupingColumn"]').forEach(cb => {
-                if (parseInt(cb.value, 10) === dimIdx) {
-                    cb.checked = false;
-                    cb.disabled = true;
+            Array.from(columnsSelect.options).forEach(opt => {
+                if (parseInt(opt.value, 10) === dimIdx) {
+                    opt.selected = false;
+                    opt.disabled = true;
                 } else {
-                    cb.disabled = false;
+                    opt.disabled = false;
                 }
             });
         };
-        updateColumnCheckboxes();
-        dimSelect.addEventListener('change', updateColumnCheckboxes);
+        updateColumnOptions();
+        dimSelect.addEventListener('change', updateColumnOptions);
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
@@ -472,13 +462,10 @@ OCA.Analytics.Filter = {
         filterOptions.timeAggregation.grouping = grouping;
         filterOptions.timeAggregation.mode = document.getElementById('timeGroupingMode').value;
 
-        const selected = [];
-        const colBoxes = document.getElementsByName('timeGroupingColumn');
-        for (let i = 0; i < colBoxes.length; i++) {
-            if (colBoxes[i].checked) {
-                selected.push(parseInt(colBoxes[i].value, 10));
-            }
-        }
+        const columnsSelect = document.getElementById('timeGroupingColumns');
+        const selected = Array.from(columnsSelect.options)
+            .filter(opt => opt.selected)
+            .map(opt => parseInt(opt.value, 10));
         filterOptions.timeAggregation.columns = selected;
 
         if (grouping === 'none') {

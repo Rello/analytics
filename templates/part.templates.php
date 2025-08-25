@@ -160,30 +160,32 @@
 <template id="templateTimeAggregationOptions">
     <div class="table" style="display: table;" id="timeGroupingOptionsTable">
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <label for="timeGroupingDimension"><?php p($l->t('Time dimension')); ?></label>
             </div>
-            <div style="display: table-cell; width: 150px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <label for="timeGroupingGrouping"><?php p($l->t('Grouping')); ?></label>
             </div>
-            <div style="display: table-cell; width: 150px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <label for="timeGroupingMode"><?php p($l->t('Mode')); ?></label>
             </div>
-            <div style="display: table-cell; width: 300px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <label for="timeGroupingColumns"><?php p($l->t('Columns')); ?></label>
             </div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <select id="timeGroupingDimension" class="optionsInput"></select>
             </div>
-            <div style="display: table-cell; width: 150px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <select id="timeGroupingGrouping" class="optionsInput"></select>
             </div>
-            <div style="display: table-cell; width: 150px;">
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
                 <select id="timeGroupingMode" class="optionsInput"></select>
             </div>
-            <div style="display: table-cell; width: 300px;" id="timeGroupingColumns"></div>
+            <div style="display: table-cell; width: 150px; vertical-align: top;">
+                <select id="timeGroupingColumns" class="optionsInput" multiple size="5" style="height: auto;"></select>
+            </div>
         </div>
     </div>
 </template>
