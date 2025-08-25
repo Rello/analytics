@@ -1120,7 +1120,8 @@ OCA.Analytics.Visualization = {
 
         const grouping = tg.grouping;
         const mode = tg.mode || 'summation';
-        const valueIndex = data.data[0].length - 1;
+        const valueIndex1 = data.data[0].length - 2; // Second last column
+        const valueIndex2 = data.data[0].length - 1; // Last column
 
         if (data.data.length === 0) {
             return data;
@@ -1165,7 +1166,8 @@ OCA.Analytics.Visualization = {
             return myMoment(date).format();
         };
 
-        const sums = {};
+        const sums1 = {};
+        const sums2 = {};
         const counts = {};
 
         data.data.forEach(row => {
@@ -1186,22 +1188,26 @@ OCA.Analytics.Visualization = {
             const newRow = row.slice();
             newRow[dimension] = newTime;
 
-            const key = newRow.slice(0, valueIndex).join('\u0001');
-            const val = parseFloat(row[valueIndex]) || 0;
+            const key = newRow.slice(0, valueIndex1).join('\u0001');
+            const val1 = parseFloat(row[valueIndex1]) || 0;
+            const val2 = parseFloat(row[valueIndex2]) || 0;
 
-            if (!sums[key]) {
-                sums[key] = val;
+            if (!sums1[key]) {
+                sums1[key] = val1;
+                sums2[key] = val2;
                 counts[key] = 1;
             } else {
-                sums[key] += val;
+                sums1[key] += val1;
+                sums2[key] += val2;
                 counts[key] += 1;
             }
         });
 
-        data.data = Object.keys(sums).map(key => {
+        data.data = Object.keys(sums1).map(key => {
             const parts = key.split('\u0001');
-            const value = mode === 'average' ? sums[key] / counts[key] : sums[key];
-            return [...parts, value.toString()];
+            const value1 = mode === 'average' ? sums1[key] / counts[key] : sums1[key];
+            const value2 = mode === 'average' ? sums2[key] / counts[key] : sums2[key];
+            return [...parts, value1.toString(), value2.toString()];
         });
 
         return data;
@@ -1249,6 +1255,7 @@ OCA.Analytics.Visualization = {
         return data;
     },
 
+    
     /**
      * Check a value against threshold rules and return a color style.
      *
