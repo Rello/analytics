@@ -1120,10 +1120,21 @@ OCA.Analytics.Visualization = {
 
         const grouping = tg.grouping;
         const mode = tg.mode || 'summation';
-        const valueIndex = data.data[0].length - 1;
+        const valueIndices = (tg.columns && tg.columns.length)
+            ? tg.columns.map(c => parseInt(c, 10))
+            : [data.data[0].length - 1];
 
         if (data.data.length === 0) {
             return data;
+        }
+
+        const rowLength = data.data[0].length;
+        const valueSet = new Set(valueIndices);
+        const keyIndices = [];
+        for (let i = 0; i < rowLength; i++) {
+            if (!valueSet.has(i)) {
+                keyIndices.push(i);
+            }
         }
 
         const sample = data.data[0][dimension];
@@ -1167,6 +1178,7 @@ OCA.Analytics.Visualization = {
 
         const sums = {};
         const counts = {};
+        const keyParts = {};
 
         data.data.forEach(row => {
             const original = row[dimension];
@@ -1183,25 +1195,38 @@ OCA.Analytics.Visualization = {
             }
 
             const newTime = formatDate(date, original);
-            const newRow = row.slice();
-            newRow[dimension] = newTime;
-
-            const key = newRow.slice(0, valueIndex).join('\u0001');
-            const val = parseFloat(row[valueIndex]) || 0;
+            const keyArr = keyIndices.map(i => (i === dimension ? newTime : row[i]));
+            const key = keyArr.join('\u0001');
 
             if (!sums[key]) {
-                sums[key] = val;
-                counts[key] = 1;
-            } else {
-                sums[key] += val;
-                counts[key] += 1;
+                sums[key] = Array(valueIndices.length).fill(0);
+                counts[key] = Array(valueIndices.length).fill(0);
+                keyParts[key] = keyArr;
             }
+
+            valueIndices.forEach((vIdx, j) => {
+                const val = parseFloat(row[vIdx]) || 0;
+                sums[key][j] += val;
+                counts[key][j] += 1;
+            });
         });
 
         data.data = Object.keys(sums).map(key => {
-            const parts = key.split('\u0001');
-            const value = mode === 'average' ? sums[key] / counts[key] : sums[key];
-            return [...parts, value.toString()];
+            const parts = keyParts[key];
+            const values = sums[key].map((sum, j) => {
+                return (mode === 'average' ? sum / counts[key][j] : sum).toString();
+            });
+            const row = [];
+            let p = 0;
+            let v = 0;
+            for (let i = 0; i < rowLength; i++) {
+                if (valueSet.has(i)) {
+                    row.push(values[v++]);
+                } else {
+                    row.push(parts[p++]);
+                }
+            }
+            return row;
         });
 
         return data;

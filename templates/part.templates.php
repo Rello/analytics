@@ -181,6 +181,13 @@
                 <select id="timeGroupingMode" class="optionsInput"></select>
             </div>
         </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <label for="timeGroupingColumns"><?php p($l->t('Columns')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 300px;" id="timeGroupingColumns"></div>
+            <div style="display: table-cell; width: 150px;"></div>
+        </div>
     </div>
 </template>
 
