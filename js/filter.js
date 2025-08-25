@@ -406,11 +406,39 @@ OCA.Analytics.Filter = {
         });
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+
+        const columnsSelect = container.getElementById('timeGroupingColumns');
+        const header = OCA.Analytics.currentReportData.header || [];
+        const selectedCols = filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1];
+        header.forEach((name, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = name;
+            if (selectedCols.includes(index)) {
+                option.selected = true;
+            }
+            columnsSelect.appendChild(option);
+        });
+
         if (filterOptions && filterOptions.timeAggregation) {
             dimSelect.value = filterOptions.timeAggregation.dimension;
             groupingSelect.value = filterOptions.timeAggregation.grouping;
             modeSelect.value = filterOptions.timeAggregation.mode;
         }
+
+        const updateColumnOptions = () => {
+            const dimIdx = parseInt(dimSelect.value.match(/\d+$/)?.[0], 10) - 1;
+            Array.from(columnsSelect.options).forEach(opt => {
+                if (parseInt(opt.value, 10) === dimIdx) {
+                    opt.selected = false;
+                    opt.disabled = true;
+                } else {
+                    opt.disabled = false;
+                }
+            });
+        };
+        updateColumnOptions();
+        dimSelect.addEventListener('change', updateColumnOptions);
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
@@ -433,6 +461,12 @@ OCA.Analytics.Filter = {
         filterOptions.timeAggregation.dimension = document.getElementById('timeGroupingDimension').value;
         filterOptions.timeAggregation.grouping = grouping;
         filterOptions.timeAggregation.mode = document.getElementById('timeGroupingMode').value;
+
+        const columnsSelect = document.getElementById('timeGroupingColumns');
+        const selected = Array.from(columnsSelect.options)
+            .filter(opt => opt.selected)
+            .map(opt => parseInt(opt.value, 10));
+        filterOptions.timeAggregation.columns = selected;
 
         if (grouping === 'none') {
             delete filterOptions.timeAggregation;
