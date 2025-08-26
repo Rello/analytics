@@ -407,17 +407,23 @@ OCA.Analytics.Filter = {
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
 
-        const columnsSelect = container.getElementById('timeGroupingColumns');
+        const columnsContainer = container.getElementById('timeGroupingColumns');
         const header = OCA.Analytics.currentReportData.header || [];
         const selectedCols = filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1];
         header.forEach((name, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = name;
+            const label = document.createElement('label');
+            label.style.whiteSpace = 'nowrap';
+            label.style.marginRight = '10px';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'timeGroupingColumn';
+            checkbox.value = index;
             if (selectedCols.includes(index)) {
-                option.selected = true;
+                checkbox.checked = true;
             }
-            columnsSelect.appendChild(option);
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(' ' + name));
+            columnsContainer.appendChild(label);
         });
 
         if (filterOptions && filterOptions.timeAggregation) {
@@ -428,12 +434,12 @@ OCA.Analytics.Filter = {
 
         const updateColumnOptions = () => {
             const dimIdx = parseInt(dimSelect.value.match(/\d+$/)?.[0], 10) - 1;
-            Array.from(columnsSelect.options).forEach(opt => {
-                if (parseInt(opt.value, 10) === dimIdx) {
-                    opt.selected = false;
-                    opt.disabled = true;
+            columnsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                if (parseInt(cb.value, 10) === dimIdx) {
+                    cb.checked = false;
+                    cb.disabled = true;
                 } else {
-                    opt.disabled = false;
+                    cb.disabled = false;
                 }
             });
         };
@@ -462,10 +468,9 @@ OCA.Analytics.Filter = {
         filterOptions.timeAggregation.grouping = grouping;
         filterOptions.timeAggregation.mode = document.getElementById('timeGroupingMode').value;
 
-        const columnsSelect = document.getElementById('timeGroupingColumns');
-        const selected = Array.from(columnsSelect.options)
-            .filter(opt => opt.selected)
-            .map(opt => parseInt(opt.value, 10));
+        const selected = Array.from(document.getElementsByName('timeGroupingColumn'))
+            .filter(cb => cb.checked)
+            .map(cb => parseInt(cb.value, 10));
         filterOptions.timeAggregation.columns = selected;
 
         if (grouping === 'none') {

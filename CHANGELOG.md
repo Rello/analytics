@@ -4,7 +4,7 @@
 ### Added
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
-- Select specific columns for time aggregation via multi-select list
+- Select specific columns for time aggregation via checkboxes
 
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
