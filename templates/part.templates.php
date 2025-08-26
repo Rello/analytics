@@ -160,25 +160,23 @@
 <template id="templateTimeAggregationOptions">
     <div class="table" style="display: table;" id="timeGroupingOptionsTable">
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
-                <label for="timeGroupingDimension"><?php p($l->t('Time dimension')); ?></label>
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
+                <label for="timeGroupingDimension"><?php p($l->t('Time dimension')); ?></label><br>
+                <select id="timeGroupingDimension" class="optionsInput"></select>
             </div>
-            <div style="display: table-cell; width: 150px;">
-                <label for="timeGroupingGrouping"><?php p($l->t('Grouping')); ?></label>
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
+                <label for="timeGroupingGrouping"><?php p($l->t('Grouping')); ?></label><br>
+                <select id="timeGroupingGrouping" class="optionsInput"></select>
             </div>
-            <div style="display: table-cell; width: 150px;">
-                <label for="timeGroupingMode"><?php p($l->t('Mode')); ?></label>
+            <div style="display: table-cell; width: 150px; vertical-align: middle;">
+                <label for="timeGroupingMode"><?php p($l->t('Mode')); ?></label><br>
+                <select id="timeGroupingMode" class="optionsInput"></select>
             </div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
-                <select id="timeGroupingDimension" class="optionsInput"></select>
-            </div>
-            <div style="display: table-cell; width: 150px;">
-                <select id="timeGroupingGrouping" class="optionsInput"></select>
-            </div>
-            <div style="display: table-cell; width: 150px;">
-                <select id="timeGroupingMode" class="optionsInput"></select>
+            <div style="display: table-cell; vertical-align: top;">
+                <span><?php p($l->t('Aggregated Columns')); ?></span>
+                <div id="timeGroupingColumns" style="display: inline-flex; flex-wrap: wrap; gap: 10px; margin-left: 10px;"></div>
             </div>
         </div>
     </div>

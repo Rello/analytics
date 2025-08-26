@@ -406,11 +406,45 @@ OCA.Analytics.Filter = {
         });
 
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+
+        const columnsContainer = container.getElementById('timeGroupingColumns');
+        const header = OCA.Analytics.currentReportData.header || [];
+        const selectedCols = filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1];
+        header.forEach((name, index) => {
+            const label = document.createElement('label');
+            label.style.whiteSpace = 'nowrap';
+            label.style.marginRight = '10px';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'timeGroupingColumn';
+            checkbox.value = index;
+            if (selectedCols.includes(index)) {
+                checkbox.checked = true;
+            }
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(' ' + name));
+            columnsContainer.appendChild(label);
+        });
+
         if (filterOptions && filterOptions.timeAggregation) {
             dimSelect.value = filterOptions.timeAggregation.dimension;
             groupingSelect.value = filterOptions.timeAggregation.grouping;
             modeSelect.value = filterOptions.timeAggregation.mode;
         }
+
+        const updateColumnOptions = () => {
+            const dimIdx = parseInt(dimSelect.value.match(/\d+$/)?.[0], 10) - 1;
+            columnsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                if (parseInt(cb.value, 10) === dimIdx) {
+                    cb.checked = false;
+                    cb.disabled = true;
+                } else {
+                    cb.disabled = false;
+                }
+            });
+        };
+        updateColumnOptions();
+        dimSelect.addEventListener('change', updateColumnOptions);
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
@@ -433,6 +467,11 @@ OCA.Analytics.Filter = {
         filterOptions.timeAggregation.dimension = document.getElementById('timeGroupingDimension').value;
         filterOptions.timeAggregation.grouping = grouping;
         filterOptions.timeAggregation.mode = document.getElementById('timeGroupingMode').value;
+
+        const selected = Array.from(document.getElementsByName('timeGroupingColumn'))
+            .filter(cb => cb.checked)
+            .map(cb => parseInt(cb.value, 10));
+        filterOptions.timeAggregation.columns = selected;
 
         if (grouping === 'none') {
             delete filterOptions.timeAggregation;
