@@ -1115,8 +1115,10 @@ OCA.Analytics.Visualization = {
 
         const drilldown = data.options.filteroptions?.drilldown || {};
         const dimensions = data.dimensions || {};
-        const visibleDims = Object.keys(dimensions).filter(key => !drilldown[key]);
-        const dimension = visibleDims.indexOf(tg.dimension);
+        const visibleDims = Object.keys(dimensions)
+            .map(Number)
+            .filter(idx => drilldown[idx] === undefined);
+        const dimension = visibleDims.indexOf(parseInt(tg.dimension, 10));
         if (dimension === -1) {
             return data;
         }

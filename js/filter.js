@@ -392,11 +392,13 @@ OCA.Analytics.Filter = {
 
         const dimensions = OCA.Analytics.currentReportData.dimensions;
         const drilldown = filterOptions.drilldown || {};
-        const visibleDims = Object.keys(dimensions).filter(key => !drilldown[key]);
+        const visibleDims = Object.keys(dimensions)
+            .map(Number)
+            .filter(idx => drilldown[idx] === undefined);
         const dimSelect = container.getElementById('timeGroupingDimension');
         dimSelect.innerHTML = '';
-        visibleDims.forEach(key => {
-            dimSelect.options.add(new Option(dimensions[key], key));
+        visibleDims.forEach(idx => {
+            dimSelect.options.add(new Option(dimensions[idx], idx));
         });
 
         const groupingSelect = container.getElementById('timeGroupingGrouping');
@@ -436,7 +438,7 @@ OCA.Analytics.Filter = {
         }
 
         const updateColumnOptions = () => {
-            const dimIdx = visibleDims.indexOf(dimSelect.value);
+            const dimIdx = visibleDims.indexOf(parseInt(dimSelect.value, 10));
             columnsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                 if (parseInt(cb.value, 10) === dimIdx) {
                     cb.checked = false;
