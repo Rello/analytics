@@ -1113,22 +1113,24 @@ OCA.Analytics.Visualization = {
             return data;
         }
 
-        const dimension = parseInt(tg.dimension.match(/\d+$/)?.[0], 10) - 1;
-        if (isNaN(dimension)) {
+        const drilldown = data.options.filteroptions?.drilldown || {};
+        const dimensions = data.dimensions || {};
+        const visibleDims = Object.keys(dimensions).filter(key => !drilldown[key]);
+        const dimension = visibleDims.indexOf(tg.dimension);
+        if (dimension === -1) {
             return data;
         }
-
-        const grouping = tg.grouping;
-        const mode = tg.mode || 'summation';
-        const valueIndices = (tg.columns && tg.columns.length)
-            ? tg.columns.map(c => parseInt(c, 10))
-            : [data.data[0].length - 1];
 
         if (data.data.length === 0) {
             return data;
         }
 
         const rowLength = data.data[0].length;
+        const grouping = tg.grouping;
+        const mode = tg.mode || 'summation';
+        const valueIndices = (tg.columns && tg.columns.length)
+            ? tg.columns.map(c => parseInt(c, 10)).filter(i => i < rowLength)
+            : [rowLength - 1];
         const valueSet = new Set(valueIndices);
         const keyIndices = [];
         for (let i = 0; i < rowLength; i++) {

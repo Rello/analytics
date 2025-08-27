@@ -388,10 +388,14 @@ OCA.Analytics.Filter = {
 
         const container = document.importNode(document.getElementById('templateTimeAggregationOptions').content, true);
 
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
+
         const dimensions = OCA.Analytics.currentReportData.dimensions;
+        const drilldown = filterOptions.drilldown || {};
+        const visibleDims = Object.keys(dimensions).filter(key => !drilldown[key]);
         const dimSelect = container.getElementById('timeGroupingDimension');
         dimSelect.innerHTML = '';
-        Object.keys(dimensions).forEach(key => {
+        visibleDims.forEach(key => {
             dimSelect.options.add(new Option(dimensions[key], key));
         });
 
@@ -405,11 +409,10 @@ OCA.Analytics.Filter = {
             modeSelect.options.add(new Option(text, value));
         });
 
-        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-
         const columnsContainer = container.getElementById('timeGroupingColumns');
         const header = OCA.Analytics.currentReportData.header || [];
-        const selectedCols = filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1];
+        const selectedCols = (filterOptions?.timeAggregation?.columns?.map(Number) || [header.length - 1])
+            .filter(i => i < header.length);
         header.forEach((name, index) => {
             const label = document.createElement('label');
             label.style.whiteSpace = 'nowrap';
@@ -433,7 +436,7 @@ OCA.Analytics.Filter = {
         }
 
         const updateColumnOptions = () => {
-            const dimIdx = parseInt(dimSelect.value.match(/\d+$/)?.[0], 10) - 1;
+            const dimIdx = visibleDims.indexOf(dimSelect.value);
             columnsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                 if (parseInt(cb.value, 10) === dimIdx) {
                     cb.checked = false;

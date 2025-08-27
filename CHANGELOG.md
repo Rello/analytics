@@ -9,6 +9,7 @@
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
 - date formatting on all rows
+- Exclude hidden columns from time aggregation options
 
 ## 5.8.0 - 2025-07-29
 ### Added
