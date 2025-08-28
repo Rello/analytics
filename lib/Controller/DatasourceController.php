@@ -12,6 +12,7 @@ use OCA\Analytics\Datasource\DatasourceEvent;
 use OCA\Analytics\Datasource\ExternalCsv;
 use OCA\Analytics\Datasource\ExternalJson;
 use OCA\Analytics\Datasource\Github;
+use OCA\Analytics\Datasource\GithubCommunitySla;
 use OCA\Analytics\Datasource\LocalCsv;
 use OCA\Analytics\Datasource\LocalSpreadsheet;
 use OCA\Analytics\Datasource\LocalJson;
@@ -27,6 +28,7 @@ use Psr\Log\LoggerInterface;
 class DatasourceController extends Controller {
 	private $logger;
 	private $GithubService;
+	private $GithubCommunitySlaService;
 	private $ExternalCsvService;
 	private $RegexService;
 	private $ExternalJsonService;
@@ -48,26 +50,29 @@ class DatasourceController extends Controller {
 	const DATASET_TYPE_EXTERNAL_JSON = 6;
 	const DATASET_TYPE_LOCAL_SPREADSHEET = 7;
 	const DATASET_TYPE_LOCAL_JSON = 8;
+	const DATASET_TYPE_GITHUB_COMMUNITY_SLA = 9;
 
 	public function __construct(
-		string           $appName,
-		IRequest         $request,
-		LoggerInterface  $logger,
-		Github           $GithubService,
-		LocalCsv         $LocalCsvService,
-		Regex            $RegexService,
-		ExternalJson     $ExternalJsonService,
-		LocalJson        $LocalJsonService,
-		ExternalCsv      $ExternalCsvService,
-		LocalSpreadsheet $LocalSpreadsheetService,
-		IL10N            $l10n,
-		IEventDispatcher $dispatcher,
-		IAppConfig       $appConfig,
+		string             $appName,
+		IRequest           $request,
+		LoggerInterface    $logger,
+		Github             $GithubService,
+		GithubCommunitySla $GithubCommunitySlaService,
+		LocalCsv           $LocalCsvService,
+		Regex              $RegexService,
+		ExternalJson       $ExternalJsonService,
+		LocalJson          $LocalJsonService,
+		ExternalCsv        $ExternalCsvService,
+		LocalSpreadsheet   $LocalSpreadsheetService,
+		IL10N              $l10n,
+		IEventDispatcher   $dispatcher,
+		IAppConfig         $appConfig,
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
 		$this->ExternalCsvService = $ExternalCsvService;
 		$this->GithubService = $GithubService;
+		$this->GithubCommunitySlaService = $GithubCommunitySlaService;
 		$this->RegexService = $RegexService;
 		$this->LocalCsvService = $LocalCsvService;
 		$this->ExternalJsonService = $ExternalJsonService;
@@ -129,7 +134,7 @@ class DatasourceController extends Controller {
 	}
 
 	/**
-     * Get the data from a data source;
+	 * Get the data from a data source;
 	 *
 	 * @NoAdminRequired
 	 * @param int $datasourceId
@@ -213,6 +218,7 @@ class DatasourceController extends Controller {
 		$dataSources = [];
 		$serviceMapping = [
 			self::DATASET_TYPE_GIT => $this->GithubService,
+			self::DATASET_TYPE_GITHUB_COMMUNITY_SLA => $this->GithubCommunitySlaService,
 			self::DATASET_TYPE_LOCAL_CSV => $this->LocalCsvService,
 			self::DATASET_TYPE_LOCAL_SPREADSHEET => $this->LocalSpreadsheetService,
 			self::DATASET_TYPE_EXTERNAL_CSV => $this->ExternalCsvService,
@@ -283,7 +289,7 @@ class DatasourceController extends Controller {
 						$filtered[] = $record;
 					} else if ($filterOption === 'IN') {
 						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
-						$valuesArray = array_map(function($v) {
+						$valuesArray = array_map(function ($v) {
 							return trim($v, " '");
 						}, $matches[0]);
 

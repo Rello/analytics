@@ -4,6 +4,14 @@
 ### Added
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
+- GitHub Community SLA data source
+- Configure excluded authors, repositories, and SLA days via GitHub Community SLA options
+
+### Changed
+- Treat issues as triaged when the "0. Needs triage" label is removed or the issue is closed and evaluate open items against the current date in GitHub Community SLA data source
+- Use GitHub GraphQL API for more efficient Community SLA queries
+- Register GitHub Community SLA data source with ID 9
+- Include counter column and use merge/close dates for PR SLA calculation in GitHub Community SLA data source
 
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
