@@ -145,6 +145,6 @@ return [
 
 		// whatsnew
 		['name' => 'whatsNew#get', 'url' => '/whatsnew', 'verb' => 'GET'],
-		['name' => 'whatsNew#dismiss', 'url' => '/whatsnew', 'verb' => 'POST'],
-	]
+                ['name' => 'whatsNew#dismiss', 'url' => '/whatsnew', 'verb' => 'POST'],
+        ]
 ];
