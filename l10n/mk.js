@@ -60,6 +60,7 @@ OC.L10N.register(
     "Mode" : "Мод",
     "Option" : "Опции",
     "Remove filter" : "Острани филтер",
+    "Description" : "Опис",
     "Import" : "Увези",
     "Selection" : "Селектирање",
     "Title" : "Наслов",
