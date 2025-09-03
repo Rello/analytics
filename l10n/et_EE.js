@@ -190,6 +190,7 @@ OC.L10N.register(
     "Change layout" : "Muuda küljendust",
     "Delete current page" : "Kustuta see leht",
     "Back" : "Tagasi",
+    "30 min" : "30 minutit",
     "Report was changed - Press here to save the current state" : "Aruanne on muudetud - viimase oleku salvestamiseks klõpsi siin",
     "Legend" : "Legend",
     "No data found" : "Andmeid ei leidu",

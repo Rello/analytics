@@ -55,6 +55,7 @@ OC.L10N.register(
     "Translate" : "Перакласці",
     "Edit" : "Рэдагаваць",
     "Back" : "Назад",
+    "30 min" : "30 хв",
     "Do you like this app?" : "Вам падабаецца гэта праграма?",
     "Name" : "Назва",
     "Column" : "Слупок",
