@@ -1,0 +1,59 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Analytics OCS API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/ocs/v2.php/apps/analytics/createFromDataFile": {
+      "post": {
+        "summary": "Create analytics report from a data file",
+        "operationId": "createFromDataFile",
+        "tags": ["analytics"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fileId": {
+                    "type": "integer",
+                    "description": "ID of the file to import"
+                  }
+                },
+                "required": ["fileId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {"type": "number"},
+                    "root": {
+                      "type": "object",
+                      "properties": {
+                        "orientation": {"type": "string"},
+                        "rows": {
+                          "type": "array",
+                          "items": {"type": "object"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {"description": "File not found"}
+        }
+      }
+    }
+  }
+}

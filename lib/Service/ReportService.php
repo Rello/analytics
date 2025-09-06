@@ -234,22 +234,39 @@ class ReportService {
 	 * @param string $file
 	 * @return int
 	 */
-	public function createFromDataFile($file = '') {
-		$this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
+        /**
+         * Create a report based on a data file.
+         *
+         * @param int|string $file Path to the file or the numeric file ID
+         *
+         * @return int ID of the newly created report
+         */
+        public function createFromDataFile($file = '') {
+                $this->ActivityManager->triggerEvent(0, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);
 
-		if ($file !== '') {
-			$name = explode('.', end(explode('/', $file)))[0];
-			$subheader = $file;
-			$parent = 0;
-			$dataset = 0;
-			$type = DatasourceController::DATASET_TYPE_LOCAL_CSV;
-			$link = $file;
-			$visualization = 'table';
-			$chart = 'line';
-			$reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, '', '', '');
-		}
-		return $reportId;
-	}
+                $reportId = 0;
+
+                if ($file !== '') {
+                        if (is_numeric($file)) {
+                                $userFolder = $this->rootFolder->getUserFolder($this->userId);
+                                $nodes = $userFolder->getById((int)$file);
+                                if (isset($nodes[0])) {
+                                        $file = $userFolder->getRelativePath($nodes[0]->getPath());
+                                }
+                        }
+
+                        $name = explode('.', end(explode('/', $file)))[0];
+                        $subheader = $file;
+                        $parent = 0;
+                        $dataset = 0;
+                        $type = DatasourceController::DATASET_TYPE_LOCAL_CSV;
+                        $link = $file;
+                        $visualization = 'table';
+                        $chart = 'line';
+                        $reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, '', '', '');
+                }
+                return $reportId;
+        }
 
 	/**
 	 * update report details

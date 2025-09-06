@@ -4,6 +4,7 @@
 ### Added
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
+- OCS endpoint to create reports from CSV files via files clients
 
 ### Fixed
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
