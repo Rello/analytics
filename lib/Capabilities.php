@@ -9,24 +9,31 @@
 namespace OCA\Analytics;
 
 use OCP\Capabilities\ICapability;
+use OCA\Analytics\AppInfo\Application;
+use OCP\IL10N;
 
 class Capabilities implements ICapability {
-    public function getCapabilities() {
-        return [
-            'declarativeui' => [
-                'hooks' => [
-                    [
-                        'type' => 'context-menu',
-                        'endpoints' => [
-                            [
-                                'name' => 'Show data in Analytics',
-                                'url' => '/ocs/v2.php/apps/analytics/createFromDataFile',
-                                'filter' => 'text/csv',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
+
+	public function __construct(IL10N $l10n) {
+		$this->l10n = $l10n;
+	}
+
+	public function getCapabilities() {
+		return [
+			'declarativeui' => [
+				Application::APP_ID => [
+					'context-menu' => [
+						[
+							'name' => $this->l10n->t('Show data in Analytics'),
+							'url' => '/ocs/v2.php/apps/analytics/createFromDataFile?fileId={fileId}',
+							'method' => 'POST',
+							'mimetype_filters' => 'text/csv',
+							'bodyParams' => [],
+							'icon' => '/apps/analytics/img/app.svg'
+						],
+					],
+				],
+			],
+		];
+	}
 }
