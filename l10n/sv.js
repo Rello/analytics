@@ -93,6 +93,8 @@ OC.L10N.register(
     "Add to favorites" : "Lägg till i favoriter",
     "Scheduled data load" : "Schemalagd datainläsning",
     "Delete folder" : "Radera mapp",
+    "Leaving this report?" : "Lämna den här rapporten?",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "Du har osparade ändringar. Om du lämnar nu kommer dina ändringar att gå förlorade.",
     "Save" : "Spara",
     "Discard" : "Ignorera",
     "choose a layout" : "Välj en layout",
