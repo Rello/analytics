@@ -302,8 +302,8 @@ class DatasourceController extends Controller {
 		$options = json_decode($filter, true);
 		if (isset($options['drilldown'])) {
 			// Sort the indices in descending order
-			$sortedIndices = array_keys($options['drilldown']);
-			rsort($sortedIndices);
+                        $sortedIndices = array_keys($options['drilldown']);
+                        rsort($sortedIndices, SORT_NUMERIC);
 
 			foreach ($sortedIndices as $removeIndex) {
 				$aggregatedData = [];
