@@ -82,7 +82,7 @@ OC.L10N.register(
     "Scheduled data load" : "Carga de datos programada",
     "Delete folder" : "Eliminar cartafol",
     "Save" : "Gardar",
-    "Discard" : "Desbortar",
+    "Discard" : "Desbotar",
     "choose a layout" : "escolla un deseño",
     "select to edit" : "seleccione para editar",
     "choose the content" : "escolla o contido",
