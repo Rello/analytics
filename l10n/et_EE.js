@@ -122,6 +122,8 @@ OC.L10N.register(
     "OK" : "OK",
     "Cancel" : "Loobu",
     "Search" : "Otsi",
+    "Show _MENU_ entries" : "Näita _MENU_ kirjeid",
+    "Showing _START_ to _END_ of _TOTAL_ entries" : "Näitan _START_ kuni _END_ kirjet kokku _TOTAL_-st kirjest",
     "Showing 0 to 0 of 0 entries" : "Näitan 0 kuni 0 kirjet kokku 0-st kirjest",
     "Show all" : "Näita kõiki",
     "You created a new report: {report}" : "Sa koostasid uue aruande: {report}",
