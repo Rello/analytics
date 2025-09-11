@@ -279,7 +279,7 @@ OC.L10N.register(
     "Area - 100%%" : "Område - 100%%",
     "Open documentation" : "Åbn dokumentation",
     "Data options" : "Dataindstillinger",
-    "Update" : "Opdater",
+    "Update" : "Opdatér",
     "Export" : "Eksporter",
     "Mode" : "Mode",
     "Group by" : "Gruppér efter",

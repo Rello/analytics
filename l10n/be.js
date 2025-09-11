@@ -53,6 +53,7 @@ OC.L10N.register(
     "copy" : "копія",
     "Password" : "Пароль",
     "Wiki" : "Wiki",
+    "Options" : "Параметры",
     "Translate" : "Перакласці",
     "Edit" : "Рэдагаваць",
     "Back" : "Назад",
