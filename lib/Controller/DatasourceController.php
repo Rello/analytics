@@ -172,6 +172,9 @@ class DatasourceController extends Controller {
 
 			if (isset($datasetMetadata['filteroptions']) && strlen($datasetMetadata['filteroptions']) >> 2) {
 				// filter data
+				// data sources have their dimension array with index numbers e.g. 0: test
+				// not typed like internal storage with e.g. dimension1: test
+				// due to this, we first need to filter because aggregation would alter the index numbers
 				$result = $this->filterData($result, $datasetMetadata['filteroptions']);
 				// remove columns and aggregate data
 				$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
