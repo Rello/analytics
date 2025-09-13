@@ -877,6 +877,7 @@
                     class="betaFlag">Beta</span></h3></div>
     <div id="tableOptionsSectionDisabled" style="display: none;">
         <p><?php p($l->t('Calculated columns')); ?></p>
+        <p><?php p($l->t('Use column index starting with 0')); ?></p>
         <textarea id="tableOptionsCalculatedColumns"></textarea>
 
         <br>
