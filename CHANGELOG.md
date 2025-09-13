@@ -11,6 +11,7 @@
 - date formatting on all rows
 - fix double report execution after wizard close
 - correct drilldown aggregation for numeric dimension indices
+- adjust time aggregation dimension after drilldown
 
 ## 5.8.0 - 2025-07-29
 ### Added

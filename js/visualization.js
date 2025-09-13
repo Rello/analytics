@@ -1102,6 +1102,35 @@ OCA.Analytics.Visualization = {
     },
 
     /**
+     * Translate a dimension index after drilldown removed columns.
+     *
+     * @param {string|number} dimension - Original dimension index before drilldown.
+     * @param {Object} drilldown - Drilldown filter mapping column indices to visibility.
+     * @returns {number} Adjusted zero-based index or -1 if the column was removed.
+     */
+    resolveDimensionIndex: function (dimension, drilldown) {
+        let idx = parseInt(String(dimension).match(/\d+$/)?.[0], 10);
+        if (isNaN(idx)) {
+            return -1;
+        }
+        if (drilldown && typeof drilldown === 'object') {
+            const removed = Object.keys(drilldown)
+                .filter(key => drilldown[key] === false)
+                .map(key => parseInt(String(key).match(/\d+$/)?.[0], 10))
+                .sort((a, b) => a - b);
+            for (const r of removed) {
+                if (r === idx) {
+                    return -1;
+                }
+                if (r < idx) {
+                    idx--;
+                }
+            }
+        }
+        return idx;
+    },
+
+    /**
      * Group time based dimensions by day/week/month/year.
      *
      * @param {Object} data - Backend data with grouping configuration
@@ -1113,8 +1142,11 @@ OCA.Analytics.Visualization = {
             return data;
         }
 
-        const dimension = parseInt(tg.dimension.match(/\d+$/)?.[0], 10) - 1;
-        if (isNaN(dimension)) {
+        const dimension = OCA.Analytics.Visualization.resolveDimensionIndex(
+            tg.dimension,
+            data.options.filteroptions?.drilldown
+        );
+        if (dimension < 0) {
             return data;
         }
 
