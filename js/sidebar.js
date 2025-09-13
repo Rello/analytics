@@ -608,6 +608,7 @@ OCA.Analytics.Sidebar.Report = {
             });
     },
 
+    // not used; rework to be done as the fileId is expected now
     createFromDataFile: function (file = '') {
         let requestUrl = OC.generateUrl('apps/analytics/report/file');
         fetch(requestUrl, {

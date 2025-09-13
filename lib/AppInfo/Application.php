@@ -17,6 +17,7 @@ use OCA\Analytics\Notification\Notifier;
 use OCA\Analytics\Search\SearchProvider;
 use OCA\Analytics\Listener\ReferenceListener;
 use OCA\Analytics\Reference\ReferenceProvider;
+use OCA\Analytics\Capabilities;
 use OCA\ShareReview\Sources\SourceEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -36,10 +37,12 @@ class Application extends App implements IBootstrap {
 		parent::__construct(self::APP_ID, $urlParams);
 	}
 
-	public function register(IRegistrationContext $context): void {
-		$context->registerDashboardWidget(Widget::class);
+        public function register(IRegistrationContext $context): void {
+                $context->registerDashboardWidget(Widget::class);
 
-		$context->registerSearchProvider(SearchProvider::class);
+                $context->registerSearchProvider(SearchProvider::class);
+
+                $context->registerCapability(Capabilities::class);
 
 		// file actions are not working at the moment
 		// $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
