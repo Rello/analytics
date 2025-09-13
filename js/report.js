@@ -784,6 +784,7 @@ Object.assign(OCA.Analytics.Report.Backend = {
     getData: function () {
         if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
         OCA.Analytics.Report.resetContentArea();
+        OCA.Analytics.Visualization.showContentByType('loading');
 
         // Build AJAX parameters from filter options
         const ajaxData = ['filteroptions', 'dataoptions', 'chartoptions', 'tableoptions'].reduce((acc, option) => {

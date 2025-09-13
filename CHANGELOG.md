@@ -6,6 +6,7 @@
 - Warn about unsaved changes before leaving a report
 
 ### Fixed
+- Hide menu bar and show loading spinner while reports are loading
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
 - date formatting on all rows
 - fix double report execution after wizard close
