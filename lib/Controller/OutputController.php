@@ -86,8 +86,9 @@ class OutputController extends Controller {
 
 			// evaluate if the etag matches the report version
 			// in that case, a 304 is returned and the data retrieval from the backend is not executed
+			// if there are filter options, it means that there was a navigation in the report. This should reselect the data
 			$response = $this->evaluateIfNoneMatch($reportMetadata);
-			if ($response instanceof DataResponse) {
+			if ($response instanceof DataResponse && $filteroptions === null) {
 				return $response;
 			}
 
@@ -134,7 +135,8 @@ class OutputController extends Controller {
 		$response = new DataResponse($result, HTTP::STATUS_OK);
 
 		// only internal reports are cacheable
-		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+		$this->logger->info('report type: ' . $reportMetadata['type']);
+		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB || $reportMetadata['type'] === 9911) {
 			$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 		} else {
