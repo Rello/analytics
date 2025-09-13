@@ -1341,7 +1341,7 @@ OCA.Analytics.Visualization = {
             OCA.Analytics.currentContentType = type;
         }
         //}
-        if (type === 'intro' || type === 'warning') {
+        if (type === 'intro' || type === 'warning' || type === 'loading') {
             OCA.Analytics.Visualization.hideElement('menuBar');
         } else {
             OCA.Analytics.Visualization.showElement('menuBar');
