@@ -47,6 +47,7 @@ OC.L10N.register(
     "External" : "Знешні",
     "Yes" : "Так",
     "No" : "Не",
+    "More options" : "Больш параметраў",
     "Authentication" : "Аўтэнтыфікацыя",
     "Issues" : "Праблемы",
     "Limit" : "Ліміт",

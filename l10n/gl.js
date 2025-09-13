@@ -81,6 +81,7 @@ OC.L10N.register(
     "Add to favorites" : "Engadir a favoritos",
     "Scheduled data load" : "Carga de datos programada",
     "Delete folder" : "Eliminar cartafol",
+    "You have unsaved changes. If you leave now, your changes will be lost." : "Tes cambios sen gardar. Se o deixa agora, os seus cambios perderanse.",
     "Save" : "Gardar",
     "Discard" : "Desbotar",
     "choose a layout" : "escolla un deseño",
