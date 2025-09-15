@@ -18,13 +18,16 @@ class Capabilities implements ICapability {
 		$this->l10n = $l10n;
 	}
 
+	/**
+	 * Expose the endpoint to create a report from a csv file
+	 */
 	public function getCapabilities() {
 		return [
 			'declarativeui' => [
 				Application::APP_ID => [
 					'context-menu' => [
 						[
-							'name' => $this->l10n->t('Show data in Analytics'),
+							'name' => $this->l10n->t('Visualize data in Analytics'),
 							'url' => '/ocs/v2.php/apps/analytics/createFromDataFile?fileId={fileId}',
 							'method' => 'POST',
 							'mimetype_filters' => 'text/csv',

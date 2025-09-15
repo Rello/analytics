@@ -37,12 +37,12 @@ class Application extends App implements IBootstrap {
 		parent::__construct(self::APP_ID, $urlParams);
 	}
 
-        public function register(IRegistrationContext $context): void {
-                $context->registerDashboardWidget(Widget::class);
+	public function register(IRegistrationContext $context): void {
+		$context->registerDashboardWidget(Widget::class);
 
-                $context->registerSearchProvider(SearchProvider::class);
+		$context->registerSearchProvider(SearchProvider::class);
 
-                $context->registerCapability(Capabilities::class);
+		$context->registerCapability(Capabilities::class);
 
 		// file actions are not working at the moment
 		// $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
