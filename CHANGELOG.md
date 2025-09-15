@@ -4,6 +4,7 @@
 ### Added
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
+- OCS endpoint to create reports from CSV files via files clients
 
 ### Changed
 - Time aggregation on all key figures and not only the last one

@@ -25,7 +25,7 @@ return [
 		['name' => 'report#update', 'url' => '/report/{reportId}', 'verb' => 'PUT'],
 		['name' => 'report#rename', 'url' => '/report/{reportId}/rename', 'verb' => 'PUT'],
 		['name' => 'report#createCopy', 'url' => '/report/copy', 'verb' => 'POST'],
-		['name' => 'report#createFromDataFile', 'url' => '/report/file', 'verb' => 'POST'],
+		//['name' => 'report#createFromDataFile', 'url' => '/report/file/{fileId}', 'verb' => 'POST'],
 		['name' => 'report#updateOptions', 'url' => '/report/{reportId}/options', 'verb' => 'POST'],
 		['name' => 'report#updateRefresh', 'url' => '/report/{reportId}/refresh', 'verb' => 'POST'],
 		['name' => 'report#updateGroup', 'url' => '/report/{reportId}/group', 'verb' => 'POST'],
