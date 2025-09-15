@@ -5,13 +5,15 @@
 - Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
 
+### Changed
+- Time aggregation on all key figures and not only the last one
+
 ### Fixed
 - Hide menu bar and show loading spinner while reports are loading
 - Fix PHP 8.4 deprecation warnings #534 @[robertoschwald](https://github.com/robertoschwald)
-- date formatting on all rows
-- fix double report execution after wizard close
-- correct drilldown aggregation for numeric dimension indices
-- adjust time aggregation dimension after drilldown
+- Date formatting on all table rows (not stopping after empty cells)
+- Fix double report execution after wizard close
+- Correct drilldown aggregation for numeric dimension indices
 
 ## 5.8.0 - 2025-07-29
 ### Added

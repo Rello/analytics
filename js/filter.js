@@ -389,10 +389,13 @@ OCA.Analytics.Filter = {
         const container = document.importNode(document.getElementById('templateTimeAggregationOptions').content, true);
 
         const dimensions = OCA.Analytics.currentReportData.dimensions;
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         const dimSelect = container.getElementById('timeGroupingDimension');
         dimSelect.innerHTML = '';
         Object.keys(dimensions).forEach(key => {
-            dimSelect.options.add(new Option(dimensions[key], key));
+            if (!(filterOptions && filterOptions.drilldown && filterOptions.drilldown[key] !== undefined)) {
+                dimSelect.options.add(new Option(dimensions[key], key));
+            }
         });
 
         const groupingSelect = container.getElementById('timeGroupingGrouping');
@@ -405,7 +408,6 @@ OCA.Analytics.Filter = {
             modeSelect.options.add(new Option(text, value));
         });
 
-        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         if (filterOptions && filterOptions.timeAggregation) {
             dimSelect.value = filterOptions.timeAggregation.dimension;
             groupingSelect.value = filterOptions.timeAggregation.grouping;

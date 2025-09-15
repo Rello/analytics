@@ -1152,7 +1152,10 @@ OCA.Analytics.Visualization = {
 
         const grouping = tg.grouping;
         const mode = tg.mode || 'summation';
-        const valueIndex = data.data[0].length - 1;
+        const keyFigureCount = Array.isArray(data.keyFigures) && data.keyFigures.length > 0
+            ? data.keyFigures.length
+            : 1;
+        const valueIndex = data.data[0].length - keyFigureCount;
 
         if (data.data.length === 0) {
             return data;
@@ -1219,21 +1222,23 @@ OCA.Analytics.Visualization = {
             newRow[dimension] = newTime;
 
             const key = newRow.slice(0, valueIndex).join('\u0001');
-            const val = parseFloat(row[valueIndex]) || 0;
 
             if (!sums[key]) {
-                sums[key] = val;
-                counts[key] = 1;
-            } else {
-                sums[key] += val;
-                counts[key] += 1;
+                sums[key] = Array(keyFigureCount).fill(0);
+                counts[key] = 0;
+            }
+            counts[key] += 1;
+            for (let i = 0; i < keyFigureCount; i++) {
+                const val = parseFloat(row[valueIndex + i]) || 0;
+                sums[key][i] += val;
             }
         });
 
         data.data = Object.keys(sums).map(key => {
             const parts = key.split('\u0001');
-            const value = mode === 'average' ? sums[key] / counts[key] : sums[key];
-            return [...parts, value.toString()];
+            const values = sums[key].map(sum => mode === 'average' ? sum / counts[key] : sum);
+            const strValues = values.map(v => v.toString());
+            return [...parts, ...strValues];
         });
 
         return data;

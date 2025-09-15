@@ -46,7 +46,7 @@ class StorageService {
 	 * @throws Exceptionx
 	 */
 	public function read($datasetId, $reportMetadata) {
-		$availableDimensions = array();
+		$dimensions = [];
 		$header = array();
 		$datasetMetadata = $this->DatasetService->read($datasetId);
 		if ($reportMetadata && $reportMetadata['filteroptions'] !== null) {
@@ -58,14 +58,13 @@ class StorageService {
 		if (!empty($datasetMetadata)) {
 			// output the dimensions available for filtering of this dataset
 			// this needs to map the technical name to its display name in the report
-			$availableDimensions['dimension1'] = $datasetMetadata['dimension1'];
-			$availableDimensions['dimension2'] = $datasetMetadata['dimension2'];
+			$dimensions['dimension1'] = $datasetMetadata['dimension1'];
+			$dimensions['dimension2'] = $datasetMetadata['dimension2'];
 
 			// return the header texts of the data being transferred according to the current drill down state selected by user
 			// if the dimension is not part of the drill down filter, it is not hidden => to be displayed
 			if (!isset($options['drilldown']['dimension1'])) $header[0] = $datasetMetadata['dimension1'];
 			if (!isset($options['drilldown']['dimension2'])) $header[1] = $datasetMetadata['dimension2'];
-			$header[6] = $datasetMetadata['value'];
 			$header = array_values($header);
 
 			$data = $this->StorageMapper->read($datasetMetadata['id'], $options);
@@ -75,14 +74,20 @@ class StorageService {
 			}
 		}
 
+		$keyFigures = [
+			$datasetMetadata['value']
+		];
+
 		return empty($data) ? [
-			'header' => $header,
-			'dimensions' => $availableDimensions,
+			'header' => [...$header, ...$keyFigures],
+			'dimensions' => $dimensions,
+			'keyFigures' => $keyFigures,
 			'status' => 'nodata',
 			'error' => 0
 		] : [
-			'header' => $header,
-			'dimensions' => $availableDimensions,
+			'header' => [...$header, ...$keyFigures],
+			'dimensions' => $dimensions,
+			'keyFigures' => $keyFigures,
 			'data' => $data,
 			'error' => 0
 		];
