@@ -15,6 +15,7 @@
 - Date formatting on all table rows (not stopping after empty cells)
 - Fix double report execution after wizard close
 - Correct drilldown aggregation for numeric dimension indices
+- Fix threshold copying when saving report as copy
 
 ## 5.8.0 - 2025-07-29
 ### Added
