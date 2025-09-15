@@ -38,6 +38,7 @@ OC.L10N.register(
     "Date" : "Дата",
     "Segment" : "Сегмент",
     "Year" : "Год",
+    "New in" : "Новае ў",
     "View changelog" : "Праглядзець спіс змяненняў",
     "OK" : "OK",
     "Cancel" : "Скасаваць",

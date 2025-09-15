@@ -367,6 +367,7 @@ OC.L10N.register(
     "Reset table" : "重設表格",
     "Additional settings" : "其他設定",
     "Calculated columns" : "已計算的欄位",
+    "Use column index starting with 0" : "使用從 0 開始的欄位索引",
     "Compact visualization" : "緊湊視覺化",
     "Data format" : "資料格式",
     "Select how the raw data is structured" : "選取原始資料的結構",
