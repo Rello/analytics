@@ -367,6 +367,7 @@ OC.L10N.register(
     "Reset table" : "Tabelle zurücksetzen",
     "Additional settings" : "Zusätzliche Einstellungen",
     "Calculated columns" : "Berechnete Spalten",
+    "Use column index starting with 0" : "Einen mit 0 beginnenden Spaltenindex verwenden",
     "Compact visualization" : "Kompakte Visualisierung",
     "Data format" : "Datenformat",
     "Select how the raw data is structured" : "Auswählen, wie die Rohdaten strukturiert sind",

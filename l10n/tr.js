@@ -367,6 +367,7 @@ OC.L10N.register(
     "Reset table" : "Tabloyu sıfırla",
     "Additional settings" : "Ek ayarlar",
     "Calculated columns" : "Hesaplanmış sütunlar",
+    "Use column index starting with 0" : "0 ile başlayarak sütun sırasını kullanın",
     "Compact visualization" : "Küçük görselleştirme",
     "Data format" : "Veri biçimi",
     "Select how the raw data is structured" : "Ham verilerin nasıl yapılandırıldığını seçin",
