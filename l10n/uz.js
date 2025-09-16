@@ -367,6 +367,7 @@ OC.L10N.register(
     "Reset table" : "Jadvalni tiklash",
     "Additional settings" : "Parol",
     "Calculated columns" : "Hisoblangan ustunlar",
+    "Use column index starting with 0" : "0 dan boshlanadigan ustun indeksidan foydalaning",
     "Compact visualization" : "Kompakt vizualizatsiya",
     "Data format" : "Ma'lumotlar formati",
     "Select how the raw data is structured" : "Xom ma'lumotlar qanday tuzilganligini tanlang",
