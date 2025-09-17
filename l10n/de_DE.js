@@ -192,6 +192,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "Neue Daten wurden dem Datensatz {report} per Datenladung hinzugefügt",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analytics</strong>: Neue Daten wurden einem Bericht hinzugefügt",
     "<strong>Analytics</strong>: New reports" : "<strong>Analytics</strong>: Neue Berichte",
+    "Visualize data in Analytics" : "Daten in Analytics visualisieren",
     "Total" : "Gesamt",
     "External" : "Extern",
     "External URL" : "Externe URL",
