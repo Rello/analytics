@@ -367,6 +367,7 @@ OC.L10N.register(
     "Reset table" : "Ресетуј табелу",
     "Additional settings" : "Додатне поставке",
     "Calculated columns" : "Израчунате колоне",
+    "Use column index starting with 0" : "Користи индекс колоне који почиње са 0",
     "Compact visualization" : "Компактни приказ",
     "Data format" : "Формат података",
     "Select how the raw data is structured" : "Изаберите структуру сирових података",

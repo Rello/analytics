@@ -367,6 +367,7 @@ OC.L10N.register(
     "Reset table" : "Athshocraigh tábla",
     "Additional settings" : "Socruithe breise",
     "Calculated columns" : "Colúin ríofa",
+    "Use column index starting with 0" : "Úsáid innéacs colún ag tosú le 0",
     "Compact visualization" : "Amharcléiriú dlúth",
     "Data format" : "Formáid sonraí",
     "Select how the raw data is structured" : "Roghnaigh conas a struchtúraítear na sonraí amh",
