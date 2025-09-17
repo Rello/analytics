@@ -275,17 +275,14 @@ OCA.Analytics.Dashboard = {
 
             // in only one dataset is being shown, create a fancy gradient fill
             if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut') {
-                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
-                    .substring(1).match(/.{2}/g)
-                    .map(x => parseInt(x, 16));
+                const [r, g, b] = OCA.Analytics.Visualization.getHexToRgb(colors[j]);
 
                 datasets[0].backgroundColor = function (context) {
                     const chart = context.chart;
                     const {ctx, chartArea} = chart;
                     let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
-                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
+                    gradient.addColorStop(0, 'rgb(' + r + ',' + g + ',' + b + ')');
+                    gradient.addColorStop(1, 'rgb(' + r + ',' + g + ',' + b + ',0)');
                     return gradient;
                 }
                 datasets[i].borderColor = colors[j];
@@ -469,6 +466,7 @@ OCA.Analytics.Dashboard = {
             });
         } else {
             const labelMap = new Map();
+            const existingCategories = new Set();
             data.forEach((row) => {
                 let dataSeriesColumn, characteristicColumn, value;
                 if (row.length >= 3) {
@@ -478,7 +476,8 @@ OCA.Analytics.Dashboard = {
                     dataSeriesColumn = '';
                 }
 
-                if (!xAxisCategories.includes(characteristicColumn)) {
+                if (!existingCategories.has(characteristicColumn)) {
+                    existingCategories.add(characteristicColumn);
                     xAxisCategories.push(characteristicColumn);
                 }
 

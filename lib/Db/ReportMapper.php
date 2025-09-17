@@ -262,6 +262,7 @@ class ReportMapper
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('refresh', $sql->createNamedParameter($refresh))
+			->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
         $sql->executeStatement();

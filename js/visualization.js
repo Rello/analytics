@@ -24,6 +24,38 @@ var myMoment = moment;
 OCA.Analytics.Visualization = {
     defaultColorPalette: ["#1A366C", "#EA6A47", "#a3acb9", "#6AB187", "#39a7db", "#c85200", "#57606c", "#a3cce9", "#ffbc79", "#c8d0d9"],
 
+    _hexToRgbCache: {},
+
+    getHexToRgb: function (hex) {
+        if (typeof hex !== 'string') {
+            return [0, 0, 0];
+        }
+
+        let normalizedHex = hex.trim().toLowerCase();
+
+        if (normalizedHex === '') {
+            return [0, 0, 0];
+        }
+
+        if (!normalizedHex.startsWith('#')) {
+            normalizedHex = '#' + normalizedHex;
+        }
+
+        let expandedHex = normalizedHex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => '#' + r + r + g + g + b + b);
+
+        if (!/^#[a-f\d]{6}$/i.test(expandedHex)) {
+            return [0, 0, 0];
+        }
+
+        const cacheKey = expandedHex;
+
+        if (!this._hexToRgbCache[cacheKey]) {
+            this._hexToRgbCache[cacheKey] = expandedHex.substring(1).match(/.{2}/g).map(x => parseInt(x, 16));
+        }
+
+        return this._hexToRgbCache[cacheKey];
+    },
+
     thresholdColorAreaRed: 'LightCoral',
     thresholdColorAreaOrange: 'Moccasin',
     thresholdColorAreaGreen: 'LightGreen',
@@ -153,8 +185,12 @@ OCA.Analytics.Visualization = {
         };
 
         ({data, columns} = this.convertDataToDataTableFormat(jsondata.data, tableOptions, jsondata.header));
-        ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
-
+        const calculatedResult = this.dataTableCalculatedColumns(data, columns, tableOptions);
+        if (Array.isArray(calculatedResult)) {
+            data = calculatedResult;
+        } else if (calculatedResult && typeof calculatedResult === 'object') {
+            ({data, columns} = calculatedResult);
+        }
 
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
@@ -328,6 +364,7 @@ OCA.Analytics.Visualization = {
      * @returns {{data: Array, columns: Array}}
      */
     dataTableCalculatedColumns: function (data, columns, tableOptions) {
+        if (!Array.isArray(data) || data.length === 0) return data;
         let userCalculations = tableOptions.calculatedColumns ? JSON.parse('[' + tableOptions.calculatedColumns + ']') : [];
         userCalculations.forEach((calc, calcIndex) => {
             switch (calc.operation) {
@@ -572,7 +609,7 @@ OCA.Analytics.Visualization = {
         }
 
         let dimension = jsondata.data[0].length - 1
-        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, value, jsondata.thresholds);
+        let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, rawValue, jsondata.thresholds);
 
         // Create the KPI content dynamically
         const kpiContent = document.createElement('div');
@@ -586,7 +623,12 @@ OCA.Analytics.Visualization = {
         // Create the KPI value
         const kpiValue = document.createElement('div');
         kpiValue.classList.add('kpiWidgetValue');
-        kpiValue.setAttribute('style', thresholdColor);
+        if (thresholdColor) {
+            const colorValue = thresholdColor.replace('color:', '').trim();
+            if (colorValue) {
+                kpiValue.style.color = colorValue;
+            }
+        }
         kpiValue.textContent = value; // Set the KPI value
 
         // Append the title and value to the content container
@@ -698,17 +740,14 @@ OCA.Analytics.Visualization = {
 
             // in only one dataset is being shown, create a fancy gradient fill
             if (datasets.length === 1 && chartType !== 'column' && chartType !== 'doughnut' && chartType !== 'funnel') {
-                const hexToRgb = colors[j].replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-                    , (m, r, g, b) => '#' + r + r + g + g + b + b)
-                    .substring(1).match(/.{2}/g)
-                    .map(x => parseInt(x, 16));
+                const [r, g, b] = OCA.Analytics.Visualization.getHexToRgb(colors[j]);
 
                 datasets[0].backgroundColor = function (context) {
                     const chart = context.chart;
                     const {ctx, chartArea} = chart;
                     let gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                    gradient.addColorStop(0, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ')');
-                    gradient.addColorStop(1, 'rgb(' + hexToRgb[0] + ',' + hexToRgb[1] + ',' + hexToRgb[2] + ',0)');
+                    gradient.addColorStop(0, 'rgb(' + r + ',' + g + ',' + b + ')');
+                    gradient.addColorStop(1, 'rgb(' + r + ',' + g + ',' + b + ',0)');
                     return gradient;
                 }
                 datasets[i].borderColor = colors[j];
@@ -933,6 +972,7 @@ OCA.Analytics.Visualization = {
         } else {
             // KPI-Model: Use existing logic
             const labelMap = new Map();
+            const existingCategories = new Set();
             data.forEach((row) => {
                 let dataSeriesColumn, characteristicColumn, value;
                 if (row.length >= 3) {
@@ -941,7 +981,8 @@ OCA.Analytics.Visualization = {
                     [characteristicColumn, value] = row;
                     dataSeriesColumn = '';
                 }
-                if (!xAxisCategories.includes(characteristicColumn)) {
+                if (!existingCategories.has(characteristicColumn)) {
+                    existingCategories.add(characteristicColumn);
                     xAxisCategories.push(characteristicColumn);
                 }
                 if (!labelMap.has(dataSeriesColumn)) {
@@ -1017,22 +1058,20 @@ OCA.Analytics.Visualization = {
                 let parser = data.options.chartoptions["scales"]["x"]["time"]["parser"];
                 let sortColumn = data.data.length > 0 ? data.data[0].length - 2 : 0;
 
-                // Pre-parse dates and attach to each row
-                data.data.forEach(row => {
-                    row._parsedDate = myMoment(row[sortColumn], parser).toDate();
-                });
+                const parsedRows = data.data.map(row => ({
+                    row,
+                    parsedDate: myMoment(row[sortColumn], parser).toDate(),
+                }));
 
-                data.data.sort(function (a, b) {
+                parsedRows.sort((a, b) => {
                     if (sortColumn === 0) {
-                        return a._parsedDate - b._parsedDate;
-                    } else {
-                        return a[0] - b[0] || a._parsedDate - b._parsedDate;
+                        return a.parsedDate - b.parsedDate;
                     }
+                    return (a.row[0] - b.row[0]) || (a.parsedDate - b.parsedDate);
                 });
 
-                // Optionally, clean up the temporary property
-                data.data.forEach(row => {
-                    delete row._parsedDate;
+                parsedRows.forEach((entry, index) => {
+                    data.data[index] = entry.row;
                 });
             }
         }
@@ -1137,6 +1176,10 @@ OCA.Analytics.Visualization = {
      * @returns {Object} Grouped data object
      */
     applyTimeAggregation: function (data) {
+        if (data.status === 'nodata') {
+            return data;
+        }
+
         const tg = data.options.filteroptions?.timeAggregation;
         if (!tg || tg.grouping === 'none') {
             return data;
@@ -1156,10 +1199,6 @@ OCA.Analytics.Visualization = {
             ? data.keyFigures.length
             : 1;
         const valueIndex = data.data[0].length - keyFigureCount;
-
-        if (data.data.length === 0) {
-            return data;
-        }
 
         const sample = data.data[0][dimension];
         const isTimestamp = !isNaN(sample) && sample !== '';
@@ -1333,10 +1372,15 @@ OCA.Analytics.Visualization = {
      * @param {string} element - Element ID
      */
     showElement: function (element) {
-        if (document.getElementById(element)) {
-            document.getElementById(element).hidden = false;
+        const targetElement = document.getElementById(element);
+
+        if (targetElement) {
+            targetElement.hidden = false;
             if (element === 'tableContainer') {
-                document.getElementById('chartContainer').classList.remove('fullHeight');
+                const chartContainer = document.getElementById('chartContainer');
+                if (chartContainer) {
+                    chartContainer.classList.remove('fullHeight');
+                }
             }
         }
     },
@@ -1347,10 +1391,15 @@ OCA.Analytics.Visualization = {
      * @param {string} element - Element ID
      */
     hideElement: function (element) {
-        if (document.getElementById(element)) {
-            document.getElementById(element).hidden = true;
+        const targetElement = document.getElementById(element);
+
+        if (targetElement) {
+            targetElement.hidden = true;
             if (element === 'tableContainer') {
-                document.getElementById('chartContainer').classList.add('fullHeight');
+                const chartContainer = document.getElementById('chartContainer');
+                if (chartContainer) {
+                    chartContainer.classList.add('fullHeight');
+                }
             }
         }
     },
@@ -1359,20 +1408,29 @@ OCA.Analytics.Visualization = {
      * Toggle fullscreen mode for the analytics view.
      */
     toggleFullscreen: function () {
-        document.getElementById('header').classList.toggle('analyticsFullscreen');
-        document.getElementById('app-navigation').classList.toggle('analyticsFullscreen');
-        document.getElementById('content').classList.toggle('analyticsFullscreen');
-        document.getElementById('byAnalytics').classList.toggle('analyticsFullscreen');
+        const fullscreenTargets = [
+            document.getElementById('header'),
+            document.getElementById('app-navigation'),
+            document.getElementById('content'),
+            document.getElementById('byAnalytics'),
+        ].filter(Boolean);
 
-        document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreen');
-        document.getElementById('fullscreenToggle').classList.toggle('icon-analytics-fullscreenExit');
+        fullscreenTargets.forEach(target => {
+            target.classList.toggle('analyticsFullscreen');
+        });
+
+        const fullscreenToggle = document.getElementById('fullscreenToggle');
+        if (fullscreenToggle) {
+            fullscreenToggle.classList.toggle('icon-analytics-fullscreen');
+            fullscreenToggle.classList.toggle('icon-analytics-fullscreenExit');
+        }
     },
 
     showContentByType: function (type) {
         //if (OCA.Analytics.currentContentType !== type) {
-        Array.from(document.querySelectorAll('[id^="analytics-content-"]'))
-            .map(el => el.id)
-            .forEach(id => OCA.Analytics.Visualization.hideElement(id));
+        for (const element of document.querySelectorAll('[id^="analytics-content-"]')) {
+            OCA.Analytics.Visualization.hideElement(element.id);
+        }
         OCA.Analytics.Visualization.showElement('analytics-content-' + type);
         if (type !== 'loading') {
             OCA.Analytics.currentContentType = type;
