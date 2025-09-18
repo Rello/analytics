@@ -1148,7 +1148,14 @@ OCA.Analytics.Visualization = {
      * @returns {number} Adjusted zero-based index or -1 if the column was removed.
      */
     resolveDimensionIndex: function (dimension, drilldown) {
-        let idx = parseInt(String(dimension).match(/\d+$/)?.[0], 10);
+        let idx;
+        if (typeof dimension === 'string' && dimension.includes('dimension2')) {
+            // for internal storage, the dimensions are named like "dimension1"
+            // for internal processing we need the index of the column
+            idx = parseInt(String(dimension).match(/\d+$/)?.[0], 10) - 1;
+        } else {
+            idx = parseInt(String(dimension).match(/\d+$/)?.[0], 10);
+        }
         if (isNaN(idx)) {
             return -1;
         }

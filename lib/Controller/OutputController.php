@@ -94,7 +94,7 @@ class OutputController extends Controller {
 
 			// if the etag does not match the version, read data from backend
 			// and add corresponding heders
-			return $this->returnDataWithCacheableHeader($reportMetadata);
+			return $this->returnDataWithCacheableHeader($reportMetadata, $filteroptions);
 		} else {
 			return new NotFoundResponse();
 		}
@@ -124,19 +124,18 @@ class OutputController extends Controller {
 
 			// if the etag does not match the version, read data from backend
 			// and add corresponding heders
-			return $this->returnDataWithCacheableHeader($reportMetadata);
+			return $this->returnDataWithCacheableHeader($reportMetadata, null);
 		} else {
 			return new NotFoundResponse();
 		}
 	}
 
-	private function returnDataWithCacheableHeader($reportMetadata) {
+	private function returnDataWithCacheableHeader($reportMetadata, $filteroptions) {
 		$result = $this->getData($reportMetadata);
 		$response = new DataResponse($result, HTTP::STATUS_OK);
 
 		// only internal reports are cacheable
-		$this->logger->info('report type: ' . $reportMetadata['type']);
-		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB || $reportMetadata['type'] === 9911) {
+		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $filteroptions === null) {
 			$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 		} else {

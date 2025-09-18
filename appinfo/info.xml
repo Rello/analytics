@@ -25,7 +25,7 @@ Visualize and share anything, from financial analysis to IoT logs.
 - **AI Assistant**: Context Chat integration
 
 ]]></description>
-    <version>5.8.0</version>
+    <version>6.0.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>

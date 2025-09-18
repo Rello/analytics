@@ -1,10 +1,10 @@
 # Changelog
 
-## 5.9.0 - 2025-08-xx
+## 6.0.0 - 2025-09-18
 ### Added
-- Cache report data in the browser (using ETag & If-None-Match) #535
+- Performance: Cache report data in the browser (using ETag & If-None-Match) #535
 - Warn about unsaved changes before leaving a report
-- OCS endpoint to create reports from CSV files via files clients
+- OCS endpoint to create reports from csv files via files clients
 
 ### Changed
 - Time aggregation on all key figures and not only the last one
