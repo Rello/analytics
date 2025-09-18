@@ -190,6 +190,7 @@
     "New data has been added to dataset {report} via data load" : "Нови подаци су учитавањем додати у скуп података {report}",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Аналитика</strong>: У извештај су додати нови подаци",
     "<strong>Analytics</strong>: New reports" : "<strong>Аналитика</strong>: Нови извештаји",
+    "Visualize data in Analytics" : "Визуелизуј податке у Аналитици",
     "Total" : "Укупно",
     "External" : "Спољно",
     "External URL" : "Спољни URL",
