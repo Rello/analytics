@@ -19,6 +19,9 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\Attribute\UseSession;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\Files\NotFoundException;
@@ -68,7 +71,6 @@ class OutputController extends Controller {
 	 * get the data when requested from internal page
 	 * If-None-Match and eTags are being handled
 	 *
-	 * @NoAdminRequired
 	 * @param int $reportId
 	 * @param $filteroptions
 	 * @param $dataoptions
@@ -77,6 +79,7 @@ class OutputController extends Controller {
 	 * @return DataResponse|NotFoundResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions, $tableoptions) {
 		$reportMetadata = $this->ReportService->read($reportId);
 		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedReport($reportId);
@@ -105,11 +108,11 @@ class OutputController extends Controller {
 	 * Special checks are performed to ensure, that the report is really part of the shared panorama
 	 * If-None-Match and eTags are being handled
 	 *
-	 * @NoAdminRequired
 	 * @param int $reportIds
 	 * @return DataResponse|NotFoundResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function readPanorama(int $reportId) {
 		$reportMetadata = $this->ReportService->read($reportId);
 		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
@@ -160,12 +163,12 @@ class OutputController extends Controller {
 	/**
 	 * Preview the data
 	 *
-	 * @NoAdminRequired
 	 * @param $type
 	 * @param $options
 	 * @return DataResponse|NotFoundResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function readPreview($type, $options) {
 		$reportMetadata = [];
 		$array = json_decode($options, true);
@@ -192,11 +195,11 @@ class OutputController extends Controller {
 	 * pre-evaluation of valid datasetId within read & readPublic is trusted here
 	 * also used in Pagecontroller-indexPublicMin ToDo: make this private
 	 *
-	 * @NoAdminRequired
 	 * @param $reportMetadata
 	 * @return array
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function getData($reportMetadata) {
 		$datasource = (int)$reportMetadata['type'];
 		$datasetId = (int)$reportMetadata['dataset'];
@@ -243,9 +246,6 @@ class OutputController extends Controller {
 	/**
 	 * get the data when requested from public page
 	 *
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @UseSession
 	 * @param $token
 	 * @param $filteroptions
 	 * @param $dataoptions
@@ -254,6 +254,9 @@ class OutputController extends Controller {
 	 * @return DataResponse|NotFoundResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
+	#[UseSession]
+	#[PublicPage]
 	public function readPublic($token, $filteroptions, $dataoptions, $chartoptions, $tableoptions) {
 		$share = $this->ShareService->getReportByToken($token);
 		if (empty($share)) {

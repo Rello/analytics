@@ -181,8 +181,6 @@ class ShareService {
 				// shared with a user directly?
 			} elseif ((int)$sharedReport['shareType'] === self::SHARE_TYPE_USER) {
 				// current user matching?
-				$this->logger->debug('Shareservice: is user share; check against current user: ' . $this->userSession->getUser()
-																													 ->getUID());
 				if ($this->userSession->getUser()->getUID() === $sharedReport['shareUid_owner']) {
 					// was the report not yet added to the result?
 					$this->logger->debug('Shareservice: Share belongs to current user');

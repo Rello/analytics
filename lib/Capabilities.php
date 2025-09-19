@@ -14,6 +14,8 @@ use OCP\IL10N;
 
 class Capabilities implements ICapability {
 
+	private $l10n;
+
 	public function __construct(IL10N $l10n) {
 		$this->l10n = $l10n;
 	}

@@ -15,6 +15,9 @@ use OCA\Analytics\Service\StorageService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\Constants;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
@@ -55,13 +58,13 @@ class ApiDataController extends ApiController {
 
 	/**
 	 * add data via there database names
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function addData(int $datasetId) {
 		$params = $this->request->getParams();
 		$datasetMetadata = $this->DatasetService->readOwn($datasetId);
@@ -90,13 +93,13 @@ class ApiDataController extends ApiController {
 
 	/**
 	 * add data via there real field names
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function addDataV2(int $datasetId) {
 		$message = 'No -data- parameter';
 		$params = $this->request->getParams();
@@ -158,13 +161,13 @@ class ApiDataController extends ApiController {
 
 	/**
 	 * delete data
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function deleteDataV2(int $datasetId) {
 		$message = 'No -delete- parameter';
 		$params = $this->request->getParams();
@@ -195,12 +198,12 @@ class ApiDataController extends ApiController {
 
 	/**
 	 * get all data of a report and respect filter options
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function dataGetV3(int $reportId) {
 		$params = $this->request->getParams();
 		$reportMetadata = $this->ReportService->read($reportId);
@@ -219,62 +222,62 @@ class ApiDataController extends ApiController {
 
 	/**
 	 * delete data
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function dataDeleteV3(int $datasetId) {
 		return $this->deleteDataV2($datasetId);
 	}
 
 	/**
 	 * add data via there real field names
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function dataAddV3(int $datasetId) {
 		return $this->addDataV2($datasetId);
 	}
 
 	/**
 	 * list datasets
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @return array
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function datasetIndexV3() {
 		return $this->DatasetService->index();
 	}
 
 	/**
 	 * list reports
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @return array
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function reportIndexV3() {
 		return $this->ReportService->index();
 	}
 
 	/**
 	 * read data of a dataset with additional information for table and series
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function reportDetailV3(int $reportId) {
 		$reportMetadata = $this->ReportService->read($reportId);
 		unset($reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['permissions'], $reportMetadata['dimension3']);
@@ -290,13 +293,13 @@ class ApiDataController extends ApiController {
 
 	/**
 	 * add data via there real field names
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
 	public function addDataV4(int $datasetId) {
 		$message = 'No -data- parameter';
 		$params = $this->request->getParams();
