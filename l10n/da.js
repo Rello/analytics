@@ -69,7 +69,7 @@ OC.L10N.register(
     "Default" : "Standard",
     "Ascending" : "Stigende",
     "Descending" : "Faldende",
-    "Sort data ascending or descending" : "Sorter data stigende eller faldende",
+    "Sort data ascending or descending" : "Sortér data stigende eller faldende",
     "Chart options" : "Indstillinger for diagram",
     "Primary" : "Primær",
     "Secondary" : "Sekundær",
