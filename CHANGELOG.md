@@ -9,6 +9,7 @@
 ### Changed
 - Time aggregation on all key figures and not only the last one
 - Replace controller HTTP annotations with PHP attributes
+- Update warning indicators to use Nextcloud 32 contrast variables
 
 ### Fixed
 - Hide menu bar and show loading spinner while reports are loading
