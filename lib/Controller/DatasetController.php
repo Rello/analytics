@@ -15,6 +15,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class DatasetController extends Controller {
 	private $logger;
@@ -37,9 +38,9 @@ class DatasetController extends Controller {
 	/**
 	 * get all datasets
 	 *
-	 * @NoAdminRequired
 	 * @return DataResponse
 	 */
+	#[NoAdminRequired]
 	public function index() {
 		return new DataResponse($this->DatasetService->index());
 	}
@@ -47,7 +48,6 @@ class DatasetController extends Controller {
 	/**
 	 * create new dataset
 	 *
-	 * @NoAdminRequired
 	 * @param $name
 	 * @param $dimension1
 	 * @param $dimension2
@@ -55,6 +55,7 @@ class DatasetController extends Controller {
 	 * @return int
 	 * @throws \OCP\DB\Exception
 	 */
+	#[NoAdminRequired]
 	public function create($name, $dimension1, $dimension2, $value) {
 		return $this->DatasetService->create($name, $dimension1, $dimension2, $value);
 	}
@@ -62,10 +63,10 @@ class DatasetController extends Controller {
 	/**
 	 * get own dataset details
 	 *
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return array|bool
 	 */
+	#[NoAdminRequired]
 	public function read(int $datasetId) {
 		return $this->DatasetService->readOwn($datasetId);
 	}
@@ -73,11 +74,11 @@ class DatasetController extends Controller {
 	/**
 	 * Delete Dataset and all depending objects
 	 *
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 * @throws \OCP\DB\Exception
 	 */
+	#[NoAdminRequired]
 	public function delete(int $datasetId) {
 		if ($this->DatasetService->isOwn($datasetId)) {
 			$reports = $this->ReportService->reportsForDataset($datasetId);
@@ -94,7 +95,6 @@ class DatasetController extends Controller {
 	/**
 	 * get dataset details
 	 *
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @param $name
 	 * @param null $subheader
@@ -105,6 +105,7 @@ class DatasetController extends Controller {
 	 * @return bool
 	 * @throws Exception
 	 */
+        #[NoAdminRequired]
         public function update(
                 int $datasetId,
                         $name,
@@ -120,10 +121,10 @@ class DatasetController extends Controller {
         /**
          * create dataset group
          *
-         * @NoAdminRequired
          * @param int $parent
          * @return int
          */
+        #[NoAdminRequired]
         public function createGroup(int $parent) {
                 return $this->DatasetService->createGroup($parent);
         }
@@ -131,11 +132,11 @@ class DatasetController extends Controller {
         /**
          * update dataset group assignment
          *
-         * @NoAdminRequired
          * @param int $datasetId
          * @param int $groupId
          * @return bool
          */
+        #[NoAdminRequired]
         public function updateGroup(int $datasetId, int $groupId) {
                 return $this->DatasetService->updateGroup($datasetId, $groupId);
         }
@@ -143,11 +144,11 @@ class DatasetController extends Controller {
         /**
          * rename dataset
          *
-         * @NoAdminRequired
          * @param int $datasetId
          * @param string $name
          * @return bool
          */
+        #[NoAdminRequired]
         public function rename(int $datasetId, string $name) {
                 return $this->DatasetService->rename($datasetId, $name);
         }
@@ -155,10 +156,10 @@ class DatasetController extends Controller {
 	/**
 	 * get status of the dataset
 	 *
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @throws \OCP\DB\Exception
 	 */
+	#[NoAdminRequired]
 	public function status(int $datasetId) {
 		return $this->DatasetService->status($datasetId);
 	}
@@ -166,10 +167,10 @@ class DatasetController extends Controller {
 	/**
 	 * Update the context chat provider
 	 *
-	 * @NoAdminRequired
 	 * @param int $datasetId
 	 * @return DataResponse
 	 */
+	#[NoAdminRequired]
 	public function provider(int $datasetId) {
 		if ($this->DatasetService->isOwn($datasetId)) {
 			$this->DatasetService->provider($datasetId);

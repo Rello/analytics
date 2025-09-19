@@ -12,6 +12,7 @@ use OCA\Analytics\Service\ThresholdService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class ThresholdController extends Controller
 {
@@ -33,10 +34,10 @@ class ThresholdController extends Controller
     /**
      * read all thresholds for a dataset
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @return array
      */
+    #[NoAdminRequired]
     public function read(int $reportId)
     {
         return $this->ThresholdService->readRaw($reportId);
@@ -45,7 +46,6 @@ class ThresholdController extends Controller
 	/**
 	 * create new threshold for dataset
 	 *
-	 * @NoAdminRequired
 	 * @param int $reportId
 	 * @param $dimension
 	 * @param $option
@@ -54,6 +54,7 @@ class ThresholdController extends Controller
 	 * @param $coloring
 	 * @return int
 	 */
+    #[NoAdminRequired]
     public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring)
     {
         return $this->ThresholdService->create($reportId, $dimension, $option, $value, $severity, $coloring);
@@ -62,10 +63,10 @@ class ThresholdController extends Controller
     /**
      * Delete threshold for dataset
      *
-     * @NoAdminRequired
      * @param int $thresholdId
      * @return bool
      */
+    #[NoAdminRequired]
     public function delete(int $thresholdId)
     {
         $this->ThresholdService->delete($thresholdId);
@@ -75,11 +76,11 @@ class ThresholdController extends Controller
     /**
      * Update threshold order
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param array $order
      * @return bool
      */
+    #[NoAdminRequired]
     public function reorder(int $reportId, $order): bool
     {
         if (is_string($order)) {
@@ -92,7 +93,6 @@ class ThresholdController extends Controller
     /**
      * validate threshold
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
@@ -100,6 +100,7 @@ class ThresholdController extends Controller
      * @return string
      * @throws \Exception
      */
+    #[NoAdminRequired]
     public function validate(int $reportId, $dimension1, $dimension2, $value)
     {
         return $this->ThresholdService->validate($reportId, $dimension1, $dimension2, $value);

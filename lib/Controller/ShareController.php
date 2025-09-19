@@ -16,6 +16,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class ShareController extends Controller {
 	const SHARE_TYPE_USER = 0;
@@ -48,7 +49,6 @@ class ShareController extends Controller {
 	/**
 	 * create a new share
 	 *
-	 * @NoAdminRequired
 	 * @param $item_type
 	 * @param $item_source
 	 * @param $type
@@ -56,6 +56,7 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function create($item_type, $item_source, $type, $user) {
 		if (($item_type === ShareService::SHARE_ITEM_TYPE_REPORT && $this->ReportService->isOwn($item_source))
 		|| ($item_type === ShareService::SHARE_ITEM_TYPE_PANORAMA && $this->PanoramaService->isOwn($item_source))) {
@@ -68,11 +69,11 @@ class ShareController extends Controller {
 	/**
 	 * get all shares for a report
 	 *
-	 * @NoAdminRequired
 	 * @param $item_source
 	 * @return DataResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function readReport($item_source) {
 		if ($this->ReportService->isOwn($item_source)) {
 			return new DataResponse($this->ShareService->read(ShareService::SHARE_ITEM_TYPE_REPORT, $item_source));
@@ -84,11 +85,11 @@ class ShareController extends Controller {
 	/**
 	 * get all shares for a panorama
 	 *
-	 * @NoAdminRequired
 	 * @param $item_source
 	 * @return DataResponse
 	 * @throws Exception
 	 */
+	#[NoAdminRequired]
 	public function readPanorama($item_source) {
 		if ($this->PanoramaService->isOwn($item_source)) {
 			return new DataResponse($this->ShareService->read(ShareService::SHARE_ITEM_TYPE_PANORAMA, $item_source));
@@ -100,13 +101,13 @@ class ShareController extends Controller {
 	/**
 	 * update/set share password
 	 *
-	 * @NoAdminRequired
 	 * @param $shareId
 	 * @param null $password
 	 * @param null $canEdit
 	 * @param null $domain
 	 * @return DataResponse
 	 */
+	#[NoAdminRequired]
 	public function update($shareId, $password = null, $canEdit = null, $domain = null) {
 		return new DataResponse($this->ShareService->update($shareId, $password, $canEdit, $domain));
 	}
@@ -114,10 +115,10 @@ class ShareController extends Controller {
 	/**
 	 * delete a share
 	 *
-	 * @NoAdminRequired
 	 * @param $shareId
 	 * @return DataResponse
 	 */
+	#[NoAdminRequired]
 	public function delete($shareId) {
 		return new DataResponse($this->ShareService->delete($shareId));
 	}

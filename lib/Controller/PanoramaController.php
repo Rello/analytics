@@ -15,6 +15,7 @@ use OCP\DB\Exception;
 use OCP\IRequest;
 use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class PanoramaController extends Controller
 {
@@ -36,11 +37,11 @@ class PanoramaController extends Controller
     /**
      * get all reports
      *
-     * @NoAdminRequired
      * @return DataResponse
      * @throws Exception
      * @throws PreConditionNotMetException
      */
+    #[NoAdminRequired]
     public function index()
     {
         return new DataResponse($this->PanoramaService->index());
@@ -49,12 +50,12 @@ class PanoramaController extends Controller
     /**
      * create new blank report
      *
-     * @NoAdminRequired
      * @param int $type
      * @param int $parent
      * @return DataResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function create(int $type, int $parent)
     {
         return new DataResponse($this->PanoramaService->create($type, $parent));
@@ -64,10 +65,10 @@ class PanoramaController extends Controller
     /**
      * get own report details
      *
-     * @NoAdminRequired
      * @param int $panoramaId
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function read(int $panoramaId)
     {
         return new DataResponse($this->PanoramaService->read($panoramaId));
@@ -76,10 +77,10 @@ class PanoramaController extends Controller
     /**
      * Delete report and all depending objects
      *
-     * @NoAdminRequired
      * @param int $panoramaId
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function delete(int $panoramaId)
     {
         if ($this->PanoramaService->isOwn($panoramaId)) {
@@ -92,7 +93,6 @@ class PanoramaController extends Controller
     /**
      * get report details
      *
-     * @NoAdminRequired
      * @param int $panoramaId
      * @param $name
      * @param int $type
@@ -101,6 +101,7 @@ class PanoramaController extends Controller
      * @return DataResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function update(int $panoramaId, $name, int $type, int $parent, $pages)
     {
         $pages = json_encode($pages);
@@ -110,10 +111,10 @@ class PanoramaController extends Controller
     /**
      * create panorama group
      *
-     * @NoAdminRequired
      * @param int $parent
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function createGroup(int $parent)
     {
         return new DataResponse($this->PanoramaService->createGroup($parent));
@@ -122,11 +123,11 @@ class PanoramaController extends Controller
     /**
      * update panorama group assignment
      *
-     * @NoAdminRequired
      * @param int $panoramaId
      * @param int $groupId
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function updateGroup(int $panoramaId, int $groupId)
     {
         return new DataResponse($this->PanoramaService->updateGroup($panoramaId, $groupId));
@@ -135,11 +136,11 @@ class PanoramaController extends Controller
     /**
      * rename panorama
      *
-     * @NoAdminRequired
      * @param int $panoramaId
      * @param string $name
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function rename(int $panoramaId, string $name)
     {
         return new DataResponse($this->PanoramaService->rename($panoramaId, $name));
@@ -148,10 +149,10 @@ class PanoramaController extends Controller
     /**
      * get own reports which are marked as favorites
      *
-     * @NoAdminRequired
      * @return DataResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function getOwnFavoriteReports()
     {
         return new DataResponse($this->PanoramaService->getOwnFavoriteReports());
@@ -160,11 +161,11 @@ class PanoramaController extends Controller
     /**
      * set/remove the favorite flag for a report
      *
-     * @NoAdminRequired
      * @param int $panoramaId
      * @param string $favorite
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function setFavorite(int $panoramaId, string $favorite)
     {
         return new DataResponse($this->PanoramaService->setFavorite($panoramaId, $favorite));
