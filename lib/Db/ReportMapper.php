@@ -445,7 +445,23 @@ class ReportMapper
         return true;
     }
 
-    /**
+	/**
+	 * increase version for a report. used e.g. for threshold updates
+	 * @param int $id
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function increaseVersionByReport(int $id): bool
+	{
+		$sql = $this->db->getQueryBuilder();
+		$sql->update(self::TABLE_NAME)
+			->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
+			->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+		$sql->executeStatement();
+		return true;
+	}
+
+	/**
      * truncates fiels do DB-field size
      *
      * @param $string

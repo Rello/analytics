@@ -73,6 +73,7 @@ class ThresholdService {
 	 * @throws Exception
 	 */
 	public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring) {
+		$this->ReportMapper->increaseVersionByReport($reportId);
 		return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
 	}
 
@@ -93,38 +94,38 @@ class ThresholdService {
 		}
 	}
 
-       private function normalizeNumberString(string $str): string {
-               $str = trim($str);
-               $hasComma = str_contains($str, ',');
-               $hasDot   = str_contains($str, '.');
+	private function normalizeNumberString(string $str): string {
+		$str = trim($str);
+		$hasComma = str_contains($str, ',');
+		$hasDot = str_contains($str, '.');
 
-               if ($hasComma && $hasDot) {
-                       if (strrpos($str, ',') > strrpos($str, '.')) {
-                               // comma as decimal separator
-                               $str = str_replace('.', '', $str);
-                               $str = str_replace(',', '.', $str);
-                       } else {
-                               // dot as decimal separator
-                               $str = str_replace(',', '', $str);
-                       }
-               } elseif ($hasComma) {
-                       $idx = strrpos($str, ',');
-                       $digits = strlen($str) - $idx - 1;
-                       if ($digits <= 2) {
-                               $str = str_replace(',', '.', $str);
-                       } else {
-                               $str = str_replace(',', '', $str);
-                       }
-               } elseif ($hasDot) {
-                       $idx = strrpos($str, '.');
-                       $digits = strlen($str) - $idx - 1;
-                       if ($digits > 2) {
-                               $str = str_replace('.', '', $str);
-                       }
-               }
+		if ($hasComma && $hasDot) {
+			if (strrpos($str, ',') > strrpos($str, '.')) {
+				// comma as decimal separator
+				$str = str_replace('.', '', $str);
+				$str = str_replace(',', '.', $str);
+			} else {
+				// dot as decimal separator
+				$str = str_replace(',', '', $str);
+			}
+		} elseif ($hasComma) {
+			$idx = strrpos($str, ',');
+			$digits = strlen($str) - $idx - 1;
+			if ($digits <= 2) {
+				$str = str_replace(',', '.', $str);
+			} else {
+				$str = str_replace(',', '', $str);
+			}
+		} elseif ($hasDot) {
+			$idx = strrpos($str, '.');
+			$digits = strlen($str) - $idx - 1;
+			if ($digits > 2) {
+				$str = str_replace('.', '', $str);
+			}
+		}
 
-               return str_replace(' ', '', $str);
-       }
+		return str_replace(' ', '', $str);
+	}
 
 	/**
 	 * Compare two values and return comparison result similar to spaceship operator
@@ -149,6 +150,9 @@ class ThresholdService {
 	 * @return bool
 	 */
 	public function delete(int $thresholdId) {
+		$reportId = $this->ThresholdMapper->getReportByThreshold($thresholdId);
+		$this->logger->info('reportId: ' . $reportId);
+		$this->ReportMapper->increaseVersionByReport($reportId);
 		$this->ThresholdMapper->deleteThreshold($thresholdId);
 		return true;
 	}
@@ -164,7 +168,12 @@ class ThresholdService {
 		foreach ($orderedIds as $id) {
 			$this->ThresholdMapper->updateSequence((int)$id, $position);
 			$position++;
+			$thresholdId = $id;
 		}
+		$reportId = $this->ThresholdMapper->getReportByThreshold($thresholdId);
+		$this->logger->info('reportId: ' . $reportId);
+		$this->ReportMapper->increaseVersionByReport($reportId);
+
 		return true;
 	}
 

@@ -84,6 +84,15 @@ class ThresholdMapper
         return $result;
     }
 
+	public function getReportByThreshold($id)
+	{
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME)
+			->select('report')
+			->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+		return (int)$sql->executeQuery()->fetchOne();
+	}
+
     /**
      * @throws Exception
      */

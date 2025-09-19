@@ -229,14 +229,8 @@ class ReportService {
 		// Copy thresholds from original report to the new copy
 		$sourceThresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
 		foreach ($sourceThresholds as $threshold) {
-			$this->ThresholdMapper->create(
-				$newId,
-				$threshold['dimension'],
-				$threshold['value'], // This is 'target' aliased as 'value' in the query
-				$threshold['option'],
-				$threshold['severity'],
-				$threshold['coloring']
-			);
+			$this->ThresholdMapper->create($newId, $threshold['dimension'], $threshold['value'], // This is 'target' aliased as 'value' in the query
+				$threshold['option'], $threshold['severity'], $threshold['coloring']);
 		}
 
 		return $newId;
@@ -394,10 +388,14 @@ class ReportService {
 	 * @return bool
 	 */
 	public function setFavorite(int $reportId, string $favorite) {
+		$return = true;
 		if ($favorite === 'true') {
 			$return = $this->tagManager->load('analytics')->addToFavorites($reportId);
 		} else {
-			$return = $this->tagManager->load('analytics')->removeFromFavorites($reportId);
+			$favorites = $this->tagManager->load('analytics')->getFavorites();
+			if (is_array($favorites) and in_array($reportId, $favorites)) {
+				$return = $this->tagManager->load('analytics')->removeFromFavorites($reportId);
+			}
 		}
 		return $return;
 	}
@@ -461,12 +459,13 @@ class ReportService {
 		}
 
 		foreach ($data['threshold'] as $threshold) {
-			isset($threshold['dimension1']) ? $dimension1 = $threshold['dimension1'] : $dimension1 = null;
+			isset($threshold['dimension']) ? $dimension = $threshold['dimension'] : $dimension = null;
 			isset($threshold['value']) ? $value = $threshold['value'] : $value = null;
 			isset($threshold['option']) ? $option = $threshold['option'] : $option = null;
 			isset($threshold['severity']) ? $severity = $threshold['severity'] : $severity = null;
+			isset($threshold['coloring']) ? $coloring = $threshold['coloring'] : $coloring = 'row';
 			$value = $this->floatvalue($value);
-			$this->ThresholdMapper->create($reportId, $dimension1, $value, $option, $severity);
+			$this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
 		}
 
 		foreach ($data['data'] as $dData) {
