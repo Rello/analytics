@@ -15,7 +15,6 @@
 }
 
 .betaFlag {
-    color: var(--color-text-warning, var(--color-warning));
     border: 1px solid var(--color-border-warning, var(--color-element-warning, var(--color-warning)));
     border-radius: 16px;
     padding: 0 9px;
@@ -1301,7 +1300,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 .pageScroll.highlighted {
-    color: var(--color-text-warning, var(--color-warning));
+    color: var(--color-element-warning, var(--color-warning));
     opacity: 0.8;
 }
 

@@ -34,7 +34,7 @@ class Version6000Date20250917100000 extends SimpleMigrationStep {
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('analytics_whats_new')->values([
-				'version' => $query->createNamedParameter('6.0.0'),
+				'version' => $query->createNamedParameter('6.0.1'),
 				'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
 "en":{"regular":["Cached reports with stored data", "Save reports before exiting", "Various performance improvements"],"admin":["New Features apply to users"]},
 "de":{"regular":["Cache von Berichten mit gespeicherten Daten ", "Berichte vor dem Verlassen speichern", "Verschiedene Leistungsverbesserungen"],"admin":["Nur User Features"]}

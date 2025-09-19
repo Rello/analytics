@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.1 - 2025-09-19
+### Fixed
+- NC32 compatibility
+
 ## 6.0.0 - 2025-09-18
 ### Added
 - Performance: Cache report data in the browser (using ETag & If-None-Match) #535
