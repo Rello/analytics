@@ -15,8 +15,8 @@
 }
 
 .betaFlag {
-    color: var(--color-warning);
-    border: 1px solid var(--color-warning);
+    color: var(--color-text-warning, var(--color-warning));
+    border: 1px solid var(--color-border-warning, var(--color-element-warning, var(--color-warning)));
     border-radius: 16px;
     padding: 0 9px;
 }
@@ -839,7 +839,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .indicateImportantField {
-    border: 1px solid var(--color-warning) !important;
+    border: 1px solid var(--color-border-warning, var(--color-element-warning, var(--color-warning))) !important;
 }
 
 .favorite-mark {
@@ -1301,7 +1301,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 .pageScroll.highlighted {
-    color: var(--color-warning);
+    color: var(--color-text-warning, var(--color-warning));
     opacity: 0.8;
 }
 
