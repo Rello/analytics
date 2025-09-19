@@ -18,6 +18,7 @@ use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class WhatsNewController extends Controller
 {
@@ -51,9 +52,7 @@ class WhatsNewController extends Controller
         $this->logger = $logger;
     }
 
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function get(): DataResponse
     {
         $user = $this->userSession->getUser();
@@ -91,11 +90,11 @@ class WhatsNewController extends Controller
     }
 
     /**
-     * @NoAdminRequired
      *
      * @throws \OCP\PreConditionNotMetException
      * @throws DoesNotExistException
      */
+    #[NoAdminRequired]
     public function dismiss(string $version): DataResponse
     {
         $user = $this->userSession->getUser();

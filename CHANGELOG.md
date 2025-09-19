@@ -8,6 +8,7 @@
 
 ### Changed
 - Time aggregation on all key figures and not only the last one
+- Replace controller HTTP annotations with PHP attributes
 
 ### Fixed
 - Hide menu bar and show loading spinner while reports are loading

@@ -16,6 +16,7 @@ use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class DataloadController extends Controller
 {
@@ -37,12 +38,12 @@ class DataloadController extends Controller
     /**
      * create a new dataload
      *
-     * @NoAdminRequired
      * @param $datasetId
      * @param int $datasourceId
      * @return DataResponse
      * @throws \OCP\DB\Exception
      */
+    #[NoAdminRequired]
     public function create($datasetId, int $datasourceId): DataResponse
     {
         return new DataResponse(['id' => $this->DataloadService->create($datasetId, $datasourceId)]);
@@ -51,11 +52,11 @@ class DataloadController extends Controller
     /**
      * get all data loads for a dataset or report
      *
-     * @NoAdminRequired
      * @param $datasetId
      * @param $reportId
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function read($datasetId): DataResponse
     {
         return new DataResponse(['dataloads' => $this->DataloadService->read($datasetId)]);
@@ -64,13 +65,13 @@ class DataloadController extends Controller
     /**
      * update dataload
      *
-     * @NoAdminRequired
      * @param int $dataloadId
      * @param $name
      * @param $option
      * @param $schedule
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function update(int $dataloadId, $name, $option, $schedule): DataResponse
     {
         return new DataResponse(['update' => $this->DataloadService->update($dataloadId, $name, $option, $schedule)]);
@@ -79,11 +80,11 @@ class DataloadController extends Controller
     /**
      * copy a dataload
      *
-     * @NoAdminRequired
      * @param int $dataloadId
      * @return DataResponse
      * @throws NotFoundException
      */
+    #[NoAdminRequired]
     public function copy(int $dataloadId): DataResponse
     {
         return new DataResponse($this->DataloadService->copy($dataloadId));
@@ -92,10 +93,10 @@ class DataloadController extends Controller
     /**
      * delete a dataload
      *
-     * @NoAdminRequired
      * @param int $dataloadId
      * @return bool
      */
+    #[NoAdminRequired]
     public function delete(int $dataloadId): bool
     {
         return $this->DataloadService->delete($dataloadId);
@@ -104,11 +105,11 @@ class DataloadController extends Controller
     /**
      * simulate a dataload and output its data
      *
-     * @NoAdminRequired
      * @param int $dataloadId
      * @return DataResponse
      * @throws NotFoundException
      */
+    #[NoAdminRequired]
     public function simulate(int $dataloadId): DataResponse
     {
         return new DataResponse($this->DataloadService->getDataFromDatasource($dataloadId));
@@ -117,11 +118,11 @@ class DataloadController extends Controller
     /**
      * execute a dataload from data source and store into dataset
      *
-     * @NoAdminRequired
      * @param int $dataloadId
      * @return DataResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function execute(int $dataloadId): DataResponse
     {
         return new DataResponse($this->DataloadService->execute($dataloadId));
@@ -135,7 +136,6 @@ class DataloadController extends Controller
     /**
      * update data from input form
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
@@ -144,6 +144,7 @@ class DataloadController extends Controller
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function updateData(int $reportId, $dimension1, $dimension2, $value, bool $isDataset)
     {
         $result = $this->DataloadService->updateData($reportId, $dimension1, $dimension2, $value, $isDataset);
@@ -157,13 +158,13 @@ class DataloadController extends Controller
     /**
      * delete data from input form
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      */
+    #[NoAdminRequired]
     public function deleteData(int $reportId, $dimension1, $dimension2, bool $isDataset)
     {
         $result = $this->DataloadService->deleteData($reportId, $dimension1, $dimension2, $isDataset);
@@ -177,13 +178,13 @@ class DataloadController extends Controller
     /**
      * Simulate delete data from input form
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $dimension1
      * @param $dimension2
      * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      */
+    #[NoAdminRequired]
     public function deleteDataSimulate(int $reportId, $dimension1, $dimension2, bool $isDataset)
     {
         $result = $this->DataloadService->deleteDataSimulate($reportId, $dimension1, $dimension2, $isDataset);
@@ -197,13 +198,13 @@ class DataloadController extends Controller
     /**
      * Import clipboard data
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $import
      * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function importClipboard(int $reportId, $import, bool $isDataset)
     {
         $result = $this->DataloadService->importClipboard($reportId, $import, $isDataset);
@@ -217,13 +218,13 @@ class DataloadController extends Controller
     /**
      * Import data into dataset from an internal or external file
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $path
      * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function importFile(int $reportId, $path, bool $isDataset)
     {
         $result = $this->DataloadService->importFile($reportId, $path, $isDataset);

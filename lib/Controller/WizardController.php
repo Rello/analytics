@@ -13,6 +13,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class WizardController extends Controller
 {
@@ -37,11 +38,11 @@ class WizardController extends Controller
 
 
     /**
-     * @NoAdminRequired
      *
      * @return DataResponse
      * @throws \OCP\PreConditionNotMetException
      */
+    #[NoAdminRequired]
     public function dismiss(): DataResponse
     {
         $user = $this->userSession->getUser();

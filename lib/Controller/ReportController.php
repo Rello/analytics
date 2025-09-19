@@ -14,6 +14,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 
 class ReportController extends Controller
 {
@@ -35,9 +37,9 @@ class ReportController extends Controller
     /**
      * get all reports
      *
-     * @NoAdminRequired
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function index()
     {
         return new DataResponse($this->ReportService->index());
@@ -46,7 +48,6 @@ class ReportController extends Controller
     /**
      * create new blank report
      *
-     * @NoAdminRequired
      * @param $name
      * @param $subheader
      * @param int $parent
@@ -60,6 +61,7 @@ class ReportController extends Controller
      * @param $value
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function create($name, $subheader, int $parent, int $type, int $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport = null)
     {
         return new DataResponse($this->ReportService->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value, $addReport));
@@ -68,7 +70,6 @@ class ReportController extends Controller
     /**
      * copy an existing report with the current navigation status
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $chartoptions
      * @param $dataoptions
@@ -77,6 +78,7 @@ class ReportController extends Controller
      * @return DataResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
         return new DataResponse($this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions));
@@ -85,10 +87,10 @@ class ReportController extends Controller
     /**
      * create new report from file
      *
-     * @NoAdminRequired
      * @param string $file
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function createFromDataFile($file = '')
     {
         return new DataResponse($this->ReportService->createFromDataFile($file));
@@ -97,10 +99,10 @@ class ReportController extends Controller
     /**
      * get own report details
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @return DataResponse
      */
+	#[NoAdminRequired]
 	public function read(int $reportId)
 	{
 		return new DataResponse($this->ReportService->read($reportId, false));
@@ -108,10 +110,10 @@ class ReportController extends Controller
     /**
      * Delete report and all depending objects
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function delete(int $reportId)
     {
         if ($this->ReportService->isOwn($reportId)) {
@@ -124,7 +126,6 @@ class ReportController extends Controller
     /**
      * get report details
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $name
      * @param $subheader
@@ -140,6 +141,7 @@ class ReportController extends Controller
      * @return DataResponse
      * @throws \OCP\DB\Exception
      */
+    #[NoAdminRequired]
     public function update(int $reportId, $name, $subheader, int $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1 = null, $dimension2 = null, $value = null)
     {
         return new DataResponse($this->ReportService->update($reportId, $name, $subheader, $parent, $link, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value));
@@ -148,7 +150,6 @@ class ReportController extends Controller
     /**
      * update report options
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $chartoptions
      * @param $dataoptions
@@ -157,6 +158,7 @@ class ReportController extends Controller
      * @return DataResponse
      * @throws Exception
      */
+    #[NoAdminRequired]
     public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
     {
         return new DataResponse($this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions));
@@ -165,11 +167,11 @@ class ReportController extends Controller
     /**
      * update report refresh details
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $refresh
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function updateRefresh(int $reportId, $refresh)
     {
         return new DataResponse($this->ReportService->updateRefresh($reportId, $refresh));
@@ -178,11 +180,11 @@ class ReportController extends Controller
     /**
      * update report group assignment (from drag & drop)
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param $groupId
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function updateGroup(int $reportId, $groupId)
     {
         return new DataResponse($this->ReportService->updateGroup($reportId, $groupId));
@@ -191,11 +193,11 @@ class ReportController extends Controller
     /**
      * rename report
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param string $name
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function rename(int $reportId, string $name)
     {
         return new DataResponse($this->ReportService->rename($reportId, $name));
@@ -204,9 +206,9 @@ class ReportController extends Controller
     /**
      * get own reports which are marked as favorites
      *
-     * @NoAdminRequired
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function getOwnFavoriteReports()
     {
         return new DataResponse($this->ReportService->getOwnFavoriteReports());
@@ -215,11 +217,11 @@ class ReportController extends Controller
     /**
      * set/remove the favorite flag for a report
      *
-     * @NoAdminRequired
      * @param int $reportId
      * @param string $favorite
      * @return DataResponse
      */
+    #[NoAdminRequired]
     public function setFavorite(int $reportId, string $favorite)
     {
         return new DataResponse($this->ReportService->setFavorite($reportId, $favorite));
@@ -228,10 +230,10 @@ class ReportController extends Controller
     /**
      * Export report
      *
-     * @NoCSRFRequired
-     * @NoAdminRequired
      * @param int $reportId
      */
+    #[NoCSRFRequired]
+    #[NoAdminRequired]
     public function export(int $reportId)
     {
         return $this->ReportService->export($reportId);
@@ -240,13 +242,13 @@ class ReportController extends Controller
     /**
      * Import report
      *
-     * @NoAdminRequired
      * @param string|null $path
      * @param string|null $raw
      * @return DataResponse
      * @throws \OCP\Files\NotFoundException
      * @throws \OCP\Files\NotPermittedException
      */
+    #[NoAdminRequired]
     public function import(?string $path = null, ?string $raw = null)
     {
         return new DataResponse($this->ReportService->import($path, $raw));

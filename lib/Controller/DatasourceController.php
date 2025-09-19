@@ -23,6 +23,7 @@ use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IAppConfig;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 
 class DatasourceController extends Controller {
 	private $logger;
@@ -81,10 +82,10 @@ class DatasourceController extends Controller {
 	/**
 	 * get all data source ids + names
 	 *
-	 * @NoAdminRequired
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
+	#[NoAdminRequired]
 	public function index(?int $datasourceType = null) {
 		$result = [];
 		$datasourceIndex = $this->getDatasources($datasourceType);
@@ -106,10 +107,10 @@ class DatasourceController extends Controller {
 	/**
 	 * get one data source
 	 *
-	 * @NoAdminRequired
 	 * @param int|null $datasourceType
 	 * @return array
 	 */
+	#[NoAdminRequired]
 	public function indexFiltered(?int $datasourceType = null) {
 		return $this->index($datasourceType);
 	}
@@ -117,9 +118,9 @@ class DatasourceController extends Controller {
 	/**
 	 * get all data source templates
 	 *
-	 * @NoAdminRequired
 	 * @return array
 	 */
+	#[NoAdminRequired]
 	public function getTemplates() {
 		$result = array();
 		foreach ($this->getDatasources() as $key => $class) {
@@ -131,11 +132,11 @@ class DatasourceController extends Controller {
 	/**
      * Get the data from a data source;
 	 *
-	 * @NoAdminRequired
 	 * @param int $datasourceId
 	 * @param $datasetMetadata
 	 * @return array|NotFoundException
 	 */
+	#[NoAdminRequired]
 	public function read(int $datasourceId, $datasetMetadata) {
 		if (!$this->getDatasources()[$datasourceId]) {
 			$result['error'] = $this->l10n->t('Data source not available anymore');
@@ -267,11 +268,11 @@ class DatasourceController extends Controller {
 	/**
 	 * apply the fiven filters to the hole result set
 	 *
-	 * @NoAdminRequired
 	 * @param $data
 	 * @param $filter
 	 * @return array
 	 */
+	#[NoAdminRequired]
 	private function filterData($data, $filter) {
 		$options = json_decode($filter, true);
 		if (isset($options['filter'])) {

@@ -25,6 +25,10 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 use OCA\Text\Event\LoadEditor;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\Attribute\UseSession;
 
 /**
  * Controller class for main page.
@@ -78,10 +82,8 @@ class PageController extends Controller
 		$this->appManager = $appManager;
     }
 
-    /**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function main()
     {
         $params = array();
@@ -127,55 +129,49 @@ class PageController extends Controller
 		return new TemplateResponse($this->appName, 'main', $params);
     }
 
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function report()
 	{
 		return $this->main();
 	}
 
-	/**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function dataset()
     {
 		return $this->main();
     }
 
-    /**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function panorama()
     {
         return $this->main();
     }
 
     /**
-     * @PublicPage
-     * @NoCSRFRequired
-     * @UseSession
      *
      * @param string $token
      * @param string $password
      * @return RedirectResponse|TemplateResponse
      */
+    #[PublicPage]
+    #[NoCSRFRequired]
+    #[UseSession]
     public function authenticatePassword(string $token, string $password = '')
     {
         return $this->indexPublic($token, $password);
     }
 
     /**
-     * @PublicPage
-     * @UseSession
-     * @NoCSRFRequired
      * @param $token
      * @param string $password
      * @return TemplateResponse|RedirectResponse
      */
+    #[PublicPage]
+    #[UseSession]
+    #[NoCSRFRequired]
     public function indexPublic($token, string $password = '')
     {
         $share = $this->ShareService->getReportByToken($token);
@@ -206,13 +202,13 @@ class PageController extends Controller
     }
 
     /**
-     * @PublicPage
-     * @UseSession
-     * @NoCSRFRequired
      * @param $token
      * @param string $password
      * @return TemplateResponse|RedirectResponse
      */
+    #[PublicPage]
+    #[UseSession]
+    #[NoCSRFRequired]
     public function indexPublicMin($token, string $password = '')
     {
         $share = $this->ShareService->getReportByToken($token);
