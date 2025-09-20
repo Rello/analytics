@@ -111,56 +111,99 @@ OCA.Analytics.Dashboard = {
 
     getData: function (datasetId) {
         const url = OC.generateUrl('apps/analytics/data/' + datasetId, true);
+        const cacheKey = `analytics-report-${datasetId}`;
+
+        // Retrieve cached data and version
+        let cachedData = null;
+        let cachedVersion = null;
+        try {
+            const cachedEntry = localStorage.getItem(cacheKey);
+            if (cachedEntry) {
+                const parsed = JSON.parse(cachedEntry);
+                cachedData = parsed.data;
+                cachedVersion = parsed.version;
+            }
+        } catch (e) {
+            localStorage.removeItem(cacheKey);
+        }
 
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
 
+        // if data for that report is cached locally, send the version to the backend
+        if (cachedVersion) {
+            xhr.setRequestHeader('If-None-Match', cachedVersion );
+        }
+
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                let jsondata = JSON.parse(xhr.response);
-                if (jsondata['status'] !== 'nodata' && jsondata['data'].length > 20) {
-                    jsondata['data'].slice(jsondata['data'].length - 20); //just the last 20 records for the micro charts
-                }
-                try {
-                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    let parsedChartOptions = JSON.parse(jsondata.options.chartoptions.replace(/xAxes/g, 'x'));
-                    jsondata.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
-                } catch (e) {
-                    jsondata.options.chartoptions = {};
-                }
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.response);
 
-                try {
-                    let parsedDataOptions = JSON.parse(jsondata.options.dataoptions);
-                    jsondata.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
-                } catch (e) {
-                    jsondata.options.dataoptions = {};
+                    // derive new version from ETag
+                    const newVersion = xhr.getResponseHeader('ETag') || null;
+                    // data needs to be marked as cacheable
+                    const cacheable = xhr.getResponseHeader('X-Analytics-Cacheable') === 'true';
+
+                    if (cacheable && newVersion) {
+                        localStorage.setItem(cacheKey, JSON.stringify({ data, version: newVersion }));
+                    }
+
+                    if (data['status'] !== 'nodata' && data['data'].length > 20) {
+                        data['data'].slice(data['data'].length - 20); //just the last 20 records for the micro charts
+                    }
+
+                    data = OCA.Analytics.Dashboard.processReceivedData(data);
+                    OCA.Analytics.Dashboard.createWidgetContent(data);
                 }
-
-                try {
-                    let parsedFilterOptions = JSON.parse(jsondata.options.filteroptions);
-                    jsondata.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
-                } catch (e) {
-                    jsondata.options.filteroptions = {};
+                else if (xhr.status === 304 && cachedData) {
+                    let data = OCA.Analytics.Dashboard.processReceivedData(cachedData);
+                    OCA.Analytics.Dashboard.createWidgetContent(data);
                 }
-
-                try {
-                    let parsedTableOptions = JSON.parse(jsondata.options.tableoptions);
-                    jsondata.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
-                } catch (e) {
-                    jsondata.options.tableoptions = {};
-                }
-
-                // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-                jsondata = OCA.Analytics.Visualization.sortDates(jsondata);
-                jsondata = OCA.Analytics.Visualization.applyTimeAggregation(jsondata);
-                jsondata = OCA.Analytics.Visualization.applyTopN(jsondata);
-
-                OCA.Analytics.Dashboard.createWidgetContent(jsondata);
             }
         };
         xhr.send();
+    },
+
+    processReceivedData: function (data) {
+        // Do something with the data here
+        try {
+            // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
+            let parsedChartOptions = JSON.parse(data.options.chartoptions.replace(/xAxes/g, 'x'));
+            data.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
+        } catch (e) {
+            data.options.chartoptions = {};
+        }
+
+        try {
+            let parsedDataOptions = JSON.parse(data.options.dataoptions);
+            data.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
+        } catch (e) {
+            data.options.dataoptions = {};
+        }
+
+        try {
+            let parsedFilterOptions = JSON.parse(data.options.filteroptions);
+            data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
+        } catch (e) {
+            data.options.filteroptions = {};
+        }
+
+        try {
+            let parsedTableOptions = JSON.parse(data.options.tableoptions);
+            data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
+        } catch (e) {
+            data.options.tableoptions = {};
+        }
+
+        // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+        data = OCA.Analytics.Visualization.sortDates(data);
+        data = OCA.Analytics.Visualization.applyTimeAggregation(data);
+        data = OCA.Analytics.Visualization.applyTopN(data);
+
+        return data;
     },
 
     createWidgetContent: function (jsondata) {

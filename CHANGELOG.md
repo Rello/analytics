@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.2 - 2025-09-19
+### Fixed
+- Cache not use for dashboard
+
 ## 6.0.1 - 2025-09-19
 ### Fixed
 - NC32 compatibility
