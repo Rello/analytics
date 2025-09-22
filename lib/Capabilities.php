@@ -30,10 +30,10 @@ class Capabilities implements ICapability {
 					'context-menu' => [
 						[
 							'name' => $this->l10n->t('Visualize data in Analytics'),
-							'url' => '/ocs/v2.php/apps/analytics/createFromDataFile?fileId={fileId}',
+							'url' => '/ocs/v2.php/apps/analytics/createFromDataFile',
 							'method' => 'POST',
 							'mimetype_filters' => 'text/csv',
-							'bodyParams' => [],
+							'params' => ['fileId' => '{fileId}'],
 							'icon' => '/apps/analytics/img/app.svg'
 						],
 					],
