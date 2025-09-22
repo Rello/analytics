@@ -190,6 +190,7 @@
     "New data has been added to dataset {report} via data load" : "Cuireadh sonraí nua le tacar sonraí {report} trí ualach sonraí",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Anailísíocht</strong>: Cuireadh sonraí nua le tuarascáil",
     "<strong>Analytics</strong>: New reports" : "<strong>Anailísíocht</strong>: Tuarascálacha nua",
+    "Visualize data in Analytics" : "Amharcléiriú sonraí in Analytics",
     "Total" : "Iomlán",
     "External" : "Seachtrach",
     "External URL" : "URL seachtrach",
