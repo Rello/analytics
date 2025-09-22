@@ -190,6 +190,7 @@
     "New data has been added to dataset {report} via data load" : "新數據已透過數據加載添加到數據集 {report}。",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>分析</strong>：新數據已添加到報告中",
     "<strong>Analytics</strong>: New reports" : "<strong>分析</strong>：新報告",
+    "Visualize data in Analytics" : "在 Analytics 中視覺化資料",
     "Total" : "總計",
     "External" : "外部",
     "External URL" : "外部 URL",
