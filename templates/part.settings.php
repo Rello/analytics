@@ -9,14 +9,6 @@
 ?>
 
 <div id="app-settings">
-    <div id="app-settings-header">
-        <button name="app settings" id="appSettingsButton"
-                class="settings-button"
-                data-apps-slide-toggle="#app-settings-content">
-            <?php p($l->t('Settings')); ?>
-        </button>
-    </div>
-
     <div id="app-settings-content" style="display: none;">
         <ul id="analytics-settings">
             <li class="analytics-settings-item icon-external">

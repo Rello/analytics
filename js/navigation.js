@@ -138,6 +138,7 @@ OCA.Analytics.Navigation = {
 
         nav.appendChild(OCA.Analytics.Navigation.buildNewGroupPlaceholder());
         nav.appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
+        nav.appendChild(OCA.Analytics.Navigation.buildSettingsButton()); // second pinned
         // no secondary pinned buttons
         OCA.Analytics.Navigation.restoreOpenState();
     },
@@ -158,6 +159,24 @@ OCA.Analytics.Navigation = {
         navigationEntrydiv.appendChild(OCA.Analytics.Navigation.buildNewMenu());
         return li;
     },
+
+    buildSettingsButton: function () {
+        let li = document.createElement('li');
+        li.classList.add('pinned', 'second-pinned');
+        let navigationEntrydiv = document.createElement('div');
+        navigationEntrydiv.classList.add('app-navigation-entry');
+        let a = document.createElement('a');
+        a.classList.add('icon-settings', 'svg');
+        a.id = 'settingsButton';
+        a.addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);
+        a.innerText = t('analytics', 'Settings');
+
+        li.appendChild(navigationEntrydiv);
+        navigationEntrydiv.appendChild(a);
+        navigationEntrydiv.appendChild(OCA.Analytics.Navigation.buildNewMenu());
+        return li;
+    },
+
 
     buildNewMenu: function () {
         let menu = document.importNode(document.getElementById('templateNewMenu').content, true);
@@ -809,7 +828,8 @@ OCA.Analytics.Navigation = {
     },
 
     handleSettingsButton: function () {
-        document.getElementById('app-settings').classList.toggle('open');
+        const appSettingsContent = document.getElementById('app-settings-content');
+        appSettingsContent.style.display = appSettingsContent.style.display === 'none' ? 'block' : 'none';
     },
 
     addNavigationItem: function (item) {
