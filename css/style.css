@@ -667,6 +667,11 @@ div.dt-container .dt-paging .dt-paging-button {
     filter: var(--background-invert-if-dark);
 }
 
+.icon-analytics-settings {
+    background-image: url(../img/settings.svg);
+    filter: var(--background-invert-if-dark);
+}
+
 .icon-analytics-charts-wizard {
     opacity: 0.5;
     background-size: 35px;

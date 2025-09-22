@@ -166,7 +166,7 @@ OCA.Analytics.Navigation = {
         let navigationEntrydiv = document.createElement('div');
         navigationEntrydiv.classList.add('app-navigation-entry');
         let a = document.createElement('a');
-        a.classList.add('icon-settings', 'svg');
+        a.classList.add('icon-analytics-settings');
         a.id = 'settingsButton';
         a.addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);
         a.innerText = t('analytics', 'Settings');
