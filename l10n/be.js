@@ -53,6 +53,8 @@ OC.L10N.register(
     "Authentication" : "Аўтэнтыфікацыя",
     "Issues" : "Праблемы",
     "Limit" : "Ліміт",
+    "Personal access token" : "Асабісты токен доступу",
+    "Local" : "Лакальна",
     "File" : "Файл",
     "No data" : "Няма даных",
     "copy" : "копія",
