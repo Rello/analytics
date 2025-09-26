@@ -62,7 +62,7 @@ OC.L10N.register(
     "Export" : "Извези",
     "Mode" : "Мод",
     "Option" : "Опции",
-    "Remove filter" : "Острани филтер",
+    "Remove filter" : "Отстрани филтер",
     "Description" : "Опис",
     "Import" : "Увези",
     "Selection" : "Селектирање",
