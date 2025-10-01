@@ -74,6 +74,7 @@ OC.L10N.register(
     "Update" : "Абнавіць",
     "Export" : "Экспарт",
     "Remove filter" : "Выдаліць фільтр",
+    "Nextcloud Assistant" : "Памочнік Nextcloud",
     "Description" : "Апісанне",
     "Import" : "Імпарт",
     "From file" : "З файла",
