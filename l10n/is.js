@@ -45,6 +45,7 @@ OC.L10N.register(
     "Authentication" : "Auðkenning",
     "Releases" : "Útgáfur",
     "Issues" : "Vandamál",
+    "Limit" : "Takmörk",
     "Local" : "Staðvært",
     "Announcements" : "Tilkynningar",
     "copy" : "afrita",

@@ -160,7 +160,7 @@ OC.L10N.register(
     "Sales and revenue of the last years." : "过去几年的销售额和收入。",
     "New in" : "该版本的新变化",
     "View changelog" : "查看更新日志",
-    "OK" : "好",
+    "OK" : "确定",
     "Cancel" : "取消",
     "Show in Analytics" : "在 Analytics 中显示",
     "Search" : "搜索",

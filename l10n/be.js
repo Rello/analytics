@@ -70,6 +70,7 @@ OC.L10N.register(
     "Name" : "Назва",
     "Column" : "Слупок",
     "Display" : "Дысплей",
+    "Table" : "Табліца",
     "Open documentation" : "Адкрыць дакументацыю",
     "Update" : "Абнавіць",
     "Export" : "Экспарт",
