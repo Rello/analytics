@@ -13,15 +13,23 @@ use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\OCSController;
+use Psr\Log\LoggerInterface;
 use OCP\IRequest;
 
 class ApiController extends OCSController {
 	private ReportService $reportService;
+	private $logger;
 
-	public function __construct(string $appName, IRequest $request, ReportService $reportService) {
+	public function __construct(string          $appName,
+								IRequest        $request,
+								LoggerInterface $logger,
+								ReportService   $reportService
+	) {
 		parent::__construct($appName, $request);
 		$this->reportService = $reportService;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -35,25 +43,29 @@ class ApiController extends OCSController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/createFromDataFile')]
-	public function createFromDataFile(int $fileId): JSONResponse {
-		$reportId = $this->reportService->createFromDataFile($fileId);
-		$url = '/apps/analytics/r/' . $reportId;
-		return new JSONResponse([
-			'version' => 0.1,
-			'root' => [
-				'orientation' => 'vertical',
-				'rows' => [
-					[
-						'children' => [
-							[
-								'element' => 'URL',
-								'text' => 'Analytics report created',
-								'url' => $url,
+	public function createFromDataFile($fileId): JSONResponse {
+		if ($fileId) {
+			$reportId = $this->reportService->createFromDataFile($fileId);
+			$url = '/apps/analytics/r/' . $reportId;
+			return new JSONResponse([
+				'version' => 0.1,
+				'root' => [
+					'orientation' => 'vertical',
+					'rows' => [
+						[
+							'children' => [
+								[
+									'element' => 'URL',
+									'text' => 'Analytics report created',
+									'url' => $url,
+								],
 							],
 						],
 					],
 				],
-			],
-		]);
+			]);
+		} else {
+			return new JSONResponse(['error' => 'fileId missing'], HTTP::STATUS_BAD_REQUEST);
+		}
 	}
 }
