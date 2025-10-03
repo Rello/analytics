@@ -25,10 +25,11 @@ class Capabilities implements ICapability {
 	 */
 	public function getCapabilities() {
 		return [
-			'declarativeui' => [
+			'client_integration' => [
 				Application::APP_ID => [
 					'context-menu' => [
 						[
+							'version' => '0.1',
 							'name' => $this->l10n->t('Visualize data in Analytics'),
 							'url' => '/ocs/v2.php/apps/analytics/createFromDataFile',
 							'method' => 'POST',
