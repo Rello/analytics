@@ -192,6 +192,7 @@ OC.L10N.register(
     "New data has been added to dataset {report} via data load" : "Maʼlumotlar toʻplamiga yangi maʼlumotlar qoʻshildi  {report} ma`lumotlarni yuklash orqali",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analitika</strong>: Hisobotga yangi ma'lumotlar qo'shildi",
     "<strong>Analytics</strong>: New reports" : "<strong>Analitika</strong>: Yangi hisobotlar",
+    "Visualize data in Analytics" : "Analytics-da ma'lumotlarni vizualizatsiya qilish",
     "Total" : "Jami",
     "External" : "Tashqi",
     "External URL" : "Tashqi URL",
