@@ -190,6 +190,7 @@
     "New data has been added to dataset {report} via data load" : "{report} veri kümesine veri yüklemesi ile yeni veriler eklendi.",
     "<strong>Analytics</strong>: New data was added to a report" : "<strong>Analytics</strong>: Rapora yeni veriler eklendi",
     "<strong>Analytics</strong>: New reports" : "<strong>Analytics</strong>: Yeni raporlar",
+    "Visualize data in Analytics" : "Verilerinizi Analytics içinde görselleştirin",
     "Total" : "Toplam",
     "External" : "Dış",
     "External URL" : "Dış adres",
