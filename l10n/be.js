@@ -74,6 +74,7 @@ OC.L10N.register(
     "Open documentation" : "Адкрыць дакументацыю",
     "Update" : "Абнавіць",
     "Export" : "Экспарт",
+    "Option" : "Option",
     "Remove filter" : "Выдаліць фільтр",
     "Nextcloud Assistant" : "Памочнік Nextcloud",
     "Description" : "Апісанне",
