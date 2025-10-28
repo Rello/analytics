@@ -58,7 +58,7 @@ OC.L10N.register(
     "Top N" : "Top N",
     "none" : "Keine",
     "Flop N" : "Flop N",
-    "Results can be limited to Top or Flop N. Remaining values may be summarized as \"others\"." : "Die Ergebnisse können auf Top oder Flop N beschränkt werden. Die übrigen Werte können als „sonstige“ zusammengefasst werden.",
+    "Results can be limited to Top or Flop N. Remaining values may be summarized as \"others\"." : "Die Ergebnisse können auf Top oder Flop N beschränkt werden. Die übrigen Werte können als \"sonstige\" zusammengefasst werden.",
     "Time aggregation" : "Zeitliche Aggregation",
     "summation" : "Summierung",
     "average" : "Durchschnitt",
