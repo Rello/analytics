@@ -42,6 +42,7 @@ OC.L10N.register(
     "No" : "Не",
     "More options" : "Повеќе опции ",
     "Authentication" : "Автентикација",
+    "Limit" : "Ограничување",
     "Local" : "Локално",
     "File" : "Датотека",
     "Announcements" : "Објави",
