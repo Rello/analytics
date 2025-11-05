@@ -29,7 +29,7 @@ OCA.Analytics.Viewer = {
 
     registerFileActions: function () {
         OCA.Analytics.Viewer.registerNewFrontendAction();
-        OCA.Analytics.Viewer.registerLegacyFileActions();
+        //OCA.Analytics.Viewer.registerLegacyFileActions();
     },
 
     registerLegacyFileActions: function () {
