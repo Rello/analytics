@@ -12,7 +12,7 @@ use OCA\Analytics\Service\ReportService;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\OCSController;
 use Psr\Log\LoggerInterface;
@@ -37,17 +37,17 @@ class ApiController extends OCSController {
 	 *
 	 * @param int $fileId ID of the file to import
 	 *
-	 * @return JSONResponse HTTP 200 with a link to the created report
+	 * @return DataResponse HTTP 200 with a link to the created report
 	 *
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/createFromDataFile')]
-	public function createFromDataFile($fileId): JSONResponse {
+	public function createFromDataFile($fileId): DataResponse {
 		if ($fileId) {
 			$reportId = $this->reportService->createFromDataFile($fileId);
 			$url = '/apps/analytics/r/' . $reportId;
-			return new JSONResponse([
+			return new DataResponse([
 				'version' => '0.1',
 				'root' => [
 					'orientation' => 'vertical',
@@ -65,7 +65,7 @@ class ApiController extends OCSController {
 				],
 			]);
 		} else {
-			return new JSONResponse(['error' => 'fileId missing'], HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse(['error' => 'fileId missing'], HTTP::STATUS_BAD_REQUEST);
 		}
 	}
 }
