@@ -16,6 +16,7 @@ OC.L10N.register(
     "Delete" : "Выдаліць",
     "Done" : "Гатова",
     "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Выдаленне слупкоў прывядзе да аб'яднання ключавых паказчыкаў.<br>Гэта датычыцца дыяграмы і табліцы",
+    "Filter" : "Фільтр",
     "Default" : "Прадвызначаныя",
     "Ascending" : "Па ўзрастанні",
     "Descending" : "Па ўбыванні",
