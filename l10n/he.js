@@ -18,6 +18,7 @@ OC.L10N.register(
     "Done" : "הסתיים",
     "Column selection" : "בחירת עמודות",
     "Filter" : "מסנן",
+    "Sort order" : "סידור",
     "Default" : "ברירת מחדל",
     "Bar" : "בר",
     "Favorites" : "מועדפים",
