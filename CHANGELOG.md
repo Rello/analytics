@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- php 8.5 compatibility fix
+
 ## 6.0.2 - 2025-09-19
 ### Fixed
 - Cache not use for dashboard
