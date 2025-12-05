@@ -145,9 +145,10 @@ class VariableService {
 					$parsed = $this->parseFilter($value['value']);
 					if (!$parsed) continue;
 					// overwrite the filter option. Required for quarters => between
-					$filteroptions['filter'][$key]['option'] = $parsed['option'];
-
-
+					if ($parsed['option'] === 'BETWEEN') {
+						$filteroptions['filter'][$key]['option'] = $parsed['option'];
+					}
+					
 					// if a parser is selected in the chart options, it should also be valid here automatically
 					if (isset($reportMetadata['chartoptions'])) {
 						$chartOptions = json_decode($reportMetadata['chartoptions'], true);
