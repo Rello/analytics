@@ -384,7 +384,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
-                document.querySelector('[data-dataload-id="' + dataloadId + '"]').innerHTML = document.getElementById('dataloadName').value;
+                document.querySelector('[data-dataload-id="' + dataloadId + '"]').textContent = document.getElementById('dataloadName').value;
             });
     },
 
@@ -615,12 +615,18 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
             .then(data => {
                 document.getElementById('sidebarDatasetStatusRecords').innerText = parseInt(data['data']['count']).toLocaleString();
 
-                let text = '';
-                for (let report of data['reports']) {
-                    text = text + '- ' + report['name'] + '<br>';
+                const statusContainer = document.getElementById('sidebarDatasetStatusReports');
+                statusContainer.innerHTML = '';
+
+                if (data['reports'].length === 0) {
+                    statusContainer.textContent = t('analytics', 'This dataset is not used!');
+                } else {
+                    for (let report of data['reports']) {
+                        const item = document.createElement('div');
+                        item.textContent = '- ' + report['name'];
+                        statusContainer.appendChild(item);
+                    }
                 }
-                if (text === '') text = t('analytics', 'This dataset is not used!');
-                document.getElementById('sidebarDatasetStatusReports').innerHTML = text;
             });
     },
 

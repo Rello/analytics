@@ -100,6 +100,8 @@ class DataloadService
      */
     public function update(int $dataloadId, $name, $option, $schedule)
     {
+        $name = htmlspecialchars($name, ENT_NOQUOTES, 'UTF-8');
+
         $array = json_decode($option, true);
         foreach ($array as $key => $value) {
             $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');

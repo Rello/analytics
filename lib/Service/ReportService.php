@@ -185,6 +185,9 @@ class ReportService {
 		$value,
 		$addReport = null
 	): int {
+		$name = htmlspecialchars($name, ENT_NOQUOTES, 'UTF-8');
+		$subheader = htmlspecialchars($subheader, ENT_NOQUOTES, 'UTF-8');
+
 		$array = json_decode($link, true);
 		if (is_array($array)) {
 			foreach ($array as $key => $value) {
@@ -222,6 +225,8 @@ class ReportService {
 	public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions) {
 
 		$template = $this->ReportMapper->readOwn($reportId);
+		$template['name'] = htmlspecialchars($template['name'], ENT_NOQUOTES, 'UTF-8');
+		$template['subheader'] = htmlspecialchars($template['subheader'], ENT_NOQUOTES, 'UTF-8');
 		$newId = $this->ReportMapper->create(// TRANSLATORS Noun
 			$template['name'] . ' - ' . $this->l10n->t('copy'), $template['subheader'], $template['parent'], $template['type'], $template['dataset'], $template['link'], $template['visualization'], $template['chart'], $template['dimension1'], $template['dimension2'], $template['value']);
 		$this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
@@ -263,12 +268,12 @@ class ReportService {
 				}
 			}
 
-			$name = explode('.', end(explode('/', $file)))[0];
-			$subheader = $file;
-			$parent = 0;
-			$dataset = 0;
-			$type = DatasourceController::DATASET_TYPE_LOCAL_CSV;
-			$link = $file;
+				$name = htmlspecialchars(explode('.', end(explode('/', $file)))[0], ENT_NOQUOTES, 'UTF-8');
+				$subheader = htmlspecialchars($file, ENT_NOQUOTES, 'UTF-8');
+				$parent = 0;
+				$dataset = 0;
+				$type = DatasourceController::DATASET_TYPE_LOCAL_CSV;
+				$link = $file;
 			$visualization = 'table';
 			$chart = 'line';
 			$reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, '', '', '');
@@ -308,6 +313,9 @@ class ReportService {
 			$dimension2 = null,
 			$value = null
 	) {
+		$name = htmlspecialchars($name, ENT_NOQUOTES, 'UTF-8');
+		$subheader = htmlspecialchars($subheader, ENT_NOQUOTES, 'UTF-8');
+
 		$array = json_decode($options, true);
 		foreach ($array as $key => $tmpValue) {
 			$array[$key] = htmlspecialchars($tmpValue, ENT_NOQUOTES, 'UTF-8');
@@ -555,6 +563,7 @@ class ReportService {
 	 */
 	public function rename(int $reportId, string $name) {
 		if ($this->isOwn($reportId)) {
+			$name = htmlspecialchars($name, ENT_NOQUOTES, 'UTF-8');
 			return $this->ReportMapper->updateName($reportId, $name);
 		}
 		return false;

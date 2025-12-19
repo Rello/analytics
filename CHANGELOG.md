@@ -1,6 +1,10 @@
 # Changelog
 
+### Added
+- Documented current security review findings and recommendations
+
 ### Fixed
+- Escape stored names when rendering and persisting to prevent injection vectors in UI lists
 - php 8.5 compatibility fix
 
 ## 6.0.2 - 2025-09-19
