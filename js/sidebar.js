@@ -18,6 +18,10 @@ OCA.Analytics.Sidebar = {
         if (navigationItem.dataset.id === undefined) navigationItem = evt.target.closest('div');
         let datasetId = navigationItem.dataset.id;
         let datasetType = navigationItem.dataset.type;
+        OCA.Analytics.currentDataset = datasetId;
+        OCA.Analytics.currentDatasetType = datasetType;
+        OCA.Analytics.isDataset = navigationItem.dataset.item_type === 'dataset';
+        OCA.Analytics.isReport = navigationItem.dataset.item_type === 'report';
         let appsidebar = document.getElementById('app-sidebar');
 
         if (appsidebar.dataset.id === datasetId) {
@@ -158,7 +162,7 @@ OCA.Analytics.Sidebar.Report = {
     metadataChanged: false,
 
     tabContainerReport: function () {
-        const reportId = document.getElementById('app-sidebar').dataset.id;
+        const reportId = OCA.Analytics.currentDataset;
         OCA.Analytics.Sidebar.Report.metadataChanged = false;
 
         OCA.Analytics.Sidebar.resetView();
@@ -291,7 +295,7 @@ OCA.Analytics.Sidebar.Report = {
     handleDeleteButton: function (evt) {
         let id = evt.target.parentNode.dataset.id;
         if (id === undefined) id = evt.target.dataset.id;
-        if (id === undefined) id = document.getElementById('app-sidebar').dataset.id;
+        if (id === undefined) id = OCA.Analytics.currentDataset;
 
         OCA.Analytics.Notification.confirm(
             t('analytics', 'Delete'),
@@ -620,7 +624,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     update: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('sidebarReportUpdateButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -730,7 +734,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     export: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
     },
 
@@ -916,7 +920,7 @@ OCA.Analytics.Sidebar.Data = {
 OCA.Analytics.Sidebar.Backend = {
 
     updateData: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('updateDataButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -949,7 +953,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     deleteDataSimulate: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const objectId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('deleteDataButton');
         //button.classList.add('loading');
         //button.disabled = true;
@@ -959,7 +963,7 @@ OCA.Analytics.Sidebar.Backend = {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
-                reportId: reportId,
+                objectId: objectId,
                 dimension1: document.getElementById('DataDimension1').value,
                 dimension2: document.getElementById('DataDimension2').value,
                 isDataset: OCA.Analytics.isDataset,
@@ -979,7 +983,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     deleteData: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('deleteDataButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -1006,7 +1010,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     importCsvData: function () {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('importDataClipboardButton');
         button.classList.add('loading');
         button.disabled = true;
@@ -1043,7 +1047,7 @@ OCA.Analytics.Sidebar.Backend = {
     },
 
     importFileData: function (path) {
-        const reportId = parseInt(document.getElementById('app-sidebar').dataset.id);
+        const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('importDataFileButton');
         button.classList.add('loading');
         button.disabled = true;

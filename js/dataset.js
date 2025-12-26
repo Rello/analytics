@@ -48,6 +48,9 @@ Object.assign(OCA.Analytics.Dataset = {
         if (navigationItem.dataset.id === undefined) navigationItem = evt.target.closest('div');
         OCA.Analytics.currentDataset = navigationItem.dataset.id;
         OCA.Analytics.currentDatasetType = navigationItem.dataset.type;
+        OCA.Analytics.currentContentType = 'dataset';
+        OCA.Analytics.isDataset = true;
+        OCA.Analytics.isReport = false;
 
         OCA.Analytics.Dataset.constructTabs();
 
@@ -115,7 +118,7 @@ Object.assign(OCA.Analytics.Dataset = {
     },
 
     resetView: function () {
-        document.querySelector('.tabHeader.selected').classList.remove('selected');
+        document.querySelector('.tabHeader.selected')?.classList.remove('selected');
         let tabs = document.querySelectorAll('.datasetTabContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;

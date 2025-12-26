@@ -57,9 +57,15 @@ Object.assign(OCA.Analytics.Report, {
         OCA.Analytics.Wizard.show();
     },
 
-    handleNavigationClicked: function () {
+    handleNavigationClicked: function (evt) {
 
+        let navigationItem = evt.target;
+        if (navigationItem.dataset.id === undefined) navigationItem = evt.target.closest('div');
+        OCA.Analytics.currentDataset = navigationItem.dataset.id;
+        OCA.Analytics.currentDatasetType = navigationItem.dataset.type;
         OCA.Analytics.currentContentType = 'report';
+        OCA.Analytics.isDataset = false;
+        OCA.Analytics.isReport = true;
         OCA.Analytics.Visualization.showContentByType('loading');
 
         document.getElementById('filterVisualisation').innerHTML = '';
