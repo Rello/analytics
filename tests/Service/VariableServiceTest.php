@@ -125,32 +125,138 @@ class VariableServiceTest extends TestCase
         $this->assertNotSame('%last week%', $result);
     }
 
-    public function testReplaceFilterVariables()
+    /**
+     * @dataProvider replaceFilterVariablesProvider
+     */
+    public function testReplaceFilterVariables(array $filter, string $expectedOption, $expectedValue)
     {
         $report = [
             'filteroptions' => json_encode([
-                'filter' => [
-                    ['option' => 'GT', 'value' => '%current quarter%']
-                ]
+                'filter' => [$filter]
             ])
         ];
-
-        $ref = new \ReflectionMethod(VariableService::class, 'parseFilter');
-        $ref->setAccessible(true);
-        $parsed = $ref->invoke($this->service, '%current quarter%');
-
-        $start = date('Y-m-d H:m:s', $parsed['value'][0]);
-        $end = date('Y-m-d H:m:s', $parsed['value'][1]);
 
         $expected = [
             'filteroptions' => json_encode([
                 'filter' => [
-                    ['option' => 'BETWEEN', 'value' => [$start, $end]]
+                    ['option' => $expectedOption, 'value' => $expectedValue]
                 ]
             ])
         ];
 
         $result = $this->service->replaceFilterVariables($report);
         $this->assertSame($expected, $result);
+    }
+
+    public function replaceFilterVariablesProvider(): array
+    {
+        $defaultFormat = 'Y-m-d H:m:s';
+        $currentQuarterRange = self::expectedQuarterRange('current');
+        $last20DaysStart = self::expectedStartTimestamp('last', 'day', 20);
+        $nextWeekStart = self::expectedStartTimestamp('next', 'week', 1);
+        $todayStart = self::expectedStartTimestamp('current', 'day', 1);
+
+        return [
+            'current quarter overrides option' => [
+                ['option' => 'GT', 'value' => '%current quarter%'],
+                'BETWEEN',
+                [
+                    date($defaultFormat, $currentQuarterRange[0]),
+                    date($defaultFormat, $currentQuarterRange[1]),
+                ],
+            ],
+            'last 20 days trims and overrides option' => [
+                ['option' => 'lt', 'value' => '%last 20 days% '],
+                'GT',
+                date($defaultFormat, $last20DaysStart),
+            ],
+            'next week with custom format' => [
+                ['option' => 'EQ', 'value' => '%next week%(Y-m-d)'],
+                'GT',
+                date('Y-m-d', $nextWeekStart),
+            ],
+            'today with unix format' => [
+                ['option' => 'NEQ', 'value' => '%today%(X)'],
+                'GT',
+                date('U', $todayStart),
+            ],
+        ];
+    }
+
+    private static function expectedStartTimestamp(string $direction, string $unit, int $offset): int
+    {
+        if ($direction === 'last' || $direction === 'yester') {
+            $dir = '-';
+        } elseif ($direction === 'next') {
+            $dir = '+';
+        } else {
+            $dir = '+';
+            $offset = 0;
+        }
+
+        $timeString = $dir . $offset . ' ' . $unit;
+        $baseDate = strtotime($timeString);
+
+        if ($unit === 'day') {
+            $startString = 'today';
+        } elseif ($unit === 'month') {
+            $startString = 'first day of this month';
+        } elseif ($unit === 'year') {
+            $startString = 'first day of January';
+        } else {
+            $startString = 'first day of this ' . $unit;
+        }
+
+        return strtotime($startString, $baseDate);
+    }
+
+    private static function expectedQuarterRange(string $direction, int $offset = 1): array
+    {
+        $currentMonth = (int)date('n');
+        $currentYear = (int)date('Y');
+        $currentQuarter = (int)ceil($currentMonth / 3);
+
+        $targetQuarter = $currentQuarter;
+        $targetYear = $currentYear;
+
+        switch ($direction) {
+            case 'first':
+                $targetQuarter = 1;
+                break;
+            case 'second':
+                $targetQuarter = 2;
+                break;
+            case 'third':
+                $targetQuarter = 3;
+                break;
+            case 'fourth':
+                $targetQuarter = 4;
+                break;
+            case 'last':
+            case 'yester':
+                $targetQuarter = $currentQuarter - $offset;
+                while ($targetQuarter < 1) {
+                    $targetQuarter += 4;
+                    $targetYear -= 1;
+                }
+                break;
+            case 'next':
+                $targetQuarter = $currentQuarter + $offset;
+                while ($targetQuarter > 4) {
+                    $targetQuarter -= 4;
+                    $targetYear += 1;
+                }
+                break;
+            case 'current':
+            default:
+                break;
+        }
+
+        $firstMonthOfQuarter = (($targetQuarter - 1) * 3) + 1;
+        $startTS = strtotime("{$targetYear}-{$firstMonthOfQuarter}-01");
+        $lastMonthOfQuarter = $firstMonthOfQuarter + 2;
+        $endTS = strtotime("last day of {$targetYear}-{$lastMonthOfQuarter}-01 23:59:59");
+
+        return [$startTS, $endTS];
     }
 }
