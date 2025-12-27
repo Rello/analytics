@@ -166,8 +166,8 @@ class VariableServiceTest extends TestCase
                 ],
             ],
             'last 20 days trims and overrides option' => [
-                ['option' => 'lt', 'value' => '%last 20 days% '],
-                'GT',
+                ['option' => 'LT', 'value' => '%last 20 days% '],
+                'LT',
                 date($defaultFormat, $last20DaysStart),
             ],
             'next week with custom format' => [
