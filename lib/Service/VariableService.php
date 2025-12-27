@@ -144,8 +144,11 @@ class VariableService {
 					// get the parsed filter
 					$parsed = $this->parseFilter($value['value']);
 					if (!$parsed) continue;
-					// overwrite the filter option. Required for quarters => between
-					if ($parsed['option'] === 'BETWEEN') {
+
+					// $parsed['option'] is coming from the parser and returns always GT - or BETWEEN for quarters
+					// GT is best fit for most filters as most text variables return ranges
+					// if a user specifically chooses LT, it should be kept on purpose e.g. for deletion filters
+					if ($parsed['option'] === 'BETWEEN' || $filteroptions['filter'][$key]['option'] !== 'LT') {
 						$filteroptions['filter'][$key]['option'] = $parsed['option'];
 					}
 					

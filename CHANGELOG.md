@@ -3,7 +3,7 @@
 ### Fixed
 - php 8.5 compatibility fix
 - Nullpointer in DataloadController::importFile() #560 #555
-
+- Update filter option handling for BETWEEN case #559 @[joleaf](https://github.com/joleaf)
 
 ## 6.0.2 - 2025-09-19
 ### Fixed
