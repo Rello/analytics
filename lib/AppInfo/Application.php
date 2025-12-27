@@ -16,6 +16,7 @@ use OCA\Analytics\ShareReview\ShareReviewListener;
 use OCA\Analytics\Notification\Notifier;
 use OCA\Analytics\Search\SearchProvider;
 use OCA\Analytics\Listener\ReferenceListener;
+use OCA\Analytics\Listener\LoadAdditionalScripts;
 use OCA\Analytics\Reference\ReferenceProvider;
 use OCA\Analytics\Capabilities;
 use OCA\ShareReview\Sources\SourceEvent;
@@ -25,6 +26,7 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\User\Events\UserDeletedEvent;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use Psr\Container\ContainerInterface;
 use OCP\WorkflowEngine\Events\RegisterOperationsEvent;
@@ -45,7 +47,7 @@ class Application extends App implements IBootstrap {
 		$context->registerCapability(Capabilities::class);
 
 		// file actions are not working at the moment
-		// $context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
+		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScripts::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(RegisterOperationsEvent::class, RegisterOperationsListener::class);
 		$context->registerEventListener(ContentProviderRegisterEvent::class, ContentProvider::class);
