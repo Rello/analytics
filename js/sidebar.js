@@ -738,7 +738,7 @@ OCA.Analytics.Sidebar.Report = {
         window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
     },
 
-    import: function (path, raw) {
+    import: function (path, raw, button = null) {
         if (typeof raw === 'number') raw = null; // file picker is returning some INT which is not helpful in the service
         let requestUrl = OC.generateUrl('apps/analytics/report/import/');
         let headers = new Headers();
@@ -746,7 +746,9 @@ OCA.Analytics.Sidebar.Report = {
         headers.append('OCS-APIREQUEST', 'true');
         headers.append('Content-Type', 'application/json');
 
-        fetch(requestUrl, {
+        OCA.Analytics.Sidebar.Backend.setButtonBusy(button, true);
+
+        return fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
@@ -757,6 +759,12 @@ OCA.Analytics.Sidebar.Report = {
             .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Navigation.init();
+            })
+            .catch(error => {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Import failed'));
+            })
+            .finally(() => {
+                OCA.Analytics.Sidebar.Backend.setButtonBusy(button, false);
             });
     },
 
@@ -919,6 +927,19 @@ OCA.Analytics.Sidebar.Data = {
 
 OCA.Analytics.Sidebar.Backend = {
 
+    setButtonBusy: function (button, isBusy) {
+        if (!button) {
+            return;
+        }
+        if (isBusy) {
+            button.classList.add('loading');
+            button.disabled = true;
+        } else {
+            button.classList.remove('loading');
+            button.disabled = false;
+        }
+    },
+
     updateData: function () {
         const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('updateDataButton');
@@ -1011,9 +1032,8 @@ OCA.Analytics.Sidebar.Backend = {
 
     importCsvData: function () {
         const reportId = parseInt(OCA.Analytics.currentDataset);
-        const button = document.getElementById('importDataClipboardButton');
-        button.classList.add('loading');
-        button.disabled = true;
+        const button = document.getElementById('importDataClipboardButtonGo');
+        OCA.Analytics.Sidebar.Backend.setButtonBusy(button, true);
 
         let requestUrl = OC.generateUrl('apps/analytics/data/importCSV');
         fetch(requestUrl, {
@@ -1027,8 +1047,6 @@ OCA.Analytics.Sidebar.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                button.classList.remove('loading');
-                button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isDataset) {
@@ -1041,16 +1059,16 @@ OCA.Analytics.Sidebar.Backend = {
             })
             .catch(error => {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
-                button.classList.remove('loading');
-                button.disabled = false;
+            })
+            .finally(() => {
+                OCA.Analytics.Sidebar.Backend.setButtonBusy(button, false);
             });
     },
 
     importFileData: function (path) {
         const reportId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('importDataFileButton');
-        button.classList.add('loading');
-        button.disabled = true;
+        OCA.Analytics.Sidebar.Backend.setButtonBusy(button, true);
 
         let requestUrl = OC.generateUrl('apps/analytics/data/importFile');
         fetch(requestUrl, {
@@ -1064,8 +1082,6 @@ OCA.Analytics.Sidebar.Backend = {
         })
             .then(response => response.json())
             .then(data => {
-                button.classList.remove('loading');
-                button.disabled = false;
                 if (data.error === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
                     if (!OCA.Analytics.isDataset) {
@@ -1078,8 +1094,9 @@ OCA.Analytics.Sidebar.Backend = {
             })
             .catch(error => {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
-                button.classList.remove('loading');
-                button.disabled = false;
+            })
+            .finally(() => {
+                OCA.Analytics.Sidebar.Backend.setButtonBusy(button, false);
             });
     },
 };
