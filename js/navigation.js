@@ -544,8 +544,7 @@ OCA.Analytics.Navigation = {
 
         // not shared
         if (data['isShare'] === undefined
-            || parseInt(data['isShare']) === OCA.Analytics.SHARE_TYPE_GROUP )
-        {
+            || parseInt(data['isShare']) === OCA.Analytics.SHARE_TYPE_GROUP) {
             unshareReport.parentElement.remove();
         }
 
@@ -624,7 +623,7 @@ OCA.Analytics.Navigation = {
             document.getElementById('analyticsDialogBtnGo').innerText = t('analytics', 'Save');
             const cancelBtn = document.getElementById('analyticsDialogBtnCancel');
             cancelBtn.innerText = t('analytics', 'Discard');
-            cancelBtn.addEventListener('click', callback, { once: true });
+            cancelBtn.addEventListener('click', callback, {once: true});
         } else {
             callback();
         }
@@ -815,7 +814,8 @@ OCA.Analytics.Navigation = {
         const fileInput = document.getElementById('importFile');
         const importButton = document.getElementById('importDatasetButton');
         fileInput.click();
-        fileInput.addEventListener('change', async () => {
+        fileInput.value = '';
+        fileInput.onchange = async () => {
             const file = fileInput.files[0];
             if (!file) {
                 return;
@@ -831,7 +831,7 @@ OCA.Analytics.Navigation = {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Import failed'));
                 OCA.Analytics.Sidebar.Backend.setButtonBusy(importButton, false);
             };
-        }, {once: true});
+        }, {once: true};
     },
 
     handleSettingsButton: function () {

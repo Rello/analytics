@@ -7,6 +7,7 @@
 - Extend filter variable replacement tests with multiple filter cases
 - Update filter option handling for BETWEEN case #559 @[joleaf](https://github.com/joleaf)
 - XSS protection
+- file import cause double reports #554
 
 ## 6.0.2 - 2025-09-19
 ### Fixed
