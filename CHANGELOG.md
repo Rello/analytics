@@ -2,6 +2,7 @@
 
 ### Fixed
 - php 8.5 compatibility fix
+- Prevent double submissions by showing busy indicators during report and data imports
 
 ## 6.0.2 - 2025-09-19
 ### Fixed

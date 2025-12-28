@@ -813,18 +813,25 @@ OCA.Analytics.Navigation = {
 
     handleImportButton: function () {
         const fileInput = document.getElementById('importFile');
+        const importButton = document.getElementById('importDatasetButton');
         fileInput.click();
         fileInput.addEventListener('change', async () => {
             const file = fileInput.files[0];
             if (!file) {
                 return;
             }
+            OCA.Analytics.Sidebar.Backend.setButtonBusy(importButton, true);
             const reader = new FileReader();
             reader.readAsText(file);
             reader.onload = async () => {
-                OCA.Analytics.Sidebar.Report.import(null, reader.result);
+                OCA.Analytics.Sidebar.Report.import(null, reader.result, importButton);
+                fileInput.value = '';
             };
-        })
+            reader.onerror = () => {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Import failed'));
+                OCA.Analytics.Sidebar.Backend.setButtonBusy(importButton, false);
+            };
+        }, {once: true});
     },
 
     handleSettingsButton: function () {
