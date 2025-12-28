@@ -62,6 +62,7 @@ OC.L10N.register(
     "1 min" : "1 min",
     "10 min" : "10 min",
     "30 min" : "30 min",
+    "More information …" : "Mai d’informacions…",
     "Name" : "Nom",
     "Saved Data" : "Donadas enregistradas",
     "Visualization" : "Visualizacion",

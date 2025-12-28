@@ -178,16 +178,16 @@ class DataloadController extends Controller
     /**
      * Simulate delete data from input form
      *
-     * @param int $reportId
+     * @param int $objectId
      * @param $dimension1
      * @param $dimension2
      * @param bool $isDataset
      * @return DataResponse|NotFoundResponse
      */
     #[NoAdminRequired]
-    public function deleteDataSimulate(int $reportId, $dimension1, $dimension2, bool $isDataset)
+    public function deleteDataSimulate(int $objectId, $dimension1, $dimension2, bool $isDataset)
     {
-        $result = $this->DataloadService->deleteDataSimulate($reportId, $dimension1, $dimension2, $isDataset);
+        $result = $this->DataloadService->deleteDataSimulate($objectId, $dimension1, $dimension2, $isDataset);
         if ($result) {
             return new DataResponse($result);
         } else {

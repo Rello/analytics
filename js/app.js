@@ -1144,4 +1144,276 @@ Object.assign(OCA.Analytics.Share = {
                 }
             });
     },
-})
+});
+
+OCA.Analytics.Threshold = OCA.Analytics.Threshold || {};
+Object.assign(OCA.Analytics.Threshold = {
+    draggedItem: null,
+
+    getThreholdList: function (reportId) {
+        let requestUrl = OC.generateUrl('apps/analytics/threshold/') + reportId;
+        fetch(requestUrl, {
+            method: 'GET',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data !== false) {
+                    document.getElementById('thresholdList').innerHTML = '';
+                    for (let threshold of data) {
+                        const li = OCA.Analytics.Threshold.buildThresholdRow(threshold);
+                        document.getElementById('thresholdList').appendChild(li);
+                    }
+                }
+            });
+    },
+
+    handleThresholdHint: function () {
+        let guidance = t('analytics', 'Text variables can be used to evaluate a date value.<br>For example %today% can be used to highlight the data of today.<br>Operator and value are not relevant in this case.');
+        let text = '%today%<br>' +
+            '%next day%<br>' +
+            '%next 2 days% (in 2 days)';
+        OCA.Analytics.Notification.info(t('analytics', 'Text variables'), text, guidance);
+    },
+
+    handleThresholdCreateButton: function () {
+        OCA.Analytics.Threshold.createThreashold();
+    },
+
+    handleThresholdCreateNewButton: function () {
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
+        let requestUrl = OC.generateUrl('apps/analytics/threshold');
+        fetch(requestUrl, {
+            method: 'POST',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({
+                reportId: reportId,
+                dimension1: 0,
+                option: 'new',
+                value: 0,
+                severity: 1,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Threshold.resetThresholdInputs();
+                if (!OCA.Analytics.isDataset) {
+                    OCA.Analytics.Report.resetContentArea();
+                    OCA.Analytics.Report.Backend.getData();
+                }
+            });
+    },
+
+    handleThresholdDeleteButton: function (evt) {
+        const thresholdId = evt.target.dataset.id;
+        OCA.Analytics.Threshold.deleteThreshold(thresholdId);
+    },
+
+    editThreshold: function (data, element) {
+        document.getElementById('thresholdDimension').value = data.dimension;
+        document.getElementById('thresholdOption').value = data.option;
+        document.getElementById('thresholdValue').value = data.value;
+        document.getElementById('thresholdSeverity').value = data.severity;
+        document.getElementById('thresholdColoring').value = data.coloring;
+        document.getElementById('thresholdCreateButton').dataset.id = data.id;
+
+        document.querySelectorAll('#thresholdList .thresholdItem.selected').forEach(item => {
+            item.classList.remove('selected');
+        });
+        if (element) {
+            element.classList.add('selected');
+        }
+    },
+
+    resetThresholdInputs: function () {
+        const dimensionSelect = document.getElementById('thresholdDimension');
+        dimensionSelect.selectedIndex = 0;
+        document.getElementById('thresholdOption').value = '=';
+        document.getElementById('thresholdValue').value = '';
+        document.getElementById('thresholdSeverity').value = '4';
+        document.getElementById('thresholdColoring').value = 'value';
+        delete document.getElementById('thresholdCreateButton').dataset.id;
+        document.getElementById('thresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+    },
+
+    buildThresholdRow: function (data) {
+        let bulletColor, bullet;
+        data.severity = parseInt(data.severity);
+        if (data.severity === 2) {
+            bulletColor = 'red';
+        } else if (data.severity === 3) {
+            bulletColor = 'orange';
+        } else {
+            bulletColor = 'green';
+        }
+
+        if (data.option === 'new') { // adjust the text for the "new records" option
+            data.value = '';
+            data.dimension1 = t('analytics', 'new record');
+            data.option = '';
+        }
+
+        if (data.severity === 1) {
+            bullet = document.createElement('img');
+            bullet.src = OC.imagePath('notifications', 'notifications-dark.svg');
+            bullet.classList.add('thresholdBullet');
+        } else {
+            bullet = document.createElement('div');
+            bullet.style.backgroundColor = bulletColor;
+            bullet.classList.add('thresholdBullet');
+        }
+
+        let item = document.createElement('div');
+        item.classList.add('thresholdItem');
+        item.dataset.id = data.id;
+        item.draggable = true;
+        item.addEventListener('dragstart', OCA.Analytics.Threshold.handleDragStart);
+        item.addEventListener('dragover', OCA.Analytics.Threshold.handleDragOver);
+        item.addEventListener('drop', OCA.Analytics.Threshold.handleDrop);
+
+        let grip = document.createElement('div');
+        grip.classList.add('icon-analytics-gripLines', 'sidebarPointer');
+
+        let colorIcon = document.createElement('img');
+        colorIcon.classList.add('thresholdColorIcon');
+        if (data.coloring === 'row') {
+            colorIcon.src = OC.imagePath('analytics', 'row.svg');
+        } else {
+            colorIcon.src = OC.imagePath('analytics', 'column.svg');
+        }
+
+        let text = document.createElement('div');
+        text.classList.add('thresholdText');
+
+        let dimension = OCA.Analytics.currentReportData.header[data.dimension];
+        text.innerText = dimension + ' ' + data.option + ' ' + data.value;
+        text.addEventListener('click', function () {
+            const row = this.parentNode;
+            if (row.classList.contains('selected')) {
+                row.classList.remove('selected');
+                OCA.Analytics.Threshold.resetThresholdInputs();
+            } else {
+                OCA.Analytics.Threshold.editThreshold(data, row);
+            }
+        });
+
+        let tDelete = document.createElement('div');
+        tDelete.classList.add('icon-close');
+        tDelete.classList.add('analyticsTesting');
+        tDelete.dataset.id = data.id;
+        tDelete.addEventListener('click', OCA.Analytics.Threshold.handleThresholdDeleteButton);
+
+        item.appendChild(grip);
+        item.appendChild(bullet);
+        item.appendChild(colorIcon);
+        item.appendChild(text);
+        item.appendChild(tDelete);
+        return item;
+    },
+
+    createThreashold: function () {
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
+
+        if (document.getElementById('thresholdValue').value === '') {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Missing data'));
+            return;
+        }
+
+        const button = document.getElementById('thresholdCreateButton');
+        const currentId = button.dataset.id;
+
+        const create = () => {
+            let requestUrl = OC.generateUrl('apps/analytics/threshold');
+            fetch(requestUrl, {
+                method: 'POST',
+                headers: OCA.Analytics.headers(),
+                body: JSON.stringify({
+                    reportId: reportId,
+                    dimension: document.getElementById('thresholdDimension').value,
+                    option: document.getElementById('thresholdOption').value,
+                    value: document.getElementById('thresholdValue').value,
+                    severity: document.getElementById('thresholdSeverity').value,
+                    coloring: document.getElementById('thresholdColoring').value,
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    delete button.dataset.id;
+                    OCA.Analytics.Threshold.getThreholdList(reportId);
+                    OCA.Analytics.Threshold.resetThresholdInputs();
+                    if (!OCA.Analytics.isDataset) {
+                        OCA.Analytics.Report.resetContentArea();
+                        OCA.Analytics.Report.Backend.getData();
+                    }
+                });
+        };
+
+        if (currentId) {
+            let delUrl = OC.generateUrl('apps/analytics/threshold/') + currentId;
+            fetch(delUrl, {
+                method: 'DELETE',
+                headers: OCA.Analytics.headers(),
+            })
+                .then(() => create());
+        } else {
+            create();
+        }
+    },
+
+    deleteThreshold: function (thresholdId) {
+        let requestUrl = OC.generateUrl('apps/analytics/threshold/') + thresholdId;
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
+        fetch(requestUrl, {
+            method: 'DELETE',
+            headers: OCA.Analytics.headers(),
+        })
+            .then(response => response.json())
+            .then(data => {
+                OCA.Analytics.Threshold.getThreholdList(reportId);
+                OCA.Analytics.Threshold.resetThresholdInputs();
+                if (!OCA.Analytics.isDataset) {
+                    OCA.Analytics.Report.resetContentArea();
+                    OCA.Analytics.Report.Backend.getData();
+                }
+            });
+    },
+
+    handleDragStart: function (e) {
+        OCA.Analytics.Threshold.draggedItem = this;
+        e.dataTransfer.effectAllowed = 'move';
+    },
+
+    handleDragOver: function (e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    },
+
+    handleDrop: function (e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+        if (OCA.Analytics.Threshold.draggedItem !== this) {
+            this.parentNode.insertBefore(OCA.Analytics.Threshold.draggedItem, this);
+        }
+        OCA.Analytics.Threshold.saveOrder();
+        return false;
+    },
+
+    saveOrder: function () {
+        const ids = [];
+        document.querySelectorAll('#thresholdList > div').forEach(item => {
+            ids.push(item.dataset.id);
+        });
+        const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
+        let requestUrl = OC.generateUrl('apps/analytics/threshold/order/') + reportId;
+        fetch(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify({order: ids})
+        });
+    },
+});

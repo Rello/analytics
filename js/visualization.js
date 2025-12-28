@@ -1442,6 +1442,17 @@ OCA.Analytics.Visualization = {
         if (type !== 'loading') {
             OCA.Analytics.currentContentType = type;
         }
+        if (type !== 'dataset') {
+            const datasetTabHeaders = document.querySelector('.datasetTabHeaders');
+            const datasetTabContainer = document.querySelector('.datasetTabContainer');
+            if (datasetTabHeaders) {
+                datasetTabHeaders.innerHTML = '';
+            }
+            if (datasetTabContainer) {
+                datasetTabContainer.innerHTML = '';
+            }
+        }
+
         //}
         if (type === 'intro' || type === 'warning' || type === 'loading') {
             OCA.Analytics.Visualization.hideElement('menuBar');
