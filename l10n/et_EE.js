@@ -84,6 +84,7 @@ OC.L10N.register(
     "You have unsaved changes. If you leave now, your changes will be lost." : "Sul on salvestamata muudatusi, Kui lahkus, siis muudatused lähevad kaduma.",
     "Save" : "Salvesta",
     "Discard" : "Loobu",
+    "Import failed" : "Importimine ei õnnestunud",
     "choose a layout" : "vali küljenduse paigutus",
     "select to edit" : "vali muutmiseks",
     "choose the content" : "vali sisu",
