@@ -1,5 +1,6 @@
 # Changelog
 
+## 6.0.2 - 2025-12-30
 ### Fixed
 - php 8.5 compatibility fix
 - Prevent double submissions by showing busy indicators during report and data imports
@@ -8,9 +9,6 @@
 - Update filter option handling for BETWEEN case #559 @[joleaf](https://github.com/joleaf)
 - XSS protection
 - file import cause double reports #554
-
-## 6.0.2 - 2025-09-19
-### Fixed
 - Cache not use for dashboard
 - Icon fixes
 
