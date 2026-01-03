@@ -99,6 +99,7 @@
     "You have unsaved changes. If you leave now, your changes will be lost." : "Tá athruithe neamhshábháilte agat. Má fhágann tú anois, caillfear do chuid athruithe.",
     "Save" : "Sábháil",
     "Discard" : "Caith amach",
+    "Import failed" : "Theip ar an allmhairiú",
     "choose a layout" : "roghnaigh leagan amach",
     "select to edit" : "roghnaigh a chur in eagar",
     "choose the content" : "roghnaigh an t-ábhar",
