@@ -99,6 +99,7 @@
     "You have unsaved changes. If you leave now, your changes will be lost." : "You have unsaved changes. If you leave now, your changes will be lost.",
     "Save" : "Save",
     "Discard" : "Discard",
+    "Import failed" : "Import failed",
     "choose a layout" : "choose a layout",
     "select to edit" : "select to edit",
     "choose the content" : "choose the content",

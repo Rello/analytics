@@ -101,6 +101,7 @@ OC.L10N.register(
     "You have unsaved changes. If you leave now, your changes will be lost." : "Kaydedilmemiş değişiklikleriniz var. Şimdi çıkarsanız değişiklikleriniz kaybolacak.",
     "Save" : "Kaydet",
     "Discard" : "Yok say",
+    "Import failed" : "İçe aktarılamadı",
     "choose a layout" : "bir yerleşim seçin",
     "select to edit" : "düzenlemek için seçin",
     "choose the content" : "içeriği seçin",

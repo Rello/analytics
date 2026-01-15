@@ -99,6 +99,7 @@
     "You have unsaved changes. If you leave now, your changes will be lost." : "您有未保存的更改。如果您現在離開，您的更改將會丟失。",
     "Save" : "保存",
     "Discard" : "取消",
+    "Import failed" : "導入失敗",
     "choose a layout" : "選擇佈局",
     "select to edit" : "選取以編輯",
     "choose the content" : "選擇內容",

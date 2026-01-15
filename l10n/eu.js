@@ -11,6 +11,7 @@ OC.L10N.register(
     "Parameter missing" : "Parametroa falta da",
     "Add custom column" : "Gehitu zutabe pertsonalizatua",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Hautatu behar diren zutabeak.<br>Berrantolatu sekuentzia arrastatuz eta jareginez.<br>Kendu hautapen guztiak berrezartzeko.<br>Gehitu zutabe pertsonalizatuak, daten testu-aldagaiak barne. Ikusi {linkstart}Wikia{linkend}.",
+    "Previous Values:" : "Aurreko balioak:",
     "Enter the fixed value:" : "Sartu balio finkoa:",
     "Select file" : "Hautatu fitxategia",
     "Share" : "Partekatu",

@@ -101,6 +101,7 @@ OC.L10N.register(
     "You have unsaved changes. If you leave now, your changes will be lost." : "您有尚未儲存的變更。若您現在離開，您的變更將會遺失。",
     "Save" : "儲存",
     "Discard" : "放棄",
+    "Import failed" : "匯入失敗",
     "choose a layout" : "選擇佈局",
     "select to edit" : "選取以編輯",
     "choose the content" : "選擇內容",
