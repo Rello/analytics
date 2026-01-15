@@ -1,5 +1,9 @@
 # Changelog
 
+### Fixes
+- Dark Mode: Settings element does not adapt text color #565
+
+
 ## 6.0.2 - 2025-12-30
 ### Fixed
 - php 8.5 compatibility fix

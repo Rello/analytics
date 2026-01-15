@@ -664,12 +664,12 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-star {
     background-image: url(../img/star.svg);
-    filter: var(--background-invert-if-dark);
+    /*filter: var(--background-invert-if-dark);*/
 }
 
 .icon-analytics-settings {
     background-image: url(../img/settings.svg);
-    filter: var(--background-invert-if-dark);
+    /*filter: var(--background-invert-if-dark);*/
 }
 
 .icon-analytics-charts-wizard {
