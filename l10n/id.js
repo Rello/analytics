@@ -206,7 +206,9 @@ OC.L10N.register(
     "Issues" : "Isu",
     "Limit" : "Batas",
     "Personal access token" : "Token akses pribadi",
+    "optional" : "opsional",
     "Local" : "Lokal",
+    "File" : "File",
     "Announcements" : "Pengumuman",
     "3rd field must be a valid number" : "bidang ke-3 harus berupa angka yang valid",
     "copy" : "salin",
@@ -247,6 +249,7 @@ OC.L10N.register(
     "Vertical axis" : "Sumbu vertikal",
     "Color" : "Warna",
     "Sort by" : "Urutan",
+    "Direction" : "Arah",
     "New report" : "Laporan baru",
     "New dataset" : "Himpunan data baru",
     "Create" : "Buat"
