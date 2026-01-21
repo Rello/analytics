@@ -101,6 +101,7 @@ OC.L10N.register(
     "You have unsaved changes. If you leave now, your changes will be lost." : "Vous avez des modifications non enregistrées. Si vous quittez maintenant, vos modifications seront perdues.",
     "Save" : "Enregistrer",
     "Discard" : "ignorer",
+    "Import failed" : "Échec de l'importation",
     "choose a layout" : "choisir une disposition",
     "select to edit" : "sélectionner pour modifier",
     "choose the content" : "choisir le contenu",
