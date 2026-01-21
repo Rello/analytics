@@ -48,7 +48,7 @@ class ApiController extends OCSController {
 			$reportId = $this->reportService->createFromDataFile($fileId);
 			$url = '/apps/analytics/r/' . $reportId;
 			return new DataResponse([
-				'version' => '0.1',
+				'version' => 0.1,
 				'root' => [
 					'orientation' => 'vertical',
 					'rows' => [
