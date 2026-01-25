@@ -384,7 +384,7 @@ OC.L10N.register(
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics робить ваші дані видимими та допомагає їх оцінювати – від фінансових даних до журналів IoT.",
     "Give your numbers a meaning." : "Надайте своїм числам значення.",
     "Data is processed inside Nextcloud." : "Дані обробляються всередині Nextcloud.",
-    "Share your reports and insights" : "Поділіться своїми звітами та ідеями",
+    "Share your reports and insights" : "Поділітися власними ідеями та спостереженнями",
     "Fully integrated into Nextcloud" : "Повністю інтегрований у Nextcloud",
     "Open Source" : "Відкрите джерело",
     "Visualize any data with ease" : "Візуалізуйте просто будь-які дані",
