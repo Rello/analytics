@@ -234,6 +234,7 @@ OC.L10N.register(
     "Open documentation" : "Buka dokumentasi",
     "Update" : "Perbarui",
     "Export" : "Ekspor",
+    "Mode" : "Mode",
     "Option" : "Option",
     "Remove filter" : "Hapus filter",
     "Nextcloud Assistant" : "Nextcloud Assistant",
@@ -244,6 +245,7 @@ OC.L10N.register(
     "Selection" : "Pilihan",
     "Title" : "Judul",
     "Copy" : "Salin",
+    "Not scheduled" : "Tidak dijadwalkan",
     "Daily" : "Harian",
     "Hourly" : "Setiap jam",
     "Basic settings" : "Setelan dasar",
@@ -259,6 +261,7 @@ OC.L10N.register(
     "Color" : "Warna",
     "Sort by" : "Urutan",
     "Direction" : "Arah",
+    "Nextcloud forum" : "Forum Nextcloud",
     "New report" : "Laporan baru",
     "New dataset" : "Himpunan data baru",
     "Create" : "Buat"
