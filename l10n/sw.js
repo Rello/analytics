@@ -101,6 +101,7 @@ OC.L10N.register(
     "You have unsaved changes. If you leave now, your changes will be lost." : "Una mabadiliko ambayo hayajahifadhiwa. Ukiondoka sasa, mabadiliko yako yatapotea.",
     "Save" : "Hifadhi",
     "Discard" : "Tupilia ",
+    "Import failed" : "Imeshindwa kuleta",
     "choose a layout" : "chagua mpangilio",
     "select to edit" : "chagua kuhariri",
     "choose the content" : "chagua yaliyomo",
