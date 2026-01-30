@@ -101,6 +101,7 @@ OC.L10N.register(
     "You have unsaved changes. If you leave now, your changes will be lost." : "Jsou zde neuložené změny! Pokud toto nyní opustíte, provedené změny budou ztraceny.",
     "Save" : "Uložit",
     "Discard" : "Zahodit",
+    "Import failed" : "Import se nezdařil",
     "choose a layout" : "zvolte rozvržení",
     "select to edit" : "upravíte výběrem",
     "choose the content" : "zvolte obsah",
