@@ -1,5 +1,8 @@
 # Changelog
 
+### Changed
+- Documentation: refresh README structure and onboarding details
+
 ### Fixes
 - Dark Mode: Settings element does not adapt text color #565
 
