@@ -113,7 +113,7 @@ OC.L10N.register(
     "Starting PDF export" : "Розпочинаємо експорт у PDF",
     "capturing page {pageCount}" : "захоплення сторінки {pageCount}",
     "captured page {pageCount}" : "захоплена сторінка {pageCount}",
-    "page {pageCount} added to pdf" : "сторінка {pageCount} додана до PDF",
+    "page {pageCount} added to pdf" : "сторінку {pageCount} додано до PDF",
     "creating pdf" : "створення PDF",
     "created pdf" : "створений PDF",
     "The report is not available anymore" : "Звіт більше не доступний",
