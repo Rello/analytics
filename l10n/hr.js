@@ -6,6 +6,7 @@ OC.L10N.register(
     "Share" : "Dijeli",
     "Share link" : "Dijeli poveznicu",
     "Link copied" : "Poveznica je kopirana",
+    "Missing data" : "Nedostaju podaci",
     "Settings" : "Postavke",
     "Data" : "Podaci",
     "Filter by" : "Filtriraj prema",
