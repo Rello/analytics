@@ -4,24 +4,25 @@
     <name>Analytics</name>
     <summary>extract / store / visualize</summary>
 	<description><![CDATA[
-Connect data from different sources in one place.
-Use flexible Panoramas and reports with seamless Nextcloud integration.
-Visualize and share anything, from financial analysis to IoT logs.
+Connect data from different sources in one place and turn it into shareable insights. Analytics lets teams build flexible panoramas, dashboards, and reports with seamless Nextcloud integration.
 
+## Why Analytics
+- **Centralize data**: combine CSV, spreadsheets, APIs, and Nextcloud apps in one place.
+- **Analyze faster**: use charts, tables, filters, and panoramas to explore data quickly.
+- **Share securely**: collaborate with users, groups, or share links with fine-grained access.
+- **Automate updates**: schedule data loads and keep reports current.
 
 #### Features:
-- Visualization: **Panoramas**, reports, charts, tables, filters
-- Data sources:
-  - csv, spreadsheet, API, import, manual entry
-  - Nextcloud Files, Forms, Tables
-  - external: GitHub, website grabber, JSON
-- Register external data sources from other apps
-- Storage: **real-time** or database
-- Advanced data loads with scheduling
-- Analysis functions: **trend**, dis-/aggregation
-- Thresholds for alerts and color coding
-- Sharing: user, groups, link
-- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation
+- **Visualization**: panoramas, reports, charts, tables, filters
+- **Data sources**:
+  - CSV, spreadsheets, API, imports, manual entry
+  - External sources: GitHub, website grabber, JSON
+- **Extensible**: register custom data sources from other apps
+- **Storage**: real-time or database
+- **Automation**: scheduled data loads
+- **Functions**: trend calculations, dis-/aggregation
+- **Alerts**: thresholds for notifications and color coding
+- **Integration**: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation
 - **AI Assistant**: Context Chat integration
 
 ]]></description>
