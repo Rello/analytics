@@ -3,7 +3,7 @@
 ### Fixes
 - Dark Mode: Settings element does not adapt text color #565
 - Harden filter column handling to block unsupported identifiers
-
+- Fix public chart only link
 
 ## 6.0.2 - 2025-12-30
 ### Fixed

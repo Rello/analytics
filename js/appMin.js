@@ -58,15 +58,51 @@ OCA.Analytics.Report = {
         document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>Reset Zoom</button><canvas id="myChart" ></canvas>';
         document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
 
-        OCA.Analytics.currentReportData = JSON.parse(document.getElementById('data').value);
+        OCA.Analytics.currentReportData = OCA.Analytics.Report.processReceivedData(JSON.parse(document.getElementById('data').value));
         // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-        OCA.Analytics.currentReportData = OCA.Analytics.Visualization.sortDates(OCA.Analytics.currentReportData);
-        OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTimeAggregation(OCA.Analytics.currentReportData);
-        OCA.Analytics.currentReportData = OCA.Analytics.Visualization.applyTopN(OCA.Analytics.currentReportData);
         OCA.Analytics.currentReportData.data = OCA.Analytics.Visualization.formatDates(OCA.Analytics.currentReportData.data);
 
         let ctx = document.getElementById('myChart').getContext('2d');
         OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.Report.getDefaultChartOptions());
+    },
+
+    processReceivedData: function (data) {
+        // Do something with the data here
+        try {
+            // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
+            let parsedChartOptions = JSON.parse(data.options.chartoptions.replace(/xAxes/g, 'x'));
+            data.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
+        } catch (e) {
+            data.options.chartoptions = {};
+        }
+
+        try {
+            let parsedDataOptions = JSON.parse(data.options.dataoptions);
+            data.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
+        } catch (e) {
+            data.options.dataoptions = {};
+        }
+
+        try {
+            let parsedFilterOptions = JSON.parse(data.options.filteroptions);
+            data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
+        } catch (e) {
+            data.options.filteroptions = {};
+        }
+
+        try {
+            let parsedTableOptions = JSON.parse(data.options.tableoptions);
+            data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
+        } catch (e) {
+            data.options.tableoptions = {};
+        }
+
+        // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
+        data = OCA.Analytics.Visualization.sortDates(data);
+        data = OCA.Analytics.Visualization.applyTimeAggregation(data);
+        data = OCA.Analytics.Visualization.applyTopN(data);
+
+        return data;
     },
 
     getDefaultChartOptions: function () {
