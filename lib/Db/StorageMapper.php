@@ -21,6 +21,12 @@ class StorageMapper
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_facts';
+    private const FILTERABLE_COLUMNS = [
+        'dimension1',
+        'dimension2',
+        'timestamp',
+        'value',
+    ];
 
     public function __construct(
         $userId,
@@ -150,6 +156,10 @@ class StorageMapper
         // add the where clauses depending on the filter selection of the
         if (isset($options['filter'])) {
             foreach ($options['filter'] as $key => $value) {
+				$column = $this->getAllowedFilterColumn($key);
+				if ($column === null) {
+					continue;
+				}
 
 				// Remove quotes from each element
 				// quotes are required when filter has a comma e.g. 'home, office" and needs to be evaluated as one select
@@ -163,11 +173,11 @@ class StorageMapper
 				}
 
 				if ($value['option'] === 'EQ') {
-					$sql->andWhere($sql->expr()->eq($key, $sql->createNamedParameter($valueNoQuotes)));
+					$sql->andWhere($sql->expr()->eq($column, $sql->createNamedParameter($valueNoQuotes)));
 				} elseif ($value['option'] === 'GT') {
-					$sql->andWhere($sql->expr()->gt($key, $sql->createNamedParameter($valueNoQuotes)));
+					$sql->andWhere($sql->expr()->gt($column, $sql->createNamedParameter($valueNoQuotes)));
 				} elseif ($value['option'] === 'LT') {
-					$sql->andWhere($sql->expr()->lt($key, $sql->createNamedParameter($valueNoQuotes)));
+					$sql->andWhere($sql->expr()->lt($column, $sql->createNamedParameter($valueNoQuotes)));
 				} elseif ($value['option'] === 'IN') {
 					// Use regex to split by comma or semicolon, keeping quoted strings together
 					preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value['value'], $matches);
@@ -175,10 +185,10 @@ class StorageMapper
 						return trim($v, " '");
 					}, $matches[0]);
 
-					$sql->andWhere($sql->expr()->in($key, $sql->createParameter('inValues')));
+					$sql->andWhere($sql->expr()->in($column, $sql->createParameter('inValues')));
 					$sql->setParameter('inValues', $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
 				} elseif ($value['option'] === 'LIKE') {
-					$sql->andWhere($sql->expr()->like($key, $sql->createNamedParameter('%' . $valueNoQuotes . '%')));
+					$sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter('%' . $valueNoQuotes . '%')));
 				} elseif ($value['option'] === 'BETWEEN') {
 					// Between is used for filters on quarters
 					// Support both array and comma-separated string formats
@@ -192,8 +202,8 @@ class StorageMapper
 					}
 					$sql->andWhere(
 						$sql->expr()->andX(
-							$sql->expr()->gte($key, $sql->createNamedParameter($start)),
-							$sql->expr()->lte($key, $sql->createNamedParameter($end))
+							$sql->expr()->gte($column, $sql->createNamedParameter($start)),
+							$sql->expr()->lte($column, $sql->createNamedParameter($end))
 						)
 					);
 				}
@@ -370,6 +380,11 @@ class StorageMapper
      */
     protected function sqlWhere(IQueryBuilder $sql, $column, $option, $value)
     {
+		$column = $this->getAllowedFilterColumn($column);
+		if ($column === null) {
+			return;
+		}
+
         if ($option === 'EQ') {
             $sql->andWhere($sql->expr()->eq($column, $sql->createNamedParameter($value)));
         } elseif ($option === 'GT') {
@@ -383,4 +398,14 @@ class StorageMapper
             $sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter('%' . $value . '%')));
         }
     }
+
+	private function getAllowedFilterColumn(string $column): ?string
+	{
+		if (in_array($column, self::FILTERABLE_COLUMNS, true)) {
+			return $column;
+		}
+
+		$this->logger->warning('Blocked unsupported filter column', ['column' => $column]);
+		return null;
+	}
 }
