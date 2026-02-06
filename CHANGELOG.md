@@ -2,7 +2,7 @@
 
 ### Fixes
 - Dark Mode: Settings element does not adapt text color #565
-- Harden storage filter column handling#566
+- Harden filter column handling to block unsupported identifiers
 
 
 ## 6.0.2 - 2025-12-30

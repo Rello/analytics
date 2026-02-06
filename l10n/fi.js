@@ -189,6 +189,7 @@ OC.L10N.register(
     "Time dimension" : "Aikadimensio",
     "Grouping" : "Ryhmittely",
     "Mode" : "Tila",
+    "Option" : "Valinta",
     "Add filter" : "Lisää suodatin",
     "Remove filter" : "Poista suodatin",
     "Nextcloud Assistant" : "Nextcloud-avustaja",
