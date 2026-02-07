@@ -241,7 +241,6 @@ OC.L10N.register(
     "Last field must be a valid number" : "最後一個字段必須是有效數字",
     "copy" : "複製",
     "extract / store / visualize" : "提取/存儲/使形象化",
-    "Connect data from different sources in one place.\nUse flexible Panoramas and reports with seamless Nextcloud integration.\nVisualize and share anything, from financial analysis to IoT logs.\n\n\n#### Features:\n- Visualization: **Panoramas**, reports, charts, tables, filters\n- Data sources:\n  - csv, spreadsheet, API, import, manual entry\n  - Nextcloud Files, Forms, Tables\n  - external: GitHub, website grabber, JSON\n- Register external data sources from other apps\n- Storage: **real-time** or database\n- Advanced data loads with scheduling\n- Analysis functions: **trend**, dis-/aggregation\n- Thresholds for alerts and color coding\n- Sharing: user, groups, link\n- Integration: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation\n- **AI Assistant**: Context Chat integration" : "將不同來源的數據連接到一處。\n使用靈活的全景圖和報告以及無縫的 Nextcloud 整合。\n視覺化並分享從財務分析到物聯網日誌的任何內容。\n\n\n＃＃＃＃ 特徵：\n- 視覺化：**全景圖**、報告、圖表、表格、篩選器\n- 資料來源：\n- csv、電子表格、API、匯入、手動輸入\n- Nextcloud 檔案、表格、表格\n- 外部：GitHub、網站抓取器、JSON\n- 註冊來自其他應用程式的外部資料來源\n- 儲存：**即時**或資料庫\n- 進階資料載入與調度\n- 分析功能：**趨勢**、分解/聚合\n- 警報閾值和顏色編碼\n- 分享：用戶、群組、鏈接\n- 整合：文件、活動、通知、流程、儀表板、搜尋、智慧選擇器、翻譯\n- **人工智慧助理**：上下文聊天集成",
     "This report is password protected" : "此報告受密碼保護",
     "The password is wrong. Try again." : "密碼錯誤，請重試",
     "Password" : "密碼",
