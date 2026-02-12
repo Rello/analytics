@@ -5,6 +5,7 @@
 - Harden filter column handling to block unsupported identifiers
 - Fix public chart only link
 - Use native color picker inputs in chart options for data series colors
+- Preserve chart option callback functions (e.g. datalabel formatters) during option composition
 
 ### Changed
 - Prepare chart option handling for future enhancements

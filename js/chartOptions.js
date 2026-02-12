@@ -140,11 +140,23 @@ Object.assign(OCA.Analytics.ChartOptions, {
             return value;
         }
 
-        try {
-            return JSON.parse(JSON.stringify(value));
-        } catch (e) {
+        if (typeof value === 'function') {
             return value;
         }
+
+        if (Array.isArray(value)) {
+            return value.map((entry) => this._clone(entry));
+        }
+
+        if (this._isPlainObject(value)) {
+            const cloned = {};
+            Object.keys(value).forEach((key) => {
+                cloned[key] = this._clone(value[key]);
+            });
+            return cloned;
+        }
+
+        return value;
     },
 
     _deepMerge: function (target, source) {
