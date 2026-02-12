@@ -757,10 +757,10 @@ OCA.Analytics.Filter = {
         try {
             dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         } catch (e) {
-            dataOptions = '';
+            dataOptions = [];
         }
         const distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0);
-        if (dataOptions === null) dataOptions = {};
+        if (dataOptions === null) dataOptions = [];
 
         // clone the DOM template
         let container = document.getElementById('templateChartOptions').content;
@@ -829,16 +829,11 @@ OCA.Analytics.Filter = {
 
         table.appendChild(fragment);
 
-        let dataModel;
-        try {
-            dataModel = OCA.Analytics.currentReportData.options.chartoptions["analyticsModel"];
-            if (dataModel === 'accountModel') {
-                container.getElementById('analyticsModelOpt2').checked = true;
-            } else if (dataModel === 'timeSeriesModel') {
-                container.getElementById('analyticsModelOpt3').checked = true;
-            }
-        } catch (e) {
-            dataModel = '';
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
+        if (guiState.model === 'accountModel') {
+            container.getElementById('analyticsModelOpt2').checked = true;
+        } else if (guiState.model === 'timeSeriesModel') {
+            container.getElementById('analyticsModelOpt3').checked = true;
         }
 
         OCA.Analytics.Notification.htmlDialogUpdate(
@@ -909,15 +904,11 @@ OCA.Analytics.Filter = {
      */
     processChartOptionsDialog: function () {
         let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        if (dataOptions === '' || dataOptions === null) {
+        if (!Array.isArray(dataOptions)) {
             dataOptions = [];
         }
-        let chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
-        if (chartOptions === null) {
-            chartOptions = [];
-        }
+        const chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
         let userDatasetOptions = [];
-        let nonDefaultValues, secondaryAxisRequired = false;
         let optionObject;
 
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
@@ -935,7 +926,6 @@ OCA.Analytics.Filter = {
             optionObject = {};
             if (optionsYAxis[i].value !== defaultYAxis) {
                 optionObject['yAxisID'] = optionsYAxis[i].value;
-                secondaryAxisRequired = true;
             }
             if (optionsChartType[i].value !== defaultChartType) {
                 optionObject['type'] = optionsChartType[i].value;
@@ -946,64 +936,15 @@ OCA.Analytics.Filter = {
                     optionObject['borderColor'] = optionsColor[i].value;
                 }
             }
-            if (Object.keys(optionObject).length) nonDefaultValues = true;
             userDatasetOptions.push(optionObject);
         }
 
-        // decide of the data series array is relevant to be saved or not.
-        // if all settings are default, all options can be removed can be removed completely
-        // to keep the array clean, it will overwrite any existing settings.
-        if (nonDefaultValues === true) {
-            dataOptions = userDatasetOptions;
-        } else {
-            dataOptions = '';
-        }
-
-        let chartOptionsObj = (chartOptions && chartOptions.length !== 0) ? chartOptions : {};
+        // keep one array entry per series and drop only when all values are defaults
+        const hasAnyCustomSeriesOptions = userDatasetOptions.some(option => Object.keys(option).length !== 0);
+        dataOptions = hasAnyCustomSeriesOptions ? userDatasetOptions : [];
 
         let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
-        if (dataModel === 'accountModel' || dataModel === 'timeSeriesModel') {
-            let enableModel = {analyticsModel: dataModel};
-            try {
-                // if there are existing settings, merge them
-                chartOptionsObj = cloner.deep.merge(chartOptionsObj, enableModel);
-            } catch (e) {
-                chartOptionsObj = enableModel;
-            }
-        } else {
-            try {
-                if (chartOptionsObj["analyticsModel"]) {
-                    delete chartOptionsObj["analyticsModel"];
-                }
-            } catch (e) {
-                // Handle error if JSON parsing fails
-            }
-        }
-
-        // if any data series is tied to the secondary yAxis or not
-        // if yes, it needs to be enabled in the chart options (in addition to the dataseries options)
-        // additional combinations for dataMode apply
-        if (secondaryAxisRequired === true) {
-            let enableAxis = {scales: {secondary: {display: true}}};
-            try {
-                // if there are existing settings, merge them
-                chartOptionsObj = cloner.deep.merge(chartOptionsObj, enableAxis);
-            } catch (e) {
-                chartOptionsObj = enableAxis;
-            }
-        } else {
-            try {
-                if (chartOptionsObj.scales && chartOptionsObj.scales.secondary) {
-                    delete chartOptionsObj.scales.secondary;
-                    // if the secondary axis is not required anymore but was enabled before
-                    // the options are cleared all together
-                    // this does only apply when ONLY the axis was enabled before
-                    // this does not do anything, if the user had own custom settings
-                }
-            } catch (e) {
-                // Handle error if JSON parsing fails
-            }
-        }
+        const chartOptionsObj = OCA.Analytics.ChartOptions.setGuiState(chartOptions, {model: dataModel});
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
         OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObj;

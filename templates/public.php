@@ -13,6 +13,7 @@ Util::addStyle('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/moment.min');
 Util::addScript('analytics', '3rdParty/cloner');
 Util::addScript('analytics', 'app');
+Util::addScript('analytics', 'chartOptions');
 Util::addScript('analytics', 'filter');
 Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'report');

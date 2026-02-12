@@ -75,6 +75,7 @@ class Widget implements IWidget
      */
     public function load(): void
     {
+        Util::addScript('analytics', 'chartOptions');
         Util::addScript('analytics', 'dashboard');
         Util::addScript('analytics', 'visualization');
         Util::addStyle('analytics', 'dashboard');

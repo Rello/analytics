@@ -181,11 +181,6 @@ OCA.Analytics.Sidebar.Report = {
                 if (data !== false) {
                     data['type'] = parseInt(data['type']);
 
-                    // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-                    if (data['chartoptions']) {
-                        data['chartoptions'] = data['chartoptions'].replace(/xAxes/g, 'x');
-                    }
-
                     // clone the DOM template
                     table = document.importNode(document.getElementById('templateReport').content, true);
                     table.id = 'sidebarReport';
@@ -246,10 +241,7 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('sidebarReportDataset').value = data['dataset'];
         document.getElementById('sidebarReportChart').value = data['chart'];
         document.getElementById('sidebarReportVisualization').value = data['visualization'];
-        // {"scales":{"yAxes":[{},{"display":true}]}} => {"scales":{"secondary":{"display":true}}}
-        if (data['chartoptions'] !== null) {
-            document.getElementById('sidebarReportChartOptions').value = data['chartoptions'].replace('{"yAxes":[{},{"display":true}]}', '{"secondary":{"display":true}}');
-        }
+        document.getElementById('sidebarReportChartOptions').value = OCA.Analytics.ChartOptions.toSidebarEditorValue(data['chartoptions']);
         document.getElementById('sidebarReportDataOptions').value = data['dataoptions'];
         document.getElementById('sidebarReportDimension1').value = data['dimension1'];
         document.getElementById('sidebarReportDimension2').value = data['dimension2'];
@@ -635,6 +627,22 @@ OCA.Analytics.Sidebar.Report = {
             option[inputField.id] = inputField.value;
         }
 
+        let chartOptionsText = document.getElementById('sidebarReportChartOptions').value;
+        let chartOptionsObject;
+        let chartOptionsPayload;
+        try {
+            chartOptionsObject = OCA.Analytics.ChartOptions.fromSidebarEditorValue(
+                chartOptionsText,
+                OCA.Analytics?.currentReportData?.options?.chartoptions
+            );
+            chartOptionsPayload = JSON.stringify(chartOptionsObject);
+        } catch (error) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Incorrect chart options'));
+            button.classList.remove('loading');
+            button.disabled = false;
+            return;
+        }
+
         let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId;
         fetch(requestUrl, {
             method: 'PUT',
@@ -646,7 +654,7 @@ OCA.Analytics.Sidebar.Report = {
                 link: JSON.stringify(option),
                 visualization: document.getElementById('sidebarReportVisualization').value,
                 chart: document.getElementById('sidebarReportChart').value,
-                chartoptions: document.getElementById('sidebarReportChartOptions').value,
+                chartoptions: chartOptionsPayload,
                 dataoptions: document.getElementById('sidebarReportDataOptions').value,
                 dimension1: document.getElementById('sidebarReportDimension1').value,
                 dimension2: document.getElementById('sidebarReportDimension2').value,
@@ -660,16 +668,10 @@ OCA.Analytics.Sidebar.Report = {
 
                 // store possibly changed values into the temporary variable as this is used in getData
                 // without this, the new options would only be active after a full reload
-                let chartOptions = document.getElementById('sidebarReportChartOptions').value;
                 let dataOptions = document.getElementById('sidebarReportDataOptions').value;
 
                 if (OCA.Analytics?.currentReportData?.options) {
-                    try {
-                        OCA.Analytics.currentReportData.options.chartoptions = chartOptions ? JSON.parse(chartOptions) : null;
-                    } catch (error) {
-                        OCA.Analytics.Notification.notification('error', t('analytics', 'Incorrect chart options'));
-                        OCA.Analytics.currentReportData.options.chartoptions = null;
-                    }
+                    OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObject;
 
                     try {
                         OCA.Analytics.currentReportData.options.dataoptions = dataOptions ? JSON.parse(dataOptions) : null;

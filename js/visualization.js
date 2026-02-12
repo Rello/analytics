@@ -823,9 +823,27 @@ OCA.Analytics.Visualization = {
         // e.g. the display unit for the x-axis can be overwritten '{"scales": {"x": {"time": {"unit" : "month"}}}}'
         // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
 
-        let userChartOptions = jsondata.options.chartoptions;
-        if (userChartOptions !== '' && userChartOptions !== null) {
-            chartOptions = cloner.deep.merge(chartOptions, userChartOptions);
+        chartOptions = OCA.Analytics.ChartOptions.compose(
+            chartOptions,
+            jsondata.options.chartoptions,
+            jsondata.options.dataoptions
+        );
+
+        // keep chart-type specific behavior deterministic after composed options were applied
+        if (chartType === 'doughnut') {
+            if (chartOptions.scales?.x) {
+                chartOptions.scales.x.display = false;
+            }
+            if (chartOptions.scales?.primary) {
+                chartOptions.scales.primary.display = false;
+                chartOptions.scales.primary.grid.display = false;
+            }
+            if (chartOptions.scales?.secondary) {
+                chartOptions.scales.secondary.display = false;
+                chartOptions.scales.secondary.grid.display = false;
+            }
+        } else if (chartType === 'funnel') {
+            delete chartOptions.scales;
         }
 
         // the user can modify dataset/series settings
@@ -927,16 +945,11 @@ OCA.Analytics.Visualization = {
      */
     convertDataToChartJsFormat: function (data, chartType) {
         let datasets = [], xAxisCategories = [];
-        let dataModel = '';
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(data.options.chartoptions);
+        const dataModel = guiState.model;
         let header = data.header.slice(1);
         const isTopGrouping = !!data.options?.filteroptions?.topN;
         let datasetCounter = 0;
-
-        if (data.options.chartoptions !== null) {
-            if (data.options.chartoptions?.analyticsModel !== undefined) {
-                dataModel = data.options.chartoptions["analyticsModel"];
-            }
-        }
 
         data = data.data;
 

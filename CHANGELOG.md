@@ -5,6 +5,9 @@
 - Harden filter column handling to block unsupported identifiers
 - Fix public chart only link
 
+### Changed
+- Prepare chart option handling for future enhancements
+
 ## 6.0.2 - 2025-12-30
 ### Fixed
 - php 8.5 compatibility fix

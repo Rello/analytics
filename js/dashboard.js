@@ -168,35 +168,16 @@ OCA.Analytics.Dashboard = {
     },
 
     processReceivedData: function (data) {
-        // Do something with the data here
-        try {
-            // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-            let parsedChartOptions = JSON.parse(data.options.chartoptions.replace(/xAxes/g, 'x'));
-            data.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
-        } catch (e) {
-            data.options.chartoptions = {};
-        }
+        data.options.chartoptions = OCA.Analytics.ChartOptions.parseAndNormalize(data.options.chartoptions);
 
-        try {
-            let parsedDataOptions = JSON.parse(data.options.dataoptions);
-            data.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
-        } catch (e) {
-            data.options.dataoptions = {};
-        }
+        const parsedDataOptions = OCA.Analytics.ChartOptions.safeParse(data.options.dataoptions, []);
+        data.options.dataoptions = Array.isArray(parsedDataOptions) ? parsedDataOptions : [];
 
-        try {
-            let parsedFilterOptions = JSON.parse(data.options.filteroptions);
-            data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
-        } catch (e) {
-            data.options.filteroptions = {};
-        }
+        const parsedFilterOptions = OCA.Analytics.ChartOptions.safeParse(data.options.filteroptions, {});
+        data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
 
-        try {
-            let parsedTableOptions = JSON.parse(data.options.tableoptions);
-            data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
-        } catch (e) {
-            data.options.tableoptions = {};
-        }
+        const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
+        data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
 
         // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
         data = OCA.Analytics.Visualization.sortDates(data);
@@ -333,7 +314,7 @@ OCA.Analytics.Dashboard = {
             } else if (chartType === 'doughnut') {
                 // special array handling for doughnuts
                 if (jsondata.options.dataoptions !== null) {
-                    const arr = JSON.parse(jsondata.options.dataoptions);
+                    const arr = OCA.Analytics.ChartOptions.safeParse(jsondata.options.dataoptions, []);
                     let index = 0;
                     for (const obj of arr) {
                         if (obj.backgroundColor) {
@@ -355,7 +336,7 @@ OCA.Analytics.Dashboard = {
         let stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
         let stacked100 = chartTypeFull.endsWith('St100');
         if (stacked === true) {
-            chartOptions.scales['primary'].stacked = chartOptions.scales['xAxes'].stacked = true;
+            chartOptions.scales['primary'].stacked = chartOptions.scales['x'].stacked = true;
         }
         if (stacked100 === true) {
             datasets = OCA.Analytics.Report.calculateStacked100(datasets);
@@ -384,12 +365,13 @@ OCA.Analytics.Dashboard = {
         // the user can add/overwrite chart options
         // the user can put the options in array-format into the report definition
         // these are merged with the standard report settings
-        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"xAxes": [{"time": {"unit" : "month"}}]}}'
+        // e.g. the display unit for the x-axis can be overwritten '{"scales": {"x": {"time": {"unit" : "month"}}}}'
         // e.g. add a secondary y-axis '{"scales": {"yAxes": [{},{"id":"B","position":"right"}]}}'
-        let userChartOptions = jsondata.options.chartoptions;
-        if (userChartOptions !== '' && userChartOptions !== null) {
-            chartOptions = cloner.deep.merge(chartOptions, JSON.parse(userChartOptions));
-        }
+        chartOptions = OCA.Analytics.ChartOptions.compose(
+            chartOptions,
+            jsondata.options.chartoptions,
+            jsondata.options.dataoptions
+        );
 
         // never show any axis in the dashboard
         chartOptions.scales['secondary'].display = false;
@@ -399,12 +381,10 @@ OCA.Analytics.Dashboard = {
         // these are merged with the data array coming from the backend
         // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
         //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
-        let userDatasetOptions = jsondata.options.dataoptions;
-        if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
-            let numberOfDatasets = datasets.length;
-            let userDatasetOptionsCleaned = JSON.parse(userDatasetOptions);
+        let userDatasetOptions = OCA.Analytics.ChartOptions.safeParse(jsondata.options.dataoptions, []);
+        if (Array.isArray(userDatasetOptions) && userDatasetOptions.length !== 0 && chartType !== 'doughnut') {
             datasets = cloner.deep.merge({}, datasets);
-            datasets = cloner.deep.merge(datasets, userDatasetOptionsCleaned);
+            datasets = cloner.deep.merge(datasets, userDatasetOptions);
             datasets = Object.values(datasets);
         }
 
@@ -484,7 +464,8 @@ OCA.Analytics.Dashboard = {
         const isTopGrouping = options?.filteroptions?.group?.type === 'top';
         let datasets = [], xAxisCategories = [];
         let datasetCounter = 0;
-        const dataModel = options?.chartoptions?.analyticsModel ?? '';
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(options?.chartoptions);
+        const dataModel = guiState.model;
 
         if (dataModel === 'accountModel') {
             const header = data.header.slice(1);

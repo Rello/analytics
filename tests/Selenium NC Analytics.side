@@ -10880,6 +10880,24 @@
       ]
     },
     {
+      "id": "5f7d1e6d-26ec-4b4b-a8e1-8f336298f10a",
+      "name": "27 Chart GUI + Custom Options Coexistence",
+      "commands": [
+        {
+          "command": "run",
+          "target": "26 Options Chart",
+          "value": "",
+          "id": "fdbcf7a5-c449-4757-a96f-01cfc019d7e5"
+        },
+        {
+          "command": "run",
+          "target": "24 Filter Table/Chart only",
+          "value": "",
+          "id": "8df00fe1-a318-4ac9-90de-a65c6a95b710"
+        }
+      ]
+    },
+    {
       "id": "fe7f1a7d-80a7-4cbd-b13d-95a6e28e7f83",
       "name": "51 Automation Deletion",
       "commands": [
@@ -15019,7 +15037,8 @@
         "76aecb95-a688-4add-ab2b-db736fcede58",
         "7ff62a8a-dbd8-4744-b3c2-f8c5a5efb37b",
         "4ece2116-edb7-40b3-9f7f-5079e9768219",
-        "55628954-1c73-431c-ae25-2e45469c7883"
+        "55628954-1c73-431c-ae25-2e45469c7883",
+        "5f7d1e6d-26ec-4b4b-a8e1-8f336298f10a"
       ]
     },
     {

@@ -865,35 +865,16 @@ Object.assign(OCA.Analytics.Report.Backend = {
     },
 
     processReceivedData: function (data) {
-        // Do something with the data here
-        try {
-            // Chart.js v4.4.3 changed from xAxes to x. In case the user has old chart options, they need to be corrected
-            let parsedChartOptions = JSON.parse(data.options.chartoptions.replace(/xAxes/g, 'x'));
-            data.options.chartoptions = (parsedChartOptions !== null && typeof parsedChartOptions === 'object') ? parsedChartOptions : {};
-        } catch (e) {
-            data.options.chartoptions = {};
-        }
+        data.options.chartoptions = OCA.Analytics.ChartOptions.parseAndNormalize(data.options.chartoptions);
 
-        try {
-            let parsedDataOptions = JSON.parse(data.options.dataoptions);
-            data.options.dataoptions = (parsedDataOptions !== null && typeof parsedDataOptions === 'object') ? parsedDataOptions : {};
-        } catch (e) {
-            data.options.dataoptions = {};
-        }
+        const parsedDataOptions = OCA.Analytics.ChartOptions.safeParse(data.options.dataoptions, []);
+        data.options.dataoptions = Array.isArray(parsedDataOptions) ? parsedDataOptions : [];
 
-        try {
-            let parsedFilterOptions = JSON.parse(data.options.filteroptions);
-            data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
-        } catch (e) {
-            data.options.filteroptions = {};
-        }
+        const parsedFilterOptions = OCA.Analytics.ChartOptions.safeParse(data.options.filteroptions, {});
+        data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
 
-        try {
-            let parsedTableOptions = JSON.parse(data.options.tableoptions);
-            data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
-        } catch (e) {
-            data.options.tableoptions = {};
-        }
+        const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
+        data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
 
         // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
         data = OCA.Analytics.Visualization.sortDates(data);
