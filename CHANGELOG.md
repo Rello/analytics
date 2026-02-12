@@ -4,6 +4,7 @@
 - Dark Mode: Settings element does not adapt text color #565
 - Harden filter column handling to block unsupported identifiers
 - Fix public chart only link
+- Use native color picker inputs in chart options for data series colors
 
 ### Changed
 - Prepare chart option handling for future enhancements

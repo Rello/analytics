@@ -1,0 +1,49 @@
+{
+  "common": {
+    "name": "nextcloudtalk",
+    "title": "Nextcloud Talk",
+    "titleLang": {
+      "en": "Nextcloud Talk",
+      "de": "Nextcloud Talk"
+    },
+    "version": "1.0.0",
+    "news": {
+      "1.0.0": {
+        "en": "initial version",
+        "de": "Erstversion"
+      }
+    },
+    "desc": {
+      "en": "Use Nextcloud Talk to send notifications",
+      "de": "Benachrichtigungen über Nextcloud Talk senden"
+    },
+    "authors": [
+      "Rello"
+    ],
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "nextcloud.png",
+    "extIcon": "https://raw.githubusercontent.com/Rello/ioBroker.nextcloudtalk/master/admin/nextcloud.png",
+    "keywords": ["nextcloud", "talk", "notification"],
+    "readme": "https://github.com/Rello/ioBroker.nextcloudtalk/blob/master/README.md",
+    "license": "MIT",
+    "connectionType": "cloud",
+    "dataSource": "push",
+    "loglevel": "info",
+    "enabled": true,
+    "tier": 2,
+    "adminUI": {
+      "config": "html"
+    },
+    "type": "messaging",
+    "dependencies": [
+      {"js-controller": ">=6.0.0"}
+    ]
+  },
+  "native": {
+    "server": "",
+    "username": "",
+    "token": ""
+  },
+  "objects": []
+}

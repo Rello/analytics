@@ -818,9 +818,10 @@ OCA.Analytics.Filter = {
             const colorInput = document.createElement('input');
             colorInput.id = 'optionsColor' + i;
             colorInput.name = 'optionsColor';
+            colorInput.type = 'color';
             colorInput.className = 'optionsInput';
-            colorInput.value = color;
-            colorInput.style.backgroundColor = color;
+            colorInput.value = OCA.Analytics.Filter.normalizeHexColor(color, OCA.Analytics.Visualization.defaultColorPalette[i % OCA.Analytics.Visualization.defaultColorPalette.length]);
+            colorInput.style.backgroundColor = colorInput.value;
             colorCell.appendChild(colorInput);
             row.appendChild(colorCell);
 
@@ -844,7 +845,8 @@ OCA.Analytics.Filter = {
         const optionsColor = container.querySelectorAll('[name="optionsColor"]');
         optionsColor.forEach(field => {
             OCA.Analytics.Filter.updateColor({target: field});
-            field.addEventListener('keyup', OCA.Analytics.Filter.updateColor);
+            field.addEventListener('input', OCA.Analytics.Filter.updateColor);
+            field.addEventListener('change', OCA.Analytics.Filter.updateColor);
         });
     },
 
@@ -1002,6 +1004,20 @@ OCA.Analytics.Filter = {
         } else {
             return colors[j];
         }
+    },
+
+    /**
+     * Ensure a value is a valid #RRGGBB color for native color inputs.
+     */
+    normalizeHexColor: function (value, fallback = '#4e79a7') {
+        const validHexColor = /^#[0-9a-fA-F]{6}$/;
+        if (typeof value === 'string' && validHexColor.test(value)) {
+            return value;
+        }
+        if (typeof fallback === 'string' && validHexColor.test(fallback)) {
+            return fallback;
+        }
+        return '#4e79a7';
     },
 
     // function to check non standard legend selections during save
