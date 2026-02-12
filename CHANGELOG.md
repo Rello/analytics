@@ -43,6 +43,7 @@
 - Fix double report execution after wizard close
 - Correct drilldown aggregation for numeric dimension indices
 - Fix threshold copying when saving report as copy
+- Restore Files action registration for the Vue-based Files app so "Show in Analytics" remains available on Nextcloud 31
 
 ## 5.8.0 - 2025-07-29
 ### Added
