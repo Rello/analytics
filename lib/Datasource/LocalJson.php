@@ -69,13 +69,37 @@ class LocalJson implements IDatasource {
 	 */
 	public function readData($option): array {
 		$file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
+		$cache = $this->getCacheMetadata($option, $file->getMTime());
+		if ($cache['notModified'] === true) {
+			return [
+				'header' => [],
+				'dimensions' => [],
+				'data' => [],
+				'rawdata' => null,
+				'error' => 0,
+				'cache' => $cache,
+			];
+		}
+
 		$rawResult = $file->getContent();
 
 		$return = $this->jsonParser($option, $rawResult);
 		$return['rawdata'] = $rawResult;
 		$return['error'] = 0;
+		$return['cache'] = $cache;
 
 		return $return;
+	}
+
+	private function getCacheMetadata(array $option, int $mtime): array {
+		$currentCacheKey = 'ljson-' . md5($option['link'] . '|' . $mtime);
+		$clientCacheKey = isset($option['cacheKey']) ? trim((string)$option['cacheKey'], '"') : '';
+
+		return [
+			'cacheable' => true,
+			'key' => $currentCacheKey,
+			'notModified' => ($clientCacheKey !== '' && $clientCacheKey === $currentCacheKey),
+		];
 	}
 
 	/**

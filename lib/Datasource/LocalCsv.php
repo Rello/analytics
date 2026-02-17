@@ -77,6 +77,17 @@ class LocalCsv implements IDatasource
     {
         $error = 0;
         $file = $this->rootFolder->getUserFolder($option['user_id'])->get($option['link']);
+        $cache = $this->getCacheMetadata($option, $file->getMTime());
+        if ($cache['notModified'] === true) {
+            return [
+                'header' => [],
+                'dimensions' => [],
+                'data' => [],
+                'error' => $error,
+                'cache' => $cache,
+            ];
+        }
+
         $rows = str_getcsv($file->getContent(), "\n");
 
         // remove x number of rows from the beginning
@@ -129,6 +140,19 @@ class LocalCsv implements IDatasource
             'dimensions' => array_slice($header, 0, count($header) - 1),
             'data' => $data,
             'error' => $error,
+            'cache' => $cache,
+        ];
+    }
+
+    private function getCacheMetadata(array $option, int $mtime): array
+    {
+        $currentCacheKey = 'lcsv-' . md5($option['link'] . '|' . $mtime);
+        $clientCacheKey = isset($option['cacheKey']) ? trim((string)$option['cacheKey'], '"') : '';
+
+        return [
+            'cacheable' => true,
+            'key' => $currentCacheKey,
+            'notModified' => ($clientCacheKey !== '' && $clientCacheKey === $currentCacheKey),
         ];
     }
 
