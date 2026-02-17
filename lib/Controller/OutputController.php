@@ -86,17 +86,19 @@ class OutputController extends Controller {
 
 		if (!empty($reportMetadata)) {
 			$reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
-
-			// evaluate if the etag matches the report version
-			// in that case, a 304 is returned and the data retrieval from the backend is not executed
-			// if there are filter options, it means that there was a navigation in the report. This should reselect the data
-			$response = $this->evaluateIfNoneMatch($reportMetadata);
-			if ($response instanceof DataResponse && $filteroptions === null) {
-				return $response;
+			if ($filteroptions === null) {
+				$reportMetadata['cacheKey'] = $this->getRequestCacheKey();
 			}
 
-			// if the etag does not match the version, read data from backend
-			// and add corresponding heders
+			// internal storage reports are validated directly against version
+			if ((int)$reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+				$response = $this->evaluateIfNoneMatch($reportMetadata);
+				if ($response instanceof DataResponse && $filteroptions === null) {
+					return $response;
+				}
+			}
+
+			// external datasource caching is evaluated by datasource specific logic
 			return $this->returnDataWithCacheableHeader($reportMetadata, $filteroptions);
 		} else {
 			return new NotFoundResponse();
@@ -118,15 +120,17 @@ class OutputController extends Controller {
 		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
 
 		if (!empty($reportMetadata)) {
-			// evaluate if the etag matches the report version
-			// in that case, a 304 is returned and the data retrieval from the backend is not executed
-			$response = $this->evaluateIfNoneMatch($reportMetadata);
-			if ($response instanceof DataResponse) {
-				return $response;
+			$reportMetadata['cacheKey'] = $this->getRequestCacheKey();
+
+			// internal storage reports are validated directly against version
+			if ((int)$reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+				$response = $this->evaluateIfNoneMatch($reportMetadata);
+				if ($response instanceof DataResponse) {
+					return $response;
+				}
 			}
 
-			// if the etag does not match the version, read data from backend
-			// and add corresponding heders
+			// external datasource caching is evaluated by datasource specific logic
 			return $this->returnDataWithCacheableHeader($reportMetadata, null);
 		} else {
 			return new NotFoundResponse();
@@ -135,11 +139,27 @@ class OutputController extends Controller {
 
 	private function returnDataWithCacheableHeader($reportMetadata, $filteroptions) {
 		$result = $this->getData($reportMetadata);
+		$cache = $this->extractCacheMetadata($result);
+		unset($result['cache']);
+
+		if ($filteroptions === null && $cache['notModified'] === true) {
+			$response = new DataResponse(null, HTTP::STATUS_NOT_MODIFIED);
+			if ($cache['key'] !== null) {
+				$response->addHeader('ETag', '"' . $cache['key'] . '"');
+			}
+			$response->addHeader('X-Analytics-Cacheable', 'true');
+			return $response;
+		}
+
 		$response = new DataResponse($result, HTTP::STATUS_OK);
 
-		// only internal reports are cacheable
+		// internal reports are cacheable by version
 		if ($reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $filteroptions === null) {
 			$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
+			$response->addHeader('X-Analytics-Cacheable', 'true');
+		// external reports can provide datasource controlled cache validators
+		} else if ($filteroptions === null && $cache['cacheable'] === true && $cache['key'] !== null) {
+			$response->addHeader('ETag', '"' . $cache['key'] . '"');
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 		} else {
 			$response->addHeader('X-Analytics-Cacheable', 'false');
@@ -148,16 +168,43 @@ class OutputController extends Controller {
 	}
 
 	private function evaluateIfNoneMatch($reportMetadata) {
-		$clientETag = $this->request->getHeader('If-None-Match');
+		$clientETag = $this->getRequestCacheKey();
 		if ($clientETag !== null && $clientETag !== '') {
-			$clientETag = (int)trim($clientETag, '"');
+			$clientETag = (int)$clientETag;
 			// Compare with your current version/etag
 			if ($clientETag === (int)$reportMetadata['version']) {
 				$response = new DataResponse(null, HTTP::STATUS_NOT_MODIFIED);
 				$response->addHeader('ETag', '"' . $reportMetadata['version'] . '"');
+				$response->addHeader('X-Analytics-Cacheable', 'true');
 				return $response;
 			}
 		}
+	}
+
+	private function getRequestCacheKey(): ?string {
+		$clientETag = $this->request->getHeader('If-None-Match');
+		if ($clientETag === null || $clientETag === '') {
+			return null;
+		}
+		return trim($clientETag, '"');
+	}
+
+	private function extractCacheMetadata(array $result): array {
+		$cache = ['cacheable' => false, 'key' => null, 'notModified' => false];
+		if (!isset($result['cache']) || !is_array($result['cache'])) {
+			return $cache;
+		}
+
+		if (isset($result['cache']['cacheable'])) {
+			$cache['cacheable'] = (bool)$result['cache']['cacheable'];
+		}
+		if (isset($result['cache']['key']) && $result['cache']['key'] !== '') {
+			$cache['key'] = (string)$result['cache']['key'];
+		}
+		if (isset($result['cache']['notModified'])) {
+			$cache['notModified'] = (bool)$result['cache']['notModified'];
+		}
+		return $cache;
 	}
 
 	/**
@@ -218,6 +265,11 @@ class OutputController extends Controller {
 			// Realtime data
 			$result = $this->DatasourceController->read($datasource, $reportMetadata);
 			unset($result['rawdata']);
+
+			// datasource confirmed a stable cache key and no change
+			if (isset($result['cache']['notModified']) && $result['cache']['notModified'] === true) {
+				return $result;
+			}
 		}
 
 		// sort the data by a given column
@@ -225,7 +277,7 @@ class OutputController extends Controller {
 			$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
 		}
 
-		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset']);
+		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset'], $reportMetadata['cacheKey']);
 
 		$result['filterApplied'] = $reportMetadata['filteroptions'];
 		$reportMetadata['filteroptions'] = $filterOptions; // keep the original filters

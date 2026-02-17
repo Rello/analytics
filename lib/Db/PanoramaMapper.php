@@ -105,11 +105,16 @@ class PanoramaMapper
     public function readOwn(int $id)
     {
         $sql = $this->db->getQueryBuilder();
+		$ownershipExpr = $sql->expr()->andX(
+			$sql->expr()->orX(
+				$sql->expr()->eq('id', $sql->createNamedParameter($id)),
+				$sql->expr()->eq('parent', $sql->createNamedParameter($id))
+			),
+			$sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId))
+		);
         $sql->from(self::TABLE_NAME)
             ->select('*')
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
-            ->orWhere($sql->expr()->eq('parent', $sql->createNamedParameter($id)))
-            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+            ->where($ownershipExpr)
             ->orderBy('name', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
@@ -177,7 +182,8 @@ class PanoramaMapper
     {
         $sql = $this->db->getQueryBuilder();
         $sql->delete(self::TABLE_NAME)
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
         $sql->executeStatement();
         return true;
     }

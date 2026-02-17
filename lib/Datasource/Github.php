@@ -12,6 +12,8 @@ use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
 class Github implements IDatasource {
+	private const CACHE_TTL_SECONDS = 60;
+
 	private LoggerInterface $logger;
 	private IL10N $l10n;
 
@@ -90,6 +92,18 @@ class Github implements IDatasource {
 	public function readData($option): array {
 		$data = array();
 		$header = array();
+		$cache = $this->getCacheMetadata($option);
+
+		if ($cache['notModified'] === true) {
+			return [
+				'header' => [],
+				'dimensions' => [],
+				'data' => [],
+				'rawdata' => null,
+				'error' => 0,
+				'cache' => $cache,
+			];
+		}
 
 		if (!isset($option['data']) || $option['data'] === 'release') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
@@ -103,6 +117,7 @@ class Github implements IDatasource {
 					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
 					'rawdata' => $curlResult,
 					'error' => 'HTTP response code: ' . $http_code,
+					'cache' => $cache,
 				];
 			}
 			$i = 0;
@@ -148,6 +163,7 @@ class Github implements IDatasource {
 					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
 					'rawdata' => $curlResult,
 					'error' => 'HTTP response code: ' . $http_code,
+					'cache' => $cache,
 				];
 			}
 
@@ -174,6 +190,7 @@ class Github implements IDatasource {
 					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
 					'rawdata' => $curlResult,
 					'error' => 'HTTP response code: ' . $http_code,
+					'cache' => $cache,
 				];
 			}
 			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
@@ -191,6 +208,18 @@ class Github implements IDatasource {
 			'data' => $data,
 			'rawdata' => $curlResult,
 			'error' => 0,
+			'cache' => $cache,
+		];
+	}
+
+	private function getCacheMetadata($option): array {
+		$currentCacheKey = 'gh-' . (string)floor(time() / self::CACHE_TTL_SECONDS);
+		$clientCacheKey = isset($option['cacheKey']) ? trim((string)$option['cacheKey'], '"') : '';
+
+		return [
+			'cacheable' => true,
+			'key' => $currentCacheKey,
+			'notModified' => ($clientCacheKey !== '' && $clientCacheKey === $currentCacheKey),
 		];
 	}
 

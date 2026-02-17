@@ -86,7 +86,7 @@ class PanoramaController extends Controller
         if ($this->PanoramaService->isOwn($panoramaId)) {
             return new DataResponse($this->PanoramaService->delete($panoramaId));
         } else {
-            return new DataResponse(false,400);
+            return new DataResponse(false, 403);
         }
     }
 
@@ -104,6 +104,9 @@ class PanoramaController extends Controller
     #[NoAdminRequired]
     public function update(int $panoramaId, $name, int $type, int $parent, $pages)
     {
+		if (!$this->PanoramaService->isOwn($panoramaId)) {
+			return new DataResponse(false, 403);
+		}
         $pages = json_encode($pages);
         return new DataResponse($this->PanoramaService->update($panoramaId, $name, $type, $parent, $pages));
     }

@@ -151,10 +151,16 @@ class DatasourceController extends Controller {
 			$option = json_decode($datasetMetadata['link'], true);
 		}
 		$option['user_id'] = $datasetMetadata['user_id'];
+		if (isset($datasetMetadata['cacheKey']) && $datasetMetadata['cacheKey'] !== '') {
+			$option['cacheKey'] = $datasetMetadata['cacheKey'];
+		}
 
 		try {
 			// read the data from the source
 			$result = $this->getDatasources()[$datasourceId]->readData($option);
+			if (isset($result['cache']['notModified']) && $result['cache']['notModified'] === true) {
+				return $result;
+			}
 
 			// if data source should be timestamped/snapshoted
 			if (isset($option['timestamp']) and $option['timestamp'] === 'true') {

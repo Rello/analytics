@@ -67,7 +67,15 @@ interface IDatasource
      *      'dimensions' => array_slice($header, 0, count($header) - 1),
      *      'data' => $data,
      *      'error' => 0,         // INT 0 = no error
+     *      'cache' => [          // optional datasource controlled cache metadata
+     *          'cacheable' => true,
+     *          'key' => 'opaque-validator',
+     *          'notModified' => false,
+     *      ],
      *  ]
+     *
+     * if option['cacheKey'] is provided, the datasource can compare it with the current
+     * cache key and return cache.notModified=true.
      *
      * @param $option
      * @return array available options of the data source

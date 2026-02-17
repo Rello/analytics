@@ -13,6 +13,8 @@ use Psr\Log\LoggerInterface;
 
 class ExternalJson implements IDatasource
 {
+    private const CACHE_TTL_SECONDS = 30;
+
     private LoggerInterface $logger;
     private IL10N $l10n;
 
@@ -67,6 +69,18 @@ class ExternalJson implements IDatasource
      */
     public function readData($option): array
     {
+        $cache = $this->getCacheMetadata($option);
+        if ($cache['notModified'] === true) {
+            return [
+                'header' => [],
+                'dimensions' => [],
+                'data' => [],
+                'rawdata' => null,
+                'error' => 0,
+                'cache' => $cache,
+            ];
+        }
+
         $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
         $auth = $option['auth'];
         $post = $option['method'] === 'POST';
@@ -106,8 +120,20 @@ class ExternalJson implements IDatasource
 		$return['customHeaders'] = $headers;
 		$return['URL'] = $url;
 		$return['error'] = ($http_code >= 200 && $http_code < 300) ? 0 : 'HTTP response code: ' . $http_code;
+		$return['cache'] = $cache;
 
 		return $return;
+	}
+
+	private function getCacheMetadata($option): array {
+		$currentCacheKey = 'json-' . (string)floor(time() / self::CACHE_TTL_SECONDS);
+		$clientCacheKey = isset($option['cacheKey']) ? trim((string)$option['cacheKey'], '"') : '';
+
+		return [
+			'cacheable' => true,
+			'key' => $currentCacheKey,
+			'notModified' => ($clientCacheKey !== '' && $clientCacheKey === $currentCacheKey),
+		];
 	}
 
 	/**

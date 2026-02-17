@@ -14,6 +14,8 @@ use OCA\Analytics\Service\VariableService;
 
 class ExternalCsv implements IDatasource
 {
+    private const CACHE_TTL_SECONDS = 30;
+
     private $logger;
     private $userId;
     private $l10n;
@@ -68,6 +70,18 @@ class ExternalCsv implements IDatasource
      */
     public function readData($option): array
     {
+        $cache = $this->getCacheMetadata($option);
+        if ($cache['notModified'] === true) {
+            return [
+                'header' => [],
+                'dimensions' => [],
+                'data' => [],
+                'rawdata' => null,
+                'error' => 0,
+                'cache' => $cache,
+            ];
+        }
+
         $url = htmlspecialchars_decode($option['link'], ENT_NOQUOTES);
         $ch = curl_init();
         if ($ch !== false) {
@@ -130,6 +144,19 @@ class ExternalCsv implements IDatasource
             'data' => $data,
             'rawdata' => $curlResult,
             'error' => ($http_code>=200 && $http_code<300) ? 0 : 'HTTP response code: '.$http_code,
+            'cache' => $cache,
+        ];
+    }
+
+    private function getCacheMetadata($option): array
+    {
+        $currentCacheKey = 'csv-' . (string)floor(time() / self::CACHE_TTL_SECONDS);
+        $clientCacheKey = isset($option['cacheKey']) ? trim((string)$option['cacheKey'], '"') : '';
+
+        return [
+            'cacheable' => true,
+            'key' => $currentCacheKey,
+            'notModified' => ($clientCacheKey !== '' && $clientCacheKey === $currentCacheKey),
         ];
     }
 
