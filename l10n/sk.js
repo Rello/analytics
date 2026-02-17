@@ -347,6 +347,7 @@ OC.L10N.register(
     "Vertical axis" : "Zvislá os",
     "Color" : "Farba",
     "Sort by" : "Zoradiť podľa",
+    "Direction" : "Smer",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "Nextcloud Analytics zviditeľní vaše údaje a pomôže vám ich vyhodnotiť – od finančných údajov až po denníky internetu vecí.",
     "Give your numbers a meaning." : "Dajte svojim číslam význam.",
     "Data is processed inside Nextcloud." : "Údaje sú spracovávané v Nextcloude.",
