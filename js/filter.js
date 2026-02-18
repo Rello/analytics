@@ -836,6 +836,10 @@ OCA.Analytics.Filter = {
         } else if (guiState.model === 'timeSeriesModel') {
             container.getElementById('analyticsModelOpt3').checked = true;
         }
+        const doughnutLabelStyleSelect = container.getElementById('chartDoughnutLabelStyle');
+        if (doughnutLabelStyleSelect) {
+            doughnutLabelStyleSelect.value = guiState.doughnutLabelStyle;
+        }
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
@@ -946,7 +950,12 @@ OCA.Analytics.Filter = {
         dataOptions = hasAnyCustomSeriesOptions ? userDatasetOptions : [];
 
         let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
-        const chartOptionsObj = OCA.Analytics.ChartOptions.setGuiState(chartOptions, {model: dataModel});
+        const doughnutLabelStyleField = document.getElementById('chartDoughnutLabelStyle');
+        const doughnutLabelStyle = doughnutLabelStyleField ? doughnutLabelStyleField.value : 'percentage';
+        const chartOptionsObj = OCA.Analytics.ChartOptions.setGuiState(chartOptions, {
+            model: dataModel,
+            doughnutLabelStyle: doughnutLabelStyle
+        });
 
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
         OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObj;

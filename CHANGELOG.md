@@ -4,6 +4,7 @@
 - Caching also for data sources. (Can be implemented by data source owner)
 - TTL based caching for GitHub, External CSV and External JSON
 - File-change based caching for local Spreadsheet, CSV and JSON datasources
+- Chart options now include a doughnut label style setting (percentage vs. absolute value)
 
 ### Fixes
 - Dark Mode: Settings element does not adapt text color #565

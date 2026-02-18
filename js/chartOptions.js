@@ -14,7 +14,7 @@ OCA.Analytics = OCA.Analytics || {};
 OCA.Analytics.ChartOptions = OCA.Analytics.ChartOptions || {};
 Object.assign(OCA.Analytics.ChartOptions, {
     GUI_NAMESPACE: '__analytics_gui',
-    GUI_VERSION: 1,
+    GUI_VERSION: 2,
     MANAGED_PATHS: ['analyticsModel', 'scales.secondary'],
 
     safeParse: function (raw, fallback = {}) {
@@ -272,10 +272,16 @@ Object.assign(OCA.Analytics.ChartOptions, {
         return validModels.includes(model) ? model : 'kpiModel';
     },
 
+    _normalizeDoughnutLabelStyle: function (style) {
+        const validStyles = ['percentage', 'absolute'];
+        return validStyles.includes(style) ? style : 'percentage';
+    },
+
     _ensureGuiState: function (guiState) {
         const state = this._isPlainObject(guiState) ? this._clone(guiState) : {};
         state.version = this.GUI_VERSION;
         state.model = this._normalizeModel(state.model);
+        state.doughnutLabelStyle = this._normalizeDoughnutLabelStyle(state.doughnutLabelStyle);
         return state;
     },
 

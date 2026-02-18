@@ -920,6 +920,23 @@
     </div>
     <br>
     <br>
+    <h2> <?php p($l->t('Labels')); ?> </h2>
+    <span class="userGuidance"><?php p($l->t('Choose how doughnut chart labels are displayed')); ?></span>
+    <div class="table" style="display: table;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 220px;">
+                <?php p($l->t('Doughnut label style')); ?>
+            </div>
+            <div style="display: table-cell; width: 220px;">
+                <select id="chartDoughnutLabelStyle" class="optionsInput">
+                    <option value="percentage"><?php p($l->t('Percentage')); ?></option>
+                    <option value="absolute"><?php p($l->t('Absolute value')); ?></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
     <h2> <?php p($l->t('Visualization')); ?> </h2>
     <div class="table" style="display: table;" id="chartOptionsTable">
         <div style="display: table-row;">

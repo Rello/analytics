@@ -720,6 +720,7 @@ OCA.Analytics.Visualization = {
         let chartTypeFull;
         jsondata.options.chart === '' ? chartTypeFull = 'column' : chartTypeFull = jsondata.options.chart;
         let chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(jsondata.options.chartoptions);
 
         // get the default settings for a chart
         Chart.defaults.elements.line.borderWidth = 2;
@@ -842,6 +843,17 @@ OCA.Analytics.Visualization = {
                 chartOptions.scales.secondary.display = false;
                 chartOptions.scales.secondary.grid.display = false;
             }
+            chartOptions.plugins ??= {};
+            chartOptions.plugins.datalabels ??= {};
+            chartOptions.plugins.datalabels.display = true;
+            chartOptions.plugins.datalabels.color = '#FFFFFF';
+            chartOptions.plugins.datalabels.formatter = (value, context) => {
+                return OCA.Analytics.Visualization.formatDoughnutDataLabel(
+                    value,
+                    context,
+                    guiState.doughnutLabelStyle
+                );
+            };
         } else if (chartType === 'funnel') {
             delete chartOptions.scales;
         }
@@ -879,6 +891,34 @@ OCA.Analytics.Visualization = {
             options: chartOptions,
         });
     },
+
+    formatDoughnutDataLabel: function (value, context, labelStyle = 'percentage') {
+        const numericValue = parseFloat(value);
+        if (isNaN(numericValue)) {
+            return '';
+        }
+
+        const dataArr = context?.chart?.data?.datasets?.[0]?.data || [];
+        let sum = 0;
+        dataArr.forEach(data => {
+            const numericDataValue = parseFloat(data);
+            if (!isNaN(numericDataValue)) {
+                sum += numericDataValue;
+            }
+        });
+
+        const percentageValue = sum > 0 ? (numericValue * 100 / sum) : 0;
+        if (percentageValue <= 5) {
+            return '';
+        }
+
+        if (labelStyle === 'absolute') {
+            return numericValue.toLocaleString();
+        }
+
+        return percentageValue.toFixed(0) + '%';
+    },
+
     /**
      * Build threshold annotations for Chart.js charts.
      *
