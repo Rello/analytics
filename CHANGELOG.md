@@ -1,16 +1,17 @@
 # Changelog
 
+## 6.1.0 - 2026-02-18
 ### Added
 - Caching also for data sources. (Can be implemented by data source owner)
 - TTL based caching for GitHub, External CSV and External JSON
 - File-change based caching for local Spreadsheet, CSV and JSON datasources
 - Chart options now include a doughnut label style setting (percentage vs. absolute value)
+- Use native color picker inputs in chart options for data series colors
 
 ### Fixes
 - Dark Mode: Settings element does not adapt text color #565
 - Harden filter column handling to block unsupported identifiers
 - Fix public chart only link
-- Use native color picker inputs in chart options for data series colors
 - Preserve chart option callback functions (e.g. datalabel formatters) during option composition
 - Harden panorama ownership checks to prevent unauthorized read/update/delete access
 - Guard browser cache access when localStorage is unavailable (e.g. Android WebView)

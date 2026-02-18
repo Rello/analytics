@@ -26,7 +26,7 @@ Connect data from different sources in one place and turn it into shareable insi
 - **AI Assistant**: Context Chat integration
 
 ]]></description>
-    <version>6.0.2</version>
+    <version>6.1.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>
