@@ -112,19 +112,25 @@ OCA.Analytics.Dashboard = {
     getData: function (datasetId) {
         const url = OC.generateUrl('apps/analytics/data/' + datasetId, true);
         const cacheKey = `analytics-report-${datasetId}`;
+        const storage = OCA.Analytics.getLocalStorage();
 
         // Retrieve cached data and version
         let cachedData = null;
         let cachedVersion = null;
-        try {
-            const cachedEntry = localStorage.getItem(cacheKey);
-            if (cachedEntry) {
-                const parsed = JSON.parse(cachedEntry);
-                cachedData = parsed.data;
-                cachedVersion = parsed.version;
+        if (storage) {
+            try {
+                const cachedEntry = storage.getItem(cacheKey);
+                if (cachedEntry) {
+                    const parsed = JSON.parse(cachedEntry);
+                    cachedData = parsed.data;
+                    cachedVersion = parsed.version;
+                }
+            } catch (e) {
+                try {
+                    storage.removeItem(cacheKey);
+                } catch (removeError) {
+                }
             }
-        } catch (e) {
-            localStorage.removeItem(cacheKey);
         }
 
         let xhr = new XMLHttpRequest();
@@ -147,8 +153,11 @@ OCA.Analytics.Dashboard = {
                     // data needs to be marked as cacheable
                     const cacheable = xhr.getResponseHeader('X-Analytics-Cacheable') === 'true';
 
-                    if (cacheable && newVersion) {
-                        localStorage.setItem(cacheKey, JSON.stringify({ data, version: newVersion }));
+                    if (cacheable && newVersion && storage) {
+                        try {
+                            storage.setItem(cacheKey, JSON.stringify({ data, version: newVersion }));
+                        } catch (e) {
+                        }
                     }
 
                     if (data['status'] !== 'nodata' && data['data'].length > 20) {

@@ -105,6 +105,23 @@ Object.assign(OCA.Analytics, {
         return headers;
     },
 
+    /**
+     * Return browser localStorage if available and accessible
+     */
+    getLocalStorage: function () {
+        if (typeof window === 'undefined') {
+            return null;
+        }
+        try {
+            if (typeof window.localStorage === 'undefined') {
+                return null;
+            }
+            return window.localStorage;
+        } catch (e) {
+            return null;
+        }
+    },
+
     registerHandler: function (context, type, handlerFunction) {
         if (!OCA.Analytics.handlers[context]) {
             OCA.Analytics.handlers[context] = {};

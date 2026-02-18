@@ -1067,6 +1067,10 @@ OCA.Analytics.Navigation = {
     },
 
     saveOpenState: function () {
+        const storage = OCA.Analytics.getLocalStorage();
+        if (!storage) {
+            return;
+        }
         const openNodes = [];
         document.querySelectorAll('#navigationDatasets li.collapsible.open').forEach(li => {
             if (li.dataset.id) {
@@ -1075,15 +1079,23 @@ OCA.Analytics.Navigation = {
                 openNodes.push('s-' + li.dataset.sectionId);
             }
         });
-        localStorage.setItem('analyticsNavState', JSON.stringify(openNodes));
+        try {
+            storage.setItem('analyticsNavState', JSON.stringify(openNodes));
+        } catch (e) {
+        }
     },
 
     restoreOpenState: function () {
+        const storage = OCA.Analytics.getLocalStorage();
         let saved;
-        try {
-            saved = JSON.parse(localStorage.getItem('analyticsNavState')) || [];
-        } catch (e) {
+        if (!storage) {
             saved = [];
+        } else {
+            try {
+                saved = JSON.parse(storage.getItem('analyticsNavState')) || [];
+            } catch (e) {
+                saved = [];
+            }
         }
         saved.forEach(id => {
             if (id.startsWith('g-')) {

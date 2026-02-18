@@ -12,6 +12,7 @@
 - Use native color picker inputs in chart options for data series colors
 - Preserve chart option callback functions (e.g. datalabel formatters) during option composition
 - Harden panorama ownership checks to prevent unauthorized read/update/delete access
+- Guard browser cache access when localStorage is unavailable (e.g. Android WebView)
 
 ### Changed
 - Prepare chart option handling for future enhancements

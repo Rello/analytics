@@ -805,19 +805,25 @@ Object.assign(OCA.Analytics.Report.Backend = {
         const reportId = isPublic ? sharingToken : document.querySelector('#navigationDatasets .active').firstElementChild.dataset.id;
         const url = OC.generateUrl(`apps/analytics/data/${isPublic ? 'public/' : ''}`) + reportId;
         const cacheKey = `analytics-report-${reportId}`;
+        const storage = OCA.Analytics.getLocalStorage();
 
         // Retrieve cached data and version
         let cachedData = null;
         let cachedVersion = null;
-        try {
-            const cachedEntry = localStorage.getItem(cacheKey);
-            if (cachedEntry) {
-                const parsed = JSON.parse(cachedEntry);
-                cachedData = parsed.data;
-                cachedVersion = parsed.version;
+        if (storage) {
+            try {
+                const cachedEntry = storage.getItem(cacheKey);
+                if (cachedEntry) {
+                    const parsed = JSON.parse(cachedEntry);
+                    cachedData = parsed.data;
+                    cachedVersion = parsed.version;
+                }
+            } catch (e) {
+                try {
+                    storage.removeItem(cacheKey);
+                } catch (removeError) {
+                }
             }
-        } catch (e) {
-            localStorage.removeItem(cacheKey);
         }
 
         let xhr = new XMLHttpRequest();
@@ -843,8 +849,11 @@ Object.assign(OCA.Analytics.Report.Backend = {
                     // data needs to be marked as cacheable
                     const cacheable = xhr.getResponseHeader('X-Analytics-Cacheable') === 'true';
 
-                    if (cacheable && newVersion) {
-                        localStorage.setItem(cacheKey, JSON.stringify({ data, version: newVersion }));
+                    if (cacheable && newVersion && storage) {
+                        try {
+                            storage.setItem(cacheKey, JSON.stringify({ data, version: newVersion }));
+                        } catch (e) {
+                        }
                     }
 
                     OCA.Analytics.currentReportData = OCA.Analytics.Report.Backend.processReceivedData(data);
