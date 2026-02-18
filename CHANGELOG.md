@@ -15,6 +15,7 @@
 - Preserve chart option callback functions (e.g. datalabel formatters) during option composition
 - Harden panorama ownership checks to prevent unauthorized read/update/delete access
 - Guard browser cache access when localStorage is unavailable (e.g. Android WebView)
+- Disable datasource cache validation for dataload execution paths to prevent not-modified responses during background imports
 
 ### Changed
 - Prepare chart option handling for future enhancements

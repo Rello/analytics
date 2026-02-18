@@ -285,8 +285,9 @@ class DataloadService
 
             if ($dataloadMetadata['datasource'] !== 0) {
                 $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
+                unset($dataloadMetadata['cacheKey']);
 
-                $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata);
+                $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata, false);
                 $result['datasetId'] = $dataloadMetadata['dataset'];
             } else {
                 // this is a deletion request. Just run the simulation and return the possible row count in the expected result array
@@ -488,7 +489,7 @@ class DataloadService
             $reportMetadata = array();
             $reportMetadata['link'] = $path;
             $reportMetadata['user_id'] = $this->userId;
-            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $reportMetadata);
+            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $reportMetadata, false);
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {

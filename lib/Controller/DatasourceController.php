@@ -134,10 +134,11 @@ class DatasourceController extends Controller {
 	 *
 	 * @param int $datasourceId
 	 * @param $datasetMetadata
+	 * @param bool $allowCacheValidation
 	 * @return array|NotFoundException
 	 */
 	#[NoAdminRequired]
-	public function read(int $datasourceId, $datasetMetadata) {
+	public function read(int $datasourceId, $datasetMetadata, bool $allowCacheValidation = true) {
 		if (!$this->getDatasources()[$datasourceId]) {
 			$result['error'] = $this->l10n->t('Data source not available anymore');
 			return $result;
@@ -150,8 +151,9 @@ class DatasourceController extends Controller {
 		} else {
 			$option = json_decode($datasetMetadata['link'], true);
 		}
+		unset($option['cacheKey']);
 		$option['user_id'] = $datasetMetadata['user_id'];
-		if (isset($datasetMetadata['cacheKey']) && $datasetMetadata['cacheKey'] !== '') {
+		if ($allowCacheValidation && isset($datasetMetadata['cacheKey']) && $datasetMetadata['cacheKey'] !== '') {
 			$option['cacheKey'] = $datasetMetadata['cacheKey'];
 		}
 
