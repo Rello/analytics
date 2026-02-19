@@ -79,6 +79,7 @@ OC.L10N.register(
     "Password protection" : "Verndun með lykilorði",
     "Copy link" : "Afrita tengil",
     "Additional settings" : "Aukastillingar",
+    "Labels" : "Skýringar",
     "Color" : "Litur",
     "Sort by" : "Raða sem",
     "Get more information" : "Til að fá frekari upplýsingar",

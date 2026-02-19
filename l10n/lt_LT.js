@@ -97,6 +97,7 @@ OC.L10N.register(
     "Rows" : "Eilutės",
     "Columns" : "Stulpeliai",
     "Additional settings" : "Papildomi nustatymai",
+    "Labels" : "Etiketės",
     "Color" : "Spalva",
     "Sort by" : "Rikiuoti pagal",
     "Get more information" : "Gaukite daugiau informacijos",

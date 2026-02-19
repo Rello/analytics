@@ -377,6 +377,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "ئىستوندىكى قىممەتلەر بىلەن ھەر بىر تېمىغا بىر قۇر",
     "Timestamps in first column" : "بىرىنچى قاتاردا ۋاقىت",
     "One line per timestamp with the series in the columns" : "ھەر بىر ۋاقىت بەلگىسىگە بىر قۇر، ئىستونلاردا تىزىلغانلار بار",
+    "Labels" : "بەلگىلەر",
     "Data series" : "سانلىق مەلۇمات يۈرۈشلۈكلىرى",
     "Vertical axis" : "تىك ئوق",
     "Color" : "رەڭ",

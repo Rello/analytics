@@ -377,6 +377,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "ໜຶ່ງແຖວຕໍ່ຫົວຂໍ້ພ້ອມກັບຄ່າໃນຖັນ",
     "Timestamps in first column" : "ເວລາໃນຖັນທຳອິດ",
     "One line per timestamp with the series in the columns" : "ໜຶ່ງແຖວຕໍ່ເວລາພ້ອມກັບຊຸດຂໍ້ມູນໃນຖັນ",
+    "Labels" : "ປ້າຍກຳກັບ",
     "Data series" : "ຊຸດຂໍ້ມູນ",
     "Vertical axis" : "ແກນຕັ້ງ",
     "Color" : "ສີ",

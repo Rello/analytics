@@ -92,6 +92,7 @@ OC.L10N.register(
     "Rows" : "Retci",
     "Columns" : "Stupci",
     "Additional settings" : "Dodatne postavke",
+    "Labels" : "Oznake",
     "Color" : "Boja",
     "Sort by" : "Razvrstaj prema",
     "Get more information" : "Dohvatite više informacija",

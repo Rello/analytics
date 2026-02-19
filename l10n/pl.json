@@ -376,6 +376,7 @@
     "One line per topic with the values in the columns" : "Jedna linia na temat, a wartości w kolumnach",
     "Timestamps in first column" : "Znaczniki czasu w pierwszej kolumnie",
     "One line per timestamp with the series in the columns" : "Jedna linia na znacznik czasu, a serie w kolumnach",
+    "Labels" : "Etykiety",
     "Data series" : "Seria danych",
     "Vertical axis" : "Oś pionowa",
     "Color" : "Kolor",

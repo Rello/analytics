@@ -378,6 +378,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "Une ligne par topic avec les valeurs en colonne",
     "Timestamps in first column" : "Horodatage dans la première colonne",
     "One line per timestamp with the series in the columns" : "Une ligne par horodatage avec la série dans la colonne.",
+    "Labels" : "Étiquettes",
     "Data series" : "Séries de données",
     "Vertical axis" : "Axe vertical (ordonnée)",
     "Color" : "Couleur",

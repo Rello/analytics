@@ -62,6 +62,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",
     "Additional settings" : "Konfigurime shtesë",
+    "Labels" : "Etiketa",
     "Color" : "Ngjyrë ",
     "Sort by" : "Renditni sipas",
     "Create" : "Krijo"

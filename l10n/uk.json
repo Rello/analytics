@@ -373,6 +373,7 @@
     "One line per topic with the values in the columns" : "Один рядок на тему із значеннями у стовпцях",
     "Timestamps in first column" : "Мітки часу в першому стовпчику",
     "One line per timestamp with the series in the columns" : "По одному рядку на кожну мітку часу з серіями у стовпчиках",
+    "Labels" : "Етикетки",
     "Data series" : "Ряд даних",
     "Vertical axis" : "Вертикальна вісь",
     "Color" : "Колір",

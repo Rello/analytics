@@ -343,6 +343,7 @@ OC.L10N.register(
     "A list of values. This is the default." : "Zoznam hodnôt. Toto je predvolené.",
     "In columns" : "V stĺpcoch",
     "One line per topic with the values in the columns" : "Jeden riadok na tému s hodnotami v stĺpcoch",
+    "Labels" : "Značky",
     "Data series" : "Série údajov",
     "Vertical axis" : "Zvislá os",
     "Color" : "Farba",

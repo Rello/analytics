@@ -278,6 +278,7 @@ OC.L10N.register(
     "In columns" : "Veergudes",
     "Timestamps in first column" : "Ajatemplid esimeses veerus",
     "One line per timestamp with the series in the columns" : "Üks rida ajatempli kohta nii, et andmejada on veergudes",
+    "Labels" : "Sildid",
     "Vertical axis" : "Püsttelg",
     "Color" : "Värv",
     "Sort by" : "Sorteeri",

@@ -377,6 +377,7 @@
     "One line per topic with the values in the columns" : "Mstari mmoja kwa kila mada yenye thamani katika safu wima",
     "Timestamps in first column" : "Muhuri wa saa katika safu wima ya kwanza",
     "One line per timestamp with the series in the columns" : "Mstari mmoja kwa kila muhuri wa muda na mfululizo katika safu wima",
+    "Labels" : "Lebo",
     "Data series" : "Mfululizo wa data",
     "Vertical axis" : "Mhimili wima",
     "Color" : "Rangi",

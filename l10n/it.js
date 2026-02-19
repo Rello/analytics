@@ -321,6 +321,7 @@ OC.L10N.register(
     "Data format" : "Formato dati",
     "In rows" : "In righe",
     "In columns" : "In colonne",
+    "Labels" : "Etichette",
     "Data series" : "Serie di dati",
     "Vertical axis" : "Asse verticale",
     "Color" : "Colore",

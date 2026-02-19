@@ -375,6 +375,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "每个主题占一行，数值置于各列中​",
     "Timestamps in first column" : "第一列中的时间戳",
     "One line per timestamp with the series in the columns" : "每条时间戳对应一行数据，各项指标列在相应列中。",
+    "Labels" : "标签",
     "Data series" : "数据系列",
     "Vertical axis" : "纵轴",
     "Color" : "颜色",

@@ -376,6 +376,7 @@
     "One line per topic with the values in the columns" : "Een regel per onderwerp, met de waarden in de kolommen",
     "Timestamps in first column" : "Tijdsaanduidingen in eerste kolom",
     "One line per timestamp with the series in the columns" : "Een regel per tijdsaanduiding met de series in de kolommen",
+    "Labels" : "Labels",
     "Data series" : "Dataserie",
     "Vertical axis" : "Verticale as",
     "Color" : "Kleur",

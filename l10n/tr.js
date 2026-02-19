@@ -378,6 +378,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "Sütunlardaki değerlerle her konu için bir satır",
     "Timestamps in first column" : "Zaman damgaları ilk sütunda",
     "One line per timestamp with the series in the columns" : "Sütunlardaki dizilerle her zaman damgası için bir satır",
+    "Labels" : "Etiketler",
     "Data series" : "Veri dizileri",
     "Vertical axis" : "Dikey eksen",
     "Color" : "Renk",

@@ -356,6 +356,7 @@ OC.L10N.register(
     "A list of values. This is the default." : "En liste over verdier. Dette er standard.",
     "In columns" : "I kolonner",
     "One line per topic with the values in the columns" : "Én linje per emne med verdiene i kolonnene",
+    "Labels" : "Etiketter",
     "Data series" : "Data serier",
     "Vertical axis" : "Vertikal akse",
     "Color" : "Farge",

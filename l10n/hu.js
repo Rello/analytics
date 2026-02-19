@@ -349,6 +349,7 @@ OC.L10N.register(
     "In columns" : "Oszlopokban",
     "One line per topic with the values in the columns" : "Témánként egy sor az oszlopokban szereplő értékekkel",
     "Timestamps in first column" : "Időbélyegek az első oszlopban",
+    "Labels" : "Címkék",
     "Data series" : "Adatsorok",
     "Vertical axis" : "Függőleges tengely",
     "Color" : "Szín",

@@ -379,6 +379,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "Líne amháin in aghaidh an ábhair leis na luachanna sna colúin",
     "Timestamps in first column" : "Stampaí ama sa chéad cholún",
     "One line per timestamp with the series in the columns" : "Líne amháin in aghaidh an stampa ama leis an tsraith sna colúin",
+    "Labels" : "Lipéid",
     "Data series" : "Sraith sonraí",
     "Vertical axis" : "Ais ingearach",
     "Color" : "Dath",

@@ -222,6 +222,7 @@ OC.L10N.register(
     "Columns" : "Sarakkeet",
     "Not required" : "Ei vaadittu",
     "Additional settings" : "Lisäasetukset",
+    "Labels" : "Etiketit",
     "Data series" : "Datasarjat",
     "Vertical axis" : "Pystyakseli",
     "Color" : "Väri",
