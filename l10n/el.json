@@ -375,6 +375,7 @@
     "One line per topic with the values in the columns" : "Μία γραμμή ανά θέμα με τις τιμές στις στήλες",
     "Timestamps in first column" : "Χρονικές σημάνσεις στην πρώτη στήλη",
     "One line per timestamp with the series in the columns" : "Μία γραμμή ανά χρονική σήμανση με τις σειρές στις στήλες",
+    "Labels" : "Ετικέτες",
     "Data series" : "Σειρά δεδομένων",
     "Vertical axis" : "Κάθετος άξονας",
     "Color" : "Χρώμα",

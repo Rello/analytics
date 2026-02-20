@@ -377,6 +377,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "En linje per emne med værdierne i kolonnerne",
     "Timestamps in first column" : "Tidsstempel i første kolonne",
     "One line per timestamp with the series in the columns" : "En linje per tidsstempel med serierne i kolonnerne",
+    "Labels" : "Labels",
     "Data series" : "Data serier",
     "Vertical axis" : "Lodret akser",
     "Color" : "Farve",

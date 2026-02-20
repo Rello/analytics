@@ -184,6 +184,7 @@ OC.L10N.register(
     "Measures" : "Midíes",
     "Not required" : "Nun se rique",
     "Additional settings" : "Configuración adicional",
+    "Labels" : "Etiquetes",
     "Data series" : "Series de datos",
     "Vertical axis" : "Exes verticales",
     "Color" : "Color",

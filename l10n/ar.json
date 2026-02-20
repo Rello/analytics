@@ -340,6 +340,7 @@
     "A list of values. This is the default." : "قائمة من القيم. هذا هو الافتراضي.",
     "In columns" : "عموديّاً",
     "One line per topic with the values in the columns" : "سطر واحد لكل موضوع مع وضع القيم في الأعمدة",
+    "Labels" : "العناوين",
     "Data series" : "سلاسل بيانات",
     "Vertical axis" : "محور عمودي",
     "Color" : "اللون",

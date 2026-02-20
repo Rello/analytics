@@ -343,6 +343,7 @@ OC.L10N.register(
     "A list of values. This is the default." : "Una llista de valors. Aquesta és per defecte..",
     "In columns" : "En columnes",
     "One line per topic with the values in the columns" : "Una línia per tema amb els valors de les columnes",
+    "Labels" : "Etiqueta",
     "Data series" : "Sèries de dades",
     "Vertical axis" : "Eix vertical",
     "Color" : "Color",

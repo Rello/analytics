@@ -377,6 +377,7 @@
     "One line per topic with the values in the columns" : "One line per topic with the values in the columns",
     "Timestamps in first column" : "Timestamps in first column",
     "One line per timestamp with the series in the columns" : "One line per timestamp with the series in the columns",
+    "Labels" : "Labels",
     "Data series" : "Data series",
     "Vertical axis" : "Vertical axis",
     "Color" : "Colour",

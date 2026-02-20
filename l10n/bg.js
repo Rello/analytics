@@ -367,6 +367,7 @@ OC.L10N.register(
     "One line per topic with the values in the columns" : "Един ред на тема със стойности в колоните",
     "Timestamps in first column" : "Времевите маркери в първата колона",
     "One line per timestamp with the series in the columns" : "Един ред на времеви отрязък със сериите в колоните",
+    "Labels" : "Етикети",
     "Data series" : "Серии от данни",
     "Vertical axis" : "Вертикална ос",
     "Color" : "Цвят",
