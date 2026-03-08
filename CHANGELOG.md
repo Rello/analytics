@@ -3,6 +3,19 @@
 ## 6.2.0 - 2026-02-xx
 ### Added
 - Data sources can offer report templates within the wizard
+- Startup splash screen
+
+### Changed
+- Automatically import demo reports on first app start for each user
+- Hide panorama subheader rows in layout chooser previews
+- Open the layout chooser immediately after creating a new panorama
+- Enter panorama edit mode automatically after selecting the first layout on a newly created panorama
+- Enable data aggregation in the column selection dialog
+
+### Fixed
+- Prevent new panoramas from reusing page content/layout from previously edited panoramas
+- Keep aggregated numeric values when rows with empty/null values are merged after removing columns
+- Ignore stale drilldown column-selection indices that no longer map to dimensions after report dimension changes
 
 ## 6.1.0 - 2026-02-18
 ### Added

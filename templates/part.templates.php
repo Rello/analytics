@@ -228,6 +228,17 @@
             </div>
         </div>
     </div>
+    <div class="table" style="display: table; margin-top: 14px;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 150px;">
+                <label for="drilldownAggregate"><?php p($l->t('Aggregate values')); ?></label>
+            </div>
+            <div style="display: table-cell; width: 50px;">
+                <input type="checkbox" id="drilldownAggregate" class="checkbox" name="drilldownAggregate" checked>
+                <label for="drilldownAggregate"></label>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template id="templateFilterDialog">

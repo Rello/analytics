@@ -3,10 +3,6 @@
 }
 
 .app-splash-screen {
-    --splash-draw-ms: 1000ms;
-    --splash-reveal-ms: 2000ms;
-    --splash-hold-ms: 2000ms;
-    --splash-fade-ms: 320ms;
     position: fixed;
     top: 50px !important;
     inset: 0;
@@ -16,10 +12,13 @@
     justify-content: center;
     background: radial-gradient(circle at 20% 20%, #f4f8f6 0%, #e2e8f0 65%, #d8e0db 100%);
     opacity: 1;
+    animation: splashFallbackHide 1ms linear 8000ms forwards;
 }
 
 .app-splash-screen.is-running {
-    animation: splashHide var(--splash-fade-ms) ease calc(var(--splash-draw-ms) + var(--splash-reveal-ms) + var(--splash-hold-ms)) forwards;
+    animation:
+        splashHide var(--splash-fade-ms, 0ms) ease calc(var(--splash-draw-ms, 0ms) + var(--splash-reveal-ms, 0ms) + var(--splash-hold-ms, 0ms)) forwards,
+        splashFallbackHide 1ms linear 8000ms forwards;
 }
 
 .app-splash-content {
@@ -31,7 +30,7 @@
 }
 
 .app-splash-screen.is-running .app-splash-content {
-    animation: splashGroupExpand var(--splash-reveal-ms) ease var(--splash-draw-ms) forwards;
+    animation: splashGroupExpand var(--splash-reveal-ms, 0ms) ease var(--splash-draw-ms, 0ms) forwards;
 }
 
 .app-splash-logo {
@@ -40,36 +39,10 @@
     display: block;
 }
 
-.app-splash-logo-svg {
+.app-splash-logo-img {
     width: 100%;
     height: 100%;
     display: block;
-}
-
-.app-splash-logo-fill {
-    fill: #12426E;
-    opacity: 0;
-}
-
-.app-splash-logo-stroke {
-    fill: none;
-    stroke: #12426E;
-    stroke-width: 120;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    opacity: 1;
-}
-
-.app-splash-screen.is-running .app-splash-logo-stroke {
-    animation:
-        splashLogoDraw var(--splash-draw-ms) linear forwards,
-        splashLogoStrokeFade var(--splash-reveal-ms) ease var(--splash-draw-ms) forwards;
-}
-
-.app-splash-screen.is-running .app-splash-logo-fill {
-    animation: splashLogoFill var(--splash-reveal-ms) ease var(--splash-draw-ms) forwards;
 }
 
 .app-splash-name {
@@ -85,7 +58,7 @@
 }
 
 .app-splash-screen.is-running .app-splash-name {
-    animation: splashNameReveal var(--splash-reveal-ms) ease var(--splash-draw-ms) forwards;
+    animation: splashNameReveal var(--splash-reveal-ms, 0ms) ease var(--splash-draw-ms, 0ms) forwards;
 }
 
 @keyframes splashNameReveal {
@@ -102,25 +75,15 @@
     }
 }
 
-@keyframes splashLogoDraw {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-@keyframes splashLogoStrokeFade {
+@keyframes splashHide {
     to {
         opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
     }
 }
 
-@keyframes splashLogoFill {
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes splashHide {
+@keyframes splashFallbackHide {
     to {
         opacity: 0;
         visibility: hidden;
@@ -165,12 +128,4 @@
         transform: none;
     }
 
-    .app-splash-logo-stroke {
-        opacity: 0;
-        stroke-dashoffset: 0;
-    }
-
-    .app-splash-logo-fill {
-        opacity: 1;
-    }
 }

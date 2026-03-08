@@ -1227,6 +1227,7 @@ document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.WhatsNew.whatsnew();
     if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
         OCA.Analytics.Wizard.showFirstStart();
+        OCA.Analytics.Wizard.demo();
     }
 
     document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);

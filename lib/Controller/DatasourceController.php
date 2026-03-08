@@ -193,8 +193,10 @@ class DatasourceController extends Controller {
 				// not typed like internal storage with e.g. dimension1: test
 				// due to this, we first need to filter because aggregation would alter the index numbers
 				$result = $this->filterData($result, $datasetMetadata['filteroptions']);
-				// remove columns and aggregate data
-				$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
+				// remove columns and aggregate data if enabled in report options
+				if ($this->isAggregationEnabled($datasetMetadata['filteroptions'])) {
+					$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
+				}
 			}
 
 		} catch (\Error $e) {
@@ -321,9 +323,22 @@ class DatasourceController extends Controller {
 	private function aggregateData($data, $filter) {
 		$options = json_decode($filter, true);
 		if (isset($options['drilldown'])) {
+			// Drop stale drilldown indices that now target non-dimension columns (e.g. value).
+			$dimensionCount = max(count($data['header']) - 1, 0);
+			$validDrilldown = [];
+			foreach ($options['drilldown'] as $index => $hidden) {
+				$drilldownIndex = filter_var($index, FILTER_VALIDATE_INT);
+				if ($drilldownIndex === false || $drilldownIndex < 0 || $drilldownIndex >= $dimensionCount) {
+					continue;
+				}
+				if ($hidden === false || $hidden === 'false' || $hidden === 0 || $hidden === '0') {
+					$validDrilldown[] = $drilldownIndex;
+				}
+			}
+
 			// Sort the indices in descending order
-                        $sortedIndices = array_keys($options['drilldown']);
-                        rsort($sortedIndices, SORT_NUMERIC);
+			$sortedIndices = $validDrilldown;
+			rsort($sortedIndices, SORT_NUMERIC);
 
 			foreach ($sortedIndices as $removeIndex) {
 				$aggregatedData = [];
@@ -356,7 +371,7 @@ class DatasourceController extends Controller {
 					if (is_numeric($value)) {
 						//$this->logger->info("value is float");
 						$aggregatedData[$key] += $value;
-					} else {
+					} elseif ($value !== null && $value !== '') {
 						//$this->logger->info("value is not float");
 						$aggregatedData[$key] = $value;
 					}
@@ -384,5 +399,28 @@ class DatasourceController extends Controller {
 			}
 		}
 		return $data;
+	}
+
+	private function isAggregationEnabled(string $filterOptions): bool {
+		$options = json_decode($filterOptions, true);
+		if (!is_array($options)) {
+			return true;
+		}
+
+		// Hidden drilldown columns always require aggregation to build valid grouped rows.
+		if (isset($options['drilldown']) && is_array($options['drilldown'])) {
+			foreach ($options['drilldown'] as $isVisible) {
+				if ($isVisible === false || $isVisible === 'false' || $isVisible === 0 || $isVisible === '0') {
+					return true;
+				}
+			}
+		}
+
+		if (!array_key_exists('aggregate', $options)) {
+			return true;
+		}
+
+		$value = $options['aggregate'];
+		return !($value === false || $value === 'false' || $value === 0 || $value === '0');
 	}
 }

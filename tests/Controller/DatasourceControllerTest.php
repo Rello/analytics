@@ -122,6 +122,72 @@ class DatasourceControllerTest extends TestCase {
         $this->assertTrue($result['cache']['notModified']);
     }
 
+    public function testReadSkipsAggregationWhenAggregateFlagIsFalse(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [['Germany', 'EU', 1], ['Germany', 'EU', 1]],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false,"drilldown":{"1":false}}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(2, $result['data']);
+        $this->assertCount(3, $result['data'][0]);
+    }
+
+    public function testAggregateDataKeepsNumericSumWhenLaterRowsHaveNullValue(): void {
+        $controller = $this->createController();
+        $data = [
+            'header' => ['Country', 'Date', 'Value'],
+            'data' => [
+                ['Germany', '2026-01-01', 1],
+                ['Germany', '2026-01-02', null],
+            ],
+        ];
+        $filter = json_encode(['drilldown' => ['1' => true]]);
+
+        $reflection = new \ReflectionClass(DatasourceController::class);
+        $method = $reflection->getMethod('aggregateData');
+        $method->setAccessible(true);
+        $result = $method->invoke($controller, $data, $filter);
+
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 1], $result['data'][0]);
+    }
+
+    public function testAggregateDataIgnoresStaleDrilldownIndexPointingToValueColumn(): void {
+        $controller = $this->createController();
+        $data = [
+            'header' => ['Country', 'Value'],
+            'data' => [
+                ['Germany', 1],
+                ['France', 2],
+            ],
+        ];
+        $filter = json_encode(['drilldown' => ['1' => false]]);
+
+        $reflection = new \ReflectionClass(DatasourceController::class);
+        $method = $reflection->getMethod('aggregateData');
+        $method->setAccessible(true);
+        $result = $method->invoke($controller, $data, $filter);
+
+        $this->assertSame(['Country', 'Value'], $result['header']);
+        $this->assertCount(2, $result['data']);
+        $this->assertSame(['Germany', 1], $result['data'][0]);
+        $this->assertSame(['France', 2], $result['data'][1]);
+    }
+
     private function createController(
         ?\OCA\Analytics\Datasource\LocalCsv $localCsv = null,
         ?\OCA\Analytics\Datasource\Github $github = null

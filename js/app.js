@@ -16,6 +16,10 @@
 
 'use strict';
 
+if (typeof window !== 'undefined') {
+    window.__analyticsAppScriptLoaded = true;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.initialDocumentTitle = document.title;
     OCA.Analytics.Visualization.hideElement('analytics-warning');

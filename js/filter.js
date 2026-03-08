@@ -80,9 +80,13 @@ OCA.Analytics.Filter = {
 
         const container = document.importNode(document.getElementById('templateDrilldownOptions').content, true);
         const table = container.getElementById('drilldownOptionsTable');
+        const aggregateCheckbox = container.getElementById('drilldownAggregate');
 
         const availableDimensions = OCA.Analytics.currentReportData.dimensions;
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (aggregateCheckbox) {
+            aggregateCheckbox.checked = filterOptions.aggregate !== false;
+        }
 
         const fragment = document.createDocumentFragment();
         Object.keys(availableDimensions).forEach((dimension, index) => {
@@ -127,6 +131,7 @@ OCA.Analytics.Filter = {
     processColumnsSelectionDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         let drilldownColumns = document.getElementsByName('drilldownColumn');
+        const aggregateCheckbox = document.getElementById('drilldownAggregate');
 
         for (let i = 0; i < drilldownColumns.length; i++) {
             let dimension = drilldownColumns[i].value;
@@ -145,6 +150,7 @@ OCA.Analytics.Filter = {
             }
         }
 
+        filterOptions.aggregate = aggregateCheckbox ? aggregateCheckbox.checked : true;
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();
