@@ -124,6 +124,7 @@ OC.L10N.register(
     "Aggregation" : "Агрегація",
     "Disaggregation" : "Дезагрегація",
     "Report" : "Звіт",
+    "No template" : "Відсутній шаблон",
     "Text variables can be used in the name or subheader.<br>They are replaced when the report is executed." : "Текстові змінні можна використовувати в імені або підзаголовку. <br>Вони замінюються під час виконання звіту.",
     "Reports can be grouped into a folder structure." : "Звіти можна групувати в структуру папок.",
     "Do you want to create a new group folder?" : "Створити новий груповий каталог?",
