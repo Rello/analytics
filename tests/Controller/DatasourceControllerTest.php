@@ -146,6 +146,112 @@ class DatasourceControllerTest extends TestCase {
         $this->assertCount(3, $result['data'][0]);
     }
 
+    public function testReadSanitizesStaleDrilldownAndDoesNotAggregate(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Value'],
+                'dimensions' => ['Country'],
+                'data' => [['Germany', 1], ['France', 2]],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"drilldown":{"1":false}}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(2, $result['data']);
+        $this->assertSame('{}', $result['filteroptions']);
+    }
+
+    public function testReadAggregatesDuplicateRowsWhenAggregateFlagIsTrueWithoutDrilldown(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['Germany', 'EU', 2],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":true}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
+    }
+
+    public function testReadAggregatesDuplicateRowsWhenAggregateOptionIsOmitted(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['Germany', 'EU', 2],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
+    }
+
+    public function testReadSanitizesArrayFilterOptionsAndAggregatesByDefault(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['Germany', 'EU', 2],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '[]',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertSame('{}', $result['filteroptions']);
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
+    }
+
     public function testAggregateDataKeepsNumericSumWhenLaterRowsHaveNullValue(): void {
         $controller = $this->createController();
         $data = [

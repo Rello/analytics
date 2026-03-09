@@ -880,7 +880,11 @@ Object.assign(OCA.Analytics.Report.Backend = {
         data.options.dataoptions = Array.isArray(parsedDataOptions) ? parsedDataOptions : [];
 
         const parsedFilterOptions = OCA.Analytics.ChartOptions.safeParse(data.options.filteroptions, {});
-        data.options.filteroptions = (parsedFilterOptions !== null && typeof parsedFilterOptions === 'object') ? parsedFilterOptions : {};
+        data.options.filteroptions = (
+            parsedFilterOptions !== null
+            && typeof parsedFilterOptions === 'object'
+            && !Array.isArray(parsedFilterOptions)
+        ) ? parsedFilterOptions : {};
 
         const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
         data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};

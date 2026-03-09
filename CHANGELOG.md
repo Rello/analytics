@@ -10,7 +10,7 @@
 - Hide panorama subheader rows in layout chooser previews
 - Open the layout chooser immediately after creating a new panorama
 - Enter panorama edit mode automatically after selecting the first layout on a newly created panorama
-- Enable data aggregation in the column selection dialog
+- Enable/disable data aggregation in the column selection dialog
 
 ### Fixed
 - Prevent new panoramas from reusing page content/layout from previously edited panoramas

@@ -44,7 +44,10 @@ OCA.Analytics.Filter = {
             }
             let active;
             if (key === 'drilldown') {
-                active = !!(filterOptions.drilldown && Object.keys(filterOptions.drilldown).length);
+                active = !!(
+                    (filterOptions.drilldown && Object.keys(filterOptions.drilldown).length)
+                    || filterOptions.aggregate === false
+                );
             } else {
                 active = filterOptions[key] !== undefined;
             }
@@ -130,6 +133,9 @@ OCA.Analytics.Filter = {
      */
     processColumnsSelectionDialog: function () {
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        if (!filterOptions || typeof filterOptions !== 'object' || Array.isArray(filterOptions)) {
+            filterOptions = {};
+        }
         let drilldownColumns = document.getElementsByName('drilldownColumn');
         const aggregateCheckbox = document.getElementById('drilldownAggregate');
 
@@ -150,7 +156,12 @@ OCA.Analytics.Filter = {
             }
         }
 
-        filterOptions.aggregate = aggregateCheckbox ? aggregateCheckbox.checked : true;
+        // `aggregate=true` is the default and should not be persisted.
+        if (aggregateCheckbox && aggregateCheckbox.checked === false) {
+            filterOptions.aggregate = false;
+        } else {
+            delete filterOptions.aggregate;
+        }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();

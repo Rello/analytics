@@ -265,6 +265,11 @@ class OutputController extends Controller {
 			// Realtime data
 			$result = $this->DatasourceController->read($datasource, $reportMetadata);
 			unset($result['rawdata']);
+			if (isset($result['filteroptions']) && is_string($result['filteroptions'])) {
+				$reportMetadata['filteroptions'] = $result['filteroptions'];
+				$filterOptions = $result['filteroptions'];
+				unset($result['filteroptions']);
+			}
 
 			// datasource confirmed a stable cache key and no change
 			if (isset($result['cache']['notModified']) && $result['cache']['notModified'] === true) {
