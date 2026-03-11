@@ -187,28 +187,24 @@ class DatasourceController extends Controller {
 				}, $result['data']);
 			}
 
-			if (isset($datasetMetadata['filteroptions']) && $datasetMetadata['filteroptions'] !== null && $datasetMetadata['filteroptions'] !== '') {
-				$originalFilterOptions = $datasetMetadata['filteroptions'];
-				$datasetMetadata['filteroptions'] = $this->sanitizeFilterOptionsForData(
-					$datasetMetadata['filteroptions'],
-					$result['header'] ?? []
-				);
-				if ($datasetMetadata['filteroptions'] !== $originalFilterOptions) {
-					// Return sanitized report options so callers can persist updated settings.
-					$result['filteroptions'] = $datasetMetadata['filteroptions'];
-				}
-
-				// filter data
-				// data sources have their dimension array with index numbers e.g. 0: test
-				// not typed like internal storage with e.g. dimension1: test
-				// due to this, we first need to filter because aggregation would alter the index numbers
-				$result = $this->filterData($result, $datasetMetadata['filteroptions']);
-				// remove columns and aggregate data if enabled in report options
-				$dimensionCount = max(count($result['header']) - 1, 0);
-				if ($this->isAggregationEnabled($datasetMetadata['filteroptions'], $dimensionCount)) {
-					$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
-				}
+			$originalFilterOptions = $datasetMetadata['filteroptions'] ?? null;
+			$datasetMetadata['filteroptions'] = $this->normalizeFilterOptionsForData(
+				$originalFilterOptions,
+				$result['header'] ?? []
+			);
+			if (is_string($originalFilterOptions)
+				&& trim($originalFilterOptions) !== ''
+				&& $datasetMetadata['filteroptions'] !== $originalFilterOptions) {
+				// Return sanitized report options so callers can persist updated settings.
+				$result['filteroptions'] = $datasetMetadata['filteroptions'];
 			}
+
+			// filter data
+			// data sources have their dimension array with index numbers e.g. 0: test
+			// not typed like internal storage with e.g. dimension1: test
+			// due to this, we first need to filter because aggregation would alter the index numbers
+			$result = $this->filterData($result, $datasetMetadata['filteroptions']);
+			$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
 
 		} catch (\Error $e) {
 			$result['error'] = $e->getMessage();
@@ -334,105 +330,31 @@ class DatasourceController extends Controller {
 	private function aggregateData($data, $filter) {
 		$options = json_decode($filter, true);
 		if (!is_array($options)) {
+			$options = [];
+		}
+
+		$header = isset($data['header']) && is_array($data['header']) ? $data['header'] : [];
+		$dimensionCount = max(count($header) - 1, 0);
+		$hiddenDrilldownIndices = $this->getHiddenDrilldownIndices($options, $dimensionCount);
+		if (!empty($hiddenDrilldownIndices)) {
+			$data = $this->removeColumnsByIndex($data, $hiddenDrilldownIndices);
+		}
+
+		if (!$this->shouldAggregate($options)) {
 			return $data;
 		}
 
-		$dimensionCount = max(count($data['header']) - 1, 0);
-		$validDrilldown = $this->getHiddenDrilldownIndices($options, $dimensionCount);
-		if (empty($validDrilldown)) {
-			if ($this->isAggregateOptionEnabled($options)) {
-				return $this->aggregateByCurrentDimensions($data);
-			}
-			return $data;
-		}
-
-		// Sort the indices in descending order
-		$sortedIndices = $validDrilldown;
-		rsort($sortedIndices, SORT_NUMERIC);
-
-		foreach ($sortedIndices as $removeIndex) {
-			$aggregatedData = [];
-
-			// remove the header of the column which is not needed
-			unset($data['header'][$removeIndex]);
-			$data['header'] = array_values($data['header']);
-
-			// remove the column of the data
-			foreach ($data['data'] as $row) {
-				// Remove the desired column by its index
-				unset($row[$removeIndex]);
-
-				// The last column is assumed to always be the value
-				$value = array_pop($row);
-
-				// If there are no columns left except the value column, insert a dummy
-				if (empty($row)) {
-					$key = 'xxsingle_valuexx';
-				} else {
-					// Use remaining columns as key
-					$key = implode("|", $row);
-				}
-
-				if (!isset($aggregatedData[$key])) {
-					$aggregatedData[$key] = 0;
-				}
-
-				//$this->logger->info("Aggregating data for key $key and $value");
-				if (is_numeric($value)) {
-					//$this->logger->info("value is float");
-					$aggregatedData[$key] += $value;
-				} elseif ($value !== null && $value !== '') {
-					//$this->logger->info("value is not float");
-					$aggregatedData[$key] = $value;
-				}
-				//$this->logger->info("aggregatedData: ". json_encode($aggregatedData));
-
-			}
-			//$this->logger->info(json_encode($aggregatedData));
-
-			// Convert the associative array to the desired format
-			$result = [];
-			foreach ($aggregatedData as $aKey => $aValue) {
-				// If only the value column remains, append its total value
-				if ($aKey === 'xxsingle_valuexx') {
-					$aKey = $this->l10n->t('Total');
-					// Add an empty column to the header because of the "total" row description
-					array_unshift($data['header'], '');
-				} else {
-					// Split the key into components
-					$components = explode('|', $aKey);
-					// Combine components with the aggregated value
-					$result[] = array_merge($components, [$aValue]);
-				}
-			}
-			$data['data'] = $result;
-		}
-		return $data;
+		return $this->aggregateRows($data);
 	}
 
-	private function isAggregationEnabled(string $filterOptions, int $dimensionCount): bool {
+	private function normalizeFilterOptionsForData($filterOptions, array $header): string {
+		if (!is_string($filterOptions) || trim($filterOptions) === '') {
+			return '{}';
+		}
+
 		$options = json_decode($filterOptions, true);
 		if (!is_array($options)) {
-			return true;
-		}
-
-		// Hidden drilldown columns always require aggregation to build valid grouped rows.
-		if (!empty($this->getHiddenDrilldownIndices($options, $dimensionCount))) {
-			return true;
-		}
-
-		if (!array_key_exists('aggregate', $options)) {
-			return true;
-		}
-
-		$value = $options['aggregate'];
-		return !($value === false || $value === 'false' || $value === 0 || $value === '0');
-	}
-
-	private function sanitizeFilterOptionsForData(string $filterOptions, array $header): string {
-		$options = json_decode($filterOptions, true);
-		if (!is_array($options)) {
-			return $filterOptions;
+			return '{}';
 		}
 
 		if (isset($options['drilldown']) && is_array($options['drilldown'])) {
@@ -475,7 +397,36 @@ class DatasourceController extends Controller {
 		return $hiddenIndices;
 	}
 
-	private function isAggregateOptionEnabled(array $options): bool {
+	private function removeColumnsByIndex(array $data, array $indices): array {
+		rsort($indices, SORT_NUMERIC);
+
+		foreach ($indices as $removeIndex) {
+			if (isset($data['header']) && is_array($data['header'])) {
+				unset($data['header'][$removeIndex]);
+			}
+
+			if (!isset($data['data']) || !is_array($data['data'])) {
+				continue;
+			}
+
+			foreach ($data['data'] as $rowIndex => $row) {
+				if (!is_array($row)) {
+					continue;
+				}
+
+				unset($row[$removeIndex]);
+				$data['data'][$rowIndex] = array_values($row);
+			}
+		}
+
+		if (isset($data['header']) && is_array($data['header'])) {
+			$data['header'] = array_values($data['header']);
+		}
+
+		return $data;
+	}
+
+	private function shouldAggregate(array $options): bool {
 		if (!array_key_exists('aggregate', $options)) {
 			// Default behavior: aggregate unless explicitly disabled.
 			return true;
@@ -485,10 +436,19 @@ class DatasourceController extends Controller {
 		return !($value === false || $value === 'false' || $value === 0 || $value === '0');
 	}
 
-	private function aggregateByCurrentDimensions(array $data): array {
+	private function aggregateRows(array $data): array {
+		if (!isset($data['data']) || !is_array($data['data']) || empty($data['data'])) {
+			return $data;
+		}
+
 		$aggregatedData = [];
 
 		foreach ($data['data'] as $row) {
+			if (!is_array($row) || empty($row)) {
+				continue;
+			}
+
+			$row = array_values($row);
 			$value = array_pop($row);
 			$key = empty($row) ? 'xxsingle_valuexx' : implode("|", $row);
 
@@ -503,10 +463,19 @@ class DatasourceController extends Controller {
 			}
 		}
 
+		if (empty($aggregatedData)) {
+			$data['data'] = [];
+			return $data;
+		}
+
 		$result = [];
 		foreach ($aggregatedData as $aKey => $aValue) {
 			if ($aKey === 'xxsingle_valuexx') {
-				array_unshift($data['header'], '');
+				if (!isset($data['header']) || !is_array($data['header'])) {
+					$data['header'] = [''];
+				} else {
+					array_unshift($data['header'], '');
+				}
 				$result[] = [$this->l10n->t('Total'), $aValue];
 			} else {
 				$components = explode('|', $aKey);

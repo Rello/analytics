@@ -6,6 +6,9 @@ use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
 
 class DatasourceControllerTest extends TestCase {
+    /**
+     * Verifies datasource providers expose their report templates via indexFiltered().
+     */
     public function testIndexFilteredIncludesReportTemplatesForDatasourceProviders(): void {
         $github = $this->createMock(\OCA\Analytics\Datasource\Github::class);
         $github->expects($this->once())
@@ -31,6 +34,9 @@ class DatasourceControllerTest extends TestCase {
         $this->assertArrayHasKey('github_demo_downloads', $result['reportTemplates'][DatasourceController::DATASET_TYPE_GIT]);
     }
 
+    /**
+     * Verifies hidden drilldown indices are processed in numeric order and removed from headers.
+     */
     public function testAggregateDataRemovesColumnsUsingNumericSorting() {
         $controller = $this->createController();
 
@@ -47,10 +53,9 @@ class DatasourceControllerTest extends TestCase {
         $row2[] = 2;
         $data = ['header' => $header, 'data' => [$row1, $row2]];
 
-        $filter = json_encode(['drilldown' => ['2' => true, '10' => true]]);
+        $filter = json_encode(['drilldown' => ['2' => false, '10' => false]]);
         $reflection = new \ReflectionClass(DatasourceController::class);
         $method = $reflection->getMethod('aggregateData');
-        $method->setAccessible(true);
         $result = $method->invoke($controller, $data, $filter);
 
         $this->assertSame('Value', end($result['header']));
@@ -59,6 +64,9 @@ class DatasourceControllerTest extends TestCase {
         $this->assertCount(10, $result['header']);
     }
 
+    /**
+     * Ensures persisted cache keys are not forwarded when cache validation is disabled.
+     */
     public function testReadIgnoresPersistedCacheKeyWhenValidationIsDisabled(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -88,6 +96,9 @@ class DatasourceControllerTest extends TestCase {
         $this->assertCount(1, $result['data']);
     }
 
+    /**
+     * Ensures only the request cache key is used when cache validation is active.
+     */
     public function testReadUsesOnlyRequestCacheKeyForValidation(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -122,7 +133,10 @@ class DatasourceControllerTest extends TestCase {
         $this->assertTrue($result['cache']['notModified']);
     }
 
-    public function testReadSkipsAggregationWhenAggregateFlagIsFalse(): void {
+    /**
+     * Confirms aggregate=false keeps rows separate while still applying drilldown column removal.
+     */
+    public function testReadAppliesDrilldownWithoutAggregationWhenAggregateFlagIsFalse(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
             ->method('readData')
@@ -143,9 +157,15 @@ class DatasourceControllerTest extends TestCase {
         $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
 
         $this->assertCount(2, $result['data']);
-        $this->assertCount(3, $result['data'][0]);
+        $this->assertCount(2, $result['data'][0]);
+        $this->assertSame(['Country', 'Value'], $result['header']);
+        $this->assertSame(['Germany', 1], $result['data'][0]);
+        $this->assertSame(['Germany', 1], $result['data'][1]);
     }
 
+    /**
+     * Confirms stale drilldown indices are sanitized out of returned filter options.
+     */
     public function testReadSanitizesStaleDrilldownAndDoesNotAggregate(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -170,6 +190,9 @@ class DatasourceControllerTest extends TestCase {
         $this->assertSame('{}', $result['filteroptions']);
     }
 
+    /**
+     * Confirms aggregate=true merges duplicate rows by visible dimensions.
+     */
     public function testReadAggregatesDuplicateRowsWhenAggregateFlagIsTrueWithoutDrilldown(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -197,6 +220,9 @@ class DatasourceControllerTest extends TestCase {
         $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
     }
 
+    /**
+     * Confirms aggregation is enabled by default when the aggregate option is omitted.
+     */
     public function testReadAggregatesDuplicateRowsWhenAggregateOptionIsOmitted(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -224,6 +250,68 @@ class DatasourceControllerTest extends TestCase {
         $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
     }
 
+    /**
+     * Confirms aggregation still runs when report metadata has no filteroptions field.
+     */
+    public function testReadAggregatesDuplicateRowsWhenFilterOptionsAreMissing(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['Germany', 'EU', 2],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
+    }
+
+    /**
+     * Confirms empty-string filteroptions are normalized and aggregation still runs by default.
+     */
+    public function testReadAggregatesDuplicateRowsWhenFilterOptionsAreEmptyString(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['Germany', 'EU', 2],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
+    }
+
+    /**
+     * Confirms array-style filteroptions are sanitized to {} and default aggregation still applies.
+     */
     public function testReadSanitizesArrayFilterOptionsAndAggregatesByDefault(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -252,6 +340,40 @@ class DatasourceControllerTest extends TestCase {
         $this->assertSame(['Germany', 'EU', 3], $result['data'][0]);
     }
 
+    /**
+     * Confirms hidden drilldown columns are removed before default aggregation is applied.
+     */
+    public function testReadAggregatesAfterRemovingHiddenDrilldownColumnsWhenAggregateOptionIsOmitted(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['Germany', 'EMEA', 2],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"drilldown":{"1":false}}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertSame(['Country', 'Value'], $result['header']);
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['Germany', 3], $result['data'][0]);
+    }
+
+    /**
+     * Confirms null values do not overwrite an already accumulated numeric aggregate.
+     */
     public function testAggregateDataKeepsNumericSumWhenLaterRowsHaveNullValue(): void {
         $controller = $this->createController();
         $data = [
@@ -261,17 +383,19 @@ class DatasourceControllerTest extends TestCase {
                 ['Germany', '2026-01-02', null],
             ],
         ];
-        $filter = json_encode(['drilldown' => ['1' => true]]);
+        $filter = json_encode(['drilldown' => ['1' => false]]);
 
         $reflection = new \ReflectionClass(DatasourceController::class);
         $method = $reflection->getMethod('aggregateData');
-        $method->setAccessible(true);
         $result = $method->invoke($controller, $data, $filter);
 
         $this->assertCount(1, $result['data']);
         $this->assertSame(['Germany', 1], $result['data'][0]);
     }
 
+    /**
+     * Confirms stale drilldown indices targeting the value column are ignored safely.
+     */
     public function testAggregateDataIgnoresStaleDrilldownIndexPointingToValueColumn(): void {
         $controller = $this->createController();
         $data = [
@@ -285,7 +409,6 @@ class DatasourceControllerTest extends TestCase {
 
         $reflection = new \ReflectionClass(DatasourceController::class);
         $method = $reflection->getMethod('aggregateData');
-        $method->setAccessible(true);
         $result = $method->invoke($controller, $data, $filter);
 
         $this->assertSame(['Country', 'Value'], $result['header']);

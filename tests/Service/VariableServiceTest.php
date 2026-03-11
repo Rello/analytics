@@ -38,7 +38,6 @@ class VariableServiceTest extends TestCase
     public function testParseFilter(string $variable)
     {
         $ref = new \ReflectionMethod(VariableService::class, 'parseFilter');
-        $ref->setAccessible(true);
         $result = $ref->invoke($this->service, $variable);
 
         $this->assertIsArray($result);

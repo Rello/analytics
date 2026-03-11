@@ -23,7 +23,6 @@ class ExternalCsvTest extends TestCase
     public function testDetectDelimiter(string $row, string $expected): void
     {
         $ref = new \ReflectionMethod(ExternalCsv::class, 'detectDelimiter');
-        $ref->setAccessible(true);
         $this->assertSame($expected, $ref->invoke($this->csv, $row));
     }
 
