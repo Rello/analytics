@@ -143,14 +143,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			$http_code = $curlResult['http_code'];
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
-				return [
-					'header' => [],
-					'dimensions' => [],
-					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
-					'rawdata' => $curlResult,
-					'error' => 'HTTP response code: ' . $http_code,
-					'cache' => $cache,
-				];
+				return $this->buildHttpErrorResult($http_code, $curlResult, $cache);
 			}
 			$i = 0;
 			if (isset($option['filter'])) {
@@ -189,20 +182,18 @@ class Github implements IDatasource, IReportTemplateProvider {
 
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
-				return [
-					'header' => [],
-					'dimensions' => [],
-					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
-					'rawdata' => $curlResult,
-					'error' => 'HTTP response code: ' . $http_code,
-					'cache' => $cache,
-				];
+				return $this->buildHttpErrorResult($http_code, $curlResult, $cache);
 			}
 
 			$issuesTotal = $curlResult['data']['open_issues'];
 
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
 			$curlResult = $this->getCurlData($url, $option);
+			$http_code = $curlResult['http_code'];
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return $this->buildHttpErrorResult($http_code, $curlResult, $cache);
+			}
 			$pulls = count($curlResult['data']);
 
 			$issuesCleaned = $issuesTotal - $pulls;
@@ -216,14 +207,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			$http_code = $curlResult['http_code'];
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
-				return [
-					'header' => [],
-					'dimensions' => [],
-					'data' => $http_code === 403 ? 'Rate limit exceeded' : [],
-					'rawdata' => $curlResult,
-					'error' => 'HTTP response code: ' . $http_code,
-					'cache' => $cache,
-				];
+				return $this->buildHttpErrorResult($http_code, $curlResult, $cache);
 			}
 			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
 			$header[] = $this->l10n->t('Type');
@@ -255,8 +239,30 @@ class Github implements IDatasource, IReportTemplateProvider {
 		];
 	}
 
+	private function buildHttpErrorResult(int $httpCode, array $curlResult, array $cache): array {
+		return [
+			'header' => [],
+			'dimensions' => [],
+			'data' => [],
+			'rawdata' => $curlResult,
+			'error' => $this->getHttpErrorMessage($httpCode),
+			'cache' => $cache,
+		];
+	}
+
+	private function getHttpErrorMessage(int $httpCode): string {
+		if ($httpCode === 401) {
+			return $this->l10n->t('Missing or invalid GitHub access token');
+		}
+		if ($httpCode === 403) {
+			return $this->l10n->t('Rate limit exceeded');
+		}
+		return 'HTTP response code: ' . $httpCode;
+	}
+
 	private function getCurlData($url, $option) {
 		$ch = curl_init();
+		$http_code = 0;
 		if ($ch !== false) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_HEADER, false);

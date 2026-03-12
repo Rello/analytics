@@ -17,6 +17,7 @@
 - Prevent new panoramas from reusing page content/layout from previously edited panoramas
 - Keep aggregated numeric values when rows with empty/null values are merged after removing columns
 - Ignore stale drilldown column-selection indices that no longer map to dimensions after report dimension changes
+- Normalize GitHub datasource HTTP error payloads to always return an empty data array
 
 ## 6.1.0 - 2026-02-18
 ### Added
