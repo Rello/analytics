@@ -302,6 +302,7 @@ Object.assign(OCA.Analytics.Report, {
         OCA.Analytics.Visualization.showElement('filterVisualisation');
         OCA.Analytics.Visualization.hideElement('reportSubHeader');
         OCA.Analytics.Visualization.hideElement('noDataContainer');
+        document.getElementById('noDataContainer').innerText = t('analytics', 'No data found');
         document.getElementById('reportHeader').innerHTML = '';
         document.getElementById('reportSubHeader').innerHTML = '';
 
@@ -784,11 +785,47 @@ Object.assign(OCA.Analytics.Report.Functions = {
 OCA.Analytics.Report.Backend = OCA.Analytics.Report.Backend || {};
 Object.assign(OCA.Analytics.Report.Backend = {
 
+    getErrorMessage: function (xhr) {
+        const fallbackMessage = t('analytics', 'The report has a technical error');
+
+        if (!xhr) {
+            return fallbackMessage;
+        }
+
+        try {
+            const parsedResponse = JSON.parse(xhr.responseText);
+            if (typeof parsedResponse.error === 'string' && parsedResponse.error !== '') {
+                return parsedResponse.error;
+            }
+            if (typeof parsedResponse.message === 'string' && parsedResponse.message !== '') {
+                return parsedResponse.message;
+            }
+        } catch (e) {
+        }
+
+        if (xhr.status >= 400) {
+            return fallbackMessage + ' (HTTP ' + xhr.status + ')';
+        }
+
+        return fallbackMessage;
+    },
+
+    showRequestError: function (errorMessage) {
+        OCA.Analytics.Visualization.showContentByType('report');
+        OCA.Analytics.Visualization.showElement('noDataContainer');
+        document.getElementById('noDataContainer').innerText = errorMessage;
+        OCA.Analytics.Notification.notification('error', errorMessage);
+    },
+
     /**
      * Fetch report data from the backend
      */
     getData: function () {
-        if (OCA.Analytics.currentXhrRequest) OCA.Analytics.currentXhrRequest.abort();
+        if (OCA.Analytics.currentXhrRequest) {
+            const previousRequest = OCA.Analytics.currentXhrRequest;
+            OCA.Analytics.currentXhrRequest = null;
+            previousRequest.abort();
+        }
         OCA.Analytics.Report.resetContentArea();
         OCA.Analytics.Visualization.showContentByType('loading');
 
@@ -842,8 +879,19 @@ Object.assign(OCA.Analytics.Report.Backend = {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
+                // Ignore old/aborted requests when a newer one has already been started
+                if (xhr !== OCA.Analytics.currentXhrRequest) return;
+                OCA.Analytics.currentXhrRequest = null;
+
                 if (xhr.status === 200) {
-                    const data = JSON.parse(xhr.responseText);
+                    let data;
+                    try {
+                        data = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        OCA.Analytics.Report.Backend.showRequestError(OCA.Analytics.Report.Backend.getErrorMessage(xhr));
+                        return;
+                    }
+
                     // derive new version from ETag
                     const newVersion = xhr.getResponseHeader('ETag') || null;
                     // data needs to be marked as cacheable
@@ -867,6 +915,8 @@ Object.assign(OCA.Analytics.Report.Backend = {
                     OCA.Analytics.Report.buildReport();
                     let refresh = parseInt(OCA.Analytics.currentReportData.options.refresh);
                     OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
+                } else {
+                    OCA.Analytics.Report.Backend.showRequestError(OCA.Analytics.Report.Backend.getErrorMessage(xhr));
                 }
             }
         };
