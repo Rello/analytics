@@ -21,4 +21,6 @@ Agents should focus on the core application logic and ignore files or folders ma
 
 For every change, add a meaningful one-liner to the corresponding section (Added, Changed, Fixed) in CHANGELOG.md.
 
+Test execution instructions are maintained in `tests/INSTRUCTIONS.md`; prefer the reusable wrappers `tests/run-unit.sh` and `tests/run-playwright.sh` over ad-hoc container commands.
+
 No nodejs or vue components are used. Everything is plain Javascript.

@@ -4,6 +4,7 @@
 ### Added
 - Data sources can offer report templates within the wizard
 - Startup splash screen
+- Playwright UI and PHPUnit and testing
 
 ### Changed
 - Automatically import demo reports on first app start for each user
