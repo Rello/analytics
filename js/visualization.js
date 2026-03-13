@@ -23,6 +23,12 @@ var myMoment = moment;
  */
 OCA.Analytics.Visualization = {
     defaultColorPalette: ["#1A366C", "#EA6A47", "#a3acb9", "#6AB187", "#39a7db", "#c85200", "#57606c", "#a3cce9", "#ffbc79", "#c8d0d9"],
+    timeAggregationFormats: {
+        day: 'YYYY-MM-DD',
+        week: 'YYYY-MM-DD',
+        month: 'YYYY-MM',
+        year: 'YYYY',
+    },
 
     _hexToRgbCache: {},
 
@@ -184,7 +190,17 @@ OCA.Analytics.Visualization = {
             },
         };
 
-        ({data, columns} = this.convertDataToDataTableFormat(jsondata.data, tableOptions, jsondata.header));
+        const timeAggregationDisplayConfig = this.getTimeAggregationTableDisplayConfig(
+            jsondata.options?.filteroptions,
+            jsondata.options?.chartoptions
+        );
+
+        ({data, columns} = this.convertDataToDataTableFormat(
+            jsondata.data,
+            tableOptions,
+            jsondata.header,
+            timeAggregationDisplayConfig
+        ));
         const calculatedResult = this.dataTableCalculatedColumns(data, columns, tableOptions);
         if (Array.isArray(calculatedResult)) {
             data = calculatedResult;
@@ -261,9 +277,10 @@ OCA.Analytics.Visualization = {
      * @param {Array} originalData - Raw matrix style data rows
      * @param {Object} tableOptions - DataTable related options
      * @param {Array} header - Original header row
+     * @param {Object|null} timeAggregationDisplayConfig - Optional table-only formatting config for aggregated time labels
      * @returns {{data: Array, columns: Array}}
      */
-    convertDataToDataTableFormat: function (originalData, tableOptions, header) {
+    convertDataToDataTableFormat: function (originalData, tableOptions, header, timeAggregationDisplayConfig = null) {
         let layoutConfig = tableOptions.layout !== undefined ? tableOptions.layout : false;
         let uniqueHeaders = new Set();
         let transformedData = {};
@@ -275,8 +292,14 @@ OCA.Analytics.Visualization = {
 
             // create the columns. default alignment is left
             columns = header.map((header, index) => ({title: _.escape(header), className: ''}));
+            if (timeAggregationDisplayConfig) {
+                this.applyTimeAggregationDisplayRenderer(columns, timeAggregationDisplayConfig.dimension, timeAggregationDisplayConfig);
+            }
             data = originalData.map(row =>
                 row.map((value, index) => {
+                    if (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension) {
+                        return value;
+                    }
                     if (!isNaN(parseFloat(value)) && index !== 0 && tableOptions.formatLocales === undefined) {
                         // Any number gets aligned to the right and formated with locales
                         if (parseInt(value) > 1950 && parseInt(value) < 2050 && index < 2) {
@@ -299,15 +322,23 @@ OCA.Analytics.Visualization = {
             // Use titles from the headers array based on the reordered sequence (indices)
             columns = layoutConfig.rows.map((index, i) => ({
                 title: _.escape(header[index]),
-                className: i > 0 ? 'dt-right' : ''
+                className: i > 0 && (!timeAggregationDisplayConfig || index !== timeAggregationDisplayConfig.dimension) ? 'dt-right' : ''
             }));
+            if (timeAggregationDisplayConfig) {
+                const displayIndex = layoutConfig.rows.indexOf(timeAggregationDisplayConfig.dimension);
+                if (displayIndex !== -1) {
+                    this.applyTimeAggregationDisplayRenderer(columns, displayIndex, timeAggregationDisplayConfig);
+                }
+            }
 
             const rowsLength = layoutConfig.rows.length; // Cache length to avoid repeated property access
 
             // Reorder the data according to the new column sequence
             data = originalData.map(row =>
                 layoutConfig.rows.map((index, i) =>
-                    i === rowsLength - 1 ? _.escape(parseFloat(row[index]).toLocaleString()) : _.escape(row[index])
+                    (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension)
+                        ? row[index]
+                        : (i === rowsLength - 1 ? _.escape(parseFloat(row[index]).toLocaleString()) : _.escape(row[index]))
                 )
             );
         } else {
@@ -315,9 +346,16 @@ OCA.Analytics.Visualization = {
 
             // 1. Extract unique headers and initialize transformedData
             originalData.forEach(row => {
-                const columnHeader = row[layoutConfig.columns[0]];
+                let columnHeader = row[layoutConfig.columns[0]];
+                if (timeAggregationDisplayConfig && layoutConfig.columns[0] === timeAggregationDisplayConfig.dimension) {
+                    columnHeader = this.formatTimeAggregationDisplayValue(columnHeader, timeAggregationDisplayConfig);
+                }
                 uniqueHeaders.add(columnHeader);
-                transformedData[row[layoutConfig.rows[0]]] = {};
+                let rowHeader = row[layoutConfig.rows[0]];
+                if (timeAggregationDisplayConfig && layoutConfig.rows[0] === timeAggregationDisplayConfig.dimension) {
+                    rowHeader = this.formatTimeAggregationDisplayValue(rowHeader, timeAggregationDisplayConfig);
+                }
+                transformedData[rowHeader] = {};
             });
 
             // Sort the headers for consistent ordering
@@ -325,8 +363,14 @@ OCA.Analytics.Visualization = {
 
             // 2. Transform the data
             originalData.forEach(row => {
-                const rowHeader = row[layoutConfig.rows[0]];
-                const columnHeader = row[layoutConfig.columns[0]];
+                let rowHeader = row[layoutConfig.rows[0]];
+                let columnHeader = row[layoutConfig.columns[0]];
+                if (timeAggregationDisplayConfig && layoutConfig.rows[0] === timeAggregationDisplayConfig.dimension) {
+                    rowHeader = this.formatTimeAggregationDisplayValue(rowHeader, timeAggregationDisplayConfig);
+                }
+                if (timeAggregationDisplayConfig && layoutConfig.columns[0] === timeAggregationDisplayConfig.dimension) {
+                    columnHeader = this.formatTimeAggregationDisplayValue(columnHeader, timeAggregationDisplayConfig);
+                }
                 const dataValue = row[layoutConfig.measures[0]];
                 transformedData[rowHeader][columnHeader] = dataValue;
             });
@@ -1227,6 +1271,70 @@ OCA.Analytics.Visualization = {
             }
         }
         return idx;
+    },
+
+    getTimeAggregationFormat: function (grouping) {
+        return this.timeAggregationFormats[grouping] || null;
+    },
+
+    getTimeAggregationTableDisplayConfig: function (filteroptions, chartoptions) {
+        const grouping = filteroptions?.timeAggregation?.grouping;
+        if (!grouping || grouping === 'none') {
+            return null;
+        }
+
+        const format = this.getTimeAggregationFormat(grouping);
+        if (!format) {
+            return null;
+        }
+
+        const dimension = this.resolveDimensionIndex(
+            filteroptions.timeAggregation.dimension,
+            filteroptions?.drilldown
+        );
+        if (dimension < 0) {
+            return null;
+        }
+
+        const parser = chartoptions?.scales?.x?.time?.parser || null;
+        return {dimension, format, parser};
+    },
+
+    formatTimeAggregationDisplayValue: function (value, config) {
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
+
+        let date;
+        if (!isNaN(value) && value !== '') {
+            const rawValue = String(value);
+            const numericValue = parseInt(rawValue, 10);
+            date = rawValue.length > 10 ? new Date(numericValue) : new Date(numericValue * 1000);
+        } else if (config?.parser) {
+            date = myMoment(value, config.parser).toDate();
+        } else {
+            date = new Date(value);
+        }
+
+        if (isNaN(date?.valueOf?.())) {
+            return value;
+        }
+
+        return myMoment(date).format(config.format);
+    },
+
+    applyTimeAggregationDisplayRenderer: function (columns, columnIndex, config) {
+        if (!columns[columnIndex]) {
+            return;
+        }
+
+        columns[columnIndex].render = function (data, type) {
+            if (type !== 'display' && type !== 'filter') {
+                return data;
+            }
+
+            return _.escape(OCA.Analytics.Visualization.formatTimeAggregationDisplayValue(data, config));
+        };
     },
 
     /**

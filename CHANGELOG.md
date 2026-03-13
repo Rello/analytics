@@ -19,6 +19,7 @@
 - Ignore stale drilldown column-selection indices that no longer map to dimensions after report dimension changes
 - Normalize GitHub datasource HTTP error payloads to always return an empty data array
 - Stop report loading spinner and show an explicit error when `/data` requests fail
+- Shorten time aggregation labels to the relevant year/month/day granularity
 
 ## 6.1.0 - 2026-02-18
 ### Added
