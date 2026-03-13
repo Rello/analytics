@@ -103,8 +103,6 @@ class Github implements IDatasource, IReportTemplateProvider {
 					'dimension1' => 'Version',
 					'dimension2' => 'Version',
 					'value' => 'false',
-					'chartoptions' => '{"__analytics_gui":{"version":2,"model":"kpiModel","doughnutLabelStyle":"percentage"}}',
-					'dataoptions' => '[]',
 				],
 				'options' => [
 					'chartoptions' => '{"__analytics_gui":{"version":2,"model":"kpiModel","doughnutLabelStyle":"percentage"}}',
