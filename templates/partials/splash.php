@@ -1,3 +1,10 @@
+<!--/**
+* Analytics
+*
+* SPDX-FileCopyrightText: 2019-2024 Marcel Scherello
+* SPDX-License-Identifier: AGPL-3.0-or-later
+*/-->
+
 <div
     id="app-splash-screen"
     class="app-splash-screen"

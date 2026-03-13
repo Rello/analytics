@@ -43,3 +43,12 @@ Environment variables:
 Artifacts:
 - Scenario `10`: `tests/ui-artifacts/10/`
 - Scenario `20`: `tests/ui-artifacts/20/`
+
+## License Compliance (REUSE)
+- Run REUSE lint:
+  - `./tests/run-reuse.sh`
+
+Notes:
+- Default container image: `fsfe/reuse`
+- Override image if needed:
+  - `REUSE_IMAGE=fsfe/reuse:latest ./tests/run-reuse.sh`

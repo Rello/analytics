@@ -24,3 +24,15 @@ For every change, add a meaningful one-liner to the corresponding section (Added
 Test execution instructions are maintained in `tests/INSTRUCTIONS.md`; prefer the reusable wrappers `tests/run-unit.sh` and `tests/run-playwright.sh` over ad-hoc container commands.
 
 No nodejs or vue components are used. Everything is plain Javascript.
+
+### License Header
+
+Every new file needs to get a SPDX header in the first rows according to this template.
+The year in the first line must be replaced with the year when the file is created (for example, 2026 for files first added in 2026).
+The commenting signs need to be used depending on the file type.
+If a file can not get a header like svg images, these need to be added to the REUSE.toml file.
+
+```plaintext
+SPDX-FileCopyrightText: <YEAR> Marcel Scherello
+SPDX-License-Identifier: AGPL-3.0-or-later
+```
