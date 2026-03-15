@@ -13,6 +13,7 @@
 - Open the layout chooser immediately after creating a new panorama
 - Enter panorama edit mode automatically after selecting the first layout on a newly created panorama
 - Enable/disable data aggregation in the column selection dialog
+- Add a template/own-report chooser as the first report wizard step
 
 ### Fixed
 - Prevent new panoramas from reusing page content/layout from previously edited panoramas

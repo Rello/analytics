@@ -160,6 +160,7 @@ OCA.Analytics.Sidebar = {
 
 OCA.Analytics.Sidebar.Report = {
     metadataChanged: false,
+    wizardTemplateJump: false,
 
     tabContainerReport: function () {
         const reportId = OCA.Analytics.currentDataset;
@@ -390,20 +391,23 @@ OCA.Analytics.Sidebar.Report = {
         });
 
         templateRow.style.display = 'table-row';
+        if (OCA.Analytics.Sidebar.Report.isTemplateDrivenWizardFlow()) {
+            templateRow.style.display = 'none';
+        }
     },
 
-    buildGlobalTemplateDropdownWizard: function () {
+    isTemplateDrivenWizardFlow: function () {
         const globalTemplateSelect = document.getElementById('wizardNewGlobalTemplate');
-        globalTemplateSelect.innerHTML = '';
+        return OCA.Analytics.Sidebar.Report.wizardTemplateJump === true
+            && !!globalTemplateSelect
+            && globalTemplateSelect.value !== '';
+    },
 
-        let emptyOption = document.createElement('option');
-        emptyOption.value = '';
-        emptyOption.innerText = t('analytics', 'No template');
-        globalTemplateSelect.appendChild(emptyOption);
-
+    getGlobalTemplatesWizard: function () {
         const datasources = OCA.Analytics?.datasources?.datasources || {};
         const templatesByDatasource = OCA.Analytics?.datasources?.reportTemplates || {};
         const sortedDatasources = Object.entries(datasources).sort((a, b) => a[1].localeCompare(b[1]));
+        const groups = [];
 
         sortedDatasources.forEach(([datasourceType, datasourceName]) => {
             const templates = templatesByDatasource[datasourceType] || {};
@@ -416,17 +420,124 @@ OCA.Analytics.Sidebar.Report = {
                 return;
             }
 
-            let group = document.createElement('optgroup');
-            group.label = datasourceName;
+            groups.push({
+                datasourceType: datasourceType,
+                datasourceName: datasourceName,
+                templates: sortableTemplates,
+            });
+        });
 
-            sortableTemplates.forEach(([templateId, templateDefinition]) => {
+        return groups;
+    },
+
+    buildGlobalTemplateDropdownWizard: function () {
+        const globalTemplateSelect = document.getElementById('wizardNewGlobalTemplate');
+        if (!globalTemplateSelect) {
+            return;
+        }
+        globalTemplateSelect.innerHTML = '';
+
+        let emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.innerText = t('analytics', 'No template');
+        globalTemplateSelect.appendChild(emptyOption);
+
+        OCA.Analytics.Sidebar.Report.getGlobalTemplatesWizard().forEach((groupDefinition) => {
+            let group = document.createElement('optgroup');
+            group.label = groupDefinition.datasourceName;
+
+            groupDefinition.templates.forEach(([templateId, templateDefinition]) => {
                 let option = document.createElement('option');
-                option.value = datasourceType + '::' + templateId;
+                option.value = groupDefinition.datasourceType + '::' + templateId;
                 option.innerText = templateDefinition.name || templateId;
                 group.appendChild(option);
             });
 
             globalTemplateSelect.appendChild(group);
+        });
+    },
+
+    buildGlobalTemplateListWizard: function () {
+        const templateList = document.getElementById('wizardNewTemplateList');
+        if (!templateList) {
+            return;
+        }
+        templateList.innerHTML = '';
+
+        const groupDefinitions = OCA.Analytics.Sidebar.Report.getGlobalTemplatesWizard();
+        if (groupDefinitions.length === 0) {
+            let emptyText = document.createElement('div');
+            emptyText.classList.add('wizardNewTemplateListEmpty');
+            emptyText.innerText = t('analytics', 'No templates available');
+            templateList.appendChild(emptyText);
+            return;
+        }
+
+        groupDefinitions.forEach((groupDefinition) => {
+            let groupContainer = document.createElement('div');
+            groupContainer.classList.add('wizardNewTemplateListGroup');
+
+            let groupHeader = document.createElement('h3');
+            groupHeader.classList.add('wizardNewTemplateListGroupHeader');
+            groupHeader.innerText = groupDefinition.datasourceName;
+            groupContainer.appendChild(groupHeader);
+
+            let itemList = document.createElement('div');
+            itemList.classList.add('wizardNewTemplateItems');
+
+            groupDefinition.templates.forEach(([templateId, templateDefinition]) => {
+                let itemButton = document.createElement('button');
+                itemButton.type = 'button';
+                itemButton.classList.add('wizardNewTemplateItem');
+                itemButton.dataset.value = groupDefinition.datasourceType + '::' + templateId;
+
+                let icon = document.createElement('span');
+                icon.classList.add('icon-analytics-report', 'wizardNewTemplateItemIcon');
+                itemButton.appendChild(icon);
+
+                let label = document.createElement('span');
+                label.classList.add('wizardNewTemplateItemLabel');
+                label.innerText = templateDefinition.name || templateId;
+                itemButton.appendChild(label);
+
+                itemButton.addEventListener('click', function () {
+                    OCA.Analytics.Sidebar.Report.selectGlobalTemplateWizard(itemButton.dataset.value);
+                });
+
+                itemList.appendChild(itemButton);
+            });
+
+            groupContainer.appendChild(itemList);
+            templateList.appendChild(groupContainer);
+        });
+
+        OCA.Analytics.Sidebar.Report.updateGlobalTemplateListSelectionWizard();
+    },
+
+    selectGlobalTemplateWizard: function (combinedValue) {
+        const globalSelect = document.getElementById('wizardNewGlobalTemplate');
+        if (!globalSelect) {
+            return;
+        }
+        OCA.Analytics.Sidebar.Report.wizardTemplateJump = true;
+        globalSelect.value = combinedValue;
+        OCA.Analytics.Sidebar.Report.handleGlobalTemplateChangeWizard();
+    },
+
+    updateGlobalTemplateListSelectionWizard: function () {
+        const globalSelect = document.getElementById('wizardNewGlobalTemplate');
+        if (!globalSelect) {
+            return;
+        }
+
+        const selectedValue = globalSelect.value;
+        const templateButtons = document.querySelectorAll('#wizardNewTemplateList .wizardNewTemplateItem');
+        templateButtons.forEach((templateButton) => {
+            if (templateButton.dataset.value === selectedValue && selectedValue !== '') {
+                templateButton.classList.add('wizardNewTemplateItemSelected');
+            } else {
+                templateButton.classList.remove('wizardNewTemplateItemSelected');
+            }
         });
     },
 
@@ -444,12 +555,18 @@ OCA.Analytics.Sidebar.Report = {
     setWizardTypeMode: function (mode) {
         const realtimeButton = document.getElementById('wizardNewTypeRealtime');
         const storedButton = document.getElementById('wizardNewTypeStored');
+        const modeRow = document.getElementById('wizardNewTypeModeRow');
         const datasourceRow = document.getElementById('wizardNewTypeDatasourceRow');
         const optionsRow = document.getElementById('wizardNewTypeOptionsRow');
         const templateRow = document.getElementById('wizardNewTypeTemplateRow');
         const storedRow = document.getElementById('wizardNewTypeStoredRow');
         const datasetRow = document.getElementById('wizardNewTypeDatasetRow');
         const dimensionRow = document.getElementById('wizardNewTypeDimensionRow');
+        const isTemplateFlow = OCA.Analytics.Sidebar.Report.isTemplateDrivenWizardFlow();
+
+        if (modeRow) {
+            modeRow.style.display = isTemplateFlow ? 'none' : 'table-row';
+        }
 
         if (mode === 'stored') {
             datasourceRow.style.display = 'none';
@@ -473,6 +590,10 @@ OCA.Analytics.Sidebar.Report = {
         realtimeButton.classList.add('analyticsPrimary');
         storedButton.classList.remove('analyticsPrimary');
         OCA.Analytics.Sidebar.Report.buildTemplateDropdownWizard(datasourceType);
+        if (isTemplateFlow) {
+            datasourceRow.style.display = 'none';
+            templateRow.style.display = 'none';
+        }
         OCA.Analytics.Sidebar.Report.updateWizardVisualTemplateState(OCA.Analytics.Sidebar.Report.getSelectedTemplateWizard());
     },
 
@@ -487,10 +608,13 @@ OCA.Analytics.Sidebar.Report = {
     handleGlobalTemplateChangeWizard: function () {
         const globalValue = document.getElementById('wizardNewGlobalTemplate').value;
         if (globalValue === '') {
+            OCA.Analytics.Sidebar.Report.wizardTemplateJump = false;
             document.getElementById('wizardNewDatasourceTemplate').value = '';
             OCA.Analytics.Sidebar.Report.handleTemplateChangeWizard();
+            OCA.Analytics.Sidebar.Report.updateGlobalTemplateListSelectionWizard();
             return;
         }
+        OCA.Analytics.Sidebar.Report.wizardTemplateJump = true;
 
         const separatorIndex = globalValue.indexOf('::');
         if (separatorIndex === -1) {
@@ -504,8 +628,12 @@ OCA.Analytics.Sidebar.Report = {
         OCA.Analytics.Sidebar.Report.handleDatasourceChangeWizard();
         document.getElementById('wizardNewDatasourceTemplate').value = templateId;
         OCA.Analytics.Sidebar.Report.handleTemplateChangeWizard();
+        OCA.Analytics.Sidebar.Report.updateGlobalTemplateListSelectionWizard();
 
         if (OCA.Analytics?.Wizard?.currentSlide === 1) {
+            OCA.Analytics.Wizard.next();
+            OCA.Analytics.Wizard.next();
+        } else if (OCA.Analytics?.Wizard?.currentSlide === 2) {
             OCA.Analytics.Wizard.next();
         }
     },
@@ -519,6 +647,7 @@ OCA.Analytics.Sidebar.Report = {
         const templateId = document.getElementById('wizardNewDatasourceTemplate').value;
         if (templateId === '') {
             globalSelect.value = '';
+            OCA.Analytics.Sidebar.Report.updateGlobalTemplateListSelectionWizard();
             return;
         }
 
@@ -526,6 +655,7 @@ OCA.Analytics.Sidebar.Report = {
         if (globalSelect.querySelector('option[value="' + combinedValue + '"]')) {
             globalSelect.value = combinedValue;
         }
+        OCA.Analytics.Sidebar.Report.updateGlobalTemplateListSelectionWizard();
     },
 
     applyTemplateToDatasourceSettingsWizard: function (templateDefinition) {
@@ -1112,8 +1242,24 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     wizard: function () {
+        const wizardDialog = document.getElementById('analyticsWizard');
+        if (wizardDialog && wizardDialog.dataset.reportWizardInitialized === '1') {
+            return;
+        }
+        if (wizardDialog) {
+            wizardDialog.dataset.reportWizardInitialized = '1';
+        }
+        OCA.Analytics.Sidebar.Report.wizardTemplateJump = false;
+
         document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.create);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.cancel);
+        document.getElementById('wizardNewTemplateOwnReport').addEventListener('click', function () {
+            OCA.Analytics.Sidebar.Report.wizardTemplateJump = false;
+            OCA.Analytics.Sidebar.Report.setWizardTypeMode('realtime');
+            if (OCA.Analytics?.Wizard?.currentSlide === 1) {
+                OCA.Analytics.Wizard.next();
+            }
+        });
 
         document.getElementById('wizardNewTypeRealtime').addEventListener('click', function () {
             OCA.Analytics.Sidebar.Report.setWizardTypeMode('realtime');
@@ -1138,6 +1284,7 @@ OCA.Analytics.Sidebar.Report = {
 
         OCA.Analytics.Datasource.buildDropdown('wizardNewDatasource').then(() => {
             OCA.Analytics.Sidebar.Report.buildGlobalTemplateDropdownWizard();
+            OCA.Analytics.Sidebar.Report.buildGlobalTemplateListWizard();
         });
         document.getElementById('wizardNewDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChangeWizard);
         document.getElementById('wizardNewDatasourceTemplate').addEventListener('change', OCA.Analytics.Sidebar.Report.handleTemplateChangeWizard);

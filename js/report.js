@@ -50,7 +50,8 @@ Object.assign(OCA.Analytics.Report, {
         OCA.Analytics.Sidebar.close();
         OCA.Analytics.Wizard.sildeArray = [
             ['', ''],
-            ['wizardNewGeneral', OCA.Analytics.Sidebar.Report.wizard],
+            ['wizardNewTemplate', OCA.Analytics.Sidebar.Report.wizard],
+            ['wizardNewGeneral', ''],
             ['wizardNewType', ''],
             ['wizardNewVisual', '']
         ];

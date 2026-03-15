@@ -297,7 +297,6 @@ class DatasourceController extends Controller {
 	 * @param $filter
 	 * @return array
 	 */
-	#[NoAdminRequired]
 	private function filterData($data, $filter) {
 		$options = json_decode($filter, true);
 		if (isset($options['filter'])) {

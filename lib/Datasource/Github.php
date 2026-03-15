@@ -255,6 +255,10 @@ class Github implements IDatasource, IReportTemplateProvider {
 		if ($httpCode === 403) {
 			return $this->l10n->t('Rate limit exceeded');
 		}
+		if ($httpCode === 0) {
+			return $this->l10n->t('Report not available');
+		}
+
 		return 'HTTP response code: ' . $httpCode;
 	}
 
@@ -272,7 +276,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			if (isset($option['token']) && $option['token'] !== '') {
 				$headers = [
 					'Authorization: token ' . $option['token'],
-					'User-Agent: YourAppName',
+					'User-Agent: Analytics for Nextcloud',
 					'Accept: application/vnd.github.v3+json'
 				];
 				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

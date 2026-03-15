@@ -51,6 +51,14 @@ const reportName =
       await capture('03_new_menu_report');
     }
 
+    steps.push('choose own report wizard path');
+    await clickFirst(
+      page,
+      ['#wizardNewTemplateOwnReport', 'button:has-text("Own report")', 'button:has-text("Eigenen Bericht")'],
+      'wizard own report'
+    );
+    await capture('03a_own_report');
+
     steps.push('fill report basics');
     await fillRequired(page, '#wizardNewName', reportName, 'wizard report name');
     await fillRequired(page, '#wizardNewSubheader', reportSubheader, 'wizard report subheader');

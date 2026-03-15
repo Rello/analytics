@@ -175,6 +175,27 @@
     </div>
 </template>
 
+<template id="wizardNewTemplate">
+    <div class="page wizardNewTemplatePage" style="display: none;">
+        <div class="content content-values wizardNewTemplateLayout">
+            <div class="wizardNewTemplateOwnColumn">
+                <button id="wizardNewTemplateOwnReport" type="button" class="wizardNewTemplateOwnCard">
+                    <span class="icon-analytics-report wizardNewTemplateOwnIcon"></span>
+                    <span class="wizardNewTemplateOwnTitle"><?php p($l->t('Own report')); ?></span>
+                    <span class="wizardNewTemplateOwnDescription"><?php p($l->t('Start from scratch and configure all report settings manually.')); ?></span>
+                </button>
+            </div>
+            <div class="wizardNewTemplateListColumn">
+                <h2><?php p($l->t('Templates')); ?></h2>
+                <div id="wizardNewTemplateList" class="wizardNewTemplateList"></div>
+                <select id="wizardNewGlobalTemplate" class="wizardNewTemplateHiddenSelect sidebarInput" aria-hidden="true" tabindex="-1">
+                    <option value=""><?php p($l->t('No template')); ?></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</template>
+
 <template id="wizardNewGeneral">
     <div class="page" style="display: none;">
         <div class="content content-values">
@@ -207,18 +228,10 @@
                         <select style="display: table-cell;" id="wizardNewGrouping" class="sidebarInput">
                             <option value="0"></option>
                         </select>
-                        <br>
-                        <?php p($l->t('Report template (optional)')); ?>
-                        <br>
-                        <select style="display: table-cell;" id="wizardNewGlobalTemplate" class="sidebarInput">
-                            <option value=""><?php p($l->t('No template')); ?></option>
-                        </select>
                     </div>
                     <div style="display: table-cell;">
                         <br>
                         <?php p($l->t('Reports can be grouped into a folder structure.')); ?>
-                        <br><br>
-                        <?php p($l->t('Templates provide preconfigured reports for a data source.')); ?>
                     </div>
                 </div>
             </div>
@@ -230,7 +243,7 @@
         <div class="content content-values">
             <h2><?php p($l->t('Type of report')); ?></h2><br>
             <div class="table" style="display: table; width: 100%;">
-                <div style="display: table-row;">
+                <div id="wizardNewTypeModeRow" style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
                         <button id="wizardNewTypeRealtime"><?php p($l->t('Real-time Data')); ?></button>
                         <button id="wizardNewTypeStored"><?php p($l->t('Stored Data')); ?></button>
