@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.2.0 - 2026-02-xx
+## 6.2.0 - 2026-03-15
 ### Added
 - Data sources can offer report templates within the wizard
 - Startup splash screen
@@ -9,11 +9,11 @@
 
 ### Changed
 - Automatically import demo reports on first app start for each user
-- Hide panorama subheader rows in layout chooser previews
 - Open the layout chooser immediately after creating a new panorama
 - Enter panorama edit mode automatically after selecting the first layout on a newly created panorama
 - Enable/disable data aggregation in the column selection dialog
 - Add a template/own-report chooser as the first report wizard step
+- Shorten time aggregation labels to the relevant year/month/day granularity
 
 ### Fixed
 - Prevent new panoramas from reusing page content/layout from previously edited panoramas
@@ -21,7 +21,6 @@
 - Ignore stale drilldown column-selection indices that no longer map to dimensions after report dimension changes
 - Normalize GitHub datasource HTTP error payloads to always return an empty data array
 - Stop report loading spinner and show an explicit error when `/data` requests fail
-- Shorten time aggregation labels to the relevant year/month/day granularity
 
 ## 6.1.0 - 2026-02-18
 ### Added
