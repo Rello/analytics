@@ -74,6 +74,7 @@ OC.L10N.register(
     "Additional settings" : "Setări adiționale",
     "Color" : "Culoare",
     "Sort by" : "Sortare după",
+    "Templates" : "Șabloane",
     "Create" : "Crează"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

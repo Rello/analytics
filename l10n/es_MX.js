@@ -370,6 +370,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Active un conjunto de informes de demostración para mostrar cómo funciona Analytics.",
     "Create Demo" : "Crear demostración",
     "Start using Analytics" : "Empezar a usar Analytics",
+    "Templates" : "Plantillas",
     "General information" : "Información general",
     "Report title" : "Título del informe",
     "New report" : "Nuevo reporte",

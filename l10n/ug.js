@@ -420,6 +420,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "ئانالىزنىڭ قانداق ئىشلەيدىغانلىقىنى كۆرسىتىش ئۈچۈن بىر يۈرۈش ئۈلگە دوكلاتىنى قوزغىتىڭ.",
     "Create Demo" : "Demo قۇرۇش",
     "Start using Analytics" : "Analytics نى ئىشلىتىشنى باشلاڭ",
+    "Templates" : "قېلىپلار",
     "General information" : "ئادەتتىكى ئۇچۇرلار",
     "Report title" : "دوكلات ماۋزۇسى",
     "New report" : "يېڭى دوكلات",

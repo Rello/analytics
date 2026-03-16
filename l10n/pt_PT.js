@@ -157,6 +157,7 @@ OC.L10N.register(
     "Color" : "Cor",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obter mais informação",
+    "Templates" : "Modelos",
     "New report" : "Novo relatório",
     "New dataset" : "Novo conjunto de dados",
     "Create" : "Criar"

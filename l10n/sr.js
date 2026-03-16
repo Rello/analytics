@@ -420,6 +420,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Активирајте скуп демо извештаја који приказују како ради Аналитика.",
     "Create Demo" : "Креирај демо",
     "Start using Analytics" : "Крените са коришћењем Аналитике",
+    "Templates" : "Шаблони",
     "General information" : "Опште информације",
     "Report title" : "Назив извештаја",
     "New report" : "Нови извештај",

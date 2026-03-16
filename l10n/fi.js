@@ -233,6 +233,7 @@ OC.L10N.register(
     "Get more information" : "Hanki lisätietoja",
     "Nextcloud forum" : "Nextcloud-keskustelupalsta",
     "Create Demo" : "Luo demo",
+    "Templates" : "Mallipohjat",
     "General information" : "Yleiset tiedot",
     "Report title" : "Raportin otsikko",
     "New report" : "Uusi raportti",

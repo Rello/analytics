@@ -315,6 +315,7 @@ OC.L10N.register(
     "Nextcloud forum" : "Forum Nextcloud",
     "Create Demo" : "Ustvari demo",
     "Start using Analytics" : "Začni z uporabo Analitike",
+    "Templates" : "Predloge",
     "General information" : "Splošne podrobnosti",
     "Report title" : "Naslov poročila",
     "New report" : "Novo poročilo",

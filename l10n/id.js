@@ -262,6 +262,7 @@ OC.L10N.register(
     "Sort by" : "Urutan",
     "Direction" : "Arah",
     "Nextcloud forum" : "Forum Nextcloud",
+    "Templates" : "Templat",
     "New report" : "Laporan baru",
     "New dataset" : "Himpunan data baru",
     "Create" : "Buat"

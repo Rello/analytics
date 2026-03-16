@@ -102,6 +102,7 @@ OC.L10N.register(
     "Color" : "Color",
     "Sort by" : "Sort by",
     "Get more information" : "Get more information",
+    "Templates" : "Templates",
     "Create" : "Create"
 },
 "nplurals=2; plural=(n!=1);");

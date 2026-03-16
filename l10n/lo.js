@@ -420,6 +420,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "ເປີດໃຊ້ຊຸດລາຍງານສາທິດເພື່ອສະແດງວິທີການເຮັດວຽກຂອງ Analytics.",
     "Create Demo" : "ສ້າງຕົວຢ່າງສາທິດ",
     "Start using Analytics" : "ເລີ່ມໃຊ້ Analytics",
+    "Templates" : "Templates",
     "General information" : "ຂໍ້ມູນທົ່ວໄປ",
     "Report title" : "ຊື່ລາຍງານ",
     "New report" : "ລາຍງານໃໝ່",
