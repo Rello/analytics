@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.2.1 - 2026-03-17
+### Fixed
+- Fix `/whatsnew` crashes on Nextcloud 33 by using `executeQuery()` in `WhatsNewMapper`
+- Persist wizard dismissal for demo imports to prevent re-importing demo reports on every startup
+
 ## 6.2.0 - 2026-03-15
 ### Added
 - Data sources can offer report templates within the wizard

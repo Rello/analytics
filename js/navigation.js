@@ -1225,7 +1225,8 @@ OCA.Analytics.Navigation.Drag = {
 
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.WhatsNew.whatsnew();
-    if (OCA.Analytics.Core.getInitialState('wizard') !== '1') {
+    const wizardState = OCA.Analytics.Core.getInitialState('wizard');
+    if (wizardState !== '1' && wizardState !== 1) {
         OCA.Analytics.Wizard.showFirstStart();
         OCA.Analytics.Wizard.demo();
     }
