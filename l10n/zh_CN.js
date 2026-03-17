@@ -418,6 +418,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "激活一组演示报告，以显示分析功能的运作方式。",
     "Create Demo" : "创建示例",
     "Start using Analytics" : "开始使用分析应用",
+    "Templates" : "模板",
     "General information" : "一般信息",
     "Report title" : "报告标题",
     "New report" : "新报告",

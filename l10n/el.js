@@ -420,6 +420,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Ενεργοποιήστε ένα σύνολο επίδειξης αναφορών για να δείξετε πώς λειτουργεί το Analytics.",
     "Create Demo" : "Δημιουργία επίδειξης",
     "Start using Analytics" : "Ξεκινήστε τη χρήση του Analytics",
+    "Templates" : "Πρότυπα",
     "General information" : "Γενικές πληροφορίες",
     "Report title" : "Τίτλος αναφοράς",
     "New report" : "Νέα αναφορά",

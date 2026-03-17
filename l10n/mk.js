@@ -81,6 +81,7 @@ OC.L10N.register(
     "Sort by" : "Сортирај по",
     "Get more information" : "Побарајте повеќе информации",
     "Nextcloud forum" : "Nextcloud форум",
+    "Templates" : "Шаблони",
     "Create" : "Креирај"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

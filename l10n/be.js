@@ -113,6 +113,7 @@ OC.L10N.register(
     "Customize charts with primary and secondary axes" : "Наладжвайце дыяграмы з дапамогай асноўных і другасных восяў",
     "Mix and match chart types for each data series" : "Камбінуйце тыпы дыяграм для кожнага шэрагу даных",
     "Nextcloud forum" : "Форум Nextcloud",
+    "Templates" : "Шаблоны",
     "No Chart" : "Няма дыяграмы",
     "Create" : "Стварыць"
 },

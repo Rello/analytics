@@ -193,6 +193,7 @@ OC.L10N.register(
     "Open Source" : "Códigu abiertu",
     "Get more information" : "Consiguir más información",
     "Nextcloud forum" : "Foru de Nextcloud",
+    "Templates" : "Plantíes",
     "General information" : "Información xeneral",
     "New report" : "Informe nuevu",
     "Type of report" : "Tipu d'informe",

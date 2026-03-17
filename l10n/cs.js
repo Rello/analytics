@@ -425,6 +425,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Pokud si chcete zobrazit jak fungují Analýzy, aktivujte sadu demo výkazů.",
     "Create Demo" : "Vytvořit demo",
     "Start using Analytics" : "Zahájit používání Analýz",
+    "Templates" : "Šablony",
     "General information" : "Obecné informace",
     "Report title" : "Nadpis výkazu",
     "New report" : "Nový výkaz",

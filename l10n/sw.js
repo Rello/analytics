@@ -422,6 +422,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Washa seti ya ripoti za demo ili kuonyesha jinsi Analytics inavyofanya kazi.",
     "Create Demo" : "Unda Onyesho",
     "Start using Analytics" : "Anza kutumia uchanganuzi",
+    "Templates" : "Violezo",
     "General information" : "Taarifa za jumla",
     "Report title" : "Kichwa cha ripoti",
     "New report" : "Ripoti mpya",

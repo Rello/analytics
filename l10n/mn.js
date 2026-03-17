@@ -90,6 +90,7 @@ OC.L10N.register(
     "Sort by" : "Эрэмбэлэх",
     "Direction" : "Чиглэл",
     "Nextcloud forum" : "Nextcloud форум",
+    "Templates" : "Загварууд",
     "Create" : "Үүсгэх"
 },
 "nplurals=2; plural=(n != 1);");

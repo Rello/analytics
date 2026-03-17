@@ -124,6 +124,7 @@ OC.L10N.register(
     "Additional settings" : "Cài đặt bổ sung",
     "Color" : "Màu sắc",
     "Get more information" : "Có thêm thông tin",
+    "Templates" : "Mẫu",
     "New report" : "Tạo báo cáo",
     "Create" : "‎Tạo‎"
 },

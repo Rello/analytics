@@ -50,6 +50,7 @@ OC.L10N.register(
     "Rename" : "Beddel isem",
     "Copy link" : "Nɣel aseɣwen",
     "Sort by" : "Trier par",
+    "Templates" : "Timudmiwin",
     "Create" : "Snulfu-d"
 },
 "nplurals=2; plural=(n != 1);");

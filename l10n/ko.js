@@ -189,6 +189,7 @@ OC.L10N.register(
     "Sort by" : "정렬",
     "Get more information" : "추가 정보 얻기",
     "Nextcloud forum" : "Nextcloud 포럼",
+    "Templates" : "템플릿",
     "New report" : "새로운 리포트",
     "New dataset" : "새로운 데이터셋",
     "Create" : "생성"

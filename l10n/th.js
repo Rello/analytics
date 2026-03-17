@@ -67,6 +67,7 @@ OC.L10N.register(
     "Color" : "สี",
     "Sort by" : "เรียงตาม",
     "Get more information" : "รับข้อมูลเพิ่มเติม",
+    "Templates" : "เทมเพลต",
     "Create" : "สร้าง"
 },
 "nplurals=1; plural=0;");

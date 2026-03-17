@@ -62,6 +62,7 @@ OC.L10N.register(
     "Color" : "Koloro",
     "Sort by" : "Ordigi laŭ",
     "Get more information" : "Pli da informoj",
+    "Templates" : "Ŝablonoj",
     "Create" : "Krei"
 },
 "nplurals=2; plural=(n != 1);");

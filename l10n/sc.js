@@ -81,6 +81,7 @@ OC.L10N.register(
     "Color" : "Colore",
     "Get more information" : "Otene àteras informatziones",
     "Nextcloud forum" : "Forum de Nextcloud",
+    "Templates" : "Modellos",
     "Create" : "Crea"
 },
 "nplurals=2; plural=(n != 1);");

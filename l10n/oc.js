@@ -89,6 +89,7 @@ OC.L10N.register(
     "Additional settings" : "Paramètres addicionals",
     "Color" : "Color",
     "Sort by" : "Triar",
+    "Templates" : "Modèls",
     "General information" : "Informacions generalas",
     "No Table" : "Cap de tablèu",
     "Create" : "Crear"

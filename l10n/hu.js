@@ -390,6 +390,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Egy demó jelentés aktiválása, hogy megtudja hogyan is működik az Elemzés.",
     "Create Demo" : "Demó létrehozása",
     "Start using Analytics" : "Az Elemzés használatának megkezdése",
+    "Templates" : "Sablonok",
     "General information" : "Általános információk",
     "Report title" : "Jelentés címe",
     "New report" : "Új jelentés",

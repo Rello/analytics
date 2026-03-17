@@ -426,6 +426,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Активуйте набір демонстраційних звітів, щоб показати, як працює Analytics.",
     "Create Demo" : "Створити демо",
     "Start using Analytics" : "Почніть використовувати Analytics",
+    "Templates" : "Шаблони",
     "General information" : "Загальна інформація",
     "Report title" : "Назва звіту",
     "New report" : "Новий звіт",

@@ -84,6 +84,7 @@ OC.L10N.register(
     "Sort by" : "Raða sem",
     "Get more information" : "Til að fá frekari upplýsingar",
     "Nextcloud forum" : "Nextcloud spjallsvæði",
+    "Templates" : "Sniðmát",
     "Create" : "Búa til"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

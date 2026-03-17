@@ -302,6 +302,7 @@ OC.L10N.register(
     "Activate a set of demo report to show how Analytics works." : "Activate a set of demo report to show how Analytics works.",
     "Create Demo" : "Create Demo",
     "Start using Analytics" : "Start using Analytics",
+    "Templates" : "قالب‌ها",
     "General information" : "General information",
     "Report title" : "Report title",
     "New report" : "New report",

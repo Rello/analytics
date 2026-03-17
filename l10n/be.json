@@ -111,6 +111,7 @@
     "Customize charts with primary and secondary axes" : "Наладжвайце дыяграмы з дапамогай асноўных і другасных восяў",
     "Mix and match chart types for each data series" : "Камбінуйце тыпы дыяграм для кожнага шэрагу даных",
     "Nextcloud forum" : "Форум Nextcloud",
+    "Templates" : "Шаблоны",
     "No Chart" : "Няма дыяграмы",
     "Create" : "Стварыць"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
