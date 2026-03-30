@@ -851,57 +851,123 @@
         <div class="dummy2"></div>
     </div>
 
-    <br>
-    <div id="tableOptionsLayoutTotals">
-        <p><?php p($l->t('Show totals')); ?></p>
-        <div id="totalsSwitch">
-            <label class="toggle-option">
-                <input type="radio" id="totalOption1" name="totalOption" value="true"><?php p($l->t('Yes')); ?>
-            </label>
-            <label class="toggle-option">
-                <input type="radio" id="totalOption2" name="totalOption" value="false" checked><?php p($l->t('No')); ?>
-            </label></div>
+    <div id="tableOptionsCalculatedColumnsEditor" class="tableOptionsCalculatedColumnsEditor" hidden>
+        <div class="tableOptionsCalculatedColumnsEditorCard">
+            <div class="tableOptionsCalculatedColumnsEditorHeader">
+                <h3 id="tableOptionsCalculatedColumnsEditorHeading"><?php p($l->t('Add calculated column')); ?></h3>
+                <button type="button" id="tableOptionsCalculatedColumnsEditorClose"
+                        class="tableOptionsCalculatedColumnsEditorClose icon icon-close"></button>
+            </div>
+
+            <div class="tableOptionsCalculatedColumnsEditorFields">
+                <div class="tableOptionsCalculatedColumnsEditorFieldRow">
+                    <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                        <label for="tableOptionsCalculatedColumnsTitle"><?php p($l->t('Title')); ?></label>
+                    </div>
+                    <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                        <input type="text" id="tableOptionsCalculatedColumnsTitle" class="optionsInput">
+                    </div>
+                </div>
+
+                <div class="tableOptionsCalculatedColumnsEditorFieldRow">
+                    <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                        <label for="tableOptionsCalculatedColumnsOperation"><?php p($l->t('Calculation method')); ?></label>
+                    </div>
+                    <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                        <select id="tableOptionsCalculatedColumnsOperation" class="optionsInput"></select>
+                    </div>
+                </div>
+
+                <div class="tableOptionsCalculatedColumnsEditorFieldRow tableOptionsCalculatedColumnsEditorFieldRowTop">
+                    <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                        <label for="tableOptionsCalculatedColumnsSourceSelect"><?php p($l->t('Available columns')); ?></label>
+                    </div>
+                    <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                        <div class="tableOptionsCalculatedColumnsSourcePicker">
+                            <select id="tableOptionsCalculatedColumnsSourceSelect" class="optionsInput"></select>
+                            <button type="button" id="tableOptionsCalculatedColumnsSourceAdd"><?php p($l->t('Add source column')); ?></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tableOptionsCalculatedColumnsSelectedWrap">
+                <p id="tableOptionsCalculatedColumnsSelectedHint" class="userGuidance"></p>
+                <div id="tableOptionsCalculatedColumnsSelected" class="tableOptionsCalculatedColumnsSelected"></div>
+                <p id="tableOptionsCalculatedColumnsEditorMessage" class="userGuidance" hidden></p>
+            </div>
+
+            <div class="tableOptionsCalculatedColumnsEditorActions">
+                <button type="button" id="tableOptionsCalculatedColumnsDelete" hidden>
+                    <?php p($l->t('Remove calculated column')); ?>
+                </button>
+                <button type="button" id="tableOptionsCalculatedColumnsCancel" class="button"><?php p($l->t('Cancel')); ?></button>
+                <button type="button" id="tableOptionsCalculatedColumnsSave" class="button analyticsPrimary"><?php p($l->t('Save calculated column')); ?></button>
+            </div>
+        </div>
     </div>
+
     <br>
-    <div id="tableOptionsFormatLocales">
-        <p><?php p($l->t('Format all numbers in local format')); ?></p>
-        <div id="totalsSwitch">
-            <label class="toggle-option">
-                <input type="radio" id="formatLocalesOption1" name="formatLocalesOption" value="true"
-                       checked><?php p($l->t('Yes')); ?>
-            </label>
-            <label class="toggle-option">
-                <input type="radio" id="formatLocalesOption2" name="formatLocalesOption"
-                       value="false"><?php p($l->t('No')); ?>
-            </label></div>
+    <div id="tableOptionsCalculatedColumnsPanel">
+        <p><?php p($l->t('Calculated columns')); ?></p>
+        <div id="tableOptionsCalculatedColumnsList" class="tableOptionsCalculatedColumnsList"></div>
+        <div class="sidebarButtonRow">
+            <button type="button" id="tableOptionsCalculatedColumnsAdd">
+                <span class="icon-add"></span>
+                <span><?php p($l->t('Add calculated column')); ?></span>
+            </button>
+        </div>
+        <p id="tableOptionsCalculatedColumnsWarning" class="userGuidance" hidden></p>
+        <textarea id="tableOptionsCalculatedColumns" hidden></textarea>
     </div>
+
     <br>
-    <div class="sidebarButtonRow">
-        <button id="tableOptionsResetState">
-            <span class="icon-analytics-reset"></span>
-            <span><?php p($l->t('Reset table')); ?></span>
-        </button>
+    <div class="tableOptionsSettingsTable">
+        <div class="tableOptionsSettingsRow">
+            <div class="tableOptionsSettingsLabel"><?php p($l->t('Show totals')); ?></div>
+            <div class="tableOptionsSettingsValue">
+                <label class="toggle-option">
+                    <input type="radio" id="totalOption1" name="totalOption" value="true"><?php p($l->t('Yes')); ?>
+                </label>
+                <label class="toggle-option">
+                    <input type="radio" id="totalOption2" name="totalOption" value="false" checked><?php p($l->t('No')); ?>
+                </label>
+            </div>
+        </div>
+        <div class="tableOptionsSettingsRow">
+            <div class="tableOptionsSettingsLabel"><?php p($l->t('Format all numbers in local format')); ?></div>
+            <div class="tableOptionsSettingsValue">
+                <label class="toggle-option">
+                    <input type="radio" id="formatLocalesOption1" name="formatLocalesOption" value="true"
+                           checked><?php p($l->t('Yes')); ?>
+                </label>
+                <label class="toggle-option">
+                    <input type="radio" id="formatLocalesOption2" name="formatLocalesOption"
+                           value="false"><?php p($l->t('No')); ?>
+                </label>
+            </div>
+        </div>
     </div>
     <br>
     <div class="sidebarHeaderClosed"><h3 id="tableOptionsSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('Additional settings')); ?> <span
                     class="betaFlag">Beta</span></h3></div>
     <div id="tableOptionsSectionDisabled" style="display: none;">
-        <p><?php p($l->t('Calculated columns')); ?></p>
-        <p><?php p($l->t('Use column index starting with 0')); ?></p>
-        <textarea id="tableOptionsCalculatedColumns"></textarea>
-
-        <br>
-        <p><?php p($l->t('Compact visualization')); ?></p>
-        <div id="totalsSwitch">
-            <label class="toggle-option">
-                <input type="radio" id="compactDisplayOption1" name="compactDisplayOption"
-                       value="true"><?php p($l->t('Yes')); ?>
-            </label>
-            <label class="toggle-option">
-                <input type="radio" id="compactDisplayOption2" name="compactDisplayOption" value="false"
-                       checked><?php p($l->t('No')); ?>
-            </label></div>
+        <div class="tableOptionsSettingsTable">
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel"><?php p($l->t('Compact visualization')); ?></div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="toggle-option">
+                        <input type="radio" id="compactDisplayOption1" name="compactDisplayOption"
+                               value="true"><?php p($l->t('Yes')); ?>
+                    </label>
+                    <label class="toggle-option">
+                        <input type="radio" id="compactDisplayOption2" name="compactDisplayOption" value="false"
+                               checked><?php p($l->t('No')); ?>
+                    </label>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>

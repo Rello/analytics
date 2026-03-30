@@ -1071,6 +1071,253 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     grid-template-rows: auto; /* Define the height for rows and measures */
     gap: 10px;
 }
+
+#tableOptionsCalculatedColumnsPanel {
+    max-width: 100%;
+    width: 600px;
+}
+
+.tableOptionsSettingsTable {
+    display: table;
+    width: 600px;
+    max-width: 100%;
+}
+
+.tableOptionsSettingsRow {
+    display: table-row;
+}
+
+.tableOptionsSettingsLabel,
+.tableOptionsSettingsValue {
+    display: table-cell;
+    padding: 0 0 10px;
+    vertical-align: middle;
+}
+
+.tableOptionsSettingsLabel {
+    padding-right: 14px;
+    white-space: nowrap;
+    width: 260px;
+}
+
+.tableOptionsCalculatedColumnsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.tableOptionsCalculatedColumnsEmpty {
+    border: 1px dashed var(--color-border-dark);
+    border-radius: var(--border-radius-element);
+    color: var(--color-text-maxcontrast);
+    padding: 12px;
+}
+
+.tableOptionsCalculatedColumnCard {
+    align-items: flex-start;
+    background: var(--color-background-hover);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--border-radius-element);
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 12px;
+    text-align: left;
+    width: 100%;
+}
+
+.tableOptionsCalculatedColumnCard:hover {
+    background: var(--color-background-darker);
+}
+
+.tableOptionsCalculatedColumnCardTitle {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.tableOptionsCalculatedColumnCardFormula,
+.tableOptionsCalculatedColumnCardMeta {
+    color: var(--color-text-maxcontrast);
+    display: block;
+}
+
+.tableOptionsCalculatedColumnsEditor {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    padding: 20px;
+    position: fixed;
+    z-index: 10001;
+}
+
+.tableOptionsCalculatedColumnsEditorCard {
+    background: var(--color-main-background);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    max-height: calc(100vh - 60px);
+    overflow: auto;
+    padding: 20px;
+    width: min(640px, calc(100vw - 40px));
+}
+
+.tableOptionsCalculatedColumnsEditorHeader {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.tableOptionsCalculatedColumnsEditorHeader h3 {
+    margin: 0;
+}
+
+.tableOptionsCalculatedColumnsEditorClose {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    min-height: 32px;
+    min-width: 32px;
+    opacity: .7;
+}
+
+.tableOptionsCalculatedColumnsEditorClose:hover {
+    opacity: 1;
+}
+
+.tableOptionsCalculatedColumnsEditorFields {
+    display: table;
+    width: 100%;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldRow {
+    display: table-row;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldRowTop {
+    vertical-align: top;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldLabel,
+.tableOptionsCalculatedColumnsEditorFieldValue {
+    display: table-cell;
+    padding: 0 0 10px;
+    vertical-align: middle;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldRowTop .tableOptionsCalculatedColumnsEditorFieldLabel,
+.tableOptionsCalculatedColumnsEditorFieldRowTop .tableOptionsCalculatedColumnsEditorFieldValue {
+    vertical-align: top;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldLabel {
+    padding-right: 14px;
+    white-space: nowrap;
+    width: 160px;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldLabel label {
+    margin: 0;
+}
+
+.tableOptionsCalculatedColumnsEditorFieldValue .optionsInput {
+    width: 100%;
+}
+
+.tableOptionsCalculatedColumnsSourcePicker {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tableOptionsCalculatedColumnsSourcePicker select {
+    flex: 1;
+}
+
+@media (max-width: 720px) {
+    .tableOptionsSettingsTable,
+    .tableOptionsSettingsRow,
+    .tableOptionsCalculatedColumnsEditorFields,
+    .tableOptionsCalculatedColumnsEditorFieldRow {
+        display: block;
+    }
+
+    .tableOptionsSettingsLabel,
+    .tableOptionsSettingsValue,
+    .tableOptionsCalculatedColumnsEditorFieldLabel,
+    .tableOptionsCalculatedColumnsEditorFieldValue {
+        display: block;
+        padding-bottom: 8px;
+        width: auto;
+    }
+}
+
+.tableOptionsCalculatedColumnsSelectedWrap {
+    margin-top: 16px;
+}
+
+.tableOptionsCalculatedColumnsSelected {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.tableOptionsCalculatedColumnsSelectedEmpty {
+    border: 1px dashed var(--color-border-dark);
+    border-radius: var(--border-radius-element);
+    color: var(--color-text-maxcontrast);
+    padding: 10px;
+}
+
+.tableOptionsCalculatedColumnsSelectedItem {
+    align-items: center;
+    background: var(--color-background-hover);
+    border-radius: var(--border-radius-element);
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 10px 12px;
+}
+
+.tableOptionsCalculatedColumnsSelectedLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tableOptionsCalculatedColumnsSelectedRole,
+.tableOptionsCalculatedColumnsSelectedMeta {
+    color: var(--color-text-maxcontrast);
+}
+
+.tableOptionsCalculatedColumnsSelectedActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tableOptionsCalculatedColumnsEditorActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+#tableOptionsCalculatedColumnsEditorMessage:not([hidden]),
+#tableOptionsCalculatedColumnsWarning:not([hidden]) {
+    color: var(--color-error);
+    margin-top: 8px;
+}
+
 .table-layout > div {
     border: 1px dashed #000;
     padding: 20px;

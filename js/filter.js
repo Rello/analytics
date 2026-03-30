@@ -25,6 +25,12 @@ OCA.Analytics.Filter = {
         'LIKE': t('analytics', 'contains'),
         'IN': t('analytics', 'list of values'),
     },
+    calculatedColumnsEditorState: {
+        items: [],
+        editingIndex: null,
+        parseError: false,
+        draft: null,
+    },
 
     /**
      * Update indicator state of report menu options
@@ -559,23 +565,22 @@ OCA.Analytics.Filter = {
             section.addEventListener('drop', OCA.Analytics.Filter.Drag.drop);
             section.addEventListener('dragover', OCA.Analytics.Filter.Drag.allowDrop);
         });
-        container.getElementById('tableOptionsResetState').addEventListener('click', OCA.Analytics.Filter.processTableOptionsReset);
 
-        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions;
+        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions || {};
 
-        if (tableOptions && tableOptions.footer) {
+        if (tableOptions.footer) {
             container.querySelector('input[name="totalOption"][value="true"]').checked = true;
         }
 
-        if (tableOptions && tableOptions.formatLocales !== undefined) {
+        if (tableOptions.formatLocales !== undefined) {
             container.querySelector('input[name="formatLocalesOption"][value="false"]').checked = true;
         }
 
-        if (tableOptions && tableOptions.compactDisplay !== undefined) {
+        if (tableOptions.compactDisplay !== undefined) {
             container.querySelector('input[name="compactDisplayOption"][value="true"]').checked = true;
         }
 
-        if (tableOptions && tableOptions.calculatedColumns) {
+        if (tableOptions.calculatedColumns) {
             container.getElementById('tableOptionsCalculatedColumns').value = tableOptions.calculatedColumns;
         }
 
@@ -585,6 +590,8 @@ OCA.Analytics.Filter = {
         );
 
         OCA.Analytics.Filter.Drag.initialize();
+        OCA.Analytics.Filter.initializeCalculatedColumnsDialog();
+        OCA.Analytics.Filter.addTableOptionsResetButton();
 
         OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
     },
@@ -594,7 +601,7 @@ OCA.Analytics.Filter = {
      * to the current report before requesting fresh data.
      */
     processTableOptionsDialog: function () {
-        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions;
+        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions || {};
 
         const showTotalsSelected = document.querySelector('input[name="totalOption"]:checked');
         const showTotals = showTotalsSelected ? showTotalsSelected.value : null;
@@ -650,6 +657,8 @@ OCA.Analytics.Filter = {
         let calculatedColumns = document.getElementById('tableOptionsCalculatedColumns').value;
         if (calculatedColumns !== '') {
             tableOptions.calculatedColumns = calculatedColumns;
+        } else if (tableOptions) {
+            delete tableOptions.calculatedColumns;
         }
 
         if (OCA.Analytics.currentReportData.options.tableoptions !== tableOptions) {
@@ -672,6 +681,522 @@ OCA.Analytics.Filter = {
             OCA.Analytics.Report.Backend.getData();
             OCA.Analytics.Notification.dialogClose();
         }
+    },
+
+    addTableOptionsResetButton: function () {
+        const buttonRow = document.querySelector('.analyticsDialogButtonrow');
+        if (!buttonRow || document.getElementById('tableOptionsResetState')) {
+            return;
+        }
+
+        const resetButton = document.createElement('button');
+        resetButton.type = 'button';
+        resetButton.id = 'tableOptionsResetState';
+        resetButton.className = 'button';
+        resetButton.textContent = t('analytics', 'Reset table');
+        resetButton.addEventListener('click', OCA.Analytics.Filter.processTableOptionsReset);
+
+        buttonRow.insertBefore(resetButton, buttonRow.firstChild);
+    },
+
+    initializeCalculatedColumnsDialog: function () {
+        const operationSelect = document.getElementById('tableOptionsCalculatedColumnsOperation');
+        if (!operationSelect) {
+            return;
+        }
+
+        operationSelect.innerHTML = '';
+        OCA.Analytics.Filter.getCalculatedColumnOperations().forEach(operation => {
+            operationSelect.options.add(new Option(operation.label, operation.value));
+        });
+
+        document.getElementById('tableOptionsCalculatedColumnsAdd').addEventListener('click', function () {
+            OCA.Analytics.Filter.openCalculatedColumnEditor();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsEditorClose').addEventListener('click', function () {
+            OCA.Analytics.Filter.closeCalculatedColumnEditor();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsCancel').addEventListener('click', function () {
+            OCA.Analytics.Filter.closeCalculatedColumnEditor();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsSave').addEventListener('click', function () {
+            OCA.Analytics.Filter.saveCalculatedColumnEditor();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsDelete').addEventListener('click', function () {
+            OCA.Analytics.Filter.deleteCalculatedColumnEditor();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsSourceAdd').addEventListener('click', function () {
+            OCA.Analytics.Filter.addCalculatedColumnSource();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsOperation').addEventListener('change', function () {
+            OCA.Analytics.Filter.handleCalculatedColumnOperationChange();
+        });
+        document.getElementById('tableOptionsCalculatedColumnsEditor').addEventListener('click', function (evt) {
+            if (evt.target.id === 'tableOptionsCalculatedColumnsEditor') {
+                OCA.Analytics.Filter.closeCalculatedColumnEditor();
+            }
+        });
+
+        const parsedCalculatedColumns = OCA.Analytics.Filter.parseCalculatedColumnsValue(
+            document.getElementById('tableOptionsCalculatedColumns').value
+        );
+        OCA.Analytics.Filter.calculatedColumnsEditorState.items = parsedCalculatedColumns.items;
+        OCA.Analytics.Filter.calculatedColumnsEditorState.parseError = parsedCalculatedColumns.parseError;
+        OCA.Analytics.Filter.calculatedColumnsEditorState.editingIndex = null;
+        OCA.Analytics.Filter.calculatedColumnsEditorState.draft = null;
+
+        OCA.Analytics.Filter.renderCalculatedColumnsList();
+        OCA.Analytics.Filter.closeCalculatedColumnEditor();
+    },
+
+    getCalculatedColumnOperations: function () {
+        return [
+            {value: 'add', label: t('analytics', 'Add')},
+            {value: 'substract', label: t('analytics', 'Subtract')},
+            {value: 'percentage', label: t('analytics', 'Percentage')},
+        ];
+    },
+
+    parseCalculatedColumnsValue: function (rawValue) {
+        if (rawValue === '' || rawValue === null || rawValue === undefined) {
+            return {items: [], parseError: false};
+        }
+
+        const rawString = String(rawValue).trim();
+        if (rawString === '') {
+            return {items: [], parseError: false};
+        }
+
+        const normalized = rawString.charAt(0) === '[' ? rawString : '[' + rawString + ']';
+        let parsedValue;
+
+        try {
+            parsedValue = JSON.parse(normalized);
+        } catch (e) {
+            return {items: [], parseError: true};
+        }
+
+        if (!Array.isArray(parsedValue)) {
+            return {items: [], parseError: true};
+        }
+
+        const items = parsedValue
+            .filter(item => item && typeof item === 'object')
+            .map(item => {
+                const operation = typeof item.operation === 'string' ? item.operation : 'add';
+                const title = typeof item.title === 'string' ? item.title : '';
+                const columns = Array.isArray(item.columns)
+                    ? item.columns
+                        .map(index => parseInt(index, 10))
+                        .filter(index => !Number.isNaN(index) && index >= 0)
+                    : [];
+
+                return {
+                    operation: operation,
+                    columns: columns,
+                    title: title,
+                };
+            });
+
+        return {items: items, parseError: false};
+    },
+
+    serializeCalculatedColumnsValue: function (items) {
+        if (!Array.isArray(items) || items.length === 0) {
+            return '';
+        }
+
+        return items.map(item => JSON.stringify({
+            operation: item.operation,
+            columns: item.columns.map(index => parseInt(index, 10)),
+            title: item.title,
+        })).join(',');
+    },
+
+    renderCalculatedColumnsList: function () {
+        const list = document.getElementById('tableOptionsCalculatedColumnsList');
+        const warning = document.getElementById('tableOptionsCalculatedColumnsWarning');
+        if (!list || !warning) {
+            return;
+        }
+
+        list.innerHTML = '';
+
+        if (OCA.Analytics.Filter.calculatedColumnsEditorState.parseError) {
+            warning.textContent = t('analytics', 'Existing calculated columns could not be parsed. The current raw value stays unchanged until you save a new calculated-column configuration.');
+            warning.hidden = false;
+        } else {
+            warning.textContent = '';
+            warning.hidden = true;
+        }
+
+        if (OCA.Analytics.Filter.calculatedColumnsEditorState.items.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'tableOptionsCalculatedColumnsEmpty';
+            emptyState.textContent = t('analytics', 'No calculated columns configured');
+            list.appendChild(emptyState);
+            return;
+        }
+
+        OCA.Analytics.Filter.calculatedColumnsEditorState.items.forEach((item, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'tableOptionsCalculatedColumnCard';
+            button.addEventListener('click', function () {
+                OCA.Analytics.Filter.openCalculatedColumnEditor(index);
+            });
+
+            const textWrap = document.createElement('span');
+
+            const title = document.createElement('span');
+            title.className = 'tableOptionsCalculatedColumnCardTitle';
+            title.textContent = item.title || t('analytics', 'Untitled calculated column');
+
+            const formula = document.createElement('span');
+            formula.className = 'tableOptionsCalculatedColumnCardFormula';
+            formula.textContent = OCA.Analytics.Filter.getCalculatedColumnFormulaText(item);
+
+            const meta = document.createElement('span');
+            meta.className = 'tableOptionsCalculatedColumnCardMeta';
+            meta.textContent = t('analytics', '{operation} using {count} source columns', {
+                operation: OCA.Analytics.Filter.getCalculatedColumnOperationLabel(item.operation),
+                count: item.columns.length
+            });
+
+            textWrap.appendChild(title);
+            textWrap.appendChild(formula);
+            textWrap.appendChild(meta);
+            button.appendChild(textWrap);
+            list.appendChild(button);
+        });
+    },
+
+    getCalculatedColumnOperationLabel: function (operation) {
+        const operationEntry = OCA.Analytics.Filter.getCalculatedColumnOperations().find(item => item.value === operation);
+        return operationEntry ? operationEntry.label : operation;
+    },
+
+    getCalculatedColumnHeaderLabel: function (index) {
+        const headers = OCA.Analytics.currentReportData.header || [];
+        return headers[index] || t('analytics', 'Column {column}', {column: index});
+    },
+
+    getCalculatedColumnFormulaText: function (item) {
+        const labels = item.columns.map(index => OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(index));
+
+        if (labels.length === 0) {
+            return t('analytics', 'No source columns selected');
+        }
+
+        if (item.operation === 'percentage') {
+            if (labels.length < 2) {
+                return labels.join(' / ');
+            }
+            return labels[0] + ' / ' + labels[1] + ' * 100';
+        }
+
+        if (item.operation === 'substract') {
+            return labels.join(' - ');
+        }
+
+        return labels.join(' + ');
+    },
+
+    openCalculatedColumnEditor: function (index = null) {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        const currentItem = index !== null && state.items[index]
+            ? state.items[index]
+            : {operation: 'add', columns: [], title: ''};
+
+        state.editingIndex = index;
+        state.draft = {
+            operation: currentItem.operation,
+            columns: Array.isArray(currentItem.columns) ? [...currentItem.columns] : [],
+            title: currentItem.title || '',
+        };
+
+        document.getElementById('tableOptionsCalculatedColumnsEditorHeading').textContent = index === null
+            ? t('analytics', 'Add calculated column')
+            : t('analytics', 'Edit calculated column');
+        document.getElementById('tableOptionsCalculatedColumnsTitle').value = state.draft.title;
+        document.getElementById('tableOptionsCalculatedColumnsOperation').value = state.draft.operation;
+        document.getElementById('tableOptionsCalculatedColumnsDelete').hidden = index === null;
+
+        OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
+        OCA.Analytics.Filter.handleCalculatedColumnOperationChange();
+        document.getElementById('tableOptionsCalculatedColumnsEditor').hidden = false;
+        document.getElementById('tableOptionsCalculatedColumnsTitle').focus();
+    },
+
+    closeCalculatedColumnEditor: function () {
+        const editor = document.getElementById('tableOptionsCalculatedColumnsEditor');
+        if (editor) {
+            editor.hidden = true;
+        }
+        OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
+        OCA.Analytics.Filter.calculatedColumnsEditorState.editingIndex = null;
+        OCA.Analytics.Filter.calculatedColumnsEditorState.draft = null;
+    },
+
+    handleCalculatedColumnOperationChange: function () {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        if (!state.draft) {
+            return;
+        }
+
+        const operation = document.getElementById('tableOptionsCalculatedColumnsOperation').value;
+        state.draft.operation = operation;
+
+        if (operation === 'percentage' && state.draft.columns.length > 2) {
+            state.draft.columns = state.draft.columns.slice(0, 2);
+        }
+
+        OCA.Analytics.Filter.populateCalculatedColumnSourceSelect();
+        OCA.Analytics.Filter.renderCalculatedColumnSelectedSources();
+    },
+
+    populateCalculatedColumnSourceSelect: function () {
+        const select = document.getElementById('tableOptionsCalculatedColumnsSourceSelect');
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        if (!select || !state.draft) {
+            return;
+        }
+
+        select.innerHTML = '';
+        select.options.add(new Option(t('analytics', 'Choose a column'), ''));
+
+        (OCA.Analytics.currentReportData.header || []).forEach((header, index) => {
+            const option = new Option(header + ' (' + index + ')', index);
+            option.disabled = state.draft.columns.includes(index);
+            select.options.add(option);
+        });
+
+        select.value = '';
+    },
+
+    renderCalculatedColumnSelectedSources: function () {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        const selectedContainer = document.getElementById('tableOptionsCalculatedColumnsSelected');
+        const hint = document.getElementById('tableOptionsCalculatedColumnsSelectedHint');
+        const addButton = document.getElementById('tableOptionsCalculatedColumnsSourceAdd');
+        if (!selectedContainer || !hint || !addButton || !state.draft) {
+            return;
+        }
+
+        selectedContainer.innerHTML = '';
+
+        if (state.draft.operation === 'percentage') {
+            hint.textContent = t('analytics', 'Select the numerator first and the denominator second.');
+        } else if (state.draft.operation === 'substract') {
+            hint.textContent = t('analytics', 'The first source column is the base value. All following columns are subtracted from it.');
+        } else {
+            hint.textContent = t('analytics', 'Select at least two source columns. Their order is preserved in the calculation.');
+        }
+
+        addButton.disabled = state.draft.operation === 'percentage' && state.draft.columns.length >= 2;
+
+        if (state.draft.columns.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'tableOptionsCalculatedColumnsSelectedEmpty';
+            emptyState.textContent = t('analytics', 'No source columns selected');
+            selectedContainer.appendChild(emptyState);
+            OCA.Analytics.Filter.populateCalculatedColumnSourceSelect();
+            return;
+        }
+
+        state.draft.columns.forEach((columnIndex, index) => {
+            const item = document.createElement('div');
+            item.className = 'tableOptionsCalculatedColumnsSelectedItem';
+
+            const labelWrap = document.createElement('span');
+            labelWrap.className = 'tableOptionsCalculatedColumnsSelectedLabel';
+
+            const label = document.createElement('strong');
+            label.textContent = OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(columnIndex);
+
+            const meta = document.createElement('span');
+            meta.className = 'tableOptionsCalculatedColumnsSelectedMeta';
+            meta.textContent = OCA.Analytics.Filter.getCalculatedColumnSourceRoleLabel(state.draft.operation, index);
+
+            labelWrap.appendChild(label);
+            labelWrap.appendChild(meta);
+
+            const actionWrap = document.createElement('span');
+            actionWrap.className = 'tableOptionsCalculatedColumnsSelectedActions';
+
+            const moveUp = document.createElement('button');
+            moveUp.type = 'button';
+            moveUp.textContent = t('analytics', 'Up');
+            moveUp.disabled = index === 0;
+            moveUp.addEventListener('click', function () {
+                OCA.Analytics.Filter.moveCalculatedColumnSource(index, -1);
+            });
+
+            const moveDown = document.createElement('button');
+            moveDown.type = 'button';
+            moveDown.textContent = t('analytics', 'Down');
+            moveDown.disabled = index === state.draft.columns.length - 1;
+            moveDown.addEventListener('click', function () {
+                OCA.Analytics.Filter.moveCalculatedColumnSource(index, 1);
+            });
+
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.textContent = t('analytics', 'Remove');
+            remove.addEventListener('click', function () {
+                OCA.Analytics.Filter.removeCalculatedColumnSource(index);
+            });
+
+            actionWrap.appendChild(moveUp);
+            actionWrap.appendChild(moveDown);
+            actionWrap.appendChild(remove);
+
+            item.appendChild(labelWrap);
+            item.appendChild(actionWrap);
+            selectedContainer.appendChild(item);
+        });
+
+        OCA.Analytics.Filter.populateCalculatedColumnSourceSelect();
+    },
+
+    getCalculatedColumnSourceRoleLabel: function (operation, index) {
+        if (operation === 'percentage') {
+            return index === 0 ? t('analytics', 'Numerator') : t('analytics', 'Denominator');
+        }
+
+        if (operation === 'substract') {
+            return index === 0 ? t('analytics', 'Base value') : t('analytics', 'Subtract value');
+        }
+
+        return t('analytics', 'Source {position}', {position: index + 1});
+    },
+
+    addCalculatedColumnSource: function () {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        const select = document.getElementById('tableOptionsCalculatedColumnsSourceSelect');
+        if (!state.draft || !select) {
+            return;
+        }
+
+        const selectedValue = parseInt(select.value, 10);
+        if (Number.isNaN(selectedValue)) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Choose a source column first.'));
+            return;
+        }
+
+        if (state.draft.columns.includes(selectedValue)) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'This source column is already selected.'));
+            return;
+        }
+
+        if (state.draft.operation === 'percentage' && state.draft.columns.length >= 2) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'A percentage calculation needs exactly two source columns.'));
+            return;
+        }
+
+        state.draft.columns.push(selectedValue);
+        OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
+        OCA.Analytics.Filter.renderCalculatedColumnSelectedSources();
+    },
+
+    moveCalculatedColumnSource: function (index, direction) {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        if (!state.draft) {
+            return;
+        }
+
+        const targetIndex = index + direction;
+        if (targetIndex < 0 || targetIndex >= state.draft.columns.length) {
+            return;
+        }
+
+        const movedItem = state.draft.columns[index];
+        state.draft.columns.splice(index, 1);
+        state.draft.columns.splice(targetIndex, 0, movedItem);
+        OCA.Analytics.Filter.renderCalculatedColumnSelectedSources();
+    },
+
+    removeCalculatedColumnSource: function (index) {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        if (!state.draft) {
+            return;
+        }
+
+        state.draft.columns.splice(index, 1);
+        OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
+        OCA.Analytics.Filter.renderCalculatedColumnSelectedSources();
+    },
+
+    updateCalculatedColumnEditorMessage: function (message) {
+        const messageElement = document.getElementById('tableOptionsCalculatedColumnsEditorMessage');
+        if (!messageElement) {
+            return;
+        }
+
+        if (!message) {
+            messageElement.textContent = '';
+            messageElement.hidden = true;
+            return;
+        }
+
+        messageElement.textContent = message;
+        messageElement.hidden = false;
+    },
+
+    saveCalculatedColumnEditor: function () {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        if (!state.draft) {
+            return;
+        }
+
+        const title = document.getElementById('tableOptionsCalculatedColumnsTitle').value.trim();
+        const operation = document.getElementById('tableOptionsCalculatedColumnsOperation').value;
+        const columns = [...state.draft.columns];
+
+        if (title === '') {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Enter a title for the calculated column.'));
+            return;
+        }
+
+        if (operation === 'percentage' && columns.length !== 2) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'A percentage calculation needs exactly two source columns.'));
+            return;
+        }
+
+        if (operation !== 'percentage' && columns.length < 2) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Select at least two source columns.'));
+            return;
+        }
+
+        const calculatedColumn = {
+            operation: operation,
+            columns: columns,
+            title: title,
+        };
+
+        if (state.editingIndex === null) {
+            state.items.push(calculatedColumn);
+        } else {
+            state.items[state.editingIndex] = calculatedColumn;
+        }
+
+        state.parseError = false;
+        document.getElementById('tableOptionsCalculatedColumns').value = OCA.Analytics.Filter.serializeCalculatedColumnsValue(state.items);
+        OCA.Analytics.Filter.renderCalculatedColumnsList();
+        OCA.Analytics.Filter.closeCalculatedColumnEditor();
+    },
+
+    deleteCalculatedColumnEditor: function () {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        if (state.editingIndex === null) {
+            return;
+        }
+
+        state.items.splice(state.editingIndex, 1);
+        state.parseError = false;
+        document.getElementById('tableOptionsCalculatedColumns').value = OCA.Analytics.Filter.serializeCalculatedColumnsValue(state.items);
+        OCA.Analytics.Filter.renderCalculatedColumnsList();
+        OCA.Analytics.Filter.closeCalculatedColumnEditor();
     },
 
     /**

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- Add a visual editor for table calculated columns in the table options dialog
+
 ## 6.2.1 - 2026-03-17
 ### Fixed
 - Fix `/whatsnew` crashes on Nextcloud 33 by using `executeQuery()` in `WhatsNewMapper`
