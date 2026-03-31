@@ -14,6 +14,8 @@ OC.L10N.register(
     "Delete" : "Cantzella",
     "Column selection" : "Seletzione de colunnas",
     "Filter" : "Filtru",
+    "Add" : "Agiunghe",
+    "Remove" : "Boga",
     "Default" : "Predefinidu",
     "Bar" : "Tzilleri",
     "Favorites" : "Preferidos",

@@ -52,6 +52,8 @@ OC.L10N.register(
     "Column selection" : "Sarakevalinnat",
     "Filter" : "Suodatin",
     "none" : "ei mitään",
+    "Add" : "Lisää",
+    "Remove" : "Poista",
     "Default" : "Oletus",
     "Ascending" : "Nouseva",
     "Descending" : "Laskeva",

@@ -33,6 +33,8 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Done" : "დასრულდა",
     "Filter" : "გაფილტრვა",
+    "Add" : "დამატება",
+    "Remove" : "Remove",
     "Default" : "Default",
     "Bar" : "Bar",
     "Doughnut" : "დონატი",

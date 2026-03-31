@@ -8,6 +8,8 @@ OC.L10N.register(
     "Value" : "Value",
     "Delete" : "நீக்குக",
     "Done" : "Done",
+    "Add" : "சேர்க்க",
+    "Remove" : "அகற்றுக",
     "Favorites" : "விருப்பங்கள்",
     "New" : "புதிய",
     "Remove from favorites" : "Remove from favorites",

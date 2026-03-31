@@ -7,6 +7,7 @@ OC.L10N.register(
     "Settings" : "Astellungen",
     "Saved" : "Gespäichert",
     "Delete" : "Läschen",
+    "Add" : "Dobäisetzen",
     "Favorites" : "Favoriten",
     "New" : "Nei",
     "Remove from favorites" : "Remove from favorites",

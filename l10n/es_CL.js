@@ -40,6 +40,7 @@ OC.L10N.register(
     "All data including all reports will be deleted!" : "¡Todos los datos y todos los informes serán eliminados!",
     "The dataset name is missing" : "Falta el nombre del conjunto de datos",
     "Filter" : "Filtrar",
+    "Remove" : "Remover",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Overview" : "Generalidades",

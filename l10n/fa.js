@@ -57,6 +57,8 @@ OC.L10N.register(
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.",
     "none" : "none",
     "Table options" : "گزینه‌های جدول",
+    "Add" : "افزودن",
+    "Remove" : "حذف",
     "Sort order" : "Sort order",
     "Default" : "پیش‌فرض",
     "Ascending" : "Ascending",

@@ -14,6 +14,8 @@ OC.L10N.register(
     "Delete" : "Eyða",
     "Done" : "Lokið",
     "Filter" : "Sía",
+    "Add" : "Bæta við",
+    "Remove" : "Fjarlægja",
     "Default" : "Sjálfgefið",
     "Line" : "Lína",
     "Bar" : "Bar",

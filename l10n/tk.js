@@ -6,6 +6,7 @@ OC.L10N.register(
     "Link copied" : "Link-yň nusgasy alyndy",
     "Settings" : "Sazlamalar",
     "Delete" : "Pozmak",
+    "Remove" : "Aýyrmak",
     "Default" : "Bellenen",
     "Favorites" : "Halanýanlar",
     "Add to favorites" : "Saýlananlara goşuň",

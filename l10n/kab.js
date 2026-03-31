@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Kkes",
     "Done" : "Immed",
     "Filter" : "Sizdeg",
+    "Remove" : "Kkes",
     "Default" : "Prédéfini(e)",
     "Favorites" : "Imenyafen",
     "New" : "Amaynut",

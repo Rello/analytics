@@ -18,6 +18,8 @@ OC.L10N.register(
     "Done" : "הסתיים",
     "Column selection" : "בחירת עמודות",
     "Filter" : "מסנן",
+    "Add" : "הוספה",
+    "Remove" : "הסרה",
     "Sort order" : "סידור",
     "Default" : "ברירת מחדל",
     "Bar" : "בר",
