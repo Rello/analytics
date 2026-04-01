@@ -28,6 +28,7 @@ OC.L10N.register(
     "Ascending" : "Didėjančia tvarka",
     "Descending" : "Mažėjančia tvarka",
     "Sort data ascending or descending" : "Rikiuoti duomenis didėjančia arba mažėjančia tvarka",
+    "Line" : "Linija",
     "Favorites" : "Mėgstami",
     "New" : "Nauja",
     "New group" : "Nauja grupė",

@@ -70,6 +70,8 @@ OC.L10N.register(
     "Table options" : "Tabel muligheder",
     "The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section." : "Tabellen kan brugerdefineres ved at placere rækkerne og kolonnerne.\nHvis en klassisk listevisning er påkrævet, skal alle felter placeres i rækkesektionen.",
     "Reset table" : "Nulstil tabel",
+    "Add" : "Tilføj",
+    "Remove" : "Fjern",
     "Sort order" : "Sorteringsrækkefølge",
     "Default" : "Standard",
     "Ascending" : "Stigende",

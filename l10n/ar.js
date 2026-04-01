@@ -61,6 +61,8 @@ OC.L10N.register(
     "Table options" : "خيارات الجدول",
     "The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section." : "يمكن تخصيص الجدول بتغيير مواضع الصفوف و الأعمدة <br>إذا كان عرض القائمة الكلاسيكي مطلوباً، فيجب وضع جميع الحقول في قسم الصفوف.",
     "Reset table" : "إعادة ضبط الجدول",
+    "Add" : "إضافة ",
+    "Remove" : "حذف",
     "Sort order" : "ترتيب الفرز",
     "Default" : "التلقائي",
     "Ascending" : "تَصاعُدي",

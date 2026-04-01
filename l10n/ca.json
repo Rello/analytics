@@ -58,6 +58,8 @@
     "Table options" : "Opcions de taula",
     "The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section." : "La taula es pot personalitzar col·locant les files i columnes.<br>Si es requereix una vista de llista clàssica, tots els camps s'han de col·locar a la secció de files.",
     "Reset table" : "Reinicia la taula",
+    "Add" : "Afegeix",
+    "Remove" : "Suprimir",
     "Sort order" : "Ordenació",
     "Default" : "Per defecte",
     "Ascending" : "Ascendent",

@@ -42,6 +42,8 @@ OC.L10N.register(
     "list of values" : "llista de valores",
     "Filter" : "Peñerar",
     "Table options" : "Opciones de la tabla",
+    "Add" : "Amestar",
+    "Remove" : "Quitar",
     "Default" : "Por defeutu",
     "Ascending" : "Ascendente",
     "Descending" : "Descendente",

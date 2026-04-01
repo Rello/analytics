@@ -67,6 +67,8 @@
     "Table options" : "Опции",
     "The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section." : "Таблицата може да бъде променена чрез поставяне на редове и колони. 1. Ако е необходим класически изглед като на лист, всички полета трябва да се поставят в секцията за редове.",
     "Reset table" : "Нулирай таблицата",
+    "Add" : "Добавяне",
+    "Remove" : "Премахване",
     "Sort order" : "Сортиране на реда",
     "Default" : "По подразбиране",
     "Ascending" : "Възходящо",
