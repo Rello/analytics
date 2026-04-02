@@ -307,7 +307,7 @@ class DatasourceController extends Controller {
 				$filtered = array();
 
 				foreach ($data['data'] as $record) {
-					if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && strpos($record[$key], $filterValueNoQuotes) !== false)) {
+					if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes)) || ($filterOption === 'NOTLIKE' && !$this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
 						$filtered[] = $record;
 					} else if ($filterOption === 'IN') {
 						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
@@ -324,6 +324,16 @@ class DatasourceController extends Controller {
 			}
 		}
 		return $data;
+	}
+
+	private function matchesLikeFilter($value, string $filterValue): bool {
+		$value = (string)$value;
+		if (strpbrk($filterValue, '*?') === false) {
+			return strpos($value, $filterValue) !== false;
+		}
+
+		$pattern = '/^' . str_replace(['\\*', '\\?'], ['.*', '.'], preg_quote($filterValue, '/')) . '$/u';
+		return preg_match($pattern, $value) === 1;
 	}
 
 	private function aggregateData($data, $filter) {

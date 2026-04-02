@@ -233,8 +233,7 @@
 #analyticsWizard .page h3 {
     margin: 10px 0 10px;
     line-height: 120%;
-    background-position: 0px;
-    padding-left: 26px;
+    background-position: 0;
 }
 
 #analyticsWizard .page .image {
@@ -484,6 +483,7 @@
         overflow: hidden;
         display: flex;
     }
+
     #firstrunwizard .page #wizard-values li span {
         width: 44px !important;
         padding-right: 20px;

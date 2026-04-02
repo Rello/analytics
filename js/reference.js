@@ -25,14 +25,38 @@ if (!OCA.Analytics) {
 OCA.Analytics.Reference = {
     init: function () {
         _registerWidget('analytics', async (el, {richObjectType, richObject, accessible}) => {
-            el.innerHTML = '<a href="' + richObject.url + '" target="_blank" style="display: flex;">'
-                + '<img src="' + richObject.image + '" style="width: 20%; padding: 20px; opacity:.5;">'
-                + '<div style="width: 75%; padding:10px;">'
-                + '<div style="font-weight: 600;">' + richObject.name + '</div>'
-                + '<br>'
-                + '<div>' + richObject.subheader + '</div>'
-                //+ '<div style="color: var(--color-text-maxcontrast);">' + richObject.url + '</div>'
-                + '</div></a>';
+            const link = document.createElement('a');
+            link.href = richObject.url || '';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.style.display = 'flex';
+
+            const image = document.createElement('img');
+            image.src = richObject.image || '';
+            image.alt = '';
+            image.style.width = '20%';
+            image.style.padding = '20px';
+            image.style.opacity = '.5';
+
+            const content = document.createElement('div');
+            content.style.width = '75%';
+            content.style.padding = '10px';
+
+            const title = document.createElement('div');
+            title.style.fontWeight = '600';
+            title.textContent = richObject.name || '';
+
+            const subheader = document.createElement('div');
+            subheader.style.marginTop = '1em';
+            subheader.textContent = richObject.subheader || '';
+
+            content.appendChild(title);
+            content.appendChild(subheader);
+            link.appendChild(image);
+            link.appendChild(content);
+
+            el.textContent = '';
+            el.appendChild(link);
         }, () => {}, { hasInteractiveView: false });
     },
 }

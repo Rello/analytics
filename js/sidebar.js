@@ -1211,8 +1211,10 @@ OCA.Analytics.Sidebar.Report = {
         window.open(OC.generateUrl('apps/analytics/report/export/') + reportId, '_blank')
     },
 
-    import: function (path, raw, button = null) {
+    import: function (path, raw, button = null, options = {}) {
         if (typeof raw === 'number') raw = null; // file picker is returning some INT which is not helpful in the service
+        const refreshNavigation = options.refreshNavigation !== false;
+        const rethrowError = options.rethrowError === true;
         let requestUrl = OC.generateUrl('apps/analytics/report/import/');
         let headers = new Headers();
         headers.append('requesttoken', OC.requestToken);
@@ -1229,12 +1231,21 @@ OCA.Analytics.Sidebar.Report = {
                 raw: raw
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.Navigation.init();
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error('Import failed');
+                }
+                if (refreshNavigation) {
+                    OCA.Analytics.Navigation.init();
+                }
+                return data;
             })
             .catch(error => {
                 OCA.Analytics.Notification.notification('error', t('analytics', 'Import failed'));
+                if (rethrowError) {
+                    throw error;
+                }
             })
             .finally(() => {
                 OCA.Analytics.Sidebar.Backend.setButtonBusy(button, false);

@@ -56,6 +56,8 @@ OCA.Analytics = Object.assign({}, OCA.Analytics, {
  * @namespace OCA.Analytics.Dashboard
  */
 OCA.Analytics.Dashboard = {
+    favoritesRequestId: 0,
+
     init: function () {
         OCA.Analytics.Visualization?.showContentByType('intro');
         document.getElementById('ulAnalytics').innerHTML = '';
@@ -66,6 +68,12 @@ OCA.Analytics.Dashboard = {
     },
 
     getFavorites: function () {
+        const requestId = ++OCA.Analytics.Dashboard.favoritesRequestId;
+        const favoritesList = document.getElementById('ulAnalytics');
+        if (!favoritesList) {
+            return;
+        }
+
         const requests = [];
         requests.push(fetch(OC.generateUrl('apps/analytics/favorites'), {
             method: 'GET',
@@ -79,37 +87,46 @@ OCA.Analytics.Dashboard = {
         Promise.all(requests)
             .then(responses => Promise.all(responses.map(r => r.json())))
             .then(responseData => {
-                const reportFavorites = Array.isArray(responseData[0]) ? responseData[0] : [];
-                const panoramaFavorites = Array.isArray(responseData[1]) ? responseData[1] : [];
+                if (requestId !== OCA.Analytics.Dashboard.favoritesRequestId) {
+                    return;
+                }
+
+                const favoritesList = document.getElementById('ulAnalytics');
+                if (!favoritesList) {
+                    return;
+                }
+
+                const reportFavorites = Array.isArray(responseData[0]) ? [...new Set(responseData[0])] : [];
+                const panoramaFavorites = Array.isArray(responseData[1]) ? [...new Set(responseData[1])] : [];
 
                 if (reportFavorites.length > 0 || panoramaFavorites.length > 0) {
-                    document.getElementById('ulAnalytics').innerHTML = '';
+                    favoritesList.innerHTML = '';
 
                     for (let dataset of reportFavorites) {
                         let li = '<li id="analyticsWidgetItem-report-' + dataset + '" class="analyticsWidgetItem"></li>';
-                        document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
-                        OCA.Analytics.Dashboard.getData(dataset);
+                        favoritesList.insertAdjacentHTML('beforeend', li);
+                        OCA.Analytics.Dashboard.getData(dataset, requestId);
                     }
 
                     for (let panorama of panoramaFavorites) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
                         if (story !== undefined) {
                             let li = '<li id="analyticsWidgetItem-panorama-' + panorama + '" class="analyticsWidgetItem"></li>';
-                            document.getElementById('ulAnalytics').insertAdjacentHTML('beforeend', li);
+                            favoritesList.insertAdjacentHTML('beforeend', li);
                             let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
                             document.getElementById('analyticsWidgetItem-panorama-' + panorama).insertAdjacentHTML('beforeend', widgetRow);
                             document.getElementById('analyticsWidgetItem-panorama-' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
                         }
                    }
                 } else {
-                    document.getElementById('ulAnalytics').innerHTML = '<div>'
+                    favoritesList.innerHTML = '<div>'
                         + t('analytics', 'Add a report to the favorites to be shown here.')
                         + '</div>';
                 }
             });
     },
 
-    getData: function (datasetId) {
+    getData: function (datasetId, requestId) {
         const url = OC.generateUrl('apps/analytics/data/' + datasetId, true);
         const cacheKey = `analytics-report-${datasetId}`;
         const storage = OCA.Analytics.getLocalStorage();
@@ -145,6 +162,9 @@ OCA.Analytics.Dashboard = {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (requestId !== OCA.Analytics.Dashboard.favoritesRequestId) {
+                    return;
+                }
                 if (xhr.status === 200) {
                     let data = JSON.parse(xhr.response);
 
@@ -165,11 +185,11 @@ OCA.Analytics.Dashboard = {
                     }
 
                     data = OCA.Analytics.Dashboard.processReceivedData(data);
-                    OCA.Analytics.Dashboard.createWidgetContent(data);
+                    OCA.Analytics.Dashboard.createWidgetContent(data, requestId);
                 }
                 else if (xhr.status === 304 && cachedData) {
                     let data = OCA.Analytics.Dashboard.processReceivedData(cachedData);
-                    OCA.Analytics.Dashboard.createWidgetContent(data);
+                    OCA.Analytics.Dashboard.createWidgetContent(data, requestId);
                 }
             }
         };
@@ -200,11 +220,19 @@ OCA.Analytics.Dashboard = {
         return data;
     },
 
-    createWidgetContent: function (jsondata) {
+    createWidgetContent: function (jsondata, requestId) {
+        if (requestId !== OCA.Analytics.Dashboard.favoritesRequestId) {
+            return;
+        }
+
         let report = jsondata['options']['name'];
         let reportId = jsondata['options']['id'];
         let type = jsondata['options']['visualization'];
         let value, data, subheader;
+        const widgetItem = document.getElementById('analyticsWidgetItem-report-' + reportId);
+        if (!widgetItem) {
+            return;
+        }
 
         if (jsondata['data'] && type === 'table') {
             data = jsondata['data'][jsondata['data'].length - 1];
@@ -222,8 +250,9 @@ OCA.Analytics.Dashboard = {
 
         // pass the last dimension index for threshold evaluation
         let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds, data.length - 1);
-        document.getElementById('analyticsWidgetItem-report-' + reportId).insertAdjacentHTML('beforeend', widgetRow);
-        document.getElementById('analyticsWidgetItem-report-' + reportId).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
+        widgetItem.innerHTML = '';
+        widgetItem.insertAdjacentHTML('beforeend', widgetRow);
+        widgetItem.addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
         if (type !== 'table') {
             document.getElementById('kpi' + reportId).remove();

@@ -188,7 +188,9 @@ class StorageMapper
 					$sql->andWhere($sql->expr()->in($column, $sql->createParameter('inValues')));
 					$sql->setParameter('inValues', $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
 				} elseif ($value['option'] === 'LIKE') {
-					$sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter('%' . $valueNoQuotes . '%')));
+					$sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes))));
+				} elseif ($value['option'] === 'NOTLIKE') {
+					$sql->andWhere('NOT (' . $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes))) . ')');
 				} elseif ($value['option'] === 'BETWEEN') {
 					// Between is used for filters on quarters
 					// Support both array and comma-separated string formats
@@ -395,9 +397,21 @@ class StorageMapper
             $sql->andWhere($sql->expr()->in($column, $sql->createParameter('inValues')));
             $sql->setParameter('inValues', explode(',', $value), IQueryBuilder::PARAM_STR_ARRAY);
         } elseif ($option === 'LIKE') {
-            $sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter('%' . $value . '%')));
+            $sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($value))));
+        } elseif ($option === 'NOTLIKE') {
+            $sql->andWhere('NOT (' . $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($value))) . ')');
         }
     }
+
+	private function buildLikePattern(string $value): string
+	{
+		$escapedValue = $this->db->escapeLikeParameter($value);
+		if (strpbrk($value, '*?') !== false) {
+			return str_replace(['*', '?'], ['%', '_'], $escapedValue);
+		}
+
+		return '%' . $escapedValue . '%';
+	}
 
 	private function getAllowedFilterColumn(string $column): ?string
 	{

@@ -341,6 +341,69 @@ class DatasourceControllerTest extends TestCase {
     }
 
     /**
+     * Confirms NOTLIKE excludes rows matched by wildcard filters.
+     */
+    public function testReadFiltersRowsUsingNotLikeWildcardOperator(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['France', 'EU', 2],
+                    ['Germany', 'APAC', 3],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false,"filter":{"0":{"option":"NOTLIKE","value":"Ger*"}}}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(1, $result['data']);
+        $this->assertSame(['France', 'EU', 2], $result['data'][0]);
+    }
+
+    /**
+     * Confirms LIKE keeps supporting wildcard filters for external datasources.
+     */
+    public function testReadFiltersRowsUsingLikeWildcardOperator(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['France', 'EU', 2],
+                    ['Germany', 'APAC', 3],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false,"filter":{"1":{"option":"LIKE","value":"E?"}}}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(2, $result['data']);
+        $this->assertSame(['Germany', 'EU', 1], $result['data'][0]);
+        $this->assertSame(['France', 'EU', 2], $result['data'][1]);
+    }
+
+    /**
      * Confirms hidden drilldown columns are removed before default aggregation is applied.
      */
     public function testReadAggregatesAfterRemovingHiddenDrilldownColumnsWhenAggregateOptionIsOmitted(): void {

@@ -3,6 +3,7 @@
 ## 6.3.0 - 2026-04-03
 ### Added
 - visual UI for creating calculated columns
+- `not contains` report filter operator with wildcard support for excluding matches
 
 ### Changed
 - new layouts for chart and table option dialogs
@@ -10,6 +11,9 @@
 
 ### Fixed
 - Restore the collapsed sidebar section right-arrow icon by shipping the missing asset again
+- Render the filter dialog Wiki help text as a clickable link instead of showing raw placeholders
+- Run first-start demo imports sequentially to avoid false import-failed errors after creating the sample reports
+- Prevent duplicate favorite widgets on the start screen when overlapping favorites loads complete out of order
 
 ## 6.2.1 - 2026-03-17
 ### Fixed
