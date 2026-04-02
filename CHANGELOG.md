@@ -1,8 +1,15 @@
 # Changelog
 
-## Unreleased
+## 6.3.0 - 2026-04-03
 ### Added
-- Add a visual editor for table calculated columns in the table options dialog
+- visual UI for creating calculated columns
+
+### Changed
+- new layouts for chart and table option dialogs
+- UI unification
+
+### Fixed
+- Restore the collapsed sidebar section right-arrow icon by shipping the missing asset again
 
 ## 6.2.1 - 2026-03-17
 ### Fixed

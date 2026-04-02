@@ -13,6 +13,7 @@ use OCA\Analytics\Dashboard\Widget;
 use OCA\Analytics\Flow\RegisterOperationsListener;
 use OCA\Analytics\Listener\UserDeletedListener;
 use OCA\Analytics\ShareReview\ShareReviewListener;
+use OCA\Analytics\UserMigration\AnalyticsMigrator;
 use OCA\Analytics\Notification\Notifier;
 use OCA\Analytics\Search\SearchProvider;
 use OCA\Analytics\Listener\ReferenceListener;
@@ -23,10 +24,8 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
-use Psr\Container\ContainerInterface;
 use OCP\WorkflowEngine\Events\RegisterOperationsEvent;
 use OCA\ContextChat\Event\ContentProviderRegisterEvent;
 
@@ -50,6 +49,10 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(RegisterOperationsEvent::class, RegisterOperationsListener::class);
 		$context->registerEventListener(ContentProviderRegisterEvent::class, ContentProvider::class);
 		$context->registerEventListener(SourceEvent::class, ShareReviewListener::class);
+
+		if (method_exists($context, 'registerUserMigrator')) {
+			$context->registerUserMigrator(AnalyticsMigrator::class);
+		}
 
 		if (method_exists($context, 'registerReferenceProvider')) {
 			$context->registerReferenceProvider(ReferenceProvider::class);

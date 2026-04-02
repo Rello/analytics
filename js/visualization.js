@@ -643,8 +643,11 @@ OCA.Analytics.Visualization = {
 
         let rawValue = parseFloat(jsondata.data[0][1]);
         let value;
+        const isAverageTimeAggregation = jsondata.options?.filteroptions?.timeAggregation?.mode === 'average';
 
-        if (rawValue % 1 === 0) {
+        if (isAverageTimeAggregation) {
+            value = rawValue.toLocaleString(undefined, {maximumFractionDigits: 1});
+        } else if (rawValue % 1 === 0) {
             // If the number is an integer, format without decimals
             value = rawValue.toLocaleString();
         } else {
@@ -1337,6 +1340,20 @@ OCA.Analytics.Visualization = {
         };
     },
 
+    formatTimeAggregationMeasureValue: function (value, mode) {
+        const numericValue = parseFloat(value);
+        if (isNaN(numericValue)) {
+            return value;
+        }
+
+        if (mode !== 'average') {
+            return numericValue.toString();
+        }
+
+        const roundedValue = Math.round((numericValue + Number.EPSILON) * 10) / 10;
+        return Number.isInteger(roundedValue) ? roundedValue.toString() : roundedValue.toFixed(1);
+    },
+
     /**
      * Group time based dimensions by day/week/month/year.
      *
@@ -1444,7 +1461,7 @@ OCA.Analytics.Visualization = {
         data.data = Object.keys(sums).map(key => {
             const parts = key.split('\u0001');
             const values = sums[key].map(sum => mode === 'average' ? sum / counts[key] : sum);
-            const strValues = values.map(v => v.toString());
+            const strValues = values.map(v => this.formatTimeAggregationMeasureValue(v, mode));
             return [...parts, ...strValues];
         });
 

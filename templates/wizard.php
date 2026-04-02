@@ -356,7 +356,7 @@
             <div id="wizardNewVisualSelectionArea" style="position: relative;">
                 <div id="wizardNewVisualTemplateHint"
                      class="userGuidance"
-                     style="display: none; position: absolute; z-index: 10; top: 8px; left: 50%; transform: translateX(-50%); padding: 10px 14px; border-radius: 8px; background: var(--color-main-background); border: 1px solid var(--color-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                     style="display: none; position: absolute; z-index: 10; top: 8px; left: 50%; transform: translateX(-50%); padding: 10px 14px; border-radius: var(--analytics-surface-radius); background: var(--color-main-background); border: 1px solid var(--color-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
                     <?php p($l->t('Visualization is preconfigured by the selected template and cannot be changed in this step.')); ?>
                 </div>
             <div class="table" style="display: table; width: 100%;">

@@ -211,8 +211,11 @@
                 <input type="number" id="groupOptionNumber" class="optionsInput" min="1"/>
             </div>
             <div style="display: table-cell; width: 100px;">
-                <input type="checkbox" id="groupOptionOthers" class="checkbox" name="groupOptionOthers"/>
-                <label for="groupOptionOthers"></label>
+                <label class="analyticsSwitch analyticsSwitch--centered" for="groupOptionOthers">
+                    <input type="checkbox" id="groupOptionOthers" name="groupOptionOthers" role="switch"
+                           aria-label="<?php p($l->t('with others')); ?>"/>
+                    <span class="analyticsSwitchSlider" aria-hidden="true"></span>
+                </label>
             </div>
         </div>
     </div>
@@ -234,8 +237,11 @@
                 <label for="drilldownAggregate"><?php p($l->t('Aggregate values')); ?></label>
             </div>
             <div style="display: table-cell; width: 50px;">
-                <input type="checkbox" id="drilldownAggregate" class="checkbox" name="drilldownAggregate" checked>
-                <label for="drilldownAggregate"></label>
+                <label class="analyticsSwitch analyticsSwitch--centered" for="drilldownAggregate">
+                    <input type="checkbox" id="drilldownAggregate" name="drilldownAggregate" role="switch" checked
+                           aria-label="<?php p($l->t('Aggregate values')); ?>">
+                    <span class="analyticsSwitchSlider" aria-hidden="true"></span>
+                </label>
             </div>
         </div>
     </div>
@@ -670,6 +676,8 @@
                             class="icon-analytics-panorama"></span><span><?php p($l->t('Panorama')); ?></span></a></li>
             <li><a href="#" id="newMenuDataset" data-type="dataset"><span
                             class="icon-analytics-dataset"></span><span><?php p($l->t('Dataset')); ?></span></a></li>
+            <li><a href="#" id="newMenuImport"><span
+                            class="icon-analytics-import"></span><span><?php p($l->t('Import report')); ?></span></a></li>
         </ul>
     </div>
 </template>
@@ -829,201 +837,219 @@
 </template>
 
 <template id="templateTableOptions">
-    <div class="tableOptionsLayout">
-        <div class="dummy"></div>
-        <div id="tableOptionsLayoutRows">
-            <p><?php p($l->t('Rows')); ?></p>
-            <div id="rows" class="columnSection"></div>
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'chartBar.svg'); ?>">
+        <h2><?php p($l->t('Data Source')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Position the available fields to define the structure of the table. For a classic list view, move all fields into rows.')); ?></span>
+        <div class="tableOptionsLayout">
+            <div class="dummy"></div>
+            <div id="tableOptionsLayoutRows">
+                <p><?php p($l->t('Rows')); ?></p>
+                <div id="rows" class="columnSection"></div>
+            </div>
+            <div id="tableOptionsLayoutColumns">
+                <p><?php p($l->t('Columns')); ?></p>
+                <div id="columns" class="columnSection"></div>
+            </div>
+            <div id="tableOptionsLayoutMeasures">
+                <p><?php // TRANSLATORS "Measures" means key figures and refers to the display area of a data table
+					p($l->t('Measures')); ?></p>
+                <div id="measures" class="columnSection"></div>
+            </div>
+            <div id="tableOptionsLayoutAvailable">
+                <p><?php p($l->t('Not required')); ?></p>
+                <div id="notRequired" class="columnSection"></div>
+            </div>
+            <div class="dummy2"></div>
         </div>
-        <div id="tableOptionsLayoutColumns">
-            <p><?php p($l->t('Columns')); ?></p>
-            <div id="columns" class="columnSection"></div>
-        </div>
-        <div id="tableOptionsLayoutMeasures">
-            <p><?php // TRANSLATORS "Measures" means key figures and refers to the display area of a data table
-				p($l->t('Measures')); ?></p>
-            <div id="measures" class="columnSection"></div>
-        </div>
-        <div id="tableOptionsLayoutAvailable">
-            <p><?php p($l->t('Not required')); ?></p>
-            <div id="notRequired" class="columnSection"></div>
-        </div>
-        <div class="dummy2"></div>
     </div>
 
-    <div id="tableOptionsCalculatedColumnsEditor" class="tableOptionsCalculatedColumnsEditor" hidden>
-        <div class="tableOptionsCalculatedColumnsEditorCard">
-            <div class="tableOptionsCalculatedColumnsEditorHeader">
-                <h3 id="tableOptionsCalculatedColumnsEditorHeading"><?php p($l->t('Add calculated column')); ?></h3>
-                <button type="button" id="tableOptionsCalculatedColumnsEditorClose"
-                        class="tableOptionsCalculatedColumnsEditorClose icon icon-close"></button>
-            </div>
-
-            <div class="tableOptionsCalculatedColumnsEditorFields">
-                <div class="tableOptionsCalculatedColumnsEditorFieldRow">
-                    <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
-                        <label for="tableOptionsCalculatedColumnsTitle"><?php p($l->t('Title')); ?></label>
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'calculate.svg'); ?>">
+        <h2><?php p($l->t('Calculated Columns')); ?></h2>
+        <div id="tableOptionsCalculatedColumnsEditor" class="tableOptionsCalculatedColumnsEditor" hidden>
+            <div class="tableOptionsCalculatedColumnsEditorCard">
+                <div class="analyticsDialogHeaderWrap tableOptionsCalculatedColumnsEditorHeader">
+                    <div class="analyticsDialogHeader">
+                        <span id="tableOptionsCalculatedColumnsEditorHeading"><?php p($l->t('Add calculated column')); ?></span>
                     </div>
-                    <div class="tableOptionsCalculatedColumnsEditorFieldValue">
-                        <input type="text" id="tableOptionsCalculatedColumnsTitle" class="optionsInput">
-                    </div>
+                    <button type="button" id="tableOptionsCalculatedColumnsEditorClose"
+                            class="analyticsDialogClose tableOptionsCalculatedColumnsEditorClose"
+                            aria-label="<?php p($l->t('Close')); ?>"></button>
                 </div>
 
-                <div class="tableOptionsCalculatedColumnsEditorFieldRow">
-                    <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
-                        <label for="tableOptionsCalculatedColumnsOperation"><?php p($l->t('Calculation method')); ?></label>
+                <div class="tableOptionsCalculatedColumnsEditorFields">
+                    <div class="tableOptionsCalculatedColumnsEditorFieldRow">
+                        <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                            <label for="tableOptionsCalculatedColumnsTitle"><?php p($l->t('Title')); ?></label>
+                        </div>
+                        <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                            <input type="text" id="tableOptionsCalculatedColumnsTitle" class="optionsInput">
+                        </div>
                     </div>
-                    <div class="tableOptionsCalculatedColumnsEditorFieldValue">
-                        <select id="tableOptionsCalculatedColumnsOperation" class="optionsInput"></select>
-                    </div>
-                </div>
 
-                <div class="tableOptionsCalculatedColumnsEditorFieldRow tableOptionsCalculatedColumnsEditorFieldRowTop">
-                    <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
-                        <label for="tableOptionsCalculatedColumnsSourceSelect"><?php p($l->t('Available columns')); ?></label>
+                    <div class="tableOptionsCalculatedColumnsEditorFieldRow">
+                        <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                            <label for="tableOptionsCalculatedColumnsOperation"><?php p($l->t('Calculation method')); ?></label>
+                        </div>
+                        <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                            <select id="tableOptionsCalculatedColumnsOperation" class="optionsInput"></select>
+                        </div>
                     </div>
-                    <div class="tableOptionsCalculatedColumnsEditorFieldValue">
-                        <div class="tableOptionsCalculatedColumnsSourcePicker">
-                            <select id="tableOptionsCalculatedColumnsSourceSelect" class="optionsInput"></select>
-                            <button type="button" id="tableOptionsCalculatedColumnsSourceAdd"><?php p($l->t('Add source column')); ?></button>
+
+                    <div class="tableOptionsCalculatedColumnsEditorFieldRow tableOptionsCalculatedColumnsEditorFieldRowTop">
+                        <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                            <label for="tableOptionsCalculatedColumnsSourceSelect"><?php p($l->t('Available columns')); ?></label>
+                        </div>
+                        <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                            <div class="tableOptionsCalculatedColumnsSourcePicker">
+                                <select id="tableOptionsCalculatedColumnsSourceSelect" class="optionsInput"></select>
+                                <button type="button" id="tableOptionsCalculatedColumnsSourceAdd"><?php p($l->t('Add source column')); ?></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="tableOptionsCalculatedColumnsSelectedWrap">
-                <p id="tableOptionsCalculatedColumnsSelectedHint" class="userGuidance"></p>
-                <div id="tableOptionsCalculatedColumnsSelected" class="tableOptionsCalculatedColumnsSelected"></div>
-                <p id="tableOptionsCalculatedColumnsEditorMessage" class="userGuidance" hidden></p>
-            </div>
+                <div class="tableOptionsCalculatedColumnsSelectedWrap">
+                    <p id="tableOptionsCalculatedColumnsSelectedHint" class="userGuidance"></p>
+                    <div id="tableOptionsCalculatedColumnsSelected" class="tableOptionsCalculatedColumnsSelected"></div>
+                    <p id="tableOptionsCalculatedColumnsEditorMessage" class="userGuidance" hidden></p>
+                </div>
 
-            <div class="tableOptionsCalculatedColumnsEditorActions">
-                <button type="button" id="tableOptionsCalculatedColumnsDelete" hidden>
-                    <?php p($l->t('Remove calculated column')); ?>
+                <div class="analyticsDialogButtonrow tableOptionsCalculatedColumnsEditorActions">
+                    <button type="button" id="tableOptionsCalculatedColumnsDelete" class="button analyticsDialogButtonLeading" hidden>
+                        <?php p($l->t('Remove calculated column')); ?>
+                    </button>
+                    <button type="button" id="tableOptionsCalculatedColumnsCancel" class="button"><?php p($l->t('Cancel')); ?></button>
+                    <button type="button" id="tableOptionsCalculatedColumnsSave" class="button analyticsPrimary"><?php p($l->t('Save')); ?></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tableOptionsCalculatedColumnsPanel">
+            <div id="tableOptionsCalculatedColumnsList" class="tableOptionsCalculatedColumnsList"></div>
+            <div class="sidebarButtonRow">
+                <button type="button" id="tableOptionsCalculatedColumnsAdd">
+                    <span class="icon-add"></span>
+                    <span><?php p($l->t('Add calculated column')); ?></span>
                 </button>
-                <button type="button" id="tableOptionsCalculatedColumnsCancel" class="button"><?php p($l->t('Cancel')); ?></button>
-                <button type="button" id="tableOptionsCalculatedColumnsSave" class="button analyticsPrimary"><?php p($l->t('Save calculated column')); ?></button>
             </div>
+            <p id="tableOptionsCalculatedColumnsWarning" class="userGuidance" hidden></p>
+            <textarea id="tableOptionsCalculatedColumns" hidden></textarea>
         </div>
     </div>
 
-    <br>
-    <div id="tableOptionsCalculatedColumnsPanel">
-        <p><?php p($l->t('Calculated columns')); ?></p>
-        <div id="tableOptionsCalculatedColumnsList" class="tableOptionsCalculatedColumnsList"></div>
-        <div class="sidebarButtonRow">
-            <button type="button" id="tableOptionsCalculatedColumnsAdd">
-                <span class="icon-add"></span>
-                <span><?php p($l->t('Add calculated column')); ?></span>
-            </button>
-        </div>
-        <p id="tableOptionsCalculatedColumnsWarning" class="userGuidance" hidden></p>
-        <textarea id="tableOptionsCalculatedColumns" hidden></textarea>
-    </div>
-
-    <br>
-    <div class="tableOptionsSettingsTable">
-        <div class="tableOptionsSettingsRow">
-            <div class="tableOptionsSettingsLabel"><?php p($l->t('Show totals')); ?></div>
-            <div class="tableOptionsSettingsValue">
-                <label class="toggle-option">
-                    <input type="radio" id="totalOption1" name="totalOption" value="true"><?php p($l->t('Yes')); ?>
-                </label>
-                <label class="toggle-option">
-                    <input type="radio" id="totalOption2" name="totalOption" value="false" checked><?php p($l->t('No')); ?>
-                </label>
-            </div>
-        </div>
-        <div class="tableOptionsSettingsRow">
-            <div class="tableOptionsSettingsLabel"><?php p($l->t('Format all numbers in local format')); ?></div>
-            <div class="tableOptionsSettingsValue">
-                <label class="toggle-option">
-                    <input type="radio" id="formatLocalesOption1" name="formatLocalesOption" value="true"
-                           checked><?php p($l->t('Yes')); ?>
-                </label>
-                <label class="toggle-option">
-                    <input type="radio" id="formatLocalesOption2" name="formatLocalesOption"
-                           value="false"><?php p($l->t('No')); ?>
-                </label>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="sidebarHeaderClosed"><h3 id="tableOptionsSectionHeaderH3"
-                                         class="sidebarPointer"><?php p($l->t('Additional settings')); ?> <span
-                    class="betaFlag">Beta</span></h3></div>
-    <div id="tableOptionsSectionDisabled" style="display: none;">
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'visibility.svg'); ?>">
+        <h2><?php p($l->t('Visualization')); ?></h2>
         <div class="tableOptionsSettingsTable">
             <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel"><?php p($l->t('Compact visualization')); ?></div>
+                <div class="tableOptionsSettingsLabel"><?php p($l->t('Show totals')); ?></div>
                 <div class="tableOptionsSettingsValue">
-                    <label class="toggle-option">
-                        <input type="radio" id="compactDisplayOption1" name="compactDisplayOption"
-                               value="true"><?php p($l->t('Yes')); ?>
+                    <label class="analyticsSwitch" for="totalOption">
+                        <input type="checkbox" id="totalOption" role="switch"
+                               aria-label="<?php p($l->t('Show totals')); ?>">
+                        <span class="analyticsSwitchSlider" aria-hidden="true"></span>
                     </label>
-                    <label class="toggle-option">
-                        <input type="radio" id="compactDisplayOption2" name="compactDisplayOption" value="false"
-                               checked><?php p($l->t('No')); ?>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel"><?php p($l->t('Format all numbers in local format')); ?></div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="analyticsSwitch" for="formatLocalesOption">
+                        <input type="checkbox" id="formatLocalesOption" role="switch"
+                               aria-label="<?php p($l->t('Format all numbers in local format')); ?>" checked>
+                        <span class="analyticsSwitchSlider" aria-hidden="true"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel"><?php p($l->t('Compact visualization')); ?> <span class="betaFlag">Beta</span></div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="analyticsSwitch" for="compactDisplayOption">
+                        <input type="checkbox" id="compactDisplayOption" role="switch"
+                               aria-label="<?php p($l->t('Compact visualization')); ?>">
+                        <span class="analyticsSwitchSlider" aria-hidden="true"></span>
                     </label>
                 </div>
             </div>
         </div>
     </div>
-
 </template>
 
 <template id="templateChartOptions">
-    <br>
-    <h2> <?php p($l->t('Data format')); ?> </h2>
-    <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
-    <div class="table" style="display: table;">
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 200px; text-align: center;">
-                <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked/><br>
-                <label for="opt1"><?php p($l->t('In rows')); ?></label><br>
-                <span class="userGuidance"><?php p($l->t('A list of values. This is the default.')); ?></span>
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'chartBar.svg'); ?>">
+        <h2><?php p($l->t('Data format')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
+        <div class="analyticsModelSelector">
+            <div class="analyticsModelOption">
+                <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked>
+                <label for="analyticsModelOpt1" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'row.svg'); ?>"
+                             class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('In rows')); ?></span>
+                    <span class="analyticsModelCardText"><?php p($l->t('Data series are organized by horizontal rows.')); ?></span>
+                </label>
             </div>
-            <div style="display: table-cell; width: 200px; text-align: center;">
-                <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel"/><br>
-                <label for="opt2"> <?php p($l->t('In columns')); ?></label><br>
-                <span class="userGuidance"><?php p($l->t('One line per topic with the values in the columns')); ?></span>
+            <div class="analyticsModelOption">
+                <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel">
+                <label for="analyticsModelOpt2" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>"
+                             class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('In columns')); ?></span>
+                    <span class="analyticsModelCardText"><?php p($l->t('Data series are grouped by vertical columns.')); ?></span>
+                </label>
             </div>
-            <div style="display: table-cell; width: 200px; text-align: center;">
-                <input type="radio" id="analyticsModelOpt3" name="analyticsModel" value="timeSeriesModel"/><br>
-                <label for="opt3"> <?php p($l->t('Timestamps in first column')); ?></label><br>
-                <span class="userGuidance"><?php p($l->t('One line per timestamp with the series in the columns')); ?></span>
+            <div class="analyticsModelOption">
+                <input type="radio" id="analyticsModelOpt3" name="analyticsModel" value="timeSeriesModel">
+                <label for="analyticsModelOpt3" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'chartTime.svg'); ?>"
+                             class="analyticsModelCardIcon analyticsModelCardIcon--time" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Timestamps')); ?></span>
+                    <span class="analyticsModelCardText"><?php p($l->t('Use first column for time-series indexing.')); ?></span>
+                </label>
             </div>
         </div>
     </div>
-    <br>
-    <br>
-    <h2> <?php p($l->t('Labels')); ?> </h2>
-    <span class="userGuidance"><?php p($l->t('Choose how doughnut chart labels are displayed')); ?></span>
-    <div class="table" style="display: table;">
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 220px;">
-                <?php p($l->t('Doughnut label style')); ?>
-            </div>
-            <div style="display: table-cell; width: 220px;">
-                <select id="chartDoughnutLabelStyle" class="optionsInput">
-                    <option value="percentage"><?php p($l->t('Percentage')); ?></option>
-                    <option value="absolute"><?php p($l->t('Absolute value')); ?></option>
-                </select>
+
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'label.svg'); ?>">
+        <h2><?php p($l->t('Labels')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Choose how doughnut chart labels are displayed')); ?></span>
+        <div class="table" style="display: table;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 220px;">
+                    <?php p($l->t('Doughnut label style')); ?>
+                </div>
+                <div style="display: table-cell; width: 220px;">
+                    <select id="chartDoughnutLabelStyle" class="optionsInput">
+                        <option value="percentage"><?php p($l->t('Percentage')); ?></option>
+                        <option value="absolute"><?php p($l->t('Absolute value')); ?></option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
-    <br>
-    <br>
-    <h2> <?php p($l->t('Visualization')); ?> </h2>
-    <div class="table" style="display: table;" id="chartOptionsTable">
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;"><?php p($l->t('Data series')); ?>
-            </div>
-            <div style="display: table-cell; width: 150px;"><?php p($l->t('Vertical axis')); ?>
-            </div>
-            <div style="display: table-cell; width: 150px;"><?php p($l->t('Chart type')); ?>
-            </div>
-            <div style="display: table-cell; width: 150px;"><?php p($l->t('Color')); ?>
+
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'visibility.svg'); ?>">
+        <h2><?php p($l->t('Visualization')); ?></h2>
+        <div id="chartOptionsTable" class="chartOptionsSeriesList">
+            <div class="chartOptionsSeriesHeader">
+                <div class="chartOptionsSeriesHeaderTitle"></div>
+                <div><?php p($l->t('Vertical axis')); ?></div>
+                <div><?php p($l->t('Chart type')); ?></div>
+                <div class="chartOptionsSeriesHeaderColor"></div>
             </div>
         </div>
     </div>

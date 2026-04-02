@@ -61,7 +61,6 @@
     max-width: 0;
     overflow: hidden;
     opacity: 0;
-    transform: translateY(8px);
 }
 
 .app-splash-screen.is-running .app-splash-name {
@@ -72,7 +71,6 @@
     to {
         max-width: 520px;
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -113,7 +111,6 @@
         to {
             max-width: 340px;
             opacity: 1;
-            transform: translateY(0);
         }
     }
 }
@@ -132,7 +129,6 @@
 
     .app-splash-name {
         max-width: 520px;
-        transform: none;
     }
 
 }

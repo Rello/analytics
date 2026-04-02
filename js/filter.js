@@ -109,20 +109,25 @@ OCA.Analytics.Filter = {
 
             const cellCheckbox = document.createElement('div');
             cellCheckbox.style.display = 'table-cell';
+            cellCheckbox.style.width = '50px';
+            const switchLabel = document.createElement('label');
+            switchLabel.classList.add('analyticsSwitch', 'analyticsSwitch--centered');
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = 'drilldownColumn' + index;
-            checkbox.className = 'checkbox';
             checkbox.name = 'drilldownColumn';
             checkbox.value = dimension;
+            checkbox.setAttribute('role', 'switch');
+            checkbox.setAttribute('aria-label', availableDimensions[dimension]);
             if (!(filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined)) {
                 checkbox.checked = true;
             }
-            const label = document.createElement('label');
-            label.setAttribute('for', checkbox.id);
-            label.textContent = ' ';
-            cellCheckbox.appendChild(checkbox);
-            cellCheckbox.appendChild(label);
+            const switchSlider = document.createElement('span');
+            switchSlider.classList.add('analyticsSwitchSlider');
+            switchSlider.setAttribute('aria-hidden', 'true');
+            switchLabel.appendChild(checkbox);
+            switchLabel.appendChild(switchSlider);
+            cellCheckbox.appendChild(switchLabel);
             row.appendChild(cellCheckbox);
 
             fragment.appendChild(row);
@@ -551,9 +556,18 @@ OCA.Analytics.Filter = {
     openTableOptionsDialog: function () {
         OCA.Analytics.Report.hideReportMenu();
 
+        const dialogOptions = {
+            variant: 'enhanced',
+            leadingAction: {
+                label: t('analytics', 'Reset table'),
+                onClick: OCA.Analytics.Filter.processTableOptionsReset
+            }
+        };
+
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Table options'),
-            OCA.Analytics.Filter.processTableOptionsDialog
+            OCA.Analytics.Filter.processTableOptionsDialog,
+            dialogOptions
         );
 
         // clone the DOM template
@@ -569,15 +583,15 @@ OCA.Analytics.Filter = {
         let tableOptions = OCA.Analytics.currentReportData.options.tableoptions || {};
 
         if (tableOptions.footer) {
-            container.querySelector('input[name="totalOption"][value="true"]').checked = true;
+            container.getElementById('totalOption').checked = true;
         }
 
         if (tableOptions.formatLocales !== undefined) {
-            container.querySelector('input[name="formatLocalesOption"][value="false"]').checked = true;
+            container.getElementById('formatLocalesOption').checked = false;
         }
 
         if (tableOptions.compactDisplay !== undefined) {
-            container.querySelector('input[name="compactDisplayOption"][value="true"]').checked = true;
+            container.getElementById('compactDisplayOption').checked = true;
         }
 
         if (tableOptions.calculatedColumns) {
@@ -586,14 +600,12 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'The table can be customized by positioning the rows and columns. <br>If a classic list view is required, all fields need to be placed in the rows section.')
+            t('analytics', 'Configure the source layout, calculated columns, and table display settings.'),
+            dialogOptions
         );
 
         OCA.Analytics.Filter.Drag.initialize();
         OCA.Analytics.Filter.initializeCalculatedColumnsDialog();
-        OCA.Analytics.Filter.addTableOptionsResetButton();
-
-        OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
     },
 
     /**
@@ -603,27 +615,24 @@ OCA.Analytics.Filter = {
     processTableOptionsDialog: function () {
         let tableOptions = OCA.Analytics.currentReportData.options.tableoptions || {};
 
-        const showTotalsSelected = document.querySelector('input[name="totalOption"]:checked');
-        const showTotals = showTotalsSelected ? showTotalsSelected.value : null;
-        if (showTotals === 'true') {
+        const showTotals = document.getElementById('totalOption')?.checked === true;
+        if (showTotals) {
             tableOptions.footer = true;
         } else if (tableOptions) {
             delete tableOptions.footer;
         }
 
-        const formatLocalesSelected = document.querySelector('input[name="formatLocalesOption"]:checked');
-        const formatLocales = formatLocalesSelected ? formatLocalesSelected.value : null;
         // default is, that the locales are calculated
-        if (formatLocales === 'false') {
+        const formatLocales = document.getElementById('formatLocalesOption')?.checked === true;
+        if (!formatLocales) {
             tableOptions.formatLocales = false;
         } else if (tableOptions) {
             delete tableOptions.formatLocales;
         }
 
         // Compact view for table with less line space and bold first column
-        const compactDisplaySelected = document.querySelector('input[name="compactDisplayOption"]:checked');
-        const compactDisplay = compactDisplaySelected ? compactDisplaySelected.value : null;
-        if (compactDisplay === 'true') {
+        const compactDisplay = document.getElementById('compactDisplayOption')?.checked === true;
+        if (compactDisplay) {
             tableOptions.compactDisplay = true;
         } else if (tableOptions) {
             delete tableOptions.compactDisplay;
@@ -1290,9 +1299,15 @@ OCA.Analytics.Filter = {
     openChartOptionsDialog: function () {
         OCA.Analytics.Report.hideReportMenu();
 
+        const dialogOptions = {
+            variant: 'enhanced',
+            documentationUrl: 'https://github.com/Rello/analytics/wiki/Advanced-chart-options'
+        };
+
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Chart options'),
-            OCA.Analytics.Filter.processChartOptionsDialog
+            OCA.Analytics.Filter.processChartOptionsDialog,
+            dialogOptions
         );
 
         let dataOptions;
@@ -1317,16 +1332,24 @@ OCA.Analytics.Filter = {
             const color = OCA.Analytics.Filter.checkColor(dataOptions, i);
 
             const row = document.createElement('div');
-            row.style.display = 'table-row';
+            row.className = 'chartOptionsSeriesRow';
 
             const titleCell = document.createElement('div');
-            titleCell.style.display = 'table-cell';
-            titleCell.id = 'optionsTitle' + i;
-            titleCell.textContent = category;
+            titleCell.className = 'chartOptionsSeriesTitle';
+
+            const grip = document.createElement('span');
+            grip.className = 'icon-analytics-gripLines chartOptionsSeriesGrip';
+            titleCell.appendChild(grip);
+
+            const titleText = document.createElement('span');
+            titleText.id = 'optionsTitle' + i;
+            titleText.textContent = category;
+            titleCell.appendChild(titleText);
+
             row.appendChild(titleCell);
 
             const yAxisCell = document.createElement('div');
-            yAxisCell.style.display = 'table-cell';
+            yAxisCell.className = 'chartOptionsSeriesSelect';
             const yAxisSelect = document.createElement('select');
             yAxisSelect.id = 'optionsYAxis' + i;
             yAxisSelect.name = 'optionsYAxis';
@@ -1339,7 +1362,7 @@ OCA.Analytics.Filter = {
             row.appendChild(yAxisCell);
 
             const typeCell = document.createElement('div');
-            typeCell.style.display = 'table-cell';
+            typeCell.className = 'chartOptionsSeriesSelect';
             const typeSelect = document.createElement('select');
             typeSelect.id = 'optionsChartType' + i;
             typeSelect.name = 'optionsChartType';
@@ -1356,15 +1379,19 @@ OCA.Analytics.Filter = {
             row.appendChild(typeCell);
 
             const colorCell = document.createElement('div');
-            colorCell.style.display = 'table-cell';
+            colorCell.className = 'chartOptionsSeriesColor';
+            const colorWrap = document.createElement('label');
+            colorWrap.className = 'chartOptionsSeriesColorWrap';
+            colorWrap.setAttribute('for', 'optionsColor' + i);
             const colorInput = document.createElement('input');
             colorInput.id = 'optionsColor' + i;
             colorInput.name = 'optionsColor';
             colorInput.type = 'color';
-            colorInput.className = 'optionsInput';
+            colorInput.className = 'chartOptionsColorInput';
             colorInput.value = OCA.Analytics.Filter.normalizeHexColor(color, OCA.Analytics.Visualization.defaultColorPalette[i % OCA.Analytics.Visualization.defaultColorPalette.length]);
             colorInput.style.backgroundColor = colorInput.value;
-            colorCell.appendChild(colorInput);
+            colorWrap.appendChild(colorInput);
+            colorCell.appendChild(colorWrap);
             row.appendChild(colorCell);
 
             fragment.appendChild(row);
@@ -1385,10 +1412,11 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Select the format of the data and how it should be visualized')
+            t('analytics', 'Select the format of the data and how it should be visualized'),
+            dialogOptions
         );
 
-        const optionsColor = container.querySelectorAll('[name="optionsColor"]');
+        const optionsColor = document.querySelectorAll('#analyticsDialogContent [name="optionsColor"]');
         optionsColor.forEach(field => {
             OCA.Analytics.Filter.updateColor({target: field});
             field.addEventListener('input', OCA.Analytics.Filter.updateColor);

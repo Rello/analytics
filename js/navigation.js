@@ -173,7 +173,6 @@ OCA.Analytics.Navigation = {
 
         li.appendChild(navigationEntrydiv);
         navigationEntrydiv.appendChild(a);
-        navigationEntrydiv.appendChild(OCA.Analytics.Navigation.buildNewMenu());
         return li;
     },
 
@@ -193,6 +192,10 @@ OCA.Analytics.Navigation = {
         menu.querySelector('#newMenuDataset').addEventListener('click', function (evt) {
             evt.stopPropagation();
             OCA.Analytics.Navigation.handleNewMenu('dataset');
+        });
+        menu.querySelector('#newMenuImport').addEventListener('click', function (evt) {
+            evt.stopPropagation();
+            OCA.Analytics.Navigation.handleImportButton();
         });
 
         return menu;
@@ -811,8 +814,10 @@ OCA.Analytics.Navigation = {
     },
 
     handleImportButton: function () {
+        const menu = document.getElementById('newMenu');
         const fileInput = document.getElementById('importFile');
-        const importButton = document.getElementById('importDatasetButton');
+        const importButton = document.getElementById('newMenuImport');
+        menu?.classList.remove('open');
         fileInput.click();
         fileInput.value = '';
         fileInput.onchange = async () => {
@@ -1232,5 +1237,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.getElementById('wizardStart').addEventListener('click', OCA.Analytics.Wizard.showFirstStart);
-    document.getElementById('importDatasetButton').addEventListener('click', OCA.Analytics.Navigation.handleImportButton);
 });

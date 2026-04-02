@@ -92,6 +92,7 @@
         background-color: #fefefe;
         padding: 20px;
         border: 1px solid #888;
+        border-radius: var(--analytics-surface-radius);
         position: relative;
     }
 
@@ -186,6 +187,7 @@
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
+        border-radius: var(--analytics-surface-radius);
         width: 60%;
     }
 

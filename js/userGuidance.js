@@ -258,6 +258,11 @@ OCA.Analytics.WhatsNew = {
  */
 OCA.Analytics.Notification = {
     draggedItem: null,
+    DEFAULT_DIALOG_OPTIONS: {
+        variant: 'simple',
+        documentationUrl: null,
+        leadingAction: null,
+    },
 
     info: function (header, text, guidance) {
         document.body.insertAdjacentHTML('beforeend',
@@ -325,33 +330,85 @@ OCA.Analytics.Notification = {
      * @param {string} header Popup header as text
      * @param callback Callback function of the OK button
      */
-    htmlDialogInitiate: function (header, callback) {
+    htmlDialogInitiate: function (header, callback, options = {}) {
+        const dialogOptions = OCA.Analytics.Notification.normalizeDialogOptions(options);
+
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
-            + '<div id="analyticsDialogContainer" class="analyticsDialog">'
+            + '<div id="analyticsDialogContainer" class="analyticsDialog'
+            + (dialogOptions.variant === 'enhanced' ? ' analyticsDialog--enhanced' : '')
+            + '">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<div class="analyticsDialogHeaderWrap">'
             + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
             + header
             + '</span></div>'
-            + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
+            + '<span id="analyticsDialogGuidance" class="userGuidance analyticsDialogGuidance"></span>'
+            + '</div>'
             + '<div id="analyticsDialogContent">'
             + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
             + '</div>'
-            + '<br><div class="analyticsDialogButtonrow">'
+            + '<div class="analyticsDialogButtonrow">'
+            + (
+                dialogOptions.leadingAction
+                    ? '<a class="button analyticsDialogButtonLeading'
+                    + (dialogOptions.leadingAction.className ? ' ' + dialogOptions.leadingAction.className : '')
+                    + '" id="analyticsDialogBtnLeading">'
+                    + dialogOptions.leadingAction.label
+                    + '</a>'
+                    : ''
+            )
             + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
             + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
             + '</div></div>'
         );
 
+        const dialogContainer = document.getElementById('analyticsDialogContainer');
+        dialogContainer._analyticsDialogOptions = dialogOptions;
+
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
+
+        if (dialogOptions.leadingAction) {
+            document.getElementById('analyticsDialogBtnLeading').addEventListener('click', dialogOptions.leadingAction.onClick);
+        }
     },
 
-    htmlDialogUpdate: function (content, guidance) {
-        document.getElementById('analyticsDialogContent').innerHTML = '';
-        document.getElementById('analyticsDialogContent').appendChild(content);
-        document.getElementById('analyticsDialogGuidance').innerHTML = guidance;
+    htmlDialogUpdate: function (content, guidance, options = null) {
+        const dialogContainer = document.getElementById('analyticsDialogContainer');
+        if (!dialogContainer) {
+            return;
+        }
+
+        const dialogOptions = OCA.Analytics.Notification.normalizeDialogOptions({
+            ...(dialogContainer._analyticsDialogOptions || {}),
+            ...(options || {})
+        });
+        dialogContainer._analyticsDialogOptions = dialogOptions;
+        dialogContainer.classList.toggle('analyticsDialog--enhanced', dialogOptions.variant === 'enhanced');
+
+        const contentElement = document.getElementById('analyticsDialogContent');
+        const guidanceElement = document.getElementById('analyticsDialogGuidance');
+
+        if (typeof dialogContainer._analyticsDialogCleanup === 'function') {
+            dialogContainer._analyticsDialogCleanup();
+            dialogContainer._analyticsDialogCleanup = null;
+        }
+
+        contentElement.innerHTML = '';
+        guidanceElement.innerHTML = guidance;
+        guidanceElement.hidden = guidance === '';
+
+        if (dialogOptions.variant === 'enhanced') {
+            dialogContainer._analyticsDialogCleanup = OCA.Analytics.Notification.renderEnhancedDialogContent(
+                contentElement,
+                content,
+                dialogOptions
+            );
+        } else {
+            contentElement.appendChild(content);
+        }
     },
 
     htmlDialogUpdateAdd: function (guidance) {
@@ -359,8 +416,150 @@ OCA.Analytics.Notification = {
     },
 
     dialogClose: function () {
-        document.getElementById('analyticsDialogContainer').remove();
-        document.getElementById('analyticsDialogOverlay').remove();
+        const dialogContainer = document.getElementById('analyticsDialogContainer');
+        if (dialogContainer && typeof dialogContainer._analyticsDialogCleanup === 'function') {
+            dialogContainer._analyticsDialogCleanup();
+        }
+        dialogContainer?.remove();
+        document.getElementById('analyticsDialogOverlay')?.remove();
+    },
+
+    normalizeDialogOptions: function (options = {}) {
+        const dialogOptions = {
+            ...OCA.Analytics.Notification.DEFAULT_DIALOG_OPTIONS,
+            ...(options || {}),
+        };
+
+        dialogOptions.variant = dialogOptions.variant === 'enhanced' ? 'enhanced' : 'simple';
+        dialogOptions.documentationUrl = typeof dialogOptions.documentationUrl === 'string' && dialogOptions.documentationUrl !== ''
+            ? dialogOptions.documentationUrl
+            : null;
+
+        if (!dialogOptions.leadingAction || typeof dialogOptions.leadingAction.onClick !== 'function') {
+            dialogOptions.leadingAction = null;
+        }
+
+        return dialogOptions;
+    },
+
+    renderEnhancedDialogContent: function (contentRoot, content, options) {
+        const sectionScrollOffset = 24;
+        const createSectionIcon = function (className, iconUrl) {
+            if (!iconUrl) {
+                return null;
+            }
+
+            const icon = document.createElement('span');
+            icon.className = className;
+            icon.setAttribute('aria-hidden', 'true');
+            icon.style.setProperty('--analytics-dialog-section-icon', `url("${iconUrl}")`);
+            return icon;
+        };
+        const layout = document.createElement('div');
+        layout.className = 'analyticsEnhancedDialogLayout';
+
+        const nav = document.createElement('div');
+        nav.className = 'analyticsEnhancedDialogNav';
+
+        const navList = document.createElement('div');
+        navList.className = 'analyticsEnhancedDialogNavList';
+        nav.appendChild(navList);
+
+        const panel = document.createElement('div');
+        panel.className = 'analyticsEnhancedDialogPanel';
+        panel.appendChild(content);
+
+        layout.appendChild(nav);
+        layout.appendChild(panel);
+        contentRoot.appendChild(layout);
+
+        const sections = Array.from(panel.querySelectorAll('.analyticsDialogSection'));
+        if (sections.length === 0) {
+            nav.remove();
+            return null;
+        }
+
+        const navLinks = [];
+        sections.forEach((section, index) => {
+            const heading = section.querySelector('h2');
+            const label = heading ? heading.textContent.trim() : t('analytics', 'Chart options');
+            const sectionId = section.id || 'analyticsDialogSection' + index;
+            const sectionIconUrl = section.dataset.sectionIcon ? section.dataset.sectionIcon.trim() : '';
+            section.id = sectionId;
+
+            if (heading) {
+                heading.classList.add('analyticsDialogSectionHeading');
+                if (!heading.querySelector('.analyticsDialogSectionIcon')) {
+                    const headingIcon = createSectionIcon('analyticsDialogSectionIcon', sectionIconUrl);
+                    if (headingIcon) {
+                        heading.prepend(headingIcon);
+                    }
+                }
+            }
+
+            const link = document.createElement('a');
+            link.className = 'analyticsEnhancedDialogNavButton';
+            link.href = '#' + sectionId;
+            link.dataset.target = sectionId;
+
+            const navIcon = createSectionIcon('analyticsEnhancedDialogNavIcon', sectionIconUrl);
+            if (navIcon) {
+                link.appendChild(navIcon);
+            }
+
+            const labelText = document.createElement('span');
+            labelText.className = 'analyticsEnhancedDialogNavLabel';
+            labelText.textContent = label;
+            link.appendChild(labelText);
+
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
+                const targetTop = Math.max(section.offsetTop - panelPaddingTop - sectionScrollOffset, 0);
+                panel.scrollTo({top: targetTop, behavior: 'smooth'});
+                OCA.Analytics.Notification.updateEnhancedDialogActiveSection(navLinks, sectionId);
+            });
+
+            navLinks.push(link);
+            navList.appendChild(link);
+        });
+
+        if (options.documentationUrl) {
+            const documentationLink = document.createElement('a');
+            documentationLink.className = 'analyticsEnhancedDialogDocLink';
+            documentationLink.href = options.documentationUrl;
+            documentationLink.target = '_blank';
+            documentationLink.rel = 'noreferrer noopener';
+            documentationLink.textContent = t('analytics', 'Open documentation');
+            nav.appendChild(documentationLink);
+        }
+
+        const syncActiveSection = function () {
+            const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
+            const panelTop = panel.scrollTop + panelPaddingTop + sectionScrollOffset;
+            let activeSectionId = sections[0].id;
+
+            sections.forEach((section) => {
+                if (section.offsetTop <= panelTop) {
+                    activeSectionId = section.id;
+                }
+            });
+
+            OCA.Analytics.Notification.updateEnhancedDialogActiveSection(navLinks, activeSectionId);
+        };
+
+        panel.addEventListener('scroll', syncActiveSection, {passive: true});
+        syncActiveSection();
+
+        return function () {
+            panel.removeEventListener('scroll', syncActiveSection);
+        };
+    },
+
+    updateEnhancedDialogActiveSection: function (navLinks, activeSectionId) {
+        navLinks.forEach((link) => {
+            link.classList.toggle('analyticsEnhancedDialogNavButton--active', link.dataset.target === activeSectionId);
+        });
     },
 
     handleDragStart: function (e) {

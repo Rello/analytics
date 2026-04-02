@@ -8,6 +8,7 @@
 :root {
     --color-analytics-primary: #12426E;
     --color-analytics-shadow: #12426E;
+    --analytics-surface-radius: 5px;
 }
 
 [hidden] {
@@ -34,7 +35,7 @@ button, .button {
 }
 
 #app-navigation .collapsible:before {
-content: inherit;
+    content: inherit;
 }
 
 /* show a down-triangle if a folder is opened */
@@ -44,7 +45,7 @@ content: inherit;
 
 /* show the ... icon when the navigation row is hovered */
 #app-navigation > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button,
-#app-navigation > ul > li > ul > li > div  > a:hover + .app-navigation-entry-utils > ul > li > button,
+#app-navigation > ul > li > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button,
 #app-navigation > ul > li > ul > li > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button {
     opacity: 0.5;
 }
@@ -79,8 +80,7 @@ content: inherit;
     padding-bottom: 0;
 }
 
-#app-navigation .app-navigation-entry
-{
+#app-navigation .app-navigation-entry {
     display: inline-flex;
     flex-wrap: wrap;
     order: 1;
@@ -91,7 +91,7 @@ content: inherit;
     border-radius: var(--border-radius-element, var(--border-radius-pill));
 }
 
-#app-navigation .app-navigation-entry:hover{
+#app-navigation .app-navigation-entry:hover {
     background-color: var(--color-background-hover);
 }
 
@@ -100,7 +100,7 @@ content: inherit;
 }
 
 #app-navigation > ul > li > div > a,
-#app-navigation > ul > li > ul > li > div  > a,
+#app-navigation > ul > li > ul > li > div > a,
 #app-navigation > ul > li > ul > li > ul > li > div > a,
 #app-navigation > ul > li > ul > li > ul > li > ul > li > div > a {
     background-size: 18px 18px;
@@ -129,6 +129,7 @@ content: inherit;
 #app-navigation .app-navigation-entry-menu ul {
     list-style-type: none;
 }
+
 #app-navigation .app-navigation-entry-utils ul {
     display: flex !important;
     align-items: center;
@@ -139,6 +140,7 @@ content: inherit;
     width: 30px !important;
     height: var(--default-clickable-area);
 }
+
 #app-navigation li {
     position: relative;
 }
@@ -147,15 +149,15 @@ content: inherit;
     background-image: var(--icon-more-dark);
 }
 
-#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button:hover, #app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button:focus, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button:hover, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button:focus {
-    background-color: rgba(0,0,0,0);
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button:hover, #app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button:focus, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button:hover, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button:focus {
+    background-color: rgba(0, 0, 0, 0);
     opacity: 1;
 }
 
-#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button>button, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
+#app-navigation .app-navigation-entry-utils .app-navigation-entry-utils-menu-button > button, #app-navigation .app-navigation-entry-deleted .app-navigation-entry-deleted-button {
     border: 0;
     opacity: .5;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -174,13 +176,13 @@ content: inherit;
 #app-navigation .app-navigation-entry-menu,
 #app-navigation .app-navigation-entry-menu {
     top: 44px;
-    border-radius: 0 !important;
 }
 
 #app-navigation > ul > li.pinned.first-pinned {
     margin-top: auto !important;
 }
-#app-navigation>ul>li.pinned {
+
+#app-navigation > ul > li.pinned {
     order: 2;
 }
 
@@ -193,20 +195,23 @@ content: inherit;
 #app-navigation ul ul > li > div {
     padding-left: 24px;
 }
+
 #app-navigation ul ul ul > li > div {
     padding-left: 48px;
 }
+
 #app-navigation ul ul ul ul > li > div {
     padding-left: 72px;
 }
+
 #app-navigation ul ul ul ul ul > li > div {
     padding-left: 96px;
 }
 
-#app-navigation>ul>li.deleted>ul,
-#app-navigation>ul>li.collapsible:not(.open)>ul,
-#app-navigation>ul>li>ul>li.collapsible:not(.open)>ul,
-#app-navigation>ul>li>ul>li>ul>li.collapsible:not(.open)>ul {
+#app-navigation > ul > li.deleted > ul,
+#app-navigation > ul > li.collapsible:not(.open) > ul,
+#app-navigation > ul > li > ul > li.collapsible:not(.open) > ul,
+#app-navigation > ul > li > ul > li > ul > li.collapsible:not(.open) > ul {
     display: none;
 }
 
@@ -264,7 +269,7 @@ content: inherit;
     font-size: 22px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    color:white;
+    color: white;
     padding: 8px 20px;
     width: 600px;
     background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%);
@@ -335,7 +340,7 @@ content: inherit;
 
 #myChart {
     background-color: var(--color-main-background);
-    border-radius: 15px;
+    border-radius: var(--analytics-surface-radius);
 }
 
 #chartContainer {
@@ -344,7 +349,7 @@ content: inherit;
     height: 40vh;
     margin: 0 30px;
     background-color: var(--color-main-background);
-    border-radius: 5px;
+    border-radius: var(--analytics-surface-radius);
     padding: 10px;
 }
 
@@ -381,6 +386,7 @@ content: inherit;
     width: 100%;
     height: 40%;
     background-color: var(--color-main-background);
+    border-radius: var(--analytics-surface-radius);
 }
 
 table.dataTable tbody tr {
@@ -637,6 +643,7 @@ div.dt-container .dt-paging .dt-paging-button {
     background-image: url(../img/chartFunnel.svg);
     filter: var(--background-invert-if-dark);
 }
+
 .icon-analytics-chartNone {
     background-image: url(../img/chartNone.svg);
     filter: var(--background-invert-if-dark);
@@ -669,6 +676,11 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .icon-analytics-settings {
     background-image: url(../img/settings.svg);
+    /*filter: var(--background-invert-if-dark);*/
+}
+
+.icon-analytics-import {
+    background-image: url(../img/download.svg);
     /*filter: var(--background-invert-if-dark);*/
 }
 
@@ -868,11 +880,13 @@ div.dt-container .dt-paging .dt-paging-button {
     display: inline-flex;
     align-items: center;
 }
+
 #navigationDatasets a[data-editing="true"] .icon {
     margin-left: 5px;
     cursor: pointer;
     opacity: 0.7;
 }
+
 #navigationDatasets a[data-editing="true"] ~ .app-navigation-entry-utils .menuButton {
     display: none;
 }
@@ -919,13 +933,27 @@ div.dt-container .dt-paging .dt-paging-button {
     padding: 10px;
 }
 
+.analyticsDialog .userGuidance {
+    text-align: left;
+    display: block;
+}
+
+.analyticsDialogHeaderWrap {
+    display: flex;
+    flex-direction: column;
+}
+
 .analyticsDialogHeader {
     color: var(--color-text-light);
     display: flex;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 12px;
-    line-height: 30px;
+    margin-bottom: 10px;
+    line-height: 34px;
+}
+
+.analyticsDialogGuidance {
+    margin-bottom: 16px;
 }
 
 .analyticsDialogHeaderIcon {
@@ -968,8 +996,33 @@ div.dt-container .dt-paging .dt-paging-button {
     max-width: calc(100% - 20px);
     overflow: auto;
     position: fixed;
+    border-radius: var(--analytics-surface-radius);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     animation: analyticsDialogEnter .25s ease-out;
+}
+
+.analyticsDialog--enhanced {
+    width: min(1080px, calc(100% - 32px));
+    height: min(820px, calc(100% - 32px));
+    max-height: min(820px, calc(100% - 32px));
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--analytics-surface-radius);
+    display: flex;
+    flex-direction: column;
+}
+
+.analyticsDialog--enhanced .analyticsDialogHeaderWrap {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.analyticsDialog--enhanced #analyticsDialogContent {
+    padding: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
 }
 
 .analyticsDialogDim {
@@ -991,6 +1044,391 @@ div.dt-container .dt-paging .dt-paging-button {
     gap: 8px;
     padding-top: 10px;
 }
+
+.analyticsDialog--enhanced > .analyticsDialogButtonrow {
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-main-background);
+}
+
+.analyticsDialog--enhanced > .analyticsDialogButtonrow > .button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.analyticsDialogButtonLeading {
+    margin-right: auto;
+}
+
+.analyticsEnhancedDialogLayout {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    min-width: 0;
+    background: var(--color-main-background);
+}
+
+.analyticsEnhancedDialogNav {
+    width: 240px;
+    min-width: 240px;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 14px;
+    padding: 20px 14px 18px;
+    border-right: 1px solid var(--color-border);
+    background: transparent;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.analyticsEnhancedDialogNavList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    min-height: 0;
+    overflow: auto;
+}
+
+.analyticsEnhancedDialogNavButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 4px 0;
+    color: var(--color-text-light);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color .15s ease;
+}
+
+.analyticsEnhancedDialogNavButton:hover,
+.analyticsEnhancedDialogNavButton:focus {
+    color: var(--color-text-maxcontrast);
+    text-decoration: none;
+}
+
+.analyticsEnhancedDialogNavButton--active {
+    color: var(--color-text-maxcontrast);
+    text-decoration: none;
+}
+
+.analyticsEnhancedDialogDocLink {
+    margin-top: auto;
+    padding: 2px 0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.analyticsEnhancedDialogDocLink:hover,
+.analyticsEnhancedDialogDocLink:focus {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.analyticsEnhancedDialogPanel {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    padding: 28px 32px 32px;
+    background: var(--color-background-hover);
+    scroll-behavior: smooth;
+    scroll-padding-top: 24px;
+}
+
+.analyticsDialogSection + .analyticsDialogSection {
+    margin-top: 40px;
+}
+
+.analyticsDialogSection {
+    scroll-margin-top: 24px;
+}
+
+.analyticsDialogSection h2 {
+    margin-top: 0;
+}
+
+.analyticsDialogSectionHeading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.analyticsDialogSectionIcon,
+.analyticsEnhancedDialogNavIcon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    background-color: var(--color-analytics-primary);
+    mask-image: var(--analytics-dialog-section-icon);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-image: var(--analytics-dialog-section-icon);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+}
+
+.analyticsEnhancedDialogNavLabel {
+    min-width: 0;
+}
+
+.analyticsModelSelector {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.analyticsModelOption input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.analyticsModelCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 138px;
+    padding: 14px 16px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: var(--color-main-background);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.analyticsModelCard:hover,
+.analyticsModelCard:focus-within {
+    border-color: var(--color-primary-element-light);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+.analyticsModelCardTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.analyticsModelCardIcon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    filter: var(--background-invert-if-dark);
+    opacity: 0.85;
+}
+
+.analyticsModelCardIcon--time {
+    width: 24px;
+    height: 24px;
+}
+
+.analyticsModelCardIndicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--color-border-dark);
+    border-radius: 50%;
+    flex: 0 0 auto;
+    margin-top: 1px;
+    position: relative;
+}
+
+.analyticsModelCardTitle {
+    color: var(--color-text-maxcontrast);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.analyticsModelCardText {
+    color: var(--color-text-light);
+    line-height: 1.45;
+}
+
+.analyticsModelOption input[type="radio"]:checked + .analyticsModelCard {
+    border-color: var(--color-primary-element-light);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.analyticsModelOption input[type="radio"]:checked + .analyticsModelCard .analyticsModelCardIndicator {
+    border-color: var(--color-primary-element-light);
+}
+
+.analyticsModelOption input[type="radio"]:checked + .analyticsModelCard .analyticsModelCardIndicator::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--color-primary-element-light);
+}
+
+.chartOptionsSeriesList {
+    margin-top: 18px;
+}
+
+.chartOptionsSeriesHeader {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) 150px 150px 88px;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 10px;
+    color: var(--color-text-lighter);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.chartOptionsSeriesHeaderColor {
+    text-align: center;
+}
+
+.chartOptionsSeriesRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) 150px 150px 88px;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--analytics-surface-radius);
+    background: var(--color-main-background);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+}
+
+.chartOptionsSeriesRow + .chartOptionsSeriesRow {
+    margin-top: 12px;
+}
+
+.chartOptionsSeriesTitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    color: var(--color-text-maxcontrast);
+    font-weight: 600;
+}
+
+.chartOptionsSeriesTitle > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chartOptionsSeriesGrip {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex: 0 0 auto;
+    opacity: 0.55;
+}
+
+.chartOptionsSeriesColor {
+    display: flex;
+    justify-content: center;
+}
+
+.chartOptionsSeriesColorWrap {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-main-background);
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.02);
+    cursor: pointer;
+}
+
+.chartOptionsColorInput {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.chartOptionsColorInput::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.chartOptionsColorInput::-webkit-color-swatch {
+    border: 0;
+    border-radius: 50%;
+}
+
+.chartOptionsColorInput::-moz-color-swatch {
+    border: 0;
+    border-radius: 50%;
+}
+
+@media (max-width: 900px) {
+    .analyticsDialog--enhanced {
+        width: calc(100% - 16px);
+        max-height: calc(100% - 16px);
+    }
+
+    .analyticsEnhancedDialogLayout {
+        flex-direction: column;
+    }
+
+    .analyticsEnhancedDialogNav {
+        width: 100%;
+        min-width: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--color-border);
+        grid-template-rows: auto auto;
+        overflow: visible;
+    }
+
+    .analyticsEnhancedDialogNavList {
+        flex-direction: row;
+        flex-wrap: wrap;
+        overflow: visible;
+    }
+
+    .analyticsEnhancedDialogDocLink {
+        margin-top: 0;
+    }
+
+    .analyticsEnhancedDialogPanel {
+        padding: 20px;
+    }
+
+    .analyticsModelSelector {
+        grid-template-columns: 1fr;
+    }
+
+    .chartOptionsSeriesHeader {
+        display: none;
+    }
+
+    .chartOptionsSeriesRow {
+        grid-template-columns: 1fr;
+    }
+
+    .chartOptionsSeriesColor {
+        justify-content: flex-start;
+    }
+}
+
 .sidebarButtonRow {
     display: flex;
     justify-content: flex-end;
@@ -1003,6 +1441,7 @@ div.dt-container .dt-paging .dt-paging-button {
 .analyticsPrimary {
     background-color: var(--color-primary-element-light);
 }
+
 .analyticsPrimary:hover {
     background-color: var(--color-primary-element-light-hover);
 }
@@ -1061,7 +1500,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 .tableOptionsLayout {
-    width: 600px;
+    width: min(720px, 100%);
     display: grid;
     grid-template-areas:
       "dummy columns"
@@ -1074,12 +1513,12 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 #tableOptionsCalculatedColumnsPanel {
     max-width: 100%;
-    width: 600px;
+    width: min(720px, 100%);
 }
 
 .tableOptionsSettingsTable {
     display: table;
-    width: 600px;
+    width: min(720px, 100%);
     max-width: 100%;
 }
 
@@ -1100,6 +1539,73 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     width: 260px;
 }
 
+.tableOptionsSettingsValue {
+    text-align: right;
+}
+
+.analyticsDialogSection .tableOptionsSettingsTable {
+    margin-top: 16px;
+}
+
+.analyticsSwitch {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.analyticsSwitch--inline {
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.analyticsSwitch--centered {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+}
+
+.analyticsSwitch input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.analyticsSwitchSlider {
+    position: relative;
+    width: 30px;
+    height: 15px;
+    border-radius: 999px;
+    background: var(--color-border-dark);
+    transition: background-color .15s ease;
+}
+
+.analyticsSwitchSlider::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-main-background);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
+    transition: transform .15s ease;
+}
+
+.analyticsSwitch input:checked + .analyticsSwitchSlider {
+    background: var(--color-analytics-primary);
+}
+
+.analyticsSwitch input:checked + .analyticsSwitchSlider::after {
+    transform: translateX(15px);
+}
+
+.analyticsSwitch input:focus-visible + .analyticsSwitchSlider {
+    outline: 2px solid var(--color-analytics-primary);
+    outline-offset: 2px;
+}
+
 .tableOptionsCalculatedColumnsList {
     display: flex;
     flex-direction: column;
@@ -1109,7 +1615,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 .tableOptionsCalculatedColumnsEmpty {
     border: 1px dashed var(--color-border-dark);
-    border-radius: var(--border-radius-element);
+    border-radius: var(--analytics-surface-radius);
     color: var(--color-text-maxcontrast);
     padding: 12px;
 }
@@ -1118,7 +1624,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     align-items: flex-start;
     background: var(--color-background-hover);
     border: 1px solid var(--color-border-dark);
-    border-radius: var(--border-radius-element);
+    border-radius: var(--analytics-surface-radius);
     color: inherit;
     cursor: pointer;
     display: flex;
@@ -1159,36 +1665,28 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 .tableOptionsCalculatedColumnsEditorCard {
     background: var(--color-main-background);
-    border-radius: var(--border-radius-large);
+    border-radius: var(--analytics-surface-radius);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     max-height: calc(100vh - 60px);
     overflow: auto;
     padding: 20px;
+    position: relative;
     width: min(640px, calc(100vw - 40px));
 }
 
 .tableOptionsCalculatedColumnsEditorHeader {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 16px;
+    padding-right: 40px;
 }
 
-.tableOptionsCalculatedColumnsEditorHeader h3 {
-    margin: 0;
+.tableOptionsCalculatedColumnsEditorHeader .analyticsDialogHeader {
+    margin-bottom: 0;
 }
 
 .tableOptionsCalculatedColumnsEditorClose {
-    background-color: transparent;
     border: 0;
     cursor: pointer;
-    min-height: 32px;
-    min-width: 32px;
-    opacity: .7;
-}
-
-.tableOptionsCalculatedColumnsEditorClose:hover {
-    opacity: 1;
+    margin: 0;
 }
 
 .tableOptionsCalculatedColumnsEditorFields {
@@ -1272,7 +1770,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 .tableOptionsCalculatedColumnsSelectedEmpty {
     border: 1px dashed var(--color-border-dark);
-    border-radius: var(--border-radius-element);
+    border-radius: var(--analytics-surface-radius);
     color: var(--color-text-maxcontrast);
     padding: 10px;
 }
@@ -1280,7 +1778,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .tableOptionsCalculatedColumnsSelectedItem {
     align-items: center;
     background: var(--color-background-hover);
-    border-radius: var(--border-radius-element);
+    border-radius: var(--analytics-surface-radius);
     display: flex;
     gap: 12px;
     justify-content: space-between;
@@ -1308,7 +1806,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: flex-end;
     margin-top: 20px;
 }
 
@@ -1323,21 +1820,25 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     padding: 20px;
     background-color: #f8f8f8;
 }
+
 #tableOptionsLayoutRows {
     grid-area: rows;
     display: flex;
     flex-direction: column;
     min-height: 100px; /* Minimum height to ensure visibility */
 }
+
 #tableOptionsLayoutColumns {
     grid-area: columns;
 }
+
 #tableOptionsLayoutMeasures {
     grid-area: measures;
     display: flex;
     flex-direction: column;
     min-height: 100px; /* Minimum height to ensure visibility */
 }
+
 #tableOptionsLayoutTotals {
     grid-area: totals;
 }
@@ -1347,7 +1848,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 #tableOptionsLayoutColumns .columnSection,
-#tableOptionsLayoutMeasures .columnSection{
+#tableOptionsLayoutMeasures .columnSection {
     display: flex; /* Align items horizontally */
     flex-wrap: wrap; /* Allow multiple lines if needed */
 }
@@ -1407,17 +1908,17 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 #content.analyticsFullscreen {
     margin-top: var(--body-container-margin) !important;
-    height: calc(100% - var(--body-container-margin)* 2);
+    height: calc(100% - var(--body-container-margin) * 2);
 }
 
 #header.analyticsFullscreen,
 #app-navigation.analyticsFullscreen,
-.panoramaSubHeaderRow.analyticsFullscreen{
-    display:none !important;
+.panoramaSubHeaderRow.analyticsFullscreen {
+    display: none !important;
 }
 
 #byAnalytics.analyticsFullscreen {
-    display: flex  !important;
+    display: flex !important;
 }
 
 .kpiWidget {
@@ -1444,10 +1945,12 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     font-size: 3.5rem;
     font-weight: 400;
 }
+
 /* indicator for report options when filters are active */
 .report-option-active span:first-child {
     position: relative;
 }
+
 .report-option-active span:first-child::after {
     content: "";
     position: absolute;
@@ -1491,7 +1994,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     margin: 15px;
     padding: 15px;
     background-color: var(--color-main-background);
-    border-radius: 5px;
+    border-radius: var(--analytics-surface-radius);
 }
 
 .flex-item-tall {
@@ -1500,7 +2003,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     margin: 15px;
     padding: 15px;
     background-color: var(--color-main-background);
-    border-radius: 5px;
+    border-radius: var(--analytics-surface-radius);
 }
 
 .textContainer {
@@ -1627,13 +2130,15 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
         opacity: 1;
     }
 }
-#app-navigation #newMenu{
-    top:auto;
-    bottom:44px;
+
+#app-navigation #newMenu {
+    top: auto;
+    bottom: 44px;
+    left: 0;
 }
 
 .popovermenu {
-    border-radius: 0 !important;
+    border-radius: var(--analytics-surface-radius);
 }
 
 .popovermenu:after,
@@ -1643,6 +2148,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 .popovermenu,
 .app-navigation-entry-menu {
+    border-radius: var(--analytics-surface-radius);
     animation: analyticsMenuEnter .15s ease-out;
     transform-origin: top;
 }
@@ -1659,5 +2165,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 #body-public #content {
-    padding-block-end: initial; !important;
+    padding-block-end: initial;
+!important;
 }

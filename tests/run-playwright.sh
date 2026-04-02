@@ -18,6 +18,9 @@ case "${SCENARIO}" in
   20|report|create)
     SCRIPT_PATH="tests/ui_playwright_20_report_create.js"
     ;;
+  30|chart|modal)
+    SCRIPT_PATH="tests/ui_playwright_30_chart_options_modal.js"
+    ;;
   check)
     SCRIPT_PATH="tests/ui_playwright_check.js"
     ;;
@@ -29,7 +32,7 @@ case "${SCENARIO}" in
     ;;
   *)
     echo "Unknown scenario: ${SCENARIO}" >&2
-    echo "Use: 10|smoke|navigation|20|report|create|check|report-create|<script.js>" >&2
+    echo "Use: 10|smoke|navigation|20|report|create|30|chart|modal|check|report-create|<script.js>" >&2
     exit 2
     ;;
 esac

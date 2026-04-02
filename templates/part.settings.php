@@ -12,12 +12,6 @@
     <div id="app-settings-content" style="display: none;">
         <ul id="analytics-settings">
             <li class="analytics-settings-item icon-external">
-                <button id="importDatasetButton" style="padding: 0 25px;">
-                    <?php p($l->t('Import report')); ?>
-                </button>
-                <input type="file" id="importFile" accept="text/plain" hidden>
-            </li>
-            <li class="analytics-settings-item icon-external">
                 <a href="https://github.com/rello/analytics/wiki/donate" target="_blank" style="padding: 0 25px;">
                     <?php p($l->t('Do you like this app?')); ?>
                 </a>
@@ -37,4 +31,5 @@
             </li>
         </ul>
     </div>
+    <input type="file" id="importFile" accept="text/plain" hidden>
 </div>
