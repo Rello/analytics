@@ -45,6 +45,8 @@ OC.L10N.register(
     "list of values" : "vērtību sarakstu",
     "none" : "nav",
     "Table options" : "Tabulas iespējas",
+    "Add" : "Pievienot",
+    "Remove" : "Noņemt",
     "Primary" : "Galvenā",
     "Secondary" : "Sekundāri",
     "Favorites" : "Izlases vienumi",

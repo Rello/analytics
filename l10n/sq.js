@@ -11,6 +11,8 @@ OC.L10N.register(
     "Delete" : "Fshij",
     "Done" : "U bë",
     "Filter" : "Filtro",
+    "Add" : "Shto ",
+    "Remove" : "Hiqe",
     "Default" : "Paraprake",
     "Favorites" : "Favorites",
     "New" : "I ri",

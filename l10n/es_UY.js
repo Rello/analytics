@@ -9,6 +9,7 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
+    "Add" : "Guardar",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Remove from favorites" : "Eliminar de favoritos",

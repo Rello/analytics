@@ -34,6 +34,8 @@ OC.L10N.register(
     "less than" : "bé hơn",
     "contains" : "chứa",
     "Filter" : "Lọc",
+    "Add" : "Thêm",
+    "Remove" : "Xoá",
     "Ascending" : "Tăng dần",
     "Descending" : "Giảm dần",
     "Chart options" : "Tuỳ chọn biểu đồ",

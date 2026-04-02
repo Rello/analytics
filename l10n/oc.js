@@ -16,6 +16,8 @@ OC.L10N.register(
     "equal to" : "egal a ",
     "less than" : "mens de",
     "none" : "pas cap",
+    "Add" : "Apondre",
+    "Remove" : "Suprimir",
     "Secondary" : "Segondari",
     "Line" : "Linha",
     "Favorites" : "Favorits",

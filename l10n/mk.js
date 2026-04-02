@@ -12,6 +12,8 @@ OC.L10N.register(
     "Delete" : "Избриши",
     "Done" : "Готово",
     "Filter" : "Филтер",
+    "Add" : "Додади",
+    "Remove" : "Отстрани ",
     "Default" : "Предефиниран",
     "Ascending" : "Растечки",
     "Descending" : "Опаѓачки",

@@ -50,6 +50,8 @@ OC.L10N.register(
     "Top N" : "上位N個",
     "none" : "なし",
     "Aggregate daily data into weeks, months, or years" : "１日ごとのデータを週、月または年単位に集計する<br>",
+    "Add" : "追加",
+    "Remove" : "削除",
     "Sort order" : "ソート順",
     "Default" : "デフォルト",
     "Ascending" : "昇順",

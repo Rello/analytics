@@ -8,6 +8,8 @@ OC.L10N.register(
     "Settings" : "සැකසුම්",
     "Value" : "අගය",
     "Filter" : "පෙරහන",
+    "Add" : "එකතු කරන්න",
+    "Remove" : "ඉවත් කරන්න",
     "Favorites" : "ප්‍රියතම",
     "New" : "නව",
     "Download" : "බාගන්න",

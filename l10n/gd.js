@@ -7,6 +7,7 @@ OC.L10N.register(
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh",
     "Settings" : "Roghainnean",
     "Delete" : "Sguab às",
+    "Remove" : "Thoir air falbh",
     "Default" : "Bunaiteach",
     "Favorites" : "Annsachdan",
     "Add to favorites" : "Cuir ris na h-annsachdan",

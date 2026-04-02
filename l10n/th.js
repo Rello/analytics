@@ -13,6 +13,7 @@ OC.L10N.register(
     "Are you sure?" : "คุณแน่ใจหรือไม่?",
     "Delete" : "ลบ",
     "Filter" : "ตัวกรอง",
+    "Remove" : "ลบออก",
     "Favorites" : "รายการโปรด",
     "New" : "สร้างใหม่",
     "Remove from favorites" : "เอาออกจากรายการโปรด",

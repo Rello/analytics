@@ -14,6 +14,8 @@ OC.L10N.register(
     "Done" : "Дууслаа",
     "contains" : "агуулсан",
     "Filter" : "Шүүлтүүр",
+    "Add" : "–ù—ç–º—ç—Ö",
+    "Remove" : "–£—Å—Ç–≥–∞—Ö",
     "Sort order" : "Эрэмбийн дараалал",
     "Default" : "Өгөгдмөл",
     "Ascending" : "Өсөх",

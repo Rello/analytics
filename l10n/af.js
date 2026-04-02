@@ -10,6 +10,7 @@ OC.L10N.register(
     "Saved" : "Bewaar",
     "Delete" : "Skrap",
     "Filter" : "Filter",
+    "Add" : "Voeg toe",
     "Favorites" : "Gunstelinge",
     "New" : "Nuut",
     "Remove from favorites" : "Verwyder uit gunstelinge",

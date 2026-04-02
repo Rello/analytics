@@ -53,6 +53,8 @@ OC.L10N.register(
     "Column selection" : "Seleção de coluna",
     "Filter" : "Filtro",
     "Table options" : "Opções da tabela",
+    "Add" : "Adicionar",
+    "Remove" : "Remover",
     "Default" : "Predefinido",
     "Ascending" : "Ascending",
     "Descending" : "Descending",

@@ -18,6 +18,8 @@ OC.L10N.register(
     "contains" : "sadrži",
     "Column selection" : "Odabir stupca",
     "Filter" : "Filtar",
+    "Add" : "Dodaj",
+    "Remove" : "Ukloni",
     "Default" : "Zadani",
     "Line" : "Linija",
     "Bar" : "Bar",
