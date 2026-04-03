@@ -14,6 +14,7 @@
     "Are you sure?" : "¿Estás seguro?",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
+    "Add" : "Guardar",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Overview" : "Resumen",
@@ -28,6 +29,7 @@
     "Date" : "Fecha",
     "OK" : "OK",
     "Cancel" : "Cancelar",
+    "Open documentation" : "Abrir documentación",
     "Search" : "Buscar",
     "Total" : "Total",
     "Yes" : "Sí",
@@ -45,7 +47,6 @@
     "Back" : "Atrás",
     "Name" : "Nombre",
     "Display" : "Mostrar",
-    "Open documentation" : "Abrir documentación",
     "Update" : "Actualizar",
     "Export" : "Exportar",
     "Description" : "Descripción",
@@ -58,8 +59,6 @@
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
-    "Additional settings" : "Configuraciones adicionales",
-    "Color" : "Color",
     "Sort by" : "Ordenar por",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

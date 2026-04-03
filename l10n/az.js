@@ -21,6 +21,7 @@ OC.L10N.register(
     "Date" : "Date",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
+    "Open documentation" : "Sənədləri aç",
     "Search" : "Axtarış",
     "Yes" : "Yes",
     "No" : "No",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Back" : "Geri",
     "Name" : "Ad",
     "Display" : "Ekran",
-    "Open documentation" : "Sənədləri aç",
     "Update" : "Yenilənmə",
     "Export" : "Çıxarış",
     "Description" : "Açıqlanma",
@@ -46,7 +46,6 @@ OC.L10N.register(
     "Unshare" : "Paylaşımı durdur",
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
-    "Additional settings" : "Əlavə parametrlər",
     "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },

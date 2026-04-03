@@ -23,6 +23,7 @@ OC.L10N.register(
     "Date" : "Datum",
     "OK" : "Goed",
     "Cancel" : "Kanselleer",
+    "Open documentation" : "Open dokumentasie",
     "Search" : "Soek",
     "Total" : "Totaal",
     "Yes" : "Ja",
@@ -35,7 +36,6 @@ OC.L10N.register(
     "Password" : "Wagwoord",
     "Back" : "Terug",
     "Name" : "Naam",
-    "Open documentation" : "Open dokumentasie",
     "Update" : "Werk by",
     "Export" : "Voer uit",
     "Description" : "Beskrywing",
@@ -46,7 +46,6 @@ OC.L10N.register(
     "Hourly" : "Uurliks",
     "Unshare" : "Ontdeel",
     "Copy link" : "Kopieer skakel",
-    "Color" : "Kleur",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },

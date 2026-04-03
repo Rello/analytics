@@ -19,6 +19,7 @@
     "Date" : "Date",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
+    "Open documentation" : "Sənədləri aç",
     "Search" : "Axtarış",
     "Yes" : "Yes",
     "No" : "No",
@@ -30,7 +31,6 @@
     "Back" : "Geri",
     "Name" : "Ad",
     "Display" : "Ekran",
-    "Open documentation" : "Sənədləri aç",
     "Update" : "Yenilənmə",
     "Export" : "Çıxarış",
     "Description" : "Açıqlanma",
@@ -44,7 +44,6 @@
     "Unshare" : "Paylaşımı durdur",
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
-    "Additional settings" : "Əlavə parametrlər",
     "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

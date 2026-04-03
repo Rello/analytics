@@ -103,7 +103,6 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "ចម្លងតំណ",
     "Vertical axis" : "អ័ក្សឈរ",
-    "Color" : "ព័ណ៌",
     "Sort by" : "តម្រៀបដោយ",
     "New report" : "បង្កើតរបាយការណ៍ថ្មី",
     "Create" : "បង្កើត"

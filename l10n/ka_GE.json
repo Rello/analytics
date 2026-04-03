@@ -22,6 +22,7 @@
     "Date" : "თარიღი",
     "OK" : "კარგი",
     "Cancel" : "უარყოფა",
+    "Open documentation" : "ღია დოკუმენტაცია",
     "Search" : "ძიება",
     "Total" : "სულ",
     "Yes" : "კი",
@@ -39,7 +40,6 @@
     "Back" : "უკან",
     "Name" : "სახელი",
     "Display" : "დისპლეი",
-    "Open documentation" : "ღია დოკუმენტაცია",
     "Update" : "განახლება",
     "Export" : "ექსპორტი",
     "Mode" : "რეჟიმი",
@@ -54,8 +54,6 @@
     "Unshare" : "გაზიარების შეწყვეტა",
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",
-    "Additional settings" : "დამატებითი პარამეტრები",
-    "Color" : "ფერი",
     "Sort by" : "დაასორტირე",
     "Create" : "შექმნა"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
