@@ -63,6 +63,7 @@ OC.L10N.register(
     "Unshare" : "Fjern deling",
     "Password protection" : "Password protection",
     "Copy link" : "Kopier lenkje",
+    "Close" : "Lat att",
     "Sort by" : "Sorter på",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"

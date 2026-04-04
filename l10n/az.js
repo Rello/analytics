@@ -46,6 +46,7 @@ OC.L10N.register(
     "Unshare" : "Paylaşımı durdur",
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
+    "Close" : "Bağla",
     "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },

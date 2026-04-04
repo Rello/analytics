@@ -56,6 +56,7 @@ OC.L10N.register(
     "Unshare" : "გაზიარების შეწყვეტა",
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",
+    "Close" : "დახურვა",
     "Sort by" : "დაასორტირე",
     "Create" : "შექმნა"
 },

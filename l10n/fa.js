@@ -287,6 +287,7 @@ OC.L10N.register(
     "Domain of external site" : "Domain of external site",
     "Rows" : "Rows",
     "Columns" : "Columns",
+    "Close" : "بستن",
     "Vertical axis" : "Vertical axis",
     "Sort by" : "مرتب‌سازی بر اساس",
     "Give your numbers a meaning." : "Give your numbers a meaning.",

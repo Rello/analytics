@@ -223,6 +223,7 @@ OC.L10N.register(
     "Rows" : "Rivit",
     "Columns" : "Sarakkeet",
     "Not required" : "Ei vaadittu",
+    "Close" : "Sulje",
     "Labels" : "Etiketit",
     "Vertical axis" : "Pystyakseli",
     "Sort by" : "Lajittelujärjestys",

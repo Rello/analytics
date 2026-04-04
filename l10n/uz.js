@@ -365,6 +365,8 @@ OC.L10N.register(
     "Columns" : "Ustunlar",
     "Measures" : "Chora-tadbirlar",
     "Not required" : "Majburiy emas",
+    "Calculated Columns" : "Hisoblangan ustunlar",
+    "Close" : "Yopish",
     "Show totals" : "Jami ko'rsatish",
     "Format all numbers in local format" : "Barcha raqamlarni mahalliy formatda formatlash",
     "Compact visualization" : "Kompakt vizualizatsiya",

@@ -155,6 +155,7 @@ OC.L10N.register(
     "Unshare" : "Cancelar partilha",
     "Password protection" : "Protegido por palavra-passe",
     "Copy link" : "Copiar hiperligação",
+    "Close" : "Fechar",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obter mais informação",
     "Templates" : "Modelos",

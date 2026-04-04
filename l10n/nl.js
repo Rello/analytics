@@ -367,6 +367,8 @@ OC.L10N.register(
     "Columns" : "Kolommen",
     "Measures" : "Afmetingen",
     "Not required" : "Niet verplicht",
+    "Calculated Columns" : "Berekende kolommen",
+    "Close" : "Sluit",
     "Show totals" : "Toon totalen",
     "Format all numbers in local format" : "Formatteer alle cijfers in lokaal formaat",
     "Compact visualization" : "Compacte visualisatie",

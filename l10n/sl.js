@@ -295,6 +295,8 @@ OC.L10N.register(
     "Columns" : "Stolpci",
     "Measures" : "Meritve",
     "Not required" : "Ni zahtevano",
+    "Calculated Columns" : "Izračunani stolpci",
+    "Close" : "Zapri",
     "Show totals" : "Pokaži skupne vrednosti",
     "Data format" : "Zapis datuma",
     "Select how the raw data is structured" : "Izbor načina strukturiranja surovih podatkov",

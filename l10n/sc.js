@@ -79,6 +79,7 @@ OC.L10N.register(
     "Unshare" : "Annulla sa cumpartzidura",
     "Password protection" : "Bardiadura de sa crae",
     "Copy link" : "Còpia ligòngiu",
+    "Close" : "Serra",
     "Get more information" : "Otene àteras informatziones",
     "Nextcloud forum" : "Forum de Nextcloud",
     "Templates" : "Modellos",

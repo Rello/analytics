@@ -363,6 +363,7 @@ OC.L10N.register(
     "Columns" : "Kolumner",
     "Measures" : "Mått",
     "Not required" : "Inte obligatoriskt",
+    "Close" : "Stäng",
     "Show totals" : "Visa summor",
     "Format all numbers in local format" : "Formatera alla siffror enligt lokal standard",
     "Compact visualization" : "Kompakt visualisering",

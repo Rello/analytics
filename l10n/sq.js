@@ -63,6 +63,7 @@ OC.L10N.register(
     "Unshare" : "Hiqe ndarjen",
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",
+    "Close" : "Mbylleni",
     "Labels" : "Etiketa",
     "Sort by" : "Renditni sipas",
     "Create" : "Krijo"

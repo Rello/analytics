@@ -123,6 +123,7 @@ OC.L10N.register(
     "Copy link" : "Sao chép liên kết",
     "Rows" : "Các hàng",
     "Columns" : "Các cột",
+    "Close" : "Đóng",
     "Get more information" : "Có thêm thông tin",
     "Templates" : "Mẫu",
     "New report" : "Tạo báo cáo",

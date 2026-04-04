@@ -82,6 +82,7 @@ OC.L10N.register(
     "Unshare" : "ביטול שיתוף",
     "Password protection" : "הגנה בססמה",
     "Copy link" : "העתקת קישור",
+    "Close" : "סגירה",
     "Sort by" : "מיון על בסיס",
     "Get more information" : "קבלת מידע נוסף",
     "Nextcloud forum" : "הפורום של Nextcloud",

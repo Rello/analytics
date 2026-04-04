@@ -31,6 +31,7 @@ OC.L10N.register(
     "Rename" : "Thoir ainm ùr air",
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
+    "Close" : "Dùin",
     "Sort by" : "Seòrsaich a-rèir",
     "Create" : "Cruthaich"
 },

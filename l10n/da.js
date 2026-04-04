@@ -363,6 +363,8 @@ OC.L10N.register(
     "Columns" : "Kolonner",
     "Measures" : "Tiltag",
     "Not required" : "Ikke krævet",
+    "Calculated Columns" : "Beregnet kolonne",
+    "Close" : "Luk",
     "Show totals" : "Vis totaller",
     "Format all numbers in local format" : "Formater alle tal i lokalt format",
     "Compact visualization" : "Kompakt visualisering",

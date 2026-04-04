@@ -313,6 +313,8 @@ OC.L10N.register(
     "Columns" : "Colonne",
     "Measures" : "Misurazioni",
     "Not required" : "Non necessario",
+    "Calculated Columns" : "Colonne calcolate",
+    "Close" : "Chiudi",
     "Show totals" : "Mostra i totali",
     "Format all numbers in local format" : "Formatta tutti i numeri nel formato locale",
     "Compact visualization" : "Visualizzazione compatta",

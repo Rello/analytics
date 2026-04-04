@@ -354,6 +354,7 @@ OC.L10N.register(
     "Columns" : "Колони",
     "Measures" : "Ключови показатели",
     "Not required" : "По желание",
+    "Close" : "Затваряне",
     "Show totals" : "Покажи сумата",
     "Format all numbers in local format" : "Форматирай всички числа с локалния формат",
     "Compact visualization" : "Компактна визуализация",

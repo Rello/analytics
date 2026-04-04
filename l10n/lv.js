@@ -143,6 +143,7 @@ OC.L10N.register(
     "Unshare" : "Pārtraukt koplietošanu",
     "Password protection" : "Password protection",
     "Copy link" : "Ievietot saiti starpliktuvē",
+    "Close" : "Aizvērt",
     "Sort by" : "Kārtot pēc",
     "Get more information" : "Iegūt vairāk informācijas",
     "New report" : "Jauna atskaite",

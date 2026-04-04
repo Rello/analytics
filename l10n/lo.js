@@ -365,6 +365,7 @@ OC.L10N.register(
     "Columns" : "ຖັນ",
     "Measures" : "ໂຕວັດແທກ",
     "Not required" : "ບໍ່ຈຳເປັນ",
+    "Close" : "ປິດ",
     "Show totals" : "ສະແດງຜົນລວມ",
     "Format all numbers in local format" : "ຈັດຮູບແບບຕົວເລກທັງໝົດໃນຮູບແບບທ້ອງຖິ່ນ",
     "Compact visualization" : "ການສະແດງຜົນແບບກະທັດຮັດ",

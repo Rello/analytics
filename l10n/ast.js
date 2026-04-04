@@ -185,6 +185,8 @@ OC.L10N.register(
     "Columns" : "Columnes",
     "Measures" : "Midíes",
     "Not required" : "Nun se rique",
+    "Calculated Columns" : "Columnes calculaes",
+    "Close" : "Zarrar",
     "Labels" : "Etiquetes",
     "Vertical axis" : "Exes verticales",
     "Sort by" : "Ordenar per",

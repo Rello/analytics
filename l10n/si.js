@@ -34,6 +34,7 @@ OC.L10N.register(
     "Daily" : "දිනපතා",
     "Password protection" : "මුරපද ආරක්ෂාව",
     "Copy link" : "සබැඳිය පිටපත් කරන්න",
+    "Close" : "වසන්න",
     "Create" : "සාදන්න"
 },
 "nplurals=2; plural=(n != 1);");

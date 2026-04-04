@@ -110,6 +110,7 @@ OC.L10N.register(
     "Share chart for external website" : "Абагуліць дыяграму на знешнім вэб-сайце",
     "To including a chart in an external website, that domain needs to be allowed (CSP policy)" : "Каб уключыць дыяграму на знешні вэб-сайт, ягоны дамен павінен быць дазволены (палітыка CSP).",
     "Copy link" : "Скапіяваць спасылку",
+    "Close" : "Закрыць",
     "Sort by" : "Сартаваць па",
     "Various chart types, including lines, columns, and doughnuts" : "Розныя тыпы дыяграм, у тым ліку лінейныя, слупковыя і кольцавыя",
     "Customize charts with primary and secondary axes" : "Наладжвайце дыяграмы з дапамогай асноўных і другасных восяў",

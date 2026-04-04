@@ -364,6 +364,8 @@ OC.L10N.register(
     "Columns" : "Kolumny",
     "Measures" : "Jednostki",
     "Not required" : "Nie wymagane",
+    "Calculated Columns" : "Obliczone kolumny",
+    "Close" : "Zamknij",
     "Show totals" : "Pokaż sumy",
     "Format all numbers in local format" : "Formatuj wszystkie liczby zgodnie z lokalnym formatem",
     "Compact visualization" : "Kompaktowa wizualizacja",

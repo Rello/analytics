@@ -183,6 +183,7 @@ OC.L10N.register(
     "Copy link" : "링크 복사",
     "Rows" : "행",
     "Columns" : "행",
+    "Close" : "닫기",
     "Labels" : "이름표",
     "Sort by" : "정렬",
     "Get more information" : "추가 정보 얻기",

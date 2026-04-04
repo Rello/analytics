@@ -30,6 +30,7 @@ OC.L10N.register(
     "Rename" : "Adyny üýtgetmek",
     "Unshare" : "Paýlaşma",
     "Copy link" : "Link-y nusgalaň",
+    "Close" : "Ýap",
     "Create" : "Dörediň"
 },
 "nplurals=2; plural=(n != 1);");

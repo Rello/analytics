@@ -332,6 +332,8 @@ OC.L10N.register(
     "Columns" : "Columnes",
     "Measures" : "Mesures",
     "Not required" : "No requerit",
+    "Calculated Columns" : "Columnes calculades",
+    "Close" : "Tanca",
     "Show totals" : "Mostra els totals",
     "Format all numbers in local format" : "Formata tots els números en format local",
     "Compact visualization" : "Visualització Compactada",

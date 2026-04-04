@@ -93,6 +93,7 @@ OC.L10N.register(
     "Copy link" : "Kopiraj poveznicu",
     "Rows" : "Retci",
     "Columns" : "Stupci",
+    "Close" : "Zatvori",
     "Labels" : "Oznake",
     "Sort by" : "Razvrstaj prema",
     "Get more information" : "Dohvatite više informacija",

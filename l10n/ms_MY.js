@@ -62,6 +62,7 @@ OC.L10N.register(
     "Hourly" : "Setiap jam",
     "Rename" : "Namakan",
     "Password protection" : "Password protection",
+    "Close" : "Tutup",
     "Sort by" : "Susun mengikut",
     "Create" : "Buat"
 },

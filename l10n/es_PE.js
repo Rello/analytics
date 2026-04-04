@@ -54,6 +54,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Close" : "Cerrar",
     "Sort by" : "Ordenar por",
     "Create" : "Crear"
 },

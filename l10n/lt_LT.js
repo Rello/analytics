@@ -102,6 +102,7 @@ OC.L10N.register(
     "Copy link" : "Kopijuoti nuorodą",
     "Rows" : "Eilutės",
     "Columns" : "Stulpeliai",
+    "Close" : "Užverti",
     "Labels" : "Etiketės",
     "Sort by" : "Rikiuoti pagal",
     "Get more information" : "Gaukite daugiau informacijos",

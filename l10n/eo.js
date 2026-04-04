@@ -58,6 +58,7 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Password protection" : "Protektita per pasvorto",
     "Copy link" : "Kopii ligilon",
+    "Close" : "Malfermi",
     "Sort by" : "Ordigi laŭ",
     "Get more information" : "Pli da informoj",
     "Templates" : "Ŝablonoj",

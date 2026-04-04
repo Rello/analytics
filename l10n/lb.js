@@ -41,6 +41,7 @@ OC.L10N.register(
     "Unshare" : "Net méi deelen",
     "Password protection" : "Password protection",
     "Copy link" : "Link kopéieren",
+    "Close" : "Zoumaachen",
     "Sort by" : "Zortéieren no",
     "Create" : "Erstellen"
 },

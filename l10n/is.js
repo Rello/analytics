@@ -80,6 +80,7 @@ OC.L10N.register(
     "Unshare" : "Hætta deilingu",
     "Password protection" : "Verndun með lykilorði",
     "Copy link" : "Afrita tengil",
+    "Close" : "Loka",
     "Labels" : "Skýringar",
     "Sort by" : "Raða sem",
     "Get more information" : "Til að fá frekari upplýsingar",

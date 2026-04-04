@@ -311,6 +311,8 @@ OC.L10N.register(
     "Columns" : "Columnas",
     "Measures" : "Medidas",
     "Not required" : "No requerido",
+    "Calculated Columns" : "Columnas calculadas",
+    "Close" : "Cerrar",
     "Show totals" : "Mostrar totales",
     "Data format" : "Formato de datos",
     "Select how the raw data is structured" : "Seleccioná cómo se estructuran los datos sin procesar",

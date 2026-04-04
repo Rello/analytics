@@ -88,6 +88,7 @@ OC.L10N.register(
     "Unshare" : "Partejar pas mai",
     "Password protection" : "Proteccion per senhal",
     "Copy link" : "Copiar lo ligam",
+    "Close" : "Plegar",
     "Sort by" : "Triar",
     "Templates" : "Modèls",
     "General information" : "Informacions generalas",

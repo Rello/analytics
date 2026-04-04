@@ -100,6 +100,7 @@ OC.L10N.register(
     "Unshare" : "Unshare",
     "Password protection" : "Password protection",
     "Copy link" : "Copy link",
+    "Close" : "Close",
     "Sort by" : "Sort by",
     "Get more information" : "Get more information",
     "Templates" : "Templates",

@@ -31,6 +31,7 @@ OC.L10N.register(
     "Rename" : "﻿ಮರುಹೆಸರಿಸು",
     "Unshare" : "ಹಂಚಿಕೆಯನ್ನು ಹಿಂತೆಗೆ",
     "Password protection" : "Password protection",
+    "Close" : "ಮುಚ್ಚು",
     "Create" : "ಸೃಷ್ಟಿಸಿ"
 },
 "nplurals=2; plural=(n > 1);");

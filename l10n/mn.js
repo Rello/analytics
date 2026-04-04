@@ -87,6 +87,7 @@ OC.L10N.register(
     "Copy link" : "Холбоос хуулах",
     "Rows" : "Мөрүүд",
     "Columns" : "Баганууд",
+    "Close" : "‚Äì‚Ä¢‚Äì‚àû‚Äì‚àû‚Äî√ñ",
     "Sort by" : "Эрэмбэлэх",
     "Direction" : "Чиглэл",
     "Nextcloud forum" : "Nextcloud форум",

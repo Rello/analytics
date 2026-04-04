@@ -50,6 +50,7 @@ OC.L10N.register(
     "Hourly" : "S usrag",
     "Rename" : "Beddel isem",
     "Copy link" : "Nɣel aseɣwen",
+    "Close" : "Mdel",
     "Sort by" : "Trier par",
     "Templates" : "Timudmiwin",
     "Create" : "Snulfu-d"

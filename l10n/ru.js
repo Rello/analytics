@@ -362,6 +362,8 @@ OC.L10N.register(
     "Columns" : "Столбцы",
     "Measures" : "Меры",
     "Not required" : "Не требуется",
+    "Calculated Columns" : "Вычисляемые столбцы",
+    "Close" : "Закрыть",
     "Show totals" : "Показать итоги",
     "Format all numbers in local format" : "Форматировать все номера в местном формате",
     "Compact visualization" : "Сжатая визуализация",

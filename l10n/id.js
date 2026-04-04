@@ -257,6 +257,7 @@ OC.L10N.register(
     "Unshare" : "Batalkan berbagi",
     "Password protection" : "Password protection",
     "Copy link" : "Salin tautan",
+    "Close" : "Tutup",
     "Vertical axis" : "Sumbu vertikal",
     "Sort by" : "Urutan",
     "Direction" : "Arah",
