@@ -73,6 +73,8 @@ OC.L10N.register(
     "Translate" : "Verskite",
     "Edit" : "Taisyti",
     "Back" : "Atgal",
+    "30 min" : "30 min",
+    "Legend" : "Sutartiniai ženklai",
     "Do you like this app?" : "Ar jums patinka ši programėlė?",
     "More information …" : "Daugiau informacijos…",
     "Name" : "Vardas, pavardė",
