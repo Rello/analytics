@@ -27,6 +27,7 @@
     "New in" : "I ri në ",
     "OK" : "OK",
     "Cancel" : "Anullo",
+    "Open documentation" : "Dokumentacion i hapur",
     "Search" : "Kërko",
     "Total" : "Total",
     "External" : "I jashtëm",
@@ -46,7 +47,6 @@
     "Back" : "Prapa",
     "Name" : "Emri",
     "Display" : "Ekran",
-    "Open documentation" : "Dokumentacion i hapur",
     "Update" : "Përditëso",
     "Export" : "Eksport",
     "Description" : "Përshkrim",
@@ -61,9 +61,8 @@
     "Unshare" : "Hiqe ndarjen",
     "Password protection" : "Password protection",
     "Copy link" : "Kopjo linkun",
-    "Additional settings" : "Konfigurime shtesë",
+    "Close" : "Mbylleni",
     "Labels" : "Etiketa",
-    "Color" : "Ngjyrë ",
     "Sort by" : "Renditni sipas",
     "Create" : "Krijo"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

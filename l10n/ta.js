@@ -38,6 +38,7 @@ OC.L10N.register(
     "Rename" : "பெயர்மாற்றம்",
     "Unshare" : "பகிரப்படாதது",
     "Password protection" : "Password protection",
+    "Close" : "மூடுக",
     "Create" : "உருவாக்குக"
 },
 "nplurals=2; plural=(n != 1);");

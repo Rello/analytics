@@ -21,6 +21,7 @@
     "Date" : "Datum",
     "OK" : "Goed",
     "Cancel" : "Kanselleer",
+    "Open documentation" : "Open dokumentasie",
     "Search" : "Soek",
     "Total" : "Totaal",
     "Yes" : "Ja",
@@ -33,7 +34,6 @@
     "Password" : "Wagwoord",
     "Back" : "Terug",
     "Name" : "Naam",
-    "Open documentation" : "Open dokumentasie",
     "Update" : "Werk by",
     "Export" : "Voer uit",
     "Description" : "Beskrywing",
@@ -44,7 +44,6 @@
     "Hourly" : "Uurliks",
     "Unshare" : "Ontdeel",
     "Copy link" : "Kopieer skakel",
-    "Color" : "Kleur",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

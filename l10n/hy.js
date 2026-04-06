@@ -41,6 +41,7 @@ OC.L10N.register(
     "Unshare" : "Չկիսվել",
     "Password protection" : "Password protection",
     "Copy link" : "Պատճենել հղումը",
+    "Close" : "Փակել",
     "Sort by" : "Դասակարգել ըստ",
     "Create" : "Ստեղծել"
 },

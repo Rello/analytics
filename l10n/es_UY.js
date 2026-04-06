@@ -22,6 +22,7 @@ OC.L10N.register(
     "Date" : "Fecha",
     "OK" : "OK",
     "Cancel" : "Cancelar",
+    "Open documentation" : "Abrir la documentación",
     "Search" : "Buscar",
     "Total" : "Total",
     "Yes" : "Sí",
@@ -39,7 +40,6 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Name" : "Nombre",
     "Display" : "Mostrar",
-    "Open documentation" : "Abrir la documentación",
     "Update" : "Actualizar",
     "Export" : "Exportar",
     "Description" : "Descripción",
@@ -53,8 +53,6 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
-    "Additional settings" : "Configuraciones adicionales",
-    "Color" : "Color",
     "Create" : "Crear"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

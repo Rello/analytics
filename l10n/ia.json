@@ -17,6 +17,7 @@
     "Date" : "Date",
     "OK" : "Ok",
     "Cancel" : "Cancellar",
+    "Open documentation" : "Aperir documentation",
     "Search" : "Cercar",
     "Total" : "Total",
     "Yes" : "Si",
@@ -29,7 +30,6 @@
     "Edit" : "Modificar",
     "Back" : "Retro",
     "Name" : "Nomine",
-    "Open documentation" : "Aperir documentation",
     "Update" : "Actualisation",
     "Export" : "Exportar",
     "Description" : "Description",
@@ -41,6 +41,7 @@
     "Unshare" : "Cessa de compartir",
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
+    "Close" : "Clauder",
     "Labels" : "Etiquettas",
     "Sort by" : "Ordinar per",
     "Create" : "Crear"
