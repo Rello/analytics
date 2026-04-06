@@ -85,7 +85,7 @@ OCA.Analytics.Dashboard = {
         }));
 
         Promise.all(requests)
-            .then(responses => Promise.all(responses.map(r => r.json())))
+            .then(responses => Promise.all(responses.map(response => OCA.Analytics.Dashboard.parseJsonResponse(response))))
             .then(responseData => {
                 if (requestId !== OCA.Analytics.Dashboard.favoritesRequestId) {
                     return;
@@ -100,29 +100,42 @@ OCA.Analytics.Dashboard = {
                 const panoramaFavorites = Array.isArray(responseData[1]) ? [...new Set(responseData[1])] : [];
 
                 if (reportFavorites.length > 0 || panoramaFavorites.length > 0) {
-                    favoritesList.innerHTML = '';
+                    favoritesList.replaceChildren();
 
                     for (let dataset of reportFavorites) {
-                        let li = '<li id="analyticsWidgetItem-report-' + dataset + '" class="analyticsWidgetItem"></li>';
-                        favoritesList.insertAdjacentHTML('beforeend', li);
+                        const listItem = document.createElement('li');
+                        listItem.id = 'analyticsWidgetItem-report-' + dataset;
+                        listItem.className = 'analyticsWidgetItem';
+                        favoritesList.appendChild(listItem);
                         OCA.Analytics.Dashboard.getData(dataset, requestId);
                     }
 
                     for (let panorama of panoramaFavorites) {
                         let story = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panorama));
                         if (story !== undefined) {
-                            let li = '<li id="analyticsWidgetItem-panorama-' + panorama + '" class="analyticsWidgetItem"></li>';
-                            favoritesList.insertAdjacentHTML('beforeend', li);
-                            let widgetRow = OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama);
-                            document.getElementById('analyticsWidgetItem-panorama-' + panorama).insertAdjacentHTML('beforeend', widgetRow);
-                            document.getElementById('analyticsWidgetItem-panorama-' + panorama).addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
+                            const listItem = document.createElement('li');
+                            listItem.id = 'analyticsWidgetItem-panorama-' + panorama;
+                            listItem.className = 'analyticsWidgetItem';
+                            listItem.appendChild(OCA.Analytics.Dashboard.buildPanoramaRow(story.name, panorama));
+                            listItem.addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
+                            favoritesList.appendChild(listItem);
                         }
                    }
                 } else {
-                    favoritesList.innerHTML = '<div>'
-                        + t('analytics', 'Add a report to the favorites to be shown here.')
-                        + '</div>';
+                    favoritesList.replaceChildren(OCA.Analytics.Dashboard.buildEmptyState());
                 }
+            })
+            .catch(() => {
+                if (requestId !== OCA.Analytics.Dashboard.favoritesRequestId) {
+                    return;
+                }
+
+                const favoritesList = document.getElementById('ulAnalytics');
+                if (!favoritesList) {
+                    return;
+                }
+
+                favoritesList.replaceChildren(OCA.Analytics.Dashboard.buildEmptyState());
             });
     },
 
@@ -166,7 +179,12 @@ OCA.Analytics.Dashboard = {
                     return;
                 }
                 if (xhr.status === 200) {
-                    let data = JSON.parse(xhr.response);
+                    let data;
+                    try {
+                        data = JSON.parse(xhr.response);
+                    } catch (e) {
+                        return;
+                    }
 
                     // derive new version from ETag
                     const newVersion = xhr.getResponseHeader('ETag') || null;
@@ -181,7 +199,7 @@ OCA.Analytics.Dashboard = {
                     }
 
                     if (data['status'] !== 'nodata' && data['data'].length > 20) {
-                        data['data'].slice(data['data'].length - 20); //just the last 20 records for the micro charts
+                        data['data'] = data['data'].slice(data['data'].length - 20); //just the last 20 records for the micro charts
                     }
 
                     data = OCA.Analytics.Dashboard.processReceivedData(data);
@@ -234,11 +252,11 @@ OCA.Analytics.Dashboard = {
             return;
         }
 
-        if (jsondata['data'] && type === 'table') {
+        if (Array.isArray(jsondata['data']) && jsondata['data'].length > 0 && type === 'table') {
             data = jsondata['data'][jsondata['data'].length - 1];
             subheader = data[0];
             value = data[data.length - 1];
-        } else if (jsondata['data']) {
+        } else if (Array.isArray(jsondata['data']) && jsondata['data'].length > 0) {
             data = jsondata['data'][jsondata['data'].length - 1];
             subheader = jsondata['options']['subheader'];
             value = data[data.length - 1];
@@ -246,12 +264,12 @@ OCA.Analytics.Dashboard = {
             subheader = 'no data';
             value = 0;
             type = 'table';
+            data = [];
         }
 
         // pass the last dimension index for threshold evaluation
         let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds, data.length - 1);
-        widgetItem.innerHTML = '';
-        widgetItem.insertAdjacentHTML('beforeend', widgetRow);
+        widgetItem.replaceChildren(widgetRow);
         widgetItem.addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
         if (type !== 'table') {
@@ -265,39 +283,101 @@ OCA.Analytics.Dashboard = {
         }
     },
 
+    parseJsonResponse: function (response) {
+        if (!response.ok) {
+            throw new Error('Failed dashboard request');
+        }
+
+        return response.json().catch(() => {
+            throw new Error('Invalid dashboard response');
+        });
+    },
+
+    buildEmptyState: function () {
+        const emptyState = document.createElement('div');
+        emptyState.textContent = t('analytics', 'Add a report to the favorites to be shown here.');
+        return emptyState;
+    },
+
     buildWidgetRow: function (report, reportId, subheader, value, thresholds, dimension) {
         let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, value, thresholds);
         //value = parseFloat(value).toLocaleString();
         value = OCA.Analytics.Dashboard.nFormatter(value);
         let href = OC.generateUrl('apps/analytics/r/' + reportId);
 
-        return `<a href="${href}">
-                <div class="analyticsWidgetContent1">
-                    <div class="analyticsWidgetReport">${report}</div>
-                    <div class="analyticsWidgetSmall">${subheader}</div>
-                </div>
-                <div class="analyticsWidgetContent2">
-                     <div id="kpi${reportId}">
-                        <div style="${thresholdColor}" class="analyticsWidgetValue">${value}</div>
-                    </div>
-                   <div id="chartContainer${reportId}">
-                        <canvas id="myChart${reportId}" class="chartContainer"></canvas>
-                    </div>
-                </div>
-            </a>`;
+        const link = document.createElement('a');
+        link.href = href;
+
+        const content1 = document.createElement('div');
+        content1.className = 'analyticsWidgetContent1';
+
+        const reportElement = document.createElement('div');
+        reportElement.className = 'analyticsWidgetReport';
+        reportElement.textContent = report;
+
+        const subheaderElement = document.createElement('div');
+        subheaderElement.className = 'analyticsWidgetSmall';
+        subheaderElement.textContent = subheader;
+
+        content1.appendChild(reportElement);
+        content1.appendChild(subheaderElement);
+
+        const content2 = document.createElement('div');
+        content2.className = 'analyticsWidgetContent2';
+
+        const kpiContainer = document.createElement('div');
+        kpiContainer.id = 'kpi' + reportId;
+
+        const valueElement = document.createElement('div');
+        valueElement.className = 'analyticsWidgetValue';
+        valueElement.textContent = value;
+        if (thresholdColor) {
+            valueElement.setAttribute('style', thresholdColor);
+        }
+        kpiContainer.appendChild(valueElement);
+
+        const chartContainer = document.createElement('div');
+        chartContainer.id = 'chartContainer' + reportId;
+
+        const canvas = document.createElement('canvas');
+        canvas.id = 'myChart' + reportId;
+        canvas.className = 'chartContainer';
+        chartContainer.appendChild(canvas);
+
+        content2.appendChild(kpiContainer);
+        content2.appendChild(chartContainer);
+
+        link.appendChild(content1);
+        link.appendChild(content2);
+
+        return link;
     },
 
     buildPanoramaRow: function (name, panoramaId) {
         let href = OC.generateUrl('apps/analytics/pa/' + panoramaId);
 
-        return `<a href="${href}">
-                <div class="analyticsWidgetContent1">
-                    <div class="analyticsWidgetReport">${name}</div>
-                </div>
-                <div class="analyticsWidgetContent2">
-                    <span class="analyticsWidgetIcon icon-analytics-panorama"></span>
-                </div>
-            </a>`;
+        const link = document.createElement('a');
+        link.href = href;
+
+        const content1 = document.createElement('div');
+        content1.className = 'analyticsWidgetContent1';
+
+        const nameElement = document.createElement('div');
+        nameElement.className = 'analyticsWidgetReport';
+        nameElement.textContent = name;
+        content1.appendChild(nameElement);
+
+        const content2 = document.createElement('div');
+        content2.className = 'analyticsWidgetContent2';
+
+        const icon = document.createElement('span');
+        icon.className = 'analyticsWidgetIcon icon-analytics-panorama';
+        content2.appendChild(icon);
+
+        link.appendChild(content1);
+        link.appendChild(content2);
+
+        return link;
     },
 
     nFormatter: function (num) {

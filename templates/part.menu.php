@@ -139,11 +139,6 @@
                     <span><?php p($l->t('Disaggregate values')); ?></span>
                 </button>
             </li>
-            <li>
-                <button id="linearRegressionIcon" class="menuitem" disabled>
-                    <span><?php p($l->t('Linear Regression')); ?></span>
-                </button>
-            </li>
         </ul>
         <ul id="optionsMenuSubRefresh" style="display: none !important;">
             <li id="backIcon2">

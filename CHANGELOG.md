@@ -4,10 +4,12 @@
 ### Added
 - visual UI for creating calculated columns
 - `not contains` report filter operator with wildcard support for excluding matches
+- Expand Playwright UI lifecycle coverage
 
 ### Changed
 - new layouts for chart and table option dialogs
 - UI unification
+- code hardening
 
 ### Fixed
 - Restore the collapsed sidebar section right-arrow icon by shipping the missing asset again

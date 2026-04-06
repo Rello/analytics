@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     OCA.Analytics.registerHandler('favoriteUpdate', 'dataset', function (id, isFavorite) {
-        OCA.Analytics.Panorama.Dashboard.favoriteUpdate(id, isFavorite);
+        OCA.Analytics.Dataset.handleFavoriteUpdate(id, isFavorite);
     });
 })
 
@@ -38,6 +38,16 @@ OCA = OCA || {};
 OCA.Analytics.Dataset = OCA.Analytics.Dataset || {};
 Object.assign(OCA.Analytics.Dataset = {
     sidebar_tabs: {},
+
+    handleFavoriteUpdate: function (id, isFavorite) {
+        OCA.Analytics.Navigation.updateFavoriteUI(id, 'dataset', 'false');
+        const favoriteItem = document.querySelector('#section-favorites [data-id="' + id + '"][data-item_type="dataset"]');
+        favoriteItem?.parentElement?.remove();
+
+        if (isFavorite === 'true') {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Datasets cannot be added to favorites'));
+        }
+    },
 
     handleNavigationClicked: function (evt) {
         OCA.Analytics.Sidebar.close();
@@ -138,6 +148,71 @@ OCA.Analytics.Dataset.Dataload = OCA.Analytics.Dataset.Dataload || {};
 Object.assign(OCA.Analytics.Dataset.Dataload = {
     dataloadArray: [],
 
+    getRequestErrorMessage: function (data, fallbackMessage) {
+        if (typeof data === 'string' && data !== '') {
+            return data;
+        }
+        if (data && typeof data.message === 'string' && data.message !== '') {
+            return data.message;
+        }
+        if (data && data.ocs && data.ocs.meta && typeof data.ocs.meta.message === 'string' && data.ocs.meta.message !== '') {
+            return data.ocs.meta.message;
+        }
+        return fallbackMessage;
+    },
+
+    fetchJson: function (requestUrl, options, fallbackMessage) {
+        return fetch(requestUrl, options)
+            .then(async response => {
+                let rawData = '';
+                let data = null;
+
+                try {
+                    rawData = await response.text();
+                } catch (error) {
+                    rawData = '';
+                }
+
+                if (rawData !== '') {
+                    try {
+                        data = JSON.parse(rawData);
+                    } catch (error) {
+                        if (response.ok) {
+                            throw new Error(fallbackMessage);
+                        }
+                    }
+                }
+
+                if (!response.ok) {
+                    throw new Error(OCA.Analytics.Dataset.Dataload.getRequestErrorMessage(data, fallbackMessage));
+                }
+
+                return data;
+            });
+    },
+
+    showRequestError: function (error, fallbackMessage, closeDialog = false) {
+        const message = error && error.message ? error.message : fallbackMessage;
+        OCA.Analytics.Notification.notification('error', message);
+        if (closeDialog) {
+            OCA.Analytics.Notification.dialogClose();
+        }
+    },
+
+    parseOptions: function (rawOption) {
+        if (typeof rawOption !== 'string' || rawOption.trim() === '') {
+            return {};
+        }
+
+        try {
+            const parsedOptions = JSON.parse(rawOption);
+            return parsedOptions !== null && typeof parsedOptions === 'object' ? parsedOptions : {};
+        } catch (error) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'The data load options could not be loaded'));
+            return {};
+        }
+    },
+
     tabContainerDataload: function () {
         const datasetId = OCA.Analytics.currentDataset;
 
@@ -155,11 +230,10 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         let url = OC.generateUrl('apps/analytics/dataload');
         let params = new URLSearchParams({datasetId: datasetId});
         let requestUrl = `${url}?${params}`;
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
+        }, t('analytics', 'Failed to load data loads'))
             .then(data => {
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateDataload').content, true);
@@ -208,6 +282,12 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
                 // write dimension structure to data source array [0] in case it is required for a deletion job later
                 //OCA.Analytics.Dataset.Dataload.updateDatasourceDeletionOption();
+            })
+            .catch(error => {
+                document.getElementById('tabContainerDataload').innerHTML = '<div style="margin-left: 2em;" class="get-metadata"><p>'
+                    + t('analytics', 'Failed to load data loads')
+                    + '</p></div>';
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to load data loads'));
             });
     },
 
@@ -296,7 +376,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(dataload['datasource']));
 
         // set the options for a data source
-        let fieldValues = JSON.parse(dataload['option']);
+        let fieldValues = OCA.Analytics.Dataset.Dataload.parseOptions(dataload['option']);
         for (let fieldValue in fieldValues) {
             document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Dataset.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
         }
@@ -320,18 +400,20 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
     createDataload: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload');
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 datasetId: parseInt(OCA.Analytics.currentDataset),
                 datasourceId: document.getElementById('datasourceSelect').value,
             })
-        })
-            .then(response => response.json())
+        }, t('analytics', 'Failed to create data load'))
             .then(data => {
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = data.id;
                 document.querySelector('.tabHeader.selected').click();
+            })
+            .catch(error => {
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to create data load'));
             });
     },
 
@@ -341,18 +423,20 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
     createDataDelete: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload');
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 datasetId: parseInt(OCA.Analytics.currentDataset),
                 datasourceId: 0,
             })
-        })
-            .then(response => response.json())
+        }, t('analytics', 'Failed to create data load'))
             .then(data => {
                 document.getElementById('app-sidebar').dataset.dataLoadCreated = data.id;
                 document.querySelector('.tabHeader.selected').click();
+            })
+            .catch(error => {
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to create data load'));
             });
     },
 
@@ -372,7 +456,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         option = JSON.stringify(option);
 
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + dataloadId;
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'PUT',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
@@ -380,14 +464,16 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                 schedule: document.getElementById('dataloadSchedule').value,
                 option: option,
             })
-        })
-            .then(response => response.json())
+        }, t('analytics', 'Failed to save data load'))
             .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
                 document.querySelector('[data-dataload-id="' + dataloadId + '"]').textContent = document.getElementById('dataloadName').value;
+            })
+            .catch(error => {
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to save data load'));
             });
     },
 
@@ -397,27 +483,19 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
     copyDataload: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload/copy');
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 dataloadId: document.getElementById('dataloadDetail').dataset.dataloadId,
             })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+        }, t('analytics', 'Failed to copy data load'))
             .then(data => {
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Data load copied'));
                 document.querySelector('.tabHeader.selected').click();
             })
             .catch(error => {
-                // stop if the file link is missing
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Parameter missing'));
-                OCA.Analytics.Notification.dialogClose();
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to copy data load'));
             });
     },
 
@@ -434,13 +512,15 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
     deleteDataload: function () {
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.dataloadId;
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'DELETE',
             headers: OCA.Analytics.headers()
-        })
-            .then(response => response.json())
+        }, t('analytics', 'Failed to delete data load'))
             .then(data => {
                 document.querySelector('.tabHeader.selected').click();
+            })
+            .catch(error => {
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to delete data load'));
             });
     },
 
@@ -462,19 +542,13 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + mode;
-        fetch(requestUrl, {
+        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 dataloadId: document.getElementById('dataloadDetail').dataset.dataloadId,
             })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+        }, t('analytics', 'Failed to run data load'))
             .then(data => {
                 if (mode === 'simulate') {
                     let dialogContent;
@@ -505,9 +579,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                 }
             })
             .catch(error => {
-                // stop if the file link is missing
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Parameter missing'));
-                OCA.Analytics.Notification.dialogClose();
+                OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to run data load'), mode === 'simulate');
             });
     },
 
@@ -535,6 +607,10 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
     },
 
     decodeEscapedHtml: function (text) {
+        if (typeof text !== 'string') {
+            return text ?? '';
+        }
+
         let map =
             {
                 '&amp;': '&',

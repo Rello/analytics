@@ -9,6 +9,24 @@
 
 'use strict';
 
+const getSafeReferenceUrl = function (value) {
+    if (typeof value !== 'string' || value.trim() === '') {
+        return null;
+    }
+
+    try {
+        const url = new URL(value, window.location.origin);
+
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+            return null;
+        }
+
+        return url.href;
+    } catch (error) {
+        return null;
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     OCA.Analytics.Reference.init();
 })
@@ -25,22 +43,20 @@ if (!OCA.Analytics) {
 OCA.Analytics.Reference = {
     init: function () {
         _registerWidget('analytics', async (el, {richObjectType, richObject, accessible}) => {
-            const link = document.createElement('a');
-            link.href = richObject.url || '';
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.style.display = 'flex';
+            const referenceUrl = getSafeReferenceUrl(richObject.url);
+            const imageUrl = getSafeReferenceUrl(richObject.image);
+            const widget = document.createElement(referenceUrl ? 'a' : 'div');
+            widget.style.display = 'flex';
 
-            const image = document.createElement('img');
-            image.src = richObject.image || '';
-            image.alt = '';
-            image.style.width = '20%';
-            image.style.padding = '20px';
-            image.style.opacity = '.5';
+            if (referenceUrl) {
+                widget.setAttribute('href', referenceUrl);
+                widget.setAttribute('target', '_blank');
+                widget.setAttribute('rel', 'noopener noreferrer');
+            }
 
             const content = document.createElement('div');
-            content.style.width = '75%';
             content.style.padding = '10px';
+            content.style.width = imageUrl ? '75%' : '100%';
 
             const title = document.createElement('div');
             title.style.fontWeight = '600';
@@ -52,11 +68,21 @@ OCA.Analytics.Reference = {
 
             content.appendChild(title);
             content.appendChild(subheader);
-            link.appendChild(image);
-            link.appendChild(content);
+
+            if (imageUrl) {
+                const image = document.createElement('img');
+                image.setAttribute('src', imageUrl);
+                image.setAttribute('alt', '');
+                image.style.width = '20%';
+                image.style.padding = '20px';
+                image.style.opacity = '.5';
+                widget.appendChild(image);
+            }
+
+            widget.appendChild(content);
 
             el.textContent = '';
-            el.appendChild(link);
+            el.appendChild(widget);
         }, () => {}, { hasInteractiveView: false });
     },
 }

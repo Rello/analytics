@@ -212,7 +212,15 @@ Object.assign(OCA.Analytics.Core = {
         if (elem === null) {
             return false;
         }
-        return JSON.parse(atob(elem.value))
+        if (typeof elem.value !== 'string' || elem.value === '') {
+            return false;
+        }
+        try {
+            return JSON.parse(atob(elem.value));
+        } catch (error) {
+            console.warn('Failed to parse analytics initial state for key:', key, error);
+            return false;
+        }
     },
 
     /**
@@ -226,20 +234,15 @@ Object.assign(OCA.Analytics.Core = {
 OCA.Analytics.Translation = OCA.Analytics.Translation || {};
 Object.assign(OCA.Analytics.Translation = {
     /**
-     * Send current report text to translation service
+     * Translate a single text value and return the translated string
      */
-    translate: function () {
-        let name = OCA.Analytics.currentReportData.options.name;
-        let subheader = OCA.Analytics.currentReportData.options.subheader;
-        let header = OCA.Analytics.currentReportData.header;
-        let dimensions = JSON.stringify(OCA.Analytics.currentReportData.dimensions);
-        let text = name + '**' + subheader + '**' + header + '**' + dimensions;
+    translateText: function (text, targetLanguage) {
+        if (typeof text !== 'string' || text === '') {
+            return Promise.resolve(text);
+        }
 
-        let targetLanguage = document.getElementById('translateLanguage').value;
-        targetLanguage = targetLanguage === 'EN' ? 'EN-US' : targetLanguage;
-
-        let requestUrl = OC.generateUrl('ocs/v2.php/translation/translate');
-        fetch(requestUrl, {
+        const requestUrl = OC.generateUrl('ocs/v2.php/translation/translate');
+        return fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
@@ -254,21 +257,63 @@ Object.assign(OCA.Analytics.Translation = {
                         OCA.Analytics.Notification.notification('error', t('analytics', 'Translation error. Possibly wrong ISO code?'));
                         return Promise.reject('400 Error');
                     }
+                    return Promise.reject(new Error('Translation request failed with status ' + response.status));
                 }
                 return response.text();
             })
-            .then(data => {
-                let parser = new DOMParser();
-                let xmlDoc = parser.parseFromString(data, "text/xml");
+            .then(OCA.Analytics.Translation.parseTranslationResponse);
+    },
 
-                let text = xmlDoc.getElementsByTagName("text")[0].childNodes[0].nodeValue;
-                text = text.split('**');
-                let from = xmlDoc.getElementsByTagName("from")[0].childNodes[0].nodeValue;
+    /**
+     * Extract translated text from the translation app XML response
+     */
+    parseTranslationResponse: function (data) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data, 'text/xml');
+        const parserError = xmlDoc.querySelector('parsererror');
+        if (parserError) {
+            throw new Error('Malformed translation response');
+        }
 
-                OCA.Analytics.currentReportData.options.name = text[0];
-                OCA.Analytics.currentReportData.options.subheader = text[1];
-                OCA.Analytics.currentReportData.header = text[2].split(',');
-                OCA.Analytics.currentReportData.dimensions = JSON.parse(text[3]);
+        const textNode = xmlDoc.getElementsByTagName('text')[0];
+        if (!textNode || textNode.textContent === null) {
+            throw new Error('Missing translation text');
+        }
+
+        return textNode.textContent;
+    },
+
+    /**
+     * Send current report text to translation service
+     */
+    translate: function () {
+        let targetLanguage = document.getElementById('translateLanguage').value;
+        targetLanguage = targetLanguage === 'EN' ? 'EN-US' : targetLanguage;
+
+        const reportData = OCA.Analytics.currentReportData;
+        const reportOptions = reportData.options || {};
+        const name = reportOptions.name || '';
+        const subheader = reportOptions.subheader || '';
+        const header = Array.isArray(reportData.header) ? reportData.header : [];
+        const dimensions = reportData.dimensions && typeof reportData.dimensions === 'object' ? reportData.dimensions : {};
+
+        Promise.all([
+            OCA.Analytics.Translation.translateText(name, targetLanguage),
+            OCA.Analytics.Translation.translateText(subheader, targetLanguage),
+            Promise.all(header.map(item => OCA.Analytics.Translation.translateText(item, targetLanguage))),
+            Promise.all(Object.entries(dimensions).map(([key, value]) => {
+                return OCA.Analytics.Translation.translateText(value, targetLanguage)
+                    .then(translatedValue => [key, translatedValue]);
+            })),
+        ])
+            .then(([translatedName, translatedSubheader, translatedHeader, translatedDimensions]) => {
+                if (!OCA.Analytics.currentReportData.options || typeof OCA.Analytics.currentReportData.options !== 'object') {
+                    OCA.Analytics.currentReportData.options = {};
+                }
+                OCA.Analytics.currentReportData.options.name = translatedName;
+                OCA.Analytics.currentReportData.options.subheader = translatedSubheader;
+                OCA.Analytics.currentReportData.header = translatedHeader;
+                OCA.Analytics.currentReportData.dimensions = Object.fromEntries(translatedDimensions);
                 OCA.Analytics.Report.resetContentArea();
                 OCA.Analytics.Report.buildReport();
             })
@@ -282,7 +327,6 @@ Object.assign(OCA.Analytics.Translation = {
      * Populate translation language selector
      */
     languages: function () {
-        const elem = document.querySelector('#initial-state-analytics-translationLanguages');
         let translateLanguage = document.getElementById('translateLanguage');
         translateLanguage.innerHTML = '';
 
@@ -291,8 +335,13 @@ Object.assign(OCA.Analytics.Translation = {
         option.value = '';
         translateLanguage.appendChild(option);
 
+        const translationLanguages = OCA.Analytics.Core.getInitialState('translationLanguages');
+        if (!Array.isArray(translationLanguages)) {
+            return;
+        }
+
         const set = new Set();
-        for (const item of JSON.parse(atob(elem.value))) {
+        for (const item of translationLanguages) {
             if (!set.has(item.from)) {
                 set.add(item.from)
                 let option = document.createElement('option');
@@ -774,6 +823,8 @@ Object.assign(OCA.Analytics.Share = {
 
     searchTimeout: null,
     searchDelay: 300,
+    searchRequestId: 0,
+    searchAbortController: null,
 
     buildShareModal: function (evt) {
         if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
@@ -1089,28 +1140,53 @@ Object.assign(OCA.Analytics.Share = {
     },
 
     _executeShareSearch: function () {
-        const shareInput = document.getElementById('shareInput').value;
+        const shareInputElement = document.getElementById('shareInput');
         const resultElement = document.getElementById('shareSearchResult');
+        if (!shareInputElement || !resultElement) {
+            return;
+        }
+
+        const shareInput = shareInputElement.value;
+        const requestId = ++OCA.Analytics.Share.searchRequestId;
         if (shareInput === '') {
+            if (OCA.Analytics.Share.searchAbortController) {
+                OCA.Analytics.Share.searchAbortController.abort();
+                OCA.Analytics.Share.searchAbortController = null;
+            }
             resultElement.innerHTML = '';
             resultElement.style.display = 'none';
             return;
         }
 
-        const URL = OC.linkToOCS('apps/files_sharing/api/v1/sharees').slice(0, -1);
-        const params = 'format=json'
-            + '&itemType=file'
-            + '&search=' + shareInput
-            + '&lookup=false&perPage=200'
-            + '&shareType[]=0&shareType[]=1';
+        if (OCA.Analytics.Share.searchAbortController) {
+            OCA.Analytics.Share.searchAbortController.abort();
+        }
+        const abortController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        OCA.Analytics.Share.searchAbortController = abortController;
 
-        const requestUrl = URL + '?' + params;
+        const URL = OC.linkToOCS('apps/files_sharing/api/v1/sharees').slice(0, -1);
+        const params = new URLSearchParams();
+        params.set('format', 'json');
+        params.set('itemType', 'file');
+        params.set('search', shareInput);
+        params.set('lookup', 'false');
+        params.set('perPage', '200');
+        params.append('shareType[]', '0');
+        params.append('shareType[]', '1');
+
+        const requestUrl = URL + '?' + params.toString();
         fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers(),
+            signal: abortController ? abortController.signal : undefined,
         })
             .then(response => response.json())
             .then(data => {
+                if (requestId !== OCA.Analytics.Share.searchRequestId) {
+                    return;
+                }
+                OCA.Analytics.Share.searchAbortController = null;
+
                 const jsondata = data;
                 if (jsondata['ocs']['meta']['status'] === 'ok') {
                     resultElement.style.display = '';
@@ -1163,6 +1239,17 @@ Object.assign(OCA.Analytics.Share = {
                     resultElement.style.display = 'none';
                     resultElement.innerHTML = '';
                 }
+            })
+            .catch(error => {
+                if (error && error.name === 'AbortError') {
+                    return;
+                }
+                if (requestId !== OCA.Analytics.Share.searchRequestId) {
+                    return;
+                }
+                OCA.Analytics.Share.searchAbortController = null;
+                resultElement.style.display = 'none';
+                resultElement.innerHTML = '';
             });
     },
 });

@@ -712,8 +712,9 @@ OCA.Analytics.Filter = {
     },
 
     initializeCalculatedColumnsDialog: function () {
+        const editor = document.getElementById('tableOptionsCalculatedColumnsEditor');
         const operationSelect = document.getElementById('tableOptionsCalculatedColumnsOperation');
-        if (!operationSelect) {
+        if (!editor || !operationSelect) {
             return;
         }
 
@@ -722,32 +723,32 @@ OCA.Analytics.Filter = {
             operationSelect.options.add(new Option(operation.label, operation.value));
         });
 
-        document.getElementById('tableOptionsCalculatedColumnsAdd').addEventListener('click', function () {
+        document.getElementById('tableOptionsCalculatedColumnsAdd').onclick = function () {
             OCA.Analytics.Filter.openCalculatedColumnEditor();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsEditorClose').addEventListener('click', function () {
+        };
+        document.getElementById('tableOptionsCalculatedColumnsEditorClose').onclick = function () {
             OCA.Analytics.Filter.closeCalculatedColumnEditor();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsCancel').addEventListener('click', function () {
+        };
+        document.getElementById('tableOptionsCalculatedColumnsCancel').onclick = function () {
             OCA.Analytics.Filter.closeCalculatedColumnEditor();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsSave').addEventListener('click', function () {
+        };
+        document.getElementById('tableOptionsCalculatedColumnsSave').onclick = function () {
             OCA.Analytics.Filter.saveCalculatedColumnEditor();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsDelete').addEventListener('click', function () {
+        };
+        document.getElementById('tableOptionsCalculatedColumnsDelete').onclick = function () {
             OCA.Analytics.Filter.deleteCalculatedColumnEditor();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsSourceAdd').addEventListener('click', function () {
+        };
+        document.getElementById('tableOptionsCalculatedColumnsSourceAdd').onclick = function () {
             OCA.Analytics.Filter.addCalculatedColumnSource();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsOperation').addEventListener('change', function () {
+        };
+        document.getElementById('tableOptionsCalculatedColumnsOperation').onchange = function () {
             OCA.Analytics.Filter.handleCalculatedColumnOperationChange();
-        });
-        document.getElementById('tableOptionsCalculatedColumnsEditor').addEventListener('click', function (evt) {
+        };
+        editor.onclick = function (evt) {
             if (evt.target.id === 'tableOptionsCalculatedColumnsEditor') {
                 OCA.Analytics.Filter.closeCalculatedColumnEditor();
             }
-        });
+        };
 
         const parsedCalculatedColumns = OCA.Analytics.Filter.parseCalculatedColumnsValue(
             document.getElementById('tableOptionsCalculatedColumns').value
@@ -1541,6 +1542,7 @@ OCA.Analytics.Filter = {
      * Close the currently opened dialog and clean up global listeners.
      */
     close: function () {
+        OCA.Analytics.Report.hideDropDownList();
         document.getElementById('analytics_dialog_container').remove();
         document.getElementById('analytics_dialog_overlay').remove();
         // remove the global event listener which was added by the drop down lists
@@ -1812,10 +1814,31 @@ OCA.Analytics.Filter.Drag = {
 };
 
 OCA.Analytics.Filter.Backend = {
+    getResponseErrorMessage: async function (response, fallbackMessage) {
+        try {
+            const data = await response.json();
+            if (typeof data?.error === 'string' && data.error !== '') {
+                return data.error;
+            }
+        } catch (error) {
+        }
+
+        return fallbackMessage;
+    },
+
+    handleRequestFailure: function (error, options = {}) {
+        if (options.restoreUnsavedChanges === true) {
+            OCA.Analytics.unsavedChanges = true;
+        }
+
+        OCA.Analytics.Notification.notification('error', error?.message || t('analytics', 'Request could not be processed'));
+        console.error(error);
+    },
+
     /**
      * Create a copy of the current report on the server and load it.
      */
-    newReport: function () {
+    newReport: async function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
 
         if (typeof (OCA.Analytics.currentReportData.options.filteroptions) === 'undefined') {
@@ -1830,39 +1853,55 @@ OCA.Analytics.Filter.Backend = {
         headers.append('OCS-APIREQUEST', 'true');
         headers.append('Content-Type', 'application/json');
 
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                reportId: reportId,
-                chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
-                dataoptions: JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions),
-                filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
-                tableoptions: JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions),
-            })
-        })
-            .then(response => response.json())
-            .then(id => {
-                return fetch(OC.generateUrl('apps/analytics/report/') + id, {
-                    method: 'GET',
-                    headers: OCA.Analytics.headers(),
-                });
-            })
-            .then(response => response.json())
-            .then(data => {
-                data.item_type = 'report';
-                OCA.Analytics.isNewObject = false;
-                OCA.Analytics.Navigation.addNavigationItem(data);
-                const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
-                anchor?.click();
-            })
-            .catch(err => console.error(err));
+        try {
+            let response = await fetch(requestUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    reportId: reportId,
+                    chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
+                    dataoptions: JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions),
+                    filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
+                    tableoptions: JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions),
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(await OCA.Analytics.Filter.Backend.getResponseErrorMessage(
+                    response,
+                    t('analytics', 'Request could not be processed')
+                ));
+            }
+
+            const id = await response.json();
+
+            response = await fetch(OC.generateUrl('apps/analytics/report/') + id, {
+                method: 'GET',
+                headers: OCA.Analytics.headers(),
+            });
+
+            if (!response.ok) {
+                throw new Error(await OCA.Analytics.Filter.Backend.getResponseErrorMessage(
+                    response,
+                    t('analytics', 'Request could not be processed')
+                ));
+            }
+
+            const data = await response.json();
+            data.item_type = 'report';
+            OCA.Analytics.isNewObject = false;
+            OCA.Analytics.Navigation.addNavigationItem(data);
+            const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
+            anchor?.click();
+        } catch (error) {
+            OCA.Analytics.Filter.Backend.handleRequestFailure(error, {restoreUnsavedChanges: true});
+        }
     },
 
     /**
      * Persist all current filter and option settings for the report.
      */
-    saveReport: function () {
+    saveReport: async function () {
         const reportId = parseInt(OCA.Analytics.currentReportData.options.id);
         OCA.Analytics.unsavedChanges = false;
 
@@ -1929,28 +1968,37 @@ OCA.Analytics.Filter.Backend = {
         headers.append('OCS-APIREQUEST', 'true');
         headers.append('Content-Type', 'application/json');
 
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
-                dataoptions: JSON.stringify(dataOptions),
-                filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
-                tableoptions: JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions),
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                delete OCA.Analytics.currentReportData.options;
-                OCA.Analytics.Report.Backend.getData();
-            })
-            .catch(err => console.error(err));
+        try {
+            const response = await fetch(requestUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
+                    dataoptions: JSON.stringify(dataOptions),
+                    filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
+                    tableoptions: JSON.stringify(OCA.Analytics.currentReportData.options.tableoptions),
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(await OCA.Analytics.Filter.Backend.getResponseErrorMessage(
+                    response,
+                    t('analytics', 'Request could not be processed')
+                ));
+            }
+
+            await response.json();
+            delete OCA.Analytics.currentReportData.options;
+            OCA.Analytics.Report.Backend.getData();
+        } catch (error) {
+            OCA.Analytics.Filter.Backend.handleRequestFailure(error, {restoreUnsavedChanges: true});
+        }
     },
 
     /**
      * Save and start the automatic refresh timer with the given interval.
      */
-    saveRefresh: function (evt) {
+    saveRefresh: async function (evt) {
         OCA.Analytics.Report.hideReportMenu();
         let refresh = evt.target.id;
         refresh = parseInt(refresh.substring(7));
@@ -1962,18 +2010,27 @@ OCA.Analytics.Filter.Backend = {
         headers.append('OCS-APIREQUEST', 'true');
         headers.append('Content-Type', 'application/json');
 
-        fetch(requestUrl, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                refresh: refresh,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
-                OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
-            })
-            .catch(err => console.error(err));
+        try {
+            const response = await fetch(requestUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    refresh: refresh,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(await OCA.Analytics.Filter.Backend.getResponseErrorMessage(
+                    response,
+                    t('analytics', 'Request could not be processed')
+                ));
+            }
+
+            await response.json();
+            OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
+            OCA.Analytics.Report.Backend.startRefreshTimer(refresh);
+        } catch (error) {
+            OCA.Analytics.Filter.Backend.handleRequestFailure(error);
+        }
     },
 }; 

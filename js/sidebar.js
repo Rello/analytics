@@ -254,9 +254,14 @@ OCA.Analytics.Sidebar.Report = {
         if (data['link'] && data['link'].substring(0, 1) === '{') { // New format as of 3.1.0
             let options = JSON.parse(data['link']);
             for (let option in options) {
-                document.getElementById(option) ? document.getElementById(option).value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]) : null;
-                if (document.getElementById(option).type === 'checkbox') {
-                    document.getElementById(option).checked = true;
+                const optionField = document.getElementById(option);
+                if (!optionField) {
+                    continue;
+                }
+
+                optionField.value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]);
+                if (optionField.type === 'checkbox') {
+                    optionField.checked = true;
                 }
             }
         } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_GIT)) { // Old format before 3.1.0
@@ -1132,10 +1137,15 @@ OCA.Analytics.Sidebar.Report = {
                 value: document.getElementById('sidebarReportValue').value
             })
         })
-            .then(response => response.json())
-            .then(data => {
+            .then(async response => {
+                const data = await response.json();
                 button.classList.remove('loading');
                 button.disabled = false;
+
+                if (!response.ok) {
+                    OCA.Analytics.Notification.notification('error', data.error || t('analytics', 'Request could not be processed'));
+                    return;
+                }
 
                 // store possibly changed values into the temporary variable as this is used in getData
                 // without this, the new options would only be active after a full reload
@@ -1164,6 +1174,11 @@ OCA.Analytics.Sidebar.Report = {
                         OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                     }
                 }
+            })
+            .catch(() => {
+                button.classList.remove('loading');
+                button.disabled = false;
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'));
             });
     },
 
@@ -1202,7 +1217,7 @@ OCA.Analytics.Sidebar.Report = {
         })
             .then(response => response.json())
             .then(data => {
-                OCA.Analytics.Navigation.getDatasets();
+                OCA.Analytics.Navigation.init();
             });
     },
 

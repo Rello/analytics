@@ -406,14 +406,11 @@ Object.assign(OCA.Analytics.Report, {
         document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Report.Functions.trend);
         document.getElementById('disAggregateIcon').addEventListener('click', OCA.Analytics.Report.Functions.disAggregate);
         document.getElementById('aggregateIcon').addEventListener('click', OCA.Analytics.Report.Functions.aggregate);
-        //document.getElementById('linearRegressionIcon').addEventListener('click', OCA.Analytics.Report.Functions.linearRegression);
         document.getElementById('backIcon').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
         document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
         document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
         document.getElementById('optionsMenuDownload').addEventListener('click', OCA.Analytics.Report.downloadChart);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.Report.toggleChartLegend);
-
-        //document.getElementById('menuSearchBox').addEventListener('keypress', OCA.Analytics.Report.tableSearch);
 
         let refresh = document.getElementsByName('refresh');
         for (let i = 0; i < refresh.length; i++) {
@@ -473,13 +470,6 @@ Object.assign(OCA.Analytics.Report, {
     },
 
     /**
-     * Search inside the DataTable
-     */
-    tableSearch: function () {
-        OCA.Analytics.tableObject.search(this.value).draw();
-    },
-
-    /**
      * Build and display a dropdown for filter values
      */
     showDropDownList: function (evt) {
@@ -487,7 +477,7 @@ Object.assign(OCA.Analytics.Report, {
             return;
         }
         let inputField = evt.target;
-        if (!inputField.hasAttribute('data-dropDownListIndex')) {
+        if (!inputField.hasAttribute('data-dropdownlistindex')) {
             return;
         }
         // make the list align-able
@@ -533,44 +523,54 @@ Object.assign(OCA.Analytics.Report, {
 
         // create an event listener on document level to recognize a click outside the list
         document.addEventListener('click', OCA.Analytics.Report.handleDropDownListClicked);
+        inputField.addEventListener('keyup', OCA.Analytics.Report.handleDropDownListKeyup);
+    },
 
-        inputField.addEventListener('keyup', function (event) {
-            let li = document.getElementById('tmpList').getElementsByTagName('li');
+    /**
+     * Filter visible dropdown entries based on the input value.
+     */
+    handleDropDownListKeyup: function (event) {
+        let dropDownList = document.getElementById('tmpList');
+        if (!dropDownList) {
+            return;
+        }
+        let inputField = event.target;
+        let li = dropDownList.getElementsByTagName('li');
+        let listCount = 0;
+        const listCountMax = 4;
 
-            if (event.key === 'Tab') {
-                // if the Tab key is pressed, we mimic autocompletion by using the first visible entry
-                event.preventDefault(); // prevent the focus from moving to the next element
+        if (event.key === 'Tab') {
+            // if the Tab key is pressed, we mimic autocompletion by using the first visible entry
+            event.preventDefault(); // prevent the focus from moving to the next element
 
-                // loop through all li items in the list
-                for (let i = 0; i < li.length; i++) {
-                    // if the li is visible, set the input value to its text and hide the list
-                    if (li[i].style.display !== 'none') {
-                        inputField.value = li[i].textContent;
-                        OCA.Analytics.Report.hideDropDownList();
-                        break; // exit the loop after finding the first visible li
-                    }
-                }
-            } else {
-                // for every keypress, we filter the list vor matching entries
-                let filter = inputField.value.toUpperCase(); // get the typed text in uppercase
-                // loop through all li items in the list
-                listCount = 0;
-                for (let i = 0; i < li.length; i++) {
-                    let txtValue = li[i].textContent || li[i].innerText; // get the text in the li
-                    // if the li text doesn't match the typed text, hide it
-                    if (txtValue.toUpperCase().indexOf(filter) > -1 && listCount < listCountMax) {
-                        li[i].style.display = "";
-                        listCount++;
-                    } else if (li[i].id === 'dummy' && listCount >= listCountMax) {
-                        // always show the ... when there are more values available
-                        li[i].style.display = "";
-                        listCount++;
-                    } else {
-                        li[i].style.display = "none";
-                    }
+            // loop through all li items in the list
+            for (let i = 0; i < li.length; i++) {
+                // if the li is visible, set the input value to its text and hide the list
+                if (li[i].style.display !== 'none') {
+                    inputField.value = li[i].textContent;
+                    OCA.Analytics.Report.hideDropDownList();
+                    break; // exit the loop after finding the first visible li
                 }
             }
-        });
+        } else {
+            // for every keypress, we filter the list for matching entries
+            let filter = inputField.value.toUpperCase(); // get the typed text in uppercase
+            // loop through all li items in the list
+            for (let i = 0; i < li.length; i++) {
+                let txtValue = li[i].textContent || li[i].innerText; // get the text in the li
+                // if the li text doesn't match the typed text, hide it
+                if (txtValue.toUpperCase().indexOf(filter) > -1 && listCount < listCountMax) {
+                    li[i].style.display = '';
+                    listCount++;
+                } else if (li[i].id === 'dummy' && listCount >= listCountMax) {
+                    // always show the ... when there are more values available
+                    li[i].style.display = '';
+                    listCount++;
+                } else {
+                    li[i].style.display = 'none';
+                }
+            }
+        }
     },
 
     /**
@@ -578,6 +578,9 @@ Object.assign(OCA.Analytics.Report, {
      */
     handleDropDownListClicked: function (event) {
         let dropDownList = document.getElementById('tmpList');
+        if (!dropDownList) {
+            return;
+        }
         let inputField = dropDownList.previousElementSibling;
         let isClickInside = dropDownList.contains(event.target);
         let isClickOnInput = inputField === event.target;
@@ -597,10 +600,14 @@ Object.assign(OCA.Analytics.Report, {
      * Remove dropdown list from the DOM
      */
     hideDropDownList: function () {
+        let dropDownList = document.getElementById('tmpList');
+        if (!dropDownList) {
+            return;
+        }
         // remove the global event listener again
         document.removeEventListener('click', OCA.Analytics.Report.handleDropDownListClicked);
-        let dropDownList = document.getElementById('tmpList');
         let inputField = dropDownList.previousElementSibling;
+        inputField.removeEventListener('keyup', OCA.Analytics.Report.handleDropDownListKeyup);
         inputField.classList.remove('dropDownListParentOpen');
         dropDownList.remove();
     }

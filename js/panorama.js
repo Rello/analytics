@@ -122,6 +122,8 @@ Object.assign(OCA.Analytics.Panorama = {
             document.getElementById('layoutModalGrid').innerHTML = '';
         });
 
+        document.addEventListener('click', OCA.Analytics.Panorama.handleEditMenuDocumentClick);
+
     },
 
     getDefaultChartOptions: function () {
@@ -187,15 +189,37 @@ Object.assign(OCA.Analytics.Panorama = {
         };
     },
 
+    getClickedNavigationItem: function (evt) {
+        if (evt?.currentTarget instanceof Element && evt.currentTarget.matches('a[data-id][data-item_type="panorama"]')) {
+            return evt.currentTarget;
+        }
+
+        let target = null;
+        if (evt?.target instanceof Element) {
+            target = evt.target;
+        } else if (evt?.target?.parentElement instanceof Element) {
+            target = evt.target.parentElement;
+        }
+
+        return target?.closest?.('a[data-id][data-item_type="panorama"]') || null;
+    },
+
     handleNavigationClicked: function (evt) {
+        const navigationItem = OCA.Analytics.Panorama.getClickedNavigationItem(evt);
+        const panoramaId = navigationItem?.dataset?.id;
+        const foundItem = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(panoramaId));
+
+        if (!foundItem) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'The panorama is not available anymore'));
+            return;
+        }
+
         OCA.Analytics.Sidebar.close();
         OCA.Analytics.Visualization.hideElement('addFilterIcon');
         OCA.Analytics.Visualization.hideElement('filterVisualisation');
         OCA.Analytics.Visualization.showContentByType('loading');
 
-        const foundItem = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
         OCA.Analytics.currentPanorama = JSON.parse(JSON.stringify(foundItem));
-        //OCA.Analytics.currentPanorama = OCA.Analytics.stories.find(x => parseInt(x.id) === parseInt(evt.target.dataset.id));
         if (typeof OCA.Analytics.currentPanorama.pages === 'string') {
             OCA.Analytics.currentPanorama.pages = JSON.parse(OCA.Analytics.currentPanorama.pages);
         }
@@ -627,20 +651,24 @@ Object.assign(OCA.Analytics.Panorama = {
             });
 
             menu.addEventListener('click', function (e) {
-                const action = e.target.getAttribute('data-modal');
+                const menuTarget = e.target instanceof Element ? e.target : e.target?.parentElement;
+                const menuItem = menuTarget?.closest?.('.menu-item');
+                if (!menuItem) {
+                    return;
+                }
+
+                const action = menuItem.getAttribute('data-modal');
                 // Check if the clicked item is the close button
                 if (action === 'close') {
-                    document.getElementById('editMenuContainer').style.display = 'none';
-                    // Remove the active state from any previous flex-item
-                    OCA.Analytics.Panorama.resetEditOverlays();
-                    event.stopPropagation()
+                    OCA.Analytics.Panorama.hideEditMenu();
+                    e.stopPropagation();
                 } else {
-                    const modalId = e.target.dataset.modal;
+                    const modalId = menuItem.dataset.modal;
                     const modal = document.getElementById(modalId);
                     // show the corresponding modal
                     if (modal) {
                         modal.style.display = 'block';
-                        modal.dataset.itemId = e.target.parentElement.dataset.itemId;
+                        modal.dataset.itemId = menu.dataset.itemId;
 
                         // special handling for the text modal
                         if (modalId === 'modalText') {
@@ -683,19 +711,6 @@ Object.assign(OCA.Analytics.Panorama = {
                 });
             });
 
-            // Close the menu if the user clicks outside of it
-            document.addEventListener('click', function (e) {
-                if (!e.target.classList.contains('overlay')
-                    && !e.target.classList.contains('menu-item')
-                    && !e.target.classList.contains('close')
-                    && !e.target.classList.contains('overlayText')
-                ) {
-                    document.getElementById('editMenuContainer').style.display = 'none';
-                    // Remove the active state from any previous flex-item
-                    OCA.Analytics.Panorama.resetEditOverlays();
-                }
-            });
-
             // event listener for the text input. to be moved out later
             document.getElementById('textInputButton').addEventListener('click', (e) => {
                 let itemId = document.getElementById('modalText').dataset.itemId;
@@ -724,6 +739,36 @@ Object.assign(OCA.Analytics.Panorama = {
                 OCA.Analytics.Panorama.buildWidgetContentFileSelector();
             })
         }
+    },
+
+    hideEditMenu: function () {
+        document.getElementById('editMenuContainer').style.display = 'none';
+        OCA.Analytics.Panorama.resetEditOverlays();
+    },
+
+    handleEditMenuDocumentClick: function (evt) {
+        const editMenuContainer = document.getElementById('editMenuContainer');
+        if (!editMenuContainer || editMenuContainer.style.display === 'none') {
+            return;
+        }
+
+        let target = null;
+        if (evt?.target instanceof Element) {
+            target = evt.target;
+        } else if (evt?.target?.parentElement instanceof Element) {
+            target = evt.target.parentElement;
+        }
+
+        if (!target) {
+            OCA.Analytics.Panorama.hideEditMenu();
+            return;
+        }
+
+        if (target.closest('.overlay') || target.closest('#editMenuContainer')) {
+            return;
+        }
+
+        OCA.Analytics.Panorama.hideEditMenu();
     },
 
     buildWidgetContentReportSelector: function () {
@@ -1278,6 +1323,28 @@ Object.assign(OCA.Analytics.Panorama = {
 OCA.Analytics.Panorama.Backend = OCA.Analytics.Panorama.Backend || {};
 Object.assign(OCA.Analytics.Panorama.Backend = {
 
+    getWidgetRequestErrorMessage: function (xhr) {
+        if (xhr?.status === 404) {
+            return t('analytics', 'The report is not available anymore');
+        }
+
+        return OCA.Analytics.Report.Backend.getErrorMessage(xhr);
+    },
+
+    showWidgetRequestError: function (itemId, errorMessage) {
+        const reportTitle = document.getElementById('analyticsWidgetReport' + itemId);
+        const widget = document.getElementById('myWidget' + itemId);
+
+        if (reportTitle) {
+            reportTitle.innerText = '';
+        }
+        if (widget) {
+            widget.innerText = errorMessage;
+        }
+
+        OCA.Analytics.Notification.notification('error', errorMessage);
+    },
+
     getReportData: function (reportId, itemId) {
         let url = OC.generateUrl('apps/analytics/data/pa/' + reportId, true);
         let cacheKey = `analytics-report-${reportId}`;
@@ -1315,10 +1382,22 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 404) {
-                    document.getElementById('analyticsWidgetReport' + itemId).innerText = '';
-                    document.getElementById('myWidget' + itemId).innerText = t('analytics', 'The report is not available anymore');
+                    OCA.Analytics.Panorama.Backend.showWidgetRequestError(
+                        itemId,
+                        OCA.Analytics.Panorama.Backend.getWidgetRequestErrorMessage(xhr)
+                    );
                 } else if (xhr.status === 200) {
-                    let data = JSON.parse(xhr.responseText);
+                    let data;
+                    try {
+                        data = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        OCA.Analytics.Panorama.Backend.showWidgetRequestError(
+                            itemId,
+                            OCA.Analytics.Panorama.Backend.getWidgetRequestErrorMessage(xhr)
+                        );
+                        return;
+                    }
+
                     // derive new version from ETag
                     const newVersion = xhr.getResponseHeader('ETag') || null;
                     // data needs to be marked as cacheable
@@ -1326,7 +1405,7 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
 
                     // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
                     if (parseInt(data.error) !== 0) {
-                        OCA.Analytics.Notification.notification('error', data.error);
+                        OCA.Analytics.Panorama.Backend.showWidgetRequestError(itemId, data.error);
                         return;
                     }
 
@@ -1343,6 +1422,11 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
                     // backend confirmed no change → reuse cached data
                     let data = OCA.Analytics.Report.Backend.processReceivedData(cachedData);
                     OCA.Analytics.Panorama.setWidgetTypeReportContent(data, itemId);
+                } else {
+                    OCA.Analytics.Panorama.Backend.showWidgetRequestError(
+                        itemId,
+                        OCA.Analytics.Panorama.Backend.getWidgetRequestErrorMessage(xhr)
+                    );
                 }
             }
         };

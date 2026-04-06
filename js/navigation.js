@@ -17,12 +17,28 @@ OCA.Analytics.Panorama = {
  * @namespace OCA.Analytics.Navigation
  */
 OCA.Analytics.Navigation = {
-    quickstartValue: '',
-    quickstartId: 0,
-
     init: function (navigationItem) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getNavigationContent(navigationItem);
+    },
+
+    getShortItemType: function (itemType) {
+        if (itemType === 'dataset') {
+            return 'd';
+        }
+        if (itemType === 'panorama') {
+            return 'pa';
+        }
+        return 'r';
+    },
+
+    getNavigationTuple: function (itemType, id) {
+        const shortItemType = OCA.Analytics.Navigation.getShortItemType(itemType);
+        return [
+            OC.generateUrl('apps/analytics/' + shortItemType + '/' + id),
+            shortItemType,
+            String(id)
+        ];
     },
 
     getNavigationContent: function (navigationItem) {
@@ -1013,7 +1029,12 @@ OCA.Analytics.Navigation = {
         }
         const id = anchor.dataset.id;
         const itemType = anchor.dataset.item_type;
-        await OCA.Analytics.Navigation.renameBackend(itemType, id, newName);
+        const renameSuccessful = await OCA.Analytics.Navigation.renameBackend(itemType, id, newName);
+        if (!renameSuccessful) {
+            input.focus();
+            input.select();
+            return;
+        }
 
         anchor.dataset.name = newName;
         anchor.innerHTML = newName;
@@ -1049,11 +1070,27 @@ OCA.Analytics.Navigation = {
     renameBackend: async function (itemType, id, newName) {
         try {
             const url = OC.generateUrl('apps/analytics/' + itemType + '/' + id + '/rename');
-            await fetch(url, {
+            const response = await fetch(url, {
                 method: 'PUT',
                 headers: OCA.Analytics.headers(),
                 body: JSON.stringify({name: newName})
             });
+            const responseText = await response.text();
+            let responseData = responseText;
+            if (responseText !== '') {
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (parseError) {
+                }
+            }
+
+            if (!response.ok || (responseData !== true && responseData !== 'true' && responseData !== '1' && responseData !== 1)) {
+                throw new Error(
+                    typeof responseData === 'string' && responseData !== ''
+                        ? responseData
+                        : t('analytics', 'Request could not be processed')
+                );
+            }
 
             if (itemType === 'dataset') {
                 const ds = OCA.Analytics.datasets.find(d => parseInt(d.id) === parseInt(id));
@@ -1067,7 +1104,11 @@ OCA.Analytics.Navigation = {
                 const rep = OCA.Analytics.reports.find(r => parseInt(r.id) === parseInt(id) && r.item_type !== 'panorama');
                 if (rep) rep.name = newName;
             }
+            return true;
         } catch (e) {
+            console.error('Failed to rename navigation item', e);
+            OCA.Analytics.Notification.notification('error', e.message || t('analytics', 'Request could not be processed'));
+            return false;
         }
     },
 
@@ -1223,7 +1264,7 @@ OCA.Analytics.Navigation.Drag = {
         })
             .then(response => response.json())
             .then(() => {
-                OCA.Analytics.Navigation.init(groupId);
+                OCA.Analytics.Navigation.init(OCA.Analytics.Navigation.getNavigationTuple(itemType, groupId));
             });
     },
 }
