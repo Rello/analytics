@@ -266,13 +266,13 @@
                 <span class="icon-analytics-filterRow"></span>
             </div>
             <div style="display: table-cell;">
-                <select class="filterDialogDimension checkbox optionsInput"></select>
+                <select id="filterDialogDimension" class="filterDialogDimension checkbox optionsInput"></select>
             </div>
             <div style="display: table-cell;">
-                <select class="filterDialogOption checkbox optionsInput"></select>
+                <select id="filterDialogOption" class="filterDialogOption checkbox optionsInput"></select>
             </div>
             <div style="display: table-cell;">
-                <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off"
+                <input id="filterDialogValue" type="text" class="filterDialogValue optionsInputValue" autocomplete="off"
                        data-dropDownListIndex="0">
             </div>
         </div>

@@ -4,9 +4,10 @@ const {
   clickFirst,
   ensureAnalyticsLoaded,
   waitForIdle,
+  waitForSplashScreenHidden,
   attachPageIssueListeners,
   createCapture,
-} = require('./playwright/common');
+} = require('./common');
 
 const config = buildScenarioConfig('10');
 
@@ -21,7 +22,6 @@ const config = buildScenarioConfig('10');
 
   try {
     await ensureAnalyticsLoaded(page, config);
-    await capture('01_loaded');
     visited.push(`loaded:${page.url()}`);
 
     const datasets = await clickFirst(
@@ -31,8 +31,6 @@ const config = buildScenarioConfig('10');
       { throwOnMissing: false }
     );
     visited.push(datasets.clicked ? `datasets via ${datasets.selector}` : 'datasets not found');
-    await capture('02_datasets');
-
     const reports = await clickFirst(
       page,
       ['#navigationReports a', '#app-navigation a[href*="report"]', '#navigationReports'],
@@ -40,8 +38,6 @@ const config = buildScenarioConfig('10');
       { throwOnMissing: false }
     );
     visited.push(reports.clicked ? `reports via ${reports.selector}` : 'reports not found');
-    await capture('03_reports');
-
     const panoramas = await clickFirst(
       page,
       ['#navigationPanoramas a', '#app-navigation a[href*="panorama"]', '#navigationPanoramas'],
@@ -49,8 +45,6 @@ const config = buildScenarioConfig('10');
       { throwOnMissing: false }
     );
     visited.push(panoramas.clicked ? `panoramas via ${panoramas.selector}` : 'panoramas not found');
-    await capture('04_panoramas');
-
     const newReport = await clickFirst(
       page,
       ['#newReportButton', 'a#newReportButton', 'a:has-text("New report")', 'a:has-text("New")'],
@@ -59,7 +53,6 @@ const config = buildScenarioConfig('10');
     );
     visited.push(newReport.clicked ? `new-report-button via ${newReport.selector}` : 'new-report-button not found');
     await page.waitForTimeout(800);
-    await capture('05_new_report_dialog_or_page');
 
     const linkHrefs = await page
       .locator('#app-navigation a[href*="/apps/analytics"]')
@@ -82,7 +75,6 @@ const config = buildScenarioConfig('10');
       await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
       await waitForIdle(page, 10000);
       visited.push(`nav:${href}`);
-      await capture(`06_nav_${index}`);
     }
 
     const bodyText = (await page.locator('body').innerText().catch(() => '')).toLowerCase();
@@ -98,6 +90,9 @@ const config = buildScenarioConfig('10');
       status: !obviousError && issues.length === 0 ? 'PASS' : 'WARN',
     };
 
+    await waitForSplashScreenHidden(page, 12000);
+    await capture('state');
+
     console.log(JSON.stringify(result, null, 2));
     if (result.status !== 'PASS') {
       process.exitCode = 1;
@@ -111,7 +106,7 @@ const config = buildScenarioConfig('10');
       issues: issues.concat([`fatal:${error.message}`]),
       status: 'FAIL',
     };
-    await capture('99_failure').catch(() => {});
+    await capture('failure_state').catch(() => {});
     console.log(JSON.stringify(result, null, 2));
     process.exitCode = 1;
   } finally {

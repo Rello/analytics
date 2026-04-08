@@ -111,11 +111,10 @@ class ShareMapper
 	 * @param $type
 	 * @param $uid_owner
 	 * @param $token
-	 * @param null $parent
 	 * @return bool
 	 * @throws Exception
 	 */
-    public function createShare($item_type, $item_source, $type, $uid_owner, $token, $parent = null)
+    public function createShare($item_type, $item_source, $type, $uid_owner, $token)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
@@ -144,7 +143,6 @@ class ShareMapper
                     'uid_owner' => $sql->createNamedParameter($uid_owner),
                     'uid_initiator' => $sql->createNamedParameter($this->userSession->getUser()->getUID()),
                     'token' => $sql->createNamedParameter($token),
-                    'parent' => $sql->createNamedParameter($parent),
 					'permissions' => $sql->createNamedParameter(1),
 					'created_at' => $sql->createNamedParameter($currentDateTime),
                 ]);

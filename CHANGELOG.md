@@ -4,7 +4,7 @@
 ### Added
 - visual UI for creating calculated columns
 - `not contains` report filter operator with wildcard support for excluding matches
-- Expand Playwright UI lifecycle coverage
+- migration of Seleniu to Playwright UI lifecycle coverage
 
 ### Changed
 - new layouts for chart and table option dialogs

@@ -201,7 +201,9 @@ OCA.Analytics.Filter = {
         const addButton = container.getElementById('addFilterRowButton');
 
         const initRow = function (row, dimension = '', option = '', value = '') {
+            const rowIndex = Array.from(table.querySelectorAll('.filterRow')).indexOf(row);
             const dimSelect = row.querySelector('.filterDialogDimension');
+            dimSelect.id = rowIndex === 0 ? 'filterDialogDimension' : `filterDialogDimension${rowIndex}`;
             dimSelect.innerHTML = '';
             Object.keys(availableDimensions).forEach(key => {
                 dimSelect.options.add(new Option(availableDimensions[key], key));
@@ -209,25 +211,12 @@ OCA.Analytics.Filter = {
             if (dimension) {
                 dimSelect.value = dimension;
             }
-            dimSelect.dataset.prevValue = dimSelect.value;
             dimSelect.addEventListener('change', function (evt) {
-                // prevent duplicate dimensions
-                const selected = evt.target.value;
-                let count = 0;
-                container.querySelectorAll('.filterDialogDimension').forEach(sel => {
-                    if (sel.value === selected) {
-                        count++;
-                    }
-                });
-                if (count > 1) {
-                    evt.target.value = evt.target.dataset.prevValue;
-                    return;
-                }
-                evt.target.dataset.prevValue = selected;
                 row.querySelector('.filterDialogValue').dataset.dropdownlistindex = evt.target.selectedIndex;
             });
 
             const optSelect = row.querySelector('.filterDialogOption');
+            optSelect.id = rowIndex === 0 ? 'filterDialogOption' : `filterDialogOption${rowIndex}`;
             optSelect.innerHTML = '';
             Object.keys(optionTexts).forEach(key => {
                 optSelect.options.add(new Option(optionTexts[key], key));
@@ -237,6 +226,7 @@ OCA.Analytics.Filter = {
             }
 
             const valueInput = row.querySelector('.filterDialogValue');
+            valueInput.id = rowIndex === 0 ? 'filterDialogValue' : `filterDialogValue${rowIndex}`;
             valueInput.value = value;
             valueInput.addEventListener('click', OCA.Analytics.Report.showDropDownList);
             valueInput.addEventListener('keydown', function (event) {

@@ -798,7 +798,10 @@ OCA.Analytics.Navigation = {
         if (handler) {
             handler(datasetId, isFavorite);
         }
-        document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');
+        const openMenu = document.querySelector('.app-navigation-entry-menu.open');
+        if (openMenu) {
+            openMenu.classList.remove('open');
+        }
     },
 
 

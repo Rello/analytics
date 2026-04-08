@@ -692,9 +692,13 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('sidebarDatasetStatusRecords').innerText = parseInt(data['data']['count']).toLocaleString();
-
                 const statusContainer = document.getElementById('sidebarDatasetStatusReports');
+                const recordCount = document.getElementById('sidebarDatasetStatusRecords');
+                if (!statusContainer || !recordCount) {
+                    return;
+                }
+
+                recordCount.innerText = parseInt(data['data']['count']).toLocaleString();
                 statusContainer.innerHTML = '';
 
                 if (data['reports'].length === 0) {

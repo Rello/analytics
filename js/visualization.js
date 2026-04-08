@@ -84,8 +84,33 @@ OCA.Analytics.Visualization = {
         'LE': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x <= y),
         '>=': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x >= y),
         'GE': (a, b) => OCA.Analytics.Visualization.compareValues(a, b, (x, y) => x >= y),
-        'LIKE': (a, b) => String(a).toLowerCase().includes(String(b).toLowerCase()),
-        'IN': (a, b) => String(b).split(',').map(v => v.trim()).includes(String(a)),
+        'LIKE': (a, b) => OCA.Analytics.Visualization.normalizeThresholdString(a).toLowerCase()
+            .includes(OCA.Analytics.Visualization.normalizeThresholdString(b).toLowerCase()),
+        'IN': (a, b) => String(b)
+            .split(',')
+            .map(v => OCA.Analytics.Visualization.normalizeThresholdString(v).toLowerCase())
+            .includes(OCA.Analytics.Visualization.normalizeThresholdString(a).toLowerCase()),
+    },
+
+    normalizeThresholdString: function (value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        let normalizedValue = String(value).trim();
+        const quotePairs = [['"', '"'], ['\'', '\'']];
+
+        for (const [startQuote, endQuote] of quotePairs) {
+            if (normalizedValue.length >= 2
+                && normalizedValue.startsWith(startQuote)
+                && normalizedValue.endsWith(endQuote)
+            ) {
+                normalizedValue = normalizedValue.slice(1, -1).trim();
+                break;
+            }
+        }
+
+        return normalizedValue;
     },
 
     compareValues: function (a, b, fn) {
@@ -123,8 +148,10 @@ OCA.Analytics.Visualization = {
             return str.replace(/\s/g, '');
         }
 
-        const normA = normalizeNumberString(String(a));
-        const normB = normalizeNumberString(String(b));
+        const normalizedA = OCA.Analytics.Visualization.normalizeThresholdString(a);
+        const normalizedB = OCA.Analytics.Visualization.normalizeThresholdString(b);
+        const normA = normalizeNumberString(normalizedA);
+        const normB = normalizeNumberString(normalizedB);
         const numA = parseFloat(normA);
         const numB = parseFloat(normB);
 
@@ -137,7 +164,7 @@ OCA.Analytics.Visualization = {
             const numB = parseFloat(normB);
             return fn(numA, numB);
         }
-        return fn(String(a).toLowerCase(), String(b).toLowerCase());
+        return fn(normalizedA.toLowerCase(), normalizedB.toLowerCase());
     },
 
     dataTableInitialized: {},
@@ -489,12 +516,17 @@ OCA.Analytics.Visualization = {
         thresholds = thresholds.filter(p => p.option !== 'new');
 
         for (let threshold of thresholds) {
-            const dimIndex = parseInt(threshold['dimension'] ?? threshold['dimension2']);
-            if (Number.isNaN(dimIndex)) {
+            const sourceDimIndex = parseInt(threshold['dimension'] ?? threshold['dimension2']);
+            if (Number.isNaN(sourceDimIndex)) {
                 continue;
             }
 
-            const cellValue = data[dimIndex];
+            const displayDimIndex = OCA.Analytics.Visualization.resolveThresholdDisplayColumnIndex(sourceDimIndex, tableOptions);
+            if (displayDimIndex === -1) {
+                continue;
+            }
+
+            const cellValue = data[displayDimIndex];
             let option = String(threshold['option']).toUpperCase();
 
             // allow old option values
@@ -531,7 +563,7 @@ OCA.Analytics.Visualization = {
                     } else if (severity === 4) { // green
                         color = OCA.Analytics.Visualization.thresholdColorNumberGreen;
                     }
-                    const cell = row.childNodes.item(dimIndex);
+                    const cell = row.children.item(displayDimIndex);
                     if (cell) {
                         cell.style.color = color;
                     }
@@ -551,6 +583,36 @@ OCA.Analytics.Visualization = {
                 cell.style.padding = '0'; // Remove the padding
             });
         }
+    },
+
+    /**
+     * Map a threshold dimension from report-source order to the
+     * currently displayed table column index.
+     *
+     * @param {number} sourceDimIndex - Original report column index
+     * @param {Object} tableOptions - Current table options
+     * @returns {number} Display column index or -1 when not rendered
+     */
+    resolveThresholdDisplayColumnIndex: function (sourceDimIndex, tableOptions) {
+        const layoutConfig = tableOptions?.layout;
+
+        if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
+            return sourceDimIndex;
+        }
+
+        if (Array.isArray(layoutConfig.rows)
+            && layoutConfig.rows.length
+            && (!Array.isArray(layoutConfig.columns) || layoutConfig.columns.length === 0)
+            && (!Array.isArray(layoutConfig.measures) || layoutConfig.measures.length === 0)
+        ) {
+            return layoutConfig.rows.indexOf(sourceDimIndex);
+        }
+
+        if (Array.isArray(layoutConfig.rows) && layoutConfig.rows.length === 1 && layoutConfig.rows[0] === sourceDimIndex) {
+            return 0;
+        }
+
+        return -1;
     },
 
     /**
