@@ -27,7 +27,7 @@ jobs:
       - name: Set up local Nextcloud server
         uses: SMillerDev/nextcloud-actions/setup-nextcloud@fae87e29aa7cdf1ea0b8033c67f60e75b10be2cd
         with:
-          version: stable
+          version: stable29
           database-type: sqlite
           cron: false
 
