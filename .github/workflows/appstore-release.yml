@@ -25,14 +25,14 @@ jobs:
           coverage: none
 
       - name: Set up local Nextcloud server
-        uses: SMillerDev/nextcloud-actions/setup-nextcloud@master
+        uses: SMillerDev/setup-nextcloud@master
         with:
           version: stable
           database-type: sqlite
           cron: false
 
       - name: Install app into local Nextcloud server
-        uses: SMillerDev/nextcloud-actions/setup-nextcloud-app@master
+        uses: SMillerDev/setup-nextcloud-app@master
         with:
           app: ${{ env.APP_NAME }}
           check-code: false
