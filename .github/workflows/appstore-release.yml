@@ -55,9 +55,19 @@ jobs:
 
           mkdir -p "$signed_dir"
           rsync -a --delete \
+            --exclude '.DS_Store' \
+            --exclude '.eslintrc.js' \
+            --exclude '.gitignore' \
+            --exclude '.l10nignore' \
+            --exclude '.phpunit.result.cache' \
             --exclude '.git' \
-            --exclude 'build' \
+            --exclude '.tx' \
+            --exclude '.tx' \
+            --exclude 'phpunit.xml' \
             --exclude '.github' \
+            --exclude 'sample_data' \
+            --exclude 'screenshots' \
+            --exclude 'tests' \
             --exclude 'tests/ui-artifacts' \
             ./ "$signed_dir/"
 
