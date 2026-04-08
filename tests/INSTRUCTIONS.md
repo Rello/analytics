@@ -4,7 +4,6 @@ This project runs tests in containers for reproducibility.
 
 ## Prerequisites
 - Docker daemon running locally
-- From repository root: `/Users/Rello/Downloads/docker/apps/analytics`
 
 ## Unit Tests (PHPUnit)
 - Run full suite:
