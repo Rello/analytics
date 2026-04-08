@@ -1152,6 +1152,14 @@ OCA.Analytics.Sidebar.Report = {
                 let dataOptions = document.getElementById('sidebarReportDataOptions').value;
 
                 if (OCA.Analytics?.currentReportData?.options) {
+                    OCA.Analytics.currentReportData.options.name = document.getElementById('sidebarReportName').value;
+                    OCA.Analytics.currentReportData.options.subheader = document.getElementById('sidebarReportSubheader').value;
+                    OCA.Analytics.currentReportData.options.parent = document.getElementById('sidebarReportParent').value;
+                    OCA.Analytics.currentReportData.options.visualization = document.getElementById('sidebarReportVisualization').value;
+                    OCA.Analytics.currentReportData.options.chart = document.getElementById('sidebarReportChart').value;
+                    OCA.Analytics.currentReportData.options.dimension1 = document.getElementById('sidebarReportDimension1').value;
+                    OCA.Analytics.currentReportData.options.dimension2 = document.getElementById('sidebarReportDimension2').value;
+                    OCA.Analytics.currentReportData.options.value = document.getElementById('sidebarReportValue').value;
                     OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObject;
 
                     try {
@@ -1164,7 +1172,9 @@ OCA.Analytics.Sidebar.Report = {
 
                 if (OCA.Analytics.Sidebar.Report.metadataChanged === true) {
                     OCA.Analytics.Sidebar.Report.metadataChanged = false;
-                    OCA.Analytics.Navigation.init(reportId);
+                    OCA.Analytics.Report.resetContentArea();
+                    OCA.Analytics.Report.buildReport();
+                    OCA.Analytics.Navigation.init(OCA.Analytics.Navigation.getNavigationTuple('report', reportId));
                     OCA.Analytics.Report.Backend.getDatasetDefinitions();
                 } else {
                     if (!OCA.Analytics.isDataset) {

@@ -12,6 +12,7 @@
 - code hardening
 
 ### Fixed
+- Can't change report title after copying #571
 - Restore the collapsed sidebar section right-arrow icon by shipping the missing asset again
 - Render the filter dialog Wiki help text as a clickable link instead of showing raw placeholders
 - Run first-start demo imports sequentially to avoid false import-failed errors after creating the sample reports
