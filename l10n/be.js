@@ -35,6 +35,7 @@ OC.L10N.register(
     "Delete folder" : "Выдаліць папку",
     "Save" : "Захаваць",
     "Discard" : "Адхіліць",
+    "The panorama is not available anymore" : "Панарама больш недаступна",
     "All data will be deleted!" : "Усе даныя будуць выдалены!",
     "Download" : "Спампаваць",
     "Incorrect chart options" : "Няправільныя параметры дыяграмы",
