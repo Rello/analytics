@@ -6,11 +6,19 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-    $('#password').on('keyup input change', function () {
-        if ($('#password').val().length > 0) {
-            $('#password-submit').prop('disabled', false);
-        } else {
-            $('#password-submit').prop('disabled', true);
-        }
-    });
+    const passwordField = document.getElementById('password');
+    const submitButton = document.getElementById('password-submit');
+
+    if (!passwordField || !submitButton) {
+        return;
+    }
+
+    const updateSubmitState = function () {
+        submitButton.disabled = passwordField.value.length === 0;
+    };
+
+    passwordField.addEventListener('keyup', updateSubmitState);
+    passwordField.addEventListener('input', updateSubmitState);
+    passwordField.addEventListener('change', updateSubmitState);
+    updateSubmitState();
 });

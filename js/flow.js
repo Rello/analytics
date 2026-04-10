@@ -10,23 +10,20 @@
 
     var Component = {
         name: 'WorkflowScript',
-        items: [],
+        data: function () {
+            return {
+                items: []
+            };
+        },
         render: function (createElement) {
             let self = this;
             let items = [];
-            let selected;
-            for (let navigation of Component.items) {
+            for (let navigation of self.items) {
                 if (parseInt(navigation.type) === 2) {
-                    if (parseInt(self.value) === navigation.id) {
-                        selected = 'selected';
-                    } else {
-                        selected = '';
-                    }
                     items.push(createElement('option', {
                         domProps: {
                             value: navigation.id,
-                            innerText: navigation.name,
-                            selected
+                            innerText: navigation.name
                         }
                     }))
                 }
@@ -73,9 +70,17 @@
                     method: 'GET',
                     headers: headers
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Dataset request failed');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        Component.items = data;
+                        this.items = Array.isArray(data) ? data : [];
+                    })
+                    .catch(() => {
+                        this.items = [];
                     });
             },
         },

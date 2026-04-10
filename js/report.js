@@ -316,7 +316,6 @@ Object.assign(OCA.Analytics.Report, {
         document.getElementById('optionsMenuTopN').disabled = false;
         document.getElementById('optionsMenuTimeAggregation').disabled = false;
         document.getElementById('optionsMenuDownload').disabled = false;
-        document.getElementById('optionsMenuAnalysis').disabled = false;
         document.getElementById('optionsMenuTranslate').disabled = false;
     },
 

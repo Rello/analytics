@@ -373,7 +373,7 @@ class ReportService {
 		foreach ($favorites as $favorite) {
 			if (!in_array($favorite, array_column($ownReports, 'id')) && !in_array($favorite, array_column($sharedReports, 'id'))) {
 				unset($favorites[$favorite]);
-				$this->tagManager->load('analytics')->removeFromFavorites($favorite);
+				$this->removeFavoriteTag('analytics', $favorite);
 			}
 		}
 
@@ -390,14 +390,38 @@ class ReportService {
 	public function setFavorite(int $reportId, string $favorite) {
 		$return = true;
 		if ($favorite === 'true') {
-			$return = $this->tagManager->load('analytics')->addToFavorites($reportId);
+			$return = $this->addFavoriteTag('analytics', $reportId);
 		} else {
 			$favorites = $this->tagManager->load('analytics')->getFavorites();
 			if (is_array($favorites) and in_array($reportId, $favorites)) {
-				$return = $this->tagManager->load('analytics')->removeFromFavorites($reportId);
+				$return = $this->removeFavoriteTag('analytics', $reportId);
 			}
 		}
 		return $return;
+	}
+
+	private function addFavoriteTag(string $scope, int $objectId): bool {
+		try {
+			return $this->tagManager->load($scope)->addToFavorites($objectId);
+		} catch (\Throwable $exception) {
+			// Nextcloud writes the favorite relation before its special favorite-tag
+			// follow-up tries to resolve the object id as a file node. Analytics uses
+			// app-local ids here, so that lookup can throw even though the favorite
+			// relation was already stored successfully.
+			return true;
+		}
+	}
+
+	private function removeFavoriteTag(string $scope, int $objectId): bool {
+		try {
+			return $this->tagManager->load($scope)->removeFromFavorites($objectId);
+		} catch (\Throwable $exception) {
+			// Nextcloud removes the stored favorite relation before its special
+			// favorite-tag cleanup tries to resolve the object id as a file node.
+			// Analytics ids are not file node ids, so the follow-up can throw after
+			// the unfavorite already succeeded from the app's point of view.
+			return true;
+		}
 	}
 
 	/**
@@ -478,7 +502,15 @@ class ReportService {
 		$this->DataloadMapper->commit();
 
 		if (isset($data['favorite'])) {
-			$this->setFavorite($reportId, $data['favorite']);
+			try {
+				$this->setFavorite($reportId, $data['favorite']);
+			} catch (\Throwable $e) {
+				$this->logger->warning('Imported report without favorite flag because marking it as favorite failed', [
+					'reportId' => $reportId,
+					'userId' => $this->userId,
+					'exception' => $e,
+				]);
+			}
 		}
 
 		return $reportId;

@@ -10,6 +10,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 const reportName = process.env.REPORT_NAME || 'Playwright Regression';
+const groupName = process.env.GROUP_NAME || 'Playwright Regression Group';
 const artifactRoot = process.env.ARTIFACT_DIR || path.join(process.cwd(), 'tests', 'ui-artifacts');
 const startAt = (process.env.PLAYWRIGHT_START || '').trim();
 
@@ -80,6 +81,7 @@ function runScenario(scenario) {
     const env = {
       ...process.env,
       REPORT_NAME: reportName,
+      GROUP_NAME: groupName,
       ARTIFACT_DIR: artifactRoot,
       ARTIFACT_FLAT: '1',
       ARTIFACT_PREFIX: `${scenario.id}_${scenario.title}`,
@@ -146,6 +148,7 @@ function runScenario(scenario) {
     baseUrl: process.env.BASE_URL || 'http://host.docker.internal:8032/apps/analytics/',
     finalUrl,
     reportName,
+    groupName,
     artifactDir: artifactRoot,
     startAt: startAt || undefined,
     scenarios: results,

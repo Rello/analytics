@@ -22,25 +22,20 @@ if (!OCA.Analytics) {
 OCA.Analytics.Viewer = {
 
     registerFileActions: function () {
-        let mime_array = ['text/csv'];
-        let icon_url = OC.imagePath('analytics', 'app-dark');
-
-        for (let i = 0; i < mime_array.length; i++) {
-            let mime = mime_array[i];
-            OCA.Files.fileActions.registerAction({
-                name: 'analytics',
-                displayName: t('analytics', 'Show in Analytics'),
-                mime: mime,
-                permissions: OC.PERMISSION_READ,
-                icon: icon_url,
-                actionHandler: OCA.Analytics.Viewer.importFile
-            });
-        }
+        OCA.Files.fileActions.registerAction({
+            name: 'analytics',
+            displayName: t('analytics', 'Show in Analytics'),
+            mime: 'text/csv',
+            permissions: OC.PERMISSION_READ,
+            icon: OC.imagePath('analytics', 'app-dark'),
+            actionHandler: OCA.Analytics.Viewer.importFile
+        });
     },
 
     importFile: function (file, data) {
         file = encodeURIComponent(file);
-        let dirLoad = data.dir.substr(1);
+        const directory = typeof data?.dir === 'string' ? data.dir : '';
+        let dirLoad = directory.startsWith('/') ? directory.slice(1) : directory;
         if (dirLoad !== '') {
             dirLoad = dirLoad + '/';
         }
@@ -49,7 +44,10 @@ OCA.Analytics.Viewer = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (typeof OCA !== 'undefined' && typeof OCA.Files !== 'undefined' && typeof OCA.Files.fileActions !== 'undefined' && $('#header').hasClass('share-file') === false) {
+    const header = document.getElementById('header');
+    const isShareFileView = header ? header.classList.contains('share-file') : false;
+
+    if (typeof OCA !== 'undefined' && typeof OCA.Files !== 'undefined' && typeof OCA.Files.fileActions !== 'undefined' && isShareFileView === false) {
         OCA.Analytics.Viewer.registerFileActions();
     }
     return true;

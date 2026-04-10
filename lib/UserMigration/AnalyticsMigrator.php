@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace OCA\Analytics\UserMigration;
 
 use OCP\DB\Exception;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IUser;
@@ -145,7 +146,7 @@ class AnalyticsMigrator implements IMigrator {
 		$sql->from($table)
 			->select('*')
 			->where($sql->expr()->in($idColumn, $sql->createParameter('ids')))
-			->setParameter('ids', $ids);
+			->setParameter('ids', $ids, IQueryBuilder::PARAM_INT_ARRAY);
 
 		$statement = $sql->executeQuery();
 		$result = $statement->fetchAll();
@@ -315,7 +316,7 @@ class AnalyticsMigrator implements IMigrator {
 			$this->insertAndReturnId('analytics_threshold', [
 				'user_id' => $uid,
 				'report' => $newReport,
-				'dimension' => $row['dimension'] ?? '',
+				'dimension' => $this->normalizeNullableInt($row['dimension'] ?? null),
 				'target' => $row['target'] ?? 0,
 				'option' => $row['option'] ?? '',
 				'severity' => isset($row['severity']) ? (int)$row['severity'] : 0,
@@ -323,6 +324,17 @@ class AnalyticsMigrator implements IMigrator {
 				'sequence' => isset($row['sequence']) ? (int)$row['sequence'] : 1,
 			]);
 		}
+	}
+
+	/**
+	 * Keep nullable integer fields nullable during import instead of coercing them to empty strings.
+	 */
+	private function normalizeNullableInt(mixed $value): ?int {
+		if ($value === null || $value === '') {
+			return null;
+		}
+
+		return (int)$value;
 	}
 
 	/**

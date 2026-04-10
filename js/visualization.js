@@ -152,8 +152,6 @@ OCA.Analytics.Visualization = {
         const normalizedB = OCA.Analytics.Visualization.normalizeThresholdString(b);
         const normA = normalizeNumberString(normalizedA);
         const normB = normalizeNumberString(normalizedB);
-        const numA = parseFloat(normA);
-        const numB = parseFloat(normB);
 
         const numericRegex = /^-?\d+(?:\.\d+)?$/;
         const isNumA = numericRegex.test(normA);
@@ -168,6 +166,43 @@ OCA.Analytics.Visualization = {
     },
 
     dataTableInitialized: {},
+
+    getCalculatedColumns: function (tableOptions) {
+        if (!tableOptions || typeof tableOptions !== 'object') {
+            return [];
+        }
+
+        const rawCalculatedColumns = typeof tableOptions.calculatedColumns === 'string'
+            ? tableOptions.calculatedColumns.trim()
+            : '';
+
+        if (rawCalculatedColumns === '') {
+            tableOptions._analyticsCalculatedColumnsRaw = '';
+            tableOptions._analyticsCalculatedColumnsParsed = [];
+            return [];
+        }
+
+        if (tableOptions._analyticsCalculatedColumnsRaw === rawCalculatedColumns
+            && Array.isArray(tableOptions._analyticsCalculatedColumnsParsed)
+        ) {
+            return tableOptions._analyticsCalculatedColumnsParsed;
+        }
+
+        let parsedCalculatedColumns = [];
+        try {
+            const normalizedCalculatedColumns = rawCalculatedColumns.charAt(0) === '['
+                ? rawCalculatedColumns
+                : '[' + rawCalculatedColumns + ']';
+            const parsedValue = JSON.parse(normalizedCalculatedColumns);
+            parsedCalculatedColumns = Array.isArray(parsedValue) ? parsedValue : [];
+        } catch (e) {
+            parsedCalculatedColumns = [];
+        }
+
+        tableOptions._analyticsCalculatedColumnsRaw = rawCalculatedColumns;
+        tableOptions._analyticsCalculatedColumnsParsed = parsedCalculatedColumns;
+        return parsedCalculatedColumns;
+    },
 
     // *************
     // *** table ***
@@ -436,7 +471,7 @@ OCA.Analytics.Visualization = {
      */
     dataTableCalculatedColumns: function (data, columns, tableOptions) {
         if (!Array.isArray(data) || data.length === 0) return data;
-        let userCalculations = tableOptions.calculatedColumns ? JSON.parse('[' + tableOptions.calculatedColumns + ']') : [];
+        const userCalculations = this.getCalculatedColumns(tableOptions);
         userCalculations.forEach((calc, calcIndex) => {
             switch (calc.operation) {
                 case "substract":
@@ -637,7 +672,8 @@ OCA.Analytics.Visualization = {
             let total;
 
             // Check if this column is a percentage calculation
-            const calcColumn = tableOptions.calculatedColumns && JSON.parse('[' + tableOptions.calculatedColumns + ']').find(calc => calc.title === api.column(colIdx).header().textContent);
+            const calcColumn = OCA.Analytics.Visualization.getCalculatedColumns(tableOptions)
+                .find(calc => calc.title === api.column(colIdx).header().textContent);
 
             if (calcColumn && calcColumn.operation === "percentage") {
                 // Access the data for the numerator and denominator columns

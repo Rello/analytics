@@ -8,6 +8,7 @@
 (function() {
     'use strict';
 
+    let observer = null;
     const DEFAULT_SPLASH_DURATIONS = Object.freeze({
         draw: 500,
         reveal: 800,
@@ -67,6 +68,11 @@
                 splash.setAttribute('data-splash-ready', '1');
             }
         });
+
+        if (observer !== null && document.querySelector('[data-splash]:not([data-splash-ready])') === null) {
+            observer.disconnect();
+            observer = null;
+        }
     }
 
     if (document.readyState !== 'loading') {
@@ -74,7 +80,7 @@
     }
     document.addEventListener('DOMContentLoaded', initAvailableSplashes);
 
-    const observer = new MutationObserver(() => {
+    observer = new MutationObserver(() => {
         initAvailableSplashes();
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });

@@ -275,14 +275,19 @@ OCA.Analytics.Notification = {
         leadingAction: null,
     },
 
+    closeExistingDialog: function () {
+        if (document.getElementById('analyticsDialogContainer') || document.getElementById('analyticsDialogOverlay')) {
+            OCA.Analytics.Notification.dialogClose();
+        }
+    },
+
     info: function (header, text, guidance) {
+        OCA.Analytics.Notification.closeExistingDialog();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
             + '<div id="analyticsDialogContainer" class="analyticsDialog">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
-            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
-            + header
-            + '</span></div>'
+            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;"></span></div>'
             + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
             + '<div id="analyticsDialogContent">'
             + '</div>'
@@ -290,6 +295,7 @@ OCA.Analytics.Notification = {
             + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
             + '</div></div>'
         );
+        document.getElementById('analyticsDialogHeader').textContent = header;
         document.getElementById('analyticsDialogGuidance').innerHTML = guidance;
         document.getElementById('analyticsDialogContent').innerHTML = text;
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
@@ -297,13 +303,12 @@ OCA.Analytics.Notification = {
     },
 
     confirm: function (header, text, callback) {
+        OCA.Analytics.Notification.closeExistingDialog();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
             + '<div id="analyticsDialogContainer" class="analyticsDialog">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
-            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
-            + header
-            + '</span></div>'
+            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;"></span></div>'
             + '<div id="analyticsDialogContent">'
             + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
             + '</div>'
@@ -312,6 +317,7 @@ OCA.Analytics.Notification = {
             + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
             + '</div></div>'
         );
+        document.getElementById('analyticsDialogHeader').textContent = header;
         document.getElementById('analyticsDialogContent').innerHTML = text;
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
@@ -344,6 +350,7 @@ OCA.Analytics.Notification = {
     htmlDialogInitiate: function (header, callback, options = {}) {
         const dialogOptions = OCA.Analytics.Notification.normalizeDialogOptions(options);
 
+        OCA.Analytics.Notification.closeExistingDialog();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
             + '<div id="analyticsDialogContainer" class="analyticsDialog'
@@ -351,9 +358,7 @@ OCA.Analytics.Notification = {
             + '">'
             + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
             + '<div class="analyticsDialogHeaderWrap">'
-            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;">'
-            + header
-            + '</span></div>'
+            + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;"></span></div>'
             + '<span id="analyticsDialogGuidance" class="userGuidance analyticsDialogGuidance"></span>'
             + '</div>'
             + '<div id="analyticsDialogContent">'
@@ -376,6 +381,7 @@ OCA.Analytics.Notification = {
 
         const dialogContainer = document.getElementById('analyticsDialogContainer');
         dialogContainer._analyticsDialogOptions = dialogOptions;
+        document.getElementById('analyticsDialogHeader').textContent = header;
 
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);

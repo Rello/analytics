@@ -45,21 +45,13 @@ Object.assign(OCA.Analytics.ChartOptions, {
         }
     },
 
-    parseAndNormalize: function (raw) {
-        let chartOptions = this.safeParse(raw, {});
-        chartOptions = this._isPlainObject(chartOptions) ? this._clone(chartOptions) : {};
-        chartOptions = this._normalizeLegacyAxes(chartOptions);
-
-        const guiState = this.getGuiState(chartOptions);
-        delete chartOptions.analyticsModel;
-        chartOptions = this.setGuiState(chartOptions, guiState);
-
-        return chartOptions;
+    _normalizeParsedOptions: function (value) {
+        const parsed = this.safeParse(value, {});
+        const options = this._isPlainObject(parsed) ? this._clone(parsed) : {};
+        return this._normalizeLegacyAxes(options);
     },
 
-    getGuiState: function (chartOptions) {
-        const parsed = this.safeParse(chartOptions, {});
-        const options = this._isPlainObject(parsed) ? parsed : {};
+    _getGuiStateFromOptions: function (options) {
         const gui = options[this.GUI_NAMESPACE];
 
         const state = this._isPlainObject(gui) ? this._clone(gui) : {};
@@ -70,22 +62,37 @@ Object.assign(OCA.Analytics.ChartOptions, {
         return this._ensureGuiState(state);
     },
 
-    setGuiState: function (chartOptions, guiState) {
-        const parsed = this.safeParse(chartOptions, {});
-        const options = this._isPlainObject(parsed) ? this._clone(parsed) : {};
+    _setGuiStateOnOptions: function (options, guiState) {
+        const normalizedOptions = this._isPlainObject(options) ? this._clone(options) : {};
         const state = this._ensureGuiState(guiState);
 
-        options[this.GUI_NAMESPACE] = state;
-        delete options.analyticsModel;
+        normalizedOptions[this.GUI_NAMESPACE] = state;
+        delete normalizedOptions.analyticsModel;
 
-        return options;
+        return normalizedOptions;
+    },
+
+    parseAndNormalize: function (raw) {
+        const chartOptions = this._normalizeParsedOptions(raw);
+        const guiState = this._getGuiStateFromOptions(chartOptions);
+        return this._setGuiStateOnOptions(chartOptions, guiState);
+    },
+
+    getGuiState: function (chartOptions) {
+        const options = this._normalizeParsedOptions(chartOptions);
+        return this._getGuiStateFromOptions(options);
+    },
+
+    setGuiState: function (chartOptions, guiState) {
+        const options = this._normalizeParsedOptions(chartOptions);
+        return this._setGuiStateOnOptions(options, guiState);
     },
 
     compose: function (defaultOptions, chartOptions, dataOptions) {
         const defaults = this._isPlainObject(defaultOptions) ? this._clone(defaultOptions) : {};
         const normalizedChartOptions = this.parseAndNormalize(chartOptions);
         const normalizedDataOptions = this._normalizeDataOptions(dataOptions);
-        const guiState = this.getGuiState(normalizedChartOptions);
+        const guiState = this._getGuiStateFromOptions(normalizedChartOptions);
 
         let customOptions = this._removeGuiNamespace(normalizedChartOptions);
         customOptions = this._stripManagedPaths(customOptions);

@@ -17,8 +17,8 @@ const {
 } = require('./common');
 
 const config = buildScenarioConfig('92');
-const reportName = buildUniqueName('Playwright Group Delete Seed', process.env.REPORT_NAME);
-const groupName = buildUniqueName('Playwright Group Delete', process.env.GROUP_NAME);
+const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_NAME);
+const groupName = buildUniqueName('Playwright Regression Group', process.env.GROUP_NAME);
 
 (async () => {
   const browser = await chromium.launch({ headless: config.headless });

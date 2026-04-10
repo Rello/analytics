@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.3.1 - 2026-04-10
+### Fixed
+- user migration ignored data loads
+- favorites error
+- test case fixes
+- code hardening
+
 ## 6.3.0 - 2026-04-08
 ### Added
 - visual UI for creating calculated columns

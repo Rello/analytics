@@ -222,7 +222,7 @@ class PanoramaService {
 		foreach ($favorites as $favorite) {
 			if (!in_array($favorite, array_column($ownReports, 'id')) && !in_array($favorite, array_column($sharedReports, 'id'))) {
 				unset($favorites[$favorite]);
-				$this->tagManager->load('analyticsPanorama')->removeFromFavorites($favorite);
+				$this->removeFavoriteTag('analyticsPanorama', $favorite);
 			}
 		}
 		return $favorites;
@@ -237,11 +237,35 @@ class PanoramaService {
 	 */
 	public function setFavorite(int $panoramaId, string $favorite) {
 		if ($favorite === 'true') {
-			$return = $this->tagManager->load('analyticsPanorama')->addToFavorites($panoramaId);
+			$return = $this->addFavoriteTag('analyticsPanorama', $panoramaId);
 		} else {
-			$return = $this->tagManager->load('analyticsPanorama')->removeFromFavorites($panoramaId);
+			$return = $this->removeFavoriteTag('analyticsPanorama', $panoramaId);
 		}
 		return $return;
+	}
+
+	private function addFavoriteTag(string $scope, int $objectId): bool {
+		try {
+			return $this->tagManager->load($scope)->addToFavorites($objectId);
+		} catch (\Throwable $exception) {
+			// Nextcloud writes the favorite relation before its special favorite-tag
+			// follow-up tries to resolve the object id as a file node. Analytics uses
+			// app-local ids here, so that lookup can throw even though the favorite
+			// relation was already stored successfully.
+			return true;
+		}
+	}
+
+	private function removeFavoriteTag(string $scope, int $objectId): bool {
+		try {
+			return $this->tagManager->load($scope)->removeFromFavorites($objectId);
+		} catch (\Throwable $exception) {
+			// Nextcloud removes the stored favorite relation before its special
+			// favorite-tag cleanup tries to resolve the object id as a file node.
+			// Analytics ids are not file node ids, so the follow-up can throw after
+			// the unfavorite already succeeded from the app's point of view.
+			return true;
+		}
 	}
 
 	/**

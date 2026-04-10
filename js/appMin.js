@@ -14,8 +14,8 @@
 /** global: _ */
 
 'use strict';
-let OCA;
-OCA = {};
+window.OCA = window.OCA || {};
+const OCA = window.OCA;
 
 if (!OCA.Analytics) {
     /**
@@ -50,19 +50,37 @@ if (!OCA.Analytics) {
 OCA.Analytics.Report = {
 
     initApplication: function () {
+        const chartContainer = document.getElementById('chartContainer');
+        const dataElement = document.getElementById('data');
+        if (!chartContainer || !dataElement) {
+            return;
+        }
+
         OCA.Analytics.Visualization.hideElement('analytics-intro');
         OCA.Analytics.Visualization.hideElement('analytics-content');
         OCA.Analytics.Visualization.hideElement('analytics-loading');
         OCA.Analytics.Visualization.showElement('analytics-content');
-        document.getElementById('chartContainer').innerHTML = '';
-        document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>Reset Zoom</button><canvas id="myChart" ></canvas>';
+        chartContainer.innerHTML = '<button id="chartZoomReset" hidden>Reset Zoom</button><canvas id="myChart" ></canvas>';
         document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
 
-        OCA.Analytics.currentReportData = OCA.Analytics.Report.processReceivedData(JSON.parse(document.getElementById('data').value));
+        let initialReportData;
+        try {
+            initialReportData = JSON.parse(dataElement.value);
+        } catch (e) {
+            console.error('Analytics public report data could not be parsed', e);
+            return;
+        }
+
+        OCA.Analytics.currentReportData = OCA.Analytics.Report.processReceivedData(initialReportData);
         // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
         OCA.Analytics.currentReportData.data = OCA.Analytics.Visualization.formatDates(OCA.Analytics.currentReportData.data);
 
-        let ctx = document.getElementById('myChart').getContext('2d');
+        const chartCanvas = document.getElementById('myChart');
+        if (!chartCanvas) {
+            return;
+        }
+
+        let ctx = chartCanvas.getContext('2d');
         OCA.Analytics.Visualization.buildChart(ctx, OCA.Analytics.currentReportData, OCA.Analytics.Report.getDefaultChartOptions());
     },
 
