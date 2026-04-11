@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add custom column" : "カスタム列の追加",
     "Select file" : "ファイルを選択",
     "Share" : "共有",
+    "Select the share receiver" : "共有の受信者を選択してください",
     "No changes possible" : "変更はできない",
     "Add share link" : "共有リンクを追加",
     "Share link" : "リンクを共有",
