@@ -19,6 +19,7 @@ OC.L10N.register(
     "Are you sure?" : "Ar esate tikri?",
     "Delete" : "Ištrinti",
     "Done" : "Atlikta",
+    "contains" : "turi",
     "Filter" : "Filtras",
     "Table options" : "Lentelės parinktys",
     "Add" : "Pridėti",
