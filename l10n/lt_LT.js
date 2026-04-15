@@ -23,6 +23,7 @@ OC.L10N.register(
     "Filter" : "Filtras",
     "Table options" : "Lentelės parinktys",
     "Add" : "Pridėti",
+    "Column {column}" : "Stulpelis {column}",
     "Remove" : "Šalinti",
     "Sort order" : "Rikiavimo tvarka",
     "Default" : "Numatytasis",
