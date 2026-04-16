@@ -42,6 +42,7 @@ OC.L10N.register(
     "Filter" : "Filtrar",
     "Add" : "Guardar",
     "Remove" : "Remover",
+    "Default" : "Por defecto",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Overview" : "Generalidades",
