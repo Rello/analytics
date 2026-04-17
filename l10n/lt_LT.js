@@ -59,6 +59,7 @@ OC.L10N.register(
     "External" : "Išorinė",
     "Yes" : "Taip",
     "No" : "Ne",
+    "More options" : "Daugiau parinkčių",
     "Authentication" : "Tapatybės nustatymas",
     "Releases" : "Laidos",
     "Issues" : "Problemos",
