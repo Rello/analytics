@@ -45,6 +45,7 @@ OC.L10N.register(
     "Reset zoom" : "Atstatyti mastelį",
     "Report" : "Ataskaita",
     "Type" : "Tipas",
+    "Threshold" : "Slenkstis",
     "Notification" : "Pranešimas",
     "Date" : "Data",
     "Year" : "Metai",
