@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.3.2 - 2026-04-27
+### Fixed
+- Use the browser origin for the sidebar REST API link so data maintenance event setup does not abort on newer Nextcloud versions.
+
 ## 6.3.1 - 2026-04-10
 ### Fixed
 - user migration ignored data loads

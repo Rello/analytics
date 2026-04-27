@@ -23,7 +23,9 @@ For every change, add a meaningful one-liner to the corresponding section (Added
 
 Test execution instructions are maintained in `tests/INSTRUCTIONS.md`; prefer the reusable wrappers `tests/run-unit.sh` and `tests/run-playwright.sh` over ad-hoc container commands.
 
-No nodejs or vue components are used. Everything is plain Javascript.
+No nodejs or vue components are used. Everything is plain Javascript. 
+
+Do not use ILogger. It is deprecated in favor of Psr\Log\LoggerInterface
 
 ### License Header
 
