@@ -127,6 +127,7 @@ OC.L10N.register(
     "Aggregation" : "ການລວມກຸ່ມ",
     "Disaggregation" : "ການແຍກກຸ່ມ",
     "Report" : "ລາຍງານ",
+    "No templates available" : "ບໍ່ມີແມ່ແບບທີ່ພ້ອມໃຊ້ງານ",
     "Text variables can be used in the name or subheader.<br>They are replaced when the report is executed." : "ໂຕແປຂໍ້ຄວາມສາມາດໃຊ້ໃນຊື່ ຫຼື ຫົວຂໍ້ຍ່ອຍໄດ້.<br>ພວກມັນຈະຖືກແທນທີ່ເມື່ອລາຍງານຖືກດຳເນີນການ.",
     "Reports can be grouped into a folder structure." : "ລາຍງານສາມາດຖືກຈັດກຸ່ມເປັນໂຄງສ້າງໂຟນເດີ.",
     "Do you want to create a new group folder?" : "ທ່ານຕ້ອງການສ້າງໂຟນເດີກຸ່ມໃໝ່ບໍ່?",
