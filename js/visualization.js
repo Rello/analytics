@@ -204,6 +204,60 @@ OCA.Analytics.Visualization = {
         return parsedCalculatedColumns;
     },
 
+    parseTableCellLink: function (value) {
+        if (value === null || value === undefined) {
+            return null;
+        }
+
+        const text = _.unescape(String(value)).trim();
+        if (text === '') {
+            return null;
+        }
+
+        const titledLink = text.match(/^(.+?)\s+\((https?:\/\/[^\s)]+)\)$/i);
+        if (titledLink) {
+            return {
+                title: titledLink[1].trim(),
+                url: titledLink[2],
+            };
+        }
+
+        const plainLink = text.match(/^(https?:\/\/\S+)$/i);
+        if (plainLink) {
+            return {
+                title: plainLink[1],
+                url: plainLink[1],
+            };
+        }
+
+        return null;
+    },
+
+    renderTableCellContent: function (data, type) {
+        if (type !== 'display') {
+            return data;
+        }
+
+        const link = OCA.Analytics.Visualization.parseTableCellLink(data);
+        if (!link) {
+            return data;
+        }
+
+        return '<a class="analytics-table-link" href="' + _.escape(link.url) + '" target="_blank" rel="noopener noreferrer">'
+            + _.escape(link.title)
+            + '</a>';
+    },
+
+    applyTableCellRenderer: function (columns) {
+        columns.forEach(column => {
+            if (column.render) {
+                return;
+            }
+
+            column.render = OCA.Analytics.Visualization.renderTableCellContent;
+        });
+    },
+
     // *************
     // *** table ***
     // *************
@@ -357,6 +411,7 @@ OCA.Analytics.Visualization = {
             if (timeAggregationDisplayConfig) {
                 this.applyTimeAggregationDisplayRenderer(columns, timeAggregationDisplayConfig.dimension, timeAggregationDisplayConfig);
             }
+            this.applyTableCellRenderer(columns);
             data = originalData.map(row =>
                 row.map((value, index) => {
                     if (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension) {
@@ -392,6 +447,7 @@ OCA.Analytics.Visualization = {
                     this.applyTimeAggregationDisplayRenderer(columns, displayIndex, timeAggregationDisplayConfig);
                 }
             }
+            this.applyTableCellRenderer(columns);
 
             const rowsLength = layoutConfig.rows.length; // Cache length to avoid repeated property access
 
@@ -400,7 +456,9 @@ OCA.Analytics.Visualization = {
                 layoutConfig.rows.map((index, i) =>
                     (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension)
                         ? row[index]
-                        : (i === rowsLength - 1 ? _.escape(parseFloat(row[index]).toLocaleString()) : _.escape(row[index]))
+                        : (i === rowsLength - 1 && !isNaN(parseFloat(row[index]))
+                            ? _.escape(parseFloat(row[index]).toLocaleString())
+                            : _.escape(row[index]))
                 )
             );
         } else {
@@ -457,6 +515,7 @@ OCA.Analytics.Visualization = {
             data = Object.entries(transformedData).map(([key, values]) => {
                 return [_.escape(key), ...uniqueHeaders.map(header => _.escape(values[header] || ''))];
             });
+            this.applyTableCellRenderer(columns);
         }
         return {data, columns};
     },
@@ -1434,7 +1493,10 @@ OCA.Analytics.Visualization = {
                 return data;
             }
 
-            return _.escape(OCA.Analytics.Visualization.formatTimeAggregationDisplayValue(data, config));
+            return OCA.Analytics.Visualization.renderTableCellContent(
+                _.escape(OCA.Analytics.Visualization.formatTimeAggregationDisplayValue(data, config)),
+                type
+            );
         };
     },
 

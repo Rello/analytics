@@ -3,6 +3,7 @@
 ## 6.3.2 - 2026-04-27
 ### Fixed
 - Use the browser origin for the sidebar REST API link so data maintenance event setup does not abort on newer Nextcloud versions.
+- Render table values formatted as URLs or `Title (URL)` text as clickable links.
 
 ## 6.3.1 - 2026-04-10
 ### Fixed
