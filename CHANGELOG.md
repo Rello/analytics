@@ -1,11 +1,12 @@
 # Changelog
 
-## 6.3.2 - 2026-04-27
+## 6.3.2 - 2026-05-02
 ### Added
 - UI for custom columns in the column picker.
 
 ### Fixed
-- Use the browser origin for the sidebar REST API link so data maintenance event setup does not abort on newer Nextcloud versions.
+- Seed new report cache versions to prevent stale browser cache hits.
+- Sidebar data load not responding.
 - Render table values formatted as URLs or `Title (URL)` text as clickable links.
 
 ## 6.3.1 - 2026-04-10

@@ -15,6 +15,9 @@ use Psr\Log\LoggerInterface;
 
 class ReportMapper
 {
+    private const INITIAL_VERSION_MIN = 10000;
+    private const INITIAL_VERSION_MAX = 99999;
+
     private $userId;
     private $l10n;
     private $db;
@@ -123,6 +126,7 @@ class ReportMapper
                 'value' => $sql->createNamedParameter($value),
                 'chart' => $sql->createNamedParameter($chart),
                 'visualization' => $sql->createNamedParameter($visualization),
+                'version' => $sql->createNamedParameter(random_int(self::INITIAL_VERSION_MIN, self::INITIAL_VERSION_MAX)),
             ]);
         $sql->executeStatement();
         return (int)$sql->getLastInsertId();
