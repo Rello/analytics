@@ -621,8 +621,36 @@ async function waitForToastAndDismiss(page, timeout = 15000) {
 }
 
 async function openReportAutomationTab(page, reportName) {
+  if (await reportExists(page, reportName)) {
+    const menu = await openNavigationEntryMenu(page, reportName);
+    const maintenance = menu.locator('#navigationMenuAdvanced, a:has-text("Dataset maintenance")').first();
+    if (await maintenance.count().catch(() => 0)) {
+      await maintenance.click();
+      await waitForIdle(page, 15000);
+      await clickFirst(
+        page,
+        ['#tabHeaderDataload', '#tabHeaderDataload a', 'a:has-text("Automation")', 'a:has-text("Dataload")'],
+        'automation tab'
+      );
+      await page.locator('#datasourceSelect').first().waitFor({ state: 'visible', timeout: 15000 });
+      return;
+    }
+  }
+
+  let datasetId = await page.locator('#datasetId').first().inputValue().catch(() => '');
+  if (!datasetId) {
+    datasetId = await page.evaluate(() => String(window.OCA?.Analytics?.currentReportData?.options?.dataset || '')).catch(() => '');
+  }
   await ensureNavigationSection(page, 'datasets');
-  const datasetEntry = page.locator('#navigationDatasets a[data-item_type="dataset"]').filter({ hasText: reportName }).first();
+  if (!datasetId) {
+    datasetId = await page.locator('#datasetId').first().inputValue().catch(() => '');
+  }
+  let datasetEntry = datasetId
+    ? page.locator(`#navigationDatasets a[data-id="${datasetId}"][data-item_type="dataset"]`).first()
+    : page.locator('#navigationDatasets a[data-item_type="dataset"]').filter({ hasText: reportName }).first();
+  if (!(await datasetEntry.count().catch(() => 0))) {
+    datasetEntry = page.locator('#navigationDatasets a[data-item_type="dataset"]').filter({ hasText: reportName }).first();
+  }
   await datasetEntry.waitFor({ state: 'attached', timeout: 20000 });
   const entryVisible = await datasetEntry.isVisible().catch(() => false);
   if (entryVisible) {
