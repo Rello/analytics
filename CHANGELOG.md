@@ -1,6 +1,9 @@
 # Changelog
 
 ## 6.3.2 - 2026-04-27
+### Added
+- UI for custom columns in the column picker.
+
 ### Fixed
 - Use the browser origin for the sidebar REST API link so data maintenance event setup does not abort on newer Nextcloud versions.
 - Render table values formatted as URLs or `Title (URL)` text as clickable links.

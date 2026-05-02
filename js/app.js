@@ -651,12 +651,19 @@ Object.assign(OCA.Analytics.Datasource = {
             };
         });
 
-        let selectionArray = document.querySelector('[data-type="columnPicker"]').value.split(',').map(str => parseInt(str));
+        const selectionTokens = document.querySelector('[data-type="columnPicker"]').value
+            .split(',')
+            .map(str => str.trim())
+            .filter(str => str !== '');
+        const selectedColumnIds = selectionTokens
+            .filter(str => /^\d+$/.test(str))
+            .map(str => parseInt(str, 10));
+        const renderedColumnIds = [];
 
         // sort the items and put selected ones in front
         items.sort((a, b) => {
-            const indexA = selectionArray.indexOf(a.id);
-            const indexB = selectionArray.indexOf(b.id);
+            const indexA = selectedColumnIds.indexOf(a.id);
+            const indexB = selectedColumnIds.indexOf(b.id);
             if (indexA < 0) return indexB >= 0 ? 1 : 0;
             if (indexB < 0) return -1;
             return indexA - indexB;
@@ -664,7 +671,7 @@ Object.assign(OCA.Analytics.Datasource = {
 
         // selected ones should get the checkbox true
         items.forEach((item) => {
-            item.checked = selectionArray.includes(item.id);
+            item.checked = selectedColumnIds.includes(item.id);
         });
 
         // create the list element
@@ -675,8 +682,29 @@ Object.assign(OCA.Analytics.Datasource = {
         list.style.margin = '0';
         list.style.padding = '0';
         list.style.width = "400px"
+        selectionTokens.forEach((token) => {
+            if (/^\d+$/.test(token)) {
+                const columnId = parseInt(token, 10);
+                const item = items.find(item => item.id === columnId);
+                if (item !== undefined && !renderedColumnIds.includes(columnId)) {
+                    list.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
+                    renderedColumnIds.push(columnId);
+                }
+            } else {
+                list.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow({
+                    id: 'fixedColumn',
+                    name: t('analytics', 'Custom Column'),
+                    text: token,
+                    checked: true,
+                    contenteditable: true,
+                    customColumn: true
+                }));
+            }
+        });
         items.forEach((item) => {
-            list.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
+            if (!renderedColumnIds.includes(item.id)) {
+                list.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
+            }
         });
 
         // create the button below to add a custom column
@@ -688,20 +716,11 @@ Object.assign(OCA.Analytics.Datasource = {
         button.id = 'addColumnButton';
         button.addEventListener('click', OCA.Analytics.Datasource.addFixedColumn);
 
-        // create span for reference to the old values
-        const hint = document.createElement('span');
-        hint.style.paddingLeft = '25px';
-        hint.classList.add('userGuidance');
-        hint.id = 'addColumnHint'
-        hint.innerText
-
         const content = document.createDocumentFragment();
         content.appendChild(list);
         content.appendChild(document.createElement('br'));
         content.appendChild(document.createElement('br'));
         content.appendChild(button);
-        content.appendChild(document.createElement('br'));
-        content.appendChild(hint);
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             content,
@@ -715,17 +734,14 @@ Object.assign(OCA.Analytics.Datasource = {
      * Append a new custom column to the picker
      */
     addFixedColumn: function () {
-        const currentColumns = document.querySelector('input[data-type="columnPicker"]').value;
-        const preText = t('analytics', 'Previous Values:');
-        document.getElementById('addColumnHint').innerText = preText + ' ' + currentColumns;
-
         const sortableList = document.querySelector("#analyticsDialogContent > #sortable-list");
         const item = {
             id: 'fixedColumn',
-            name: t('analytics', 'Enter the fixed value:'),
+            name: t('analytics', 'Custom Column'),
             text: 'new',
             checked: true,
-            contenteditable: true
+            contenteditable: true,
+            customColumn: true
         }
         sortableList.appendChild(OCA.Analytics.Datasource.buildColumnPickerRow(item));
     },
@@ -738,7 +754,7 @@ Object.assign(OCA.Analytics.Datasource = {
         li.style.display = 'flex';
         li.style.alignItems = 'center';
         li.style.margin = '5px';
-        li.style.backgroundColor = 'var(--color-background-hover)';
+        li.style.backgroundColor = item.customColumn === true ? 'var(--color-warning-hover)' : 'var(--color-background-hover)';
         li.draggable = true;
         li.addEventListener("dragstart", OCA.Analytics.Notification.handleDragStart);
         li.addEventListener("dragover", OCA.Analytics.Notification.handleDragOver);
