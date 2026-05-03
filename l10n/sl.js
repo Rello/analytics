@@ -10,7 +10,6 @@ OC.L10N.register(
     "Column Picker" : "Izbirnik stolpcev",
     "Parameter missing" : "Manjka parameter",
     "Add custom column" : "Dodaj stolpec po meri",
-    "Enter the fixed value:" : "Vpis popravljene vrednosti:",
     "Select file" : "Izbor datotek",
     "Share" : "Souporaba",
     "No changes possible" : "Spreminjanje ni mogoče",

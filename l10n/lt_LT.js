@@ -66,6 +66,7 @@ OC.L10N.register(
     "Releases" : "Laidos",
     "Issues" : "Problemos",
     "Limit" : "Limitas",
+    "optional" : "nebūtina",
     "Local" : "Vietinis",
     "File" : "Failas",
     "Announcements" : "Skelbimai",

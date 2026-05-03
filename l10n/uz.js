@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Parametr etishmayapti",
     "Add custom column" : "Maxsus ustun qo'shing",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Kerakli ustunlarni tanlang.<br>Drag & drop yordamida ketma-ketlikni o'zgartiring.<br>Qayta tiklash uchun barcha tanlovlarni olib tashlang.<br> Sanalar uchun matn o'zgaruvchilari, jumladan, maxsus ustunlar qo'shing. {linkstart}dagi Wiki{linkend}ga qarang.",
-    "Previous Values:" : "Avvalgi qiymatlar:",
-    "Enter the fixed value:" : "Belgilangan qiymatni kiriting:",
     "Select file" : "Faylni tanlang",
     "Share" : "Ulashish",
     "Select the share receiver" : "Ulashish qabul qiluvchini tanlang",

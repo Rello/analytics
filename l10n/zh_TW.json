@@ -9,8 +9,6 @@
     "Parameter missing" : "找不到參數",
     "Add custom column" : "新增自訂欄位",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "選取需要的欄位。<br>透過拖放重新排列序列。<br>移除所有選擇以重設。<br>新增包含文字變數的自訂欄位以供日期使用。請見 {linkstart}Wiki{linkend}。",
-    "Previous Values:" : "上一個值：",
-    "Enter the fixed value:" : "輸入固定值：",
     "Select file" : "選擇檔案",
     "Share" : "分享",
     "Select the share receiver" : "選取分享接收者",

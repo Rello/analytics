@@ -10,7 +10,6 @@ OC.L10N.register(
     "Column Picker" : "Sarakkeen valitsin",
     "Parameter missing" : "Parametri puuttuu",
     "Add custom column" : "Lisää mukautettu sarake",
-    "Previous Values:" : "Aiemmat arvot:",
     "Select file" : "Valitse tiedosto",
     "Share" : "Jaa",
     "No changes possible" : "Muutokset eivät ole mahdollisia",

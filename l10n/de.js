@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Parameter fehlt",
     "Add custom column" : "Benutzerdefinierte Spalte hinzufügen",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Wähle die gewünschten Spalten aus, <br>ändere die Reihenfolge per Drag & Drop, <br>entferne alle Markierungen, um sie zurückzusetzen, <br>füge benutzerdefinierte Spalten hinzu, einschließlich Textvariablen für Daten. Siehe das {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Vorherige Werte:",
-    "Enter the fixed value:" : "Den festen Wert eingeben:",
     "Select file" : "Datei auswählen",
     "Share" : "Teilen",
     "Select the share receiver" : "Freigabeempfänger auswählen",

@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Недостаје параметар",
     "Add custom column" : "Додај произвољну колону",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Изаберите жељене колоне.<br>Промените редослед превлачењем и упуштањем.<br>Уклоните све изборе да ресетујете.<br>Додајте произвољне колоне укључујући и текст променљве за датуме. Погледајте {linkstart}Вики{linkend}.",
-    "Previous Values:" : "Претходне вредности:",
-    "Enter the fixed value:" : "Унесите фиксну вредност:",
     "Select file" : "Изаберите фајл",
     "Share" : "Подели",
     "Select the share receiver" : "Изаберите примаоца дељења",

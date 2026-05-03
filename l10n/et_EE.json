@@ -9,8 +9,6 @@
     "Parameter missing" : "Parameeter puudub",
     "Add custom column" : "Lisa kohandatud veerg",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Vali vajalikud veerud.<br>Järjesta jada ümber lohistades.<br>Eemalda lähtestamiseks kõik valikud.<br>Lisage kuupäevade jaoks kohandatud veerge, sealhulgas tekstimuutujaid. Vaata {linkstart}Wikit{linkend}.",
-    "Previous Values:" : "Eelmised väärtused:",
-    "Enter the fixed value:" : "Sisesta parandatud väärtus:",
     "Select file" : "Vali fail",
     "Share" : "Jaga",
     "Select the share receiver" : "Vali jagamise saaja",

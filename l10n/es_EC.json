@@ -9,7 +9,6 @@
     "Parameter missing" : "Falta parámetro",
     "Add custom column" : "Agregar columna personalizada",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Seleccionar las columnas requeridas.<br>Reorganiza la secuencia con arrastrar y soltar.<br>Elimina todas las selecciones para restablecer.<br>Agregar columnas personalizadas, incluyendo variables de texto para fechas. Consulta la {linkstart}Wiki{linkend}.",
-    "Enter the fixed value:" : "Ingresa el valor fijo:",
     "Select file" : "Seleccionar archivo",
     "Share" : "Compartir",
     "No changes possible" : "No hay cambios posibles",

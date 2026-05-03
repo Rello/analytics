@@ -9,8 +9,6 @@
     "Parameter missing" : "Відсутній параметр",
     "Add custom column" : "Додати власний стовпець",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Оберіть необхідні стовпці.<br>Змінюйте порядок, використовуючи перетягування.<br>Зніміть усі позначки для скидання.<br>2 власні стовпці, включно текстові змінні для дат. Див. {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Попередні значення:",
-    "Enter the fixed value:" : "Введіть фіксоване значення:",
     "Select file" : "Виберіть файл",
     "Share" : "Спільний доступ",
     "Select the share receiver" : "Виберіть отримувача спільного ресурсу",

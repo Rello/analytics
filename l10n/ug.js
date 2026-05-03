@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "پارامېتىر يوقاپ كەتتى",
     "Add custom column" : "ئىختىيارى ئىستون قوشۇڭ",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "لازىملىق ئىستونلارنى تاللاڭ. <br> سۆرەپ تاشلاش ئارقىلىق تەرتىپنى قايتا رەتلەڭ. <br>بارلىق تاللاشلارنى ئەمەلدىن قالدۇرۇڭ. <br>ۋاقىت ئۈچۈن تېكىست ئۆزگەرگۈچىلىرىنى ئۆز ئىچىگە ئالغان خاس ئىستونلارنى قوشۇڭ. بۇ {linkstart} ۋىكى{linkend} گە قاراڭ.",
-    "Previous Values:" : "ئالدىنقى قىممەتلەر:",
-    "Enter the fixed value:" : "مۇقىم قىممەتنى كىرگۈزۈڭ:",
     "Select file" : "ھۆججەتنى تاللاڭ",
     "Share" : "ھەمبەھىر",
     "Select the share receiver" : "ھەمبەھىر قوبۇللىغۇچنى تاللاڭ",

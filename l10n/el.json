@@ -9,8 +9,6 @@
     "Parameter missing" : "Απουσιάζει παράμετρος",
     "Add custom column" : "Προσθήκη προσαρμοσμένης στήλης",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Επιλέξτε τις απαιτούμενες στήλες.<br>Αναδιατάξτε την σειρά με drag & drop.<br>Αφαιρέστε όλες τις επιλογές για επαναφορά.<br>Προσθέστε προσαρμοσμένες στήλες συμπεριλαμβανομένων μεταβλητών κειμένου για ημερομηνίες. Δείτε το {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Προηγούμενες τιμές:",
-    "Enter the fixed value:" : "Δώστε την σταθερή τιμή:",
     "Select file" : "Επιλέξτε αρχείο",
     "Share" : "Διαμοιρασμός",
     "Select the share receiver" : "Επιλέξτε τον παραλήπτη διαμοιρασμού",

@@ -9,8 +9,6 @@
     "Parameter missing" : "Falta de parâmetro",
     "Add custom column" : "Adicionar coluna personalizada",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Selecione as colunas necessárias.<br>Reorganize a sequência arrastando e soltando.<br>Remova todas as seleções para redefinir.<br>Adicione colunas personalizadas, incluindo variáveis ​​de texto para datas. Saiba mais no {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Valores Anteriores:",
-    "Enter the fixed value:" : "Digite o valor fixo:",
     "Select file" : "Selecionar arquivo",
     "Share" : "Compartilhamento",
     "Select the share receiver" : "Selecione o destinatário do compartilhamento",

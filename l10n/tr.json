@@ -9,8 +9,6 @@
     "Parameter missing" : "Parametre eksik",
     "Add custom column" : "Özel sütun ekle",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Gerekli sütunları seçin.<br>Sürükleyip bırakarak sırayı değiştirebilirsiniz.<br>Sıfırlamak için tüm seçimleri kaldırın.<br>Tarihler için yazı değişkenleri ile birlikte özel sütunlar ekleyin. {linkstart}Viki{linkend} sitesinden bilgi alabilirsiniz.",
-    "Previous Values:" : "Önceki değerler:",
-    "Enter the fixed value:" : "Sabit değeri yazın:",
     "Select file" : "Dosyayı seç",
     "Share" : "Paylaş",
     "Select the share receiver" : "Paylaşım alıcısını seçin",

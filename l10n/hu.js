@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Hiányzó paraméter",
     "Add custom column" : "Egyéni oszlop hozzáadása",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Válassza ki a szükséges oszlopokat.<br>Rendezze a felsorolást az elemek áthúzásával.<br>Távolítsa el az összes kijelölést az alaphelyzetbe állításhoz.<br>Adjon hozzá egyedi oszlopokat, beleértve szöveges mezőt a dátumokhoz. Lásd:{linkstart}, Wiki: {linkend}",
-    "Previous Values:" : "Korábbi értékek:",
-    "Enter the fixed value:" : "Adja meg a fix értéket:",
     "Select file" : "Fájl kiválasztása",
     "Share" : "Megosztás",
     "Select the share receiver" : "Válassza ki a megosztás címzettjét",
