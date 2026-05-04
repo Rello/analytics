@@ -9,6 +9,7 @@ OC.L10N.register(
     "Data source not available anymore" : "Níl foinse sonraí ar fáil a thuilleadh",
     "Column Picker" : "Roghnóir Colún",
     "Parameter missing" : "Paraiméadar in easnamh",
+    "Custom Column" : "Colún Saincheaptha",
     "Add custom column" : "Cuir colún saincheaptha leis",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Roghnaigh na colúin riachtanacha.<br>Atheagraigh an t-ord le tarraing & drop.<br>Bain gach rogha chun colúin a athshocrú.<br>Cuir leis na hathróga téacs le haghaidh dátaí san áireamh. Féach ar an {linkstart}Vici{linkend}.",
     "Select file" : "Roghnaigh comhad",
