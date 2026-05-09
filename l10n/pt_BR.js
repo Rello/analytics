@@ -9,6 +9,7 @@ OC.L10N.register(
     "Data source not available anymore" : "Fonte de dados não está mais disponível",
     "Column Picker" : "Seletor de Coluna",
     "Parameter missing" : "Falta de parâmetro",
+    "Custom Column" : "Coluna personalizada",
     "Add custom column" : "Adicionar coluna personalizada",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Selecione as colunas necessárias.<br>Reorganize a sequência arrastando e soltando.<br>Remova todas as seleções para redefinir.<br>Adicione colunas personalizadas, incluindo variáveis ​​de texto para datas. Saiba mais no {linkstart}Wiki{linkend}.",
     "Select file" : "Selecionar arquivo",
