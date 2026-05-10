@@ -254,7 +254,7 @@ OC.L10N.register(
     "Authentication" : "Authentifizierung",
     "Allow insecure connections" : "Unsichere Verbindungen erlauben",
     "Timestamp of data load" : "Zeitpunkt der Datenladung",
-    "Releases" : "Veröffentlichungen",
+    "Releases" : "Versionen",
     "Issues" : "Probleme",
     "Pull Requests" : "Pull-Anforderungen",
     "Limit" : "Limit",
