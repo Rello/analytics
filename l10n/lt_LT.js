@@ -45,6 +45,7 @@ OC.L10N.register(
     "Download" : "Atsisiųsti",
     "Reset zoom" : "Atstatyti mastelį",
     "Report" : "Ataskaita",
+    "Delete data" : "Ištrinti duomenis",
     "Type" : "Tipas",
     "Threshold" : "Slenkstis",
     "Notification" : "Pranešimas",
