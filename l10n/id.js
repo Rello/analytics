@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Parameter tidak ada",
     "Add custom column" : "Tambahkan kolom khusus",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Pilih kolom yang dikehendaki.<br>Atur ulang urutannya dengan seret & lepas.<br>Hapus sepua pilihan untuk mengatur ulang.<br>Tambahkan kolom khusus termasuk variabel untuk tanggal. Lihat {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Nilai Sebelumnya:",
-    "Enter the fixed value:" : "Masukan nilai tetap:",
     "Select file" : "Pilih berkas",
     "Share" : "Bagikan",
     "Select the share receiver" : "Pilih Penerima Berbagi",

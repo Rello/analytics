@@ -9,7 +9,6 @@ OC.L10N.register(
     "Data source not available anymore" : "La fonte de datos yá nun ta disponible",
     "Column Picker" : "Selector de columnes",
     "Parameter missing" : "Falta'l parámetru",
-    "Enter the fixed value:" : "Introduz el valor fixu:",
     "Share" : "Compartir",
     "No changes possible" : "Nun hai nengún cambéu posible",
     "Share link" : "Compartir l'enllaz",

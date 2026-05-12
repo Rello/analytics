@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Параметр пропущен",
     "Add custom column" : "Добавить пользовательский столбец",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Выберите необходимые столбцы. <br>Измените последовательность с помощью перетаскивания. <br>Удалите все выделения для сброса. <br>Добавьте пользовательские столбцы, включая текстовые переменные для дат. См. {linkstart}Вики{linkend}.",
-    "Previous Values:" : "Предыдущие значения:",
-    "Enter the fixed value:" : "Введите фиксированное значение:",
     "Select file" : "Выбрать файл",
     "Share" : "Поделиться",
     "Select the share receiver" : "Выберите получателя общего доступа",

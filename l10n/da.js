@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Parameter mangler",
     "Add custom column" : "Tilføj brugerdefineret kolonne",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Vælg de krævede kolonner. <br>Omarranger rækkefølgen med drag & drop. <br>Fjern alle områder for at nulstille. <br>Tilføj brugerdefinerede kolonner med tekst variabler for datoer. Se {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Tidligere værdier:",
-    "Enter the fixed value:" : "Indtast den faste værdi:",
     "Select file" : "Vælg fil",
     "Share" : "Del",
     "Select the share receiver" : "Vælg delingsmodtageren",

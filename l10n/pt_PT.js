@@ -10,7 +10,6 @@ OC.L10N.register(
     "Column Picker" : "Seleção de colunas",
     "Parameter missing" : "Parâmetro em falta",
     "Add custom column" : "Adicionar coluna",
-    "Enter the fixed value:" : "Insira o valor fixo:",
     "Select file" : "Selecione o ficheiro",
     "Share" : "Partilhar",
     "Select the share receiver" : "Selecionar o recetor da partilha",

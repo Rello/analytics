@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Chybí parametr",
     "Add custom column" : "Přidat uživatelsky určený sloupec",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Vyberte potřebné sloupce.<br>Změňte uspořádání posloupnosti pomocí přetahování.<br>Pokud chcete vrátit zpět, odeberte veškeré výběry.<br>Přidejte uživatelsky určené sloupce včetně textových proměnný pro datumy. Viz {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Předchozí hodnoty:",
-    "Enter the fixed value:" : "Zadejte pevnou hodnotu:",
     "Select file" : "Vybrat soubor",
     "Share" : "Sdílet",
     "Select the share receiver" : "Vybrat příjemce sdílen",

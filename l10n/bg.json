@@ -9,7 +9,6 @@
     "Parameter missing" : "Липсващ параметър",
     "Add custom column" : "Добави колона",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Избери колоните. 1. Промени последователността чрез влачене. 2.Премахни избора от всички за нулиране. 3.Добави нови колони включително текстови променливи за датите. Виж {linkstart} Инструкциите тук. {linkend}",
-    "Enter the fixed value:" : "Въведи фиксирана стойност:",
     "Select file" : "Избор на файл",
     "Share" : "Споделяне",
     "Select the share receiver" : "Избери получателя за споделяния",

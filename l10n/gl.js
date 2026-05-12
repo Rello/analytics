@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Falta o parámetro",
     "Add custom column" : "Engadir unha columna personalizada",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Seleccione as columnas precisas. <br> Reorganice a secuencia arrastrando e soltando. <br> Retire todas as seleccións para restabelecer. <br> Engada columnas personalizadas, incluíndo variábeis de texto para as datas. Consulte a {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Valores anteriores:",
-    "Enter the fixed value:" : "Introduza o valor fixo:",
     "Select file" : "Seleccionar ficheiro",
     "Share" : "Compartir",
     "Select the share receiver" : "Seleccione o receptor da compartición",

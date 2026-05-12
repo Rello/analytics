@@ -9,7 +9,6 @@ OC.L10N.register(
     "Data source not available anymore" : "Datu avots vairāk nav pieejams",
     "Parameter missing" : "Iztrūkst parametrs",
     "Add custom column" : "Pievienot pielāgotu kolonnu",
-    "Enter the fixed value:" : "Ievadiet fiksētu vērtību:",
     "Select file" : "Atlasīt datni",
     "Share" : "Koplietot",
     "Add share link" : "Pievienot koplietošanas saiti",

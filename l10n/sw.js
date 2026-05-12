@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Kigezo kinakosekana",
     "Add custom column" : "Ongeza safu maalum",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Chagua safu wima zinazohitajika.<br>Panga upya mlolongo kwa kuburuta na kuacha. <br>Ondoa chaguo zote ili kuweka upya. <br>Ongeza safu wima maalum ikijumuisha vigezo vya maandishi kwa tarehe. Tazama {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Thamani za awali:",
-    "Enter the fixed value:" : "Ingiza thamani iliyowekwa:",
     "Select file" : "Chagua faili",
     "Share" : "Shirikisha",
     "Select the share receiver" : "Chagua kipokeaji cha kushiriki",

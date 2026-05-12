@@ -11,7 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "المُعامِل operator ناقصٌ",
     "Add custom column" : "إضافة عمود مخصص",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "إختَر الأعمدة المطلوبة.<br>أعِد ترتيب التتابع عن طريق السحب و الإفلات.<br>إحذف كل ما تمّ تحديده لإعادة التعيين.<br>أضِف أعمدة مُخصّصة تشتمل على متغيرات نصّية للتواريخ. أنظُر {linkstart} الويكي {linkend}.",
-    "Enter the fixed value:" : "أدخِل القيمة الثابتة:",
     "Select file" : "إختَر ملفّاً",
     "Share" : "مُشارَكة",
     "Select the share receiver" : "تحديد مُستلِم المشاركة",

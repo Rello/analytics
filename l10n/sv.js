@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Parameter saknas",
     "Add custom column" : "Lägg till anpassad kolumn",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Välj önskade kolumner.<br>Ändra ordning med dra och släpp.<br>Ta bort alla val för att återställa.<br>Lägg till anpassade kolumner inklusive textvariabler för datum. Se {linkstart}Wiki{linkend}.",
-    "Previous Values:" : "Föregående värden:",
-    "Enter the fixed value:" : "Ange det fasta värdet:",
     "Select file" : "Välj fil",
     "Share" : "Dela",
     "Select the share receiver" : "Välj delningsmottagare",

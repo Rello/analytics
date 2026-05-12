@@ -11,7 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "Parametro mancante",
     "Add custom column" : "Aggiungi una colonna personalizzata",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "Seleziona le colonne richieste.<br>Riorganizza la sequenza trascinando e rilasciando.<br>Rimuovi tutte le selezioni per reimpostare.<br>Aggiungi colonne personalizzate, comprese le variabili di testo per le date. Consulta la {linkstart}Wiki{linkend}.",
-    "Enter the fixed value:" : "Inserisci il valore fisso:",
     "Select file" : "Seleziona file",
     "Share" : "Condividi",
     "No changes possible" : "Nessuna modifica possibile",

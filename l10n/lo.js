@@ -11,8 +11,6 @@ OC.L10N.register(
     "Parameter missing" : "ພາຣາມິເຕີຂາດຫາຍ",
     "Add custom column" : "ເພີ່ມຖັນກຳນົດເອງ",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "ເລືອກຖັນທີ່ຕ້ອງການ.<br>ຈັດລຽງລຳດັບໃໝ່ດ້ວຍການລາກ ແລະ ວາງ.<br>ລຶບການເລືອກທັງໝົດເພື່ອຣີເຊັດ.<br>ເພີ່ມຖັນກຳນົດເອງລວມທັງໂຕແປຂໍ້ຄວາມສຳລັບວັນທີ. ເບິ່ງທີ່ {linkstart}ວິກິ{linkend}.",
-    "Previous Values:" : "ຄ່າກ່ອນໜ້າ:",
-    "Enter the fixed value:" : "ໃສ່ຄ່າທີ່ຄົງທີ່:",
     "Select file" : "ເລືອກໄຟລ໌",
     "Share" : "ແບ່ງປັນ",
     "Select the share receiver" : "ເລືອກຜູ້ຮັບການແບ່ງປັນ",
