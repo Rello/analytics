@@ -3,6 +3,7 @@
 ## 6.3.3 - 2026-05-12
 ### Fixed
 - Prevent template rendering errors on Nextcloud 34 by using the documented `image_path()` helper.
+- Fix share link rendering on Nextcloud versions where deprecated `OC` host helpers are removed.
 
 ## 6.3.2 - 2026-05-02
 ### Added

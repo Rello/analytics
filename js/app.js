@@ -927,7 +927,7 @@ Object.assign(OCA.Analytics.Share = {
         } else {
             linkRow.getElementById('sharingOptionsGroupNew').remove();
             linkRow.getElementById('shareOpenDirect').href = OC.generateUrl('/apps/analytics/p/') + token;
-            linkRow.getElementById('shareClipboardLink').value = OC.getProtocol() + '://' + OC.getHostName() + (OC.getPort() !== '' ? ':' + OC.getPort() : '') + OC.generateUrl('/apps/analytics/p/') + token;
+            linkRow.getElementById('shareClipboardLink').value = new URL(OC.generateUrl('/apps/analytics/p/') + token, window.location.origin).href;
             linkRow.getElementById('shareClipboard').addEventListener('click', OCA.Analytics.Share.handleShareClipboard)
             linkRow.getElementById('moreIcon').addEventListener('click', OCA.Analytics.Share.showShareMenu);
             linkRow.getElementById('showPassword').addEventListener('click', OCA.Analytics.Share.showPassMenu);
@@ -938,7 +938,7 @@ Object.assign(OCA.Analytics.Share = {
             linkRow.getElementById('shareChart').nextElementSibling.htmlFor = 'shareChart' + id;
             linkRow.getElementById('shareChart').id = 'shareChart' + id;
             linkRow.getElementById('shareChartDomain').id = 'shareChartDomain' + id;
-            linkRow.getElementById('shareChartLink').value = OC.getProtocol() + '://' + OC.getHostName() + OC.generateUrl('/apps/analytics/pm/') + token;
+            linkRow.getElementById('shareChartLink').value = new URL(OC.generateUrl('/apps/analytics/pm/') + token, window.location.origin).href;
             linkRow.getElementById('shareChartClipboard').addEventListener('click', OCA.Analytics.Share.handleShareChartClipboard)
 
             linkRow.getElementById('linkPassSubmit').addEventListener('click', OCA.Analytics.Share.updateSharePassword);
