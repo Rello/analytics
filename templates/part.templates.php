@@ -226,7 +226,7 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 150px;"></div>
             <div style="display: table-cell; width: 50px;">
-                <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>"
+                <img src="<?php echo image_path('analytics', 'column.svg'); ?>"
                      style="height: 20px;" alt="column">
             </div>
         </div>
@@ -838,7 +838,7 @@
 
 <template id="templateTableOptions">
     <div class="analyticsDialogSection"
-         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'chartBar.svg'); ?>">
+         data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
         <h2><?php p($l->t('Data Source')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Position the available fields to define the structure of the table. For a classic list view, move all fields into rows.')); ?></span>
         <div class="tableOptionsLayout">
@@ -865,7 +865,7 @@
     </div>
 
     <div class="analyticsDialogSection"
-         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'calculate.svg'); ?>">
+         data-section-icon="<?php echo image_path('analytics', 'calculate.svg'); ?>">
         <h2><?php p($l->t('Calculated Columns')); ?></h2>
         <div id="tableOptionsCalculatedColumnsEditor" class="tableOptionsCalculatedColumnsEditor" hidden>
             <div class="tableOptionsCalculatedColumnsEditorCard">
@@ -940,7 +940,7 @@
     </div>
 
     <div class="analyticsDialogSection"
-         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'visibility.svg'); ?>">
+         data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
         <h2><?php p($l->t('Visualization')); ?></h2>
         <div class="tableOptionsSettingsTable">
             <div class="tableOptionsSettingsRow">
@@ -979,7 +979,7 @@
 
 <template id="templateChartOptions">
     <div class="analyticsDialogSection"
-         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'chartBar.svg'); ?>">
+         data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
         <h2><?php p($l->t('Data format')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
         <div class="analyticsModelSelector">
@@ -987,7 +987,7 @@
                 <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked>
                 <label for="analyticsModelOpt1" class="analyticsModelCard">
                     <span class="analyticsModelCardTop">
-                        <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'row.svg'); ?>"
+                        <img src="<?php echo image_path('analytics', 'row.svg'); ?>"
                              class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
@@ -999,7 +999,7 @@
                 <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel">
                 <label for="analyticsModelOpt2" class="analyticsModelCard">
                     <span class="analyticsModelCardTop">
-                        <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'column.svg'); ?>"
+                        <img src="<?php echo image_path('analytics', 'column.svg'); ?>"
                              class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
@@ -1011,7 +1011,7 @@
                 <input type="radio" id="analyticsModelOpt3" name="analyticsModel" value="timeSeriesModel">
                 <label for="analyticsModelOpt3" class="analyticsModelCard">
                     <span class="analyticsModelCardTop">
-                        <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'chartTime.svg'); ?>"
+                        <img src="<?php echo image_path('analytics', 'chartTime.svg'); ?>"
                              class="analyticsModelCardIcon analyticsModelCardIcon--time" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
@@ -1023,7 +1023,7 @@
     </div>
 
     <div class="analyticsDialogSection"
-         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'label.svg'); ?>">
+         data-section-icon="<?php echo image_path('analytics', 'label.svg'); ?>">
         <h2><?php p($l->t('Labels')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Choose how doughnut chart labels are displayed')); ?></span>
         <div class="table" style="display: table;">
@@ -1042,7 +1042,7 @@
     </div>
 
     <div class="analyticsDialogSection"
-         data-section-icon="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'visibility.svg'); ?>">
+         data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
         <h2><?php p($l->t('Visualization')); ?></h2>
         <div id="chartOptionsTable" class="chartOptionsSeriesList">
             <div class="chartOptionsSeriesHeader">

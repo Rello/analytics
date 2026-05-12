@@ -25,7 +25,7 @@
     </div>
     <div style="margin-bottom: 65px"></div>
     <div id="byAnalytics" class="byAnalytics" style="display: none;">
-        <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;margin-left: 10px;" src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg') ?>">
+        <img id="byAnalyticsImg" style="width: 33px; margin-right: 7px;margin-left: 10px;" src="<?php echo image_path('analytics', 'app-color.svg') ?>">
         <span style="font-size: 12px; line-height: 14px;">created with<br>Analytics</span>
     </div>
 </div>

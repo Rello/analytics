@@ -16,7 +16,7 @@
         <div class="app-splash-logo" data-splash-logo aria-hidden="true">
             <img
                 class="app-splash-logo-img"
-                src="<?php p(\OC::$server->getURLGenerator()->imagePath('analytics', 'app-color.svg')); ?>"
+                src="<?php p(image_path('analytics', 'app-color.svg')); ?>"
                 alt=""
                 aria-hidden="true"
             >

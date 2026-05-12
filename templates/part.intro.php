@@ -9,7 +9,7 @@
 ?>
 
 <div id="analytics-content-intro" hidden>
-    <img src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'logo.svg') ?>" style="width: 300px;margin-left: auto;margin-right: auto;/* padding-left: 100px; */display: block;">
+    <img src="<?php echo image_path('analytics', 'logo.svg') ?>" style="width: 300px;margin-left: auto;margin-right: auto;/* padding-left: 100px; */display: block;">
     <br>
     <h3><?php p($l->t('Favorites')); ?></h3>
     <div>
@@ -21,21 +21,21 @@
         <ul id="ulQuickstart" style="width: 100%;">
             <li style="display: inline-block; margin: 10px;">
                 <div class="infoBox" id="infoBoxReport"><img height="80px" width="80px"
-                                                             src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoReport.svg') ?>"
+                                                             src="<?php echo image_path('analytics', 'infoReport.svg') ?>"
                                                              alt="infoReport">
                     <div class="infoBoxHeader"><?php p($l->t('New')); ?></div>
                 </div>
             </li>
             <li style="display: inline-block; margin: 10px;">
                 <div class="infoBox" id="infoBoxIntro"><img height="80px" width="80px"
-                                                            src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoIntro.svg') ?>"
+                                                            src="<?php echo image_path('analytics', 'infoIntro.svg') ?>"
                                                             alt="infoIntro">
                     <div class="infoBoxHeader"><?php p($l->t('Intro')); ?></div>
                 </div>
             </li>
             <li style="display: inline-block; margin: 10px;">
                 <div class="infoBox" id="infoBoxWiki"><img height="80px" width="80px"
-                                                           src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'infoWiki.svg') ?>"
+                                                           src="<?php echo image_path('analytics', 'infoWiki.svg') ?>"
                                                            alt="infoWiki">
                     <div class="infoBoxHeader"><?php p($l->t('Wiki')); ?></div>
                 </div>

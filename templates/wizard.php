@@ -73,7 +73,7 @@
 <template id="wizard-charts">
     <div class="page" style="display: none;">
         <div class="image"><img
-                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_charts.png') ?>">
+                src="<?php echo image_path('analytics', 'wizard_charts.png') ?>">
         </div>
         <div class="description">
             <p id="wizardNewHeader1"><?php p($l->t('Visualize any data with ease')); ?></p>
@@ -90,7 +90,7 @@
 <template id="wizard-filter">
     <div class="page" style="display: none;">
         <div class="image"><img
-                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_filter.gif') ?>">
+                src="<?php echo image_path('analytics', 'wizard_filter.gif') ?>">
         </div>
         <div class="description">
             <p id="wizardNewHeader2"><?php p($l->t('Slice and dice your data with precision')); ?></p>
@@ -107,7 +107,7 @@
 <template id="wizard-datasource">
     <div class="page" style="display: none;">
         <div class="image"><img
-                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_datasources.gif') ?>">
+                src="<?php echo image_path('analytics', 'wizard_datasources.gif') ?>">
         </div>
         <div class="description">
             <p id="wizardNewHeader3"><?php p($l->t('Utilize data from multiple sources with ease')); ?></p>
@@ -124,7 +124,7 @@
 <template id="wizard-dataload">
     <div class="page" style="display: none;">
         <div class="image"><img
-                src="<?php echo \OC::$server->getURLGenerator()->imagePath('analytics', 'wizard_dataload.gif') ?>">
+                src="<?php echo image_path('analytics', 'wizard_dataload.gif') ?>">
         </div>
         <div class="description">
             <p id="wizardNewHeader4"><?php p($l->t('Automate your data workflows seamlessly')); ?></p>
