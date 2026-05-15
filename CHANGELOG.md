@@ -4,7 +4,7 @@
 ### Changed
 - Update bundled DataTables to v2.3.8.
 - Include own jQuery v4.0
-- 
+
 ### Fixed
 - Register the notification notifier through the bootstrap context for Nextcloud 34 compatibility.
 - Remove remaining jQuery shorthand usage from user guidance scripts.
