@@ -42,9 +42,21 @@ SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["css/3rdParty/datatables.min.css", "js/3rdParty/datatables.min.js"]
+path = "css/3rdParty/datatables.min.css"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "SpryMedia Ltd"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/datatables.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "SpryMedia Ltd"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "js/3rdParty/jquery.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "OpenJS Foundation and other contributors"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]

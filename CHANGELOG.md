@@ -1,9 +1,14 @@
 # Changelog
 
-## 6.3.3 - 2026-05-12
+## 6.3.3 - 2026-05-14
+### Changed
+- Update bundled DataTables to v2.3.8.
+- Include own jQuery v4.0
+
 ### Fixed
 - Prevent template rendering errors on Nextcloud 34 by using the documented `image_path()` helper.
 - Fix share link rendering on Nextcloud versions where deprecated `OC` host helpers are removed.
+- Remove remaining jQuery shorthand usage from user guidance scripts.
 
 ## 6.3.2 - 2026-05-02
 ### Added

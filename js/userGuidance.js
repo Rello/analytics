@@ -92,10 +92,11 @@ OCA.Analytics.Wizard = {
     },
 
     dismissWizard: function () {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/analytics/wizard'),
-        });
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', OC.generateUrl('apps/analytics/wizard'), true);
+        xhr.setRequestHeader('requesttoken', OC.requestToken);
+        xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        xhr.send();
     },
 
     demo: async function () {
@@ -184,7 +185,7 @@ OCA.Analytics.WhatsNew = {
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(params);
-        $('.whatsNewPopover').remove();
+        document.querySelectorAll('.whatsNewPopover').forEach((popover) => popover.remove());
     },
 
     show: function (data, xhr) {

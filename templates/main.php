@@ -25,6 +25,7 @@ Util::addScript('analytics', 'filter');
 Util::addScript('analytics', 'report');
 Util::addScript('analytics', 'panorama');
 Util::addScript('analytics', 'dataset');
+Util::addScript('analytics', '3rdParty/jquery.min');
 Util::addScript('analytics', '3rdParty/datatables.min');
 Util::addScript('analytics', '3rdParty/chart.umd');
 Util::addScript('analytics', '3rdParty/chartjs-plugin-funnel.min');
