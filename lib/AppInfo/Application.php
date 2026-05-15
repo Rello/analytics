@@ -59,14 +59,9 @@ class Application extends App implements IBootstrap {
 			$context->registerEventListener(RenderReferenceEvent::class, ReferenceListener::class);
 		}
 
-		$this->registerNotifications();
+		$context->registerNotifierService(Notifier::class);
 	}
 
 	public function boot(IBootContext $context): void {
-	}
-
-	protected function registerNotifications(): void {
-		$notificationManager = \OC::$server->getNotificationManager();
-		$notificationManager->registerNotifierService(Notifier::class);
 	}
 }

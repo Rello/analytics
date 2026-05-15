@@ -8,6 +8,7 @@
 ### Fixed
 - Prevent template rendering errors on Nextcloud 34 by using the documented `image_path()` helper.
 - Fix share link rendering on Nextcloud versions where deprecated `OC` host helpers are removed.
+- Register the notification notifier through the bootstrap context for Nextcloud 34 compatibility.
 - Remove remaining jQuery shorthand usage from user guidance scripts.
 
 ## 6.3.2 - 2026-05-02
