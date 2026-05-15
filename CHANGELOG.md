@@ -1,15 +1,18 @@
 # Changelog
 
-## 6.3.3 - 2026-05-14
+## 6.3.4 - 2026-05-12
 ### Changed
 - Update bundled DataTables to v2.3.8.
 - Include own jQuery v4.0
+- 
+### Fixed
+- Register the notification notifier through the bootstrap context for Nextcloud 34 compatibility.
+- Remove remaining jQuery shorthand usage from user guidance scripts.
 
+## 6.3.3 - 2026-05-12
 ### Fixed
 - Prevent template rendering errors on Nextcloud 34 by using the documented `image_path()` helper.
 - Fix share link rendering on Nextcloud versions where deprecated `OC` host helpers are removed.
-- Register the notification notifier through the bootstrap context for Nextcloud 34 compatibility.
-- Remove remaining jQuery shorthand usage from user guidance scripts.
 
 ## 6.3.2 - 2026-05-02
 ### Added
