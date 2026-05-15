@@ -118,6 +118,7 @@ OC.L10N.register(
     "Close" : "Užverti",
     "Labels" : "Etiketės",
     "Sort by" : "Rikiuoti pagal",
+    "Direction" : "Kryptis",
     "Get more information" : "Gaukite daugiau informacijos",
     "Nextcloud forum" : "Nextcloud forumas",
     "Templates" : "Šablonai",
