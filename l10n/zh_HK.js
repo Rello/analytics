@@ -9,6 +9,7 @@ OC.L10N.register(
     "Data source not available anymore" : "數據源不再可用",
     "Column Picker" : "直欄選擇器",
     "Parameter missing" : "找不到參數",
+    "Custom Column" : "自訂直欄",
     "Add custom column" : "新增自訂欄位",
     "Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}." : "選擇所需的直欄。<br>通過拖放重新排列序列。<br>刪除所有選擇以重置。<br>添加自訂直欄，包括日期的文本變量。請參閱 {linkstart}Wiki{linkedin}。",
     "Select file" : "選擇檔案",
