@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Analytics\Notification;
 
-use InvalidArgumentException;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+use OCP\Notification\UnknownNotificationException;
 use Psr\Log\LoggerInterface;
 
 class Notifier implements INotifier
@@ -69,7 +69,7 @@ class Notifier implements INotifier
      * @param INotification $notification
      * @param string $languageCode The code of the language that should be used to prepare the notification
      * @return INotification
-     * @throws InvalidArgumentException When the notification was not prepared by a notifier
+     * @throws UnknownNotificationException When the notification was not prepared by a notifier
      * @throws AlreadyProcessedException When the notification is not needed anymore and should be deleted
      * @since 9.0.0
      */
@@ -77,7 +77,7 @@ class Notifier implements INotifier
     {
         if ($notification->getApp() !== 'analytics') {
             // Not my app => throw
-            throw new InvalidArgumentException('Unknown app');
+            throw new UnknownNotificationException('Unknown app');
         }
 
         // Read the language from the notification
@@ -141,9 +141,8 @@ class Notifier implements INotifier
                 );
 
                 break;
-            default: // legacy due to switch to subject field filled with an id for notification removal
-                //$parsedSubject = $l->t("Report '{report}': {subject} reached the threshold of {rule} {value}");
-                //$link = $this->urlGenerator->linkToRouteAbsolute('analytics.page.report') . 'r/' . $notification->getObjectId();
+            default:
+                throw new UnknownNotificationException('Unknown notification object type');
         }
 
 

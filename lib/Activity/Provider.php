@@ -8,7 +8,7 @@
 
 namespace OCA\Analytics\Activity;
 
-use InvalidArgumentException;
+use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\IL10N;
@@ -35,12 +35,12 @@ class Provider implements IProvider {
 	 * @param IEvent $event
 	 * @param IEvent|null $previousEvent
 	 * @return IEvent
-	 * @throws InvalidArgumentException
+	 * @throws UnknownActivityException
 	 * @since 11.0.0
 	 */
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
 		if ($event->getApp() !== 'analytics') {
-			throw new InvalidArgumentException();
+			throw new UnknownActivityException();
 		}
 
 		$parsedSubject = '';
@@ -109,6 +109,8 @@ class Provider implements IProvider {
 			case ActivityManager::SUBJECT_DATA_ADD_DATALOAD:
 				$parsedSubject = $this->l10n->t('New data has been added to dataset {report} via data load');
 				break;
+			default:
+				throw new UnknownActivityException();
 		}
 
 		$event->setRichSubject($parsedSubject, [

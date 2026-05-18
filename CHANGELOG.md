@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.3.5 - 2026-05-18
+### Fixed
+- activity and notification deprecation warning for unhandled events.
+
 ## 6.3.4 - 2026-05-12
 ### Changed
 - Update bundled DataTables to v2.3.8.
