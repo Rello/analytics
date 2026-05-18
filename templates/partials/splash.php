@@ -5,12 +5,18 @@
 * SPDX-License-Identifier: AGPL-3.0-or-later
 */-->
 
+<noscript>
+    <style>
+        .app-splash-screen {
+            display: none !important;
+        }
+    </style>
+</noscript>
 <div
     id="app-splash-screen"
     class="app-splash-screen"
     data-splash
-    hidden
-    aria-hidden="true"
+    aria-hidden="false"
 >
     <div class="app-splash-content">
         <div class="app-splash-logo" data-splash-logo aria-hidden="true">

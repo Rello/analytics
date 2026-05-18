@@ -3,6 +3,7 @@
 ## 6.3.5 - 2026-05-18
 ### Fixed
 - activity and notification deprecation warning for unhandled events.
+- Keep the startup splash screen inside the content frame.
 
 ## 6.3.4 - 2026-05-12
 ### Changed

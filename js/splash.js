@@ -21,6 +21,22 @@
         return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
     }
 
+    function removeSplash(splash, appContent) {
+        if (splash.dataset.splashRemoved === '1') {
+            return;
+        }
+
+        splash.dataset.splashRemoved = '1';
+        splash.hidden = true;
+        splash.setAttribute('aria-hidden', 'true');
+
+        if (appContent) {
+            appContent.classList.remove('has-splash');
+        }
+
+        splash.remove();
+    }
+
     function initSplash(splash) {
         if (window.__analyticsAppScriptLoaded !== true) {
             return false;
@@ -29,7 +45,7 @@
         splash.hidden = false;
         splash.setAttribute('aria-hidden', 'false');
 
-        const appContent = splash.closest('#app-content') || document.getElementById('app-content');
+        const appContent = splash.closest('#content') || document.getElementById('content');
         if (appContent) {
             appContent.classList.add('has-splash');
         }
@@ -41,18 +57,29 @@
                 : 'Analytics for Nextcloud';
         }
 
+        let cleanupDelayMs = 8000;
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!prefersReducedMotion) {
             const drawMs = parseDuration(splash.dataset.drawMs, DEFAULT_SPLASH_DURATIONS.draw);
             const revealMs = parseDuration(splash.dataset.revealMs, DEFAULT_SPLASH_DURATIONS.reveal);
             const holdMs = parseDuration(splash.dataset.holdMs, DEFAULT_SPLASH_DURATIONS.hold);
             const fadeMs = parseDuration(splash.dataset.fadeMs, DEFAULT_SPLASH_DURATIONS.fade);
+            cleanupDelayMs = drawMs + revealMs + holdMs + fadeMs + 100;
 
             splash.style.setProperty('--splash-draw-ms', `${drawMs}ms`);
             splash.style.setProperty('--splash-reveal-ms', `${revealMs}ms`);
             splash.style.setProperty('--splash-hold-ms', `${holdMs}ms`);
             splash.style.setProperty('--splash-fade-ms', `${fadeMs}ms`);
         }
+
+        splash.addEventListener('animationend', event => {
+            if (event.animationName === 'splashHide' || event.animationName === 'splashFallbackHide') {
+                removeSplash(splash, appContent);
+            }
+        });
+        window.setTimeout(() => {
+            removeSplash(splash, appContent);
+        }, cleanupDelayMs);
 
         window.requestAnimationFrame(() => {
             splash.classList.add('is-running');

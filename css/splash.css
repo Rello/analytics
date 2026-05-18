@@ -5,21 +5,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-#app-content.has-splash {
+#content.has-splash {
+    position: relative;
+}
+
+#content:has(.app-splash-screen) {
     position: relative;
 }
 
 .app-splash-screen {
-    position: fixed;
-    top: 50px !important;
+    position: absolute;
     inset: 0;
     z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: inherit;
     background: radial-gradient(circle at 20% 20%, #f4f8f6 0%, #e2e8f0 65%, #d8e0db 100%);
     opacity: 1;
     animation: splashFallbackHide 1ms linear 8000ms forwards;
+}
+
+.app-splash-screen[hidden] {
+    display: none;
 }
 
 .app-splash-screen.is-running {
