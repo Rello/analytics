@@ -60,7 +60,7 @@ OCA.Analytics.Wizard = {
             let dot = document.createElement('div');
             dot.id = 'wizardDot' + i;
             dot.classList.add('dot');
-            if (i===1) dot.classList.add('active');
+            if (i === 1) dot.classList.add('active');
             document.getElementById('wizardFooter').appendChild(dot);
         }
 
@@ -331,16 +331,12 @@ OCA.Analytics.Notification = {
      * @param {string} message - The notification message.
      */
     notification: function (type, message) {
-        if (parseInt(OC.config.versionstring.substr(0, 2)) >= 17) {
-            if (type === 'success') {
-                OCP.Toast.success(message)
-            } else if (type === 'error') {
-                OCP.Toast.error(message)
-            } else {
-                OCP.Toast.info(message)
-            }
+        if (type === 'success') {
+            OCP.Toast.success(message)
+        } else if (type === 'error') {
+            OCP.Toast.error(message)
         } else {
-            OC.Notification.showTemporary(message);
+            OCP.Toast.info(message)
         }
     },
 
