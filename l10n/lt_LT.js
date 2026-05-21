@@ -108,6 +108,7 @@ OC.L10N.register(
     "Setting" : "Nustatymas",
     "Title" : "Pavadinimas",
     "Copy" : "Kopija",
+    "Not scheduled" : "Nenumatyta",
     "Daily" : "Kas dieną",
     "Hourly" : "Kas valandą",
     "Basic settings" : "Pagrindiniai nustatymai",
