@@ -37,7 +37,7 @@ class Operation implements IOperation {
 	}
 
 	public function getDescription(): string {
-		return $this->l->t('Read file and add its data to an existing dataset');
+		return $this->l->t('Import data into an existing dataset');
 	}
 
 	public function getIcon(): string {
