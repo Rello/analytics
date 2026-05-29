@@ -227,7 +227,6 @@
     "e.g. A1:C3,A5:C5" : "πχ A1:C3,A5:C5",
     "HTML grabber" : "HTML grabber",
     "valid regex" : "έγκυρο regex",
-    "Read file and add its data to an existing dataset" : "Ανάγνωση αρχείου και προσθήκη των δεδομένων του σε ένα προϋπάρχον σύνολο δεδομένων",
     "Announcements" : "Ανακοινώσεις",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Αναφορά '{report}': Το {subject} έφτασε στο όριο του {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Σφάλμα κατά τη φόρτωση δεδομένων \"{dataloadName}\" για το σύνολο δεδομένων \"{datasetName}\"",

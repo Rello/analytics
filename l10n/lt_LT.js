@@ -276,7 +276,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "pvz. A1:C3,A5:C5",
     "HTML grabber" : "HTML griebtuvas",
     "valid regex" : "teisinga reguliarioji išraiška",
-    "Read file and add its data to an existing dataset" : "Nuskaityti failą ir pridėti jo duomenis prie esamo duomenų rinkinio",
     "Announcements" : "Skelbimai",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Ataskaita „{report}“: {subject} pasiekė {rule} slenkstinę reikšmę {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Klaida įkeliant duomenis „{dataloadName}“ duomenų rinkiniui „{datasetName}“",

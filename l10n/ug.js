@@ -231,7 +231,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "مەسىلەن A1: C3, A5: C5",
     "HTML grabber" : "HTML تۇتقۇچى",
     "valid regex" : "ئىناۋەتلىك regex",
-    "Read file and add its data to an existing dataset" : "ھۆججەتنى ئوقۇڭ ۋە ئۇنىڭ سانلىق مەلۇماتلىرىنى ھازىرقى سانلىق مەلۇمات ئامبىرىغا قوشۇڭ",
     "Announcements" : "ئېلانلار",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "دوكلات '{report}': {subject} قىممىتى بوسۇغىسى {rule} {value} غا يەتتى",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "سانلىق مەلۇمات توپلاشتىكى خاتالىق \"{dataloadName}\" سانلىق مەلۇمات توپلىمى \"{datasetName}\"",

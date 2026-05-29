@@ -243,7 +243,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "Např.: A1:C3,A5:C5",
     "HTML grabber" : "odchytávač HTML",
     "valid regex" : "platný regulární výraz",
-    "Read file and add its data to an existing dataset" : "Načíst soubor a přidat data z něho do existujícího souboru dat",
     "Announcements" : "Oznámení",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Výkaz „{report}“: {subject} dosáhl prahu pravidla {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Chyba při načítání „{dataloadName}“ sady dat „{datasetName}“",

@@ -196,7 +196,6 @@
     "e.g. A1:C3,A5:C5" : "ad es. A1:C3,A5:C5",
     "HTML grabber" : "Grabber HTML",
     "valid regex" : "regex valido",
-    "Read file and add its data to an existing dataset" : "Leggi file e aggiungi i suoi dati ad un Set di dati esistente",
     "Announcements" : "Annunci",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Report '{report}': {subject} ha raggiunto la soglia di {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Errore durante il caricamento dei dati \"{dataloadName}\" per il set di dati \"{datasetName}\"",

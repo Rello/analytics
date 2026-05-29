@@ -219,7 +219,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "f.eks. A1:C3,A5:C5",
     "HTML grabber" : "HTML-fanget",
     "valid regex" : "gyldig regex",
-    "Read file and add its data to an existing dataset" : "Les fil og legg dens data til et eksisterende datasett",
     "Announcements" : "Kunngjøringer",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Rapport '{report}': {subject} nådde terskelen til {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Feil under datainnlasting \"{dataloadName}\" for datasettet \"{datasetName}\"",

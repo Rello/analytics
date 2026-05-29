@@ -210,7 +210,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "per exemple. A1:C3,A5:C5",
     "HTML grabber" : "Captador d'HTML",
     "valid regex" : "expressió regular vàlida",
-    "Read file and add its data to an existing dataset" : "Llegiu el fitxer i afegiu-ne les dades a un conjunt de dades existent",
     "Announcements" : "Anuncis",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Informe \"{report}\": {subject} ha arribat al llindar de {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Error durant la càrrega de dades \"{dataloadName}\" per al conjunt de dades \"{datasetName}\"",

@@ -228,7 +228,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "например A1:C3,A5:C5",
     "HTML grabber" : "HTML-граббер",
     "valid regex" : "допустимый символ сравнения",
-    "Read file and add its data to an existing dataset" : "Чтение файла и добавление его данных в существующую базу данных",
     "Announcements" : "Объявления",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Отчёт '{report}': {subject} достиг предела {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Ошибка при загрузке данных \"{dataloadName}\" для набора данных \"{datasetName}\"",

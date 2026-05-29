@@ -276,7 +276,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "範例：A1:C3,A5:C5",
     "HTML grabber" : "HTML 抓取程式",
     "valid regex" : "有效的正規表示式",
-    "Read file and add its data to an existing dataset" : "讀取檔案並新增其資料至既有的資料集",
     "Announcements" : "公告",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "報告「{report}」：{subject} 達到了 {rule} {value} 的閾值",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "資料集「{datasetName}」的資料載入「{dataloadName}」時發生錯誤",

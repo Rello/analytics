@@ -276,7 +276,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "Masalan: A1:C3,A5:C5",
     "HTML grabber" : "HTML ushlagichi",
     "valid regex" : "haqiqiy regex",
-    "Read file and add its data to an existing dataset" : "Faylni o'qing va uning ma'lumotlarini mavjud ma'lumotlar to'plamiga qo'shing",
     "Announcements" : "E'lonlar",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Hisobot'{report}': {subject}  {rule} {value} ostonasiga yetdi",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Ma'lumotlarni yuklashda xato \"{dataloadName}\"  \"{datasetName}\" ma'lumotlar to'plami uchun",

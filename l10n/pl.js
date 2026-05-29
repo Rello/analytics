@@ -275,7 +275,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "np. A1:C3,A5:C5",
     "HTML grabber" : "Chwytak HTML",
     "valid regex" : "prawidłowe wyrażenie regularne",
-    "Read file and add its data to an existing dataset" : "Odczytaj plik i dodaj jego dane do istniejącego zbioru danych",
     "Announcements" : "Ogłoszenia",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Raport '{report}': {subject} osiągnął próg {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Błąd podczas ładowania danych \"{dataloadName}\" dla zestawu danych \"{datasetName}\"",
