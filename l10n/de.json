@@ -274,6 +274,7 @@
     "e.g. A1:C3,A5:C5" : "z. B. A1:C3,A5:C5",
     "HTML grabber" : "HTML-Grabber",
     "valid regex" : "gültiger Regex",
+    "Import data into an existing dataset" : "Daten in einem bestehenden Datensatz importieren",
     "Announcements" : "Ankündigungen",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Bericht {report}': {subject} hat den Schwellenwert von {rule} {value} erreicht",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Fehler beim Laden der Daten \"{dataloadName}\" für den Datensatz \"{datasetName}\"",

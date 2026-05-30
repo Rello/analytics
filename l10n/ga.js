@@ -276,6 +276,7 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "m.sh. A1: C3, A5: C5",
     "HTML grabber" : "Tiománaí html",
     "valid regex" : "regex bailí",
+    "Import data into an existing dataset" : "Iompórtáil sonraí isteach i dtacar sonraí atá ann cheana féin",
     "Announcements" : "Fógraí",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Tuairiscigh '{report}': shroich {subject} tairseach {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Earráid le linn lódála sonraí \"{dataloadName}\" don tacar sonraí \"{datasetName}\"",
