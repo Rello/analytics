@@ -248,7 +248,6 @@
     "e.g. A1:C3,A5:C5" : "例如，A1:C3,A5:C5",
     "HTML grabber" : "HTML 抓取程序",
     "valid regex" : "有效的正则表达式",
-    "Read file and add its data to an existing dataset" : "读取文件并将其数据添加到现有数据集中",
     "Announcements" : "公告",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "报告 “{report}”：{subject} 达到了 {rule} {value} 的阈值",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "数据集\"{datasetName}\"的数据加载\"{dataloadName}\"时发生错误",

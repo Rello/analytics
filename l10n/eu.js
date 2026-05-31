@@ -202,7 +202,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "adib. A1:C3,A5:C5",
     "HTML grabber" : "HTML biltzailea",
     "valid regex" : "baliozko adierazpen erregularra",
-    "Read file and add its data to an existing dataset" : "Irakurri fitxategia eta gehitu datuak dagoen datu-sorta batean",
     "Announcements" : "Iragarpenak",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "'{report}' txostena: {subject} {rule}-(r)en atalasera heldu da {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Errore bat gertatu da \"{dataloadName}\" datu-kargatzean \"{datasetName}\" datu multzorako",

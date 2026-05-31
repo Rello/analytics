@@ -229,7 +229,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "нпр. A1:C3,A5:C5",
     "HTML grabber" : "HTML хватач",
     "valid regex" : "исправан регуларни израз",
-    "Read file and add its data to an existing dataset" : "Чита фајл и додаје податке из њега у постојећи скуп података",
     "Announcements" : "Објаве",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Извештај ’{report}’: {subject} је достигао границу {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Грешка током учитавања података „{dataloadName}” за скуп података „{datasetName}",

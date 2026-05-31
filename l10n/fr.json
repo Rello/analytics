@@ -238,7 +238,6 @@
     "e.g. A1:C3,A5:C5" : "ex. A1:C3,A5:C5",
     "HTML grabber" : "Par récupération HTML",
     "valid regex" : "regex valide",
-    "Read file and add its data to an existing dataset" : "Lire le fichier et ajouter ses données à un jeu de données existant",
     "Announcements" : "Annonces",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Rapport '{report}' : {subject} a atteint le seuil de {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Erreur lors du chargement de données \"{dataloadName}\" pour le jeu de données \"{datasetName}\"",

@@ -233,7 +233,6 @@
     "e.g. A1:C3,A5:C5" : "p. ex. A1:C3,A5:C5",
     "HTML grabber" : "Capturador HTML",
     "valid regex" : "expresión regular válida",
-    "Read file and add its data to an existing dataset" : "Ler o ficheiro e engadir os seus datos a un conxunto de datos existente",
     "Announcements" : "Anuncios",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "O informe «{report}»: {subject} acadou o limiar de {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Produciuse un erro durante a carga de datos «{dataloadName}» para o conxunto de datos «{datasetName}»",

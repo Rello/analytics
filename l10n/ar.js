@@ -210,7 +210,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "على سبيل المثال A1:C3، A5:C5",
     "HTML grabber" : "مٌلتقِط HTML grabber",
     "valid regex" : "تعبير نمطي \"regex\"صالح",
-    "Read file and add its data to an existing dataset" : "اقرأ الملف وأضف بياناته إلى مجموعة بيانات موجودة",
     "Announcements" : "الإعلانات",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "التقرير '{report}': وصل {subject} إلى حد الـ {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "حدث خطأ أثناء تحميل البيانات \"{dataloadName}\" لمجموعة البيانات \"{datasetName}\"",

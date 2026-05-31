@@ -221,7 +221,6 @@
     "e.g. A1:C3,A5:C5" : "напр. A1:C3,A5:C5",
     "HTML grabber" : "HTML грабер",
     "valid regex" : "валиден регулярен израз",
-    "Read file and add its data to an existing dataset" : "Прочетете файла и добавете неговите данни към съществуващ набор от данни",
     "Announcements" : "Известия",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Доклад „{report}“: {subject} достигна прага на {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Грешка при зареждане на данни \"{dataloadName}\", за набора от данни \"{datasetName}\"",

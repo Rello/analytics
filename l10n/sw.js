@@ -232,7 +232,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "e.g. A1:C3,A5:C5",
     "HTML grabber" : "mnyakuzi wa HTML",
     "valid regex" : "regex halali",
-    "Read file and add its data to an existing dataset" : "Soma faili na uongeze data yake kwenye mkusanyiko wa data uliopo",
     "Announcements" : "Matangazo",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Ripoti '{report}': {subject} imefikia kizingiti cha {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Hitilafu wakati wa kupakia data \"{dataloadName}\" kwa seti ya data \"{datasetName}\"",

@@ -211,7 +211,6 @@ OC.L10N.register(
     "e.g. A1:C3,A5:C5" : "napr. A1:C3,A5:C5",
     "HTML grabber" : "HTML grabber",
     "valid regex" : "validný regex",
-    "Read file and add its data to an existing dataset" : "Načítať súbor a pridať jeho údaje do existujúceho súboru údajov",
     "Announcements" : "Oznámenia",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "Zostava '{report}': {subject} dosiahol hranicu {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "Chyba pri načítavaní údajov „{dataloadName}“ pre množinu údajov „{datasetName}“",

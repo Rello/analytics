@@ -230,7 +230,6 @@
     "e.g. A1:C3,A5:C5" : "ຕົວຢ່າງ A1:C3,A5:C5",
     "HTML grabber" : "ໂຕດຶງ HTML",
     "valid regex" : "regex ທີ່ຖືກຕ້ອງ",
-    "Read file and add its data to an existing dataset" : "ອ່ານໄຟລ໌ ແລະ ເພີ່ມຂໍ້ມູນຂອງມັນໃສ່ຊຸດຂໍ້ມູນທີ່ມີຢູ່",
     "Announcements" : "ປະກາດ",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "ລາຍງານ '{report}': {subject} ບັນລຸເກນກຳນົດຂອງ {rule} {value}",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການໂຫຼດຂໍ້ມູນ \"{dataloadName}\" ສຳລັບຊຸດຂໍ້ມູນ \"{datasetName}\"",
