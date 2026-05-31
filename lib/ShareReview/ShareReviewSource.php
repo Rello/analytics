@@ -9,11 +9,12 @@
 namespace OCA\Analytics\ShareReview;
 
 use OCA\Analytics\Service\ShareService;
+use OCA\ShareReview\Sources\ISource;
 use OCP\DB\Exception;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
-class ShareReviewSource {
+class ShareReviewSource implements ISource {
 	/** @var LoggerInterface */
 	private $logger;
 	/** @var IDBConnection */
