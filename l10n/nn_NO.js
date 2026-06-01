@@ -12,6 +12,7 @@ OC.L10N.register(
     "Saved" : "Lagra",
     "errors" : "feil",
     "Delete" : "Slett",
+    "Done" : "Ferdig",
     "greater than" : "større enn",
     "less than" : "mindre enn",
     "contains" : "inneheld",

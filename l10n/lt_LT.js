@@ -336,7 +336,7 @@ OC.L10N.register(
     "Table" : "Lentelė",
     "Chart" : "Diagrama",
     "Chart type" : "Diagramos tipas",
-    "Timeline (date in column 2)" : "Laiko juosta (data 2 stulpelyje)",
+    "Timeline (date in column 2)" : "Laiko skalė (data 2 stulpelyje)",
     "Bar - Stacked" : "Sudėtinė stulpelinė diagrama",
     "Bar - Stacked 100%%" : " Sluoksniuota stulpelinė diagrama 100%%",
     "Area" : "Santykinė plotinė diagrama",
