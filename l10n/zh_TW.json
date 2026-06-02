@@ -274,6 +274,7 @@
     "e.g. A1:C3,A5:C5" : "範例：A1:C3,A5:C5",
     "HTML grabber" : "HTML 抓取程式",
     "valid regex" : "有效的正規表示式",
+    "Import data into an existing dataset" : "將資料匯入至既有的資料集",
     "Announcements" : "公告",
     "Report '{report}': {subject} reached the threshold of {rule} {value}" : "報告「{report}」：{subject} 達到了 {rule} {value} 的閾值",
     "Error during data load \"{dataloadName}\" for data set \"{datasetName}\"" : "資料集「{datasetName}」的資料載入「{dataloadName}」時發生錯誤",
