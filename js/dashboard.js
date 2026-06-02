@@ -142,7 +142,7 @@ OCA.Analytics.Dashboard = {
     getData: function (datasetId, requestId) {
         const url = OC.generateUrl('apps/analytics/data/' + datasetId, true);
         const cacheKey = `analytics-report-${datasetId}`;
-        const storage = OCA.Analytics.getLocalStorage();
+        const storage = OCA.Analytics.Dashboard.getLocalStorage();
 
         // Retrieve cached data and version
         let cachedData = null;
@@ -212,6 +212,17 @@ OCA.Analytics.Dashboard = {
             }
         };
         xhr.send();
+    },
+
+    getLocalStorage: function () {
+        if (typeof window === 'undefined') {
+            return null;
+        }
+        try {
+            return typeof window.localStorage === 'undefined' ? null : window.localStorage;
+        } catch (e) {
+            return null;
+        }
     },
 
     processReceivedData: function (data) {

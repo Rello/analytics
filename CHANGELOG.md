@@ -1,9 +1,14 @@
 # Changelog
 
-## 6.3.5 - 2026-05-18
+## 6.3.5 - 2026-xx-xx
+### Added
+- Flow operations can trigger a selected dataload and pass the flow file into the datasource options.
+- Log the flow file path used when a flow-triggered dataload is executed.
+
 ### Fixed
 - activity and notification deprecation warning for unhandled events.
 - Keep the startup splash screen inside the content frame.
+- Nextcloud Dashboard does not show the Analytics reports #573
 
 ## 6.3.4 - 2026-05-12
 ### Changed
