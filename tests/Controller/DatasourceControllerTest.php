@@ -404,6 +404,38 @@ class DatasourceControllerTest extends TestCase {
     }
 
     /**
+     * Confirms multiple filters for one dimension are combined with OR while other dimensions use AND.
+     */
+    public function testReadCombinesMultipleFiltersForSameDimension(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => [
+                    ['Germany', 'EU', 1],
+                    ['France', 'EU', 2],
+                    ['Germany', 'APAC', 3],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false,"filter":[{"dimension":"0","option":"EQ","value":"Germany"},{"dimension":"0","option":"EQ","value":"France"},{"dimension":"1","option":"EQ","value":"EU"}]}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(2, $result['data']);
+        $this->assertSame(['Germany', 'EU', 1], $result['data'][0]);
+        $this->assertSame(['France', 'EU', 2], $result['data'][1]);
+    }
+
+    /**
      * Confirms hidden drilldown columns are removed before default aggregation is applied.
      */
     public function testReadAggregatesAfterRemovingHiddenDrilldownColumnsWhenAggregateOptionIsOmitted(): void {

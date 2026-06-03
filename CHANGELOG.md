@@ -9,6 +9,8 @@
 - activity and notification deprecation warning for unhandled events.
 - Keep the startup splash screen inside the content frame.
 - Nextcloud Dashboard does not show the Analytics reports #573
+- Keep API dataset route ids authoritative when JSON request bodies contain colliding keys #572
+- Allow multiple report filters for the same dimension to be combined.
 
 ## 6.3.4 - 2026-05-12
 ### Changed

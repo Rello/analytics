@@ -257,7 +257,10 @@ OCA.Analytics.Filter = {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         let existing = [];
         if (filterOptions && filterOptions.filter) {
-            existing = Object.entries(filterOptions.filter);
+            existing = Object.entries(filterOptions.filter).map(([dimension, data]) => [
+                data.dimension ?? dimension,
+                data
+            ]);
         }
 
         if (existing.length > 0) {
@@ -287,7 +290,7 @@ OCA.Analytics.Filter = {
      */
     processFilterDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
-        filterOptions.filter = {};
+        filterOptions.filter = [];
 
         const rows = document.querySelectorAll('#filterDialogTable .filterRow');
         rows.forEach(row => {
@@ -297,7 +300,7 @@ OCA.Analytics.Filter = {
             }
             const optionValue = row.querySelector('.filterDialogOption').value;
             const filterValue = row.querySelector('.filterDialogValue').value;
-            filterOptions.filter[dimension] = {option: optionValue, value: filterValue};
+            filterOptions.filter.push({dimension, option: optionValue, value: filterValue});
         });
 
         if (Object.keys(filterOptions.filter).length === 0) {
@@ -477,10 +480,11 @@ OCA.Analytics.Filter = {
         const filterDimensions = OCA.Analytics.currentReportData.dimensions;
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         if (filterOptions && filterOptions["filter"]) {
-            for (const filterDimension of Object.keys(filterOptions["filter"])) {
-                let optionText = OCA.Analytics.Filter.optionTextsArray[filterOptions["filter"][filterDimension]["option"]];
+            for (const [filterIndex, filter] of Object.entries(filterOptions["filter"])) {
+                const filterDimension = filter.dimension ?? filterIndex;
+                let optionText = OCA.Analytics.Filter.optionTextsArray[filter["option"]];
                 const container = document.createElement("span");
-                let filterValue = filterOptions["filter"][filterDimension]["value"];
+                let filterValue = filter["value"];
                 if (filterValue.match(/%/g) && filterValue.match(/%/g).length === 2) {
                     optionText = "";
                     filterValue = filterValue.replace(/%/g, "");
@@ -495,7 +499,7 @@ OCA.Analytics.Filter = {
                 textSpan.innerText = filterDimensions[filterDimension] + " " + optionText + " " + filterValue;
 
                 container.classList.add("filterVisualizationItem");
-                container.id = filterDimension;
+                container.dataset.filterIndex = filterIndex;
                 container.appendChild(removeIcon);
                 container.appendChild(textSpan);
 
@@ -531,9 +535,12 @@ OCA.Analytics.Filter = {
      */
     removeFilter: function (evt) {
         const parent = evt.target.closest('.filterVisualizationItem');
-        let filterDimension = parent ? parent.id : evt.target.id;
+        let filterIndex = parent ? parent.dataset.filterIndex : evt.target.dataset.filterIndex;
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        delete filterOptions['filter'][filterDimension];
+        delete filterOptions['filter'][filterIndex];
+        if (Array.isArray(filterOptions['filter'])) {
+            filterOptions['filter'] = filterOptions['filter'].filter(() => true);
+        }
         if (Object.keys(filterOptions['filter']).length === 0) {
             delete filterOptions['filter'];
         }

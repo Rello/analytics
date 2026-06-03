@@ -21,6 +21,7 @@ class StorageMapper
     private $db;
     private $logger;
     const TABLE_NAME = 'analytics_facts';
+	private $filterParameterCounter = 0;
     private const FILTERABLE_COLUMNS = [
         'dimension1',
         'dimension2',
@@ -153,64 +154,7 @@ class StorageMapper
         // value column deeds to be at the last position in the select. So it needs to be after the dynamic selects
         $sql->addSelect($sql->func()->sum('value'));
 
-        // add the where clauses depending on the filter selection of the
-        if (isset($options['filter'])) {
-            foreach ($options['filter'] as $key => $value) {
-				$column = $this->getAllowedFilterColumn($key);
-				if ($column === null) {
-					continue;
-				}
-
-				// Remove quotes from each element
-				// quotes are required when filter has a comma e.g. 'home, office" and needs to be evaluated as one select
-				if (is_array($value['value'])) {
-					// Remove quotes from each element in the array
-					$valueNoQuotes = array_map(function($v) {
-						return trim($v, "'");
-					}, $value['value']);
-				} else {
-					$valueNoQuotes = trim($value['value'], "'");
-				}
-
-				if ($value['option'] === 'EQ') {
-					$sql->andWhere($sql->expr()->eq($column, $sql->createNamedParameter($valueNoQuotes)));
-				} elseif ($value['option'] === 'GT') {
-					$sql->andWhere($sql->expr()->gt($column, $sql->createNamedParameter($valueNoQuotes)));
-				} elseif ($value['option'] === 'LT') {
-					$sql->andWhere($sql->expr()->lt($column, $sql->createNamedParameter($valueNoQuotes)));
-				} elseif ($value['option'] === 'IN') {
-					// Use regex to split by comma or semicolon, keeping quoted strings together
-					preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value['value'], $matches);
-					$valuesArray = array_map(function($v) {
-						return trim($v, " '");
-					}, $matches[0]);
-
-					$sql->andWhere($sql->expr()->in($column, $sql->createParameter('inValues')));
-					$sql->setParameter('inValues', $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
-				} elseif ($value['option'] === 'LIKE') {
-					$sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes))));
-				} elseif ($value['option'] === 'NOTLIKE') {
-					$sql->andWhere('NOT (' . $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes))) . ')');
-				} elseif ($value['option'] === 'BETWEEN') {
-					// Between is used for filters on quarters
-					// Support both array and comma-separated string formats
-					if (is_array($value['value'])) {
-						$start = $value['value'][0];
-						$end = $value['value'][1];
-					} else {
-						list($start, $end) = explode(',', $valueNoQuotes, 2);
-						$start = trim($start);
-						$end = trim($end);
-					}
-					$sql->andWhere(
-						$sql->expr()->andX(
-							$sql->expr()->gte($column, $sql->createNamedParameter($start)),
-							$sql->expr()->lte($column, $sql->createNamedParameter($end))
-						)
-					);
-				}
-            }
-        }
+        $this->applyFilterOptions($sql, $options);
 
         $statement = $sql->executeQuery();
         $rows = $statement->fetchAll();
@@ -301,12 +245,7 @@ class StorageMapper
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
-        // add the where clauses depending on the filter selection of the
-        if (isset($options['filter'])) {
-            foreach ($options['filter'] as $key => $value) {
-                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
-            }
-        }
+        $this->applyFilterOptions($sql, $options);
         return $sql->executeStatement(); // number of deleted rows
     }
 
@@ -324,12 +263,7 @@ class StorageMapper
             ->selectAlias($sql->func()->count('*'), 'count')
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
-        // add the where clauses depending on the filter selection of the
-        if (isset($options['filter'])) {
-            foreach ($options['filter'] as $key => $value) {
-                $this->sqlWhere($sql, $key, $value['option'], $value['value']);
-            }
-        }
+        $this->applyFilterOptions($sql, $options);
 
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
@@ -372,36 +306,90 @@ class StorageMapper
         return $result;
     }
 
-    /**
-     * Add where statements to a query builder
-     *
-     * @param IQueryBuilder $sql
-     * @param $column
-     * @param $option
-     * @param $value
-     */
-    protected function sqlWhere(IQueryBuilder $sql, $column, $option, $value)
-    {
-		$column = $this->getAllowedFilterColumn($column);
-		if ($column === null) {
+	private function applyFilterOptions(IQueryBuilder $sql, $options): void
+	{
+		if (!isset($options['filter']) || !is_array($options['filter'])) {
 			return;
 		}
 
-        if ($option === 'EQ') {
-            $sql->andWhere($sql->expr()->eq($column, $sql->createNamedParameter($value)));
-        } elseif ($option === 'GT') {
-            $sql->andWhere($sql->expr()->gt($column, $sql->createNamedParameter($value)));
-        } elseif ($option === 'LT') {
-            $sql->andWhere($sql->expr()->lt($column, $sql->createNamedParameter($value)));
-        } elseif ($option === 'IN') {
-            $sql->andWhere($sql->expr()->in($column, $sql->createParameter('inValues')));
-            $sql->setParameter('inValues', explode(',', $value), IQueryBuilder::PARAM_STR_ARRAY);
-        } elseif ($option === 'LIKE') {
-            $sql->andWhere($sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($value))));
-        } elseif ($option === 'NOTLIKE') {
-            $sql->andWhere('NOT (' . $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($value))) . ')');
-        }
-    }
+		foreach ($this->groupFiltersByDimension($options['filter']) as $dimension => $filters) {
+			$column = $this->getAllowedFilterColumn($dimension);
+			if ($column === null) {
+				continue;
+			}
+
+			$expressions = [];
+			foreach ($filters as $filter) {
+				$expression = $this->buildFilterExpression($sql, $column, $filter['option'], $filter['value']);
+				if ($expression !== null) {
+					$expressions[] = $expression;
+				}
+			}
+
+			if (count($expressions) === 1) {
+				$sql->andWhere($expressions[0]);
+			} elseif (count($expressions) > 1) {
+				$sql->andWhere($sql->expr()->orX(...$expressions));
+			}
+		}
+	}
+
+	private function groupFiltersByDimension(array $filters): array
+	{
+		$groups = [];
+		foreach ($filters as $key => $value) {
+			$dimension = $value['dimension'] ?? $key;
+			$groups[$dimension][] = $value;
+		}
+		return $groups;
+	}
+
+	private function buildFilterExpression(IQueryBuilder $sql, string $column, string $option, $value)
+	{
+		if (is_array($value)) {
+			$valueNoQuotes = array_map(function($v) {
+				return trim($v, "'");
+			}, $value);
+		} else {
+			$valueNoQuotes = trim($value, "'");
+		}
+
+		if ($option === 'EQ') {
+			return $sql->expr()->eq($column, $sql->createNamedParameter($valueNoQuotes));
+		} elseif ($option === 'GT') {
+			return $sql->expr()->gt($column, $sql->createNamedParameter($valueNoQuotes));
+		} elseif ($option === 'LT') {
+			return $sql->expr()->lt($column, $sql->createNamedParameter($valueNoQuotes));
+		} elseif ($option === 'IN') {
+			preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value, $matches);
+			$valuesArray = array_map(function($v) {
+				return trim($v, " '");
+			}, $matches[0]);
+
+			$parameter = 'inValues' . (++$this->filterParameterCounter);
+			$sql->setParameter($parameter, $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
+			return $sql->expr()->in($column, $sql->createParameter($parameter));
+		} elseif ($option === 'LIKE') {
+			return $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes)));
+		} elseif ($option === 'NOTLIKE') {
+			return 'NOT (' . $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes))) . ')';
+		} elseif ($option === 'BETWEEN') {
+			if (is_array($value)) {
+				$start = $value[0];
+				$end = $value[1];
+			} else {
+				list($start, $end) = explode(',', $valueNoQuotes, 2);
+				$start = trim($start);
+				$end = trim($end);
+			}
+			return $sql->expr()->andX(
+				$sql->expr()->gte($column, $sql->createNamedParameter($start)),
+				$sql->expr()->lte($column, $sql->createNamedParameter($end))
+			);
+		}
+
+		return null;
+	}
 
 	private function buildLikePattern(string $value): string
 	{

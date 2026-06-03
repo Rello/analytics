@@ -38,7 +38,7 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     const seedState = await ensureStoredReportWithDefaultData(page, reportName, 'Filter regression');
     steps.push(`report ${seedState}`);
 
-    steps.push('apply combined column-2 filters');
+    steps.push('apply combined same-dimension filters');
     await clickFirst(page, ['#addFilterIcon'], 'add filter');
     await page.locator('#filterDialogValue').waitFor({ state: 'visible', timeout: 15000 });
     await page.locator('#filterDialogDimension').selectOption({ label: 'Column 2' });
@@ -49,9 +49,13 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     await page.locator('#filterDialogValue').fill('Dimension 2');
     await clickFirst(page, ['#addFilterRowButton'], 'add second filter row');
     await page.locator('#filterDialogValue1').waitFor({ state: 'visible', timeout: 15000 });
-    await page.locator('#filterDialogDimension1').selectOption({ label: 'Column 1' });
-    await page.locator('#filterDialogOption1').selectOption({ label: 'contains' });
-    await page.locator('#filterDialogValue1').fill('N');
+    await page.locator('#filterDialogDimension1').selectOption({ label: 'Column 2' });
+    await page.locator('#filterDialogValue1').fill('Threshold Test');
+    await clickFirst(page, ['#addFilterRowButton'], 'add third filter row');
+    await page.locator('#filterDialogValue2').waitFor({ state: 'visible', timeout: 15000 });
+    await page.locator('#filterDialogDimension2').selectOption({ label: 'Column 1' });
+    await page.locator('#filterDialogOption2').selectOption({ label: 'contains' });
+    await page.locator('#filterDialogValue2').fill('N');
     await clickFirst(page, ['#analyticsDialogBtnGo'], 'confirm filter');
     await page.locator('#reportSubHeader').waitFor({ state: 'visible', timeout: 15000 });
 
@@ -59,12 +63,12 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     await saveAndReloadReport(page, reportName);
     const activeFilterChips = page.locator('.filterVisualizationRemove');
     const filterChipCountAfterReload = await activeFilterChips.count();
-    if (filterChipCountAfterReload !== 2) {
-      throw new Error(`Expected 2 active filter chips after reload, got ${filterChipCountAfterReload}`);
+    if (filterChipCountAfterReload !== 3) {
+      throw new Error(`Expected 3 active filter chips after reload, got ${filterChipCountAfterReload}`);
     }
-    const dimensionFilterVisible = await page.locator('#dimension2').first().isVisible().catch(() => false);
+    const dimensionFilterVisible = await page.locator('.filterVisualizationItem').first().isVisible().catch(() => false);
     if (!dimensionFilterVisible) {
-      throw new Error('Expected dimension2 filter chip after reloading the saved filter');
+      throw new Error('Expected filter chip after reloading the saved filter');
     }
 
     let rowTexts = await page.locator('#tableContainer tbody tr').evaluateAll((nodes) =>
@@ -78,11 +82,13 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     steps.push('remove combined filters');
     const filterRemoveButtons = page.locator('.filterVisualizationRemove');
     const filterChipCount = await filterRemoveButtons.count();
-    if (filterChipCount !== 2) {
-      throw new Error(`Expected 2 active filter chips before removal, got ${filterChipCount}`);
+    if (filterChipCount !== 3) {
+      throw new Error(`Expected 3 active filter chips before removal, got ${filterChipCount}`);
     }
     await filterRemoveButtons.nth(0).click();
     await page.waitForTimeout(300);
+    await filterRemoveButtons.nth(0).click();
+    await page.waitForTimeout(500);
     await filterRemoveButtons.nth(0).click();
     await page.waitForTimeout(500);
     if (await page.locator('.filterVisualizationRemove').count()) {

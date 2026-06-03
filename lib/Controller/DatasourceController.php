@@ -300,30 +300,49 @@ class DatasourceController extends Controller {
 	private function filterData($data, $filter) {
 		$options = json_decode($filter, true);
 		if (isset($options['filter'])) {
-			foreach ($options['filter'] as $key => $value) {
-				$filterValue = $value['value'];
-				$filterValueNoQuotes = trim($value['value'], "'");
-				$filterOption = $value['option'];
+			foreach ($this->groupFiltersByDimension($options['filter']) as $key => $filters) {
 				$filtered = array();
 
 				foreach ($data['data'] as $record) {
-					if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes)) || ($filterOption === 'NOTLIKE' && !$this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
+					if ($this->recordMatchesAnyFilter($record, $key, $filters)) {
 						$filtered[] = $record;
-					} else if ($filterOption === 'IN') {
-						preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
-						$valuesArray = array_map(function($v) {
-							return trim($v, " '");
-						}, $matches[0]);
-
-						if (in_array($record[$key], $valuesArray)) {
-							$filtered[] = $record;
-						}
 					}
 				}
 				$data['data'] = $filtered;
 			}
 		}
 		return $data;
+	}
+
+	private function groupFiltersByDimension(array $filters): array {
+		$groups = [];
+		foreach ($filters as $key => $value) {
+			$dimension = $value['dimension'] ?? $key;
+			$groups[$dimension][] = $value;
+		}
+		return $groups;
+	}
+
+	private function recordMatchesAnyFilter(array $record, $key, array $filters): bool {
+		foreach ($filters as $value) {
+			$filterValue = $value['value'];
+			$filterValueNoQuotes = trim($value['value'], "'");
+			$filterOption = $value['option'];
+
+			if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes)) || ($filterOption === 'NOTLIKE' && !$this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
+				return true;
+			} else if ($filterOption === 'IN') {
+				preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
+				$valuesArray = array_map(function($v) {
+					return trim($v, " '");
+				}, $matches[0]);
+
+				if (in_array($record[$key], $valuesArray)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private function matchesLikeFilter($value, string $filterValue): bool {
