@@ -1,10 +1,9 @@
 # Changelog
 
-## 6.3.5 - 2026-xx-xx
+## 6.4.0 - 2026-06-04
 ### Added
 - Flow operations can trigger a dataload and pass the file name.
 - Timestamp for local CSV and JSON data loads can be read from filename.
-- Repeatable Docker build wrapper for the local PHPUnit image.
 
 ### Fixed
 - activity and notification deprecation warning for unhandled events.

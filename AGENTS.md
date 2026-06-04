@@ -27,6 +27,18 @@ No nodejs or vue components are used. Everything is plain Javascript.
 
 Do not use ILogger. It is deprecated in favor of Psr\Log\LoggerInterface
 
+### WhatsNew Migrations
+
+When adding release notes for the `/whatsnew` endpoint, create a dedicated migration in `lib/Migration` that inserts one row into `analytics_whats_new`.
+
+- Use the current app version from `appinfo/info.xml` as the `version` value, for example `6.4.0`.
+- Name the migration with the numeric app version and timestamp pattern used by existing migrations, for example `Version6400Date20260604100000.php`.
+- Add the standard SPDX header for new files.
+- Inject `OCP\IDBConnection` in the constructor and insert the row in `postSchemaChange()`.
+- Store `data` as the existing JSON structure with `changelogURL` and `whatsNew` keys. Provide at least `en` and `de` entries, each with `regular` and `admin` arrays.
+- Keep `admin` consistent with previous entries unless the release note is admin-specific: English `New Features apply to users`, German `Nur User Features`.
+- Do not add this migration to the `CHANGELOG.md`.
+
 ### License Header
 
 Every new file needs to get a SPDX header in the first rows according to this template.
