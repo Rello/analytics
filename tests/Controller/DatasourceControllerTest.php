@@ -133,6 +133,107 @@ class DatasourceControllerTest extends TestCase {
         $this->assertTrue($result['cache']['notModified']);
     }
 
+    public function testReadUsesFilenameTimestampFromDatasourceFileOption(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->with($this->callback(function ($option) {
+                $this->assertSame('/reports/current.csv', $option['link']);
+                $this->assertSame('/flow/archive/report_2026-05-03.csv', $option['file']);
+                return true;
+            }))
+            ->willReturn([
+                'header' => ['Value'],
+                'dimensions' => [],
+                'data' => [[7]],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/reports/current.csv","file":"/flow/archive/report_2026-05-03.csv","timestamp":"filename"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertSame(0, $result['error']);
+        $this->assertSame([['2026-05-03 00:00:00Z', 7]], $result['data']);
+    }
+
+    public function testReadUsesFilenameTimestampWithUnixSeconds(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Value'],
+                'dimensions' => [],
+                'data' => [[3]],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/reports/export_1767225600.json","timestamp":"filename"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertSame([['2026-01-01 00:00:00Z', 3]], $result['data']);
+    }
+
+    public function testReadReturnsErrorForInvalidFilenameTimestamp(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Value'],
+                'dimensions' => [],
+                'data' => [[5]],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/reports/no-date.csv","timestamp":"filename"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertSame('No valid timestamp found in datasource filename', $result['error']);
+        $this->assertSame('nodata', $result['status']);
+        $this->assertSame([], $result['data']);
+    }
+
+    public function testReadKeepsLegacyTrueTimestampShape(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Value'],
+                'dimensions' => [],
+                'data' => [[11]],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/reports/current.csv","timestamp":"true"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}Z$/', $result['data'][0][0]);
+        $this->assertSame(11, $result['data'][0][1]);
+    }
+
     /**
      * Confirms aggregate=false keeps rows separate while still applying drilldown column removal.
      */

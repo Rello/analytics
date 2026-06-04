@@ -55,6 +55,46 @@ class DataloadServiceTest extends TestCase {
 		$this->assertSame(0, $result['error']);
 	}
 
+	public function testGetDataFromDatasourceOverridesFileForFlowExecution(): void {
+		$datasourceController = $this->createMock(DatasourceController::class);
+		$datasourceController->expects($this->once())
+			->method('read')
+			->with(
+				DatasourceController::DATASET_TYPE_LOCAL_JSON,
+				$this->callback(function ($metadata) {
+					$option = json_decode($metadata['link'], true);
+					$this->assertSame('/flow/import.json', $option['link']);
+					$this->assertSame('/flow/import.json', $option['file']);
+					$this->assertSame('items/{name,value}', $option['path']);
+					return true;
+				}),
+				false
+			)
+			->willReturn([
+				'header' => ['d1', 'd2', 'value'],
+				'dimensions' => ['d1', 'd2'],
+				'data' => [['x', 'y', 1]],
+				'error' => 0,
+			]);
+
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('getDataloadById')
+			->with(42)
+			->willReturn([
+				'datasource' => DatasourceController::DATASET_TYPE_LOCAL_JSON,
+				'dataset' => 11,
+				'user_id' => 'u1',
+				'option' => '{"link":"/configured/import.json","path":"items/{name,value}"}',
+			]);
+
+		$service = $this->createService($datasourceController, $dataloadMapper);
+		$result = $service->getDataFromDatasource(42, '/flow/import.json');
+
+		$this->assertSame(11, $result['datasetId']);
+		$this->assertSame(0, $result['error']);
+	}
+
 	private function createService(DatasourceController $datasourceController, DataloadMapper $dataloadMapper): DataloadService {
 		return new DataloadService(
 			'u1',

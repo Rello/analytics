@@ -63,6 +63,7 @@ class LocalCsv implements IDatasource
         $template[] = ['id' => 'hasHeader', 'name' => $this->l10n->t('Header row'), 'placeholder' => 'true-' . $this->l10n->t('Yes').'/false-'.$this->l10n->t('No'), 'type' => 'tf'];
         $template[] = ['id' => 'offset', 'name' => $this->l10n->t('Ignore leading rows'), 'placeholder' => $this->l10n->t('Number of rows'), 'type' => 'number'];
         $template[] = ['id' => 'columns', 'name' => $this->l10n->t('Select columns'), 'placeholder' => $this->l10n->t('e.g. 1,2,4 or leave empty'), 'type' => 'columnPicker'];
+        $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'false-' . $this->l10n->t('No') . '/true-' . $this->l10n->t('Current time') . '/filename-' . $this->l10n->t('From filename'), 'type' => 'tf'];
         return $template;
     }
 

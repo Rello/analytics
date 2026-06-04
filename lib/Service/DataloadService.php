@@ -156,10 +156,11 @@ class DataloadService
      * execute a data load from data source and store into dataset
      *
      * @param int $dataloadId
+     * @param string|null $file
      * @return array
      * @throws Exception
      */
-    public function execute(int $dataloadId)
+    public function execute(int $dataloadId, ?string $file = null)
     {
         $bulkSize = 500;
         $insert = $update = $error = $delete = $currentCount = 0;
@@ -167,7 +168,7 @@ class DataloadService
         $aggregation = null;
 
         // get the data from the data source
-        $result = $this->getDataFromDatasource($dataloadId);
+        $result = $this->getDataFromDatasource($dataloadId, $file);
 
         // dont continue in case of data source error
         if ($result['error'] !== 0) {
@@ -273,11 +274,12 @@ class DataloadService
      * to be used in simulation or execution
      *
      * @param int $dataloadId
+     * @param string|null $file
      * @return array|NotFoundResponse
      * @throws NotFoundResponse
      * @throws \OCP\DB\Exception
      */
-    public function getDataFromDatasource(int $dataloadId)
+    public function getDataFromDatasource(int $dataloadId, ?string $file = null)
     {
         $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
 
@@ -286,6 +288,22 @@ class DataloadService
             if ($dataloadMetadata['datasource'] !== 0) {
                 $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
                 unset($dataloadMetadata['cacheKey']);
+                if ($file !== null && $file !== '') {
+                    $option = json_decode($dataloadMetadata['link'], true);
+                    if (!is_array($option)) {
+                        $option = [];
+                    }
+                    $option['link'] = $file;
+                    $option['file'] = $file;
+                    $dataloadMetadata['link'] = json_encode($option);
+                    $this->logger->info('Analytics flow dataload file override', [
+                        'dataloadId' => $dataloadId,
+                        'datasetId' => $dataloadMetadata['dataset'],
+                        'datasourceId' => $dataloadMetadata['datasource'],
+                        'file' => $file,
+                        'filename' => basename($file),
+                    ]);
+                }
 
                 $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata, false);
                 $result['datasetId'] = $dataloadMetadata['dataset'];

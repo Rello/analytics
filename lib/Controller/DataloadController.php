@@ -119,13 +119,14 @@ class DataloadController extends Controller
      * execute a dataload from data source and store into dataset
      *
      * @param int $dataloadId
+     * @param string|null $file
      * @return DataResponse
      * @throws Exception
      */
     #[NoAdminRequired]
-    public function execute(int $dataloadId): DataResponse
+    public function execute(int $dataloadId, ?string $file = null): DataResponse
     {
-        return new DataResponse($this->DataloadService->execute($dataloadId));
+        return new DataResponse($this->DataloadService->execute($dataloadId, $file));
     }
 
 

@@ -173,16 +173,24 @@ class DatasourceController extends Controller {
 			}
 
 			// if data source should be timestamped/snapshoted
-			if (isset($option['timestamp']) and $option['timestamp'] === 'true') {
-				date_default_timezone_set('UTC');
-				$result['data'] = array_map(function ($tag) {
+			if (isset($option['timestamp']) && ($option['timestamp'] === 'true' || $option['timestamp'] === 'filename')) {
+				$timestamp = $this->getDatasourceTimestamp($option);
+				if ($timestamp === null) {
+					return [
+						'error' => $this->l10n->t('No valid timestamp found in datasource filename'),
+						'data' => [],
+						'status' => 'nodata',
+					];
+				}
+
+				$result['data'] = array_map(function ($tag) use ($timestamp) {
 					$columns = count($tag);
 					if ($columns > 1) {
 						// shift values by one dimension and stores date in second column
-						return array($tag[$columns - 2], date("Y-m-d H:i:s") . 'Z', $tag[$columns - 1]);
+						return array($tag[$columns - 2], $timestamp, $tag[$columns - 1]);
 					} else {
 						// just return 2 columns if the original data only has one column
-						return array(date("Y-m-d H:i:s") . 'Z', $tag[$columns - 1]);
+						return array($timestamp, $tag[$columns - 1]);
 					}
 				}, $result['data']);
 			}
@@ -214,6 +222,47 @@ class DatasourceController extends Controller {
 			$result['status'] = 'nodata';
 		}
 		return $result;
+	}
+
+	private function getDatasourceTimestamp(array $option): ?string {
+		if ($option['timestamp'] === 'true') {
+			return gmdate('Y-m-d H:i:s') . 'Z';
+		}
+
+		$filename = basename((string)($option['file'] ?? $option['link'] ?? ''));
+		return $this->parseTimestampFromFilename($filename);
+	}
+
+	private function parseTimestampFromFilename(string $filename): ?string {
+		if (preg_match('/(?<!\d)(\d{10})(?!\d)/', $filename, $matches) === 1) {
+			$date = (new \DateTimeImmutable('@' . $matches[1]))->setTimezone(new \DateTimeZone('UTC'));
+			return $date->format('Y-m-d H:i:s') . 'Z';
+		}
+
+		if (preg_match('/(?<!\d)(\d{4})-(\d{2})-(\d{2})[_T ](\d{2})[:-](\d{2})[:-](\d{2})(?!\d)/', $filename, $matches) === 1) {
+			return $this->formatParsedUtcTimestamp($matches[1], $matches[2], $matches[3], $matches[4], $matches[5], $matches[6]);
+		}
+
+		if (preg_match('/(?<!\d)(\d{4})-(\d{2})-(\d{2})(?!\d)/', $filename, $matches) === 1) {
+			return $this->formatParsedUtcTimestamp($matches[1], $matches[2], $matches[3]);
+		}
+
+		if (preg_match('/(?<!\d)(\d{4})(\d{2})(\d{2})(?!\d)/', $filename, $matches) === 1) {
+			return $this->formatParsedUtcTimestamp($matches[1], $matches[2], $matches[3]);
+		}
+
+		return null;
+	}
+
+	private function formatParsedUtcTimestamp(string $year, string $month, string $day, string $hour = '00', string $minute = '00', string $second = '00'): ?string {
+		if (!checkdate((int)$month, (int)$day, (int)$year)) {
+			return null;
+		}
+		if ((int)$hour > 23 || (int)$minute > 59 || (int)$second > 59) {
+			return null;
+		}
+
+		return sprintf('%04d-%02d-%02d %02d:%02d:%02dZ', $year, $month, $day, $hour, $minute, $second);
 	}
 
 	/**

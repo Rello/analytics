@@ -2,14 +2,14 @@
 
 ## 6.3.5 - 2026-xx-xx
 ### Added
-- Flow operations can trigger a selected dataload and pass the flow file into the datasource options.
-- Log the flow file path used when a flow-triggered dataload is executed.
+- Flow operations can trigger a dataload and pass the file name.
+- Timestamp for local CSV and JSON data loads can be read from filename.
 
 ### Fixed
 - activity and notification deprecation warning for unhandled events.
 - Keep the startup splash screen inside the content frame.
 - Nextcloud Dashboard does not show the Analytics reports #573
-- Keep API dataset route ids authoritative when JSON request bodies contain colliding keys #572
+- API returns error code 9003 when using v3.0 or v4.0 #572
 - Allow multiple report filters for the same dimension to be combined.
 
 ## 6.3.4 - 2026-05-12
