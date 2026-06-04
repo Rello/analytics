@@ -4,9 +4,11 @@
 ### Added
 - Flow operations can trigger a dataload and pass the file name.
 - Timestamp for local CSV and JSON data loads can be read from filename.
+- Repeatable Docker build wrapper for the local PHPUnit image.
 
 ### Fixed
 - activity and notification deprecation warning for unhandled events.
+- Restore the PHPUnit configuration required by the local unit test wrapper.
 - Keep the startup splash screen inside the content frame.
 - Nextcloud Dashboard does not show the Analytics reports #573
 - API returns error code 9003 when using v3.0 or v4.0 #572

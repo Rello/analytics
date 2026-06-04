@@ -6,6 +6,8 @@ This project runs tests in containers for reproducibility.
 - Docker daemon running locally
 
 ## Unit Tests (PHPUnit)
+- Build the local PHPUnit image:
+  - `./tests/phpunit/build-phpunit-image.sh`
 - Run full suite:
   - `./tests/run-unit.sh`
 
