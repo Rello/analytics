@@ -63,7 +63,7 @@ class Operation implements IOperation {
 			return;
 		}
 
-		$datasetId = (int)$flow['operation'];
+		$operation = $this->parseOperation($flow['operation']);
 
 		if ($eventName === '\OCP\Files::postRename') {
 			/** @var Node $oldNode */
@@ -79,11 +79,34 @@ class Operation implements IOperation {
 		$file = '/' . $file;
 
 		try {
-			$this->DataloadController->importFile($datasetId, $file, true);
+			if ($operation['dataloadId'] !== 0) {
+				$this->DataloadController->execute($operation['dataloadId'], $file);
+			} else {
+				$this->DataloadController->importFile($operation['datasetId'], $file, true);
+			}
 		} catch (NotFoundException $e) {
 			return;
 		} catch (\Exception $e) {
 			return;
 		}
+	}
+
+	private function parseOperation($operation): array {
+		$flowOperation = [
+			'datasetId' => 0,
+			'dataloadId' => 0,
+		];
+
+		if (is_string($operation) && str_starts_with(trim($operation), '{')) {
+			$decodedOperation = json_decode($operation, true);
+			if (is_array($decodedOperation)) {
+				$flowOperation['datasetId'] = (int)($decodedOperation['datasetId'] ?? 0);
+				$flowOperation['dataloadId'] = (int)($decodedOperation['dataloadId'] ?? 0);
+				return $flowOperation;
+			}
+		}
+
+		$flowOperation['datasetId'] = (int)$operation;
+		return $flowOperation;
 	}
 }

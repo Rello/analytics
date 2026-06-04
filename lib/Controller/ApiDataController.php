@@ -66,6 +66,7 @@ class ApiDataController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function addData(int $datasetId) {
+		$datasetId = $this->getDatasetIdFromRoute($datasetId);
 		$params = $this->request->getParams();
 		$datasetMetadata = $this->DatasetService->readOwn($datasetId);
 
@@ -101,6 +102,7 @@ class ApiDataController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function addDataV2(int $datasetId) {
+		$datasetId = $this->getDatasetIdFromRoute($datasetId);
 		$message = 'No -data- parameter';
 		$params = $this->request->getParams();
 		$datasetMetadata = $this->DatasetService->readOwn($datasetId);
@@ -169,6 +171,7 @@ class ApiDataController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function deleteDataV2(int $datasetId) {
+		$datasetId = $this->getDatasetIdFromRoute($datasetId);
 		$message = 'No -delete- parameter';
 		$params = $this->request->getParams();
 		$datasetMetadata = $this->DatasetService->readOwn($datasetId);
@@ -301,6 +304,7 @@ class ApiDataController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function addDataV4(int $datasetId) {
+		$datasetId = $this->getDatasetIdFromRoute($datasetId);
 		$message = 'No -data- parameter';
 		$params = $this->request->getParams();
 		$datasetMetadata = $this->DatasetService->readOwn($datasetId);
@@ -327,6 +331,16 @@ class ApiDataController extends ApiController {
 		}
 
 		return $this->requestResponse(true, Http::STATUS_OK, $message);
+	}
+
+	/**
+	 * JSON request bodies can overwrite controller arguments after route matching.
+	 * Always use the dataset id captured from the endpoint URL when available.
+	 */
+	private function getDatasetIdFromRoute(int $datasetId): int {
+		return isset($this->request->urlParams['datasetId'])
+			? (int)$this->request->urlParams['datasetId']
+			: $datasetId;
 	}
 
 	/**
