@@ -213,6 +213,7 @@ OC.L10N.register(
     "Count" : "Telle",
     "Local" : "Lokal",
     "File" : "Fil",
+    "Current time" : "Gjeldende tidspunkt",
     "Sheet" : "Ark",
     "sheet name" : "Arknavn",
     "Cell range" : "Celleområde",

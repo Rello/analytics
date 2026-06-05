@@ -196,6 +196,7 @@ OC.L10N.register(
     "Count" : "Kantitatea",
     "Local" : "Lokala",
     "File" : "Fitxategia",
+    "Current time" : "Uneko ordua",
     "Sheet" : "Orria",
     "sheet name" : "orriaren izena",
     "Cell range" : "Gelaxka barrutia",

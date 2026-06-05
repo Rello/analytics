@@ -225,6 +225,7 @@ OC.L10N.register(
     "Count" : "ساناپ بېقىڭ",
     "Local" : "يەرلىك",
     "File" : "ھۆججەت",
+    "Current time" : "نۆۋەتتىكى ۋاقىت",
     "Sheet" : "ۋاراق",
     "sheet name" : "ۋاراق ئىسمى",
     "Cell range" : "كاتەكچە دائىرىسى",

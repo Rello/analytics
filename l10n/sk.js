@@ -205,6 +205,7 @@ OC.L10N.register(
     "Count" : "Počet",
     "Local" : "Lokálne",
     "File" : "Súbor",
+    "Current time" : "Aktuálny čas",
     "Sheet" : "List",
     "sheet name" : "názov listu",
     "Cell range" : "Rozsah bunky",

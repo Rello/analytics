@@ -270,6 +270,7 @@ OC.L10N.register(
     "Report not available" : "Níl an tuarascáil ar fáil",
     "Local" : "Áitiúil",
     "File" : "Comhad",
+    "Current time" : "Am reatha",
     "Sheet" : "Bileog",
     "sheet name" : "ainm bileog",
     "Cell range" : "Raon cille",

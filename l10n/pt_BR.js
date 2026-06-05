@@ -270,6 +270,7 @@ OC.L10N.register(
     "Report not available" : "Relatório indisponível",
     "Local" : "Local",
     "File" : "Arquivo",
+    "Current time" : "Hora atual",
     "Sheet" : "Planilha",
     "sheet name" : "nome da planilha",
     "Cell range" : "Intervalo de células",

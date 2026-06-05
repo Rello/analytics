@@ -223,6 +223,7 @@ OC.L10N.register(
     "Count" : "Πλήθος",
     "Local" : "Τοπικός",
     "File" : "Αρχείο",
+    "Current time" : "Τρέχουσα ώρα",
     "Sheet" : "Φύλλο",
     "sheet name" : "όνομα φύλλου",
     "Cell range" : "Εύρος κελιού",

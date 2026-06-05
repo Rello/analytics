@@ -228,6 +228,7 @@ OC.L10N.register(
     "Count" : "Лічильник",
     "Local" : "Локально",
     "File" : "Файл",
+    "Current time" : "Поточний час",
     "Sheet" : "Аркуш",
     "sheet name" : "ім'я аркуша",
     "Cell range" : "Діапазон клітинок",
