@@ -122,7 +122,7 @@ OC.L10N.register(
     "Thresholds" : "Schwellenwerte",
     "Drag fields here" : "Felder hierher ziehen",
     "Request could not be processed" : "Anfrage konnte nicht bearbeitet werden",
-    "Import a csv directly; Do not use a data load." : "Eine CSV-Datei direkt importieren; keine Nutzdaten verwenden.",
+    "Import a csv directly; Do not use a data load." : "Eine CSV-Datei direkt importieren; keine Datenladung verwenden.",
     "Favorites" : "Favoriten",
     "Panoramas" : "Panoramen",
     "Reports" : "Berichte",
