@@ -223,6 +223,7 @@ OC.L10N.register(
     "Count" : "Бројач",
     "Local" : "Локално",
     "File" : "Фајл",
+    "Current time" : "Текуће време",
     "Sheet" : "Лист",
     "sheet name" : "назив листа",
     "Cell range" : "Опсег ћелија",

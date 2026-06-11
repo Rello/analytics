@@ -222,6 +222,7 @@ OC.L10N.register(
     "Count" : "Считать",
     "Local" : "Локальный",
     "File" : "Файл",
+    "Current time" : "Текущее время",
     "Sheet" : "Таблица",
     "sheet name" : "название листа",
     "Cell range" : "Диапазон клеток",

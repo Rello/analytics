@@ -227,6 +227,7 @@ OC.L10N.register(
     "Count" : "Aantal",
     "Local" : "Lokaal",
     "File" : "Bestand",
+    "Current time" : "Huidige tijd",
     "Sheet" : "Bladzijde",
     "sheet name" : "bladzijde naam",
     "Cell range" : "Cellreeks",

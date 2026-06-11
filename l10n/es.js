@@ -245,6 +245,7 @@ OC.L10N.register(
     "Report not available" : "El informe no está disponible",
     "Local" : "Local",
     "File" : "Archivo",
+    "Current time" : "Hora actual",
     "Sheet" : "Hoja de cálculo",
     "sheet name" : "nombre de la hoja de cálculo",
     "Cell range" : "rango de las celdas",

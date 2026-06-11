@@ -211,6 +211,7 @@ OC.L10N.register(
     "optional" : "opsional",
     "Local" : "Lokal",
     "File" : "File",
+    "Current time" : "Waktu saat ini",
     "Announcements" : "Pengumuman",
     "3rd field must be a valid number" : "bidang ke-3 harus berupa angka yang valid",
     "No data" : "Tidak ada data",

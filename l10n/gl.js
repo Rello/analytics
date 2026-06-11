@@ -229,6 +229,7 @@ OC.L10N.register(
     "Count" : "Conta",
     "Local" : "Local",
     "File" : "Ficheiro",
+    "Current time" : "Hora actual",
     "Sheet" : "Folla",
     "sheet name" : "nome da folla",
     "Cell range" : "Intervalo de celas",

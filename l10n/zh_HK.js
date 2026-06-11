@@ -270,6 +270,7 @@ OC.L10N.register(
     "Report not available" : "沒有可用的報告",
     "Local" : "近端",
     "File" : "檔案",
+    "Current time" : "目前時間",
     "Sheet" : "工作表",
     "sheet name" : "工作表名稱",
     "Cell range" : "單元格範圍",

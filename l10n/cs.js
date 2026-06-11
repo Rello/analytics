@@ -237,6 +237,7 @@ OC.L10N.register(
     "Report not available" : "Nejsou k dispozici žádné výkazy",
     "Local" : "Lokální",
     "File" : "Soubor",
+    "Current time" : "Aktuální čas",
     "Sheet" : "List",
     "sheet name" : "název listu",
     "Cell range" : "Rozsah buněk",

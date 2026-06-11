@@ -270,6 +270,7 @@ OC.L10N.register(
     "Report not available" : "Rapor kullanılamıyor",
     "Local" : "Yerel",
     "File" : "Dosya",
+    "Current time" : "Geçerli saat",
     "Sheet" : "Sayfa",
     "sheet name" : "sayfa  adı",
     "Cell range" : "Hücre aralığı",

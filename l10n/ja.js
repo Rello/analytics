@@ -124,6 +124,7 @@ OC.L10N.register(
     "Limit" : "制限",
     "Local" : "ローカル",
     "File" : "ファイル",
+    "Current time" : "現在時刻",
     "Sheet" : "シート",
     "sheet name" : "シート名",
     "Cell range" : "セル範囲",

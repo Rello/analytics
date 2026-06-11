@@ -269,6 +269,7 @@ OC.L10N.register(
     "Report not available" : "Report not available",
     "Local" : "Local",
     "File" : "File",
+    "Current time" : "Current time",
     "Sheet" : "Sheet",
     "sheet name" : "sheet name",
     "Cell range" : "Cell range",
