@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.5.0 - 2026-06-xx
+### Fixed
+- Add composite database indexes for filtered facts queries.
+
 ## 6.4.0 - 2026-06-04
 ### Added
 - Flow operations can trigger a dataload and pass the file name.
