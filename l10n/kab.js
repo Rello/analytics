@@ -44,6 +44,7 @@ OC.L10N.register(
     "Option" : "Taxtiṛt",
     "Nextcloud Assistant" : "Amallal n Nextcloud",
     "Description" : "Aglam",
+    "Selection" : "Tafrant",
     "Title" : "Azwel",
     "Copy" : "Nɣel",
     "Daily" : "S wass",
