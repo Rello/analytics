@@ -34,6 +34,26 @@ class DatasourceControllerTest extends TestCase {
         $this->assertArrayHasKey('github_demo_downloads', $result['reportTemplates'][DatasourceController::DATASET_TYPE_GIT]);
     }
 
+    public function testOwnReturnsInternalDatasourcesWithoutDispatchingRegisteredDatasourceEvent(): void {
+        $dispatcher = $this->createMock(\OCP\EventDispatcher\IEventDispatcher::class);
+        $dispatcher->expects($this->never())
+            ->method('dispatchTyped');
+
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('getName')
+            ->willReturn('Local CSV');
+        $localCsv->expects($this->once())
+            ->method('getTemplate')
+            ->willReturn([]);
+
+        $controller = $this->createController($localCsv, null, $dispatcher);
+        $result = $controller->own();
+
+        $this->assertArrayHasKey(DatasourceController::DATASET_TYPE_LOCAL_CSV, $result['datasources']);
+        $this->assertSame('Local CSV', $result['datasources'][DatasourceController::DATASET_TYPE_LOCAL_CSV]);
+    }
+
     /**
      * Verifies hidden drilldown indices are processed in numeric order and removed from headers.
      */
@@ -615,7 +635,8 @@ class DatasourceControllerTest extends TestCase {
 
     private function createController(
         ?\OCA\Analytics\Datasource\LocalCsv $localCsv = null,
-        ?\OCA\Analytics\Datasource\Github $github = null
+        ?\OCA\Analytics\Datasource\Github $github = null,
+        ?\OCP\EventDispatcher\IEventDispatcher $dispatcher = null
     ): DatasourceController {
         $appConfig = $this->createMock(\OCP\IAppConfig::class);
         $appConfig->method('getValueString')->willReturn('');
@@ -632,7 +653,7 @@ class DatasourceControllerTest extends TestCase {
             $this->createMock(\OCA\Analytics\Datasource\ExternalCsv::class),
             $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class),
             new FakeL10N(),
-            $this->createMock(\OCP\EventDispatcher\IEventDispatcher::class),
+            $dispatcher ?? $this->createMock(\OCP\EventDispatcher\IEventDispatcher::class),
             $appConfig
         );
     }

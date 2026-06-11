@@ -1322,6 +1322,10 @@ OCA.Analytics.Sidebar.Report = {
             OCA.Analytics.Sidebar.Report.buildGlobalTemplateDropdownWizard();
             OCA.Analytics.Sidebar.Report.buildGlobalTemplateListWizard();
         });
+        document.addEventListener('analytics:registeredDatasourcesLoaded', function () {
+            OCA.Analytics.Sidebar.Report.buildGlobalTemplateDropdownWizard();
+            OCA.Analytics.Sidebar.Report.buildGlobalTemplateListWizard();
+        }, {once: true});
         document.getElementById('wizardNewDatasource').addEventListener('change', OCA.Analytics.Sidebar.Report.handleDatasourceChangeWizard);
         document.getElementById('wizardNewDatasourceTemplate').addEventListener('change', OCA.Analytics.Sidebar.Report.handleTemplateChangeWizard);
         document.getElementById('wizardNewGlobalTemplate').addEventListener('change', OCA.Analytics.Sidebar.Report.handleGlobalTemplateChangeWizard);

@@ -355,6 +355,8 @@ Object.assign(OCA.Analytics.Translation = {
 
 OCA.Analytics.Datasource = OCA.Analytics.Datasource || {};
 Object.assign(OCA.Analytics.Datasource = {
+    registeredDatasourceLoading: false,
+
     /**
      * Load data source list and fill dropdown element
      */
@@ -371,8 +373,14 @@ Object.assign(OCA.Analytics.Datasource = {
         if (filter) {
             filterDatasource = '/' + filter;
         }
+        if (!filter) {
+            OCA.Analytics.Datasource.registeredDatasourceLoading = true;
+        }
         // need to offer an await here, because the data source options are important for subsequent functions in the sidebar
         let requestUrl = OC.generateUrl('apps/analytics/datasource' + filterDatasource);
+        if (!filter) {
+            requestUrl = OC.generateUrl('apps/analytics/datasource/own');
+        }
         let response = await fetch(requestUrl, {
             method: 'GET',
             headers: OCA.Analytics.headers()
@@ -380,6 +388,16 @@ Object.assign(OCA.Analytics.Datasource = {
         let data = await response.json();
 
         OCA.Analytics.datasources = data;
+        OCA.Analytics.Datasource.fillDropdown(target, data, !filter);
+        if (!filter) {
+            OCA.Analytics.Datasource.loadRegisteredDatasources(target);
+        }
+    },
+
+    /**
+     * Fill dropdown element with data source entries
+     */
+    fillDropdown: function (target, data, addLoadingMore) {
         let options = document.createDocumentFragment();
         let option = document.createElement('option');
         option.value = '';
@@ -394,12 +412,58 @@ Object.assign(OCA.Analytics.Datasource = {
             option.innerText = value;
             options.appendChild(option);
         });
+        if (addLoadingMore) {
+            option = document.createElement('option');
+            option.value = '';
+            option.disabled = true;
+            option.dataset.loadingMore = 'true';
+            option.innerText = t('analytics', 'Loading more...');
+            options.appendChild(option);
+        }
         document.getElementById(target).innerHTML = '';
         document.getElementById(target).appendChild(options);
         if (document.getElementById(target).dataset.typeId) {
             // in case the value was set in the sidebar before the dropdown was ready
             document.getElementById(target).value = document.getElementById(target).dataset.typeId;
         }
+    },
+
+    /**
+     * Load registered data sources after the internal data sources are already available
+     */
+    loadRegisteredDatasources: async function (target) {
+        let data = null;
+        try {
+            let response = await fetch(OC.generateUrl('apps/analytics/datasource/registered'), {
+                method: 'GET',
+                headers: OCA.Analytics.headers()
+            });
+            data = await response.json();
+        } catch (error) {
+            console.error('Could not load registered data sources', error);
+            OCA.Analytics.Datasource.registeredDatasourceLoading = false;
+            OCA.Analytics.Datasource.fillDropdown(target, OCA.Analytics.datasources, false);
+            return;
+        }
+
+        OCA.Analytics.datasources.datasources = Object.assign(
+            {},
+            OCA.Analytics.datasources.datasources,
+            data.datasources
+        );
+        OCA.Analytics.datasources.options = Object.assign(
+            {},
+            OCA.Analytics.datasources.options,
+            data.options
+        );
+        OCA.Analytics.datasources.reportTemplates = Object.assign(
+            {},
+            OCA.Analytics.datasources.reportTemplates,
+            data.reportTemplates
+        );
+        OCA.Analytics.Datasource.registeredDatasourceLoading = false;
+        OCA.Analytics.Datasource.fillDropdown(target, OCA.Analytics.datasources, false);
+        document.dispatchEvent(new CustomEvent('analytics:registeredDatasourcesLoaded'));
     },
 
     /**
@@ -428,7 +492,11 @@ Object.assign(OCA.Analytics.Datasource = {
         form.id = 'dataSourceOptions';
 
         if (typeof (template) === 'undefined') {
-            OCA.Analytics.Notification.notification('error', t('analytics', 'Data source not available anymore'));
+            if (OCA.Analytics.Datasource.registeredDatasourceLoading) {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Datasources still loading. Retry'));
+            } else {
+                OCA.Analytics.Notification.notification('error', t('analytics', 'Data source not available anymore'));
+            }
             return form;
         }
 

@@ -3,6 +3,7 @@
 ## 6.5.0 - 2026-06-xx
 ### Fixed
 - Add composite database indexes for filtered facts queries.
+- Lazy loading for external data source metadata.
 
 ## 6.4.0 - 2026-06-04
 ### Added

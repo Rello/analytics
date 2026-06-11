@@ -88,28 +88,27 @@ class DatasourceController extends Controller {
 	 */
 	#[NoAdminRequired]
 	public function index(?int $datasourceType = null) {
-		$result = [];
-		$datasourceIndex = $this->getDatasources($datasourceType);
+		return $this->buildDatasourceIndex($this->getDatasources($datasourceType));
+	}
 
-		$datasources = [];
-		$options = [];
-		$reportTemplates = [];
+	/**
+	 * get internal data source ids + names without dispatching registered datasource listeners
+	 *
+	 * @return array
+	 */
+	#[NoAdminRequired]
+	public function own() {
+		return $this->buildDatasourceIndex($this->filterDisabledDatasources($this->getOwnDatasources()));
+	}
 
-		foreach ($datasourceIndex as $key => $class) {
-			$datasources[$key] = $class->getName();
-			$options[$key] = $class->getTemplate();
-			if ($class instanceof IReportTemplateProvider) {
-				$reportTemplates[$key] = $class->getReportTemplates();
-			} else {
-				$reportTemplates[$key] = [];
-			}
-		}
-
-		$result['datasources'] = $datasources;
-		$result['options'] = $options;
-		$result['reportTemplates'] = $reportTemplates;
-
-		return $result;
+	/**
+	 * get registered data source ids + names
+	 *
+	 * @return array
+	 */
+	#[NoAdminRequired]
+	public function registered() {
+		return $this->buildDatasourceIndex($this->filterDisabledDatasources($this->getRegisteredDatasources()));
 	}
 
 	/**
@@ -271,15 +270,46 @@ class DatasourceController extends Controller {
 	 * @return array
 	 */
 	private function getDatasources(?int $datasourceType = null) {
-		$datasources = $this->getOwnDatasources($datasourceType) + $this->getRegisteredDatasources($datasourceType);
+		return $this->filterDisabledDatasources($this->getOwnDatasources($datasourceType) + $this->getRegisteredDatasources($datasourceType));
+	}
 
+	/**
+	 * @param array $datasourceIndex
+	 * @return array
+	 */
+	private function buildDatasourceIndex(array $datasourceIndex): array {
+		$result = [];
+		$datasources = [];
+		$options = [];
+		$reportTemplates = [];
+
+		foreach ($datasourceIndex as $key => $class) {
+			$datasources[$key] = $class->getName();
+			$options[$key] = $class->getTemplate();
+			if ($class instanceof IReportTemplateProvider) {
+				$reportTemplates[$key] = $class->getReportTemplates();
+			} else {
+				$reportTemplates[$key] = [];
+			}
+		}
+
+		$result['datasources'] = $datasources;
+		$result['options'] = $options;
+		$result['reportTemplates'] = $reportTemplates;
+
+		return $result;
+	}
+
+	/**
+	 * @param array $datasources
+	 * @return array
+	 */
+	private function filterDisabledDatasources(array $datasources): array {
 		// Data sources can be disabled globally by their ID
 		// occ config:app:set analytics disabledDataSources --type=string --value="1,3,4"
 		$disabledString = $this->appConfig->getValueString('analytics', 'disabledDataSources');
 		$disabledArray = explode(',', $disabledString);
-		$datasources = array_diff_key($datasources, array_flip($disabledArray));
-
-		return $datasources;
+		return array_diff_key($datasources, array_flip($disabledArray));
 	}
 
 	/**
