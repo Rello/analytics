@@ -110,6 +110,7 @@ class ApiDataController extends ApiController {
 		$response = $this->deriveMaintenancePossible($datasetMetadata);
 		if ($response !== true) return $response;
 
+		$insert = $update = 0;
 		foreach ($params['data'] as $dataArray) {
 
 			$dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
@@ -124,12 +125,15 @@ class ApiDataController extends ApiController {
 			$dimension1 = $this->replaceTextVariablesSingle($dimension1);
 			$dimension2 = $this->replaceTextVariablesSingle($dimension2);
 
-			$this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
-
-			// Update the Context Chat backend
-			$this->DatasetService->provider($datasetId);
+			$action = $this->StorageService->update($datasetId, $dimension1, $dimension2, $value, null, null, null, false);
+			$insert = $insert + $action['insert'];
+			$update = $update + $action['update'];
 
 			$message = 'Data update successful';
+		}
+		if ($insert > 0 || $update > 0) {
+			$this->ReportService->increaseVersionByDataset($datasetId);
+			$this->DatasetService->provider($datasetId);
 		}
 
 		return $this->requestResponse(true, Http::STATUS_OK, $message);
@@ -312,6 +316,7 @@ class ApiDataController extends ApiController {
 		$response = $this->deriveMaintenancePossible($datasetMetadata);
 		if ($response !== true) return $response;
 
+		$insert = $update = 0;
 		foreach ($params['data'] as $dataArray) {
 
 			$dimension1 = $this->deriveParameterNames($dataArray, $datasetMetadata, 'dimension1');
@@ -322,12 +327,15 @@ class ApiDataController extends ApiController {
 				return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
 			}
 
-			$this->StorageService->update($datasetId, $dimension1, $dimension2, $value);
-
-			// Update the Context Chat backend
-			$this->DatasetService->provider($datasetId);
+			$action = $this->StorageService->update($datasetId, $dimension1, $dimension2, $value, null, null, null, false);
+			$insert = $insert + $action['insert'];
+			$update = $update + $action['update'];
 
 			$message = 'Data update successful';
+		}
+		if ($insert > 0 || $update > 0) {
+			$this->ReportService->increaseVersionByDataset($datasetId);
+			$this->DatasetService->provider($datasetId);
 		}
 
 		return $this->requestResponse(true, Http::STATUS_OK, $message);

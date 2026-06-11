@@ -114,7 +114,8 @@ class StorageService {
 				$value,
 		?string $user_id = null,
 				$bulkInsert = null,
-				$aggregation = null
+				$aggregation = null,
+		bool    $increaseVersion = true
 	) {
 		TODO:
 		//dates in both columns
@@ -140,7 +141,7 @@ class StorageService {
 				$error = 1;
 			}
 			if ($action === 'insert') $insert = 1; elseif ($action === 'update') $update = 1;
-			if ($action === 'insert' || $action === 'update') {
+			if ($increaseVersion && ($action === 'insert' || $action === 'update')) {
 				$this->ReportService->increaseVersionByDataset($datasetId);
 			}
 		} else {

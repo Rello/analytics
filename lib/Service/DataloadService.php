@@ -242,7 +242,7 @@ class DataloadService
 				$row = [$row[0], $row[1], $row[count($row) - 1]];
 			}
 
-            $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert, $aggregation);
+            $action = $this->StorageService->update($datasetId, $row[0], $row[1], $row[2], $dataloadMetadata['user_id'], $bulkInsert, $aggregation, false);
             $insert = $insert + $action['insert'];
             $update = $update + $action['update'];
             $error = $error + $action['error'];
@@ -263,7 +263,10 @@ class DataloadService
         ];
 
 		// Update the Context Chat backend
-		$this->DatasetService->provider($datasetId);
+		if ($insert > 0 || $update > 0) {
+			$this->ReportService->increaseVersionByDataset($datasetId);
+			$this->DatasetService->provider($datasetId);
+		}
 
         //$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATA, ActivityManager::SUBJECT_DATA_ADD_DATALOAD, $dataloadMetadata['user_id']);
         return $result;
