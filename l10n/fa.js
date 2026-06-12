@@ -291,6 +291,7 @@ OC.L10N.register(
     "Labels" : "برچسب‌ها",
     "Vertical axis" : "Vertical axis",
     "Sort by" : "مرتب‌سازی بر اساس",
+    "Direction" : "Direction",
     "Give your numbers a meaning." : "Give your numbers a meaning.",
     "Data is processed inside Nextcloud." : "Data is processed inside Nextcloud.",
     "Share your reports and insights" : "Share your reports and insights",

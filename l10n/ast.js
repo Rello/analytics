@@ -116,6 +116,7 @@ OC.L10N.register(
     "Limit" : "Llende",
     "Local" : "Llocal",
     "File" : "Ficheru",
+    "Current time" : "Hora actual",
     "Sheet" : "Fueya",
     "Cell range" : "Intervalu de caxelles",
     "Announcements" : "Anuncios",
