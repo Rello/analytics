@@ -6,6 +6,8 @@ OC.L10N.register(
     "Choose language" : "Dil seçin",
     "Loading" : "Yükleniyor",
     "Please select" : "Lütfen seçin",
+    "Loading more..." : "Diğerleri yükleniyor...",
+    "Datasources still loading. Retry" : "Veri kaynaklarının yüklenmesi sürüyor. Yeniden dene",
     "Data source not available anymore" : "Veri kaynağı artık kullanılamıyor",
     "Column Picker" : "Sütun seçici",
     "Parameter missing" : "Parametre eksik",

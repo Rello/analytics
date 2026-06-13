@@ -4,6 +4,8 @@
     "Choose language" : "Pasirinkite kalbą",
     "Loading" : "Įkeliama",
     "Please select" : "Pasirinkite",
+    "Loading more..." : "Įkeliama daugiau...",
+    "Datasources still loading. Retry" : "Duomenų šaltiniai vis dar įkeliami. Bandykite dar kartą",
     "Data source not available anymore" : "Duomenų šaltinis nebepasiekiamas",
     "Column Picker" : "Stulpelių rinkiklis",
     "Parameter missing" : "Trūksta parametro",
