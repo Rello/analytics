@@ -4,6 +4,8 @@
     "Choose language" : "انتخاب زبان",
     "Loading" : "در حال بارگذاری",
     "Please select" : "لطفا انتخاب کنید",
+    "Loading more..." : "در حال بارگذاری موارد بیشتر...",
+    "Datasources still loading. Retry" : "منابع داده هنوز در حال بارگذاری هستند. تلاش دوباره",
     "Data source not available anymore" : "منبع داده دیگر در دسترس نیست",
     "Column Picker" : "انتخاب‌گر ستون",
     "Parameter missing" : "پارامتر یافت نشد",
