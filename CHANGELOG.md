@@ -4,6 +4,8 @@
 ### Fixed
 - Add composite database indexes for filtered facts queries.
 - Lazy loading for external data source metadata.
+- Allow user migration imports when older archives do not contain Analytics migrator metadata.
+- Show all chart series values for the hovered column with Chart.js 4 tooltips.
 
 ## 6.4.0 - 2026-06-04
 ### Added

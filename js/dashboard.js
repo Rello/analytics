@@ -535,7 +535,6 @@ OCA.Analytics.Dashboard = {
         return {
             bezierCurve: false, //remove curves from your plot
             scaleShowLabels: false, //remove labels
-            tooltipEvents: [], //remove trigger from tooltips so they will'nt be show
             pointDot: false, //remove the points markers
             scaleShowGridLines: false, //set to false to remove the grids background
             maintainAspectRatio: false,
@@ -569,10 +568,15 @@ OCA.Analytics.Dashboard = {
             animation: {
                 duration: 1500 // general animation time
             },
+            interaction: {
+                mode: 'x',
+                intersect: false,
+            },
             plugins: {
                 legend: {
                     display: false,
                 },
+                tooltip: OCA.Analytics.Visualization.getSharedTooltipOptions(),
                 datalabels: {
                     display: false,
                     formatter: (value, ctx) => {

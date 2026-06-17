@@ -109,7 +109,7 @@ class AnalyticsMigrator implements IMigrator {
 		}
 
 		if ($version === null) {
-			return false;
+			return true;
 		}
 
 		return $version <= self::VERSION;

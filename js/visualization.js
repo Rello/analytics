@@ -32,6 +32,29 @@ OCA.Analytics.Visualization = {
 
     _hexToRgbCache: {},
 
+    getSharedTooltipOptions: function () {
+        return {
+            mode: 'x',
+            intersect: false,
+            filter: function (context, index, tooltipItems) {
+                return tooltipItems.findIndex((tooltipItem) => tooltipItem.datasetIndex === context.datasetIndex) === index;
+            },
+            callbacks: {
+                label: OCA.Analytics.Visualization.formatSharedTooltipLabel,
+            },
+        };
+    },
+
+    formatSharedTooltipLabel: function (context) {
+        const datasetLabel = context.dataset.label || context.label || '';
+        const value = context.parsed?.y ?? context.parsed;
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue)) {
+            return datasetLabel + ': ' + numericValue.toLocaleString();
+        }
+        return datasetLabel;
+    },
+
     getHexToRgb: function (hex) {
         if (typeof hex !== 'string') {
             return [0, 0, 0];

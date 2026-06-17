@@ -192,24 +192,16 @@ Object.assign(OCA.Analytics.Report, {
                 duration: 0 // general animation time
             },
 
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-//                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
-                        let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
-                        if (tooltipItem['yLabel'] !== '') {
-                            return datasetLabel + ': ' + parseFloat(tooltipItem['yLabel']).toLocaleString();
-                        } else {
-                            return datasetLabel;
-                        }
-                    }
-                }
+            interaction: {
+                mode: 'x',
+                intersect: false,
             },
 
             plugins: {
                 legend: {
                     display: false,
                 },
+                tooltip: OCA.Analytics.Visualization.getSharedTooltipOptions(),
                 datalabels: {
                     display: false,
                     formatter: (value, ctx) => {

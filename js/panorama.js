@@ -131,7 +131,6 @@ Object.assign(OCA.Analytics.Panorama = {
             devicePixelRatio: 2,
             bezierCurve: false, //remove curves from your plot
             scaleShowLabels: false, //remove labels
-            tooltipEvents: [], //remove trigger from tooltips so they will not be show
             pointDot: false, //remove the points markers
             scaleShowGridLines: false, //set to false to remove the grids background
             maintainAspectRatio: false,
@@ -165,10 +164,15 @@ Object.assign(OCA.Analytics.Panorama = {
             animation: {
                 duration: 0 // general animation time
             },
+            interaction: {
+                mode: 'x',
+                intersect: false,
+            },
             plugins: {
                 legend: {
                     display: true,
                 },
+                tooltip: OCA.Analytics.Visualization.getSharedTooltipOptions(),
                 datalabels: {
                     display: false,
                     formatter: (value, ctx) => {
