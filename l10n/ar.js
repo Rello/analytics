@@ -204,6 +204,7 @@ OC.L10N.register(
     "Count" : "عدّاد",
     "Local" : "محلي",
     "File" : "File",
+    "Current time" : "الوقت الحالي",
     "Sheet" : "صفحة",
     "sheet name" : "اسم الصفحة",
     "Cell range" : "نطاق الخلايا",

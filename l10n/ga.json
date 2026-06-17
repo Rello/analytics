@@ -4,6 +4,8 @@
     "Choose language" : "Roghnaigh teanga",
     "Loading" : "Ag lódáil",
     "Please select" : "Roghnaigh le do thoil",
+    "Loading more..." : "Ag lódáil níos mó...",
+    "Datasources still loading. Retry" : "Foinsí sonraí fós ag lódáil. Déan iarracht eile.",
     "Data source not available anymore" : "Níl foinse sonraí ar fáil a thuilleadh",
     "Column Picker" : "Roghnóir Colún",
     "Parameter missing" : "Paraiméadar in easnamh",

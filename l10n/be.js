@@ -70,6 +70,7 @@ OC.L10N.register(
     "Personal access token" : "Асабісты токен доступу",
     "Local" : "Лакальна",
     "File" : "Файл",
+    "Current time" : "Бягучы час",
     "No data" : "Няма даных",
     "copy" : "копія",
     "The password is wrong. Try again." : "Пароль няправільны. Паспрабуйце яшчэ раз.",

@@ -6,6 +6,8 @@ OC.L10N.register(
     "Choose language" : "Escolher idioma",
     "Loading" : "Carregando",
     "Please select" : "Por favor, selecione",
+    "Loading more..." : "Carregando mais…",
+    "Datasources still loading. Retry" : "Fontes de dados ainda estão sendo carregadas. Tentar novamente",
     "Data source not available anymore" : "Fonte de dados não está mais disponível",
     "Column Picker" : "Seletor de Coluna",
     "Parameter missing" : "Falta de parâmetro",

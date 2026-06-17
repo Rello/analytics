@@ -4,6 +4,8 @@
     "Choose language" : "Sprache auswählen",
     "Loading" : "Lade",
     "Please select" : "Bitte auswählen",
+    "Loading more..." : "Lade weitere …",
+    "Datasources still loading. Retry" : "Datenquellen werden noch geladen. Erneut versuchen",
     "Data source not available anymore" : "Datenquelle nicht mehr verfügbar",
     "Column Picker" : "Spaltenwähler",
     "Parameter missing" : "Parameter fehlt",

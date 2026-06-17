@@ -6,6 +6,8 @@ OC.L10N.register(
     "Choose language" : "選擇語言",
     "Loading" : "正在載入",
     "Please select" : "請選取",
+    "Loading more..." : "正在載入更多……",
+    "Datasources still loading. Retry" : "仍在載入資料來源。重試",
     "Data source not available anymore" : "資料來源不再可用",
     "Column Picker" : "欄選擇器",
     "Parameter missing" : "找不到參數",

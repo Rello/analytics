@@ -244,6 +244,7 @@ OC.L10N.register(
     "Report not available" : "无可用报告",
     "Local" : "本地",
     "File" : "文件",
+    "Current time" : "当前时间",
     "Sheet" : "工作表",
     "sheet name" : "工作表名称",
     "Cell range" : "单元格范围",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Choose language" : "Valitse kieli",
     "Loading" : "Ladataan",
     "Please select" : "Valitse",
+    "Loading more..." : "Ladataan lisää...",
     "Data source not available anymore" : "Tietolähdettä ei enää ole",
     "Column Picker" : "Sarakkeen valitsin",
     "Parameter missing" : "Parametri puuttuu",
