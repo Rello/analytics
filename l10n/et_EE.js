@@ -292,7 +292,7 @@ OC.L10N.register(
     "Quickstart" : "Kiirjuhend",
     "Intro" : "Sissejuhatus",
     "Wiki" : "Viki",
-    "Options" : "Sätted",
+    "Options" : "Valikud",
     "Show top N items and group others together" : "Näita esimesed x kirjed ja rühmita muud kokku",
     "Maintain thresholds for notifications" : "Säilita teavituste lävend",
     "Analysis" : "Analüüs",
