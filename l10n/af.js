@@ -46,6 +46,7 @@ OC.L10N.register(
     "Hourly" : "Uurliks",
     "Unshare" : "Ontdeel",
     "Copy link" : "Kopieer skakel",
+    "Close" : "Close",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },

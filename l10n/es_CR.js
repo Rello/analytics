@@ -76,6 +76,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Close" : "Close",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"
