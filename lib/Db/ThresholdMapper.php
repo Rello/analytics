@@ -93,6 +93,15 @@ class ThresholdMapper
 		return (int)$sql->executeQuery()->fetchOne();
 	}
 
+	public function getOwnReportByThreshold(int $id): int {
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME)
+			->select('report')
+			->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
+		return (int)$sql->executeQuery()->fetchOne();
+	}
+
     /**
      * @throws Exception
      */
@@ -148,7 +157,8 @@ class ThresholdMapper
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
             ->set('sequence', $sql->createNamedParameter($sequence))
-            ->where($sql->expr()->eq('id', $sql->createNamedParameter($thresholdId)));
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($thresholdId)))
+            ->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
         $sql->executeStatement();
         return true;
     }

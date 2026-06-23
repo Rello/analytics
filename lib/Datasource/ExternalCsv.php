@@ -8,6 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
+use OCA\Analytics\Security\ExternalUrlValidator;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use OCA\Analytics\Service\VariableService;
@@ -83,11 +84,22 @@ class ExternalCsv implements IDatasource
         }
 
         $url = htmlspecialchars_decode($option['link'], ENT_NOQUOTES);
+        $urlError = ExternalUrlValidator::validate($url);
+        if ($urlError !== null) {
+            return [
+                'header' => [],
+                'dimensions' => [],
+                'data' => [],
+                'error' => $urlError,
+                'cache' => $cache,
+            ];
+        }
         $ch = curl_init();
         if ($ch !== false) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
             curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_REFERER, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

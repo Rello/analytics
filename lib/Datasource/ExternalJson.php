@@ -8,6 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
+use OCA\Analytics\Security\ExternalUrlValidator;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
@@ -82,6 +83,16 @@ class ExternalJson implements IDatasource
         }
 
         $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
+        $urlError = ExternalUrlValidator::validate($url);
+        if ($urlError !== null) {
+            return [
+                'header' => [],
+                'dimensions' => [],
+                'data' => [],
+                'error' => $urlError,
+                'cache' => $cache,
+            ];
+        }
         $auth = $option['auth'];
         $post = $option['method'] === 'POST';
         $contentType = ($option['content-type'] && $option['content-type'] !== '') ? $option['content-type'] : 'application/json';
@@ -101,6 +112,7 @@ class ExternalJson implements IDatasource
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_USERPWD, $auth);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -117,7 +129,6 @@ class ExternalJson implements IDatasource
 
 		$return = $this->jsonParser($option, $rawResult);
 		$return['rawdata'] = $rawResult;
-		$return['customHeaders'] = $headers;
 		$return['URL'] = $url;
 		$return['error'] = ($http_code >= 200 && $http_code < 300) ? 0 : 'HTTP response code: ' . $http_code;
 		$return['cache'] = $cache;

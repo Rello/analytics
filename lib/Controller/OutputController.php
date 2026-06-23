@@ -15,6 +15,7 @@ use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Service\StorageService;
 use OCA\Analytics\Service\VariableService;
 use OCA\Analytics\Service\PanoramaService;
+use OCA\Analytics\Security\DatasourceResultSanitizer;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -264,7 +265,7 @@ class OutputController extends Controller {
 		} else {
 			// Realtime data
 			$result = $this->DatasourceController->read($datasource, $reportMetadata);
-			unset($result['rawdata']);
+			$result = DatasourceResultSanitizer::sanitize($result);
 			if (isset($result['filteroptions']) && is_string($result['filteroptions'])) {
 				$reportMetadata['filteroptions'] = $result['filteroptions'];
 				$filterOptions = $result['filteroptions'];

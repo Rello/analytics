@@ -18,6 +18,9 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Psr\Log\LoggerInterface;
 
 class LocalSpreadsheet implements IDatasource {
+	private const MAX_RANGE_ROWS = 10000;
+	private const MAX_RANGE_CELLS = 100000;
+
 	private $logger;
 	private $rootFolder;
 	private $l10n;
@@ -104,6 +107,18 @@ class LocalSpreadsheet implements IDatasource {
 		if (strlen($option['sheet']) > 0) {
 			$reader->setLoadSheetsOnly([$option['sheet']]);
 		}
+
+		$rangeError = $this->validateRanges((string)$option['range']);
+		if ($rangeError !== null) {
+			return [
+				'header' => [],
+				'dimensions' => [],
+				'data' => [],
+				'error' => $rangeError,
+				'cache' => $cache,
+			];
+		}
+
 		$spreadsheet = $reader->load($fileName);
 
 		// separated columns can be selected via ranges e.g. "A1:B9,C1:C9"
@@ -161,6 +176,34 @@ class LocalSpreadsheet implements IDatasource {
 			'key' => $currentCacheKey,
 			'notModified' => ($clientCacheKey !== '' && $clientCacheKey === $currentCacheKey),
 		];
+	}
+
+	private function validateRanges(string $rangeList): ?string {
+		$ranges = str_getcsv($rangeList);
+		$totalCells = 0;
+		foreach ($ranges as $range) {
+			$range = strtoupper(trim($range));
+			if ($range === '') {
+				return $this->l10n->t('Invalid spreadsheet range');
+			}
+
+			if (preg_match('/^[A-Z]{1,3}[1-9][0-9]*(?::[A-Z]{1,3}[1-9][0-9]*)?$/', $range) !== 1) {
+				return $this->l10n->t('Invalid spreadsheet range');
+			}
+
+			[$start, $end] = array_pad(explode(':', $range, 2), 2, $range);
+			[$startColumn, $startRow] = Coordinate::coordinateFromString($start);
+			[$endColumn, $endRow] = Coordinate::coordinateFromString($end);
+			$columns = abs(Coordinate::columnIndexFromString($endColumn) - Coordinate::columnIndexFromString($startColumn)) + 1;
+			$rows = abs((int)$endRow - (int)$startRow) + 1;
+			$totalCells += $columns * $rows;
+
+			if ($rows > self::MAX_RANGE_ROWS || $totalCells > self::MAX_RANGE_CELLS) {
+				return $this->l10n->t('Spreadsheet range is too large');
+			}
+		}
+
+		return null;
 	}
 
 	private function removeNullColumns(array $data): array {

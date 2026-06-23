@@ -74,6 +74,9 @@ class DataloadService
      */
     public function create($datasetId, int $datasourceId)
     {
+        if (empty($this->DatasetService->readOwn((int)$datasetId))) {
+            return 0;
+        }
         return $this->DataloadMapper->create((int)$datasetId, $datasourceId);
     }
 
@@ -86,6 +89,9 @@ class DataloadService
      */
     public function read($datasetId)
     {
+        if (empty($this->DatasetService->readOwn((int)$datasetId))) {
+            return [];
+        }
         return $this->DataloadMapper->read((int)$datasetId);
     }
 
@@ -100,6 +106,9 @@ class DataloadService
      */
     public function update(int $dataloadId, $name, $option, $schedule)
     {
+        if (empty($this->DataloadMapper->readOwnById($dataloadId))) {
+            return false;
+        }
         $array = json_decode($option, true);
         foreach ($array as $key => $value) {
             $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
@@ -117,6 +126,9 @@ class DataloadService
      */
     public function copy(int $dataloadId)
     {
+        if (empty($this->DataloadMapper->readOwnById($dataloadId))) {
+            return false;
+        }
         return $this->DataloadMapper->copy($dataloadId);
     }
 
@@ -128,6 +140,9 @@ class DataloadService
      */
     public function delete(int $dataloadId)
     {
+        if (empty($this->DataloadMapper->readOwnById($dataloadId))) {
+            return false;
+        }
         return $this->DataloadMapper->delete($dataloadId);
     }
 
@@ -143,7 +158,7 @@ class DataloadService
     {
         $schedules = $this->DataloadMapper->getDataloadBySchedule($schedule);
         foreach ($schedules as $dataload) {
-            $result = $this->execute($dataload['id']);
+            $result = $this->execute($dataload['id'], null, false);
             if ($result['error'] !== 0) {
                 // if the data source produced an error, a notification needs to be triggered
                 $dataset = $this->DatasetService->read($dataload['dataset']);
@@ -160,7 +175,7 @@ class DataloadService
      * @return array
      * @throws Exception
      */
-    public function execute(int $dataloadId, ?string $file = null)
+    public function execute(int $dataloadId, ?string $file = null, bool $enforceOwnership = true)
     {
         $bulkSize = 500;
         $insert = $update = $error = $delete = $currentCount = 0;
@@ -168,10 +183,10 @@ class DataloadService
         $aggregation = null;
 
         // get the data from the data source
-        $result = $this->getDataFromDatasource($dataloadId, $file);
+        $result = $this->getDataFromDatasource($dataloadId, $file, $enforceOwnership);
 
         // dont continue in case of data source error
-        if ($result['error'] !== 0) {
+        if (!is_array($result) || $result['error'] !== 0) {
             return [
                 'insert' => $insert,
                 'update' => $update,
@@ -181,7 +196,15 @@ class DataloadService
         }
 
         // get the meta data
-        $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
+        $dataloadMetadata = $this->getDataloadMetadata($dataloadId, $enforceOwnership);
+        if (empty($dataloadMetadata)) {
+            return [
+                'insert' => $insert,
+                'update' => $update,
+                'delete' => $delete,
+                'error' => 1,
+            ];
+        }
         $option = json_decode($dataloadMetadata['option'], true);
         $datasetId = $dataloadMetadata['dataset'];
 
@@ -282,9 +305,9 @@ class DataloadService
      * @throws NotFoundResponse
      * @throws \OCP\DB\Exception
      */
-    public function getDataFromDatasource(int $dataloadId, ?string $file = null)
+    public function getDataFromDatasource(int $dataloadId, ?string $file = null, bool $enforceOwnership = true)
     {
-        $dataloadMetadata = $this->DataloadMapper->getDataloadById($dataloadId);
+        $dataloadMetadata = $this->getDataloadMetadata($dataloadId, $enforceOwnership);
 
         if (!empty($dataloadMetadata)) {
 
@@ -539,12 +562,21 @@ class DataloadService
     private function getDatasetId($objectId, bool $isDataset)
     {
         if ($isDataset) {
-            $dataset = $objectId;
+            $ownDataset = $this->DatasetService->readOwn((int)$objectId);
+            $dataset = empty($ownDataset) ? '' : (int)$ownDataset['id'];
         } else {
             $reportMetadata = $this->ReportService->read($objectId);
-            $dataset = (int)$reportMetadata['dataset'];
+            $dataset = empty($reportMetadata) ? '' : (int)$reportMetadata['dataset'];
         }
         return $dataset;
+    }
+
+    private function getDataloadMetadata(int $dataloadId, bool $enforceOwnership)
+    {
+        if ($enforceOwnership) {
+            return $this->DataloadMapper->readOwnById($dataloadId);
+        }
+        return $this->DataloadMapper->getDataloadById($dataloadId);
     }
 
     private function detectDelimiter($data): string

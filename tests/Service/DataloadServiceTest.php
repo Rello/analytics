@@ -11,6 +11,7 @@ use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\StorageService;
 use OCA\Analytics\Service\VariableService;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
+use OCP\AppFramework\Http\NotFoundResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -38,7 +39,7 @@ class DataloadServiceTest extends TestCase {
 
 		$dataloadMapper = $this->createMock(DataloadMapper::class);
 		$dataloadMapper->expects($this->once())
-			->method('getDataloadById')
+			->method('readOwnById')
 			->with(42)
 			->willReturn([
 				'datasource' => DatasourceController::DATASET_TYPE_EXTERNAL_CSV,
@@ -79,7 +80,7 @@ class DataloadServiceTest extends TestCase {
 
 		$dataloadMapper = $this->createMock(DataloadMapper::class);
 		$dataloadMapper->expects($this->once())
-			->method('getDataloadById')
+			->method('readOwnById')
 			->with(42)
 			->willReturn([
 				'datasource' => DatasourceController::DATASET_TYPE_LOCAL_JSON,
@@ -95,17 +96,100 @@ class DataloadServiceTest extends TestCase {
 		$this->assertSame(0, $result['error']);
 	}
 
-	private function createService(DatasourceController $datasourceController, DataloadMapper $dataloadMapper): DataloadService {
+	public function testCreateRejectsUnownedDataset(): void {
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->expects($this->once())
+			->method('readOwn')
+			->with(77)
+			->willReturn(false);
+
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->never())->method('create');
+
+		$service = $this->createService(
+			$this->createMock(DatasourceController::class),
+			$dataloadMapper,
+			$datasetService
+		);
+
+		$this->assertSame(0, $service->create(77, 0));
+	}
+
+	public function testUpdateDataRejectsUnownedDataset(): void {
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->expects($this->once())
+			->method('readOwn')
+			->with(77)
+			->willReturn(false);
+
+		$storageService = $this->createMock(StorageService::class);
+		$storageService->expects($this->never())->method('update');
+
+		$service = $this->createService(
+			$this->createMock(DatasourceController::class),
+			$this->createMock(DataloadMapper::class),
+			$datasetService,
+			null,
+			$storageService
+		);
+
+		$this->assertFalse($service->updateData(77, 'a', 'b', '1', true));
+	}
+
+	public function testGetDataFromDatasourceRejectsUnownedDataload(): void {
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('readOwnById')
+			->with(42)
+			->willReturn(false);
+		$dataloadMapper->expects($this->never())->method('getDataloadById');
+
+		$datasourceController = $this->createMock(DatasourceController::class);
+		$datasourceController->expects($this->never())->method('read');
+
+		$service = $this->createService($datasourceController, $dataloadMapper);
+
+		$this->assertInstanceOf(NotFoundResponse::class, $service->getDataFromDatasource(42));
+	}
+
+	public function testExecuteRejectsUnownedDataload(): void {
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('readOwnById')
+			->with(42)
+			->willReturn(false);
+
+		$service = $this->createService(
+			$this->createMock(DatasourceController::class),
+			$dataloadMapper
+		);
+
+		$result = $service->execute(42);
+
+		$this->assertSame(1, $result['error']);
+		$this->assertSame(0, $result['insert']);
+		$this->assertSame(0, $result['update']);
+		$this->assertSame(0, $result['delete']);
+	}
+
+	private function createService(
+		DatasourceController $datasourceController,
+		DataloadMapper $dataloadMapper,
+		?DatasetService $datasetService = null,
+		?ReportService $reportService = null,
+		?StorageService $storageService = null,
+		?VariableService $variableService = null
+	): DataloadService {
 		return new DataloadService(
 			'u1',
 			new FakeL10N(),
 			new NullLogger(),
 			$this->createMock(ActivityManager::class),
 			$datasourceController,
-			$this->createMock(ReportService::class),
-			$this->createMock(DatasetService::class),
-			$this->createMock(StorageService::class),
-			$this->createMock(VariableService::class),
+			$reportService ?? $this->createMock(ReportService::class),
+			$datasetService ?? $this->createMock(DatasetService::class),
+			$storageService ?? $this->createMock(StorageService::class),
+			$variableService ?? $this->createMock(VariableService::class),
 			$this->createMock(NotificationManager::class),
 			$dataloadMapper
 		);

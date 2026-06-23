@@ -8,6 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
+use OCA\Analytics\Security\ExternalUrlValidator;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
@@ -64,6 +65,15 @@ class Regex implements IDatasource
 	{
 		$regex = isset($option['regex']) ? htmlspecialchars_decode($option['regex'], ENT_NOQUOTES) : '';
 		$url = isset($option['url']) ? htmlspecialchars_decode($option['url'], ENT_NOQUOTES) : '';
+		$urlError = ExternalUrlValidator::validate($url);
+		if ($urlError !== null) {
+			return [
+				'header' => ['', 'Dimension2', 'Count'],
+				'dimensions' => ['', 'Dimension2'],
+				'data' => [],
+				'error' => $urlError,
+			];
+		}
 
 		// Fetch HTML content using cURL
 		[$curlResult, $httpCode] = $this->fetchUrlContent($url);
@@ -122,9 +132,10 @@ class Regex implements IDatasource
 		}
 
 		curl_setopt_array($ch, [
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYPEER => true,
+			CURLOPT_SSL_VERIFYHOST => 2,
 			CURLOPT_HEADER => false,
-			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_FOLLOWLOCATION => false,
 			CURLOPT_URL => $url,
 			CURLOPT_REFERER => $url,
 			CURLOPT_RETURNTRANSFER => true,

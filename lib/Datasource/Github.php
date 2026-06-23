@@ -266,21 +266,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 		$ch = curl_init();
 		$http_code = 0;
 		if ($ch !== false) {
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_HEADER, false);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_REFERER, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-			if (isset($option['token']) && $option['token'] !== '') {
-				$headers = [
-					'Authorization: token ' . $option['token'],
-					'User-Agent: Analytics for Nextcloud',
-					'Accept: application/vnd.github.v3+json'
-				];
-				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-			}
+			curl_setopt_array($ch, $this->buildCurlOptions($url, $option));
 			$curlResult = curl_exec($ch);
 			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
@@ -289,6 +275,29 @@ class Github implements IDatasource, IReportTemplateProvider {
 		}
 		$curlResult = json_decode($curlResult, true);
 		return ['data' => $curlResult, 'http_code' => $http_code];
+	}
+
+	private function buildCurlOptions($url, $option): array {
+		$options = [
+			CURLOPT_SSL_VERIFYPEER => true,
+			CURLOPT_SSL_VERIFYHOST => 2,
+			CURLOPT_HEADER => false,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_URL => $url,
+			CURLOPT_REFERER => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
+		];
+
+		if (isset($option['token']) && $option['token'] !== '') {
+			$options[CURLOPT_HTTPHEADER] = [
+				'Authorization: token ' . $option['token'],
+				'User-Agent: Analytics for Nextcloud',
+				'Accept: application/vnd.github.v3+json'
+			];
+		}
+
+		return $options;
 	}
 
 	private function floatvalue($val) {

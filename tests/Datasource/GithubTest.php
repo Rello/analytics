@@ -46,4 +46,20 @@ class GithubTest extends TestCase
 		$this->assertSame('Rate limit exceeded', $result['error']);
 		$this->assertSame([], $result['data']);
 	}
+
+	public function testBuildCurlOptionsVerifiesTlsWhenTokenIsConfigured(): void
+	{
+		$method = new \ReflectionMethod(Github::class, 'buildCurlOptions');
+		$method->setAccessible(true);
+
+		$options = $method->invoke(
+			$this->github,
+			'https://api.github.com/repos/nextcloud/server',
+			['token' => 'secret-token']
+		);
+
+		$this->assertTrue($options[CURLOPT_SSL_VERIFYPEER]);
+		$this->assertSame(2, $options[CURLOPT_SSL_VERIFYHOST]);
+		$this->assertContains('Authorization: token secret-token', $options[CURLOPT_HTTPHEADER]);
+	}
 }

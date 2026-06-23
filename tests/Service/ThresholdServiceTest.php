@@ -119,4 +119,27 @@ class ThresholdServiceTest extends TestCase {
                         // Add more scenarios here …
                 ];
         }
+
+	public function testCreateRejectsUnownedReport(): void {
+		$thresholdMapper = $this->createMock(ThresholdMapper::class);
+		$thresholdMapper->expects($this->never())->method('create');
+
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->expects($this->once())
+			->method('readOwn')
+			->with(55)
+			->willReturn(false);
+		$reportMapper->expects($this->never())->method('increaseVersionByReport');
+
+		$service = new ThresholdService(
+			new NullLogger(),
+			$thresholdMapper,
+			$this->createMock(NotificationManager::class),
+			$reportMapper,
+			$this->createMock(VariableService::class),
+			new FakeL10N()
+		);
+
+		$this->assertSame(0, $service->create(55, 0, 'EQ', 'x', 1, 'row'));
+	}
 }

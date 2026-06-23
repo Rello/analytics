@@ -217,6 +217,18 @@ class DataloadMapper {
 		return $result;
 	}
 
+	public function readOwnById(int $dataloadId) {
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME)
+			->select('*')
+			->where($sql->expr()->eq('id', $sql->createNamedParameter($dataloadId)))
+			->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)));
+		$statement = $sql->executeQuery();
+		$result = $statement->fetch();
+		$statement->closeCursor();
+		return $result;
+	}
+
 	/**
 	 * truncates fiels do DB-field size
 	 *

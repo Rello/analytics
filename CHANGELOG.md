@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.5.1 - 2026-06-xx
+### Fixed
+- Harden ownership checks and external datasource handling for security audit findings.
+
 ## 6.5.0 - 2026-06-17
 ### Fixed
 - Add composite database indexes for filtered facts queries.

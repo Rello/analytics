@@ -73,6 +73,9 @@ class ThresholdService {
 	 * @throws Exception
 	 */
 	public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring) {
+		if (empty($this->ReportMapper->readOwn($reportId))) {
+			return 0;
+		}
 		$this->ReportMapper->increaseVersionByReport($reportId);
 		return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
 	}
@@ -150,9 +153,14 @@ class ThresholdService {
 	 * @return bool
 	 */
 	public function delete(int $thresholdId) {
-		$reportId = $this->ThresholdMapper->getReportByThreshold($thresholdId);
+		$reportId = $this->ThresholdMapper->getOwnReportByThreshold($thresholdId);
+		if ($reportId === 0) {
+			return false;
+		}
 		$this->logger->info('reportId: ' . $reportId);
-		$this->ReportMapper->increaseVersionByReport($reportId);
+		if (!empty($this->ReportMapper->readOwn($reportId))) {
+			$this->ReportMapper->increaseVersionByReport($reportId);
+		}
 		$this->ThresholdMapper->deleteThreshold($thresholdId);
 		return true;
 	}
@@ -165,14 +173,20 @@ class ThresholdService {
 	 */
 	public function reorder(array $orderedIds): bool {
 		$position = 1;
+		$reportId = 0;
 		foreach ($orderedIds as $id) {
+			$thresholdReportId = $this->ThresholdMapper->getOwnReportByThreshold((int)$id);
+			if ($thresholdReportId === 0) {
+				return false;
+			}
+			$reportId = $thresholdReportId;
 			$this->ThresholdMapper->updateSequence((int)$id, $position);
 			$position++;
-			$thresholdId = $id;
 		}
-		$reportId = $this->ThresholdMapper->getReportByThreshold($thresholdId);
 		$this->logger->info('reportId: ' . $reportId);
-		$this->ReportMapper->increaseVersionByReport($reportId);
+		if ($reportId !== 0 && !empty($this->ReportMapper->readOwn($reportId))) {
+			$this->ReportMapper->increaseVersionByReport($reportId);
+		}
 
 		return true;
 	}
@@ -195,6 +209,9 @@ class ThresholdService {
 		$datasetMetadata = $this->ReportMapper->read($reportId);
 
 		foreach ($thresholds as $threshold) {
+			if (isset($datasetMetadata['user_id']) && $threshold['user_id'] !== $datasetMetadata['user_id']) {
+				continue;
+			}
 			$dimIndex = intval($threshold['dimension']);
 			switch ($dimIndex) {
 				case 0:

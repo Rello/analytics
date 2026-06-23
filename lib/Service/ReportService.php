@@ -198,6 +198,11 @@ class ReportService {
 		}
 		if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
 			$dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
+		} else if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset !== 0) {
+			$ownDataset = $this->DatasetService->readOwn($dataset);
+			if (empty($ownDataset)) {
+				return 0;
+			}
 		}
 		$reportId = $this->ReportMapper->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
 		$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_REPORT, ActivityManager::SUBJECT_REPORT_ADD);

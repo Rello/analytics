@@ -121,4 +121,36 @@ class ReportServiceTest extends TestCase {
 
 		$this->assertTrue($service->setFavorite(81, 'false'));
 	}
+
+	public function testCreateRejectsUnownedInternalDataset(): void {
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->expects($this->once())
+			->method('readOwn')
+			->with(77)
+			->willReturn(false);
+
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->expects($this->never())->method('create');
+
+		$service = new ReportService(
+			'u1',
+			new FakeL10N(),
+			$this->createMock(LoggerInterface::class),
+			$this->createMock(\OCP\ITagManager::class),
+			$this->createMock(ShareService::class),
+			$datasetService,
+			$this->createMock(StorageMapper::class),
+			$reportMapper,
+			$this->createMock(ThresholdMapper::class),
+			$this->createMock(DataloadMapper::class),
+			$this->createMock(ActivityManager::class),
+			$this->createMock(\OCP\Files\IRootFolder::class),
+			$this->createMock(\OCP\IConfig::class),
+			$this->createMock(VariableService::class)
+		);
+
+		$result = $service->create('Report', '', 0, 2, 77, '{}', 'table', 'table', 'A', 'B', 'Value');
+
+		$this->assertSame(0, $result);
+	}
 }
