@@ -6,6 +6,7 @@ OC.L10N.register(
     "Choose language" : "Pilih bahasa",
     "Loading" : "Memuat",
     "Please select" : "Harap pilih",
+    "Loading more..." : "Memuat lebih banyak...",
     "Data source not available anymore" : "Sumber data tak lagi tersedia",
     "Column Picker" : "Pemilih Kolom",
     "Parameter missing" : "Parameter tidak ada",
