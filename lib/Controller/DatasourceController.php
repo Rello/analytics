@@ -403,13 +403,25 @@ class DatasourceController extends Controller {
 	}
 
 	private function recordMatchesAnyFilter(array $record, $key, array $filters): bool {
+		$hasPositiveFilter = false;
+		$matchesPositiveFilter = false;
+
 		foreach ($filters as $value) {
 			$filterValue = $value['value'];
 			$filterValueNoQuotes = trim($value['value'], "'");
 			$filterOption = $value['option'];
 
-			if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes)) || ($filterOption === 'NOTLIKE' && !$this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
-				return true;
+			if ($filterOption === 'NOTLIKE') {
+				if ($this->matchesLikeFilter($record[$key], $filterValueNoQuotes)) {
+					return false;
+				}
+				continue;
+			}
+
+			$hasPositiveFilter = true;
+
+			if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
+				$matchesPositiveFilter = true;
 			} else if ($filterOption === 'IN') {
 				preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
 				$valuesArray = array_map(function($v) {
@@ -417,11 +429,12 @@ class DatasourceController extends Controller {
 				}, $matches[0]);
 
 				if (in_array($record[$key], $valuesArray)) {
-					return true;
+					$matchesPositiveFilter = true;
 				}
 			}
 		}
-		return false;
+
+		return !$hasPositiveFilter || $matchesPositiveFilter;
 	}
 
 	private function matchesLikeFilter($value, string $filterValue): bool {

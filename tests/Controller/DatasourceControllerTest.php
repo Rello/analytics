@@ -557,6 +557,40 @@ class DatasourceControllerTest extends TestCase {
     }
 
     /**
+     * Confirms NOTLIKE filters on a dimension exclude rows while positive filters remain OR alternatives.
+     */
+    public function testReadCombinesSameDimensionPositiveFiltersWithNotLikeExclusions(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->willReturn([
+                'header' => ['Tag', 'Downloads'],
+                'dimensions' => ['Tag'],
+                'data' => [
+                    ['v9.3.2-rc.1', 17370],
+                    ['v9.3.1', 23255],
+                    ['v9.3.1-tp.1-dev-buildcache', 6],
+                    ['nightly', 115],
+                    ['latest', 17370],
+                ],
+                'error' => 0,
+            ]);
+
+        $controller = $this->createController($localCsv);
+        $metadata = [
+            'link' => '{"link":"/data.csv"}',
+            'user_id' => 'u1',
+            'filteroptions' => '{"aggregate":false,"filter":[{"dimension":"0","option":"LIKE","value":"v*"},{"dimension":"0","option":"NOTLIKE","value":"*buildcache*"},{"dimension":"0","option":"NOTLIKE","value":"latest*"},{"dimension":"0","option":"NOTLIKE","value":"nightly*"}]}',
+        ];
+
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata, false);
+
+        $this->assertCount(2, $result['data']);
+        $this->assertSame(['v9.3.2-rc.1', 17370], $result['data'][0]);
+        $this->assertSame(['v9.3.1', 23255], $result['data'][1]);
+    }
+
+    /**
      * Confirms hidden drilldown columns are removed before default aggregation is applied.
      */
     public function testReadAggregatesAfterRemovingHiddenDrilldownColumnsWhenAggregateOptionIsOmitted(): void {

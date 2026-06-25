@@ -45,11 +45,11 @@ class Github implements IDatasource, IReportTemplateProvider {
 	public function getTemplate(): array {
 		$template = array();
 		$template[] = ['id' => 'user', 'name' => 'GitHub Username', 'placeholder' => 'GitHub user'];
-		$template[] = ['id' => 'repository', 'name' => 'Repository', 'placeholder' => 'GitHub repository'];
+		$template[] = ['id' => 'repository', 'name' => 'Repository / package', 'placeholder' => 'GitHub repository or package'];
 		$template[] = [
 			'id' => 'data',
-			'name' => 'Releases, Issues or PRs',
-			'placeholder' => 'release-' . $this->l10n->t('Releases') . '/issues-' . $this->l10n->t('Issues') . '/pulls-' . $this->l10n->t('Pull Requests'),
+			'name' => 'Releases, Packages, Issues or PRs',
+			'placeholder' => 'release-' . $this->l10n->t('Releases') . '/package-' . $this->l10n->t('Packages') . '/issues-' . $this->l10n->t('Issues') . '/pulls-' . $this->l10n->t('Pull Requests'),
 			'type' => 'tf'
 		];
 		$template[] = [
@@ -173,6 +173,25 @@ class Github implements IDatasource, IReportTemplateProvider {
 				$header[] = $this->l10n->t('Asset');
 			}
 			$header[] = $this->l10n->t('Download count');
+		} else if ($option['data'] === 'package') {
+			$url = $this->buildPackageVersionsUrl($option);
+			$curlResult = $this->getCurlRawData($url, $option);
+			$http_code = $curlResult['http_code'];
+
+			// Check for HTTP error code
+			if ($http_code < 200 || $http_code >= 300) {
+				return $this->buildHttpErrorResult($http_code, $curlResult, $cache);
+			}
+
+			foreach ($this->parsePackageDownloadRows($curlResult['data'], $option) as $versionRow) {
+				$data[] = [
+					$versionRow['tag'],
+					$versionRow['downloads']
+				];
+			}
+
+			$header[] = $this->l10n->t('Tag');
+			$header[] = $this->l10n->t('Download count');
 		} else if ($option['data'] === 'issues') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'];
 			$curlResult = $this->getCurlData($url, $option);
@@ -243,16 +262,21 @@ class Github implements IDatasource, IReportTemplateProvider {
 			'dimensions' => [],
 			'data' => [],
 			'rawdata' => $curlResult,
-			'error' => $this->getHttpErrorMessage($httpCode),
+			'error' => $this->getHttpErrorMessage($httpCode, $curlResult['data'] ?? []),
 			'cache' => $cache,
 		];
 	}
 
-	private function getHttpErrorMessage(int $httpCode): string {
+	private function getHttpErrorMessage(int $httpCode, array $responseData): string {
 		if ($httpCode === 401) {
 			return $this->l10n->t('Missing or invalid GitHub access token');
 		}
 		if ($httpCode === 403) {
+			$message = $this->getGithubErrorMessage($responseData);
+			if ($message !== '' && stripos($message, 'rate limit') === false) {
+				return 'GitHub API error: ' . $message;
+			}
+
 			return $this->l10n->t('Rate limit exceeded');
 		}
 		if ($httpCode === 0) {
@@ -260,6 +284,93 @@ class Github implements IDatasource, IReportTemplateProvider {
 		}
 
 		return 'HTTP response code: ' . $httpCode;
+	}
+
+	private function getGithubErrorMessage(array $responseData): string {
+		if (isset($responseData['message']) && is_string($responseData['message'])) {
+			return $responseData['message'];
+		}
+
+		return '';
+	}
+
+	private function buildPackageUrl(array $option): string {
+		return 'https://api.github.com/orgs/' . rawurlencode($option['user']) . '/packages/container/' . rawurlencode($option['repository']);
+	}
+
+	private function buildPackageVersionsUrl(array $option): string {
+		return 'https://github.com/orgs/' . rawurlencode($option['user']) . '/packages/container/' . rawurlencode($option['repository']) . '/versions?filters%5Bversion_type%5D=tagged';
+	}
+
+	private function parsePackageDownloadRows(string $html, array $option): array {
+		$rows = [];
+		$limit = isset($option['limit']) && $option['limit'] !== '' ? (int)$option['limit'] : 0;
+
+		preg_match_all('/<li\b[^>]*class="[^"]*\bBox-row\b[^"]*"[^>]*>(.*?)<\/li>/is', $html, $matches);
+		foreach ($matches[1] as $rowHtml) {
+			preg_match_all('/<a\b[^>]*class="[^"]*\bLabel\b[^"]*"[^>]*>(.*?)<\/a>/is', $rowHtml, $tagMatches);
+			if ($tagMatches[1] === []) {
+				continue;
+			}
+
+			if (!preg_match('/octicon-download.*?<\/svg>\s*([\d,.]+)/is', $rowHtml, $downloadMatch)) {
+				continue;
+			}
+
+			$downloads = $this->parseDownloadCount($downloadMatch[1]);
+			foreach ($tagMatches[1] as $tagHtml) {
+				$tag = trim(html_entity_decode(strip_tags($tagHtml), ENT_QUOTES | ENT_HTML5));
+				if ($tag !== '') {
+					$rows[] = [
+						'tag' => $tag,
+						'downloads' => $downloads,
+					];
+				}
+
+				if ($limit > 0 && count($rows) >= $limit) {
+					return $rows;
+				}
+			}
+		}
+
+		return $rows;
+	}
+
+	private function parseDownloadCount(string $value): int {
+		$digits = preg_replace('/\D+/', '', $value);
+		if ($digits === null || $digits === '') {
+			return 0;
+		}
+
+		return (int)$digits;
+	}
+
+	private function getCurlRawData($url, $option) {
+		$ch = curl_init();
+		$http_code = 0;
+		if ($ch !== false) {
+			curl_setopt_array($ch, $this->buildCurlOptions($url, $option));
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $this->buildHtmlRequestHeaders($option));
+			$curlResult = curl_exec($ch);
+			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			curl_close($ch);
+		} else {
+			$curlResult = '';
+		}
+		return ['data' => (string)$curlResult, 'http_code' => $http_code];
+	}
+
+	private function buildHtmlRequestHeaders(array $option): array {
+		$headers = [
+			'Accept: text/html',
+			'User-Agent: Analytics for Nextcloud',
+		];
+
+		if (isset($option['token']) && $option['token'] !== '') {
+			$headers[] = 'Authorization: token ' . $option['token'];
+		}
+
+		return $headers;
 	}
 
 	private function getCurlData($url, $option) {

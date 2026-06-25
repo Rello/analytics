@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.5.1 - 2026-06-xx
+## 6.5.1 - 2026-06-25
+### Added
+- GitHub datasource can query container package metadata with tags.
+
 ### Fixed
 - Harden ownership checks and external datasource handling for security audit findings.
+- Show GitHub 403 API errors instead of always reporting rate limits.
+- Allow same-column negative filters to exclude rows from positive filter matches.
 
 ## 6.5.0 - 2026-06-17
 ### Fixed
