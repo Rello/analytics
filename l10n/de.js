@@ -280,6 +280,8 @@ OC.L10N.register(
     "sheet name" : "Blattname",
     "Cell range" : "Zellenbereich",
     "e.g. A1:C3,A5:C5" : "z. B. A1:C3,A5:C5",
+    "Invalid spreadsheet range" : "Ungültiger Tabellenkalkulationsbereich",
+    "Spreadsheet range is too large" : "Tabellenkalkulationsbereich ist zu groß",
     "HTML grabber" : "HTML-Grabber",
     "valid regex" : "gültiger Regex",
     "Import data into an existing dataset" : "Daten in einem bestehenden Datensatz importieren",

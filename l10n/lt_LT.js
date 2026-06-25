@@ -280,6 +280,8 @@ OC.L10N.register(
     "sheet name" : "lapo pavadinimas",
     "Cell range" : "Langelio ribos",
     "e.g. A1:C3,A5:C5" : "pvz. A1:C3,A5:C5",
+    "Invalid spreadsheet range" : "Netinkamas skaičiuoklės diapazonas",
+    "Spreadsheet range is too large" : "Skaičiuoklės diapazonas per didelis",
     "HTML grabber" : "HTML griebtuvas",
     "valid regex" : "teisinga reguliarioji išraiška",
     "Import data into an existing dataset" : "Duomenų importavimas į esamą duomenų rinkinį",
