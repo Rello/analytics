@@ -280,6 +280,8 @@ OC.L10N.register(
     "sheet name" : "工作表名稱",
     "Cell range" : "儲存格範圍",
     "e.g. A1:C3,A5:C5" : "範例：A1:C3,A5:C5",
+    "Invalid spreadsheet range" : "無效的試算表範圍",
+    "Spreadsheet range is too large" : "試算表範圍太大",
     "HTML grabber" : "HTML 抓取程式",
     "valid regex" : "有效的正規表示式",
     "Import data into an existing dataset" : "將資料匯入至既有的資料集",

@@ -121,6 +121,7 @@ OC.L10N.register(
     "Authentication" : "Autenticação",
     "Releases" : "Lançamentos",
     "Issues" : "Problemas",
+    "Limit" : "Limite",
     "Local" : "Local",
     "File" : "Ficheiro",
     "Announcements" : "Anúncios",
