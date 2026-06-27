@@ -220,6 +220,7 @@ OC.L10N.register(
     "optional" : "необавезно",
     "Asset" : "Ресурс",
     "Download count" : "Број преузимања",
+    "Tag" : "Ознака",
     "Count" : "Бројач",
     "Local" : "Локално",
     "File" : "Фајл",

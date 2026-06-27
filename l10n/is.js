@@ -49,6 +49,7 @@ OC.L10N.register(
     "Releases" : "Útgáfur",
     "Issues" : "Vandamál",
     "Limit" : "Takmörk",
+    "Tag" : "Merki",
     "Local" : "Staðvært",
     "Announcements" : "Tilkynningar",
     "copy" : "afrita",

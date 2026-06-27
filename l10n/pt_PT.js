@@ -122,6 +122,7 @@ OC.L10N.register(
     "Releases" : "Lançamentos",
     "Issues" : "Problemas",
     "Limit" : "Limite",
+    "Tag" : "Etiqueta",
     "Local" : "Local",
     "File" : "Ficheiro",
     "Announcements" : "Anúncios",

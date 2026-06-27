@@ -268,6 +268,7 @@ OC.L10N.register(
     "optional" : "選擇性",
     "Asset" : "資產",
     "Download count" : "下載次數",
+    "Tag" : "標籤",
     "Count" : "次數",
     "Missing or invalid GitHub access token" : "GitHub 存取權杖遺失或無效",
     "Rate limit exceeded" : "超過速率限制",

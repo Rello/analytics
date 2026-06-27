@@ -122,6 +122,7 @@ OC.L10N.register(
     "Releases" : "リリース",
     "Issues" : "問題",
     "Limit" : "制限",
+    "Tag" : "タグ",
     "Local" : "ローカル",
     "File" : "ファイル",
     "Current time" : "現在時刻",

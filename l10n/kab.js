@@ -80,6 +80,7 @@ OC.L10N.register(
     "Issues" : "Uguren",
     "Limit" : "Talast",
     "optional" : "afrayan",
+    "Tag" : "Tabzimt",
     "Count" : "Amḍan amatu",
     "Local" : "Adigan",
     "File" : "Afaylu",

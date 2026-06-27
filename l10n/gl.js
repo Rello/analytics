@@ -226,6 +226,7 @@ OC.L10N.register(
     "optional" : "opcional",
     "Asset" : "Activo",
     "Download count" : "Conta de descargas",
+    "Tag" : "Etiqueta",
     "Count" : "Conta",
     "Local" : "Local",
     "File" : "Ficheiro",

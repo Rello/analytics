@@ -263,6 +263,7 @@ OC.L10N.register(
     "optional" : "opcjonalnie",
     "Asset" : "Zasób",
     "Download count" : "Ilość pobrań",
+    "Tag" : "Etykieta",
     "Count" : "Ilość pobrań",
     "Missing or invalid GitHub access token" : "Brak lub nieprawidłowy token dostępu GitHub",
     "Rate limit exceeded" : "Przekroczono limit zapytań",

@@ -268,6 +268,7 @@ OC.L10N.register(
     "optional" : "roghnach",
     "Asset" : "Sócmhainn",
     "Download count" : "Íosluchtaigh áireamhán",
+    "Tag" : "Clib",
     "Count" : "Áireamh",
     "Missing or invalid GitHub access token" : "Comhartha rochtana GitHub ar iarraidh nó neamhbhailí",
     "Rate limit exceeded" : "Teorainn ráta sáraithe",

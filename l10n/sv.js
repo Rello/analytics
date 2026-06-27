@@ -220,6 +220,7 @@ OC.L10N.register(
     "optional" : "valfritt",
     "Asset" : "Tillgång",
     "Download count" : "Antal nedladdningar",
+    "Tag" : "Tagg",
     "Count" : "Antal",
     "Local" : "Lokal",
     "File" : "Fil",

@@ -49,6 +49,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Өгөгдөл ачаалсан цагийн тэмдэг",
     "Issues" : "Асуудлууд",
     "Limit" : "Хязгаар",
+    "Tag" : "Таг",
     "Count" : "Тоо",
     "Local" : "Локал",
     "File" : "Файл",

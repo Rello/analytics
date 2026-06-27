@@ -132,6 +132,7 @@ OC.L10N.register(
     "Issues" : "Ongelmat",
     "Personal access token" : "Henkilökohtainen valtuutustietue",
     "Download count" : "Latausmäärä",
+    "Tag" : "Tunniste",
     "Count" : "Määrä",
     "Local" : "Paikallinen",
     "File" : "Tiedosto",

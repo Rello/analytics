@@ -175,6 +175,7 @@ OC.L10N.register(
     "Limit" : "Omejitve",
     "Personal access token" : "Osebni žeton za dostop",
     "Download count" : "Števec prejemov",
+    "Tag" : "Oznaka",
     "Count" : "Števec",
     "Local" : "Krajevno",
     "File" : "Datoteka",

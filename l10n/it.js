@@ -189,6 +189,7 @@ OC.L10N.register(
     "Personal access token" : "Token di accesso personale",
     "optional" : "Facoltativo",
     "Download count" : "Conteggio scaricamenti",
+    "Tag" : "Etichetta",
     "Count" : "Conto",
     "Local" : "Locale",
     "File" : "File",
