@@ -269,7 +269,7 @@ OC.L10N.register(
     "optional" : "Optional",
     "Asset" : "Asset",
     "Download count" : "Anzahl der Downloads",
-    "Tag" : "Schnipsel",
+    "Tag" : "Schlagwort",
     "Count" : "Anzahl",
     "Missing or invalid GitHub access token" : "Fehlendes oder ungültiges GitHub-Zugriffstoken",
     "Rate limit exceeded" : "Ratengrenze überschritten",
