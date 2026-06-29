@@ -259,6 +259,7 @@ OC.L10N.register(
     "Allow insecure connections" : "允許不安全的連線",
     "Timestamp of data load" : "資料載入時間戳",
     "Releases" : "釋出版本",
+    "Packages" : "軟體包",
     "Issues" : "問題",
     "Pull Requests" : "拉取請求",
     "Limit" : "限制",
