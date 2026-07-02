@@ -265,8 +265,15 @@ class DatasetService {
 			self::$contextChatAvailable = class_exists('OCA\\ContextChat\\Public\\ContentManager');
 		}
 		if (self::$contextChatAvailable) {
-			$this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
-			$this->contextChatManager->submitContent($datasetId);
+			try {
+				$this->contextChatManager = \OC::$server->query('OCA\\Analytics\\ContextChat\\ContextChatManager');
+				$this->contextChatManager->submitContent($datasetId);
+			} catch (\Throwable $e) {
+				$this->logger->warning('Analytics context chat indexing failed', [
+					'datasetId' => $datasetId,
+					'exception' => $e,
+				]);
+			}
 		}
 		return true;
 	}

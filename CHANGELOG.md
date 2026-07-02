@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.5.2 - 2026-07-02
+### Fixed
+- Keep dataload execution successful when optional context chat indexing fails.
+
 ## 6.5.1 - 2026-06-25
 ### Added
 - GitHub datasource can query container package metadata with tags.
