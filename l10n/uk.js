@@ -225,6 +225,7 @@ OC.L10N.register(
     "optional" : "необов'язково",
     "Asset" : "Ресурс",
     "Download count" : "Кількість звантажень",
+    "Tag" : "Тег",
     "Count" : "Лічильник",
     "Local" : "Локально",
     "File" : "Файл",

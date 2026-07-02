@@ -222,6 +222,7 @@ OC.L10N.register(
     "optional" : "ئىختىيارى",
     "Asset" : "مۈلۈك",
     "Download count" : "چۈشۈرۈش سانى",
+    "Tag" : "خەتكۈچ",
     "Count" : "ساناپ بېقىڭ",
     "Local" : "يەرلىك",
     "File" : "ھۆججەت",

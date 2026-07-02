@@ -223,6 +223,7 @@ OC.L10N.register(
     "optional" : "hiari",
     "Asset" : "Mali",
     "Download count" : "Idadi ya upakuaji",
+    "Tag" : "Tag",
     "Count" : "Hesabu",
     "Local" : "Kawaida",
     "File" : "Faili",

@@ -240,6 +240,7 @@ OC.L10N.register(
     "optional" : "可选的选项",
     "Asset" : "资产",
     "Download count" : "下载次数",
+    "Tag" : "标签",
     "Count" : "计数",
     "Report not available" : "无可用报告",
     "Local" : "本地",

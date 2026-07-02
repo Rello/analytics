@@ -210,6 +210,7 @@ OC.L10N.register(
     "Limit" : "Batas",
     "Personal access token" : "Token akses pribadi",
     "optional" : "opsional",
+    "Tag" : "Tag",
     "Local" : "Lokal",
     "File" : "File",
     "Current time" : "Waktu saat ini",

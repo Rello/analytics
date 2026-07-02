@@ -223,6 +223,7 @@ OC.L10N.register(
     "optional" : "(ບໍ່ບັງຄັບ)",
     "Asset" : "ຊັບສິນ",
     "Download count" : "ຈຳນວນດາວໂຫຼດ",
+    "Tag" : "Tag",
     "Count" : "ຈຳນວນ",
     "Local" : "ພາຍໃນ",
     "File" : "ໄຟລ໌",

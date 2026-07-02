@@ -68,6 +68,7 @@ OC.L10N.register(
     "Issues" : "Праблемы",
     "Limit" : "Ліміт",
     "Personal access token" : "Асабісты токен доступу",
+    "Tag" : "Тэг",
     "Local" : "Лакальна",
     "File" : "Файл",
     "Current time" : "Бягучы час",

@@ -224,6 +224,7 @@ OC.L10N.register(
     "optional" : "optioneel",
     "Asset" : "Aanwinst",
     "Download count" : "Aantal downloads",
+    "Tag" : "Label",
     "Count" : "Aantal",
     "Local" : "Lokaal",
     "File" : "Bestand",

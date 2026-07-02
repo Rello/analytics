@@ -112,6 +112,7 @@ OC.L10N.register(
     "Authentication" : "Autentifikācija",
     "Allow insecure connections" : "Atļaut nedrošus savienojumus",
     "Releases" : "Laidieni",
+    "Tag" : "Birkas",
     "Local" : "Vietējs",
     "File" : "Datne",
     "Announcements" : "Paziņojumi",

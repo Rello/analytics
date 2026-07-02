@@ -202,6 +202,7 @@ OC.L10N.register(
     "optional" : "voliteľné",
     "Asset" : "Majetok",
     "Download count" : "Počet stiahnutí",
+    "Tag" : "Štítok",
     "Count" : "Počet",
     "Local" : "Lokálne",
     "File" : "Súbor",

@@ -54,6 +54,7 @@ OC.L10N.register(
     "Releases" : "מהדורות",
     "Issues" : "תקלות",
     "Personal access token" : "אסימון גישה פרטי",
+    "Tag" : "תגית",
     "Local" : "מקומי",
     "File" : "קובץ",
     "Announcements" : "הכרזות",

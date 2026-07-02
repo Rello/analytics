@@ -157,6 +157,7 @@ OC.L10N.register(
     "Limit" : "Límite",
     "Personal access token" : "Token de acceso personal",
     "Download count" : "Cantidad de descargas",
+    "Tag" : "Etiqueta",
     "Local" : "Local",
     "File" : "Archivo",
     "Sheet" : "Hoja",

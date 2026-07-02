@@ -57,6 +57,7 @@ OC.L10N.register(
     "Issues" : "Poteškoće",
     "Limit" : "Ograničenje",
     "Personal access token" : "Osobni token za pristup",
+    "Tag" : "Oznaka",
     "Count" : "Broj",
     "File" : "Datoteka",
     "Announcements" : "Obavijesti",

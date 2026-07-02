@@ -268,6 +268,7 @@ OC.L10N.register(
     "optional" : "необязательно",
     "Asset" : "Ресурс",
     "Download count" : "Счетчик загрузок",
+    "Tag" : "Метка",
     "Count" : "Считать",
     "Missing or invalid GitHub access token" : "Токен доступа GitHub отсутствует или недействителен",
     "Rate limit exceeded" : "Превышен лимит частоты",

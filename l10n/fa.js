@@ -268,6 +268,7 @@ OC.L10N.register(
     "optional" : "اختیاری",
     "Asset" : "دارایی",
     "Download count" : "تعداد دانلود",
+    "Tag" : "برچسب",
     "Count" : "تعداد",
     "Missing or invalid GitHub access token" : "توکن دسترسی گیت‌هاب نامعتبر یا گم شده",
     "Rate limit exceeded" : "محدودیت نرخ فراتر رفته",

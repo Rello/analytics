@@ -201,6 +201,7 @@ OC.L10N.register(
     "optional" : "opcional",
     "Asset" : "Actiu",
     "Download count" : "Recompte de baixades",
+    "Tag" : "Etiqueta",
     "Count" : "Recompte",
     "Local" : "Local",
     "File" : "Fitxer",

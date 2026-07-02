@@ -222,6 +222,7 @@ OC.L10N.register(
     "optional" : "nem kötelező",
     "Asset" : "Erőforrás",
     "Download count" : "Letöltések száma",
+    "Tag" : "Címke",
     "Count" : "Darabszám",
     "Local" : "Helyi",
     "File" : "Fájl",
