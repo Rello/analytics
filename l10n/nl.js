@@ -127,6 +127,7 @@ OC.L10N.register(
     "Aggregation" : "Aggregatie",
     "Disaggregation" : "Disaggregatie",
     "Report" : "Rapportage",
+    "No templates available" : "Geen sjablonen beschikbaar",
     "Text variables can be used in the name or subheader.<br>They are replaced when the report is executed." : "Tekstvariabelen kunnen gebruikt worden in de naam of subkop.<br>Ze worden vervangen wanneer de rapportage wordt uitgevoerd.",
     "Reports can be grouped into a folder structure." : "Rapportages kunnen worden gegroepeerd in een mappenstructuur.",
     "Do you want to create a new group folder?" : "Wil je een nieuwe groepsmap aanmaken?",
