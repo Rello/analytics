@@ -18,6 +18,12 @@ SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
+path = "sbom.cdx.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
 path = ["img/app.svg", "img/app-dark.svg", "img/app-color.svg", "img/app-integration.svg", "img/infoIntro.svg", "img/infoReport.svg", "img/infoWiki.svg", "img/save.svg", "img/warning.svg", "img/**.png", "img/**.gif", "img/logo.svg", "img/rename.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019-2024 Marcel Scherello"
@@ -68,7 +74,7 @@ SPDX-License-Identifier = "MIT"
 [[annotations]]
 path = "js/3rdParty/jspdf.umd.min.js"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright (c) 2010-2021 James Hall, https://github.com/MrRio/jsPDF (c) 2015-2021 yWorks GmbH, https://www.yworks.com/"
+SPDX-FileCopyrightText = "2010-2025 James Hall <james@parall.ax>, 2015-2025 yWorks GmbH, 2015-2025 Lukas Hollaender <lukas.hollaender@yworks.com>, and contributors"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]

@@ -1,5 +1,20 @@
 # Changelog
 
+##
+### Added
+- GitHub Actions cross-check Analytics on multiple Nextcloud, PHP, and database combinations.
+- Provide a CycloneDX SBOM for the bundled app dependencies.
+
+### Changed
+- GitHub Actions use the bundled vendor dependencies instead of Composer installs.
+- GitHub Actions no longer run on unsupported PHP 8.0.
+- Update bundled jsPDF to v4.2.1.
+
+### Fixed
+- Keep the Flow operation listener compatible with PHP versions before 8.3.
+- Keep variable-service parser tests compatible with GitHub Actions PHP runtimes.
+- Reject bracketed IPv6 literal external URLs without DNS lookups.
+
 ## 6.6.0 - 2026-07-07
 ### Added
 - Calculated columns can use fixed-value formulas and appear as chart series for the time-series chart model.
