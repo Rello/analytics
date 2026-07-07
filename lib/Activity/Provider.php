@@ -11,23 +11,31 @@ namespace OCA\Analytics\Activity;
 use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
+use OCP\App\IAppManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 
 class Provider implements IProvider {
 
 	private $l10n;
 	private $userId;
 	private $urlGenerator;
+	private $appManager;
+	private $userManager;
 
 	public function __construct(
 		IURLGenerator $urlGenerator,
 		IL10N         $l10n,
+		IAppManager  $appManager,
+		IUserManager $userManager,
 					  $userId
 	) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->l10n = $l10n;
+		$this->appManager = $appManager;
+		$this->userManager = $userManager;
 	}
 
 	/**
@@ -40,6 +48,9 @@ class Provider implements IProvider {
 	 */
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
 		if ($event->getApp() !== 'analytics') {
+			throw new UnknownActivityException();
+		}
+		if (!$this->isAnalyticsEnabledForCurrentUser()) {
 			throw new UnknownActivityException();
 		}
 
@@ -128,5 +139,18 @@ class Provider implements IProvider {
 
 	public function Url($endpoint) {
 		return $this->urlGenerator->linkToRouteAbsolute('analytics.page.main') . 'r/' . $endpoint;
+	}
+
+	private function isAnalyticsEnabledForCurrentUser(): bool {
+		if ($this->userId === null || $this->userId === '') {
+			return $this->appManager->isEnabledForUser('analytics');
+		}
+
+		$user = $this->userManager->get($this->userId);
+		if ($user === null) {
+			return false;
+		}
+
+		return $this->appManager->isEnabledForUser('analytics', $user);
 	}
 }

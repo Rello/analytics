@@ -15,6 +15,8 @@ use OCA\Analytics\Db\ShareMapper;
 use OCA\Analytics\Service\ShareService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
+use OCP\App\IAppManager;
+use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class ActivityManager
@@ -48,6 +50,8 @@ class ActivityManager
     private $ReportMapper;
     private $DatasetMapper;
 	private $PanoramaMapper;
+	private $appManager;
+	private $userManager;
 
     public function __construct(
         IManager $manager,
@@ -56,7 +60,9 @@ class ActivityManager
         ReportMapper $ReportMapper,
         DatasetMapper $DatasetMapper,
         LoggerInterface $logger,
-		PanoramaMapper $PanoramaMapper
+		PanoramaMapper $PanoramaMapper,
+		IAppManager $appManager,
+		IUserManager $userManager
     )
     {
         $this->manager = $manager;
@@ -66,6 +72,8 @@ class ActivityManager
         $this->DatasetMapper = $DatasetMapper;
 		$this->PanoramaMapper = $PanoramaMapper;
         $this->logger = $logger;
+		$this->appManager = $appManager;
+		$this->userManager = $userManager;
     }
 
     /**
@@ -139,10 +147,29 @@ class ActivityManager
         $users = $this->ShareMapper->getSharedReceiver($item_type, $event->getObjectId());
 		//$this->logger->info('share receiver: ' . $item_type . $event->getObjectId());
         foreach ($users as $user) {
+			if (!$this->isAnalyticsEnabledForUser($user['uid_owner'])) {
+				continue;
+			}
             $event->setAffectedUser($user['uid_owner']);
             $this->manager->publish($event);
         }
-        $event->setAffectedUser($this->userId);
-        $this->manager->publish($event);
+		if ($this->isAnalyticsEnabledForUser($this->userId)) {
+			$event->setAffectedUser($this->userId);
+			$this->manager->publish($event);
+		}
     }
+
+	private function isAnalyticsEnabledForUser(?string $userId): bool
+	{
+		if ($userId === null || $userId === '') {
+			return false;
+		}
+
+		$user = $this->userManager->get($userId);
+		if ($user === null) {
+			return false;
+		}
+
+		return $this->appManager->isEnabledForUser('analytics', $user);
+	}
 }
