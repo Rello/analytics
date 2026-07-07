@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.5.2 - 2026-07-02
+## 6.5.2 - 2026-07-07
+### Added
+- Calculated columns can use fixed-value formulas and appear as chart series for the time-series chart model.
+
 ### Fixed
+- Allow historical database migrations to run on Nextcloud 33.
 - Keep dataload execution successful when optional context chat indexing fails.
+- Respect Analytics app group restrictions when publishing and rendering activity entries.
 
 ## 6.5.1 - 2026-06-25
 ### Added
