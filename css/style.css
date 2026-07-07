@@ -1743,6 +1743,15 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     flex: 1;
 }
 
+.tableOptionsCalculatedColumnsFormulaHint {
+    margin: 6px 0 0;
+}
+
+#tableOptionsCalculatedColumnsFormula {
+    min-height: 72px;
+    resize: vertical;
+}
+
 @media (max-width: 720px) {
     .tableOptionsSettingsTable,
     .tableOptionsSettingsRow,

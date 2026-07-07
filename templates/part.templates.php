@@ -908,6 +908,19 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="tableOptionsCalculatedColumnsFormulaRow" class="tableOptionsCalculatedColumnsEditorFieldRow tableOptionsCalculatedColumnsEditorFieldRowTop" hidden>
+                        <div class="tableOptionsCalculatedColumnsEditorFieldLabel">
+                            <label for="tableOptionsCalculatedColumnsFormula"><?php p($l->t('Formula')); ?></label>
+                        </div>
+                        <div class="tableOptionsCalculatedColumnsEditorFieldValue">
+                            <textarea id="tableOptionsCalculatedColumnsFormula" class="optionsInput" rows="3"
+                                      placeholder="<?php p($l->t('Example: (30 * column1) + (column2 * -1)')); ?>"></textarea>
+                            <p class="tableOptionsCalculatedColumnsFormulaHint userGuidance">
+                                <?php p($l->t('Use column1, column2, fixed numbers, +, -, *, / and parentheses.')); ?>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tableOptionsCalculatedColumnsSelectedWrap">

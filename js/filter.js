@@ -763,7 +763,10 @@ OCA.Analytics.Filter = {
         return [
             {value: 'add', label: t('analytics', 'Add')},
             {value: 'substract', label: t('analytics', 'Subtract')},
+            {value: 'multiply', label: t('analytics', 'Multiply')},
+            {value: 'divide', label: t('analytics', 'Divide')},
             {value: 'percentage', label: t('analytics', 'Percentage')},
+            {value: 'formula', label: t('analytics', 'Own Formular')},
         ];
     },
 
@@ -805,6 +808,7 @@ OCA.Analytics.Filter = {
                     operation: operation,
                     columns: columns,
                     title: title,
+                    expression: typeof item.expression === 'string' ? item.expression : '',
                 };
             });
 
@@ -816,11 +820,17 @@ OCA.Analytics.Filter = {
             return '';
         }
 
-        return items.map(item => JSON.stringify({
-            operation: item.operation,
-            columns: item.columns.map(index => parseInt(index, 10)),
-            title: item.title,
-        })).join(',');
+        return items.map(item => {
+            const serializedItem = {
+                operation: item.operation,
+                columns: Array.isArray(item.columns) ? item.columns.map(index => parseInt(index, 10)) : [],
+                title: item.title,
+            };
+            if (item.operation === 'formula') {
+                serializedItem.expression = item.expression || '';
+            }
+            return JSON.stringify(serializedItem);
+        }).join(',');
     },
 
     renderCalculatedColumnsList: function () {
@@ -868,10 +878,14 @@ OCA.Analytics.Filter = {
 
             const meta = document.createElement('span');
             meta.className = 'tableOptionsCalculatedColumnCardMeta';
-            meta.textContent = t('analytics', '{operation} using {count} source columns', {
-                operation: OCA.Analytics.Filter.getCalculatedColumnOperationLabel(item.operation),
-                count: item.columns.length
-            });
+            if (item.operation === 'formula') {
+                meta.textContent = t('analytics', 'Own Formular');
+            } else {
+                meta.textContent = t('analytics', '{operation} using {count} source columns', {
+                    operation: OCA.Analytics.Filter.getCalculatedColumnOperationLabel(item.operation),
+                    count: item.columns.length
+                });
+            }
 
             textWrap.appendChild(title);
             textWrap.appendChild(formula);
@@ -894,6 +908,10 @@ OCA.Analytics.Filter = {
     getCalculatedColumnFormulaText: function (item) {
         const labels = item.columns.map(index => OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(index));
 
+        if (item.operation === 'formula') {
+            return item.expression || t('analytics', 'No formula entered');
+        }
+
         if (labels.length === 0) {
             return t('analytics', 'No source columns selected');
         }
@@ -907,6 +925,14 @@ OCA.Analytics.Filter = {
 
         if (item.operation === 'substract') {
             return labels.join(' - ');
+        }
+
+        if (item.operation === 'multiply') {
+            return labels.join(' * ');
+        }
+
+        if (item.operation === 'divide') {
+            return labels.join(' / ');
         }
 
         return labels.join(' + ');
@@ -923,6 +949,7 @@ OCA.Analytics.Filter = {
             operation: currentItem.operation,
             columns: Array.isArray(currentItem.columns) ? [...currentItem.columns] : [],
             title: currentItem.title || '',
+            expression: currentItem.expression || '',
         };
 
         document.getElementById('tableOptionsCalculatedColumnsEditorHeading').textContent = index === null
@@ -930,6 +957,7 @@ OCA.Analytics.Filter = {
             : t('analytics', 'Edit calculated column');
         document.getElementById('tableOptionsCalculatedColumnsTitle').value = state.draft.title;
         document.getElementById('tableOptionsCalculatedColumnsOperation').value = state.draft.operation;
+        document.getElementById('tableOptionsCalculatedColumnsFormula').value = state.draft.expression;
         document.getElementById('tableOptionsCalculatedColumnsDelete').hidden = index === null;
 
         OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
@@ -956,6 +984,10 @@ OCA.Analytics.Filter = {
 
         const operation = document.getElementById('tableOptionsCalculatedColumnsOperation').value;
         state.draft.operation = operation;
+        const formulaRow = document.getElementById('tableOptionsCalculatedColumnsFormulaRow');
+        if (formulaRow) {
+            formulaRow.hidden = operation !== 'formula';
+        }
 
         if (operation === 'percentage' && state.draft.columns.length > 2) {
             state.draft.columns = state.draft.columns.slice(0, 2);
@@ -976,8 +1008,9 @@ OCA.Analytics.Filter = {
         select.options.add(new Option(t('analytics', 'Choose a column'), ''));
 
         (OCA.Analytics.currentReportData.header || []).forEach((header, index) => {
-            const option = new Option(header + ' (' + index + ')', index);
-            option.disabled = state.draft.columns.includes(index);
+            const columnReference = 'column' + (index + 1);
+            const option = new Option(header + ' (' + columnReference + ')', index);
+            option.disabled = state.draft.operation !== 'formula' && state.draft.columns.includes(index);
             select.options.add(option);
         });
 
@@ -995,10 +1028,23 @@ OCA.Analytics.Filter = {
 
         selectedContainer.innerHTML = '';
 
-        if (state.draft.operation === 'percentage') {
+        if (state.draft.operation === 'formula') {
+            hint.textContent = t('analytics', 'Select a source column to insert its reference into the formula.');
+            addButton.disabled = false;
+            const emptyState = document.createElement('div');
+            emptyState.className = 'tableOptionsCalculatedColumnsSelectedEmpty';
+            emptyState.textContent = t('analytics', 'Formula source columns are read from the formula.');
+            selectedContainer.appendChild(emptyState);
+            OCA.Analytics.Filter.populateCalculatedColumnSourceSelect();
+            return;
+        } else if (state.draft.operation === 'percentage') {
             hint.textContent = t('analytics', 'Select the numerator first and the denominator second.');
         } else if (state.draft.operation === 'substract') {
             hint.textContent = t('analytics', 'The first source column is the base value. All following columns are subtracted from it.');
+        } else if (state.draft.operation === 'divide') {
+            hint.textContent = t('analytics', 'The first source column is divided by all following columns.');
+        } else if (state.draft.operation === 'multiply') {
+            hint.textContent = t('analytics', 'All selected source columns are multiplied.');
         } else {
             hint.textContent = t('analytics', 'Select at least two source columns. Their order is preserved in the calculation.');
         }
@@ -1078,6 +1124,14 @@ OCA.Analytics.Filter = {
             return index === 0 ? t('analytics', 'Base value') : t('analytics', 'Subtract value');
         }
 
+        if (operation === 'divide') {
+            return index === 0 ? t('analytics', 'Base value') : t('analytics', 'Divide by');
+        }
+
+        if (operation === 'multiply') {
+            return t('analytics', 'Factor {position}', {position: index + 1});
+        }
+
         return t('analytics', 'Source {position}', {position: index + 1});
     },
 
@@ -1094,7 +1148,7 @@ OCA.Analytics.Filter = {
             return;
         }
 
-        if (state.draft.columns.includes(selectedValue)) {
+        if (state.draft.operation !== 'formula' && state.draft.columns.includes(selectedValue)) {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'This source column is already selected.'));
             return;
         }
@@ -1104,7 +1158,26 @@ OCA.Analytics.Filter = {
             return;
         }
 
-        state.draft.columns.push(selectedValue);
+        if (state.draft.operation === 'formula') {
+            const formulaInput = document.getElementById('tableOptionsCalculatedColumnsFormula');
+            if (formulaInput) {
+                const reference = 'column' + (selectedValue + 1);
+                const selectionStart = typeof formulaInput.selectionStart === 'number'
+                    ? formulaInput.selectionStart
+                    : formulaInput.value.length;
+                const selectionEnd = typeof formulaInput.selectionEnd === 'number'
+                    ? formulaInput.selectionEnd
+                    : formulaInput.value.length;
+                formulaInput.value = formulaInput.value.slice(0, selectionStart)
+                    + reference
+                    + formulaInput.value.slice(selectionEnd);
+                formulaInput.focus();
+                const cursorPosition = selectionStart + reference.length;
+                formulaInput.setSelectionRange(cursorPosition, cursorPosition);
+            }
+        } else {
+            state.draft.columns.push(selectedValue);
+        }
         OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
         OCA.Analytics.Filter.renderCalculatedColumnSelectedSources();
     },
@@ -1153,6 +1226,30 @@ OCA.Analytics.Filter = {
         messageElement.hidden = false;
     },
 
+    getFormulaColumnIndexes: function (expression) {
+        if (OCA.Analytics.Visualization?.getCalculatedColumnExpressionColumnIndexes) {
+            return OCA.Analytics.Visualization.getCalculatedColumnExpressionColumnIndexes(expression);
+        }
+
+        const indexes = [];
+        const regex = /\bcolumn(\d+)\b/gi;
+        const expressionString = String(expression || '');
+        let match;
+        while ((match = regex.exec(expressionString)) !== null) {
+            const index = parseInt(match[1], 10) - 1;
+            if (!Number.isNaN(index) && index >= 0 && !indexes.includes(index)) {
+                indexes.push(index);
+            }
+        }
+        return indexes;
+    },
+
+    validateFormulaExpression: function (expression) {
+        if (OCA.Analytics.Visualization?.parseCalculatedColumnExpression) {
+            OCA.Analytics.Visualization.parseCalculatedColumnExpression(expression);
+        }
+    },
+
     saveCalculatedColumnEditor: function () {
         const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
         if (!state.draft) {
@@ -1161,19 +1258,30 @@ OCA.Analytics.Filter = {
 
         const title = document.getElementById('tableOptionsCalculatedColumnsTitle').value.trim();
         const operation = document.getElementById('tableOptionsCalculatedColumnsOperation').value;
-        const columns = [...state.draft.columns];
+        const expression = document.getElementById('tableOptionsCalculatedColumnsFormula').value.trim();
+        let columns = [...state.draft.columns];
 
         if (title === '') {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Enter a title for the calculated column.'));
             return;
         }
 
-        if (operation === 'percentage' && columns.length !== 2) {
+        if (operation === 'formula') {
+            if (expression === '') {
+                OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Enter a formula for the calculated column.'));
+                return;
+            }
+            try {
+                OCA.Analytics.Filter.validateFormulaExpression(expression);
+                columns = OCA.Analytics.Filter.getFormulaColumnIndexes(expression);
+            } catch (e) {
+                OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'The formula could not be parsed.'));
+                return;
+            }
+        } else if (operation === 'percentage' && columns.length !== 2) {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'A percentage calculation needs exactly two source columns.'));
             return;
-        }
-
-        if (operation !== 'percentage' && columns.length < 2) {
+        } else if (columns.length < 2) {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Select at least two source columns.'));
             return;
         }
@@ -1183,6 +1291,9 @@ OCA.Analytics.Filter = {
             columns: columns,
             title: title,
         };
+        if (operation === 'formula') {
+            calculatedColumn.expression = expression;
+        }
 
         if (state.editingIndex === null) {
             state.items.push(calculatedColumn);
@@ -1317,7 +1428,6 @@ OCA.Analytics.Filter = {
         } catch (e) {
             dataOptions = [];
         }
-        const distinctCategories = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0);
         if (dataOptions === null) dataOptions = [];
 
         // clone the DOM template
@@ -1325,11 +1435,51 @@ OCA.Analytics.Filter = {
         container = document.importNode(container, true);
         const table = container.getElementById('chartOptionsTable');
 
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
+        if (guiState.model === 'accountModel') {
+            container.getElementById('analyticsModelOpt2').checked = true;
+        } else if (guiState.model === 'timeSeriesModel') {
+            container.getElementById('analyticsModelOpt3').checked = true;
+        }
+        const doughnutLabelStyleSelect = container.getElementById('chartDoughnutLabelStyle');
+        if (doughnutLabelStyleSelect) {
+            doughnutLabelStyleSelect.value = guiState.doughnutLabelStyle;
+        }
+        OCA.Analytics.Filter.renderChartOptionsSeriesRows(table, dataOptions, guiState.model);
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Select the format of the data and how it should be visualized'),
+            dialogOptions
+        );
+
+        document.querySelectorAll('#analyticsDialogContent input[name="analyticsModel"]').forEach(field => {
+            field.addEventListener('change', function (evt) {
+                const seriesTable = document.getElementById('chartOptionsTable');
+                if (seriesTable) {
+                    OCA.Analytics.Filter.renderChartOptionsSeriesRows(seriesTable, dataOptions, evt.target.value);
+                }
+            });
+        });
+    },
+
+    renderChartOptionsSeriesRows: function (table, dataOptions, dataModel) {
+        if (!table) {
+            return;
+        }
+
+        table.querySelectorAll('.chartOptionsSeriesRow').forEach(row => row.remove());
+
         // get the default chart type to preset the drop downs
-        const defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+        const chartType = OCA.Analytics.currentReportData.options.chart || 'column';
+        const defaultChartType = OCA.Analytics.chartTypeMapping[chartType] || 'bar';
+        const seriesItems = OCA.Analytics.Visualization?.getChartSeriesItems
+            ? OCA.Analytics.Visualization.getChartSeriesItems(OCA.Analytics.currentReportData, dataModel)
+            : Object.values(OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0))
+                .map(label => ({label: label}));
 
         const fragment = document.createDocumentFragment();
-        Object.values(distinctCategories).forEach((category, i) => {
+        seriesItems.forEach((series, i) => {
             const color = OCA.Analytics.Filter.checkColor(dataOptions, i);
 
             const row = document.createElement('div');
@@ -1344,7 +1494,7 @@ OCA.Analytics.Filter = {
 
             const titleText = document.createElement('span');
             titleText.id = 'optionsTitle' + i;
-            titleText.textContent = category;
+            titleText.textContent = series.label || t('analytics', 'Data series');
             titleCell.appendChild(titleText);
 
             row.appendChild(titleCell);
@@ -1391,6 +1541,9 @@ OCA.Analytics.Filter = {
             colorInput.className = 'chartOptionsColorInput';
             colorInput.value = OCA.Analytics.Filter.normalizeHexColor(color, OCA.Analytics.Visualization.defaultColorPalette[i % OCA.Analytics.Visualization.defaultColorPalette.length]);
             colorInput.style.backgroundColor = colorInput.value;
+            colorInput.addEventListener('input', OCA.Analytics.Filter.updateColor);
+            colorInput.addEventListener('change', OCA.Analytics.Filter.updateColor);
+            OCA.Analytics.Filter.updateColor({target: colorInput});
             colorWrap.appendChild(colorInput);
             colorCell.appendChild(colorWrap);
             row.appendChild(colorCell);
@@ -1399,30 +1552,6 @@ OCA.Analytics.Filter = {
         });
 
         table.appendChild(fragment);
-
-        const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
-        if (guiState.model === 'accountModel') {
-            container.getElementById('analyticsModelOpt2').checked = true;
-        } else if (guiState.model === 'timeSeriesModel') {
-            container.getElementById('analyticsModelOpt3').checked = true;
-        }
-        const doughnutLabelStyleSelect = container.getElementById('chartDoughnutLabelStyle');
-        if (doughnutLabelStyleSelect) {
-            doughnutLabelStyleSelect.value = guiState.doughnutLabelStyle;
-        }
-
-        OCA.Analytics.Notification.htmlDialogUpdate(
-            container,
-            t('analytics', 'Select the format of the data and how it should be visualized'),
-            dialogOptions
-        );
-
-        const optionsColor = document.querySelectorAll('#analyticsDialogContent [name="optionsColor"]');
-        optionsColor.forEach(field => {
-            OCA.Analytics.Filter.updateColor({target: field});
-            field.addEventListener('input', OCA.Analytics.Filter.updateColor);
-            field.addEventListener('change', OCA.Analytics.Filter.updateColor);
-        });
     },
 
     /**
@@ -1489,7 +1618,8 @@ OCA.Analytics.Filter = {
         let optionObject;
 
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
-        let defaultChartType = OCA.Analytics.chartTypeMapping[OCA.Analytics.currentReportData.options.chart];
+        const chartType = OCA.Analytics.currentReportData.options.chart || 'column';
+        let defaultChartType = OCA.Analytics.chartTypeMapping[chartType] || 'bar';
         let defaultYAxis = 'primary';
         let defaultColors = OCA.Analytics.Visualization.defaultColorPalette;
 
@@ -1631,7 +1761,10 @@ OCA.Analytics.Filter = {
      */
     cleanupDataOptionsArray: function (dataOptions) {
         // Get the correct number of items from the report
-        const itemCount = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
+        const itemCount = OCA.Analytics.Visualization?.getChartSeriesItems
+            ? OCA.Analytics.Visualization.getChartSeriesItems(OCA.Analytics.currentReportData, guiState.model).length
+            : OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
         // Remove all array values beyond itemCount
         if (Array.isArray(dataOptions)) {
             dataOptions.splice(itemCount);

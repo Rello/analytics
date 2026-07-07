@@ -217,7 +217,11 @@ OCA.Analytics.Visualization = {
                 ? rawCalculatedColumns
                 : '[' + rawCalculatedColumns + ']';
             const parsedValue = JSON.parse(normalizedCalculatedColumns);
-            parsedCalculatedColumns = Array.isArray(parsedValue) ? parsedValue : [];
+            parsedCalculatedColumns = Array.isArray(parsedValue)
+                ? parsedValue
+                    .map(calc => OCA.Analytics.Visualization.normalizeCalculatedColumn(calc))
+                    .filter(calc => calc !== null)
+                : [];
         } catch (e) {
             parsedCalculatedColumns = [];
         }
@@ -225,6 +229,367 @@ OCA.Analytics.Visualization = {
         tableOptions._analyticsCalculatedColumnsRaw = rawCalculatedColumns;
         tableOptions._analyticsCalculatedColumnsParsed = parsedCalculatedColumns;
         return parsedCalculatedColumns;
+    },
+
+    normalizeCalculatedColumn: function (calc) {
+        if (!calc || typeof calc !== 'object') {
+            return null;
+        }
+
+        const operation = typeof calc.operation === 'string' ? calc.operation : 'add';
+        const columns = Array.isArray(calc.columns)
+            ? calc.columns
+                .map(index => parseInt(index, 10))
+                .filter(index => !Number.isNaN(index) && index >= 0)
+            : [];
+
+        return {
+            operation: operation,
+            columns: columns,
+            title: typeof calc.title === 'string' ? calc.title : '',
+            expression: typeof calc.expression === 'string' ? calc.expression.trim() : '',
+        };
+    },
+
+    parseCalculatedColumnNumber: function (value) {
+        if (typeof value === 'number') {
+            return Number.isFinite(value) ? value : 0;
+        }
+
+        if (value === null || value === undefined || value === '') {
+            return 0;
+        }
+
+        let normalizedValue = String(value).trim();
+        if (typeof _ !== 'undefined' && _.unescape) {
+            normalizedValue = _.unescape(normalizedValue);
+        }
+        normalizedValue = normalizedValue.replace(/<[^>]*>/g, '').replace(/%$/, '').trim();
+
+        const hasComma = normalizedValue.includes(',');
+        const hasDot = normalizedValue.includes('.');
+        if (hasComma && hasDot) {
+            if (normalizedValue.lastIndexOf(',') > normalizedValue.lastIndexOf('.')) {
+                normalizedValue = normalizedValue.replace(/\./g, '').replace(',', '.');
+            } else {
+                normalizedValue = normalizedValue.replace(/,/g, '');
+            }
+        } else if (hasComma) {
+            const commaIndex = normalizedValue.lastIndexOf(',');
+            const digitsAfterComma = normalizedValue.length - commaIndex - 1;
+            normalizedValue = digitsAfterComma <= 2
+                ? normalizedValue.replace(',', '.')
+                : normalizedValue.replace(/,/g, '');
+        } else if (hasDot) {
+            const dotIndex = normalizedValue.lastIndexOf('.');
+            const digitsAfterDot = normalizedValue.length - dotIndex - 1;
+            if (digitsAfterDot > 2) {
+                normalizedValue = normalizedValue.replace(/\./g, '');
+            }
+        }
+
+        normalizedValue = normalizedValue.replace(/\s/g, '');
+        const numericValue = parseFloat(normalizedValue);
+        return Number.isFinite(numericValue) ? numericValue : 0;
+    },
+
+    tokenizeCalculatedColumnExpression: function (expression) {
+        const source = String(expression || '');
+        const tokens = [];
+        let position = 0;
+
+        while (position < source.length) {
+            const remaining = source.slice(position);
+            const character = source[position];
+
+            if (/\s/.test(character)) {
+                position++;
+                continue;
+            }
+
+            const columnMatch = remaining.match(/^(?:column|col)(\d+)\b/i);
+            if (columnMatch) {
+                const columnNumber = parseInt(columnMatch[1], 10);
+                if (Number.isNaN(columnNumber) || columnNumber < 1) {
+                    throw new Error('Invalid column reference');
+                }
+                tokens.push({type: 'column', index: columnNumber - 1});
+                position += columnMatch[0].length;
+                continue;
+            }
+
+            const bracketColumnMatch = remaining.match(/^\[(\d+)\]/);
+            if (bracketColumnMatch) {
+                const columnNumber = parseInt(bracketColumnMatch[1], 10);
+                if (Number.isNaN(columnNumber) || columnNumber < 1) {
+                    throw new Error('Invalid column reference');
+                }
+                tokens.push({type: 'column', index: columnNumber - 1});
+                position += bracketColumnMatch[0].length;
+                continue;
+            }
+
+            const numberMatch = remaining.match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?/i);
+            if (numberMatch) {
+                tokens.push({type: 'number', value: parseFloat(numberMatch[0])});
+                position += numberMatch[0].length;
+                continue;
+            }
+
+            if ('+-*/'.includes(character)) {
+                tokens.push({type: 'operator', value: character});
+                position++;
+                continue;
+            }
+
+            if (character === '(') {
+                tokens.push({type: 'leftParen'});
+                position++;
+                continue;
+            }
+
+            if (character === ')') {
+                tokens.push({type: 'rightParen'});
+                position++;
+                continue;
+            }
+
+            throw new Error('Invalid formula token');
+        }
+
+        return tokens;
+    },
+
+    parseCalculatedColumnExpression: function (expression) {
+        const tokens = this.tokenizeCalculatedColumnExpression(expression);
+        if (tokens.length === 0) {
+            throw new Error('Empty formula');
+        }
+
+        const output = [];
+        const operators = [];
+        const precedence = {'u+': 3, 'u-': 3, '*': 2, '/': 2, '+': 1, '-': 1};
+        const rightAssociative = {'u+': true, 'u-': true};
+        let previousType = 'start';
+
+        tokens.forEach(token => {
+            if (token.type === 'number' || token.type === 'column') {
+                if (previousType === 'value') {
+                    throw new Error('Missing operator');
+                }
+                output.push(token);
+                previousType = 'value';
+                return;
+            }
+
+            if (token.type === 'leftParen') {
+                if (previousType === 'value') {
+                    throw new Error('Missing operator');
+                }
+                operators.push(token);
+                previousType = 'leftParen';
+                return;
+            }
+
+            if (token.type === 'rightParen') {
+                if (previousType === 'operator' || previousType === 'leftParen' || previousType === 'start') {
+                    throw new Error('Invalid closing parenthesis');
+                }
+                while (operators.length && operators[operators.length - 1].type !== 'leftParen') {
+                    output.push(operators.pop());
+                }
+                if (!operators.length) {
+                    throw new Error('Unmatched closing parenthesis');
+                }
+                operators.pop();
+                previousType = 'value';
+                return;
+            }
+
+            if (token.type === 'operator') {
+                const isUnary = (token.value === '+' || token.value === '-')
+                    && (previousType === 'start' || previousType === 'operator' || previousType === 'leftParen');
+                if (!isUnary && previousType !== 'value') {
+                    throw new Error('Missing left operand');
+                }
+
+                const operatorToken = {
+                    type: 'operator',
+                    value: isUnary ? 'u' + token.value : token.value,
+                };
+
+                while (operators.length && operators[operators.length - 1].type === 'operator') {
+                    const topOperator = operators[operators.length - 1].value;
+                    const shouldPop = rightAssociative[operatorToken.value]
+                        ? precedence[operatorToken.value] < precedence[topOperator]
+                        : precedence[operatorToken.value] <= precedence[topOperator];
+                    if (!shouldPop) {
+                        break;
+                    }
+                    output.push(operators.pop());
+                }
+
+                operators.push(operatorToken);
+                previousType = 'operator';
+            }
+        });
+
+        if (previousType === 'operator' || previousType === 'leftParen' || previousType === 'start') {
+            throw new Error('Incomplete formula');
+        }
+
+        while (operators.length) {
+            const operator = operators.pop();
+            if (operator.type === 'leftParen') {
+                throw new Error('Unmatched opening parenthesis');
+            }
+            output.push(operator);
+        }
+
+        return output;
+    },
+
+    getCalculatedColumnExpressionColumnIndexes: function (expression) {
+        const indexes = [];
+        this.tokenizeCalculatedColumnExpression(expression).forEach(token => {
+            if (token.type === 'column' && !indexes.includes(token.index)) {
+                indexes.push(token.index);
+            }
+        });
+        return indexes;
+    },
+
+    getCalculatedColumnExpressionRpn: function (calc) {
+        const expression = calc.expression || '';
+        if (calc._analyticsFormulaExpression === expression && Array.isArray(calc._analyticsFormulaRpn)) {
+            return calc._analyticsFormulaRpn;
+        }
+
+        calc._analyticsFormulaExpression = expression;
+        calc._analyticsFormulaRpn = this.parseCalculatedColumnExpression(expression);
+        return calc._analyticsFormulaRpn;
+    },
+
+    evaluateCalculatedColumnExpression: function (row, calc) {
+        const stack = [];
+        const rpn = this.getCalculatedColumnExpressionRpn(calc);
+
+        rpn.forEach(token => {
+            if (token.type === 'number') {
+                stack.push(token.value);
+                return;
+            }
+
+            if (token.type === 'column') {
+                stack.push(this.parseCalculatedColumnNumber(row[token.index]));
+                return;
+            }
+
+            if (token.type === 'operator' && (token.value === 'u+' || token.value === 'u-')) {
+                if (stack.length < 1) {
+                    throw new Error('Missing formula operand');
+                }
+                const value = stack.pop();
+                stack.push(token.value === 'u-' ? -value : value);
+                return;
+            }
+
+            if (token.type === 'operator') {
+                if (stack.length < 2) {
+                    throw new Error('Missing formula operand');
+                }
+                const right = stack.pop();
+                const left = stack.pop();
+                if (token.value === '+') {
+                    stack.push(left + right);
+                } else if (token.value === '-') {
+                    stack.push(left - right);
+                } else if (token.value === '*') {
+                    stack.push(left * right);
+                } else if (token.value === '/') {
+                    stack.push(right === 0 ? 0 : left / right);
+                }
+            }
+        });
+
+        if (stack.length !== 1 || !Number.isFinite(stack[0])) {
+            return 0;
+        }
+        return stack[0];
+    },
+
+    isCalculatedColumnRenderable: function (calc) {
+        if (!calc || typeof calc !== 'object') {
+            return false;
+        }
+
+        if (calc.operation === 'formula') {
+            try {
+                this.parseCalculatedColumnExpression(calc.expression);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        if (calc.operation === 'percentage') {
+            return calc.columns.length >= 2;
+        }
+
+        return ['add', 'substract', 'subtract', 'multiply', 'divide'].includes(calc.operation)
+            && calc.columns.length > 0;
+    },
+
+    calculateCalculatedColumnValue: function (row, calc) {
+        const columns = Array.isArray(calc.columns) ? calc.columns : [];
+        const valueAt = index => this.parseCalculatedColumnNumber(row[index]);
+
+        if (calc.operation === 'formula') {
+            try {
+                return this.evaluateCalculatedColumnExpression(row, calc);
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        if (calc.operation === 'percentage') {
+            const denominator = valueAt(columns[1]);
+            return denominator === 0 ? 0 : (valueAt(columns[0]) / denominator) * 100;
+        }
+
+        if (calc.operation === 'substract' || calc.operation === 'subtract') {
+            const initialValue = valueAt(columns[0]);
+            return columns.slice(1).reduce((acc, index) => acc - valueAt(index), initialValue);
+        }
+
+        if (calc.operation === 'multiply') {
+            return columns.reduce((acc, index) => acc * valueAt(index), 1);
+        }
+
+        if (calc.operation === 'divide') {
+            return columns.slice(1).reduce((acc, index) => {
+                const divisor = valueAt(index);
+                return divisor === 0 ? 0 : acc / divisor;
+            }, valueAt(columns[0]));
+        }
+
+        return columns.reduce((acc, index) => acc + valueAt(index), 0);
+    },
+
+    getCalculatedColumnTableDefinition: function (calc, calcIndex) {
+        return {
+            title: _.escape(calc.title),
+            className: 'dt-right',
+            calculationId: calcIndex,
+            render: function (data, type, row, meta) {
+                if (data === null || data === undefined || data === '') {
+                    return '';
+                }
+                const value = OCA.Analytics.Visualization.parseCalculatedColumnNumber(data);
+                const formattedValue = value.toLocaleString() + (calc.operation === 'percentage' ? ' %' : '');
+                return _.escape(formattedValue);
+            }
+        };
     },
 
     parseTableCellLink: function (value) {
@@ -555,66 +920,11 @@ OCA.Analytics.Visualization = {
         if (!Array.isArray(data) || data.length === 0) return data;
         const userCalculations = this.getCalculatedColumns(tableOptions);
         userCalculations.forEach((calc, calcIndex) => {
-            switch (calc.operation) {
-                case "substract":
-                    data = data.map(row => {
-                        // Start with the value of the first column to subtract from
-                        const initialValue = parseFloat(row[calc.columns[0]] || 0);
-                        // Subtract the rest of the columns' values from the initial value
-                        const difference = calc.columns.slice(1).reduce((acc, index) => acc - parseFloat(row[index] || 0), initialValue);
-                        return [...row, difference];
-                    });
-                    columns.push({
-                        title: _.escape(calc.title),
-                        className: 'dt-right',
-                        calculationId: calcIndex, // Store the index of the calculation
-                        render: function (data, type, row, meta) {
-                            if (data === null || isNaN(parseFloat(data))) {
-                                return '';
-                            } else {
-                                return _.escape(parseFloat(data).toLocaleString());
-                            }
-                        }
-                    });
-                    break;
-                case "add":
-                    data = data.map(row => {
-                        const sum = calc.columns.reduce((acc, index) => acc + parseFloat(row[index] || 0), 0);
-                        return [...row, sum];
-                    });
-                    columns.push({
-                        title: _.escape(calc.title),
-                        className: 'dt-right',
-                        calculationId: calcIndex, // Store the index of the calculation
-                        render: function (data, type, row, meta) {
-                            if (data === null || isNaN(parseFloat(data))) {
-                                return '';
-                            } else {
-                                return _.escape(parseFloat(data).toLocaleString());
-                            }
-                        }
-                    });
-                    break;
-                case "percentage":
-                    data = data.map(row => {
-                        const percentage = (parseFloat(row[calc.columns[0]] || 0) / parseFloat(row[calc.columns[1]] || 1)) * 100;
-                        return [...row, percentage.toFixed(2)];
-                    });
-                    columns.push({
-                        title: _.escape(calc.title),
-                        className: 'dt-right',
-                        calculationId: calcIndex, // Store the index of the calculation
-                        render: function (data, type, row, meta) {
-                            if (data === null || isNaN(parseFloat(data))) {
-                                return '';
-                            } else {
-                                return _.escape(parseFloat(data).toLocaleString() + " %");
-                            }
-                        }
-                    });
-                    break;
-                // Add more cases for different operations as needed
+            if (!this.isCalculatedColumnRenderable(calc)) {
+                return;
             }
+            data = data.map(row => [...row, this.calculateCalculatedColumnValue(row, calc)]);
+            columns.push(this.getCalculatedColumnTableDefinition(calc, calcIndex));
         });
         return {data, columns};
     },
@@ -763,13 +1073,13 @@ OCA.Analytics.Visualization = {
                 const denominatorData = api.column(calcColumn.columns[1]).data().toArray();
 
                 // Calculate the sums for numerator and denominator
-                const numeratorSum = numeratorData.reduce((sum, value) => sum + parseFloat(value || 0), 0);
-                const denominatorSum = denominatorData.reduce((sum, value) => sum + parseFloat(value || 1), 0);
-                total = (numeratorSum / denominatorSum) * 100;
+                const numeratorSum = numeratorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
+                const denominatorSum = denominatorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
+                total = denominatorSum === 0 ? 0 : (numeratorSum / denominatorSum) * 100;
                 total = total.toFixed(2);
             } else {
                 // Regular sum for non-percentage columns
-                total = columnData.reduce((sum, curValue) => sum + parseFloat(curValue || 0), 0);
+                total = columnData.reduce((sum, curValue) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(curValue), 0);
             }
 
             let cell = footerRow.querySelector('td:nth-child(' + (displayIdx + 1) + ')');
@@ -1203,6 +1513,70 @@ OCA.Analytics.Visualization = {
         return {annotations};
     },
 
+    getChartDataWithCalculatedColumns: function (reportData, dataModel) {
+        const chartData = {
+            header: Array.isArray(reportData.header) ? [...reportData.header] : [],
+            data: Array.isArray(reportData.data) ? reportData.data.map(row => Array.isArray(row) ? [...row] : row) : [],
+        };
+
+        if (dataModel !== 'timeSeriesModel') {
+            return chartData;
+        }
+
+        const calculatedColumns = this.getCalculatedColumns(reportData.options?.tableoptions)
+            .filter(calc => this.isCalculatedColumnRenderable(calc));
+        calculatedColumns.forEach((calc) => {
+            chartData.header.push(calc.title || t('analytics', 'Calculated column'));
+            chartData.data = chartData.data.map(row => Array.isArray(row)
+                ? [...row, this.calculateCalculatedColumnValue(row, calc)]
+                : row
+            );
+        });
+
+        return chartData;
+    },
+
+    getChartSeriesItems: function (reportData, dataModel) {
+        const model = dataModel || OCA.Analytics.ChartOptions.getGuiState(reportData.options?.chartoptions).model;
+        const chartData = this.getChartDataWithCalculatedColumns(reportData, model);
+
+        if (model === 'timeSeriesModel') {
+            return chartData.header.slice(1).map((label, index) => ({
+                label: label,
+                index: index,
+            }));
+        }
+
+        if (model === 'accountModel') {
+            return chartData.data
+                .filter(row => Array.isArray(row))
+                .map((row, index) => ({
+                    label: row[0] || t('analytics', 'Data series'),
+                    index: index,
+                }));
+        }
+
+        const labelMap = new Map();
+        chartData.data.forEach((row) => {
+            if (!Array.isArray(row)) {
+                return;
+            }
+            let dataSeriesColumn;
+            if (row.length >= 3) {
+                [dataSeriesColumn] = row.slice(-3);
+            } else if (row.length === 2) {
+                dataSeriesColumn = '';
+            } else {
+                dataSeriesColumn = row[0] || '';
+            }
+            if (!labelMap.has(dataSeriesColumn)) {
+                labelMap.set(dataSeriesColumn, {label: dataSeriesColumn});
+            }
+        });
+
+        return Array.from(labelMap.values());
+    },
+
     /**
      * Transform backend data into the dataset format expected by Chart.js.
      *
@@ -1214,11 +1588,12 @@ OCA.Analytics.Visualization = {
         let datasets = [], xAxisCategories = [];
         const guiState = OCA.Analytics.ChartOptions.getGuiState(data.options.chartoptions);
         const dataModel = guiState.model;
-        let header = data.header.slice(1);
+        const chartData = this.getChartDataWithCalculatedColumns(data, dataModel);
+        let header = chartData.header.slice(1);
         const isTopGrouping = !!data.options?.filteroptions?.topN;
         let datasetCounter = 0;
 
-        data = data.data;
+        data = chartData.data;
 
         // as of chartjs 4, the yAxis needs to be mapped to the primary axis per default
 
