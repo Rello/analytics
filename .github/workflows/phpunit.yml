@@ -94,12 +94,12 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           extensions: apcu, bcmath, ctype, curl, dom, fileinfo, gd, iconv, intl, mbstring, mysqli, pdo_mysql, pdo_pgsql, pdo_sqlite, posix, simplexml, xmlreader, xmlwriter, zip
-          tools: composer:v2, phpunit:9.6
+          tools: phpunit:9.6
           coverage: none
 
-      - name: Install app dependencies
+      - name: Verify bundled app dependencies
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer install --prefer-dist --no-interaction --no-progress
+        run: test -f vendor/autoload.php
 
       - name: Check PHP syntax
         working-directory: apps/${{ env.APP_NAME }}
