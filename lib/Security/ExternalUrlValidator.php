@@ -24,6 +24,9 @@ class ExternalUrlValidator {
 		}
 
 		$host = strtolower(rtrim((string)$parts['host'], '.'));
+		if (str_starts_with($host, '[') && str_ends_with($host, ']')) {
+			$host = substr($host, 1, -1);
+		}
 		if ($host === '' || $host === 'localhost' || str_ends_with($host, '.localhost')) {
 			return 'External URL host is not allowed';
 		}
@@ -55,12 +58,12 @@ class ExternalUrlValidator {
 		}
 
 		$addresses = [];
-		$ipv4 = gethostbynamel($host);
+		$ipv4 = @gethostbynamel($host);
 		if (is_array($ipv4)) {
 			$addresses = array_merge($addresses, $ipv4);
 		}
 
-		$ipv6 = dns_get_record($host, DNS_AAAA);
+		$ipv6 = @dns_get_record($host, DNS_AAAA);
 		if (is_array($ipv6)) {
 			foreach ($ipv6 as $record) {
 				if (isset($record['ipv6'])) {
