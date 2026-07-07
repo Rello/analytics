@@ -1,0 +1,992 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:afc80c55-5bb1-4e32-9154-8f59b0240212",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-07-07T20:04:56Z",
+    "tools": [
+      {
+        "vendor": "OpenAI",
+        "name": "Codex local manifest extraction",
+        "version": "2026-07-07"
+      }
+    ],
+    "supplier": {
+      "name": "Marcel Scherello",
+      "url": [
+        "https://github.com/Rello/analytics"
+      ],
+      "contact": [
+        {
+          "name": "Marcel Scherello",
+          "email": "analytics@scherello.de"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:github/Rello/analytics@6.6.0",
+      "name": "analytics",
+      "version": "6.6.0",
+      "description": "Nextcloud Analytics app",
+      "licenses": [
+        {
+          "license": {
+            "id": "AGPL-3.0-or-later"
+          }
+        }
+      ],
+      "purl": "pkg:github/Rello/analytics@6.6.0",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://rello.github.io/analytics/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/Rello/analytics"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/Rello/analytics/issues"
+        }
+      ],
+      "properties": [
+        {
+          "name": "nextcloud:app-id",
+          "value": "analytics"
+        },
+        {
+          "name": "local:source",
+          "value": "appinfo/info.xml"
+        },
+        {
+          "name": "local:sha256",
+          "value": "1234a614371473feb8dc8f99ac9e449e6a5547df6985c45b0fc8aa4a4a15e5af"
+        }
+      ]
+    },
+    "properties": [
+      {
+        "name": "local:generated-from",
+        "value": "appinfo/info.xml, composer.json, composer.lock, vendor/composer/installed.json, js/3rdParty, css/3rdParty"
+      },
+      {
+        "name": "local:note",
+        "value": "Root composer.json requires phpoffice/phpspreadsheet ^5.8; composer.lock records phpoffice/phpspreadsheet 5.8.0."
+      },
+      {
+        "name": "local:note",
+        "value": "Composer packages are taken from composer.lock and verified against the bundled vendor package directories."
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "platform",
+      "bom-ref": "platform:php",
+      "name": "PHP",
+      "version": ">=8.2 <8.6",
+      "scope": "required",
+      "purl": "pkg:generic/php",
+      "cpe": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "composer:constraint",
+          "value": ">=8.2 <8.6"
+        },
+        {
+          "name": "local:source",
+          "value": "composer.json"
+        },
+        {
+          "name": "local:sha256",
+          "value": "75aad9436d03e96bb4f5e321784550d7f533ba5b0e297bba2bc2141032acca0c"
+        }
+      ]
+    },
+    {
+      "type": "framework",
+      "bom-ref": "pkg:github/nextcloud/server",
+      "group": "nextcloud",
+      "name": "server",
+      "version": ">=29 <=99",
+      "scope": "required",
+      "purl": "pkg:github/nextcloud/server",
+      "properties": [
+        {
+          "name": "local:source",
+          "value": "appinfo/info.xml"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/composer/pcre@3.4.0",
+      "group": "composer",
+      "name": "pcre",
+      "version": "3.4.0",
+      "description": "PCRE wrapping library that offers type-safe preg_* replacements.",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/composer/pcre@3.4.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/composer/pcre.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/composer/pcre"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/composer/pcre"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "4688ddf2027743e0b0b9a5750e911984137f8c3d1549994e899d26c06e7b048a"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "composer.lock"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "d5a341b3fb61f3001970940afb1d332968a183ed"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/maennchen/zipstream-php@3.1.2",
+      "group": "maennchen",
+      "name": "zipstream-php",
+      "version": "3.1.2",
+      "description": "ZipStream is a library for dynamically streaming dynamic zip files from PHP without writing to the disk at all on the server.",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/maennchen/zipstream-php@3.1.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/maennchen/ZipStream-PHP.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/maennchen/ZipStream-PHP"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/maennchen/zipstream-php"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "a669d77c102f12640e3cee752c85a3d030a615bf5ef1e25a083301136ac5a1c0"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "composer.lock"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "aeadcf5c412332eb426c0f9b4485f6accba2a99f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/markbaker/complex@3.0.2",
+      "group": "markbaker",
+      "name": "complex",
+      "version": "3.0.2",
+      "description": "PHP Class for working with complex numbers",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/markbaker/complex@3.0.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/MarkBaker/PHPComplex.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/MarkBaker/PHPComplex"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/markbaker/complex"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "834681464b7cda430d27b770d5ef51656f8026be38cf8f5768c3e6a2c0a7920c"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "composer.lock"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "95c56caa1cf5c766ad6d65b6344b807c1e8405b9"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/markbaker/matrix@3.0.1",
+      "group": "markbaker",
+      "name": "matrix",
+      "version": "3.0.1",
+      "description": "PHP Class for working with matrices",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/markbaker/matrix@3.0.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/MarkBaker/PHPMatrix.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/MarkBaker/PHPMatrix"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/markbaker/matrix"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "7dbb6f2563b69a442b9c861e0625a70bc332e0b91447c207138717d2b70c2365"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "composer.lock"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "728434227fe21be27ff6d86621a1b13107a2562c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+      "group": "phpoffice",
+      "name": "phpspreadsheet",
+      "version": "5.8.0",
+      "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/PHPOffice/PhpSpreadsheet.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/PHPOffice/PhpSpreadsheet"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/phpoffice/phpspreadsheet"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "f02f61bac8e66a7a76d9a83a904b4bd9e650982e71b05abe73c54ab9afb1c7a9"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "composer.lock"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "01964d92536edf1a3a874b9580a52824bebf6fbb"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/psr/simple-cache@3.0.0",
+      "group": "psr",
+      "name": "simple-cache",
+      "version": "3.0.0",
+      "description": "Common interfaces for simple caching",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/psr/simple-cache@3.0.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/php-fig/simple-cache.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/php-fig/simple-cache"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/psr/simple-cache"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "07d516e9bb18abd622783bdf9e8177bb5ff419e2e33c8324d640a6404e1657d2"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "composer.lock"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/chart.js@4.4.9",
+      "group": "npm",
+      "name": "chart.js",
+      "version": "4.4.9",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "de315773454b6076b63990bfa05ce5155a37f71992c87d7bb5f9a2ea698697ef"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chart.js@4.4.9",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chart.umd.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.chartjs.org"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/chartjs-adapter-moment@1.0.0",
+      "group": "npm",
+      "name": "chartjs-adapter-moment",
+      "version": "1.0.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "da93169fad32f6d5f9b71eeb17a216f4de797a7232d13ea53c949d6347deab2c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chartjs-adapter-moment@1.0.0",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chartjs-adapter-moment.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.chartjs.org"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/chartjs-plugin-annotation@3.1.0",
+      "group": "npm",
+      "name": "chartjs-plugin-annotation",
+      "version": "3.1.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "37e04f5c152d8000748bf79e4da2d7d0b0e12583aacbf2c3cce57acf962de91d"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chartjs-plugin-annotation@3.1.0",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chartjs-plugin-annotation.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.chartjs.org/chartjs-plugin-annotation/latest/"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/chartjs-plugin-colorschemes@0.4.0",
+      "group": "npm",
+      "name": "chartjs-plugin-colorschemes",
+      "version": "0.4.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0adca6d3ae58b1aba052fcac4f99c76b22b29db883195a60341a9478f4402fed"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chartjs-plugin-colorschemes@0.4.0",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chartjs-plugin-colorschemes.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://nagix.github.io/chartjs-plugin-colorschemes"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/chartjs-plugin-datalabels@2.1.0",
+      "group": "npm",
+      "name": "chartjs-plugin-datalabels",
+      "version": "2.1.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "39b5b353074c5ac3d3c1d917fc5cbaaa88e7916f91920722c94ae6483deea70d"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chartjs-plugin-datalabels@2.1.0",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chartjs-plugin-datalabels.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://chartjs-plugin-datalabels.netlify.app"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/chartjs-plugin-zoom@1.2.1",
+      "group": "npm",
+      "name": "chartjs-plugin-zoom",
+      "version": "1.2.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "711b558fad87393d4cdc419cfb810169c53fdfc858b18acd041e3ccc4567f2e5"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chartjs-plugin-zoom@1.2.1",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chartjs-plugin-zoom.min.js"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "local:chartjs-plugin-funnel",
+      "group": "npm",
+      "name": "chartjs-plugin-funnel",
+      "version": "unknown",
+      "scope": "required",
+      "purl": "pkg:npm/chartjs-chart-funnel",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "67a9d0e301f64595e7237ecd1ceeab95bc5af2d783bef131ae6d65a491474cb9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/sgratzl/chartjs-chart-funnel"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/chartjs-plugin-funnel.min.js"
+        },
+        {
+          "name": "local:package-evidence",
+          "value": "Bundled file is referenced as chartjs-plugin-funnel locally; upstream reference points to chartjs-chart-funnel."
+        },
+        {
+          "name": "local:version-evidence",
+          "value": "No plugin version header found in the bundled minified file."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "local:cloner.js",
+      "name": "cloner.js",
+      "version": "unknown",
+      "scope": "required",
+      "purl": "pkg:generic/cloner.js@unknown",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "602d1b3916cd01e06ea51872c08e4845648dfd2e94b19b06b485f78c8102ff50"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/cloner.js"
+        },
+        {
+          "name": "local:copyright",
+          "value": "Andrea Giammarchi - @WebReflection"
+        },
+        {
+          "name": "local:version-evidence",
+          "value": "No version header found in the bundled file."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/datatables.net@2.3.8",
+      "group": "npm",
+      "name": "datatables.net",
+      "version": "2.3.8",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5b4ea4250ee444307442f879c3f304dd2658918794dd685347cc52ae572c7bd2"
+        },
+        {
+          "alg": "SHA-256",
+          "content": "526a1997aebe15ccc11a325b4025671539a8c0845234200cafd29c04644fecd6"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/datatables.net@2.3.8",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://datatables.net"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/datatables.min.js"
+        },
+        {
+          "name": "local:path",
+          "value": "css/3rdParty/datatables.min.css"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/datatables.net-colreorder@2.1.2",
+      "group": "npm",
+      "name": "datatables.net-colreorder",
+      "version": "2.1.2",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5b4ea4250ee444307442f879c3f304dd2658918794dd685347cc52ae572c7bd2"
+        },
+        {
+          "alg": "SHA-256",
+          "content": "526a1997aebe15ccc11a325b4025671539a8c0845234200cafd29c04644fecd6"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/datatables.net-colreorder@2.1.2",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://datatables.net/extensions/colreorder/"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/datatables.min.js"
+        },
+        {
+          "name": "local:path",
+          "value": "css/3rdParty/datatables.min.css"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/html2canvas@1.4.1",
+      "group": "npm",
+      "name": "html2canvas",
+      "version": "1.4.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e87e550794322e574a1fda0c1549a3c70dae5a93d9113417a429016838eab8cb"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/html2canvas@1.4.1",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/html2canvas.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://html2canvas.hertzen.com"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/jquery@4.0.0%2Bslim",
+      "group": "npm",
+      "name": "jquery",
+      "version": "4.0.0+slim",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b406bfdcb79aeb98faf751bd4a402b1c2267e9110f6d4efba548f9286f5751ba"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/jquery@4.0.0%2Bslim",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/jquery.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://jquery.com"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/jspdf@4.2.1",
+      "group": "npm",
+      "name": "jspdf",
+      "version": "4.2.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e6551fcdc32f09d6853b2c5126d18d01d9447e0da618a41a11ebeee0f6c20d54"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/jspdf@4.2.1",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/jspdf.umd.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/parallax/jsPDF"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/moment@2.30.1",
+      "group": "npm",
+      "name": "moment",
+      "version": "2.30.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a68f64a74e0a99c214357bbb1406b232189a9c50a03e7db4984aafbae43392c8"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/moment@2.30.1",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/moment.min.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://momentjs.com"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:github/Rello/analytics@6.6.0",
+      "dependsOn": [
+        "platform:php",
+        "pkg:github/nextcloud/server",
+        "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+        "pkg:npm/chart.js@4.4.9",
+        "pkg:npm/chartjs-adapter-moment@1.0.0",
+        "pkg:npm/chartjs-plugin-annotation@3.1.0",
+        "pkg:npm/chartjs-plugin-colorschemes@0.4.0",
+        "pkg:npm/chartjs-plugin-datalabels@2.1.0",
+        "local:chartjs-plugin-funnel",
+        "pkg:npm/chartjs-plugin-zoom@1.2.1",
+        "local:cloner.js",
+        "pkg:npm/datatables.net@2.3.8",
+        "pkg:npm/datatables.net-colreorder@2.1.2",
+        "pkg:npm/html2canvas@1.4.1",
+        "pkg:npm/jquery@4.0.0%2Bslim",
+        "pkg:npm/jspdf@4.2.1",
+        "pkg:npm/moment@2.30.1"
+      ]
+    },
+    {
+      "ref": "pkg:composer/composer/pcre@3.4.0",
+      "dependsOn": [
+        "platform:php"
+      ]
+    },
+    {
+      "ref": "pkg:composer/maennchen/zipstream-php@3.1.2",
+      "dependsOn": [
+        "platform:php"
+      ]
+    },
+    {
+      "ref": "pkg:composer/markbaker/complex@3.0.2",
+      "dependsOn": [
+        "platform:php"
+      ]
+    },
+    {
+      "ref": "pkg:composer/markbaker/matrix@3.0.1",
+      "dependsOn": [
+        "platform:php"
+      ]
+    },
+    {
+      "ref": "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+      "dependsOn": [
+        "pkg:composer/composer/pcre@3.4.0",
+        "pkg:composer/maennchen/zipstream-php@3.1.2",
+        "pkg:composer/markbaker/complex@3.0.2",
+        "pkg:composer/markbaker/matrix@3.0.1",
+        "platform:php",
+        "pkg:composer/psr/simple-cache@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:composer/psr/simple-cache@3.0.0",
+      "dependsOn": [
+        "platform:php"
+      ]
+    },
+    {
+      "ref": "pkg:npm/chartjs-adapter-moment@1.0.0",
+      "dependsOn": [
+        "pkg:npm/chart.js@4.4.9",
+        "pkg:npm/moment@2.30.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/chartjs-plugin-annotation@3.1.0",
+      "dependsOn": [
+        "pkg:npm/chart.js@4.4.9"
+      ]
+    },
+    {
+      "ref": "pkg:npm/chartjs-plugin-colorschemes@0.4.0",
+      "dependsOn": [
+        "pkg:npm/chart.js@4.4.9"
+      ]
+    },
+    {
+      "ref": "pkg:npm/chartjs-plugin-datalabels@2.1.0",
+      "dependsOn": [
+        "pkg:npm/chart.js@4.4.9"
+      ]
+    },
+    {
+      "ref": "local:chartjs-plugin-funnel",
+      "dependsOn": [
+        "pkg:npm/chart.js@4.4.9"
+      ]
+    },
+    {
+      "ref": "pkg:npm/chartjs-plugin-zoom@1.2.1",
+      "dependsOn": [
+        "pkg:npm/chart.js@4.4.9"
+      ]
+    }
+  ]
+}

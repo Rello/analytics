@@ -2,7 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Reader\Xls;
 
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Cell\AddressRange;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
@@ -48,29 +48,17 @@ class DataValidationHelper extends Xls
 
     public static function type(int $type): ?string
     {
-        if (isset(self::$types[$type])) {
-            return self::$types[$type];
-        }
-
-        return null;
+        return self::$types[$type] ?? null;
     }
 
     public static function errorStyle(int $errorStyle): ?string
     {
-        if (isset(self::$errorStyles[$errorStyle])) {
-            return self::$errorStyles[$errorStyle];
-        }
-
-        return null;
+        return self::$errorStyles[$errorStyle] ?? null;
     }
 
     public static function operator(int $operator): ?string
     {
-        if (isset(self::$operators[$operator])) {
-            return self::$operators[$operator];
-        }
-
-        return null;
+        return self::$operators[$operator] ?? null;
     }
 
     /**
@@ -187,26 +175,44 @@ class DataValidationHelper extends Xls
 
         // offset: var; size: var; cell range address list with
         $cellRangeAddressList = Biff8::readBIFF8CellRangeAddressList(substr($recordData, $offset));
+        /** @var string[] */
         $cellRangeAddresses = $cellRangeAddressList['cellRangeAddresses'];
+        $maxRow = (string) AddressRange::MAX_ROW;
+        $maxCol = AddressRange::MAX_COLUMN;
+        $maxXlsRow = (string) AddressRange::MAX_ROW_XLS;
+        $maxXlsColumnString = AddressRange::MAX_COLUMN_XLS;
 
         foreach ($cellRangeAddresses as $cellRange) {
-            $stRange = $xls->phpSheet->shrinkRangeToFit($cellRange);
-            foreach (Coordinate::extractAllCellReferencesInRange($stRange) as $coordinate) {
-                $objValidation = $xls->phpSheet->getCell($coordinate)->getDataValidation();
-                $objValidation->setType($type);
-                $objValidation->setErrorStyle($errorStyle);
-                $objValidation->setAllowBlank((bool) $allowBlank);
-                $objValidation->setShowInputMessage((bool) $showInputMessage);
-                $objValidation->setShowErrorMessage((bool) $showErrorMessage);
-                $objValidation->setShowDropDown(!$suppressDropDown);
-                $objValidation->setOperator($operator);
-                $objValidation->setErrorTitle($errorTitle);
-                $objValidation->setError($error);
-                $objValidation->setPromptTitle($promptTitle);
-                $objValidation->setPrompt($prompt);
-                $objValidation->setFormula1($formula1);
-                $objValidation->setFormula2($formula2);
-            }
+            $cellRange = preg_replace(
+                [
+                    "/([a-z]+)1:([a-z]+)$maxXlsRow/i",
+                    "/([a-z]+\\d+):([a-z]+)$maxXlsRow/i",
+                    "/A(\\d+):$maxXlsColumnString(\\d+)/i",
+                    "/([a-z]+\\d+):$maxXlsColumnString(\\d+)/i",
+                ],
+                [
+                    '$1:$2',
+                    '$1:${2}' . $maxRow,
+                    '$1:$2',
+                    '$1:' . $maxCol . '$2',
+                ],
+                $cellRange
+            ) ?? $cellRange;
+            $objValidation = new DataValidation();
+            $objValidation->setType($type);
+            $objValidation->setErrorStyle($errorStyle);
+            $objValidation->setAllowBlank((bool) $allowBlank);
+            $objValidation->setShowInputMessage((bool) $showInputMessage);
+            $objValidation->setShowErrorMessage((bool) $showErrorMessage);
+            $objValidation->setShowDropDown(!$suppressDropDown);
+            $objValidation->setOperator($operator);
+            $objValidation->setErrorTitle($errorTitle);
+            $objValidation->setError($error);
+            $objValidation->setPromptTitle($promptTitle);
+            $objValidation->setPrompt($prompt);
+            $objValidation->setFormula1($formula1);
+            $objValidation->setFormula2($formula2);
+            $xls->phpSheet->setDataValidation($cellRange, $objValidation);
         }
     }
 }

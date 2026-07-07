@@ -6,10 +6,10 @@ use PhpOffice\PhpSpreadsheet\Chart\Chart;
 use PhpOffice\PhpSpreadsheet\Chart\Renderer\MtJpGraphRenderer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
@@ -36,7 +36,7 @@ class Sample
      */
     public function getScriptFilename(): string
     {
-        return basename($_SERVER['SCRIPT_FILENAME'], '.php');
+        return basename(StringHelper::convertToString($_SERVER['SCRIPT_FILENAME']), '.php');
     }
 
     /**
@@ -129,20 +129,21 @@ class Sample
                 $writerCallback($writer);
             }
             $callStartTime = microtime(true);
-            if (PHP_VERSION_ID >= 80400 && $writer instanceof Dompdf) {
-                @$writer->save($path);
-            } else {
-                $writer->save($path);
-            }
+            $writer->save($path);
             $this->logWrite($writer, $path, $callStartTime);
-            if ($this->isCli() === false) {
-                // @codeCoverageIgnoreStart
-                echo '<a href="/download.php?type=' . pathinfo($path, PATHINFO_EXTENSION) . '&name=' . basename($path) . '">Download ' . basename($path) . '</a><br />';
-                // @codeCoverageIgnoreEnd
-            }
+            $this->addDownloadLink($path);
         }
 
         $this->logEndingNotes();
+    }
+
+    public function addDownloadLink(string $path): void
+    {
+        if ($this->isCli() === false) {
+            // @codeCoverageIgnoreStart
+            echo '<a href="/download.php?type=' . pathinfo($path, PATHINFO_EXTENSION) . '&name=' . basename($path) . '">Download ' . basename($path) . '</a><br />';
+            // @codeCoverageIgnoreEnd
+        }
     }
 
     protected function isDirOrMkdir(string $folder): bool
@@ -189,10 +190,10 @@ class Sample
         return $temporaryFilename . '.' . $extension;
     }
 
-    public function log(string $message): void
+    public function log(mixed $message): void
     {
         $eol = $this->isCli() ? PHP_EOL : '<br />';
-        echo ($this->isCli() ? date('H:i:s ') : '') . $message . $eol;
+        echo ($this->isCli() ? date('H:i:s ') : '') . StringHelper::convertToString($message) . $eol;
     }
 
     /**
@@ -245,9 +246,16 @@ class Sample
             : $this->log(sprintf('Function: %s() - %s.', rtrim($functionName, '()'), rtrim($description, '.')));
     }
 
-    public function displayGrid(array $matrix): void
+    /** @param mixed[][] $matrix */
+    public function displayGrid(array $matrix, null|bool|TextGridRightAlign $numbersRight = null): void
     {
         $renderer = new TextGrid($matrix, $this->isCli());
+        if (is_bool($numbersRight)) {
+            $numbersRight = $numbersRight ? TextGridRightAlign::numeric : TextGridRightAlign::none;
+        }
+        if ($numbersRight !== null) {
+            $renderer->setNumbersRight($numbersRight);
+        }
         echo $renderer->render();
     }
 

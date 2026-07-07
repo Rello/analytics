@@ -50,6 +50,7 @@ Connect data from different sources in one place and turn it into shareable insi
         https://raw.githubusercontent.com/Rello/analytics/master/screenshots/architecture.png
     </screenshot>
     <dependencies>
+        <php min-version="8.2" max-version="8.5"/>
         <nextcloud min-version="29" max-version="99"/>
     </dependencies>
     <activity>
