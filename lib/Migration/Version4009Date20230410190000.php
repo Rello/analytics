@@ -57,6 +57,18 @@ class Version4009Date20230410190000 extends SimpleMigrationStep
      */
     public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options)
     {
+        /** @var ISchemaWrapper $schema */
+        $schema = $schemaClosure();
+
+        if (!$schema->hasTable('analytics_share')) {
+            return;
+        }
+
+        $table = $schema->getTable('analytics_share');
+        if (!$table->hasColumn('parent')) {
+            return;
+        }
+
         $query = $this->connection->getQueryBuilder();
         $query->delete('analytics_share')
             ->where($query->expr()->isNotNull('parent'))

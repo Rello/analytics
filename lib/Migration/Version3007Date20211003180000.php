@@ -192,7 +192,7 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
         $query->select('*')
             ->from('analytics_dataset');
 
-        $result = $query->execute();
+        $result = $query->executeQuery();
         while ($row = $result->fetch()) {
             $insert
                 ->setParameter('user_id', $row['user_id'])
@@ -212,7 +212,7 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
                 ->setParameter('dataoptions', $row['dataoptions'])
                 ->setParameter('filteroptions', $row['filteroptions'])
                 ->setParameter('refresh', (int) $row['refresh'], IQueryBuilder::PARAM_INT);
-            $insert->execute();
+            $insert->executeStatement();
 
             $reportIdMap[(int)$row['id']] = $insert->getLastInsertId();
         }
@@ -234,14 +234,14 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
         $query = $this->connection->getQueryBuilder();
         $query->select(['id'])
             ->from('analytics_dataset');
-        $result = $query->execute();
+        $result = $query->executeQuery();
 
         while ($row = $result->fetch()) {
             $update
                 ->setParameter('report', $reportIdMap[(int) $row['id']])
                 ->setParameter('dataset', (int) $row['id'])
             ;
-            $update->execute();
+            $update->executeStatement();
         }
     }
 
@@ -258,14 +258,14 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
         $query = $this->connection->getQueryBuilder();
         $query->select(['id'])
             ->from('analytics_dataset');
-        $result = $query->execute();
+        $result = $query->executeQuery();
 
         while ($row = $result->fetch()) {
             $update
                 ->setParameter('report', $reportIdMap[(int) $row['id']])
                 ->setParameter('dataset', (int) $row['id'])
             ;
-            $update->execute();
+            $update->executeStatement();
         }
     }
 
@@ -283,14 +283,14 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
         $query->select(['id', 'parent'])
             ->from('analytics_report')
             ->where($query->expr()->neq('parent', $query->createNamedParameter('0')));
-        $result = $query->execute();
+        $result = $query->executeQuery();
 
         while ($row = $result->fetch()) {
             $update
                 ->setParameter('parent_to', $reportIdMap[(int) $row['parent']])
                 ->setParameter('id', (int) $row['id'])
             ;
-            $update->execute();
+            $update->executeStatement();
         }
     }
 
