@@ -1,282 +1,155 @@
-name: PHPUnit
+# SPDX-FileCopyrightText: 2026 Marcel Scherello
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: Nextcloud compatibility
 
 on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - main
+      - stable*
   workflow_dispatch:
-  #pull_request:
-  #push:
+
+permissions:
+  contents: read
 
 env:
   APP_NAME: analytics
 
 jobs:
-  php:
+  compatibility:
     runs-on: ubuntu-latest
 
     strategy:
-      # do not stop on another job's failure
       fail-fast: false
       matrix:
-        php-versions: [ '8.3']
-        databases: [ 'sqlite' ]
-        server-versions: [ 'master' ]
+        include:
+          - nextcloud-version: stable29
+            php-version: '8.0'
+            database: sqlite
+          - nextcloud-version: stable30
+            php-version: '8.1'
+            database: sqlite
+          - nextcloud-version: stable31
+            php-version: '8.2'
+            database: mysql
+          - nextcloud-version: stable32
+            php-version: '8.3'
+            database: pgsql
+          - nextcloud-version: stable33
+            php-version: '8.4'
+            database: mysql
+          - nextcloud-version: stable34
+            php-version: '8.5'
+            database: pgsql
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
-
-    steps:
-      - name: Checkout server
-        uses: actions/checkout@v2
-        with:
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
-      - name: Checkout app
-        uses: actions/checkout@v2
-        with:
-          path: apps/${{ env.APP_NAME }}
-
-      - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite
-          tools: phpunit:8.5.2
-          coverage: none
-
-      - name: Set up PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
-
-      - name: Set up Nextcloud
-        env:
-          DB_PORT: 4444
-        run: |
-          mkdir data
-          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass password
-          php -f index.php
-          ./occ app:enable --force ${{ env.APP_NAME }}
-      #          php -S localhost:8080 &
-
-  #    - name: PHPUnit
-  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
-  #      run: phpunit -c phpunit.xml
-
-  #      - name: PHPUnit integration
-  #        working-directory: apps/${{ env.APP_NAME }}
-  #        run: phpunit -c phpunit.integration.xml
-
-  mysql:
-    runs-on: ubuntu-latest
-
-    strategy:
-      # do not stop on another job's failure
-      fail-fast: false
-      matrix:
-        php-versions: [ '8.3' ]
-        databases: [ 'mysql' ]
-        server-versions: [ 'master' ]
-
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
+    name: nc-${{ matrix.nextcloud-version }}-php${{ matrix.php-version }}-${{ matrix.database }}
 
     services:
       mysql:
-        image: mariadb
+        image: mariadb:10.11
         ports:
-          - 4444:3306/tcp
+          - 3306:3306
         env:
+          MYSQL_DATABASE: nextcloud
+          MYSQL_USER: nextcloud
+          MYSQL_PASSWORD: nextcloud
           MYSQL_ROOT_PASSWORD: rootpassword
-        options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
-
-    steps:
-      - name: Checkout server
-        uses: actions/checkout@v2
-        with:
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
-      - name: Checkout app
-        uses: actions/checkout@v2
-        with:
-          path: apps/${{ env.APP_NAME }}
-
-      - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, gd, zip
-          tools: phpunit:8.5.2
-          coverage: none
-
-      - name: Set up PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
-
-      - name: Set up Nextcloud
-        env:
-          DB_PORT: 4444
-        run: |
-          mkdir data
-          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass password
-          php -f index.php
-          ./occ app:enable --force ${{ env.APP_NAME }}
-      #          php -S localhost:8080 &
-
-  #    - name: PHPUnit
-  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
-  #      run: phpunit -c phpunit.xml
-
-  #      - name: PHPUnit integration
-  #        working-directory: apps/${{ env.APP_NAME }}
-  #        run: phpunit -c phpunit.integration.xml
-
-  pgsql:
-    runs-on: ubuntu-latest
-
-    strategy:
-      # do not stop on another job's failure
-      fail-fast: false
-      matrix:
-        php-versions: [ '8.3' ]
-        databases: [ 'pgsql' ]
-        server-versions: [ 'master' ]
-
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
-
-    services:
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
       postgres:
-        image: postgres
+        image: postgres:16
         ports:
-          - 4444:5432/tcp
+          - 5432:5432
         env:
-          POSTGRES_USER: root
-          POSTGRES_PASSWORD: rootpassword
           POSTGRES_DB: nextcloud
-        options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
+          POSTGRES_USER: nextcloud
+          POSTGRES_PASSWORD: nextcloud
+        options: >-
+          --health-cmd="pg_isready -U nextcloud -d nextcloud"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
-      - name: Checkout server
-        uses: actions/checkout@v2
+      - name: Checkout Nextcloud server
+        uses: actions/checkout@v4
         with:
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ matrix.nextcloud-version }}
+          submodules: recursive
 
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
-      - name: Checkout app
-        uses: actions/checkout@v2
+      - name: Checkout Analytics app
+        uses: actions/checkout@v4
         with:
           path: apps/${{ env.APP_NAME }}
 
-      - name: Set up php ${{ matrix.php-versions }}
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
-          tools: phpunit:8.5.2
+          php-version: ${{ matrix.php-version }}
+          extensions: apcu, bcmath, ctype, curl, dom, fileinfo, gd, iconv, intl, mbstring, mysqli, pdo_mysql, pdo_pgsql, pdo_sqlite, posix, simplexml, xmlreader, xmlwriter, zip
+          tools: composer:v2, phpunit:9.6
           coverage: none
 
-      - name: Set up PHPUnit
+      - name: Install app dependencies
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Set up Nextcloud
-        env:
-          DB_PORT: 4444
-        run: |
-          mkdir data
-          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass password
-          php -f index.php
-          ./occ app:enable --force ${{ env.APP_NAME }}
-      #          php -S localhost:8080 &
-
-  #    - name: PHPUnit
-  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
-  #      run: phpunit -c phpunit.xml
-
-  #      - name: PHPUnit integration
-  #        working-directory: apps/${{ env.APP_NAME }}
-  #        run: phpunit -c phpunit.integration.xml
-
-  oci:
-    runs-on: ubuntu-latest
-
-    strategy:
-      # do not stop on another job's failure
-      fail-fast: false
-      matrix:
-        php-versions: [ '8.3' ]
-        databases: [ 'oci' ]
-        server-versions: [ 'master' ]
-
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
-
-    services:
-      oracle:
-        image: deepdiver/docker-oracle-xe-11g # "wnameless/oracle-xe-11g-r2"
-        ports:
-          - "1521:1521"
-
-    steps:
-      - name: Checkout server
-        uses: actions/checkout@v2
-        with:
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
-      - name: Checkout app
-        uses: actions/checkout@v2
-        with:
-          path: apps/${{ env.APP_NAME }}
-
-      - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, iconv, fileinfo, intl, oci8
-          tools: phpunit:8.5.2
-          coverage: none
-
-      - name: Set up PHPUnit
+      - name: Check PHP syntax
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
-
-      - name: Set up Nextcloud
         run: |
-          mkdir data
-          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=XE --database-host=127.0.0.1 --database-port=1521 --database-user=autotest --database-pass=owncloud --admin-user admin --admin-pass admin
+          find appinfo lib templates tests -name '*.php' -print0 \
+            | xargs -0 -n 1 php -l
+
+      - name: Run standalone PHPUnit tests
+        working-directory: apps/${{ env.APP_NAME }}
+        run: phpunit --configuration phpunit.xml
+
+      - name: Install Nextcloud with ${{ matrix.database }}
+        run: |
+          mkdir -p data
+
+          case "${{ matrix.database }}" in
+            sqlite)
+              ./occ maintenance:install \
+                --database=sqlite \
+                --admin-user=admin \
+                --admin-pass=admin
+              ;;
+            mysql)
+              ./occ maintenance:install \
+                --database=mysql \
+                --database-name=nextcloud \
+                --database-host=127.0.0.1 \
+                --database-port=3306 \
+                --database-user=nextcloud \
+                --database-pass=nextcloud \
+                --admin-user=admin \
+                --admin-pass=admin
+              ;;
+            pgsql)
+              ./occ maintenance:install \
+                --database=pgsql \
+                --database-name=nextcloud \
+                --database-host=127.0.0.1 \
+                --database-port=5432 \
+                --database-user=nextcloud \
+                --database-pass=nextcloud \
+                --admin-user=admin \
+                --admin-pass=admin
+              ;;
+          esac
+
           php -f index.php
-          ./occ app:enable --force ${{ env.APP_NAME }}
-      #          php -S localhost:8080 &
 
-  #    - name: PHPUnit
-  #      working-directory: apps/${{ env.APP_NAME }}/tests/php
-  #      run: phpunit -c phpunit.xml
-
-#      - name: PHPUnit integration
-#        working-directory: apps/${{ env.APP_NAME }}
-#        run: phpunit -c phpunit.integration.xml
+      - name: Enable Analytics app
+        run: |
+          ./occ app:enable --force "${APP_NAME}"
+          ./occ app:list --enabled | grep -F "  - ${APP_NAME}:"
+          ./occ status
