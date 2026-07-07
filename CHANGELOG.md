@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.5.2 - 2026-07-07
+## 6.6.0 - 2026-07-07
 ### Added
 - Calculated columns can use fixed-value formulas and appear as chart series for the time-series chart model.
 
