@@ -27,7 +27,7 @@ jobs:
       matrix:
         include:
           - nextcloud-version: stable29
-            php-version: '8.0'
+            php-version: '8.1'
             database: sqlite
           - nextcloud-version: stable30
             php-version: '8.1'
