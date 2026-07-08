@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add" : "Agregar",
     "Sort order" : "Orden de clasificación",
     "Chart options" : "Opciones del gráfico",
+    "Data series" : "Series de datos",
     "Primary" : "Primario",
     "Secondary" : "Secundario",
     "Line" : "Línea",

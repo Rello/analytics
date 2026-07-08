@@ -58,6 +58,7 @@ OC.L10N.register(
     "Ascending" : "Nouseva",
     "Descending" : "Laskeva",
     "Chart options" : "Kaavion valinnat",
+    "Data series" : "Datasarjat",
     "Primary" : "Ensisijainen",
     "Secondary" : "Toissijainen",
     "Line" : "Viiva",
