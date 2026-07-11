@@ -161,7 +161,8 @@ class DatasetController extends Controller {
 	 */
 	#[NoAdminRequired]
 	public function status(int $datasetId) {
-		return $this->DatasetService->status($datasetId);
+		$status = $this->DatasetService->status($datasetId);
+		return new DataResponse($status, $status === [] ? 404 : 200);
 	}
 
 	/**

@@ -74,6 +74,32 @@ class DatasetServiceTest extends TestCase {
 		$this->assertTrue($service->provider(11));
 	}
 
+	public function testUpdateRejectsForeignDatasetBeforeSideEffects(): void {
+		$datasetMapper = $this->createMock(DatasetMapper::class);
+		$datasetMapper->expects($this->once())->method('readOwn')->with(77)->willReturn(false);
+		$datasetMapper->expects($this->never())->method('update');
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->expects($this->never())->method('increaseVersionByDataset');
+
+		$service = new DatasetService(
+			'u1',
+			new FakeL10N(),
+			$this->createMock(LoggerInterface::class),
+			$this->createMock(ITagManager::class),
+			$this->createMock(ShareService::class),
+			$this->createMock(StorageMapper::class),
+			$datasetMapper,
+			$this->createMock(ThresholdService::class),
+			$this->createMock(DataloadMapper::class),
+			$this->createMock(ActivityManager::class),
+			$this->createMock(IRootFolder::class),
+			$this->createMock(VariableService::class),
+			$reportMapper,
+		);
+
+		$this->assertFalse($service->update(77, 'foreign', '', '', '', '', 0));
+	}
+
 	private function createService(LoggerInterface $logger): DatasetService {
 		return new DatasetService(
 			'u1',

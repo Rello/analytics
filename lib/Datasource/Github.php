@@ -8,6 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
+use OCA\Analytics\Security\ExternalHttpClient;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
@@ -16,13 +17,16 @@ class Github implements IDatasource, IReportTemplateProvider {
 
 	private LoggerInterface $logger;
 	private IL10N $l10n;
+	private ExternalHttpClient $httpClient;
 
 	public function __construct(
 		IL10N           $l10n,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		ExternalHttpClient $httpClient,
 	) {
 		$this->l10n = $l10n;
 		$this->logger = $logger;
+		$this->httpClient = $httpClient;
 	}
 
 	/**
@@ -137,7 +141,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 
 		if (!isset($option['data']) || $option['data'] === 'release') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/releases';
-			$curlResult = $this->getCurlData($url, $option);
+			$curlResult = $this->getJsonData($url, $option);
 			$http_code = $curlResult['http_code'];
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
@@ -175,7 +179,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			$header[] = $this->l10n->t('Download count');
 		} else if ($option['data'] === 'package') {
 			$url = $this->buildPackageVersionsUrl($option);
-			$curlResult = $this->getCurlRawData($url, $option);
+			$curlResult = $this->getRawData($url, $option);
 			$http_code = $curlResult['http_code'];
 
 			// Check for HTTP error code
@@ -194,7 +198,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			$header[] = $this->l10n->t('Download count');
 		} else if ($option['data'] === 'issues') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'];
-			$curlResult = $this->getCurlData($url, $option);
+			$curlResult = $this->getJsonData($url, $option);
 			$http_code = $curlResult['http_code'];
 
 			// Check for HTTP error code
@@ -205,7 +209,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			$issuesTotal = $curlResult['data']['open_issues'];
 
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
-			$curlResult = $this->getCurlData($url, $option);
+			$curlResult = $this->getJsonData($url, $option);
 			$http_code = $curlResult['http_code'];
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
@@ -220,7 +224,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			$header[] = $this->l10n->t('Count');
 		} else if ($option['data'] === 'pulls') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
-			$curlResult = $this->getCurlData($url, $option);
+			$curlResult = $this->getJsonData($url, $option);
 			$http_code = $curlResult['http_code'];
 			// Check for HTTP error code
 			if ($http_code < 200 || $http_code >= 300) {
@@ -262,7 +266,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			'dimensions' => [],
 			'data' => [],
 			'rawdata' => $curlResult,
-			'error' => $this->getHttpErrorMessage($httpCode, $curlResult['data'] ?? []),
+			'error' => $curlResult['request_error'] ?? $this->getHttpErrorMessage($httpCode, $curlResult['data'] ?? []),
 			'cache' => $cache,
 		];
 	}
@@ -345,70 +349,39 @@ class Github implements IDatasource, IReportTemplateProvider {
 		return (int)$digits;
 	}
 
-	private function getCurlRawData($url, $option) {
-		$ch = curl_init();
-		$http_code = 0;
-		if ($ch !== false) {
-			curl_setopt_array($ch, $this->buildCurlOptions($url, $option));
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $this->buildHtmlRequestHeaders($option));
-			$curlResult = curl_exec($ch);
-			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			curl_close($ch);
-		} else {
-			$curlResult = '';
-		}
-		return ['data' => (string)$curlResult, 'http_code' => $http_code];
+	private function getRawData($url, $option) {
+		$response = $this->httpClient->request($url, 'GET', $this->buildHtmlRequestHeaders($option));
+		return ['data' => $response['body'], 'http_code' => $response['status'], 'request_error' => $response['error']];
 	}
 
 	private function buildHtmlRequestHeaders(array $option): array {
 		$headers = [
-			'Accept: text/html',
-			'User-Agent: Analytics for Nextcloud',
+			'Accept' => 'text/html',
+			'User-Agent' => 'Analytics for Nextcloud',
 		];
 
 		if (isset($option['token']) && $option['token'] !== '') {
-			$headers[] = 'Authorization: token ' . $option['token'];
+			$headers['Authorization'] = 'token ' . $option['token'];
 		}
 
 		return $headers;
 	}
 
-	private function getCurlData($url, $option) {
-		$ch = curl_init();
-		$http_code = 0;
-		if ($ch !== false) {
-			curl_setopt_array($ch, $this->buildCurlOptions($url, $option));
-			$curlResult = curl_exec($ch);
-			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			curl_close($ch);
-		} else {
-			$curlResult = '';
-		}
-		$curlResult = json_decode($curlResult, true);
-		return ['data' => $curlResult, 'http_code' => $http_code];
-	}
-
-	private function buildCurlOptions($url, $option): array {
-		$options = [
-			CURLOPT_SSL_VERIFYPEER => true,
-			CURLOPT_SSL_VERIFYHOST => 2,
-			CURLOPT_HEADER => false,
-			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_URL => $url,
-			CURLOPT_REFERER => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
+	private function getJsonData($url, $option) {
+		$headers = [
+			'User-Agent' => 'Analytics for Nextcloud',
+			'Accept' => 'application/vnd.github.v3+json',
 		];
-
 		if (isset($option['token']) && $option['token'] !== '') {
-			$options[CURLOPT_HTTPHEADER] = [
-				'Authorization: token ' . $option['token'],
-				'User-Agent: Analytics for Nextcloud',
-				'Accept: application/vnd.github.v3+json'
-			];
+			$headers['Authorization'] = 'token ' . $option['token'];
 		}
-
-		return $options;
+		$response = $this->httpClient->request($url, 'GET', $headers);
+		$data = json_decode($response['body'], true);
+		return [
+			'data' => is_array($data) ? $data : [],
+			'http_code' => $response['status'],
+			'request_error' => $response['error'],
+		];
 	}
 
 	private function floatvalue($val) {

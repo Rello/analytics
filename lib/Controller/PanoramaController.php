@@ -107,7 +107,7 @@ class PanoramaController extends Controller
 		if (!$this->PanoramaService->isOwn($panoramaId)) {
 			return new DataResponse(false, 403);
 		}
-        $pages = json_encode($pages);
+		$pages = json_encode($pages);
         return new DataResponse($this->PanoramaService->update($panoramaId, $name, $type, $parent, $pages));
     }
 

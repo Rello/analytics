@@ -52,8 +52,9 @@ class ShareMapper
             ->addSelect('SHARE.permissions')
             ->selectAlias('SHARE.domain', 'domain')
             ->selectAlias('SHARE.password', 'password')
-            ->where($sql->expr()->eq('SHARE.token', $sql->createNamedParameter($token)))
-			->andWhere($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('report')));
+			->where($sql->expr()->eq('SHARE.token', $sql->createNamedParameter($token)))
+			->andWhere($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('report')))
+			->andWhere($sql->expr()->eq('SHARE.uid_initiator', 'DS.user_id'));
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
         $statement->closeCursor();
@@ -74,8 +75,9 @@ class ShareMapper
             ->selectAlias('SHARE.id', 'shareId')
             ->selectAlias('SHARE.type', 'shareType')
             ->selectAlias('SHARE.uid_owner', 'shareUid_owner')
-            ->addSelect('SHARE.permissions')
-			->where($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('report')));
+			->addSelect('SHARE.permissions')
+			->where($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('report')))
+			->andWhere($sql->expr()->eq('SHARE.uid_initiator', 'REPORT.user_id'));
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -97,7 +99,8 @@ class ShareMapper
 			->selectAlias('SHARE.type', 'shareType')
 			->selectAlias('SHARE.uid_owner', 'shareUid_owner')
 			->addSelect('SHARE.permissions')
-			->where($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('panorama')));
+			->where($sql->expr()->eq('SHARE.item_type', $sql->createNamedParameter('panorama')))
+			->andWhere($sql->expr()->eq('SHARE.uid_initiator', 'PANORAMA.user_id'));
 		$statement = $sql->executeQuery();
 		$result = $statement->fetchAll();
 		$statement->closeCursor();

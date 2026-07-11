@@ -411,5 +411,5 @@ class ApiDataController extends ApiController {
 		$response->setData($array)->render();
 		return $response;
 	}
-	// curl -u admin:pR9Pc-KifMn-WdXmx-Bg4sG-F2ngL -d '{"data":[{"dimension1": "%currentDate%", "dimension2": "%currentTime%", "value": "2"}]}' -X POST -H "Content-Type: application/json" http://localhost:8031/apps/analytics/api/4.0/data/22/add
+	// curl -u USER:APP_PASSWORD -d '{"data":[{"dimension1": "%currentDate%", "dimension2": "%currentTime%", "value": "2"}]}' -X POST -H "Content-Type: application/json" https://cloud.example/apps/analytics/api/4.0/data/DATASET_ID/add
 }

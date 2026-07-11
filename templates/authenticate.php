@@ -14,7 +14,7 @@ use OCP\Util;
 Util::addStyle('analytics', 'authenticate');
 Util::addScript('analytics', 'authenticate');
 ?>
-<form method="POST">
+<form method="POST" action="<?php p($_['action']); ?>">
     <fieldset class="warning">
         <?php if (!$_['wrongpw']) { ?>
             <div class="warning-info"><?php p($l->t('This report is password protected')); ?></div>

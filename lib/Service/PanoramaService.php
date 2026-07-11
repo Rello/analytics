@@ -134,6 +134,9 @@ class PanoramaService {
 	 * @throws Exception
 	 */
 	public function create(int $type, int $parent): int {
+		if (!$this->isValidParent($parent)) {
+			return 0;
+		}
 		$reportId = $this->PanoramaMapper->create($this->l10n->t('New'), $type, $parent, '[]');
 		$this->ActivityManager->triggerEvent($reportId, ActivityManager::OBJECT_PANORAMA, ActivityManager::SUBJECT_PANORAMA_ADD);
 		return $reportId;
@@ -152,14 +155,27 @@ class PanoramaService {
 	 * @throws Exception
 	 */
     public function update(int $id, $name, int $type, int $parent, $pages) {
-        return $this->PanoramaMapper->update($id, $name, $type, $parent, $pages);
+		if (!$this->isOwn($id) || !$this->isValidParent($parent, $id)) {
+			return false;
+		}
+		$normalizedPages = $this->normalizePages($pages);
+		if ($normalizedPages === null) {
+			return false;
+		}
+        return $this->PanoramaMapper->update($id, $name, $type, $parent, json_encode($normalizedPages));
     }
 
     public function createGroup(int $parent = 0): int {
+		if (!$this->isValidParent($parent)) {
+			return 0;
+		}
         return $this->PanoramaMapper->create($this->l10n->t('New'), self::REPORT_TYPE_GROUP, $parent, '[]');
     }
 
     public function updateGroup(int $panoramaId, int $groupId): bool {
+		if (!$this->isOwn($panoramaId) || !$this->isValidParent($groupId, $panoramaId)) {
+			return false;
+		}
         return $this->PanoramaMapper->updateGroup($panoramaId, $groupId);
     }
 
@@ -203,7 +219,53 @@ class PanoramaService {
 			$this->ShareService->deleteSharesByItem(ShareService::SHARE_ITEM_TYPE_PANORAMA, $panorama['id']);
 			$this->setFavorite($panorama['id'], 'false');
 		}
+		return $this->PanoramaMapper->deleteByUser($userId);
+	}
+
+	private function isValidParent(int $parentId, ?int $itemId = null): bool {
+		if ($parentId === 0) {
+			return true;
+		}
+		if ($itemId !== null && $parentId === $itemId) {
+			return false;
+		}
+
+		$visited = [];
+		$currentId = $parentId;
+		while ($currentId !== 0) {
+			if (isset($visited[$currentId]) || ($itemId !== null && $currentId === $itemId)) {
+				return false;
+			}
+			$visited[$currentId] = true;
+			$parent = $this->PanoramaMapper->readOwn($currentId);
+			if (empty($parent) || (int)$parent['type'] !== self::REPORT_TYPE_GROUP) {
+				return false;
+			}
+			$currentId = (int)$parent['parent'];
+		}
 		return true;
+	}
+
+	private function normalizePages(mixed $pages): ?array {
+		if (is_string($pages)) {
+			$pages = json_decode($pages, true);
+		}
+		if (!is_array($pages)) {
+			return null;
+		}
+		foreach ($pages as &$page) {
+			if (!is_array($page)) {
+				return null;
+			}
+			$layoutId = filter_var($page['layoutId'] ?? 0, FILTER_VALIDATE_INT);
+			if ($layoutId === false || $layoutId < 0 || $layoutId > 6) {
+				return null;
+			}
+			$page['layoutId'] = $layoutId;
+			unset($page['layout']);
+		}
+		unset($page);
+		return $pages;
 	}
 
 	/**

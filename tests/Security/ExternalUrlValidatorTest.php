@@ -24,6 +24,9 @@ class ExternalUrlValidatorTest extends TestCase {
 			'private ipv4' => ['http://192.168.1.10/status'],
 			'link local' => ['http://169.254.169.254/latest/meta-data'],
 			'ipv6 loopback' => ['http://[::1]/status'],
+			'ipv4-mapped ipv6 loopback' => ['http://[::ffff:127.0.0.1]/status'],
+			'ipv4-mapped ipv6 metadata' => ['http://[::ffff:169.254.169.254]/latest/meta-data'],
+			'userinfo' => ['https://user:password@example.com/data'],
 			'file scheme' => ['file:///etc/passwd'],
 		];
 	}

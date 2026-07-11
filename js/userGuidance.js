@@ -411,8 +411,13 @@ OCA.Analytics.Notification = {
         }
 
         contentElement.innerHTML = '';
-        guidanceElement.innerHTML = guidance;
-        guidanceElement.hidden = guidance === '';
+		if (guidance instanceof Node) {
+			guidanceElement.replaceChildren(guidance);
+			guidanceElement.hidden = false;
+		} else {
+			guidanceElement.innerHTML = guidance;
+			guidanceElement.hidden = guidance === '';
+		}
 
         if (dialogOptions.variant === 'enhanced') {
             dialogContainer._analyticsDialogCleanup = OCA.Analytics.Notification.renderEnhancedDialogContent(

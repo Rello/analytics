@@ -16,10 +16,12 @@
 - Update bundled jsPDF to v4.2.1.
 
 ### Fixed
+- Preserve unsaved per-series chart options when changing the analytics model.
+- Various security hardenings
 - Resolve bundled Composer dependencies against PHP 8.2 instead of requiring PHP 8.5.
 - Keep the Flow operation listener compatible with PHP versions before 8.3.
 - Keep variable-service parser tests compatible with GitHub Actions PHP runtimes.
-- Reject bracketed IPv6 literal external URLs without DNS lookups.
+- Reject private and reserved IPv6 literal external URLs without DNS lookups.
 
 ## 6.6.0 - 2026-07-07
 ### Added

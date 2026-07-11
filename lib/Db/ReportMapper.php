@@ -391,12 +391,13 @@ class ReportMapper
      * @return array
      * @throws Exception
      */
-    public function getReportsByGroup($groupId)
+    public function getReportsByGroup($groupId, string $ownerId)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('*')
-            ->where($sql->expr()->eq('parent', $sql->createNamedParameter($groupId)));
+            ->where($sql->expr()->eq('parent', $sql->createNamedParameter($groupId)))
+			->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($ownerId)));
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -419,7 +420,7 @@ class ReportMapper
      * @return array
      * @throws Exception
      */
-    public function reportsForDataset($datasetId)
+    public function reportsForDataset($datasetId, ?string $ownerId = null)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
@@ -427,6 +428,9 @@ class ReportMapper
             ->addSelect('name')
             ->addSelect('user_id')
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
+		if ($ownerId !== null) {
+			$sql->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($ownerId)));
+		}
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();

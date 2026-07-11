@@ -21,9 +21,12 @@ class DataSession
         $this->session = $session;
     }
 
-    public function getPasswordForShare(string $token): ?string
+    public function isShareAuthenticated(string $token, string $passwordHash): bool
     {
-        return $this->getValue('data-password', $token);
+		$this->removeLegacyPassword($token);
+		$storedFingerprint = $this->getValue('analytics-share-auth', $token);
+		return $storedFingerprint !== null
+			&& hash_equals($storedFingerprint, hash('sha256', $passwordHash));
     }
 
     protected function getValue(string $key, string $token): ?string
@@ -48,9 +51,10 @@ class DataSession
         return $values;
     }
 
-    public function setPasswordForShare(string $token, string $password): void
+    public function setShareAuthenticated(string $token, string $passwordHash): void
     {
-        $this->setValue('data-password', $token, $password);
+		$this->removeLegacyPassword($token);
+		$this->setValue('analytics-share-auth', $token, hash('sha256', $passwordHash));
     }
 
     protected function setValue(string $key, string $token, string $value): void
@@ -68,10 +72,18 @@ class DataSession
         $this->session->set($key, json_encode($values));
     }
 
-    public function removePasswordForShare(string $token): void
+    public function removeShareAuthentication(string $token): void
     {
-        $this->removeValue('data-password', $token);
+		$this->removeLegacyPassword($token);
+		$this->removeValue('analytics-share-auth', $token);
     }
+
+	private function removeLegacyPassword(string $token): void
+	{
+		if ($this->getValue('data-password', $token) !== null) {
+			$this->removeValue('data-password', $token);
+		}
+	}
 
     protected function removeValue(string $key, string $token): void
     {

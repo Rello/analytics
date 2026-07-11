@@ -2,6 +2,7 @@
 namespace OCA\Analytics\Tests\Datasource;
 
 use OCA\Analytics\Datasource\Github;
+use OCA\Analytics\Security\ExternalHttpClient;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -12,7 +13,7 @@ class GithubTest extends TestCase
 
 	protected function setUp(): void
 	{
-		$this->github = new Github(new FakeL10N(), new NullLogger());
+		$this->github = new Github(new FakeL10N(), new NullLogger(), $this->createMock(ExternalHttpClient::class));
 	}
 
 	public function testBuildHttpErrorResultForUnauthorizedResponse(): void
@@ -63,20 +64,19 @@ class GithubTest extends TestCase
 		$this->assertSame([], $result['data']);
 	}
 
-	public function testBuildCurlOptionsVerifiesTlsWhenTokenIsConfigured(): void
+	public function testBuildHtmlRequestHeadersIncludesToken(): void
 	{
-		$method = new \ReflectionMethod(Github::class, 'buildCurlOptions');
+		$method = new \ReflectionMethod(Github::class, 'buildHtmlRequestHeaders');
 		$method->setAccessible(true);
 
-		$options = $method->invoke(
+		$headers = $method->invoke(
 			$this->github,
-			'https://api.github.com/repos/nextcloud/server',
 			['token' => 'secret-token']
 		);
 
-		$this->assertTrue($options[CURLOPT_SSL_VERIFYPEER]);
-		$this->assertSame(2, $options[CURLOPT_SSL_VERIFYHOST]);
-		$this->assertContains('Authorization: token secret-token', $options[CURLOPT_HTTPHEADER]);
+		$this->assertSame('text/html', $headers['Accept']);
+		$this->assertSame('Analytics for Nextcloud', $headers['User-Agent']);
+		$this->assertSame('token secret-token', $headers['Authorization']);
 	}
 
 	public function testBuildPackageUrlDefaultsToOrganizationPackages(): void

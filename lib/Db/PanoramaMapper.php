@@ -105,16 +105,10 @@ class PanoramaMapper
     public function readOwn(int $id)
     {
         $sql = $this->db->getQueryBuilder();
-		$ownershipExpr = $sql->expr()->andX(
-			$sql->expr()->orX(
-				$sql->expr()->eq('id', $sql->createNamedParameter($id)),
-				$sql->expr()->eq('parent', $sql->createNamedParameter($id))
-			),
-			$sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId))
-		);
         $sql->from(self::TABLE_NAME)
             ->select('*')
-            ->where($ownershipExpr)
+            ->where($sql->expr()->eq('id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->orderBy('name', 'ASC');
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
@@ -217,12 +211,13 @@ class PanoramaMapper
      * @return array
      * @throws Exception
      */
-    public function getPanoramasByGroup(int $groupId): array
+    public function getPanoramasByGroup(int $groupId, string $ownerId): array
     {
         $sql = $this->db->getQueryBuilder();
         $sql->from(self::TABLE_NAME)
             ->select('*')
-            ->where($sql->expr()->eq('parent', $sql->createNamedParameter($groupId)));
+            ->where($sql->expr()->eq('parent', $sql->createNamedParameter($groupId)))
+			->andWhere($sql->expr()->eq('user_id', $sql->createNamedParameter($ownerId)));
         $statement = $sql->executeQuery();
         $result = $statement->fetchAll();
         $statement->closeCursor();
@@ -237,6 +232,15 @@ class PanoramaMapper
 
         return $result;
     }
+
+	public function deleteByUser(string $userId): bool
+	{
+		$sql = $this->db->getQueryBuilder();
+		$sql->delete(self::TABLE_NAME)
+			->where($sql->expr()->eq('user_id', $sql->createNamedParameter($userId)));
+		$sql->executeStatement();
+		return true;
+	}
 
     /**
      * search reports by search string

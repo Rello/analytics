@@ -29,6 +29,8 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\UseSession;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
+use OCP\AppFramework\Http\Attribute\BruteForceProtection;
 
 /**
  * Controller class for main page.
@@ -159,9 +161,25 @@ class PageController extends Controller
     #[PublicPage]
     #[NoCSRFRequired]
     #[UseSession]
+	#[BruteForceProtection(action: 'analyticsPublicSharePassword')]
+	#[AnonRateLimit(limit: 10, period: 60)]
     public function authenticatePassword(string $token, string $password = '')
     {
-        return $this->indexPublic($token, $password);
+		$share = $this->ShareService->getReportByToken($token);
+		if (empty($share)) {
+			return $this->redirectToLogin($token);
+		}
+		if ($share['password'] === null || $this->ShareService->verifyPassword($password, $share['password'])) {
+			if ($share['password'] !== null) {
+				$this->DataSession->setShareAuthenticated($token, $share['password']);
+			}
+			return new RedirectResponse($this->urlGenerator->linkToRoute($this->appName . '.page.indexPublic', ['token' => $token]));
+		}
+
+		$this->DataSession->removeShareAuthentication($token);
+		$response = $this->passwordPrompt($token, true);
+		$response->throttle(['action' => 'analyticsPublicSharePassword', 'token' => hash('sha256', $token)]);
+		return $response;
     }
 
     /**
@@ -172,25 +190,16 @@ class PageController extends Controller
     #[PublicPage]
     #[UseSession]
     #[NoCSRFRequired]
-    public function indexPublic($token, string $password = '')
+    public function indexPublic($token)
     {
         $share = $this->ShareService->getReportByToken($token);
 
         if (empty($share)) {
             // Dataset not shared or wrong token
-            return new RedirectResponse($this->urlGenerator->linkToRoute('core.login.showLoginForm', [
-                'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.report', ['token' => $token]),
-            ]));
+			return $this->redirectToLogin($token);
         } else {
-            if ($share['password'] !== null) {
-                $password = $password !== '' ? $password : (string)$this->DataSession->getPasswordForShare($token);
-                $passwordVerification = $this->ShareService->verifyPassword($password, $share['password']);
-                if ($passwordVerification === true) {
-                    $this->DataSession->setPasswordForShare($token, $password);
-                } else {
-                    $this->DataSession->removePasswordForShare($token);
-                    return new TemplateResponse($this->appName, 'authenticate', ['wrongpw' => $password !== '',], 'guest');
-                }
+			if (!$this->hasShareAccess($token, $share)) {
+				return $this->passwordPrompt($token, false);
             }
             $params = array();
             $params['token'] = $token;
@@ -209,25 +218,16 @@ class PageController extends Controller
     #[PublicPage]
     #[UseSession]
     #[NoCSRFRequired]
-    public function indexPublicMin($token, string $password = '')
+    public function indexPublicMin($token)
     {
         $share = $this->ShareService->getReportByToken($token);
 
         if (empty($share)) {
             // Dataset not shared or wrong token
-            return new RedirectResponse($this->urlGenerator->linkToRoute('core.login.showLoginForm', [
-                'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.report', ['token' => $token]),
-            ]));
+			return $this->redirectToLogin($token);
         } else {
-            if ($share['password'] !== null) {
-                $password = $password !== '' ? $password : (string)$this->DataSession->getPasswordForShare($token);
-                $passwordVerification = $this->ShareService->verifyPassword($password, $share['password']);
-                if ($passwordVerification === true) {
-                    $this->DataSession->setPasswordForShare($token, $password);
-                } else {
-                    $this->DataSession->removePasswordForShare($token);
-                    return new TemplateResponse($this->appName, 'authenticate', ['wrongpw' => $password !== '',], 'guest');
-                }
+			if (!$this->hasShareAccess($token, $share)) {
+				return $this->passwordPrompt($token, false);
             }
             $params = array();
             $params['data'] = $this->outputController->getData($share);
@@ -241,4 +241,25 @@ class PageController extends Controller
             return $response;
         }
     }
+
+	private function hasShareAccess(string $token, array $share): bool
+	{
+		return $share['password'] === null
+			|| $this->DataSession->isShareAuthenticated($token, $share['password']);
+	}
+
+	private function passwordPrompt(string $token, bool $wrongPassword): TemplateResponse
+	{
+		return new TemplateResponse($this->appName, 'authenticate', [
+			'wrongpw' => $wrongPassword,
+			'action' => $this->urlGenerator->linkToRoute($this->appName . '.page.authenticatePassword', ['token' => $token]),
+		], 'guest');
+	}
+
+	private function redirectToLogin(string $token): RedirectResponse
+	{
+		return new RedirectResponse($this->urlGenerator->linkToRoute('core.login.showLoginForm', [
+			'redirect_url' => $this->urlGenerator->linkToRoute($this->appName . '.page.report', ['token' => $token]),
+		]));
+	}
 }

@@ -8,7 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCA\Analytics\Security\ExternalUrlValidator;
+use OCA\Analytics\Security\ExternalHttpClient;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
@@ -18,14 +18,17 @@ class ExternalJson implements IDatasource
 
     private LoggerInterface $logger;
     private IL10N $l10n;
+	private ExternalHttpClient $httpClient;
 
     public function __construct(
         IL10N           $l10n,
-        LoggerInterface $logger
+		LoggerInterface $logger,
+		ExternalHttpClient $httpClient,
     )
     {
         $this->l10n = $l10n;
         $this->logger = $logger;
+		$this->httpClient = $httpClient;
     }
 
     /**
@@ -57,7 +60,6 @@ class ExternalJson implements IDatasource
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];
         $template[] = ['id' => 'customHeaders', 'name' => 'Custom headers', 'placeholder' => 'key: value,key: value'];
         $template[] = ['id' => 'auth', 'name' => $this->l10n->t('Authentication'), 'placeholder' => 'User:Password'];
-        $template[] = ['id' => 'insecure', 'name' => $this->l10n->t('Allow insecure connections'), 'placeholder' => '2-' . $this->l10n->t('No') . '/0-' . $this->l10n->t('Yes'), 'type' => 'tf'];
         $template[] = ['id' => 'body', 'name' => 'Request body', 'placeholder' => ''];
         $template[] = ['id' => 'timestamp', 'name' => $this->l10n->t('Timestamp of data load'), 'placeholder' => 'true-' . $this->l10n->t('Yes') . '/false-' . $this->l10n->t('No'), 'type' => 'tf'];
         return $template;
@@ -83,49 +85,26 @@ class ExternalJson implements IDatasource
         }
 
         $url = htmlspecialchars_decode($option['url'], ENT_NOQUOTES);
-        $urlError = ExternalUrlValidator::validate($url);
-        if ($urlError !== null) {
-            return [
-                'header' => [],
-                'dimensions' => [],
-                'data' => [],
-                'error' => $urlError,
-                'cache' => $cache,
-            ];
-        }
-        $auth = $option['auth'];
-        $post = $option['method'] === 'POST';
-        $contentType = ($option['content-type'] && $option['content-type'] !== '') ? $option['content-type'] : 'application/json';
+		$auth = (string)($option['auth'] ?? '');
+		$method = ($option['method'] ?? 'GET') === 'POST' ? 'POST' : 'GET';
+		$contentType = !empty($option['content-type']) ? (string)$option['content-type'] : 'application/json';
         $data = array();
         $http_code = '';
-        $headers = ($option['customHeaders'] && $option['customHeaders'] !== '') ? explode(",", $option['customHeaders']) : [];
-        $headers = array_map('trim', $headers);
-        $headers[] = 'OCS-APIRequest: true';
-        $headers[] = 'Content-Type: ' . $contentType;
-        # VERIFYHOST is used with CURLOPT_SSL_VERIFYHOST: 0 disables verification,
-        # 2 enables it. Value 1 is deprecated and should not be used.
-        $verifyHost = intval($option['insecure']);
-
-        $ch = curl_init();
-        if ($ch !== false) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, $post);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_USERPWD, $auth);
-            curl_setopt($ch, CURLOPT_VERBOSE, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $verifyHost);
-            if ($option['body'] && $option['body'] !== '') {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $option['body']);
-            }
-            $rawResult = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-        } else {
-            $rawResult = '';
-        }
+		$headers = $this->parseHeaders((string)($option['customHeaders'] ?? ''));
+		$headers['OCS-APIRequest'] = 'true';
+		$headers['Content-Type'] = $contentType;
+		$response = $this->httpClient->request(
+			$url,
+			$method,
+			$headers,
+			isset($option['body']) && $option['body'] !== '' ? (string)$option['body'] : null,
+			(string)$auth,
+		);
+		$rawResult = $response['body'];
+		$http_code = $response['status'];
+		if ($response['error'] !== null) {
+			return ['header' => [], 'dimensions' => [], 'data' => [], 'error' => $response['error'], 'cache' => $cache];
+		}
 
 		$return = $this->jsonParser($option, $rawResult);
 		$return['rawdata'] = $rawResult;
@@ -134,6 +113,19 @@ class ExternalJson implements IDatasource
 		$return['cache'] = $cache;
 
 		return $return;
+	}
+
+	/** @return array<string, string> */
+	private function parseHeaders(string $customHeaders): array {
+		$headers = [];
+		foreach (explode(',', $customHeaders) as $header) {
+			if (trim($header) === '') {
+				continue;
+			}
+			[$name, $value] = array_pad(explode(':', $header, 2), 2, '');
+			$headers[trim($name)] = trim($value);
+		}
+		return $headers;
 	}
 
 	private function getCacheMetadata($option): array {

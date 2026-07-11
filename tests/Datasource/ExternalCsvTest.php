@@ -4,6 +4,7 @@ namespace OCA\Analytics\Tests\Datasource;
 use OCA\Analytics\Datasource\ExternalCsv;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use OCA\Analytics\Service\VariableService;
+use OCA\Analytics\Security\ExternalHttpClient;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -14,7 +15,8 @@ class ExternalCsvTest extends TestCase
     protected function setUp(): void
     {
         $variableService = $this->createMock(VariableService::class);
-        $this->csv = new ExternalCsv('uid', new FakeL10N(), new NullLogger(), $variableService);
+		$httpClient = $this->createMock(ExternalHttpClient::class);
+		$this->csv = new ExternalCsv('uid', new FakeL10N(), new NullLogger(), $variableService, $httpClient);
     }
 
     /**

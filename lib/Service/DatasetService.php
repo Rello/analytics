@@ -157,8 +157,11 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function status(int $datasetId): array {
+		if (!$this->isOwn($datasetId)) {
+			return [];
+		}
 		$status = array();
-		$status['reports'] = $this->ReportMapper->reportsForDataset($datasetId);
+		$status['reports'] = $this->ReportMapper->reportsForDataset($datasetId, $this->userId);
 		$status['data'] = $this->StorageMapper->getRecordCount($datasetId);
 		return $status;
 	}
@@ -193,6 +196,9 @@ class DatasetService {
 	 * @throws Exception
 	 */
         public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
+				if (!$this->isOwn($datasetId)) {
+					return false;
+				}
                 $dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
                $this->ReportMapper->increaseVersionByDataset($datasetId);
 
@@ -209,6 +215,9 @@ class DatasetService {
 	}
 
         public function updateGroup(int $datasetId, int $groupId): bool {
+				if (!$this->isOwn($datasetId)) {
+					return false;
+				}
                $result = $this->DatasetMapper->updateGroup($datasetId, $groupId);
                $this->ReportMapper->increaseVersionByDataset($datasetId);
                return $result;

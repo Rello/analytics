@@ -17,6 +17,9 @@ class ExternalUrlValidator {
 		if (!is_array($parts) || !isset($parts['scheme'], $parts['host'])) {
 			return 'External URL is invalid';
 		}
+		if (isset($parts['user']) || isset($parts['pass'])) {
+			return 'Credentials in external URLs are not allowed';
+		}
 
 		$scheme = strtolower((string)$parts['scheme']);
 		if (!in_array($scheme, ['http', 'https'], true)) {
@@ -76,6 +79,9 @@ class ExternalUrlValidator {
 	}
 
 	private static function isPublicIp(string $address): bool {
+		if (preg_match('/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i', $address, $matches)) {
+			$address = $matches[1];
+		}
 		if (filter_var($address, FILTER_VALIDATE_IP) === false) {
 			return false;
 		}

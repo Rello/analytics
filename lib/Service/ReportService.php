@@ -196,6 +196,9 @@ class ReportService {
 		if ($type === DatasourceController::DATASET_TYPE_GROUP) {
 			$parent = 0;
 		}
+		if (!$this->isValidParent((int)$parent)) {
+			return 0;
+		}
 		if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
 			$dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
 		} else if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset !== 0) {
@@ -313,6 +316,9 @@ class ReportService {
 			$dimension2 = null,
 			$value = null
 	) {
+		if (!$this->isOwn($reportId) || !$this->isValidParent($parent, $reportId)) {
+			return false;
+		}
 		$array = json_decode($options, true);
 		foreach ($array as $key => $tmpValue) {
 			$array[$key] = htmlspecialchars($tmpValue, ENT_NOQUOTES, 'UTF-8');
@@ -580,7 +586,35 @@ class ReportService {
 	 * @return bool
 	 */
 	public function updateGroup(int $reportId, $groupId) {
+		$groupId = (int)$groupId;
+		if (!$this->isOwn($reportId) || !$this->isValidParent($groupId, $reportId)) {
+			return false;
+		}
 		return $this->ReportMapper->updateGroup($reportId, $groupId);
+	}
+
+	private function isValidParent(int $parentId, ?int $itemId = null): bool {
+		if ($parentId === 0) {
+			return true;
+		}
+		if ($itemId !== null && $parentId === $itemId) {
+			return false;
+		}
+
+		$visited = [];
+		$currentId = $parentId;
+		while ($currentId !== 0) {
+			if (isset($visited[$currentId]) || ($itemId !== null && $currentId === $itemId)) {
+				return false;
+			}
+			$visited[$currentId] = true;
+			$parent = $this->ReportMapper->readOwn($currentId);
+			if (empty($parent) || (int)$parent['type'] !== self::REPORT_TYPE_GROUP) {
+				return false;
+			}
+			$currentId = (int)$parent['parent'];
+		}
+		return true;
 	}
 
 	/**

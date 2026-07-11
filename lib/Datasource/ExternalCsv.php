@@ -8,7 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCA\Analytics\Security\ExternalUrlValidator;
+use OCA\Analytics\Security\ExternalHttpClient;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use OCA\Analytics\Service\VariableService;
@@ -21,18 +21,21 @@ class ExternalCsv implements IDatasource
     private $userId;
     private $l10n;
     private $VariableService;
+	private ExternalHttpClient $httpClient;
 
     public function __construct(
         $userId,
         IL10N $l10n,
         LoggerInterface $logger,
-        VariableService $VariableService
+		VariableService $VariableService,
+		ExternalHttpClient $httpClient,
     )
     {
         $this->userId = $userId;
         $this->l10n = $l10n;
         $this->logger = $logger;
         $this->VariableService = $VariableService;
+		$this->httpClient = $httpClient;
     }
 
     /**
@@ -84,33 +87,23 @@ class ExternalCsv implements IDatasource
         }
 
         $url = htmlspecialchars_decode($option['link'], ENT_NOQUOTES);
-        $urlError = ExternalUrlValidator::validate($url);
-        if ($urlError !== null) {
+		$response = $this->httpClient->request($url, 'GET', [
+			'User-Agent' => 'Nextcloud Analytics',
+		]);
+		if ($response['error'] !== null) {
             return [
                 'header' => [],
                 'dimensions' => [],
                 'data' => [],
-                'error' => $urlError,
+				'error' => $response['error'],
                 'cache' => $cache,
             ];
         }
-        $ch = curl_init();
-        if ($ch !== false) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_REFERER, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-            $curlResult = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-        } else {
-            $curlResult = '';
-            $http_code = 0;
-        }
+		$curlResult = $response['body'];
+		$http_code = $response['status'];
+		if ($curlResult === '') {
+			return ['header' => [], 'dimensions' => [], 'data' => [], 'rawdata' => '', 'error' => 'External response is empty', 'cache' => $cache];
+		}
 
         $rows = str_getcsv($curlResult, "\n");
 

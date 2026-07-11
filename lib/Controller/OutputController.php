@@ -322,9 +322,7 @@ class OutputController extends Controller {
 			return new NotFoundResponse();
 		} else {
 			if ($share['password'] !== null) {
-				$password = $this->DataSession->getPasswordForShare($token);
-				$passwordVerification = $this->ShareService->verifyPassword($password, $share['password']);
-				if ($passwordVerification === false) {
+				if (!$this->DataSession->isShareAuthenticated($token, $share['password'])) {
 					return new NotFoundResponse();
 				}
 			}

@@ -198,7 +198,7 @@ class ShareService {
 		if ($item_type === self::SHARE_ITEM_TYPE_PANORAMA) {
 			foreach ($reports as $report) {
 				if ((int)$report['type'] === PanoramaService::REPORT_TYPE_GROUP) {
-					$subreport = $this->PanoramaMapper->getPanoramasByGroup($report['id']);
+					$subreport = $this->PanoramaMapper->getPanoramasByGroup($report['id'], $report['user_id']);
 					$subreport = array_map(function ($pano) {
 						$pano['isShare'] = self::SHARE_TYPE_GROUP;
 						return $pano;
@@ -210,7 +210,7 @@ class ShareService {
 		} else {
 			foreach ($reports as $report) {
 				if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
-					$subreport = $this->ReportMapper->getReportsByGroup($report['id']);
+					$subreport = $this->ReportMapper->getReportsByGroup($report['id'], $report['user_id']);
 					$subreport = array_map(function ($report) {
 						$report['isShare'] = self::SHARE_TYPE_GROUP;
 						return $report;

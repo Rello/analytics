@@ -38,14 +38,14 @@ OCA.Analytics.Panorama = OCA.Analytics.Panorama || {};
 Object.assign(OCA.Analytics.Panorama = {
 
     stories: {},
-    emptyPageTemplate: {page: 0, name: 'New', reports: [], layout: ''},
+    emptyPageTemplate: {page: 0, name: 'New', reports: [], layoutId: 0},
     createEmptyPage: function () {
         // return a fresh object each time to avoid leaking page state between panoramas
         return {
             page: OCA.Analytics.Panorama.emptyPageTemplate.page,
             name: OCA.Analytics.Panorama.emptyPageTemplate.name,
             reports: [],
-            layout: OCA.Analytics.Panorama.emptyPageTemplate.layout,
+			layoutId: OCA.Analytics.Panorama.emptyPageTemplate.layoutId,
         };
     },
     layouts: [
@@ -104,6 +104,17 @@ Object.assign(OCA.Analytics.Panorama = {
                 '</div>'
         },
     ],
+
+	normalizeLayoutId: function (page) {
+		let layoutId = Number.parseInt(page.layoutId, 10);
+		if (!Number.isInteger(layoutId) || layoutId < 1 || layoutId > 6) {
+			const legacyLayout = OCA.Analytics.Panorama.layouts.find(layout => layout.layout === page.layout);
+			layoutId = legacyLayout ? legacyLayout.id : 0;
+		}
+		page.layoutId = layoutId;
+		delete page.layout;
+		return layoutId;
+	},
 
     /**
      * Attach click handlers for report menu elements
@@ -269,10 +280,12 @@ Object.assign(OCA.Analytics.Panorama = {
         // Add the layout page by page
         OCA.Analytics.currentPanorama.pages.forEach((page, pageIndex) => {
             let flexContainer = null;
-            if (page.layout !== '') {
-                // Parse the string to DOM
+			const layoutId = OCA.Analytics.Panorama.normalizeLayoutId(page);
+			const trustedLayout = OCA.Analytics.Panorama.layouts.find(layout => layout.id === layoutId);
+			if (trustedLayout) {
+				// Only parse markup from the application-owned layout catalog.
                 let parser = new DOMParser();
-                let layout = parser.parseFromString(page.layout, 'text/html');
+				let layout = parser.parseFromString(trustedLayout.layout, 'text/html');
                 flexContainer = layout.querySelector('div');
             } else {
                 flexContainer = document.createElement('div');
@@ -936,10 +949,11 @@ Object.assign(OCA.Analytics.Panorama = {
                 let page = OCA.Analytics.currentPanorama.pages[currentPage];
                 const isInitialLayoutSelection = OCA.Analytics.currentPanorama.pages.length === 1
                     && currentPage === 0
-                    && page.layout === ''
+					&& OCA.Analytics.Panorama.normalizeLayoutId(page) === 0
                     && Array.isArray(page.reports)
                     && page.reports.length === 0;
-                page.layout = selectedLayout.layout;
+				page.layoutId = selectedLayout.id;
+				delete page.layout;
                 OCA.Analytics.editMode = isInitialLayoutSelection;
                 OCA.Analytics.Panorama.getPanorama(currentPage);
                 if (isInitialLayoutSelection) {

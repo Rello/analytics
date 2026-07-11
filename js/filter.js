@@ -1457,9 +1457,37 @@ OCA.Analytics.Filter = {
             field.addEventListener('change', function (evt) {
                 const seriesTable = document.getElementById('chartOptionsTable');
                 if (seriesTable) {
+                    dataOptions = OCA.Analytics.Filter.getChartOptionsSeriesRows(seriesTable);
                     OCA.Analytics.Filter.renderChartOptionsSeriesRows(seriesTable, dataOptions, evt.target.value);
                 }
             });
+        });
+    },
+
+    /**
+     * Capture the current chart-series controls before a model change rebuilds
+     * their rows. The new model may expose a different series list, but values
+     * at indexes shared by both models should not lose unsaved user changes.
+     */
+    getChartOptionsSeriesRows: function (table) {
+        return Array.from(table.querySelectorAll('.chartOptionsSeriesRow')).map(row => {
+            const yAxis = row.querySelector('[name="optionsYAxis"]');
+            const chartType = row.querySelector('[name="optionsChartType"]');
+            const color = row.querySelector('[name="optionsColor"]');
+            const option = {};
+
+            if (yAxis) {
+                option.yAxisID = yAxis.value;
+            }
+            if (chartType) {
+                option.type = chartType.value;
+            }
+            if (color && color.value !== '') {
+                option.backgroundColor = color.value;
+                option.borderColor = color.value;
+            }
+
+            return option;
         });
     },
 

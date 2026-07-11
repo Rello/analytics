@@ -554,18 +554,23 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                     let dialogContent;
                     let errorData = '';
                     if (parseInt(data.error) === 0) {
-                        dialogContent = document.createElement('div');
+						dialogContent = document.createElement('pre');
                         dialogContent.id = 'simulationData';
-                        dialogContent.innerHTML = JSON.stringify(data.data);
+						dialogContent.textContent = JSON.stringify(data.data);
                     } else {
                         dialogContent = document.createElement('div');
-                        dialogContent.innerHTML = '<textarea style="width: 500px;" cols="200" rows="15">'
-                            + new Option(JSON.stringify(data.rawdata)).innerHTML + '</textarea>';
-                        errorData = 'Error: ' + data.error;
+						const rawData = document.createElement('textarea');
+						rawData.style.width = '500px';
+						rawData.cols = 200;
+						rawData.rows = 15;
+						rawData.value = JSON.stringify(data.rawdata);
+						dialogContent.appendChild(rawData);
+						errorData = document.createElement('span');
+						errorData.textContent = 'Error: ' + data.error;
                     }
                     OCA.Analytics.Notification.htmlDialogUpdate(
                         dialogContent,
-                        errorData,
+						errorData,
                     );
 
                 } else {

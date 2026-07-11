@@ -64,6 +64,9 @@ async function setAnalyticsModel(page, selector) {
     await page.locator('#optionsChartType0').selectOption('line');
     await page.locator('#optionsColor0').fill('#cec7e8');
     await setAnalyticsModel(page, '#analyticsModelOpt2');
+    if ((await page.locator('#optionsYAxis0').inputValue()) !== 'secondary') {
+      throw new Error('Expected unsaved Y axis selection to survive analytics model change');
+    }
     await clickFirst(page, ['#analyticsDialogBtnGo'], 'apply chart options');
 
     steps.push('save reload and validate chart options');

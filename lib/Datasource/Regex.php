@@ -8,7 +8,7 @@
 
 namespace OCA\Analytics\Datasource;
 
-use OCA\Analytics\Security\ExternalUrlValidator;
+use OCA\Analytics\Security\ExternalHttpClient;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 
@@ -16,14 +16,17 @@ class Regex implements IDatasource
 {
     private LoggerInterface $logger;
     private IL10N $l10n;
+	private ExternalHttpClient $httpClient;
 
     public function __construct(
         IL10N           $l10n,
-        LoggerInterface $logger
+		LoggerInterface $logger,
+		ExternalHttpClient $httpClient,
     )
     {
         $this->l10n = $l10n;
         $this->logger = $logger;
+		$this->httpClient = $httpClient;
     }
 
     /**
@@ -65,18 +68,19 @@ class Regex implements IDatasource
 	{
 		$regex = isset($option['regex']) ? htmlspecialchars_decode($option['regex'], ENT_NOQUOTES) : '';
 		$url = isset($option['url']) ? htmlspecialchars_decode($option['url'], ENT_NOQUOTES) : '';
-		$urlError = ExternalUrlValidator::validate($url);
-		if ($urlError !== null) {
+		$response = $this->httpClient->request($url, 'GET', ['User-Agent' => 'Nextcloud Analytics']);
+		if ($response['error'] !== null) {
 			return [
 				'header' => ['', 'Dimension2', 'Count'],
 				'dimensions' => ['', 'Dimension2'],
 				'data' => [],
-				'error' => $urlError,
+				'error' => $response['error'],
 			];
 		}
 
-		// Fetch HTML content using cURL
-		[$curlResult, $httpCode] = $this->fetchUrlContent($url);
+		// Fetch HTML through Nextcloud's SSRF-aware client.
+		$curlResult = $response['body'];
+		$httpCode = $response['status'];
 
 		$header = ['', 'Dimension2', 'Count'];
 
@@ -119,33 +123,4 @@ class Regex implements IDatasource
 		];
 	}
 
-	/**
-	 * Fetches the content of a URL using cURL.
-	 * @param string $url
-	 * @return array [string $content, int $httpCode]
-	 */
-	private function fetchUrlContent(string $url): array
-	{
-		$ch = curl_init();
-		if ($ch === false) {
-			return ['', 0];
-		}
-
-		curl_setopt_array($ch, [
-			CURLOPT_SSL_VERIFYPEER => true,
-			CURLOPT_SSL_VERIFYHOST => 2,
-			CURLOPT_HEADER => false,
-			CURLOPT_FOLLOWLOCATION => false,
-			CURLOPT_URL => $url,
-			CURLOPT_REFERER => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'
-		]);
-
-		$result = curl_exec($ch);
-		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-
-		return [$result !== false ? $result : '', $httpCode];
-	}
 }
