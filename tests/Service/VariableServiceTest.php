@@ -124,6 +124,18 @@ class VariableServiceTest extends TestCase
         $this->assertNotSame('%last week%', $result);
     }
 
+    public function testReplaceDatasourceTextPreservesPathAndFormatting(): void
+    {
+        $result = $this->service->replaceDatasourceText('/reports/export_%today%(Y-m-d).csv');
+
+        $this->assertSame('/reports/export_' . date('Y-m-d') . '.csv', $result);
+    }
+
+    public function testReplaceDatasourceTextLeavesUnknownVariablesUntouched(): void
+    {
+        $this->assertSame('/reports/%unknown%.csv', $this->service->replaceDatasourceText('/reports/%unknown%.csv'));
+    }
+
     /**
      * @dataProvider replaceFilterVariablesProvider
      */

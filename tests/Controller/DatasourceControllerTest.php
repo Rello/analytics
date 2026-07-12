@@ -153,6 +153,33 @@ class DatasourceControllerTest extends TestCase {
         $this->assertTrue($result['cache']['notModified']);
     }
 
+    public function testReadReturnsReadableErrorWhenResolvedLocalFileIsMissing(): void {
+        $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $localCsv->expects($this->once())
+            ->method('readData')
+            ->with($this->callback(function ($option) {
+                $this->assertSame('/reports/export_2026-07-12.csv', $option['link']);
+                return true;
+            }))
+            ->willThrowException(new \OCP\Files\NotFoundException());
+
+        $variableService = $this->createMock(\OCA\Analytics\Service\VariableService::class);
+        $variableService->expects($this->once())
+            ->method('replaceDatasourceText')
+            ->with('/reports/export_%today%(Y-m-d).csv')
+            ->willReturn('/reports/export_2026-07-12.csv');
+
+        $controller = $this->createController($localCsv, null, null, $variableService);
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, [
+            'link' => '{"link":"/reports/export_%today%(Y-m-d).csv"}',
+            'user_id' => 'u1',
+        ], false);
+
+        $this->assertSame('File not found: /reports/export_2026-07-12.csv', $result['error']);
+        $this->assertSame([], $result['data']);
+        $this->assertSame('nodata', $result['status']);
+    }
+
     public function testReadUsesFilenameTimestampFromDatasourceFileOption(): void {
         $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
         $localCsv->expects($this->once())
@@ -670,10 +697,15 @@ class DatasourceControllerTest extends TestCase {
     private function createController(
         ?\OCA\Analytics\Datasource\LocalCsv $localCsv = null,
         ?\OCA\Analytics\Datasource\Github $github = null,
-        ?\OCP\EventDispatcher\IEventDispatcher $dispatcher = null
+        ?\OCP\EventDispatcher\IEventDispatcher $dispatcher = null,
+        ?\OCA\Analytics\Service\VariableService $variableService = null
     ): DatasourceController {
         $appConfig = $this->createMock(\OCP\IAppConfig::class);
         $appConfig->method('getValueString')->willReturn('');
+		if ($variableService === null) {
+			$variableService = $this->createMock(\OCA\Analytics\Service\VariableService::class);
+			$variableService->method('replaceDatasourceText')->willReturnArgument(0);
+		}
 
         return new DatasourceController(
             'analytics',
@@ -688,7 +720,8 @@ class DatasourceControllerTest extends TestCase {
             $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class),
             new FakeL10N(),
             $dispatcher ?? $this->createMock(\OCP\EventDispatcher\IEventDispatcher::class),
-            $appConfig
+            $appConfig,
+            $variableService
         );
     }
 }

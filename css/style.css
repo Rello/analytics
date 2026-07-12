@@ -464,6 +464,35 @@ table.dataTable tbody tr {
     width: 200px;
 }
 
+.datasourceTextVariableCell {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    vertical-align: middle;
+}
+
+button.datasourceTextVariableEdit {
+    width: 20px;
+    min-width: 20px;
+    height: 32px;
+    min-height: 32px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    background-position: center;
+    box-shadow: none;
+    vertical-align: middle;
+}
+
+button.datasourceTextVariableEdit:hover,
+button.datasourceTextVariableEdit:focus,
+button.datasourceTextVariableEdit:active {
+    border: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
 input.sidebarInput,
 select.sidebarInput,
 textarea.sidebarInput,

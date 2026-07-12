@@ -43,6 +43,7 @@ interface IDatasource
      *                                  'section' will create a click-able section header and hide all options afterwards per default
      *                                  'longtext' will create a text area input
      *  placeholder *mandatory*     = help text for the input field in the UI
+     *  allowTextVariables *optional* = adds a separate editor for text variables without triggering the input's primary action
      *                                for type=tf:
      *                                  e.g. "true/false"
      *                                  if value/text pairs are required for the dropdown/option, the values need to be separated with "-" in addition.

@@ -556,7 +556,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                     if (parseInt(data.error) === 0) {
 						dialogContent = document.createElement('pre');
                         dialogContent.id = 'simulationData';
-						dialogContent.textContent = JSON.stringify(data.data);
+						dialogContent.textContent = JSON.stringify(data.data, null, 2);
                     } else {
                         dialogContent = document.createElement('div');
 						const rawData = document.createElement('textarea');

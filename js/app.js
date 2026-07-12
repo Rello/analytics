@@ -538,6 +538,10 @@ Object.assign(OCA.Analytics.Datasource = {
                     input.addEventListener('click', OCA.Analytics.Datasource.handleColumnPicker);
                 }
             }
+            if (templateOption.allowTextVariables === true) {
+                infoColumn.classList.add('datasourceTextVariableCell');
+                infoColumn.appendChild(OCA.Analytics.Datasource.buildTextVariableButton(input));
+            }
             form.appendChild(tableRow);
             tableRow.appendChild(label);
             tableRow.appendChild(input);
@@ -576,6 +580,58 @@ Object.assign(OCA.Analytics.Datasource = {
             input.autocomplete = 'off';
         }
         return input;
+    },
+
+    /**
+     * Create an opt-in button for editing an option without triggering its primary action
+     */
+    buildTextVariableButton: function (input) {
+        let button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('icon', 'icon-rename', 'datasourceTextVariableEdit');
+        button.title = t('analytics', 'Edit text variables');
+        button.setAttribute('aria-label', t('analytics', 'Edit text variables'));
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            OCA.Analytics.Datasource.handleTextVariableEditor(input);
+        });
+        return button;
+    },
+
+    /**
+     * Open an editor for datasource options which support text variables
+     */
+    handleTextVariableEditor: function (sourceInput) {
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Edit file name'),
+            function () {
+                sourceInput.value = document.getElementById('datasourceTextVariableValue').value;
+                OCA.Analytics.Notification.dialogClose();
+            }
+        );
+
+        let editor = document.createElement('div');
+        let label = document.createElement('label');
+        label.htmlFor = 'datasourceTextVariableValue';
+        label.textContent = t('analytics', 'File name');
+        let input = document.createElement('input');
+        input.id = 'datasourceTextVariableValue';
+        input.type = 'text';
+        input.value = sourceInput.value;
+        input.style.width = '100%';
+
+        editor.appendChild(label);
+        editor.appendChild(input);
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            editor,
+            t('analytics', 'Keep the selected path and replace parts of the file name with text variables, for example report_%today%(Y-m-d).csv. The variable is resolved when the data load runs. See the {linkstart}Wiki{linkend}.')
+                .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#text-variables" target="_blank" rel="noreferrer noopener">')
+                .replace('{linkend}', '</a>')
+        );
+        input.focus();
+        input.select();
     },
 
     /**

@@ -50,7 +50,8 @@ class LocalJson implements IDatasource {
 			'id' => 'link',
 			'name' => $this->l10n->t('File'),
 			'placeholder' => $this->l10n->t('File'),
-			'type' => 'filePicker'
+			'type' => 'filePicker',
+			'allowTextVariables' => true
 		];
 		$template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
 		$template[] = [

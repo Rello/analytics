@@ -130,6 +130,27 @@ class VariableService {
 	}
 
 	/**
+	 * Replace date variables embedded in data source text, such as file paths.
+	 *
+	 * @param string $text
+	 * @return string
+	 */
+	public function replaceDatasourceText(string $text): string {
+		return preg_replace_callback(
+			'/%[^%]+%(?:\([^)]*\))?/',
+			function (array $match): string {
+				$parsed = $this->parseFilter($match[0]);
+				if (!$parsed || is_array($parsed['value'])) {
+					return $match[0];
+				}
+
+				return date($this->parseFormat($match[0]), $parsed['value']);
+			},
+			$text
+		);
+	}
+
+	/**
 	 * replace variables in filters and apply format
 	 *
 	 * @param $reportMetadata

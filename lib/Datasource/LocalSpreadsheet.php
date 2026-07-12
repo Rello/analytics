@@ -58,7 +58,8 @@ class LocalSpreadsheet implements IDatasource {
 			'id' => 'link',
 			'name' => $this->l10n->t('File'),
 			'placeholder' => $this->l10n->t('File'),
-			'type' => 'filePicker'
+			'type' => 'filePicker',
+			'allowTextVariables' => true
 		];
 		$template[] = [
 			'id' => 'sheet',

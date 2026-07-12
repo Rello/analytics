@@ -17,6 +17,7 @@ use OCA\Analytics\Datasource\LocalCsv;
 use OCA\Analytics\Datasource\LocalSpreadsheet;
 use OCA\Analytics\Datasource\LocalJson;
 use OCA\Analytics\Datasource\Regex;
+use OCA\Analytics\Service\VariableService;
 use OCP\AppFramework\Controller;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
@@ -40,6 +41,7 @@ class DatasourceController extends Controller {
 	private $l10n;
 	/** @var IAppConfig */
 	protected $appConfig;
+	private VariableService $VariableService;
 
 	const DATASET_TYPE_GROUP = 0;
 	const DATASET_TYPE_LOCAL_CSV = 1;
@@ -65,6 +67,7 @@ class DatasourceController extends Controller {
 		IL10N            $l10n,
 		IEventDispatcher $dispatcher,
 		IAppConfig       $appConfig,
+		VariableService  $VariableService,
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
@@ -78,6 +81,7 @@ class DatasourceController extends Controller {
 		$this->dispatcher = $dispatcher;
 		$this->l10n = $l10n;
 		$this->appConfig = $appConfig;
+		$this->VariableService = $VariableService;
 	}
 
 	/**
@@ -160,6 +164,13 @@ class DatasourceController extends Controller {
 		}
 		unset($option['cacheKey']);
 		$option['user_id'] = $datasetMetadata['user_id'];
+		if (isset($option['link']) && in_array($datasourceId, [
+			self::DATASET_TYPE_LOCAL_CSV,
+			self::DATASET_TYPE_LOCAL_SPREADSHEET,
+			self::DATASET_TYPE_LOCAL_JSON,
+		], true)) {
+			$option['link'] = $this->VariableService->replaceDatasourceText((string)$option['link']);
+		}
 		if ($allowCacheValidation && isset($datasetMetadata['cacheKey']) && $datasetMetadata['cacheKey'] !== '') {
 			$option['cacheKey'] = $datasetMetadata['cacheKey'];
 		}
@@ -213,6 +224,12 @@ class DatasourceController extends Controller {
 			$result = $this->filterData($result, $datasetMetadata['filteroptions']);
 			$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
 
+		} catch (NotFoundException $e) {
+			$result = [
+				'error' => $this->l10n->t('File not found: %s', [$option['link'] ?? '']),
+				'data' => [],
+				'status' => 'nodata',
+			];
 		} catch (\Error $e) {
 			$result['error'] = $e->getMessage();
 		}

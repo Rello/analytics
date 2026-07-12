@@ -2,6 +2,7 @@
 
 ##
 ### Added
+- Local datasource file paths can use date text variables and formatting through an opt-in filename editor.
 - Reusable script for generating the CycloneDX SBOM from the bundled dependencies.
 - GitHub Actions cross-check Analytics on multiple Nextcloud, PHP, and database combinations.
 - Provide a CycloneDX SBOM for the bundled app dependencies.
@@ -16,6 +17,7 @@
 - Update bundled jsPDF to v4.2.1.
 
 ### Fixed
+- Return a readable simulation error when a dynamic local datasource file does not exist.
 - Preserve unsaved per-series chart options when changing the analytics model.
 - Various security hardenings
 - Resolve bundled Composer dependencies against PHP 8.2 instead of requiring PHP 8.5.
