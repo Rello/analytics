@@ -211,7 +211,6 @@ OC.L10N.register(
     "Object path" : "Sökväg till objektet",
     "More options" : "Fler alternativ",
     "Authentication" : "Autentisering",
-    "Allow insecure connections" : "Tillåt osäkra anslutningar",
     "Timestamp of data load" : "Tidstämpel för datainläsning",
     "Releases" : "Versioner",
     "Issues" : "Problem",

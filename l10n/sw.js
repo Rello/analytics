@@ -212,7 +212,6 @@ OC.L10N.register(
     "Object path" : "Njia ya kitu",
     "More options" : "Mibadala zaidi",
     "Authentication" : "Uthibitisho",
-    "Allow insecure connections" : "Ruhusu miunganisho isiyo salama",
     "Timestamp of data load" : "Muhuri wa muda wa upakiaji wa data",
     "Releases" : "Matoleo",
     "Issues" : "Masuala",

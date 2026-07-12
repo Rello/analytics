@@ -46,6 +46,7 @@ OC.L10N.register(
     "Default" : "Por defeutu",
     "Ascending" : "Ascendente",
     "Descending" : "Descendente",
+    "Data series" : "Series de datos",
     "Primary" : "Primariu",
     "Secondary" : "Secundariu",
     "Line" : "Llinia",

@@ -214,7 +214,6 @@ OC.L10N.register(
     "Object path" : "Object pad",
     "More options" : "Meer opties",
     "Authentication" : "Authenticatie",
-    "Allow insecure connections" : "Sta onveilige verbindingen toe",
     "Timestamp of data load" : "Tijdstempel van de datalading",
     "Releases" : "Releases",
     "Issues" : "Problemen",

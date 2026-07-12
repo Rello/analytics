@@ -257,7 +257,6 @@ OC.L10N.register(
     "Object path" : "Nesne yolu",
     "More options" : "Diğer seçenekler",
     "Authentication" : "Kimlik doğrulama",
-    "Allow insecure connections" : "Güvenli olmayan bağlantılara izin verilsin",
     "Timestamp of data load" : "Veri yüklemesinin zaman damgası",
     "Releases" : "Sürümler",
     "Packages" : "Paketler",

@@ -257,7 +257,6 @@ OC.L10N.register(
     "Object path" : "Objekti asukoht",
     "More options" : "Täiendavad valikud",
     "Authentication" : "Autentimine",
-    "Allow insecure connections" : "Luba kasutada ebaturvalisi ühendusi",
     "Timestamp of data load" : "Andmete laadimise ajatempel",
     "Releases" : "Versioonid",
     "Packages" : "Paketid",

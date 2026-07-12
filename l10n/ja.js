@@ -118,7 +118,6 @@ OC.L10N.register(
     "HTTP method" : "HTTPメソッド",
     "More options" : "追加のオプション",
     "Authentication" : "認証",
-    "Allow insecure connections" : "安全ではない接続を許可する",
     "Timestamp of data load" : "データ読み込み時のタイムスタンプ",
     "Releases" : "リリース",
     "Issues" : "問題",

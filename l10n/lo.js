@@ -212,7 +212,6 @@ OC.L10N.register(
     "Object path" : "ເສັ້ນທາງວັດຖຸ",
     "More options" : "ຕົວເລືອກເພີ່ມເຕີມ",
     "Authentication" : "ການຢືນຢັນຕົວຕົນ",
-    "Allow insecure connections" : "ອະນຸຍາດການເຊື່ອມຕໍ່ທີ່ບໍ່ປອດໄພ",
     "Timestamp of data load" : "ເວລາຂອງການໂຫຼດຂໍ້ມູນ",
     "Releases" : "ລຸ້ນທີ່ອອກ",
     "Issues" : "ບັນຫາ",

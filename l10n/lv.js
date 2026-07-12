@@ -110,7 +110,6 @@ OC.L10N.register(
     "No" : "Nē",
     "More options" : "Vairāk iespēju",
     "Authentication" : "Autentifikācija",
-    "Allow insecure connections" : "Atļaut nedrošus savienojumus",
     "Releases" : "Laidieni",
     "Tag" : "Birkas",
     "Local" : "Vietējs",

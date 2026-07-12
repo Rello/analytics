@@ -187,7 +187,6 @@ OC.L10N.register(
     "Object path" : "Objektuaren bide-izena",
     "More options" : "Aukera gehiago",
     "Authentication" : "Autentifikazioa",
-    "Allow insecure connections" : "Baimendu konexio ez seguruak",
     "Timestamp of data load" : "Datu-kargaren denbora-zigilua",
     "Releases" : "Bertsioak",
     "Packages" : "Paketeak",

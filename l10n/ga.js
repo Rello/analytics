@@ -270,7 +270,6 @@ OC.L10N.register(
     "Object path" : "Conair réad",
     "More options" : "Tuilleadh roghanna",
     "Authentication" : "Fíordheimhniú",
-    "Allow insecure connections" : "Ceadaigh naisc neamhdhaingean",
     "Timestamp of data load" : "Stampa ama an ualaigh sonraí",
     "Releases" : "Scaoileadh",
     "Packages" : "Pacáistí",
