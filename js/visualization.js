@@ -336,6 +336,13 @@ OCA.Analytics.Visualization = {
                 continue;
             }
 
+            const functionMatch = remaining.match(/^round\b/i);
+            if (functionMatch) {
+                tokens.push({type: 'function', value: 'round'});
+                position += functionMatch[0].length;
+                continue;
+            }
+
             if ('+-*/'.includes(character)) {
                 tokens.push({type: 'operator', value: character});
                 position++;
@@ -350,6 +357,12 @@ OCA.Analytics.Visualization = {
 
             if (character === ')') {
                 tokens.push({type: 'rightParen'});
+                position++;
+                continue;
+            }
+
+            if (character === ',') {
+                tokens.push({type: 'comma'});
                 position++;
                 continue;
             }
@@ -374,7 +387,7 @@ OCA.Analytics.Visualization = {
 
         tokens.forEach(token => {
             if (token.type === 'number' || token.type === 'column') {
-                if (previousType === 'value') {
+                if (previousType === 'value' || previousType === 'function') {
                     throw new Error('Missing operator');
                 }
                 output.push(token);
@@ -382,17 +395,47 @@ OCA.Analytics.Visualization = {
                 return;
             }
 
-            if (token.type === 'leftParen') {
+            if (token.type === 'function') {
                 if (previousType === 'value') {
                     throw new Error('Missing operator');
                 }
                 operators.push(token);
+                previousType = 'function';
+                return;
+            }
+
+            if (token.type === 'leftParen') {
+                if (previousType === 'value') {
+                    throw new Error('Missing operator');
+                }
+                operators.push({
+                    ...token,
+                    functionCall: previousType === 'function',
+                    argumentCount: 1,
+                });
                 previousType = 'leftParen';
                 return;
             }
 
+            if (token.type === 'comma') {
+                if (previousType !== 'value') {
+                    throw new Error('Missing function argument');
+                }
+                while (operators.length && operators[operators.length - 1].type !== 'leftParen') {
+                    output.push(operators.pop());
+                }
+                const leftParen = operators[operators.length - 1];
+                if (!leftParen || !leftParen.functionCall) {
+                    throw new Error('Comma outside function');
+                }
+                leftParen.argumentCount++;
+                previousType = 'comma';
+                return;
+            }
+
             if (token.type === 'rightParen') {
-                if (previousType === 'operator' || previousType === 'leftParen' || previousType === 'start') {
+                if (previousType === 'operator' || previousType === 'leftParen' || previousType === 'comma'
+                    || previousType === 'function' || previousType === 'start') {
                     throw new Error('Invalid closing parenthesis');
                 }
                 while (operators.length && operators[operators.length - 1].type !== 'leftParen') {
@@ -401,14 +444,25 @@ OCA.Analytics.Visualization = {
                 if (!operators.length) {
                     throw new Error('Unmatched closing parenthesis');
                 }
-                operators.pop();
+                const leftParen = operators.pop();
+                if (leftParen.functionCall) {
+                    const functionToken = operators.pop();
+                    if (!functionToken || functionToken.type !== 'function') {
+                        throw new Error('Invalid function call');
+                    }
+                    if (functionToken.value === 'round' && ![1, 2].includes(leftParen.argumentCount)) {
+                        throw new Error('Invalid ROUND argument count');
+                    }
+                    output.push({...functionToken, argumentCount: leftParen.argumentCount});
+                }
                 previousType = 'value';
                 return;
             }
 
             if (token.type === 'operator') {
                 const isUnary = (token.value === '+' || token.value === '-')
-                    && (previousType === 'start' || previousType === 'operator' || previousType === 'leftParen');
+                    && (previousType === 'start' || previousType === 'operator' || previousType === 'leftParen'
+                        || previousType === 'comma');
                 if (!isUnary && previousType !== 'value') {
                     throw new Error('Missing left operand');
                 }
@@ -434,7 +488,8 @@ OCA.Analytics.Visualization = {
             }
         });
 
-        if (previousType === 'operator' || previousType === 'leftParen' || previousType === 'start') {
+        if (previousType === 'operator' || previousType === 'leftParen' || previousType === 'comma'
+            || previousType === 'function' || previousType === 'start') {
             throw new Error('Incomplete formula');
         }
 
@@ -442,6 +497,9 @@ OCA.Analytics.Visualization = {
             const operator = operators.pop();
             if (operator.type === 'leftParen') {
                 throw new Error('Unmatched opening parenthesis');
+            }
+            if (operator.type === 'function') {
+                throw new Error('Function call needs parentheses');
             }
             output.push(operator);
         }
@@ -482,6 +540,19 @@ OCA.Analytics.Visualization = {
 
             if (token.type === 'column') {
                 stack.push(this.parseCalculatedColumnNumber(row[token.index]));
+                return;
+            }
+
+            if (token.type === 'function') {
+                if (token.value !== 'round' || ![1, 2].includes(token.argumentCount)
+                    || stack.length < token.argumentCount) {
+                    throw new Error('Invalid formula function');
+                }
+                const decimals = token.argumentCount === 2 ? stack.pop() : 0;
+                const value = stack.pop();
+                const normalizedDecimals = Math.max(-15, Math.min(15, Math.trunc(decimals)));
+                const factor = Math.pow(10, normalizedDecimals);
+                stack.push(Math.round((value + Number.EPSILON) * factor) / factor);
                 return;
             }
 
@@ -699,18 +770,29 @@ OCA.Analytics.Visualization = {
             jsondata.options?.chartoptions
         );
 
-        ({data, columns} = this.convertDataToDataTableFormat(
+        const calculatedSource = this.dataTableCalculatedSourceColumns(
             jsondata.data,
-            tableOptions,
             jsondata.header,
+            tableOptions
+        );
+        const calculatedTableOptions = this.getCalculatedColumnLayoutOptions(
+            tableOptions,
+            jsondata.header.length,
+            calculatedSource.calculations.length
+        );
+
+        ({data, columns} = this.convertDataToDataTableFormat(
+            calculatedSource.data,
+            calculatedTableOptions,
+            calculatedSource.header,
             timeAggregationDisplayConfig
         ));
-        const calculatedResult = this.dataTableCalculatedColumns(data, columns, tableOptions);
-        if (Array.isArray(calculatedResult)) {
-            data = calculatedResult;
-        } else if (calculatedResult && typeof calculatedResult === 'object') {
-            ({data, columns} = calculatedResult);
-        }
+        this.applyCalculatedColumnTableDefinitions(
+            columns,
+            calculatedSource.calculations,
+            calculatedTableOptions,
+            jsondata.header.length
+        );
 
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
@@ -909,24 +991,84 @@ OCA.Analytics.Visualization = {
     },
 
     /**
-     * Add calculated columns such as sums or percentages to a data table.
+     * Calculate custom columns against the unmodified source rows.
      *
-     * @param {Array} data - Data table rows
-     * @param {Array} columns - Existing column definitions
+     * @param {Array} data - Raw source rows
+     * @param {Array} header - Raw source headers
      * @param {Object} tableOptions - Options containing calculation definitions
-     * @returns {{data: Array, columns: Array}}
+     * @returns {{data: Array, header: Array, calculations: Array}}
      */
-    dataTableCalculatedColumns: function (data, columns, tableOptions) {
-        if (!Array.isArray(data) || data.length === 0) return data;
-        const userCalculations = this.getCalculatedColumns(tableOptions);
-        userCalculations.forEach((calc, calcIndex) => {
-            if (!this.isCalculatedColumnRenderable(calc)) {
-                return;
-            }
-            data = data.map(row => [...row, this.calculateCalculatedColumnValue(row, calc)]);
-            columns.push(this.getCalculatedColumnTableDefinition(calc, calcIndex));
+    dataTableCalculatedSourceColumns: function (data, header, tableOptions) {
+        const calculations = this.getCalculatedColumns(tableOptions)
+            .filter(calc => this.isCalculatedColumnRenderable(calc));
+        let calculatedData = Array.isArray(data) ? data.map(row => [...row]) : [];
+        const calculatedHeader = Array.isArray(header) ? [...header] : [];
+
+        calculations.forEach(calc => {
+            calculatedData = calculatedData.map(row => [
+                ...row,
+                this.calculateCalculatedColumnValue(row, calc),
+            ]);
+            calculatedHeader.push(calc.title || t('analytics', 'Calculated column'));
         });
-        return {data, columns};
+
+        return {data: calculatedData, header: calculatedHeader, calculations};
+    },
+
+    getCalculatedColumnLayoutOptions: function (tableOptions, sourceColumnCount, calculationCount) {
+        if (!tableOptions?.layout || calculationCount === 0) {
+            return tableOptions;
+        }
+
+        const layout = tableOptions.layout;
+        const isRowLayout = Array.isArray(layout.rows)
+            && (!Array.isArray(layout.columns) || layout.columns.length === 0)
+            && (!Array.isArray(layout.measures) || layout.measures.length === 0);
+        if (!isRowLayout) {
+            return tableOptions;
+        }
+
+        const calculatedIndexes = Array.from(
+            {length: calculationCount},
+            (unused, index) => sourceColumnCount + index
+        );
+        const explicitlyPlacedIndexes = new Set([
+            ...(Array.isArray(layout.rows) ? layout.rows : []),
+            ...(Array.isArray(layout.columns) ? layout.columns : []),
+            ...(Array.isArray(layout.measures) ? layout.measures : []),
+            ...(Array.isArray(layout.notRequired) ? layout.notRequired : []),
+        ]);
+        return {
+            ...tableOptions,
+            layout: {
+                ...layout,
+                rows: [
+                    ...layout.rows,
+                    ...calculatedIndexes.filter(index => !explicitlyPlacedIndexes.has(index)),
+                ],
+            },
+        };
+    },
+
+    applyCalculatedColumnTableDefinitions: function (columns, calculations, tableOptions, sourceColumnCount) {
+        if (!Array.isArray(columns) || !Array.isArray(calculations) || calculations.length === 0) {
+            return;
+        }
+
+        const layout = tableOptions?.layout;
+        const isDefaultLayout = !layout || Object.keys(layout).length === 0;
+        const isRowLayout = Array.isArray(layout?.rows)
+            && (!Array.isArray(layout.columns) || layout.columns.length === 0)
+            && (!Array.isArray(layout.measures) || layout.measures.length === 0);
+        calculations.forEach((calc, calcIndex) => {
+            const sourceIndex = sourceColumnCount + calcIndex;
+            const columnIndex = isDefaultLayout
+                ? sourceIndex
+                : (isRowLayout ? layout.rows.indexOf(sourceIndex) : -1);
+            if (columnIndex >= 0) {
+                columns[columnIndex] = this.getCalculatedColumnTableDefinition(calc, calcIndex);
+            }
+        });
     },
 
     /**

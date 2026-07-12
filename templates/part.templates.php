@@ -917,7 +917,7 @@
                             <textarea id="tableOptionsCalculatedColumnsFormula" class="optionsInput" rows="3"
                                       placeholder="<?php p($l->t('Example: (30 * column1) + (column2 * -1)')); ?>"></textarea>
                             <p class="tableOptionsCalculatedColumnsFormulaHint userGuidance">
-                                <?php p($l->t('Use column1, column2, fixed numbers, +, -, *, / and parentheses.')); ?>
+                                <?php p($l->t('Use column1, column2, fixed numbers, +, -, *, /, parentheses, and ROUND(value, decimals).')); ?>
                             </p>
                         </div>
                     </div>

@@ -2,11 +2,14 @@
 
 ##
 ### Added
+- Custom calculated-column formulas can round values with ROUND(value) or ROUND(value, decimals).
+- Nextcloud Dashboard API V2 clients can display favorite reports with PHP-rendered SVG value and trend previews.
 - Local datasource file paths can use date text variables and formatting through an opt-in filename editor.
 - Reusable script for generating the CycloneDX SBOM from the bundled dependencies.
 - GitHub Actions cross-check Analytics on multiple Nextcloud, PHP, and database combinations.
 
 ### Changed
+- Allow calculated columns to be positioned in the table layout dialog.
 - Update PhpSpreadsheet to the 5.x release line.
 - Update bundled jsPDF to v4.2.1.
 - Only send scheduled data load error notifications when the complete load fails.

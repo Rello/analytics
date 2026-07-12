@@ -74,6 +74,16 @@ OCA.Analytics.Filter = {
                 thresholdEl.classList.remove('report-option-active');
             }
         }
+
+        const tableOptionsEl = document.getElementById('optionsMenuTableOptions');
+        if (tableOptionsEl) {
+            const calculatedColumns = OCA.Analytics.currentReportData.options.tableoptions?.calculatedColumns;
+            if (typeof calculatedColumns === 'string' && calculatedColumns.trim() !== '') {
+                tableOptionsEl.classList.add('report-option-active');
+            } else {
+                tableOptionsEl.classList.remove('report-option-active');
+            }
+        }
     },
 
     /**
@@ -756,6 +766,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Filter.calculatedColumnsEditorState.draft = null;
 
         OCA.Analytics.Filter.renderCalculatedColumnsList();
+        OCA.Analytics.Filter.Drag.syncCalculatedColumns();
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
     },
 
@@ -1304,6 +1315,7 @@ OCA.Analytics.Filter = {
         state.parseError = false;
         document.getElementById('tableOptionsCalculatedColumns').value = OCA.Analytics.Filter.serializeCalculatedColumnsValue(state.items);
         OCA.Analytics.Filter.renderCalculatedColumnsList();
+        OCA.Analytics.Filter.Drag.syncCalculatedColumns();
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
     },
 
@@ -1313,10 +1325,12 @@ OCA.Analytics.Filter = {
             return;
         }
 
-        state.items.splice(state.editingIndex, 1);
+        const deletedIndex = state.editingIndex;
+        state.items.splice(deletedIndex, 1);
         state.parseError = false;
         document.getElementById('tableOptionsCalculatedColumns').value = OCA.Analytics.Filter.serializeCalculatedColumnsValue(state.items);
         OCA.Analytics.Filter.renderCalculatedColumnsList();
+        OCA.Analytics.Filter.Drag.syncCalculatedColumns(deletedIndex);
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
     },
 
@@ -1840,6 +1854,41 @@ OCA.Analytics.Filter = {
 };
 
 OCA.Analytics.Filter.Drag = {
+    createDraggableItem: function (text, index, calculationIndex = null) {
+        const div = document.createElement('div');
+        div.id = 'column-' + index;
+        div.className = 'draggable tableOptionsLayoutItem';
+        div.draggable = true;
+        div.ondragstart = OCA.Analytics.Filter.Drag.drag;
+        if (calculationIndex !== null) {
+            div.dataset.calculationIndex = calculationIndex;
+        }
+
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'icon-analytics-gripLines sidebarPointer';
+        div.appendChild(iconDiv);
+
+        const textSpan = document.createElement('span');
+        textSpan.textContent = text;
+        div.appendChild(textSpan);
+
+        return div;
+    },
+
+    getCalculatedColumnItems: function () {
+        const calculatedColumnsInput = document.getElementById('tableOptionsCalculatedColumns');
+        if (calculatedColumnsInput) {
+            const parsed = OCA.Analytics.Filter.parseCalculatedColumnsValue(calculatedColumnsInput.value);
+            return parsed.items
+                .map(calc => OCA.Analytics.Visualization.normalizeCalculatedColumn(calc))
+                .filter(calc => calc !== null && OCA.Analytics.Visualization.isCalculatedColumnRenderable(calc));
+        }
+
+        const tableOptions = OCA.Analytics.currentReportData.options.tableoptions || {};
+        return OCA.Analytics.Visualization.getCalculatedColumns(tableOptions)
+            .filter(calc => OCA.Analytics.Visualization.isCalculatedColumnRenderable(calc));
+    },
+
     /**
      * Allow dropping an element during drag and drop operations.
      */
@@ -1892,7 +1941,12 @@ OCA.Analytics.Filter.Drag = {
      */
     initialize: function () {
         let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions.layout;
-        let headerItems = OCA.Analytics.currentReportData.header;
+        const sourceHeaders = OCA.Analytics.currentReportData.header || [];
+        const calculations = OCA.Analytics.Filter.Drag.getCalculatedColumnItems();
+        const headerItems = [
+            ...sourceHeaders,
+            ...calculations.map(calc => calc.title || t('analytics', 'Calculated column')),
+        ];
         let rowsSection = document.getElementById('rows');
 
         // Clear existing sections
@@ -1900,45 +1954,86 @@ OCA.Analytics.Filter.Drag = {
             section.innerHTML = '<p>' + section.id.charAt(0).toUpperCase() + section.id.slice(1) + '</p>';
         });
 
-        // Function to create a draggable div
-        const createDraggableItem = (text, index) => {
-            let div = document.createElement('div');
-            div.id = 'column-' + index;
-            div.className = 'draggable tableOptionsLayoutItem';
-            div.draggable = true;
-            div.ondragstart = OCA.Analytics.Filter.Drag.drag;
-
-            // Create and append the icon div
-            let iconDiv = document.createElement('div');
-            iconDiv.className = 'icon-analytics-gripLines sidebarPointer';
-            div.appendChild(iconDiv);
-
-            // Create and append the text span
-            let textSpan = document.createElement('span');
-            textSpan.textContent = text;
-            div.appendChild(textSpan);
-
-            return div;
-        };
-
         if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
             // Fallback: Add all header items to the "rows" section
             headerItems.forEach((text, index) => {
-                let draggableItem = createDraggableItem(text, index);
+                const calculationIndex = index >= sourceHeaders.length ? index - sourceHeaders.length : null;
+                let draggableItem = OCA.Analytics.Filter.Drag.createDraggableItem(text, index, calculationIndex);
                 rowsSection.appendChild(draggableItem);
             });
         } else {
+            const placedIndexes = new Set();
             // Append items to their respective sections based on layoutConfig
             Object.keys(layoutConfig).forEach(section => {
                 let sectionElement = document.getElementById(section);
                 layoutConfig[section].forEach(index => {
-                    let draggableItem = createDraggableItem(headerItems[index], index);
+                    if (!sectionElement || headerItems[index] === undefined || placedIndexes.has(index)) {
+                        return;
+                    }
+                    const calculationIndex = index >= sourceHeaders.length ? index - sourceHeaders.length : null;
+                    let draggableItem = OCA.Analytics.Filter.Drag.createDraggableItem(headerItems[index], index, calculationIndex);
                     sectionElement.appendChild(draggableItem);
+                    placedIndexes.add(index);
                 });
+            });
+
+            headerItems.forEach((text, index) => {
+                if (placedIndexes.has(index)) {
+                    return;
+                }
+                const calculationIndex = index >= sourceHeaders.length ? index - sourceHeaders.length : null;
+                rowsSection.appendChild(OCA.Analytics.Filter.Drag.createDraggableItem(text, index, calculationIndex));
             });
         }
 
         // Manage placeholders initially
+        OCA.Analytics.Filter.Drag.managePlaceholders();
+    },
+
+    syncCalculatedColumns: function (deletedIndex = null) {
+        const rowsSection = document.getElementById('rows');
+        if (!rowsSection) {
+            return;
+        }
+
+        const sourceColumnCount = (OCA.Analytics.currentReportData.header || []).length;
+        if (deletedIndex !== null) {
+            document.querySelectorAll('.draggable[data-calculation-index]').forEach(item => {
+                const calculationIndex = parseInt(item.dataset.calculationIndex, 10);
+                if (calculationIndex === deletedIndex) {
+                    item.remove();
+                } else if (calculationIndex > deletedIndex) {
+                    item.dataset.calculationIndex = calculationIndex - 1;
+                    item.id = 'column-' + (sourceColumnCount + calculationIndex - 1);
+                }
+            });
+        }
+
+        const calculations = OCA.Analytics.Filter.Drag.getCalculatedColumnItems();
+        calculations.forEach((calc, calculationIndex) => {
+            const columnIndex = sourceColumnCount + calculationIndex;
+            let item = document.querySelector('.draggable[data-calculation-index="' + calculationIndex + '"]');
+            if (!item) {
+                item = OCA.Analytics.Filter.Drag.createDraggableItem(
+                    calc.title || t('analytics', 'Calculated column'),
+                    columnIndex,
+                    calculationIndex
+                );
+                rowsSection.appendChild(item);
+            } else {
+                item.id = 'column-' + columnIndex;
+                const label = item.querySelector('span');
+                if (label) {
+                    label.textContent = calc.title || t('analytics', 'Calculated column');
+                }
+            }
+        });
+
+        document.querySelectorAll('.draggable[data-calculation-index]').forEach(item => {
+            if (parseInt(item.dataset.calculationIndex, 10) >= calculations.length) {
+                item.remove();
+            }
+        });
         OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 
