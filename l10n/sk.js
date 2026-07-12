@@ -191,7 +191,6 @@ OC.L10N.register(
     "Object path" : "Cesta k objektu",
     "More options" : "Viac možností",
     "Authentication" : "Autentifikácia",
-    "Allow insecure connections" : "Povoliť nezabezpečené spojenia",
     "Timestamp of data load" : "Časové razítko načítaných údajov",
     "Releases" : "Vydania",
     "Issues" : "Problémy",

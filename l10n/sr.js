@@ -209,7 +209,6 @@ OC.L10N.register(
     "Object path" : "Путања објекта",
     "More options" : "Више опција",
     "Authentication" : "Провера идентитета",
-    "Allow insecure connections" : "Дозволи небезбедне везе",
     "Timestamp of data load" : "Временска ознака учитавања података",
     "Releases" : "Издања",
     "Issues" : "Проблеми",

@@ -229,7 +229,6 @@ OC.L10N.register(
     "Object path" : "对象路径",
     "More options" : "更多选项",
     "Authentication" : "身份验证",
-    "Allow insecure connections" : "允许不安全的连接",
     "Timestamp of data load" : "数据加载时间戳",
     "Releases" : "发行版",
     "Issues" : "问题",

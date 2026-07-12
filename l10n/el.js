@@ -209,7 +209,6 @@ OC.L10N.register(
     "Object path" : "Διαδρομή αντικειμένου",
     "More options" : "Περισσότερες επιλογές",
     "Authentication" : "Πιστοποίηση",
-    "Allow insecure connections" : "Να επιτρέπονται μη ασφαλείς συνδέσεις",
     "Timestamp of data load" : "Χρονική σήμανση φόρτωσης δεδομένων",
     "Releases" : "Εκδόσεις",
     "Issues" : "Ζητήματα",

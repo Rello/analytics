@@ -201,7 +201,6 @@ OC.L10N.register(
     "Object path" : "Objektsti",
     "More options" : "Mer innstillinger",
     "Authentication" : "Autentisering",
-    "Allow insecure connections" : "Tillat usikre tilkoblinger",
     "Timestamp of data load" : "Tidsstempel for datainnlasting",
     "Releases" : "Utgivelser",
     "Issues" : "Problemer",

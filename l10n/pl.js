@@ -252,7 +252,6 @@ OC.L10N.register(
     "Object path" : "Ścieżka obiektu",
     "More options" : "Więcej opcji",
     "Authentication" : "Uwierzytelnienie",
-    "Allow insecure connections" : "Zezwalaj na niepewne połączenia",
     "Timestamp of data load" : "Znacznik czasu ładowania danych",
     "Releases" : "Wydania",
     "Issues" : "Problemy",

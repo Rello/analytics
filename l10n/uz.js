@@ -253,7 +253,6 @@ OC.L10N.register(
     "Object path" : "Ob'ekt yo'li",
     "More options" : "Boshqa variantlar",
     "Authentication" : "Autentifikatsiya",
-    "Allow insecure connections" : "Ishonchsiz ulanishlarga ruxsat bering",
     "Timestamp of data load" : "Ma'lumotlarni yuklash vaqt belgisi",
     "Releases" : "Relizlar",
     "Issues" : "Muammolar",

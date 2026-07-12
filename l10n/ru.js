@@ -257,7 +257,6 @@ OC.L10N.register(
     "Object path" : "Путь к объекту",
     "More options" : "Дополнительные параметры",
     "Authentication" : "Аутентификация",
-    "Allow insecure connections" : "Разрешить небезопасные соединения",
     "Timestamp of data load" : "Время загрузки данных",
     "Releases" : "Релизы",
     "Packages" : "Пакеты",

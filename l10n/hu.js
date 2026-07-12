@@ -211,7 +211,6 @@ OC.L10N.register(
     "Object path" : "Objektumútvonal",
     "More options" : "További lehetőségek",
     "Authentication" : "Hitelesítés",
-    "Allow insecure connections" : "Nem biztonságos kapcsolatok engedélyezése",
     "Timestamp of data load" : "Az adatbetöltés időbélyege",
     "Releases" : "Kiadások",
     "Issues" : "Hibajegyek",

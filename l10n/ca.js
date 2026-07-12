@@ -190,7 +190,6 @@ OC.L10N.register(
     "Object path" : "Camí a l'objecte",
     "More options" : "Més opcions",
     "Authentication" : "Autenticació",
-    "Allow insecure connections" : "Permet connexions insegures",
     "Timestamp of data load" : "Marca de temps de càrrega de dades",
     "Releases" : "Llançaments",
     "Issues" : "Errors",

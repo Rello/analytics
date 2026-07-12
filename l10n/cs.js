@@ -222,7 +222,6 @@ OC.L10N.register(
     "Object path" : "Popis umístění objektu",
     "More options" : "Další volby",
     "Authentication" : "Ověřování se",
-    "Allow insecure connections" : "Umožnit nezabezpečená spojení",
     "Timestamp of data load" : "Časové razítko načtení dat",
     "Releases" : "Vydání",
     "Packages" : "Balíčky",

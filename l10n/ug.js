@@ -211,7 +211,6 @@ OC.L10N.register(
     "Object path" : "ئوبيېكت يولى",
     "More options" : "تېخىمۇ كۆپ تاللاشلار",
     "Authentication" : "دەلىللەش",
-    "Allow insecure connections" : "بىخەتەر ئۇلىنىشقا يول قويۇڭ",
     "Timestamp of data load" : "سانلىق مەلۇمات يۈكلەش ۋاقتى",
     "Releases" : "تارقىتىلدى",
     "Issues" : "مەسىلىلەر",

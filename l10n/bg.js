@@ -203,7 +203,6 @@ OC.L10N.register(
     "Object path" : "Път на обекта",
     "More options" : "Още опции",
     "Authentication" : "Удостоверяване",
-    "Allow insecure connections" : "Позволи несигурните връзки",
     "Timestamp of data load" : "Печат за време на зареждането на данни",
     "Releases" : "Версии",
     "Packages" : "Пакети",

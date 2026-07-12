@@ -256,7 +256,6 @@ OC.L10N.register(
     "Object path" : "Objekto kelias",
     "More options" : "Daugiau parinkčių",
     "Authentication" : "Tapatybės nustatymas",
-    "Allow insecure connections" : "Leiskite nesaugius ryšius",
     "Timestamp of data load" : "Duomenų įkėlimo laiko žyma",
     "Releases" : "Laidos",
     "Packages" : "Paketai",

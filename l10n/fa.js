@@ -257,7 +257,6 @@ OC.L10N.register(
     "Object path" : "مسیر شیء",
     "More options" : "گزینه‌های بیشتر",
     "Authentication" : "احراز هویت",
-    "Allow insecure connections" : "اجازه اتصال‌های ناامن",
     "Timestamp of data load" : "زمان‌بارگذاری داده",
     "Releases" : "انتشارها",
     "Issues" : "مسائل",

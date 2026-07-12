@@ -253,7 +253,6 @@ OC.L10N.register(
     "Object path" : "對象路徑",
     "More options" : "更多選項",
     "Authentication" : "驗證",
-    "Allow insecure connections" : "允許不安全的連線",
     "Timestamp of data load" : "數據加載時間戳",
     "Releases" : "發行版本",
     "Packages" : "軟件包",
