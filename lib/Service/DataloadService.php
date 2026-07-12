@@ -159,8 +159,8 @@ class DataloadService
         $schedules = $this->DataloadMapper->getDataloadBySchedule($schedule);
         foreach ($schedules as $dataload) {
             $result = $this->execute($dataload['id'], null, false);
-            if ($result['error'] !== 0) {
-                // if the data source produced an error, a notification needs to be triggered
+            if ($result['error'] !== 0 && $result['insert'] === 0 && $result['update'] === 0) {
+                // Only notify when the data load failed completely, not when individual records failed.
                 $dataset = $this->DatasetService->read($dataload['dataset']);
                 $this->NotificationManager->triggerNotification(NotificationManager::DATALOAD_ERROR, $dataload['dataset'], $dataload['id'], ['dataloadName' => $dataload['name'], 'datasetName' => $dataset['name']], $dataload['user_id']);
             }

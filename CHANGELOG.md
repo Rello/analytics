@@ -5,25 +5,17 @@
 - Local datasource file paths can use date text variables and formatting through an opt-in filename editor.
 - Reusable script for generating the CycloneDX SBOM from the bundled dependencies.
 - GitHub Actions cross-check Analytics on multiple Nextcloud, PHP, and database combinations.
-- Provide a CycloneDX SBOM for the bundled app dependencies.
 
 ### Changed
-- GitHub Actions use the bundled vendor dependencies instead of Composer installs.
-- GitHub Actions no longer run below the supported Composer PHP floor.
-- Refresh the CycloneDX SBOM for the updated Composer and bundled browser dependencies.
-- Support PHP 8.2 through 8.5 in Composer and app metadata.
-- Remove PhpSpreadsheet writer modules automatically after Composer updates.
 - Update PhpSpreadsheet to the 5.x release line.
 - Update bundled jsPDF to v4.2.1.
+- Only send scheduled data load error notifications when the complete load fails.
 
 ### Fixed
+- Preserve custom chart-series colors when saving charts without legend items.
 - Return a readable simulation error when a dynamic local datasource file does not exist.
 - Preserve unsaved per-series chart options when changing the analytics model.
 - Various security hardenings
-- Resolve bundled Composer dependencies against PHP 8.2 instead of requiring PHP 8.5.
-- Keep the Flow operation listener compatible with PHP versions before 8.3.
-- Keep variable-service parser tests compatible with GitHub Actions PHP runtimes.
-- Reject private and reserved IPv6 literal external URLs without DNS lookups.
 
 ## 6.6.0 - 2026-07-07
 ### Added

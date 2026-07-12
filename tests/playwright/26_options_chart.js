@@ -70,6 +70,9 @@ async function setAnalyticsModel(page, selector) {
     await clickFirst(page, ['#analyticsDialogBtnGo'], 'apply chart options');
 
     steps.push('save reload and validate chart options');
+    await page.evaluate(() => {
+      OCA.Analytics.chartObject.legend.legendItems = [];
+    });
     await saveAndReloadReport(page, reportName);
 
     await capture('final_chart_options');

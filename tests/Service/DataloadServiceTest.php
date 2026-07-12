@@ -172,6 +172,104 @@ class DataloadServiceTest extends TestCase {
 		$this->assertSame(0, $result['delete']);
 	}
 
+	public function testScheduledDataloadDoesNotNotifyForPartialSuccess(): void {
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('getDataloadBySchedule')
+			->with('hourly')
+			->willReturn([[
+				'id' => 42,
+				'dataset' => 11,
+				'name' => 'Partial load',
+				'user_id' => 'u1',
+			]]);
+
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->expects($this->never())->method('read');
+
+		$notificationManager = $this->createMock(NotificationManager::class);
+		$notificationManager->expects($this->never())->method('triggerNotification');
+
+		$service = $this->createScheduledServiceMock(
+			['insert' => 1, 'update' => 0, 'delete' => 0, 'error' => 1],
+			$dataloadMapper,
+			$datasetService,
+			$notificationManager
+		);
+
+		$service->executeBySchedule('hourly');
+	}
+
+	public function testScheduledDataloadNotifiesForCompleteFailure(): void {
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('getDataloadBySchedule')
+			->with('daily')
+			->willReturn([[
+				'id' => 42,
+				'dataset' => 11,
+				'name' => 'Failed load',
+				'user_id' => 'u1',
+			]]);
+
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->expects($this->once())
+			->method('read')
+			->with(11)
+			->willReturn(['name' => 'Dataset']);
+
+		$notificationManager = $this->createMock(NotificationManager::class);
+		$notificationManager->expects($this->once())
+			->method('triggerNotification')
+			->with(
+				NotificationManager::DATALOAD_ERROR,
+				11,
+				42,
+				['dataloadName' => 'Failed load', 'datasetName' => 'Dataset'],
+				'u1'
+			);
+
+		$service = $this->createScheduledServiceMock(
+			['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 3],
+			$dataloadMapper,
+			$datasetService,
+			$notificationManager
+		);
+
+		$service->executeBySchedule('daily');
+	}
+
+	private function createScheduledServiceMock(
+		array $result,
+		DataloadMapper $dataloadMapper,
+		DatasetService $datasetService,
+		NotificationManager $notificationManager
+	) {
+		$service = $this->getMockBuilder(DataloadService::class)
+			->setConstructorArgs([
+				'u1',
+				new FakeL10N(),
+				new NullLogger(),
+				$this->createMock(ActivityManager::class),
+				$this->createMock(DatasourceController::class),
+				$this->createMock(ReportService::class),
+				$datasetService,
+				$this->createMock(StorageService::class),
+				$this->createMock(VariableService::class),
+				$notificationManager,
+				$dataloadMapper,
+			])
+			->onlyMethods(['execute'])
+			->getMock();
+
+		$service->expects($this->once())
+			->method('execute')
+			->with(42, null, false)
+			->willReturn($result);
+
+		return $service;
+	}
+
 	private function createService(
 		DatasourceController $datasourceController,
 		DataloadMapper $dataloadMapper,

@@ -1767,7 +1767,6 @@ OCA.Analytics.Filter = {
     processChartLegendSelections: function (dataOptions) {
         if (OCA.Analytics.chartObject !== null) {
             let legendItems = OCA.Analytics.chartObject.legend.legendItems;
-            dataOptions.length = legendItems.length;                        // cleanup any obsolete settings from data sets not being there anymore
             for (let i = 0; i < legendItems.length; i++) {
                 if (!dataOptions.hasOwnProperty(i)) dataOptions[i] = {};    // create dummy for every index as a later index might get a setting
                 if (i < 4 && legendItems[i]['hidden'] === true) {           // per default, the first 4 are  visible
