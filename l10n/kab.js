@@ -4,6 +4,7 @@ OC.L10N.register(
     "Version" : "Lqem",
     "Choose language" : "Fren tutlayt",
     "Loading" : "Yessalay-d",
+    "File name" : "Isem n ufaylu",
     "Select file" : "Fren afaylu",
     "Share" : "Bḍu",
     "Share link" : "Fren aseɣwen",

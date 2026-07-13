@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "Верзија",
     "Loading" : "Се вчитува",
+    "File name" : "Име на датотека",
     "Share" : "Сподели",
     "Share link" : "Сподели линк",
     "Link copied" : "Линкот е копиран",

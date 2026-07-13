@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Γίνεται φόρτωση",
     "Please select" : "Παρακαλώ επιλέξτε",
     "Data source not available anymore" : "Η πηγή δεδομένων δεν είναι πλεόν διαθέσιμη",
+    "File name" : "Όνομα αρχείου",
     "Column Picker" : "Επιλογέας στήλης",
     "Parameter missing" : "Απουσιάζει παράμετρος",
     "Add custom column" : "Προσθήκη προσαρμοσμένης στήλης",

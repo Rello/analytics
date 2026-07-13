@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "Útgáfa",
     "Loading" : "Hleð inn",
+    "File name" : "Skráarheiti",
     "Share" : "Deila",
     "Share link" : "Deila tengli",
     "Link copied" : "Tengill afritaður",

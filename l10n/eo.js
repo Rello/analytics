@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "Versio",
     "Loading" : "Ŝargado",
+    "File name" : "Dosiernomo",
     "Share" : "Kunhavigi",
     "Share link" : "Kunhavigi ligilon",
     "Link copied" : "Ligilo kopiita",

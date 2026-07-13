@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "加載中",
     "Please select" : "請選擇",
     "Data source not available anymore" : "數據源不再可用",
+    "File name" : "檔案名稱",
     "Column Picker" : "直欄選擇器",
     "Parameter missing" : "找不到參數",
     "Custom Column" : "自訂直欄",

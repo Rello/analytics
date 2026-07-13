@@ -8,6 +8,7 @@ OC.L10N.register(
     "Please select" : "Harap pilih",
     "Loading more..." : "Memuat lebih banyak...",
     "Data source not available anymore" : "Sumber data tak lagi tersedia",
+    "File name" : "Nama file",
     "Column Picker" : "Pemilih Kolom",
     "Parameter missing" : "Parameter tidak ada",
     "Add custom column" : "Tambahkan kolom khusus",

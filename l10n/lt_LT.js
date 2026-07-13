@@ -9,6 +9,7 @@ OC.L10N.register(
     "Loading more..." : "Įkeliama daugiau...",
     "Datasources still loading. Retry" : "Duomenų šaltiniai vis dar įkeliami. Bandykite dar kartą",
     "Data source not available anymore" : "Duomenų šaltinis nebepasiekiamas",
+    "File name" : "Failo pavadinimas",
     "Column Picker" : "Stulpelių rinkiklis",
     "Parameter missing" : "Trūksta parametro",
     "Custom Column" : "Pasirinktinis stulpelis",

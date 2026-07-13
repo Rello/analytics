@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Kargatzen",
     "Please select" : "Mesedez, hautatu",
     "Data source not available anymore" : "Datu iturria jada ez dago eskuragarri",
+    "File name" : "Fitxategi izena",
     "Column Picker" : "Zutabe-hautatzailea",
     "Parameter missing" : "Parametroa falta da",
     "Add custom column" : "Gehitu zutabe pertsonalizatua",

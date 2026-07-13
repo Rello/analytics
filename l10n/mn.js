@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "төрөл",
     "Loading" : "Ачааллаж байна",
+    "File name" : "Файлын нэр",
     "Select file" : "Файл сонгох",
     "Share" : "Түгээх",
     "Share link" : "Холбоос хуваалцах",

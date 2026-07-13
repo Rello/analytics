@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "Versione",
     "Loading" : "Carrighende",
+    "File name" : "Nùmene de archìviu",
     "Share" : "Cumpartzidura",
     "Share link" : "Cumpartzi ligòngiu",
     "Link copied" : "Ligòngiu copiadu",

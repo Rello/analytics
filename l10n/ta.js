@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Loading" : "Loading",
+    "File name" : "கோப்பு பெயரைக்",
     "Share" : "பகிர்வு",
     "Share link" : "Share link",
     "Settings" : "அமைப்புகள்",

@@ -4,6 +4,7 @@ OC.L10N.register(
     "Version" : "Phiên bản",
     "Loading" : "Đang tải",
     "Please select" : "Hãy chọn",
+    "File name" : "Tên tệp tin",
     "Select file" : "Chọn tập tin",
     "Share" : "Chia sẻ",
     "Share link" : "Chia sẻ liên kết",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "גרסה",
     "Loading" : "בטעינה",
+    "File name" : "שם קובץ",
     "Share" : "שתף",
     "Share link" : "קישור שיתוף",
     "Link copied" : "הקישור הועתק",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "يۈكلەۋاتىدۇ",
     "Please select" : "تاللاڭ",
     "Data source not available anymore" : "سانلىق مەلۇمات مەنبەسى ئەمدى يوق",
+    "File name" : "ھۆججەت ئىسمى",
     "Column Picker" : "ستون تاللىغۇچ",
     "Parameter missing" : "پارامېتىر يوقاپ كەتتى",
     "Add custom column" : "ئىختىيارى ئىستون قوشۇڭ",
