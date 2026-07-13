@@ -160,3 +160,14 @@ path = "vendor/psr/simple-cache/**"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2016 PHP Framework Interoperability Group"
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "vendor/maennchen/zipstream-php/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = [
+    "2007-2009 Paul Duncan <pabs@pablotron.org>",
+    "2014 Jonatan Männchen <jonatan@maennchen.ch>",
+    "2014 Jesse G. Donat <donatj@gmail.com>",
+    "2018 Nicolas CARPi <nicolas.carpi@curie.fr>",
+]
+SPDX-License-Identifier = "MIT"
