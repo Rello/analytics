@@ -188,18 +188,27 @@ class LocalSpreadsheet implements IDatasource {
 				return $this->l10n->t('Invalid spreadsheet range');
 			}
 
-			if (preg_match('/^[A-Z]{1,3}[1-9][0-9]*(?::[A-Z]{1,3}[1-9][0-9]*)?$/', $range) !== 1) {
+			if (preg_match('/^(?<startColumn>[A-Z]{1,3})(?<startRow>[1-9][0-9]*)(?::(?<endColumn>[A-Z]{1,3})(?<endRow>[1-9][0-9]*))?$/', $range, $matches) !== 1) {
 				return $this->l10n->t('Invalid spreadsheet range');
 			}
 
-			[$start, $end] = array_pad(explode(':', $range, 2), 2, $range);
-			[$startColumn, $startRow] = Coordinate::coordinateFromString($start);
-			[$endColumn, $endRow] = Coordinate::coordinateFromString($end);
-			$columns = abs(Coordinate::columnIndexFromString($endColumn) - Coordinate::columnIndexFromString($startColumn)) + 1;
-			$rows = abs((int)$endRow - (int)$startRow) + 1;
+			$endColumn = ($matches['endColumn'] ?? '') !== '' ? $matches['endColumn'] : $matches['startColumn'];
+			$endRow = ($matches['endRow'] ?? '') !== '' ? $matches['endRow'] : $matches['startRow'];
+			$rows = abs((int)$endRow - (int)$matches['startRow']) + 1;
+			if ($rows > self::MAX_RANGE_ROWS) {
+				return $this->l10n->t('Spreadsheet range is too large');
+			}
+
+			try {
+				[$startColumn] = Coordinate::coordinateFromString($matches['startColumn'] . $matches['startRow']);
+				[$validatedEndColumn] = Coordinate::coordinateFromString($endColumn . $endRow);
+				$columns = abs(Coordinate::columnIndexFromString($validatedEndColumn) - Coordinate::columnIndexFromString($startColumn)) + 1;
+			} catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+				return $this->l10n->t('Invalid spreadsheet range');
+			}
 			$totalCells += $columns * $rows;
 
-			if ($rows > self::MAX_RANGE_ROWS || $totalCells > self::MAX_RANGE_CELLS) {
+			if ($totalCells > self::MAX_RANGE_CELLS) {
 				return $this->l10n->t('Spreadsheet range is too large');
 			}
 		}

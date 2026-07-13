@@ -63,7 +63,11 @@ const dataloadName = 'json';
 
     steps.push('execute json dataload simulation');
     await clickFirst(page, ['#dataloadExecuteButton'], 'execute dataload');
-    await assertSimulationData(page, '[["json testdata","test 99",99],["json testdata","test 88",88],["json testdata","test 77",77]]');
+    await assertSimulationData(page, JSON.stringify([
+      ['json testdata', 'test 99', 99],
+      ['json testdata', 'test 88', 88],
+      ['json testdata', 'test 77', 77],
+    ], null, 2));
 
     await capture('datasource_json');
 

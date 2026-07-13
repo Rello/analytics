@@ -59,7 +59,9 @@ const dataloadName = 'csv';
 
     steps.push('execute csv dataload simulation');
     await clickFirst(page, ['#dataloadExecuteButton'], 'execute dataload');
-    await assertSimulationData(page, '[["Germany",83073100]]');
+    await assertSimulationData(page, JSON.stringify([
+      ['Germany', 83073100],
+    ], null, 2));
 
     await capture('datasource_csv');
 
