@@ -3,6 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+UI_ARTIFACT_ROOT="${ROOT_DIR}/tests/ui-artifacts"
 
 PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-analytics-playwright:local}"
 BASE_URL="${BASE_URL:-http://host.docker.internal:8033/apps/analytics/}"
@@ -106,6 +107,9 @@ if [[ ! -f "${ROOT_DIR}/${SCRIPT_PATH}" ]]; then
   exit 2
 fi
 
+rm -rf "${UI_ARTIFACT_ROOT}"
+mkdir -p "${UI_ARTIFACT_ROOT}"
+
 if ! docker image inspect "${PLAYWRIGHT_IMAGE}" >/dev/null 2>&1; then
   echo "Playwright image ${PLAYWRIGHT_IMAGE} is missing. Building a local self-contained runtime..." >&2
   "${SCRIPT_DIR}/playwright/build-playwright-image.sh" "${PLAYWRIGHT_IMAGE}"
@@ -140,7 +144,7 @@ if [[ -n "${ARTIFACT_DIR:-}" ]]; then
   DOCKER_ARGS+=(-e "ARTIFACT_DIR=${ARTIFACT_DIR}")
 elif [[ "${FULL_RUN}" -eq 1 ]]; then
   RUN_TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
-  HOST_ARTIFACT_DIR="${ROOT_DIR}/tests/ui-artifacts/${RUN_TIMESTAMP}"
+  HOST_ARTIFACT_DIR="${UI_ARTIFACT_ROOT}/${RUN_TIMESTAMP}"
   mkdir -p "${HOST_ARTIFACT_DIR}"
   DOCKER_ARGS+=(-e "ARTIFACT_DIR=/work/tests/ui-artifacts/${RUN_TIMESTAMP}")
 fi

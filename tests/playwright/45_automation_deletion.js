@@ -57,7 +57,7 @@ const dataloadName = 'Test Deletion';
 
     steps.push('execute deletion simulation');
     await clickFirst(page, ['#dataloadExecuteButton'], 'execute deletion');
-    await assertSimulationData(page, '{"count":2}');
+    await assertSimulationData(page, JSON.stringify({ count: 2 }, null, 2));
 
     await capture('automation_deletion');
 

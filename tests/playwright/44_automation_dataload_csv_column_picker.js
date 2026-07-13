@@ -133,7 +133,10 @@ const customColumnValues = ['Solar', 'Manual month'];
 
     steps.push('execute local csv dataload');
     await clickFirst(page, ['#dataloadExecuteButton'], 'execute dataload');
-    await assertSimulationData(page, '[["2022-09-06","Solar edited","Manual month"],["2022-09-07","Solar edited","Manual month"]]');
+    await assertSimulationData(page, JSON.stringify([
+      ['2022-09-06', 'Solar edited', 'Manual month'],
+      ['2022-09-07', 'Solar edited', 'Manual month'],
+    ], null, 2));
     await closeAnalyticsDialog(page);
 
     steps.push('persist schedule and reopen entry');

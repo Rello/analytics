@@ -71,6 +71,7 @@ Environment variables:
   - Override `REPORT_NAME` only when you intentionally want a different shared report.
 
 Artifacts:
+- Every wrapper invocation deletes artifacts left by previous Playwright runs.
 - Full run: `tests/ui-artifacts/<timestamp>/`
   - All screenshots for the chained run are written into that one folder.
   - Filenames are prefixed as `<number>_<current_title>_<capture>.png`.
