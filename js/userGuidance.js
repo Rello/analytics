@@ -315,7 +315,7 @@ OCA.Analytics.Notification = {
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
             + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<button type="button" class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</button>'
             + '</div></div>'
         );
         document.getElementById('analyticsDialogHeader').textContent = header;
@@ -323,6 +323,7 @@ OCA.Analytics.Notification = {
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
+        document.getElementById("analyticsDialogBtnGo").focus();
     },
 
     /**

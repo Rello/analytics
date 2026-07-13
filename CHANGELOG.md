@@ -1,12 +1,10 @@
 # Changelog
 
-##
+## 6.7.0 - 2026-07-13
 ### Added
 - Custom calculated-column formulas can round values with ROUND(value) or ROUND(value, decimals).
-- Nextcloud Dashboard API V2 clients can display favorite reports with PHP-rendered SVG value and trend previews.
 - Local datasource file paths can use date text variables and formatting through an opt-in filename editor.
 - Reusable script for generating the CycloneDX SBOM from the bundled dependencies.
-- GitHub Actions cross-check Analytics on multiple Nextcloud, PHP, and database combinations.
 
 ### Changed
 - Allow calculated columns to be positioned in the table layout dialog.
@@ -15,6 +13,8 @@
 - Only send scheduled data load error notifications when the complete load fails.
 
 ### Fixed
+- Make the OK action in delete confirmation dialogs the default keyboard action.
+- Reject oversized spreadsheet ranges before PhpSpreadsheet parses their coordinates.
 - Preserve custom chart-series colors when saving charts without legend items.
 - Return a readable simulation error when a dynamic local datasource file does not exist.
 - Preserve unsaved per-series chart options when changing the analytics model.

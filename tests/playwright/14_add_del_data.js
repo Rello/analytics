@@ -91,7 +91,11 @@ async function addRow(page, dimension1, dimension2, value) {
     if (dialogHeader !== 'Delete data') {
       throw new Error(`Unexpected delete dialog header: "${dialogHeader}"`);
     }
-    await clickFirst(page, ['#analyticsDialogBtnGo'], 'confirm delete data');
+    const focusedControl = await page.evaluate(() => document.activeElement?.id);
+    if (focusedControl !== 'analyticsDialogBtnGo') {
+      throw new Error(`Delete confirmation OK button is not focused: "${focusedControl}"`);
+    }
+    await page.keyboard.press('Enter');
     await waitForIdle(page, 15000);
     await page.locator('#reportSubHeader').waitFor({ state: 'visible', timeout: 15000 });
 
