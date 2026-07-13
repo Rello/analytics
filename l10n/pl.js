@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Wczytywanie",
     "Please select" : "Wybierz",
     "Data source not available anymore" : "Źródło danych jest już niedostępne",
+    "File name" : "Nazwa pliku",
     "Column Picker" : "Selektor kolumn",
     "Parameter missing" : "Brakujący parametr",
     "Add custom column" : "Dodaj kolumnę niestandardową",

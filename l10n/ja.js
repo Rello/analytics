@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "読み込み中",
     "Please select" : "選択してください",
     "Data source not available anymore" : "データソースが利用できなくなりました",
+    "File name" : "ファイル名",
     "Parameter missing" : "パラメーターがない",
     "Add custom column" : "カスタム列の追加",
     "Select file" : "ファイルを選択",

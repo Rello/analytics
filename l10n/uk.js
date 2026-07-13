@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Завантаження",
     "Please select" : "Виберіть будь ласка",
     "Data source not available anymore" : "Джерело даних більше недоступне",
+    "File name" : "Ім'я файлу",
     "Column Picker" : "Вибір стовпців",
     "Parameter missing" : "Відсутній параметр",
     "Add custom column" : "Додати власний стовпець",

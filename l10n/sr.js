@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Учитавам",
     "Please select" : "Молимо изаберите",
     "Data source not available anymore" : "Извор података више није доступан",
+    "File name" : "Име фајла",
     "Column Picker" : "Бирач колона",
     "Parameter missing" : "Недостаје параметар",
     "Add custom column" : "Додај произвољну колону",

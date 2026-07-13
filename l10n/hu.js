@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Betöltés",
     "Please select" : "Válasszon",
     "Data source not available anymore" : "Az adatforrás már nem érhető el",
+    "File name" : "Fájlnév",
     "Column Picker" : "Oszlopválasztó",
     "Parameter missing" : "Hiányzó paraméter",
     "Custom Column" : "Egyéni oszlop",

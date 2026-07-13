@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Loader",
     "Please select" : "Venligst vælg",
     "Data source not available anymore" : "Data kilde ikke tilgængelig",
+    "File name" : "Filnavn",
     "Column Picker" : "Kolonnevælger",
     "Parameter missing" : "Parameter mangler",
     "Add custom column" : "Tilføj brugerdefineret kolonne",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Läser in",
     "Please select" : "Vänligen välj",
     "Data source not available anymore" : "Datakälla inte längre tillgänglig",
+    "File name" : "Filnamn",
     "Column Picker" : "Kolumnväljare",
     "Parameter missing" : "Parameter saknas",
     "Add custom column" : "Lägg till anpassad kolumn",

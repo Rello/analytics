@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Poteka nalaganje ...",
     "Please select" : "Izbor",
     "Data source not available anymore" : "Podatkovni vir ni več na voljo",
+    "File name" : "Ime datoteke",
     "Column Picker" : "Izbirnik stolpcev",
     "Parameter missing" : "Manjka parameter",
     "Add custom column" : "Dodaj stolpec po meri",

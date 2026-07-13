@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "ვერსია",
     "Loading" : "ითვირთება",
+    "File name" : "File name",
     "Parameter missing" : "პარამეტრი არ არის",
     "Select file" : "აირჩიეთ ფაილი",
     "Share" : "გაზიარება",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "Inačica",
     "Loading" : "Učitavanje",
+    "File name" : "Naziv datoteke",
     "Select file" : "Odaberi datoteku",
     "Share" : "Dijeli",
     "Share link" : "Dijeli poveznicu",

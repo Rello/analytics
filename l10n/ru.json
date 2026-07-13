@@ -7,6 +7,7 @@
     "Loading more..." : "Загружается ещё...",
     "Datasources still loading. Retry" : "Источники данных всё ещё загружаются. Повторить попытку",
     "Data source not available anymore" : "Источник данных больше не доступен",
+    "File name" : "Имя файла",
     "Column Picker" : "Средство выбора столбцов",
     "Parameter missing" : "Параметр пропущен",
     "Custom Column" : "Пользовательский столбец",

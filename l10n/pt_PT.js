@@ -9,6 +9,7 @@ OC.L10N.register(
     "Loading more..." : "Carregando mais…",
     "Datasources still loading. Retry" : "Fontes de dados ainda estão sendo carregadas. Tentar novamente",
     "Data source not available anymore" : "A fonte de dados já não está disponível",
+    "File name" : "Nome do ficheiro",
     "Column Picker" : "Seleção de colunas",
     "Parameter missing" : "Parâmetro em falta",
     "Custom Column" : "Coluna personalizada",

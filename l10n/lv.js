@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Ielādē",
     "Please select" : "Lūgums atlasīt",
     "Data source not available anymore" : "Datu avots vairāk nav pieejams",
+    "File name" : "Datnes nosaukums",
     "Parameter missing" : "Iztrūkst parametrs",
     "Add custom column" : "Pievienot pielāgotu kolonnu",
     "Select file" : "Atlasīt datni",

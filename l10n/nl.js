@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Laden",
     "Please select" : "Selecteer alsjeblieft",
     "Data source not available anymore" : "Gegevensbron niet meer beschikbaar",
+    "File name" : "Bestandsnaam",
     "Column Picker" : "Kolomkiezer",
     "Parameter missing" : "Parameter ontbreekt",
     "Add custom column" : "Voeg aangepaste kolom toe",

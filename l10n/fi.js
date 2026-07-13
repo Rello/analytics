@@ -8,6 +8,7 @@ OC.L10N.register(
     "Please select" : "Valitse",
     "Loading more..." : "Ladataan lisää...",
     "Data source not available anymore" : "Tietolähdettä ei enää ole",
+    "File name" : "Tiedostonimi",
     "Column Picker" : "Sarakkeen valitsin",
     "Parameter missing" : "Parametri puuttuu",
     "Add custom column" : "Lisää mukautettu sarake",

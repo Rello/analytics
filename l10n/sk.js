@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Načítava sa",
     "Please select" : "Prosím vyberte",
     "Data source not available anymore" : "Zdroj údajov už nie je k dispozícii",
+    "File name" : "Názov súboru",
     "Column Picker" : "Výber stĺpcov",
     "Parameter missing" : "Chýba parameter",
     "Add custom column" : "Pridať vlastný stĺpec",

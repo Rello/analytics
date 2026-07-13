@@ -9,6 +9,7 @@ OC.L10N.register(
     "Loading more..." : "Diğerleri yükleniyor...",
     "Datasources still loading. Retry" : "Veri kaynaklarının yüklenmesi sürüyor. Yeniden dene",
     "Data source not available anymore" : "Veri kaynağı artık kullanılamıyor",
+    "File name" : "Dosya adı",
     "Column Picker" : "Sütun seçici",
     "Parameter missing" : "Parametre eksik",
     "Custom Column" : "Özel sütun",

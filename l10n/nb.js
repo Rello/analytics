@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Lasting",
     "Please select" : "Vennligst velg",
     "Data source not available anymore" : "Datakilde er ikke tilgjengelig lenger",
+    "File name" : "Filnavn",
     "Column Picker" : "Kolonnevelger",
     "Parameter missing" : "Parameter mangler",
     "Add custom column" : "Legg til egendefinert kolonne",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Inapakia",
     "Please select" : "Tafadhali chagua",
     "Data source not available anymore" : "Chanzo cha data hakipatikani tena",
+    "File name" : "Jina la faili",
     "Column Picker" : "Kichagua Safu",
     "Parameter missing" : "Kigezo kinakosekana",
     "Add custom column" : "Ongeza safu maalum",

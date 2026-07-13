@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Version" : "Version",
     "Loading" : "Cargament",
+    "File name" : "Nom de fichièr",
     "Select file" : "Seleccionar fichièr",
     "Share" : "Partejar",
     "Add share link" : "Apondre ligam de partatge",

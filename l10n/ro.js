@@ -2,6 +2,7 @@ OC.L10N.register(
     "analytics",
     {
     "Version" : "Versiune",
+    "File name" : "Nume fișier",
     "Share" : "Partajează",
     "Share link" : "Partajează link-ul",
     "Link copied" : "Link copiat",
