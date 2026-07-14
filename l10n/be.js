@@ -4,6 +4,7 @@ OC.L10N.register(
     "Version" : "Версія",
     "Choose language" : "Выберыце мову",
     "Loading" : "Загрузка",
+    "File name" : "Назва файла",
     "Share" : "Абагуліць",
     "Share link" : "Абагуліць спасылку",
     "Link copied" : "Спасылка скапіявана",
