@@ -9,6 +9,8 @@
     --color-analytics-primary: #12426E;
     --color-analytics-shadow: #12426E;
     --analytics-surface-radius: 5px;
+    --analytics-table-stripe: color-mix(in srgb, var(--color-main-text) 3%, transparent);
+    --analytics-table-hover: color-mix(in srgb, var(--color-main-text) 6%, transparent);
 }
 
 [hidden] {
@@ -387,18 +389,58 @@ button, .button {
     height: 40%;
     background-color: var(--color-main-background);
     border-radius: var(--analytics-surface-radius);
-}
-
-table.dataTable tbody tr {
-    /*background-color: var(--color-main-background) !important;*/
+    color: var(--color-main-text);
 }
 
 #tableContainer_wrapper {
     padding: 0 30px;
+    color: var(--color-main-text);
 }
 
-#tableContainer > thead {
+#tableContainer_wrapper .dt-input {
     background-color: var(--color-main-background);
+    color: var(--color-main-text);
+}
+
+#tableContainer > thead,
+#tableContainer > tbody > tr,
+#tableContainer > tfoot {
+    background-color: var(--color-main-background);
+    color: var(--color-main-text);
+}
+
+#tableContainer.dataTable > thead > tr > th,
+#tableContainer.dataTable > thead > tr > td,
+#tableContainer.dataTable > tbody > tr > th,
+#tableContainer.dataTable > tbody > tr > td,
+#tableContainer.dataTable > tfoot > tr > th,
+#tableContainer.dataTable > tfoot > tr > td {
+    border-color: var(--color-border);
+}
+
+#tableContainer.dataTable.stripe > tbody > tr:nth-child(odd) > *,
+#tableContainer.dataTable.display > tbody > tr:nth-child(odd) > * {
+    box-shadow: inset 0 0 0 9999px var(--analytics-table-stripe);
+}
+
+#tableContainer.dataTable.hover > tbody > tr:hover > *,
+#tableContainer.dataTable.display > tbody > tr:hover > * {
+    box-shadow: inset 0 0 0 9999px var(--analytics-table-hover);
+}
+
+#tableContainer.dataTable thead > tr > th .dt-column-order::before,
+#tableContainer.dataTable thead > tr > th .dt-column-order::after,
+#tableContainer.dataTable thead > tr > td .dt-column-order::before,
+#tableContainer.dataTable thead > tr > td .dt-column-order::after {
+    color: var(--color-main-text);
+    opacity: .35;
+}
+
+#tableContainer.dataTable thead > tr > th.dt-ordering-asc .dt-column-order::before,
+#tableContainer.dataTable thead > tr > th.dt-ordering-desc .dt-column-order::after,
+#tableContainer.dataTable thead > tr > td.dt-ordering-asc .dt-column-order::before,
+#tableContainer.dataTable thead > tr > td.dt-ordering-desc .dt-column-order::after {
+    opacity: .9;
 }
 
 #tableContainer .analytics-table-link {
