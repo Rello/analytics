@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "Cargando",
     "Please select" : "Seleiciona",
     "Data source not available anymore" : "La fonte de datos yá nun ta disponible",
+    "File name" : "Nome del ficheru",
     "Column Picker" : "Selector de columnes",
     "Parameter missing" : "Falta'l parámetru",
     "Share" : "Compartir",

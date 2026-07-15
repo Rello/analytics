@@ -7,6 +7,7 @@ OC.L10N.register(
     "Loading" : "التحميل جارٍ",
     "Please select" : "اختر من فضلك",
     "Data source not available anymore" : "مصدر البيانات لم يعد متاحاً ",
+    "File name" : "اسم الملف",
     "Column Picker" : "لاقط العمود Column Picker",
     "Parameter missing" : "المُعامِل operator ناقصٌ",
     "Add custom column" : "إضافة عمود مخصص",
