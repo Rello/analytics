@@ -31,6 +31,8 @@ OCA.Analytics.Filter = {
         editingIndex: null,
         parseError: false,
         draft: null,
+        context: 'table',
+        sourceHeaders: [],
     },
 
     /**
@@ -54,6 +56,7 @@ OCA.Analytics.Filter = {
                 active = !!(
                     (filterOptions.drilldown && Object.keys(filterOptions.drilldown).length)
                     || filterOptions.aggregate === false
+                    || (typeof filterOptions.calculatedColumns === 'string' && filterOptions.calculatedColumns.trim() !== '')
                 );
             } else {
                 active = filterOptions[key] !== undefined;
@@ -93,12 +96,21 @@ OCA.Analytics.Filter = {
     openColumnsSelectionDialog: function () {
         OCA.Analytics.Report.hideReportMenu();
 
+        const dialogOptions = {
+            variant: 'enhanced'
+        };
+
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Column selection'),
-            OCA.Analytics.Filter.processColumnsSelectionDialog
+            OCA.Analytics.Filter.processColumnsSelectionDialog,
+            dialogOptions
         );
 
         const container = document.importNode(document.getElementById('templateDrilldownOptions').content, true);
+        const calculatedColumnsSection = document.getElementById('templateTableOptions').content
+            .querySelector('[data-calculated-columns-section]')
+            .cloneNode(true);
+        container.getElementById('columnSelectionCalculatedColumnsSlot').replaceWith(calculatedColumnsSection);
         const table = container.getElementById('drilldownOptionsTable');
         const aggregateCheckbox = container.getElementById('drilldownAggregate');
 
@@ -145,9 +157,19 @@ OCA.Analytics.Filter = {
         });
         table.appendChild(fragment);
 
-        OCA.Analytics.Notification.htmlDialogUpdate(container,
-            t('analytics', 'Removing columns will aggregate the key figures.<br>This applies to the chart and table')
+        const calculatedColumnsInput = container.getElementById('tableOptionsCalculatedColumns');
+        if (calculatedColumnsInput && typeof filterOptions.calculatedColumns === 'string') {
+            calculatedColumnsInput.value = filterOptions.calculatedColumns;
+        }
+
+        OCA.Analytics.Notification.htmlDialogUpdate(
+            container,
+            t('analytics', 'Removing source columns aggregates the key figures. Calculated columns use the visible report columns and are available to the chart and table.'),
+            dialogOptions
         );
+
+        OCA.Analytics.Filter.initializeCalculatedColumnsDialog('report');
+        OCA.Analytics.Filter.renderColumnSelectionCalculatedColumns();
     },
 
     /**
@@ -160,20 +182,28 @@ OCA.Analytics.Filter = {
         }
         let drilldownColumns = document.getElementsByName('drilldownColumn');
         const aggregateCheckbox = document.getElementById('drilldownAggregate');
+        const visibleSourceHeaders = new Set(OCA.Analytics.currentReportData.header || []);
 
         for (let i = 0; i < drilldownColumns.length; i++) {
             let dimension = drilldownColumns[i].value;
+            const dimensionLabel = OCA.Analytics.currentReportData.dimensions?.[dimension];
             if (drilldownColumns[i].checked === false) {
                 if (filterOptions['drilldown'] === undefined) {
                     filterOptions['drilldown'] = {};
                 }
                 filterOptions['drilldown'][dimension] = false;
+                if (dimensionLabel) {
+                    visibleSourceHeaders.delete(dimensionLabel);
+                }
             } else {
                 if (filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined) {
                     delete filterOptions['drilldown'][dimension];
                 }
                 if (filterOptions['drilldown'] !== undefined && Object.keys(filterOptions['drilldown']).length === 0) {
                     delete filterOptions['drilldown'];
+                }
+                if (dimensionLabel) {
+                    visibleSourceHeaders.add(dimensionLabel);
                 }
             }
         }
@@ -183,6 +213,23 @@ OCA.Analytics.Filter = {
             filterOptions.aggregate = false;
         } else {
             delete filterOptions.aggregate;
+        }
+
+        const parsedCalculatedColumns = OCA.Analytics.Filter.parseCalculatedColumnsValue(
+            document.getElementById('tableOptionsCalculatedColumns')?.value || ''
+        );
+        parsedCalculatedColumns.items.forEach((item, index) => {
+            const visibilitySwitch = document.getElementById('drilldownCalculatedColumn' + index);
+            item.visible = visibilitySwitch ? visibilitySwitch.checked : item.visible !== false;
+            if (!OCA.Analytics.Filter.isReportCalculatedColumnAvailable(item, Array.from(visibleSourceHeaders))) {
+                item.visible = false;
+            }
+        });
+        const calculatedColumns = OCA.Analytics.Filter.serializeCalculatedColumnsValue(parsedCalculatedColumns.items);
+        if (calculatedColumns !== '') {
+            filterOptions.calculatedColumns = calculatedColumns;
+        } else {
+            delete filterOptions.calculatedColumns;
         }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedChanges = true;
@@ -718,12 +765,17 @@ OCA.Analytics.Filter = {
         buttonRow.insertBefore(resetButton, buttonRow.firstChild);
     },
 
-    initializeCalculatedColumnsDialog: function () {
+    initializeCalculatedColumnsDialog: function (context = 'table') {
         const editor = document.getElementById('tableOptionsCalculatedColumnsEditor');
         const operationSelect = document.getElementById('tableOptionsCalculatedColumnsOperation');
         if (!editor || !operationSelect) {
             return;
         }
+
+        OCA.Analytics.Filter.calculatedColumnsEditorState.context = context;
+        OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders = [
+            ...(OCA.Analytics.currentReportData.header || [])
+        ];
 
         operationSelect.innerHTML = '';
         OCA.Analytics.Filter.getCalculatedColumnOperations().forEach(operation => {
@@ -766,8 +818,87 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Filter.calculatedColumnsEditorState.draft = null;
 
         OCA.Analytics.Filter.renderCalculatedColumnsList();
-        OCA.Analytics.Filter.Drag.syncCalculatedColumns();
+        OCA.Analytics.Filter.syncCalculatedColumnsEditorContext();
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
+    },
+
+    syncCalculatedColumnsEditorContext: function (deletedIndex = null) {
+        if (OCA.Analytics.Filter.calculatedColumnsEditorState.context === 'report') {
+            OCA.Analytics.Filter.renderColumnSelectionCalculatedColumns();
+            return;
+        }
+        OCA.Analytics.Filter.Drag.syncCalculatedColumns(deletedIndex);
+    },
+
+    getCalculatedColumnReferencedIndexes: function (item) {
+        if (!item || typeof item !== 'object') {
+            return [];
+        }
+        if (item.operation === 'formula') {
+            try {
+                return OCA.Analytics.Visualization.getCalculatedColumnExpressionColumnIndexes(item.expression);
+            } catch (e) {
+                return [];
+            }
+        }
+        return Array.isArray(item.columns) ? item.columns : [];
+    },
+
+    isReportCalculatedColumnAvailable: function (item, visibleHeaders = OCA.Analytics.currentReportData.header || []) {
+        const sourceHeaders = Array.isArray(item?.sourceHeaders) ? item.sourceHeaders : [];
+        if (sourceHeaders.length === 0) {
+            return false;
+        }
+        const visibleHeaderSet = new Set(visibleHeaders);
+        return OCA.Analytics.Filter.getCalculatedColumnReferencedIndexes(item).every(index =>
+            sourceHeaders[index] !== undefined && visibleHeaderSet.has(sourceHeaders[index])
+        );
+    },
+
+    renderColumnSelectionCalculatedColumns: function () {
+        if (OCA.Analytics.Filter.calculatedColumnsEditorState.context !== 'report') {
+            return;
+        }
+        const table = document.getElementById('drilldownOptionsTable');
+        if (!table) {
+            return;
+        }
+        table.querySelectorAll('.drilldownCalculatedColumnRow').forEach(row => row.remove());
+
+        const visibleHeaders = OCA.Analytics.currentReportData.header || [];
+        OCA.Analytics.Filter.calculatedColumnsEditorState.items.forEach((item, index) => {
+            const available = OCA.Analytics.Filter.isReportCalculatedColumnAvailable(item, visibleHeaders);
+            const row = document.createElement('div');
+            row.className = 'drilldownCalculatedColumnRow';
+            row.style.display = 'table-row';
+
+            const cellLabel = document.createElement('div');
+            cellLabel.style.display = 'table-cell';
+            cellLabel.textContent = item.title || t('analytics', 'Untitled calculated column');
+            row.appendChild(cellLabel);
+
+            const cellCheckbox = document.createElement('div');
+            cellCheckbox.style.display = 'table-cell';
+            cellCheckbox.style.width = '50px';
+            const switchLabel = document.createElement('label');
+            switchLabel.classList.add('analyticsSwitch', 'analyticsSwitch--centered');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'drilldownCalculatedColumn' + index;
+            checkbox.name = 'drilldownCalculatedColumn';
+            checkbox.setAttribute('role', 'switch');
+            checkbox.setAttribute('aria-label', item.title || t('analytics', 'Calculated column'));
+            checkbox.checked = available && item.visible !== false;
+            checkbox.disabled = !available;
+            const switchSlider = document.createElement('span');
+            switchSlider.classList.add('analyticsSwitchSlider');
+            switchSlider.setAttribute('aria-hidden', 'true');
+            switchLabel.appendChild(checkbox);
+            switchLabel.appendChild(switchSlider);
+            cellCheckbox.appendChild(switchLabel);
+            row.appendChild(cellCheckbox);
+            table.appendChild(row);
+        });
     },
 
     getCalculatedColumnOperations: function () {
@@ -820,6 +951,10 @@ OCA.Analytics.Filter = {
                     columns: columns,
                     title: title,
                     expression: typeof item.expression === 'string' ? item.expression : '',
+                    sourceHeaders: Array.isArray(item.sourceHeaders)
+                        ? item.sourceHeaders.map(header => String(header))
+                        : undefined,
+                    visible: item.visible !== false,
                 };
             });
 
@@ -839,6 +974,12 @@ OCA.Analytics.Filter = {
             };
             if (item.operation === 'formula') {
                 serializedItem.expression = item.expression || '';
+            }
+            if (Array.isArray(item.sourceHeaders)) {
+                serializedItem.sourceHeaders = item.sourceHeaders.map(header => String(header));
+            }
+            if (item.visible === false) {
+                serializedItem.visible = false;
             }
             return JSON.stringify(serializedItem);
         }).join(',');
@@ -911,13 +1052,17 @@ OCA.Analytics.Filter = {
         return operationEntry ? operationEntry.label : operation;
     },
 
-    getCalculatedColumnHeaderLabel: function (index) {
-        const headers = OCA.Analytics.currentReportData.header || [];
+    getCalculatedColumnHeaderLabel: function (index, item = null) {
+        const headers = Array.isArray(item?.sourceHeaders)
+            ? item.sourceHeaders
+            : (OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders.length > 0
+                ? OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders
+                : OCA.Analytics.currentReportData.header || []);
         return headers[index] || t('analytics', 'Column {column}', {column: index});
     },
 
     getCalculatedColumnFormulaText: function (item) {
-        const labels = item.columns.map(index => OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(index));
+        const labels = item.columns.map(index => OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(index, item));
 
         if (item.operation === 'formula') {
             return item.expression || t('analytics', 'No formula entered');
@@ -961,6 +1106,13 @@ OCA.Analytics.Filter = {
             columns: Array.isArray(currentItem.columns) ? [...currentItem.columns] : [],
             title: currentItem.title || '',
             expression: currentItem.expression || '',
+            sourceHeaders: Array.isArray(currentItem.sourceHeaders)
+                ? [...currentItem.sourceHeaders]
+                : [...state.sourceHeaders],
+            visible: currentItem.visible !== false,
+            unavailable: state.context === 'report'
+                && index !== null
+                && !OCA.Analytics.Filter.isReportCalculatedColumnAvailable(currentItem, state.sourceHeaders),
         };
 
         document.getElementById('tableOptionsCalculatedColumnsEditorHeading').textContent = index === null
@@ -973,6 +1125,15 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
         OCA.Analytics.Filter.handleCalculatedColumnOperationChange();
+        if (state.draft.unavailable) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(
+                t('analytics', 'Make all source columns used by this calculation visible before editing it.')
+            );
+            document.getElementById('tableOptionsCalculatedColumnsSave').disabled = true;
+            document.getElementById('tableOptionsCalculatedColumnsSourceAdd').disabled = true;
+        } else {
+            document.getElementById('tableOptionsCalculatedColumnsSave').disabled = false;
+        }
         document.getElementById('tableOptionsCalculatedColumnsEditor').hidden = false;
         document.getElementById('tableOptionsCalculatedColumnsTitle').focus();
     },
@@ -990,6 +1151,12 @@ OCA.Analytics.Filter = {
     handleCalculatedColumnOperationChange: function () {
         const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
         if (!state.draft) {
+            return;
+        }
+        if (state.draft.unavailable) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(
+                t('analytics', 'Make all source columns used by this calculation visible before editing it.')
+            );
             return;
         }
 
@@ -1018,7 +1185,10 @@ OCA.Analytics.Filter = {
         select.innerHTML = '';
         select.options.add(new Option(t('analytics', 'Choose a column'), ''));
 
-        (OCA.Analytics.currentReportData.header || []).forEach((header, index) => {
+        const sourceHeaders = state.context === 'report'
+            ? state.sourceHeaders
+            : (OCA.Analytics.currentReportData.header || []);
+        sourceHeaders.forEach((header, index) => {
             const columnReference = 'column' + (index + 1);
             const option = new Option(header + ' (' + columnReference + ')', index);
             option.disabled = state.draft.operation !== 'formula' && state.draft.columns.includes(index);
@@ -1079,7 +1249,7 @@ OCA.Analytics.Filter = {
             labelWrap.className = 'tableOptionsCalculatedColumnsSelectedLabel';
 
             const label = document.createElement('strong');
-            label.textContent = OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(columnIndex);
+            label.textContent = OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(columnIndex, state.draft);
 
             const meta = document.createElement('span');
             meta.className = 'tableOptionsCalculatedColumnsSelectedMeta';
@@ -1266,6 +1436,12 @@ OCA.Analytics.Filter = {
         if (!state.draft) {
             return;
         }
+        if (state.draft.unavailable) {
+            OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(
+                t('analytics', 'Make all source columns used by this calculation visible before editing it.')
+            );
+            return;
+        }
 
         const title = document.getElementById('tableOptionsCalculatedColumnsTitle').value.trim();
         const operation = document.getElementById('tableOptionsCalculatedColumnsOperation').value;
@@ -1302,6 +1478,10 @@ OCA.Analytics.Filter = {
             columns: columns,
             title: title,
         };
+        if (state.context === 'report') {
+            calculatedColumn.sourceHeaders = [...state.sourceHeaders];
+            calculatedColumn.visible = state.draft.visible !== false;
+        }
         if (operation === 'formula') {
             calculatedColumn.expression = expression;
         }
@@ -1315,7 +1495,7 @@ OCA.Analytics.Filter = {
         state.parseError = false;
         document.getElementById('tableOptionsCalculatedColumns').value = OCA.Analytics.Filter.serializeCalculatedColumnsValue(state.items);
         OCA.Analytics.Filter.renderCalculatedColumnsList();
-        OCA.Analytics.Filter.Drag.syncCalculatedColumns();
+        OCA.Analytics.Filter.syncCalculatedColumnsEditorContext();
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
     },
 
@@ -1330,7 +1510,7 @@ OCA.Analytics.Filter = {
         state.parseError = false;
         document.getElementById('tableOptionsCalculatedColumns').value = OCA.Analytics.Filter.serializeCalculatedColumnsValue(state.items);
         OCA.Analytics.Filter.renderCalculatedColumnsList();
-        OCA.Analytics.Filter.Drag.syncCalculatedColumns(deletedIndex);
+        OCA.Analytics.Filter.syncCalculatedColumnsEditorContext(deletedIndex);
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
     },
 
@@ -1655,6 +1835,9 @@ OCA.Analytics.Filter = {
         if (!Array.isArray(dataOptions)) {
             dataOptions = [];
         }
+        const hiddenOptions = dataOptions.map(option =>
+            typeof option?.hidden === 'boolean' ? option.hidden : undefined
+        );
         const chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
         let userDatasetOptions = [];
         let optionObject;
@@ -1687,6 +1870,14 @@ OCA.Analytics.Filter = {
             }
             userDatasetOptions.push(optionObject);
         }
+
+        hiddenOptions.forEach((hidden, index) => {
+            if (typeof hidden !== 'boolean') {
+                return;
+            }
+            userDatasetOptions[index] ??= {};
+            userDatasetOptions[index].hidden = hidden;
+        });
 
         // keep one array entry per series and drop only when all values are defaults
         const hasAnyCustomSeriesOptions = userDatasetOptions.some(option => Object.keys(option).length !== 0);
@@ -1779,21 +1970,39 @@ OCA.Analytics.Filter = {
      * obsolete entries removed before persisting chart options.
      */
     processChartLegendSelections: function (dataOptions) {
-        if (OCA.Analytics.chartObject !== null) {
-            let legendItems = OCA.Analytics.chartObject.legend.legendItems;
-            for (let i = 0; i < legendItems.length; i++) {
-                if (!dataOptions.hasOwnProperty(i)) dataOptions[i] = {};    // create dummy for every index as a later index might get a setting
-                if (i < 4 && legendItems[i]['hidden'] === true) {           // per default, the first 4 are  visible
-                    dataOptions[i]['hidden'] = true;
-                } else if (i > 3 && legendItems[i]['hidden'] === false) {   // per default, all others are hidden
-                    dataOptions[i]['hidden'] = false;
-                } else if (i in dataOptions) {
-                    delete dataOptions[i]['hidden'];
-                }
-            }
+        if (!Array.isArray(dataOptions)) {
+            dataOptions = [];
         }
-        // Convert to array without index numbers
-        return Object.values(dataOptions).slice(0, dataOptions.length);
+
+        const chart = OCA.Analytics.chartObject;
+        if (chart === null) {
+            return dataOptions;
+        }
+
+        const isDoughnut = chart.config.type === 'doughnut';
+        const itemCount = isDoughnut ? chart.data.labels.length : chart.data.datasets.length;
+        for (let index = 0; index < itemCount; index++) {
+            if (dataOptions[index] === null || typeof dataOptions[index] !== 'object' || Array.isArray(dataOptions[index])) {
+                dataOptions[index] = {};
+            }
+
+            const hidden = isDoughnut
+                ? !chart.getDataVisibility(index)
+                : !chart.isDatasetVisible(index);
+            dataOptions[index].hidden = hidden;
+        }
+
+        return dataOptions;
+    },
+
+    /**
+     * Copy the current Chart.js visibility state into the pending report options.
+     */
+    syncChartLegendSelections: function (dataOptions = OCA.Analytics.currentReportData.options.dataoptions) {
+        dataOptions = OCA.Analytics.Filter.processChartLegendSelections(dataOptions);
+        dataOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(dataOptions);
+        OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
+        return dataOptions;
     },
 
     /**
@@ -1802,10 +2011,18 @@ OCA.Analytics.Filter = {
      */
     cleanupDataOptionsArray: function (dataOptions) {
         // Get the correct number of items from the report
-        const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
-        const itemCount = OCA.Analytics.Visualization?.getChartSeriesItems
-            ? OCA.Analytics.Visualization.getChartSeriesItems(OCA.Analytics.currentReportData, guiState.model).length
-            : OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
+        const chart = OCA.Analytics.chartObject;
+        let itemCount;
+        if (chart) {
+            itemCount = chart.config.type === 'doughnut'
+                ? chart.data.labels.length
+                : chart.data.datasets.length;
+        } else {
+            const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
+            itemCount = OCA.Analytics.Visualization?.getChartSeriesItems
+                ? OCA.Analytics.Visualization.getChartSeriesItems(OCA.Analytics.currentReportData, guiState.model).length
+                : OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0).length;
+        }
         // Remove all array values beyond itemCount
         if (Array.isArray(dataOptions)) {
             dataOptions.splice(itemCount);
@@ -2210,9 +2427,7 @@ OCA.Analytics.Filter.Backend = {
         dataOptions === '' || dataOptions === null ? dataOptions = [] : dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
 
         // function to check non standard legend selections during save
-        dataOptions = OCA.Analytics.Filter.processChartLegendSelections(dataOptions);
-        // cleanup the array to keep it as small as necessary
-        dataOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(dataOptions);
+        dataOptions = OCA.Analytics.Filter.syncChartLegendSelections(dataOptions);
 
         let requestUrl = OC.generateUrl('apps/analytics/report/') + reportId + '/options';
         let headers = new Headers();
