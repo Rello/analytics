@@ -55,7 +55,6 @@ OC.L10N.register(
     "contains" : "Ina",
     "list of values" : "Orodha ya maadili",
     "Column selection" : "Uchaguzi wa safu wima",
-    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Kuondoa safu kutaunganisha takwimu kuu. <br>Hii inatumika kwa chati na jedwali",
     "Filter" : "Chujio",
     "Top N" : "Juu N",
     "none" : "hakuna",
