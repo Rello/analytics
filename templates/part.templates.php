@@ -222,26 +222,29 @@
 </template>
 
 <template id="templateDrilldownOptions">
-    <div class="table" style="display: table;" id="drilldownOptionsTable">
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;"></div>
-            <div style="display: table-cell; width: 50px;">
-                <img src="<?php echo image_path('analytics', 'column.svg'); ?>"
-                     style="height: 20px;" alt="column">
-            </div>
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo image_path('analytics', 'column.svg'); ?>">
+        <h2><?php p($l->t('Column selection')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Select the source columns available to the chart and table.')); ?></span>
+        <div class="tableOptionsSettingsTable" id="drilldownOptionsTable">
         </div>
     </div>
-    <div class="table" style="display: table; margin-top: 14px;">
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
-                <label for="drilldownAggregate"><?php p($l->t('Aggregate values')); ?></label>
-            </div>
-            <div style="display: table-cell; width: 50px;">
-                <label class="analyticsSwitch analyticsSwitch--centered" for="drilldownAggregate">
-                    <input type="checkbox" id="drilldownAggregate" name="drilldownAggregate" role="switch" checked
-                           aria-label="<?php p($l->t('Aggregate values')); ?>">
-                    <span class="analyticsSwitchSlider" aria-hidden="true"></span>
-                </label>
+
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
+        <h2><?php p($l->t('Visualizations')); ?></h2>
+        <div class="tableOptionsSettingsTable">
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="drilldownAggregate"><?php p($l->t('Aggregate values')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="analyticsSwitch" for="drilldownAggregate">
+                        <input type="checkbox" id="drilldownAggregate" name="drilldownAggregate" role="switch" checked
+                               aria-label="<?php p($l->t('Aggregate values')); ?>">
+                        <span class="analyticsSwitchSlider" aria-hidden="true"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -915,9 +918,9 @@
                         </div>
                         <div class="tableOptionsCalculatedColumnsEditorFieldValue">
                             <textarea id="tableOptionsCalculatedColumnsFormula" class="optionsInput" rows="3"
-                                      placeholder="<?php p($l->t('Example: (30 * column1) + (column2 * -1)')); ?>"></textarea>
+                                      placeholder="<?php p($l->t('Example: (30 * [Quantity]) + ([Price] * -1)')); ?>"></textarea>
                             <p class="tableOptionsCalculatedColumnsFormulaHint userGuidance">
-                                <?php p($l->t('Use column1, column2, fixed numbers, +, -, *, /, parentheses, and ROUND(value, decimals).')); ?>
+                                <?php p($l->t('Use the displayed column names, fixed numbers, +, -, *, /, parentheses, and ROUND(value, decimals).')); ?>
                             </p>
                         </div>
                     </div>

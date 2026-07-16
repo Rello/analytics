@@ -255,8 +255,20 @@ Object.assign(OCA.Analytics.Report, {
      * Toggle visibility of the chart legend
      */
     toggleChartLegend: function () {
-        OCA.Analytics.chartObject.legend.options.display = !OCA.Analytics.chartObject.legend.options.display
+        const displayLegend = !OCA.Analytics.chartObject.legend.options.display;
+        OCA.Analytics.chartObject.legend.options.display = displayLegend;
         OCA.Analytics.chartObject.update();
+
+        const chartOptions = OCA.Analytics.ChartOptions.parseAndNormalize(
+            OCA.Analytics.currentReportData.options.chartoptions
+        );
+        chartOptions.plugins ??= {};
+        chartOptions.plugins.legend ??= {};
+        chartOptions.plugins.legend.display = displayLegend;
+        OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
+
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
     /**

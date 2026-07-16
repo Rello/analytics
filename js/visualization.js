@@ -244,11 +244,23 @@ OCA.Analytics.Visualization = {
             : [];
 
         return {
+            version: parseInt(calc.version, 10) === 2 ? 2 : 1,
             operation: operation,
             columns: columns,
+            references: Array.isArray(calc.references)
+                ? calc.references.filter(reference => typeof reference === 'string' && reference !== '')
+                : [],
             title: typeof calc.title === 'string' ? calc.title : '',
             expression: typeof calc.expression === 'string' ? calc.expression.trim() : '',
         };
+    },
+
+    getTableColumnReference: function (kind, sourceIndex, header, value = null) {
+        const parts = [kind, String(sourceIndex), encodeURIComponent(String(header ?? ''))];
+        if (value !== null) {
+            parts.push(encodeURIComponent(String(value)));
+        }
+        return parts.join(':');
     },
 
     parseCalculatedColumnNumber: function (value) {
@@ -315,6 +327,17 @@ OCA.Analytics.Visualization = {
                 }
                 tokens.push({type: 'column', index: columnNumber - 1});
                 position += columnMatch[0].length;
+                continue;
+            }
+
+            const referenceMatch = remaining.match(/^ref(\d+)\b/i);
+            if (referenceMatch) {
+                const referenceNumber = parseInt(referenceMatch[1], 10);
+                if (Number.isNaN(referenceNumber) || referenceNumber < 1) {
+                    throw new Error('Invalid column reference');
+                }
+                tokens.push({type: 'column', index: referenceNumber - 1});
+                position += referenceMatch[0].length;
                 continue;
             }
 
@@ -652,6 +675,8 @@ OCA.Analytics.Visualization = {
             title: _.escape(calc.title),
             className: 'dt-right',
             calculationId: calcIndex,
+            analyticsReference: 'calculation:' + calcIndex,
+            analyticsLabel: calc.title || t('analytics', 'Calculated column'),
             render: function (data, type, row, meta) {
                 if (data === null || data === undefined || data === '') {
                     return '';
@@ -770,29 +795,15 @@ OCA.Analytics.Visualization = {
             jsondata.options?.chartoptions
         );
 
-        const calculatedSource = this.dataTableCalculatedSourceColumns(
-            jsondata.data,
-            jsondata.header,
-            tableOptions
-        );
-        const calculatedTableOptions = this.getCalculatedColumnLayoutOptions(
-            tableOptions,
-            jsondata.header.length,
-            calculatedSource.calculations.length
-        );
-
         ({data, columns} = this.convertDataToDataTableFormat(
-            calculatedSource.data,
-            calculatedTableOptions,
-            calculatedSource.header,
+            jsondata.data,
+            tableOptions,
+            jsondata.header,
             timeAggregationDisplayConfig
         ));
-        this.applyCalculatedColumnTableDefinitions(
-            columns,
-            calculatedSource.calculations,
-            calculatedTableOptions,
-            jsondata.header.length
-        );
+        ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
+
+        const safeColReorder = this.getSafeColReorder(tableOptions, columns.length, defaultColReorder);
 
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
@@ -801,7 +812,8 @@ OCA.Analytics.Visualization = {
             isDataLengthGreaterThanDefault = false;
         }
 
-        domTarget.createTFoot().insertRow(0);
+        const footerRow = domTarget.createTFoot().insertRow(0);
+        columns.forEach(() => footerRow.appendChild(document.createElement('td')));
         OCA.Analytics.tableObject[uniqueId] = new DataTable(domTarget, {
             //dom: 'lrtip',
             ordering: ordering,
@@ -811,7 +823,7 @@ OCA.Analytics.Visualization = {
                 bottomStart: isDataLengthGreaterThanDefault ? 'info' : null,
                 bottomEnd: isDataLengthGreaterThanDefault ? 'paging' : null,
             },
-            colReorder: tableOptions.colReorder || defaultColReorder,
+            colReorder: safeColReorder,
             order: tableOptions.order || defaultOrder,
             pageLength: tableOptions.length || defaultLength,
             pagingType: 'simple_numbers',
@@ -873,11 +885,28 @@ OCA.Analytics.Visualization = {
         let columns = [];
         let data = '';
 
+        if (layoutConfig && Object.keys(layoutConfig).length > 0) {
+            const rows = Array.isArray(layoutConfig.rows) ? layoutConfig.rows : [];
+            const pivotColumns = Array.isArray(layoutConfig.columns) ? layoutConfig.columns : [];
+            const measures = Array.isArray(layoutConfig.measures) ? layoutConfig.measures : [];
+            const isNonPivoted = pivotColumns.length === 0 && measures.length === 0;
+            const isPivoted = rows.length > 0 && pivotColumns.length > 0 && measures.length > 0;
+            if (!isNonPivoted && !isPivoted) {
+                console.warn('Invalid table layout; falling back to the source column order.');
+                layoutConfig = false;
+            }
+        }
+
         if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
             // No special layout is defined: display all data in rows
 
             // create the columns. default alignment is left
-            columns = header.map((header, index) => ({title: _.escape(header), className: ''}));
+            columns = header.map((header, index) => ({
+                title: _.escape(header),
+                className: '',
+                analyticsReference: this.getTableColumnReference('source', index, header),
+                analyticsLabel: String(header),
+            }));
             if (timeAggregationDisplayConfig) {
                 this.applyTimeAggregationDisplayRenderer(columns, timeAggregationDisplayConfig.dimension, timeAggregationDisplayConfig);
             }
@@ -909,7 +938,9 @@ OCA.Analytics.Visualization = {
             // Use titles from the headers array based on the reordered sequence (indices)
             columns = layoutConfig.rows.map((index, i) => ({
                 title: _.escape(header[index]),
-                className: i > 0 && (!timeAggregationDisplayConfig || index !== timeAggregationDisplayConfig.dimension) ? 'dt-right' : ''
+                className: i > 0 && (!timeAggregationDisplayConfig || index !== timeAggregationDisplayConfig.dimension) ? 'dt-right' : '',
+                analyticsReference: this.getTableColumnReference('source', index, header[index]),
+                analyticsLabel: String(header[index]),
             }));
             if (timeAggregationDisplayConfig) {
                 const displayIndex = layoutConfig.rows.indexOf(timeAggregationDisplayConfig.dimension);
@@ -966,11 +997,25 @@ OCA.Analytics.Visualization = {
             });
 
             // 3. Generate the columns array which contains the column header and formatting (e.g. numbers)
-            columns = [{title: _.escape(header[layoutConfig.rows]), className: ''}];
-            uniqueHeaders.forEach(header => {
+            const rowSourceIndex = layoutConfig.rows[0];
+            const columnSourceIndex = layoutConfig.columns[0];
+            columns = [{
+                title: _.escape(header[rowSourceIndex]),
+                className: '',
+                analyticsReference: this.getTableColumnReference('source', rowSourceIndex, header[rowSourceIndex]),
+                analyticsLabel: String(header[rowSourceIndex]),
+            }];
+            uniqueHeaders.forEach(pivotHeader => {
                 columns.push({
-                    title: _.escape(header),
+                    title: _.escape(pivotHeader),
                     className: 'dt-right',
+                    analyticsReference: this.getTableColumnReference(
+                        'pivot',
+                        columnSourceIndex,
+                        header[columnSourceIndex],
+                        pivotHeader
+                    ),
+                    analyticsLabel: String(pivotHeader),
                     render: function (data, type, row, meta) {
                         if (data === null || isNaN(parseFloat(data))) {
                             return '';
@@ -990,85 +1035,105 @@ OCA.Analytics.Visualization = {
         return {data, columns};
     },
 
-    /**
-     * Calculate custom columns against the unmodified source rows.
-     *
-     * @param {Array} data - Raw source rows
-     * @param {Array} header - Raw source headers
-     * @param {Object} tableOptions - Options containing calculation definitions
-     * @returns {{data: Array, header: Array, calculations: Array}}
-     */
-    dataTableCalculatedSourceColumns: function (data, header, tableOptions) {
-        const calculations = this.getCalculatedColumns(tableOptions)
-            .filter(calc => this.isCalculatedColumnRenderable(calc));
+    resolveCalculatedColumn: function (calc, columns) {
+        const resolved = {...calc};
+        if (!Array.isArray(calc.references) || calc.references.length === 0) {
+            resolved._analyticsAvailable = true;
+            return resolved;
+        }
+
+        resolved.columns = calc.references.map(reference =>
+            columns.findIndex(column => column.analyticsReference === reference)
+        );
+        resolved._analyticsAvailable = resolved.columns.every(index => index >= 0);
+        if (calc.operation === 'formula') {
+            resolved.expression = String(calc.expression || '').replace(/\bref(\d+)\b/gi, function (match, number) {
+                const referenceIndex = parseInt(number, 10) - 1;
+                const columnIndex = resolved.columns[referenceIndex];
+                return columnIndex >= 0 ? 'column' + (columnIndex + 1) : 'column0';
+            });
+        }
+        return resolved;
+    },
+
+    dataTableCalculatedColumns: function (data, columns, tableOptions) {
         let calculatedData = Array.isArray(data) ? data.map(row => [...row]) : [];
-        const calculatedHeader = Array.isArray(header) ? [...header] : [];
+        const calculatedColumns = Array.isArray(columns) ? [...columns] : [];
+        let normalizedCalculations = this.getCalculatedColumns(tableOptions).map(calc => {
+            if (Array.isArray(calc.references) && calc.references.length > 0) {
+                return calc;
+            }
+
+            const referencedIndexes = calc.operation === 'formula'
+                ? this.getCalculatedColumnExpressionColumnIndexes(calc.expression)
+                : calc.columns;
+            const references = referencedIndexes.map(index => calculatedColumns[index]?.analyticsReference);
+            if (references.some(reference => reference === undefined)) {
+                return calc;
+            }
+
+            const upgraded = {...calc, version: 2, references};
+            if (calc.operation === 'formula') {
+                upgraded.expression = String(calc.expression || '').replace(/\b(?:column|col)(\d+)\b/gi, function (match, number) {
+                    const sourceIndex = parseInt(number, 10) - 1;
+                    const referenceIndex = referencedIndexes.indexOf(sourceIndex);
+                    return referenceIndex >= 0 ? 'ref' + (referenceIndex + 1) : match;
+                });
+            }
+            return upgraded;
+        });
+        if (normalizedCalculations.length > 0
+            && normalizedCalculations.every(calc => calc.version === 2 && calc.references.length > 0)
+        ) {
+            tableOptions.calculatedColumns = normalizedCalculations.map(calc => {
+                const serialized = {
+                    version: 2,
+                    operation: calc.operation,
+                    references: calc.references,
+                    title: calc.title,
+                };
+                if (calc.operation === 'formula') {
+                    serialized.expression = calc.expression;
+                }
+                return JSON.stringify(serialized);
+            }).join(',');
+            delete tableOptions._analyticsCalculatedColumnsRaw;
+            delete tableOptions._analyticsCalculatedColumnsParsed;
+        }
+
+        const calculations = normalizedCalculations.map((calc, calcIndex) => ({
+            ...this.resolveCalculatedColumn(calc, calculatedColumns),
+            _analyticsCalculationIndex: calcIndex,
+        }));
 
         calculations.forEach(calc => {
+            const available = calc._analyticsAvailable !== false && this.isCalculatedColumnRenderable(calc);
             calculatedData = calculatedData.map(row => [
                 ...row,
-                this.calculateCalculatedColumnValue(row, calc),
+                available ? this.calculateCalculatedColumnValue(row, calc) : '',
             ]);
-            calculatedHeader.push(calc.title || t('analytics', 'Calculated column'));
+            calculatedColumns.push(this.getCalculatedColumnTableDefinition(calc, calc._analyticsCalculationIndex));
         });
-
-        return {data: calculatedData, header: calculatedHeader, calculations};
+        tableOptions._analyticsRenderedCalculatedColumns = calculations;
+        return {data: calculatedData, columns: calculatedColumns};
     },
 
-    getCalculatedColumnLayoutOptions: function (tableOptions, sourceColumnCount, calculationCount) {
-        if (!tableOptions?.layout || calculationCount === 0) {
-            return tableOptions;
-        }
-
-        const layout = tableOptions.layout;
-        const isRowLayout = Array.isArray(layout.rows)
-            && (!Array.isArray(layout.columns) || layout.columns.length === 0)
-            && (!Array.isArray(layout.measures) || layout.measures.length === 0);
-        if (!isRowLayout) {
-            return tableOptions;
-        }
-
-        const calculatedIndexes = Array.from(
-            {length: calculationCount},
-            (unused, index) => sourceColumnCount + index
-        );
-        const explicitlyPlacedIndexes = new Set([
-            ...(Array.isArray(layout.rows) ? layout.rows : []),
-            ...(Array.isArray(layout.columns) ? layout.columns : []),
-            ...(Array.isArray(layout.measures) ? layout.measures : []),
-            ...(Array.isArray(layout.notRequired) ? layout.notRequired : []),
-        ]);
-        return {
-            ...tableOptions,
-            layout: {
-                ...layout,
-                rows: [
-                    ...layout.rows,
-                    ...calculatedIndexes.filter(index => !explicitlyPlacedIndexes.has(index)),
-                ],
-            },
-        };
+    getTableCalculatedColumnSources: function (data, header, tableOptions) {
+        const result = this.convertDataToDataTableFormat(data || [], tableOptions || {}, header || []);
+        return result.columns.map((column, index) => ({
+            reference: column.analyticsReference,
+            label: column.analyticsLabel || _.unescape(column.title || ''),
+            index: index,
+        }));
     },
 
-    applyCalculatedColumnTableDefinitions: function (columns, calculations, tableOptions, sourceColumnCount) {
-        if (!Array.isArray(columns) || !Array.isArray(calculations) || calculations.length === 0) {
-            return;
-        }
-
-        const layout = tableOptions?.layout;
-        const isDefaultLayout = !layout || Object.keys(layout).length === 0;
-        const isRowLayout = Array.isArray(layout?.rows)
-            && (!Array.isArray(layout.columns) || layout.columns.length === 0)
-            && (!Array.isArray(layout.measures) || layout.measures.length === 0);
-        calculations.forEach((calc, calcIndex) => {
-            const sourceIndex = sourceColumnCount + calcIndex;
-            const columnIndex = isDefaultLayout
-                ? sourceIndex
-                : (isRowLayout ? layout.rows.indexOf(sourceIndex) : -1);
-            if (columnIndex >= 0) {
-                columns[columnIndex] = this.getCalculatedColumnTableDefinition(calc, calcIndex);
-            }
-        });
+    getSafeColReorder: function (tableOptions, columnCount, fallback = true) {
+        const order = tableOptions?.colReorder?.order;
+        const valid = Array.isArray(order)
+            && order.length === columnCount
+            && new Set(order).size === columnCount
+            && order.every(index => Number.isInteger(index) && index >= 0 && index < columnCount);
+        return valid ? {order: [...order]} : fallback;
     },
 
     /**
@@ -1192,7 +1257,7 @@ OCA.Analytics.Visualization = {
      */
     dataTablefooterCallback: function (api, tableOptions) {
         const footerRow = api.table().footer().querySelector('tr');
-        const colReorder = tableOptions.colReorder ? tableOptions.colReorder.order : [...Array(api.columns().count()).keys()];
+        const columnCount = api.columns().count();
 
         if (tableOptions.footer !== true) {
             while (footerRow.firstChild) {
@@ -1201,18 +1266,24 @@ OCA.Analytics.Visualization = {
             return;
         }
 
-        colReorder.forEach((colIdx, displayIdx) => {
+        [...Array(columnCount).keys()].forEach(colIdx => {
+            const column = api.column(colIdx);
             const columnData = api.column(colIdx).data().toArray();
             let total;
 
             // Check if this column is a percentage calculation
-            const calcColumn = OCA.Analytics.Visualization.getCalculatedColumns(tableOptions)
-                .find(calc => calc.title === api.column(colIdx).header().textContent);
+            const renderedCalculations = tableOptions._analyticsRenderedCalculatedColumns || [];
+            const columnTitle = column.header()?.textContent || '';
+            const calcColumn = renderedCalculations.find(calc => calc.title === columnTitle) || null;
 
             if (calcColumn && calcColumn.operation === "percentage") {
                 // Access the data for the numerator and denominator columns
-                const numeratorData = api.column(calcColumn.columns[0]).data().toArray();
-                const denominatorData = api.column(calcColumn.columns[1]).data().toArray();
+                const numeratorData = calcColumn._analyticsAvailable === false
+                    ? []
+                    : api.column(calcColumn.columns[0]).data().toArray();
+                const denominatorData = calcColumn._analyticsAvailable === false
+                    ? []
+                    : api.column(calcColumn.columns[1]).data().toArray();
 
                 // Calculate the sums for numerator and denominator
                 const numeratorSum = numeratorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
@@ -1224,13 +1295,14 @@ OCA.Analytics.Visualization = {
                 total = columnData.reduce((sum, curValue) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(curValue), 0);
             }
 
-            let cell = footerRow.querySelector('td:nth-child(' + (displayIdx + 1) + ')');
+            let cell = column.footer();
             if (!cell) {
                 cell = footerRow.appendChild(document.createElement('td'));
             }
 
-            if (displayIdx === 0) {
+            if (column.index('visible') === 0) {
                 cell.textContent = 'Total';
+                cell.classList.remove('dt-right');
             } else {
                 cell.textContent = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
                 cell.classList.add('dt-right');
@@ -1324,6 +1396,47 @@ OCA.Analytics.Visualization = {
     // *************
 
     /**
+     * Apply Nextcloud theme colors to canvas-rendered Chart.js elements.
+     *
+     * CSS variables do not cascade into a canvas, so Chart.js otherwise keeps
+     * its light-theme label and grid defaults in dark mode.
+     *
+     * @param {Object} chartOptions - Chart.js options
+     * @param {HTMLCanvasElement} chartCanvas - Canvas inheriting the active theme
+     * @return {Object} themed Chart.js options
+     */
+    applyThemeToChartOptions: function (chartOptions, chartCanvas) {
+        const styles = window.getComputedStyle(chartCanvas || document.body);
+        const cssColor = function (name, fallback) {
+            return styles.getPropertyValue(name).trim() || fallback;
+        };
+        const textColor = styles.color || cssColor('--color-main-text', '#222222');
+        const textChannels = textColor.match(/[\d.]+/g);
+        const gridColor = textChannels && textChannels.length >= 3
+            ? `rgba(${textChannels[0]}, ${textChannels[1]}, ${textChannels[2]}, 0.14)`
+            : 'rgba(127, 127, 127, 0.22)';
+
+        chartOptions.color ??= textColor;
+        if (chartOptions.scales) {
+            Object.values(chartOptions.scales).forEach(function (scale) {
+                scale.ticks ??= {};
+                scale.ticks.color ??= textColor;
+                scale.grid ??= {};
+                scale.grid.color ??= gridColor;
+                scale.border ??= {};
+                scale.border.color ??= gridColor;
+            });
+        }
+
+        chartOptions.plugins ??= {};
+        chartOptions.plugins.legend ??= {};
+        chartOptions.plugins.legend.labels ??= {};
+        chartOptions.plugins.legend.labels.color ??= textColor;
+
+        return chartOptions;
+    },
+
+    /**
      * Create a Chart.js chart based on backend data and user options.
      *
      * @param {CanvasRenderingContext2D} ctx - Context of the canvas
@@ -1337,11 +1450,23 @@ OCA.Analytics.Visualization = {
             const index = legendItem.datasetIndex;
             const type = legend.chart.config.type;
 
+            OCA.Analytics.unsavedChanges = true;
+            OCA.Analytics.Filter.toggleSaveButtonDisplay();
+
             if (index === -1) {
-                legend.chart.data.datasets.forEach(ds => {
-                    ds.hidden = false;
-                });
+                if (type === 'doughnut') {
+                    for (let dataIndex = 0; dataIndex < legend.chart.data.labels.length; dataIndex++) {
+                        if (!legend.chart.getDataVisibility(dataIndex)) {
+                            legend.chart.toggleDataVisibility(dataIndex);
+                        }
+                    }
+                } else {
+                    for (let datasetIndex = 0; datasetIndex < legend.chart.data.datasets.length; datasetIndex++) {
+                        legend.chart.setDatasetVisibility(datasetIndex, true);
+                    }
+                }
                 legend.chart.update();
+                OCA.Analytics.Filter.syncChartLegendSelections();
                 return;
             }
 
@@ -1351,8 +1476,7 @@ OCA.Analytics.Visualization = {
             } else {
                 defaultLegendClickHandler(e, legendItem, legend);
             }
-            OCA.Analytics.unsavedChanges = true;
-            OCA.Analytics.Filter.toggleSaveButtonDisplay();
+            OCA.Analytics.Filter.syncChartLegendSelections();
         };
 
         const defaultGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
@@ -1369,7 +1493,7 @@ OCA.Analytics.Visualization = {
                     text: label,
                     fillStyle: colors[index],
                     strokeStyle: colors[index],
-                    hidden: false,
+                    hidden: !chart.getDataVisibility(index),
                     datasetIndex: 0,
                     index: index
                 }));
@@ -1377,7 +1501,7 @@ OCA.Analytics.Visualization = {
                 labels = defaultGenerateLabels(chart);
             }
 
-            const showAllNeeded = labels.length > 4 && chart.data.datasets.some(ds => ds.hidden);
+            const showAllNeeded = labels.length > 4 && labels.some(label => label.hidden);
             if (showAllNeeded) {
                 labels.push({
                     text: t('analytics', 'Show all'),
@@ -1504,7 +1628,7 @@ OCA.Analytics.Visualization = {
         // e.g. add a secondary y-axis '{"scales":{"secondary":{"display":true}}}'
 
         chartOptions = OCA.Analytics.ChartOptions.compose(
-            chartOptions,
+            this.applyThemeToChartOptions(chartOptions, ctx.canvas),
             jsondata.options.chartoptions,
             jsondata.options.dataoptions
         );
@@ -1569,6 +1693,15 @@ OCA.Analytics.Visualization = {
             },
             options: chartOptions,
         });
+
+        if (chartType === 'doughnut' && Array.isArray(userDatasetOptions)) {
+            userDatasetOptions.forEach((option, index) => {
+                if (option?.hidden === true && OCA.Analytics.chartObject.getDataVisibility(index)) {
+                    OCA.Analytics.chartObject.toggleDataVisibility(index);
+                }
+            });
+            OCA.Analytics.chartObject.update();
+        }
     },
 
     formatDoughnutDataLabel: function (value, context, labelStyle = 'percentage') {
@@ -1656,26 +1789,10 @@ OCA.Analytics.Visualization = {
     },
 
     getChartDataWithCalculatedColumns: function (reportData, dataModel) {
-        const chartData = {
+        return {
             header: Array.isArray(reportData.header) ? [...reportData.header] : [],
             data: Array.isArray(reportData.data) ? reportData.data.map(row => Array.isArray(row) ? [...row] : row) : [],
         };
-
-        if (dataModel !== 'timeSeriesModel') {
-            return chartData;
-        }
-
-        const calculatedColumns = this.getCalculatedColumns(reportData.options?.tableoptions)
-            .filter(calc => this.isCalculatedColumnRenderable(calc));
-        calculatedColumns.forEach((calc) => {
-            chartData.header.push(calc.title || t('analytics', 'Calculated column'));
-            chartData.data = chartData.data.map(row => Array.isArray(row)
-                ? [...row, this.calculateCalculatedColumnValue(row, calc)]
-                : row
-            );
-        });
-
-        return chartData;
     },
 
     getChartSeriesItems: function (reportData, dataModel) {

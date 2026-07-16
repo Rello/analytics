@@ -88,7 +88,10 @@ class OutputController extends Controller {
 		if (!empty($reportMetadata)) {
 			$reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
 			if ($filteroptions === null) {
-				$reportMetadata['cacheKey'] = $this->getRequestCacheKey();
+				$reportMetadata['cacheKey'] = $this->getDatasourceCacheKey(
+					$reportMetadata,
+					$this->getRequestCacheKey()
+				);
 			}
 
 			// internal storage reports are validated directly against version
@@ -121,7 +124,10 @@ class OutputController extends Controller {
 		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
 
 		if (!empty($reportMetadata)) {
-			$reportMetadata['cacheKey'] = $this->getRequestCacheKey();
+			$reportMetadata['cacheKey'] = $this->getDatasourceCacheKey(
+				$reportMetadata,
+				$this->getRequestCacheKey()
+			);
 
 			// internal storage reports are validated directly against version
 			if ((int)$reportMetadata['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
@@ -146,7 +152,7 @@ class OutputController extends Controller {
 		if ($filteroptions === null && $cache['notModified'] === true) {
 			$response = new DataResponse(null, HTTP::STATUS_NOT_MODIFIED);
 			if ($cache['key'] !== null) {
-				$response->addHeader('ETag', '"' . $cache['key'] . '"');
+				$response->addHeader('ETag', '"' . $this->buildExternalCacheKey($reportMetadata, $cache['key']) . '"');
 			}
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 			return $response;
@@ -160,7 +166,7 @@ class OutputController extends Controller {
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 		// external reports can provide datasource controlled cache validators
 		} else if ($filteroptions === null && $cache['cacheable'] === true && $cache['key'] !== null) {
-			$response->addHeader('ETag', '"' . $cache['key'] . '"');
+			$response->addHeader('ETag', '"' . $this->buildExternalCacheKey($reportMetadata, $cache['key']) . '"');
 			$response->addHeader('X-Analytics-Cacheable', 'true');
 		} else {
 			$response->addHeader('X-Analytics-Cacheable', 'false');
@@ -188,6 +194,24 @@ class OutputController extends Controller {
 			return null;
 		}
 		return trim($clientETag, '"');
+	}
+
+	private function getDatasourceCacheKey(array $reportMetadata, ?string $clientCacheKey): ?string {
+		if ($clientCacheKey === null || $clientCacheKey === '') {
+			return null;
+		}
+
+		$prefix = (string)((int)$reportMetadata['version']) . ':';
+		if (!str_starts_with($clientCacheKey, $prefix)) {
+			return null;
+		}
+
+		$datasourceCacheKey = substr($clientCacheKey, strlen($prefix));
+		return $datasourceCacheKey !== '' ? $datasourceCacheKey : null;
+	}
+
+	private function buildExternalCacheKey(array $reportMetadata, string $datasourceCacheKey): string {
+		return (string)((int)$reportMetadata['version']) . ':' . $datasourceCacheKey;
 	}
 
 	private function extractCacheMetadata(array $result): array {

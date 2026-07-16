@@ -172,6 +172,61 @@ class DataloadServiceTest extends TestCase {
 		$this->assertSame(0, $result['delete']);
 	}
 
+	public function testExecuteNormalizesTwoColumnRowsForStorage(): void {
+		$metadata = [
+			'id' => 42,
+			'datasource' => DatasourceController::DATASET_TYPE_LOCAL_CSV,
+			'dataset' => 11,
+			'user_id' => 'u1',
+			'option' => '{"link":"/EXPENDITURE.CATEGORIES.csv"}',
+		];
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->exactly(2))
+			->method('readOwnById')
+			->with(42)
+			->willReturn($metadata);
+
+		$datasourceController = $this->createMock(DatasourceController::class);
+		$datasourceController->expects($this->once())
+			->method('read')
+			->with(
+				DatasourceController::DATASET_TYPE_LOCAL_CSV,
+				$this->callback(function (array $dataloadMetadata): bool {
+					$this->assertSame('u1', $dataloadMetadata['user_id']);
+					return true;
+				}),
+				false
+			)
+			->willReturn([
+				'header' => ['CATEGORY', 'EURO'],
+				'dimensions' => ['CATEGORY'],
+				'data' => [['ENTERTAINMENT', '9798']],
+				'error' => 0,
+			]);
+
+		$storageService = $this->createMock(StorageService::class);
+		$storageService->expects($this->once())
+			->method('getRecordCount')
+			->with(11, 'u1')
+			->willReturn(['count' => 1]);
+		$storageService->expects($this->once())
+			->method('update')
+			->with(11, 'ENTERTAINMENT', null, '9798', 'u1', null, null, false)
+			->willReturn(['insert' => 0, 'update' => 0, 'error' => 0]);
+
+		$service = $this->createService(
+			$datasourceController,
+			$dataloadMapper,
+			null,
+			null,
+			$storageService
+		);
+
+		$result = $service->execute(42);
+
+		$this->assertSame(0, $result['error']);
+	}
+
 	public function testScheduledDataloadDoesNotNotifyForPartialSuccess(): void {
 		$dataloadMapper = $this->createMock(DataloadMapper::class);
 		$dataloadMapper->expects($this->once())

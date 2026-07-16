@@ -51,6 +51,136 @@ async function setSwitch(page, selector, checked) {
     const seedState = await ensureStoredReportWithDefaultData(page, reportName, 'Table options regression');
     steps.push(`report ${seedState}`);
 
+    steps.push('validate layout-aware calculated-column pipeline');
+    const pipelineResult = await page.evaluate(() => {
+      const visualization = OCA.Analytics.Visualization;
+      const encodeCalculations = (items) => items.map((item) => JSON.stringify(item)).join(',');
+
+      const nonPivotOptions = {
+        layout: { rows: [0, 1], columns: [], measures: [], notRequired: [2] },
+      };
+      const nonPivotData = [
+        ['2', '5', 'ignored'],
+        ['3', '7', 'ignored'],
+      ];
+      const nonPivotHeader = ['Quantity', 'Price', 'Hidden'];
+      const nonPivotSources = visualization.getTableCalculatedColumnSources(
+        nonPivotData,
+        nonPivotHeader,
+        nonPivotOptions
+      );
+      nonPivotOptions.calculatedColumns = encodeCalculations([{
+        version: 2,
+        operation: 'formula',
+        references: [nonPivotSources[0].reference, nonPivotSources[1].reference],
+        expression: 'ROUND(ref1 * ref2, 2)',
+        title: 'Revenue',
+      }]);
+      let nonPivot = visualization.convertDataToDataTableFormat(
+        nonPivotData,
+        nonPivotOptions,
+        nonPivotHeader
+      );
+      nonPivot = visualization.dataTableCalculatedColumns(
+        nonPivot.data,
+        nonPivot.columns,
+        nonPivotOptions
+      );
+      if (nonPivot.columns.map((column) => column.analyticsLabel).join('|') !== 'Quantity|Price|Revenue') {
+        throw new Error('Non-pivot calculated columns did not follow the displayed row layout');
+      }
+      if (nonPivot.data[0][2] !== 10 || nonPivot.data[1][2] !== 21) {
+        throw new Error(`Unexpected non-pivot calculation values: ${JSON.stringify(nonPivot.data)}`);
+      }
+
+      const pivotOptions = {
+        layout: { rows: [1], columns: [0], measures: [2], notRequired: [] },
+      };
+      const pivotHeader = ['Type', 'Week', '€'];
+      const pivotData = [
+        ['Achived', 'W1', '80'],
+        ['Goal', 'W1', '100'],
+        ['unweighted', 'W1', '60'],
+        ['weighted', 'W1', '70'],
+        ['Achived', 'W2', '100'],
+        ['Goal', 'W2', '200'],
+      ];
+      const pivotSources = visualization.getTableCalculatedColumnSources(pivotData, pivotHeader, pivotOptions);
+      const sourceByLabel = Object.fromEntries(pivotSources.map((source) => [source.label, source]));
+      pivotOptions.calculatedColumns = encodeCalculations([
+        {
+          version: 2,
+          operation: 'substract',
+          references: [sourceByLabel.Goal.reference, sourceByLabel.Achived.reference],
+          title: 'todo',
+        },
+        {
+          version: 2,
+          operation: 'percentage',
+          references: [sourceByLabel.Achived.reference, sourceByLabel.Goal.reference],
+          title: 'Achievement',
+        },
+      ]);
+      let pivot = visualization.convertDataToDataTableFormat(pivotData, pivotOptions, pivotHeader);
+      pivot = visualization.dataTableCalculatedColumns(pivot.data, pivot.columns, pivotOptions);
+      const pivotLabels = pivot.columns.map((column) => column.analyticsLabel);
+      const todoIndex = pivotLabels.indexOf('todo');
+      const achievementIndex = pivotLabels.indexOf('Achievement');
+      if (todoIndex === -1 || achievementIndex === -1) {
+        throw new Error(`Missing pivot calculations: ${JSON.stringify(pivotLabels)}`);
+      }
+      if (pivot.data[0][todoIndex] !== 20 || pivot.data[0][achievementIndex] !== 80) {
+        throw new Error(`Unexpected W1 pivot calculations: ${JSON.stringify(pivot.data[0])}`);
+      }
+      if (pivot.data[1][todoIndex] !== 100 || pivot.data[1][achievementIndex] !== 50) {
+        throw new Error(`Unexpected W2 pivot calculations: ${JSON.stringify(pivot.data[1])}`);
+      }
+
+      const legacyOptions = {
+        layout: pivotOptions.layout,
+        calculatedColumns: JSON.stringify({
+          operation: 'substract',
+          columns: [pivotSources.indexOf(sourceByLabel.Goal), pivotSources.indexOf(sourceByLabel.Achived)],
+          title: 'legacy todo',
+        }),
+      };
+      let legacy = visualization.convertDataToDataTableFormat(pivotData, legacyOptions, pivotHeader);
+      legacy = visualization.dataTableCalculatedColumns(legacy.data, legacy.columns, legacyOptions);
+      if (!legacyOptions.calculatedColumns.includes('"version":2') || legacy.data[0].at(-1) !== 20) {
+        throw new Error('Legacy post-pivot references were not upgraded correctly');
+      }
+
+      const missingOptions = {
+        layout: pivotOptions.layout,
+        calculatedColumns: encodeCalculations([{
+          version: 2,
+          operation: 'add',
+          references: ['pivot:0:Type:Missing'],
+          title: 'Unavailable',
+        }]),
+      };
+      let missing = visualization.convertDataToDataTableFormat(pivotData, missingOptions, pivotHeader);
+      missing = visualization.dataTableCalculatedColumns(missing.data, missing.columns, missingOptions);
+      if (missing.data.some((row) => row.at(-1) !== '')) {
+        throw new Error('A globally missing pivot reference should render blank values');
+      }
+
+      if (visualization.getSafeColReorder({ colReorder: { order: [0, 1] } }, 3, true) !== true) {
+        throw new Error('Invalid saved column order was not discarded');
+      }
+      const chartData = visualization.getChartDataWithCalculatedColumns({
+        header: nonPivotHeader,
+        data: nonPivotData,
+        options: { tableoptions: nonPivotOptions },
+      }, 'timeSeriesModel');
+      if (chartData.header.length !== nonPivotHeader.length || chartData.data[0].length !== nonPivotData[0].length) {
+        throw new Error('Table calculated columns leaked into chart data');
+      }
+
+      return { nonPivotRows: nonPivot.data.length, pivotRows: pivot.data.length };
+    });
+    steps.push(`calculated pipeline ${pipelineResult.nonPivotRows}/${pipelineResult.pivotRows}`);
+
     steps.push('configure table options');
     await openOptionsMenuItem(page, 'optionsMenuTableOptions', 'table options');
     await page.locator('#totalOption').waitFor({ state: 'visible', timeout: 15000 });
@@ -66,9 +196,51 @@ async function setSwitch(page, selector, checked) {
     await capture('show_totals');
 
     const footerValue = (await page.locator('#tableContainer tfoot td').last().innerText()).trim();
-    if (!footerValue.includes('10.1')) {
-      throw new Error(`Expected footer total to contain "10.1", got "${footerValue}"`);
+    if (!footerValue.includes('9.1')) {
+      throw new Error(`Expected footer total to contain "9.1", got "${footerValue}"`);
     }
+
+    const reorderedFooter = await page.evaluate(() => {
+      const key = Object.keys(OCA.Analytics.tableObject)[0];
+      const table = OCA.Analytics.tableObject[key];
+      const originalOrder = table.colReorder.order();
+      const reordered = [...originalOrder];
+      if (reordered.length >= 3) {
+        [reordered[1], reordered[2]] = [reordered[2], reordered[1]];
+        table.colReorder.order(reordered);
+        table.draw(false);
+      }
+
+      const headers = Array.from(document.querySelectorAll('#tableContainer thead th'))
+        .map((cell) => cell.textContent.trim());
+      const footers = Array.from(document.querySelectorAll('#tableContainer tfoot td'))
+        .map((cell) => cell.textContent.trim());
+      const actual = footers.map((value, displayIndex) => displayIndex === 0
+        ? value
+        : OCA.Analytics.Visualization.parseCalculatedColumnNumber(value));
+      const expected = headers.map((header, displayIndex) => {
+        if (displayIndex === 0) {
+          return 'Total';
+        }
+        return table.column(`${displayIndex}:visible`).data().toArray()
+          .reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
+      });
+
+      table.colReorder.order(originalOrder);
+      table.draw(false);
+      return { headers, footers, actual, expected };
+    });
+    reorderedFooter.expected.forEach((expected, index) => {
+      if (index === 0) {
+        if (reorderedFooter.footers[index] !== expected) {
+          throw new Error(`Expected Total in the first reordered footer cell, got ${JSON.stringify(reorderedFooter)}`);
+        }
+        return;
+      }
+      if (Math.abs(reorderedFooter.actual[index] - expected) > 0.001) {
+        throw new Error(`Footer moved away from its reordered column: ${JSON.stringify(reorderedFooter)}`);
+      }
+    });
 
     const rows = await collectTableRows(page);
     if (rows.length < 4) {

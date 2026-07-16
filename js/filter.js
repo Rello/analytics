@@ -33,6 +33,7 @@ OCA.Analytics.Filter = {
         draft: null,
         context: 'table',
         sourceHeaders: [],
+        sourceColumns: [],
     },
 
     /**
@@ -56,7 +57,6 @@ OCA.Analytics.Filter = {
                 active = !!(
                     (filterOptions.drilldown && Object.keys(filterOptions.drilldown).length)
                     || filterOptions.aggregate === false
-                    || (typeof filterOptions.calculatedColumns === 'string' && filterOptions.calculatedColumns.trim() !== '')
                 );
             } else {
                 active = filterOptions[key] !== undefined;
@@ -97,7 +97,8 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Report.hideReportMenu();
 
         const dialogOptions = {
-            variant: 'enhanced'
+            variant: 'enhanced',
+            compact: true,
         };
 
         OCA.Analytics.Notification.htmlDialogInitiate(
@@ -107,10 +108,6 @@ OCA.Analytics.Filter = {
         );
 
         const container = document.importNode(document.getElementById('templateDrilldownOptions').content, true);
-        const calculatedColumnsSection = document.getElementById('templateTableOptions').content
-            .querySelector('[data-calculated-columns-section]')
-            .cloneNode(true);
-        container.getElementById('columnSelectionCalculatedColumnsSlot').replaceWith(calculatedColumnsSection);
         const table = container.getElementById('drilldownOptionsTable');
         const aggregateCheckbox = container.getElementById('drilldownAggregate');
 
@@ -126,15 +123,14 @@ OCA.Analytics.Filter = {
             row.style.display = 'table-row';
 
             const cellLabel = document.createElement('div');
-            cellLabel.style.display = 'table-cell';
+            cellLabel.className = 'tableOptionsSettingsLabel';
             cellLabel.textContent = availableDimensions[dimension];
             row.appendChild(cellLabel);
 
             const cellCheckbox = document.createElement('div');
-            cellCheckbox.style.display = 'table-cell';
-            cellCheckbox.style.width = '50px';
+            cellCheckbox.className = 'tableOptionsSettingsValue';
             const switchLabel = document.createElement('label');
-            switchLabel.classList.add('analyticsSwitch', 'analyticsSwitch--centered');
+            switchLabel.classList.add('analyticsSwitch');
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = 'drilldownColumn' + index;
@@ -157,19 +153,11 @@ OCA.Analytics.Filter = {
         });
         table.appendChild(fragment);
 
-        const calculatedColumnsInput = container.getElementById('tableOptionsCalculatedColumns');
-        if (calculatedColumnsInput && typeof filterOptions.calculatedColumns === 'string') {
-            calculatedColumnsInput.value = filterOptions.calculatedColumns;
-        }
-
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Removing source columns aggregates the key figures. Calculated columns use the visible report columns and are available to the chart and table.'),
+            t('analytics', 'Removing columns will aggregate the key figures.<br>This applies to the chart and table'),
             dialogOptions
         );
-
-        OCA.Analytics.Filter.initializeCalculatedColumnsDialog('report');
-        OCA.Analytics.Filter.renderColumnSelectionCalculatedColumns();
     },
 
     /**
@@ -182,28 +170,20 @@ OCA.Analytics.Filter = {
         }
         let drilldownColumns = document.getElementsByName('drilldownColumn');
         const aggregateCheckbox = document.getElementById('drilldownAggregate');
-        const visibleSourceHeaders = new Set(OCA.Analytics.currentReportData.header || []);
 
         for (let i = 0; i < drilldownColumns.length; i++) {
             let dimension = drilldownColumns[i].value;
-            const dimensionLabel = OCA.Analytics.currentReportData.dimensions?.[dimension];
             if (drilldownColumns[i].checked === false) {
                 if (filterOptions['drilldown'] === undefined) {
                     filterOptions['drilldown'] = {};
                 }
                 filterOptions['drilldown'][dimension] = false;
-                if (dimensionLabel) {
-                    visibleSourceHeaders.delete(dimensionLabel);
-                }
             } else {
                 if (filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined) {
                     delete filterOptions['drilldown'][dimension];
                 }
                 if (filterOptions['drilldown'] !== undefined && Object.keys(filterOptions['drilldown']).length === 0) {
                     delete filterOptions['drilldown'];
-                }
-                if (dimensionLabel) {
-                    visibleSourceHeaders.add(dimensionLabel);
                 }
             }
         }
@@ -215,22 +195,6 @@ OCA.Analytics.Filter = {
             delete filterOptions.aggregate;
         }
 
-        const parsedCalculatedColumns = OCA.Analytics.Filter.parseCalculatedColumnsValue(
-            document.getElementById('tableOptionsCalculatedColumns')?.value || ''
-        );
-        parsedCalculatedColumns.items.forEach((item, index) => {
-            const visibilitySwitch = document.getElementById('drilldownCalculatedColumn' + index);
-            item.visible = visibilitySwitch ? visibilitySwitch.checked : item.visible !== false;
-            if (!OCA.Analytics.Filter.isReportCalculatedColumnAvailable(item, Array.from(visibleSourceHeaders))) {
-                item.visible = false;
-            }
-        });
-        const calculatedColumns = OCA.Analytics.Filter.serializeCalculatedColumnsValue(parsedCalculatedColumns.items);
-        if (calculatedColumns !== '') {
-            filterOptions.calculatedColumns = calculatedColumns;
-        } else {
-            delete filterOptions.calculatedColumns;
-        }
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();
@@ -709,6 +673,16 @@ OCA.Analytics.Filter = {
             }
         });
 
+        const isNonPivoted = layout.columns.length === 0 && layout.measures.length === 0;
+        const isPivoted = layout.rows.length > 0 && layout.columns.length > 0 && layout.measures.length > 0;
+        if (!isNonPivoted && !isPivoted) {
+            OCA.Analytics.Notification.notification(
+                'error',
+                t('analytics', 'A pivoted table needs fields in Rows, Columns, and Measures.')
+            );
+            return;
+        }
+
         const isSequential = (arr) => arr.every((val, i, array) => i === 0 || (val === array[i - 1] + 1));
         if (layout.columns.length === 0 && layout.measures.length === 0 && layout.notRequired.length === 0) {
             if (!isSequential(layout.rows)) {
@@ -773,9 +747,22 @@ OCA.Analytics.Filter = {
         }
 
         OCA.Analytics.Filter.calculatedColumnsEditorState.context = context;
-        OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders = [
-            ...(OCA.Analytics.currentReportData.header || [])
-        ];
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        state.sourceColumns = OCA.Analytics.Visualization.getTableCalculatedColumnSources(
+            OCA.Analytics.currentReportData.data,
+            OCA.Analytics.currentReportData.header,
+            OCA.Analytics.currentReportData.options.tableoptions || {}
+        );
+        const labelCounts = state.sourceColumns.reduce((counts, source) => {
+            counts[source.label] = (counts[source.label] || 0) + 1;
+            return counts;
+        }, {});
+        state.sourceColumns.forEach(source => {
+            source.displayLabel = labelCounts[source.label] > 1
+                ? source.label + ' (' + source.reference.split(':')[0] + ')'
+                : source.label;
+        });
+        state.sourceHeaders = state.sourceColumns.map(source => source.displayLabel);
 
         operationSelect.innerHTML = '';
         OCA.Analytics.Filter.getCalculatedColumnOperations().forEach(operation => {
@@ -812,7 +799,8 @@ OCA.Analytics.Filter = {
         const parsedCalculatedColumns = OCA.Analytics.Filter.parseCalculatedColumnsValue(
             document.getElementById('tableOptionsCalculatedColumns').value
         );
-        OCA.Analytics.Filter.calculatedColumnsEditorState.items = parsedCalculatedColumns.items;
+        OCA.Analytics.Filter.calculatedColumnsEditorState.items = parsedCalculatedColumns.items
+            .map(item => OCA.Analytics.Filter.hydrateCalculatedColumnReferences(item));
         OCA.Analytics.Filter.calculatedColumnsEditorState.parseError = parsedCalculatedColumns.parseError;
         OCA.Analytics.Filter.calculatedColumnsEditorState.editingIndex = null;
         OCA.Analytics.Filter.calculatedColumnsEditorState.draft = null;
@@ -820,6 +808,41 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Filter.renderCalculatedColumnsList();
         OCA.Analytics.Filter.syncCalculatedColumnsEditorContext();
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
+    },
+
+    refreshCalculatedColumnSourcesFromLayout: function () {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        const layout = {};
+        document.querySelectorAll('.columnSection').forEach(section => {
+            layout[section.id] = Array.from(section.getElementsByClassName('draggable'))
+                .map(item => parseInt(item.id.replace('column-', ''), 10))
+                .filter(index => !Number.isNaN(index));
+        });
+        if (!layout.rows) {
+            return;
+        }
+
+        const tableOptions = {
+            ...(OCA.Analytics.currentReportData.options.tableoptions || {}),
+            layout: layout,
+        };
+        state.sourceColumns = OCA.Analytics.Visualization.getTableCalculatedColumnSources(
+            OCA.Analytics.currentReportData.data,
+            OCA.Analytics.currentReportData.header,
+            tableOptions
+        );
+        const labelCounts = state.sourceColumns.reduce((counts, source) => {
+            counts[source.label] = (counts[source.label] || 0) + 1;
+            return counts;
+        }, {});
+        state.sourceColumns.forEach(source => {
+            source.displayLabel = labelCounts[source.label] > 1
+                ? source.label + ' (' + source.reference.split(':')[0] + ')'
+                : source.label;
+        });
+        state.sourceHeaders = state.sourceColumns.map(source => source.displayLabel);
+        state.items = state.items.map(item => OCA.Analytics.Filter.hydrateCalculatedColumnReferences(item));
+        OCA.Analytics.Filter.renderCalculatedColumnsList();
     },
 
     syncCalculatedColumnsEditorContext: function (deletedIndex = null) {
@@ -912,6 +935,50 @@ OCA.Analytics.Filter = {
         ];
     },
 
+    hydrateCalculatedColumnReferences: function (item) {
+        const sources = OCA.Analytics.Filter.calculatedColumnsEditorState.sourceColumns;
+        const hydrated = {...item};
+
+        if (Array.isArray(item.references) && item.references.length > 0) {
+            hydrated.columns = item.references.map(reference =>
+                sources.findIndex(source => source.reference === reference)
+            );
+            hydrated.unavailable = hydrated.columns.some(index => index < 0);
+            if (item.operation === 'formula') {
+                hydrated.editorExpression = String(item.expression || '').replace(/\bref(\d+)\b/gi, function (match, number) {
+                    const sourceIndex = hydrated.columns[parseInt(number, 10) - 1];
+                    return sourceIndex >= 0 ? '[' + sources[sourceIndex].displayLabel + ']' : '[' + t('analytics', 'Unavailable column') + ']';
+                });
+            }
+            return hydrated;
+        }
+
+        if (item.operation === 'formula') {
+            const referencedIndexes = OCA.Analytics.Filter.getFormulaColumnIndexes(item.expression);
+            hydrated.columns = referencedIndexes;
+            hydrated.references = referencedIndexes
+                .map(index => sources[index]?.reference)
+                .filter(reference => reference !== undefined);
+            hydrated.unavailable = hydrated.references.length !== referencedIndexes.length;
+            hydrated.expression = String(item.expression || '').replace(/\b(?:column|col)(\d+)\b/gi, function (match, number) {
+                const sourceIndex = parseInt(number, 10) - 1;
+                const referenceIndex = referencedIndexes.indexOf(sourceIndex);
+                return referenceIndex >= 0 ? 'ref' + (referenceIndex + 1) : match;
+            });
+            hydrated.editorExpression = String(item.expression || '').replace(/\b(?:column|col)(\d+)\b/gi, function (match, number) {
+                const source = sources[parseInt(number, 10) - 1];
+                return source ? '[' + source.displayLabel + ']' : '[' + t('analytics', 'Unavailable column') + ']';
+            });
+        } else {
+            hydrated.references = hydrated.columns
+                .map(index => sources[index]?.reference)
+                .filter(reference => reference !== undefined);
+            hydrated.unavailable = hydrated.references.length !== hydrated.columns.length;
+        }
+        hydrated.version = 2;
+        return hydrated;
+    },
+
     parseCalculatedColumnsValue: function (rawValue) {
         if (rawValue === '' || rawValue === null || rawValue === undefined) {
             return {items: [], parseError: false};
@@ -947,8 +1014,12 @@ OCA.Analytics.Filter = {
                     : [];
 
                 return {
+                    version: parseInt(item.version, 10) === 2 ? 2 : 1,
                     operation: operation,
                     columns: columns,
+                    references: Array.isArray(item.references)
+                        ? item.references.filter(reference => typeof reference === 'string' && reference !== '')
+                        : [],
                     title: title,
                     expression: typeof item.expression === 'string' ? item.expression : '',
                     sourceHeaders: Array.isArray(item.sourceHeaders)
@@ -968,8 +1039,9 @@ OCA.Analytics.Filter = {
 
         return items.map(item => {
             const serializedItem = {
+                version: 2,
                 operation: item.operation,
-                columns: Array.isArray(item.columns) ? item.columns.map(index => parseInt(index, 10)) : [],
+                references: Array.isArray(item.references) ? [...item.references] : [],
                 title: item.title,
             };
             if (item.operation === 'formula') {
@@ -1053,11 +1125,9 @@ OCA.Analytics.Filter = {
     },
 
     getCalculatedColumnHeaderLabel: function (index, item = null) {
-        const headers = Array.isArray(item?.sourceHeaders)
-            ? item.sourceHeaders
-            : (OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders.length > 0
-                ? OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders
-                : OCA.Analytics.currentReportData.header || []);
+        const headers = OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders.length > 0
+            ? OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders
+            : OCA.Analytics.currentReportData.header || [];
         return headers[index] || t('analytics', 'Column {column}', {column: index});
     },
 
@@ -1065,7 +1135,7 @@ OCA.Analytics.Filter = {
         const labels = item.columns.map(index => OCA.Analytics.Filter.getCalculatedColumnHeaderLabel(index, item));
 
         if (item.operation === 'formula') {
-            return item.expression || t('analytics', 'No formula entered');
+            return item.editorExpression || item.expression || t('analytics', 'No formula entered');
         }
 
         if (labels.length === 0) {
@@ -1106,13 +1176,13 @@ OCA.Analytics.Filter = {
             columns: Array.isArray(currentItem.columns) ? [...currentItem.columns] : [],
             title: currentItem.title || '',
             expression: currentItem.expression || '',
+            editorExpression: currentItem.editorExpression || currentItem.expression || '',
+            references: Array.isArray(currentItem.references) ? [...currentItem.references] : [],
             sourceHeaders: Array.isArray(currentItem.sourceHeaders)
                 ? [...currentItem.sourceHeaders]
                 : [...state.sourceHeaders],
             visible: currentItem.visible !== false,
-            unavailable: state.context === 'report'
-                && index !== null
-                && !OCA.Analytics.Filter.isReportCalculatedColumnAvailable(currentItem, state.sourceHeaders),
+            unavailable: currentItem.unavailable === true,
         };
 
         document.getElementById('tableOptionsCalculatedColumnsEditorHeading').textContent = index === null
@@ -1120,14 +1190,14 @@ OCA.Analytics.Filter = {
             : t('analytics', 'Edit calculated column');
         document.getElementById('tableOptionsCalculatedColumnsTitle').value = state.draft.title;
         document.getElementById('tableOptionsCalculatedColumnsOperation').value = state.draft.operation;
-        document.getElementById('tableOptionsCalculatedColumnsFormula').value = state.draft.expression;
+        document.getElementById('tableOptionsCalculatedColumnsFormula').value = state.draft.editorExpression;
         document.getElementById('tableOptionsCalculatedColumnsDelete').hidden = index === null;
 
         OCA.Analytics.Filter.updateCalculatedColumnEditorMessage('');
         OCA.Analytics.Filter.handleCalculatedColumnOperationChange();
         if (state.draft.unavailable) {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(
-                t('analytics', 'Make all source columns used by this calculation visible before editing it.')
+                t('analytics', 'A table column used by this calculation is not available in the selected layout.')
             );
             document.getElementById('tableOptionsCalculatedColumnsSave').disabled = true;
             document.getElementById('tableOptionsCalculatedColumnsSourceAdd').disabled = true;
@@ -1155,7 +1225,7 @@ OCA.Analytics.Filter = {
         }
         if (state.draft.unavailable) {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(
-                t('analytics', 'Make all source columns used by this calculation visible before editing it.')
+                t('analytics', 'A table column used by this calculation is not available in the selected layout.')
             );
             return;
         }
@@ -1185,12 +1255,9 @@ OCA.Analytics.Filter = {
         select.innerHTML = '';
         select.options.add(new Option(t('analytics', 'Choose a column'), ''));
 
-        const sourceHeaders = state.context === 'report'
-            ? state.sourceHeaders
-            : (OCA.Analytics.currentReportData.header || []);
+        const sourceHeaders = state.sourceHeaders;
         sourceHeaders.forEach((header, index) => {
-            const columnReference = 'column' + (index + 1);
-            const option = new Option(header + ' (' + columnReference + ')', index);
+            const option = new Option(header, index);
             option.disabled = state.draft.operation !== 'formula' && state.draft.columns.includes(index);
             select.options.add(option);
         });
@@ -1342,7 +1409,7 @@ OCA.Analytics.Filter = {
         if (state.draft.operation === 'formula') {
             const formulaInput = document.getElementById('tableOptionsCalculatedColumnsFormula');
             if (formulaInput) {
-                const reference = 'column' + (selectedValue + 1);
+                const reference = '[' + state.sourceHeaders[selectedValue] + ']';
                 const selectionStart = typeof formulaInput.selectionStart === 'number'
                     ? formulaInput.selectionStart
                     : formulaInput.value.length;
@@ -1431,6 +1498,31 @@ OCA.Analytics.Filter = {
         }
     },
 
+    parseCalculatedColumnEditorFormula: function (editorExpression) {
+        const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
+        const sources = state.sourceColumns;
+        let positionalExpression = String(editorExpression || '').replace(/\[([^\]]+)\]/g, function (match, label) {
+            const sourceIndex = sources.findIndex(source => source.displayLabel === label);
+            if (sourceIndex === -1) {
+                throw new Error('Unknown formula column');
+            }
+            return 'column' + (sourceIndex + 1);
+        });
+
+        OCA.Analytics.Filter.validateFormulaExpression(positionalExpression);
+        const columns = OCA.Analytics.Filter.getFormulaColumnIndexes(positionalExpression);
+        const references = columns.map(index => sources[index]?.reference);
+        if (references.some(reference => reference === undefined)) {
+            throw new Error('Unknown formula column');
+        }
+        const expression = positionalExpression.replace(/\b(?:column|col)(\d+)\b/gi, function (match, number) {
+            const sourceIndex = parseInt(number, 10) - 1;
+            const referenceIndex = columns.indexOf(sourceIndex);
+            return referenceIndex >= 0 ? 'ref' + (referenceIndex + 1) : match;
+        });
+        return {columns, references, expression};
+    },
+
     saveCalculatedColumnEditor: function () {
         const state = OCA.Analytics.Filter.calculatedColumnsEditorState;
         if (!state.draft) {
@@ -1438,15 +1530,17 @@ OCA.Analytics.Filter = {
         }
         if (state.draft.unavailable) {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(
-                t('analytics', 'Make all source columns used by this calculation visible before editing it.')
+                t('analytics', 'A table column used by this calculation is not available in the selected layout.')
             );
             return;
         }
 
         const title = document.getElementById('tableOptionsCalculatedColumnsTitle').value.trim();
         const operation = document.getElementById('tableOptionsCalculatedColumnsOperation').value;
-        const expression = document.getElementById('tableOptionsCalculatedColumnsFormula').value.trim();
+        const editorExpression = document.getElementById('tableOptionsCalculatedColumnsFormula').value.trim();
+        let expression = '';
         let columns = [...state.draft.columns];
+        let references = columns.map(index => state.sourceColumns[index]?.reference);
 
         if (title === '') {
             OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Enter a title for the calculated column.'));
@@ -1454,13 +1548,15 @@ OCA.Analytics.Filter = {
         }
 
         if (operation === 'formula') {
-            if (expression === '') {
+            if (editorExpression === '') {
                 OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'Enter a formula for the calculated column.'));
                 return;
             }
             try {
-                OCA.Analytics.Filter.validateFormulaExpression(expression);
-                columns = OCA.Analytics.Filter.getFormulaColumnIndexes(expression);
+                const parsedFormula = OCA.Analytics.Filter.parseCalculatedColumnEditorFormula(editorExpression);
+                columns = parsedFormula.columns;
+                references = parsedFormula.references;
+                expression = parsedFormula.expression;
             } catch (e) {
                 OCA.Analytics.Filter.updateCalculatedColumnEditorMessage(t('analytics', 'The formula could not be parsed.'));
                 return;
@@ -1474,9 +1570,12 @@ OCA.Analytics.Filter = {
         }
 
         const calculatedColumn = {
+            version: 2,
             operation: operation,
             columns: columns,
+            references: references,
             title: title,
+            unavailable: false,
         };
         if (state.context === 'report') {
             calculatedColumn.sourceHeaders = [...state.sourceHeaders];
@@ -1484,6 +1583,7 @@ OCA.Analytics.Filter = {
         }
         if (operation === 'formula') {
             calculatedColumn.expression = expression;
+            calculatedColumn.editorExpression = editorExpression;
         }
 
         if (state.editingIndex === null) {
@@ -2150,6 +2250,7 @@ OCA.Analytics.Filter.Drag = {
 
         // Update layout and manage placeholders
         OCA.Analytics.Filter.Drag.managePlaceholders();
+        OCA.Analytics.Filter.refreshCalculatedColumnSourcesFromLayout();
     },
 
     /**
@@ -2159,11 +2260,7 @@ OCA.Analytics.Filter.Drag = {
     initialize: function () {
         let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions.layout;
         const sourceHeaders = OCA.Analytics.currentReportData.header || [];
-        const calculations = OCA.Analytics.Filter.Drag.getCalculatedColumnItems();
-        const headerItems = [
-            ...sourceHeaders,
-            ...calculations.map(calc => calc.title || t('analytics', 'Calculated column')),
-        ];
+        const headerItems = [...sourceHeaders];
         let rowsSection = document.getElementById('rows');
 
         // Clear existing sections
@@ -2174,8 +2271,7 @@ OCA.Analytics.Filter.Drag = {
         if (!layoutConfig || Object.keys(layoutConfig).length === 0) {
             // Fallback: Add all header items to the "rows" section
             headerItems.forEach((text, index) => {
-                const calculationIndex = index >= sourceHeaders.length ? index - sourceHeaders.length : null;
-                let draggableItem = OCA.Analytics.Filter.Drag.createDraggableItem(text, index, calculationIndex);
+                let draggableItem = OCA.Analytics.Filter.Drag.createDraggableItem(text, index);
                 rowsSection.appendChild(draggableItem);
             });
         } else {
@@ -2187,8 +2283,7 @@ OCA.Analytics.Filter.Drag = {
                     if (!sectionElement || headerItems[index] === undefined || placedIndexes.has(index)) {
                         return;
                     }
-                    const calculationIndex = index >= sourceHeaders.length ? index - sourceHeaders.length : null;
-                    let draggableItem = OCA.Analytics.Filter.Drag.createDraggableItem(headerItems[index], index, calculationIndex);
+                    let draggableItem = OCA.Analytics.Filter.Drag.createDraggableItem(headerItems[index], index);
                     sectionElement.appendChild(draggableItem);
                     placedIndexes.add(index);
                 });
@@ -2198,8 +2293,7 @@ OCA.Analytics.Filter.Drag = {
                 if (placedIndexes.has(index)) {
                     return;
                 }
-                const calculationIndex = index >= sourceHeaders.length ? index - sourceHeaders.length : null;
-                rowsSection.appendChild(OCA.Analytics.Filter.Drag.createDraggableItem(text, index, calculationIndex));
+                rowsSection.appendChild(OCA.Analytics.Filter.Drag.createDraggableItem(text, index));
             });
         }
 
@@ -2208,49 +2302,6 @@ OCA.Analytics.Filter.Drag = {
     },
 
     syncCalculatedColumns: function (deletedIndex = null) {
-        const rowsSection = document.getElementById('rows');
-        if (!rowsSection) {
-            return;
-        }
-
-        const sourceColumnCount = (OCA.Analytics.currentReportData.header || []).length;
-        if (deletedIndex !== null) {
-            document.querySelectorAll('.draggable[data-calculation-index]').forEach(item => {
-                const calculationIndex = parseInt(item.dataset.calculationIndex, 10);
-                if (calculationIndex === deletedIndex) {
-                    item.remove();
-                } else if (calculationIndex > deletedIndex) {
-                    item.dataset.calculationIndex = calculationIndex - 1;
-                    item.id = 'column-' + (sourceColumnCount + calculationIndex - 1);
-                }
-            });
-        }
-
-        const calculations = OCA.Analytics.Filter.Drag.getCalculatedColumnItems();
-        calculations.forEach((calc, calculationIndex) => {
-            const columnIndex = sourceColumnCount + calculationIndex;
-            let item = document.querySelector('.draggable[data-calculation-index="' + calculationIndex + '"]');
-            if (!item) {
-                item = OCA.Analytics.Filter.Drag.createDraggableItem(
-                    calc.title || t('analytics', 'Calculated column'),
-                    columnIndex,
-                    calculationIndex
-                );
-                rowsSection.appendChild(item);
-            } else {
-                item.id = 'column-' + columnIndex;
-                const label = item.querySelector('span');
-                if (label) {
-                    label.textContent = calc.title || t('analytics', 'Calculated column');
-                }
-            }
-        });
-
-        document.querySelectorAll('.draggable[data-calculation-index]').forEach(item => {
-            if (parseInt(item.dataset.calculationIndex, 10) >= calculations.length) {
-                item.remove();
-            }
-        });
         OCA.Analytics.Filter.Drag.managePlaceholders();
     },
 

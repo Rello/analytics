@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.7.1 - 2026-07-xx
+### Fixed
+- Keep table footer totals aligned with their columns after column reordering.
+- Evaluate table calculated columns after the selected row or pivot layout without changing references during column reordering.
+- Improve chart and report table contrast when using dark mode.
+- Keep the report wizard navigation arrows visible with customized theme colors.
+- Preserve matching headers and rows when local CSV data sources contain only two columns.
+- Invalidate cached external report layouts when saved report options change.
+- Persist chart legend visibility and trigger report saving for all legend selections.
+
 ## 6.7.0 - 2026-07-13
 ### Added
 - Custom calculated-column formulas can round values with ROUND(value) or ROUND(value, decimals).
@@ -7,7 +17,7 @@
 - Reusable script for generating the CycloneDX SBOM from the bundled dependencies.
 
 ### Changed
-- Allow calculated columns to be positioned in the table layout dialog.
+- Compact the column-selection dialog and align its visibility switches with the other settings.
 - Update PhpSpreadsheet to the 5.x release line.
 - Update bundled jsPDF to v4.2.1.
 - Only send scheduled data load error notifications when the complete load fails.
