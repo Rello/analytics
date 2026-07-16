@@ -55,7 +55,6 @@ OC.L10N.register(
     "contains" : "contén",
     "list of values" : "lista de valores",
     "Column selection" : "Selección de columnas",
-    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Ao retirar columnas engadiranse os valores clave.<br>Isto aplícase ao gráfico e á táboa",
     "Filter" : "Filtro",
     "Top N" : "Os N mellores",
     "none" : "ningún",

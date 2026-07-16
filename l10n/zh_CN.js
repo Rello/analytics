@@ -58,7 +58,6 @@ OC.L10N.register(
     "not contains" : "不包含",
     "list of values" : "值列表",
     "Column selection" : "列选择",
-    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "移除列将触发关键指标汇总，该应用对图表与表格同时生效。​​",
     "Filter" : "过滤器",
     "Top N" : "前 N 项",
     "none" : "无",
