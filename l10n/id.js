@@ -56,6 +56,7 @@ OC.L10N.register(
     "contains" : "mengandung",
     "list of values" : "Daftar nilai",
     "Column selection" : "Seleksi kolom",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Menghapus kolom akan mengabungkan angka penting.<br>Ini berlaku ke bagan dan tabel",
     "Filter" : "Filter",
     "Top N" : "Top N",
     "none" : "tidak ada",

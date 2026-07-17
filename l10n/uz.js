@@ -64,6 +64,7 @@ OC.L10N.register(
     "not contains" : "o'z ichiga olmaydi",
     "list of values" : "qiymatlar ro'yxati",
     "Column selection" : "Ustunni tanlash",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Ustunlarni olib tashlash asosiy kalitlarni jamlaydi. Bu <br> diagramma va jadvalga tegishli",
     "Filter" : "Filtr",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dinamik matn o'zgaruvchilari sanalarni tanlash uchun ishlatilishi mumkin.<br>Tanlov ikki % (masalan, %oxirgi2 oy) orasida yoziladi.<br>Contains va not contains filtrlari uchun * va ? belgilaridan foydalaning.<br>Mavjud filtrlar va muqobil sana formatlari haqida ma'lumot {linkstart}Wiki{linkend} da mavjud.",
     "Top N" : "Ust N",

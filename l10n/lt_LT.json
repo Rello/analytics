@@ -65,6 +65,7 @@
     "not contains" : "neapima",
     "list of values" : "verčių sąrašas",
     "Column selection" : "Stulpelių pasirinkimas",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Pašalinus stulpelius, pagrindiniai rodikliai bus apibendrinti.<br>Tai taikoma diagramai ir lentelei.",
     "Filter" : "Filtras",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dinaminiai teksto kintamieji gali būti naudojami datoms pasirinkti.<br>Pasirinkimas rašomas tarp dviejų % (pvz., %paskutiniai2mėnesiai%).<br>Naudokite * ir ? kaip pakaitos simbolius filtrams „apima“ ir „neapima“.<br>Informacijos apie galimus filtrus ir alternatyvius datos formatus rasite {linkstart}Wiki {linkend}.",
     "Top N" : "N geriausių",

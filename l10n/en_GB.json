@@ -65,6 +65,7 @@
     "not contains" : "not contains",
     "list of values" : "list of values",
     "Column selection" : "Column selection",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Removing columns will aggregate the key figures.<br>This applies to the chart and table",
     "Filter" : "Filter",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.",
     "Top N" : "Top N",

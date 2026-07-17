@@ -67,6 +67,7 @@ OC.L10N.register(
     "not contains" : "não contém",
     "list of values" : "lista de valores",
     "Column selection" : "Seleção de coluna",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "A remoção de colunas agregará os números-chave.<br>Isso se aplica ao gráfico e à tabela.",
     "Filter" : "Filtro",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "É possível usar variáveis de texto dinâmicas para selecionar datas.<br>A seleção é escrita entre dois % (p. ex., %last2months%).<br>Use * e ? como caracteres curinga nos filtros \"contém\" e \"não contém\".<br>Informações sobre os filtros disponíveis e formatos alternativos de data podem ser encontradas na {linkstart}Wiki{linkend}.",
     "Top N" : "N Melhores",

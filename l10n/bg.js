@@ -55,6 +55,7 @@ OC.L10N.register(
     "contains" : "съдържа",
     "list of values" : "списък със стойности",
     "Column selection" : "Избор на колона",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Премахването на колони ще агрегира ключовите фигури. 1 Това важи за графиките и таблиците.",
     "Filter" : "Филтър",
     "Top N" : "Макс Н-на-брой",
     "none" : "няма",

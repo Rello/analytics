@@ -65,6 +65,7 @@ OC.L10N.register(
     "not contains" : "不包含",
     "list of values" : "值列表",
     "Column selection" : "列選擇",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "移除列將彙總關鍵數據。<br>這適用於圖表和數據庫表",
     "Filter" : "過濾",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "可使用動態文字變數來選擇日期。<br>選擇內容需以兩個 % 包圍（例如 %last2months%）。<br>在「包含」及「不包含」篩選中可使用 * 和 ? 作為萬用字元。<br>有關可用篩選器及其他日期格式的資訊，請參閱 {linkstart}Wiki{linkend}。",
     "Top N" : "前 N",

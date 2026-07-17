@@ -55,6 +55,7 @@ OC.L10N.register(
     "contains" : "ປະກອບມີ",
     "list of values" : "ລາຍການຂອງຄ່າ",
     "Column selection" : "ການເລືອກຖັນ",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "ການລຶບຖັນຈະລວມຕົວເລກສຳຄັນ.<br>ອັນນີ້ມີຜົນກັບກຣາຟ ແລະ ຕາຕະລາງ",
     "Filter" : "ໂຕກອງ",
     "Top N" : "ສູງສຸດ N",
     "none" : "ບໍ່ມີ",

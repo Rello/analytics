@@ -444,8 +444,6 @@ OC.L10N.register(
     "Available columns" : "Verfügbare Spalten",
     "Add source column" : "Quellspalte hinzufügen",
     "Formula" : "Formel",
-    "Example: (30 * column1) + (column2 * -1)" : "Beispiel: (30 * Spalte1) + (Spalte2 * -1)",
-    "Use column1, column2, fixed numbers, +, -, *, /, parentheses, and ROUND(value, decimals)." : "Spalte1, Spalte2, feste Zahlen, +, -, *, /, Klammern und ROUND(wert, dezimal) verwenden.",
     "Remove calculated column" : "Berechnete Spalte entfernen",
     "Show totals" : "Gesamtwerte anzeigen",
     "Format all numbers in local format" : "Alle Zahlen im lokalen Format formatieren",

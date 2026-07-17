@@ -65,6 +65,7 @@
     "not contains" : "شامل نمی‌شود",
     "list of values" : "لیست مقادیر",
     "Column selection" : "انتخاب ستون",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "حذف ستون‌ها باعث تجمیع اعداد کلیدی می‌شود.<br>این مورد برای نمودار و جدول اعمال می‌شود",
     "Filter" : "فیلتر",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "برای انتخاب تاریخ‌ها می‌توان از متغیرهای متنی پویا استفاده کرد.<br>انتخاب بین دو علامت % نوشته می‌شود (مثلاً %last2months%).<br>برای فیلترهای «شامل» و «شامل نمی‌شود» از * و ? به عنوان کاراکترهای عام استفاده کنید.<br>اطلاعات مربوط به فیلترهای موجود و فرمت‌های جایگزین تاریخ در {linkstart}ویکی{linkend} موجود است.",
     "Top N" : "N برتر",

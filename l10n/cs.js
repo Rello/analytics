@@ -57,6 +57,7 @@ OC.L10N.register(
     "not contains" : "neobsahuje",
     "list of values" : "seznam hodnot",
     "Column selection" : "Výběr sloupce",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Odstraněním sloupců dojde k agregaci klíčových údajů.<br>Toto bude uplatněno na graf a tabulku",
     "Filter" : "Filtr",
     "Top N" : "Nejlepších N",
     "none" : "žádné",
