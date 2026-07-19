@@ -55,6 +55,7 @@ OC.L10N.register(
     "contains" : "بار",
     "list of values" : "قىممەت تىزىملىكى",
     "Column selection" : "ستون تاللاش",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "ئىستونلارنى چىقىرىۋېتىش ئاچقۇچلۇق سانلارنى بىر يەرگە توپلايدۇ.1 بۇ دىئاگرامما ۋە جەدۋەلگە ماس كېلىدۇ.",
     "Filter" : "سۈزگۈچ",
     "Top N" : "ئالدىدىن N",
     "none" : "يوق",

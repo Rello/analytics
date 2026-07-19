@@ -55,6 +55,7 @@ OC.L10N.register(
     "contains" : "містить",
     "list of values" : "список значень",
     "Column selection" : "Вибір стовпця",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Видалення стовпців призведе до агрегації ключових показників. <br> Це стосується діаграми та таблиці.",
     "Filter" : "Фільтр",
     "Top N" : "Топ N",
     "none" : "немає",

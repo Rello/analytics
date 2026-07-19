@@ -50,6 +50,7 @@
     "contains" : "다음을 포함함",
     "list of values" : "값 목록",
     "Column selection" : "열 선택",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "열을 제거하면 키 수치가 집계됩니다. <br>이는 차트 및 표에 적용됩니다.",
     "Filter" : "필터",
     "Top N" : "상위 N",
     "none" : "없음",

@@ -67,6 +67,7 @@ OC.L10N.register(
     "not contains" : "şunu içermeyen",
     "list of values" : "değer listesi",
     "Column selection" : "Sütun seçimi",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Sütunların kaldırılması önemli rakamları birleştirir.<br>Bu, çizelge ve tablo için geçerlidir",
     "Filter" : "Süzgeç",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Tarihleri seçmek için dinamik yazı değişkenleri kullanılabilir.<br>Seçim, iki % karakteri arasına yazılır (%last2months% gibi).<br>şunu içeren ve şunu içermeyen süzgeçlerinde * ve ? genel arama karakterlerini kullanabilirsiniz.<br>Kullanılabilecek süzgeçler ve alternatif tarih biçimleri hakkında {linkstart}Wiki{linkend} üzerinden ayrıntılı bilgi alabilirsiniz.",
     "Top N" : "En yüksek N",

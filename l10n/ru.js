@@ -67,6 +67,7 @@ OC.L10N.register(
     "not contains" : "не содержит",
     "list of values" : "список проблем",
     "Column selection" : "Выбор столбца",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Удаление колонок объединит основные фигуры. <br>Это применяется к диаграммам и таблицам",
     "Filter" : "Фильтр",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Для выбора дат можно использовать динамические текстовые переменные. <br>Выбор записывается между двумя % (например, %last2months%). <br>Используйте * и ? в качестве подстановочных знаков для фильтров «содержит» и «не содержит». <br>Информацию о доступных фильтрах и альтернативных форматах дат можно найти в {linkstart}Wiki{linkend}.",
     "Top N" : "Верхние N",

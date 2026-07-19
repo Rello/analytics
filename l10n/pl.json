@@ -62,6 +62,7 @@
     "not contains" : "nie zawiera",
     "list of values" : "lista wartości",
     "Column selection" : "Wybór kolumny",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Usunięcie kolumn spowoduje agregację kluczowych danych. <br>Dotyczy to zarówno wykresu, jak i tabeli.",
     "Filter" : "Filtruj",
     "Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}." : "Dynamiczne zmienne tekstowe mogą być używane do wybierania dat. <br> Wybór jest zapisywany między dwoma % (np. %last2months%). <br> Użyj * i ? jako symboli wieloznacznych dla zawiera i nie zawiera filtrów. <br> Informacje o dostępnych zmiennych filtrów dat alternatywnych znajdują się w {linkstart}Wiki {linkend}",
     "Top N" : "Top N",

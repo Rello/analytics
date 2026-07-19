@@ -55,6 +55,7 @@ OC.L10N.register(
     "contains" : "indeholder",
     "list of values" : "liste over værdier",
     "Column selection" : "Kolonnevalg",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Hvis du fjerner kolonner, bliver nøgletallene aggregeret.<br>Dette gælder for diagram og tabell",
     "Filter" : "Filter",
     "Top N" : "Top N",
     "none" : "ingen",

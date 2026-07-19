@@ -55,6 +55,7 @@ OC.L10N.register(
     "contains" : "bevat",
     "list of values" : "lijst van waarden",
     "Column selection" : "Kolomselectie",
+    "Removing columns will aggregate the key figures.<br>This applies to the chart and table" : "Met de verwijdering van kolommen worden de resultaten opnieuw bepaald.<br>Dit geldt voor de grafiek en de tabel.",
     "Filter" : "Filter",
     "Top N" : "Top N",
     "none" : "geen",
