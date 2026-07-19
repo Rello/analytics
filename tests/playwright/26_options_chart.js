@@ -183,6 +183,8 @@ async function setAnalyticsModel(page, selector) {
     if ((await page.locator('#optionsYAxis0').inputValue()) !== 'secondary') {
       throw new Error('Expected unsaved Y axis selection to survive analytics model change');
     }
+    await capture('first_chart_options');
+
     await clickFirst(page, ['#analyticsDialogBtnGo'], 'apply chart options');
 
     steps.push('save reload and validate chart options');
@@ -190,8 +192,6 @@ async function setAnalyticsModel(page, selector) {
       OCA.Analytics.chartObject.legend.legendItems = [];
     });
     await saveAndReloadReport(page, reportName);
-
-    await capture('final_chart_options');
 
     if (!(await page.locator('#myChart').isVisible().catch(() => false))) {
       throw new Error('Expected chart to remain visible after saving chart options');
@@ -201,6 +201,8 @@ async function setAnalyticsModel(page, selector) {
       throw new Error('Expected saved chart legend visibility to survive reload');
     }
     await openChartOptions(page, 'chart options validation');
+    await capture('saved_chart_options');
+
     if ((await page.locator('#optionsYAxis0').inputValue()) !== 'secondary') {
       throw new Error('Expected saved Y axis selection to stay on secondary');
     }

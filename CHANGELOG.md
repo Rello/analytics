@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.7.1 - 2026-07-xx
+## 6.7.1 - 2026-07-19
 ### Fixed
 - Keep table footer totals aligned with their columns after column reordering.
 - Evaluate table calculated columns after the selected row or pivot layout without changing references during column reordering.

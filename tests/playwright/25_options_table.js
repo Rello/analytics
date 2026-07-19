@@ -195,9 +195,18 @@ async function setSwitch(page, selector, checked) {
 
     await capture('show_totals');
 
-    const footerValue = (await page.locator('#tableContainer tfoot td').last().innerText()).trim();
-    if (!footerValue.includes('9.1')) {
-      throw new Error(`Expected footer total to contain "9.1", got "${footerValue}"`);
+    const { footerValue, expectedFooterTotal } = await page.evaluate(() => {
+      const key = Object.keys(OCA.Analytics.tableObject)[0];
+      const table = OCA.Analytics.tableObject[key];
+      const lastVisibleColumn = table.columns(':visible').indexes().toArray().at(-1);
+      const expectedFooterTotal = table.column(lastVisibleColumn).data().toArray()
+        .reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
+      const footerValue = document.querySelector('#tableContainer tfoot td:last-child')?.textContent.trim() || '';
+      return { footerValue, expectedFooterTotal };
+    });
+    const actualFooterTotal = Number(footerValue.replace(/[^0-9.-]/g, ''));
+    if (Math.abs(actualFooterTotal - expectedFooterTotal) > 0.001) {
+      throw new Error(`Expected footer total ${expectedFooterTotal}, got "${footerValue}"`);
     }
 
     const reorderedFooter = await page.evaluate(() => {
@@ -263,8 +272,9 @@ async function setSwitch(page, selector, checked) {
 
     steps.push('save reload and validate original report');
     await saveAndReloadReport(page, reportName);
-    if (await page.locator('#tableContainer tfoot td').count()) {
-      throw new Error('Expected no footer totals after reverting table options');
+    const hasRevertedFooter = (await page.locator('#tableContainer tfoot td').count()) > 0;
+    if (hasRevertedFooter !== initialTotals) {
+      throw new Error(`Expected footer totals to restore to ${initialTotals}, got ${hasRevertedFooter}`);
     }
     await openOptionsMenuItem(page, 'optionsMenuTableOptions', 'table options reverted validation');
     if ((await page.locator('#totalOption').isChecked()) !== initialTotals) {

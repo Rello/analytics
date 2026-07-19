@@ -95,9 +95,23 @@ async function addRow(page, dimension1, dimension2, value) {
     if (focusedControl !== 'analyticsDialogBtnGo') {
       throw new Error(`Delete confirmation OK button is not focused: "${focusedControl}"`);
     }
+    const deletionResponsePromise = page.waitForResponse(
+      (response) => response.request().method() === 'DELETE'
+        && response.url().includes('/apps/analytics/data/'),
+      { timeout: 15000 }
+    );
     await page.keyboard.press('Enter');
+    const deletionResponse = await deletionResponsePromise;
+    if (!deletionResponse.ok()) {
+      throw new Error(`Delete data request failed with HTTP ${deletionResponse.status()}`);
+    }
     await waitForIdle(page, 15000);
     await page.locator('#reportSubHeader').waitFor({ state: 'visible', timeout: 15000 });
+    await page.waitForFunction(
+      () => Array.from(document.querySelectorAll('#tableContainer tbody tr'))
+        .every((row) => !row.innerText.includes('Year format check')),
+      { timeout: 15000 }
+    );
 
     const rowsAfterDelete = await page
       .locator('#tableContainer tbody tr')
