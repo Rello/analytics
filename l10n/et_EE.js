@@ -327,6 +327,7 @@ OC.L10N.register(
     "Change layout" : "Muuda küljendust",
     "Delete current page" : "Kustuta see leht",
     "Back" : "Tagasi",
+    "Aggregate values" : "Koondväärtused",
     "1 min" : "1 minut",
     "10 min" : "10 minutit",
     "30 min" : "30 minutit",
