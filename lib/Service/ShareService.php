@@ -242,6 +242,24 @@ class ShareService {
 	}
 
 	/**
+	 * get metadata of a panorama, shared with current user
+	 * used to check if user is allowed to access current panorama
+	 *
+	 * @param $panoramaId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSharedPanorama($panoramaId) {
+		$sharedPanoramas = $this->getSharedItems(self::SHARE_ITEM_TYPE_PANORAMA);
+		if (in_array($panoramaId, array_column($sharedPanoramas, "id"))) {
+			$key = array_search($panoramaId, array_column($sharedPanoramas, 'id'));
+			return $sharedPanoramas[$key];
+		} else {
+			return [];
+		}
+	}
+
+	/**
 	 * get metadata of a report, shared with current user as part of a panorama
 	 * used to check if user is allowed to execute current report
 	 *

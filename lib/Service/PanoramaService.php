@@ -98,6 +98,7 @@ class PanoramaService {
 
 	/**
 	 * get own report details
+	 * falls back to panoramas shared with the current user
 	 *
 	 * @param int $panoramaId
 	 * @return array
@@ -105,6 +106,15 @@ class PanoramaService {
 	 */
 	public function read(int $panoramaId) {
 		$ownReport = $this->PanoramaMapper->readOwn($panoramaId);
+		if (empty($ownReport)) {
+			$sharedPanorama = $this->ShareService->getSharedPanorama($panoramaId);
+			if (!empty($sharedPanorama)) {
+				// ToDo: panoramas do not have an edit logic. to be added later
+				$sharedPanorama['permissions'] = \OCP\Constants::PERMISSION_READ;
+				$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId', 'permissions');
+				$ownReport = array_intersect_key($sharedPanorama, array_flip($keysToKeep));
+			}
+		}
 		return $ownReport;
 	}
 
