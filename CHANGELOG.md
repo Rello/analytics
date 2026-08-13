@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.8.0
+
+### Added
+- Link previews (Smart Picker) render the full live report as chart, table or KPI instead of a static card.
+- Link previews render the first page of a panorama with all its report, text and picture widgets.
+
+### Fixed
+- Reports and panoramas shared with the current user resolve correctly in link previews instead of showing "Report not found".
+- The admin setting `link_preview_enabled` disables analytics link previews again.
+
 ## 6.7.1 - 2026-07-19
 ### Fixed
 - Keep table footer totals aligned with their columns after column reordering.

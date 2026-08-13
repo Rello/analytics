@@ -22,5 +22,6 @@ class ReferenceListener implements IEventListener
         }
 
         Util::addScript('analytics', 'reference');
+        Util::addStyle('analytics', 'reference');
     }
 }

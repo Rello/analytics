@@ -10,6 +10,7 @@ namespace OCA\Analytics\Reference;
 
 use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\PanoramaService;
+use OCA\Analytics\Service\ShareService;
 use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
@@ -32,6 +33,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
     private LoggerInterface $logger;
     private ReportService $ReportService;
     private PanoramaService $PanoramaService;
+    private ShareService $ShareService;
 
     public function __construct(IConfig          $config,
                                 LoggerInterface  $logger,
@@ -40,6 +42,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
                                 ReferenceManager $referenceManager,
                                 ReportService    $ReportService,
                                 PanoramaService  $PanoramaService,
+                                ShareService     $ShareService,
                                 ?string          $userId)
     {
         $this->userId = $userId;
@@ -50,6 +53,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
         $this->urlGenerator = $urlGenerator;
         $this->ReportService = $ReportService;
         $this->PanoramaService = $PanoramaService;
+        $this->ShareService = $ShareService;
     }
 
     public function getId(): string
@@ -83,7 +87,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
     {
         $adminLinkPreviewEnabled = $this->config->getAppValue('analytics', 'link_preview_enabled', '1') === '1';
         if (!$adminLinkPreviewEnabled) {
-            //return false;
+            return false;
         }
         return preg_match('~/apps/analytics/(?:r|pa)/~', $referenceText) === 1;
     }
@@ -92,13 +96,24 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
     {
         if ($this->matchReference($referenceText)) {
             preg_match("/\d+$/", $referenceText, $matches); // get the last integer
+            $itemId = isset($matches[0]) ? (int)$matches[0] : 0;
             $isPanorama = str_contains($referenceText, '/pa/');
+            $item = [];
             if ($isPanorama) {
-                $item = $this->PanoramaService->read((int)$matches[0]);
+                if ($itemId !== 0) {
+                    // PanoramaService->read() already falls back to shared panoramas
+                    $item = $this->PanoramaService->read($itemId);
+                }
                 $icon = 'panorama.svg';
 				$type = $this->l10n->t('Panorama');
             } else {
-                $item = $this->ReportService->read((int)$matches[0]);
+                if ($itemId !== 0) {
+                    $item = $this->ReportService->read($itemId);
+                    if (empty($item)) {
+                        // fall back to reports shared with the current user
+                        $item = $this->ShareService->getSharedReport($itemId);
+                    }
+                }
                 $icon = 'report.svg';
 				$type = $this->l10n->t('Report');
             }
@@ -121,7 +136,10 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
                     'name' => $name,
                     'subheader' => $subheader,
                     'url' => $referenceText,
-                    'image' => $imageUrl
+                    'image' => $imageUrl,
+                    'id' => $itemId,
+                    'item_type' => $isPanorama ? 'panorama' : 'report',
+                    'found' => !empty($item)
                 ]
             );
             return $reference;
