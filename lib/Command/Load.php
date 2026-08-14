@@ -27,7 +27,7 @@ class Load extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('analytics:load')
@@ -39,7 +39,7 @@ class Load extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $dataloadId = $input->getArgument('dataloadId');
         $this->DataloadService->execute((int)$dataloadId);
