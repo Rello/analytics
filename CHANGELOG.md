@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.7.2 - 2026-08-14
+### Fixed
+- NC35 command signature
+
 ## 6.7.1 - 2026-07-19
 ### Fixed
 - Keep table footer totals aligned with their columns after column reordering.
