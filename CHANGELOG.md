@@ -6,6 +6,9 @@
 - Persist aggregation and disaggregation chart functions and show their secondary axis automatically.
 - Mark the Analysis menu when aggregation or disaggregation functions are active.
 
+### Changed
+- Store report option data as longtext instead of varchar(1000).
+
 ### Fixed
 - Match navigation and navigation-menu icon colors to their labels in light and dark themes.
 - Export panoramas using a consistent light theme in PDFs.
