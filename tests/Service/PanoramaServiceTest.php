@@ -72,6 +72,37 @@ class PanoramaServiceTest extends TestCase {
 		$this->createService($rootFolder)->resolvePictureFile('/Documents/report.pdf');
 	}
 
+	public function testFilterDefinitionsAreSavedAndOmittedDefinitionsArePreserved(): void {
+        $mapper = $this->createMock(PanoramaMapper::class);
+        $mapper->method('readOwn')->willReturn(['id' => 1]);
+        $pages = [['layoutId' => 5, 'reports' => [['type' => 0, 'value' => 7]]]];
+        $filters = [['id' => 'date', 'label' => 'Date', 'enabled' => true, 'operator' => 'EQ', 'defaultValue' => null,
+            'mappings' => [['reportId' => 7, 'dimension' => 'dimension1', 'dimensionLabel' => 'Date']]]];
+        $mapper->expects($this->exactly(2))->method('update')->withConsecutive(
+            [1, 'Name', 1, 0, json_encode($pages), json_encode($filters)],
+            [1, 'Name', 1, 0, json_encode($pages), null]
+        )->willReturn(true);
+        $service = (new \ReflectionClass(PanoramaService::class))->newInstanceWithoutConstructor();
+        $property = new \ReflectionProperty(PanoramaService::class, 'PanoramaMapper');
+        $property->setAccessible(true);
+        $property->setValue($service, $mapper);
+        $this->assertTrue($service->update(1, 'Name', 1, 0, $pages, $filters));
+        $this->assertTrue($service->update(1, 'Name', 1, 0, $pages));
+        $filters[0]['mappings'][0]['reportId'] = 99;
+        $this->assertFalse($service->update(1, 'Name', 1, 0, $pages, $filters));
+    }
+
+    public function testReadIncludesOwnerPermissionsWithoutGrantingAccessToMissingPanorama(): void {
+        $mapper = $this->createMock(PanoramaMapper::class);
+        $mapper->method('readOwn')->willReturnMap([[1, ['id' => 1]], [2, false]]);
+        $service = (new \ReflectionClass(PanoramaService::class))->newInstanceWithoutConstructor();
+        $property = new \ReflectionProperty(PanoramaService::class, 'PanoramaMapper');
+        $property->setAccessible(true);
+        $property->setValue($service, $mapper);
+        $this->assertSame(['id' => 1, 'permissions' => 2], $service->read(1));
+        $this->assertFalse($service->read(2));
+    }
+
 	private function createService(IRootFolder $rootFolder): PanoramaService {
 		return new PanoramaService(
 			'u1',

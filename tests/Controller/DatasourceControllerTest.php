@@ -694,6 +694,27 @@ class DatasourceControllerTest extends TestCase {
         $this->assertSame(['France', 2], $result['data'][1]);
     }
 
+    public function testPanoramaFilterRunsBeforeExternalAggregation(): void {
+        $csv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $csv->method('readData')->willReturn([
+            'error' => 0, 'header' => ['Date', 'Country', 'Value'], 'dimensions' => ['Date', 'Country'],
+            'data' => [['2025', 'DE', 100], ['2026', 'DE', 3], ['2026', 'DE', 4]],
+        ]);
+        $metadata = ['id' => 7, 'user_id' => 'u1', 'link' => '{"link":"test.csv"}',
+            'filteroptions' => json_encode(['drilldown' => [0 => false]])];
+        $metadata = \OCA\Analytics\Service\PanoramaFilterService::apply($metadata, [
+            ['id' => 'date', 'enabled' => true, 'operator' => 'EQ',
+                'mappings' => [['reportId' => 7, 'dimension' => '0', 'dimensionLabel' => 'Date']]],
+        ], ['date' => '2026']);
+        $controller = $this->createController($csv);
+        $result = $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata);
+        $this->assertSame(['Country', 'Value'], $result['header']);
+        $this->assertEquals([['DE', 7]], array_values($result['data']));
+        $metadata['panoramaMappings'][0]['dimensionLabel'] = 'Renamed date';
+        $this->expectException(\InvalidArgumentException::class);
+        $controller->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $metadata);
+    }
+
     private function createController(
         ?\OCA\Analytics\Datasource\LocalCsv $localCsv = null,
         ?\OCA\Analytics\Datasource\Github $github = null,

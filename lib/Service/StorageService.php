@@ -60,6 +60,7 @@ class StorageService {
 			// this needs to map the technical name to its display name in the report
 			$dimensions['dimension1'] = $datasetMetadata['dimension1'];
 			$dimensions['dimension2'] = $datasetMetadata['dimension2'];
+			PanoramaFilterService::validateDimensions($reportMetadata['panoramaMappings'] ?? [], $dimensions);
 
 			// return the header texts of the data being transferred according to the current drill down state selected by user
 			// if the dimension is not part of the drill down filter, it is not hidden => to be displayed

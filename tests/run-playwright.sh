@@ -38,6 +38,9 @@ case "${SCENARIO}" in
   21|21-filter|filter)
     SCRIPT_PATH="tests/playwright/21_filter.js"
     ;;
+  32|panorama-filters)
+    SCRIPT_PATH="tests/playwright/32_panorama_filters.js"
+    ;;
   22|drilldown)
     SCRIPT_PATH="tests/playwright/22_drilldown.js"
     ;;

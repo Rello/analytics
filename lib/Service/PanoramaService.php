@@ -75,7 +75,7 @@ class PanoramaService {
 		unset($panorama);
 
 		$sharedPanoramas = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA);
-		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId', 'permissions');
+		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'filters', 'isShare', 'shareId', 'permissions');
 
 		// get shared reports and remove duplicates
 		foreach ($sharedPanoramas as $sharedPanorama) {
@@ -110,6 +110,9 @@ class PanoramaService {
 	 */
 	public function read(int $panoramaId) {
 		$ownReport = $this->PanoramaMapper->readOwn($panoramaId);
+		if ($ownReport) {
+			$ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+		}
 		return $ownReport;
 	}
 
@@ -181,7 +184,7 @@ class PanoramaService {
 	 * @return bool
 	 * @throws Exception
 	 */
-    public function update(int $id, $name, int $type, int $parent, $pages) {
+    public function update(int $id, $name, int $type, int $parent, $pages, $filters = null) {
 		if (!$this->isOwn($id) || !$this->isValidParent($parent, $id)) {
 			return false;
 		}
@@ -189,7 +192,14 @@ class PanoramaService {
 		if ($normalizedPages === null) {
 			return false;
 		}
-        return $this->PanoramaMapper->update($id, $name, $type, $parent, json_encode($normalizedPages));
+        if ($filters !== null) {
+            try {
+                $filters = json_encode(PanoramaFilterService::normalize($filters, $normalizedPages));
+            } catch (\InvalidArgumentException $e) {
+                return false;
+            }
+        }
+        return $this->PanoramaMapper->update($id, $name, $type, $parent, json_encode($normalizedPages), $filters);
     }
 
     public function createGroup(int $parent = 0): int {

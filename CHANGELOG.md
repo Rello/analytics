@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Configure shared panorama filters with editable report mappings and temporary viewer selections.
 - Allow thresholds to target calculated table columns.
 - Persist aggregation and disaggregation chart functions and show their secondary axis automatically.
 - Mark the Analysis menu when aggregation or disaggregation functions are active.

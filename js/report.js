@@ -392,7 +392,13 @@ Object.assign(OCA.Analytics.Report, {
      * Attach click handlers for report menu elements
      */
     reportOptionsEventlisteners: function () {
-        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+        document.getElementById('addFilterIcon').addEventListener('click', () => {
+            if (OCA.Analytics.currentContentType === 'panorama') {
+                OCA.Analytics.PanoramaFilters.openViewer();
+            } else {
+                OCA.Analytics.Filter.openFilterDialog();
+            }
+        });
         document.getElementById('optionsMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('optionsMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
         document.getElementById('optionsMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
@@ -555,7 +561,7 @@ Object.assign(OCA.Analytics.Report, {
     /**
      * Build and display a dropdown for filter values
      */
-    showDropDownList: function (evt) {
+    showDropDownList: function (evt, values = null) {
         if (document.getElementById('tmpList')) {
             return;
         }
@@ -568,7 +574,7 @@ Object.assign(OCA.Analytics.Report, {
         let dropDownListIndex = inputField.dataset.dropdownlistindex;
 
         // get the values for the list from the report data
-        let listValues = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, dropDownListIndex);
+        let listValues = values ?? OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, dropDownListIndex);
 
         let ul = document.createElement('ul');
         ul.id = 'tmpList';

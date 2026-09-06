@@ -27,6 +27,7 @@ Util::addScript('analytics', 'report');
 Util::addScript('analytics', '3rdParty/jspdf.umd.min');
 Util::addScript('analytics', '3rdParty/html2canvas.min');
 Util::addScript('analytics', 'panorama');
+Util::addScript('analytics', 'panoramaFilters');
 Util::addScript('analytics', 'dataset');
 Util::addScript('analytics', '3rdParty/jquery.min');
 Util::addScript('analytics', '3rdParty/datatables.min');

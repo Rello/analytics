@@ -15,6 +15,7 @@ use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Service\StorageService;
 use OCA\Analytics\Service\VariableService;
 use OCA\Analytics\Service\PanoramaService;
+use OCA\Analytics\Service\PanoramaFilterService;
 use OCA\Analytics\Security\DatasourceResultSanitizer;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -114,14 +115,49 @@ class OutputController extends Controller {
 	 * Special checks are performed to ensure, that the report is really part of the shared panorama
 	 * If-None-Match and eTags are being handled
 	 *
-	 * @param int $reportIds
+	 * @param int $reportId
+	 * @param int|null $panoramaId
+	 * @param array|string|null $variables
 	 * @return DataResponse|NotFoundResponse
 	 * @throws Exception
 	 */
 	#[NoAdminRequired]
-	public function readPanorama(int $reportId) {
-		$reportMetadata = $this->ReportService->read($reportId);
-		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
+	public function readPanorama(int $reportId, ?int $panoramaId = null, $variables = null) {
+		if ($panoramaId !== null) {
+			$panorama = $this->PanoramaService->read($panoramaId);
+			$metadata = [];
+			if ($panorama) {
+				$metadata = $this->ReportService->read($reportId);
+			} else {
+				foreach ($this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA) as $shared) {
+					if ((int)$shared['id'] === $panoramaId) { $panorama = $shared; break; }
+				}
+				if ($panorama) $metadata = $this->ShareService->getSharedPanoramaReport($reportId, $panoramaId);
+			}
+			$pages = json_decode($panorama['pages'] ?? '[]', true) ?: [];
+			$member = false;
+			foreach ($pages as $page) {
+				foreach ($page['reports'] ?? [] as $report) {
+					if ((int)($report['type'] ?? -1) === 0 && (int)$report['value'] === $reportId) $member = true;
+				}
+			}
+			if (!$panorama || !$metadata || !$member) return new NotFoundResponse();
+			try {
+				$filters = PanoramaFilterService::normalize($panorama['filters'] ?? [], $pages);
+				$metadata = PanoramaFilterService::apply($metadata, $filters, $variables ?? []);
+				if (!empty($metadata['panoramaMappings'])) {
+					// Temporary filters never reuse the unfiltered datasource validator or response cache.
+					unset($metadata['cacheKey']);
+					return $this->returnDataWithCacheableHeader($metadata, $metadata['filteroptions']);
+				}
+			} catch (\InvalidArgumentException $e) {
+				return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
+			}
+		} elseif ($variables !== null) {
+			return new DataResponse(['error' => 'Panorama context is required'], Http::STATUS_BAD_REQUEST);
+		}
+		$reportMetadata = $panoramaId !== null ? $metadata : $this->ReportService->read($reportId);
+		if ($panoramaId === null && empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedPanoramaReport($reportId);
 
 		if (!empty($reportMetadata)) {
 			$reportMetadata['cacheKey'] = $this->getDatasourceCacheKey(
@@ -307,7 +343,7 @@ class OutputController extends Controller {
 			$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
 		}
 
-		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset'], $reportMetadata['cacheKey']);
+		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset'], $reportMetadata['cacheKey'], $reportMetadata['panoramaMappings']);
 
 		$result['filterApplied'] = $reportMetadata['filteroptions'];
 		$reportMetadata['filteroptions'] = $filterOptions; // keep the original filters

@@ -205,6 +205,9 @@ class DatasourceController extends Controller {
 				}, $result['data']);
 			}
 
+			\OCA\Analytics\Service\PanoramaFilterService::validateDimensions(
+				$datasetMetadata['panoramaMappings'] ?? [], $result['dimensions'] ?? []
+			);
 			$originalFilterOptions = $datasetMetadata['filteroptions'] ?? null;
 			$datasetMetadata['filteroptions'] = $this->normalizeFilterOptionsForData(
 				$originalFilterOptions,

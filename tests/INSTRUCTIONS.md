@@ -46,6 +46,7 @@ Supported identifiers:
 - `29`, `top-n`, `group-top-n`
 - `30`, `chart`, `modal`
 - `31`, `thresholds`, `options-thresholds`
+- `32`, `panorama-filters` (requires the panorama filters migration)
 - `41`, `git`, `datasource-git`
 - `42`, `json`, `datasource-json`
 - `43`, `csv`, `datasource-csv`

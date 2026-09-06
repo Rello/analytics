@@ -213,18 +213,23 @@ OCA.Analytics.Filter = {
      * Show the filter dialog where a dimension, comparison operator
      * and value can be selected for report filtering.
      */
-    openFilterDialog: function () {
+    openFilterDialog: function (context = null) {
+        // DOM click events still open the report dialog without a custom context.
+        context = typeof context?.onApply === 'function' ? context : null;
+        const apply = context ? () => context.onApply(OCA.Analytics.Filter.readFilterDialogRows())
+            : OCA.Analytics.Filter.processFilterDialog;
         OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
             t('analytics', 'Filter'),
-            OCA.Analytics.Filter.processFilterDialog
+            apply,
+            context?.dialogOptions || {}
         );
 
         let container = document.getElementById('templateFilterDialog').content;
         container = document.importNode(container, true);
 
-        const availableDimensions = OCA.Analytics.currentReportData.dimensions;
+        const availableDimensions = context?.dimensions || OCA.Analytics.currentReportData.dimensions;
         const optionTexts = OCA.Analytics.Filter.optionTextsArray;
         const table = container.getElementById('filterDialogTable');
         const addButton = container.getElementById('addFilterRowButton');
@@ -242,6 +247,10 @@ OCA.Analytics.Filter = {
             }
             dimSelect.addEventListener('change', function (evt) {
                 row.querySelector('.filterDialogValue').dataset.dropdownlistindex = evt.target.selectedIndex;
+                if (context) {
+                    optSelect.value = context.defaultOperators[dimSelect.value] || 'EQ';
+                    updateDescription();
+                }
             });
 
             const optSelect = row.querySelector('.filterDialogOption');
@@ -250,17 +259,34 @@ OCA.Analytics.Filter = {
             Object.keys(optionTexts).forEach(key => {
                 optSelect.options.add(new Option(optionTexts[key], key));
             });
-            if (option) {
-                optSelect.value = option;
-            }
+            optSelect.value = option || context?.defaultOperators[dimSelect.value] || 'EQ';
+            const updateDescription = () => {
+                if (!context) return;
+                let description = row.querySelector('.filterReportNames');
+                if (!description) {
+                    description = document.createElement('div');
+                    description.className = 'filterReportNames';
+                    dimSelect.parentElement.append(description);
+                }
+                const reportNames = context.descriptions[dimSelect.value] || [];
+                const names = Array.isArray(reportNames) ? reportNames : [reportNames];
+                description.replaceChildren(...names.map(name => {
+                    const report = document.createElement('div');
+                    report.textContent = name;
+                    return report;
+                }));
+            };
+            updateDescription();
 
             const valueInput = row.querySelector('.filterDialogValue');
             valueInput.id = rowIndex === 0 ? 'filterDialogValue' : `filterDialogValue${rowIndex}`;
             valueInput.value = value;
-            valueInput.addEventListener('click', OCA.Analytics.Report.showDropDownList);
+            valueInput.addEventListener('click', context
+                ? event => OCA.Analytics.Report.showDropDownList(event, context.valuesFor(dimSelect.value))
+                : OCA.Analytics.Report.showDropDownList);
             valueInput.addEventListener('keydown', function (event) {
                 if (event.key === 'Enter') {
-                    OCA.Analytics.Filter.processFilterDialog();
+                    apply();
                 }
             });
             valueInput.dataset.dropdownlistindex = dimSelect.selectedIndex;
@@ -283,7 +309,7 @@ OCA.Analytics.Filter = {
         // initialize first row
         const firstRow = table.querySelector('.filterRow');
 
-        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+        const filterOptions = context ? {filter: context.filters} : OCA.Analytics.currentReportData.options.filteroptions;
         let existing = [];
         if (filterOptions && filterOptions.filter) {
             existing = Object.entries(filterOptions.filter).map(([dimension, data]) => [
@@ -315,22 +341,19 @@ OCA.Analytics.Filter = {
     },
 
     /**
-     * Store filter dialog settings to the current report and reload data.
+     * Read report-style filter conditions from the shared dialog.
      */
+    readFilterDialogRows: function () {
+        return Array.from(document.querySelectorAll('#filterDialogTable .filterRow')).map(row => ({
+            dimension: row.querySelector('.filterDialogDimension').value,
+            option: row.querySelector('.filterDialogOption').value,
+            value: row.querySelector('.filterDialogValue').value,
+        })).filter(row => row.dimension !== '');
+    },
+
     processFilterDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
-        filterOptions.filter = [];
-
-        const rows = document.querySelectorAll('#filterDialogTable .filterRow');
-        rows.forEach(row => {
-            const dimension = row.querySelector('.filterDialogDimension').value;
-            if (dimension === '') {
-                return;
-            }
-            const optionValue = row.querySelector('.filterDialogOption').value;
-            const filterValue = row.querySelector('.filterDialogValue').value;
-            filterOptions.filter.push({dimension, option: optionValue, value: filterValue});
-        });
+        filterOptions.filter = OCA.Analytics.Filter.readFilterDialogRows();
 
         if (Object.keys(filterOptions.filter).length === 0) {
             delete filterOptions.filter;

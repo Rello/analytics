@@ -2542,6 +2542,7 @@ OCA.Analytics.Visualization = {
     },
 
     showContentByType: function (type) {
+        if (type !== 'panorama') OCA.Analytics.PanoramaFilters?.stop();
         //if (OCA.Analytics.currentContentType !== type) {
         for (const element of document.querySelectorAll('[id^="analytics-content-"]')) {
             OCA.Analytics.Visualization.hideElement(element.id);

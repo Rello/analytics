@@ -249,18 +249,19 @@ class ShareService {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getSharedPanoramaReport($reportId) {
+	public function getSharedPanoramaReport($reportId, ?int $panoramaId = null) {
 		$foundReportId = 0;
 		$panoramaOwner = null;
 		$sharedPanoramas = $this->getSharedItems(self::SHARE_ITEM_TYPE_PANORAMA);
 		foreach ($sharedPanoramas as $sharedPanorama) {
+			if ($panoramaId !== null && (int)$sharedPanorama['id'] !== $panoramaId) continue;
 			$panoramaOwner = $sharedPanorama['user_id'];
 			$pages = json_decode($sharedPanorama['pages'], true);
 			foreach ($pages as $page) {
 				$reports = $page['reports'];
 				foreach ($reports as $report) {
 					// only use report type 0 = report; not text or image
-					if ($report['type'] === 0 && $report['value'] === $reportId) {
+					if ((int)$report['type'] === 0 && (int)$report['value'] === (int)$reportId) {
 						$foundReportId = $reportId;
 						break 3;
 					}
