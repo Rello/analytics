@@ -13,6 +13,8 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Save" : "﻿ಉಳಿಸಿ",
     "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
+    "Reset" : "ಮರುಹೊಂದಿಸಿ",
+    "Enabled" : "ಸಕ್ರಿಯಗೊಳಿಸಿದೆ",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "ಸರಿ",

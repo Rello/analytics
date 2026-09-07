@@ -25,6 +25,8 @@ OC.L10N.register(
     "Delete folder" : "Borrar carpeta",
     "Save" : "Guardar",
     "Download" : "Descargar",
+    "Reset" : "Restaurar",
+    "Apply" : "Aplicar",
     "Dataset" : "Conjunto de datos",
     "Type" : "Tipo",
     "Notification" : "Notificación",
