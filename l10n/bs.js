@@ -14,6 +14,7 @@ OC.L10N.register(
     "Delete folder" : "Izbriši fasciklu",
     "Save" : "Spremi",
     "Download" : "Preuzmi",
+    "Enabled" : "Aktivirano",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "OK",

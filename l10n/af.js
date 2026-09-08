@@ -18,6 +18,7 @@ OC.L10N.register(
     "Delete folder" : "Skrap vouer",
     "Save" : "Stoor",
     "Download" : "Laai af",
+    "Reset" : "Herstel",
     "Type" : "Tipe",
     "Notification" : "Kennisgewing",
     "Date" : "Datum",
