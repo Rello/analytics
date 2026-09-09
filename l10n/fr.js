@@ -191,6 +191,7 @@ OC.L10N.register(
     "Remove filter" : "Retirer un filtre",
     "Report" : "Rapport",
     "Reset" : "Réinitialiser",
+    "Some report dimensions could not be loaded. Reopen this dialog to retry." : "Certains dimensions du rapport n'ont pas pu être chargées. Ouvrez de nouveau ce dialogue pour réessayer.",
     "Enabled" : "Activé",
     "New variable" : "Nouvelle variable",
     "Variable name" : "Nom de variable",
