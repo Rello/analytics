@@ -1,0 +1,37 @@
+{
+  "contractVersion": 1,
+  "dataset": {
+    "name": "Flexible Sales Fixture",
+    "columns": [
+      {"name": "Date", "type": "date", "role": "dimension", "nullable": false},
+      {"name": "Region", "type": "text", "role": "dimension", "nullable": false},
+      {"name": "Product", "type": "text", "role": "dimension", "nullable": false},
+      {"name": "Revenue", "type": "decimal", "role": "measure", "nullable": true, "defaultAggregation": "sum"},
+      {"name": "Cost", "type": "decimal", "role": "measure", "nullable": true, "defaultAggregation": "sum"}
+    ]
+  },
+  "source": {
+    "header": ["Date", "Region", "Product", "Revenue", "Cost", "Unused"],
+    "rows": [
+      ["2026-09-01", "Germany", "Alpha", "120.00", "80.00", "ignored"],
+      ["2026-09-01", "Germany", "Beta", "75.50", "25.25", "ignored"],
+      ["2026-09-01", "Germany", "Alpha", "125.00", "82.00", "last duplicate wins"]
+    ]
+  },
+  "mappingTemplate": {
+    "schemaVersion": 1,
+    "sourceHeader": ["Date", "Region", "Product", "Revenue", "Cost", "Unused"],
+    "columns": [
+      {"columnName": "Date", "sourceIndex": 0},
+      {"columnName": "Region", "sourceIndex": 1},
+      {"columnName": "Product", "sourceIndex": 2},
+      {"columnName": "Revenue", "sourceIndex": 3},
+      {"columnName": "Cost", "sourceIndex": 4}
+    ]
+  },
+  "expected": {
+    "recordCount": 2,
+    "alphaRevenue": "125.00",
+    "ignoredSourceIndexes": [5]
+  }
+}

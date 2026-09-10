@@ -311,6 +311,7 @@
                         <br>
                         <select id="wizardNewDataset">
                         </select>
+                        <div id="wizardNewDatasetSummary" class="userGuidance" hidden></div>
                         <br>
                         <br>
                     </div>
@@ -478,6 +479,18 @@
                 </div>
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
+                        <fieldset class="flexibleDatasetMode">
+                            <legend><?php p($l->t('Dataset structure')); ?></legend>
+                            <label>
+                                <input type="radio" name="wizardDatasetMode" value="legacy" checked>
+                                <?php p($l->t('Classic three-column dataset')); ?>
+                            </label>
+                            <label>
+                                <input type="radio" name="wizardDatasetMode" value="flexible_shared">
+                                <?php p($l->t('Flexible dataset')); ?>
+                            </label>
+                        </fieldset>
+                        <div id="wizardDatasetLegacyColumns">
                         <?php p($l->t('Column')); ?>&nbsp;1
                         <br>
                         <input id="wizardDatasetDimension1" class="sidebarInput" value="<?php p($l->t('Object')); ?>">
@@ -489,6 +502,14 @@
                         <?php p($l->t('Value')); ?>
                         <br>
                         <input id="wizardDatasetValue" class="sidebarInput" value="<?php p($l->t('Value')); ?>">
+                        </div>
+                        <div id="wizardDatasetFlexibleColumns" hidden>
+                            <p class="userGuidance"><?php p($l->t('All dimension columns together identify a record. Importing the same combination updates its measures.')); ?></p>
+                            <div id="wizardDatasetFlexibleColumnList"></div>
+                            <button id="wizardDatasetFlexibleAddColumn" type="button" class="analyticsSecondary">
+                                <?php p($l->t('Add column')); ?>
+                            </button>
+                        </div>
                     </div>
                     <div style="display: table-cell;">
                         <br>

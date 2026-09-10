@@ -7,6 +7,9 @@ use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Notification\NotificationManager;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use OCA\Analytics\Service\VariableService;
+use OCA\Analytics\Storage\DatasetStorageResolver;
+use OCA\Analytics\Db\FlexibleStorageMapper;
+use OCA\Analytics\Exception\FlexibleStorageException;
 use OCP\IDateTimeFormatter;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -45,7 +48,9 @@ class ThresholdServiceTest extends TestCase {
 			$notification,
 			$reportMapper,
 			$variableService,
-			new FakeL10N()
+			new FakeL10N(),
+			$this->createMock(DatasetStorageResolver::class),
+			$this->createMock(FlexibleStorageMapper::class)
 		);
 
 		// Call read to trigger variable replacement logic
@@ -137,9 +142,37 @@ class ThresholdServiceTest extends TestCase {
 			$this->createMock(NotificationManager::class),
 			$reportMapper,
 			$this->createMock(VariableService::class),
-			new FakeL10N()
+			new FakeL10N(),
+			$this->createMock(DatasetStorageResolver::class),
+			$this->createMock(FlexibleStorageMapper::class)
 		);
 
 		$this->assertSame(0, $service->create(55, 0, 'EQ', 'x', 1, 'row'));
+	}
+
+	public function testCreateRequiresStableSourceReferenceForFlexibleReport(): void {
+		$thresholdMapper = $this->createMock(ThresholdMapper::class);
+		$thresholdMapper->expects($this->never())->method('create');
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->method('readOwn')->with(55)->willReturn(['id' => 55, 'dataset' => 7]);
+		$reportMapper->expects($this->never())->method('increaseVersionByReport');
+		$resolver = $this->createMock(DatasetStorageResolver::class);
+		$resolver->method('resolve')->with(7, true)->willReturn([
+			'mode' => DatasetStorageResolver::FLEXIBLE_SHARED,
+			'dataset' => ['id' => 7],
+		]);
+		$service = new ThresholdService(
+			new NullLogger(),
+			$thresholdMapper,
+			$this->createMock(NotificationManager::class),
+			$reportMapper,
+			$this->createMock(VariableService::class),
+			new FakeL10N(),
+			$resolver,
+			$this->createMock(FlexibleStorageMapper::class)
+		);
+
+		$this->expectException(FlexibleStorageException::class);
+		$service->create(55, 0, 'EQ', 'x', 1, 'row');
 	}
 }

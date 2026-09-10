@@ -339,9 +339,9 @@ class OutputController extends Controller {
 		}
 
 		// sort the data by a given column
-		if ($filterOptions && isset($result['data'])) {
-			$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
-		}
+			if ($filterOptions && isset($result['data']) && !($result['queryProcessing']['backendProcessed'] ?? false)) {
+				$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
+			}
 
 		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset'], $reportMetadata['cacheKey'], $reportMetadata['panoramaMappings']);
 

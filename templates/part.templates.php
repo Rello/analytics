@@ -50,6 +50,10 @@
             <select style="display: table-cell;" id="sidebarReportDataset" class="sidebarInput" disabled>
             </select>
         </div>
+        <div id="sidebarReportDatasetSummaryRow" style="display: none;">
+            <div style="display: table-cell; width: 100%;"></div>
+            <div id="sidebarReportDatasetSummary" class="userGuidance" style="display: table-cell;"></div>
+        </div>
     </div>
     <br>
     <div id="reportDatasourceSectionHeader" class="sidebarHeaderClosed"><h3 id="reportDatasourceSectionHeaderH3"
@@ -60,7 +64,7 @@
                                                                            class="sidebarPointer"><?php p($l->t('Column headers')); ?></h3>
     </div>
     <div id="reportDimensionSection" style="display: none; width: 100%; max-width: 500px;">
-        <div style="display: table-row;">
+        <div style="display: table-row;" class="legacyReportFieldRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
             <div style="display: table-cell;"><input id="sidebarReportDimension1" class="sidebarInput"></div>
             <div style="display: table-cell;">
@@ -68,11 +72,11 @@
                     <div class="icon-info" style="opacity: 0.5;padding: 0 10px;"></div>
                 </a></div>
         </div>
-        <div style="display: table-row;">
+        <div style="display: table-row;" class="legacyReportFieldRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
             <div style="display: table-cell;"><input id="sidebarReportDimension2" class="sidebarInput"></div>
         </div>
-        <div style="display: table-row;">
+        <div style="display: table-row;" class="legacyReportFieldRow">
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
             <div style="display: table-cell;"><input id="sidebarReportValue" class="sidebarInput"></div>
         </div>
@@ -190,6 +194,9 @@
             <div style="display: table-cell; width: 150px;">
                 <label for="groupOptionDimension"><?php p($l->t('Group by')); ?></label>
             </div>
+            <div class="flexibleTopNMeasure" style="display: none; width: 150px;">
+                <label for="groupOptionMeasure"><?php p($l->t('Measure')); ?></label>
+            </div>
             <div style="display: table-cell; width: 150px;">
                 <label for="groupOptionType"><?php p($l->t('Option')); ?></label>
             </div>
@@ -203,6 +210,9 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 150px;">
                 <select id="groupOptionDimension" class="optionsInput"></select>
+            </div>
+            <div class="flexibleTopNMeasure" style="display: none; width: 150px;">
+                <select id="groupOptionMeasure" class="optionsInput"></select>
             </div>
             <div style="display: table-cell; width: 150px;">
                 <select id="groupOptionType" class="optionsInput"></select>
@@ -326,6 +336,13 @@
             <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
             <div style="display: table-cell;"><input id="sidebarDatasetValue" class="sidebarInput"></div>
         </div>
+    </div>
+    <div id="flexibleDatasetSchema" hidden>
+        <p class="userGuidance"><?php p($l->t('All dimension columns together identify a record. Renaming or reordering a column does not change its stable reference.')); ?></p>
+        <div id="flexibleDatasetSchemaColumns"></div>
+        <button id="flexibleDatasetSchemaAdd" type="button" class="analyticsSecondary">
+            <?php p($l->t('Add nullable measure')); ?>
+        </button>
     </div>
     <br>
     <div id="datasetStatusSection" class="table" style="display: table; width: 100%; max-width: 500px;">
@@ -994,7 +1011,7 @@
 </template>
 
 <template id="templateChartOptions">
-    <div class="analyticsDialogSection"
+    <div id="chartDataFormatSection" class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
         <h2><?php p($l->t('Data format')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
@@ -1035,6 +1052,31 @@
                     <span class="analyticsModelCardText"><?php p($l->t('Use first column for time-series indexing.')); ?></span>
                 </label>
             </div>
+        </div>
+    </div>
+
+    <div id="chartColumnMappingSection" class="analyticsDialogSection"
+         data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
+        <h2><?php p($l->t('Data mapping')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Choose how returned columns are used by the chart. This does not change the report data or table columns.')); ?></span>
+        <label class="chartColumnMappingAutomatic">
+            <input type="checkbox" id="chartColumnMappingAutomatic" role="switch" checked>
+            <span><?php p($l->t('Automatic chart mapping')); ?></span>
+        </label>
+        <p id="chartColumnMappingSummary" class="userGuidance"></p>
+        <div id="chartColumnMappingEditor" class="chartColumnMappingEditor" hidden>
+            <label id="chartColumnCategoryLabel" for="chartColumnCategory"><?php p($l->t('Category / X-axis')); ?></label>
+            <select id="chartColumnCategory" class="optionsInput"></select>
+            <fieldset id="chartColumnSeriesFieldset">
+                <legend><?php p($l->t('Split into series')); ?></legend>
+                <span class="userGuidance"><?php p($l->t('Optional columns that create separate chart series.')); ?></span>
+                <div id="chartColumnSeries" class="chartColumnChoices"></div>
+            </fieldset>
+            <fieldset>
+                <legend><?php p($l->t('Value columns')); ?></legend>
+                <span class="userGuidance"><?php p($l->t('Select one or more columns to visualize.')); ?></span>
+                <div id="chartColumnValues" class="chartColumnChoices"></div>
+            </fieldset>
         </div>
     </div>
 

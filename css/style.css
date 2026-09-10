@@ -2706,3 +2706,115 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     padding-block-end: initial;
 !important;
 }
+
+.flexibleDatasetMode {
+    display: flex;
+    gap: 18px;
+    margin: 0 0 18px;
+    padding: 0;
+    border: 0;
+}
+
+.flexibleDatasetMode legend {
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.flexibleDatasetMode label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flexibleColumnRow,
+.flexibleMappingRow,
+.flexibleRecordRow {
+    display: grid;
+    grid-template-columns: minmax(130px, 2fr) minmax(95px, 1fr) minmax(110px, 1fr) auto auto auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.flexibleMappingRow {
+    grid-template-columns: minmax(130px, 1fr) minmax(180px, 2fr);
+}
+
+.flexibleRecordRow {
+    grid-template-columns: minmax(130px, 1fr) minmax(180px, 2fr);
+}
+
+.flexibleColumnRow .sidebarInput,
+.flexibleMappingRow .sidebarInput,
+.flexibleRecordRow .sidebarInput {
+    width: 100%;
+}
+
+.flexibleColumnActions {
+    display: flex;
+    gap: 4px;
+}
+
+.flexibleColumnActions button {
+    min-width: 34px;
+    padding: 6px;
+}
+
+.flexibleRecordTable {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: collapse;
+}
+
+.flexibleRecordTable th,
+.flexibleRecordTable td {
+    padding: 7px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: start;
+}
+
+.flexibleRecordTable td:last-child {
+    white-space: nowrap;
+}
+
+.flexibleValidationErrors {
+    color: var(--color-error);
+    white-space: pre-wrap;
+}
+
+.chartColumnMappingAutomatic {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.chartColumnMappingEditor {
+    display: grid;
+    gap: 12px;
+    max-width: 520px;
+    margin-top: 18px;
+}
+
+.chartColumnMappingEditor[hidden] {
+    display: none;
+}
+
+.chartColumnMappingEditor fieldset {
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+}
+
+.chartColumnChoices {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.chartColumnChoices label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

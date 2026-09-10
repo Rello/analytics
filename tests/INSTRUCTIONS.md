@@ -52,6 +52,7 @@ Supported identifiers:
 - `43`, `csv`, `datasource-csv`
 - `44`, `automation-dataload`, `column-picker`, `local-csv`
 - `45`, `automation-deletion`, `deletion-automation`
+- `46`, `flexible-datasets`, `flexible-storage`
 - `50`, `share`, `navigation-share`
 - `51`, `favorites`, `navigation-favorites`
 - `91`, `91-delete`, `report-delete`, `delete`

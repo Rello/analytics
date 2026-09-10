@@ -502,7 +502,8 @@ OCA.Analytics.Notification = {
         layout.appendChild(panel);
         contentRoot.appendChild(layout);
 
-        const sections = Array.from(panel.querySelectorAll('.analyticsDialogSection'));
+        const sections = Array.from(panel.querySelectorAll('.analyticsDialogSection'))
+            .filter(section => !section.hidden);
         if (sections.length === 0) {
             nav.remove();
             return null;

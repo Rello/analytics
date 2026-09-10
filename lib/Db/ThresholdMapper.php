@@ -33,7 +33,7 @@ class ThresholdMapper
     /**
      * @throws Exception
      */
-    public function create($reportId, $dimension, $value, $option, $severity, $coloring)
+    public function create($reportId, $dimension, $value, $option, $severity, $coloring, ?string $sourceColumnRef = null)
     {
         $get = $this->db->getQueryBuilder();
         $get->select('sequence')
@@ -50,6 +50,7 @@ class ThresholdMapper
                 'user_id' => $sql->createNamedParameter($this->userId),
                 'report' => $sql->createNamedParameter($reportId),
                 'dimension' => $sql->createNamedParameter($dimension),
+				'source_column_ref' => $sql->createNamedParameter($sourceColumnRef),
                 'target' => $sql->createNamedParameter($value),
                 'option' => $sql->createNamedParameter($option),
                 'severity' => $sql->createNamedParameter($severity),
@@ -69,6 +70,7 @@ class ThresholdMapper
         $sql->from(self::TABLE_NAME)
             ->select('id')
             ->addSelect('dimension')
+			->addSelect('source_column_ref')
             ->addSelect('coloring')
             ->selectAlias('target', 'value')
             ->addSelect('option')

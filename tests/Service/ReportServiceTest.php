@@ -15,6 +15,7 @@ use OCA\Analytics\Service\DatasetService;
 use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\VariableService;
+use OCA\Analytics\Service\FlexibleStorageService;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -60,7 +61,8 @@ class ReportServiceTest extends TestCase {
 			$this->createMock(ActivityManager::class),
 			$this->createMock(\OCP\Files\IRootFolder::class),
 			$this->createMock(\OCP\IConfig::class),
-			$this->createMock(VariableService::class)
+				$this->createMock(VariableService::class),
+				$this->createMock(FlexibleStorageService::class)
 		);
 
 		$payload = json_encode([
@@ -116,7 +118,8 @@ class ReportServiceTest extends TestCase {
 			$this->createMock(ActivityManager::class),
 			$this->createMock(\OCP\Files\IRootFolder::class),
 			$this->createMock(\OCP\IConfig::class),
-			$this->createMock(VariableService::class)
+				$this->createMock(VariableService::class),
+				$this->createMock(FlexibleStorageService::class)
 		);
 
 		$this->assertTrue($service->setFavorite(81, 'false'));
@@ -146,7 +149,8 @@ class ReportServiceTest extends TestCase {
 			$this->createMock(ActivityManager::class),
 			$this->createMock(\OCP\Files\IRootFolder::class),
 			$this->createMock(\OCP\IConfig::class),
-			$this->createMock(VariableService::class)
+				$this->createMock(VariableService::class),
+				$this->createMock(FlexibleStorageService::class)
 		);
 
 		$result = $service->create('Report', '', 0, 2, 77, '{}', 'table', 'table', 'A', 'B', 'Value');

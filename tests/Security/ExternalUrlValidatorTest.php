@@ -50,4 +50,11 @@ class ExternalUrlValidatorTest extends TestCase {
 
 		$this->assertNull((new ExternalUrlValidator($remoteHostValidator))->validate('http://10.0.0.150/em1data/0/data.csv'));
 	}
+
+	public function testValidateDescribesBlockedInternalUrl(): void {
+		$this->assertSame(
+			'Internal URL is not allowed by server configuration',
+			(new ExternalUrlValidator($this->remoteHostValidator))->validate('http://10.0.0.150/em1data/0/data.csv')
+		);
+	}
 }

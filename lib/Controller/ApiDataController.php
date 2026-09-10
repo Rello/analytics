@@ -217,9 +217,11 @@ class ApiDataController extends ApiController {
 
 		if (!empty($reportMetadata)) {
 			$options = json_decode($reportMetadata['filteroptions'], true);
-			$allData = $this->StorageMapper->read((int)$reportMetadata['dataset'], $options);
-
-			return new DataResponse($allData, HTTP::STATUS_OK);
+				$allData = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata);
+				return new DataResponse(
+					($allData['storageMode'] ?? 'legacy') === 'flexible_shared' ? $allData : ($allData['data'] ?? []),
+					HTTP::STATUS_OK
+				);
 		} else {
 			return new DataResponse([
 				'message' => 'No data available for given report id',
@@ -378,6 +380,9 @@ class ApiDataController extends ApiController {
 		if (empty($datasetMetadata)) {
 			$this->errors[] = 'Unknown or unauthorized report or dataset';
 			return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
+		} elseif (($datasetMetadata['storageMode'] ?? 'legacy') !== 'legacy') {
+			$this->errors[] = 'Flexible datasets must use the stable-column record API';
+			return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
 		} else {
 			return true;
 		}

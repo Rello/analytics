@@ -290,8 +290,10 @@ OCA.Analytics.Visualization = {
         };
     },
 
-    getTableColumnReference: function (kind, sourceIndex, header, value = null) {
-        const parts = [kind, String(sourceIndex), encodeURIComponent(String(header ?? ''))];
+    getTableColumnReference: function (kind, sourceIndex, header, value = null, stableReference = null) {
+        const parts = stableReference
+            ? [kind + '-ref', stableReference]
+            : [kind, String(sourceIndex), encodeURIComponent(String(header ?? ''))];
         if (value !== null) {
             parts.push(encodeURIComponent(String(value)));
         }
@@ -804,7 +806,11 @@ OCA.Analytics.Visualization = {
         this.showElement('tableContainer');
 
         // get current table state
-        let tableOptions = jsondata.options.tableoptions;
+        let tableOptions = {...(jsondata.options.tableoptions || {})};
+        tableOptions._analyticsColumnRefs = jsondata.columnRefs || [];
+        if (OCA.Analytics.Flexible?.isFlexible(jsondata) && tableOptions.layout) {
+            tableOptions.layout = OCA.Analytics.Flexible.resolveLayout(jsondata, tableOptions.layout);
+        }
         let defaultOrder = [];
         let defaultLength = 10;
         let defaultColReorder = true;
@@ -825,14 +831,16 @@ OCA.Analytics.Visualization = {
 
         const timeAggregationDisplayConfig = this.getTimeAggregationTableDisplayConfig(
             jsondata.options?.filteroptions,
-            jsondata.options?.chartoptions
+            jsondata.options?.chartoptions,
+            jsondata
         );
 
         ({data, columns} = this.convertDataToDataTableFormat(
             jsondata.data,
             tableOptions,
             jsondata.header,
-            timeAggregationDisplayConfig
+            timeAggregationDisplayConfig,
+            jsondata.columnRefs || []
         ));
         ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
 
@@ -911,7 +919,7 @@ OCA.Analytics.Visualization = {
      * @param {Object|null} timeAggregationDisplayConfig - Optional table-only formatting config for aggregated time labels
      * @returns {{data: Array, columns: Array}}
      */
-    convertDataToDataTableFormat: function (originalData, tableOptions, header, timeAggregationDisplayConfig = null) {
+    convertDataToDataTableFormat: function (originalData, tableOptions, header, timeAggregationDisplayConfig = null, columnRefs = []) {
         let layoutConfig = tableOptions.layout !== undefined ? tableOptions.layout : false;
         let uniqueHeaders = new Set();
         let transformedData = {};
@@ -937,7 +945,7 @@ OCA.Analytics.Visualization = {
             columns = header.map((header, index) => ({
                 title: OCA.Analytics.Visualization.escapeHtml(header),
                 className: '',
-                analyticsReference: this.getTableColumnReference('source', index, header),
+                analyticsReference: this.getTableColumnReference('source', index, header, null, columnRefs[index]),
                 analyticsLabel: String(header),
             }));
             if (timeAggregationDisplayConfig) {
@@ -972,7 +980,7 @@ OCA.Analytics.Visualization = {
             columns = layoutConfig.rows.map((index, i) => ({
                 title: OCA.Analytics.Visualization.escapeHtml(header[index]),
                 className: i > 0 && (!timeAggregationDisplayConfig || index !== timeAggregationDisplayConfig.dimension) ? 'dt-right' : '',
-                analyticsReference: this.getTableColumnReference('source', index, header[index]),
+                analyticsReference: this.getTableColumnReference('source', index, header[index], null, columnRefs[index]),
                 analyticsLabel: String(header[index]),
             }));
             if (timeAggregationDisplayConfig) {
@@ -1035,7 +1043,7 @@ OCA.Analytics.Visualization = {
             columns = [{
                 title: OCA.Analytics.Visualization.escapeHtml(header[rowSourceIndex]),
                 className: '',
-                analyticsReference: this.getTableColumnReference('source', rowSourceIndex, header[rowSourceIndex]),
+                analyticsReference: this.getTableColumnReference('source', rowSourceIndex, header[rowSourceIndex], null, columnRefs[rowSourceIndex]),
                 analyticsLabel: String(header[rowSourceIndex]),
             }];
             uniqueHeaders.forEach(pivotHeader => {
@@ -1046,7 +1054,8 @@ OCA.Analytics.Visualization = {
                         'pivot',
                         columnSourceIndex,
                         header[columnSourceIndex],
-                        pivotHeader
+                        pivotHeader,
+                        columnRefs[columnSourceIndex]
                     ),
                     analyticsLabel: String(pivotHeader),
                     render: function (data, type, row, meta) {
@@ -1154,8 +1163,12 @@ OCA.Analytics.Visualization = {
         return {data: calculatedData, columns: calculatedColumns};
     },
 
-    getTableCalculatedColumnSources: function (data, header, tableOptions) {
-        const result = this.convertDataToDataTableFormat(data || [], tableOptions || {}, header || []);
+    getTableCalculatedColumnSources: function (data, header, tableOptions, columnRefs = []) {
+        const runtimeOptions = {...(tableOptions || {})};
+        if (columnRefs.length && runtimeOptions.layout) {
+            runtimeOptions.layout = OCA.Analytics.Flexible.resolveLayout({columnRefs}, runtimeOptions.layout);
+        }
+        const result = this.convertDataToDataTableFormat(data || [], runtimeOptions, header || [], null, columnRefs);
         return result.columns.map((column, index) => ({
             reference: column.analyticsReference,
             label: column.analyticsLabel || OCA.Analytics.Visualization.unescapeHtml(column.title || ''),
@@ -1167,7 +1180,7 @@ OCA.Analytics.Visualization = {
     // threshold dimensions distinct from source-data column indexes.
     thresholdCalculatedColumnOffset: 10000,
 
-    getThresholdColumnLabel: function (dimension) {
+    getThresholdColumnLabel: function (dimension, stableReference = null) {
         const dimensionIndex = parseInt(dimension, 10);
         if (dimensionIndex >= this.thresholdCalculatedColumnOffset) {
             const calculationIndex = dimensionIndex - this.thresholdCalculatedColumnOffset;
@@ -1175,6 +1188,13 @@ OCA.Analytics.Visualization = {
                 OCA.Analytics.currentReportData.options.tableoptions || {}
             )[calculationIndex];
             return calculation?.title || t('analytics', 'Calculated column');
+        }
+        if (stableReference) {
+            const stableIndex = OCA.Analytics.Flexible.indexForReference(
+                OCA.Analytics.currentReportData,
+                stableReference
+            );
+            return OCA.Analytics.currentReportData.header[stableIndex] || stableReference;
         }
         return OCA.Analytics.currentReportData.header[dimensionIndex];
     },
@@ -1202,8 +1222,14 @@ OCA.Analytics.Visualization = {
         thresholds = thresholds.filter(p => p.option !== 'new');
 
         for (let threshold of thresholds) {
-            const sourceDimIndex = parseInt(threshold['dimension'] ?? threshold['dimension2']);
-            if (Number.isNaN(sourceDimIndex)) {
+            const stableReference = threshold.source_column_ref || threshold.sourceColumnRef;
+            const storedDimension = parseInt(threshold['dimension'] ?? threshold['dimension2']);
+            const sourceDimIndex = storedDimension >= OCA.Analytics.Visualization.thresholdCalculatedColumnOffset
+                ? storedDimension
+                : stableReference
+                    ? (tableOptions._analyticsColumnRefs || []).indexOf(stableReference)
+                    : storedDimension;
+            if (Number.isNaN(sourceDimIndex) || sourceDimIndex < 0) {
                 continue;
             }
 
@@ -1620,7 +1646,7 @@ OCA.Analytics.Visualization = {
             } else if (chartType === 'doughnut' || chartType === 'funnel') {
                 // special array handling for doughnuts
                 if (jsondata.options.dataoptions !== null && Object.keys(jsondata.options.dataoptions).length !== 0) {
-                    const arr = jsondata.options.dataoptions;
+                    const arr = OCA.Analytics.Flexible.seriesOptions(jsondata.options.dataoptions);
                     let index = 0;
                     for (const obj of arr) {
                         if (obj.backgroundColor) {
@@ -1691,7 +1717,7 @@ OCA.Analytics.Visualization = {
         chartOptions = OCA.Analytics.ChartOptions.compose(
             this.applyThemeToChartOptions(chartOptions, ctx.canvas),
             jsondata.options.chartoptions,
-            jsondata.options.dataoptions
+            OCA.Analytics.Flexible.seriesOptions(jsondata.options.dataoptions)
         );
 
         // keep chart-type specific behavior deterministic after composed options were applied
@@ -1726,8 +1752,11 @@ OCA.Analytics.Visualization = {
         // these are merged with the data array coming from the backend
         // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
         // for doughnuts, no overwrites are allowed. Colors were taken care of before already
-        let userDatasetOptions = jsondata.options.dataoptions;
+        let userDatasetOptions = OCA.Analytics.Flexible.seriesOptions(jsondata.options.dataoptions);
         if (userDatasetOptions !== '' && userDatasetOptions !== null && chartType !== 'doughnut') {
+            if (Array.isArray(userDatasetOptions) && userDatasetOptions.length > datasets.length) {
+                userDatasetOptions = userDatasetOptions.slice(0, datasets.length);
+            }
             datasets = cloner.deep.merge({}, datasets);
             datasets = cloner.deep.merge(datasets, userDatasetOptions);
             datasets = Object.values(datasets);
@@ -1908,22 +1937,66 @@ OCA.Analytics.Visualization = {
         };
     },
 
-    getChartSeriesItems: function (reportData, dataModel) {
+    getChartColumnFields: function (reportData, model, configuredMapping = undefined) {
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(reportData.options?.chartoptions);
+        const mapping = OCA.Analytics.ChartOptions.columnMapping(
+            reportData,
+            model,
+            configuredMapping === undefined ? guiState.columnMapping : configuredMapping
+        );
+        if (!mapping) {
+            return null;
+        }
+        const field = (columnId) => {
+            const index = OCA.Analytics.ChartOptions.resolveColumnIndex(reportData, columnId);
+            return index < 0 ? null : {
+                id: columnId,
+                index,
+                label: reportData.header?.[index] || String(columnId),
+            };
+        };
+        const category = field(mapping.category);
+        const seriesDimensions = mapping.series.map(field).filter(Boolean);
+        const measures = mapping.measures.map(field).filter(Boolean);
+        return category && measures.length ? {category, seriesDimensions, measures} : null;
+    },
+
+    getChartSeriesLabel: function (row, fields, measure) {
+        const parts = fields.seriesDimensions.map(field => row[field.index]).filter(value => value !== null && value !== undefined && value !== '');
+        if (fields.measures.length > 1 || parts.length === 0) {
+            parts.push(measure.label);
+        }
+        return parts.join(' · ');
+    },
+
+    getChartSeriesItems: function (reportData, dataModel, configuredMapping = undefined) {
         const model = dataModel || OCA.Analytics.ChartOptions.getGuiState(reportData.options?.chartoptions).model;
         const chartData = this.getChartDataWithCalculatedColumns(reportData, model);
+        const fields = this.getChartColumnFields(reportData, model, configuredMapping);
 
-        if (model === 'timeSeriesModel') {
-            return chartData.header.slice(1).map((label, index) => ({
-                label: label,
-                index: index,
+        if (fields && model === 'kpiModel') {
+            const labels = new Map();
+            chartData.data.forEach(row => fields.measures.forEach(measure => {
+                const label = this.getChartSeriesLabel(row, fields, measure);
+                const key = fields.seriesDimensions.map(field => String(row[field.index] ?? '')).join('\u0000')
+                    + '\u0001' + String(measure.id);
+                if (!labels.has(key)) labels.set(key, {label});
+            }));
+            return Array.from(labels.values());
+        }
+
+        if (fields && model === 'timeSeriesModel') {
+            return fields.measures.map(measure => ({
+                label: measure.label,
+                index: measure.index,
             }));
         }
 
-        if (model === 'accountModel') {
+        if (fields && model === 'accountModel') {
             return chartData.data
                 .filter(row => Array.isArray(row))
                 .map((row, index) => ({
-                    label: row[0] || t('analytics', 'Data series'),
+                    label: row[fields.category.index] || t('analytics', 'Data series'),
                     index: index,
                 }));
         }
@@ -1961,6 +2034,7 @@ OCA.Analytics.Visualization = {
         const guiState = OCA.Analytics.ChartOptions.getGuiState(data.options.chartoptions);
         const dataModel = guiState.model;
         const chartData = this.getChartDataWithCalculatedColumns(data, dataModel);
+        const fields = this.getChartColumnFields(data, dataModel);
         let header = chartData.header.slice(1);
         const isTopGrouping = !!data.options?.filteroptions?.topN;
         let datasetCounter = 0;
@@ -1969,29 +2043,61 @@ OCA.Analytics.Visualization = {
 
         // as of chartjs 4, the yAxis needs to be mapped to the primary axis per default
 
-        if (dataModel === 'accountModel') {
-            xAxisCategories = header;
+        if (fields && dataModel === 'kpiModel') {
+            const categories = new Set();
+            const series = new Map();
+            data.forEach(row => {
+                const category = row[fields.category.index];
+                if (!categories.has(category)) {
+                    categories.add(category);
+                    xAxisCategories.push(category);
+                }
+                fields.measures.forEach(measure => {
+                    const key = fields.seriesDimensions.map(field => String(row[field.index] ?? '')).join('\u0000')
+                        + '\u0001' + String(measure.id);
+                    if (!series.has(key)) {
+                        const label = this.getChartSeriesLabel(row, fields, measure);
+                        series.set(key, {
+                            ...(chartType !== 'doughnut' && {label: label || undefined}),
+                            data: [],
+                            hidden: datasetCounter >= 4 && !isTopGrouping,
+                            yAxisID: 'primary',
+                            pointHitRadius: 20,
+                        });
+                        datasetCounter++;
+                    }
+                    const value = parseFloat(row[measure.index]);
+                    if (chartType === 'doughnut' || chartType === 'funnel') {
+                        series.get(key).data.push(value);
+                    } else {
+                        series.get(key).data.push({x: category, y: value});
+                    }
+                });
+            });
+            datasets = Array.from(series.values());
+        } else if (fields && dataModel === 'accountModel') {
+            xAxisCategories = fields.measures.map(measure => measure.label);
             // Account Model: Create one dataset per row
             data.forEach(row => {
-                const label = row[0]; // Date becomes the label
-                const dataPoints = row.slice(1).map((value, index) => ({
-                    x: xAxisCategories[index],
-                    y: value
+                const label = row[fields.category.index];
+                const dataPoints = fields.measures.map(measure => ({
+                    x: measure.label,
+                    y: row[measure.index]
                 }));
                 datasets.push({label: label, data: dataPoints, yAxisID: 'primary'});
             });
-        } else if (dataModel === 'timeSeriesModel') {
-            xAxisCategories = data.map(row => row[0]);
-            header.forEach((seriesName, index) => {
+        } else if (fields && dataModel === 'timeSeriesModel') {
+            xAxisCategories = data.map(row => row[fields.category.index]);
+            fields.measures.forEach(measure => {
                 const dataset = {
-                    label: seriesName,
+                    label: measure.label,
                     data: [],
                     hidden: datasetCounter >= 4 && !isTopGrouping,
                     yAxisID: 'primary',
                     pointHitRadius: 20,
                 };
                 data.forEach(row => {
-                    dataset.data.push({x: row[0], y: parseFloat(row[index + 1])});
+                    dataset.data.push({x: row[fields.category.index], y: parseFloat(row[measure.index])});
                 });
                 datasets.push(dataset);
                 datasetCounter++;
@@ -2207,7 +2313,7 @@ OCA.Analytics.Visualization = {
         return this.timeAggregationFormats[grouping] || null;
     },
 
-    getTimeAggregationTableDisplayConfig: function (filteroptions, chartoptions) {
+    getTimeAggregationTableDisplayConfig: function (filteroptions, chartoptions, response = null) {
         const grouping = filteroptions?.timeAggregation?.grouping;
         if (!grouping || grouping === 'none') {
             return null;
@@ -2218,10 +2324,13 @@ OCA.Analytics.Visualization = {
             return null;
         }
 
-        const dimension = this.resolveDimensionIndex(
-            filteroptions.timeAggregation.dimension,
-            filteroptions?.drilldown
-        );
+        const storedColumn = filteroptions.timeAggregation.column ?? filteroptions.timeAggregation.dimension;
+        const stableIndex = typeof storedColumn === 'string' && /^c_[1-9][0-9]*$/.test(storedColumn)
+            ? OCA.Analytics.Flexible.indexForReference(response, storedColumn)
+            : null;
+        const dimension = stableIndex === null
+            ? this.resolveDimensionIndex(storedColumn, filteroptions?.drilldown)
+            : stableIndex;
         if (dimension < 0) {
             return null;
         }

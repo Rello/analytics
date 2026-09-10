@@ -48,8 +48,9 @@ class AnalyticsMigratorTest extends TestCase {
 	public function migratorVersions(): array {
 		return [
 			'older version' => [0, true],
-			'current version' => [1, true],
-			'newer version' => [2, false],
+			'old current version' => [1, true],
+			'current version' => [2, true],
+			'newer version' => [3, false],
 		];
 	}
 

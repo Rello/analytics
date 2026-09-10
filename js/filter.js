@@ -380,12 +380,26 @@ OCA.Analytics.Filter = {
 
         const container = document.importNode(document.getElementById('templateTopNOptions').content, true);
 
-        const headerArray = OCA.Analytics.currentReportData.header;
+        const reportData = OCA.Analytics.currentReportData;
+        const isFlexible = OCA.Analytics.Flexible.isFlexible(reportData);
+        const headerArray = reportData.header;
         const dimensionSelect = container.getElementById('groupOptionDimension');
         dimensionSelect.innerHTML = '';
-        headerArray.forEach((header, index) => {
-            dimensionSelect.options.add(new Option(header, index));
-        });
+        if (isFlexible) {
+            Object.entries(reportData.dimensions || {}).forEach(([reference, label]) => {
+                dimensionSelect.options.add(new Option(label, reference));
+            });
+            container.querySelectorAll('.flexibleTopNMeasure').forEach(element => element.style.display = 'table-cell');
+            const measureSelect = container.getElementById('groupOptionMeasure');
+            OCA.Analytics.Flexible.columns(reportData).filter(column => column.role === 'measure'
+                && reportData.columnRefs.includes(column.ref)).forEach(column => {
+                measureSelect.options.add(new Option(column.name, column.ref));
+            });
+        } else {
+            headerArray.forEach((header, index) => {
+                dimensionSelect.options.add(new Option(header, index));
+            });
+        }
 
         const typeSelect = container.getElementById('groupOptionType');
         typeSelect.innerHTML = '';
@@ -401,6 +415,7 @@ OCA.Analytics.Filter = {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         if (filterOptions !== null && filterOptions['topN'] !== undefined) {
             dimensionSelect.value = filterOptions.topN.dimension;
+            if (isFlexible) container.getElementById('groupOptionMeasure').value = filterOptions.topN.measure;
             typeSelect.value = filterOptions.topN.type;
             container.getElementById('groupOptionNumber').value = filterOptions.topN.number;
             container.getElementById('groupOptionOthers').checked = filterOptions.topN.others === true;
@@ -423,6 +438,9 @@ OCA.Analytics.Filter = {
         }
 
         filterOptions.topN.dimension = document.getElementById('groupOptionDimension').value;
+        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+            filterOptions.topN.measure = document.getElementById('groupOptionMeasure').value;
+        }
         filterOptions.topN.type = document.getElementById('groupOptionType').value;
         filterOptions.topN.number = parseInt(document.getElementById('groupOptionNumber').value);
         filterOptions.topN.others = document.getElementById('groupOptionOthers').checked;
@@ -430,7 +448,8 @@ OCA.Analytics.Filter = {
         if (filterOptions.topN.type === 'none' || isNaN(filterOptions.topN.number)) {
             delete filterOptions.topN;
             // cleanup old legend settings where all items were displayed in a top N
-            let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+            const storedDataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+            let dataOptions = OCA.Analytics.Flexible.seriesOptions(storedDataOptions);
 
             // Keep only the first 4 elements
             dataOptions = dataOptions.length > 4 ? dataOptions.slice(0, 4) : dataOptions;
@@ -438,13 +457,24 @@ OCA.Analytics.Filter = {
             // Check if all first 4 elements are empty objects
             const allEmpty = dataOptions.length > 0 && dataOptions.every(obj => Object.keys(obj).length === 0 && obj.constructor === Object);
 
-            OCA.Analytics.currentReportData.options.dataoptions = allEmpty ? [] : dataOptions;
+            OCA.Analytics.currentReportData.options.dataoptions = OCA.Analytics.Flexible.withSeriesOptions(
+                storedDataOptions,
+                allEmpty ? [] : dataOptions
+            );
         }
 
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         // remove all data options for which there is no dimension anymore
-        if (filterOptions.topN && OCA.Analytics.currentReportData.options.dataoptions >> filterOptions.topN.number) {
-            OCA.Analytics.currentReportData.options.dataoptions.splice(filterOptions.topN.number);
+        if (filterOptions.topN) {
+            const storedDataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+            const seriesOptions = OCA.Analytics.Flexible.seriesOptions(storedDataOptions);
+            if (seriesOptions.length > filterOptions.topN.number) {
+                seriesOptions.splice(filterOptions.topN.number);
+                OCA.Analytics.currentReportData.options.dataoptions = OCA.Analytics.Flexible.withSeriesOptions(
+                    storedDataOptions,
+                    seriesOptions
+                );
+            }
         }
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();
@@ -469,6 +499,12 @@ OCA.Analytics.Filter = {
         const dimSelect = container.getElementById('timeGroupingDimension');
         dimSelect.innerHTML = '';
         Object.keys(dimensions).forEach(key => {
+            if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+                const column = OCA.Analytics.Flexible.column(OCA.Analytics.currentReportData, key);
+                if (!column || !['date', 'datetime'].includes(column.type)) {
+                    return;
+                }
+            }
             if (!(filterOptions && filterOptions.drilldown && filterOptions.drilldown[key] !== undefined)) {
                 dimSelect.options.add(new Option(dimensions[key], key));
             }
@@ -485,7 +521,7 @@ OCA.Analytics.Filter = {
         });
 
         if (filterOptions && filterOptions.timeAggregation) {
-            dimSelect.value = filterOptions.timeAggregation.dimension;
+            dimSelect.value = filterOptions.timeAggregation.column || filterOptions.timeAggregation.dimension;
             groupingSelect.value = filterOptions.timeAggregation.grouping;
             modeSelect.value = filterOptions.timeAggregation.mode;
         }
@@ -508,7 +544,12 @@ OCA.Analytics.Filter = {
             filterOptions.timeAggregation = {};
         }
 
-        filterOptions.timeAggregation.dimension = document.getElementById('timeGroupingDimension').value;
+        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+            filterOptions.timeAggregation.column = document.getElementById('timeGroupingDimension').value;
+            delete filterOptions.timeAggregation.dimension;
+        } else {
+            filterOptions.timeAggregation.dimension = document.getElementById('timeGroupingDimension').value;
+        }
         filterOptions.timeAggregation.grouping = grouping;
         filterOptions.timeAggregation.mode = document.getElementById('timeGroupingMode').value;
 
@@ -699,7 +740,11 @@ OCA.Analytics.Filter = {
             }
             const childNodes = section.getElementsByClassName('draggable');
             for (let i = 0; i < childNodes.length; i++) {
-                const columnId = parseInt(childNodes[i].id.replace('column-', ''));
+                const storedReference = childNodes[i].dataset.columnRef;
+                const columnId = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+                    && storedReference
+                    ? storedReference
+                    : parseInt(childNodes[i].id.replace('column-', ''));
                 layout[sectionId].push(columnId);
             }
         });
@@ -714,7 +759,8 @@ OCA.Analytics.Filter = {
             return;
         }
 
-        const isSequential = (arr) => arr.every((val, i, array) => i === 0 || (val === array[i - 1] + 1));
+        const isSequential = (arr) => arr.every((val, i, array) => typeof val === 'number'
+            && (i === 0 || val === array[i - 1] + 1));
         if (layout.columns.length === 0 && layout.measures.length === 0 && layout.notRequired.length === 0) {
             if (!isSequential(layout.rows)) {
                 tableOptions.layout = layout;
@@ -782,7 +828,8 @@ OCA.Analytics.Filter = {
         state.sourceColumns = OCA.Analytics.Visualization.getTableCalculatedColumnSources(
             OCA.Analytics.currentReportData.data,
             OCA.Analytics.currentReportData.header,
-            OCA.Analytics.currentReportData.options.tableoptions || {}
+            OCA.Analytics.currentReportData.options.tableoptions || {},
+            OCA.Analytics.currentReportData.columnRefs || []
         );
         const labelCounts = state.sourceColumns.reduce((counts, source) => {
             counts[source.label] = (counts[source.label] || 0) + 1;
@@ -860,7 +907,8 @@ OCA.Analytics.Filter = {
         state.sourceColumns = OCA.Analytics.Visualization.getTableCalculatedColumnSources(
             OCA.Analytics.currentReportData.data,
             OCA.Analytics.currentReportData.header,
-            tableOptions
+            tableOptions,
+            OCA.Analytics.currentReportData.columnRefs || []
         );
         const labelCounts = state.sourceColumns.reduce((counts, source) => {
             counts[source.label] = (counts[source.label] || 0) + 1;
@@ -1670,7 +1718,10 @@ OCA.Analytics.Filter = {
         // Create options for every available report header column
         const fragment = document.createDocumentFragment();
         headerArray.forEach((header, index) => {
-            const dimensionOption = new Option(header, index); // Create option directly
+            const optionValue = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+                ? OCA.Analytics.Flexible.referenceForIndex(OCA.Analytics.currentReportData, index)
+                : index;
+            const dimensionOption = new Option(header, optionValue); // Create option directly
             fragment.appendChild(dimensionOption);
         });
         sortOptionDimension.appendChild(fragment); // Append all options at once
@@ -1692,7 +1743,7 @@ OCA.Analytics.Filter = {
         // set current values
         let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
         if (filterOptions !== null && filterOptions['sort'] !== undefined) {
-            container.getElementById('sortOptionDimension').value = filterOptions.sort.dimension;
+            container.getElementById('sortOptionDimension').value = filterOptions.sort.column || filterOptions.sort.dimension;
             container.getElementById('sortOptionDirection').value = filterOptions.sort.direction;
         }
 
@@ -1715,7 +1766,12 @@ OCA.Analytics.Filter = {
         }
 
         // Set dimension and direction
-        filterOptions.sort.dimension = document.getElementById('sortOptionDimension').value;
+        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+            filterOptions.sort.column = document.getElementById('sortOptionDimension').value;
+            delete filterOptions.sort.dimension;
+        } else {
+            filterOptions.sort.dimension = document.getElementById('sortOptionDimension').value;
+        }
         filterOptions.sort.direction = document.getElementById('sortOptionDirection').value;
 
         // Remove sort if direction is 'def'
@@ -1749,7 +1805,7 @@ OCA.Analytics.Filter = {
 
         let dataOptions;
         try {
-            dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+            dataOptions = OCA.Analytics.Flexible.seriesOptions(OCA.Analytics.currentReportData.options.dataoptions);
         } catch (e) {
             dataOptions = [];
         }
@@ -1761,6 +1817,19 @@ OCA.Analytics.Filter = {
         const table = container.getElementById('chartOptionsTable');
 
         const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
+        OCA.Analytics.Filter.renderChartColumnMapping(container, guiState, function (columnMapping, resetSeriesOptions = true) {
+            const seriesTable = document.getElementById('chartOptionsTable');
+            if (!seriesTable) {
+                return;
+            }
+            if (resetSeriesOptions) dataOptions = [];
+            if (columnMapping === false) {
+                seriesTable.querySelectorAll('.chartOptionsSeriesRow').forEach(row => row.remove());
+                return;
+            }
+            const dataModel = document.querySelector('input[name="analyticsModel"]:checked')?.value || guiState.model;
+            OCA.Analytics.Filter.renderChartOptionsSeriesRows(seriesTable, dataOptions, dataModel, columnMapping);
+        });
         if (guiState.model === 'accountModel') {
             container.getElementById('analyticsModelOpt2').checked = true;
         } else if (guiState.model === 'timeSeriesModel') {
@@ -1781,12 +1850,163 @@ OCA.Analytics.Filter = {
         document.querySelectorAll('#analyticsDialogContent input[name="analyticsModel"]').forEach(field => {
             field.addEventListener('change', function (evt) {
                 const seriesTable = document.getElementById('chartOptionsTable');
-                if (seriesTable) {
+                const mappingSection = document.getElementById('chartColumnMappingSection');
+                if (seriesTable && mappingSection?._analyticsSetModel) {
                     dataOptions = OCA.Analytics.Filter.getChartOptionsSeriesRows(seriesTable);
-                    OCA.Analytics.Filter.renderChartOptionsSeriesRows(seriesTable, dataOptions, evt.target.value);
+                    mappingSection._analyticsSetModel(evt.target.value);
                 }
             });
         });
+    },
+
+    renderChartColumnMapping: function (container, guiState, onChange = null) {
+        const reportData = OCA.Analytics.currentReportData;
+        const section = container.getElementById('chartColumnMappingSection');
+        const columns = OCA.Analytics.ChartOptions.columnDescriptors(reportData);
+        if (!section || columns.length < 2) {
+            if (section) section.hidden = true;
+            return;
+        }
+
+        const automatic = section.querySelector('#chartColumnMappingAutomatic');
+        const editor = section.querySelector('#chartColumnMappingEditor');
+        const categoryLabel = section.querySelector('#chartColumnCategoryLabel');
+        const category = section.querySelector('#chartColumnCategory');
+        const seriesFieldset = section.querySelector('#chartColumnSeriesFieldset');
+        const series = section.querySelector('#chartColumnSeries');
+        const valueList = section.querySelector('#chartColumnValues');
+        const summary = section.querySelector('#chartColumnMappingSummary');
+        let dataModel = guiState.model;
+        automatic.checked = !guiState.columnMapping;
+
+        columns.forEach(column => {
+            category.add(new Option(column.label, OCA.Analytics.ChartOptions.encodeColumnId(column.id)));
+        });
+
+        const addChoice = (target, column, className, selected) => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = className;
+            checkbox.value = OCA.Analytics.ChartOptions.encodeColumnId(column.id);
+            checkbox.dataset.columnId = String(column.id);
+            checkbox.checked = selected;
+            const text = document.createElement('span');
+            text.textContent = column.label;
+            label.append(checkbox, text);
+            target.appendChild(label);
+            checkbox.addEventListener('change', update);
+        };
+        columns.forEach(column => addChoice(
+            series,
+            column,
+            'chartColumnSeriesChoice',
+            false
+        ));
+        columns.forEach(column => addChoice(
+            valueList,
+            column,
+            'chartColumnValueChoice',
+            false
+        ));
+
+        function selectedLabels(selector) {
+            return [...section.querySelectorAll(selector + ':checked')]
+                .map(input => input.closest('label')?.querySelector('span')?.textContent || input.value);
+        }
+
+        function applyMapping(mapping) {
+            if (!mapping) return;
+            category.value = OCA.Analytics.ChartOptions.encodeColumnId(mapping.category);
+            section.querySelectorAll('.chartColumnSeriesChoice').forEach(input => {
+                input.checked = mapping.series.some(column => input.value
+                    === OCA.Analytics.ChartOptions.encodeColumnId(column));
+            });
+            section.querySelectorAll('.chartColumnValueChoice').forEach(input => {
+                input.checked = mapping.measures.some(column => input.value
+                    === OCA.Analytics.ChartOptions.encodeColumnId(column));
+            });
+        }
+
+        function readMapping() {
+            return {
+                category: OCA.Analytics.ChartOptions.decodeColumnId(category.value),
+                series: [...section.querySelectorAll('.chartColumnSeriesChoice:checked')]
+                    .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value)),
+                measures: [...section.querySelectorAll('.chartColumnValueChoice:checked')]
+                    .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value)),
+            };
+        }
+
+        let initialized = false;
+        function update(resetSeriesOptions = true) {
+            if (automatic.checked) {
+                applyMapping(OCA.Analytics.ChartOptions.defaultColumnMapping(reportData, dataModel));
+            }
+            editor.hidden = automatic.checked;
+            const usesRowSeries = dataModel === 'kpiModel';
+            seriesFieldset.hidden = !usesRowSeries;
+            categoryLabel.textContent = dataModel === 'timeSeriesModel'
+                ? t('analytics', 'Timestamp column')
+                : (dataModel === 'accountModel' ? t('analytics', 'Series label column') : t('analytics', 'Category / X-axis'));
+            section.querySelectorAll('.chartColumnSeriesChoice, .chartColumnValueChoice').forEach(input => {
+                input.disabled = input.value === category.value;
+                if (input.disabled) {
+                    input.checked = false;
+                }
+            });
+            const selectedCategoryLabel = category.selectedOptions[0]?.textContent || '';
+            const seriesLabels = usesRowSeries ? selectedLabels('.chartColumnSeriesChoice') : [];
+            const valueLabels = selectedLabels('.chartColumnValueChoice');
+            const categoryName = dataModel === 'timeSeriesModel'
+                ? t('analytics', 'Timestamp')
+                : (dataModel === 'accountModel' ? t('analytics', 'Series label') : t('analytics', 'Category'));
+            summary.textContent = categoryName + ': ' + selectedCategoryLabel
+                + (usesRowSeries ? ' · ' + t('analytics', 'Series') + ': '
+                    + (seriesLabels.length ? seriesLabels.join(', ') : t('analytics', 'None')) : '')
+                + ' · ' + t('analytics', 'Values') + ': ' + valueLabels.join(', ');
+            if (initialized && typeof onChange === 'function') {
+                const mapping = readMapping();
+                if (!usesRowSeries) mapping.series = [];
+                onChange(automatic.checked ? null : (mapping.measures.length ? mapping : false), resetSeriesOptions);
+            }
+        }
+
+        automatic.addEventListener('change', update);
+        category.addEventListener('change', update);
+        applyMapping(OCA.Analytics.ChartOptions.columnMapping(reportData, dataModel, guiState.columnMapping));
+        update();
+        initialized = true;
+        section._analyticsSetModel = function (model) {
+            dataModel = model;
+            update(false);
+        };
+    },
+
+    getChartColumnMapping: function () {
+        const section = document.getElementById('chartColumnMappingSection');
+        if (!section || section.hidden) {
+            return undefined;
+        }
+        if (document.getElementById('chartColumnMappingAutomatic').checked) {
+            return null;
+        }
+
+        const measures = [...section.querySelectorAll('.chartColumnValueChoice:checked')]
+            .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value));
+        if (measures.length === 0) {
+            return false;
+        }
+        return {
+            category: OCA.Analytics.ChartOptions.decodeColumnId(
+                document.getElementById('chartColumnCategory').value
+            ),
+            series: document.querySelector('input[name="analyticsModel"]:checked')?.value === 'kpiModel'
+                ? [...section.querySelectorAll('.chartColumnSeriesChoice:checked')]
+                    .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value))
+                : [],
+            measures,
+        };
     },
 
     /**
@@ -1816,7 +2036,7 @@ OCA.Analytics.Filter = {
         });
     },
 
-    renderChartOptionsSeriesRows: function (table, dataOptions, dataModel) {
+    renderChartOptionsSeriesRows: function (table, dataOptions, dataModel, columnMapping = undefined) {
         if (!table) {
             return;
         }
@@ -1827,7 +2047,11 @@ OCA.Analytics.Filter = {
         const chartType = OCA.Analytics.currentReportData.options.chart || 'column';
         const defaultChartType = OCA.Analytics.chartTypeMapping[chartType] || 'bar';
         const seriesItems = OCA.Analytics.Visualization?.getChartSeriesItems
-            ? OCA.Analytics.Visualization.getChartSeriesItems(OCA.Analytics.currentReportData, dataModel)
+            ? OCA.Analytics.Visualization.getChartSeriesItems(
+                OCA.Analytics.currentReportData,
+                dataModel,
+                columnMapping
+            )
             : Object.values(OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, 0))
                 .map(label => ({label: label}));
 
@@ -1936,7 +2160,10 @@ OCA.Analytics.Filter = {
                 const dimensionSelect = document.getElementById('thresholdDimension');
                 const dimensions = OCA.Analytics.currentReportData.header;
                 dimensions.forEach((dim, idx) => {
-                    dimensionSelect.options.add(new Option(dim, idx));
+                    const reference = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+                        ? OCA.Analytics.Flexible.referenceForIndex(OCA.Analytics.currentReportData, idx)
+                        : idx;
+                    dimensionSelect.options.add(new Option(dim, reference));
                 });
 
                 OCA.Analytics.Visualization.getCalculatedColumns(
@@ -1951,7 +2178,9 @@ OCA.Analytics.Filter = {
                     ));
                 });
 
-                document.getElementById('thresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+                document.getElementById('thresholdValue').dataset.dropdownlistindex = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+                    ? OCA.Analytics.Flexible.indexForReference(OCA.Analytics.currentReportData, dimensionSelect.value)
+                    : dimensionSelect.value;
                 dimensionSelect.addEventListener('change', function (evt) {
                     const valueInput = document.getElementById('thresholdValue');
                     const isCalculatedColumn = parseInt(evt.target.value, 10)
@@ -1966,7 +2195,9 @@ OCA.Analytics.Filter = {
                             document.getElementById('thresholdSeverity').value = '4';
                         }
                     } else {
-                        valueInput.dataset.dropdownlistindex = evt.target.value;
+                        valueInput.dataset.dropdownlistindex = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+                            ? OCA.Analytics.Flexible.indexForReference(OCA.Analytics.currentReportData, evt.target.value)
+                            : evt.target.value;
                     }
                 });
                 document.getElementById('thresholdValue').addEventListener('click', OCA.Analytics.Report.showDropDownList);
@@ -1988,10 +2219,21 @@ OCA.Analytics.Filter = {
      * existing settings and trigger a reload of the report.
      */
     processChartOptionsDialog: function () {
-        let dataOptions = OCA.Analytics.currentReportData.options.dataoptions;
-        if (!Array.isArray(dataOptions)) {
-            dataOptions = [];
+        const storedDataOptions = OCA.Analytics.currentReportData.options.dataoptions;
+        const previousGuiState = OCA.Analytics.ChartOptions.getGuiState(
+            OCA.Analytics.currentReportData.options.chartoptions
+        );
+        const columnMapping = OCA.Analytics.Filter.getChartColumnMapping();
+        if (columnMapping === false) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Select at least one value for the chart'));
+            return;
         }
+        const previousColumnMapping = previousGuiState.columnMapping || null;
+        const columnMappingChanged = columnMapping !== undefined
+            && JSON.stringify(previousColumnMapping) !== JSON.stringify(columnMapping);
+        let dataOptions = columnMappingChanged
+            ? []
+            : OCA.Analytics.Flexible.seriesOptions(storedDataOptions);
         const hiddenOptions = dataOptions.map(option =>
             typeof option?.hidden === 'boolean' ? option.hidden : undefined
         );
@@ -2043,12 +2285,19 @@ OCA.Analytics.Filter = {
         let dataModel = document.querySelector('input[name="analyticsModel"]:checked').value;
         const doughnutLabelStyleField = document.getElementById('chartDoughnutLabelStyle');
         const doughnutLabelStyle = doughnutLabelStyleField ? doughnutLabelStyleField.value : 'percentage';
-        const chartOptionsObj = OCA.Analytics.ChartOptions.setGuiState(chartOptions, {
+        const guiPatch = {
             model: dataModel,
             doughnutLabelStyle: doughnutLabelStyle
-        });
+        };
+        if (columnMapping !== undefined) {
+            guiPatch.columnMapping = columnMapping;
+        }
+        const chartOptionsObj = OCA.Analytics.ChartOptions.setGuiState(chartOptions, guiPatch);
 
-        OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
+        OCA.Analytics.currentReportData.options.dataoptions = OCA.Analytics.Flexible.withSeriesOptions(
+            storedDataOptions,
+            dataOptions
+        );
         OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObj;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();
@@ -2174,8 +2423,11 @@ OCA.Analytics.Filter = {
      * Copy the current Chart.js visibility state into the pending report options.
      */
     syncChartLegendSelections: function (dataOptions = OCA.Analytics.currentReportData.options.dataoptions) {
-        dataOptions = OCA.Analytics.Filter.processChartLegendSelections(dataOptions);
-        dataOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(dataOptions);
+        const storedDataOptions = dataOptions;
+        let seriesOptions = OCA.Analytics.Flexible.seriesOptions(storedDataOptions);
+        seriesOptions = OCA.Analytics.Filter.processChartLegendSelections(seriesOptions);
+        seriesOptions = OCA.Analytics.Filter.cleanupDataOptionsArray(seriesOptions);
+        dataOptions = OCA.Analytics.Flexible.withSeriesOptions(storedDataOptions, seriesOptions);
         OCA.Analytics.currentReportData.options.dataoptions = dataOptions;
         return dataOptions;
     },
@@ -2254,6 +2506,12 @@ OCA.Analytics.Filter.Drag = {
         div.ondragstart = OCA.Analytics.Filter.Drag.drag;
         if (calculationIndex !== null) {
             div.dataset.calculationIndex = calculationIndex;
+        }
+        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+            const columnRef = OCA.Analytics.Flexible.referenceForIndex(OCA.Analytics.currentReportData, index);
+            if (columnRef) {
+                div.dataset.columnRef = columnRef;
+            }
         }
 
         const iconDiv = document.createElement('div');
@@ -2334,6 +2592,9 @@ OCA.Analytics.Filter.Drag = {
      */
     initialize: function () {
         let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions.layout;
+        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+            layoutConfig = OCA.Analytics.Flexible.resolveLayout(OCA.Analytics.currentReportData, layoutConfig);
+        }
         const sourceHeaders = OCA.Analytics.currentReportData.header || [];
         const headerItems = [...sourceHeaders];
         let rowsSection = document.getElementById('rows');

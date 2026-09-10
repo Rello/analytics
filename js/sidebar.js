@@ -174,7 +174,13 @@ OCA.Analytics.Sidebar.Report = {
             method: 'GET',
             headers: OCA.Analytics.headers()
         })
-            .then(response => response.json())
+            .then(async response => {
+                const data = await response.json().catch(() => null);
+                if (!response.ok) {
+                    throw new Error(OCA.Analytics.Flexible.errorMessage(data, t('analytics', 'Failed to load report')));
+                }
+                return data;
+            })
             .then(async data => {
                 let table;
                 if (data !== false) {
@@ -197,6 +203,7 @@ OCA.Analytics.Sidebar.Report = {
 
                     // build the sections depending on report type
                     OCA.Analytics.Sidebar.Report.buildSections(data['type']);
+                    OCA.Analytics.Sidebar.Report.configureFlexibleReportHeader(data);
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
                     if (data['type'] === OCA.Analytics.TYPE_GROUP) {
@@ -245,6 +252,50 @@ OCA.Analytics.Sidebar.Report = {
         document.getElementById('sidebarReportDimension1').value = data['dimension1'];
         document.getElementById('sidebarReportDimension2').value = data['dimension2'];
         document.getElementById('sidebarReportValue').value = data['value'];
+    },
+
+    showWizardDatasetSummary: async function () {
+        const summaryElement = document.getElementById('wizardNewDatasetSummary');
+        const id = Number(document.getElementById('wizardNewDataset').value);
+        const summary = OCA.Analytics.datasets.find(dataset => Number(dataset.id) === id);
+        if (!summary || !OCA.Analytics.Flexible.isFlexible(summary)) {
+            summaryElement.hidden = true;
+            summaryElement.textContent = '';
+            return;
+        }
+        try {
+            const descriptor = Array.isArray(summary.columns) ? summary : await OCA.Analytics.Flexible.request(
+                OC.generateUrl('apps/analytics/dataset/') + id,
+                {method: 'GET', headers: OCA.Analytics.headers()},
+                t('analytics', 'Failed to load dataset')
+            );
+            summaryElement.textContent = t('analytics', 'Flexible dataset · All {count} columns are included in the report.', {
+                count: OCA.Analytics.Flexible.columns(descriptor).length,
+            });
+            summaryElement.hidden = false;
+        } catch (error) {
+            summaryElement.hidden = true;
+            OCA.Analytics.Notification.notification('error', error.message);
+        }
+    },
+
+    configureFlexibleReportHeader: function (data) {
+        const flexible = OCA.Analytics.Flexible.isFlexible(data);
+        const dimensionHeader = document.getElementById('reportDimensionSectionHeader');
+        const dimensionSection = document.getElementById('reportDimensionSection');
+        const summaryRow = document.getElementById('sidebarReportDatasetSummaryRow');
+        const summary = document.getElementById('sidebarReportDatasetSummary');
+        if (flexible) {
+            dimensionHeader.style.display = 'none';
+            dimensionSection.style.display = 'none';
+            summary.textContent = t('analytics', 'Flexible dataset · All {count} columns are included in the report.', {
+                count: OCA.Analytics.Flexible.columns(data).length,
+            });
+            summaryRow.style.display = 'table-row';
+        } else {
+            summaryRow.style.display = 'none';
+            summary.textContent = '';
+        }
     },
 
     fillDatasourceRelatedFields: function (data) {
@@ -1007,6 +1058,12 @@ OCA.Analytics.Sidebar.Report = {
             OCA.Analytics.Notification.notification('error', error);
             return;
         }
+        const selectedDataset = OCA.Analytics.datasets.find(item => Number(item.id) === Number(dataset));
+        if (OCA.Analytics.Flexible.isFlexible(selectedDataset)) {
+            dimension1 = '';
+            dimension2 = '';
+            value = '';
+        }
 
         let payload = {
             name: name,
@@ -1307,6 +1364,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('wizardNewTypeDimensionRow').style.display = 'table-row';
             document.getElementById('wizardNewTypeStoredNew').classList.add('analyticsPrimary');
             document.getElementById('wizardNewTypeStoredOld').classList.remove('analyticsPrimary');
+            document.getElementById('wizardNewDatasetSummary').hidden = true;
         })
 
         document.getElementById('wizardNewTypeStoredOld').addEventListener('click', function () {
@@ -1314,6 +1372,7 @@ OCA.Analytics.Sidebar.Report = {
             document.getElementById('wizardNewTypeDimensionRow').style.display = 'none';
             document.getElementById('wizardNewTypeStoredNew').classList.remove('analyticsPrimary');
             document.getElementById('wizardNewTypeStoredOld').classList.add('analyticsPrimary');
+            OCA.Analytics.Sidebar.Report.showWizardDatasetSummary();
         })
 
         OCA.Analytics.Datasource.buildDropdown('wizardNewDatasource').then(() => {
@@ -1330,14 +1389,19 @@ OCA.Analytics.Sidebar.Report = {
 
         OCA.Analytics.Sidebar.Report.buildGroupingDropdown('wizardNewGrouping');
         OCA.Analytics.Sidebar.Report.buildDatasetDropdown('wizardNewDataset', true);
+        document.getElementById('wizardNewDataset').addEventListener('change', OCA.Analytics.Sidebar.Report.showWizardDatasetSummary);
         OCA.Analytics.Sidebar.Report.setWizardTypeMode('realtime');
     },
 
 };
 
 OCA.Analytics.Sidebar.Data = {
+    flexibleDescriptor: null,
+    flexibleRecordId: null,
 
     tabContainerData: function () {
+        OCA.Analytics.Sidebar.Data.flexibleDescriptor = null;
+        OCA.Analytics.Sidebar.Data.flexibleRecordId = null;
         let reportId;
         if (OCA.Analytics.currentContentType === 'dataset') {
             reportId = OCA.Analytics.currentDataset;
@@ -1366,29 +1430,39 @@ OCA.Analytics.Sidebar.Data = {
                     table.id = 'tableData';
                     document.getElementById('tabContainerData').innerHTML = '';
                     document.getElementById('tabContainerData').appendChild(table);
-                    document.getElementById('DataTextDimension1').innerText = data['dimension1'];
-                    document.getElementById('DataTextDimension2').innerText = data['dimension2'];
-                    document.getElementById('DataTextValue').innerText = data['value'];
+                    if (OCA.Analytics.Flexible.isFlexible(data)) {
+                        OCA.Analytics.Sidebar.Data.renderFlexibleData(data);
+                    } else {
+                        document.getElementById('DataTextDimension1').innerText = data['dimension1'];
+                        document.getElementById('DataTextDimension2').innerText = data['dimension2'];
+                        document.getElementById('DataTextValue').innerText = data['value'];
+                    }
                     document.getElementById('DataApiDataset').innerText = data['dataset'];
-                    const apiUrl = OC.generateUrl('/apps/analytics/api/4.0/data/') + data['dataset'] + '/add';
-                    document.getElementById('apiLinkText').innerText = apiUrl;
-                    document.getElementById('apiLink').dataset.link = window.location.origin + apiUrl;
+                    if (!OCA.Analytics.Flexible.isFlexible(data)) {
+                        const apiUrl = OC.generateUrl('/apps/analytics/api/4.0/data/') + data['dataset'] + '/add';
+                        document.getElementById('apiLinkText').innerText = apiUrl;
+                        document.getElementById('apiLink').dataset.link = window.location.origin + apiUrl;
+                    }
                     //document.getElementById('DataTextvalue').addEventListener('keydown', OCA.Analytics.Sidebar.Data.handleDataInputEnter);
-                    document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
-                    document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
+                    if (!OCA.Analytics.Flexible.isFlexible(data)) {
+                        document.getElementById('updateDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataUpdateButton);
+                        document.getElementById('deleteDataButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataDeletionButton);
+                    }
                     document.getElementById('importDataFileButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportFileButton);
                     document.getElementById('importDataClipboardButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataImportClipboardButton);
                     document.getElementById('advancedButton').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataAdvancedButton);
                     document.getElementById('apiLink').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDataApiButton);
 
-                    document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
-                    document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
-                    document.getElementById('DataDimension1').addEventListener('click', OCA.Analytics.Report.showDropDownList);
-                    document.getElementById('DataDimension2').addEventListener('click', OCA.Analytics.Report.showDropDownList);
+                    if (!OCA.Analytics.Flexible.isFlexible(data)) {
+                        document.getElementById('sidebarDataDimension1Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+                        document.getElementById('sidebarDataDimension2Hint').addEventListener('click', OCA.Analytics.Sidebar.Data.handleDimensionHint);
+                        document.getElementById('DataDimension1').addEventListener('click', OCA.Analytics.Report.showDropDownList);
+                        document.getElementById('DataDimension2').addEventListener('click', OCA.Analytics.Report.showDropDownList);
+                    }
 
                     OCA.Analytics.Sidebar.assignSectionHeaderClickEvents();
 
-                    document.getElementById('DataValue').addEventListener('keydown', function (event) {
+                    document.getElementById('DataValue')?.addEventListener('keydown', function (event) {
                         if (event.key === 'Enter') {
                             OCA.Analytics.Sidebar.Backend.updateData();
                             document.getElementById('DataDimension2').focus();
@@ -1401,6 +1475,131 @@ OCA.Analytics.Sidebar.Data = {
                     document.getElementById('tabContainerData').innerHTML = table;
                 }
             });
+    },
+
+    renderFlexibleData: function (descriptor) {
+        descriptor.storageDatasetId = Number(descriptor.dataset || descriptor.id);
+        this.flexibleDescriptor = descriptor;
+        this.flexibleRecordId = null;
+        const section = document.getElementById('dataManualSection');
+        section.replaceChildren();
+        const guidance = document.createElement('p');
+        guidance.className = 'userGuidance';
+        guidance.textContent = t('analytics', 'All dimension values together identify a record. Saving the same combination updates its measures.');
+        const form = document.createElement('div');
+        form.id = 'flexibleRecordForm';
+        OCA.Analytics.Flexible.columns(descriptor).forEach(column => {
+            const row = document.createElement('label');
+            row.className = 'flexibleRecordRow';
+            const label = document.createElement('span');
+            label.textContent = column.name + (column.nullable ? '' : ' *');
+            const input = column.type === 'boolean' && column.nullable
+                ? document.createElement('select')
+                : document.createElement('input');
+            if (input.tagName === 'SELECT') {
+                input.add(new Option(t('analytics', 'No value'), ''));
+                input.add(new Option(t('analytics', 'Yes'), 'true'));
+                input.add(new Option(t('analytics', 'No'), 'false'));
+            } else {
+                input.type = OCA.Analytics.Flexible.inputType(column);
+                if (column.type === 'decimal') {
+                    input.inputMode = 'decimal';
+                }
+            }
+            input.className = 'sidebarInput';
+            input.dataset.flexibleColumnRef = column.ref;
+            input.dataset.flexibleColumnType = column.type;
+            row.append(label, input);
+            form.appendChild(row);
+        });
+        const buttons = document.createElement('div');
+        buttons.className = 'sidebarButtonRow';
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'analyticsSecondary';
+        cancel.textContent = t('analytics', 'Cancel edit');
+        cancel.hidden = true;
+        cancel.id = 'flexibleRecordCancel';
+        cancel.addEventListener('click', () => this.resetFlexibleRecordForm());
+        const save = document.createElement('button');
+        save.type = 'button';
+        save.className = 'analyticsPrimary';
+        save.id = 'updateDataButton';
+        save.textContent = t('analytics', 'Save data');
+        save.addEventListener('click', () => OCA.Analytics.Sidebar.Backend.saveFlexibleRecord());
+        buttons.append(cancel, save);
+        const preview = document.createElement('div');
+        preview.id = 'flexibleRecordPreview';
+        section.append(guidance, form, buttons, preview);
+
+        const apiText = document.getElementById('apiLinkText');
+        const apiLink = document.getElementById('apiLink');
+        const apiUrl = OC.generateUrl('apps/analytics/dataset/') + descriptor.storageDatasetId + '/records';
+        apiText.textContent = apiUrl;
+        apiLink.dataset.link = window.location.origin + apiUrl;
+        this.renderFlexibleImportMapping(descriptor);
+        OCA.Analytics.Sidebar.Backend.loadFlexibleRecords();
+    },
+
+    resetFlexibleRecordForm: function () {
+        this.flexibleRecordId = null;
+        document.querySelectorAll('#flexibleRecordForm [data-flexible-column-ref]').forEach(input => {
+            input.type === 'checkbox' ? input.checked = false : input.value = '';
+        });
+        const cancel = document.getElementById('flexibleRecordCancel');
+        if (cancel) cancel.hidden = true;
+    },
+
+    editFlexibleRecord: function (recordId, row) {
+        this.flexibleRecordId = recordId;
+        OCA.Analytics.Flexible.columns(this.flexibleDescriptor).forEach((column, index) => {
+            const input = document.querySelector('#flexibleRecordForm [data-flexible-column-ref="' + column.ref + '"]');
+            OCA.Analytics.Flexible.setInputValue(input, column, row[index]);
+        });
+        document.getElementById('flexibleRecordCancel').hidden = false;
+    },
+
+    renderFlexibleImportMapping: function (descriptor) {
+        const section = document.getElementById('dataImportSection');
+        const settings = document.createElement('div');
+        settings.id = 'flexibleImportSettings';
+        const headerLabel = document.createElement('label');
+        headerLabel.textContent = t('analytics', 'Source header');
+        const header = document.createElement('input');
+        header.id = 'flexibleImportHeader';
+        header.className = 'sidebarInput';
+        header.placeholder = t('analytics', 'Date, Region, Revenue');
+        headerLabel.appendChild(header);
+        const delimiterLabel = document.createElement('label');
+        delimiterLabel.textContent = t('analytics', 'Delimiter');
+        const delimiter = document.createElement('select');
+        delimiter.id = 'flexibleImportDelimiter';
+        delimiter.className = 'sidebarInput';
+        [[',', t('analytics', 'Comma')], [';', t('analytics', 'Semicolon')], ['\t', t('analytics', 'Tab')]].forEach(item => delimiter.add(new Option(item[1], item[0])));
+        delimiterLabel.appendChild(delimiter);
+        const firstRow = document.createElement('label');
+        const firstRowCheckbox = document.createElement('input');
+        firstRowCheckbox.type = 'checkbox';
+        firstRowCheckbox.id = 'flexibleImportFirstRowHeader';
+        firstRowCheckbox.checked = true;
+        firstRow.append(firstRowCheckbox, document.createTextNode(' ' + t('analytics', 'First clipboard row is the header')));
+        const mapping = document.createElement('div');
+        mapping.id = 'flexibleImportMapping';
+        settings.append(headerLabel, delimiterLabel, firstRow, mapping);
+        section.insertBefore(settings, section.firstChild);
+
+        const parseHeader = () => {
+            const sourceHeader = OCA.Analytics.Flexible.sourceHeader(header.value, delimiter.value);
+            OCA.Analytics.Flexible.renderMappingEditor(mapping, descriptor, sourceHeader);
+        };
+        header.addEventListener('input', parseHeader);
+        delimiter.addEventListener('change', parseHeader);
+        document.getElementById('importDataClipboardText').addEventListener('input', event => {
+            if (!firstRowCheckbox.checked || !event.target.value) return;
+            header.value = event.target.value.split(/\r?\n/, 1)[0];
+            parseHeader();
+        });
+        parseHeader();
     },
 
     handleDimensionHint: function () {
@@ -1497,6 +1696,110 @@ OCA.Analytics.Sidebar.Backend = {
             });
     },
 
+    flexibleValues: function () {
+        const descriptor = OCA.Analytics.Sidebar.Data.flexibleDescriptor;
+        const values = {};
+        OCA.Analytics.Flexible.columns(descriptor).forEach(column => {
+            const input = document.querySelector('#flexibleRecordForm [data-flexible-column-ref="' + column.ref + '"]');
+            values[column.ref] = OCA.Analytics.Flexible.valueFromInput(input, column);
+        });
+        return values;
+    },
+
+    saveFlexibleRecord: async function () {
+        const descriptor = OCA.Analytics.Sidebar.Data.flexibleDescriptor;
+        const recordId = OCA.Analytics.Sidebar.Data.flexibleRecordId;
+        const button = document.getElementById('updateDataButton');
+        this.setButtonBusy(button, true);
+        const baseUrl = OC.generateUrl('apps/analytics/dataset/') + descriptor.storageDatasetId + '/records';
+        try {
+            const body = recordId === null
+                ? {schemaVersion: descriptor.schemaVersion, records: [{values: this.flexibleValues()}]}
+                : {schemaVersion: descriptor.schemaVersion, values: this.flexibleValues()};
+            const result = await OCA.Analytics.Flexible.request(recordId === null ? baseUrl : baseUrl + '/' + recordId, {
+                method: recordId === null ? 'POST' : 'PUT',
+                headers: OCA.Analytics.headers(),
+                body: JSON.stringify(body),
+            }, t('analytics', 'Failed to save data'));
+            OCA.Analytics.Notification.notification('success', recordId === null
+                ? result.insert + ' ' + t('analytics', 'records inserted') + ', ' + result.update + ' ' + t('analytics', 'records updated')
+                : t('analytics', 'Saved'));
+            OCA.Analytics.Sidebar.Data.resetFlexibleRecordForm();
+            await this.loadFlexibleRecords();
+        } catch (error) {
+            OCA.Analytics.Notification.notification('error', error.message);
+        } finally {
+            this.setButtonBusy(button, false);
+        }
+    },
+
+    loadFlexibleRecords: async function () {
+        const descriptor = OCA.Analytics.Sidebar.Data.flexibleDescriptor;
+        if (!descriptor) return;
+        const container = document.getElementById('flexibleRecordPreview');
+        container.innerHTML = '<div class="icon-loading" style="height: 44px"></div>';
+        try {
+            const result = await OCA.Analytics.Flexible.request(OC.generateUrl('apps/analytics/dataset/') + descriptor.storageDatasetId + '/query', {
+                method: 'POST',
+                headers: OCA.Analytics.headers(),
+                body: JSON.stringify({
+                    aggregate: false,
+                    columns: OCA.Analytics.Flexible.columns(descriptor).map(column => column.ref),
+                    limit: 100,
+                    offset: 0,
+                }),
+            }, t('analytics', 'Failed to load records'));
+            container.replaceChildren();
+            if (!result.data.length) {
+                container.textContent = t('analytics', 'No data');
+                return;
+            }
+            const table = document.createElement('table');
+            table.className = 'flexibleRecordTable';
+            const head = document.createElement('tr');
+            result.header.forEach(label => head.appendChild(Object.assign(document.createElement('th'), {textContent: label})));
+            head.appendChild(document.createElement('th'));
+            table.appendChild(head);
+            result.data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                row.forEach(value => tr.appendChild(Object.assign(document.createElement('td'), {textContent: value ?? ''})));
+                const actions = document.createElement('td');
+                const edit = document.createElement('button');
+                edit.type = 'button';
+                edit.className = 'analyticsSecondary';
+                edit.textContent = t('analytics', 'Edit');
+                edit.addEventListener('click', () => OCA.Analytics.Sidebar.Data.editFlexibleRecord(result.recordIds[index], row));
+                const remove = document.createElement('button');
+                remove.type = 'button';
+                remove.className = 'analyticsSecondary icon-delete';
+                remove.title = t('analytics', 'Delete');
+                remove.addEventListener('click', () => this.deleteFlexibleRecord(result.recordIds[index]));
+                actions.append(edit, remove);
+                tr.appendChild(actions);
+                table.appendChild(tr);
+            });
+            container.appendChild(table);
+        } catch (error) {
+            container.textContent = error.message;
+        }
+    },
+
+    deleteFlexibleRecord: function (recordId) {
+        OCA.Analytics.Notification.confirm(t('analytics', 'Delete data'), t('analytics', 'Are you sure?'), async () => {
+            try {
+                const descriptor = OCA.Analytics.Sidebar.Data.flexibleDescriptor;
+                await OCA.Analytics.Flexible.request(OC.generateUrl('apps/analytics/dataset/') + descriptor.storageDatasetId + '/records/' + recordId, {
+                    method: 'DELETE', headers: OCA.Analytics.headers(),
+                }, t('analytics', 'Failed to delete data'));
+                OCA.Analytics.Notification.dialogClose();
+                OCA.Analytics.Sidebar.Data.resetFlexibleRecordForm();
+                await this.loadFlexibleRecords();
+            } catch (error) {
+                OCA.Analytics.Notification.notification('error', error.message);
+            }
+        });
+    },
+
     deleteDataSimulate: function () {
         const objectId = parseInt(OCA.Analytics.currentDataset);
         const button = document.getElementById('deleteDataButton');
@@ -1560,29 +1863,55 @@ OCA.Analytics.Sidebar.Backend = {
         OCA.Analytics.Sidebar.Backend.setButtonBusy(button, true);
 
         let requestUrl = OC.generateUrl('apps/analytics/data/importCSV');
+        const descriptor = OCA.Analytics.Sidebar.Data.flexibleDescriptor;
+        let importValue = document.getElementById('importDataClipboardText').value;
+        let flexiblePayload = {};
+        if (descriptor) {
+            const delimiter = document.getElementById('flexibleImportDelimiter').value;
+            const header = OCA.Analytics.Flexible.sourceHeader(document.getElementById('flexibleImportHeader').value, delimiter);
+            const mappingContainer = document.getElementById('flexibleImportMapping');
+            flexiblePayload = {
+                header: header,
+                delimiter: delimiter,
+                storageMapping: OCA.Analytics.Flexible.buildMapping(descriptor, header, mappingContainer),
+            };
+            if (document.getElementById('flexibleImportFirstRowHeader').checked) {
+                importValue = importValue.split(/\r?\n/).slice(1).join('\n');
+            }
+        }
         fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
-                import: document.getElementById('importDataClipboardText').value,
+                import: importValue,
                 isDataset: OCA.Analytics.isDataset,
+                ...flexiblePayload,
             })
         })
-            .then(response => response.json())
+            .then(async response => {
+                const data = await response.json().catch(() => null);
+                if (!response.ok) {
+                    throw new Error(OCA.Analytics.Flexible.errorMessage(data, t('analytics', 'Failed to import data')));
+                }
+                return data;
+            })
             .then(data => {
-                if (data.error === 0) {
+                if (Number(data.error) === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (!OCA.Analytics.isDataset) {
+                    if (OCA.Analytics.Sidebar.Data.flexibleDescriptor) {
+                        OCA.Analytics.Sidebar.Backend.loadFlexibleRecords();
+                    } else if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.Report.resetContentArea();
                         OCA.Analytics.Report.Backend.getData();
                     }
                 } else {
-                    OCA.Analytics.Notification.notification('error', data.error);
+                    const validation = Array.isArray(data.validationErrors) ? data.validationErrors[0] : null;
+                    OCA.Analytics.Notification.notification('error', validation?.message || data.error);
                 }
             })
             .catch(error => {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
+                OCA.Analytics.Notification.notification('error', error.message || t('analytics', 'Technical error. Please check the logs.'));
             })
             .finally(() => {
                 OCA.Analytics.Sidebar.Backend.setButtonBusy(button, false);
@@ -1595,6 +1924,15 @@ OCA.Analytics.Sidebar.Backend = {
         OCA.Analytics.Sidebar.Backend.setButtonBusy(button, true);
 
         let requestUrl = OC.generateUrl('apps/analytics/data/importFile');
+        const descriptor = OCA.Analytics.Sidebar.Data.flexibleDescriptor;
+        let flexiblePayload = {};
+        if (descriptor) {
+            const delimiter = document.getElementById('flexibleImportDelimiter').value;
+            const header = OCA.Analytics.Flexible.sourceHeader(document.getElementById('flexibleImportHeader').value, delimiter);
+            flexiblePayload.storageMapping = OCA.Analytics.Flexible.buildMapping(
+                descriptor, header, document.getElementById('flexibleImportMapping')
+            );
+        }
         fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
@@ -1602,22 +1940,32 @@ OCA.Analytics.Sidebar.Backend = {
                 reportId: reportId,
                 path: path,
                 isDataset: OCA.Analytics.isDataset,
+                ...flexiblePayload,
             })
         })
-            .then(response => response.json())
+            .then(async response => {
+                const data = await response.json().catch(() => null);
+                if (!response.ok) {
+                    throw new Error(OCA.Analytics.Flexible.errorMessage(data, t('analytics', 'Failed to import data')));
+                }
+                return data;
+            })
             .then(data => {
-                if (data.error === 0) {
+                if (Number(data.error) === 0) {
                     OCA.Analytics.Notification.notification('success', data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated'));
-                    if (!OCA.Analytics.isDataset) {
+                    if (OCA.Analytics.Sidebar.Data.flexibleDescriptor) {
+                        OCA.Analytics.Sidebar.Backend.loadFlexibleRecords();
+                    } else if (!OCA.Analytics.isDataset) {
                         OCA.Analytics.Report.resetContentArea();
                         OCA.Analytics.Report.Backend.getData();
                     }
                 } else {
-                    OCA.Analytics.Notification.notification('error', data.error);
+                    const validation = Array.isArray(data.validationErrors) ? data.validationErrors[0] : null;
+                    OCA.Analytics.Notification.notification('error', validation?.message || data.error);
                 }
             })
             .catch(error => {
-                OCA.Analytics.Notification.notification('error', t('analytics', 'Technical error. Please check the logs.'));
+                OCA.Analytics.Notification.notification('error', error.message || t('analytics', 'Technical error. Please check the logs.'));
             })
             .finally(() => {
                 OCA.Analytics.Sidebar.Backend.setButtonBusy(button, false);

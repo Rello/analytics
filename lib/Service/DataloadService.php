@@ -13,6 +13,7 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Controller\DatasourceController;
 use OCA\Analytics\Notification\NotificationManager;
 use OCA\Analytics\Db\DataloadMapper;
+use OCA\Analytics\Exception\FlexibleStorageException;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
@@ -31,6 +32,7 @@ class DataloadService
     private $l10n;
     private $DataloadMapper;
     private $NotificationManager;
+    private FlexibleStorageService $FlexibleStorageService;
 
     public function __construct(
         $userId,
@@ -43,7 +45,8 @@ class DataloadService
         StorageService $StorageService,
         VariableService $VariableService,
         NotificationManager $NotificationManager,
-        DataloadMapper $DataloadMapper
+        DataloadMapper $DataloadMapper,
+        FlexibleStorageService $FlexibleStorageService
     )
     {
         $this->userId = $userId;
@@ -57,6 +60,7 @@ class DataloadService
         $this->VariableService = $VariableService;
         $this->NotificationManager = $NotificationManager;
         $this->DataloadMapper = $DataloadMapper;
+        $this->FlexibleStorageService = $FlexibleStorageService;
     }
 
     // Data loads
@@ -104,7 +108,7 @@ class DataloadService
      * @param $schedule
      * @return bool
      */
-    public function update(int $dataloadId, $name, $option, $schedule)
+    public function update(int $dataloadId, $name, $option, $schedule, $storageMapping = null)
     {
         if (empty($this->DataloadMapper->readOwnById($dataloadId))) {
             return false;
@@ -115,7 +119,14 @@ class DataloadService
         }
         $option = json_encode($array);
 
-        return $this->DataloadMapper->update($dataloadId, $name, $option, $schedule);
+        if (is_array($storageMapping)) {
+            $storageMapping = json_encode($storageMapping, JSON_THROW_ON_ERROR);
+        }
+        if ($storageMapping !== null && !is_array(json_decode((string)$storageMapping, true))) {
+            return false;
+        }
+
+        return $this->DataloadMapper->update($dataloadId, $name, $option, $schedule, $storageMapping);
     }
 
     /**
@@ -187,12 +198,16 @@ class DataloadService
 
         // dont continue in case of data source error
         if (!is_array($result) || $result['error'] !== 0) {
-            return [
+            $response = [
                 'insert' => $insert,
                 'update' => $update,
                 'delete' => $delete,
                 'error' => 1,
             ];
+            if (is_array($result) && is_string($result['error'] ?? null) && $result['error'] !== '') {
+                $response['message'] = $result['error'];
+            }
+            return $response;
         }
 
         // get the meta data
@@ -206,10 +221,10 @@ class DataloadService
             ];
         }
         $option = json_decode($dataloadMetadata['option'], true);
-        $datasetId = $dataloadMetadata['dataset'];
+	        $datasetId = $dataloadMetadata['dataset'];
 
         // this is a deletion request. Just run the deletion and stop after that with a return.
-        if ($dataloadMetadata['datasource'] === 0) {
+	        if ($dataloadMetadata['datasource'] === 0) {
             // deletion jobs are using the same dimension/option/value settings a report filter
             $filter = array();
             $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
@@ -224,7 +239,32 @@ class DataloadService
                 'delete' => $records,
                 'error' => $error,
             ];
-        }
+	        }
+
+	        $dataset = $this->DatasetService->read((int)$datasetId);
+	        if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
+	            try {
+	                $flexibleResult = $this->FlexibleStorageService->executeMappedLoad(
+	                    (int)$datasetId,
+	                    $dataloadMetadata['storage_mapping'] ?? null,
+	                    is_array($result['header'] ?? null) ? $result['header'] : [],
+	                    is_array($result['data'] ?? null) ? $result['data'] : [],
+	                    isset($option['delete']) && $option['delete'] === 'true'
+	                );
+	            } catch (FlexibleStorageException $e) {
+	                return [
+	                    'insert' => 0,
+	                    'update' => 0,
+	                    'delete' => 0,
+	                    'error' => 1,
+	                    'validationErrors' => [$e->toResponse()['error']],
+	                ];
+	            }
+	            if ($flexibleResult['insert'] > 0 || $flexibleResult['update'] > 0 || $flexibleResult['delete'] > 0) {
+	                $this->DatasetService->provider((int)$datasetId);
+	            }
+	            return $flexibleResult;
+	        }
 
         // "delete all date before loading" is true in the data source options
         // in this case, bulkInsert is additionally set to true. Then no further checks for existing records are needed
@@ -331,8 +371,20 @@ class DataloadService
                     ]);
                 }
 
-                $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata, false);
-                $result['datasetId'] = $dataloadMetadata['dataset'];
+	                $result = $this->DatasourceController->read((int)$dataloadMetadata['datasource'], $dataloadMetadata, false);
+	                $result['datasetId'] = $dataloadMetadata['dataset'];
+	                $dataset = $this->DatasetService->read((int)$dataloadMetadata['dataset']);
+	                if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
+	                    $result['storageMode'] = 'flexible_shared';
+	                    $result['schemaVersion'] = (int)$dataset['schemaVersion'];
+	                    $result['storageMapping'] = json_decode((string)($dataloadMetadata['storage_mapping'] ?? ''), true);
+	                    $result['mappingPreview'] = $this->FlexibleStorageService->previewMapping(
+	                        (int)$dataloadMetadata['dataset'],
+	                        $dataloadMetadata['storage_mapping'] ?? null,
+	                        is_array($result['header'] ?? null) ? $result['header'] : [],
+	                        is_array($result['data'] ?? null) ? $result['data'] : []
+	                    );
+	                }
             } else {
                 // this is a deletion request. Just run the simulation and return the possible row count in the expected result array
                 $option = json_decode($dataloadMetadata['option'], true);
@@ -464,11 +516,30 @@ class DataloadService
      * @return array|false
      * @throws \OCP\DB\Exception
      */
-    public function importClipboard($objectId, $import, bool $isDataset)
-    {
-        $datasetId = $this->getDatasetId($objectId, $isDataset);
-        if ($datasetId != '') {
-            $insert = $update = $errorMessage = $errorCounter = 0;
+	    public function importClipboard($objectId, $import, bool $isDataset, $storageMapping = null, $header = null, $delimiter = null)
+	    {
+	        $datasetId = $this->getDatasetId($objectId, $isDataset);
+	        if ($datasetId != '') {
+	            $dataset = $this->DatasetService->read((int)$datasetId);
+	            if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
+	                if ($import === '' || !is_array($header) || !is_string($delimiter) || $delimiter === '') {
+	                    return ['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 1, 'validationErrors' => [[
+	                        'code' => 'invalid_clipboard_import',
+	                        'message' => 'Flexible clipboard imports require explicit header and delimiter values.',
+	                        'details' => [],
+	                    ]]];
+	                }
+	                $rows = array_map(static fn (string $row): array => str_getcsv($row, $delimiter), str_getcsv($import, "\n"));
+	                try {
+	                    $result = $this->FlexibleStorageService->executeMappedLoad((int)$datasetId, $storageMapping, $header, $rows, false);
+	                    $result['delimiter'] = $delimiter;
+	                    $this->DatasetService->provider((int)$datasetId);
+	                    return $result;
+	                } catch (FlexibleStorageException $e) {
+	                    return ['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 1, 'validationErrors' => [$e->toResponse()['error']]];
+	                }
+	            }
+	            $insert = $update = $errorMessage = $errorCounter = 0;
             $delimiter = '';
 
             if ($import === '') {
@@ -525,7 +596,7 @@ class DataloadService
      * @return array|false
      * @throws \OCP\DB\Exception
      */
-    public function importFile(int $objectId, $path, bool $isDataset)
+	    public function importFile(int $objectId, $path, bool $isDataset, $storageMapping = null)
     {
         $datasetId = $this->getDatasetId($objectId, $isDataset);
         if ($datasetId != '') {
@@ -533,7 +604,23 @@ class DataloadService
             $reportMetadata = array();
             $reportMetadata['link'] = $path;
             $reportMetadata['user_id'] = $this->userId;
-            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $reportMetadata, false);
+	            $result = $this->DatasourceController->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, $reportMetadata, false);
+	            $dataset = $this->DatasetService->read((int)$datasetId);
+	            if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
+	                try {
+	                    $flexibleResult = $this->FlexibleStorageService->executeMappedLoad(
+	                        (int)$datasetId,
+	                        $storageMapping,
+	                        is_array($result['header'] ?? null) ? $result['header'] : [],
+	                        is_array($result['data'] ?? null) ? $result['data'] : [],
+	                        false
+	                    );
+	                    $this->DatasetService->provider((int)$datasetId);
+	                    return $flexibleResult;
+	                } catch (FlexibleStorageException $e) {
+	                    return ['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 1, 'validationErrors' => [$e->toResponse()['error']]];
+	                }
+	            }
 
             if ($result['error'] === 0) {
                 foreach ($result['data'] as &$row) {

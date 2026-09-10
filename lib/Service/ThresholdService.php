@@ -10,7 +10,11 @@ namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Db\ThresholdMapper;
+use OCA\Analytics\Db\FlexibleStorageMapper;
+use OCA\Analytics\Exception\FlexibleStorageException;
 use OCA\Analytics\Notification\NotificationManager;
+use OCA\Analytics\Storage\DatasetStorageResolver;
+use OCA\Analytics\Storage\FlexibleColumnResolver;
 use OCP\DB\Exception;
 use Psr\Log\LoggerInterface;
 use OCP\IL10N;
@@ -24,6 +28,8 @@ class ThresholdService {
 	private $NotificationManager;
 	private $VariableService;
 	private $l10n;
+	private DatasetStorageResolver $DatasetStorageResolver;
+	private FlexibleStorageMapper $FlexibleStorageMapper;
 
 	public function __construct(
 		LoggerInterface     $logger,
@@ -31,7 +37,9 @@ class ThresholdService {
 		NotificationManager $NotificationManager,
 		ReportMapper        $ReportMapper,
 		VariableService     $VariableService,
-		IL10N               $l10n
+		IL10N               $l10n,
+		DatasetStorageResolver $DatasetStorageResolver,
+		FlexibleStorageMapper $FlexibleStorageMapper
 	) {
 		$this->logger = $logger;
 		$this->ThresholdMapper = $ThresholdMapper;
@@ -39,6 +47,8 @@ class ThresholdService {
 		$this->ReportMapper = $ReportMapper;
 		$this->VariableService = $VariableService;
 		$this->l10n = $l10n;
+		$this->DatasetStorageResolver = $DatasetStorageResolver;
+		$this->FlexibleStorageMapper = $FlexibleStorageMapper;
 	}
 
 	/**
@@ -74,12 +84,26 @@ class ThresholdService {
 	 * @return int
 	 * @throws Exception
 	 */
-	public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring) {
-		if (empty($this->ReportMapper->readOwn($reportId))) {
+	public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring, ?string $sourceColumnRef = null) {
+		$report = $this->ReportMapper->readOwn($reportId);
+		if (empty($report)) {
 			return 0;
 		}
+		if ((int)($report['dataset'] ?? 0) > 0) {
+			$storage = $this->DatasetStorageResolver->resolve((int)$report['dataset'], true);
+			if ($storage['mode'] === DatasetStorageResolver::FLEXIBLE_SHARED) {
+				if ($sourceColumnRef === null) {
+					throw new FlexibleStorageException('missing_threshold_column', 'Flexible thresholds require a source column reference.', ['field' => 'sourceColumnRef']);
+				}
+				(new FlexibleColumnResolver($this->FlexibleStorageMapper->getColumns((int)$report['dataset'])))->resolve($sourceColumnRef);
+			} elseif ($sourceColumnRef !== null) {
+				throw new FlexibleStorageException('invalid_threshold_column', 'Source column references are available only for flexible datasets.', ['field' => 'sourceColumnRef']);
+			}
+		} elseif ($sourceColumnRef !== null) {
+			throw new FlexibleStorageException('invalid_threshold_column', 'Source column references are available only for flexible datasets.', ['field' => 'sourceColumnRef']);
+		}
 		$this->ReportMapper->increaseVersionByReport($reportId);
-		return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
+		return $this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring, $sourceColumnRef);
 	}
 
 	private function floatvalue($val) {
@@ -302,5 +326,70 @@ class ThresholdService {
 			}
 		}
 		return $result;
+	}
+
+	/** @param array<string,mixed> $values stable column reference to canonical value */
+	public function validateFlexible(int $datasetId, array $values, bool $insert): void {
+		$this->validateFlexibleRecords($datasetId, [['values' => $values, 'insert' => $insert]]);
+	}
+
+	/** @param list<array{values:array<string,mixed>,insert:bool}> $records */
+	public function validateFlexibleRecords(int $datasetId, array $records): void {
+		$columns = array_column($this->FlexibleStorageMapper->getColumns($datasetId), null, 'ref');
+		foreach ($this->ReportMapper->reportsForDataset($datasetId) as $report) {
+			$reportId = (int)$report['id'];
+			$thresholds = $this->VariableService->replaceThresholdsVariables(
+				$this->ThresholdMapper->getSevOneThresholdsByReport($reportId)
+			);
+			foreach ($records as $record) {
+				foreach ($thresholds as $threshold) {
+					$reference = $threshold['source_column_ref'] ?? null;
+					if (
+						!is_string($reference)
+						|| !array_key_exists($reference, $record['values'])
+						|| !isset($columns[$reference])
+						|| (($threshold['user_id'] ?? null) !== ($report['user_id'] ?? null))
+					) {
+						continue;
+					}
+					$compare = $record['values'][$reference];
+					$matched = $threshold['option'] === 'new' && $record['insert'];
+					if (!$matched && $threshold['option'] !== 'new') {
+						$matched = $this->matchesThreshold($compare, $threshold['target'], (string)$threshold['option']);
+					}
+					if (!$matched) {
+						continue;
+					}
+					$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
+						'report' => $report['name'],
+						'subject' => $columns[$reference]['name'],
+						'rule' => $threshold['option'] === 'new' ? $this->l10n->t('new record') : $threshold['option'],
+						'value' => $threshold['option'] === 'new' ? '' : $threshold['target'],
+					], $threshold['user_id']);
+				}
+			}
+		}
+	}
+
+	private function matchesThreshold(mixed $value, mixed $target, string $option): bool {
+		$option = strtoupper($option);
+		$option = ['=' => 'EQ', '>' => 'GT', '<' => 'LT', '>=' => 'GE', '<=' => 'LE', '!=' => 'NE'][$option] ?? $option;
+		return match ($option) {
+			'EQ' => $this->compareValues($value, $target) === 0,
+			'NE' => $this->compareValues($value, $target) !== 0,
+			'GT' => $this->compareValues($value, $target) > 0,
+			'GE' => $this->compareValues($value, $target) >= 0,
+			'LT' => $this->compareValues($value, $target) < 0,
+			'LE' => $this->compareValues($value, $target) <= 0,
+			'LIKE' => strpos((string)$value, (string)$target) !== false,
+			'IN' => $this->matchesInThreshold($value, (string)$target),
+			default => false,
+		};
+	}
+
+	private function matchesInThreshold(mixed $value, string $target): bool {
+		preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $target, $matches);
+		$values = array_map(static fn (string $item): string => trim($item, " '"), $matches[0]);
+		return in_array((string)$value, $values, true);
 	}
 }

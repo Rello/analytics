@@ -145,6 +145,8 @@ Object.assign(OCA.Analytics.Dataset = {
 OCA.Analytics.Dataset.Dataload = OCA.Analytics.Dataset.Dataload || {};
 Object.assign(OCA.Analytics.Dataset.Dataload = {
     dataloadArray: [],
+    datasetDescriptor: null,
+    sourceHeader: [],
 
     getRequestErrorMessage: function (data, fallbackMessage) {
         if (typeof data === 'string' && data !== '') {
@@ -156,7 +158,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         if (data && data.ocs && data.ocs.meta && typeof data.ocs.meta.message === 'string' && data.ocs.meta.message !== '') {
             return data.ocs.meta.message;
         }
-        return fallbackMessage;
+        return OCA.Analytics.Flexible.errorMessage(data, fallbackMessage);
     },
 
     fetchJson: function (requestUrl, options, fallbackMessage) {
@@ -228,11 +230,17 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         let url = OC.generateUrl('apps/analytics/dataload');
         let params = new URLSearchParams({datasetId: datasetId});
         let requestUrl = `${url}?${params}`;
-        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        }, t('analytics', 'Failed to load data loads'))
-            .then(data => {
+        const descriptorUrl = OC.generateUrl('apps/analytics/dataset/') + datasetId;
+        Promise.all([
+            OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
+                method: 'GET', headers: OCA.Analytics.headers()
+            }, t('analytics', 'Failed to load data loads')),
+            OCA.Analytics.Dataset.Dataload.fetchJson(descriptorUrl, {
+                method: 'GET', headers: OCA.Analytics.headers()
+            }, t('analytics', 'Failed to load dataset')),
+        ])
+            .then(([data, descriptor]) => {
+                OCA.Analytics.Dataset.Dataload.datasetDescriptor = descriptor;
                 // clone the DOM template
                 let table = document.importNode(document.getElementById('templateDataload').content, true);
                 table.id = 'tableDataload';
@@ -301,12 +309,16 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         const datasetId = OCA.Analytics.currentDataset;
         let dataset = OCA.Analytics.datasets.find(x => parseInt(x.id) === parseInt(datasetId));
 
+        const descriptor = OCA.Analytics.Dataset.Dataload.datasetDescriptor;
+        const dimensionPlaceholder = OCA.Analytics.Flexible.isFlexible(descriptor)
+            ? OCA.Analytics.Flexible.dimensions(descriptor).map(column => column.ref + '-' + column.name).join('/')
+            : 'dimension1-' + dataset['dimension1'] + '/' + 'dimension2-' + dataset['dimension2'];
         let datasetOptions = [];
         datasetOptions.push({
             id: 'filterDimension',
             name: t('analytics', 'Filter by'),
             type: 'tf',
-            placeholder: 'dimension1-' + dataset['dimension1'] + '/' + 'dimension2-' + dataset['dimension2']
+            placeholder: dimensionPlaceholder
         });
         datasetOptions.push({
             id: 'filterOption',
@@ -372,6 +384,21 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         // get all the options for a data source
         document.getElementById('dataloadDetailItems').innerHTML = '';
         document.getElementById('dataloadDetailItems').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(dataload['datasource']));
+
+        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.Dataset.Dataload.datasetDescriptor)
+            && Number(dataload['datasource']) !== 0) {
+            const mapping = OCA.Analytics.Flexible.parseMapping(dataload.storage_mapping);
+            const mappingContainer = document.createElement('div');
+            mappingContainer.id = 'flexibleDataloadMapping';
+            document.getElementById('dataloadDetailItems').appendChild(mappingContainer);
+            OCA.Analytics.Dataset.Dataload.sourceHeader = Array.isArray(mapping?.sourceHeader) ? mapping.sourceHeader : [];
+            OCA.Analytics.Flexible.renderMappingEditor(
+                mappingContainer,
+                OCA.Analytics.Dataset.Dataload.datasetDescriptor,
+                OCA.Analytics.Dataset.Dataload.sourceHeader,
+                mapping
+            );
+        }
 
         // set the options for a data source
         let fieldValues = OCA.Analytics.Dataset.Dataload.parseOptions(dataload['option']);
@@ -442,36 +469,50 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         OCA.Analytics.Dataset.Dataload.updateDataload();
     },
 
-    updateDataload: function () {
+    updateDataload: function (notify = true) {
         const dataloadId = parseInt(document.getElementById('dataloadDetail').dataset.dataloadId);
         let option = {};
 
         // loop all dynamic options of the selected data source
-        let inputFields = document.querySelectorAll('#dataloadDetailItems input, #dataloadDetailItems select, #dataloadDetailItems textarea, #dataloadDetailDelete select');
+        let inputFields = document.querySelectorAll('#dataloadDetailItems input:not([data-flexible-column-ref]), #dataloadDetailItems select:not([data-flexible-column-ref]), #dataloadDetailItems textarea, #dataloadDetailDelete select');
         for (let inputField of inputFields) {
             option[inputField['id']] = inputField['value'];
         }
         option = JSON.stringify(option);
 
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + dataloadId;
-        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
+        const body = {
+            name: document.getElementById('dataloadName').value,
+            schedule: document.getElementById('dataloadSchedule').value,
+            option: option,
+        };
+        const mappingContainer = document.getElementById('flexibleDataloadMapping');
+        if (mappingContainer && OCA.Analytics.Dataset.Dataload.sourceHeader.length) {
+            body.storageMapping = OCA.Analytics.Flexible.buildMapping(
+                OCA.Analytics.Dataset.Dataload.datasetDescriptor,
+                OCA.Analytics.Dataset.Dataload.sourceHeader,
+                mappingContainer
+            );
+        }
+        return OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'PUT',
             headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                name: document.getElementById('dataloadName').value,
-                schedule: document.getElementById('dataloadSchedule').value,
-                option: option,
-            })
+            body: JSON.stringify(body)
         }, t('analytics', 'Failed to save data load'))
             .then(data => {
-                OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
+                if (notify) OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['schedule'] = document.getElementById('dataloadSchedule').value;
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['name'] = document.getElementById('dataloadName').value;
                 OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['option'] = option;
+                if (body.storageMapping) {
+                    OCA.Analytics.Dataset.Dataload.dataloadArray.find(x => x.id === dataloadId)['storage_mapping'] = JSON.stringify(body.storageMapping);
+                }
                 document.querySelector('[data-dataload-id="' + dataloadId + '"]').textContent = document.getElementById('dataloadName').value;
+                return data;
             })
             .catch(error => {
                 OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to save data load'));
+                return false;
             });
     },
 
@@ -540,7 +581,7 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/dataload/') + mode;
-        OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
+        const run = () => OCA.Analytics.Dataset.Dataload.fetchJson(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
@@ -549,12 +590,28 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         }, t('analytics', 'Failed to run data load'))
             .then(data => {
                 if (mode === 'simulate') {
+                    if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.Dataset.Dataload.datasetDescriptor)) {
+                        const header = Array.isArray(data.header) ? data.header : [];
+                        OCA.Analytics.Dataset.Dataload.sourceHeader = header;
+                        const currentDataload = OCA.Analytics.Dataset.Dataload.dataloadArray.find(x =>
+                            parseInt(x.id) === parseInt(document.getElementById('dataloadDetail').dataset.dataloadId));
+                        OCA.Analytics.Flexible.renderMappingEditor(
+                            document.getElementById('flexibleDataloadMapping'),
+                            OCA.Analytics.Dataset.Dataload.datasetDescriptor,
+                            header,
+                            data.storageMapping || currentDataload?.storage_mapping,
+                            Array.isArray(data.data?.[0]) ? data.data[0] : []
+                        );
+                    }
                     let dialogContent;
                     let errorData = '';
                     if (parseInt(data.error) === 0) {
 						dialogContent = document.createElement('pre');
                         dialogContent.id = 'simulationData';
-						dialogContent.textContent = JSON.stringify(data.data, null, 2);
+                        dialogContent.textContent = JSON.stringify({
+                            data: data.data,
+                            mappingPreview: data.mappingPreview,
+                        }, null, 2);
                     } else {
                         dialogContent = document.createElement('div');
 						const rawData = document.createElement('textarea');
@@ -573,17 +630,29 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
                 } else {
                     let messageType;
+                    const summary = data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated') + ', ' + data.error + ' ' + t('analytics', 'errors') + ', ' + data.delete + ' ' + t('analytics', 'deletions');
                     if (parseInt(data.error) === 0) {
                         messageType = 'success';
                     } else {
                         messageType = 'error';
                     }
-                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated') + ', ' + data.error + ' ' + t('analytics', 'errors') + ', ' + data.delete + ' ' + t('analytics', 'deletions'));
+                    const message = messageType === 'error'
+                        ? OCA.Analytics.Dataset.Dataload.getRequestErrorMessage(data, summary)
+                        : summary;
+                    OCA.Analytics.Notification.notification(messageType, message);
                 }
             })
             .catch(error => {
                 OCA.Analytics.Dataset.Dataload.showRequestError(error, t('analytics', 'Failed to run data load'), mode === 'simulate');
             });
+        const hasMappingEditor = document.querySelectorAll('#flexibleDataloadMapping [data-flexible-column-ref]').length > 0;
+        if (hasMappingEditor) {
+            OCA.Analytics.Dataset.Dataload.updateDataload(false).then(result => {
+                if (result !== false) run();
+            });
+        } else {
+            run();
+        }
     },
 
     handleFilepicker: function () {
@@ -632,6 +701,137 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 OCA.Analytics.Dataset.Dataset = OCA.Analytics.Dataset.Dataset || {};
 Object.assign(OCA.Analytics.Dataset.Dataset = {
     dataloadArray: [],
+    currentDescriptor: null,
+
+    createColumnRow: function (column = {}, allowRemove = true) {
+        const row = document.createElement('div');
+        row.className = 'flexibleColumnRow';
+        if (column.ref) {
+            row.dataset.columnRef = column.ref;
+        }
+
+        const name = document.createElement('input');
+        name.className = 'sidebarInput flexibleColumnName';
+        name.placeholder = t('analytics', 'Column name');
+        name.value = column.name || '';
+
+        const type = document.createElement('select');
+        type.className = 'sidebarInput flexibleColumnType';
+        ['text', 'decimal', 'date', 'datetime', 'boolean'].forEach(value => {
+            type.add(new Option(t('analytics', value), value));
+        });
+        type.value = column.type || 'text';
+
+        const role = document.createElement('select');
+        role.className = 'sidebarInput flexibleColumnRole';
+        role.add(new Option(t('analytics', 'Dimension'), 'dimension'));
+        role.add(new Option(t('analytics', 'Measure'), 'measure'));
+        role.value = column.role || 'dimension';
+
+        const nullableLabel = document.createElement('label');
+        const nullable = document.createElement('input');
+        nullable.type = 'checkbox';
+        nullable.className = 'flexibleColumnNullable';
+        nullable.checked = column.nullable === true;
+        nullableLabel.append(nullable, document.createTextNode(' ' + t('analytics', 'Nullable')));
+
+        const aggregation = document.createElement('select');
+        aggregation.className = 'sidebarInput flexibleColumnAggregation';
+        ['sum', 'avg', 'min', 'max', 'count', 'count_distinct'].forEach(value => {
+            aggregation.add(new Option(value, value));
+        });
+        aggregation.value = column.defaultAggregation || 'sum';
+
+        const actions = document.createElement('span');
+        actions.className = 'flexibleColumnActions';
+        const up = document.createElement('button');
+        up.type = 'button';
+        up.className = 'analyticsSecondary';
+        up.title = t('analytics', 'Move up');
+        up.textContent = '↑';
+        up.addEventListener('click', () => row.previousElementSibling?.before(row));
+        const down = document.createElement('button');
+        down.type = 'button';
+        down.className = 'analyticsSecondary';
+        down.title = t('analytics', 'Move down');
+        down.textContent = '↓';
+        down.addEventListener('click', () => row.nextElementSibling?.after(row));
+        actions.append(up, down);
+        if (allowRemove) {
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'analyticsSecondary icon-delete';
+            remove.title = t('analytics', 'Remove');
+            remove.addEventListener('click', () => row.remove());
+            actions.appendChild(remove);
+        }
+
+        const syncRole = () => {
+            const isMeasure = role.value === 'measure';
+            aggregation.hidden = !isMeasure;
+        };
+        role.addEventListener('change', syncRole);
+        syncRole();
+        row.append(name, type, role, nullableLabel, aggregation, actions);
+        return row;
+    },
+
+    collectColumns: function (container) {
+        return [...container.querySelectorAll('.flexibleColumnRow')].map((row, position) => {
+            const role = row.querySelector('.flexibleColumnRole').value;
+            const definition = {
+                name: row.querySelector('.flexibleColumnName').value.trim(),
+                type: row.querySelector('.flexibleColumnType').value,
+                role: role,
+                nullable: row.querySelector('.flexibleColumnNullable').checked,
+                position: position,
+                defaultAggregation: role === 'measure'
+                    ? row.querySelector('.flexibleColumnAggregation').value
+                    : null,
+            };
+            if (row.dataset.columnRef) {
+                definition.ref = row.dataset.columnRef;
+            }
+            return definition;
+        });
+    },
+
+    validateColumns: function (columns) {
+        if (!columns.length || columns.some(column => column.name === '')) {
+            return t('analytics', 'Every column needs a name');
+        }
+        if (!columns.some(column => column.role === 'dimension')) {
+            return t('analytics', 'At least one dimension column is required');
+        }
+        return '';
+    },
+
+    initializeCreationEditor: function () {
+        const list = document.getElementById('wizardDatasetFlexibleColumnList');
+        const legacy = document.getElementById('wizardDatasetLegacyColumns');
+        const flexible = document.getElementById('wizardDatasetFlexibleColumns');
+        const renderDefaults = () => {
+            if (list.children.length) {
+                return;
+            }
+            list.append(
+                this.createColumnRow({name: t('analytics', 'Date'), type: 'date', role: 'dimension', nullable: false}),
+                this.createColumnRow({name: t('analytics', 'Region'), type: 'text', role: 'dimension', nullable: false}),
+                this.createColumnRow({name: t('analytics', 'Value'), type: 'decimal', role: 'measure', nullable: true, defaultAggregation: 'sum'})
+            );
+        };
+        document.querySelectorAll('input[name="wizardDatasetMode"]').forEach(input => {
+            input.addEventListener('change', () => {
+                const isFlexible = input.checked && input.value === OCA.Analytics.Flexible.STORAGE_MODE;
+                legacy.hidden = isFlexible;
+                flexible.hidden = !isFlexible;
+                if (isFlexible) renderDefaults();
+            });
+        });
+        document.getElementById('wizardDatasetFlexibleAddColumn').addEventListener('click', () => {
+            list.appendChild(this.createColumnRow({role: 'measure', type: 'decimal', nullable: true, defaultAggregation: 'sum'}));
+        });
+    },
 
     tabContainerDataset: function () {
         const datasetId = OCA.Analytics.currentDataset;
@@ -659,9 +859,26 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
 
                     document.getElementById('sidebarDatasetName').value = data['name'];
                     document.getElementById('sidebarDatasetSubheader').value = data['subheader'];
-                    document.getElementById('sidebarDatasetDimension1').value = data['dimension1'];
-                    document.getElementById('sidebarDatasetDimension2').value = data['dimension2'];
-                    document.getElementById('sidebarDatasetValue').value = data['value'];
+                    OCA.Analytics.Dataset.Dataset.currentDescriptor = data;
+                    if (OCA.Analytics.Flexible.isFlexible(data)) {
+                        document.getElementById('datasetDimensionSection').hidden = true;
+                        document.getElementById('datasetDimensionSectionHeader').hidden = true;
+                        const schema = document.getElementById('flexibleDatasetSchema');
+                        const list = document.getElementById('flexibleDatasetSchemaColumns');
+                        schema.hidden = false;
+                        OCA.Analytics.Flexible.columns(data).forEach(column => {
+                            list.appendChild(OCA.Analytics.Dataset.Dataset.createColumnRow(column));
+                        });
+                        document.getElementById('flexibleDatasetSchemaAdd').addEventListener('click', () => {
+                            list.appendChild(OCA.Analytics.Dataset.Dataset.createColumnRow({
+                                role: 'measure', type: 'decimal', nullable: true, defaultAggregation: 'sum'
+                            }));
+                        });
+                    } else {
+                        document.getElementById('sidebarDatasetDimension1').value = data['dimension1'];
+                        document.getElementById('sidebarDatasetDimension2').value = data['dimension2'];
+                        document.getElementById('sidebarDatasetValue').value = data['value'];
+                    }
                     document.getElementById('sidebarDatasetAiIndex').checked = parseInt(data['ai_index']) === 1;
 
                     document.getElementById('sidebarDatasetDeleteButton').addEventListener('click', OCA.Analytics.Dataset.Dataset.handleDeleteButton);
@@ -745,10 +962,12 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
     wizard: function () {
         document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Dataset.Dataset.create);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
+        OCA.Analytics.Dataset.Dataset.initializeCreationEditor();
     },
 
     create: function () {
         let name = document.getElementById('wizardDatasetName').value;
+        const mode = document.querySelector('input[name="wizardDatasetMode"]:checked')?.value || 'legacy';
         let dimension1 = document.getElementById('wizardDatasetDimension1').value;
         let dimension2 = document.getElementById('wizardDatasetDimension2').value;
         let value = document.getElementById('wizardDatasetValue').value;
@@ -761,30 +980,45 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         }
 
         let requestUrl = OC.generateUrl('apps/analytics/dataset');
-        fetch(requestUrl, {
+        let body = {name: name, dimension1: dimension1, dimension2: dimension2, value: value};
+        if (mode === OCA.Analytics.Flexible.STORAGE_MODE) {
+            const columns = OCA.Analytics.Dataset.Dataset.collectColumns(document.getElementById('wizardDatasetFlexibleColumnList'));
+            error = OCA.Analytics.Dataset.Dataset.validateColumns(columns);
+            if (error !== '') {
+                OCA.Analytics.Notification.notification('error', error);
+                return;
+            }
+            requestUrl = OC.generateUrl('apps/analytics/dataset/flexible');
+            body = {name: name, columns: columns};
+        }
+        const button = document.getElementById('wizardNewCreate');
+        button.classList.add('loading');
+        button.disabled = true;
+        OCA.Analytics.Flexible.request(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
-                name: name,
-                dimension1: dimension1,
-                dimension2: dimension2,
-                value: value
-            })
-        })
-            .then(response => response.json())
-            .then(id => {
-                return fetch(OC.generateUrl('apps/analytics/dataset/') + id, {
+            body: JSON.stringify(body)
+        }, t('analytics', 'Failed to create dataset'))
+            .then(result => {
+                if (mode === OCA.Analytics.Flexible.STORAGE_MODE) {
+                    return result;
+                }
+                return OCA.Analytics.Flexible.request(OC.generateUrl('apps/analytics/dataset/') + result, {
                     method: 'GET',
                     headers: OCA.Analytics.headers(),
-                });
+                }, t('analytics', 'Failed to load dataset'));
             })
-            .then(response => response.json())
             .then(data => {
                 OCA.Analytics.Wizard.close();
                 data.item_type = 'dataset';
                 OCA.Analytics.Navigation.addNavigationItem(data);
                 const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="dataset"]');
                 anchor?.click();
+            })
+            .catch(requestError => {
+                button.classList.remove('loading');
+                button.disabled = false;
+                OCA.Analytics.Notification.notification('error', requestError.message);
             });
     },
 
@@ -824,26 +1058,53 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         button.classList.add('loading');
         button.disabled = true;
 
+        const descriptor = OCA.Analytics.Dataset.Dataset.currentDescriptor;
+        const isFlexible = OCA.Analytics.Flexible.isFlexible(descriptor);
         let requestUrl = OC.generateUrl('apps/analytics/dataset/') + reportId;
-        fetch(requestUrl, {
-            method: 'PUT',
-            headers: OCA.Analytics.headers(),
-            body: JSON.stringify({
+        let body;
+        if (isFlexible) {
+            const columns = OCA.Analytics.Dataset.Dataset.collectColumns(document.getElementById('flexibleDatasetSchemaColumns'));
+            const error = OCA.Analytics.Dataset.Dataset.validateColumns(columns);
+            if (error !== '') {
+                OCA.Analytics.Notification.notification('error', error);
+                button.classList.remove('loading');
+                button.disabled = false;
+                return;
+            }
+            requestUrl += '/schema';
+            body = {
+                expectedSchemaVersion: descriptor.schemaVersion,
+                name: document.getElementById('sidebarDatasetName').value,
+                columns: columns,
+            };
+        } else {
+            body = {
                 name: document.getElementById('sidebarDatasetName').value,
                 subheader: document.getElementById('sidebarDatasetSubheader').value,
                 dimension1: document.getElementById('sidebarDatasetDimension1').value,
                 dimension2: document.getElementById('sidebarDatasetDimension2').value,
                 value: document.getElementById('sidebarDatasetValue').value,
                 aiIndex: document.getElementById('sidebarDatasetAiIndex').checked ? 1 : null,
-            })
-        })
-            .then(response => response.json())
+            };
+        }
+        OCA.Analytics.Flexible.request(requestUrl, {
+            method: 'PUT',
+            headers: OCA.Analytics.headers(),
+            body: JSON.stringify(body)
+        }, t('analytics', 'Failed to save dataset'))
             .then(data => {
                 button.classList.remove('loading');
                 button.disabled = false;
-
+                if (isFlexible) {
+                    OCA.Analytics.Dataset.Dataset.currentDescriptor = data;
+                }
                 OCA.Analytics.Navigation.init(reportId);
                 OCA.Analytics.Notification.notification('success', t('analytics', 'Saved'));
+            })
+            .catch(error => {
+                button.classList.remove('loading');
+                button.disabled = false;
+                OCA.Analytics.Notification.notification('error', error.message);
             });
     },
 });

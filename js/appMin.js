@@ -87,8 +87,7 @@ OCA.Analytics.Report = {
     processReceivedData: function (data) {
         data.options.chartoptions = OCA.Analytics.ChartOptions.parseAndNormalize(data.options.chartoptions);
 
-        const parsedDataOptions = OCA.Analytics.ChartOptions.safeParse(data.options.dataoptions, []);
-        data.options.dataoptions = Array.isArray(parsedDataOptions) ? parsedDataOptions : [];
+        data.options.dataoptions = OCA.Analytics.Flexible.parseDataOptions(data.options.dataoptions);
 
         const parsedFilterOptions = OCA.Analytics.ChartOptions.safeParse(data.options.filteroptions, {});
         data.options.filteroptions = (
@@ -100,10 +99,16 @@ OCA.Analytics.Report = {
         const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
         data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
 
-        // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-        data = OCA.Analytics.Visualization.sortDates(data);
-        data = OCA.Analytics.Visualization.applyTimeAggregation(data);
-        data = OCA.Analytics.Visualization.applyTopN(data);
+        const processing = data.queryProcessing || {};
+        if (!processing.backendProcessed || !processing.sorting) {
+            data = OCA.Analytics.Visualization.sortDates(data);
+        }
+        if (!processing.backendProcessed || !processing.timeAggregation) {
+            data = OCA.Analytics.Visualization.applyTimeAggregation(data);
+        }
+        if (!processing.backendProcessed || !processing.topN) {
+            data = OCA.Analytics.Visualization.applyTopN(data);
+        }
 
         return data;
     },

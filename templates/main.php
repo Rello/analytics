@@ -17,6 +17,7 @@ Util::addStyle('analytics', 'wizard');
 Util::addStyle('analytics', 'print');
 Util::addStyle('analytics', 'splash');
 Util::addScript('analytics', 'app');
+Util::addScript('analytics', 'flexible');
 Util::addScript('analytics', 'chartOptions');
 Util::addScript('analytics', '3rdParty/moment.min');
 Util::addScript('analytics', 'visualization');

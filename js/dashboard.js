@@ -228,8 +228,7 @@ OCA.Analytics.Dashboard = {
     processReceivedData: function (data) {
         data.options.chartoptions = OCA.Analytics.ChartOptions.parseAndNormalize(data.options.chartoptions);
 
-        const parsedDataOptions = OCA.Analytics.ChartOptions.safeParse(data.options.dataoptions, []);
-        data.options.dataoptions = Array.isArray(parsedDataOptions) ? parsedDataOptions : [];
+        data.options.dataoptions = OCA.Analytics.Flexible.parseDataOptions(data.options.dataoptions);
 
         const parsedFilterOptions = OCA.Analytics.ChartOptions.safeParse(data.options.filteroptions, {});
         data.options.filteroptions = (
@@ -241,10 +240,16 @@ OCA.Analytics.Dashboard = {
         const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
         data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
 
-        // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-        data = OCA.Analytics.Visualization.sortDates(data);
-        data = OCA.Analytics.Visualization.applyTimeAggregation(data);
-        data = OCA.Analytics.Visualization.applyTopN(data);
+        const processing = data.queryProcessing || {};
+        if (!processing.backendProcessed || !processing.sorting) {
+            data = OCA.Analytics.Visualization.sortDates(data);
+        }
+        if (!processing.backendProcessed || !processing.timeAggregation) {
+            data = OCA.Analytics.Visualization.applyTimeAggregation(data);
+        }
+        if (!processing.backendProcessed || !processing.topN) {
+            data = OCA.Analytics.Visualization.applyTopN(data);
+        }
 
         return data;
     },
@@ -423,7 +428,9 @@ OCA.Analytics.Dashboard = {
         Chart.defaults.plugins.legend.display = false;
 
         // convert the data array
-        let [xAxisCategories, datasets] = OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsondata.options);
+        let [xAxisCategories, datasets] = OCA.Analytics.Flexible.isFlexible(jsondata)
+            ? OCA.Analytics.Visualization.convertDataToChartJsFormat(jsondata, chartType)
+            : OCA.Analytics.Dashboard.convertDataToChartJsFormat(jsondata.data, chartType, jsondata.options);
 
         // do the color magic
         let colors = OCA.Analytics.Visualization.defaultColorPalette;
@@ -447,7 +454,7 @@ OCA.Analytics.Dashboard = {
             } else if (chartType === 'doughnut') {
                 // special array handling for doughnuts
                 if (jsondata.options.dataoptions !== null) {
-                    const arr = OCA.Analytics.ChartOptions.safeParse(jsondata.options.dataoptions, []);
+                    const arr = OCA.Analytics.Flexible.seriesOptions(jsondata.options.dataoptions);
                     let index = 0;
                     for (const obj of arr) {
                         if (obj.backgroundColor) {
@@ -503,7 +510,7 @@ OCA.Analytics.Dashboard = {
         chartOptions = OCA.Analytics.ChartOptions.compose(
             chartOptions,
             jsondata.options.chartoptions,
-            jsondata.options.dataoptions
+            OCA.Analytics.Flexible.seriesOptions(jsondata.options.dataoptions)
         );
 
         // never show any axis in the dashboard
@@ -514,7 +521,7 @@ OCA.Analytics.Dashboard = {
         // these are merged with the data array coming from the backend
         // e.g. assign one series to the secondary y-axis: '[{"yAxisID":"B"},{},{"yAxisID":"B"},{}]'
         //let userDatasetOptions = document.getElementById('userDatasetOptions').value;
-        let userDatasetOptions = OCA.Analytics.ChartOptions.safeParse(jsondata.options.dataoptions, []);
+        let userDatasetOptions = OCA.Analytics.Flexible.seriesOptions(jsondata.options.dataoptions);
         if (Array.isArray(userDatasetOptions) && userDatasetOptions.length !== 0 && chartType !== 'doughnut') {
             datasets = cloner.deep.merge({}, datasets);
             datasets = cloner.deep.merge(datasets, userDatasetOptions);

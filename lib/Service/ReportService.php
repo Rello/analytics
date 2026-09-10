@@ -39,6 +39,7 @@ class ReportService {
 	private $rootFolder;
 	private $VariableService;
 	private $l10n;
+	private FlexibleStorageService $FlexibleStorageService;
 
 	const REPORT_TYPE_GROUP = 0;
 
@@ -56,7 +57,8 @@ class ReportService {
 		ActivityManager $ActivityManager,
 		IRootFolder $rootFolder,
 		IConfig $config,
-		VariableService $VariableService
+		VariableService $VariableService,
+		FlexibleStorageService $FlexibleStorageService
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
@@ -72,6 +74,7 @@ class ReportService {
 		$this->VariableService = $VariableService;
 		$this->config = $config;
 		$this->l10n = $l10n;
+		$this->FlexibleStorageService = $FlexibleStorageService;
 	}
 
 	/**
@@ -139,11 +142,17 @@ class ReportService {
 			$ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
 			if ($replace) $ownReport = $this->VariableService->replaceTextVariables($ownReport);
 
-			if ($ownReport['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $ownReport['dataset'] !== 0) {
-				$dataset = $this->DatasetService->readOwn($ownReport['dataset']);
-				$ownReport['dimension1'] = $dataset['dimension1'];
-				$ownReport['dimension2'] = $dataset['dimension2'];
-				$ownReport['value'] = $dataset['value'];
+				if ($ownReport['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB && $ownReport['dataset'] !== 0) {
+					$dataset = $this->DatasetService->readOwn($ownReport['dataset']);
+					$ownReport['storageMode'] = $dataset['storageMode'] ?? 'legacy';
+					$ownReport['schemaVersion'] = (int)($dataset['schemaVersion'] ?? 0);
+					if ($ownReport['storageMode'] === 'flexible_shared') {
+						$ownReport['columns'] = $dataset['columns'] ?? [];
+					} else {
+						$ownReport['dimension1'] = $dataset['dimension1'];
+						$ownReport['dimension2'] = $dataset['dimension2'];
+						$ownReport['value'] = $dataset['value'];
+					}
 			}
 
 		}
@@ -238,7 +247,7 @@ class ReportService {
 		$sourceThresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
 		foreach ($sourceThresholds as $threshold) {
 			$this->ThresholdMapper->create($newId, $threshold['dimension'], $threshold['value'], // This is 'target' aliased as 'value' in the query
-				$threshold['option'], $threshold['severity'], $threshold['coloring']);
+				$threshold['option'], $threshold['severity'], $threshold['coloring'], $threshold['source_column_ref'] ?? null);
 		}
 
 		return $newId;
@@ -455,8 +464,14 @@ class ReportService {
 			return 0;
 		}
 		$data = json_decode($data, true);
+		if (!is_array($data) || !is_array($data['report'] ?? null)) {
+			return 0;
+		}
 
 		$report = $data['report'];
+		$exportedDataset = is_array($data['dataset'] ?? null) ? $data['dataset'] : [];
+		$columnMap = [];
+		$descriptor = null;
 		isset($report['name']) ? $name = $report['name'] : $name = '';
 		isset($report['subheader']) ? $subheader = $report['subheader'] : $subheader = '';
 		$parent = 0;
@@ -472,9 +487,38 @@ class ReportService {
 		isset($report['dimension1']) ? $dimension1 = $report['dimension1'] : $dimension1 = null;
 		isset($report['dimension2']) ? $dimension2 = $report['dimension2'] : $dimension2 = null;
 		isset($report['value']) ? $value = $report['value'] : $value = null;
+		$isFlexible = $type === DatasourceController::DATASET_TYPE_INTERNAL_DB && (
+			($exportedDataset['storageMode'] ?? $exportedDataset['storage_mode'] ?? 'legacy') === 'flexible_shared'
+			|| isset($data['flexible'])
+		);
 
 		if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB) { // New dataset
-			$dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
+			if ($isFlexible) {
+				$exportedColumns = $exportedDataset['columns'] ?? ($data['flexible']['columns'] ?? []);
+				$definitions = array_map(static fn (array $column): array => [
+					'name' => $column['name'],
+					'type' => $column['type'],
+					'role' => $column['role'],
+					'nullable' => $column['nullable'],
+					'defaultAggregation' => $column['defaultAggregation'] ?? null,
+				], $exportedColumns);
+				$descriptor = $this->DatasetService->createFlexible($name, $definitions);
+				$dataset = (int)$descriptor['id'];
+				foreach ($exportedColumns as $index => $oldColumn) {
+					if (isset($oldColumn['ref'], $descriptor['columns'][$index]['ref'])) {
+						$columnMap[$oldColumn['ref']] = $descriptor['columns'][$index]['ref'];
+					}
+				}
+				$dimension1 = $this->remapFlexibleValue($dimension1, $columnMap);
+				$dimension2 = $this->remapFlexibleValue($dimension2, $columnMap);
+				$value = $this->remapFlexibleValue($value, $columnMap);
+				$chartoptions = $this->remapFlexibleJson($chartoptions, $columnMap);
+				$dataoptions = $this->remapFlexibleJson($dataoptions, $columnMap);
+				$filteroptions = $this->remapFlexibleJson($filteroptions, $columnMap);
+				$tableoptions = $this->remapFlexibleJson($tableoptions, $columnMap);
+			} else {
+				$dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
+			}
 		}
 		$reportId = $this->create($name, $subheader, $parent, $type, $dataset, $link, $visualization, $chart, $dimension1, $dimension2, $value);
 		$this->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
@@ -483,34 +527,52 @@ class ReportService {
 
 		$this->DataloadMapper->beginTransaction();
 
-		foreach ($data['dataload'] as $dataload) {
+		foreach (($data['dataload'] ?? []) as $dataload) {
 			isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;
 			isset($dataload['name']) ? $name = $dataload['name'] : $name = null;
 			isset($dataload['option']) ? $option = $dataload['option'] : $option = null;
 			$schedule = null;
 
 			$dataloadId = $this->DataloadMapper->create($datasetId, $datasource);
-			$this->DataloadMapper->update($dataloadId, $name, $option, $schedule);
+			$storageMapping = $this->remapFlexibleJson($dataload['storage_mapping'] ?? null, $columnMap);
+			$this->DataloadMapper->update($dataloadId, $name, $option, $schedule, $storageMapping);
 		}
 
-		foreach ($data['threshold'] as $threshold) {
+		foreach (($data['threshold'] ?? []) as $threshold) {
 			isset($threshold['dimension']) ? $dimension = $threshold['dimension'] : $dimension = null;
 			isset($threshold['value']) ? $value = $threshold['value'] : $value = null;
 			isset($threshold['option']) ? $option = $threshold['option'] : $option = null;
 			isset($threshold['severity']) ? $severity = $threshold['severity'] : $severity = null;
 			isset($threshold['coloring']) ? $coloring = $threshold['coloring'] : $coloring = 'row';
+			$sourceColumnRef = $this->remapFlexibleValue($threshold['source_column_ref'] ?? null, $columnMap);
 			$value = $this->floatvalue($value);
-			$this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring);
+			$this->ThresholdMapper->create($reportId, $dimension, $value, $option, $severity, $coloring, $sourceColumnRef);
 		}
 
-		foreach ($data['data'] as $dData) {
-			isset($dData[0]) ? $dimension1 = $dData[0] : $dimension1 = null;
-			isset($dData[1]) ? $dimension2 = $dData[1] : $dimension2 = null;
-			isset($dData[2]) ? $value = $dData[2] : $value = null;
-			$this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value);
+		if ($isFlexible) {
+			$this->DataloadMapper->commit();
+			$records = [];
+			foreach (($data['flexible']['records'] ?? []) as $record) {
+					$values = [];
+					foreach (($record['values'] ?? []) as $reference => $recordValue) {
+						if (isset($columnMap[$reference])) {
+							$values[$columnMap[$reference]] = $recordValue;
+						}
+					}
+					$records[] = ['values' => $values];
+				}
+			if ($records !== []) {
+				$this->FlexibleStorageService->upsertRecords((int)$datasetId, (int)$descriptor['schemaVersion'], $records);
+			}
+		} else {
+			foreach (($data['data'] ?? []) as $dData) {
+				isset($dData[0]) ? $dimension1 = $dData[0] : $dimension1 = null;
+				isset($dData[1]) ? $dimension2 = $dData[1] : $dimension2 = null;
+				isset($dData[2]) ? $value = $dData[2] : $value = null;
+				$this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value);
+			}
+			$this->DataloadMapper->commit();
 		}
-
-		$this->DataloadMapper->commit();
 
 		if (isset($data['favorite'])) {
 			try {
@@ -527,6 +589,19 @@ class ReportService {
 		return $reportId;
 	}
 
+	/** @param array<string,string> $columnMap */
+	private function remapFlexibleValue(mixed $value, array $columnMap): mixed {
+		return is_string($value) && isset($columnMap[$value]) ? $columnMap[$value] : $value;
+	}
+
+	/** @param array<string,string> $columnMap */
+	private function remapFlexibleJson(mixed $value, array $columnMap): mixed {
+		if (!is_string($value) || $columnMap === []) {
+			return $value;
+		}
+		return strtr($value, $columnMap);
+	}
+
 	/**
 	 * Export Report
 	 *
@@ -541,9 +616,15 @@ class ReportService {
 		$result['threshold'] = $this->ThresholdMapper->getThresholdsByReport($reportId);
 		$result['favorite'] = '';
 
-		if ($result['report']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-			$result['data'] = $this->StorageMapper->read($datasetId);
-		}
+			if ($result['report']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+				$dataset = $this->DatasetService->read($datasetId);
+				if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
+					$result['dataset'] = $dataset;
+					$result['flexible'] = $this->FlexibleStorageService->exportDataset((int)$datasetId);
+				} else {
+					$result['data'] = $this->StorageMapper->read($datasetId);
+				}
+			}
 
 		unset($result['report']['id'], $result['report']['user_id'], $result['report']['user_id'], $result['report']['parent'], $result['report']['dataset']);
 		$data = json_encode($result);

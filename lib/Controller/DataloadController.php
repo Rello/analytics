@@ -10,6 +10,7 @@ namespace OCA\Analytics\Controller;
 
 use Exception;
 use OCA\Analytics\Service\DataloadService;
+use OCA\Analytics\Exception\FlexibleStorageException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -72,9 +73,9 @@ class DataloadController extends Controller
      * @return DataResponse
      */
     #[NoAdminRequired]
-    public function update(int $dataloadId, $name, $option, $schedule): DataResponse
+    public function update(int $dataloadId, $name, $option, $schedule, $storageMapping = null): DataResponse
     {
-        return new DataResponse(['update' => $this->DataloadService->update($dataloadId, $name, $option, $schedule)]);
+        return new DataResponse(['update' => $this->DataloadService->update($dataloadId, $name, $option, $schedule, $storageMapping)]);
     }
 
     /**
@@ -148,7 +149,11 @@ class DataloadController extends Controller
     #[NoAdminRequired]
     public function updateData(int $reportId, $dimension1, $dimension2, $value, bool $isDataset)
     {
-        $result = $this->DataloadService->updateData($reportId, $dimension1, $dimension2, $value, $isDataset);
+		try {
+			$result = $this->DataloadService->updateData($reportId, $dimension1, $dimension2, $value, $isDataset);
+		} catch (FlexibleStorageException $e) {
+			return new DataResponse($e->toResponse(), $e->getHttpStatus());
+		}
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -168,7 +173,11 @@ class DataloadController extends Controller
     #[NoAdminRequired]
     public function deleteData(int $reportId, $dimension1, $dimension2, bool $isDataset)
     {
-        $result = $this->DataloadService->deleteData($reportId, $dimension1, $dimension2, $isDataset);
+		try {
+			$result = $this->DataloadService->deleteData($reportId, $dimension1, $dimension2, $isDataset);
+		} catch (FlexibleStorageException $e) {
+			return new DataResponse($e->toResponse(), $e->getHttpStatus());
+		}
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -188,7 +197,11 @@ class DataloadController extends Controller
     #[NoAdminRequired]
     public function deleteDataSimulate(int $objectId, $dimension1, $dimension2, bool $isDataset)
     {
-        $result = $this->DataloadService->deleteDataSimulate($objectId, $dimension1, $dimension2, $isDataset);
+		try {
+			$result = $this->DataloadService->deleteDataSimulate($objectId, $dimension1, $dimension2, $isDataset);
+		} catch (FlexibleStorageException $e) {
+			return new DataResponse($e->toResponse(), $e->getHttpStatus());
+		}
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -206,9 +219,9 @@ class DataloadController extends Controller
      * @throws Exception
      */
     #[NoAdminRequired]
-    public function importClipboard(int $reportId, $import, bool $isDataset)
-    {
-        $result = $this->DataloadService->importClipboard($reportId, $import, $isDataset);
+	    public function importClipboard(int $reportId, $import, bool $isDataset, $storageMapping = null, $header = null, $delimiter = null)
+	    {
+	        $result = $this->DataloadService->importClipboard($reportId, $import, $isDataset, $storageMapping, $header, $delimiter);
         if ($result) {
             return new DataResponse($result);
         } else {
@@ -226,9 +239,9 @@ class DataloadController extends Controller
      * @throws Exception
      */
     #[NoAdminRequired]
-    public function importFile(int $reportId, $path, bool $isDataset)
-    {
-        $result = $this->DataloadService->importFile($reportId, $path, $isDataset);
+	    public function importFile(int $reportId, $path, bool $isDataset, $storageMapping = null)
+	    {
+	        $result = $this->DataloadService->importFile($reportId, $path, $isDataset, $storageMapping);
         if ($result) {
             return new DataResponse($result);
         } else {

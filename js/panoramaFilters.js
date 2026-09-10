@@ -101,8 +101,11 @@ OCA.Analytics.PanoramaFilters = {
             }
             if (controller.signal.aborted || this.state !== state) throw new DOMException('Aborted', 'AbortError');
             const suggestions = Object.fromEntries(Object.entries(data.dimensions || {}).map(([key, label]) => {
-                const index = (data.header || []).indexOf(label);
-                const unambiguous = index >= 0 && data.header.lastIndexOf(label) === index;
+                const stableIndex = OCA.Analytics.Flexible.isFlexible(data)
+                    ? OCA.Analytics.Flexible.indexForReference(data, key)
+                    : -1;
+                const index = stableIndex >= 0 ? stableIndex : (data.header || []).indexOf(label);
+                const unambiguous = stableIndex >= 0 || (index >= 0 && data.header.lastIndexOf(label) === index);
                 return [key, unambiguous ? [...new Set((data.data || []).map(row => row[index]).filter(value => value != null))] : []];
             }));
             state.metadata.set(Number(reportId), {name: data.options.name, dimensions: data.dimensions || {}, suggestions});

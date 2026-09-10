@@ -1603,16 +1603,21 @@ Object.assign(OCA.Analytics.Threshold = {
 
     handleThresholdCreateNewButton: function () {
         const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
+        const isFlexible = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData);
+        const sourceColumnRef = isFlexible
+            ? Object.keys(OCA.Analytics.currentReportData.dimensions || {})[0] || OCA.Analytics.currentReportData.columnRefs?.[0]
+            : null;
         let requestUrl = OC.generateUrl('apps/analytics/threshold');
         fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
-                dimension1: 0,
+                dimension: 0,
                 option: 'new',
                 value: 0,
                 severity: 1,
+                sourceColumnRef: sourceColumnRef,
             })
         })
             .then(response => response.json())
@@ -1632,7 +1637,10 @@ Object.assign(OCA.Analytics.Threshold = {
     },
 
     editThreshold: function (data, element) {
-        document.getElementById('thresholdDimension').value = data.dimension;
+        const dimension = parseInt(data.dimension, 10);
+        document.getElementById('thresholdDimension').value = dimension >= OCA.Analytics.Visualization.thresholdCalculatedColumnOffset
+            ? String(dimension)
+            : data.source_column_ref || data.sourceColumnRef || data.dimension;
         document.getElementById('thresholdOption').value = data.option;
         document.getElementById('thresholdValue').value = data.value;
         document.getElementById('thresholdSeverity').value = data.severity;
@@ -1655,7 +1663,9 @@ Object.assign(OCA.Analytics.Threshold = {
         document.getElementById('thresholdSeverity').value = '4';
         document.getElementById('thresholdColoring').value = 'value';
         delete document.getElementById('thresholdCreateButton').dataset.id;
-        document.getElementById('thresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+        document.getElementById('thresholdValue').dataset.dropdownlistindex = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+            ? OCA.Analytics.Flexible.indexForReference(OCA.Analytics.currentReportData, dimensionSelect.value)
+            : dimensionSelect.value;
     },
 
     buildThresholdRow: function (data) {
@@ -1707,7 +1717,10 @@ Object.assign(OCA.Analytics.Threshold = {
         let text = document.createElement('div');
         text.classList.add('thresholdText');
 
-        let dimension = OCA.Analytics.Visualization.getThresholdColumnLabel(data.dimension);
+        let dimension = OCA.Analytics.Visualization.getThresholdColumnLabel(
+            data.dimension,
+            data.source_column_ref || data.sourceColumnRef
+        );
         text.innerText = dimension + ' ' + data.option + ' ' + data.value;
         text.addEventListener('click', function () {
             const row = this.parentNode;
@@ -1746,12 +1759,29 @@ Object.assign(OCA.Analytics.Threshold = {
 
         const create = () => {
             let requestUrl = OC.generateUrl('apps/analytics/threshold');
+            const selectedColumn = document.getElementById('thresholdDimension').value;
+            const isFlexible = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData);
+            const selectedIndex = parseInt(selectedColumn, 10);
+            const isCalculatedColumn = selectedIndex >= OCA.Analytics.Visualization.thresholdCalculatedColumnOffset;
+            let sourceColumnRef = isFlexible ? selectedColumn : null;
+            if (isFlexible && isCalculatedColumn) {
+                const calculationIndex = selectedIndex - OCA.Analytics.Visualization.thresholdCalculatedColumnOffset;
+                const calculation = OCA.Analytics.Visualization.getCalculatedColumns(
+                    OCA.Analytics.currentReportData.options.tableoptions || {}
+                )[calculationIndex];
+                sourceColumnRef = (calculation?.columns || [])
+                    .map(reference => String(reference).match(/^source-ref\|(c_[1-9][0-9]*)$/)?.[1])
+                    .find(Boolean) || OCA.Analytics.currentReportData.columnRefs?.[0];
+            }
             fetch(requestUrl, {
                 method: 'POST',
                 headers: OCA.Analytics.headers(),
                 body: JSON.stringify({
                     reportId: reportId,
-                    dimension: document.getElementById('thresholdDimension').value,
+                    dimension: isFlexible && !isCalculatedColumn
+                        ? OCA.Analytics.Flexible.indexForReference(OCA.Analytics.currentReportData, selectedColumn)
+                        : selectedColumn,
+                    sourceColumnRef: sourceColumnRef,
                     option: document.getElementById('thresholdOption').value,
                     value: document.getElementById('thresholdValue').value,
                     severity: document.getElementById('thresholdSeverity').value,
