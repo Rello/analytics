@@ -36,11 +36,11 @@ class ExternalUrlValidator {
 			$host = substr($host, 1, -1);
 		}
 		if ($host === '' || $host === 'localhost' || str_ends_with($host, '.localhost')) {
-			return 'External URL host is not allowed';
+			return 'Internal URL is not allowed';
 		}
 
 		if (!$this->remoteHostValidator->isValid($host)) {
-			return 'External URL host is not allowed by server configuration';
+			return 'Internal URL is not allowed by server configuration';
 		}
 
 		return null;

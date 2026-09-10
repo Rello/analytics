@@ -573,12 +573,16 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
 
                 } else {
                     let messageType;
+                    const summary = data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated') + ', ' + data.error + ' ' + t('analytics', 'errors') + ', ' + data.delete + ' ' + t('analytics', 'deletions');
                     if (parseInt(data.error) === 0) {
                         messageType = 'success';
                     } else {
                         messageType = 'error';
                     }
-                    OCA.Analytics.Notification.notification(messageType, data.insert + ' ' + t('analytics', 'records inserted') + ', ' + data.update + ' ' + t('analytics', 'records updated') + ', ' + data.error + ' ' + t('analytics', 'errors') + ', ' + data.delete + ' ' + t('analytics', 'deletions'));
+                    const message = messageType === 'error'
+                        ? OCA.Analytics.Dataset.Dataload.getRequestErrorMessage(data, summary)
+                        : summary;
+                    OCA.Analytics.Notification.notification(messageType, message);
                 }
             })
             .catch(error => {

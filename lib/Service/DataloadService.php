@@ -187,12 +187,16 @@ class DataloadService
 
         // dont continue in case of data source error
         if (!is_array($result) || $result['error'] !== 0) {
-            return [
+            $response = [
                 'insert' => $insert,
                 'update' => $update,
                 'delete' => $delete,
                 'error' => 1,
             ];
+            if (is_array($result) && is_string($result['error'] ?? null) && $result['error'] !== '') {
+                $response['message'] = $result['error'];
+            }
+            return $response;
         }
 
         // get the meta data

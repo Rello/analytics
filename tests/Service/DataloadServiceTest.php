@@ -172,6 +172,35 @@ class DataloadServiceTest extends TestCase {
 		$this->assertSame(0, $result['delete']);
 	}
 
+	public function testExecutePreservesDatasourceErrorMessage(): void {
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('readOwnById')
+			->with(42)
+			->willReturn([
+				'datasource' => DatasourceController::DATASET_TYPE_EXTERNAL_CSV,
+				'dataset' => 11,
+				'user_id' => 'u1',
+				'option' => '{"link":"http://10.0.0.150/data.csv"}',
+			]);
+
+		$datasourceController = $this->createMock(DatasourceController::class);
+		$datasourceController->expects($this->once())
+			->method('read')
+			->willReturn([
+				'header' => [],
+				'dimensions' => [],
+				'data' => [],
+				'error' => 'Internal URL is not allowed by server configuration',
+			]);
+
+		$service = $this->createService($datasourceController, $dataloadMapper);
+		$result = $service->execute(42);
+
+		$this->assertSame(1, $result['error']);
+		$this->assertSame('Internal URL is not allowed by server configuration', $result['message']);
+	}
+
 	public function testExecuteNormalizesTwoColumnRowsForStorage(): void {
 		$metadata = [
 			'id' => 42,
