@@ -21,6 +21,7 @@ OC.L10N.register(
     "Filter" : "Filtar",
     "Add" : "Dodaj",
     "Remove" : "Ukloni",
+    "Sort order" : "Redoslijed razvrstavanja",
     "Default" : "Zadani",
     "Line" : "Linija",
     "Bar" : "Bar",
