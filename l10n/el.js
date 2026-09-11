@@ -186,6 +186,8 @@ OC.L10N.register(
     "Remove filter" : "Αφαιρέστε το φίλτρο",
     "Report" : "Αναφορά",
     "Reset" : "Επαναφορά",
+    "Enabled" : "Ενεργοποιημένο",
+    "Variable name" : "Όνομα μεταβλητής",
     "Default value" : "Προεπιλεγμένη τιμή",
     "Selected" : "Επιλεγμένο",
     "Apply" : "Εφαρμογή",

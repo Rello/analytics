@@ -141,6 +141,7 @@ OC.L10N.register(
     "Report" : "Informe",
     "Reset" : "Restablecer",
     "Enabled" : "Habilitado",
+    "Variable name" : "Nombre de la variable",
     "Default value" : "Valor predeterminado",
     "Selected" : "Selecionado",
     "Apply" : "Aplicar",
