@@ -168,13 +168,55 @@ class DataloadService
     public function executeBySchedule($schedule)
     {
         $schedules = $this->DataloadMapper->getDataloadBySchedule($schedule);
+        $failedDataloadIds = [];
         foreach ($schedules as $dataload) {
-            $result = $this->execute($dataload['id'], null, false);
+            try {
+                $result = $this->execute($dataload['id'], null, false);
+            } catch (\Throwable $e) {
+                $failedDataloadIds[] = (int)$dataload['id'];
+                $this->logger->error('Scheduled Analytics data load threw an exception', [
+                    'schedule' => (string)$schedule,
+                    'dataloadId' => (int)$dataload['id'],
+                    'datasetId' => (int)$dataload['dataset'],
+                    'datasourceId' => (int)$dataload['datasource'],
+                    'exception' => $e,
+                ]);
+                continue;
+            }
             if ($result['error'] !== 0 && $result['insert'] === 0 && $result['update'] === 0) {
                 // Only notify when the data load failed completely, not when individual records failed.
+                $failedDataloadIds[] = (int)$dataload['id'];
+                $errorMessage = is_string($result['message'] ?? null) && trim($result['message']) !== ''
+                    ? $result['message']
+                    : 'No detailed error was returned';
+                $logMessage = sprintf(
+                    'Scheduled Analytics data load %d for dataset %d failed: %s (insert: %d, update: %d, delete: %d, errors: %d)',
+                    (int)$dataload['id'],
+                    (int)$dataload['dataset'],
+                    $errorMessage,
+                    (int)$result['insert'],
+                    (int)$result['update'],
+                    (int)$result['delete'],
+                    (int)$result['error']
+                );
+                $this->logger->error($logMessage, [
+                    'schedule' => (string)$schedule,
+                    'dataloadId' => (int)$dataload['id'],
+                    'datasetId' => (int)$dataload['dataset'],
+                    'datasourceId' => (int)$dataload['datasource'],
+                    'insert' => (int)$result['insert'],
+                    'update' => (int)$result['update'],
+                    'delete' => (int)$result['delete'],
+                    'error' => (int)$result['error'],
+                    'errorMessage' => $errorMessage,
+                ]);
                 $dataset = $this->DatasetService->read($dataload['dataset']);
                 $this->NotificationManager->triggerNotification(NotificationManager::DATALOAD_ERROR, $dataload['dataset'], $dataload['id'], ['dataloadName' => $dataload['name'], 'datasetName' => $dataset['name']], $dataload['user_id']);
             }
+        }
+
+        if ($failedDataloadIds !== []) {
+            throw new \RuntimeException('Scheduled Analytics data loads failed: ' . implode(', ', $failedDataloadIds));
         }
     }
 
@@ -190,6 +232,7 @@ class DataloadService
     {
         $bulkSize = 500;
         $insert = $update = $error = $delete = $currentCount = 0;
+		$errorMessages = [];
         $bulkInsert = null;
         $aggregation = null;
 
@@ -294,6 +337,7 @@ class DataloadService
             if (count($row) === 1) {
                 $this->logger->info('loading data with only one column is not possible. This is a data load for the dataset: ' . $datasetId);
                 $error = $error + 1;
+				$errorMessages[] = 'Data rows with only one column cannot be loaded';
                 continue;
             }
 
@@ -309,6 +353,9 @@ class DataloadService
             $insert = $insert + $action['insert'];
             $update = $update + $action['update'];
             $error = $error + $action['error'];
+			if ($action['error'] !== 0 && is_string($action['message'] ?? null) && trim($action['message']) !== '') {
+				$errorMessages[] = $action['message'];
+			}
 
             if ($currentCount % $bulkSize === 0) {
                 $this->DataloadMapper->commit();
@@ -324,6 +371,11 @@ class DataloadService
             'delete' => $delete,
             'error' => $error,
         ];
+		if ($error > 0) {
+			$result['message'] = $errorMessages !== []
+				? implode('; ', array_unique($errorMessages))
+				: sprintf('%d data row(s) could not be stored', $error);
+		}
 
 		// Update the Context Chat backend
 		if ($insert > 0 || $update > 0) {

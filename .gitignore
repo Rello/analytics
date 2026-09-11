@@ -16,6 +16,8 @@ RCS/*
 *.backup*
 *.Lock
 .idea
+.phpunit.result.cache
+tests/ui-artifacts/
 docs/*
 !docs/flexible-storage-api-v1.md
 

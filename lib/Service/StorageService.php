@@ -135,6 +135,7 @@ class StorageService {
 		//$timestamp = $this->convertGermanDateFormat($timestamp);
 		$value = $this->floatvalue($value);
 		$validate = '';
+		$errorMessage = '';
 		$insert = $update = $error = $action = 0;
 
 		// replace text variables like %now%
@@ -150,6 +151,13 @@ class StorageService {
 				$action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert, $aggregation);
 			} catch (\Exception $e) {
 				$error = 1;
+				$errorMessage = 'Storage operation failed; see preceding Analytics log entry';
+				$this->logger->error('Analytics data row storage failed for dataset ' . $datasetId . ': ' . $e->getMessage(), [
+					'datasetId' => $datasetId,
+					'exceptionClass' => $e::class,
+					'exceptionCode' => $e->getCode(),
+					'exception' => $e,
+				]);
 			}
 			if ($action === 'insert') $insert = 1; elseif ($action === 'update') $update = 1;
 			if ($increaseVersion && ($action === 'insert' || $action === 'update')) {
@@ -157,6 +165,7 @@ class StorageService {
 			}
 		} else {
 			$error = 1;
+			$errorMessage = 'Last field must be a valid number';
 		}
 
 		// get all reports for the dataset and evaluate their thresholds for push notifications
@@ -167,12 +176,16 @@ class StorageService {
 			}
 		}
 
-		return [
+		$result = [
 			'insert' => $insert,
 			'update' => $update,
 			'error' => $error,
 			'validate' => $validate
 		];
+		if ($errorMessage !== '') {
+			$result['message'] = $errorMessage;
+		}
+		return $result;
 	}
 
 	/**

@@ -590,7 +590,8 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         }, t('analytics', 'Failed to run data load'))
             .then(data => {
                 if (mode === 'simulate') {
-                    if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.Dataset.Dataload.datasetDescriptor)) {
+                    const isFlexibleDataset = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.Dataset.Dataload.datasetDescriptor);
+                    if (isFlexibleDataset) {
                         const header = Array.isArray(data.header) ? data.header : [];
                         OCA.Analytics.Dataset.Dataload.sourceHeader = header;
                         const currentDataload = OCA.Analytics.Dataset.Dataload.dataloadArray.find(x =>
@@ -608,10 +609,10 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                     if (parseInt(data.error) === 0) {
 						dialogContent = document.createElement('pre');
                         dialogContent.id = 'simulationData';
-                        dialogContent.textContent = JSON.stringify({
-                            data: data.data,
-                            mappingPreview: data.mappingPreview,
-                        }, null, 2);
+                        const simulationData = isFlexibleDataset
+                            ? {data: data.data, mappingPreview: data.mappingPreview}
+                            : data.data;
+                        dialogContent.textContent = JSON.stringify(simulationData, null, 2);
                     } else {
                         dialogContent = document.createElement('div');
 						const rawData = document.createElement('textarea');

@@ -33,11 +33,7 @@ class Hourly extends TimedJob
 
     public function run($arguments)
     {
-        try {
-            $this->DataloadService->executeBySchedule('h');
-        } catch (\Exception $e) {
-            // no action
-        }
+        $this->DataloadService->executeBySchedule('h');
     }
 
 }

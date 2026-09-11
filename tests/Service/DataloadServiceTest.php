@@ -14,6 +14,7 @@ use OCA\Analytics\Service\FlexibleStorageService;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use OCP\AppFramework\Http\NotFoundResponse;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class DataloadServiceTest extends TestCase {
@@ -257,6 +258,54 @@ class DataloadServiceTest extends TestCase {
 		$this->assertSame(0, $result['error']);
 	}
 
+	public function testExecutePreservesStorageErrorMessage(): void {
+		$metadata = [
+			'id' => 42,
+			'datasource' => DatasourceController::DATASET_TYPE_EXTERNAL_CSV,
+			'dataset' => 11,
+			'user_id' => 'u1',
+			'option' => '{"link":"https://example.org/data.csv"}',
+		];
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->exactly(2))
+			->method('readOwnById')
+			->with(42)
+			->willReturn($metadata);
+
+		$datasourceController = $this->createMock(DatasourceController::class);
+		$datasourceController->expects($this->once())
+			->method('read')
+			->willReturn([
+				'header' => ['Object', 'Date', 'Value'],
+				'dimensions' => ['Object', 'Date'],
+				'data' => [['Solar', '09/2026', 'invalid']],
+				'error' => 0,
+			]);
+
+		$storageService = $this->createMock(StorageService::class);
+		$storageService->method('getRecordCount')->willReturn(['count' => 1]);
+		$storageService->expects($this->once())
+			->method('update')
+			->willReturn([
+				'insert' => 0,
+				'update' => 0,
+				'error' => 1,
+				'message' => 'Last field must be a valid number',
+			]);
+
+		$service = $this->createService(
+			$datasourceController,
+			$dataloadMapper,
+			null,
+			null,
+			$storageService
+		);
+		$result = $service->execute(42);
+
+		$this->assertSame(1, $result['error']);
+		$this->assertSame('Last field must be a valid number', $result['message']);
+	}
+
 	public function testScheduledDataloadDoesNotNotifyForPartialSuccess(): void {
 		$dataloadMapper = $this->createMock(DataloadMapper::class);
 		$dataloadMapper->expects($this->once())
@@ -265,6 +314,7 @@ class DataloadServiceTest extends TestCase {
 			->willReturn([[
 				'id' => 42,
 				'dataset' => 11,
+				'datasource' => 4,
 				'name' => 'Partial load',
 				'user_id' => 'u1',
 			]]);
@@ -293,6 +343,7 @@ class DataloadServiceTest extends TestCase {
 			->willReturn([[
 				'id' => 42,
 				'dataset' => 11,
+				'datasource' => 4,
 				'name' => 'Failed load',
 				'user_id' => 'u1',
 			]]);
@@ -314,27 +365,121 @@ class DataloadServiceTest extends TestCase {
 				'u1'
 			);
 
+		$logger = $this->createMock(LoggerInterface::class);
+		$logger->expects($this->once())
+			->method('error')
+			->with('Scheduled Analytics data load 42 for dataset 11 failed: External request failed (insert: 0, update: 0, delete: 0, errors: 3)', [
+				'schedule' => 'daily',
+				'dataloadId' => 42,
+				'datasetId' => 11,
+				'datasourceId' => 4,
+				'insert' => 0,
+				'update' => 0,
+				'delete' => 0,
+				'error' => 3,
+				'errorMessage' => 'External request failed',
+			]);
+
 		$service = $this->createScheduledServiceMock(
-			['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 3],
+			['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 3, 'message' => 'External request failed'],
 			$dataloadMapper,
 			$datasetService,
-			$notificationManager
+			$notificationManager,
+			$logger
 		);
 
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Scheduled Analytics data loads failed: 42');
 		$service->executeBySchedule('daily');
+	}
+
+	public function testScheduledDataloadContinuesAfterException(): void {
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->expects($this->once())
+			->method('getDataloadBySchedule')
+			->with('hourly')
+			->willReturn([
+				[
+					'id' => 42,
+					'dataset' => 11,
+					'datasource' => 4,
+					'name' => 'Failed load',
+					'user_id' => 'u1',
+				],
+				[
+					'id' => 43,
+					'dataset' => 12,
+					'datasource' => 3,
+					'name' => 'Successful load',
+					'user_id' => 'u2',
+				],
+			]);
+
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->expects($this->never())->method('read');
+		$notificationManager = $this->createMock(NotificationManager::class);
+		$notificationManager->expects($this->never())->method('triggerNotification');
+		$logger = $this->createMock(LoggerInterface::class);
+		$logger->expects($this->once())
+			->method('error')
+			->with(
+				'Scheduled Analytics data load threw an exception',
+				$this->callback(function (array $context): bool {
+					$this->assertSame('hourly', $context['schedule']);
+					$this->assertSame(42, $context['dataloadId']);
+					$this->assertSame(11, $context['datasetId']);
+					$this->assertSame(4, $context['datasourceId']);
+					$this->assertInstanceOf(\RuntimeException::class, $context['exception']);
+					return true;
+				})
+			);
+
+		$service = $this->getMockBuilder(DataloadService::class)
+			->setConstructorArgs([
+				'u1',
+				new FakeL10N(),
+				$logger,
+				$this->createMock(ActivityManager::class),
+				$this->createMock(DatasourceController::class),
+				$this->createMock(ReportService::class),
+				$datasetService,
+				$this->createMock(StorageService::class),
+				$this->createMock(VariableService::class),
+				$notificationManager,
+				$dataloadMapper,
+				$this->createMock(FlexibleStorageService::class),
+			])
+			->onlyMethods(['execute'])
+			->getMock();
+		$service->expects($this->exactly(2))
+			->method('execute')
+			->willReturnCallback(function (int $dataloadId, ?string $file, bool $enforceOwnership): array {
+				$this->assertNull($file);
+				$this->assertFalse($enforceOwnership);
+				if ($dataloadId === 42) {
+					throw new \RuntimeException('Transport failure');
+				}
+				$this->assertSame(43, $dataloadId);
+				return ['insert' => 1, 'update' => 0, 'delete' => 0, 'error' => 0];
+			});
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Scheduled Analytics data loads failed: 42');
+		$service->executeBySchedule('hourly');
 	}
 
 	private function createScheduledServiceMock(
 		array $result,
 		DataloadMapper $dataloadMapper,
 		DatasetService $datasetService,
-		NotificationManager $notificationManager
+		NotificationManager $notificationManager,
+		?LoggerInterface $logger = null
 	) {
 		$service = $this->getMockBuilder(DataloadService::class)
 			->setConstructorArgs([
 				'u1',
 				new FakeL10N(),
-				new NullLogger(),
+				$logger ?? new NullLogger(),
 				$this->createMock(ActivityManager::class),
 				$this->createMock(DatasourceController::class),
 				$this->createMock(ReportService::class),

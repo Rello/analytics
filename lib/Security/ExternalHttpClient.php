@@ -7,6 +7,7 @@
 namespace OCA\Analytics\Security;
 
 use OCP\Http\Client\IClientService;
+use Psr\Log\LoggerInterface;
 
 class ExternalHttpClient {
 	public const CONNECT_TIMEOUT_SECONDS = 10;
@@ -15,6 +16,7 @@ class ExternalHttpClient {
 	public function __construct(
 		private IClientService $clientService,
 		private ExternalUrlValidator $urlValidator,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -63,7 +65,27 @@ class ExternalHttpClient {
 				'error' => null,
 			];
 		} catch (\Throwable $e) {
+			$safeUrl = $this->getSafeUrlForLogging($url);
+			$exceptionMessage = str_replace($url, $safeUrl, $e->getMessage());
+			$this->logger->error('Analytics external request failed: ' . $exceptionMessage, [
+				'method' => strtoupper($method),
+				'url' => $safeUrl,
+				'exceptionClass' => $e::class,
+				'exceptionCode' => $e->getCode(),
+				'exceptionMessage' => $exceptionMessage,
+			]);
 			return ['status' => 0, 'body' => '', 'error' => 'External request failed'];
 		}
+	}
+
+	private function getSafeUrlForLogging(string $url): string {
+		$parts = parse_url($url);
+		if (!is_array($parts) || !isset($parts['host'])) {
+			return '[invalid URL]';
+		}
+
+		$scheme = isset($parts['scheme']) ? $parts['scheme'] . '://' : '';
+		$port = isset($parts['port']) ? ':' . $parts['port'] : '';
+		return $scheme . $parts['host'] . $port;
 	}
 }

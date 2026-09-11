@@ -2,13 +2,15 @@
 
 ## Unreleased
 ### Added
-- Add flexible shared datasets with typed stable columns, transactional record loading, portable aggregate queries, source mappings, full-schema reports, and source-independent chart mapping.
+- Add the internal foundation for flexible shared datasets and source-independent chart mapping.
 - Configure shared panorama filters with editable report mappings and temporary viewer selections.
 - Allow thresholds to target calculated table columns.
 - Persist aggregation and disaggregation chart functions and show their secondary axis automatically.
 - Mark the Analysis menu when aggregation or disaggregation functions are active.
 
 ### Fixed
+- Keep legacy data-load simulations focused on the returned rows.
+- Log scheduled data-load and external transport failures with diagnostic details in both messages and context.
 - Show the specific internal-URL validation message when a data load fails.
 - Match navigation and navigation-menu icon colors to their labels in light and dark themes.
 - Export panoramas using a consistent light theme in PDFs.
