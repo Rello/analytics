@@ -30,6 +30,7 @@ OC.L10N.register(
     "Save" : "Lagre",
     "All data will be deleted!" : "Alle data vert sletta",
     "Download" : "Last ned",
+    "Apply" : "Anvend",
     "Delete data" : "Slett data",
     "Type" : "Type",
     "Green" : "Grøn",

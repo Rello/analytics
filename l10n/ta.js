@@ -18,6 +18,7 @@ OC.L10N.register(
     "Delete folder" : "கோப்பை அழிக்க",
     "Save" : "சேமிக்க ",
     "Download" : "பதிவிறக்குக",
+    "Selected" : "Selected",
     "Type" : "வகை",
     "Date" : "Date",
     "OK" : "சரி ",

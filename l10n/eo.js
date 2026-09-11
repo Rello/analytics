@@ -21,6 +21,8 @@ OC.L10N.register(
     "Delete folder" : "Forigi dosierujon",
     "Save" : "Konservi",
     "Download" : "Elŝuti",
+    "Reset" : "Restarigi",
+    "Apply" : "Validigi",
     "Dataset" : "Datumaro",
     "Type" : "Tipo",
     "Notification" : "Atentigo",

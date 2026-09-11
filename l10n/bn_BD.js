@@ -16,6 +16,8 @@ OC.L10N.register(
     "Delete folder" : "ফোল্ডার মোছ",
     "Save" : "সংরক্ষণ",
     "Download" : "ডাউনলোড",
+    "Reset" : "পূণঃনির্ধানণ",
+    "Enabled" : "কার্যকর",
     "Type" : "ধরণ",
     "Notification" : "নোটিফিকেশন ",
     "Date" : "Date",

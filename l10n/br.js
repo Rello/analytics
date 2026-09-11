@@ -21,6 +21,8 @@ OC.L10N.register(
     "Save" : "Enrollañ",
     "Download" : "Pellgargañ",
     "Report" : "Kemmenn",
+    "Selected" : "Choazet",
+    "Apply" : "Lakaat",
     "Type" : "Seurt",
     "Notification" : "Kemennadenn",
     "Date" : "Deiz",

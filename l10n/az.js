@@ -17,6 +17,8 @@ OC.L10N.register(
     "Delete folder" : "Qovluğu sil",
     "Save" : "Saxla",
     "Download" : "Yüklə",
+    "Reset" : "Sıfırla",
+    "Enabled" : "İşə salınıb",
     "Type" : "Type",
     "Date" : "Date",
     "OK" : "Oldu",
