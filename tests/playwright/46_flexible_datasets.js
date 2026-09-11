@@ -66,7 +66,10 @@ const reportName = buildUniqueName('Flexible sales report');
     await page.locator('#wizardDatasetName').waitFor({state: 'visible'});
     await page.locator('#wizardDatasetName').fill(datasetName);
     assert.equal(await page.locator('.flexibleDatasetMode').isVisible(), false);
-    await page.locator('input[name="wizardDatasetMode"][value="flexible_shared"]').check({force: true});
+    await page.locator('input[name="wizardDatasetMode"][value="flexible_shared"]').evaluate(input => {
+      input.checked = true;
+      input.dispatchEvent(new Event('change', {bubbles: true}));
+    });
     const rows = page.locator('#wizardDatasetFlexibleColumnList .flexibleColumnRow');
     await rows.nth(2).locator('.flexibleColumnName').fill('Product');
     await rows.nth(2).locator('.flexibleColumnType').selectOption('text');

@@ -140,6 +140,9 @@ fi
 if [[ -n "${REPORT_NAME:-}" ]]; then
   DOCKER_ARGS+=(-e "REPORT_NAME=${REPORT_NAME}")
 fi
+if [[ -n "${GROUP_NAME:-}" ]]; then
+  DOCKER_ARGS+=(-e "GROUP_NAME=${GROUP_NAME}")
+fi
 if [[ -n "${REPORT_SUBHEADER:-}" ]]; then
   DOCKER_ARGS+=(-e "REPORT_SUBHEADER=${REPORT_SUBHEADER}")
 fi

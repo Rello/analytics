@@ -329,7 +329,10 @@ async function confirmVisibleDialogs(page, maxDialogs = 3) {
 }
 
 async function waitForNavigationEntryState(page, name, state) {
-  const entry = navigationEntryLink(page, name);
+  const entry = page
+    .locator(`#app-navigation .app-navigation-entry > a[data-name="${name.replace(/"/g, '\\"')}"]`)
+    .filter({ visible: true })
+    .first();
   if (state === 'visible') {
     await entry.waitFor({ state: 'visible', timeout: 20000 });
     return;
@@ -756,9 +759,12 @@ async function chooseLocalFile(page, fileName) {
 
   let fileRow = page.locator('.file-picker__row').filter({ hasText: fileName }).first();
   if (!(await fileRow.count().catch(() => 0))) {
-    const firstRow = page.locator('.file-picker__row .file-picker__file-name').first();
-    await firstRow.waitFor({ state: 'visible', timeout: 15000 });
-    await firstRow.click();
+    const analyticsFolder = page.locator('.file-picker__row .file-picker__file-name').filter({ hasText: /^Analytics$/ }).first();
+    const folderName = (await analyticsFolder.count().catch(() => 0))
+      ? analyticsFolder
+      : page.locator('.file-picker__row .file-picker__file-name').first();
+    await folderName.waitFor({ state: 'visible', timeout: 15000 });
+    await folderName.click();
     await page.waitForTimeout(500);
     fileRow = page.locator('.file-picker__row').filter({ hasText: fileName }).first();
   }
