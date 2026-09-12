@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:afc80c55-5bb1-4e32-9154-8f59b0240212",
+  "serialNumber": "urn:uuid:954d7de0-b2ca-4958-83ef-995defe71c93",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-07-07T20:04:56Z",
+    "timestamp": "2026-09-12T12:08:35Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -26,9 +26,9 @@
     },
     "component": {
       "type": "application",
-      "bom-ref": "pkg:github/Rello/analytics@6.6.0",
+      "bom-ref": "pkg:github/Rello/analytics@6.8.1",
       "name": "analytics",
-      "version": "6.6.0",
+      "version": "6.8.1",
       "description": "Nextcloud Analytics app",
       "licenses": [
         {
@@ -37,7 +37,7 @@
           }
         }
       ],
-      "purl": "pkg:github/Rello/analytics@6.6.0",
+      "purl": "pkg:github/Rello/analytics@6.8.1",
       "externalReferences": [
         {
           "type": "website",
@@ -63,7 +63,7 @@
         },
         {
           "name": "local:sha256",
-          "value": "1234a614371473feb8dc8f99ac9e449e6a5547df6985c45b0fc8aa4a4a15e5af"
+          "value": "c0b3e94b1e22db67bc2be872ed3737c45388b673505f430da83efd6eb9e4de71"
         }
       ]
     },
@@ -668,19 +668,19 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/datatables.net@2.3.8",
+      "bom-ref": "pkg:npm/datatables.net@3.0.3",
       "group": "npm",
       "name": "datatables.net",
-      "version": "2.3.8",
+      "version": "3.0.3",
       "scope": "required",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5b4ea4250ee444307442f879c3f304dd2658918794dd685347cc52ae572c7bd2"
+          "content": "305362ef699920212b44fd64723525d7ed5de1a0f539f2b1eaed61400f982ba5"
         },
         {
           "alg": "SHA-256",
-          "content": "526a1997aebe15ccc11a325b4025671539a8c0845234200cafd29c04644fecd6"
+          "content": "b3bd1dbd8e52fd0abb39a3bfa85113c5f59d77979d5e5008e4e4bd7df96c747a"
         }
       ],
       "licenses": [
@@ -690,7 +690,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/datatables.net@2.3.8",
+      "purl": "pkg:npm/datatables.net@3.0.3",
       "externalReferences": [
         {
           "type": "website",
@@ -710,19 +710,19 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/datatables.net-colreorder@2.1.2",
+      "bom-ref": "pkg:npm/datatables.net-colreorder@3.0.1",
       "group": "npm",
       "name": "datatables.net-colreorder",
-      "version": "2.1.2",
+      "version": "3.0.1",
       "scope": "required",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5b4ea4250ee444307442f879c3f304dd2658918794dd685347cc52ae572c7bd2"
+          "content": "305362ef699920212b44fd64723525d7ed5de1a0f539f2b1eaed61400f982ba5"
         },
         {
           "alg": "SHA-256",
-          "content": "526a1997aebe15ccc11a325b4025671539a8c0845234200cafd29c04644fecd6"
+          "content": "b3bd1dbd8e52fd0abb39a3bfa85113c5f59d77979d5e5008e4e4bd7df96c747a"
         }
       ],
       "licenses": [
@@ -732,7 +732,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/datatables.net-colreorder@2.1.2",
+      "purl": "pkg:npm/datatables.net-colreorder@3.0.1",
       "externalReferences": [
         {
           "type": "website",
@@ -781,40 +781,6 @@
         {
           "type": "website",
           "url": "https://html2canvas.hertzen.com"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "bom-ref": "pkg:npm/jquery@4.0.0%2Bslim",
-      "group": "npm",
-      "name": "jquery",
-      "version": "4.0.0+slim",
-      "scope": "required",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "b406bfdcb79aeb98faf751bd4a402b1c2267e9110f6d4efba548f9286f5751ba"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "purl": "pkg:npm/jquery@4.0.0%2Bslim",
-      "properties": [
-        {
-          "name": "local:path",
-          "value": "js/3rdParty/jquery.min.js"
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "website",
-          "url": "https://jquery.com"
         }
       ]
     },
@@ -889,7 +855,7 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:github/Rello/analytics@6.6.0",
+      "ref": "pkg:github/Rello/analytics@6.8.1",
       "dependsOn": [
         "platform:php",
         "pkg:github/nextcloud/server",
@@ -902,10 +868,9 @@
         "local:chartjs-plugin-funnel",
         "pkg:npm/chartjs-plugin-zoom@1.2.1",
         "local:cloner.js",
-        "pkg:npm/datatables.net@2.3.8",
-        "pkg:npm/datatables.net-colreorder@2.1.2",
+        "pkg:npm/datatables.net@3.0.3",
+        "pkg:npm/datatables.net-colreorder@3.0.1",
         "pkg:npm/html2canvas@1.4.1",
-        "pkg:npm/jquery@4.0.0%2Bslim",
         "pkg:npm/jspdf@4.2.1",
         "pkg:npm/moment@2.30.1"
       ]

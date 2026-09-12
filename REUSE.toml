@@ -60,12 +60,6 @@ SPDX-FileCopyrightText = "SpryMedia Ltd"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = "js/3rdParty/jquery.min.js"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "OpenJS Foundation and other contributors"
-SPDX-License-Identifier = "MIT"
-
-[[annotations]]
 path = "js/3rdParty/html2canvas.min.js"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2022 Niklas von Hertzen <https://hertzen.com>"

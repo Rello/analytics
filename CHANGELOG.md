@@ -9,6 +9,9 @@
 - Persist aggregation and disaggregation chart functions and show their secondary axis automatically.
 - Mark the Analysis menu when aggregation or disaggregation functions are active.
 
+### Changed
+- Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
+
 ### Fixed
 - Keep legacy data-load simulations focused on the returned rows.
 - Log scheduled data-load and external transport failures with diagnostic details in both messages and context.
