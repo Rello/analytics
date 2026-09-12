@@ -47,6 +47,9 @@ const config = buildScenarioConfig('47');
         await open();
         assert.deepEqual(await page.locator('.analyticsEnhancedDialogNavButton').allTextContents(),
             ['Data format', 'Data mapping', 'Labels', 'Visualization']);
+        assert.equal(await page.locator('#chartColumnCategory.optionsInput').count(), 1);
+        assert.equal(await page.locator('#chartColumnValueAdd.optionsInput').count(), 1);
+        assert.equal(await page.locator('#chartColumnSeriesAdd.optionsInput').count(), 1);
         await page.locator('#chartColumnMappingSuggest').click();
         await page.waitForFunction(() => Chart.getChart(document.getElementById('chartColumnPreviewCanvas'))?.data.datasets.length === 4);
         assert.equal(await page.locator('#chartColumnMappingSummary').innerText(), 'Show € and Cost by Segment, broken down by Year.');

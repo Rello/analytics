@@ -19,6 +19,8 @@ This `AGENTS.md` file provides guidelines for OpenAI Codex and other AI agents i
 
 Agents should focus on the core application logic and ignore files or folders marked as third-party, sample, or media-related. All changes should preserve the integrity of external dependencies and translations.
 
+All new user-interface elements must reuse the app's existing templates and shared CSS classes. Before adding custom markup or styling, find the corresponding control or dialog pattern in `templates/` and apply it consistently; extend the shared pattern when no suitable template exists instead of introducing an unstyled native control or a one-off design.
+
 For every change, add a meaningful one-liner to the corresponding section (Added, Changed, Fixed) in CHANGELOG.md. Add only one changelog entry per feature or fix: when work on the same change is iterated within a chat, update the existing entry as needed instead of adding another line. Do not add entries to a closed milestone which has a data. if no open milestone exists, add a new section to the changelog.
 
 Test execution instructions are maintained in `tests/INSTRUCTIONS.md`; prefer the reusable wrappers `tests/run-unit.sh` and `tests/run-playwright.sh` over ad-hoc container commands.

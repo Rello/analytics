@@ -1066,12 +1066,12 @@
             <div id="chartColumnMappingEditor" class="chartColumnMappingEditor">
                 <div class="chartColumnMappingRole">
                     <label id="chartColumnCategoryLabel" for="chartColumnCategory"><?php p($l->t('Category / X-axis')); ?></label>
-                    <select id="chartColumnCategory"></select>
+                    <select id="chartColumnCategory" class="optionsInput"></select>
                 </div>
                 <div class="chartColumnMappingRole">
                     <label id="chartColumnValuesLabel" for="chartColumnValueAdd"><?php p($l->t('Values / Y-axis')); ?></label>
                     <div id="chartColumnValues" class="chartColumnSelections"></div>
-                    <select id="chartColumnValueAdd" aria-labelledby="chartColumnValuesLabel"></select>
+                    <select id="chartColumnValueAdd" class="optionsInput" aria-labelledby="chartColumnValuesLabel"></select>
                 </div>
                 <div id="chartColumnSeriesFieldset" class="chartColumnMappingRole">
                     <div class="chartColumnMappingToolbar">
@@ -1079,7 +1079,7 @@
                         <button type="button" id="chartColumnMappingSwap"><?php p($l->t('Swap')); ?></button>
                     </div>
                     <div id="chartColumnSeries" class="chartColumnSelections"></div>
-                    <select id="chartColumnSeriesAdd"></select>
+                    <select id="chartColumnSeriesAdd" class="optionsInput"></select>
                     <span class="chartColumnMappingHint"><?php p($l->t('Optional. One series for each distinct group.')); ?></span>
                 </div>
                 <p id="chartColumnMappingError" class="chartColumnMappingError" role="alert" hidden></p>
