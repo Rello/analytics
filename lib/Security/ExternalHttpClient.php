@@ -53,6 +53,9 @@ class ExternalHttpClient {
 			$options['body'] = $body;
 		}
 		if ($basicAuth !== null && $basicAuth !== '') {
+			if (strtolower((string)parse_url($url, PHP_URL_SCHEME)) !== 'https') {
+				return ['status' => 0, 'body' => '', 'error' => 'Basic Authentication requires an HTTPS URL'];
+			}
 			[$username, $password] = array_pad(explode(':', $basicAuth, 2), 2, '');
 			$options['auth'] = [$username, $password];
 		}
