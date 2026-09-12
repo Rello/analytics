@@ -1058,26 +1058,42 @@
     <div id="chartColumnMappingSection" class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
         <h2><?php p($l->t('Data mapping')); ?></h2>
-        <span class="userGuidance"><?php p($l->t('Choose how returned columns are used by the chart. This does not change the report data or table columns.')); ?></span>
-        <label class="chartColumnMappingAutomatic">
-            <input type="checkbox" id="chartColumnMappingAutomatic" role="switch" checked>
-            <span><?php p($l->t('Automatic chart mapping')); ?></span>
-        </label>
-        <p id="chartColumnMappingSummary" class="userGuidance"></p>
-        <div id="chartColumnMappingEditor" class="chartColumnMappingEditor" hidden>
-            <label id="chartColumnCategoryLabel" for="chartColumnCategory"><?php p($l->t('Category / X-axis')); ?></label>
-            <select id="chartColumnCategory" class="optionsInput"></select>
-            <fieldset id="chartColumnSeriesFieldset">
-                <legend><?php p($l->t('Split into series')); ?></legend>
-                <span class="userGuidance"><?php p($l->t('Optional columns that create separate chart series.')); ?></span>
-                <div id="chartColumnSeries" class="chartColumnChoices"></div>
-            </fieldset>
-            <fieldset>
-                <legend><?php p($l->t('Value columns')); ?></legend>
-                <span class="userGuidance"><?php p($l->t('Select one or more columns to visualize.')); ?></span>
-                <div id="chartColumnValues" class="chartColumnChoices"></div>
-            </fieldset>
+        <div class="chartColumnMappingToolbar">
+            <span id="chartColumnMappingStatus" class="chartColumnMappingHint"></span>
+            <button type="button" id="chartColumnMappingSuggest"><?php p($l->t('Suggest mapping')); ?></button>
         </div>
+        <div class="chartColumnMappingLayout">
+            <div id="chartColumnMappingEditor" class="chartColumnMappingEditor">
+                <div class="chartColumnMappingRole">
+                    <label id="chartColumnCategoryLabel" for="chartColumnCategory"><?php p($l->t('Category / X-axis')); ?></label>
+                    <select id="chartColumnCategory"></select>
+                </div>
+                <div class="chartColumnMappingRole">
+                    <label id="chartColumnValuesLabel" for="chartColumnValueAdd"><?php p($l->t('Values / Y-axis')); ?></label>
+                    <div id="chartColumnValues" class="chartColumnSelections"></div>
+                    <select id="chartColumnValueAdd" aria-labelledby="chartColumnValuesLabel"></select>
+                </div>
+                <div id="chartColumnSeriesFieldset" class="chartColumnMappingRole">
+                    <div class="chartColumnMappingToolbar">
+                        <label for="chartColumnSeriesAdd"><?php p($l->t('Break down by')); ?></label>
+                        <button type="button" id="chartColumnMappingSwap"><?php p($l->t('Swap')); ?></button>
+                    </div>
+                    <div id="chartColumnSeries" class="chartColumnSelections"></div>
+                    <select id="chartColumnSeriesAdd"></select>
+                    <span class="chartColumnMappingHint"><?php p($l->t('Optional. One series for each distinct group.')); ?></span>
+                </div>
+                <p id="chartColumnMappingError" class="chartColumnMappingError" role="alert" hidden></p>
+            </div>
+            <div class="chartColumnMappingPreview">
+                <h3><?php p($l->t('Preview')); ?></h3>
+                <p id="chartColumnPreviewStatus" class="chartColumnMappingHint" aria-live="polite"></p>
+                <div id="chartColumnPreviewChart" class="chartColumnPreviewChart">
+                    <canvas id="chartColumnPreviewCanvas" role="img" aria-label="<?php p($l->t('Chart mapping preview')); ?>"></canvas>
+                </div>
+                <p id="chartColumnPreviewMessage" class="chartColumnMappingHint" hidden></p>
+            </div>
+        </div>
+        <p id="chartColumnMappingSummary" class="chartColumnMappingSummary" aria-live="polite"></p>
     </div>
 
     <div class="analyticsDialogSection"

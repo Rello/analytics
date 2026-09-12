@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- New interactive chart configuration with flexible field mapping and a live-data preview.
 - Add the internal foundation for flexible shared datasets and source-independent chart mapping.
 - Configure shared panorama filters with editable report mappings and temporary viewer selections.
 - Allow thresholds to target calculated table columns.

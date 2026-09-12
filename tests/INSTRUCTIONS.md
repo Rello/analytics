@@ -53,6 +53,8 @@ Supported identifiers:
 - `44`, `automation-dataload`, `column-picker`, `local-csv`
 - `45`, `automation-deletion`, `deletion-automation`
 - `46`, `flexible-datasets`, `flexible-storage`
+- `47`, `chart-mapping` (field roles, live-data preview, sampling, and dialog lifecycle)
+- `48`, `chart-mapping-compatibility` (original report layouts, numeric dimensions, data formats, and unchanged dialog Apply)
 - `50`, `share`, `navigation-share`
 - `51`, `favorites`, `navigation-favorites`
 - `91`, `91-delete`, `report-delete`, `delete`

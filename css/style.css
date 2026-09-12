@@ -2782,39 +2782,150 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     white-space: pre-wrap;
 }
 
-.chartColumnMappingAutomatic {
+/* Chart field roles and the live-data preview share the existing dialog panel. */
+.analyticsDialog--chartOptions .analyticsEnhancedDialogPanel {
+    position: relative;
+    overflow-anchor: none;
+}
+
+.chartColumnMappingToolbar {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 18px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.chartColumnMappingLayout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.chartColumnMappingEditor,
+.chartColumnMappingRole,
+.chartColumnSelections {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
 }
 
 .chartColumnMappingEditor {
-    display: grid;
-    gap: 12px;
-    max-width: 520px;
-    margin-top: 18px;
+    gap: 16px;
+    align-content: start;
 }
 
-.chartColumnMappingEditor[hidden] {
+.chartColumnMappingRole .chartColumnMappingToolbar {
+    margin-bottom: 0;
+}
+
+.chartColumnMappingRole > label,
+.chartColumnMappingRole .chartColumnMappingToolbar > label {
+    font-weight: 600;
+}
+
+.chartColumnMappingRole select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+}
+
+.chartColumnMappingHint {
+    color: var(--color-text-maxcontrast);
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.chartColumnSelection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 8px 4px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+    background: var(--color-main-background);
+}
+
+.chartColumnSelection > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.chartColumnSelectionActions {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.chartColumnSelectionActions button {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 4px;
+    margin: 0;
+    border: 0;
+    background: transparent;
+}
+
+.chartColumnMappingPreview {
+    min-width: 0;
+    align-self: start;
+    padding: 16px;
+    border-radius: var(--border-radius-large);
+    background: var(--color-main-background);
+}
+
+.chartColumnMappingPreview h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.chartColumnPreviewChart {
+    position: relative;
+    height: 290px;
+    min-width: 0;
+}
+
+.chartColumnMappingSummary {
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--color-border);
+    overflow-wrap: anywhere;
+}
+
+.chartColumnMappingSummary strong {
+    font-weight: 700;
+}
+
+.chartColumnMappingError {
+    color: var(--color-error-text, var(--color-error));
+}
+
+.chartColumnMappingLayout [hidden] {
     display: none;
 }
 
-.chartColumnMappingEditor fieldset {
-    margin: 0;
-    padding: 12px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-large);
+@media (max-width: 1000px) {
+    .chartColumnMappingLayout {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
-.chartColumnChoices {
-    display: grid;
-    gap: 8px;
-    margin-top: 10px;
+@media (max-width: 900px) {
+    .analyticsDialog--chartOptions .analyticsEnhancedDialogNav {
+        flex-shrink: 0;
+    }
+
+    .analyticsDialog--chartOptions .analyticsEnhancedDialogNavButton {
+        width: auto;
+    }
 }
 
-.chartColumnChoices label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+@media (pointer: coarse) {
+    .chartColumnSelectionActions button {
+        min-width: 44px;
+        min-height: 44px;
+    }
 }

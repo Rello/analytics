@@ -80,6 +80,12 @@ case "${SCENARIO}" in
   46|flexible-datasets|flexible-storage)
     SCRIPT_PATH="tests/playwright/46_flexible_datasets.js"
     ;;
+  47|chart-mapping)
+    SCRIPT_PATH="tests/playwright/47_chart_mapping.js"
+    ;;
+  48|chart-mapping-compatibility)
+    SCRIPT_PATH="tests/playwright/48_chart_mapping_compatibility.js"
+    ;;
   50|share|navigation-share)
     SCRIPT_PATH="tests/playwright/50_navigation_share.js"
     ;;
@@ -103,7 +109,7 @@ case "${SCENARIO}" in
     ;;
   *)
     echo "Unknown scenario: ${SCENARIO}" >&2
-    echo "Use: full|regression|10|smoke|navigation|11|report|create|report-create|12|group-create|14|sidebar-data|16|sidebar-options|21|filter|22|drilldown|23|sort|25|table-options|26|chart-options|27|refresh|28|translate|29|top-n|30|chart|modal|31|thresholds|options-thresholds|41|datasource-git|42|datasource-json|43|datasource-csv|44|automation-dataload|45|automation-deletion|46|flexible-datasets|50|share|navigation-share|51|favorites|navigation-favorites|91|report-delete|92|group-delete|<script.js>" >&2
+    echo "Use: full|regression|10|smoke|navigation|11|report|create|report-create|12|group-create|14|sidebar-data|16|sidebar-options|21|filter|22|drilldown|23|sort|25|table-options|26|chart-options|27|refresh|28|translate|29|top-n|30|chart|modal|31|thresholds|options-thresholds|41|datasource-git|42|datasource-json|43|datasource-csv|44|automation-dataload|45|automation-deletion|46|flexible-datasets|47|chart-mapping|48|chart-mapping-compatibility|50|share|navigation-share|51|favorites|navigation-favorites|91|report-delete|92|group-delete|<script.js>" >&2
     exit 2
     ;;
 esac

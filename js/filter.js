@@ -1847,6 +1847,17 @@ OCA.Analytics.Filter = {
             dialogOptions
         );
 
+        const dialog = document.getElementById('analyticsDialogContainer');
+        dialog.classList.add('analyticsDialog--chartOptions');
+        const mappingSection = document.getElementById('chartColumnMappingSection');
+        const cleanup = dialog._analyticsDialogCleanup;
+        dialog._analyticsDialogCleanup = () => {
+            mappingSection?._analyticsDestroyPreview?.();
+            cleanup?.();
+        };
+        dialog.addEventListener('change', () => mappingSection?._analyticsRefreshPreview?.());
+        mappingSection?._analyticsStartPreview?.();
+
         document.querySelectorAll('#analyticsDialogContent input[name="analyticsModel"]').forEach(field => {
             field.addEventListener('change', function (evt) {
                 const seriesTable = document.getElementById('chartOptionsTable');
@@ -1862,151 +1873,243 @@ OCA.Analytics.Filter = {
     renderChartColumnMapping: function (container, guiState, onChange = null) {
         const reportData = OCA.Analytics.currentReportData;
         const section = container.getElementById('chartColumnMappingSection');
-        const columns = OCA.Analytics.ChartOptions.columnDescriptors(reportData);
+        const chartOptions = OCA.Analytics.ChartOptions;
+        const columns = chartOptions.columnDescriptors(reportData);
         if (!section || columns.length < 2) {
             if (section) section.hidden = true;
             return;
         }
 
-        const automatic = section.querySelector('#chartColumnMappingAutomatic');
-        const editor = section.querySelector('#chartColumnMappingEditor');
-        const categoryLabel = section.querySelector('#chartColumnCategoryLabel');
-        const category = section.querySelector('#chartColumnCategory');
-        const seriesFieldset = section.querySelector('#chartColumnSeriesFieldset');
-        const series = section.querySelector('#chartColumnSeries');
-        const valueList = section.querySelector('#chartColumnValues');
-        const summary = section.querySelector('#chartColumnMappingSummary');
+        const field = id => section.querySelector('#' + id);
+        const category = field('chartColumnCategory');
+        const seriesList = field('chartColumnSeries');
+        const valueList = field('chartColumnValues');
+        const seriesAdd = field('chartColumnSeriesAdd');
+        const valueAdd = field('chartColumnValueAdd');
+        const summary = field('chartColumnMappingSummary');
+        const error = field('chartColumnMappingError');
         let dataModel = guiState.model;
-        automatic.checked = !guiState.columnMapping;
-
-        columns.forEach(column => {
-            category.add(new Option(column.label, OCA.Analytics.ChartOptions.encodeColumnId(column.id)));
-        });
-
-        const addChoice = (target, column, className, selected) => {
-            const label = document.createElement('label');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = className;
-            checkbox.value = OCA.Analytics.ChartOptions.encodeColumnId(column.id);
-            checkbox.dataset.columnId = String(column.id);
-            checkbox.checked = selected;
-            const text = document.createElement('span');
-            text.textContent = column.label;
-            label.append(checkbox, text);
-            target.appendChild(label);
-            checkbox.addEventListener('change', update);
-        };
-        columns.forEach(column => addChoice(
-            series,
-            column,
-            'chartColumnSeriesChoice',
-            false
-        ));
-        columns.forEach(column => addChoice(
-            valueList,
-            column,
-            'chartColumnValueChoice',
-            false
-        ));
-
-        function selectedLabels(selector) {
-            return [...section.querySelectorAll(selector + ':checked')]
-                .map(input => input.closest('label')?.querySelector('span')?.textContent || input.value);
-        }
-
-        function applyMapping(mapping) {
-            if (!mapping) return;
-            category.value = OCA.Analytics.ChartOptions.encodeColumnId(mapping.category);
-            section.querySelectorAll('.chartColumnSeriesChoice').forEach(input => {
-                input.checked = mapping.series.some(column => input.value
-                    === OCA.Analytics.ChartOptions.encodeColumnId(column));
-            });
-            section.querySelectorAll('.chartColumnValueChoice').forEach(input => {
-                input.checked = mapping.measures.some(column => input.value
-                    === OCA.Analytics.ChartOptions.encodeColumnId(column));
-            });
-        }
+        let automatic = !guiState.columnMapping;
+        let mapping = chartOptions.columnMapping(reportData, dataModel, guiState.columnMapping);
+        let preview = null;
+        let timer = null;
+        let mounted = false;
+        let closed = false;
+        const labelFor = id => columns.find(column => column.id === id)?.label || '';
+        const listFormatter = new Intl.ListFormat(document.documentElement.lang || undefined, {type: 'conjunction'});
+        const sampleLabels = new Map(columns.map(column => {
+            const values = [...new Set((reportData.data || []).slice(0, 50)
+                .map(row => row?.[column.index])
+                .filter(value => value !== null && value !== undefined && value !== ''))]
+                .slice(0, 2).map(value => String(value).slice(0, 24));
+            return [column.id, values.length ? column.label + ' — ' + values.join(', ') : column.label];
+        }));
+        columns.forEach(column => category.add(new Option(column.label, chartOptions.encodeColumnId(column.id))));
 
         function readMapping() {
-            return {
-                category: OCA.Analytics.ChartOptions.decodeColumnId(category.value),
-                series: [...section.querySelectorAll('.chartColumnSeriesChoice:checked')]
-                    .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value)),
-                measures: [...section.querySelectorAll('.chartColumnValueChoice:checked')]
-                    .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value)),
+            if (!mapping.measures.length) return false;
+            return automatic ? null : {
+                category: mapping.category,
+                series: dataModel === 'kpiModel' ? [...mapping.series] : [],
+                measures: [...mapping.measures],
             };
         }
 
-        let initialized = false;
-        function update(resetSeriesOptions = true) {
-            if (automatic.checked) {
-                applyMapping(OCA.Analytics.ChartOptions.defaultColumnMapping(reportData, dataModel));
-            }
-            editor.hidden = automatic.checked;
-            const usesRowSeries = dataModel === 'kpiModel';
-            seriesFieldset.hidden = !usesRowSeries;
-            categoryLabel.textContent = dataModel === 'timeSeriesModel'
-                ? t('analytics', 'Timestamp column')
-                : (dataModel === 'accountModel' ? t('analytics', 'Series label column') : t('analytics', 'Category / X-axis'));
-            section.querySelectorAll('.chartColumnSeriesChoice, .chartColumnValueChoice').forEach(input => {
-                input.disabled = input.value === category.value;
-                if (input.disabled) {
-                    input.checked = false;
+        function renderSelections(target, role) {
+            target.replaceChildren();
+            mapping[role].forEach((id, index) => {
+                const row = document.createElement('div');
+                row.className = 'chartColumnSelection';
+                row.dataset.columnId = String(id);
+                const name = document.createElement('span');
+                name.textContent = labelFor(id);
+                const actions = document.createElement('div');
+                actions.className = 'chartColumnSelectionActions';
+                if (mapping[role].length > 1) {
+                    const up = document.createElement('button');
+                    up.type = 'button';
+                    up.textContent = '↑';
+                    up.disabled = index === 0;
+                    up.setAttribute('aria-label', t('analytics', 'Move {column} up', {column: labelFor(id)}));
+                    up.addEventListener('click', () => {
+                        [mapping[role][index - 1], mapping[role][index]] = [id, mapping[role][index - 1]];
+                        changed();
+                        target.children[index - 1]?.querySelector('button:not(:disabled)')?.focus();
+                    });
+                    actions.append(up);
+                }
+                const remove = document.createElement('button');
+                remove.type = 'button';
+                remove.textContent = '×';
+                remove.className = 'chartColumnRemove';
+                remove.setAttribute('aria-label', t('analytics', 'Remove {column}', {column: labelFor(id)}));
+                remove.addEventListener('click', () => {
+                    mapping[role] = mapping[role].filter(column => column !== id);
+                    changed();
+                    (role === 'measures' ? valueAdd : seriesAdd).focus();
+                });
+                actions.append(remove);
+                row.append(name, actions);
+                target.append(row);
+            });
+        }
+
+        function renderAdd(select, placeholder) {
+            select.replaceChildren(new Option(placeholder, ''));
+            columns.filter(column => column.id !== mapping.category
+                && !mapping.measures.includes(column.id)
+                && (dataModel !== 'kpiModel' || !mapping.series.includes(column.id)))
+                .forEach(column => select.add(new Option(sampleLabels.get(column.id), chartOptions.encodeColumnId(column.id))));
+            select.disabled = select.options.length === 1;
+        }
+
+        function renderSummary() {
+            const values = listFormatter.format(mapping.measures.map(labelFor));
+            const series = listFormatter.format(mapping.series.map(labelFor));
+            const replacements = {values, category: labelFor(mapping.category), series};
+            // Translate the complete sentence; insert field names as text nodes, never HTML.
+            const markers = {values: '{values}', category: '{category}', series: '{series}'};
+            const sentence = dataModel === 'accountModel'
+                ? t('analytics', 'Show {values}, with one series per {category} row.', markers)
+                : dataModel === 'timeSeriesModel'
+                    ? t('analytics', 'Show {values} over time using {category}.', markers)
+                    : mapping.series.length
+                        ? t('analytics', 'Show {values} by {category}, broken down by {series}.', markers)
+                        : t('analytics', 'Show {values} by {category}.', markers);
+            summary.replaceChildren();
+            if (!mapping.measures.length) return;
+            sentence.split(/(\{(?:values|category|series)\})/).forEach(part => {
+                const key = part.slice(1, -1);
+                if (Object.hasOwn(replacements, key) && part === '{' + key + '}') {
+                    const strong = document.createElement('strong');
+                    strong.textContent = replacements[key];
+                    summary.append(strong);
+                } else {
+                    summary.append(document.createTextNode(part));
                 }
             });
-            const selectedCategoryLabel = category.selectedOptions[0]?.textContent || '';
-            const seriesLabels = usesRowSeries ? selectedLabels('.chartColumnSeriesChoice') : [];
-            const valueLabels = selectedLabels('.chartColumnValueChoice');
-            const categoryName = dataModel === 'timeSeriesModel'
-                ? t('analytics', 'Timestamp')
-                : (dataModel === 'accountModel' ? t('analytics', 'Series label') : t('analytics', 'Category'));
-            summary.textContent = categoryName + ': ' + selectedCategoryLabel
-                + (usesRowSeries ? ' · ' + t('analytics', 'Series') + ': '
-                    + (seriesLabels.length ? seriesLabels.join(', ') : t('analytics', 'None')) : '')
-                + ' · ' + t('analytics', 'Values') + ': ' + valueLabels.join(', ');
-            if (initialized && typeof onChange === 'function') {
-                const mapping = readMapping();
-                if (!usesRowSeries) mapping.series = [];
-                onChange(automatic.checked ? null : (mapping.measures.length ? mapping : false), resetSeriesOptions);
+        }
+
+        function renderPreview() {
+            if (!mounted || closed) return;
+            preview?.destroy();
+            preview = null;
+            const canvas = field('chartColumnPreviewCanvas');
+            const message = field('chartColumnPreviewMessage');
+            const status = field('chartColumnPreviewStatus');
+            const chartContainer = field('chartColumnPreviewChart');
+            canvas.setAttribute('aria-label', summary.textContent || t('analytics', 'Chart mapping preview'));
+            message.hidden = false;
+            status.textContent = '';
+            if (!mapping.measures.length) {
+                chartContainer.hidden = true;
+                message.textContent = t('analytics', 'Select at least one value for the chart');
+                return;
+            }
+            try {
+                const table = document.getElementById('chartOptionsTable');
+                const seriesOptions = table ? OCA.Analytics.Filter.getChartOptionsSeriesRows(table) : [];
+                const result = OCA.Analytics.Visualization.chartMappingPreview(reportData, dataModel, automatic ? null : mapping, seriesOptions);
+                status.textContent = t('analytics', 'Preview: {shown} of {total} report rows. Current filters apply.', {
+                    shown: result.shownRows.toLocaleString(), total: result.totalRows.toLocaleString(),
+                });
+                if (!result.shownRows) {
+                    chartContainer.hidden = true;
+                    message.textContent = t('analytics', 'No data to preview with the current filters.');
+                    return;
+                }
+                chartContainer.hidden = false;
+                message.hidden = !result.limited;
+                message.textContent = t('analytics', 'The preview shows a limited selection of categories and series. Report values are used without additional aggregation.');
+                result.config.options = OCA.Analytics.Visualization.applyThemeToChartOptions(result.config.options, canvas);
+                preview = new Chart(canvas, result.config);
+            } catch (exception) {
+                // A preview failure must not prevent editing or applying the mapping.
+                Chart.getChart(canvas)?.destroy();
+                chartContainer.hidden = true;
+                message.hidden = false;
+                message.textContent = t('analytics', 'This mapping cannot be previewed. Check the selected fields and data format.');
             }
         }
 
-        automatic.addEventListener('change', update);
-        category.addEventListener('change', update);
-        applyMapping(OCA.Analytics.ChartOptions.columnMapping(reportData, dataModel, guiState.columnMapping));
-        update();
-        initialized = true;
-        section._analyticsSetModel = function (model) {
+        function schedulePreview() {
+            clearTimeout(timer);
+            if (mounted && !closed) timer = setTimeout(renderPreview, 100);
+        }
+
+        function update() {
+            category.value = chartOptions.encodeColumnId(mapping.category);
+            field('chartColumnCategoryLabel').textContent = dataModel === 'timeSeriesModel'
+                ? t('analytics', 'Time / X-axis')
+                : dataModel === 'accountModel' ? t('analytics', 'Series label column') : t('analytics', 'Category / X-axis');
+            field('chartColumnValuesLabel').textContent = dataModel === 'accountModel'
+                ? t('analytics', 'Value columns / X-axis') : t('analytics', 'Values / Y-axis');
+            field('chartColumnSeriesFieldset').hidden = dataModel !== 'kpiModel';
+            field('chartColumnMappingSwap').disabled = mapping.series.length !== 1;
+            field('chartColumnMappingStatus').textContent = automatic
+                ? t('analytics', 'Automatic chart mapping') : t('analytics', 'Custom mapping');
+            renderSelections(valueList, 'measures');
+            renderSelections(seriesList, 'series');
+            renderAdd(valueAdd, t('analytics', 'Add value…'));
+            renderAdd(seriesAdd, mapping.series.length ? t('analytics', 'Add breakdown…') : t('analytics', 'None — add breakdown…'));
+            error.hidden = mapping.measures.length > 0;
+            error.textContent = t('analytics', 'Select at least one value for the chart');
+            renderSummary();
+            schedulePreview();
+        }
+
+        function changed() {
+            automatic = false;
+            update();
+            onChange?.(readMapping());
+        }
+
+        category.addEventListener('change', () => {
+            const previous = mapping.category;
+            mapping.category = chartOptions.decodeColumnId(category.value);
+            mapping.series = mapping.series.map(id => id === mapping.category ? previous : id);
+            mapping.measures = mapping.measures.filter(id => id !== mapping.category);
+            changed();
+        });
+        [[valueAdd, 'measures'], [seriesAdd, 'series']].forEach(([select, role]) => {
+            select.addEventListener('change', () => {
+                if (select.value === '') return;
+                mapping[role].push(chartOptions.decodeColumnId(select.value));
+                changed();
+            });
+        });
+        field('chartColumnMappingSuggest').addEventListener('click', () => {
+            mapping = chartOptions.suggestColumnMapping(reportData, dataModel);
+            changed();
+        });
+        field('chartColumnMappingSwap').addEventListener('click', () => {
+            if (mapping.series.length !== 1) return;
+            [mapping.category, mapping.series[0]] = [mapping.series[0], mapping.category];
+            changed();
+        });
+        section._analyticsGetMapping = readMapping;
+        section._analyticsSetModel = model => {
             dataModel = model;
-            update(false);
+            if (automatic) mapping = chartOptions.columnMapping(reportData, dataModel);
+            update();
+            onChange?.(readMapping(), false);
         };
+        section._analyticsStartPreview = () => {
+            mounted = true;
+            renderPreview();
+        };
+        section._analyticsRefreshPreview = schedulePreview;
+        section._analyticsDestroyPreview = () => {
+            closed = true;
+            clearTimeout(timer);
+            preview?.destroy();
+            preview = null;
+        };
+        update();
     },
 
     getChartColumnMapping: function () {
-        const section = document.getElementById('chartColumnMappingSection');
-        if (!section || section.hidden) {
-            return undefined;
-        }
-        if (document.getElementById('chartColumnMappingAutomatic').checked) {
-            return null;
-        }
-
-        const measures = [...section.querySelectorAll('.chartColumnValueChoice:checked')]
-            .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value));
-        if (measures.length === 0) {
-            return false;
-        }
-        return {
-            category: OCA.Analytics.ChartOptions.decodeColumnId(
-                document.getElementById('chartColumnCategory').value
-            ),
-            series: document.querySelector('input[name="analyticsModel"]:checked')?.value === 'kpiModel'
-                ? [...section.querySelectorAll('.chartColumnSeriesChoice:checked')]
-                    .map(input => OCA.Analytics.ChartOptions.decodeColumnId(input.value))
-                : [],
-            measures,
-        };
+        return document.getElementById('chartColumnMappingSection')?._analyticsGetMapping?.();
     },
 
     /**

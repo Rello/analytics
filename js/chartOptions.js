@@ -368,6 +368,15 @@ Object.assign(OCA.Analytics.ChartOptions, {
         return Array.isArray(reportData?.columnRefs) ? reportData.columnRefs.indexOf(normalized) : -1;
     },
 
+    /** Older row-based reports use column positions, even when dimensions are numeric. */
+    usesPositionalColumnMapping: function (reportData, model = 'kpiModel') {
+        if (model !== 'kpiModel') return false;
+        const columns = this.columnDescriptors(reportData);
+        const roles = new Map((Array.isArray(reportData?.columns) ? reportData.columns : [])
+            .map(column => [column.ref, column.role]));
+        return !columns.length || !columns.every(column => ['dimension', 'measure'].includes(roles.get(column.id)));
+    },
+
     defaultColumnMapping: function (reportData, model = 'kpiModel') {
         const columns = this.columnDescriptors(reportData);
         if (columns.length < 2) {
@@ -380,14 +389,20 @@ Object.assign(OCA.Analytics.ChartOptions, {
                 measures: columns.slice(1).map(column => column.id),
             };
         }
+        if (this.usesPositionalColumnMapping(reportData, model)) {
+            // Match the original row.slice(-3) interpretation for all untyped
+            // sources. Numeric years/IDs must not become additional measures.
+            return {
+                category: columns[columns.length - 2].id,
+                series: columns.length >= 3 ? [columns[columns.length - 3].id] : [],
+                measures: [columns[columns.length - 1].id],
+            };
+        }
+        const roles = new Map(reportData.columns.map(column => [column.ref, column.role]));
         const rows = Array.isArray(reportData?.data) ? reportData.data : [];
         const valuesFor = (column) => rows.map(row => row?.[column.index])
             .filter(value => value !== null && value !== undefined && value !== '');
-        const numericColumns = columns.filter(column => {
-            const values = valuesFor(column);
-            return values.length > 0 && values.every(value => Number.isFinite(Number(value)));
-        });
-        const measureColumns = numericColumns.length ? numericColumns : [columns[columns.length - 1]];
+        const measureColumns = columns.filter(column => roles.get(column.id) === 'measure');
         const measureIds = new Set(measureColumns.map(column => column.id));
         const dimensionColumns = columns.filter(column => !measureIds.has(column.id));
         const dateColumn = dimensionColumns.find(column => {
@@ -400,6 +415,37 @@ Object.assign(OCA.Analytics.ChartOptions, {
             category: categoryColumn.id,
             series: dimensionColumns.filter(column => column.id !== categoryColumn.id).map(column => column.id),
             measures: measureColumns.filter(column => column.id !== categoryColumn.id).map(column => column.id),
+        };
+    },
+
+    /** Suggest field roles without changing the defaults of existing reports. */
+    suggestColumnMapping: function (reportData, model = 'kpiModel') {
+        const fallback = this.defaultColumnMapping(reportData, model);
+        if (!fallback || model !== 'kpiModel') return fallback;
+        const columns = this.columnDescriptors(reportData);
+        const metadata = new Map((Array.isArray(reportData.columns) ? reportData.columns : []).map(column => [column.ref, column]));
+        const rows = (reportData.data || []).slice(0, 100);
+        const valuesFor = column => rows.map(row => row?.[column.index])
+            .filter(value => value !== null && value !== undefined && value !== '');
+        const measures = columns.filter(column => {
+            const role = metadata.get(column.id)?.role;
+            if (role) return role === 'measure';
+            // A numeric year or identifier is normally a grouping field, not a quantity.
+            if (/(?:^|[\s_-])(year|jahr|année|año|id)(?:$|[\s_-])/iu.test(column.label)) return false;
+            const values = valuesFor(column);
+            return values.length && values.every(value => Number.isFinite(Number(value)));
+        });
+        if (!measures.length) return fallback;
+        const dimensions = columns.filter(column => !measures.includes(column));
+        if (!dimensions.length) return fallback;
+        const date = dimensions.find(column => ['date', 'datetime'].includes(metadata.get(column.id)?.type)
+            || (valuesFor(column).length && valuesFor(column).every(value => typeof value === 'string'
+                && !Number.isFinite(Number(value)) && Number.isFinite(Date.parse(value)))));
+        const category = date || dimensions.find(column => !/(year|jahr|année|año)/iu.test(column.label)) || dimensions[0];
+        return {
+            category: category.id,
+            series: dimensions.filter(column => column !== category).map(column => column.id),
+            measures: measures.map(column => column.id),
         };
     },
 

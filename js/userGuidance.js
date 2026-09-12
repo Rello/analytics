@@ -510,6 +510,12 @@ OCA.Analytics.Notification = {
         }
 
         const navLinks = [];
+        let navigationTarget = null;
+        let navigationTimer = null;
+        const releaseNavigationTarget = function () {
+            clearTimeout(navigationTimer);
+            navigationTimer = setTimeout(() => { navigationTarget = null; }, 150);
+        };
         sections.forEach((section, index) => {
             const heading = section.querySelector('h2');
             const label = heading ? heading.textContent.trim() : t('analytics', 'Chart options');
@@ -544,6 +550,8 @@ OCA.Analytics.Notification = {
 
             link.addEventListener('click', function (event) {
                 event.preventDefault();
+                navigationTarget = sectionId;
+                releaseNavigationTarget();
                 const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
                 const targetTop = Math.max(section.offsetTop - panelPaddingTop - sectionScrollOffset, 0);
                 panel.scrollTo({top: targetTop, behavior: 'smooth'});
@@ -565,12 +573,19 @@ OCA.Analytics.Notification = {
         }
 
         const syncActiveSection = function () {
+            // Keep the clicked destination active while smooth scrolling settles,
+            // including sections near the end that cannot reach the panel's top.
+            if (navigationTarget) {
+                OCA.Analytics.Notification.updateEnhancedDialogActiveSection(navLinks, navigationTarget);
+                releaseNavigationTarget();
+                return;
+            }
             const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
             const panelTop = panel.scrollTop + panelPaddingTop + sectionScrollOffset;
             let activeSectionId = sections[0].id;
 
             sections.forEach((section) => {
-                if (section.offsetTop <= panelTop) {
+                if (section.offsetTop <= panelTop + 1) {
                     activeSectionId = section.id;
                 }
             });
@@ -582,6 +597,7 @@ OCA.Analytics.Notification = {
         syncActiveSection();
 
         return function () {
+            clearTimeout(navigationTimer);
             panel.removeEventListener('scroll', syncActiveSection);
         };
     },

@@ -1939,10 +1939,16 @@ OCA.Analytics.Visualization = {
 
     getChartColumnFields: function (reportData, model, configuredMapping = undefined) {
         const guiState = OCA.Analytics.ChartOptions.getGuiState(reportData.options?.chartoptions);
+        const selectedMapping = configuredMapping === undefined ? guiState.columnMapping : configuredMapping;
+        if (!selectedMapping && OCA.Analytics.ChartOptions.usesPositionalColumnMapping(reportData, model)) {
+            // Use the original renderer and series list, including unnamed
+            // two-column series and the identity/order of existing series styles.
+            return null;
+        }
         const mapping = OCA.Analytics.ChartOptions.columnMapping(
             reportData,
             model,
-            configuredMapping === undefined ? guiState.columnMapping : configuredMapping
+            selectedMapping
         );
         if (!mapping) {
             return null;
@@ -2140,6 +2146,139 @@ OCA.Analytics.Visualization = {
             datasets = Array.from(labelMap.values());
         }
         return [xAxisCategories, datasets];
+    },
+
+    /**
+     * Build a bounded preview from the already filtered report response.
+     * The draft and Chart.js instance are independent of the live report.
+     */
+    chartMappingPreview: function (reportData, model, configuredMapping, seriesOptions = []) {
+        const options = OCA.Analytics.ChartOptions;
+        const mapping = options.columnMapping(reportData, model, configuredMapping);
+        const positional = !configuredMapping && options.usesPositionalColumnMapping(reportData, model);
+        const rows = Array.isArray(reportData.data) ? reportData.data : [];
+        const categoryIndex = options.resolveColumnIndex(reportData, mapping.category);
+        const seriesIndexes = (model === 'kpiModel' ? mapping.series : [])
+            .map(id => options.resolveColumnIndex(reportData, id));
+        const categoryLimit = 12;
+        const seriesLimit = 6;
+        const rowLimit = 1000;
+        const categories = new Set();
+        const groups = new Set();
+        const sample = [];
+        const measures = mapping.measures.slice(0, model === 'accountModel' ? categoryLimit : seriesLimit);
+        const groupLimit = Math.max(1, Math.floor(seriesLimit / Math.max(1, measures.length)));
+        const sourceSeries = new Map();
+        const sampleSeries = new Map();
+        const groupFor = row => seriesIndexes.map(index => String(row[index] ?? ''));
+        const keyFor = (row, measure) => JSON.stringify([...groupFor(row), measure]);
+        rows.forEach((row, rowIndex) => {
+            if (!Array.isArray(row)) return;
+            if (model === 'kpiModel') {
+                mapping.measures.forEach(measure => {
+                    const key = keyFor(row, measure);
+                    if (!sourceSeries.has(key)) sourceSeries.set(key, sourceSeries.size);
+                });
+            }
+            const category = row[categoryIndex];
+            const group = JSON.stringify(groupFor(row));
+            if (model === 'accountModel') {
+                if (sample.length >= seriesLimit) return;
+                sampleSeries.set(rowIndex, rowIndex);
+            } else {
+                if (!categories.has(category) && categories.size >= categoryLimit) return;
+                if (model === 'kpiModel' && !groups.has(group) && groups.size >= groupLimit) return;
+                if (sample.length >= rowLimit) return;
+                categories.add(category);
+                groups.add(group);
+                measures.forEach(measure => {
+                    const key = model === 'kpiModel' ? keyFor(row, measure) : measure;
+                    if (!sampleSeries.has(key)) sampleSeries.set(key, model === 'kpiModel'
+                        ? sourceSeries.get(key) : mapping.measures.indexOf(measure));
+                });
+            }
+            sample.push(row);
+        });
+        const chartTypeFull = reportData.options.chart || 'column';
+        const chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
+        const sampleReport = {
+            ...reportData,
+            data: sample,
+            options: {
+                ...reportData.options,
+                chartoptions: options.setGuiState(reportData.options.chartoptions, {
+                    model, columnMapping: positional ? null : {...mapping, measures},
+                }),
+            },
+        };
+        let [labels, datasets] = this.convertDataToChartJsFormat(sampleReport, chartType);
+        const circular = chartType === 'doughnut' || chartType === 'funnel';
+        const palette = this.defaultColorPalette;
+        const sourceIndexes = [...sampleSeries.values()];
+        datasets = datasets.map((dataset, index) => {
+            const appearance = seriesOptions[sourceIndexes[index]] || {};
+            const color = appearance.backgroundColor || palette[index % palette.length];
+            return {
+                ...dataset,
+                ...(!circular ? appearance : {}),
+                // Always expose the sampled series so the mapping is visible.
+                hidden: false,
+                backgroundColor: circular ? [...palette] : color,
+                borderColor: circular ? [...palette] : (appearance.borderColor || color),
+                borderWidth: 2,
+                pointRadius: 2,
+                fill: chartType === 'area',
+            };
+        });
+        const stacked = chartTypeFull.endsWith('St') || chartTypeFull.endsWith('St100');
+        // A percentage of a subset would misrepresent the report. Show raw values
+        // whenever the preview excludes series from a 100% stacked chart.
+        const allSeries = model === 'kpiModel' ? sourceSeries.size : model === 'accountModel' ? rows.length : mapping.measures.length;
+        const partialSeries = datasets.length < allSeries;
+        if (chartTypeFull.endsWith('St100') && !partialSeries) datasets = this.calculateStacked100(datasets);
+        const previewOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                legend: {display: true, position: 'bottom', labels: {boxWidth: 10, padding: 10}},
+                datalabels: {display: false},
+                zoom: false,
+                annotation: false,
+            },
+            scales: {
+                x: {type: model === 'timeSeriesModel' || chartType === 'datetime' || chartType === 'area' ? 'time' : 'category',
+                    stacked, ticks: {maxTicksLimit: 6}, title: {display: model !== 'accountModel', text: reportData.header[categoryIndex]}},
+                primary: {type: 'linear', position: 'left', stacked, beginAtZero: true, ticks: {maxTicksLimit: 5}},
+                secondary: {type: 'linear', position: 'right', display: datasets.some(dataset => dataset.yAxisID === 'secondary'),
+                    grid: {drawOnChartArea: false}},
+            },
+        };
+        // Respect a custom date parser/unit without copying live legend callbacks,
+        // annotations or zoom handlers that can mutate the report.
+        const configured = options.safeParse(reportData.options.chartoptions, {});
+        if (previewOptions.scales.x.type === 'time' && configured.scales?.x?.time) {
+            previewOptions.scales.x.time = {...configured.scales.x.time};
+        }
+        if (circular) {
+            delete previewOptions.scales;
+            if (chartType === 'doughnut') {
+                previewOptions.circumference = 180;
+                previewOptions.rotation = -90;
+            } else {
+                previewOptions.indexAxis = 'y';
+            }
+        }
+        return {
+            shownRows: sample.length,
+            totalRows: rows.length,
+            limited: sample.length < rows.length || measures.length < mapping.measures.length || partialSeries,
+            config: {
+                type: OCA.Analytics.chartTypeMapping[chartType] || 'bar',
+                data: {labels, datasets},
+                options: previewOptions,
+            },
+        };
     },
 
     /**
