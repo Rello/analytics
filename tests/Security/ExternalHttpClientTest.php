@@ -63,6 +63,21 @@ class ExternalHttpClientTest extends TestCase {
 		$this->assertArrayNotHasKey('stream', $captured['options']);
 	}
 
+	public function testRequestRejectsBasicAuthenticationOverHttp(): void {
+		$service = $this->createMock(IClientService::class);
+		$service->expects($this->never())->method('newClient');
+
+		$urlValidator = $this->createMock(ExternalUrlValidator::class);
+		$urlValidator->method('validate')->willReturn(null);
+
+		$result = (new ExternalHttpClient($service, $urlValidator, new NullLogger()))
+			->request('http://example.test/data', 'GET', [], null, 'user:password');
+
+		$this->assertSame(0, $result['status']);
+		$this->assertSame('', $result['body']);
+		$this->assertSame('Basic Authentication requires an HTTPS URL', $result['error']);
+	}
+
 	public function testRequestLogsSanitizedTransportFailure(): void {
 		$client = new class() {
 			public function request(string $method, string $url, array $options): object {

@@ -10,6 +10,7 @@
 - Mark the Analysis menu when aggregation or disaggregation functions are active.
 
 ### Fixed
+- Require HTTPS when using Basic Authentication with external JSON data sources.
 - Keep legacy data-load simulations focused on the returned rows.
 - Log scheduled data-load and external transport failures with diagnostic details in both messages and context.
 - Show the specific internal-URL validation message when a data load fails.
