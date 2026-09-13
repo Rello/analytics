@@ -16,6 +16,7 @@ Util::addScript('analytics', 'app');
 Util::addScript('analytics', 'flexible');
 Util::addScript('analytics', 'chartOptions');
 Util::addScript('analytics', 'filter');
+Util::addScript('analytics', 'tableOptions');
 Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'report');
 Util::addScript('analytics', 'userGuidance');

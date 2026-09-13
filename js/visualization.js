@@ -789,7 +789,8 @@ OCA.Analytics.Visualization = {
      * @param {boolean} [ordering=true] - Enable column ordering
      * @param {string|number} uniqueId - Unique identifier of the table
      */
-    buildDataTable: function (domTarget, jsondata, ordering = true, uniqueId) {
+    buildDataTable: function (domTarget, jsondata, ordering = true, uniqueId, renderOptions = {}) {
+        const preview = renderOptions.preview === true;
 
         if (!uniqueId) {
             uniqueId = jsondata.options.id;
@@ -797,22 +798,23 @@ OCA.Analytics.Visualization = {
             uniqueId = parseInt(uniqueId.replace(/[^0-9]+/g, ''), 10);
         }
 
-        if (OCA.Analytics.tableObject?.[uniqueId]) {
+        if (!preview && OCA.Analytics.tableObject?.[uniqueId]) {
             OCA.Analytics.tableObject[uniqueId].destroy();
             domTarget.innerHTML = '';
             OCA.Analytics.tableObject[uniqueId] = [];
         }
 
-        this.showElement('tableContainer');
+        if (!preview) this.showElement('tableContainer');
 
         // get current table state
         let tableOptions = {...(jsondata.options.tableoptions || {})};
         tableOptions._analyticsColumnRefs = jsondata.columnRefs || [];
-        if (OCA.Analytics.Flexible?.isFlexible(jsondata) && tableOptions.layout) {
+        if (jsondata.columnRefs?.length && tableOptions.layout) {
             tableOptions.layout = OCA.Analytics.Flexible.resolveLayout(jsondata, tableOptions.layout);
         }
         let defaultOrder = [];
         let defaultLength = 10;
+        const previewLength = 7;
         let defaultColReorder = true;
         let data, columns;
         let language = {
@@ -843,19 +845,20 @@ OCA.Analytics.Visualization = {
             jsondata.columnRefs || []
         ));
         ({data, columns} = this.dataTableCalculatedColumns(data, columns, tableOptions));
+        this.applyTableColumnFormats(columns, tableOptions);
 
         const safeColReorder = this.getSafeColReorder(tableOptions, columns.length, defaultColReorder);
 
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
         // never show table navigation in Panorama
-        if (OCA.Analytics.isPanorama) {
+        if (OCA.Analytics.isPanorama || preview) {
             isDataLengthGreaterThanDefault = false;
         }
 
         const footerRow = domTarget.createTFoot().insertRow(0);
         columns.forEach(() => footerRow.appendChild(document.createElement('td')));
-        OCA.Analytics.tableObject[uniqueId] = new DataTable(domTarget, {
+        const instance = new DataTable(domTarget, {
             //dom: 'lrtip',
             ordering: ordering,
             layout: {
@@ -864,9 +867,11 @@ OCA.Analytics.Visualization = {
                 bottomStart: isDataLengthGreaterThanDefault ? 'info' : null,
                 bottomEnd: isDataLengthGreaterThanDefault ? 'paging' : null,
             },
-            colReorder: safeColReorder,
+            colReorder: preview ? {...(typeof safeColReorder === 'object' ? safeColReorder : {}), enable: false} : safeColReorder,
             order: tableOptions.order || defaultOrder,
-            pageLength: tableOptions.length || defaultLength,
+            // Keep the editor preview compact and independent from the report's
+            // user-configurable pagination. Totals still use the complete data set.
+            pageLength: preview ? previewLength : tableOptions.length || defaultLength,
             pagingType: 'simple_numbers',
             //scrollX: true,
             autoWidth: false,
@@ -874,21 +879,24 @@ OCA.Analytics.Visualization = {
             columns: columns,
             language: language,
             rowCallback: function (row, data, index) {
-                OCA.Analytics.Visualization.dataTableRowCallback(row, data, index, jsondata.thresholds, tableOptions);
+                OCA.Analytics.Visualization.dataTableRowCallback(row, data, index, jsondata.thresholds || [], tableOptions);
             },
             footerCallback: function () {
                 OCA.Analytics.Visualization.dataTablefooterCallback(this.api(), tableOptions);
             }
         });
 
-        if (tableOptions.compactDisplay) {
+        domTarget.classList.toggle('analyticsTableDense', tableOptions.density === 'compact');
+        domTarget.classList.toggle('stripe', tableOptions.striped !== false);
+        if (tableOptions.showHeader === false || (tableOptions.showHeader === undefined && tableOptions.compactDisplay)) {
             const thead = domTarget.querySelector('thead');
             if (thead) {
                 thead.classList.add('hidden'); // Add 'hidden' class to <thead>
             }
         }
 
-        if (!OCA.Analytics.isPanorama) {
+        if (!preview) OCA.Analytics.tableObject[uniqueId] = instance;
+        if (!preview && !OCA.Analytics.isPanorama) {
             // reset initialization flag for this table
             OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = false;
 
@@ -908,6 +916,69 @@ OCA.Analytics.Visualization = {
                 OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = true;
             });
         }
+        return instance;
+    },
+
+    getTableColumnFormat: function (tableOptions, reference) {
+        return Array.isArray(tableOptions?.columnFormats)
+            ? tableOptions.columnFormats.find(format => format?.reference === reference)
+            : undefined;
+    },
+
+    formatTableColumnValue: function (value, format, percentageCalculation = false) {
+        if (value === null || value === undefined || value === '') return '';
+        const text = String(value);
+        if ((!format.format || format.format === 'auto') && /^0\d/.test(text)) return text;
+        const numeric = typeof value === 'number' || /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(text);
+        if (format.format === 'text' || !numeric || !Number.isFinite(Number(value))) return text;
+        const decimals = Number(format.decimals);
+        const options = {};
+        if (format.decimals !== '' && format.decimals !== undefined && Number.isInteger(decimals) && decimals >= 0 && decimals <= 10) {
+            options.minimumFractionDigits = decimals;
+            options.maximumFractionDigits = decimals;
+        }
+        if (format.format === 'currency') {
+            options.style = 'currency';
+            options.currency = /^[A-Z]{3}$/.test(format.currency || '') ? format.currency : 'EUR';
+        } else if (format.format === 'percent') {
+            options.style = 'percent';
+        }
+        const number = Number(value) / (format.format === 'percent' && percentageCalculation ? 100 : 1);
+        return new Intl.NumberFormat(document.documentElement.lang || undefined, options).format(number)
+            + (percentageCalculation && format.format !== 'percent' ? ' %' : '');
+    },
+
+    applyTableColumnFormats: function (columns, tableOptions) {
+        columns.forEach(column => {
+            const format = this.getTableColumnFormat(tableOptions, column.analyticsReference);
+            if (!format) return;
+            if (typeof format.title === 'string' && format.title.trim()) column.title = this.escapeHtml(format.title);
+            const alignment = ['left', 'center', 'right'].includes(format.align) ? format.align : null;
+            if (alignment) column.className = (column.className || '').replace(/\bdt-(?:left|center|right)\b/g, '') + ' dt-' + alignment;
+            if (format.wrap === true) column.className = (column.className || '') + ' analyticsTableWrap';
+            if (Number(format.width) >= 40 && Number(format.width) <= 1000) column.width = Number(format.width) + 'px';
+            if (format.format === 'text') column.type = 'string';
+            const calculation = (tableOptions._analyticsRenderedCalculatedColumns || [])[column.calculationId];
+            column.analyticsFormat = format;
+            column.render = (data, type) => {
+                if (type === 'sort' || type === 'type') {
+                    return format.format === 'text' ? String(data ?? '') : data;
+                }
+                const automaticDimension = (!format.format || format.format === 'auto')
+                    && (column.analyticsSourceIndex === 0 || (column.analyticsSourceIndex === 1 && /^\d{4}$/.test(String(data)) && Number(data) > 1950 && Number(data) < 2050));
+                const formatted = automaticDimension ? String(data ?? '')
+                    : this.formatTableColumnValue(data, format, calculation?.operation === 'percentage');
+                if (type !== 'display') return formatted;
+                const escaped = this.escapeHtml(formatted);
+                const below = format.highlightBelow;
+                if (below !== '' && below !== undefined && data !== '' && data !== null
+                    && Number.isFinite(Number(data)) && Number.isFinite(Number(below))
+                    && this.thresholdOperators.LT(Number(data), Number(below))) {
+                    return '<span class="analyticsTableHighlight">↓ ' + escaped + '</span>';
+                }
+                return this.renderTableCellContent(escaped, type);
+            };
+        });
     },
 
     /**
@@ -920,6 +991,10 @@ OCA.Analytics.Visualization = {
      * @returns {{data: Array, columns: Array}}
      */
     convertDataToDataTableFormat: function (originalData, tableOptions, header, timeAggregationDisplayConfig = null, columnRefs = []) {
+        const rawSource = index => !!this.getTableColumnFormat(tableOptions,
+            this.getTableColumnReference('source', index, header[index], null, columnRefs[index]));
+        const rawValue = value => typeof value === 'string' && !/^0\d/.test(value) && /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(value)
+            && Number.isFinite(Number(value)) ? Number(value) : value;
         let layoutConfig = tableOptions.layout !== undefined ? tableOptions.layout : false;
         let uniqueHeaders = new Set();
         let transformedData = {};
@@ -947,6 +1022,7 @@ OCA.Analytics.Visualization = {
                 className: '',
                 analyticsReference: this.getTableColumnReference('source', index, header, null, columnRefs[index]),
                 analyticsLabel: String(header),
+                analyticsSourceIndex: index,
             }));
             if (timeAggregationDisplayConfig) {
                 this.applyTimeAggregationDisplayRenderer(columns, timeAggregationDisplayConfig.dimension, timeAggregationDisplayConfig);
@@ -954,6 +1030,10 @@ OCA.Analytics.Visualization = {
             this.applyTableCellRenderer(columns);
             data = originalData.map(row =>
                 row.map((value, index) => {
+                    if (rawSource(index)) {
+                        const format = this.getTableColumnFormat(tableOptions, columns[index].analyticsReference);
+                        return format.format === 'text' ? value : rawValue(value);
+                    }
                     if (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension) {
                         return value;
                     }
@@ -982,6 +1062,7 @@ OCA.Analytics.Visualization = {
                 className: i > 0 && (!timeAggregationDisplayConfig || index !== timeAggregationDisplayConfig.dimension) ? 'dt-right' : '',
                 analyticsReference: this.getTableColumnReference('source', index, header[index], null, columnRefs[index]),
                 analyticsLabel: String(header[index]),
+                analyticsSourceIndex: index,
             }));
             if (timeAggregationDisplayConfig) {
                 const displayIndex = layoutConfig.rows.indexOf(timeAggregationDisplayConfig.dimension);
@@ -996,8 +1077,10 @@ OCA.Analytics.Visualization = {
             // Reorder the data according to the new column sequence
             data = originalData.map(row =>
                 layoutConfig.rows.map((index, i) =>
-                    (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension)
-                        ? row[index]
+                    rawSource(index)
+                        ? (this.getTableColumnFormat(tableOptions, columns[i].analyticsReference).format === 'text' ? row[index] : rawValue(row[index]))
+                        : (timeAggregationDisplayConfig && index === timeAggregationDisplayConfig.dimension)
+                            ? row[index]
                         : (i === rowsLength - 1 && !isNaN(parseFloat(row[index]))
                             ? OCA.Analytics.Visualization.escapeHtml(parseFloat(row[index]).toLocaleString())
                             : OCA.Analytics.Visualization.escapeHtml(row[index]))
@@ -1045,6 +1128,7 @@ OCA.Analytics.Visualization = {
                 className: '',
                 analyticsReference: this.getTableColumnReference('source', rowSourceIndex, header[rowSourceIndex], null, columnRefs[rowSourceIndex]),
                 analyticsLabel: String(header[rowSourceIndex]),
+                analyticsSourceIndex: rowSourceIndex,
             }];
             uniqueHeaders.forEach(pivotHeader => {
                 columns.push({
@@ -1071,8 +1155,10 @@ OCA.Analytics.Visualization = {
             // Convert transformed data to array format
             data = Object.entries(transformedData).map(([key, values]) => {
                 return [
-                    OCA.Analytics.Visualization.escapeHtml(key),
-                    ...uniqueHeaders.map(header => OCA.Analytics.Visualization.escapeHtml(values[header] || '')),
+                    rawSource(rowSourceIndex) ? key : OCA.Analytics.Visualization.escapeHtml(key),
+                    ...uniqueHeaders.map((header, index) => this.getTableColumnFormat(tableOptions, columns[index + 1].analyticsReference)
+                        ? rawValue(values[header] ?? '')
+                        : OCA.Analytics.Visualization.escapeHtml(values[header] ?? '')),
                 ];
             });
             this.applyTableCellRenderer(columns);
@@ -1360,17 +1446,21 @@ OCA.Analytics.Visualization = {
 
             // Check if this column is a percentage calculation
             const renderedCalculations = tableOptions._analyticsRenderedCalculatedColumns || [];
-            const columnTitle = column.header()?.textContent || '';
-            const calcColumn = renderedCalculations.find(calc => calc.title === columnTitle) || null;
+            const definition = api.settings()[0].aoColumns[colIdx];
+            const calcColumn = renderedCalculations[definition.calculationId] || null;
 
             if (calcColumn && calcColumn.operation === "percentage") {
+                const inputIndex = position => {
+                    const reference = calcColumn.references?.[position];
+                    return reference ? api.settings()[0].aoColumns.findIndex(item => item.analyticsReference === reference) : calcColumn.columns[position];
+                };
                 // Access the data for the numerator and denominator columns
-                const numeratorData = calcColumn._analyticsAvailable === false
+                const numeratorData = calcColumn._analyticsAvailable === false || inputIndex(0) < 0
                     ? []
-                    : api.column(calcColumn.columns[0]).data().toArray();
-                const denominatorData = calcColumn._analyticsAvailable === false
+                    : api.column(inputIndex(0)).data().toArray();
+                const denominatorData = calcColumn._analyticsAvailable === false || inputIndex(1) < 0
                     ? []
-                    : api.column(calcColumn.columns[1]).data().toArray();
+                    : api.column(inputIndex(1)).data().toArray();
 
                 // Calculate the sums for numerator and denominator
                 const numeratorSum = numeratorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
@@ -1391,7 +1481,9 @@ OCA.Analytics.Visualization = {
                 cell.textContent = 'Total';
                 cell.classList.remove('dt-right');
             } else {
-                cell.textContent = (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
+                cell.textContent = definition.analyticsFormat
+                    ? OCA.Analytics.Visualization.formatTableColumnValue(Number(total), definition.analyticsFormat, calcColumn?.operation === 'percentage')
+                    : (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
                 cell.classList.add('dt-right');
             }
         });
