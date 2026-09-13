@@ -29,6 +29,7 @@ OC.L10N.register(
     "errors" : "errores",
     "deletions" : "supresiones",
     "Date" : "Fecha",
+    "Region" : "Región",
     "This dataset is not used!" : "Este conjunto de datos no se utiliza.",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
@@ -79,6 +80,7 @@ OC.L10N.register(
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
     "Close" : "Close",
+    "Preview" : "Previsualizar",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"

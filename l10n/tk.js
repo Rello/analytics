@@ -8,7 +8,6 @@ OC.L10N.register(
     "Remove" : "Aýyrmak",
     "Delete" : "Pozmak",
     "Default" : "Bellenen",
-    "None" : "Hiç",
     "Favorites" : "Halanýanlar",
     "Add to favorites" : "Saýlananlara goşuň",
     "Save" : "Saklamak",

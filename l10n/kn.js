@@ -8,7 +8,6 @@ OC.L10N.register(
     "Saved" : "﻿ಉಳಿಸಿದ",
     "Date" : "Date",
     "Delete" : "﻿ಅಳಿಸಿ",
-    "None" : "﻿ಯಾವುದೂ ಇಲ್ಲ",
     "Favorites" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "New" : "﻿ಹೊಸ",
     "Remove from favorites" : "Remove from favorites",

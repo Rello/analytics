@@ -10,7 +10,6 @@ OC.L10N.register(
     "Region" : "Region",
     "Delete" : "Deler",
     "Done" : "Preste",
-    "Category" : "Categoria",
     "Favorites" : "Favoritos",
     "New" : "Nove",
     "Remove from favorites" : "Remove from favorites",
@@ -48,6 +47,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
     "Close" : "Clauder",
+    "Preview" : "Previsualisar",
     "Labels" : "Etiquettas",
     "Sort by" : "Ordinar per",
     "Create" : "Crear"

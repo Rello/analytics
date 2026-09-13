@@ -19,8 +19,6 @@ OC.L10N.register(
     "Multiply" : "Multiplizéieren",
     "Divide" : "Dividéieren",
     "Default" : "Standard",
-    "Timestamp" : "Zäitstempel",
-    "None" : "Keng",
     "Favorites" : "Favoriten",
     "New" : "Nei",
     "Remove from favorites" : "Remove from favorites",
@@ -65,6 +63,7 @@ OC.L10N.register(
     "Copy link" : "Link kopéieren",
     "Close" : "Zoumaachen",
     "Formula" : "Formel",
+    "Preview" : "Virschau",
     "Sort by" : "Zortéieren no",
     "Templates" : "Virlagen",
     "Create" : "Erstellen"

@@ -58,8 +58,11 @@ OC.L10N.register(
     "records updated" : "εγγραφές ενημερώθηκαν",
     "errors" : "σφάλματα",
     "deletions" : "διαγραφές",
+    "Move up" : "Μετακίνηση επάνω",
+    "Move down" : "Μετακίνηση κάτω",
     "Remove" : "Αφαίρεση",
     "Date" : "Ημερομηνία",
+    "Region" : "Περιοχή",
     "This dataset is not used!" : "Αυτό το σύνολο δεδομένων δεν χρησιμοποιείται!",
     "Delete" : "Διαγραφή",
     "All data including all reports will be deleted!" : "Όλα τα δεδομένα συμπεριλαμβανομένων όλων των αναφορών θα διαγραφούν!",
@@ -136,7 +139,6 @@ OC.L10N.register(
     "Sort data ascending or descending" : "Ταξινόμηση δεδομένων αύξουσα ή φθίνουσα",
     "Chart options" : "Επιλογές γραφήματος",
     "Select the format of the data and how it should be visualized" : "Επιλέξτε τη μορφή των δεδομένων και πώς πρέπει να οπτικοποιηθούν",
-    "Values" : "Τιμές",
     "Data series" : "Σειρά δεδομένων",
     "Primary" : "Πρωτεύων",
     "Secondary" : "Δευτερεύων",
@@ -541,6 +543,7 @@ OC.L10N.register(
     "No Chart" : "Χωρίς γράφημα",
     "No Table" : "Χωρίς πίνακα",
     "The report can now be created" : "Η αναφορά μπορεί τώρα να δημιουργηθεί",
-    "Create" : "Δημιουργία"
+    "Create" : "Δημιουργία",
+    "Add column" : "Προσθήκη στήλης"
 },
 "nplurals=2; plural=(n != 1);");

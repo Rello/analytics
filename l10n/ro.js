@@ -21,8 +21,6 @@ OC.L10N.register(
     "Filter" : "Filtru",
     "Add" : "Adaugă",
     "Default" : "Implicită",
-    "Timestamp" : "Marcaj de timp",
-    "None" : "Niciuna",
     "Line" : "Linie",
     "Favorites" : "Favorite",
     "New" : "Nou",
@@ -85,6 +83,7 @@ OC.L10N.register(
     "Password protection" : "Protecție parolă ",
     "Copy link" : "Copiază link",
     "Close" : "Închide",
+    "Preview" : "Previzualizare",
     "Sort by" : "Sortare după",
     "Templates" : "Șabloane",
     "Create" : "Crează"

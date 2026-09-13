@@ -13,8 +13,6 @@ OC.L10N.register(
     "Done" : "დასრულდა",
     "Filter" : "ფილტრი",
     "Default" : "საწყისი პარამეტრები",
-    "Category" : "კატეგორია",
-    "None" : "არც ერთი",
     "Favorites" : "რჩეულები",
     "New" : "ახალი",
     "Overview" : "ზოგადი მიმოხილვა",
@@ -62,6 +60,7 @@ OC.L10N.register(
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",
     "Close" : "დახურვა",
+    "Preview" : "წინასწარი ჩვენება",
     "Sort by" : "დაასორტირე",
     "Create" : "შექმნა"
 },

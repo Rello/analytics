@@ -13,6 +13,7 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Are you sure?" : "¿Estás seguro?",
     "Date" : "Fecha",
+    "Region" : "Región",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
@@ -65,6 +66,7 @@ OC.L10N.register(
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar enlace",
     "Close" : "Cerrar",
+    "Preview" : "Previsualizar",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"

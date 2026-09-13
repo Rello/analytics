@@ -13,7 +13,6 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Filter" : "පෙරහන",
     "Add" : "එකතු කරන්න",
-    "Category" : "ප්‍රවර්ගය",
     "Favorites" : "ප්‍රියතම",
     "New" : "නව",
     "Save" : "Save",
@@ -40,6 +39,7 @@ OC.L10N.register(
     "Password protection" : "මුරපද ආරක්ෂාව",
     "Copy link" : "සබැඳිය පිටපත් කරන්න",
     "Close" : "වසන්න",
+    "Preview" : "පෙරදසුන",
     "Create" : "සාදන්න"
 },
 "nplurals=2; plural=(n != 1);");

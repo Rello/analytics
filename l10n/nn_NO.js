@@ -23,8 +23,6 @@ OC.L10N.register(
     "none" : "ingen",
     "Add" : "Legg til",
     "Sort order" : "Sortering",
-    "Category" : "Kategori",
-    "None" : "Ingen",
     "Favorites" : "Favorittar",
     "New" : "Ny",
     "Overview" : "Oversyn",
@@ -72,6 +70,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Kopier lenkje",
     "Close" : "Lat att",
+    "Preview" : "Førehandsvisning",
     "Sort by" : "Sorter på",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"

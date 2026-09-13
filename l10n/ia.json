@@ -8,7 +8,6 @@
     "Region" : "Region",
     "Delete" : "Deler",
     "Done" : "Preste",
-    "Category" : "Categoria",
     "Favorites" : "Favoritos",
     "New" : "Nove",
     "Remove from favorites" : "Remove from favorites",
@@ -46,6 +45,7 @@
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
     "Close" : "Clauder",
+    "Preview" : "Previsualisar",
     "Labels" : "Etiquettas",
     "Sort by" : "Ordinar per",
     "Create" : "Crear"

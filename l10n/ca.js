@@ -44,8 +44,11 @@ OC.L10N.register(
     "records updated" : "registres actualitzats",
     "errors" : "errors",
     "deletions" : "supressions",
+    "Move up" : "Mou amunt",
+    "Move down" : "Mou avall",
     "Remove" : "Suprimir",
     "Date" : "Data",
+    "Region" : "Regió",
     "This dataset is not used!" : "Aquest conjunt de dades no s'utilitza!",
     "Delete" : "Suprimeix",
     "All data including all reports will be deleted!" : "Totes les dades, inclosos tots els informes, se suprimiran!",
@@ -131,6 +134,7 @@ OC.L10N.register(
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Aquest va ser l'últim informe sobre el conjunt de dades. Voleu suprimir el conjunt de dades que inclou totes les dades?",
     "Yes" : "Sí",
     "No" : "No",
+    "Cancel edit" : "Cancel·la l'edició",
     "Save data" : "Guarda les dades",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Les variables de text es poden utilitzar a les dimensions.<br> Es substitueixen quan s'afegeixen les dades.",
     "Edit" : "Edició",
@@ -404,6 +408,7 @@ OC.L10N.register(
     "No Chart" : "Sense diagrama",
     "No Table" : "No hi ha cap taula",
     "The report can now be created" : "Ara es pot crear l'informe",
-    "Create" : "Crea"
+    "Create" : "Crea",
+    "Add column" : "Afegeix una columna"
 },
 "nplurals=2; plural=(n != 1);");

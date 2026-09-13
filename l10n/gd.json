@@ -7,7 +7,6 @@
     "Remove" : "Thoir air falbh",
     "Delete" : "Sguab às",
     "Default" : "Bunaiteach",
-    "Category" : "Roinn-seòrsa",
     "Favorites" : "Annsachdan",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Save" : "Sàbhail",
@@ -30,6 +29,7 @@
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
     "Close" : "Dùin",
+    "Preview" : "Ro-sheall",
     "Sort by" : "Seòrsaich a-rèir",
     "Create" : "Cruthaich"
 },"pluralForm" :"nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;"

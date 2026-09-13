@@ -37,6 +37,7 @@ OC.L10N.register(
     "deletions" : "eliminados",
     "Remove" : "Remover",
     "Date" : "Fecha",
+    "Region" : "Región",
     "This dataset is not used!" : "¡Este conjunto de datos no está en uso!",
     "Delete" : "Eliminar",
     "All data including all reports will be deleted!" : "¡Todos los datos y todos los informes serán eliminados!",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
     "Close" : "Close",
+    "Preview" : "Previsualizar",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"

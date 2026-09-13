@@ -7,6 +7,7 @@ OC.L10N.register(
     "Settings" : "সেটিংস",
     "Saved" : "সংরক্ষণ করা হলো",
     "Date" : "Date",
+    "Region" : "এলাকা",
     "Delete" : "মুছে",
     "Done" : "শেষ হলো",
     "Add" : "যোগ কর",

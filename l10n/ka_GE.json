@@ -11,8 +11,6 @@
     "Done" : "დასრულდა",
     "Filter" : "ფილტრი",
     "Default" : "საწყისი პარამეტრები",
-    "Category" : "კატეგორია",
-    "None" : "არც ერთი",
     "Favorites" : "რჩეულები",
     "New" : "ახალი",
     "Overview" : "ზოგადი მიმოხილვა",
@@ -60,6 +58,7 @@
     "Password protection" : "პაროლით თავდაცვა",
     "Copy link" : "ბმულის კოპირება",
     "Close" : "დახურვა",
+    "Preview" : "წინასწარი ჩვენება",
     "Sort by" : "დაასორტირე",
     "Create" : "შექმნა"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"

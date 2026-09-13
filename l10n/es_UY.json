@@ -10,7 +10,6 @@
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
-    "Category" : "Categoría",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Remove from favorites" : "Eliminar de favoritos",
@@ -56,6 +55,7 @@
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
     "Close" : "Close",
+    "Preview" : "Previsualizar",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

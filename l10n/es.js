@@ -45,8 +45,11 @@ OC.L10N.register(
     "records updated" : "registros actualizados",
     "errors" : "errores",
     "deletions" : "eliminaciones",
+    "Move up" : "Mover hacia arriba",
+    "Move down" : "Mover hacia abajo",
     "Remove" : "Quitar",
     "Date" : "Fecha",
+    "Region" : "Región",
     "This dataset is not used!" : "¡El conjunto de datos no está en uso!",
     "Delete" : "Eliminar",
     "All data including all reports will be deleted!" : "¡Todos los datos incluyendo los informes serán eliminados!",
@@ -91,7 +94,6 @@ OC.L10N.register(
     "Sort data ascending or descending" : "Ordenar datos en orden ascendente o descendente",
     "Chart options" : "Opciones del gráfico",
     "Select the format of the data and how it should be visualized" : "Seleccione el formato de los datos y como deberían ser visualizados",
-    "Values" : "Valores",
     "Data series" : "Series de datos",
     "Primary" : "Primario",
     "Secondary" : "Secundario",
@@ -403,6 +405,7 @@ OC.L10N.register(
     "Select how the raw data is structured" : "Seleccione cómo se estructuran los datos en bruto",
     "In rows" : "En filas",
     "In columns" : "En columnas",
+    "Swap" : "Swap",
     "Labels" : "Etiquetas",
     "Choose how doughnut chart labels are displayed" : "Elija cómo se muestran las etiquetas del gráfico de anillos",
     "Doughnut label style" : "Estilo de etiqueta de donut",
@@ -475,6 +478,7 @@ OC.L10N.register(
     "No Chart" : "Sin Gráfica",
     "No Table" : "Sin Tabla",
     "The report can now be created" : "El informe se puede crear",
-    "Create" : "Crear"
+    "Create" : "Crear",
+    "Add column" : "Añadir columna"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -58,8 +58,11 @@ OC.L10N.register(
     "records updated" : "poster opdateret",
     "errors" : "fejl",
     "deletions" : "sletter",
+    "Move up" : "Flyt op",
+    "Move down" : "Flyt ned",
     "Remove" : "Fjern",
     "Date" : "Dato",
+    "Region" : "Region",
     "This dataset is not used!" : "Dette dataset er ikke i brug!",
     "Delete" : "Slet",
     "All data including all reports will be deleted!" : "Alle data, inklusiv alle rapporter vil blive slettet!",
@@ -214,6 +217,7 @@ OC.L10N.register(
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "Dette var den sidste rapport om datasættet. Vil du slette datasættet inklusive alle data?",
     "Yes" : "Ja",
     "No" : "Nej",
+    "Cancel edit" : "Annullér redigering",
     "Save data" : "Gem data",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Tekstvariabler kan bruges i dimensionerne.<br>De erstattes, når data tilføjes.",
     "Edit" : "Redigér",
@@ -539,6 +543,7 @@ OC.L10N.register(
     "No Chart" : "Ingen graf",
     "No Table" : "Ingen tabel",
     "The report can now be created" : "Rapporten kan nu oprettes",
-    "Create" : "Opret"
+    "Create" : "Opret",
+    "Add column" : "Tilføj kolonne"
 },
 "nplurals=2; plural=(n != 1);");

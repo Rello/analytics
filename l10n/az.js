@@ -8,6 +8,7 @@ OC.L10N.register(
     "Settings" : "Quraşdırmalar",
     "Saved" : "Saxlanıldı",
     "Date" : "Date",
+    "Region" : "Ərazi",
     "Delete" : "Sil",
     "Done" : "Edildi",
     "Favorites" : "Sevimlilər",

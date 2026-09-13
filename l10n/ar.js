@@ -45,8 +45,11 @@ OC.L10N.register(
     "records updated" : "تمّ تحديث السجلات",
     "errors" : "أخطاء",
     "deletions" : "المحذوفات",
+    "Move up" : "نقلٌ للأعلي",
+    "Move down" : "نقلٌ للأسفل",
     "Remove" : "حذف",
     "Date" : "التاريخ ",
+    "Region" : "المنطقة",
     "This dataset is not used!" : "مجموعة البيانات غير مستخدمة",
     "Delete" : "إزالة",
     "All data including all reports will be deleted!" : "كل البيانات بما فيها التقارير سيتم حذفها",
@@ -134,6 +137,7 @@ OC.L10N.register(
     "This was the last report on the dataset. Do you want to delete the dataset including all data?" : "كان هذا هو التقرير الأخير في مجموعة البيانات. هل تريد حذف مجموعة البيانات بما في ذلك جميع البيانات؟",
     "Yes" : "نعم",
     "No" : "لا",
+    "Cancel edit" : "إلغاء التعديل",
     "Save data" : "حفظ البيانات",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "متغيرات النص يمكن استعمالها في الأبعاد<br> سيتم استبدالها عند إضافة البيانات.",
     "Edit" : "تحرير",
@@ -407,6 +411,7 @@ OC.L10N.register(
     "No Chart" : "لا يوجد مخطط",
     "No Table" : "لا يوجد جدول",
     "The report can now be created" : "يمكن إنشاء التقرير الآن ",
-    "Create" : "إنشاء"
+    "Create" : "إنشاء",
+    "Add column" : "إضافة عمود"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

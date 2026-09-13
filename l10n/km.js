@@ -23,7 +23,6 @@ OC.L10N.register(
     "none" : "មិនមាន",
     "Add" : "បន្ថែម",
     "Chart options" : "ជម្រើសក្រាប",
-    "None" : "គ្មាន",
     "Primary" : "ឯក",
     "Secondary" : "ទោ",
     "Line" : "បន្ទាត់",

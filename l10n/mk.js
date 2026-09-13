@@ -22,7 +22,6 @@ OC.L10N.register(
     "Default" : "Предефиниран",
     "Ascending" : "Растечки",
     "Descending" : "Опаѓачки",
-    "None" : "Ништо",
     "Line" : "Линија",
     "Bar" : "Бар",
     "Favorites" : "Омилени",

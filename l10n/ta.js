@@ -13,7 +13,6 @@ OC.L10N.register(
     "Delete" : "நீக்குக",
     "Done" : "Done",
     "Add" : "சேர்க்க",
-    "None" : "ஒன்றுமில்லை",
     "Favorites" : "விருப்பங்கள்",
     "New" : "புதிய",
     "Remove from favorites" : "Remove from favorites",

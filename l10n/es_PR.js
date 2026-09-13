@@ -13,7 +13,6 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
-    "Category" : "Categoría",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Remove from favorites" : "Eliminar de favoritos",
@@ -59,6 +58,7 @@ OC.L10N.register(
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
     "Close" : "Cerrar",
+    "Preview" : "Previsualizar",
     "Sort by" : "Ordenar por",
     "Create" : "Crear"
 },

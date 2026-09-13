@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove" : "Thoir air falbh",
     "Delete" : "Sguab às",
     "Default" : "Bunaiteach",
-    "Category" : "Roinn-seòrsa",
     "Favorites" : "Annsachdan",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Save" : "Sàbhail",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
     "Close" : "Dùin",
+    "Preview" : "Ro-sheall",
     "Sort by" : "Seòrsaich a-rèir",
     "Create" : "Cruthaich"
 },

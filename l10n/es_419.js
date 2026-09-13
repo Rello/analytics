@@ -15,6 +15,7 @@ OC.L10N.register(
     "Delete data load" : "Eliminar carga de datos",
     "Are you sure?" : "¿Estás seguro?",
     "Date" : "Fecha",
+    "Region" : "Región",
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
