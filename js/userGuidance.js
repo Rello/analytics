@@ -512,6 +512,9 @@ OCA.Analytics.Notification = {
         const navLinks = [];
         let navigationTarget = null;
         let navigationTimer = null;
+        // offsetTop can be relative to the dialog rather than the scrolling panel.
+        const sectionTop = section => section.getBoundingClientRect().top
+            - panel.getBoundingClientRect().top + panel.scrollTop - panel.clientTop;
         const releaseNavigationTarget = function () {
             clearTimeout(navigationTimer);
             navigationTimer = setTimeout(() => { navigationTarget = null; }, 150);
@@ -553,7 +556,7 @@ OCA.Analytics.Notification = {
                 navigationTarget = sectionId;
                 releaseNavigationTarget();
                 const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
-                const targetTop = Math.max(section.offsetTop - panelPaddingTop - sectionScrollOffset, 0);
+                const targetTop = Math.max(sectionTop(section) - panelPaddingTop - sectionScrollOffset, 0);
                 panel.scrollTo({top: targetTop, behavior: 'smooth'});
                 OCA.Analytics.Notification.updateEnhancedDialogActiveSection(navLinks, sectionId);
             });
@@ -585,7 +588,7 @@ OCA.Analytics.Notification = {
             let activeSectionId = sections[0].id;
 
             sections.forEach((section) => {
-                if (section.offsetTop <= panelTop + 1) {
+                if (sectionTop(section) <= panelTop + 1) {
                     activeSectionId = section.id;
                 }
             });

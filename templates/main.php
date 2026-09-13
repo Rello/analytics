@@ -24,6 +24,7 @@ Util::addScript('analytics', 'visualization');
 Util::addScript('analytics', 'sidebar');
 Util::addScript('analytics', 'navigation');
 Util::addScript('analytics', 'filter');
+Util::addScript('analytics', 'tableOptions');
 Util::addScript('analytics', 'report');
 Util::addScript('analytics', '3rdParty/jspdf.umd.min');
 Util::addScript('analytics', '3rdParty/html2canvas.min');

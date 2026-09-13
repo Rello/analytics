@@ -55,6 +55,7 @@ Supported identifiers:
 - `46`, `flexible-datasets`, `flexible-storage`
 - `47`, `chart-mapping` (field roles, live-data preview, sampling, and dialog lifecycle)
 - `48`, `chart-mapping-compatibility` (original report layouts, numeric dimensions, data formats, and unchanged dialog Apply)
+- `49`, `table-preview` (table preview, formatting, draft lifecycle, pivot validation, and stable column references)
 - `50`, `share`, `navigation-share`
 - `51`, `favorites`, `navigation-favorites`
 - `91`, `91-delete`, `report-delete`, `delete`

@@ -1430,6 +1430,19 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .analyticsEnhancedDialogNavLabel {
     min-width: 0;
+    position: relative;
+    padding-bottom: 3px;
+}
+
+.analyticsEnhancedDialogNavButton--active .analyticsEnhancedDialogNavLabel::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--color-analytics-primary);
+    content: '';
 }
 
 .analyticsModelSelector {
@@ -2798,12 +2811,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     margin-bottom: 12px;
 }
 
-.chartColumnMappingLayout {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-}
-
 .chartColumnMappingEditor,
 .chartColumnMappingRole,
 .chartColumnSelections {
@@ -2908,25 +2915,211 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: none;
 }
 
-@media (max-width: 1000px) {
-    .chartColumnMappingLayout {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
-
-@media (max-width: 900px) {
-    .analyticsDialog--chartOptions .analyticsEnhancedDialogNav {
-        flex-shrink: 0;
-    }
-
-    .analyticsDialog--chartOptions .analyticsEnhancedDialogNavButton {
-        width: auto;
-    }
-}
-
 @media (pointer: coarse) {
     .chartColumnSelectionActions button {
         min-width: 44px;
         min-height: 44px;
+    }
+}
+
+/* Visualization options share the same top navigation, settings panel, and preview column. */
+.analyticsDialog--visualizationOptions {
+    /* Keep focus scrolling inside the options panel instead of scrolling the dialog shell. */
+    overflow: clip;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogLayout {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogNav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    grid-column: 1 / -1;
+    width: auto;
+    min-width: 0;
+    padding: 12px 24px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogNavList {
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 36px;
+    overflow: visible;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogNavButton {
+    width: auto;
+    padding: 4px 2px;
+    font-size: 15px;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogDocLink {
+    flex: 0 0 auto;
+    margin: 0 0 0 auto;
+    white-space: nowrap;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogPanel {
+    padding: 20px;
+}
+
+.analyticsVisualizationOptionsPreview {
+    margin: 16px;
+    min-height: 0;
+    max-height: calc(100% - 32px);
+    overflow: auto;
+}
+
+.tableOptionsPreviewScroll {
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+.tableOptionsModeSelector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tableOptionsModeSelector .analyticsModelCard {
+    min-height: 100px;
+    padding: 12px;
+}
+
+.tableOptionsModeSelector .analyticsModelCardTitle {
+    font-size: 18px;
+}
+
+.analyticsDialog--tableOptions .tableOptionsLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.analyticsTableModeList #tableOptionsLayoutColumns,
+.analyticsTableModeList #tableOptionsLayoutMeasures,
+.analyticsDialog--tableOptions .tableOptionsLayout .dummy,
+.analyticsDialog--tableOptions .tableOptionsLayout .dummy2 {
+    display: none;
+}
+
+.analyticsDialog--tableOptions .tableOptionsLayoutItem {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    height: auto;
+    min-height: 36px;
+}
+
+.analyticsDialog--tableOptions .tableOptionsLayoutItem > span {
+    flex: 1;
+    min-width: 60px;
+    overflow-wrap: anywhere;
+}
+
+.analyticsDialog--tableOptions:not(.analyticsTableModeList) #tableOptionsLayoutRows {
+    margin-top: 8px;
+}
+
+.analyticsDialog--tableOptions #tableOptionsLayoutColumns .tableOptionsLayoutItem,
+.analyticsDialog--tableOptions #tableOptionsLayoutMeasures .tableOptionsLayoutItem {
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.tableOptionsFieldActions {
+    margin-left: auto;
+    align-items: center;
+}
+
+.analyticsDialog--tableOptions .tableOptionsSettingsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.analyticsDialog--tableOptions .tableOptionsSettingsLabel {
+    width: auto;
+    flex: 1 1 140px;
+    white-space: normal;
+}
+
+.analyticsDialog--tableOptions .tableOptionsSettingsValue {
+    flex: 1 1 140px;
+    min-width: 0;
+}
+
+.analyticsDialog--tableOptions .optionsInput {
+    max-width: 100%;
+}
+
+.tableOptionsPreviewColumn {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-background-hover) !important;
+    margin: 0;
+    padding: 4px;
+    font-weight: 600;
+    color: var(--color-main-text);
+    cursor: pointer;
+}
+
+.tableOptionsPreviewColumn:hover {
+    background-color: var(--color-background-dark) !important;
+}
+
+.tableOptionsPreviewColumn:focus-visible {
+    outline: 2px solid var(--color-border-dark);
+    outline-offset: 2px;
+}
+
+#tableOptionsPreviewTable th.tableOptionsSelectedColumn {
+    background: transparent;
+    color: inherit;
+}
+
+#tableOptionsPreviewTable th.tableOptionsSelectedColumn .tableOptionsPreviewColumn {
+    background-color: var(--color-background-hover) !important;
+    color: var(--color-main-text);
+    outline: 2px solid var(--color-border-dark);
+    outline-offset: 2px;
+}
+
+.analyticsTableDense tbody td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+.analyticsTableWrap {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+}
+
+.analyticsTableHighlight {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: var(--border-radius);
+    background: var(--color-warning);
+    color: var(--color-warning-text, #222);
+}
+
+@media (max-width: 800px) {
+    .analyticsDialog--visualizationOptions .analyticsEnhancedDialogLayout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .analyticsDialog--visualizationOptions .analyticsEnhancedDialogNav {
+        padding: 8px 12px;
+    }
+    .analyticsDialog--visualizationOptions .analyticsVisualizationOptionsPreview {
+        max-height: none;
+        margin: 8px;
     }
 }

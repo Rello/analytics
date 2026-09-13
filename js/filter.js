@@ -651,6 +651,7 @@ OCA.Analytics.Filter = {
 
         const dialogOptions = {
             variant: 'enhanced',
+            documentationUrl: 'https://github.com/Rello/analytics/wiki/Table-Options',
             leadingAction: {
                 label: t('analytics', 'Reset table'),
                 onClick: OCA.Analytics.Filter.processTableOptionsReset
@@ -699,6 +700,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Filter.Drag.initialize();
         OCA.Analytics.Filter.initializeCalculatedColumnsDialog();
+        OCA.Analytics.TableOptions.mount();
     },
 
     /**
@@ -706,7 +708,11 @@ OCA.Analytics.Filter = {
      * to the current report before requesting fresh data.
      */
     processTableOptionsDialog: function () {
-        let tableOptions = OCA.Analytics.currentReportData.options.tableoptions || {};
+        OCA.Analytics.TableOptions.apply();
+    },
+
+    readTableOptionsDialog: function (draft) {
+        let tableOptions = structuredClone(draft || {});
 
         const showTotals = document.getElementById('totalOption')?.checked === true;
         if (showTotals) {
@@ -741,8 +747,7 @@ OCA.Analytics.Filter = {
             const childNodes = section.getElementsByClassName('draggable');
             for (let i = 0; i < childNodes.length; i++) {
                 const storedReference = childNodes[i].dataset.columnRef;
-                const columnId = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
-                    && storedReference
+                const columnId = storedReference
                     ? storedReference
                     : parseInt(childNodes[i].id.replace('column-', ''));
                 layout[sectionId].push(columnId);
@@ -752,11 +757,7 @@ OCA.Analytics.Filter = {
         const isNonPivoted = layout.columns.length === 0 && layout.measures.length === 0;
         const isPivoted = layout.rows.length > 0 && layout.columns.length > 0 && layout.measures.length > 0;
         if (!isNonPivoted && !isPivoted) {
-            OCA.Analytics.Notification.notification(
-                'error',
-                t('analytics', 'A pivoted table needs fields in Rows, Columns, and Measures.')
-            );
-            return;
+            return null;
         }
 
         const isSequential = (arr) => arr.every((val, i, array) => typeof val === 'number'
@@ -778,20 +779,21 @@ OCA.Analytics.Filter = {
             delete tableOptions.calculatedColumns;
         }
 
-        if (OCA.Analytics.currentReportData.options.tableoptions !== tableOptions) {
+        if (JSON.stringify(tableOptions.layout) !== JSON.stringify(draft?.layout)) {
             delete tableOptions.colReorder;
+            delete tableOptions.order;
         }
-
-        OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
-        OCA.Analytics.unsavedChanges = true;
-        OCA.Analytics.Report.Backend.getData();
-        OCA.Analytics.Notification.dialogClose();
+        return tableOptions;
     },
 
     /**
      * Reset all saved table settings to their defaults.
      */
     processTableOptionsReset: function () {
+        if (OCA.Analytics.TableOptions?.active) {
+            OCA.Analytics.TableOptions.reset();
+            return;
+        }
         if (OCA.Analytics.currentReportData.options.tableoptions !== null) {
             OCA.Analytics.currentReportData.options.tableoptions = null;
             OCA.Analytics.unsavedChanges = true;
@@ -930,6 +932,7 @@ OCA.Analytics.Filter = {
             return;
         }
         OCA.Analytics.Filter.Drag.syncCalculatedColumns(deletedIndex);
+        OCA.Analytics.TableOptions?.calculationsChanged(deletedIndex);
     },
 
     getCalculatedColumnReferencedIndexes: function (item) {
@@ -1848,7 +1851,10 @@ OCA.Analytics.Filter = {
         );
 
         const dialog = document.getElementById('analyticsDialogContainer');
-        dialog.classList.add('analyticsDialog--chartOptions');
+        dialog.classList.add('analyticsDialog--chartOptions', 'analyticsDialog--visualizationOptions');
+        dialog.querySelector('.analyticsEnhancedDialogLayout').append(
+            document.getElementById('chartColumnMappingPreview')
+        );
         const mappingSection = document.getElementById('chartColumnMappingSection');
         const cleanup = dialog._analyticsDialogCleanup;
         dialog._analyticsDialogCleanup = () => {
@@ -1880,7 +1886,8 @@ OCA.Analytics.Filter = {
             return;
         }
 
-        const field = id => section.querySelector('#' + id);
+        const previewRoot = container.getElementById('chartColumnMappingPreview');
+        const field = id => section.querySelector('#' + id) || previewRoot?.querySelector('#' + id);
         const category = field('chartColumnCategory');
         const seriesList = field('chartColumnSeries');
         const valueList = field('chartColumnValues');
@@ -2610,7 +2617,7 @@ OCA.Analytics.Filter.Drag = {
         if (calculationIndex !== null) {
             div.dataset.calculationIndex = calculationIndex;
         }
-        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+        if (OCA.Analytics.currentReportData.columnRefs?.length) {
             const columnRef = OCA.Analytics.Flexible.referenceForIndex(OCA.Analytics.currentReportData, index);
             if (columnRef) {
                 div.dataset.columnRef = columnRef;
@@ -2694,8 +2701,8 @@ OCA.Analytics.Filter.Drag = {
      * and attach all necessary event handlers.
      */
     initialize: function () {
-        let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions.layout;
-        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
+        let layoutConfig = OCA.Analytics.currentReportData.options.tableoptions?.layout;
+        if (OCA.Analytics.currentReportData.columnRefs?.length) {
             layoutConfig = OCA.Analytics.Flexible.resolveLayout(OCA.Analytics.currentReportData, layoutConfig);
         }
         const sourceHeaders = OCA.Analytics.currentReportData.header || [];
@@ -2909,6 +2916,12 @@ OCA.Analytics.Filter.Backend = {
 
         if ((OCA.Analytics.currentReportData.options.tableoptions)?.calculatedColumns) {
             tableOptions.calculatedColumns = OCA.Analytics.currentReportData.options.tableoptions.calculatedColumns;
+        }
+
+        for (const key of ['columnFormats', 'density', 'showHeader', 'striped']) {
+            if (OCA.Analytics.currentReportData.options.tableoptions?.[key] !== undefined) {
+                tableOptions[key] = OCA.Analytics.currentReportData.options.tableoptions[key];
+            }
         }
 
         OCA.Analytics.currentReportData.options.tableoptions = tableOptions;

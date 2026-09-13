@@ -859,8 +859,15 @@
 <template id="templateTableOptions">
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
-        <h2><?php p($l->t('Data Source')); ?></h2>
-        <span class="userGuidance"><?php p($l->t('Position the available fields to define the structure of the table. For a classic list view, move all fields into rows.')); ?></span>
+        <h2><?php p($l->t('Layout')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Choose visible columns or arrange fields as a pivot table.')); ?></span>
+        <div class="analyticsModelSelector tableOptionsModeSelector">
+            <div class="analyticsModelOption"><input type="radio" name="tableMode" id="tableModeList" value="table" checked>
+                <label class="analyticsModelCard" for="tableModeList"><span class="analyticsModelCardTop"><img src="<?php echo image_path('analytics', 'row.svg'); ?>" class="analyticsModelCardIcon" alt=""><span class="analyticsModelCardIndicator"></span></span><span class="analyticsModelCardTitle"><?php p($l->t('Table')); ?></span><span class="analyticsModelCardText"><?php p($l->t('Choose and order visible columns')); ?></span></label></div>
+            <div class="analyticsModelOption"><input type="radio" name="tableMode" id="tableModePivot" value="pivot">
+                <label class="analyticsModelCard" for="tableModePivot"><span class="analyticsModelCardTop"><img src="<?php echo image_path('analytics', 'column.svg'); ?>" class="analyticsModelCardIcon" alt=""><span class="analyticsModelCardIndicator"></span></span><span class="analyticsModelCardTitle"><?php p($l->t('Pivot table')); ?></span><span class="analyticsModelCardText"><?php p($l->t('Arrange one field each in Rows, Columns, and Values')); ?></span></label></div>
+        </div>
+        <p id="tableOptionsLayoutError" class="chartColumnMappingHint" role="alert" hidden></p>
         <div class="tableOptionsLayout">
             <div class="dummy"></div>
             <div id="tableOptionsLayoutRows">
@@ -873,15 +880,107 @@
             </div>
             <div id="tableOptionsLayoutMeasures">
                 <p><?php // TRANSLATORS "Measures" means key figures and refers to the display area of a data table
-					p($l->t('Measures')); ?></p>
+					p($l->t('Values')); ?></p>
                 <div id="measures" class="columnSection"></div>
             </div>
             <div id="tableOptionsLayoutAvailable">
-                <p><?php p($l->t('Not required')); ?></p>
+                <p><?php p($l->t('Hidden columns')); ?></p>
                 <div id="notRequired" class="columnSection"></div>
             </div>
             <div class="dummy2"></div>
         </div>
+    </div>
+
+    <div id="tableColumnSection" class="analyticsDialogSection" data-section-icon="<?php echo image_path('analytics', 'column.svg'); ?>">
+        <h2><?php p($l->t('Columns')); ?></h2>
+        <div class="tableOptionsSettingsTable">
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnSelect"><?php p($l->t('Column')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableColumnSelect" class="optionsInput"></select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnTitle"><?php p($l->t('Display name')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <input id="tableColumnTitle" class="optionsInput" type="text">
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnFormat"><?php p($l->t('Format')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableColumnFormat" class="optionsInput">
+                        <option value="auto"><?php p($l->t('Automatic')); ?></option>
+                        <option value="text"><?php p($l->t('Text')); ?></option>
+                        <option value="number"><?php p($l->t('Number')); ?></option>
+                        <option value="currency"><?php p($l->t('Currency')); ?></option>
+                        <option value="percent"><?php p($l->t('Percent')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnCurrency"><?php p($l->t('Currency')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <input id="tableColumnCurrency" class="optionsInput" type="text" maxlength="3" placeholder="EUR" pattern="[A-Z]{3}">
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnDecimals"><?php p($l->t('Decimal places')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableColumnDecimals" class="optionsInput">
+                        <option value=""><?php p($l->t('Automatic')); ?></option>
+                        <option value="0"><?php p($l->t('0')); ?></option>
+                        <option value="1"><?php p($l->t('1')); ?></option>
+                        <option value="2"><?php p($l->t('2')); ?></option>
+                        <option value="3"><?php p($l->t('3')); ?></option>
+                        <option value="4"><?php p($l->t('4')); ?></option>
+                        <option value="5"><?php p($l->t('5')); ?></option>
+                        <option value="6"><?php p($l->t('6')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnAlign"><?php p($l->t('Alignment')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableColumnAlign" class="optionsInput">
+                        <option value="auto"><?php p($l->t('Automatic')); ?></option>
+                        <option value="left"><?php p($l->t('Left')); ?></option>
+                        <option value="center"><?php p($l->t('Center')); ?></option>
+                        <option value="right"><?php p($l->t('Right')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnWidth"><?php p($l->t('Width (pixels)')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <input id="tableColumnWidth" class="optionsInput" type="number" min="40" max="1000" placeholder="<?php p($l->t('Automatic')); ?>">
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableColumnWrap"><?php p($l->t('Wrap text')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="analyticsSwitch" for="tableColumnWrap"><input id="tableColumnWrap" type="checkbox" role="switch" ><span class="analyticsSwitchSlider" aria-hidden="true"></span></label>
+                </div>
+            </div>
+        </div>
+        <p id="tableColumnFormatHint" class="userGuidance"></p>
+        <button type="button" class="button analyticsSecondary" id="tableColumnReset"><?php p($l->t('Reset column')); ?></button>
     </div>
 
     <div class="analyticsDialogSection"
@@ -974,8 +1073,67 @@
 
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
-        <h2><?php p($l->t('Visualization')); ?></h2>
+        <h2><?php p($l->t('Appearance')); ?></h2>
         <div class="tableOptionsSettingsTable">
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableDensity"><?php p($l->t('Row spacing')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableDensity" class="optionsInput">
+                        <option value="comfortable"><?php p($l->t('Comfortable')); ?></option>
+                        <option value="compact"><?php p($l->t('Compact')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableShowHeader"><?php p($l->t('Show column headers')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="analyticsSwitch" for="tableShowHeader"><input id="tableShowHeader" type="checkbox" role="switch" checked><span class="analyticsSwitchSlider" aria-hidden="true"></span></label>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableStriped"><?php p($l->t('Alternating row shading')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <label class="analyticsSwitch" for="tableStriped"><input id="tableStriped" type="checkbox" role="switch" checked><span class="analyticsSwitchSlider" aria-hidden="true"></span></label>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tablePageLength"><?php p($l->t('Rows per page')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tablePageLength" class="optionsInput">
+                        <option value="10"><?php p($l->t('10')); ?></option>
+                        <option value="25"><?php p($l->t('25')); ?></option>
+                        <option value="50"><?php p($l->t('50')); ?></option>
+                        <option value="100"><?php p($l->t('100')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableDefaultSort"><?php p($l->t('Default sort')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableDefaultSort" class="optionsInput"></select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableSortDirection"><?php p($l->t('Direction')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableSortDirection" class="optionsInput">
+                        <option value="asc"><?php p($l->t('Ascending')); ?></option>
+                        <option value="desc"><?php p($l->t('Descending')); ?></option>
+                    </select>
+                </div>
+            </div>
             <div class="tableOptionsSettingsRow">
                 <div class="tableOptionsSettingsLabel"><?php p($l->t('Show totals')); ?></div>
                 <div class="tableOptionsSettingsValue">
@@ -1008,6 +1166,35 @@
             </div>
         </div>
     </div>
+    <div id="tableHighlightSection" class="analyticsDialogSection" data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
+        <h2><?php p($l->t('Highlighting')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Highlight values below a limit with a background and downward marker. Existing report thresholds also apply.')); ?></span>
+        <div class="tableOptionsSettingsTable">
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableHighlightColumn"><?php p($l->t('Column')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tableHighlightColumn" class="optionsInput"></select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
+                    <label for="tableHighlightBelow"><?php p($l->t('Values below')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <input type="number" step="any" id="tableHighlightBelow" class="optionsInput" placeholder="<?php p($l->t('Disabled')); ?>">
+                </div>
+            </div>
+        </div>
+    </div>
+    <aside id="tableOptionsPreview" class="chartColumnMappingPreview analyticsVisualizationOptionsPreview tableOptionsPreview" aria-label="<?php p($l->t('Live preview')); ?>">
+        <h3><?php p($l->t('Live preview')); ?></h3>
+        <p id="tableOptionsPreviewStatus" class="chartColumnMappingHint" role="status" aria-live="polite"></p>
+        <p id="tableOptionsPreviewError" class="chartColumnMappingHint" role="alert" hidden></p>
+        <div class="tableOptionsPreviewScroll"><table id="tableOptionsPreviewTable" class="row-border hover order-column"></table></div>
+        <p class="userGuidance"><?php p($l->t('Select a column heading to format it. Totals use all loaded report rows, before the preview is limited.')); ?></p>
+    </aside>
 </template>
 
 <template id="templateChartOptions">
@@ -1062,36 +1249,26 @@
             <span id="chartColumnMappingStatus" class="chartColumnMappingHint"></span>
             <button type="button" id="chartColumnMappingSuggest"><?php p($l->t('Suggest mapping')); ?></button>
         </div>
-        <div class="chartColumnMappingLayout">
-            <div id="chartColumnMappingEditor" class="chartColumnMappingEditor">
-                <div class="chartColumnMappingRole">
-                    <label id="chartColumnCategoryLabel" for="chartColumnCategory"><?php p($l->t('Category / X-axis')); ?></label>
-                    <select id="chartColumnCategory" class="optionsInput"></select>
-                </div>
-                <div class="chartColumnMappingRole">
-                    <label id="chartColumnValuesLabel" for="chartColumnValueAdd"><?php p($l->t('Values / Y-axis')); ?></label>
-                    <div id="chartColumnValues" class="chartColumnSelections"></div>
-                    <select id="chartColumnValueAdd" class="optionsInput" aria-labelledby="chartColumnValuesLabel"></select>
-                </div>
-                <div id="chartColumnSeriesFieldset" class="chartColumnMappingRole">
-                    <div class="chartColumnMappingToolbar">
-                        <label for="chartColumnSeriesAdd"><?php p($l->t('Break down by')); ?></label>
-                        <button type="button" id="chartColumnMappingSwap"><?php p($l->t('Swap')); ?></button>
-                    </div>
-                    <div id="chartColumnSeries" class="chartColumnSelections"></div>
-                    <select id="chartColumnSeriesAdd" class="optionsInput"></select>
-                    <span class="chartColumnMappingHint"><?php p($l->t('Optional. One series for each distinct group.')); ?></span>
-                </div>
-                <p id="chartColumnMappingError" class="chartColumnMappingError" role="alert" hidden></p>
+        <div id="chartColumnMappingEditor" class="chartColumnMappingEditor">
+            <div class="chartColumnMappingRole">
+                <label id="chartColumnCategoryLabel" for="chartColumnCategory"><?php p($l->t('Category / X-axis')); ?></label>
+                <select id="chartColumnCategory" class="optionsInput"></select>
             </div>
-            <div class="chartColumnMappingPreview">
-                <h3><?php p($l->t('Preview')); ?></h3>
-                <p id="chartColumnPreviewStatus" class="chartColumnMappingHint" aria-live="polite"></p>
-                <div id="chartColumnPreviewChart" class="chartColumnPreviewChart">
-                    <canvas id="chartColumnPreviewCanvas" role="img" aria-label="<?php p($l->t('Chart mapping preview')); ?>"></canvas>
-                </div>
-                <p id="chartColumnPreviewMessage" class="chartColumnMappingHint" hidden></p>
+            <div class="chartColumnMappingRole">
+                <label id="chartColumnValuesLabel" for="chartColumnValueAdd"><?php p($l->t('Values / Y-axis')); ?></label>
+                <div id="chartColumnValues" class="chartColumnSelections"></div>
+                <select id="chartColumnValueAdd" class="optionsInput" aria-labelledby="chartColumnValuesLabel"></select>
             </div>
+            <div id="chartColumnSeriesFieldset" class="chartColumnMappingRole">
+                <div class="chartColumnMappingToolbar">
+                    <label for="chartColumnSeriesAdd"><?php p($l->t('Break down by')); ?></label>
+                    <button type="button" id="chartColumnMappingSwap"><?php p($l->t('Swap')); ?></button>
+                </div>
+                <div id="chartColumnSeries" class="chartColumnSelections"></div>
+                <select id="chartColumnSeriesAdd" class="optionsInput"></select>
+                <span class="chartColumnMappingHint"><?php p($l->t('Optional. One series for each distinct group.')); ?></span>
+            </div>
+            <p id="chartColumnMappingError" class="chartColumnMappingError" role="alert" hidden></p>
         </div>
         <p id="chartColumnMappingSummary" class="chartColumnMappingSummary" aria-live="polite"></p>
     </div>
@@ -1127,6 +1304,14 @@
             </div>
         </div>
     </div>
+    <aside id="chartColumnMappingPreview" class="chartColumnMappingPreview analyticsVisualizationOptionsPreview" aria-label="<?php p($l->t('Live preview')); ?>">
+        <h3><?php p($l->t('Live preview')); ?></h3>
+        <p id="chartColumnPreviewStatus" class="chartColumnMappingHint" aria-live="polite"></p>
+        <div id="chartColumnPreviewChart" class="chartColumnPreviewChart">
+            <canvas id="chartColumnPreviewCanvas" role="img" aria-label="<?php p($l->t('Chart mapping preview')); ?>"></canvas>
+        </div>
+        <p id="chartColumnPreviewMessage" class="chartColumnMappingHint" hidden></p>
+    </aside>
 </template>
 
 <template id="templateSortOptions">

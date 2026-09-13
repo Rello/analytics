@@ -36,6 +36,7 @@ const scenarios = [
   { id: '44', title: 'automation_dataload_csv_column_picker', script: 'tests/playwright/44_automation_dataload_csv_column_picker.js' },
   { id: '45', title: 'automation_deletion', script: 'tests/playwright/45_automation_deletion.js' },
   { id: '46', title: 'flexible_datasets', script: 'tests/playwright/46_flexible_datasets.js' },
+  { id: '49', title: 'table_preview', script: 'tests/playwright/49_table_preview.js' },
   { id: '50', title: 'navigation_share', script: 'tests/playwright/50_navigation_share.js' },
   { id: '51', title: 'navigation_favorites', script: 'tests/playwright/51_navigation_favorites.js' },
   { id: '91', title: 'report_delete', script: 'tests/playwright/91_report_delete.js' },

@@ -86,6 +86,9 @@ case "${SCENARIO}" in
   48|chart-mapping-compatibility)
     SCRIPT_PATH="tests/playwright/48_chart_mapping_compatibility.js"
     ;;
+  49|table-preview)
+    SCRIPT_PATH="tests/playwright/49_table_preview.js"
+    ;;
   50|share|navigation-share)
     SCRIPT_PATH="tests/playwright/50_navigation_share.js"
     ;;
