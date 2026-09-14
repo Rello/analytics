@@ -12,6 +12,7 @@
 
 ### Changed
 - Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
+- Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
 - Preserve spreadsheet dates with month and minute format tokens correctly #589.

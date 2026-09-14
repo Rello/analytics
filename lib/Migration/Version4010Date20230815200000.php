@@ -38,9 +38,8 @@ class Version4010Date20230815200000 extends SimpleMigrationStep
 
         $table = $schema->getTable('analytics_report');
         if (!$table->hasColumn('tableoptions')) {
-            $table->addColumn('tableoptions', 'string', [
+            $table->addColumn('tableoptions', 'text', [
                 'notnull' => false,
-                'length' => 1000,
             ]);
         }
         return $schema;

@@ -111,17 +111,14 @@ class Version3007Date20211003180000 extends SimpleMigrationStep
                 'notnull' => false,
                 'length' => 64,
             ]);
-            $table->addColumn('chartoptions', 'string', [
+            $table->addColumn('chartoptions', 'text', [
                 'notnull' => false,
-                'length' => 1000,
             ]);
-            $table->addColumn('dataoptions', 'string', [
+            $table->addColumn('dataoptions', 'text', [
                 'notnull' => false,
-                'length' => 1000,
             ]);
-            $table->addColumn('filteroptions', 'string', [
+            $table->addColumn('filteroptions', 'text', [
                 'notnull' => false,
-                'length' => 1000,
             ]);
             $table->addColumn('refresh', 'integer', [
                 'notnull' => false,
