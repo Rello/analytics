@@ -48,6 +48,7 @@ OC.L10N.register(
     "Yes" : "Sí",
     "No" : "No",
     "Edit" : "Editar",
+    "Reset to defaults" : "Restablercer los valores predeterminados",
     "Type" : "Tipo",
     "Notification" : "Notificación",
     "OK" : "OK",
@@ -79,8 +80,9 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Text" : "Texto",
+    "2" : "2",
     "Close" : "Close",
-    "Preview" : "Previsualizar",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"

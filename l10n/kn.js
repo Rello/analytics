@@ -34,6 +34,7 @@ OC.L10N.register(
     "Unshare" : "ಹಂಚಿಕೆಯನ್ನು ಹಿಂತೆಗೆ",
     "Password protection" : "Password protection",
     "Close" : "ಮುಚ್ಚು",
+    "Disabled" : "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ",
     "Create" : "ಸೃಷ್ಟಿಸಿ"
 },
 "nplurals=2; plural=(n > 1);");

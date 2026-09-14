@@ -46,8 +46,8 @@ OC.L10N.register(
     "Unshare" : "Cessa de compartir",
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
+    "Automatic" : "Automatic",
     "Close" : "Clauder",
-    "Preview" : "Previsualisar",
     "Labels" : "Etiquettas",
     "Sort by" : "Ordinar per",
     "Create" : "Crear"

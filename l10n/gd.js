@@ -31,7 +31,6 @@ OC.L10N.register(
     "Unshare" : "Na co-roinn tuilleadh",
     "Copy link" : "Dèan lethbhreac dhen cheangal",
     "Close" : "Dùin",
-    "Preview" : "Ro-sheall",
     "Sort by" : "Seòrsaich a-rèir",
     "Create" : "Cruthaich"
 },

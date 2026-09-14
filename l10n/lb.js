@@ -61,9 +61,11 @@ OC.L10N.register(
     "Unshare" : "Net méi deelen",
     "Password protection" : "Password protection",
     "Copy link" : "Link kopéieren",
+    "Automatic" : "Automatesch",
+    "Text" : "Text",
     "Close" : "Zoumaachen",
     "Formula" : "Formel",
-    "Preview" : "Virschau",
+    "Disabled" : "Desaktivéiert",
     "Sort by" : "Zortéieren no",
     "Templates" : "Virlagen",
     "Create" : "Erstellen"

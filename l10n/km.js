@@ -104,6 +104,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "ចម្លងតំណ",
     "Close" : "បិទ",
+    "Disabled" : "បាន​បិទ",
     "Vertical axis" : "អ័ក្សឈរ",
     "Sort by" : "តម្រៀបដោយ",
     "New report" : "បង្កើតរបាយការណ៍ថ្មី",

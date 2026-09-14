@@ -41,6 +41,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Kopiraj vezu",
     "Close" : "Zatvori",
+    "Appearance" : "Izgled",
     "Create" : "Napravi",
     "Add column" : "Dodaj kolonu"
 },

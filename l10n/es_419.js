@@ -63,6 +63,8 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Text" : "Texto",
+    "2" : "2",
     "Close" : "Cerrar",
     "Sort by" : "Ordenar por",
     "Create" : "Crear"
