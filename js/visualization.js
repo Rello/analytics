@@ -1908,7 +1908,9 @@ OCA.Analytics.Visualization = {
         });
 
         return {
-            label: dataset.label + ' ' + t('analytics', mode === 'aggregate' ? 'Aggregation' : 'Disaggregation'),
+            label: mode === 'aggregate'
+                ? t('analytics', '{label} Aggregation', {label: dataset.label})
+                : t('analytics', '{label} Disaggregation', {label: dataset.label}),
             backgroundColor: dataset.backgroundColor,
             borderColor: dataset.borderColor,
             borderDash: [5, 5],
