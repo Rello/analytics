@@ -23,6 +23,8 @@ All new user-interface elements must reuse the app's existing templates and shar
 
 For every change, add a meaningful one-liner to the corresponding section (Added, Changed, Fixed) in CHANGELOG.md. Add only one changelog entry per feature or fix: when work on the same change is iterated within a chat, update the existing entry as needed instead of adding another line. Do not add entries to a closed milestone which has a data. if no open milestone exists, add a new section to the changelog.
 
+When fixing a GitHub issue, add the `pending release` label and comment on the issue with a link to the pushed commit.
+
 Test execution instructions are maintained in `tests/INSTRUCTIONS.md`; prefer the reusable wrappers `tests/run-unit.sh` and `tests/run-playwright.sh` over ad-hoc container commands.
 
 No nodejs or vue components are used. Everything is plain Javascript. 
