@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Add a V4 API endpoint for deleting legacy dataset rows through structured filters, including dynamic date variables.
 - Configure tables interactively with a seven-row live preview independent of report pagination, column formatting, layout controls with accurate empty-field placeholders, shared section navigation with linked documentation and an active-section underline that follows scrolling, a left settings panel paired with a live preview, and draft Apply/Cancel actions; use alternating rows by default in previews and live tables, keep section headings visible when navigating, immediately mark the chosen compact header button for column formatting, prevent Appearance controls from scrolling the dialog shell blank, use report headers as the sole persisted sort control, and support DataTables 3 column metadata.
 - New interactive chart configuration with flexible field mapping and a live-data preview in the shared options-dialog layout.
 - Add the internal foundation for flexible shared datasets and source-independent chart mapping.

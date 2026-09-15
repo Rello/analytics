@@ -148,6 +148,7 @@ return [
 			'requirements' => ['path' => '.+']
 		],
 		['name' => 'ApiData#addDataV4', 'url' => '/api/4.0/data/{datasetId}/add', 'verb' => 'POST'],
+		['name' => 'ApiData#deleteDataV4', 'url' => '/api/4.0/data/{datasetId}/delete', 'verb' => 'POST'],
 
 		// wizard
 		['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],
