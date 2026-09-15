@@ -7,14 +7,23 @@
 namespace OCA\Analytics\Tests\Security;
 
 use OCA\Analytics\Security\ExternalUrlValidator;
+use OCP\Security\IRemoteHostValidator;
 use PHPUnit\Framework\TestCase;
 
 class ExternalUrlValidatorTest extends TestCase {
+	private IRemoteHostValidator $remoteHostValidator;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$this->remoteHostValidator = $this->createMock(IRemoteHostValidator::class);
+		$this->remoteHostValidator->method('isValid')->willReturn(false);
+	}
+
 	/**
 	 * @dataProvider blockedUrls
 	 */
 	public function testValidateRejectsPrivateAndReservedTargets(string $url): void {
-		$this->assertNotNull(ExternalUrlValidator::validate($url));
+		$this->assertNotNull((new ExternalUrlValidator($this->remoteHostValidator))->validate($url));
 	}
 
 	public function blockedUrls(): array {
@@ -29,5 +38,23 @@ class ExternalUrlValidatorTest extends TestCase {
 			'userinfo' => ['https://user:password@example.com/data'],
 			'file scheme' => ['file:///etc/passwd'],
 		];
+	}
+
+	public function testValidateUsesNextcloudRemoteHostPolicy(): void {
+		$remoteHostValidator = $this->createMock(IRemoteHostValidator::class);
+		$remoteHostValidator
+			->expects($this->once())
+			->method('isValid')
+			->with('10.0.0.150')
+			->willReturn(true);
+
+		$this->assertNull((new ExternalUrlValidator($remoteHostValidator))->validate('http://10.0.0.150/em1data/0/data.csv'));
+	}
+
+	public function testValidateDescribesBlockedInternalUrl(): void {
+		$this->assertSame(
+			'Internal URL is not allowed by server configuration',
+			(new ExternalUrlValidator($this->remoteHostValidator))->validate('http://10.0.0.150/em1data/0/data.csv')
+		);
 	}
 }

@@ -12,6 +12,7 @@ use OCA\Analytics\Db\StorageMapper;
 use OCA\Analytics\Service\DatasetService;
 use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\StorageService;
+use OCA\Analytics\Service\VariableService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -36,6 +37,7 @@ class ApiDataController extends ApiController {
 	private $StorageService;
 	private $StorageMapper;
 	private $IDateTimeFormatter;
+	private VariableService $VariableService;
 
 	public function __construct(
 		$appName,
@@ -45,7 +47,8 @@ class ApiDataController extends ApiController {
 		ReportService $ReportService,
 		StorageService $StorageService,
 		StorageMapper $StorageMapper,
-		IDateTimeFormatter $IDateTimeFormatter
+		IDateTimeFormatter $IDateTimeFormatter,
+		VariableService $VariableService
 	) {
 		parent::__construct($appName, $request, 'POST');
 		$this->logger = $logger;
@@ -54,6 +57,7 @@ class ApiDataController extends ApiController {
 		$this->StorageService = $StorageService;
 		$this->StorageMapper = $StorageMapper;
 		$this->IDateTimeFormatter = $IDateTimeFormatter;
+		$this->VariableService = $VariableService;
 	}
 
 	/**
@@ -217,9 +221,11 @@ class ApiDataController extends ApiController {
 
 		if (!empty($reportMetadata)) {
 			$options = json_decode($reportMetadata['filteroptions'], true);
-			$allData = $this->StorageMapper->read((int)$reportMetadata['dataset'], $options);
-
-			return new DataResponse($allData, HTTP::STATUS_OK);
+				$allData = $this->StorageService->read((int)$reportMetadata['dataset'], $reportMetadata);
+				return new DataResponse(
+					($allData['storageMode'] ?? 'legacy') === 'flexible_shared' ? $allData : ($allData['data'] ?? []),
+					HTTP::STATUS_OK
+				);
 		} else {
 			return new DataResponse([
 				'message' => 'No data available for given report id',
@@ -342,6 +348,91 @@ class ApiDataController extends ApiController {
 	}
 
 	/**
+	 * Delete legacy dataset rows selected by a structured filter.
+	 *
+	 * The filter uses the same option and value syntax as a report filter. Date
+	 * variables such as %last 5 days% are resolved when the request runs.
+	 *
+	 * @param int $datasetId
+	 * @return DataResponse
+	 * @throws \Exception
+	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function deleteDataV4(int $datasetId): DataResponse {
+		$datasetId = $this->getDatasetIdFromRoute($datasetId);
+		$params = $this->request->getParams();
+		$datasetMetadata = $this->DatasetService->readOwn($datasetId);
+
+		$response = $this->deriveMaintenancePossible($datasetMetadata);
+		if ($response !== true) {
+			return $response;
+		}
+
+		$filter = $this->normalizeDeletionFilter($params['filter'] ?? null, $datasetMetadata);
+		if ($filter === null) {
+			return $this->requestResponse(false, self::MISSING_PARAM, implode(',', $this->errors));
+		}
+
+		$filterMetadata = $this->VariableService->replaceFilterVariables([
+			'filteroptions' => json_encode(['filter' => $filter], JSON_THROW_ON_ERROR),
+		]);
+		$resolvedFilter = json_decode($filterMetadata['filteroptions'], true, 512, JSON_THROW_ON_ERROR);
+		$deleted = $this->StorageService->deleteWithFilter($datasetId, $resolvedFilter);
+		$this->DatasetService->provider($datasetId);
+
+		return new DataResponse([
+			'success' => true,
+			'message' => 'Data deleted',
+			'delete' => $deleted,
+		], Http::STATUS_OK);
+	}
+
+	/**
+	 * @param mixed $filter
+	 * @param array<string, mixed> $datasetMetadata
+	 * @return array<string, array{option:string, value:string}>|null
+	 */
+	private function normalizeDeletionFilter($filter, array $datasetMetadata): ?array {
+		if (!is_array($filter) || $filter === []) {
+			$this->errors[] = 'filter required';
+			return null;
+		}
+
+		$columnNames = [
+			'dimension1' => (string)$datasetMetadata['dimension1'],
+			'dimension2' => (string)$datasetMetadata['dimension2'],
+		];
+		$allowedOptions = ['EQ', 'GT', 'LT', 'IN', 'LIKE', 'NOTLIKE', 'BETWEEN'];
+		$normalized = [];
+
+		foreach ($filter as $column => $condition) {
+			$technicalColumn = array_key_exists($column, $columnNames)
+				? $column
+				: array_search($column, $columnNames, true);
+			if ($technicalColumn === false || !is_array($condition)) {
+				$this->errors[] = 'valid filter required';
+				return null;
+			}
+
+			$option = $condition['option'] ?? null;
+			$value = $condition['value'] ?? null;
+			if (!is_string($option) || !in_array($option, $allowedOptions, true) || !is_string($value)) {
+				$this->errors[] = 'valid filter required';
+				return null;
+			}
+
+			$normalized[$technicalColumn] = [
+				'option' => $option,
+				'value' => $value,
+			];
+		}
+
+		return $normalized;
+	}
+
+	/**
 	 * JSON request bodies can overwrite controller arguments after route matching.
 	 * Always use the dataset id captured from the endpoint URL when available.
 	 */
@@ -378,6 +469,9 @@ class ApiDataController extends ApiController {
 		if (empty($datasetMetadata)) {
 			$this->errors[] = 'Unknown or unauthorized report or dataset';
 			return $this->requestResponse(false, self::NOT_FOUND, implode(',', $this->errors));
+		} elseif (($datasetMetadata['storageMode'] ?? 'legacy') !== 'legacy') {
+			$this->errors[] = 'Flexible datasets must use the stable-column record API';
+			return $this->requestResponse(false, self::NOT_ALLOWED, implode(',', $this->errors));
 		} else {
 			return true;
 		}

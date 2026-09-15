@@ -233,7 +233,7 @@ OCA.Analytics.WhatsNew = {
             menuItem.appendChild(icon)
 
             text = document.createElement('p')
-            text.innerHTML = _.escape(whatsNewTextItem)
+            text.textContent = whatsNewTextItem
             menuItem.appendChild(text)
 
             item.appendChild(menuItem)
@@ -241,7 +241,7 @@ OCA.Analytics.WhatsNew = {
         }
 
         // Changelog URL
-        if (!_.isUndefined(data['changelogURL'])) {
+        if (data['changelogURL'] !== undefined) {
             item = document.createElement('li')
 
             menuItem = document.createElement('a')
@@ -274,6 +274,7 @@ OCA.Analytics.Notification = {
         variant: 'simple',
         documentationUrl: null,
         leadingAction: null,
+        showActions: true,
     },
 
     closeExistingDialog: function () {
@@ -314,7 +315,7 @@ OCA.Analytics.Notification = {
             + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
-            + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '<a class="button analyticsSecondary" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
             + '<button type="button" class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</button>'
             + '</div></div>'
         );
@@ -362,19 +363,24 @@ OCA.Analytics.Notification = {
             + '<div id="analyticsDialogContent">'
             + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
             + '</div>'
-            + '<div class="analyticsDialogButtonrow">'
             + (
-                dialogOptions.leadingAction
-                    ? '<a class="button analyticsDialogButtonLeading'
-                    + (dialogOptions.leadingAction.className ? ' ' + dialogOptions.leadingAction.className : '')
-                    + '" id="analyticsDialogBtnLeading">'
-                    + dialogOptions.leadingAction.label
-                    + '</a>'
+                dialogOptions.showActions
+                    ? '<div class="analyticsDialogButtonrow">'
+                    + (
+                        dialogOptions.leadingAction
+                            ? '<a class="button analyticsSecondary analyticsDialogButtonLeading'
+                            + (dialogOptions.leadingAction.className ? ' ' + dialogOptions.leadingAction.className : '')
+                            + '" id="analyticsDialogBtnLeading">'
+                            + dialogOptions.leadingAction.label
+                            + '</a>'
+                            : ''
+                    )
+                    + '<a class="button analyticsSecondary" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
+                    + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+                    + '</div>'
                     : ''
             )
-            + '<a class="button" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
-            + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
-            + '</div></div>'
+            + '</div>'
         );
 
         const dialogContainer = document.getElementById('analyticsDialogContainer');
@@ -382,10 +388,12 @@ OCA.Analytics.Notification = {
         document.getElementById('analyticsDialogHeader').textContent = header;
 
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
-        document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
-        document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
+        if (dialogOptions.showActions) {
+            document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+            document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
+        }
 
-        if (dialogOptions.leadingAction) {
+        if (dialogOptions.showActions && dialogOptions.leadingAction) {
             document.getElementById('analyticsDialogBtnLeading').addEventListener('click', dialogOptions.leadingAction.onClick);
         }
     },
@@ -454,6 +462,7 @@ OCA.Analytics.Notification = {
         dialogOptions.documentationUrl = typeof dialogOptions.documentationUrl === 'string' && dialogOptions.documentationUrl !== ''
             ? dialogOptions.documentationUrl
             : null;
+        dialogOptions.showActions = dialogOptions.showActions !== false;
 
         if (!dialogOptions.leadingAction || typeof dialogOptions.leadingAction.onClick !== 'function') {
             dialogOptions.leadingAction = null;
@@ -493,13 +502,23 @@ OCA.Analytics.Notification = {
         layout.appendChild(panel);
         contentRoot.appendChild(layout);
 
-        const sections = Array.from(panel.querySelectorAll('.analyticsDialogSection'));
+        const sections = Array.from(panel.querySelectorAll('.analyticsDialogSection'))
+            .filter(section => !section.hidden);
         if (sections.length === 0) {
             nav.remove();
             return null;
         }
 
         const navLinks = [];
+        let navigationTarget = null;
+        let navigationTimer = null;
+        // offsetTop can be relative to the dialog rather than the scrolling panel.
+        const sectionTop = section => section.getBoundingClientRect().top
+            - panel.getBoundingClientRect().top + panel.scrollTop - panel.clientTop;
+        const releaseNavigationTarget = function () {
+            clearTimeout(navigationTimer);
+            navigationTimer = setTimeout(() => { navigationTarget = null; }, 150);
+        };
         sections.forEach((section, index) => {
             const heading = section.querySelector('h2');
             const label = heading ? heading.textContent.trim() : t('analytics', 'Chart options');
@@ -534,8 +553,10 @@ OCA.Analytics.Notification = {
 
             link.addEventListener('click', function (event) {
                 event.preventDefault();
+                navigationTarget = sectionId;
+                releaseNavigationTarget();
                 const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
-                const targetTop = Math.max(section.offsetTop - panelPaddingTop - sectionScrollOffset, 0);
+                const targetTop = Math.max(sectionTop(section) - panelPaddingTop - sectionScrollOffset, 0);
                 panel.scrollTo({top: targetTop, behavior: 'smooth'});
                 OCA.Analytics.Notification.updateEnhancedDialogActiveSection(navLinks, sectionId);
             });
@@ -555,12 +576,19 @@ OCA.Analytics.Notification = {
         }
 
         const syncActiveSection = function () {
+            // Keep the clicked destination active while smooth scrolling settles,
+            // including sections near the end that cannot reach the panel's top.
+            if (navigationTarget) {
+                OCA.Analytics.Notification.updateEnhancedDialogActiveSection(navLinks, navigationTarget);
+                releaseNavigationTarget();
+                return;
+            }
             const panelPaddingTop = parseInt(window.getComputedStyle(panel).paddingTop, 10) || 0;
             const panelTop = panel.scrollTop + panelPaddingTop + sectionScrollOffset;
             let activeSectionId = sections[0].id;
 
             sections.forEach((section) => {
-                if (section.offsetTop <= panelTop) {
+                if (sectionTop(section) <= panelTop + 1) {
                     activeSectionId = section.id;
                 }
             });
@@ -572,6 +600,7 @@ OCA.Analytics.Notification = {
         syncActiveSection();
 
         return function () {
+            clearTimeout(navigationTimer);
             panel.removeEventListener('scroll', syncActiveSection);
         };
     },

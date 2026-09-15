@@ -57,23 +57,84 @@
                     <span><?php p($l->t('Thresholds')); ?></span>
                 </button>
             </li>
-            <li>
-                <button id="optionsMenuAnalysis">
+            <li class="report-menu-has-submenu">
+                <button id="optionsMenuAnalysis" aria-haspopup="true" aria-expanded="false"
+                        aria-controls="optionsMenuSubAnalysis">
                     <span class="icon-analytics-forecast"></span>
                     <span><?php p($l->t('Analysis')); ?></span>
+                    <span class="icon-view-previous report-menu-submenu-arrow"></span>
                 </button>
+                <ul id="optionsMenuSubAnalysis" class="report-menu-submenu">
+                    <li>
+                        <button id="trendIcon">
+                            <span><?php p($l->t('Trend')); ?></span>
+                        </button>
+                    </li>
+                    <li>
+                        <button id="aggregateIcon">
+                            <span><?php p($l->t('Aggregate values')); ?></span>
+                        </button>
+                    </li>
+                    <li>
+                        <button id="disAggregateIcon">
+                            <span><?php p($l->t('Disaggregate values')); ?></span>
+                        </button>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <button id="optionsMenuTranslate">
+            <li class="report-menu-has-submenu">
+                <button id="optionsMenuTranslate" aria-haspopup="true" aria-expanded="false"
+                        aria-controls="optionsMenuSubTranslate">
                     <span class="icon-analytics-translate"></span>
                     <span><?php p($l->t('Translate')); ?></span>
+                    <span class="icon-view-previous report-menu-submenu-arrow"></span>
                 </button>
+                <ul id="optionsMenuSubTranslate" class="report-menu-submenu">
+                    <li>
+                        <span class="menuitem icon-analytics-translate">
+                            <select id="translateLanguage" class="menueInput" style="margin-left: 0px;">
+                            </select>
+                        </span>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <button id="optionsMenuRefresh">
+            <li class="report-menu-has-submenu">
+                <button id="optionsMenuRefresh" aria-haspopup="true" aria-expanded="false"
+                        aria-controls="optionsMenuSubRefresh">
                     <span class="icon-analytics-refresh"></span>
                     <span><?php p($l->t('Auto refresh')); ?></span>
+                    <span class="icon-view-previous report-menu-submenu-arrow"></span>
                 </button>
+                <ul id="optionsMenuSubRefresh" class="report-menu-submenu">
+                    <li>
+                        <span class="menuitem">
+                            <input type="radio" name="refresh" id="refresh0"
+                                   class="radio" checked>
+                            <label for="refresh0" style="font-size: 13px;"><?php p($l->t('none')); ?></label>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="menuitem">
+                            <input type="radio" name="refresh" id="refresh1"
+                                   class="radio">
+                            <label for="refresh1" style="font-size: 13px;"><?php p($l->t('1 min')); ?></label>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="menuitem">
+                            <input type="radio" name="refresh" id="refresh10"
+                                   class="radio">
+                            <label for="refresh10" style="font-size: 13px;"><?php p($l->t('10 min')); ?></label>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="menuitem">
+                            <input type="radio" name="refresh" id="refresh30"
+                                   class="radio">
+                            <label for="refresh30" style="font-size: 13px;"><?php p($l->t('30 min')); ?></label>
+                        </span>
+                    </li>
+                </ul>
             </li>
             <li class="action-separator"></li>
             <li>
@@ -116,79 +177,6 @@
                 </button>
             </li>
 
-        </ul>
-        <ul id="optionsMenuSubAnalysis" style="display: none !important;">
-            <li id="backIcon">
-                <button>
-                    <span class="icon-view-previous"></span>
-                    <span><?php p($l->t('Back')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="trendIcon">
-                    <span><?php p($l->t('Trend')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="aggregateIcon">
-                    <span><?php p($l->t('Aggregate values')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="disAggregateIcon">
-                    <span><?php p($l->t('Disaggregate values')); ?></span>
-                </button>
-            </li>
-        </ul>
-        <ul id="optionsMenuSubRefresh" style="display: none !important;">
-            <li id="backIcon2">
-                <button href="#">
-                    <span class="icon-view-previous"></span>
-                    <span><?php p($l->t('Back')); ?></span>
-                </button>
-            </li>
-            <li>
-                <span class="menuitem">
-                    <input type="radio" name="refresh" id="refresh0"
-                           class="radio" checked>
-                    <label for="refresh0" style="font-size: 13px;"><?php p($l->t('none')); ?></label>
-                </span>
-            </li>
-            <li>
-                <span class="menuitem">
-                    <input type="radio" name="refresh" id="refresh1"
-                           class="radio">
-                    <label for="refresh1" style="font-size: 13px;"><?php p($l->t('1 min')); ?></label>
-                </span>
-            </li>
-            <li>
-                <span class="menuitem">
-                    <input type="radio" name="refresh" id="refresh10"
-                           class="radio">
-                    <label for="refresh10" style="font-size: 13px;"><?php p($l->t('10 min')); ?></label>
-                </span>
-            </li>
-            <li>
-                <span class="menuitem">
-                    <input type="radio" name="refresh" id="refresh30"
-                           class="radio">
-                    <label for="refresh30" style="font-size: 13px;"><?php p($l->t('30 min')); ?></label>
-                </span>
-            </li>
-        </ul>
-        <ul id="optionsMenuSubTranslate" style="display: none !important;">
-            <li id="backIcon3">
-                <button>
-                    <span class="icon-view-previous"></span>
-                    <span><?php p($l->t('Back')); ?></span>
-                </button>
-            </li>
-            <li>
-                <span class="menuitem icon-analytics-translate">
-                    <select id="translateLanguage" class="menueInput" style="margin-left: 0px;">
-                    </select>
-                </span>
-            </li>
         </ul>
     </div>
     <div id="saveIcon" style="display: none;" class="analytics-options icon-analytics-save-warning has-tooltip"

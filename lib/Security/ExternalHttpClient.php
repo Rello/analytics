@@ -7,12 +7,17 @@
 namespace OCA\Analytics\Security;
 
 use OCP\Http\Client\IClientService;
+use Psr\Log\LoggerInterface;
 
 class ExternalHttpClient {
 	public const CONNECT_TIMEOUT_SECONDS = 10;
 	public const TIMEOUT_SECONDS = 60;
 
-	public function __construct(private IClientService $clientService) {
+	public function __construct(
+		private IClientService $clientService,
+		private ExternalUrlValidator $urlValidator,
+		private LoggerInterface $logger,
+	) {
 	}
 
 	/**
@@ -26,7 +31,7 @@ class ExternalHttpClient {
 		?string $body = null,
 		?string $basicAuth = null,
 	): array {
-		$urlError = ExternalUrlValidator::validate($url);
+		$urlError = $this->urlValidator->validate($url);
 		if ($urlError !== null) {
 			return ['status' => 0, 'body' => '', 'error' => $urlError];
 		}
@@ -48,6 +53,9 @@ class ExternalHttpClient {
 			$options['body'] = $body;
 		}
 		if ($basicAuth !== null && $basicAuth !== '') {
+			if (strtolower((string)parse_url($url, PHP_URL_SCHEME)) !== 'https') {
+				return ['status' => 0, 'body' => '', 'error' => 'Basic Authentication requires an HTTPS URL'];
+			}
 			[$username, $password] = array_pad(explode(':', $basicAuth, 2), 2, '');
 			$options['auth'] = [$username, $password];
 		}
@@ -60,7 +68,27 @@ class ExternalHttpClient {
 				'error' => null,
 			];
 		} catch (\Throwable $e) {
+			$safeUrl = $this->getSafeUrlForLogging($url);
+			$exceptionMessage = str_replace($url, $safeUrl, $e->getMessage());
+			$this->logger->error('Analytics external request failed: ' . $exceptionMessage, [
+				'method' => strtoupper($method),
+				'url' => $safeUrl,
+				'exceptionClass' => $e::class,
+				'exceptionCode' => $e->getCode(),
+				'exceptionMessage' => $exceptionMessage,
+			]);
 			return ['status' => 0, 'body' => '', 'error' => 'External request failed'];
 		}
+	}
+
+	private function getSafeUrlForLogging(string $url): string {
+		$parts = parse_url($url);
+		if (!is_array($parts) || !isset($parts['host'])) {
+			return '[invalid URL]';
+		}
+
+		$scheme = isset($parts['scheme']) ? $parts['scheme'] . '://' : '';
+		$port = isset($parts['port']) ? ':' . $parts['port'] : '';
+		return $scheme . $parts['host'] . $port;
 	}
 }

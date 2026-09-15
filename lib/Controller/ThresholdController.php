@@ -9,7 +9,9 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Service\ThresholdService;
+use OCA\Analytics\Exception\FlexibleStorageException;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -55,9 +57,13 @@ class ThresholdController extends Controller
 	 * @return int
 	 */
     #[NoAdminRequired]
-    public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring)
+    public function create(int $reportId, $dimension, $option, $value, int $severity, $coloring, ?string $sourceColumnRef = null)
     {
-        return $this->ThresholdService->create($reportId, $dimension, $option, $value, $severity, $coloring);
+		try {
+			return $this->ThresholdService->create($reportId, $dimension, $option, $value, $severity, $coloring, $sourceColumnRef);
+		} catch (FlexibleStorageException $e) {
+			return new DataResponse($e->toResponse(), $e->getHttpStatus());
+		}
     }
 
     /**

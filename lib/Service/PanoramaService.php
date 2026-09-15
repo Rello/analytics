@@ -12,6 +12,7 @@ use OCA\Analytics\Activity\ActivityManager;
 use OCA\Analytics\Db\PanoramaMapper;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\DB\Exception;
+use OCP\Files\IRootFolder;
 use OCP\ITagManager;
 use OCP\IConfig;
 use OCP\PreConditionNotMetException;
@@ -29,8 +30,10 @@ class PanoramaService {
 	private $VariableService;
 	private $l10n;
 	private $ActivityManager;
+	private $rootFolder;
 
 	const REPORT_TYPE_GROUP = 0;
+	private const PICTURE_MIME_TYPES = ['image/png', 'image/x-png', 'image/jpeg'];
 
 	public function __construct(
 		$userId,
@@ -42,6 +45,7 @@ class PanoramaService {
 		IConfig $config,
 		VariableService $VariableService,
 		ActivityManager $ActivityManager,
+		IRootFolder $rootFolder,
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
@@ -52,6 +56,7 @@ class PanoramaService {
 		$this->config = $config;
 		$this->l10n = $l10n;
 		$this->ActivityManager = $ActivityManager;
+		$this->rootFolder = $rootFolder;
 	}
 
 	/**
@@ -70,7 +75,7 @@ class PanoramaService {
 		unset($panorama);
 
 		$sharedPanoramas = $this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA);
-		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId', 'permissions');
+		$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'filters', 'isShare', 'shareId', 'permissions');
 
 		// get shared reports and remove duplicates
 		foreach ($sharedPanoramas as $sharedPanorama) {
@@ -106,16 +111,40 @@ class PanoramaService {
 	 */
 	public function read(int $panoramaId) {
 		$ownReport = $this->PanoramaMapper->readOwn($panoramaId);
-		if (empty($ownReport)) {
+		if ($ownReport) {
+			$ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
+		} else {
 			$sharedPanorama = $this->ShareService->getSharedPanorama($panoramaId);
 			if (!empty($sharedPanorama)) {
 				// ToDo: panoramas do not have an edit logic. to be added later
 				$sharedPanorama['permissions'] = \OCP\Constants::PERMISSION_READ;
-				$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'isShare', 'shareId', 'permissions');
+				$keysToKeep = array('id', 'name', 'dataset', 'favorite', 'parent', 'type', 'pages', 'filters', 'isShare', 'shareId', 'permissions');
 				$ownReport = array_intersect_key($sharedPanorama, array_flip($keysToKeep));
 			}
 		}
 		return $ownReport;
+	}
+
+	/**
+	 * Resolve a selected panorama picture to its file id.
+	 *
+	 * @param string $path
+	 * @return int
+	 * @throws \OCP\Files\NotFoundException
+	 * @throws \OCP\Files\NotPermittedException
+	 */
+	public function resolvePictureFile(string $path): int {
+		$path = ltrim($path, '/');
+		if ($path === '') {
+			throw new \InvalidArgumentException('Picture path must not be empty');
+		}
+
+		$file = $this->rootFolder->getUserFolder($this->userId)->get($path);
+		if (!in_array($file->getMimeType(), self::PICTURE_MIME_TYPES, true)) {
+			throw new \InvalidArgumentException('Selected node is not a supported picture');
+		}
+
+		return (int)$file->getId();
 	}
 
 	/**
@@ -164,7 +193,7 @@ class PanoramaService {
 	 * @return bool
 	 * @throws Exception
 	 */
-    public function update(int $id, $name, int $type, int $parent, $pages) {
+    public function update(int $id, $name, int $type, int $parent, $pages, $filters = null) {
 		if (!$this->isOwn($id) || !$this->isValidParent($parent, $id)) {
 			return false;
 		}
@@ -172,7 +201,14 @@ class PanoramaService {
 		if ($normalizedPages === null) {
 			return false;
 		}
-        return $this->PanoramaMapper->update($id, $name, $type, $parent, json_encode($normalizedPages));
+        if ($filters !== null) {
+            try {
+                $filters = json_encode(PanoramaFilterService::normalize($filters, $normalizedPages));
+            } catch (\InvalidArgumentException $e) {
+                return false;
+            }
+        }
+        return $this->PanoramaMapper->update($id, $name, $type, $parent, json_encode($normalizedPages), $filters);
     }
 
     public function createGroup(int $parent = 0): int {

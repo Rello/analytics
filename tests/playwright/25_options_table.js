@@ -56,6 +56,34 @@ async function setSwitch(page, selector, checked) {
       const visualization = OCA.Analytics.Visualization;
       const encodeCalculations = (items) => items.map((item) => JSON.stringify(item)).join(',');
 
+      const localizedDate = visualization.formatTableLocaleDateValue('2026-08-01');
+      const expectedLocalizedDate = new Date(2026, 7, 1).toLocaleDateString(undefined, {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+      });
+      if (localizedDate !== expectedLocalizedDate) {
+        throw new Error(`Unexpected localized ISO date: ${localizedDate}`);
+      }
+      if (visualization.formatTableLocaleDateValue('2026-13-01') !== '2026-13-01') {
+        throw new Error('Invalid ISO-like dates must not be reformatted');
+      }
+      const localizedColumns = [{}];
+      visualization.applyTableCellRenderer(localizedColumns, true);
+      if (localizedColumns[0].render('2026-08-01', 'sort') !== '2026-08-01'
+        || localizedColumns[0].render('2026-08-01', 'display') !== expectedLocalizedDate) {
+        throw new Error('Localized date rendering changed the sortable ISO value');
+      }
+      const alignedDateColumns = [{
+        analyticsReference: 'source:date', analyticsSourceIndex: 0, className: '',
+      }];
+      visualization.applyTableColumnFormats(alignedDateColumns, {
+        columnFormats: [{reference: 'source:date', format: 'auto', align: 'left'}],
+      });
+      if (!alignedDateColumns[0].className.includes('dt-left')
+        || alignedDateColumns[0].render('2026-08-01', 'sort') !== '2026-08-01'
+        || alignedDateColumns[0].render('2026-08-01', 'display') !== expectedLocalizedDate) {
+        throw new Error('Column alignment disabled localized date rendering');
+      }
+
       const nonPivotOptions = {
         layout: { rows: [0, 1], columns: [], measures: [], notRequired: [2] },
       };
@@ -186,12 +214,26 @@ async function setSwitch(page, selector, checked) {
     await page.locator('#totalOption').waitFor({ state: 'visible', timeout: 15000 });
     const initialTotals = await page.locator('#totalOption').isChecked();
     const initialFormatLocales = await page.locator('#formatLocalesOption').isChecked();
+    const initialStriped = await page.locator('#tableStriped').isChecked();
+    const initialColumnFormats = await page.evaluate(() => OCA.Analytics.currentReportData.options.tableoptions?.columnFormats || []);
+    await page.waitForFunction(() => !!OCA.Analytics.TableOptions.active?.preview);
+    const formattedReference = await page.locator('#tableColumnSelect option').last().getAttribute('value');
+    await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Columns'}).first().click();
+    await page.locator('#tableColumnSelect').selectOption(formattedReference);
+    await page.locator('#tableColumnFormat').selectOption('number');
+    await page.locator('#tableColumnDecimals').selectOption('2');
     await setSwitch(page, '#totalOption', true);
     await setSwitch(page, '#formatLocalesOption', false);
+    await setSwitch(page, '#tableStriped', false);
     await clickFirst(page, ['#analyticsDialogBtnGo'], 'apply table options');
 
     steps.push('save reload and validate table options');
     await saveAndReloadReport(page, reportName);
+
+    const savedFormat = await page.evaluate(reference => OCA.Analytics.currentReportData.options.tableoptions.columnFormats.find(item => item.reference === reference), formattedReference);
+    if (savedFormat?.format !== 'number' || savedFormat?.decimals !== '2') {
+      throw new Error('Per-column formatting did not survive report save/reload');
+    }
 
     await capture('show_totals');
 
@@ -262,12 +304,20 @@ async function setSwitch(page, selector, checked) {
     if (await page.locator('#formatLocalesOption').isChecked()) {
       throw new Error('Expected locale formatting to stay disabled after reload');
     }
+    if (await page.locator('#tableStriped').isChecked()) {
+      throw new Error('Expected alternating rows to stay disabled for this report');
+    }
+    if (await page.locator('#tableContainer').evaluate((table) => table.classList.contains('stripe'))) {
+      throw new Error('Expected the live table to omit standard striping when disabled');
+    }
     await clickFirst(page, ['#analyticsDialogBtnCancel'], 'cancel table options validation');
 
     steps.push('revert table options');
     await openOptionsMenuItem(page, 'optionsMenuTableOptions', 'table options revert');
+    await page.evaluate(formats => { OCA.Analytics.TableOptions.active.draft.columnFormats = formats; }, initialColumnFormats);
     await setSwitch(page, '#totalOption', initialTotals);
     await setSwitch(page, '#formatLocalesOption', initialFormatLocales);
+    await setSwitch(page, '#tableStriped', initialStriped);
     await clickFirst(page, ['#analyticsDialogBtnGo'], 'apply reverted table options');
 
     steps.push('save reload and validate original report');
@@ -282,6 +332,9 @@ async function setSwitch(page, selector, checked) {
     }
     if ((await page.locator('#formatLocalesOption').isChecked()) !== initialFormatLocales) {
       throw new Error('Locale formatting option did not restore to its original state');
+    }
+    if ((await page.locator('#tableStriped').isChecked()) !== initialStriped) {
+      throw new Error('Alternating rows option did not restore to its original state');
     }
     await clickFirst(page, ['#analyticsDialogBtnCancel'], 'cancel reverted table options validation');
 

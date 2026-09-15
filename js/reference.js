@@ -742,6 +742,7 @@ OCA.Analytics.Reference = {
                 load('3rdParty/chartjs-plugin-funnel.min'),
                 load('3rdParty/chartjs-plugin-annotation.min'),
             ]))
+            .then(() => load('flexible', () => OCA.Analytics.Flexible && OCA.Analytics.Flexible.seriesOptions))
             .then(() => load('chartOptions', () => OCA.Analytics.ChartOptions && OCA.Analytics.ChartOptions.parseAndNormalize))
             .then(() => load('visualization', () => OCA.Analytics.Visualization && OCA.Analytics.Visualization.buildChart))
             .then(() => {
@@ -760,10 +761,11 @@ OCA.Analytics.Reference = {
         if (OCA.Analytics.Reference.tableAssetsPromise) {
             return OCA.Analytics.Reference.tableAssetsPromise;
         }
-        const load = OCA.Analytics.Reference.loadScript;
-        // Talk/Text may already ship a jQuery; never load a second one
-        OCA.Analytics.Reference.tableAssetsPromise = load('3rdParty/jquery.min', () => window.jQuery)
-            .then(() => load('3rdParty/datatables.min', () => window.DataTable && window.jQuery && window.jQuery.fn && window.jQuery.fn.dataTable))
+        // DataTables 3 is standalone; Analytics no longer bundles or requires jQuery.
+        OCA.Analytics.Reference.tableAssetsPromise = OCA.Analytics.Reference.loadScript(
+            '3rdParty/datatables.min',
+            () => window.DataTable
+        )
             .then(() => OCA.Analytics.Reference.loadStyle('3rdParty/datatables.min'));
         return OCA.Analytics.Reference.tableAssetsPromise;
     },

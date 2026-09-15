@@ -37,9 +37,15 @@ return [
 		// Dataset
 		['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],
 		['name' => 'dataset#create', 'url' => '/dataset', 'verb' => 'POST'],
+		['name' => 'dataset#createFlexible', 'url' => '/dataset/flexible', 'verb' => 'POST'],
 		['name' => 'dataset#read', 'url' => '/dataset/{datasetId}', 'verb' => 'GET'],
 		['name' => 'dataset#delete', 'url' => '/dataset/{datasetId}', 'verb' => 'DELETE'],
 		['name' => 'dataset#update', 'url' => '/dataset/{datasetId}', 'verb' => 'PUT'],
+		['name' => 'dataset#updateSchema', 'url' => '/dataset/{datasetId}/schema', 'verb' => 'PUT'],
+		['name' => 'dataset#upsertRecords', 'url' => '/dataset/{datasetId}/records', 'verb' => 'POST'],
+		['name' => 'dataset#updateRecord', 'url' => '/dataset/{datasetId}/records/{recordId}', 'verb' => 'PUT'],
+		['name' => 'dataset#deleteRecord', 'url' => '/dataset/{datasetId}/records/{recordId}', 'verb' => 'DELETE'],
+		['name' => 'dataset#query', 'url' => '/dataset/{datasetId}/query', 'verb' => 'POST'],
 		['name' => 'dataset#rename', 'url' => '/dataset/{datasetId}/rename', 'verb' => 'PUT'],
 		['name' => 'dataset#updateGroup', 'url' => '/dataset/{datasetId}/group', 'verb' => 'POST'],
 		['name' => 'dataset#createGroup', 'url' => '/dataset/group', 'verb' => 'POST'],
@@ -49,6 +55,7 @@ return [
 		// Panorama
 		['name' => 'panorama#index', 'url' => '/panorama', 'verb' => 'GET'],
 		['name' => 'panorama#create', 'url' => '/panorama', 'verb' => 'POST'],
+		['name' => 'panorama#resolvePictureFile', 'url' => '/panorama/file', 'verb' => 'POST'],
 		['name' => 'panorama#read', 'url' => '/panorama/{panoramaId}', 'verb' => 'GET'],
 		['name' => 'panorama#delete', 'url' => '/panorama/{panoramaId}', 'verb' => 'DELETE'],
 		['name' => 'panorama#update', 'url' => '/panorama/{panoramaId}', 'verb' => 'PUT'],
@@ -141,6 +148,7 @@ return [
 			'requirements' => ['path' => '.+']
 		],
 		['name' => 'ApiData#addDataV4', 'url' => '/api/4.0/data/{datasetId}/add', 'verb' => 'POST'],
+		['name' => 'ApiData#deleteDataV4', 'url' => '/api/4.0/data/{datasetId}/delete', 'verb' => 'POST'],
 
 		// wizard
 		['name' => 'wizard#dismiss', 'url' => '/wizard', 'verb' => 'POST'],

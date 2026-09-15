@@ -45,8 +45,10 @@ class DatasetMapper {
                        ->addSelect('dimension1')
                        ->addSelect('dimension2')
                        ->addSelect('value')
-                       ->addSelect('type')
-                       ->addSelect('parent')
+					   ->addSelect('type')
+					   ->addSelect('parent')
+					   ->addSelect('storage_mode')
+					   ->addSelect('schema_version')
                        ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
                        ->orderBy('parent', 'ASC')
                        ->addOrderBy('name', 'ASC');
@@ -64,7 +66,7 @@ class DatasetMapper {
 	 */
 	public function indexByUser($userId): array {
 		$sql = $this->db->getQueryBuilder();
-		$sql->from(self::TABLE_NAME)->select('id')->where($sql->expr()
+		$sql->from(self::TABLE_NAME)->select('id')->addSelect('storage_mode')->where($sql->expr()
 															  ->eq('user_id', $sql->createNamedParameter($userId)));
 		$statement = $sql->executeQuery();
 		$result = $statement->fetchAll();
@@ -90,10 +92,45 @@ class DatasetMapper {
 												   'dimension2' => $sql->createNamedParameter($dimension2),
 												   'value' => $sql->createNamedParameter($value),
 												   'type' => $sql->createNamedParameter('2'),
-												   'ai_index' => $sql->createNamedParameter('0'),
-											   ]);
+											   'ai_index' => $sql->createNamedParameter('0'),
+											   'storage_mode' => $sql->createNamedParameter('legacy'),
+											   'schema_version' => $sql->createNamedParameter(0),
+										   ]);
 		$sql->executeStatement();
 		return $sql->getLastInsertId();
+	}
+
+	public function createFlexible(string $name): int {
+		$sql = $this->db->getQueryBuilder();
+		$sql->insert(self::TABLE_NAME)->values([
+			'user_id' => $sql->createNamedParameter($this->userId),
+			'name' => $sql->createNamedParameter($this->truncate($name, 64)),
+			'dimension1' => $sql->createNamedParameter(''),
+			'dimension2' => $sql->createNamedParameter(''),
+			'value' => $sql->createNamedParameter(''),
+			'type' => $sql->createNamedParameter('2'),
+			'ai_index' => $sql->createNamedParameter('0'),
+			'storage_mode' => $sql->createNamedParameter('flexible_shared'),
+			'schema_version' => $sql->createNamedParameter(1),
+		]);
+		$sql->executeStatement();
+		return (int)$sql->getLastInsertId();
+	}
+
+	public function updateFlexibleSchema(int $id, int $schemaVersion, ?string $name = null): void {
+		$sql = $this->db->getQueryBuilder();
+		$sql->update(self::TABLE_NAME)
+			->set('schema_version', $sql->createNamedParameter($schemaVersion))
+			->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
+			->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('storage_mode', $sql->createNamedParameter('flexible_shared')));
+		if ($name !== null) {
+			$name = trim($name);
+			if ($name !== '') {
+				$sql->set('name', $sql->createNamedParameter($this->truncate($name, 64)));
+			}
+		}
+		$sql->executeStatement();
 	}
 
 	/**
@@ -166,9 +203,11 @@ class DatasetMapper {
                         'type' => $sql->createNamedParameter('0'),
                         'dimension1' => $sql->createNamedParameter(''),
                         'dimension2' => $sql->createNamedParameter(''),
-                        'value' => $sql->createNamedParameter(''),
-                        'ai_index' => $sql->createNamedParameter('0'),
-                ]);
+						'value' => $sql->createNamedParameter(''),
+						'ai_index' => $sql->createNamedParameter('0'),
+						'storage_mode' => $sql->createNamedParameter('legacy'),
+						'schema_version' => $sql->createNamedParameter(0),
+				]);
                 $sql->executeStatement();
                 return (int)$sql->getLastInsertId();
         }
@@ -213,6 +252,14 @@ class DatasetMapper {
 	 * @throws Exception
 	 */
 	public function getLastUpdate($datasetId): int {
+		$dataset = $this->read((int)$datasetId);
+		if (is_array($dataset) && ($dataset['storage_mode'] ?? 'legacy') === 'flexible_shared') {
+			$sql = $this->db->getQueryBuilder();
+			$sql->from('analytics_flex_records')->select($sql->func()->max('updated_at'))->where($sql->expr()
+				->eq('dataset_id', $sql->createNamedParameter($datasetId)));
+			$value = $sql->executeQuery()->fetchOne();
+			return $value === false || $value === null ? 0 : (int)strtotime((string)$value . ' UTC');
+		}
 		$sql = $this->db->getQueryBuilder();
 		$sql->from('analytics_facts')->select($sql->func()->max('timestamp'))->where($sql->expr()
 																						 ->eq('dataset', $sql->createNamedParameter($datasetId)));

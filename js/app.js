@@ -169,6 +169,7 @@ Object.assign(OCA.Analytics.Core = {
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.handleSaveButton);
 
         document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Core.toggleOptionsMenu);
+        document.addEventListener('click', OCA.Analytics.Core.handleMenusDocumentClick);
     },
 
     toggleOptionsMenu: function () {
@@ -180,9 +181,30 @@ Object.assign(OCA.Analytics.Core = {
             document.getElementById('optionsMenuMainReport').style.removeProperty('display');
         }
         document.getElementById('optionsMenu').classList.toggle('open');
-        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
+        OCA.Analytics.Report.closeReportSubmenus();
+    },
+
+    /**
+     * Close open options, navigation menus, and app settings when clicking outside them.
+     *
+     * @param {MouseEvent} evt The document click event
+     */
+    handleMenusDocumentClick: function (evt) {
+        const target = evt.target instanceof Element ? evt.target : evt.target?.parentElement;
+        if (!target || target.closest('#optionsMenuIcon, #newReportButton, #infoBoxReport, .newMenuToggle, .menuButton, #settingsButton')) {
+            return;
+        }
+
+        document.querySelectorAll('#optionsMenu.open, .app-navigation-entry-menu.open').forEach(menu => {
+            if (!menu.contains(target)) {
+                menu.classList.remove('open');
+            }
+        });
+
+        const appSettingsContent = document.getElementById('app-settings-content');
+        if (appSettingsContent?.style.display !== 'none' && !target.closest('#app-settings')) {
+            appSettingsContent.style.display = 'none';
+        }
     },
 
     /**
@@ -685,6 +707,10 @@ Object.assign(OCA.Analytics.Datasource = {
         input.id = templateOption.id;
         input.dataset.type = templateOption.type;
 
+        if (OCA.Analytics.Datasource.buildNestedTableSelect(input, templateOption)) {
+            return input;
+        }
+
         // if options are split with "-", they are considered as value/key pairs
         let selectOptions = templateOption.placeholder.split("/")
         for (let selectOption of selectOptions) {
@@ -702,6 +728,149 @@ Object.assign(OCA.Analytics.Datasource = {
             input.appendChild(option);
         }
         return input;
+    },
+
+    /**
+     * Group a flattened Tables data source list by its table and view IDs
+     */
+    buildNestedTableSelect: function (input, templateOption) {
+        if (templateOption.id !== 'tableId' || typeof templateOption.placeholder !== 'string') {
+            return false;
+        }
+
+        // Preserve slashes in labels by splitting only before the next table or view ID.
+        const rawOptions = templateOption.placeholder
+            .replace(/\/$/, '')
+            .split(/\/(?=\d+(?::\d+)?-)/)
+            .filter(option => option !== '');
+        const parsedOptions = [];
+        let hasView = false;
+
+        for (const rawOption of rawOptions) {
+            const separator = rawOption.indexOf('-');
+            if (separator <= 0) {
+                continue;
+            }
+
+            const value = rawOption.substring(0, separator);
+            const label = rawOption.substring(separator + 1);
+            const viewMatch = value.match(/^(\d+):(\d+)$/);
+            const tableMatch = value.match(/^\d+$/);
+            if (!tableMatch && !viewMatch) {
+                continue;
+            }
+
+            parsedOptions.push({
+                value: value,
+                label: label,
+                tableId: viewMatch ? viewMatch[1] : value,
+                viewId: viewMatch ? viewMatch[2] : null,
+            });
+            hasView = hasView || viewMatch !== null;
+        }
+
+        if (!hasView) {
+            return false;
+        }
+
+        const tables = new Map();
+        for (const option of parsedOptions) {
+            if (option.viewId === null) {
+                tables.set(option.tableId, {
+                    label: option.label,
+                    value: option.value,
+                    views: [],
+                });
+            }
+        }
+
+        const sharedViews = new Map();
+        for (const option of parsedOptions) {
+            if (option.viewId === null) {
+                continue;
+            }
+            if (tables.has(option.tableId)) {
+                tables.get(option.tableId).views.push(option);
+            } else {
+                if (!sharedViews.has(option.tableId)) {
+                    sharedViews.set(option.tableId, []);
+                }
+                sharedViews.get(option.tableId).push(option);
+            }
+        }
+
+        for (const table of tables.values()) {
+            const group = document.createElement('optgroup');
+            group.label = table.label;
+            const displayOption = OCA.Analytics.Datasource.appendSelectOption(group, table.value, table.label);
+            displayOption.hidden = true;
+            displayOption.dataset.tableDisplayOption = 'true';
+            const menuOption = OCA.Analytics.Datasource.appendSelectOption(
+                group,
+                table.value,
+                t('analytics', 'Entire table')
+            );
+            menuOption.dataset.tableMenuOption = 'true';
+            OCA.Analytics.Datasource.appendTableViews(group, table.views);
+            input.appendChild(group);
+        }
+
+        for (const [tableId, views] of sharedViews) {
+            const group = document.createElement('optgroup');
+            group.label = t('analytics', 'Shared views') + ' #' + tableId;
+            OCA.Analytics.Datasource.appendTableViews(group, views);
+            input.appendChild(group);
+        }
+
+        OCA.Analytics.Datasource.configureTableSelectDisplayOptions(input);
+        return true;
+    },
+
+    /**
+     * Switch a selected "Entire table" menu entry to its hidden table-name display option
+     */
+    configureTableSelectDisplayOptions: function (input) {
+        input.addEventListener('change', function () {
+            const selectedOption = input.options[input.selectedIndex];
+            if (!selectedOption || selectedOption.dataset.tableMenuOption !== 'true') {
+                return;
+            }
+
+            for (const option of input.options) {
+                if (option.dataset.tableDisplayOption === 'true' && option.value === selectedOption.value) {
+                    option.selected = true;
+                    return;
+                }
+            }
+        });
+    },
+
+    /**
+     * Append table views and disambiguate duplicate names within one table
+     */
+    appendTableViews: function (target, views) {
+        const labelCounts = new Map();
+        for (const view of views) {
+            labelCounts.set(view.label, (labelCounts.get(view.label) || 0) + 1);
+        }
+
+        for (const view of views) {
+            const label = labelCounts.get(view.label) > 1
+                ? view.label + ' (#' + view.viewId + ')'
+                : view.label;
+            OCA.Analytics.Datasource.appendSelectOption(target, view.value, label);
+        }
+    },
+
+    /**
+     * Append one option to a select or option group
+     */
+    appendSelectOption: function (target, value, label) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.innerText = label;
+        target.appendChild(option);
+        return option;
     },
 
     /**
@@ -765,12 +934,16 @@ Object.assign(OCA.Analytics.Datasource = {
      * Render the column picker list from provided data
      */
     createColumnPickerContent: function (data) {
-        // Array of items
-        const items = data.data[0].map((value, index) => {
+        const previewRow = Array.isArray(data.data) && Array.isArray(data.data[0])
+            ? data.data[0]
+            : [];
+
+        // Headers are available even when the data source has no rows.
+        const items = data.header.map((name, index) => {
             return {
                 id: index + 1,
-                name: data.header[index],
-                text: value,
+                name: name,
+                text: previewRow[index] ?? '',
                 checked: true
             };
         });
@@ -1430,16 +1603,21 @@ Object.assign(OCA.Analytics.Threshold = {
 
     handleThresholdCreateNewButton: function () {
         const reportId = parseInt(document.getElementById('analyticsDialogContainer').dataset.reportId);
+        const isFlexible = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData);
+        const sourceColumnRef = isFlexible
+            ? Object.keys(OCA.Analytics.currentReportData.dimensions || {})[0] || OCA.Analytics.currentReportData.columnRefs?.[0]
+            : null;
         let requestUrl = OC.generateUrl('apps/analytics/threshold');
         fetch(requestUrl, {
             method: 'POST',
             headers: OCA.Analytics.headers(),
             body: JSON.stringify({
                 reportId: reportId,
-                dimension1: 0,
+                dimension: 0,
                 option: 'new',
                 value: 0,
                 severity: 1,
+                sourceColumnRef: sourceColumnRef,
             })
         })
             .then(response => response.json())
@@ -1459,7 +1637,10 @@ Object.assign(OCA.Analytics.Threshold = {
     },
 
     editThreshold: function (data, element) {
-        document.getElementById('thresholdDimension').value = data.dimension;
+        const dimension = parseInt(data.dimension, 10);
+        document.getElementById('thresholdDimension').value = dimension >= OCA.Analytics.Visualization.thresholdCalculatedColumnOffset
+            ? String(dimension)
+            : data.source_column_ref || data.sourceColumnRef || data.dimension;
         document.getElementById('thresholdOption').value = data.option;
         document.getElementById('thresholdValue').value = data.value;
         document.getElementById('thresholdSeverity').value = data.severity;
@@ -1482,7 +1663,9 @@ Object.assign(OCA.Analytics.Threshold = {
         document.getElementById('thresholdSeverity').value = '4';
         document.getElementById('thresholdColoring').value = 'value';
         delete document.getElementById('thresholdCreateButton').dataset.id;
-        document.getElementById('thresholdValue').dataset.dropdownlistindex = dimensionSelect.selectedIndex;
+        document.getElementById('thresholdValue').dataset.dropdownlistindex = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+            ? OCA.Analytics.Flexible.indexForReference(OCA.Analytics.currentReportData, dimensionSelect.value)
+            : dimensionSelect.value;
     },
 
     buildThresholdRow: function (data) {
@@ -1534,7 +1717,10 @@ Object.assign(OCA.Analytics.Threshold = {
         let text = document.createElement('div');
         text.classList.add('thresholdText');
 
-        let dimension = OCA.Analytics.currentReportData.header[data.dimension];
+        let dimension = OCA.Analytics.Visualization.getThresholdColumnLabel(
+            data.dimension,
+            data.source_column_ref || data.sourceColumnRef
+        );
         text.innerText = dimension + ' ' + data.option + ' ' + data.value;
         text.addEventListener('click', function () {
             const row = this.parentNode;
@@ -1573,12 +1759,29 @@ Object.assign(OCA.Analytics.Threshold = {
 
         const create = () => {
             let requestUrl = OC.generateUrl('apps/analytics/threshold');
+            const selectedColumn = document.getElementById('thresholdDimension').value;
+            const isFlexible = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData);
+            const selectedIndex = parseInt(selectedColumn, 10);
+            const isCalculatedColumn = selectedIndex >= OCA.Analytics.Visualization.thresholdCalculatedColumnOffset;
+            let sourceColumnRef = isFlexible ? selectedColumn : null;
+            if (isFlexible && isCalculatedColumn) {
+                const calculationIndex = selectedIndex - OCA.Analytics.Visualization.thresholdCalculatedColumnOffset;
+                const calculation = OCA.Analytics.Visualization.getCalculatedColumns(
+                    OCA.Analytics.currentReportData.options.tableoptions || {}
+                )[calculationIndex];
+                sourceColumnRef = (calculation?.columns || [])
+                    .map(reference => String(reference).match(/^source-ref\|(c_[1-9][0-9]*)$/)?.[1])
+                    .find(Boolean) || OCA.Analytics.currentReportData.columnRefs?.[0];
+            }
             fetch(requestUrl, {
                 method: 'POST',
                 headers: OCA.Analytics.headers(),
                 body: JSON.stringify({
                     reportId: reportId,
-                    dimension: document.getElementById('thresholdDimension').value,
+                    dimension: isFlexible && !isCalculatedColumn
+                        ? OCA.Analytics.Flexible.indexForReference(OCA.Analytics.currentReportData, selectedColumn)
+                        : selectedColumn,
+                    sourceColumnRef: sourceColumnRef,
                     option: document.getElementById('thresholdOption').value,
                     value: document.getElementById('thresholdValue').value,
                     severity: document.getElementById('thresholdSeverity').value,

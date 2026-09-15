@@ -130,13 +130,16 @@ class DataloadMapper {
 	 * @param $schedule
 	 * @return bool
 	 */
-	public function update(int $dataloadId, $name, $option, $schedule) {
+	public function update(int $dataloadId, $name, $option, $schedule, $storageMapping = null) {
 		$name = $this->truncate($name, 64);
 		$sql = $this->db->getQueryBuilder();
 		$sql->update(self::TABLE_NAME)->set('name', $sql->createNamedParameter($name))
 			->set('option', $sql->createNamedParameter($option))->set('schedule', $sql->createNamedParameter($schedule))
 			->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))->andWhere($sql->expr()
 																										  ->eq('id', $sql->createNamedParameter($dataloadId)));
+		if ($storageMapping !== null) {
+			$sql->set('storage_mapping', $sql->createNamedParameter($storageMapping));
+		}
 		$sql->executeStatement();
 		return true;
 	}
@@ -164,8 +167,9 @@ class DataloadMapper {
 					'name' => $insertSql->createNamedParameter($record['name'] . ' (copy)'),
 					'dataset' => $insertSql->createNamedParameter($record['dataset']),
 					'datasource' => $insertSql->createNamedParameter($record['datasource']),
-					'option' => $insertSql->createNamedParameter($record['option']),
-				]);
+						'option' => $insertSql->createNamedParameter($record['option']),
+						'storage_mapping' => $insertSql->createNamedParameter($record['storage_mapping'] ?? null),
+					]);
 			$insertSql->executeStatement();
 			return true;
 		} else {

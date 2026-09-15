@@ -17,7 +17,6 @@ const {
 } = require('./common');
 
 const config = buildScenarioConfig('92');
-const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_NAME);
 const groupName = buildUniqueName('Playwright Regression Group', process.env.GROUP_NAME);
 
 (async () => {
@@ -33,17 +32,12 @@ const groupName = buildUniqueName('Playwright Regression Group', process.env.GRO
     steps.push('open analytics');
     await ensureAnalyticsLoaded(page, config);
 
-    const reportPresent = await reportExists(page, reportName);
-    if (!reportPresent) {
-      steps.push('skip group cleanup because report does not exist');
+    const groupPresent = await reportExists(page, groupName);
+    if (!groupPresent) {
+      steps.push('skip group cleanup because group does not exist');
     } else {
-      const groupPresent = await reportExists(page, groupName);
-      if (!groupPresent) {
-        steps.push('skip group cleanup because group does not exist');
-      } else {
-        steps.push('delete existing group');
-        await deleteNavigationEntry(page, groupName);
-      }
+      steps.push('delete existing group');
+      await deleteNavigationEntry(page, groupName);
     }
 
     const result = {
@@ -51,7 +45,6 @@ const groupName = buildUniqueName('Playwright Regression Group', process.env.GRO
       status: issues.length ? 'WARN' : 'PASS',
       baseUrl: config.baseUrl,
       finalUrl: page.url(),
-      reportName,
       groupName,
       steps,
       issues,
@@ -66,7 +59,6 @@ const groupName = buildUniqueName('Playwright Regression Group', process.env.GRO
       status: 'FAIL',
       baseUrl: config.baseUrl,
       finalUrl: page.url(),
-      reportName,
       groupName,
       steps,
       issues: issues.concat([`fatal:${error.message}`]),

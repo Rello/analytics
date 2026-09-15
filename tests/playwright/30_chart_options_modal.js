@@ -69,8 +69,9 @@ const reportName = buildUniqueName('Playwright Chart Modal', process.env.REPORT_
       (sections) => sections.map((section) => section.id)
     );
 
-    if (navigationLabels.length !== 3) {
-      throw new Error(`Expected 3 chart option nav items, got ${navigationLabels.length}`);
+    const expectedNavigationLabels = ['Data format', 'Data mapping', 'Labels', 'Visualization'];
+    if (JSON.stringify(navigationLabels) !== JSON.stringify(expectedNavigationLabels)) {
+      throw new Error(`Expected chart option nav items ${JSON.stringify(expectedNavigationLabels)}, got ${JSON.stringify(navigationLabels)}`);
     }
 
     if (JSON.stringify(navigationLabels) !== JSON.stringify(sectionLabels)) {

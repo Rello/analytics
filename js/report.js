@@ -178,7 +178,6 @@ Object.assign(OCA.Analytics.Report, {
                     stacked: false,
                     type: 'category',
                     time: {
-                        parser: 'YYYY-MM-DD HH:mm',
                         tooltipFormat: 'LL',
                     },
                     distribution: 'linear',
@@ -392,7 +391,13 @@ Object.assign(OCA.Analytics.Report, {
      * Attach click handlers for report menu elements
      */
     reportOptionsEventlisteners: function () {
-        document.getElementById('addFilterIcon').addEventListener('click', OCA.Analytics.Filter.openFilterDialog);
+        document.getElementById('addFilterIcon').addEventListener('click', () => {
+            if (OCA.Analytics.currentContentType === 'panorama') {
+                OCA.Analytics.PanoramaFilters.openViewer();
+            } else {
+                OCA.Analytics.Filter.openFilterDialog();
+            }
+        });
         document.getElementById('optionsMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('optionsMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
         document.getElementById('optionsMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
@@ -409,11 +414,49 @@ Object.assign(OCA.Analytics.Report, {
         document.getElementById('trendIcon').addEventListener('click', OCA.Analytics.Report.Functions.trend);
         document.getElementById('disAggregateIcon').addEventListener('click', OCA.Analytics.Report.Functions.disAggregate);
         document.getElementById('aggregateIcon').addEventListener('click', OCA.Analytics.Report.Functions.aggregate);
-        document.getElementById('backIcon').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
-        document.getElementById('backIcon2').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
-        document.getElementById('backIcon3').addEventListener('click', OCA.Analytics.Report.showReportMenuMain);
         document.getElementById('optionsMenuDownload').addEventListener('click', OCA.Analytics.Report.downloadChart);
         document.getElementById('chartLegend').addEventListener('click', OCA.Analytics.Report.toggleChartLegend);
+
+        document.querySelectorAll('#optionsMenuMainReport > .report-menu-has-submenu').forEach(menuItem => {
+            const button = menuItem.querySelector(':scope > button');
+            const submenu = menuItem.querySelector(':scope > .report-menu-submenu');
+
+            menuItem.addEventListener('mouseenter', function () {
+                if (button.disabled) return;
+                OCA.Analytics.Report.closeReportSubmenus(button.id);
+                button.setAttribute('aria-expanded', 'true');
+            });
+            menuItem.addEventListener('mouseleave', function () {
+                if (!menuItem.classList.contains('submenu-open') && !menuItem.contains(document.activeElement)) {
+                    button.setAttribute('aria-expanded', 'false');
+                }
+            });
+            menuItem.addEventListener('focusin', function () {
+                if (button.disabled) return;
+                OCA.Analytics.Report.closeReportSubmenus(button.id);
+                menuItem.classList.add('submenu-focused');
+                button.setAttribute('aria-expanded', 'true');
+            });
+            menuItem.addEventListener('focusout', function (evt) {
+                if (menuItem.contains(evt.relatedTarget)) return;
+
+                menuItem.classList.remove('submenu-focused');
+                if (!menuItem.classList.contains('submenu-open')) button.setAttribute('aria-expanded', 'false');
+            });
+            menuItem.addEventListener('keydown', function (evt) {
+                if (evt.key === 'Escape') {
+                    OCA.Analytics.Report.closeReportSubmenus();
+                    button.focus();
+                    menuItem.classList.remove('submenu-focused');
+                    button.setAttribute('aria-expanded', 'false');
+                    evt.preventDefault();
+                } else if ((evt.key === 'ArrowRight' || evt.key === 'ArrowDown') && evt.target === button) {
+                    OCA.Analytics.Report.openReportSubmenu(button.id);
+                    submenu.querySelector('button, input, select')?.focus();
+                    evt.preventDefault();
+                }
+            });
+        });
 
         let refresh = document.getElementsByName('refresh');
         for (let i = 0; i < refresh.length; i++) {
@@ -427,6 +470,7 @@ Object.assign(OCA.Analytics.Report, {
     hideReportMenu: function () {
         if (document.getElementById('optionsMenu') !== null) {
             document.getElementById('optionsMenu').classList.remove('open');
+            OCA.Analytics.Report.closeReportSubmenus();
         }
     },
 
@@ -442,40 +486,81 @@ Object.assign(OCA.Analytics.Report, {
      * Display analysis related options
      */
     showReportMenuAnalysis: function () {
-        document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubAnalysis').style.removeProperty('display');
+        OCA.Analytics.Report.toggleReportSubmenu('optionsMenuAnalysis');
     },
 
     /**
      * Display refresh interval options
      */
     showReportMenuRefresh: function () {
-        document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubRefresh').style.removeProperty('display');
+        OCA.Analytics.Report.toggleReportSubmenu('optionsMenuRefresh');
     },
 
     /**
      * Display translation options
      */
     showReportMenuTranslate: function () {
-        document.getElementById('optionsMenuMainReport').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubTranslate').style.removeProperty('display');
+        OCA.Analytics.Report.toggleReportSubmenu('optionsMenuTranslate');
     },
 
     /**
-     * Return to the main report menu view
+     * Open one report submenu and close the other second-level menus.
+     *
+     * @param {string} buttonId The submenu button ID
+     */
+    openReportSubmenu: function (buttonId) {
+        const button = document.getElementById(buttonId);
+        if (!button || button.disabled) return;
+
+        OCA.Analytics.Report.closeReportSubmenus(buttonId);
+        button.closest('.report-menu-has-submenu').classList.add('submenu-open');
+        button.setAttribute('aria-expanded', 'true');
+    },
+
+    /**
+     * Toggle a report submenu for click and touch interaction.
+     *
+     * @param {string} buttonId The submenu button ID
+     */
+    toggleReportSubmenu: function (buttonId) {
+        const button = document.getElementById(buttonId);
+        if (!button || button.disabled) return;
+
+        const menuItem = button.closest('.report-menu-has-submenu');
+        if (menuItem.classList.contains('submenu-open')) {
+            OCA.Analytics.Report.closeReportSubmenus();
+            button.blur();
+        } else {
+            OCA.Analytics.Report.openReportSubmenu(buttonId);
+        }
+    },
+
+    /**
+     * Close report submenus except for an optional active item.
+     *
+     * @param {string} exceptButtonId Button ID that should remain expanded
+     */
+    closeReportSubmenus: function (exceptButtonId = '') {
+        document.querySelectorAll('#optionsMenuMainReport > .report-menu-has-submenu').forEach(menuItem => {
+            const button = menuItem.querySelector(':scope > button');
+            if (button.id === exceptButtonId) return;
+
+            menuItem.classList.remove('submenu-open', 'submenu-focused');
+            button.setAttribute('aria-expanded', 'false');
+        });
+    },
+
+    /**
+     * Return to the main report menu view.
      */
     showReportMenuMain: function () {
-        document.getElementById('optionsMenuSubAnalysis').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubRefresh').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuSubTranslate').style.setProperty('display', 'none', 'important');
-        document.getElementById('optionsMenuMainReport').style.removeProperty('display');
+        OCA.Analytics.Report.closeReportSubmenus();
     },
 
     /**
      * Build and display a dropdown for filter values
      */
-    showDropDownList: function (evt) {
+    showDropDownList: function (evt, values = null) {
         if (document.getElementById('tmpList')) {
             return;
         }
@@ -488,7 +573,7 @@ Object.assign(OCA.Analytics.Report, {
         let dropDownListIndex = inputField.dataset.dropdownlistindex;
 
         // get the values for the list from the report data
-        let listValues = OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, dropDownListIndex);
+        let listValues = values ?? OCA.Analytics.Core.getDistinctValues(OCA.Analytics.currentReportData.data, dropDownListIndex);
 
         let ul = document.createElement('ul');
         ul.id = 'tmpList';
@@ -632,7 +717,7 @@ Object.assign(OCA.Analytics.Report.Functions = {
             let dataset = OCA.Analytics.chartObject.data.datasets[y];
             let newLabel = dataset.label + " " + t('analytics', 'Trend');
 
-            // generate trend only for visible data series
+            // Add the function only for visible source series.
             if (OCA.Analytics.chartObject.isDatasetVisible(y) === false) continue;
             // dont add trend twice
             if (OCA.Analytics.chartObject.data.datasets.find(o => o.label === newLabel) !== undefined) continue;
@@ -733,62 +818,41 @@ Object.assign(OCA.Analytics.Report.Functions = {
         OCA.Analytics.Visualization.showElement('chartLegendContainer');
         OCA.Analytics.Report.hideReportMenu();
 
-        let numberDatasets = OCA.Analytics.chartObject.data.datasets.length;
-        let newLabel;
+        const chart = OCA.Analytics.chartObject;
+        const guiState = OCA.Analytics.ChartOptions.getGuiState(
+            OCA.Analytics.currentReportData.options.chartoptions
+        );
+        const selections = guiState.aggregationFunctions || [];
+        let changed = false;
+        const numberDatasets = chart.data.datasets.length;
         for (let y = 0; y < numberDatasets; y++) {
-            let dataset = OCA.Analytics.chartObject.data.datasets[y];
-            if (mode === 'aggregate') {
-                newLabel = dataset.label + " " + t('analytics', 'Aggregation');
-            } else {
-                newLabel = dataset.label + " " + t('analytics', 'Disaggregation');
-            }
+            const dataset = chart.data.datasets[y];
 
             // generate trend only for visible data series
-            if (OCA.Analytics.chartObject.isDatasetVisible(y) === false) continue;
-            // dont add trend twice
-            if (OCA.Analytics.chartObject.data.datasets.find(o => o.label === newLabel) !== undefined) continue;
-            // dont add trend for a trend
-            if (dataset.label.substr(dataset.label.length - 5) === "Trend") continue;
-            if (dataset.label.substr(dataset.label.length - 11) === t('analytics', 'Aggregation')) continue;
-            if (dataset.label.substr(dataset.label.length - 14) === t('analytics', 'Disaggregation')) continue;
+            if (!dataset || dataset.analyticsFunction || chart.isDatasetVisible(y) === false) continue;
+            if (selections.some(selection => selection.mode === mode && selection.sourceIndex === y)) continue;
 
-            let lastValue = 0;
-            let newValue;
-            let newData = OCA.Analytics.chartObject.data.datasets[y]['data'].map(function (currentValue, index, arr) {
-                if (mode === 'aggregate') {
-                    if (typeof (currentValue) === 'number') {
-                        newValue = currentValue + lastValue;
-                        lastValue = newValue;
-                    } else {
-                        newValue = {x: currentValue["x"], y: parseInt(currentValue["y"]) + lastValue};
-                        lastValue = parseInt(currentValue["y"]) + lastValue;
-                    }
-                } else {
-                    if (typeof (currentValue) === 'number') {
-                        newValue = currentValue - lastValue;
-                        lastValue = currentValue;
-                    } else {
-                        newValue = {x: currentValue["x"], y: parseInt(currentValue["y"]) - lastValue};
-                        lastValue = parseInt(currentValue["y"]);
-                    }
-                    return newValue;
-                }
-                return newValue;
-            })
-
-            let newDataset = {
-                label: newLabel,
-                backgroundColor: dataset.backgroundColor,
-                borderColor: dataset.borderColor,
-                borderDash: [5, 5],
-                type: 'line',
-                yAxisID: 'secondary',
-                data: newData
-            };
-            OCA.Analytics.chartObject.data.datasets.push(newDataset);
+            selections.push({mode: mode, sourceIndex: y});
+            chart.data.datasets.push(OCA.Analytics.Visualization.createAggregationDataset(dataset, mode, y));
+            changed = true;
 
         }
-        OCA.Analytics.chartObject.update();
+        if (!changed) {
+            return;
+        }
+
+        const chartOptions = OCA.Analytics.ChartOptions.setGuiState(
+            OCA.Analytics.currentReportData.options.chartoptions,
+            {...guiState, aggregationFunctions: selections}
+        );
+        OCA.Analytics.currentReportData.options.chartoptions = chartOptions;
+        if (chart.options.scales?.secondary) {
+            chart.options.scales.secondary.display = true;
+        }
+        chart.update();
+        OCA.Analytics.Filter.updateReportMenuIndicators();
+        OCA.Analytics.unsavedChanges = true;
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
 });
@@ -937,8 +1001,7 @@ Object.assign(OCA.Analytics.Report.Backend = {
     processReceivedData: function (data) {
         data.options.chartoptions = OCA.Analytics.ChartOptions.parseAndNormalize(data.options.chartoptions);
 
-        const parsedDataOptions = OCA.Analytics.ChartOptions.safeParse(data.options.dataoptions, []);
-        data.options.dataoptions = Array.isArray(parsedDataOptions) ? parsedDataOptions : [];
+        data.options.dataoptions = OCA.Analytics.Flexible.parseDataOptions(data.options.dataoptions);
 
         const parsedFilterOptions = OCA.Analytics.ChartOptions.safeParse(data.options.filteroptions, {});
         data.options.filteroptions = (
@@ -950,10 +1013,17 @@ Object.assign(OCA.Analytics.Report.Backend = {
         const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
         data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
 
-        // if the user uses a special time parser (e.g. DD.MM), the data needs to be sorted differently
-        data = OCA.Analytics.Visualization.sortDates(data);
-        data = OCA.Analytics.Visualization.applyTimeAggregation(data);
-        data = OCA.Analytics.Visualization.applyTopN(data);
+        const processing = data.queryProcessing || {};
+        // Flexible queries can apply these operations in SQL/PHP. Do not repeat them in the browser.
+        if (!processing.backendProcessed || !processing.sorting) {
+            data = OCA.Analytics.Visualization.sortDates(data);
+        }
+        if (!processing.backendProcessed || !processing.timeAggregation) {
+            data = OCA.Analytics.Visualization.applyTimeAggregation(data);
+        }
+        if (!processing.backendProcessed || !processing.topN) {
+            data = OCA.Analytics.Visualization.applyTopN(data);
+        }
 
         return data;
     },

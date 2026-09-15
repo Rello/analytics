@@ -19,11 +19,12 @@ use OCP\UserMigration\IExportDestination;
 use OCP\UserMigration\IImportSource;
 use OCP\UserMigration\IMigrator;
 use OCP\UserMigration\UserMigrationException;
+use OCA\Analytics\Storage\FlexibleValueNormalizer;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AnalyticsMigrator implements IMigrator {
 	private const EXPORT_FILE = 'analytics/user-data.json';
-	private const VERSION = 1;
+	private const VERSION = 2;
 
 	public function __construct(
 		private IDBConnection $db,
@@ -46,6 +47,9 @@ class AnalyticsMigrator implements IMigrator {
 			'reports' => $reports,
 			'dataloads' => $this->fetchAllByIds('analytics_dataload', 'dataset', $datasetIds),
 			'facts' => $this->fetchAllByIds('analytics_facts', 'dataset', $datasetIds),
+			'columns' => $this->fetchAllByIds('analytics_flex_columns', 'dataset_id', $datasetIds),
+			'records' => $this->fetchAllByIds('analytics_flex_records', 'dataset_id', $datasetIds),
+			'values' => $this->fetchAllByIds('analytics_flex_values', 'dataset_id', $datasetIds),
 			'thresholds' => $this->fetchAllByIds('analytics_threshold', 'report', $reportIds),
 			'panoramas' => $this->fetchAllByUser('analytics_panorama', $uid),
 		];
@@ -69,14 +73,21 @@ class AnalyticsMigrator implements IMigrator {
 		$uid = $user->getUID();
 		$datasetMap = [];
 		$reportMap = [];
+		$reportDatasetMap = [];
+		foreach (($payload['reports'] ?? []) as $report) {
+			if (isset($report['id'], $report['dataset'])) {
+				$reportDatasetMap[(int)$report['id']] = (int)$report['dataset'];
+			}
+		}
 
 		$this->db->beginTransaction();
 		try {
 			$datasetMap = $this->importDatasets($uid, $payload['datasets'] ?? []);
-			$reportMap = $this->importReports($uid, $payload['reports'] ?? [], $datasetMap);
-			$this->importDataloads($uid, $payload['dataloads'] ?? [], $datasetMap);
+			$columnMaps = $this->importFlexibleStorage($payload, $datasetMap);
+			$reportMap = $this->importReports($uid, $payload['reports'] ?? [], $datasetMap, $columnMaps);
+			$this->importDataloads($uid, $payload['dataloads'] ?? [], $datasetMap, $columnMaps);
 			$this->importFacts($uid, $payload['facts'] ?? [], $datasetMap);
-			$this->importThresholds($uid, $payload['thresholds'] ?? [], $reportMap);
+			$this->importThresholds($uid, $payload['thresholds'] ?? [], $reportMap, $reportDatasetMap, $columnMaps);
 			$this->importPanoramas($uid, $payload['panoramas'] ?? [], $reportMap);
 			$this->db->commit();
 		} catch (\Throwable $e) {
@@ -179,6 +190,8 @@ class AnalyticsMigrator implements IMigrator {
 				'type' => isset($row['type']) ? (int)$row['type'] : 0,
 				'parent' => 0,
 				'ai_index' => isset($row['ai_index']) ? (int)$row['ai_index'] : 0,
+				'storage_mode' => $row['storage_mode'] ?? 'legacy',
+				'schema_version' => isset($row['schema_version']) ? (int)$row['schema_version'] : 0,
 			]);
 			$idMap[$oldId] = $newId;
 		}
@@ -203,7 +216,7 @@ class AnalyticsMigrator implements IMigrator {
 	 * @return array<int,int>
 	 * @throws Exception
 	 */
-	private function importReports(string $uid, array $rows, array $datasetMap): array {
+	private function importReports(string $uid, array $rows, array $datasetMap, array $columnMaps = []): array {
 		$idMap = [];
 
 		foreach ($rows as $row) {
@@ -214,6 +227,7 @@ class AnalyticsMigrator implements IMigrator {
 			$oldId = (int)$row['id'];
 			$oldDataset = isset($row['dataset']) ? (int)$row['dataset'] : 0;
 			$newDataset = $oldDataset === 0 ? 0 : ($datasetMap[$oldDataset] ?? 0);
+			$columnMap = $columnMaps[$oldDataset] ?? [];
 
 			$newId = $this->insertAndReturnId('analytics_report', [
 				'user_id' => $uid,
@@ -223,15 +237,15 @@ class AnalyticsMigrator implements IMigrator {
 				'link' => $row['link'] ?? '',
 				'type' => isset($row['type']) ? (int)$row['type'] : 0,
 				'parent' => 0,
-				'dimension1' => $row['dimension1'] ?? '',
-				'dimension2' => $row['dimension2'] ?? '',
-				'value' => $row['value'] ?? '',
+				'dimension1' => $this->remapReferenceValue($row['dimension1'] ?? '', $columnMap),
+				'dimension2' => $this->remapReferenceValue($row['dimension2'] ?? '', $columnMap),
+				'value' => $this->remapReferenceValue($row['value'] ?? '', $columnMap),
 				'chart' => $row['chart'] ?? 'line',
 				'visualization' => $row['visualization'] ?? 'table',
-				'chartoptions' => $row['chartoptions'] ?? null,
-				'dataoptions' => $row['dataoptions'] ?? null,
-				'filteroptions' => $row['filteroptions'] ?? null,
-				'tableoptions' => $row['tableoptions'] ?? null,
+				'chartoptions' => $this->remapReferenceJson($row['chartoptions'] ?? null, $columnMap),
+				'dataoptions' => $this->remapReferenceJson($row['dataoptions'] ?? null, $columnMap),
+				'filteroptions' => $this->remapReferenceJson($row['filteroptions'] ?? null, $columnMap),
+				'tableoptions' => $this->remapReferenceJson($row['tableoptions'] ?? null, $columnMap),
 				'refresh' => isset($row['refresh']) ? (int)$row['refresh'] : 0,
 				'version' => isset($row['version']) ? (int)$row['version'] : 0,
 			]);
@@ -257,7 +271,7 @@ class AnalyticsMigrator implements IMigrator {
 	 * @param array<int,int> $datasetMap
 	 * @throws Exception
 	 */
-	private function importDataloads(string $uid, array $rows, array $datasetMap): void {
+	private function importDataloads(string $uid, array $rows, array $datasetMap, array $columnMaps = []): void {
 		foreach ($rows as $row) {
 			$oldDataset = isset($row['dataset']) ? (int)$row['dataset'] : 0;
 			$newDataset = $datasetMap[$oldDataset] ?? null;
@@ -272,8 +286,120 @@ class AnalyticsMigrator implements IMigrator {
 				'datasource' => isset($row['datasource']) ? (int)$row['datasource'] : 0,
 				'option' => $row['option'] ?? '{}',
 				'schedule' => $row['schedule'] ?? null,
+				'storage_mapping' => $this->remapReferenceJson($row['storage_mapping'] ?? null, $columnMaps[$oldDataset] ?? []),
 			]);
 		}
+	}
+
+	/**
+	 * @param array<string,mixed> $payload
+	 * @param array<int,int> $datasetMap
+	 * @return array<int,array<string,string>> old dataset id to old/new column references
+	 */
+	private function importFlexibleStorage(array $payload, array $datasetMap): array {
+		$columnMaps = [];
+		$columnIdMap = [];
+		$recordIdMap = [];
+		$newColumnsByOldId = [];
+		$dimensionColumnIdsByDataset = [];
+		$oldRecordDataset = [];
+		$valuesByOldRecord = [];
+
+		foreach (($payload['columns'] ?? []) as $row) {
+			$oldDataset = isset($row['dataset_id']) ? (int)$row['dataset_id'] : 0;
+			$newDataset = $datasetMap[$oldDataset] ?? null;
+			if ($newDataset === null || !isset($row['id'])) {
+				continue;
+			}
+			$newId = $this->insertAndReturnId('analytics_flex_columns', [
+				'dataset_id' => $newDataset,
+				'name' => $row['name'] ?? '',
+				'logical_type' => $row['logical_type'] ?? 'text',
+				'column_role' => $row['column_role'] ?? 'measure',
+				'display_position' => isset($row['display_position']) ? (int)$row['display_position'] : 0,
+				'nullable_flag' => isset($row['nullable_flag']) ? (int)$row['nullable_flag'] : 1,
+				'default_aggregation' => $row['default_aggregation'] ?? null,
+			]);
+			$oldId = (int)$row['id'];
+			$columnIdMap[$oldId] = $newId;
+			$newColumnsByOldId[$oldId] = [
+				'id' => $newId,
+				'ref' => 'c_' . $newId,
+				'type' => $row['logical_type'] ?? 'text',
+				'role' => $row['column_role'] ?? 'measure',
+				'nullable' => (bool)($row['nullable_flag'] ?? 1),
+			];
+			if (($row['column_role'] ?? 'measure') === 'dimension') {
+				$dimensionColumnIdsByDataset[$oldDataset][] = $oldId;
+			}
+			$columnMaps[$oldDataset]['c_' . $oldId] = 'c_' . $newId;
+		}
+
+		foreach (($payload['records'] ?? []) as $row) {
+			$oldDataset = isset($row['dataset_id']) ? (int)$row['dataset_id'] : 0;
+			$newDataset = $datasetMap[$oldDataset] ?? null;
+			if ($newDataset === null || !isset($row['id'])) {
+				continue;
+			}
+			$newId = $this->insertAndReturnId('analytics_flex_records', [
+				'dataset_id' => $newDataset,
+				'dimension_key' => $row['dimension_key'] ?? '',
+				'updated_at' => $row['updated_at'] ?? gmdate('Y-m-d H:i:s'),
+			]);
+			$recordIdMap[(int)$row['id']] = $newId;
+			$oldRecordDataset[(int)$row['id']] = $oldDataset;
+		}
+
+		foreach (($payload['values'] ?? []) as $row) {
+			$oldDataset = isset($row['dataset_id']) ? (int)$row['dataset_id'] : 0;
+			$newDataset = $datasetMap[$oldDataset] ?? null;
+			$newRecord = isset($row['record_id']) ? ($recordIdMap[(int)$row['record_id']] ?? null) : null;
+			$newColumn = isset($row['column_id']) ? ($columnIdMap[(int)$row['column_id']] ?? null) : null;
+			if ($newDataset === null || $newRecord === null || $newColumn === null) {
+				continue;
+			}
+			$this->insertAndReturnId('analytics_flex_values', [
+				'dataset_id' => $newDataset,
+				'record_id' => $newRecord,
+				'column_id' => $newColumn,
+				'text_value' => $row['text_value'] ?? null,
+				'decimal_value' => $row['decimal_value'] ?? null,
+				'datetime_value' => $row['datetime_value'] ?? null,
+			]);
+			$valuesByOldRecord[(int)$row['record_id']][(int)$row['column_id']] = $row;
+		}
+
+		$normalizer = new FlexibleValueNormalizer();
+		foreach ($recordIdMap as $oldRecordId => $newRecordId) {
+			$dimensions = [];
+			$normalizedValues = [];
+			$oldDataset = $oldRecordDataset[$oldRecordId] ?? 0;
+			foreach (($dimensionColumnIdsByDataset[$oldDataset] ?? []) as $oldColumnId) {
+				$valueRow = $valuesByOldRecord[$oldRecordId][$oldColumnId] ?? [];
+				$column = $newColumnsByOldId[$oldColumnId] ?? null;
+				if ($column === null) {
+					continue;
+				}
+				$dimensions[] = $column;
+				$rawValue = match ($column['type']) {
+					'text' => $valueRow['text_value'] ?? null,
+					'decimal', 'boolean' => $valueRow['decimal_value'] ?? null,
+					'date' => isset($valueRow['datetime_value']) ? substr((string)$valueRow['datetime_value'], 0, 10) : null,
+					'datetime' => isset($valueRow['datetime_value'])
+						? str_replace(' ', 'T', substr((string)$valueRow['datetime_value'], 0, 19)) . 'Z'
+						: null,
+					default => null,
+				};
+				$normalizedValues[(int)$column['id']] = $normalizer->normalizeValue($column, $rawValue, 0);
+			}
+			if ($dimensions !== []) {
+				$this->updateById('analytics_flex_records', $newRecordId, [
+					'dimension_key' => $normalizer->dimensionKey($dimensions, $normalizedValues),
+				]);
+			}
+		}
+
+		return $columnMaps;
 	}
 
 	/**
@@ -305,7 +431,7 @@ class AnalyticsMigrator implements IMigrator {
 	 * @param array<int,int> $reportMap
 	 * @throws Exception
 	 */
-	private function importThresholds(string $uid, array $rows, array $reportMap): void {
+	private function importThresholds(string $uid, array $rows, array $reportMap, array $reportDatasetMap, array $columnMaps): void {
 		foreach ($rows as $row) {
 			$oldReport = isset($row['report']) ? (int)$row['report'] : 0;
 			$newReport = $reportMap[$oldReport] ?? null;
@@ -317,6 +443,10 @@ class AnalyticsMigrator implements IMigrator {
 				'user_id' => $uid,
 				'report' => $newReport,
 				'dimension' => $this->normalizeNullableInt($row['dimension'] ?? null),
+				'source_column_ref' => $this->remapReferenceValue(
+					$row['source_column_ref'] ?? null,
+					$columnMaps[$reportDatasetMap[$oldReport] ?? 0] ?? []
+				),
 				'target' => $row['target'] ?? 0,
 				'option' => $row['option'] ?? '',
 				'severity' => isset($row['severity']) ? (int)$row['severity'] : 0,
@@ -410,6 +540,19 @@ class AnalyticsMigrator implements IMigrator {
 
 		$encoded = json_encode($pages);
 		return is_string($encoded) ? $encoded : '[]';
+	}
+
+	/** @param array<string,string> $columnMap */
+	private function remapReferenceValue(mixed $value, array $columnMap): mixed {
+		return is_string($value) && isset($columnMap[$value]) ? $columnMap[$value] : $value;
+	}
+
+	/** @param array<string,string> $columnMap */
+	private function remapReferenceJson(mixed $value, array $columnMap): mixed {
+		if (!is_string($value) || $value === '' || $columnMap === []) {
+			return $value;
+		}
+		return strtr($value, $columnMap);
 	}
 
 	/**

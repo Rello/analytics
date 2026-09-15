@@ -32,11 +32,7 @@ class Daily extends TimedJob
 
     public function run($arguments)
     {
-        try {
-            $this->DataloadService->executeBySchedule('d');
-        } catch (\Exception $e) {
-            // no action
-        }
+        $this->DataloadService->executeBySchedule('d');
     }
 
 }

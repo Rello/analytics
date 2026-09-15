@@ -56,7 +56,7 @@ async function tableVisible(page) {
 
     steps.push('open visualization settings');
     await openReportBasicSettings(page, reportName);
-    await clickFirst(page, ['#reportVisualizationSectionHeaderH3'], 'visualization section');
+    await page.locator('#reportVisualizationSectionHeader').click({ position: { x: 8, y: 8 } });
     await page.locator('#sidebarReportChartOptions').waitFor({ state: 'visible', timeout: 15000 });
 
     steps.push('save custom chart and data options');

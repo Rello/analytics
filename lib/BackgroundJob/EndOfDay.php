@@ -37,12 +37,8 @@ class EndOfDay extends TimedJob
         $startOfLast15Minutes = (clone $endOfDay)->modify('-15 minutes'); // Start of last 15 minutes of the day
 
         if ($currentTime >= $startOfLast15Minutes && $currentTime <= $endOfDay) {
-            try {
-                $this->logger->debug('Analytics Dataload - End of day');
-                $this->DataloadService->executeBySchedule('e');
-            } catch (\Exception $e) {
-                // Handle exception or log error
-            }
+            $this->logger->debug('Analytics Dataload - End of day');
+            $this->DataloadService->executeBySchedule('e');
         }
     }
 

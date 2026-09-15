@@ -14,6 +14,7 @@ use OCA\Analytics\Service\PanoramaService;
 use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\VariableService;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
+use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\ITagManager;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +39,8 @@ class PanoramaServiceReadTest extends TestCase {
 			$this->panoramaMapper,
 			$this->createMock(IConfig::class),
 			$this->createMock(VariableService::class),
-			$this->createMock(ActivityManager::class)
+			$this->createMock(ActivityManager::class),
+			$this->createMock(IRootFolder::class),
 		);
 	}
 
@@ -51,7 +53,7 @@ class PanoramaServiceReadTest extends TestCase {
 		$this->shareService->expects($this->never())
 			->method('getSharedPanorama');
 
-		$this->assertSame($own, $this->buildService()->read(7));
+		$this->assertSame($own + ['permissions' => \OCP\Constants::PERMISSION_UPDATE], $this->buildService()->read(7));
 	}
 
 	public function testReadFallsBackToSharedPanorama(): void {

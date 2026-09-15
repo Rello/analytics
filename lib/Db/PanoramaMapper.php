@@ -151,7 +151,7 @@ class PanoramaMapper
      * @return bool
      * @throws Exception
      */
-    public function update($id, $name, $type, $parent, $pages)
+    public function update($id, $name, $type, $parent, $pages, $filters = null)
     {
         $name = $this->truncate($name, 64);
         $sql = $this->db->getQueryBuilder();
@@ -162,6 +162,7 @@ class PanoramaMapper
             ->set('pages', $sql->createNamedParameter($pages))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        if ($filters !== null) $sql->set('filters', $sql->createNamedParameter($filters));
          $sql->executeStatement();
         return true;
     }

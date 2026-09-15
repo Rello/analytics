@@ -51,7 +51,12 @@ class ContextChatManager {
 		$datasetMetadata = $this->DatasetService->read($datasetId);
 		if ($datasetMetadata['ai_index'] !== 1) return false;
 
-		$columns = $datasetMetadata['dimension1'] .', '.$datasetMetadata['dimension2'].', '.$datasetMetadata['value'];
+		if (($datasetMetadata['storageMode'] ?? 'legacy') === 'flexible_shared') {
+			$columnNames = array_column($datasetMetadata['columns'] ?? [], 'name');
+		} else {
+			$columnNames = [$datasetMetadata['dimension1'], $datasetMetadata['dimension2'], $datasetMetadata['value']];
+		}
+		$columns = implode(', ', $columnNames);
 
 		$storageData = $this->StorageService->read($datasetId, null);
 		$data = array_map(function ($subArray) {
@@ -61,7 +66,7 @@ class ContextChatManager {
 
 		$content = 'This is a set of statistical data. The name of the report is: ' . $datasetMetadata['name'] . '. ';
 		$content .= 'The description of the data is: ' . $datasetMetadata['subheader'] . '. ';
-		$content .= 'The data comes in multiple rows which 3 columns separated by a comma. ';
+		$content .= 'The data comes in multiple rows with ' . count($columnNames) . ' columns separated by a comma. ';
 		$content .= 'The columns are ' . $columns . '. ';
 		$content .= 'The data is: ' . $dataString;
 

@@ -38,6 +38,9 @@ case "${SCENARIO}" in
   21|21-filter|filter)
     SCRIPT_PATH="tests/playwright/21_filter.js"
     ;;
+  32|panorama-filters)
+    SCRIPT_PATH="tests/playwright/32_panorama_filters.js"
+    ;;
   22|drilldown)
     SCRIPT_PATH="tests/playwright/22_drilldown.js"
     ;;
@@ -74,6 +77,18 @@ case "${SCENARIO}" in
   45|automation-deletion|deletion-automation)
     SCRIPT_PATH="tests/playwright/45_automation_deletion.js"
     ;;
+  46|flexible-datasets|flexible-storage)
+    SCRIPT_PATH="tests/playwright/46_flexible_datasets.js"
+    ;;
+  47|chart-mapping)
+    SCRIPT_PATH="tests/playwright/47_chart_mapping.js"
+    ;;
+  48|chart-mapping-compatibility)
+    SCRIPT_PATH="tests/playwright/48_chart_mapping_compatibility.js"
+    ;;
+  49|table-preview)
+    SCRIPT_PATH="tests/playwright/49_table_preview.js"
+    ;;
   50|share|navigation-share)
     SCRIPT_PATH="tests/playwright/50_navigation_share.js"
     ;;
@@ -97,7 +112,7 @@ case "${SCENARIO}" in
     ;;
   *)
     echo "Unknown scenario: ${SCENARIO}" >&2
-    echo "Use: full|regression|10|smoke|navigation|11|report|create|report-create|12|group-create|14|sidebar-data|16|sidebar-options|21|filter|22|drilldown|23|sort|25|table-options|26|chart-options|27|refresh|28|translate|29|top-n|30|chart|modal|31|thresholds|options-thresholds|41|datasource-git|42|datasource-json|43|datasource-csv|44|automation-dataload|45|automation-deletion|50|share|navigation-share|51|favorites|navigation-favorites|91|report-delete|92|group-delete|<script.js>" >&2
+    echo "Use: full|regression|10|smoke|navigation|11|report|create|report-create|12|group-create|14|sidebar-data|16|sidebar-options|21|filter|22|drilldown|23|sort|25|table-options|26|chart-options|27|refresh|28|translate|29|top-n|30|chart|modal|31|thresholds|options-thresholds|41|datasource-git|42|datasource-json|43|datasource-csv|44|automation-dataload|45|automation-deletion|46|flexible-datasets|47|chart-mapping|48|chart-mapping-compatibility|50|share|navigation-share|51|favorites|navigation-favorites|91|report-delete|92|group-delete|<script.js>" >&2
     exit 2
     ;;
 esac
@@ -133,6 +148,9 @@ if [[ -n "${HEADLESS:-}" ]]; then
 fi
 if [[ -n "${REPORT_NAME:-}" ]]; then
   DOCKER_ARGS+=(-e "REPORT_NAME=${REPORT_NAME}")
+fi
+if [[ -n "${GROUP_NAME:-}" ]]; then
+  DOCKER_ARGS+=(-e "GROUP_NAME=${GROUP_NAME}")
 fi
 if [[ -n "${REPORT_SUBHEADER:-}" ]]; then
   DOCKER_ARGS+=(-e "REPORT_SUBHEADER=${REPORT_SUBHEADER}")

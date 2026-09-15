@@ -59,6 +59,35 @@ const customColumnValues = ['Solar', 'Manual month'];
     await chooseLocalFile(page, 'analytics_testdatacsv.csv');
     await fillRequired(page, '#offset', '1', 'csv offset');
 
+    steps.push('open column picker for datasource without rows');
+    const emptyPreviewUrl = /\/apps\/analytics\/data(?:\?.*)?$/;
+    await page.route(emptyPreviewUrl, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          header: ['Date', 'Value'],
+          data: [],
+          error: 0,
+        }),
+      });
+    });
+    await clickFirst(page, ['#columns'], 'columns dialog without preview rows');
+    const emptyPreviewRows = page.locator('#sortable-list > li');
+    await emptyPreviewRows.first().waitFor({ state: 'visible', timeout: 10000 });
+    const emptyPreviewRowCount = await emptyPreviewRows.count();
+    if (emptyPreviewRowCount !== 2) {
+      throw new Error(`Expected 2 column rows without preview data, got ${emptyPreviewRowCount}`);
+    }
+    for (let index = 0; index < 2; index += 1) {
+      const previewText = await emptyPreviewRows.nth(index).locator('span').nth(1).textContent();
+      if (previewText !== '') {
+        throw new Error(`Expected empty preview text for column ${index + 1}, got "${previewText}"`);
+      }
+    }
+    await closeAnalyticsDialog(page);
+    await page.unroute(emptyPreviewUrl);
+
     steps.push('configure column picker');
     await clickFirst(page, ['#columns'], 'columns dialog');
     await page.locator('.analyticsDialogHeader, #analyticsDialogContainer h2').filter({ hasText: 'Column Picker' }).first()

@@ -39,6 +39,7 @@ class DatasetService {
 	private $contextChatManager;
 	private static $contextChatAvailable = null;
 	private $l10n;
+	private FlexibleStorageService $FlexibleStorageService;
 
 	public function __construct(
 		$userId,
@@ -53,7 +54,8 @@ class DatasetService {
 		ActivityManager $ActivityManager,
 		IRootFolder $rootFolder,
 		VariableService $VariableService,
-		ReportMapper $ReportMapper
+		ReportMapper $ReportMapper,
+		FlexibleStorageService $FlexibleStorageService
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
@@ -68,6 +70,7 @@ class DatasetService {
 		$this->VariableService = $VariableService;
 		$this->ReportMapper = $ReportMapper;
 		$this->l10n = $l10n;
+		$this->FlexibleStorageService = $FlexibleStorageService;
 	}
 
 	/**
@@ -101,6 +104,8 @@ class DatasetService {
 				$ownDataset['type'] = DatasourceController::DATASET_TYPE_INTERNAL_DB;
 			}
 			$ownDataset['item_type'] = ShareService::SHARE_ITEM_TYPE_DATASET;
+			$ownDataset['storageMode'] = $ownDataset['storage_mode'] ?? 'legacy';
+			$ownDataset['schemaVersion'] = (int)($ownDataset['schema_version'] ?? 0);
 			$ownDataset = $this->VariableService->replaceTextVariables($ownDataset);
 		}
 
@@ -119,6 +124,7 @@ class DatasetService {
 		if (!empty($ownDataset)) {
 			$ownDataset['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
 			$ownDataset['dataset'] = $ownDataset['id'];
+			$ownDataset = $this->decorateDataset($ownDataset);
 		}
 		return $ownDataset;
 	}
@@ -131,7 +137,8 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function read(int $datasetId) {
-		return $this->DatasetMapper->read($datasetId);
+		$dataset = $this->DatasetMapper->read($datasetId);
+		return is_array($dataset) ? $this->decorateDataset($dataset) : $dataset;
 	}
 
 	/**
@@ -162,7 +169,10 @@ class DatasetService {
 		}
 		$status = array();
 		$status['reports'] = $this->ReportMapper->reportsForDataset($datasetId, $this->userId);
-		$status['data'] = $this->StorageMapper->getRecordCount($datasetId);
+		$dataset = $this->DatasetMapper->readOwn($datasetId);
+		$status['data'] = ($dataset['storage_mode'] ?? 'legacy') === 'flexible_shared'
+			? $this->FlexibleStorageService->getRecordCount($datasetId)
+			: $this->StorageMapper->getRecordCount($datasetId);
 		return $status;
 	}
 
@@ -182,6 +192,18 @@ class DatasetService {
 		return $datasetId;
 	}
 
+	/** @param list<array<string,mixed>> $columns */
+	public function createFlexible(string $name, array $columns): array {
+		$descriptor = $this->FlexibleStorageService->createDataset($name, $columns);
+		$this->ActivityManager->triggerEvent((int)$descriptor['id'], ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_ADD);
+		return $descriptor;
+	}
+
+	/** @param list<array<string,mixed>> $columns */
+	public function updateFlexibleSchema(int $datasetId, int $expectedSchemaVersion, array $columns, ?string $name = null): array {
+		return $this->FlexibleStorageService->updateSchema($datasetId, $expectedSchemaVersion, $columns, $name);
+	}
+
 	/**
 	 * get dataset details
 	 *
@@ -195,20 +217,24 @@ class DatasetService {
 	 * @return bool
 	 * @throws Exception
 	 */
-        public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
-				if (!$this->isOwn($datasetId)) {
-					return false;
-				}
-                $dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
-               $this->ReportMapper->increaseVersionByDataset($datasetId);
+	public function update(int $datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex) {
+		if (!$this->isOwn($datasetId)) {
+			return false;
+		}
+		$dataset = $this->DatasetMapper->readOwn($datasetId);
+		if (($dataset['storage_mode'] ?? 'legacy') !== 'legacy') {
+			return false;
+		}
+		$dbUpdate = $this->DatasetMapper->update($datasetId, $name, $subheader, $dimension1, $dimension2, $value, $aiIndex);
+		$this->ReportMapper->increaseVersionByDataset($datasetId);
 
-               if ($aiIndex === 1) {
-                       $this->provider($datasetId);
-               } else {
-                       $this->providerRemove($datasetId);
-               }
-               return $dbUpdate;
-        }
+		if ($aiIndex === 1) {
+			$this->provider($datasetId);
+		} else {
+			$this->providerRemove($datasetId);
+		}
+		return $dbUpdate;
+	}
 
 	public function createGroup(int $parent = 0): int {
 		return $this->DatasetMapper->createGroup($this->l10n->t('New'), $parent);
@@ -253,8 +279,12 @@ class DatasetService {
 		$result['threshold'] = $this->ThresholdService->read($datasetId);
 		$result['favorite'] = '';
 
-		if ($result['dataset']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-			$result['data'] = $this->StorageMapper->read($datasetId);
+			if ($result['dataset']['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+				if (($result['dataset']['storage_mode'] ?? 'legacy') === 'flexible_shared') {
+					$result['flexible'] = $this->FlexibleStorageService->exportDataset($datasetId);
+				} else {
+					$result['data'] = $this->StorageMapper->read($datasetId);
+				}
 		}
 
 		unset($result['dataset']['id'], $result['dataset']['user_id'], $result['dataset']['user_id'], $result['dataset']['parent']);
@@ -331,10 +361,15 @@ class DatasetService {
 	 * @throws Exception
 	 */
 	public function delete(int $datasetId) {
+		$dataset = $this->DatasetMapper->read($datasetId);
 		$this->ActivityManager->triggerEvent($datasetId, ActivityManager::OBJECT_DATASET, ActivityManager::SUBJECT_DATASET_DELETE);
-		$this->DatasetMapper->delete($datasetId);
 		$this->DataloadMapper->deleteByDataset($datasetId);
-		$this->StorageMapper->deleteByDataset($datasetId);
+		if (is_array($dataset) && ($dataset['storage_mode'] ?? 'legacy') === 'flexible_shared') {
+			$this->FlexibleStorageService->deleteDataset($datasetId);
+		} else {
+			$this->StorageMapper->deleteByDataset($datasetId);
+		}
+		$this->DatasetMapper->delete($datasetId);
 		$this->providerRemove($datasetId);
 		return true;
 	}
@@ -349,12 +384,26 @@ class DatasetService {
 	public function deleteByUser(string $userId) {
 		$datasets = $this->DatasetMapper->indexByUser($userId);
 		foreach ($datasets as $dataset) {
-			$this->DatasetMapper->delete($dataset['id']);
 			$this->DataloadMapper->deleteByDataset($dataset['id']);
-			$this->StorageMapper->deleteByDataset($dataset['id']);
+			if (($dataset['storage_mode'] ?? 'legacy') === 'flexible_shared') {
+				$this->FlexibleStorageService->deleteDataset((int)$dataset['id']);
+			} else {
+				$this->StorageMapper->deleteByDataset($dataset['id']);
+			}
+			$this->DatasetMapper->delete($dataset['id']);
 		}
 		$this->providerRemoveByUser($userId);
 		return true;
+	}
+
+	/** @param array<string,mixed> $dataset */
+	private function decorateDataset(array $dataset): array {
+		$dataset['storageMode'] = $dataset['storage_mode'] ?? 'legacy';
+		$dataset['schemaVersion'] = (int)($dataset['schema_version'] ?? 0);
+		if ($dataset['storageMode'] === 'flexible_shared') {
+			$dataset['columns'] = $this->FlexibleStorageService->getDescriptor((int)$dataset['id'], false)['columns'];
+		}
+		return $dataset;
 	}
 
 }

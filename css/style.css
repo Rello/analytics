@@ -122,6 +122,72 @@ button, .button {
     z-index: 100;
 }
 
+#app-navigation .analytics-navigation-icon {
+    position: relative;
+    background-image: none !important;
+}
+
+#app-navigation .analytics-navigation-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+    mask-image: var(--analytics-navigation-icon);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: 18px 18px;
+    -webkit-mask-image: var(--analytics-navigation-icon);
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 18px 18px;
+    transform: translateY(-50%);
+}
+
+#app-navigation .analytics-navigation-menu-icon {
+    background-color: currentColor;
+    background-image: none !important;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: text-bottom;
+    mask-image: var(--analytics-navigation-icon);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: 16px 16px;
+    -webkit-mask-image: var(--analytics-navigation-icon);
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 16px 16px;
+}
+
+#app-navigation .icon-analytics-overview { --analytics-navigation-icon: url(../img/overview.svg); }
+#app-navigation .icon-analytics-star { --analytics-navigation-icon: url(../img/star.svg); }
+#app-navigation .icon-analytics-panorama { --analytics-navigation-icon: url(../img/panorama.svg); }
+#app-navigation .icon-analytics-report { --analytics-navigation-icon: url(../img/report.svg); }
+#app-navigation .icon-analytics-dataset { --analytics-navigation-icon: url(../img/dataset.svg); }
+#app-navigation .icon-analytics-settings { --analytics-navigation-icon: url(../img/settings.svg); }
+#app-navigation .icon-analytics-import { --analytics-navigation-icon: url(../img/download.svg); }
+#app-navigation .icon-analytics-rename { --analytics-navigation-icon: url(../img/rename.svg); }
+#app-navigation .icon-folder { --analytics-navigation-icon: var(--icon-folder-dark); }
+#app-navigation .icon-shared { --analytics-navigation-icon: var(--icon-shared-dark); }
+#app-navigation .icon-rename { --analytics-navigation-icon: url(../img/rename.svg); }
+#app-navigation .icon-add { --analytics-navigation-icon: url(../img/add.svg); }
+#app-navigation .icon-star,
+#app-navigation .icon-starred { --analytics-navigation-icon: url(../img/star.svg); }
+#app-navigation .icon-share { --analytics-navigation-icon: var(--icon-share-dark); }
+#app-navigation .icon-category-customization { --analytics-navigation-icon: var(--icon-category-customization-dark); }
+#app-navigation .icon-delete { --analytics-navigation-icon: var(--icon-delete-dark); }
+#app-navigation .icon-close { --analytics-navigation-icon: var(--icon-close-dark); }
+
+/* A section uses the same text-colored disclosure arrow when expanded. */
+#app-navigation .collapsible.open > div > .analytics-navigation-icon {
+    --analytics-navigation-icon: var(--icon-triangle-s-dark);
+}
+
 
 #app-navigation .app-navigation-entry-utils {
     flex: 0 1 auto;
@@ -301,6 +367,91 @@ button, .button {
 
 #optionsMenu {
     top: 40px;
+    overflow: visible;
+}
+
+#optionsMenuMainReport > .report-menu-has-submenu {
+    position: relative;
+}
+
+#optionsMenuMainReport > .report-menu-has-submenu > button {
+    display: flex;
+    align-items: center;
+}
+
+.report-menu-submenu-arrow {
+    margin-left: auto;
+}
+
+#optionsMenu .report-menu-submenu {
+    position: absolute;
+    z-index: 10000;
+    top: -4px;
+    right: calc(100% + 4px);
+    display: none !important;
+    box-sizing: border-box;
+    min-width: 220px;
+    margin: 0;
+    padding: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--analytics-surface-radius);
+    background-color: var(--color-main-background);
+    box-shadow: 0 1px 10px var(--color-box-shadow);
+}
+
+#optionsMenu .report-menu-submenu::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -5px;
+    width: 5px;
+    height: 100%;
+}
+
+#optionsMenuMainReport > .report-menu-has-submenu:hover > .report-menu-submenu,
+#optionsMenuMainReport > .report-menu-has-submenu.submenu-focused > .report-menu-submenu,
+#optionsMenuMainReport > .report-menu-has-submenu.submenu-open > .report-menu-submenu {
+    display: block !important;
+}
+
+#optionsMenuMainReport > .report-menu-has-submenu > button:disabled + .report-menu-submenu {
+    display: none !important;
+}
+
+#optionsMenu .report-menu-submenu > li {
+    display: block;
+    margin: 0;
+}
+
+#optionsMenu .report-menu-submenu > li > button,
+#optionsMenu .report-menu-submenu > li > .menuitem {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--border-radius-element);
+    background: none;
+    text-align: left;
+}
+
+#optionsMenu .report-menu-submenu > li > button:hover,
+#optionsMenu .report-menu-submenu > li > button:focus-visible,
+#optionsMenu .report-menu-submenu > li > .menuitem:hover,
+#optionsMenu .report-menu-submenu > li > .menuitem:focus-within {
+    background-color: var(--color-background-hover);
+}
+
+#optionsMenuSubRefresh label {
+    flex: 1;
+    cursor: pointer;
+}
+
+#optionsMenuSubTranslate select {
+    width: 100%;
 }
 
 .reportSubHeader,
@@ -385,6 +536,8 @@ button, .button {
 }
 
 #tableContainer {
+    --dt-order-arrow_color: var(--color-main-text);
+    --dt-order-arrow_color-current: var(--color-main-text);
     width: 100%;
     height: 40%;
     background-color: var(--color-main-background);
@@ -432,7 +585,6 @@ button, .button {
 #tableContainer.dataTable thead > tr > th .dt-column-order::after,
 #tableContainer.dataTable thead > tr > td .dt-column-order::before,
 #tableContainer.dataTable thead > tr > td .dt-column-order::after {
-    color: var(--color-main-text);
     opacity: .35;
 }
 
@@ -600,6 +752,7 @@ input.navigationRenameInput:hover {
     background-position: 0;
     background-repeat: no-repeat;
     padding-left: 20px;
+    cursor: pointer;
 }
 
 .sidebarHeaderOpened {
@@ -608,6 +761,7 @@ input.navigationRenameInput:hover {
     background-position: 0;
     background-repeat: no-repeat;
     padding-left: 20px;
+    cursor: pointer;
 }
 
 .sidebarPointer {
@@ -1016,6 +1170,7 @@ div.dt-container .dt-paging .dt-paging-button {
 .analyticsDialogHeaderWrap {
     display: flex;
     flex-direction: column;
+    padding-right: 56px;
 }
 
 .analyticsDialogHeader {
@@ -1109,7 +1264,7 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 .analyticsDialog--enhanced .analyticsDialogHeaderWrap {
-    padding: 28px 32px 20px;
+    padding: 28px 72px 20px 32px;
     border-bottom: 1px solid var(--color-border);
 }
 
@@ -1275,6 +1430,19 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .analyticsEnhancedDialogNavLabel {
     min-width: 0;
+    position: relative;
+    padding-bottom: 3px;
+}
+
+.analyticsEnhancedDialogNavButton--active .analyticsEnhancedDialogNavLabel::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--color-analytics-primary);
+    content: '';
 }
 
 .analyticsModelSelector {
@@ -1533,23 +1701,45 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 
-/* primary-style buttons */
+/* Shared action button styles. The important background color overrides
+ * Nextcloud's default button color while preserving icon background images. */
 .analyticsPrimary {
-    background-color: var(--color-primary-element-light);
+    background-color: var(--color-primary-element) !important;
+    color: var(--color-primary-element-text) !important;
+    border-color: var(--color-primary-element);
 }
 
-.analyticsPrimary:hover {
-    background-color: var(--color-primary-element-light-hover);
+.analyticsPrimary:hover,
+.analyticsPrimary:focus,
+.analyticsPrimary:active {
+    background-color: var(--color-primary-element-hover) !important;
+    color: var(--color-primary-element-text) !important;
+    border-color: var(--color-primary-element-hover);
+}
+
+.analyticsSecondary {
+    background-color: var(--color-primary-element-light) !important;
+    color: var(--color-main-text);
+    border-color: var(--color-border);
+}
+
+.analyticsSecondary:hover,
+.analyticsSecondary:focus,
+.analyticsSecondary:active {
+    background-color: var(--color-primary-element-light-hover) !important;
+    border-color: var(--color-border);
 }
 
 div[id^="analytics-content"] .button:not(.analyticsPrimary),
-.analyticsDialogButtonrow .button:not(.analyticsPrimary) {
-    background-color: transparent;
+.analyticsDialogButtonrow .button:not(.analyticsPrimary),
+.sidebarButtonRow > button:not(.analyticsPrimary) {
+    background-color: var(--color-primary-element-light) !important;
 }
 
 div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
-.analyticsDialogButtonrow .button:not(.analyticsPrimary):hover {
-    background-color: var(--color-background-hover);
+.analyticsDialogButtonrow .button:not(.analyticsPrimary):hover,
+.sidebarButtonRow > button:not(.analyticsPrimary):hover {
+    background-color: var(--color-primary-element-light-hover) !important;
 }
 
 .dropDownList {
@@ -2069,6 +2259,263 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 /* === Panorama === */
 
+.filterReportNames { max-width: 220px; white-space: normal; overflow-wrap: anywhere; font-size: 12px; color: var(--color-text-maxcontrast); }
+#panoramaHeaderRow { display: flex; align-items: center; }
+.panoramaFilterActions { display: flex; gap: 8px; margin-left: auto; margin-right: 20px; }
+.panoramaFilters { width: min(720px, 78vw); max-height: 68vh; overflow-y: auto; padding-right: 4px; }
+.panoramaFilters fieldset { border: 1px solid var(--color-border); border-radius: var(--border-radius-large); padding: 0; margin-bottom: 8px; overflow: hidden; }
+.panoramaFilterCardHeader { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 4px 10px; border-bottom: 1px solid var(--color-border); background-color: var(--color-background-hover); }
+.panoramaFilterEnable { display: flex; align-items: center; justify-content: flex-start; gap: 6px; margin: 0; font-weight: 600; white-space: nowrap; }
+.panoramaFilterSummary { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panoramaFilterMappingCount { color: var(--color-text-maxcontrast); font-size: 12px; white-space: nowrap; }
+.panoramaFilterRemove { margin-left: auto; }
+.panoramaFilterSettings { padding: 10px; }
+.panoramaFilterDefinitionControls { display: grid; grid-template-columns: minmax(160px, 1.4fr) minmax(120px, 1fr) minmax(120px, 1fr); align-items: end; gap: 12px; }
+.panoramaFilterDefinitionControls .panoramaFilterField { flex-direction: column; align-items: stretch; gap: 2px; margin: 0; }
+.panoramaFilterDefinitionControls .panoramaFilterField input:not([type="checkbox"]), .panoramaFilterDefinitionControls .panoramaFilterField select { width: 100%; }
+.panoramaFilterSettings.is-disabled { opacity: .45; }
+.panoramaFilterField { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 6px 0; }
+.panoramaFilterField input:not([type="checkbox"]), .panoramaFilterField select { min-width: 0; width: 50%; }
+.panoramaFilterMappingsTitle { margin: 10px 0 4px; font-weight: 600; }
+.panoramaFilterMappings { max-height: 150px; overflow-y: scroll; scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: var(--color-border-dark) transparent; border: 1px solid var(--color-border); border-radius: var(--border-radius-large); margin: 0; }
+.panoramaFilterMappings::-webkit-scrollbar { width: 12px; }
+.panoramaFilterMappings::-webkit-scrollbar-thumb { background-color: var(--color-border-dark); background-clip: content-box; border: 3px solid transparent; border-radius: 6px; }
+.panoramaFilterMappingHeader, .panoramaFilterMappingRow { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(120px, 1fr) 28px; gap: 8px; align-items: center; min-height: 30px; padding: 0 8px; }
+.panoramaFilterMappingHeader { position: sticky; top: 0; z-index: 1; color: var(--color-text-maxcontrast); font-size: 12px; background-color: var(--color-main-background); border-bottom: 1px solid var(--color-border); }
+.panoramaFilterMappingRow.is-report-start:not(:first-of-type) { border-top: 1px solid var(--color-border); }
+.panoramaFilterMappingRow input { justify-self: center; }
+.panoramaFilterAdd { margin-top: 2px; }
+@media (max-width: 700px) {
+    .panoramaFilterDefinitionControls { grid-template-columns: 1fr; gap: 6px; }
+    .panoramaFilterMappingHeader, .panoramaFilterMappingRow { grid-template-columns: minmax(110px, 1fr) minmax(90px, 1fr) 28px; }
+    .panoramaFilterMappingCount { display: none; }
+}
+.panoramaFilters p { overflow-wrap: anywhere; }
+.bg-azure {
+    background-color: azure;
+}
+
+#optionBtnContainer {
+    z-index: 9999;
+    position: relative;
+    top: 5px;
+    right: 20px;
+    font-size: 24px;
+}
+
+.addPage {
+    z-index: 9999;
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    font-size: 24px;
+}
+
+.editMenuContainer {
+    position: fixed;
+    width: 250px;
+    height: 250px;
+    top: 40%;
+    left: 50%;
+    z-index: 1000;
+}
+
+.editMenu {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.menu-item {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background-color: #12426E;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    /* You'll need to adjust the following transform values for each item
+    transform: translate(0px, 0px); */
+}
+
+.menu-item:hover {
+    background-color: var(--color-element-info);
+}
+
+.editMenu .close-menu-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Additional styles for the close button if necessary */
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1001; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    width: 300px;
+    height: 400px;
+    top: 40%;
+    left: 50%;
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: var(--analytics-surface-radius);
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
+    z-index: 5; /* Ensure it's above content but below menu */
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.overlay.active {
+    background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent overlay */
+}
+
+.overlayText {
+    background-color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
+}
+
+.overlayOptions {
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
+    position: absolute;
+    bottom: 10px;
+    background-color: rgba(255,255,255,0.8);
+    font-size: 12px;
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Optional: adds space between checkbox and label */
+}
+
+#reportSelectorContainer {
+    max-height: 280px; /* Adjust the max height as needed */
+    overflow-y: auto; /* Enables vertical scrolling when content overflows */
+}
+
+.reportSelectorItem {
+    padding: 1px;
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
+}
+
+.reportSelectorItem:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-element-hover);
+    color: var(--color-primary-text);
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
+}
+
+.reportSelectorItem.selected {
+    background-color: var(--color-primary-element-light);
+    color: var(--color-main-text);
+    border-radius: var(--border-radius-element, var(--border-radius-pill));
+}
+
+.panoramaLayoutGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 60vw;
+    max-width: calc(100vw - 104px);
+}
+
+.panoramaLayoutGridCell {
+    width: calc(25% - 20px);
+    border: 1px solid #ddd;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.panoramaLayoutGridCell:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-light-hover);
+}
+
+.panoramaLayoutName {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--color-text-maxcontrast);
+}
+
+.panoramaLayoutGridPreview {
+    height: 100px;
+    overflow: hidden;
+}
+
+.panoramaLayoutGridPreview .flex-container {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.panoramaLayoutGridPreview .flex-item {
+    padding: 0;
+    margin: 2px;
+    border: 1px solid #888;
+}
+
+.panoramaLayoutGridPreview .panoramaSubHeaderRow {
+    display: none;
+}
+
+.heading-anchor,
+.text-readonly-bar {
+    display: none !important;
+}
+
+#analytics-content-panorama.analyticsPdfLightTheme {
+    --color-main-background: #f5f5f5;
+    --color-main-text: #222222;
+    --color-text-maxcontrast: #222222;
+    --color-text-light: #555555;
+    --color-text-lighter: #767676;
+    --color-background-hover: #e8e8e8;
+    --color-border: #d1d1d1;
+    --color-border-dark: #b3b3b3;
+    --color-box-shadow: rgba(0, 0, 0, 0.12);
+    color: #222222;
+}
+
 .panoramaSubHeader {
     margin-left: 15px !important;
 }
@@ -2272,4 +2719,407 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 #body-public #content {
     padding-block-end: initial;
 !important;
+}
+
+.flexibleDatasetMode {
+    display: flex;
+    gap: 18px;
+    margin: 0 0 18px;
+    padding: 0;
+    border: 0;
+}
+
+.flexibleDatasetMode legend {
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.flexibleDatasetMode label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flexibleColumnRow,
+.flexibleMappingRow,
+.flexibleRecordRow {
+    display: grid;
+    grid-template-columns: minmax(130px, 2fr) minmax(95px, 1fr) minmax(110px, 1fr) auto auto auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.flexibleMappingRow {
+    grid-template-columns: minmax(130px, 1fr) minmax(180px, 2fr);
+}
+
+.flexibleRecordRow {
+    grid-template-columns: minmax(130px, 1fr) minmax(180px, 2fr);
+}
+
+.flexibleColumnRow .sidebarInput,
+.flexibleMappingRow .sidebarInput,
+.flexibleRecordRow .sidebarInput {
+    width: 100%;
+}
+
+.flexibleColumnActions {
+    display: flex;
+    gap: 4px;
+}
+
+.flexibleColumnActions button {
+    min-width: 34px;
+    padding: 6px;
+}
+
+.flexibleRecordTable {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: collapse;
+}
+
+.flexibleRecordTable th,
+.flexibleRecordTable td {
+    padding: 7px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: start;
+}
+
+.flexibleRecordTable td:last-child {
+    white-space: nowrap;
+}
+
+.flexibleValidationErrors {
+    color: var(--color-error);
+    white-space: pre-wrap;
+}
+
+/* Chart field roles and the live-data preview share the existing dialog panel. */
+.analyticsDialog--chartOptions .analyticsEnhancedDialogPanel {
+    position: relative;
+    overflow-anchor: none;
+}
+
+.chartColumnMappingToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.chartColumnMappingEditor,
+.chartColumnMappingRole,
+.chartColumnSelections {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+}
+
+.chartColumnMappingEditor {
+    gap: 16px;
+    align-content: start;
+}
+
+.chartColumnMappingRole .chartColumnMappingToolbar {
+    margin-bottom: 0;
+}
+
+.chartColumnMappingRole > label,
+.chartColumnMappingRole .chartColumnMappingToolbar > label {
+    font-weight: 600;
+}
+
+.chartColumnMappingRole select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+}
+
+.chartColumnMappingHint {
+    color: var(--color-text-maxcontrast);
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.chartColumnSelection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 8px 4px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+    background: var(--color-main-background);
+}
+
+.chartColumnSelection > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.chartColumnSelectionActions {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.chartColumnSelectionActions button {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 4px;
+    margin: 0;
+    border: 0;
+    background: transparent;
+}
+
+.chartColumnMappingPreview {
+    min-width: 0;
+    align-self: start;
+    padding: 16px;
+    border-radius: var(--border-radius-large);
+    background: var(--color-main-background);
+}
+
+.chartColumnMappingPreview h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.chartColumnPreviewChart {
+    position: relative;
+    height: 290px;
+    min-width: 0;
+}
+
+.chartColumnMappingSummary {
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--color-border);
+    overflow-wrap: anywhere;
+}
+
+.chartColumnMappingSummary strong {
+    font-weight: 700;
+}
+
+.chartColumnMappingError {
+    color: var(--color-error-text, var(--color-error));
+}
+
+.chartColumnMappingLayout [hidden] {
+    display: none;
+}
+
+@media (pointer: coarse) {
+    .chartColumnSelectionActions button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+/* Visualization options share the same top navigation, settings panel, and preview column. */
+.analyticsDialog--visualizationOptions {
+    /* Keep focus scrolling inside the options panel instead of scrolling the dialog shell. */
+    overflow: clip;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogLayout {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogNav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    grid-column: 1 / -1;
+    width: auto;
+    min-width: 0;
+    padding: 12px 24px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogNavList {
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 36px;
+    overflow: visible;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogNavButton {
+    width: auto;
+    padding: 4px 2px;
+    font-size: 15px;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogDocLink {
+    flex: 0 0 auto;
+    margin: 0 0 0 auto;
+    white-space: nowrap;
+}
+
+.analyticsDialog--visualizationOptions .analyticsEnhancedDialogPanel {
+    padding: 20px;
+}
+
+.analyticsVisualizationOptionsPreview {
+    margin: 16px;
+    min-height: 0;
+    max-height: calc(100% - 32px);
+    overflow: auto;
+}
+
+.tableOptionsPreviewScroll {
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+.tableOptionsModeSelector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tableOptionsModeSelector .analyticsModelCard {
+    min-height: 100px;
+    padding: 12px;
+}
+
+.tableOptionsModeSelector .analyticsModelCardTitle {
+    font-size: 18px;
+}
+
+.analyticsDialog--tableOptions .tableOptionsLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.analyticsTableModeList #tableOptionsLayoutColumns,
+.analyticsTableModeList #tableOptionsLayoutMeasures,
+.analyticsDialog--tableOptions .tableOptionsLayout .dummy,
+.analyticsDialog--tableOptions .tableOptionsLayout .dummy2 {
+    display: none;
+}
+
+.analyticsDialog--tableOptions .tableOptionsLayoutItem {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    height: auto;
+    min-height: 36px;
+}
+
+.analyticsDialog--tableOptions .tableOptionsLayoutItem > span {
+    flex: 1;
+    min-width: 60px;
+    overflow-wrap: anywhere;
+}
+
+.analyticsDialog--tableOptions:not(.analyticsTableModeList) #tableOptionsLayoutRows {
+    margin-top: 8px;
+}
+
+.analyticsDialog--tableOptions #tableOptionsLayoutColumns .tableOptionsLayoutItem,
+.analyticsDialog--tableOptions #tableOptionsLayoutMeasures .tableOptionsLayoutItem {
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.tableOptionsFieldActions {
+    margin-left: auto;
+    align-items: center;
+}
+
+.analyticsDialog--tableOptions .tableOptionsSettingsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.analyticsDialog--tableOptions .tableOptionsSettingsLabel {
+    width: auto;
+    flex: 1 1 140px;
+    white-space: normal;
+}
+
+.analyticsDialog--tableOptions .tableOptionsSettingsValue {
+    flex: 1 1 140px;
+    min-width: 0;
+}
+
+.analyticsDialog--tableOptions .optionsInput {
+    max-width: 100%;
+}
+
+.tableOptionsPreviewColumn {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-background-hover) !important;
+    margin: 0;
+    padding: 4px;
+    font-weight: 600;
+    color: var(--color-main-text);
+    cursor: pointer;
+}
+
+.tableOptionsPreviewColumn:hover {
+    background-color: var(--color-background-dark) !important;
+}
+
+.tableOptionsPreviewColumn:focus-visible {
+    outline: 2px solid var(--color-border-dark);
+    outline-offset: 2px;
+}
+
+#tableOptionsPreviewTable th.tableOptionsSelectedColumn {
+    background: transparent;
+    color: inherit;
+}
+
+#tableOptionsPreviewTable th.tableOptionsSelectedColumn .tableOptionsPreviewColumn {
+    background-color: var(--color-background-hover) !important;
+    color: var(--color-main-text);
+    outline: 2px solid var(--color-border-dark);
+    outline-offset: 2px;
+}
+
+.analyticsTableDense tbody td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+.analyticsTableWrap {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+}
+
+.analyticsTableHighlight {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: var(--border-radius);
+    background: var(--color-warning);
+    color: var(--color-warning-text, #222);
+}
+
+@media (max-width: 800px) {
+    .analyticsDialog--visualizationOptions .analyticsEnhancedDialogLayout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .analyticsDialog--visualizationOptions .analyticsEnhancedDialogNav {
+        padding: 8px 12px;
+    }
+    .analyticsDialog--visualizationOptions .analyticsVisualizationOptionsPreview {
+        max-height: none;
+        margin: 8px;
+    }
 }

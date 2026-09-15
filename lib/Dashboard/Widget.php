@@ -76,12 +76,13 @@ class Widget implements IWidget
     public function load(): void
     {
         Util::addScript('analytics', 'chartOptions');
+        Util::addScript('analytics', '3rdParty/moment.min');
+        Util::addScript('analytics', 'flexible');
         Util::addScript('analytics', 'dashboard');
         Util::addScript('analytics', 'visualization');
         Util::addStyle('analytics', 'dashboard');
         Util::addScript('analytics', '3rdParty/chart.umd');
         Util::addScript('analytics', '3rdParty/chartjs-adapter-moment');
-        Util::addScript('analytics', '3rdParty/moment.min');
         Util::addScript('analytics', '3rdParty/cloner');
         Util::addScript('analytics', '3rdParty/chartjs-plugin-datalabels.min');
     }

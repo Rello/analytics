@@ -9,12 +9,10 @@ const { chromium } = require('playwright');
 const {
   buildScenarioConfig,
   buildUniqueName,
-  clickFirst,
   ensureAnalyticsLoaded,
   attachPageIssueListeners,
   createCapture,
   ensureStoredReportWithDefaultData,
-  openOptionsMenuItem,
   saveAndReloadReport,
 } = require('./common');
 
@@ -40,8 +38,14 @@ async function openRefreshMenu(page, label) {
   if (await page.locator('#refresh0').isVisible().catch(() => false)) {
     return;
   }
-  await openOptionsMenuItem(page, 'optionsMenuRefresh', label);
+  await page.locator('#optionsMenuIcon').click();
+  const refreshButton = page.locator('#optionsMenuRefresh');
+  await refreshButton.waitFor({ state: 'visible', timeout: 15000 });
+  await refreshButton.hover();
   await page.locator('#refresh0').waitFor({ state: 'visible', timeout: 15000 });
+  if (!(await page.locator('#optionsMenuMainReport').isVisible())) {
+    throw new Error(`Expected the main report menu to stay visible while hovering ${label}`);
+  }
 }
 
 (async () => {
@@ -86,7 +90,6 @@ async function openRefreshMenu(page, label) {
     if (!(await page.locator('#refresh0').isChecked())) {
       throw new Error('Expected auto refresh to return to none after reload');
     }
-    await clickFirst(page, ['#backIcon2 button', '#backIcon2'], 'refresh back final');
 
     const result = {
       scriptId: config.scriptId,

@@ -17,6 +17,7 @@ use OCA\Analytics\Service\DatasetService;
 use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Service\VariableService;
+use OCA\Analytics\Service\FlexibleStorageService;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use OCP\Files\IRootFolder;
 use OCP\ITagManager;
@@ -94,7 +95,8 @@ class DatasetServiceTest extends TestCase {
 			$this->createMock(ActivityManager::class),
 			$this->createMock(IRootFolder::class),
 			$this->createMock(VariableService::class),
-			$reportMapper,
+				$reportMapper,
+				$this->createMock(FlexibleStorageService::class),
 		);
 
 		$this->assertFalse($service->update(77, 'foreign', '', '', '', '', 0));
@@ -114,7 +116,8 @@ class DatasetServiceTest extends TestCase {
 			$this->createMock(ActivityManager::class),
 			$this->createMock(IRootFolder::class),
 			$this->createMock(VariableService::class),
-			$this->createMock(ReportMapper::class)
+				$this->createMock(ReportMapper::class),
+				$this->createMock(FlexibleStorageService::class)
 		);
 	}
 

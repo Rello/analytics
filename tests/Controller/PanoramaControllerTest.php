@@ -8,6 +8,46 @@ use OCP\AppFramework\Http\DataResponse;
 use PHPUnit\Framework\TestCase;
 
 class PanoramaControllerTest extends TestCase {
+	public function testResolvePictureFileReturnsFileId(): void {
+		$panoramaService = $this->createMock(PanoramaService::class);
+		$panoramaService->expects($this->once())
+			->method('resolvePictureFile')
+			->with('/Pictures/chart.jpg')
+			->willReturn(42);
+
+		$controller = new PanoramaController(
+			'analytics',
+			$this->createMock(\OCP\IRequest::class),
+			$this->createMock(\Psr\Log\LoggerInterface::class),
+			$panoramaService
+		);
+
+		$response = $controller->resolvePictureFile('/Pictures/chart.jpg');
+
+		$this->assertSame(200, $response->getStatus());
+		$this->assertSame(['fileId' => 42], $response->getData());
+	}
+
+	public function testResolvePictureFileRejectsUnsupportedFile(): void {
+		$panoramaService = $this->createMock(PanoramaService::class);
+		$panoramaService->expects($this->once())
+			->method('resolvePictureFile')
+			->with('/Documents/report.pdf')
+			->willThrowException(new \InvalidArgumentException());
+
+		$controller = new PanoramaController(
+			'analytics',
+			$this->createMock(\OCP\IRequest::class),
+			$this->createMock(\Psr\Log\LoggerInterface::class),
+			$panoramaService
+		);
+
+		$response = $controller->resolvePictureFile('/Documents/report.pdf');
+
+		$this->assertSame(400, $response->getStatus());
+		$this->assertFalse($response->getData());
+	}
+
 	public function testUpdateRejectsUnauthorizedPanorama(): void {
 		$panoramaService = $this->createMock(PanoramaService::class);
 		$panoramaService->expects($this->once())

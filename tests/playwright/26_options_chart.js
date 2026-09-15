@@ -217,6 +217,45 @@ async function setAnalyticsModel(page, selector) {
     }
     await clickFirst(page, ['#analyticsDialogBtnCancel'], 'cancel chart options validation');
 
+    steps.push('persist aggregation function and secondary axis');
+    await clickFirst(page, ['#optionsMenuIcon'], 'options menu icon');
+    const analysisButton = page.locator('#optionsMenuAnalysis');
+    await analysisButton.waitFor({ state: 'visible', timeout: 15000 });
+    await analysisButton.hover();
+    await page.locator('#aggregateIcon').waitFor({ state: 'visible', timeout: 15000 });
+    if (!(await page.locator('#optionsMenuMainReport').isVisible())) {
+      throw new Error('Expected the main report menu to stay visible while hovering Analysis');
+    }
+    await clickFirst(page, ['#aggregateIcon'], 'aggregate chart values');
+    const pendingAggregation = await page.evaluate(() => ({
+      secondaryAxisVisible: OCA.Analytics.chartObject.options.scales.secondary.display,
+      functions: OCA.Analytics.ChartOptions.getGuiState(
+        OCA.Analytics.currentReportData.options.chartoptions
+      ).aggregationFunctions,
+    }));
+    if (pendingAggregation.secondaryAxisVisible !== true || pendingAggregation.functions.length === 0) {
+      throw new Error(`Expected aggregation to enable the secondary axis and persist its selection: ${JSON.stringify(pendingAggregation)}`);
+    }
+    if (!(await page.locator('#optionsMenuAnalysis').evaluate(node => node.classList.contains('report-option-active')))) {
+      throw new Error('Expected the Analysis menu to display the active-option indicator');
+    }
+    await saveAndReloadReport(page, reportName);
+    const savedAggregation = await page.evaluate(() => ({
+      secondaryAxisVisible: OCA.Analytics.chartObject.options.scales.secondary.display,
+      functions: OCA.Analytics.ChartOptions.getGuiState(
+        OCA.Analytics.currentReportData.options.chartoptions
+      ).aggregationFunctions,
+      datasets: OCA.Analytics.chartObject.data.datasets.filter(dataset => dataset.analyticsFunction).length,
+    }));
+    if (savedAggregation.secondaryAxisVisible !== true
+      || savedAggregation.functions.length === 0
+      || savedAggregation.datasets === 0) {
+      throw new Error(`Expected saved aggregation to survive reload: ${JSON.stringify(savedAggregation)}`);
+    }
+    if (!(await page.locator('#optionsMenuAnalysis').evaluate(node => node.classList.contains('report-option-active')))) {
+      throw new Error('Expected the saved aggregation function to retain the Analysis menu indicator');
+    }
+
     steps.push('revert chart options');
     await openChartOptions(page, 'chart options revert');
     await page.locator('#optionsYAxis0').selectOption(initialYAxis);

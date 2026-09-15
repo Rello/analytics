@@ -9,6 +9,8 @@
 namespace OCA\Analytics\Service;
 
 use OCA\Analytics\Db\StorageMapper;
+use OCA\Analytics\Exception\FlexibleStorageException;
+use OCA\Analytics\Storage\DatasetStorageResolver;
 use OCP\DB\Exception;
 use Psr\Log\LoggerInterface;
 
@@ -16,21 +18,24 @@ class StorageService {
 	private $logger;
 	private $StorageMapper;
 	private $ThresholdService;
-	private $DatasetService;
+	private DatasetStorageResolver $DatasetStorageResolver;
+	private FlexibleStorageService $FlexibleStorageService;
 	private $ReportService;
 	private $VariableService;
 
 	public function __construct(
 		LoggerInterface  $logger,
 		StorageMapper    $StorageMapper,
-		DatasetService   $DatasetService,
+		DatasetStorageResolver $DatasetStorageResolver,
+		FlexibleStorageService $FlexibleStorageService,
 		ThresholdService $ThresholdService,
 		VariableService  $VariableService,
 		ReportService    $ReportService
 	) {
 		$this->logger = $logger;
 		$this->StorageMapper = $StorageMapper;
-		$this->DatasetService = $DatasetService;
+		$this->DatasetStorageResolver = $DatasetStorageResolver;
+		$this->FlexibleStorageService = $FlexibleStorageService;
 		$this->ThresholdService = $ThresholdService;
 		$this->VariableService = $VariableService;
 		$this->ReportService = $ReportService;
@@ -48,7 +53,11 @@ class StorageService {
 	public function read($datasetId, $reportMetadata) {
 		$dimensions = [];
 		$header = array();
-		$datasetMetadata = $this->DatasetService->read($datasetId);
+			$resolved = $this->DatasetStorageResolver->resolve((int)$datasetId);
+			$datasetMetadata = $resolved['dataset'];
+			if ($resolved['mode'] === DatasetStorageResolver::FLEXIBLE_SHARED) {
+				return $this->FlexibleStorageService->queryForReport((int)$datasetId, is_array($reportMetadata) ? $reportMetadata : null);
+			}
 		if ($reportMetadata && $reportMetadata['filteroptions'] !== null) {
 			$options = json_decode($reportMetadata['filteroptions'], true);
 		} else {
@@ -60,6 +69,7 @@ class StorageService {
 			// this needs to map the technical name to its display name in the report
 			$dimensions['dimension1'] = $datasetMetadata['dimension1'];
 			$dimensions['dimension2'] = $datasetMetadata['dimension2'];
+			PanoramaFilterService::validateDimensions($reportMetadata['panoramaMappings'] ?? [], $dimensions);
 
 			// return the header texts of the data being transferred according to the current drill down state selected by user
 			// if the dimension is not part of the drill down filter, it is not hidden => to be displayed
@@ -117,6 +127,7 @@ class StorageService {
 				$aggregation = null,
 		bool    $increaseVersion = true
 	) {
+		$this->requireLegacy($datasetId);
 		TODO:
 		//dates in both columns
 		$dimension2 = $this->convertGermanDateFormat($dimension2);
@@ -124,6 +135,7 @@ class StorageService {
 		//$timestamp = $this->convertGermanDateFormat($timestamp);
 		$value = $this->floatvalue($value);
 		$validate = '';
+		$errorMessage = '';
 		$insert = $update = $error = $action = 0;
 
 		// replace text variables like %now%
@@ -139,6 +151,13 @@ class StorageService {
 				$action = $this->StorageMapper->create($datasetId, $dimension1, $dimension2, $value, $user_id, null, $bulkInsert, $aggregation);
 			} catch (\Exception $e) {
 				$error = 1;
+				$errorMessage = 'Storage operation failed; see preceding Analytics log entry';
+				$this->logger->error('Analytics data row storage failed for dataset ' . $datasetId . ': ' . $e->getMessage(), [
+					'datasetId' => $datasetId,
+					'exceptionClass' => $e::class,
+					'exceptionCode' => $e->getCode(),
+					'exception' => $e,
+				]);
 			}
 			if ($action === 'insert') $insert = 1; elseif ($action === 'update') $update = 1;
 			if ($increaseVersion && ($action === 'insert' || $action === 'update')) {
@@ -146,6 +165,7 @@ class StorageService {
 			}
 		} else {
 			$error = 1;
+			$errorMessage = 'Last field must be a valid number';
 		}
 
 		// get all reports for the dataset and evaluate their thresholds for push notifications
@@ -156,12 +176,16 @@ class StorageService {
 			}
 		}
 
-		return [
+		$result = [
 			'insert' => $insert,
 			'update' => $update,
 			'error' => $error,
 			'validate' => $validate
 		];
+		if ($errorMessage !== '') {
+			$result['message'] = $errorMessage;
+		}
+		return $result;
 	}
 
 	/**
@@ -175,6 +199,7 @@ class StorageService {
 	 * @return bool
 	 */
 	public function delete(int $datasetId, $dimension1, $dimension2, ?string $user_id = null) {
+		$this->requireLegacy($datasetId);
 		$result = $this->StorageMapper->delete($datasetId, $dimension1, $dimension2, $user_id);
 		$this->ReportService->increaseVersionByDataset($datasetId);
 		return $result;
@@ -191,6 +216,7 @@ class StorageService {
 	 * @throws Exception
 	 */
 	public function deleteSimulate(int $datasetId, $dimension1, $dimension2) {
+		$this->requireLegacy($datasetId);
 		return $this->StorageMapper->deleteSimulate($datasetId, $dimension1, $dimension2);
 	}
 
@@ -204,6 +230,9 @@ class StorageService {
 	 * @throws Exception
 	 */
 	public function deleteWithFilter(int $datasetId, $filter) {
+		if ($this->DatasetStorageResolver->resolve($datasetId)['mode'] === DatasetStorageResolver::FLEXIBLE_SHARED) {
+			return $this->FlexibleStorageService->deleteWithFilter($datasetId, $filter, false);
+		}
 		$deleted = $this->StorageMapper->deleteWithFilter($datasetId, $filter);
 		if ($deleted > 0) {
 			$this->ReportService->increaseVersionByDataset($datasetId);
@@ -221,6 +250,9 @@ class StorageService {
 	 * @throws Exception
 	 */
 	public function deleteWithFilterSimulate(int $datasetId, $filter) {
+		if ($this->DatasetStorageResolver->resolve($datasetId)['mode'] === DatasetStorageResolver::FLEXIBLE_SHARED) {
+			return $this->FlexibleStorageService->deleteWithFilter($datasetId, $filter, true);
+		}
 		return $this->StorageMapper->deleteWithFilterSimulate($datasetId, $filter);
 	}
 
@@ -231,7 +263,17 @@ class StorageService {
 	 * @return array
 	 */
 	public function getRecordCount(int $datasetId, ?string $user_id = null) {
+		if ($this->DatasetStorageResolver->resolve($datasetId)['mode'] === DatasetStorageResolver::FLEXIBLE_SHARED) {
+			return $this->FlexibleStorageService->getRecordCount($datasetId);
+		}
 		return $this->StorageMapper->getRecordCount($datasetId, $user_id);
+	}
+
+	private function requireLegacy(int $datasetId): void {
+		$mode = $this->DatasetStorageResolver->resolve($datasetId)['mode'];
+		if ($mode !== DatasetStorageResolver::LEGACY) {
+			throw new FlexibleStorageException('legacy_write_not_supported', 'The fixed-field write API cannot modify a flexible dataset.', ['datasetId' => $datasetId, 'storageMode' => $mode], 409);
+		}
 	}
 
 	private function floatvalue($val) {

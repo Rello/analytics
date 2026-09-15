@@ -147,3 +147,6 @@ jobs:
           ./occ app:enable --force "${APP_NAME}"
           ./occ app:list --enabled | grep -F "  - ${APP_NAME}:"
           ./occ status
+
+      - name: Verify flexible storage on ${{ matrix.database }}
+        run: php "apps/${APP_NAME}/tests/integration/flexible_storage_db.php"

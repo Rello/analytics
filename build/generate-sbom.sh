@@ -342,16 +342,6 @@ components << browser_component(
   website: 'https://html2canvas.hertzen.com'
 )
 
-jquery_version = detect_version(root, 'js/3rdParty/jquery.min.js', /jQuery v([^ |]+)/)
-components << browser_component(
-  root,
-  name: 'jquery',
-  version: jquery_version,
-  bom_ref: npm_purl('jquery', jquery_version),
-  path: 'js/3rdParty/jquery.min.js',
-  website: 'https://jquery.com'
-)
-
 jspdf_version = detect_version(root, 'js/3rdParty/jspdf.umd.min.js', /Version\s+([0-9.]+)/)
 components << browser_component(
   root,
@@ -385,7 +375,6 @@ browser_dependency_refs = [
   component_refs.fetch('datatables.net'),
   component_refs.fetch('datatables.net-colreorder'),
   component_refs.fetch('html2canvas'),
-  component_refs.fetch('jquery'),
   component_refs.fetch('jspdf'),
   component_refs.fetch('moment'),
 ]

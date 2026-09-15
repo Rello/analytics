@@ -1,14 +1,63 @@
 # Changelog
 
-## 6.8.0
-
+## Unreleased
 ### Added
-- Link previews (Smart Picker) render the full live report as chart, table or KPI instead of a static card.
-- Link previews render the first page of a panorama with all its report, text and picture widgets.
+- Render live reports and the first panorama page as chart, table, KPI, text, and picture content in link previews (Smart Picker).
+- Add a V4 API endpoint for deleting legacy dataset rows through structured filters, including dynamic date variables.
+- Configure tables interactively with a seven-row live preview independent of report pagination, column formatting, layout controls with accurate empty-field placeholders, shared section navigation with linked documentation and an active-section underline that follows scrolling, a left settings panel paired with a live preview, and draft Apply/Cancel actions; use alternating rows by default in previews and live tables, keep section headings visible when navigating, immediately mark the chosen compact header button for column formatting, prevent Appearance controls from scrolling the dialog shell blank, use report headers as the sole persisted sort control, and support DataTables 3 column metadata.
+- New interactive chart configuration with flexible field mapping and a live-data preview in the shared options-dialog layout.
+- Add the internal foundation for flexible shared datasets and source-independent chart mapping.
+- Configure shared panorama filters with editable report mappings and temporary viewer selections.
+- Allow thresholds to target calculated table columns.
+- Persist aggregation and disaggregation chart functions and show their secondary axis automatically.
+- Mark the Analysis menu when aggregation or disaggregation functions are active.
+
+### Changed
+- Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
+- Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
-- Reports and panoramas shared with the current user resolve correctly in link previews instead of showing "Report not found".
-- The admin setting `link_preview_enabled` disables analytics link previews again.
+- Resolve reports and panoramas shared with the current user in link previews and respect the `link_preview_enabled` admin setting.
+- Normalize spreadsheet dates for reliable chart parsing and render them in the viewer's local format #589.
+- Make aggregation and disaggregation series labels available for translation #593.
+- Require HTTPS when using Basic Authentication with external JSON data sources.
+- Keep legacy data-load simulations focused on the returned rows.
+- Log scheduled data-load and external transport failures with diagnostic details in both messages and context.
+- Show the specific internal-URL validation message when a data load fails.
+- Match navigation and navigation-menu icon colors to their labels in light and dark themes.
+- Export panoramas using a consistent light theme in PDFs.
+- Keep the report menu open while using its hover-based second-level options.
+- Close the navigation settings popover when clicking outside it.
+- Use the standard Analytics dialog for choosing a panorama report.
+- Use the standard Analytics dialog for selecting a panorama layout while keeping all previews visible.
+- Leave more space between dialog headings and the close button.
+- Ask for confirmation before deleting the current panorama page.
+- Normalize primary and secondary button colors and action ordering across screens and dialogs.
+- Update the browser title when selecting a panorama.
+- Preserve slashes in Nextcloud Tables names and ignore malformed entries in the grouped data source selector.
+- Open the panorama content selector only from the edit prompt instead of the entire cell.
+- Close open options and navigation menus when clicking outside them.
+- Toggle sidebar sections when clicking their expand arrow.
+
+## 6.8.1 - 2026-08-27
+### Fixed
+- Restore visualizations on Nextcloud 35 without relying on the removed global Underscore library.
+- Load the bundled Moment library before Analytics dashboard widgets on Nextcloud 35.
+- Restore panorama picture selection without relying on the removed `OC.Files.Client` API.
+
+## 6.8.0 - 2026-08-25
+### Changed
+- Group Nextcloud Tables and their views in the data source selector, showing the table name when collapsed and "Entire table" in the open menu.
+- Respect Nextcloud's administrator setting for external data sources hosted on the local network #579.
+
+### Fixed
+- Restore PDF export for panoramas #584.
+- Open the column picker for empty data sources and show their columns without preview values.
+- Load the bundled Moment library before visualizations on Nextcloud 35.
+
+## 6.7.2 - 2026-08-14
+### Fixed
+- NC35 command signature
 
 ## 6.7.1 - 2026-07-19
 ### Fixed
