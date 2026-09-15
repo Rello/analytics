@@ -44,7 +44,9 @@ OC.L10N.register(
     "Unshare" : "ভাগাভাগি বাতিল ",
     "Password protection" : "Password protection",
     "Copy link" : "লিঙ্ক কপি করো",
+    "Automatic" : "স্বয়ংক্রিয়",
     "Close" : "বন্ধ",
+    "Disabled" : "অকার্যকর",
     "Create" : "তৈরী কর"
 },
 "nplurals=2; plural=(n != 1);");

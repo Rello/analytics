@@ -57,11 +57,14 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Password protection" : "Protección con contraseña",
     "Copy link" : "Copiar liga",
+    "Automatic" : "Automático",
     "Text" : "Texto",
     "1" : "1",
     "2" : "2",
+    "3" : "3",
     "4" : "4",
     "Close" : "Cerrar",
+    "Disabled" : "Deshabilitado",
     "Create" : "Crear"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

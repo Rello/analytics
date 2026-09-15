@@ -378,6 +378,7 @@ OC.L10N.register(
     "Layout" : "Deseño",
     "Columns" : "Columnas",
     "Values" : "Valores",
+    "Display name" : "Nome para amosar",
     "Format" : "Formato",
     "Automatic" : "Automatico",
     "Text" : "Texto",

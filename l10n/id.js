@@ -272,7 +272,6 @@ OC.L10N.register(
     "Showing _START_ to _END_ of _TOTAL_ entries" : "Memperlihatkan _START_ ke _END_ dari _TOTAL_ entri",
     "Showing 0 to 0 of 0 entries" : "Menampilkan 0 hingga 0 dari 0 entri",
     "Show all" : "Lihat semua",
-    "aggregate" : "agregasi",
     "others" : "lainnya",
     "Analytics" : "Analitik",
     "You created a new report: {report}" : "Anda membuat laporan baru: {report}",

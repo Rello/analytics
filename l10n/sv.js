@@ -260,7 +260,6 @@ OC.L10N.register(
     "Showing _START_ to _END_ of _TOTAL_ entries" : "Visar _START_ till _END_ av _TOTAL_ poster",
     "Showing 0 to 0 of 0 entries" : "Visar 0 till 0 av 0 poster",
     "Show all" : "Visa alla",
-    "aggregate" : "aggregera",
     "others" : "andra",
     "Analytics" : "Analyser",
     "You created a new report: {report}" : "Du har skapat en ny rapport: {report}",

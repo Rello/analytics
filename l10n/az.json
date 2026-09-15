@@ -46,7 +46,9 @@
     "Unshare" : "Paylaşımı durdur",
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
+    "Automatic" : "Avtomatik",
     "Close" : "Bağla",
+    "Disabled" : "Dayandırılıb",
     "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

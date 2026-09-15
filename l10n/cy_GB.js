@@ -41,6 +41,7 @@ OC.L10N.register(
     "Unshare" : "Dad-rannu",
     "Password protection" : "Password protection",
     "Copy link" : "Copïo dolen",
+    "Automatic" : "Awtomatig",
     "Close" : "Cau",
     "Sort by" : "Trefnu yn ôl",
     "Create" : "Creu"
