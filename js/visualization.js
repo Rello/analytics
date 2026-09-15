@@ -767,13 +767,56 @@ OCA.Analytics.Visualization = {
             + '</a>';
     },
 
-    applyTableCellRenderer: function (columns) {
+    formatTableLocaleDateValue: function (value) {
+        const text = String(value ?? '');
+        const match = text.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?$/);
+        if (!match) {
+            return text;
+        }
+
+        const [, year, month, day, hour, minute, second] = match;
+        const date = new Date(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+            Number(hour || 0),
+            Number(minute || 0),
+            Number(second || 0)
+        );
+        if (date.getFullYear() !== Number(year)
+            || date.getMonth() !== Number(month) - 1
+            || date.getDate() !== Number(day)
+            || date.getHours() !== Number(hour || 0)
+            || date.getMinutes() !== Number(minute || 0)
+            || date.getSeconds() !== Number(second || 0)
+        ) {
+            return text;
+        }
+
+        const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
+        if (hour !== undefined) {
+            options.hour = '2-digit';
+            options.minute = '2-digit';
+            if (second !== undefined) {
+                options.second = '2-digit';
+            }
+            return date.toLocaleString(undefined, options);
+        }
+        return date.toLocaleDateString(undefined, options);
+    },
+
+    applyTableCellRenderer: function (columns, localizeDates = false) {
         columns.forEach(column => {
             if (column.render) {
                 return;
             }
 
-            column.render = OCA.Analytics.Visualization.renderTableCellContent;
+            column.render = localizeDates
+                ? (data, type) => OCA.Analytics.Visualization.renderTableCellContent(
+                    type === 'display' ? OCA.Analytics.Visualization.formatTableLocaleDateValue(data) : data,
+                    type
+                )
+                : OCA.Analytics.Visualization.renderTableCellContent;
         });
     },
 
@@ -966,9 +1009,12 @@ OCA.Analytics.Visualization = {
                 }
                 const automaticDimension = (!format.format || format.format === 'auto')
                     && (column.analyticsSourceIndex === 0 || (column.analyticsSourceIndex === 1 && /^\d{4}$/.test(String(data)) && Number(data) > 1950 && Number(data) < 2050));
-                const formatted = automaticDimension ? String(data ?? '')
+                let formatted = automaticDimension ? String(data ?? '')
                     : this.formatTableColumnValue(data, format, calculation?.operation === 'percentage');
                 if (type !== 'display') return formatted;
+                if (tableOptions.formatLocales === undefined && format.format !== 'text') {
+                    formatted = this.formatTableLocaleDateValue(formatted);
+                }
                 const escaped = this.escapeHtml(formatted);
                 const below = format.highlightBelow;
                 if (below !== '' && below !== undefined && data !== '' && data !== null
@@ -1027,7 +1073,7 @@ OCA.Analytics.Visualization = {
             if (timeAggregationDisplayConfig) {
                 this.applyTimeAggregationDisplayRenderer(columns, timeAggregationDisplayConfig.dimension, timeAggregationDisplayConfig);
             }
-            this.applyTableCellRenderer(columns);
+            this.applyTableCellRenderer(columns, tableOptions.formatLocales === undefined);
             data = originalData.map(row =>
                 row.map((value, index) => {
                     if (rawSource(index)) {
@@ -1070,7 +1116,7 @@ OCA.Analytics.Visualization = {
                     this.applyTimeAggregationDisplayRenderer(columns, displayIndex, timeAggregationDisplayConfig);
                 }
             }
-            this.applyTableCellRenderer(columns);
+            this.applyTableCellRenderer(columns, tableOptions.formatLocales === undefined);
 
             const rowsLength = layoutConfig.rows.length; // Cache length to avoid repeated property access
 
@@ -1161,7 +1207,7 @@ OCA.Analytics.Visualization = {
                         : OCA.Analytics.Visualization.escapeHtml(values[header] ?? '')),
                 ];
             });
-            this.applyTableCellRenderer(columns);
+            this.applyTableCellRenderer(columns, tableOptions.formatLocales === undefined);
         }
         return {data, columns};
     },

@@ -169,7 +169,7 @@ class LocalSpreadsheet implements IDatasource {
 	}
 
 	private function getCacheMetadata(array $option, int $mtime): array {
-		$currentCacheKey = 'lsx-' . md5($option['link'] . '|' . $mtime);
+		$currentCacheKey = 'lsx-v2-' . md5($option['link'] . '|' . $mtime);
 		$clientCacheKey = isset($option['cacheKey']) ? trim((string)$option['cacheKey'], '"') : '';
 
 		return [
@@ -249,19 +249,6 @@ class LocalSpreadsheet implements IDatasource {
 	 * @throws \PhpOffice\PhpSpreadsheet\Exception
 	 */
 	private function convertExcelDate($spreadsheet, $values, $range): array {
-		$map = [
-			"yyyy" => "Y",  // Four-digit year
-			"yy" => "y",    // Two-digit year
-			"MM" => "m",    // Two-digit month
-			"mmm" => "M",   // Three-letter month abbreviation
-			"mm" => "i",    // Two-digit minutes (lowercase)
-			"dd" => "d",    // Two-digit day
-			"d" => "j",     // Day without leading zeros
-			"hh" => "H",    // 24-hour format
-			"h" => "G",     // 12-hour format
-			"ss" => "s"     // Seconds
-		];
-
 		$start = str_getcsv($range, ':');
 		$startCell = Coordinate::coordinateFromString($start[0]);
 		$startColumn = (int)Coordinate::columnIndexFromString($startCell[0]);
@@ -293,8 +280,9 @@ class LocalSpreadsheet implements IDatasource {
 					// handle date values
 					$excelFormat = rtrim($excelFormat, ";@");
 
-					// Check if it's a duration format (e.g., h:mm, [h]:mm, h:mm:ss)
-					if (preg_match('/[h]+:?[m]+:?[s]*/i', $excelFormat)) {
+					// Check if it's a duration format (e.g., h:mm, [h]:mm, h:mm:ss).
+					// A date-time format can contain the same time tokens.
+					if (!preg_match('/[dy]/i', $excelFormat) && preg_match('/(?:\[h+\]|h+):?m+(?::?s+)?/i', $excelFormat)) {
 						// Convert time duration to decimal
 						$excelTime = $cell->getCalculatedValue();
 						$totalHours = Date::excelToDateTimeObject($excelTime)->format('G'); // Extract hours
@@ -305,9 +293,15 @@ class LocalSpreadsheet implements IDatasource {
 						$totalMinutesValue = ($totalHours * 60) + $totalMinutes + ($totalSeconds / 60);
 						$values[$rowIndex][$columnIndex] = round($totalMinutesValue, 2); // Rounded to 2 decimal places
 					} else {
-						// Regular date formatting
+						// Keep date values independent of spreadsheet and server locales.
+						// Charts can parse the ISO value reliably; presentation formatting
+						// is applied by the client without changing the underlying value.
 						$date = Date::excelToDateTimeObject($cell->getCalculatedValue());
-						$targetFormat = strtr($excelFormat, $map);
+						$formatTokens = preg_replace('/"[^"]*"|\\\\.|\[[^\]]*\]/', '', $excelFormat);
+						$targetFormat = 'Y-m-d';
+						if (preg_match('/[hs]/i', $formatTokens)) {
+							$targetFormat .= preg_match('/s/i', $formatTokens) ? ' H:i:s' : ' H:i';
+						}
 						$values[$rowIndex][$columnIndex] = $date->format($targetFormat);
 					}
 				}

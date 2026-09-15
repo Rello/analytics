@@ -1145,11 +1145,11 @@
                 </div>
             </div>
             <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel"><?php p($l->t('Format all numbers in local format')); ?></div>
+                <div class="tableOptionsSettingsLabel"><?php p($l->t('Format numbers and dates in local format')); ?></div>
                 <div class="tableOptionsSettingsValue">
                     <label class="analyticsSwitch" for="formatLocalesOption">
                         <input type="checkbox" id="formatLocalesOption" role="switch"
-                               aria-label="<?php p($l->t('Format all numbers in local format')); ?>" checked>
+                               aria-label="<?php p($l->t('Format numbers and dates in local format')); ?>" checked>
                         <span class="analyticsSwitchSlider" aria-hidden="true"></span>
                     </label>
                 </div>

@@ -149,7 +149,6 @@ OCA.Analytics.Report = {
                 'x': {
                     type: 'category',
                     time: {
-                        parser: 'YYYY-MM-DD HH:mm',
                         tooltipFormat: 'LL',
                     },
                     distribution: 'linear',
