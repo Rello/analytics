@@ -205,7 +205,7 @@ OCA.Analytics.TableOptions = {
             state.preview = OCA.Analytics.Visualization.buildDataTable(field('tableOptionsPreviewTable'), {
                 ...state.report, options: {...state.report.options, tableoptions: options},
             }, true, undefined, {preview: true});
-            state.columns = state.preview.settings()[0].aoColumns;
+            state.columns = state.preview.settings()[0].columns;
             this.updateColumnChoices();
             state.preview.columns().every(function () {
                 const column = state.columns[this.index()];
