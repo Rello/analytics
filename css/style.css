@@ -287,6 +287,36 @@ button, .button {
     background-color: var(--color-background-hover) !important;
 }
 
+#mobileNavigationToggle {
+    display: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@media only screen and (max-width: 1023px) {
+    #mobileNavigationToggle {
+        display: block;
+        position: absolute;
+        top: -5px;
+        left: 20px;
+        width: 44px;
+        height: 44px;
+        background-size: 24px;
+    }
+
+    #app-navigation.analytics-mobile-navigation-open {
+        transform: translateX(0);
+    }
+
+    #app-navigation.analytics-mobile-navigation-open + #app-content {
+        transform: translateX(300px);
+    }
+}
+
 #analytics-content-into,
 #analytics-content-report,
 #analytics-content-panorama,

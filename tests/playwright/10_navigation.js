@@ -24,6 +24,34 @@ const config = buildScenarioConfig('10');
     await ensureAnalyticsLoaded(page, config);
     visited.push(`loaded:${page.url()}`);
 
+    await page.setViewportSize({ width: 390, height: 844 });
+    const mobileNavigationToggle = page.locator('#mobileNavigationToggle');
+    await mobileNavigationToggle.waitFor({ state: 'visible', timeout: 10000 });
+    const mobileNavigationToggleBounds = await mobileNavigationToggle.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+    });
+    if (
+      mobileNavigationToggleBounds.left < 0 ||
+      mobileNavigationToggleBounds.right > 390 ||
+      mobileNavigationToggleBounds.top < 0 ||
+      mobileNavigationToggleBounds.bottom > 844
+    ) {
+      throw new Error('Expected the mobile navigation toggle to be inside the viewport');
+    }
+    if (await mobileNavigationToggle.getAttribute('aria-expanded') !== 'false') {
+      throw new Error('Expected the mobile navigation drawer to start closed');
+    }
+    await mobileNavigationToggle.click();
+    await page.locator('#app-navigation.analytics-mobile-navigation-open').waitFor({ state: 'visible', timeout: 10000 });
+    if (await mobileNavigationToggle.getAttribute('aria-expanded') !== 'true') {
+      throw new Error('Expected the mobile navigation toggle to report an open drawer');
+    }
+    await page.locator('#overviewButton').click();
+    await page.waitForFunction(() => !document.getElementById('app-navigation')?.classList.contains('analytics-mobile-navigation-open'));
+    visited.push('mobile-navigation-toggle');
+    await page.setViewportSize(config.viewport);
+
     const datasets = await clickFirst(
       page,
       ['#navigationDatasets a', '#app-navigation a[href*="dataset"]', '#navigationDatasets'],

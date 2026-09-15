@@ -16,6 +16,7 @@
 - Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
+- Restore access to the Analytics navigation on mobile browsers #592.
 - Normalize spreadsheet dates for reliable chart parsing and render them in the viewer's local format #589.
 - Make aggregation and disaggregation series labels available for translation #593.
 - Require HTTPS when using Basic Authentication with external JSON data sources.

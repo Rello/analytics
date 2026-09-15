@@ -8,6 +8,9 @@
 
 ?>
 <div id="menuBar">
+    <button id="mobileNavigationToggle" class="analytics-options icon-menu" type="button"
+            aria-controls="app-navigation" aria-expanded="false"
+            aria-label="<?php p($l->t('Navigation')); ?>" title="<?php p($l->t('Navigation')); ?>"></button>
     <div id="optionsMenuIcon" class="analytics-options icon-analytics-more has-tooltip"
          title="<?php p($l->t('Options')); ?>"></div>
     <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
