@@ -178,7 +178,6 @@ Object.assign(OCA.Analytics.Report, {
                     stacked: false,
                     type: 'category',
                     time: {
-                        parser: 'YYYY-MM-DD HH:mm',
                         tooltipFormat: 'LL',
                     },
                     distribution: 'linear',

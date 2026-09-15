@@ -56,6 +56,34 @@ async function setSwitch(page, selector, checked) {
       const visualization = OCA.Analytics.Visualization;
       const encodeCalculations = (items) => items.map((item) => JSON.stringify(item)).join(',');
 
+      const localizedDate = visualization.formatTableLocaleDateValue('2026-08-01');
+      const expectedLocalizedDate = new Date(2026, 7, 1).toLocaleDateString(undefined, {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+      });
+      if (localizedDate !== expectedLocalizedDate) {
+        throw new Error(`Unexpected localized ISO date: ${localizedDate}`);
+      }
+      if (visualization.formatTableLocaleDateValue('2026-13-01') !== '2026-13-01') {
+        throw new Error('Invalid ISO-like dates must not be reformatted');
+      }
+      const localizedColumns = [{}];
+      visualization.applyTableCellRenderer(localizedColumns, true);
+      if (localizedColumns[0].render('2026-08-01', 'sort') !== '2026-08-01'
+        || localizedColumns[0].render('2026-08-01', 'display') !== expectedLocalizedDate) {
+        throw new Error('Localized date rendering changed the sortable ISO value');
+      }
+      const alignedDateColumns = [{
+        analyticsReference: 'source:date', analyticsSourceIndex: 0, className: '',
+      }];
+      visualization.applyTableColumnFormats(alignedDateColumns, {
+        columnFormats: [{reference: 'source:date', format: 'auto', align: 'left'}],
+      });
+      if (!alignedDateColumns[0].className.includes('dt-left')
+        || alignedDateColumns[0].render('2026-08-01', 'sort') !== '2026-08-01'
+        || alignedDateColumns[0].render('2026-08-01', 'display') !== expectedLocalizedDate) {
+        throw new Error('Column alignment disabled localized date rendering');
+      }
+
       const nonPivotOptions = {
         layout: { rows: [0, 1], columns: [], measures: [], notRequired: [2] },
       };

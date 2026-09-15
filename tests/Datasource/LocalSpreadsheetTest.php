@@ -9,6 +9,8 @@ namespace OCA\Analytics\Tests\Datasource;
 use OCA\Analytics\Datasource\LocalSpreadsheet;
 use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Psr\Log\NullLogger;
 
 class LocalSpreadsheetTest extends TestCase {
@@ -23,5 +25,31 @@ class LocalSpreadsheetTest extends TestCase {
 		$method->setAccessible(true);
 
 		$this->assertSame('Spreadsheet range is too large', $method->invoke($spreadsheet, 'A1:A9999999'));
+	}
+
+	public function testConvertExcelDateReturnsCanonicalDateAndTimeValues(): void {
+		$datasource = new LocalSpreadsheet(
+			new FakeL10N(),
+			new NullLogger(),
+			$this->createMock(\OCP\Files\IRootFolder::class)
+		);
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setCellValue('A1', Date::PHPToExcel(new \DateTimeImmutable('2026-08-28 01:15:00')));
+		$sheet->getStyle('A1')->getNumberFormat()->setFormatCode('dd.mm.yy hh:mm');
+		$sheet->setCellValue('B1', Date::PHPToExcel(new \DateTimeImmutable('2026-08-28')));
+		$sheet->getStyle('B1')->getNumberFormat()->setFormatCode('dd/mm/yy');
+		$sheet->setCellValue('C1', Date::PHPToExcel(new \DateTimeImmutable('2026-08-28 01:15:30')));
+		$sheet->getStyle('C1')->getNumberFormat()->setFormatCode('dd.mm.yy hh:mm:ss');
+		$sheet->setCellValue('D1', Date::PHPToExcel(new \DateTimeImmutable('1899-12-31 01:15:00')));
+		$sheet->getStyle('D1')->getNumberFormat()->setFormatCode('[h]:mm');
+
+		$method = new \ReflectionMethod(LocalSpreadsheet::class, 'convertExcelDate');
+		$method->setAccessible(true);
+
+		$this->assertSame(
+			[['2026-08-28 01:15', '2026-08-28', '2026-08-28 01:15:30', 75.0]],
+			$method->invoke($datasource, $spreadsheet, [['', '', '', '']], 'A1:D1')
+		);
 	}
 }

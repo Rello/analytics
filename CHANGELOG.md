@@ -14,7 +14,7 @@
 - Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
 
 ### Fixed
-- Preserve spreadsheet dates with month and minute format tokens correctly #589.
+- Normalize spreadsheet dates for reliable chart parsing and render them in the viewer's local format #589.
 - Make aggregation and disaggregation series labels available for translation #593.
 - Require HTTPS when using Basic Authentication with external JSON data sources.
 - Keep legacy data-load simulations focused on the returned rows.
