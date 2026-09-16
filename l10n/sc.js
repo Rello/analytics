@@ -66,6 +66,7 @@ OC.L10N.register(
     "copy" : "còpia",
     "The password is wrong. Try again." : "Sa crae est isballiada. Torra a proare.",
     "Password" : "Crae",
+    "Navigation" : "Navigatzione",
     "Options" : "Optziones",
     "Translate" : "Borta",
     "Do you like this app?" : "Ti praghet cust'aplicatzione?",

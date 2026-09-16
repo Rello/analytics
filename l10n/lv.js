@@ -127,6 +127,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Parole ir nepareiza. Jāmēģina vēlreiz.",
     "Password" : "Parole",
     "More Information …" : "Vairāk informācijas ...",
+    "Navigation" : "Navigācija",
     "Translate" : "Tulkot",
     "Name" : "Nosaukums",
     "Variables" : "Vērtības",

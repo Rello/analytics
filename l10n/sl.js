@@ -220,6 +220,7 @@ OC.L10N.register(
     "Quickstart" : "Hitri začetek",
     "Intro" : "Uvod",
     "Wiki" : "Wiki",
+    "Navigation" : "Krmarjenje",
     "Options" : "Možnosti",
     "Analysis" : "Analiza",
     "Aggregate values" : "Združi vrednosti",

@@ -65,6 +65,7 @@ OC.L10N.register(
     "copy" : "copiar",
     "The password is wrong. Try again." : "Lo senhal es incorrècte. Ensajatz tornamai.",
     "Password" : "Senhal",
+    "Navigation" : "Navegacion",
     "Options" : "Opcions",
     "Translate" : "Tradurre",
     "1 min" : "1 min",

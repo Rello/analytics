@@ -152,6 +152,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "암호가 잘못되었습니다. 다시 시도하십시오",
     "Password" : "암호",
     "Wiki" : "사전",
+    "Navigation" : "탐색",
     "Options" : "옵션들",
     "Translate" : "번역:",
     "1 min" : "1분",

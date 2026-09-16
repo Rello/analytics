@@ -70,6 +70,7 @@ OC.L10N.register(
     "copy" : "Хуулах ",
     "The password is wrong. Try again." : "Нууц үг буруу байна. Дахин оролдоно уу.",
     "Password" : "Нууц үг",
+    "Navigation" : "Навигаци",
     "Options" : "Сонголтууд",
     "Translate" : "Орчуулга",
     "30 min" : "30 мин",

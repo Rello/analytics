@@ -82,6 +82,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "The password is wrong. Try again.",
     "Password" : "პაროლი",
     "Wiki" : "ვიკი",
+    "Navigation" : "Navigation",
     "Analysis" : "ანალიზი",
     "Translate" : "გადათარგმნე",
     "1 min" : "1 წთ",

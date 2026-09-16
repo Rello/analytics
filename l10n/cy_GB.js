@@ -28,6 +28,7 @@ OC.L10N.register(
     "Issues" : "Materion",
     "Local" : "Lleol",
     "Password" : "Cyfrinair",
+    "Navigation" : "Llywio",
     "Translate" : "Cyfieithu",
     "Name" : "Enw",
     "Export" : "Allforio",

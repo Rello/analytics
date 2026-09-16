@@ -62,6 +62,7 @@ OC.L10N.register(
     "copy" : "copiază",
     "The password is wrong. Try again." : "Parola este incorectă. Încercaţi din nou.",
     "Password" : "Parolă",
+    "Navigation" : "Navigare",
     "Options" : "Opțiuni",
     "Translate" : "Tradu",
     "Name" : "Nume",

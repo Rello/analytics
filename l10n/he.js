@@ -70,6 +70,7 @@ OC.L10N.register(
     "copy" : "עותק",
     "The password is wrong. Try again." : "הססמה שגויה. נא לנסות שוב.",
     "Password" : "ססמה",
+    "Navigation" : "ניווט",
     "Options" : "אפשרויות",
     "Translate" : "תרגום",
     "Name" : "שם",

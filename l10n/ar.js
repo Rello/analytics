@@ -352,7 +352,6 @@ OC.L10N.register(
     "Compact" : "مُدمج",
     "Direction" : "الاتجاه",
     "Show totals" : "عرض المجموع",
-    "Format all numbers in local format" : "تنسيق كل الأرقام بحسب النسق المحلي",
     "Compact visualization" : "تصوُّر مُدمَج",
     "Disabled" : "مُعطّل",
     "Live preview" : "مُعايَنة مُباشِرة",

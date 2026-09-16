@@ -89,6 +89,7 @@ OC.L10N.register(
     "The password is wrong. Try again." : "Пароль няправільны. Паспрабуйце яшчэ раз.",
     "Password" : "Пароль",
     "Wiki" : "Wiki",
+    "Navigation" : "Навігацыя",
     "Options" : "Параметры",
     "Translate" : "Перакласці",
     "30 min" : "30 хв",
