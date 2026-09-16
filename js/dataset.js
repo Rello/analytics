@@ -403,8 +403,18 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         // set the options for a data source
         let fieldValues = OCA.Analytics.Dataset.Dataload.parseOptions(dataload['option']);
         for (let fieldValue in fieldValues) {
-            document.getElementById(fieldValue) ? document.getElementById(fieldValue).value = OCA.Analytics.Dataset.Dataload.decodeEscapedHtml(fieldValues[fieldValue]) : null;
+            const field = document.getElementById(fieldValue);
+            if (field) {
+                const value = OCA.Analytics.Dataset.Dataload.decodeEscapedHtml(fieldValues[fieldValue]);
+                if (field.dataset.type === 'sheetPicker') {
+                    field.dataset.pendingValue = value;
+                } else {
+                    field.value = value;
+                }
+            }
         }
+        const sheetPicker = document.querySelector('#dataloadDetailItems [data-type="sheetPicker"]');
+        if (sheetPicker) OCA.Analytics.Datasource.loadSheetOptions(sheetPicker);
 
         if (dataload['datasource'] === 0) {
             // this is a deletion job

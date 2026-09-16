@@ -2175,10 +2175,6 @@ OCA.Analytics.Filter = {
             const titleCell = document.createElement('div');
             titleCell.className = 'chartOptionsSeriesTitle';
 
-            const grip = document.createElement('span');
-            grip.className = 'icon-analytics-gripLines chartOptionsSeriesGrip';
-            titleCell.appendChild(grip);
-
             const titleText = document.createElement('span');
             titleText.id = 'optionsTitle' + i;
             titleText.textContent = series.label || t('analytics', 'Data series');

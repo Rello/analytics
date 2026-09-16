@@ -64,7 +64,8 @@ class LocalSpreadsheet implements IDatasource {
 		$template[] = [
 			'id' => 'sheet',
 			'name' => $this->l10n->t('Sheet'),
-			'placeholder' => $this->l10n->t('sheet name')
+			'placeholder' => $this->l10n->t('sheet name'),
+			'type' => 'sheetPicker'
 		];
 		$template[] = [
 			'id' => 'range',
@@ -72,6 +73,21 @@ class LocalSpreadsheet implements IDatasource {
 			'placeholder' => $this->l10n->t('e.g. A1:C3,A5:C5')
 		];
 		return $template;
+	}
+
+	/**
+	 * List worksheet names without loading the workbook's cell data.
+	 */
+	public function listWorksheetNames(string $userId, string $path): array {
+		$file = $this->rootFolder->getUserFolder($userId)->get($path);
+		if (!$file instanceof \OCP\Files\File) {
+			throw new \InvalidArgumentException('Spreadsheet path is not a file');
+		}
+
+		include_once __DIR__ . '/../../vendor/autoload.php';
+		$fileName = $file->getStorage()->getLocalFile($file->getInternalPath());
+		$reader = IOFactory::createReader(IOFactory::identify($fileName));
+		return $reader->listWorksheetNames($fileName);
 	}
 
 	/**

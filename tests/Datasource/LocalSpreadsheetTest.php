@@ -14,6 +14,25 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Psr\Log\NullLogger;
 
 class LocalSpreadsheetTest extends TestCase {
+	public function testListWorksheetNamesReadsSelectedWorkbook(): void {
+		$path = __DIR__ . '/../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/locale/Translations.xlsx';
+		$file = $this->createMock(\OCP\Files\File::class);
+		$file->method('getInternalPath')->willReturn('book.xlsx');
+		$file->method('getStorage')->willReturn(new class($path) {
+			public function __construct(private string $path) {}
+			public function getLocalFile(string $internalPath): string { return $this->path; }
+		});
+		$folder = new class($file) {
+			public function __construct(private $file) {}
+			public function get(string $path) { return $this->file; }
+		};
+		$root = $this->createMock(\OCP\Files\IRootFolder::class);
+		$root->expects($this->once())->method('getUserFolder')->with('u1')->willReturn($folder);
+		$datasource = new LocalSpreadsheet(new FakeL10N(), new NullLogger(), $root);
+
+		$this->assertSame(['Excel Localisation', 'Excel Functions'], $datasource->listWorksheetNames('u1', '/reports/book.xlsx'));
+	}
+
 	public function testValidateRangesRejectsOversizedRange(): void {
 		$spreadsheet = new LocalSpreadsheet(
 			new FakeL10N(),

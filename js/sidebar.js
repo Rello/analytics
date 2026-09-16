@@ -308,7 +308,12 @@ OCA.Analytics.Sidebar.Report = {
                     continue;
                 }
 
-                optionField.value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]);
+                const value = OCA.Analytics.Sidebar.Report.decodeEscapedHtml(options[option]);
+                if (optionField.dataset.type === 'sheetPicker') {
+                    optionField.dataset.pendingValue = value;
+                } else {
+                    optionField.value = value;
+                }
                 if (optionField.type === 'checkbox') {
                     optionField.checked = true;
                 }
@@ -321,6 +326,8 @@ OCA.Analytics.Sidebar.Report = {
         } else if ((parseInt(data['type']) === OCA.Analytics.TYPE_INTERNAL_FILE)) { // Old format before 3.1.0
             document.getElementById('link').value = data['link'];
         }
+        const sheetPicker = document.querySelector('#reportDatasourceSection [data-type="sheetPicker"]');
+        if (sheetPicker) OCA.Analytics.Datasource.loadSheetOptions(sheetPicker);
     },
 
     assignEventListeners: function () {

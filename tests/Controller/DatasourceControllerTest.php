@@ -6,6 +6,37 @@ use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
 
 class DatasourceControllerTest extends TestCase {
+    public function testSpreadsheetSheetsListsNamesForCurrentUsersFile(): void {
+        $spreadsheet = $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class);
+        $spreadsheet->expects($this->once())->method('listWorksheetNames')
+            ->with('u1', '/reports/current.xlsx')
+            ->willReturn(['Summary', 'Details']);
+        $variableService = $this->createMock(\OCA\Analytics\Service\VariableService::class);
+        $variableService->expects($this->once())->method('replaceDatasourceText')
+            ->with('/reports/%today%.xlsx')
+            ->willReturn('/reports/current.xlsx');
+        $user = $this->createMock(\OCP\IUser::class);
+        $user->method('getUID')->willReturn('u1');
+        $userSession = $this->createMock(\OCP\IUserSession::class);
+        $userSession->method('getUser')->willReturn($user);
+
+        $response = $this->createController(null, null, null, $variableService, $spreadsheet, $userSession)
+            ->spreadsheetSheets('/reports/%today%.xlsx');
+
+        $this->assertSame(200, $response->getStatus());
+        $this->assertSame(['sheets' => ['Summary', 'Details']], $response->getData());
+    }
+
+    public function testSpreadsheetSheetsRequiresASelectedFile(): void {
+        $spreadsheet = $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class);
+        $spreadsheet->expects($this->never())->method('listWorksheetNames');
+
+        $response = $this->createController(null, null, null, null, $spreadsheet)->spreadsheetSheets();
+
+        $this->assertSame(400, $response->getStatus());
+        $this->assertSame(['sheets' => []], $response->getData());
+    }
+
     /**
      * Verifies datasource providers expose their report templates via indexFiltered().
      */
@@ -719,7 +750,9 @@ class DatasourceControllerTest extends TestCase {
         ?\OCA\Analytics\Datasource\LocalCsv $localCsv = null,
         ?\OCA\Analytics\Datasource\Github $github = null,
         ?\OCP\EventDispatcher\IEventDispatcher $dispatcher = null,
-        ?\OCA\Analytics\Service\VariableService $variableService = null
+        ?\OCA\Analytics\Service\VariableService $variableService = null,
+        ?\OCA\Analytics\Datasource\LocalSpreadsheet $spreadsheet = null,
+        ?\OCP\IUserSession $userSession = null
     ): DatasourceController {
         $appConfig = $this->createMock(\OCP\IAppConfig::class);
         $appConfig->method('getValueString')->willReturn('');
@@ -738,11 +771,12 @@ class DatasourceControllerTest extends TestCase {
             $this->createMock(\OCA\Analytics\Datasource\ExternalJson::class),
             $this->createMock(\OCA\Analytics\Datasource\LocalJson::class),
             $this->createMock(\OCA\Analytics\Datasource\ExternalCsv::class),
-            $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class),
+            $spreadsheet ?? $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class),
             new FakeL10N(),
             $dispatcher ?? $this->createMock(\OCP\EventDispatcher\IEventDispatcher::class),
             $appConfig,
-            $variableService
+            $variableService,
+            $userSession ?? $this->createMock(\OCP\IUserSession::class)
         );
     }
 }

@@ -558,8 +558,12 @@ Object.assign(OCA.Analytics.Datasource = {
             let input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
             input.style.display = 'table-cell';
             if (templateOption.type) {
-                if (templateOption.type === 'tf') {
+                if (templateOption.type === 'tf' || templateOption.type === 'sheetPicker') {
                     input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
+                    if (templateOption.type === 'sheetPicker') {
+                        input.addEventListener('focus', () => OCA.Analytics.Datasource.loadSheetOptions(input));
+                        form.querySelector('#link').addEventListener('change', () => OCA.Analytics.Datasource.loadSheetOptions(input));
+                    }
                 } else if (templateOption.type === 'filePicker') {
                     input.addEventListener('click', OCA.Analytics.Datasource.handleFilepicker);
                 } else if (templateOption.type === 'columnPicker') {
@@ -576,6 +580,55 @@ Object.assign(OCA.Analytics.Datasource = {
             tableRow.appendChild(infoColumn);
         }
         return form;
+    },
+
+    /**
+     * Fill the sheet dropdown from the selected workbook.
+     */
+    loadSheetOptions: async function (input) {
+        const path = input.closest('#dataSourceOptions').querySelector('#link').value.trim();
+        if (path === input.dataset.loadedSheetPath) return;
+
+        input.dataset.loadedSheetPath = path;
+        const savedValue = input.dataset.pendingValue || '';
+        delete input.dataset.pendingValue;
+        const blankOption = document.createElement('option');
+        blankOption.value = '';
+        blankOption.textContent = t('analytics', 'Please select');
+        input.replaceChildren(blankOption);
+        if (!path) return;
+
+        try {
+            const url = OC.generateUrl('apps/analytics/datasource/spreadsheet/sheets')
+                + '?' + new URLSearchParams({link: path});
+            const response = await fetch(url, {headers: OCA.Analytics.headers()});
+            if (!response.ok) throw new Error('Could not list spreadsheet sheets');
+            const data = await response.json();
+            if (input.closest('#dataSourceOptions')?.querySelector('#link')?.value.trim() !== path) return;
+            for (const name of data.sheets) {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                input.appendChild(option);
+            }
+            if (savedValue && !data.sheets.includes(savedValue)) {
+                const option = document.createElement('option');
+                option.value = savedValue;
+                option.textContent = savedValue;
+                input.appendChild(option);
+            }
+            input.value = savedValue;
+        } catch (error) {
+            if (input.closest('#dataSourceOptions')?.querySelector('#link')?.value.trim() !== path) return;
+            if (savedValue) {
+                const option = document.createElement('option');
+                option.value = savedValue;
+                option.textContent = savedValue;
+                input.appendChild(option);
+                input.value = savedValue;
+            }
+            if (input.dataset.loadedSheetPath === path) delete input.dataset.loadedSheetPath;
+        }
     },
 
     /**
@@ -714,6 +767,14 @@ Object.assign(OCA.Analytics.Datasource = {
         input.dataset.type = templateOption.type;
 
         if (OCA.Analytics.Datasource.buildNestedTableSelect(input, templateOption)) {
+            return input;
+        }
+
+        if (templateOption.type === 'sheetPicker') {
+            let option = document.createElement('option');
+            option.value = '';
+            option.innerText = t('analytics', 'Please select');
+            input.appendChild(option);
             return input;
         }
 
@@ -1128,7 +1189,9 @@ Object.assign(OCA.Analytics.Datasource = {
         OC.dialogs.filepicker(
             t('analytics', 'Select file'),
             function (path) {
-                document.querySelector('[data-type="filePicker"]').value = path;
+                const input = document.querySelector('[data-type="filePicker"]');
+                input.value = path;
+                input.dispatchEvent(new Event('change'));
             },
             false,
             mime,

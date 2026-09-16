@@ -1635,14 +1635,6 @@ div.dt-container .dt-paging .dt-paging-button {
     white-space: nowrap;
 }
 
-.chartOptionsSeriesGrip {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    flex: 0 0 auto;
-    opacity: 0.55;
-}
-
 .chartOptionsSeriesColor {
     display: flex;
     justify-content: center;

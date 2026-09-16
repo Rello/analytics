@@ -19,10 +19,12 @@ use OCA\Analytics\Datasource\LocalJson;
 use OCA\Analytics\Datasource\Regex;
 use OCA\Analytics\Service\VariableService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use OCP\IRequest;
+use OCP\IUserSession;
 use OCP\IAppConfig;
 use Psr\Log\LoggerInterface;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -42,6 +44,7 @@ class DatasourceController extends Controller {
 	/** @var IAppConfig */
 	protected $appConfig;
 	private VariableService $VariableService;
+	private IUserSession $userSession;
 
 	const DATASET_TYPE_GROUP = 0;
 	const DATASET_TYPE_LOCAL_CSV = 1;
@@ -68,6 +71,7 @@ class DatasourceController extends Controller {
 		IEventDispatcher $dispatcher,
 		IAppConfig       $appConfig,
 		VariableService  $VariableService,
+		IUserSession     $userSession,
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
@@ -82,6 +86,7 @@ class DatasourceController extends Controller {
 		$this->l10n = $l10n;
 		$this->appConfig = $appConfig;
 		$this->VariableService = $VariableService;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -138,6 +143,25 @@ class DatasourceController extends Controller {
 			$result[$key] = $class->getTemplate();
 		}
 		return $result;
+	}
+
+	/**
+	 * Worksheet suggestions for a file accessible to the current user.
+	 */
+	#[NoAdminRequired]
+	public function spreadsheetSheets(string $link = ''): DataResponse {
+		$user = $this->userSession->getUser();
+		if ($user === null || trim($link) === '') {
+			return new DataResponse(['sheets' => []], 400);
+		}
+
+		try {
+			$path = $this->VariableService->replaceDatasourceText($link);
+			return new DataResponse(['sheets' => $this->LocalSpreadsheetService->listWorksheetNames($user->getUID(), $path)]);
+		} catch (\Throwable $e) {
+			$this->logger->debug('Could not list spreadsheet sheets', ['exception' => $e]);
+			return new DataResponse(['sheets' => []], 400);
+		}
 	}
 
 	/**
