@@ -138,6 +138,13 @@ class PageController extends Controller
 		return $this->main();
 	}
 
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function reportMode()
+	{
+		return $this->main();
+	}
+
     #[NoAdminRequired]
     #[NoCSRFRequired]
     public function dataset()
@@ -151,6 +158,13 @@ class PageController extends Controller
     {
         return $this->main();
     }
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function panoramaMode()
+	{
+		return $this->main();
+	}
 
     /**
      *

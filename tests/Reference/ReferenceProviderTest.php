@@ -66,7 +66,13 @@ class ReferenceProviderTest extends TestCase {
 		$provider = $this->buildProvider();
 
 		$this->assertTrue($provider->matchReference('https://cloud.example.com/apps/analytics/r/5'));
+		$this->assertTrue($provider->matchReference('https://cloud.example.com/apps/analytics/r/5/content'));
+		$this->assertTrue($provider->matchReference('https://cloud.example.com/apps/analytics/r/5/chart'));
+		$this->assertTrue($provider->matchReference('https://cloud.example.com/apps/analytics/r/5/table'));
 		$this->assertTrue($provider->matchReference('https://cloud.example.com/apps/analytics/pa/7'));
+		$this->assertTrue($provider->matchReference('https://cloud.example.com/apps/analytics/pa/7/content'));
+		$this->assertFalse($provider->matchReference('https://cloud.example.com/apps/analytics/pa/7/chart'));
+		$this->assertFalse($provider->matchReference('https://cloud.example.com/apps/analytics/r/5/unknown'));
 		$this->assertFalse($provider->matchReference('https://cloud.example.com/apps/files/'));
 		$this->assertFalse($provider->matchReference('https://cloud.example.com/apps/analytics/'));
 	}
@@ -95,6 +101,7 @@ class ReferenceProviderTest extends TestCase {
 		$richObject = $reference->getRichObject();
 		$this->assertSame(5, $richObject['id']);
 		$this->assertSame('report', $richObject['item_type']);
+		$this->assertSame('link', $richObject['render_mode']);
 		$this->assertTrue($richObject['found']);
 		$this->assertSame('My Report', $richObject['subheader']);
 	}
@@ -114,6 +121,18 @@ class ReferenceProviderTest extends TestCase {
 		$richObject = $reference->getRichObject();
 		$this->assertTrue($richObject['found']);
 		$this->assertSame('Shared Report', $richObject['subheader']);
+	}
+
+	public function testResolveContentModeUsesReportIdBeforeSuffix(): void {
+		$this->reportService->expects($this->once())
+			->method('read')
+			->with(5)
+			->willReturn(['id' => 5, 'name' => 'Combined report']);
+
+		$reference = $this->buildProvider()->resolveReference('https://cloud.example.com/apps/analytics/r/5/table');
+
+		$this->assertSame(5, $reference->getRichObject()['id']);
+		$this->assertSame('table', $reference->getRichObject()['render_mode']);
 	}
 
 	public function testResolveMissingReport(): void {
@@ -141,20 +160,28 @@ class ReferenceProviderTest extends TestCase {
 		$richObject = $reference->getRichObject();
 		$this->assertSame(7, $richObject['id']);
 		$this->assertSame('panorama', $richObject['item_type']);
+		$this->assertSame('link', $richObject['render_mode']);
 		$this->assertTrue($richObject['found']);
 		$this->assertSame('My Panorama', $richObject['subheader']);
 	}
 
-	public function testResolveWithoutTrailingIntegerReturnsNotFound(): void {
+	public function testResolvePanoramaContentMode(): void {
+		$this->panoramaService->expects($this->once())
+			->method('read')
+			->with(7)
+			->willReturn(['id' => 7, 'name' => 'My Panorama']);
+
+		$reference = $this->buildProvider()->resolveReference('https://cloud.example.com/apps/analytics/pa/7/content');
+		$this->assertSame('content', $reference->getRichObject()['render_mode']);
+	}
+
+	public function testResolveWithoutIntegerDoesNotMatch(): void {
 		$this->reportService->expects($this->never())->method('read');
 		$this->shareService->expects($this->never())->method('getSharedReport');
 
 		$reference = $this->buildProvider()->resolveReference('https://cloud.example.com/apps/analytics/r/');
 
-		$this->assertInstanceOf(IReference::class, $reference);
-		$richObject = $reference->getRichObject();
-		$this->assertSame(0, $richObject['id']);
-		$this->assertFalse($richObject['found']);
+		$this->assertNull($reference);
 	}
 
 	public function testResolveUnmatchedUrlReturnsNull(): void {

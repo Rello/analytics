@@ -5,6 +5,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+/* The native picker already names Analytics in its dialog title. */
+.smart-picker-search .vs__dropdown-option:has(.group-name-icon[src*="/analytics/img/app-dark.svg"]) {
+    display: none;
+}
+
 .analytics-reference-widget {
     display: flex;
     flex-direction: column;

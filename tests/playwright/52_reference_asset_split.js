@@ -37,11 +37,14 @@ const chartAssets = [
             window.OCA = {};
             window.OC = {
                 filePath: (_app, type, name) => `https://analytics-assets.test/${type}/${name}`,
+                generateUrl: path => `https://analytics-assets.test${path}`,
+                requestToken: 'test-token',
             };
             window.t = (_app, message) => message;
             window._registerWidget = () => {};
         });
         await page.addScriptTag({path: path.join(root, 'js/reference.js')});
+        await page.addStyleTag({path: path.join(root, 'css/reference.css')});
 
         const previewState = await page.evaluate(async () => {
             const reference = OCA.Analytics.Reference;
@@ -102,6 +105,38 @@ const chartAssets = [
         for (const name of chartAssets) {
             assert.equal(requests.filter(request => request === `js/${name}`).length, 1, name);
         }
+        assert.deepEqual(pageErrors, []);
+
+        const linkIsCard = await page.evaluate(async () => {
+            const card = document.createElement('div');
+            await OCA.Analytics.Reference.renderWidget(card, {
+                id: 12, found: true, item_type: 'report', render_mode: 'link',
+                url: 'https://analytics-assets.test/apps/analytics/r/12', name: 'Analytics Report',
+                subheader: 'Combined',
+            });
+            return !!card.querySelector('.analytics-reference-fallback');
+        });
+        assert.equal(linkIsCard, true);
+
+        const renderedParts = await page.evaluate(async () => {
+            const reference = OCA.Analytics.Reference;
+            const container = document.createElement('div');
+            const parts = [];
+            reference.buildChart = () => { parts.push('chart'); };
+            reference.buildTable = () => { parts.push('table'); };
+            const data = {options: {visualization: 'ct'}, data: [['A', 1], ['B', 2]]};
+            await reference.renderVisualization(null, container, data, false, undefined, 'chart');
+            const chart = [...parts];
+            parts.length = 0;
+            await reference.renderVisualization(null, container, data, false, undefined, 'table');
+            const table = [...parts];
+            parts.length = 0;
+            await reference.renderVisualization(null, container, data, false, undefined, 'content');
+            return {chart, table, content: [...parts]};
+        });
+        assert.deepEqual(renderedParts, {
+            chart: ['chart'], table: ['table'], content: ['chart', 'table'],
+        });
         assert.deepEqual(pageErrors, []);
         console.log('PASS: KPI and table previews skip chart libraries; chart and combined previews load them once.');
     } finally {

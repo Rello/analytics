@@ -73,6 +73,24 @@ OCA.Analytics.Reference = {
     scriptPromises: {},
 
     init: function () {
+        // NcSearch includes its group heading in keyboard navigation even when
+        // CSS hides it. Keep the first Analytics result reachable in one step.
+        document.addEventListener('keydown', (event) => {
+            if (!event.isTrusted || !['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+            const input = event.target;
+            if (!(input instanceof Element) || !input.matches('.smart-picker-search input[role="combobox"]')) return;
+            requestAnimationFrame(() => {
+                if (document.activeElement !== input || input.getAttribute('aria-expanded') !== 'true') return;
+                const active = document.getElementById(input.getAttribute('aria-activedescendant'));
+                if (active?.querySelector('.group-name-icon[src*="/analytics/img/app-dark.svg"]')
+                    && getComputedStyle(active).display === 'none') {
+                    input.dispatchEvent(new KeyboardEvent('keydown', {
+                        key: 'ArrowDown', code: 'ArrowDown', keyCode: 40,
+                        bubbles: true, cancelable: true,
+                    }));
+                }
+            });
+        }, true);
         if (typeof _registerWidget !== 'function') {
             return;
         }
@@ -94,6 +112,11 @@ OCA.Analytics.Reference = {
             || (richObject.item_type !== 'report' && richObject.item_type !== 'panorama')
         ) {
             // covers items the user cannot access and references cached before this widget existed
+            OCA.Analytics.Reference.renderStaticCard(el, richObject);
+            return;
+        }
+
+        if (!richObject.render_mode || richObject.render_mode === 'link') {
             OCA.Analytics.Reference.renderStaticCard(el, richObject);
             return;
         }
@@ -155,13 +178,19 @@ OCA.Analytics.Reference = {
             headerLink.textContent = data.options.name;
         }
 
+        const configuredVisualization = data.options?.visualization;
+        if ((richObject.render_mode === 'chart' && configuredVisualization !== 'ct' && configuredVisualization !== 'chart')
+            || (richObject.render_mode === 'table' && configuredVisualization !== 'ct' && configuredVisualization !== 'table')) {
+            throw new Error('selected report view is no longer available');
+        }
+
         if (data.status === 'nodata' || !Array.isArray(data.data) || data.data.length === 0) {
             body.replaceChildren(OCA.Analytics.Reference.buildMessage(t('analytics', 'No data found')));
             return;
         }
 
         data.data = OCA.Analytics.Visualization.formatDates(data.data);
-        await OCA.Analytics.Reference.renderVisualization(el, body, data, false);
+        await OCA.Analytics.Reference.renderVisualization(el, body, data, false, undefined, richObject.render_mode);
     },
 
     renderPanorama: async function (el, richObject, headerLink, body) {
@@ -280,8 +309,15 @@ OCA.Analytics.Reference = {
      * dispatch a processed data payload to chart / KPI / table rendering
      * compact = panorama cell; legend only applies to compact charts
      */
-    renderVisualization: async function (el, container, data, compact, legend) {
-        const visualization = data.options.visualization;
+    renderVisualization: async function (el, container, data, compact, legend, renderMode = 'content') {
+        const configuredVisualization = data.options.visualization;
+        // A mode can hide one half of a combined report, never invent a view
+        // that the report itself does not provide.
+        const visualization = configuredVisualization === 'ct' && renderMode === 'chart'
+            ? 'chart'
+            : configuredVisualization === 'ct' && renderMode === 'table'
+                ? 'table'
+                : configuredVisualization;
         const registryEntry = OCA.Analytics.Reference.widgetRegistry.get(el);
 
         if (visualization === 'table' && data.data.length === 1) {
