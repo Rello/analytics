@@ -58,6 +58,7 @@ Supported identifiers:
 - `49`, `table-preview` (table preview, formatting, draft lifecycle, pivot validation, and stable column references)
 - `50`, `share`, `navigation-share`
 - `51`, `favorites`, `navigation-favorites`
+- `52`, `reference-assets` (isolated link-preview asset loading)
 - `91`, `91-delete`, `report-delete`, `delete`
 - `92`, `92-delete`, `group-delete`
 

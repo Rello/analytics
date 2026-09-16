@@ -68,6 +68,7 @@ OCA.Analytics.Reference = {
     // widget root element => {canvases: [], tableUids: []}, used by the destroy callback
     widgetRegistry: new Map(),
     coreAssetsPromise: null,
+    chartAssetsPromise: null,
     tableAssetsPromise: null,
     scriptPromises: {},
 
@@ -300,7 +301,10 @@ OCA.Analytics.Reference = {
         }
 
         if (visualization === 'ct') {
-            await OCA.Analytics.Reference.ensureTableAssets();
+            await Promise.all([
+                OCA.Analytics.Reference.ensureChartAssets(),
+                OCA.Analytics.Reference.ensureTableAssets(),
+            ]);
             container.replaceChildren();
             container.classList.add('analytics-reference-ct');
             const chartArea = document.createElement('div');
@@ -315,6 +319,7 @@ OCA.Analytics.Reference = {
         }
 
         // 'chart' and anything unknown
+        await OCA.Analytics.Reference.ensureChartAssets();
         container.replaceChildren();
         OCA.Analytics.Reference.buildChart(container, data, compact, legend, registryEntry);
     },
@@ -338,7 +343,7 @@ OCA.Analytics.Reference = {
         const uid = OCA.Analytics.Reference.nextUid();
         table.id = 'analyticsReferenceTable' + uid;
         container.appendChild(table);
-        OCA.Analytics.Visualization.buildDataTable(table, data, true, uid);
+        OCA.Analytics.Visualization.buildDataTable(table, data, true, uid, {referencePreview: true});
         if (registryEntry) {
             registryEntry.tableUids.push(uid);
         }
@@ -724,24 +729,13 @@ OCA.Analytics.Reference = {
     // *** lazy asset loading
     // *************
 
-    // the chart stack (~600KB) is only loaded once an analytics reference is actually
-    // rendered, not on every page that might show references (Talk, Text, Tables)
+    // Data preparation and visualization helpers are shared by charts, tables, and KPIs.
     ensureCoreAssets: function () {
         if (OCA.Analytics.Reference.coreAssetsPromise) {
             return OCA.Analytics.Reference.coreAssetsPromise;
         }
         const load = OCA.Analytics.Reference.loadScript;
-        OCA.Analytics.Reference.coreAssetsPromise = Promise.all([
-            load('3rdParty/moment.min', () => window.moment),
-            load('3rdParty/cloner', () => window.cloner),
-        ])
-            .then(() => load('3rdParty/chart.umd', () => window.Chart))
-            .then(() => Promise.all([
-                load('3rdParty/chartjs-adapter-moment'),
-                load('3rdParty/chartjs-plugin-datalabels.min', () => window.ChartDataLabels),
-                load('3rdParty/chartjs-plugin-funnel.min'),
-                load('3rdParty/chartjs-plugin-annotation.min'),
-            ]))
+        OCA.Analytics.Reference.coreAssetsPromise = load('3rdParty/moment.min', () => window.moment)
             .then(() => load('flexible', () => OCA.Analytics.Flexible && OCA.Analytics.Flexible.seriesOptions))
             .then(() => load('chartOptions', () => OCA.Analytics.ChartOptions && OCA.Analytics.ChartOptions.parseAndNormalize))
             .then(() => load('visualization', () => OCA.Analytics.Visualization && OCA.Analytics.Visualization.buildChart))
@@ -755,6 +749,25 @@ OCA.Analytics.Reference = {
                 OCA.Analytics.Report.hideReportMenu = OCA.Analytics.Report.hideReportMenu || function () {};
             });
         return OCA.Analytics.Reference.coreAssetsPromise;
+    },
+
+    ensureChartAssets: function () {
+        if (OCA.Analytics.Reference.chartAssetsPromise) {
+            return OCA.Analytics.Reference.chartAssetsPromise;
+        }
+        const load = OCA.Analytics.Reference.loadScript;
+        OCA.Analytics.Reference.chartAssetsPromise = OCA.Analytics.Reference.ensureCoreAssets()
+            .then(() => Promise.all([
+                load('3rdParty/cloner', () => window.cloner),
+                load('3rdParty/chart.umd', () => window.Chart)
+                    .then(() => Promise.all([
+                        load('3rdParty/chartjs-adapter-moment'),
+                        load('3rdParty/chartjs-plugin-datalabels.min', () => window.ChartDataLabels),
+                        load('3rdParty/chartjs-plugin-funnel.min'),
+                        load('3rdParty/chartjs-plugin-annotation.min'),
+                    ])),
+            ]));
+        return OCA.Analytics.Reference.chartAssetsPromise;
     },
 
     ensureTableAssets: function () {

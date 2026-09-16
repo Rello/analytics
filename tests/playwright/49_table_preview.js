@@ -67,6 +67,41 @@ const config = buildScenarioConfig('49');
         assert.equal(liveStripeProbe.defaultEnabled, true);
         assert.equal(liveStripeProbe.disabled, true);
         assert.notEqual(liveStripeProbe.defaultShadows[0], liveStripeProbe.defaultShadows[1]);
+        const referencePreviewProbe = await page.evaluate(() => {
+            const host = document.createElement('div');
+            host.style.width = '600px';
+            const table = document.createElement('table');
+            host.appendChild(table);
+            document.body.appendChild(host);
+            const uid = 'referencePreview888001';
+            const before = DataTable.settings.length;
+            const instance = OCA.Analytics.Visualization.buildDataTable(table, {
+                header: ['Name', 'Value'],
+                data: Array.from({length: 15}, (_, index) => ['Row ' + index, index]),
+                thresholds: [],
+                options: {id: 888001, tableoptions: {length: 25}, filteroptions: {}},
+            }, true, uid, {referencePreview: true});
+            const container = instance.table().container();
+            const result = {
+                rows: table.querySelectorAll('tbody tr').length,
+                pageLength: instance.page.len(),
+                total: instance.page.info().recordsTotal,
+                topControls: container.querySelectorAll('.dt-search, .dt-length, .dt-info').length,
+                pagination: container.querySelectorAll('.dt-paging').length,
+                registered: OCA.Analytics.tableObject[888001] === instance,
+            };
+            instance.page(1).draw('page');
+            result.secondPage = instance.page.info().page;
+            result.secondPageRows = table.querySelectorAll('tbody tr').length;
+            instance.destroy();
+            delete OCA.Analytics.tableObject[888001];
+            host.remove();
+            return {...result, cleanedUp: DataTable.settings.length === before};
+        });
+        assert.deepEqual(referencePreviewProbe, {
+            rows: 10, pageLength: 10, total: 15, topControls: 0, pagination: 1,
+            registered: true, secondPage: 1, secondPageRows: 5, cleanedUp: true,
+        });
         await open();
         const navigationOffset = await page.locator('.analyticsEnhancedDialogNav').evaluate(nav => {
             const bounds = nav.getBoundingClientRect();

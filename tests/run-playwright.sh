@@ -95,6 +95,9 @@ case "${SCENARIO}" in
   51|favorites|navigation-favorites)
     SCRIPT_PATH="tests/playwright/51_navigation_favorites.js"
     ;;
+  52|reference-assets)
+    SCRIPT_PATH="tests/playwright/52_reference_asset_split.js"
+    ;;
   91|91-delete|report-delete|delete)
     SCRIPT_PATH="tests/playwright/91_report_delete.js"
     ;;

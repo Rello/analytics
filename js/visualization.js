@@ -834,6 +834,7 @@ OCA.Analytics.Visualization = {
      */
     buildDataTable: function (domTarget, jsondata, ordering = true, uniqueId, renderOptions = {}) {
         const preview = renderOptions.preview === true;
+        const referencePreview = renderOptions.referencePreview === true;
 
         if (!uniqueId) {
             uniqueId = jsondata.options.id;
@@ -847,7 +848,7 @@ OCA.Analytics.Visualization = {
             OCA.Analytics.tableObject[uniqueId] = [];
         }
 
-        if (!preview) this.showElement('tableContainer');
+        if (!preview && !referencePreview) this.showElement('tableContainer');
 
         // get current table state
         let tableOptions = {...(jsondata.options.tableoptions || {})};
@@ -894,10 +895,11 @@ OCA.Analytics.Visualization = {
 
         // check table length => show/hide navigation
         let isDataLengthGreaterThanDefault = data.length > ((tableOptions && tableOptions.length) || defaultLength);
-        // never show table navigation in Panorama
-        if (OCA.Analytics.isPanorama || preview) {
+        // Keep the editor and Panorama tables free of navigation controls.
+        if (OCA.Analytics.isPanorama || preview || referencePreview) {
             isDataLengthGreaterThanDefault = false;
         }
+        const referenceHasMorePages = referencePreview && data.length > defaultLength;
 
         const footerRow = domTarget.createTFoot().insertRow(0);
         columns.forEach(() => footerRow.appendChild(document.createElement('td')));
@@ -908,13 +910,13 @@ OCA.Analytics.Visualization = {
                 topStart: isDataLengthGreaterThanDefault ? 'pageLength' : null,
                 topEnd: isDataLengthGreaterThanDefault ? 'search' : null,
                 bottomStart: isDataLengthGreaterThanDefault ? 'info' : null,
-                bottomEnd: isDataLengthGreaterThanDefault ? 'paging' : null,
+                bottomEnd: isDataLengthGreaterThanDefault || referenceHasMorePages ? 'paging' : null,
             },
-            colReorder: preview ? {...(typeof safeColReorder === 'object' ? safeColReorder : {}), enable: false} : safeColReorder,
+            colReorder: preview || referencePreview ? {...(typeof safeColReorder === 'object' ? safeColReorder : {}), enable: false} : safeColReorder,
             order: tableOptions.order || defaultOrder,
-            // Keep the editor preview compact and independent from the report's
-            // user-configurable pagination. Totals still use the complete data set.
-            pageLength: preview ? previewLength : tableOptions.length || defaultLength,
+            // Reference previews use ten-row pages with paging below the table;
+            // the editor preview remains a fixed excerpt. Totals use all data.
+            pageLength: preview ? previewLength : referencePreview ? defaultLength : tableOptions.length || defaultLength,
             pagingType: 'simple_numbers',
             //scrollX: true,
             autoWidth: false,
@@ -939,7 +941,7 @@ OCA.Analytics.Visualization = {
         }
 
         if (!preview) OCA.Analytics.tableObject[uniqueId] = instance;
-        if (!preview && !OCA.Analytics.isPanorama) {
+        if (!preview && !referencePreview && !OCA.Analytics.isPanorama) {
             // reset initialization flag for this table
             OCA.Analytics.Visualization.dataTableInitialized[uniqueId] = false;
 
