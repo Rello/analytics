@@ -2951,9 +2951,17 @@ OCA.Analytics.Visualization = {
         }
 
         //}
-        if (type === 'intro' || type === 'warning' || type === 'loading') {
+        const menuBar = document.getElementById('menuBar');
+        const isOverview = type === 'intro' || type === 'warning' || type === 'loading';
+        const hasMobileNavigation = document.getElementById('mobileNavigationToggle') !== null;
+
+        if (isOverview && hasMobileNavigation) {
+            menuBar?.classList.add('analytics-mobile-navigation-only');
+            OCA.Analytics.Visualization.showElement('menuBar');
+        } else if (isOverview) {
             OCA.Analytics.Visualization.hideElement('menuBar');
         } else {
+            menuBar?.classList.remove('analytics-mobile-navigation-only');
             OCA.Analytics.Visualization.showElement('menuBar');
         }
     }

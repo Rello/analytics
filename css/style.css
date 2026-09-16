@@ -298,6 +298,14 @@ button, .button {
 }
 
 @media only screen and (max-width: 1023px) {
+    #menuBar.analytics-mobile-navigation-only {
+        height: 0;
+    }
+
+    #menuBar.analytics-mobile-navigation-only > :not(#mobileNavigationToggle) {
+        display: none !important;
+    }
+
     #mobileNavigationToggle {
         display: block;
         position: absolute;
@@ -314,6 +322,12 @@ button, .button {
 
     #app-navigation.analytics-mobile-navigation-open + #app-content {
         transform: translateX(300px);
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    #menuBar.analytics-mobile-navigation-only {
+        display: none !important;
     }
 }
 
@@ -2639,6 +2653,85 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .pageScroll.highlighted {
     color: var(--color-element-warning, var(--color-warning));
     opacity: 0.8;
+}
+
+@media (max-width: 700px) {
+    #analytics-content-panorama {
+        height: auto;
+        min-height: 100%;
+    }
+
+    #panoramaHeaderRow {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    #analytics-content-panorama .reportHeader,
+    #analytics-content-panorama .panoramaSubHeader {
+        box-sizing: border-box;
+        width: calc(100% - 60px);
+        max-width: calc(100% - 60px);
+        background-size: 100% 100%;
+    }
+
+    #analytics-content-panorama .reportHeader {
+        flex: 1 1 calc(100% - 60px);
+        font-size: 16px;
+        font-weight: normal;
+        margin: 25px 30px 0;
+    }
+
+    #panoramaHeaderRow .panoramaFilterActions {
+        flex: 1 0 100%;
+        justify-content: flex-end;
+        margin: 0 30px;
+    }
+
+    #panoramaHeaderRow .panoramaFilterActions:has(button:not([hidden])) {
+        margin-top: 8px;
+    }
+
+    #analytics-content-panorama .pages {
+        align-items: flex-start;
+        height: auto;
+        min-height: calc(100% - 69px);
+    }
+
+    #analytics-content-panorama .flex-container {
+        box-sizing: border-box;
+        height: auto;
+        min-height: 100%;
+    }
+
+    #analytics-content-panorama .panoramaSubHeaderRow {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    #analytics-content-panorama .panoramaSubHeader {
+        width: calc(100% - 30px);
+        max-width: calc(100% - 30px);
+        margin: 0 15px 10px !important;
+    }
+
+    #analytics-content-panorama .flex-row {
+        flex: 0 0 auto;
+        flex-direction: column;
+        height: auto !important;
+    }
+
+    #analytics-content-panorama .flex-item {
+        box-sizing: border-box;
+        flex: 0 0 340px;
+        width: calc(100% - 30px);
+        height: 340px !important;
+        min-height: 340px;
+        overflow: auto;
+    }
+
+    #analytics-content-panorama .textContainer {
+        padding-left: 0;
+    }
 }
 
 /* === Datsets === */

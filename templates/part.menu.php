@@ -162,13 +162,13 @@
                 </button>
             </li>
             <li>
-                <button id="optionsMenuPanoramaLayout">
+                <button id="optionsMenuPanoramaLayout" disabled>
                     <span class="icon-analytics-drilldown"></span>
                     <span><?php p($l->t('Change layout')); ?></span>
                 </button>
             </li>
             <li>
-                <button id="optionsMenuPanoramaDeletePage">
+                <button id="optionsMenuPanoramaDeletePage" disabled>
                     <span class="icon-delete"></span>
                     <span><?php p($l->t('Delete current page')); ?></span>
                 </button>

@@ -544,15 +544,11 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     updateOptionsMenuContent: function () {
-        if (OCA.Analytics.currentPanorama.permissions && parseInt(OCA.Analytics.currentPanorama.permissions) === OCA.Analytics.SHARE_PERMISSION_UPDATE) {
-            document.getElementById('optionsMenuPanoramaEdit').disabled = false;
-            document.getElementById('optionsMenuPanoramaLayout').disabled = false;
-            document.getElementById('optionsMenuPanoramaDeletePage').disabled = false;
-        } else {
-            document.getElementById('optionsMenuPanoramaEdit').disabled = true;
-            document.getElementById('optionsMenuPanoramaLayout').disabled = true;
-            document.getElementById('optionsMenuPanoramaDeletePage').disabled = true;
-        }
+        const canEdit = OCA.Analytics.currentPanorama.permissions
+            && parseInt(OCA.Analytics.currentPanorama.permissions) === OCA.Analytics.SHARE_PERMISSION_UPDATE;
+        document.getElementById('optionsMenuPanoramaEdit').disabled = !canEdit;
+        document.getElementById('optionsMenuPanoramaLayout').disabled = !canEdit || !OCA.Analytics.editMode;
+        document.getElementById('optionsMenuPanoramaDeletePage').disabled = !canEdit || !OCA.Analytics.editMode;
     },
 
     hideOptionMenu: function () {
@@ -576,6 +572,7 @@ Object.assign(OCA.Analytics.Panorama = {
             OCA.Analytics.Panorama.updateNavButtons();
             OCA.Analytics.Panorama.hideOptionMenu();
         }
+        OCA.Analytics.Panorama.updateOptionsMenuContent();
         OCA.Analytics.PanoramaFilters.updateButtons();
     },
 

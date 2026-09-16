@@ -49,6 +49,13 @@ const config = buildScenarioConfig('10');
     }
     await page.locator('#overviewButton').click();
     await page.waitForFunction(() => !document.getElementById('app-navigation')?.classList.contains('analytics-mobile-navigation-open'));
+    await mobileNavigationToggle.waitFor({ state: 'visible', timeout: 10000 });
+    if (!(await page.locator('#menuBar').evaluate((element) => element.classList.contains('analytics-mobile-navigation-only')))) {
+      throw new Error('Expected the overview dashboard to retain only the mobile navigation control');
+    }
+    if (await page.locator('#optionsMenuIcon').isVisible()) {
+      throw new Error('Expected overview dashboard report options to remain hidden');
+    }
     visited.push('mobile-navigation-toggle');
     await page.setViewportSize(config.viewport);
 
