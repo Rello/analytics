@@ -143,6 +143,7 @@ OC.L10N.register(
     "Quickstart" : "Aniciu rápidu",
     "Intro" : "Introducción",
     "Wiki" : "Wiki",
+    "Navigation" : "Navegación",
     "Options" : "Opciones",
     "Analysis" : "Análisis",
     "Translate" : "Traducir",

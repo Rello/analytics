@@ -576,6 +576,7 @@
     "Default sort" : "Ordenação padrão",
     "Direction" : "Direção",
     "Show totals" : "Mostrar totais",
+    "Format numbers and dates in local format" : "Formatar números e datas no formato local",
     "Compact visualization" : "Visualização compacta",
     "Highlighting" : "Destaque",
     "Highlight values below a limit with a background and downward marker. Existing report thresholds also apply." : "Destaque os valores abaixo de um limite com um fundo e um marcador voltado para baixo. Os limites existentes no relatório também se aplicam.",

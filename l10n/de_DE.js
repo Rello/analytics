@@ -578,6 +578,7 @@ OC.L10N.register(
     "Default sort" : "Standard-Sortierung",
     "Direction" : "Richtung",
     "Show totals" : "Summen anzeigen",
+    "Format numbers and dates in local format" : "Zahlen und Datumsangaben im lokalen Format formatieren",
     "Compact visualization" : "Kompakte Visualisierung",
     "Highlighting" : "Hervorhebung",
     "Highlight values below a limit with a background and downward marker. Existing report thresholds also apply." : "Werte unterhalb eines Grenzwerts werden durch einen Hintergrund und eine nach unten gerichtete Markierung hervorgehoben. Bestehende Berichtsschwellenwerte gelten ebenfalls.",
