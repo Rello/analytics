@@ -232,6 +232,7 @@ OC.L10N.register(
     "Quickstart" : "Inicio rápido",
     "Intro" : "Intro",
     "Wiki" : "Wiki",
+    "Navigation" : "Navegación",
     "Options" : "Opciones",
     "Analysis" : "Análisis",
     "Aggregate values" : "Agregar valores",

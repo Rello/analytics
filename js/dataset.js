@@ -961,9 +961,18 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
     },
 
     wizard: function () {
-        document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Dataset.Dataset.create);
+        const nameInput = document.getElementById('wizardDatasetName');
+        const createButton = document.getElementById('wizardNewCreate');
+        createButton.addEventListener('click', OCA.Analytics.Dataset.Dataset.create);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.close);
+        nameInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                createButton.click();
+            }
+        });
         OCA.Analytics.Dataset.Dataset.initializeCreationEditor();
+        nameInput.focus();
     },
 
     create: function () {

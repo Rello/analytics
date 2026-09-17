@@ -78,6 +78,7 @@ OC.L10N.register(
     "copy" : "kopiraj",
     "The password is wrong. Try again." : "Pogrešna zaporka. Pokušajte ponovno.",
     "Password" : "Zaporka",
+    "Navigation" : "Navigacija",
     "Options" : "Mogućnosti",
     "Translate" : "Prevedi",
     "30 min" : "30 min",

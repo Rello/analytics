@@ -63,8 +63,10 @@ const reportName = buildUniqueName('Flexible sales report');
 
     steps.push('create the flexible schema through the dataset wizard');
     await page.evaluate(() => OCA.Analytics.handlers.create.dataset());
-    await page.locator('#wizardDatasetName').waitFor({state: 'visible'});
-    await page.locator('#wizardDatasetName').fill(datasetName);
+    const datasetNameInput = page.locator('#wizardDatasetName');
+    await datasetNameInput.waitFor({state: 'visible'});
+    assert.equal(await datasetNameInput.evaluate(input => input === document.activeElement), true);
+    await datasetNameInput.fill(datasetName);
     assert.equal(await page.locator('.flexibleDatasetMode').isVisible(), false);
     await page.locator('input[name="wizardDatasetMode"][value="flexible_shared"]').evaluate(input => {
       input.checked = true;
@@ -80,7 +82,7 @@ const reportName = buildUniqueName('Flexible sales report');
     await rows.nth(4).locator('.flexibleColumnName').fill('Cost');
     const createResponse = page.waitForResponse(response => response.request().method() === 'POST'
       && response.url().endsWith('/apps/analytics/dataset/flexible'));
-    await page.locator('#wizardNewCreate').click();
+    await datasetNameInput.press('Enter');
     const created = await (await createResponse).json();
     datasetId = Number(created.id);
     assert.equal(created.storageMode, 'flexible_shared');

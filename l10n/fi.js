@@ -171,6 +171,7 @@ OC.L10N.register(
     "Quickstart" : "Pika-aloitus",
     "Intro" : "Johdanto",
     "Wiki" : "Wiki",
+    "Navigation" : "Navigointi",
     "Options" : "Valinnat",
     "Analysis" : "Analyysi",
     "Translate" : "Käännä",

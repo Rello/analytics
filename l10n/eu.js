@@ -240,6 +240,7 @@ OC.L10N.register(
     "Quickstart" : "Hasiera azkarra",
     "Intro" : "Sarrera",
     "Wiki" : "Wikia",
+    "Navigation" : "Nabigazioa",
     "Options" : "Aukerak",
     "Analysis" : "Analisia",
     "Aggregate values" : "Agregatu balioak",

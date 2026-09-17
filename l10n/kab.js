@@ -103,6 +103,7 @@ OC.L10N.register(
     "copy" : "nɣel",
     "Password" : "Awal uffir",
     "Wiki" : "Awiki",
+    "Navigation" : "Tunigin",
     "Options" : "Iɣewwaṛen",
     "Translate" : "Suqel",
     "1 min" : "1 n tesdat",

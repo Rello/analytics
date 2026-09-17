@@ -17,6 +17,24 @@ OCA.Analytics.Panorama = {
  * @namespace OCA.Analytics.Navigation
  */
 OCA.Analytics.Navigation = {
+    setMobileNavigationOpen: function (open) {
+        const navigation = document.getElementById('app-navigation');
+        const toggle = document.getElementById('mobileNavigationToggle');
+        navigation?.classList.toggle('analytics-mobile-navigation-open', open);
+        toggle?.setAttribute('aria-expanded', String(open));
+    },
+
+    toggleMobileNavigation: function () {
+        const navigation = document.getElementById('app-navigation');
+        OCA.Analytics.Navigation.setMobileNavigationOpen(
+            !navigation?.classList.contains('analytics-mobile-navigation-open')
+        );
+    },
+
+    closeMobileNavigation: function () {
+        OCA.Analytics.Navigation.setMobileNavigationOpen(false);
+    },
+
     init: function (navigationItem) {
         document.getElementById('navigationDatasets').innerHTML = '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>';
         OCA.Analytics.Navigation.getNavigationContent(navigationItem);
@@ -653,6 +671,7 @@ OCA.Analytics.Navigation = {
             if (evt) {
                 history.pushState(null, '', evt.target.href);
             }
+            OCA.Analytics.Navigation.closeMobileNavigation();
             OCA.Analytics.Sidebar?.close?.();
             if (document.querySelector('#navigationDatasets .active')) {
                 document.querySelector('#navigationDatasets .active').classList.remove('active');
@@ -670,6 +689,7 @@ OCA.Analytics.Navigation = {
         // ToDo: change app.js to register handler
         const navigate = () => {
             history.pushState(null, '', evt.target.href);
+            OCA.Analytics.Navigation.closeMobileNavigation();
 
             if (document.querySelector('.app-navigation-entry-menu.open') !== null) {
                 document.querySelector('.app-navigation-entry-menu.open').classList.remove('open');

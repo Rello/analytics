@@ -38,6 +38,8 @@ const config = buildScenarioConfig('32-panorama-filters');
         await page.locator('#panoramaLayoutGrid .panoramaLayoutGridCell[id="5"]').click();
         await page.locator('#panoramaConfigureFilters').waitFor();
         assert.equal(await page.locator('#optionsMenuPanoramaEdit').isDisabled(), false);
+        assert.equal(await page.locator('#optionsMenuPanoramaLayout').isDisabled(), false);
+        assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), false);
         await page.locator('#panoramaConfigureFilters').click();
         await page.locator('#analyticsDialogBtnCancel').click();
         const [createdSave] = await Promise.all([
@@ -111,8 +113,75 @@ const config = buildScenarioConfig('32-panorama-filters');
         await page.locator('#addFilterIcon').waitFor();
         await page.locator('#app-splash-screen').waitFor({state: 'hidden'});
         await idle();
+        assert.equal(await page.locator('#optionsMenuPanoramaEdit').isDisabled(), false);
+        assert.equal(await page.locator('#optionsMenuPanoramaLayout').isDisabled(), true);
+        assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), true);
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        assert.equal(await page.locator('#optionsMenuPanoramaLayout').isDisabled(), false);
+        assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), false);
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        assert.equal(await page.locator('#optionsMenuPanoramaLayout').isDisabled(), true);
+        assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), true);
         assert.equal(filteredRequests, 2, 'each distinct report has one request across all widgets');
         assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 2);
+        const wideHeaderRadii = await page.evaluate(() => {
+            const radii = selector => {
+                const style = getComputedStyle(document.querySelector(selector));
+                return [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius];
+            };
+            return {
+                main: radii('#panoramaHeader'),
+                sub: radii('#panoramaSubHeader-0'),
+                mainPadding: getComputedStyle(document.querySelector('#panoramaHeader')).padding,
+            };
+        });
+        await page.setViewportSize({width: 520, height: 900});
+        const narrowLayout = await page.evaluate(() => {
+            const bounds = selector => document.querySelector(selector).getBoundingClientRect().toJSON();
+            const radii = selector => {
+                const style = getComputedStyle(document.querySelector(selector));
+                return [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius];
+            };
+            const items = [...document.querySelectorAll('#panoramaPages > .flex-container:first-child .flex-item')]
+                .map(item => item.getBoundingClientRect().toJSON());
+            const row = document.createElement('div');
+            row.className = 'flex-row';
+            row.style.height = '50%';
+            row.append(document.createElement('div'), document.createElement('div'));
+            [...row.children].forEach(item => item.className = 'flex-item');
+            document.querySelector('#panoramaPages > .flex-container:first-child').appendChild(row);
+            const result = {
+                headerRow: bounds('#panoramaHeaderRow'),
+                mainHeader: bounds('#panoramaHeader'),
+                subHeader: bounds('#panoramaSubHeader-0'),
+                firstPage: bounds('#panoramaPages > .flex-container:first-child'),
+                items,
+                wrappedItems: [...row.children].map(item => item.getBoundingClientRect().toJSON()),
+                mainHeaderFontSize: getComputedStyle(document.querySelector('#panoramaHeader')).fontSize,
+                subHeaderFontSize: getComputedStyle(document.querySelector('#panoramaSubHeader-0')).fontSize,
+                mainHeaderPadding: getComputedStyle(document.querySelector('#panoramaHeader')).padding,
+                mainHeaderRadii: radii('#panoramaHeader'),
+                subHeaderRadii: radii('#panoramaSubHeader-0'),
+                rowDirection: getComputedStyle(row).flexDirection,
+            };
+            row.remove();
+            return result;
+        });
+        assert.equal(narrowLayout.rowDirection, 'column');
+        assert.ok(narrowLayout.wrappedItems[1].top >= narrowLayout.wrappedItems[0].bottom, 'panorama tiles wrap onto separate rows');
+        assert.ok(Math.abs(narrowLayout.wrappedItems[0].left - narrowLayout.wrappedItems[1].left) <= 1);
+        assert.ok(Math.abs(narrowLayout.wrappedItems[0].width - narrowLayout.wrappedItems[1].width) <= 1);
+        assert.ok(Math.abs(narrowLayout.headerRow.width - narrowLayout.firstPage.width) <= 1);
+        assert.ok(Math.abs((narrowLayout.mainHeader.top - narrowLayout.headerRow.top) - (narrowLayout.items[0].top - narrowLayout.subHeader.bottom)) <= 1, 'header group has matching top and bottom spacing');
+        assert.ok(Math.abs(narrowLayout.mainHeader.left - narrowLayout.subHeader.left) <= 1);
+        assert.ok(Math.abs(narrowLayout.mainHeader.width - narrowLayout.subHeader.width) <= 1);
+        assert.ok(Math.abs(narrowLayout.mainHeader.bottom - narrowLayout.subHeader.top) <= 1, 'empty filter actions leave no gap between headers');
+        assert.equal(narrowLayout.mainHeaderFontSize, narrowLayout.subHeaderFontSize);
+        assert.equal(narrowLayout.mainHeaderPadding, wideHeaderRadii.mainPadding, 'narrow layout preserves report header padding');
+        assert.deepEqual(narrowLayout.mainHeaderRadii, wideHeaderRadii.main, 'narrow layout preserves main header corner radii');
+        assert.deepEqual(narrowLayout.subHeaderRadii, wideHeaderRadii.sub, 'narrow layout preserves subheader corner radii');
+        await capture('viewer-narrow');
+        await page.setViewportSize(config.viewport);
         await page.locator('#addFilterIcon').click();
         const targets = await page.locator('.filterReportNames').innerText();
         assert.match(targets, /Panorama filters/);

@@ -169,6 +169,12 @@ Object.assign(OCA.Analytics.Core = {
         document.getElementById('saveIcon').addEventListener('click', OCA.Analytics.Filter.handleSaveButton);
 
         document.getElementById('optionsMenuIcon').addEventListener('click', OCA.Analytics.Core.toggleOptionsMenu);
+        document.getElementById('mobileNavigationToggle')?.addEventListener('click', OCA.Analytics.Navigation.toggleMobileNavigation);
+        document.addEventListener('keydown', function (evt) {
+            if (evt.key === 'Escape') {
+                OCA.Analytics.Navigation.closeMobileNavigation();
+            }
+        });
         document.addEventListener('click', OCA.Analytics.Core.handleMenusDocumentClick);
     },
 

@@ -64,6 +64,7 @@ OC.L10N.register(
     "copy" : "копирај",
     "The password is wrong. Try again." : "Лозинката е погрешна. Обидите се повторно.",
     "Password" : "Лозинка",
+    "Navigation" : "Навигација",
     "Options" : "Опции",
     "Translate" : "Преведи",
     "30 min" : "30 мин",

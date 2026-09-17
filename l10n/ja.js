@@ -155,6 +155,7 @@ OC.L10N.register(
     "copy" : "コピーする",
     "The password is wrong. Try again." : "パスワードが違います。再入力してください。",
     "Password" : "パスワード",
+    "Navigation" : "ナビゲーション",
     "Options" : "オプション",
     "Translate" : "翻訳",
     "1 min" : "1分",

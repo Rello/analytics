@@ -69,6 +69,7 @@ OC.L10N.register(
     "copy" : "afrita",
     "The password is wrong. Try again." : "Lykilorðið er rangt. Reyndu aftur.",
     "Password" : "Lykilorð",
+    "Navigation" : "Yfirsýn",
     "Options" : "Valkostir",
     "Translate" : "Þýða",
     "Legend" : "Skýring",

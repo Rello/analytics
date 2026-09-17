@@ -103,6 +103,7 @@ OC.L10N.register(
     "copy" : "sao chép",
     "The password is wrong. Try again." : "Mật khẩu sai. Hãy thử lại.",
     "Password" : "Mật khẩu",
+    "Navigation" : "Điều hướng",
     "Options" : "Tùy chọn",
     "Translate" : "Dịch",
     "Do you like this app?" : "Bạn thích ứng dụng này không?",
