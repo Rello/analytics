@@ -1479,6 +1479,7 @@ OCA.Analytics.Visualization = {
     dataTablefooterCallback: function (api, tableOptions) {
         const footerRow = api.table().footer().querySelector('tr');
         const columnCount = api.columns().count();
+        const definitions = api.settings()[0].columns;
 
         if (tableOptions.footer !== true) {
             while (footerRow.firstChild) {
@@ -1487,6 +1488,14 @@ OCA.Analytics.Visualization = {
             return;
         }
 
+        const isNumericColumn = values => values.some(value => value !== null && value !== undefined && String(value).trim() !== '')
+            && values.every(value => {
+                if (value === null || value === undefined || String(value).trim() === '') return true;
+                if (typeof value === 'number') return Number.isFinite(value);
+                const text = OCA.Analytics.Visualization.unescapeHtml(String(value)).replace(/<[^>]*>/g, '').trim();
+                return /^[+-]?(?:\d[\d\s.,]*|\.\d+)\s*%?$/.test(text);
+            });
+
         [...Array(columnCount).keys()].forEach(colIdx => {
             const column = api.column(colIdx);
             const columnData = api.column(colIdx).data().toArray();
@@ -1494,13 +1503,13 @@ OCA.Analytics.Visualization = {
 
             // Check if this column is a percentage calculation
             const renderedCalculations = tableOptions._analyticsRenderedCalculatedColumns || [];
-            const definition = api.settings()[0].aoColumns[colIdx];
+            const definition = definitions[colIdx];
             const calcColumn = renderedCalculations[definition.calculationId] || null;
 
             if (calcColumn && calcColumn.operation === "percentage") {
                 const inputIndex = position => {
                     const reference = calcColumn.references?.[position];
-                    return reference ? api.settings()[0].aoColumns.findIndex(item => item.analyticsReference === reference) : calcColumn.columns[position];
+                    return reference ? definitions.findIndex(item => item.analyticsReference === reference) : calcColumn.columns[position];
                 };
                 // Access the data for the numerator and denominator columns
                 const numeratorData = calcColumn._analyticsAvailable === false || inputIndex(0) < 0
@@ -1510,12 +1519,12 @@ OCA.Analytics.Visualization = {
                     ? []
                     : api.column(inputIndex(1)).data().toArray();
 
-                // Calculate the sums for numerator and denominator
-                const numeratorSum = numeratorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
-                const denominatorSum = denominatorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
-                total = denominatorSum === 0 ? 0 : (numeratorSum / denominatorSum) * 100;
-                total = total.toFixed(2);
-            } else {
+                if (isNumericColumn(numeratorData) && isNumericColumn(denominatorData)) {
+                    const numeratorSum = numeratorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
+                    const denominatorSum = denominatorData.reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
+                    total = (denominatorSum === 0 ? 0 : (numeratorSum / denominatorSum) * 100).toFixed(2);
+                }
+            } else if (isNumericColumn(columnData)) {
                 // Regular sum for non-percentage columns
                 total = columnData.reduce((sum, curValue) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(curValue), 0);
             }
@@ -1525,14 +1534,20 @@ OCA.Analytics.Visualization = {
                 cell = footerRow.appendChild(document.createElement('td'));
             }
 
+            const alignment = definition.analyticsFormat?.align;
+            cell.classList.remove('dt-left', 'dt-center', 'dt-right');
+            if (['left', 'center', 'right'].includes(alignment)) {
+                cell.classList.add('dt-' + alignment);
+            } else if (column.index('visible') !== 0 && total !== undefined) {
+                cell.classList.add('dt-right');
+            }
+
             if (column.index('visible') === 0) {
                 cell.textContent = 'Total';
-                cell.classList.remove('dt-right');
             } else {
-                cell.textContent = definition.analyticsFormat
+                cell.textContent = total === undefined ? '' : definition.analyticsFormat
                     ? OCA.Analytics.Visualization.formatTableColumnValue(Number(total), definition.analyticsFormat, calcColumn?.operation === 'percentage')
                     : (total !== undefined && !isNaN(total)) ? parseFloat(total).toLocaleString() + (calcColumn && calcColumn.operation === "percentage" ? " %" : "") : '';
-                cell.classList.add('dt-right');
             }
         });
     },

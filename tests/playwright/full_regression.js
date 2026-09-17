@@ -132,7 +132,7 @@ function runScenario(scenario) {
       title: scenario.title,
       status: result.json.status || (result.code === 0 ? 'PASS' : 'FAIL'),
       finalUrl: result.json.finalUrl || '',
-      issues: result.json.issues || [],
+      issues: [...(result.json.issues || []), ...(result.code !== 0 && result.stderr.trim() ? [`stderr:${result.stderr.trim()}`] : [])],
     });
     finalUrl = result.json.finalUrl || finalUrl;
 

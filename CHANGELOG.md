@@ -14,10 +14,15 @@
 - Mark the Analysis menu when aggregation or disaggregation functions are active.
 
 ### Changed
+- Keep the latest Playwright run's artifacts and clean up older runs after completion.
 - Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
 - Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
+- Omit totals for table columns that mix text with numeric values and align totals with their column formatting.
+- Restore table footer totals and saving table options with DataTables 3.
+- Remove unused sort controls from the table options dialog.
+- Make browser checks wait for refresh saves, handle duplicate test groups, select filter rows precisely, and report scenario failures in the full runner.
 - Remove the misleading drag handle from chart visualization options.
 - Resolve reports and panoramas shared with the current user in link previews and respect the `link_preview_enabled` admin setting.
 - Enable panorama layout changes and page deletion only while editing.

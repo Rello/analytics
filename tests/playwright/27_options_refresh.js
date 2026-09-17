@@ -34,6 +34,17 @@ async function waitForRefreshSelection(page, selector) {
   }, selector, { timeout: 15000 });
 }
 
+async function selectRefreshAndWaitForSave(page, selector) {
+  const [response] = await Promise.all([
+    page.waitForResponse(response => /\/report\/\d+\/refresh(?:\?|$)/.test(response.url()) && response.request().method() === 'POST'),
+    page.locator(`label[for="${selector}"]`).click(),
+  ]);
+  if (!response.ok()) {
+    throw new Error(`Saving auto refresh failed with HTTP ${response.status()}`);
+  }
+  await waitForRefreshSelection(page, `#${selector}`);
+}
+
 async function openRefreshMenu(page, label) {
   if (await page.locator('#refresh0').isVisible().catch(() => false)) {
     return;
@@ -67,8 +78,7 @@ async function openRefreshMenu(page, label) {
 
     steps.push('set auto refresh to 1 minute');
     await openRefreshMenu(page, 'refresh menu');
-    await page.locator('label[for="refresh1"]').click();
-    await waitForRefreshSelection(page, '#refresh1');
+    await selectRefreshAndWaitForSave(page, 'refresh1');
     await closeToastIfPresent(page);
 
     steps.push('reload and validate refresh option');
@@ -80,8 +90,7 @@ async function openRefreshMenu(page, label) {
     await capture('applied');
 
     steps.push('revert auto refresh to none');
-    await page.locator('label[for="refresh0"]').click();
-    await waitForRefreshSelection(page, '#refresh0');
+    await selectRefreshAndWaitForSave(page, 'refresh0');
     await closeToastIfPresent(page);
 
     steps.push('reload and validate original report');

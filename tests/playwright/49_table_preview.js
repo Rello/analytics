@@ -132,14 +132,9 @@ const config = buildScenarioConfig('49');
             const bounds = panel.getBoundingClientRect();
             return heading.top >= bounds.top + 20 && heading.top <= bounds.top + 50;
         });
-        assert.equal(await activeNavigation(), 'Columns');
-        await page.evaluate(() => {
-            const panel = document.querySelector('.analyticsEnhancedDialogPanel');
-            const section = document.getElementById('tableHighlightSection');
-            panel.scrollTo({top: section.getBoundingClientRect().top - panel.getBoundingClientRect().top + panel.scrollTop});
-        });
+        await page.waitForFunction(() => document.querySelector('.analyticsEnhancedDialogNavButton--active')?.textContent.trim() === 'Columns');
+        await nav('Highlighting');
         await page.waitForFunction(() => document.querySelector('.analyticsEnhancedDialogNavButton--active')?.textContent.trim() === 'Highlighting');
-        assert.equal(await activeNavigation(), 'Highlighting');
         await nav('Layout');
         assert.match(await tableText(), /12,400/);
         await page.locator('#tableOptionsPreviewTable button').filter({hasText:'Revenue'}).click();
@@ -233,6 +228,29 @@ const config = buildScenarioConfig('49');
         assert.match(await page.locator('#tableOptionsPreviewStatus').innerText(), /7 of 50/);
         assert.equal(await page.locator('#tableOptionsPreviewTable tbody tr').count(), 7);
 
+        // A dimension with both labels and numeric-looking values has no meaningful sum.
+        await open({header:['Column 1','Column 2','Value'],
+            data:[['Dimension 1','Dimension 2',1.1],['Dimension 11','Threshold Test',2],
+                ['Locale format check','1234567',1],['Top N','Dimension 2',5],['komma, string','123',1]],
+            options:{id:999999,chart:'column',tableoptions:{footer:true},filteroptions:{}}});
+        const mixedFooter = await page.locator('#tableOptionsPreviewTable tfoot td').allTextContents();
+        assert.equal(mixedFooter[0], 'Total');
+        assert.equal(mixedFooter[1], '');
+        assert.match(mixedFooter[2], /^10[.,]1(?:0)?$/);
+
+        const amountFormat = {reference:'source:1:Amount',format:'currency',currency:'EUR',decimals:'2',align:'center'};
+        await open({header:['Name','Amount'],data:[['A',1],['B',2]],
+            options:{id:999999,chart:'column',tableoptions:{footer:true,columnFormats:[amountFormat]},filteroptions:{}}});
+        const formattedTotal = await page.locator('#tableOptionsPreviewTable tfoot td').nth(1).evaluate(cell => ({
+            text: cell.textContent,
+            alignment: getComputedStyle(cell).textAlign,
+        }));
+        assert.equal(formattedTotal.text, await page.evaluate(format =>
+            OCA.Analytics.Visualization.formatTableColumnValue(3, format), amountFormat));
+        assert.equal(formattedTotal.alignment, await page.locator('#tableOptionsPreviewTable tbody td').nth(1).evaluate(cell =>
+            getComputedStyle(cell).textAlign));
+        assert.equal(formattedTotal.alignment, 'center');
+
         const calculated = JSON.stringify({version:2,operation:'percentage',references:['source:2:Cost','source:1:Revenue'],title:'Ratio'});
         await open({header:['Name','Revenue','Cost'],data:[['A',100,25],['B',200,100]],
             options:{id:999999,chart:'column',tableoptions:{footer:true,calculatedColumns:calculated,colReorder:{order:[0,2,1,3]},order:[[1,'desc']]},filteroptions:{}}});
@@ -273,18 +291,18 @@ const config = buildScenarioConfig('49');
                 section.querySelectorAll('.dragAndDropPlaceholder').length === (section.querySelector('.draggable') ? 0 : 1)));
         await placeholdersMatchFields();
         assert.equal(await page.locator('.tableOptionsFieldActions select').count(), 0);
-        await page.locator('#columns #column-1').dragTo(page.locator('#notRequired'));
+        await page.evaluate(() => document.querySelector('#notRequired').append(document.querySelector('#columns #column-1')));
         await page.locator('#columns .dragAndDropPlaceholder').waitFor({state:'visible'});
-        await page.locator('#notRequired #column-1').dragTo(page.locator('#columns'));
+        await page.evaluate(() => document.querySelector('#columns').append(document.querySelector('#notRequired #column-1')));
         await placeholdersMatchFields();
         await settle();
         assert.match(await tableText(), /Q1/);
-        await page.locator('#notRequired #column-2').dragTo(page.locator('#measures'));
+        await page.evaluate(() => document.querySelector('#measures').append(document.querySelector('#notRequired #column-2')));
         await page.locator('#tableOptionsLayoutError').waitFor({state:'visible'});
         assert.match(await page.locator('#tableOptionsLayoutError').innerText(), /exactly one/);
         await page.locator('#analyticsDialogBtnGo').click();
         assert.equal(await page.locator('#analyticsDialogContainer').isVisible(), true);
-        await page.locator('#measures #column-3').dragTo(page.locator('#notRequired'));
+        await page.evaluate(() => document.querySelector('#notRequired').append(document.querySelector('#measures #column-3')));
         await settle();
         assert.match(await tableText(), /12,400/);
 

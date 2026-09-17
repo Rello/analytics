@@ -138,7 +138,10 @@ const chartAssets = [
             chart: ['chart'], table: ['table'], content: ['chart', 'table'],
         });
         assert.deepEqual(pageErrors, []);
-        console.log('PASS: KPI and table previews skip chart libraries; chart and combined previews load them once.');
+        console.log(JSON.stringify({
+            scriptId: '52', status: 'PASS', issues: [],
+            steps: ['KPI and table previews skip chart libraries', 'chart and combined previews load them once'],
+        }, null, 2));
     } finally {
         await browser.close();
     }

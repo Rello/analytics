@@ -1116,25 +1116,6 @@
                 </div>
             </div>
             <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel">
-                    <label for="tableDefaultSort"><?php p($l->t('Default sort')); ?></label>
-                </div>
-                <div class="tableOptionsSettingsValue">
-                    <select id="tableDefaultSort" class="optionsInput"></select>
-                </div>
-            </div>
-            <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel">
-                    <label for="tableSortDirection"><?php p($l->t('Direction')); ?></label>
-                </div>
-                <div class="tableOptionsSettingsValue">
-                    <select id="tableSortDirection" class="optionsInput">
-                        <option value="asc"><?php p($l->t('Ascending')); ?></option>
-                        <option value="desc"><?php p($l->t('Descending')); ?></option>
-                    </select>
-                </div>
-            </div>
-            <div class="tableOptionsSettingsRow">
                 <div class="tableOptionsSettingsLabel"><?php p($l->t('Show totals')); ?></div>
                 <div class="tableOptionsSettingsValue">
                     <label class="analyticsSwitch" for="totalOption">

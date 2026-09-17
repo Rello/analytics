@@ -125,7 +125,6 @@ if [[ ! -f "${ROOT_DIR}/${SCRIPT_PATH}" ]]; then
   exit 2
 fi
 
-rm -rf "${UI_ARTIFACT_ROOT}"
 mkdir -p "${UI_ARTIFACT_ROOT}"
 
 if ! docker image inspect "${PLAYWRIGHT_IMAGE}" >/dev/null 2>&1; then
@@ -163,11 +162,17 @@ if [[ -n "${START_AT}" ]]; then
 fi
 if [[ -n "${ARTIFACT_DIR:-}" ]]; then
   DOCKER_ARGS+=(-e "ARTIFACT_DIR=${ARTIFACT_DIR}")
-elif [[ "${FULL_RUN}" -eq 1 ]]; then
-  RUN_TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
-  HOST_ARTIFACT_DIR="${UI_ARTIFACT_ROOT}/${RUN_TIMESTAMP}"
-  mkdir -p "${HOST_ARTIFACT_DIR}"
-  DOCKER_ARGS+=(-e "ARTIFACT_DIR=/work/tests/ui-artifacts/${RUN_TIMESTAMP}")
+else
+  HOST_ARTIFACT_DIR="$(mktemp -d "${UI_ARTIFACT_ROOT}/$(date +%Y%m%d_%H%M%S)_XXXXXX")"
+  DOCKER_ARGS+=(-e "ARTIFACT_DIR=/work/tests/ui-artifacts/$(basename "${HOST_ARTIFACT_DIR}")")
+  cleanup_old_artifacts() {
+    for artifact in "${UI_ARTIFACT_ROOT}"/*; do
+      [[ -e "${artifact}" ]] || continue
+      [[ "${artifact}" == "${HOST_ARTIFACT_DIR}" ]] && continue
+      rm -rf -- "${artifact}"
+    done
+  }
+  trap cleanup_old_artifacts EXIT
 fi
 
 docker run "${DOCKER_ARGS[@]}" "${PLAYWRIGHT_IMAGE}" "${SCRIPT_PATH}"

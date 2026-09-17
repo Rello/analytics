@@ -383,11 +383,14 @@ async function renameNavigationEntry(page, currentName, nextName) {
 }
 
 async function deleteNavigationEntry(page, name) {
+  const selector = `#app-navigation .app-navigation-entry > a[data-name="${name.replace(/"/g, '\\"')}"]`;
+  const before = await page.locator(selector).count();
   const menu = await openNavigationEntryMenu(page, name);
   await clickNavigationMenuAction(menu, 'delete', 'navigation delete');
   await confirmVisibleDialogs(page, 3);
   await waitForIdle(page, 15000);
-  await waitForNavigationEntryState(page, name, 'hidden');
+  await page.waitForFunction(({selector, before}) => document.querySelectorAll(selector).length < before,
+    {selector, before}, {timeout: 20000});
 }
 
 async function openReportBasicSettings(page, reportName) {

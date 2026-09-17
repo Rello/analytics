@@ -211,10 +211,10 @@ const config = buildScenarioConfig('32-panorama-filters');
         await idle();
         assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 3);
         await page.locator('#addFilterIcon').click();
-        await page.locator('.icon-analytics-filterRow-remove').click();
+        await page.locator('#filterDialogTable .filterRow').last().locator('.icon-analytics-filterRow-remove').click();
         await page.locator('#analyticsDialogBtnGo').click();
         await idle();
-        assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 2);
+        assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 1);
         // Superseded responses must not replace the final selection.
         await page.evaluate(id => {
             OCA.Analytics.PanoramaFilters.apply({[id]: 'missing'});

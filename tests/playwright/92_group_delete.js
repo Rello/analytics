@@ -32,12 +32,16 @@ const groupName = buildUniqueName('Playwright Regression Group', process.env.GRO
     steps.push('open analytics');
     await ensureAnalyticsLoaded(page, config);
 
-    const groupPresent = await reportExists(page, groupName);
-    if (!groupPresent) {
+    if (!(await reportExists(page, groupName))) {
       steps.push('skip group cleanup because group does not exist');
     } else {
       steps.push('delete existing group');
-      await deleteNavigationEntry(page, groupName);
+      for (let attempt = 0; attempt < 10 && await reportExists(page, groupName); attempt += 1) {
+        await deleteNavigationEntry(page, groupName);
+      }
+      if (await reportExists(page, groupName)) {
+        throw new Error('Matching test groups remain after cleanup');
+      }
     }
 
     const result = {
