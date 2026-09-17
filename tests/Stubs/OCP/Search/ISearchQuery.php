@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCP;
+namespace OCP\Search;
 
-interface IConfig {
-	public function getAppValue($appName, $key, $default = '');
+interface ISearchQuery {
+	public function getTerm(): string;
 }

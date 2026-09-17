@@ -353,6 +353,7 @@ class ReportMapper
             ->select('id')
             ->addSelect('name')
             ->addSelect('type')
+            ->addSelect('visualization')
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->iLike('name', $sql->createNamedParameter('%' . $this->db->escapeLikeParameter($searchString) . '%')))
             ->orderBy('name', 'ASC');
