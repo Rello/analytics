@@ -578,6 +578,7 @@ OC.L10N.register(
     "Default sort" : "Varsayılan sıralama",
     "Direction" : "Yön",
     "Show totals" : "Toplamlar görüntülensin",
+    "Format numbers and dates in local format" : "Sayılar ve tarihler yerel ayarlara göre biçimlendirilsin",
     "Compact visualization" : "Dar görselleştirme",
     "Highlighting" : "Vurgulama",
     "Highlight values below a limit with a background and downward marker. Existing report thresholds also apply." : "Bir sınırın altındaki değerleri bir arka plan ve aşağı doğru işaretleyici ile vurgular. Var olan rapor eşik değerleri de geçerlidir.",

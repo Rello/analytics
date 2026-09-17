@@ -533,6 +533,7 @@ OC.L10N.register(
     "Default sort" : "Vaikimisi järjestus",
     "Direction" : "Suund",
     "Show totals" : "Näita summasid",
+    "Format numbers and dates in local format" : "Vorminda numbrid ja kuupäevad lokaadikohaselt",
     "Compact visualization" : "Kompaktne välimus",
     "Highlighting" : "Esiletõstmine",
     "Disabled" : "Väljalülitatud",

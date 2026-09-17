@@ -27,7 +27,7 @@ class SearchProvider implements IProvider
     /** @var IAppManager */
     private $appManager;
     /** @var IL10N */
-    private $l10n;
+    protected $l10n;
     /** @var IURLGenerator */
     private $urlGenerator;
     private $ReportService;
@@ -62,23 +62,29 @@ class SearchProvider implements IProvider
         $result = [];
 
         foreach ($reports as $report) {
-            $result[] = new SearchResultEntry(
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'report.svg')),
-                $report['name'],
-                '',
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.report', ['id' => $report['id']])),
-                ''
-            );
+            $url = $this->urlGenerator->linkToRouteAbsolute('analytics.page.report', ['id' => $report['id']]);
+            foreach ($this->getReportModes($report) as $mode => $label) {
+                $result[] = new SearchResultEntry(
+                    $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'report.svg')),
+                    $report['name'],
+                    $label,
+                    $url . ($mode === '' ? '' : '/' . $mode),
+                    ''
+                );
+            }
         }
 
         foreach ($panoramas as $panorama) {
-            $result[] = new SearchResultEntry(
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'panorama.svg')),
-                $panorama['name'],
-                '',
-                $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('analytics.page.panorama', ['id' => $panorama['id']])),
-                ''
-            );
+            $url = $this->urlGenerator->linkToRouteAbsolute('analytics.page.panorama', ['id' => $panorama['id']]);
+            foreach ($this->getPanoramaModes() as $mode => $label) {
+                $result[] = new SearchResultEntry(
+                    $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('analytics', 'panorama.svg')),
+                    $panorama['name'],
+                    $label,
+                    $url . ($mode === '' ? '' : '/' . $mode),
+                    ''
+                );
+            }
         }
 
         return SearchResult::complete(
@@ -92,8 +98,18 @@ class SearchProvider implements IProvider
         return $this->l10n->t('Analytics');
     }
 
-    public function getOrder(string $route, array $routeParameters): int
+    public function getOrder(string $route, array $routeParameters): ?int
     {
         return 10;
+    }
+
+    protected function getReportModes(array $report): array
+    {
+        return ['' => ''];
+    }
+
+    protected function getPanoramaModes(): array
+    {
+        return ['' => ''];
     }
 }

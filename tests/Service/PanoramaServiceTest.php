@@ -99,6 +99,11 @@ class PanoramaServiceTest extends TestCase {
         $property = new \ReflectionProperty(PanoramaService::class, 'PanoramaMapper');
         $property->setAccessible(true);
         $property->setValue($service, $mapper);
+        $shareService = $this->createMock(ShareService::class);
+        $shareService->expects($this->once())->method('getSharedPanorama')->with(2)->willReturn([]);
+        $property = new \ReflectionProperty(PanoramaService::class, 'ShareService');
+        $property->setAccessible(true);
+        $property->setValue($service, $shareService);
         $this->assertSame(['id' => 1, 'permissions' => 2], $service->read(1));
         $this->assertFalse($service->read(2));
     }

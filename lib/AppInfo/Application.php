@@ -16,6 +16,7 @@ use OCA\Analytics\ShareReview\ShareReviewListener;
 use OCA\Analytics\UserMigration\AnalyticsMigrator;
 use OCA\Analytics\Notification\Notifier;
 use OCA\Analytics\Search\SearchProvider;
+use OCA\Analytics\Search\ReferenceSearchProvider;
 use OCA\Analytics\Listener\ReferenceListener;
 use OCA\Analytics\Reference\ReferenceProvider;
 use OCA\Analytics\Capabilities;
@@ -40,6 +41,7 @@ class Application extends App implements IBootstrap {
 		$context->registerDashboardWidget(Widget::class);
 
 		$context->registerSearchProvider(SearchProvider::class);
+		$context->registerSearchProvider(ReferenceSearchProvider::class);
 
 		$context->registerCapability(Capabilities::class);
 

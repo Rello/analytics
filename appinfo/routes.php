@@ -11,8 +11,10 @@ return [
 	'routes' => [
 		['name' => 'page#main', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#report', 'url' => '/r/{id}', 'verb' => 'GET'],
+		['name' => 'page#reportMode', 'url' => '/r/{id}/{mode}', 'verb' => 'GET'],
 		['name' => 'page#dataset', 'url' => '/d/{id}', 'verb' => 'GET'],
 		['name' => 'page#panorama', 'url' => '/pa/{id}', 'verb' => 'GET'],
+		['name' => 'page#panoramaMode', 'url' => '/pa/{id}/{mode}', 'verb' => 'GET'],
 		['name' => 'page#indexPublic', 'url' => '/p/{token}', 'verb' => 'GET'],
 		['name' => 'page#indexPublicMin', 'url' => '/pm/{token}', 'verb' => 'GET'],
 		['name' => 'page#authenticatePassword', 'url' => '/p/{token}', 'verb' => 'POST'],

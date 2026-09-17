@@ -247,6 +247,7 @@ OC.L10N.register(
     "Quickstart" : "بداية سريعة",
     "Intro" : "مقدمة",
     "Wiki" : "ويكي",
+    "Navigation" : "التنقل",
     "Options" : "خيارات",
     "Analysis" : "التحليل",
     "Aggregate values" : "القيمة الإجمالية",

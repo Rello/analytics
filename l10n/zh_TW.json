@@ -576,6 +576,7 @@
     "Default sort" : "預設排序",
     "Direction" : "方向",
     "Show totals" : "顯示加總",
+    "Format numbers and dates in local format" : "將數字和日期格式化為當地格式",
     "Compact visualization" : "緊湊視覺化",
     "Highlighting" : "突顯",
     "Highlight values below a limit with a background and downward marker. Existing report thresholds also apply." : "以背景色與向下箭頭標示低於閾值的數值。現有報表的閾值設定同樣適用。",
