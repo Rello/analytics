@@ -27,6 +27,7 @@ OC.L10N.register(
     "Releases" : "Ryddhadau",
     "Issues" : "Materion",
     "Local" : "Lleol",
+    "Link" : "Dolen",
     "Password" : "Cyfrinair",
     "Navigation" : "Llywio",
     "Translate" : "Cyfieithu",

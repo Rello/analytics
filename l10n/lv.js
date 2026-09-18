@@ -123,6 +123,8 @@ OC.L10N.register(
     "Local" : "Vietējs",
     "File" : "Datne",
     "Announcements" : "Paziņojumi",
+    "Link" : "Saite",
+    "Content" : "Saturs",
     "copy" : "kopēt",
     "The password is wrong. Try again." : "Parole ir nepareiza. Jāmēģina vēlreiz.",
     "Password" : "Parole",

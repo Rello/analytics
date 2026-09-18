@@ -67,6 +67,8 @@ OC.L10N.register(
     "Local" : "מקומי",
     "File" : "קובץ",
     "Announcements" : "הכרזות",
+    "Link" : "קישור",
+    "Content" : "תוכן",
     "copy" : "עותק",
     "The password is wrong. Try again." : "הססמה שגויה. נא לנסות שוב.",
     "Password" : "ססמה",

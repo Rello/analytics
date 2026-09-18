@@ -46,6 +46,7 @@ OC.L10N.register(
     "Local" : "ต้นทาง",
     "File" : "ไฟล์",
     "Announcements" : "ประกาศ",
+    "Link" : "ลิงก์",
     "copy" : "คัดลอก",
     "The password is wrong. Try again." : "รหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง",
     "Password" : "รหัสผ่าน",

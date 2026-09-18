@@ -47,6 +47,8 @@ OC.L10N.register(
     "Local" : "Lokale",
     "File" : "Skedar ",
     "Announcements" : "Lajmërimet",
+    "Link" : "Lidhje",
+    "Content" : "Përmbajtja",
     "copy" : "kopjo",
     "The password is wrong. Try again." : "Fjalëkalim i gabuar. Provojeni sërish.",
     "Password" : "Fjalëkalim",

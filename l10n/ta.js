@@ -29,6 +29,7 @@ OC.L10N.register(
     "Cancel" : "இரத்து செய்க",
     "Search" : "Search",
     "File" : "File",
+    "Link" : "Link",
     "Password" : "கடவுச்சொல்",
     "Translate" : "Translate",
     "Name" : "பெயர்",

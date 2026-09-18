@@ -100,6 +100,7 @@ OC.L10N.register(
     "Local" : "Cục bộ",
     "File" : "Tệp",
     "Announcements" : "Các thông báo",
+    "Link" : "Liên kết",
     "copy" : "sao chép",
     "The password is wrong. Try again." : "Mật khẩu sai. Hãy thử lại.",
     "Password" : "Mật khẩu",

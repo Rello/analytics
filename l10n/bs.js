@@ -24,6 +24,7 @@ OC.L10N.register(
     "Cancel" : "Otkaži",
     "Search" : "Search",
     "Local" : "Lokalno",
+    "Link" : "Veza",
     "Password" : "Lozinka",
     "Name" : "Ime",
     "Export" : "Izvezi",

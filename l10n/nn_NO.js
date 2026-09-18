@@ -50,6 +50,7 @@ OC.L10N.register(
     "Authentication" : "Godkjenning",
     "Local" : "Lokal",
     "File" : "Fil",
+    "Link" : "Lenkje",
     "The password is wrong. Try again." : "Passordet er gale. Prøv igjen.",
     "Password" : "Passord",
     "More Information …" : "Meir informasjon…",

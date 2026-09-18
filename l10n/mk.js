@@ -61,6 +61,7 @@ OC.L10N.register(
     "Local" : "Локално",
     "File" : "Датотека",
     "Announcements" : "Објави",
+    "Link" : "Линк",
     "copy" : "копирај",
     "The password is wrong. Try again." : "Лозинката е погрешна. Обидите се повторно.",
     "Password" : "Лозинка",

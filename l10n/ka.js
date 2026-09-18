@@ -78,6 +78,7 @@ OC.L10N.register(
     "Local" : "Local",
     "File" : "ფაილი",
     "Announcements" : "Announcements",
+    "Link" : "Link",
     "copy" : "copy",
     "The password is wrong. Try again." : "The password is wrong. Try again.",
     "Password" : "პაროლი",

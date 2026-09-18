@@ -24,6 +24,7 @@ OC.L10N.register(
     "Search" : "Traži",
     "Issues" : "Problemi",
     "File" : "Fajl",
+    "Link" : "Veza",
     "copy" : "kopiraj",
     "Password" : "Lozinka",
     "Translate" : "Prevedi",

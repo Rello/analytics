@@ -47,6 +47,8 @@ OC.L10N.register(
     "Local" : "Local",
     "File" : "Archivo",
     "Announcements" : "Anuncios",
+    "Link" : "Enlace",
+    "Content" : "Contenido",
     "copy" : "Copiar",
     "The password is wrong. Try again." : "La contraseña está equivoada. Por favor vuelve a intentarlo. ",
     "Password" : "Contraseña",

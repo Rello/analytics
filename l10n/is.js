@@ -66,6 +66,8 @@ OC.L10N.register(
     "File" : "Skrá",
     "Current time" : "Tími núna",
     "Announcements" : "Tilkynningar",
+    "Link" : "Tengill",
+    "Content" : "Efni",
     "copy" : "afrita",
     "The password is wrong. Try again." : "Lykilorðið er rangt. Reyndu aftur.",
     "Password" : "Lykilorð",

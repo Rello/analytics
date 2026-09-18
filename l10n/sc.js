@@ -63,6 +63,7 @@ OC.L10N.register(
     "Local" : "Locale",
     "File" : "Archìviu",
     "Announcements" : "Comunicatziones",
+    "Link" : "Ligòngiu",
     "copy" : "còpia",
     "The password is wrong. Try again." : "Sa crae est isballiada. Torra a proare.",
     "Password" : "Crae",

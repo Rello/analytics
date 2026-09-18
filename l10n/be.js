@@ -85,6 +85,8 @@ OC.L10N.register(
     "Local" : "Лакальна",
     "File" : "Файл",
     "Current time" : "Бягучы час",
+    "Link" : "Спасылка",
+    "Content" : "Змест",
     "copy" : "копія",
     "The password is wrong. Try again." : "Пароль няправільны. Паспрабуйце яшчэ раз.",
     "Password" : "Пароль",

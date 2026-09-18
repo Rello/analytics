@@ -26,6 +26,7 @@ OC.L10N.register(
     "Cancel" : "ընդհատել",
     "Search" : "Search",
     "Issues" : "հայց",
+    "Link" : "Հղում",
     "Password" : "Գաղտնաբառ",
     "Translate" : "Թարգմանել",
     "Name" : "Անուն",

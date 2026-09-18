@@ -59,6 +59,7 @@ OC.L10N.register(
     "Local" : "Local",
     "File" : "Fișier",
     "Announcements" : "Anunțuri",
+    "Link" : "Legătură",
     "copy" : "copiază",
     "The password is wrong. Try again." : "Parola este incorectă. Încercaţi din nou.",
     "Password" : "Parolă",

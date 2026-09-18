@@ -41,6 +41,7 @@ OC.L10N.register(
     "Local" : "ლოკალური",
     "File" : "ფაილი",
     "Announcements" : "განცხადებები",
+    "Content" : "მოცულობა",
     "The password is wrong. Try again." : "პაროლი არასწორია. სცადეთ ახლიდან.",
     "Password" : "პაროლი",
     "Translate" : "გადათარგმნეთ",

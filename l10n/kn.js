@@ -24,6 +24,7 @@ OC.L10N.register(
     "Cancel" : "﻿ರದ್ದು",
     "Search" : "Search",
     "Local" : "ಸ್ಥಳೀಯ",
+    "Link" : "ಸಂಪರ್ಕ ಕೊಂಡಿ",
     "Password" : "ಗುಪ್ತ ಪದ",
     "Name" : "﻿ಹೆಸರು",
     "Export" : "ರಫ್ತು",

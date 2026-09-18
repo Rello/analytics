@@ -44,6 +44,8 @@ OC.L10N.register(
     "Local" : "Loka",
     "File" : "Dosiero",
     "Announcements" : "Anoncoj",
+    "Link" : "Ligilo",
+    "Content" : "Enhavo",
     "copy" : "kopio",
     "The password is wrong. Try again." : "La pasvorto malĝustas. Provu denove.",
     "Password" : "Pasvorto",

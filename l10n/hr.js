@@ -75,6 +75,8 @@ OC.L10N.register(
     "Count" : "Broj",
     "File" : "Datoteka",
     "Announcements" : "Obavijesti",
+    "Link" : "Poveznica",
+    "Content" : "Sadržaj",
     "copy" : "kopiraj",
     "The password is wrong. Try again." : "Pogrešna zaporka. Pokušajte ponovno.",
     "Password" : "Zaporka",

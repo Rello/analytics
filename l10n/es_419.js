@@ -46,6 +46,8 @@ OC.L10N.register(
     "Local" : "Local",
     "File" : "Archivo",
     "Announcements" : "Anuncios",
+    "Link" : "Liga",
+    "Content" : "Contenido",
     "The password is wrong. Try again." : "Error en la contraseña. Inténtalo de nuevo.",
     "Password" : "Contraseña",
     "Translate" : "Traducir",

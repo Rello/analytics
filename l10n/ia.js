@@ -32,6 +32,7 @@ OC.L10N.register(
     "Authentication" : "Authentication",
     "Local" : "Local",
     "Announcements" : "Annucios",
+    "Link" : "Ligamine",
     "The password is wrong. Try again." : "Le contrasigno es incorrecte. Tenta de novo.",
     "Password" : "Contrasigno",
     "Name" : "Nomine",

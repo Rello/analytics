@@ -29,6 +29,7 @@ OC.L10N.register(
     "Authentication" : "සත්‍යාපනය",
     "File" : "ගොනුව",
     "Announcements" : "නිවේදන",
+    "Link" : "සබැඳිය",
     "copy" : "පිටපත්",
     "Password" : "මුර පදය",
     "Translate" : "පරිවර්තනය",
