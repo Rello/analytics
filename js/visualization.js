@@ -933,6 +933,7 @@ OCA.Analytics.Visualization = {
 
         domTarget.classList.toggle('analyticsTableDense', tableOptions.density === 'compact');
         domTarget.classList.toggle('stripe', tableOptions.striped !== false);
+        domTarget.classList.add('hover');
         if (tableOptions.showHeader === false || (tableOptions.showHeader === undefined && tableOptions.compactDisplay)) {
             const thead = domTarget.querySelector('thead');
             if (thead) {

@@ -168,9 +168,13 @@ delete and insert inside the same transaction, so a failure preserves the last
 complete dataset. Simulation adds `storageMapping` and `mappingPreview` with
 `mappedFields`, `ignoredSourceColumns`, and `validationErrors`.
 
-Clipboard imports add explicit `header`, `delimiter`, and `storageMapping`;
-file imports add `storageMapping`. Scheduled and manual execution use the saved
-mapping and do not change datasource-provider interfaces.
+Clipboard and file imports may omit `storageMapping` when their fields follow
+the dataset column order exactly. Clipboard imports detect the delimiter and
+accept a first row matching the dataset column names as an optional header.
+File imports use the file's usual header handling. Explicit mappings remain
+available for sources with a different order or extra fields. Scheduled and
+manual data-load execution use the saved mapping and do not change
+datasource-provider interfaces.
 
 ## Errors and lifecycle
 

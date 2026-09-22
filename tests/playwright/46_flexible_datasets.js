@@ -92,23 +92,18 @@ const reportName = buildUniqueName('Flexible sales report');
     const descriptor = (await api('dataset/' + datasetId)).data;
     const refs = Object.fromEntries(descriptor.columns.map(column => [column.name, column.ref]));
 
-    steps.push('map and import a source with an ignored column twice');
+    steps.push('import columns in dataset order twice');
     await page.locator('#tabHeaderData').click();
     await page.locator('#flexibleRecordForm').waitFor({state: 'visible'});
     await page.locator('#dataImportSectionHeaderH3').click();
     await page.locator('#importDataClipboardButton').click();
     const firstImport = [
-      'Date,Region,Product,Revenue,Cost,Unused',
-      '2026-09-01,Germany,Cloud,100.00,60.00,first',
-      '2026-09-01,France,Cloud,50.00,30.00,second',
+      'Date,Region,Product,Revenue,Cost',
+      '2026-09-01,Germany,Cloud,100.00,60.00',
+      '2026-09-01,France,Cloud,50.00,30.00',
     ].join('\n');
     await page.locator('#importDataClipboardText').fill(firstImport);
-    await page.locator('#flexibleImportMapping select').first().waitFor();
-    assert.deepEqual(
-      await page.locator('#flexibleImportMapping select').evaluateAll(nodes => nodes.map(node => node.value)),
-      ['0', '1', '2', '3', '4']
-    );
-    assert.match(await page.locator('.flexibleIgnoredColumns').innerText(), /Unused/);
+    assert.equal(await page.locator('#flexibleImportSettings').count(), 0);
     let importResponse = page.waitForResponse(response => response.request().method() === 'POST'
       && response.url().endsWith('/apps/analytics/data/importCSV'));
     await page.locator('#importDataClipboardButtonGo').click();
@@ -118,9 +113,8 @@ const reportName = buildUniqueName('Flexible sales report');
     );
 
     const secondImport = [
-      'Date,Region,Product,Revenue,Cost,Unused',
-      '2026-09-01,Germany,Cloud,120.00,70.00,changed',
-      '2026-09-01,France,Cloud,55.00,31.00,changed',
+      '2026-09-01,Germany,Cloud,120.00,70.00',
+      '2026-09-01,France,Cloud,55.00,31.00',
     ].join('\n');
     await page.locator('#importDataClipboardText').fill(secondImport);
     importResponse = page.waitForResponse(response => response.request().method() === 'POST'
@@ -130,8 +124,13 @@ const reportName = buildUniqueName('Flexible sales report');
       (({insert, update, error}) => ({insert, update, error}))(await (await importResponse).json()),
       {insert: 0, update: 2, error: 0}
     );
-    await page.waitForFunction(() => document.querySelector('#flexibleRecordPreview')?.innerText.includes('120'));
-    assert.equal(await page.locator('#flexibleRecordPreview tr:has(td)').count(), 2);
+    assert.equal(await page.locator('#flexibleRecordPreview').count(), 0);
+    const regionInput = page.locator('#flexibleRecordForm [data-flexible-column-ref="' + refs.Region + '"]');
+    await regionInput.click();
+    await page.locator('#tmpList li', {hasText: 'Germany'}).waitFor();
+    assert.equal(await page.locator('#tmpList li', {hasText: 'France'}).count(), 1);
+    await page.locator('#tmpList li', {hasText: 'Germany'}).click();
+    assert.equal(await regionInput.inputValue(), 'Germany');
     await capture('mapped_records');
 
     steps.push('create and render a normal report with two measures');

@@ -574,15 +574,29 @@ class DataloadService
 	        if ($datasetId != '') {
 	            $dataset = $this->DatasetService->read((int)$datasetId);
 	            if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
-	                if ($import === '' || !is_array($header) || !is_string($delimiter) || $delimiter === '') {
+	                if ($import === '') {
 	                    return ['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 1, 'validationErrors' => [[
 	                        'code' => 'invalid_clipboard_import',
-	                        'message' => 'Flexible clipboard imports require explicit header and delimiter values.',
+	                        'message' => 'No data was provided.',
 	                        'details' => [],
 	                    ]]];
 	                }
-	                $rows = array_map(static fn (string $row): array => str_getcsv($row, $delimiter), str_getcsv($import, "\n"));
 	                try {
+	                    if ($storageMapping === null) {
+	                        $delimiter = $this->detectDelimiter($import);
+	                        $rows = array_map(static fn (string $row): array => str_getcsv($row, $delimiter), str_getcsv($import, "\n"));
+	                        $columns = $this->FlexibleStorageService->getDescriptor((int)$datasetId)['columns'];
+	                        $header = array_column($columns, 'name');
+	                        if ($rows !== [] && array_map('trim', $rows[0]) === $header) {
+	                            array_shift($rows);
+	                        }
+	                        $storageMapping = $this->positionalImportMapping($columns, $header, $rows);
+	                    } else {
+	                        if (!is_array($header) || !is_string($delimiter) || $delimiter === '') {
+	                            throw new FlexibleStorageException('invalid_clipboard_import', 'Flexible clipboard imports require explicit header and delimiter values.');
+	                        }
+	                        $rows = array_map(static fn (string $row): array => str_getcsv($row, $delimiter), str_getcsv($import, "\n"));
+	                    }
 	                    $result = $this->FlexibleStorageService->executeMappedLoad((int)$datasetId, $storageMapping, $header, $rows, false);
 	                    $result['delimiter'] = $delimiter;
 	                    $this->DatasetService->provider((int)$datasetId);
@@ -660,11 +674,17 @@ class DataloadService
 	            $dataset = $this->DatasetService->read((int)$datasetId);
 	            if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
 	                try {
+	                    $header = is_array($result['header'] ?? null) ? $result['header'] : [];
+	                    $rows = is_array($result['data'] ?? null) ? $result['data'] : [];
+	                    if ($storageMapping === null) {
+	                        $columns = $this->FlexibleStorageService->getDescriptor((int)$datasetId)['columns'];
+	                        $storageMapping = $this->positionalImportMapping($columns, $header, $rows);
+	                    }
 	                    $flexibleResult = $this->FlexibleStorageService->executeMappedLoad(
 	                        (int)$datasetId,
 	                        $storageMapping,
-	                        is_array($result['header'] ?? null) ? $result['header'] : [],
-	                        is_array($result['data'] ?? null) ? $result['data'] : [],
+	                        $header,
+	                        $rows,
 	                        false
 	                    );
 	                    $this->DatasetService->provider((int)$datasetId);
@@ -708,6 +728,32 @@ class DataloadService
             $dataset = empty($reportMetadata) ? '' : (int)$reportMetadata['dataset'];
         }
         return $dataset;
+    }
+
+    /** @param list<array<string,mixed>> $columns
+     *  @param list<string> $header
+     *  @param list<array<mixed>> $rows
+     *  @return array<string,mixed>
+     */
+    private function positionalImportMapping(array $columns, array $header, array $rows): array
+    {
+        $count = count($columns);
+        if (count($header) !== $count) {
+            throw new FlexibleStorageException('invalid_source_columns', 'The import must have one field for each dataset column, in the same order.');
+        }
+        foreach ($rows as $index => $row) {
+            if (!is_array($row) || count($row) !== $count) {
+                throw new FlexibleStorageException('invalid_source_row', 'Each imported row must have one field for each dataset column.', ['record' => $index]);
+            }
+        }
+        return [
+            'schemaVersion' => 1,
+            'sourceHeader' => $header,
+            'columns' => array_map(static fn (array $column, int $index): array => [
+                'column' => $column['ref'],
+                'sourceIndex' => $index,
+            ], $columns, array_keys($columns)),
+        ];
     }
 
     private function getDataloadMetadata(int $dataloadId, bool $enforceOwnership)

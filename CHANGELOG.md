@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Highlight data table rows when the mouse hovers over them.
 - Select a worksheet from a dropdown populated by the chosen spreadsheet.
 - Offer applicable link, content, chart-only, and table-only choices in the native Smart Picker search results for Analytics reports and panoramas without the redundant Analytics group heading, preserving explicit chart/table selections when reports gain another view; content previews render live charts, tables, KPIs, text, and pictures with ten-row table pages, bottom-only pagination, and chart libraries loaded only for chart previews.
 - Add a V4 API endpoint for deleting legacy dataset rows through structured filters, including dynamic date variables.
@@ -19,6 +20,8 @@
 - Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
+- Restore the edit pen for Basic settings in the navigation menu.
+- Align flexible dataset manual entry and imports with the standard sidebar, including dimension value suggestions and positional file or clipboard imports without listing records there.
 - Omit totals for table columns that mix text with numeric values and align totals with their column formatting.
 - Restore table footer totals and saving table options with DataTables 3.
 - Remove unused sort controls from the table options dialog.

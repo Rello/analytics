@@ -174,7 +174,7 @@ button, .button {
 #app-navigation .icon-analytics-rename { --analytics-navigation-icon: url(../img/rename.svg); }
 #app-navigation .icon-folder { --analytics-navigation-icon: var(--icon-folder-dark); }
 #app-navigation .icon-shared { --analytics-navigation-icon: var(--icon-shared-dark); }
-#app-navigation .icon-rename { --analytics-navigation-icon: url(../img/rename.svg); }
+#app-navigation .icon-rename { --analytics-navigation-icon: var(--icon-rename-dark); }
 #app-navigation .icon-add { --analytics-navigation-icon: url(../img/add.svg); }
 #app-navigation .icon-star,
 #app-navigation .icon-starred { --analytics-navigation-icon: url(../img/star.svg); }
@@ -2856,8 +2856,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 .flexibleColumnRow,
-.flexibleMappingRow,
-.flexibleRecordRow {
+.flexibleMappingRow {
     display: grid;
     grid-template-columns: minmax(130px, 2fr) minmax(95px, 1fr) minmax(110px, 1fr) auto auto auto;
     gap: 8px;
@@ -2870,7 +2869,26 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 }
 
 .flexibleRecordRow {
-    grid-template-columns: minmax(130px, 1fr) minmax(180px, 2fr);
+    display: table-row;
+}
+
+.flexibleRecordRow > * {
+    display: table-cell;
+}
+
+.flexibleRecordInput {
+    position: relative;
+}
+
+.flexibleRecordInput .dropDownList {
+    position: absolute;
+    left: 0;
+    top: 100%;
+}
+
+.flexibleRecordRow .icon-info {
+    opacity: 0.5;
+    padding: 0 10px;
 }
 
 .flexibleColumnRow .sidebarInput,
