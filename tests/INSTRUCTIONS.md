@@ -59,6 +59,7 @@ Supported identifiers:
 - `50`, `share`, `navigation-share`
 - `51`, `favorites`, `navigation-favorites`
 - `52`, `reference-assets` (isolated link-preview asset loading)
+- `53`, `panorama-pdf-upload` (safe panorama PDF uploads and overwrite protection)
 - `91`, `91-delete`, `report-delete`, `delete`
 - `92`, `92-delete`, `group-delete`
 

@@ -9,6 +9,7 @@
 - Persist aggregation and disaggregation chart functions.
 
 ### Changed
+- Include the panorama PDF upload regression in the Playwright scenario runner and full suite.
 - Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
 - Store report option data as longtext instead of varchar(1000).
 
