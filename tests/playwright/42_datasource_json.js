@@ -41,6 +41,17 @@ const dataloadName = 'json';
     steps.push('open analytics');
     await ensureAnalyticsLoaded(page, config);
 
+    steps.push('preserve mixed External JSON table values during date formatting');
+    const formattedRows = await page.evaluate(() => OCA.Analytics.Visualization.formatDates([
+      ['Cohere: North Mini Code (free)', '256000', '0', '0', 'cohere/north-mini-code:free'],
+      ['2025-04-14T00:00:00Z', '512000', '0.000000019', '0.00000003', 'dots-studio/dots-3-note-preview:free'],
+    ]));
+    if (formattedRows[0].join('|') !== 'Cohere: North Mini Code (free)|256000|0|0|cohere/north-mini-code:free'
+      || formattedRows[1][4] !== 'dots-studio/dots-3-note-preview:free'
+      || !/^2025-04-14 /.test(formattedRows[1][0])) {
+      throw new Error(`External JSON values changed during date formatting: ${JSON.stringify(formattedRows)}`);
+    }
+
     steps.push('prepare stored dataset report');
     await ensureStoredReportWithDefaultData(page, reportName, 'Automation datasource regression');
 

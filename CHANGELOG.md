@@ -20,6 +20,7 @@
 - Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
+- Preserve External JSON table text and numeric values when another row contains a date-like string #590.
 - Restore the edit pen for Basic settings in the navigation menu.
 - Align flexible dataset manual entry and imports with the standard sidebar, including dimension value suggestions and positional file or clipboard imports without listing records there.
 - Omit totals for table columns that mix text with numeric values and align totals with their column formatting.

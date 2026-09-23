@@ -2811,38 +2811,22 @@ OCA.Analytics.Visualization = {
      * @returns {Array} Updated rows
      */
     formatDates: function (data) {
-        let now;
-        for (let i = 0; i < data[0].length; i++) {
-            // Find a valid date in the column
-            let validDateFound = false;
-            for (let j = 0; j < data.length; j++) {
-                if (!isNaN(new Date(data[j][i]).valueOf()) && data[j][i] !== null && data[j][i].length >= 19) {
-                    validDateFound = true;
-                    break;
-                }
-            }
+        const isoDateTime = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/i;
+        data.forEach(row => row.forEach((value, index) => {
+            if (typeof value !== 'string' || !isoDateTime.test(value)) return;
 
-            // If a valid date is found, convert all dates in the column
-            if (validDateFound) {
-                for (let j = 0; j < data.length; j++) {
-                    if (data[j][i].length === 19) {
-                        // values are assumed to have a timezone or are used as UTC
-                        data[j][i] = data[j][i] + 'Z';
-                    }
-                    now = new Date(data[j][i]);
-                    if (!isNaN(now.valueOf())) {
-                        data[j][i] = now.getFullYear()
-                            + "-" + (now.getMonth() < 9 ? '0' : '') + (now.getMonth() + 1)
-                            + "-" + (now.getDate() < 10 ? '0' : '') + now.getDate()
-                            + " " + (now.getHours() < 10 ? '0' : '') + now.getHours()
-                            + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
-                            + ":" + (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
-                    } else {
-                        data[j][i] = ''; // Set to empty string if date is invalid
-                    }
-                }
-            }
-        }
+            // Datasources without a timezone have historically been interpreted as UTC.
+            const timestamp = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(value) ? value : value + 'Z';
+            const date = new Date(timestamp);
+            if (isNaN(date.valueOf())) return;
+
+            row[index] = date.getFullYear()
+                + "-" + (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1)
+                + "-" + (date.getDate() < 10 ? '0' : '') + date.getDate()
+                + " " + (date.getHours() < 10 ? '0' : '') + date.getHours()
+                + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+                + ":" + (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
+        }));
         return data;
     },
 
