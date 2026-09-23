@@ -21,7 +21,7 @@ Agents should focus on the core application logic and ignore files or folders ma
 
 All new user-interface elements must reuse the app's existing templates and shared CSS classes. Before adding custom markup or styling, find the corresponding control or dialog pattern in `templates/` and apply it consistently; extend the shared pattern when no suitable template exists instead of introducing an unstyled native control or a one-off design.
 
-For every change, add a meaningful one-liner to the corresponding section (Added, Changed, Fixed) in CHANGELOG.md. Add only one changelog entry per feature or fix: when work on the same change is iterated within a chat, update the existing entry as needed instead of adding another line. Do not add entries to a closed milestone which has a data. if no open milestone exists, add a new section to the changelog.
+For every user-facing change, add a meaningful one-liner to the corresponding section (Added, Changed, Fixed) in CHANGELOG.md. Technical fixes that do not change user-facing behavior, such as correcting a migration's Doctrine type argument, do not require a changelog entry. Add only one changelog entry per feature or fix: when work on the same change is iterated within a chat, update the existing entry as needed instead of adding another line. Do not add entries to a closed milestone which has a data. if no open milestone exists, add a new section to the changelog.
 
 When fixing a GitHub issue, add the `pending release` label and comment on the issue with a link to the pushed commit.
 
@@ -30,6 +30,8 @@ Test execution instructions are maintained in `tests/INSTRUCTIONS.md`; prefer th
 No nodejs or vue components are used. Everything is plain Javascript. 
 
 Do not use ILogger. It is deprecated in favor of Psr\Log\LoggerInterface
+
+When changing a column type in a database migration, pass a Doctrine `Type` object, for example `Type::getType(Types::TEXT)`, to `changeColumn()` or `setType()`. Passing a string such as `'text'` can cause a `TypeError` with the bundled Doctrine DBAL version.
 
 ### WhatsNew Migrations
 

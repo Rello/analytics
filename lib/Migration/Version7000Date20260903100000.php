@@ -11,7 +11,9 @@ declare(strict_types=1);
 namespace OCA\Analytics\Migration;
 
 use Closure;
+use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -23,7 +25,7 @@ class Version7000Date20260903100000 extends SimpleMigrationStep {
 		$table = $schema->getTable('analytics_report');
 		foreach (['chartoptions', 'dataoptions', 'filteroptions', 'tableoptions'] as $column) {
 			$table->changeColumn($column, [
-				'type' => 'text',
+				'type' => Type::getType(Types::TEXT),
 				'notnull' => false,
 			]);
 		}
