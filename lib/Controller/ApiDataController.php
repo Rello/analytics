@@ -217,7 +217,7 @@ class ApiDataController extends ApiController {
 	#[CORS]
 	public function dataGetV3(int $reportId) {
 		$params = $this->request->getParams();
-		$reportMetadata = $this->ReportService->read($reportId);
+		$reportMetadata = $this->ReportService->readOwnDatasetReport($reportId);
 
 		if (!empty($reportMetadata)) {
 			$options = json_decode($reportMetadata['filteroptions'], true);

@@ -1373,8 +1373,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 pdf.save(fileName);
             } else {
                 let pdfBlob = pdf.output('blob');
-                path = path + '/' + fileName;
-                OCA.Analytics.Panorama.Backend.uploadPdf(path, pdfBlob);
+                OCA.Analytics.Panorama.Backend.uploadPdf(path, fileName, pdfBlob);
             }
             OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'created pdf'));
             OCA.Analytics.Notification.dialogClose();
@@ -1567,18 +1566,30 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
             });
     },
 
-    uploadPdf: function (path, pdfBlob) {
-        let username = OC.currentUser;
-        let requestUrl = OC.linkToRemote('dav/files/') + username + path;
+    uploadPdf: function (folder, fileName, pdfBlob) {
+        const safeFileName = fileName.replace(/[\\/\x00-\x1f\x7f]/g, '_');
+        const folderParts = folder.split('/');
+        if (folderParts[folderParts.length - 1] === '') {
+            folderParts.pop();
+        }
+        if (folderParts.shift() !== '' || folderParts.some(part => !part || part === '.' || part === '..')) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'));
+            return;
+        }
+        const requestUrl = OC.linkToRemote('dav/files/') + encodeURIComponent(OC.currentUser) + '/'
+            + folderParts.map(encodeURIComponent).join('/') + (folderParts.length ? '/' : '') + encodeURIComponent(safeFileName);
+        const headers = OCA.Analytics.headers();
+        headers.set('If-None-Match', '*');
 
         fetch(requestUrl, {
             method: 'PUT',
-            headers: OCA.Analytics.headers(),
+            headers: headers,
             body: pdfBlob,
         })
             .then(response => {
                 if (!response.ok) {
-                    OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'))
+                    OCA.Analytics.Notification.notification('error', t('analytics', 'Request could not be processed'));
+                    return;
                 }
                 OCA.Analytics.Notification.notification('success', 'Document was saved');
             })

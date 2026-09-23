@@ -139,6 +139,16 @@ class ReportService {
 	public function read(int $reportId, $replace = true) {
 		$ownReport = $this->ReportMapper->readOwn($reportId);
 		if (!empty($ownReport)) {
+			if ((int)$ownReport['type'] === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+				if ((int)$ownReport['dataset'] <= 0
+					|| empty($this->DatasetService->readOwn((int)$ownReport['dataset']))) {
+					return [];
+				}
+			} else if ((int)$ownReport['dataset'] !== 0) {
+				return [];
+			}
+		}
+		if (!empty($ownReport)) {
 			$ownReport['permissions'] = \OCP\Constants::PERMISSION_UPDATE;
 			if ($replace) $ownReport = $this->VariableService->replaceTextVariables($ownReport);
 
@@ -157,6 +167,17 @@ class ReportService {
 
 		}
 		return $ownReport;
+	}
+
+	/** Return only an owned report with an owned internal dataset. */
+	public function readOwnDatasetReport(int $reportId): array {
+		$report = $this->ReportMapper->readOwn($reportId);
+		if (empty($report) || (int)$report['type'] !== DatasourceController::DATASET_TYPE_INTERNAL_DB
+			|| (int)$report['dataset'] <= 0
+			|| empty($this->DatasetService->readOwn((int)$report['dataset']))) {
+			return [];
+		}
+		return $report;
 	}
 
 	/**
@@ -206,6 +227,9 @@ class ReportService {
 			$parent = 0;
 		}
 		if (!$this->isValidParent((int)$parent)) {
+			return 0;
+		}
+		if ($dataset < 0 || ($type !== DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset !== 0)) {
 			return 0;
 		}
 		if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
@@ -611,6 +635,10 @@ class ReportService {
 	public function export(int $reportId) {
 		$result = array();
 		$result['report'] = $this->ReportMapper->readOwn($reportId);
+		if (empty($result['report']) || ((int)$result['report']['dataset'] !== 0
+			&& empty($this->readOwnDatasetReport($reportId)))) {
+			throw new Exception('Report dataset is not accessible');
+		}
 		$datasetId = $result['report']['dataset'];
 		$result['dataload'] = $this->DataloadMapper->read($datasetId);
 		$result['threshold'] = $this->ThresholdMapper->getThresholdsByReport($reportId);

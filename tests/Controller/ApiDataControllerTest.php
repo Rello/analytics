@@ -81,18 +81,45 @@ class ApiDataControllerTest extends TestCase {
 		], $response->getData());
 	}
 
+	public function testDataGetV3RejectsForgedReportBeforeStorageRead(): void {
+		$request = $this->getMockBuilder(IRequest::class)->addMethods(['getParams'])->getMock();
+		$request->method('getParams')->willReturn([]);
+		$reportService = $this->createMock(ReportService::class);
+		$reportService->expects($this->once())->method('readOwnDatasetReport')->with(42)->willReturn([]);
+		$storageService = $this->createMock(StorageService::class);
+		$storageService->expects($this->never())->method('read');
+		$response = $this->createController($request, $this->createMock(DatasetService::class),
+			$storageService, $this->createMock(VariableService::class), $reportService)->dataGetV3(42);
+		$this->assertSame(['message' => 'No data available for given report id'], $response->getData());
+	}
+
+	public function testDataGetV3ReadsAuthorizedReport(): void {
+		$request = $this->getMockBuilder(IRequest::class)->addMethods(['getParams'])->getMock();
+		$request->method('getParams')->willReturn([]);
+		$metadata = ['type' => 2, 'dataset' => 77, 'filteroptions' => '{}'];
+		$reportService = $this->createMock(ReportService::class);
+		$reportService->method('readOwnDatasetReport')->with(42)->willReturn($metadata);
+		$storageService = $this->createMock(StorageService::class);
+		$storageService->expects($this->once())->method('read')->with(77, $metadata)
+			->willReturn(['data' => [['dimension1' => 'safe']]]);
+		$response = $this->createController($request, $this->createMock(DatasetService::class),
+			$storageService, $this->createMock(VariableService::class), $reportService)->dataGetV3(42);
+		$this->assertSame([['dimension1' => 'safe']], $response->getData());
+	}
+
 	private function createController(
 		IRequest $request,
 		DatasetService $datasetService,
 		StorageService $storageService,
-		VariableService $variableService
+		VariableService $variableService,
+		?ReportService $reportService = null
 	): ApiDataController {
 		return new ApiDataController(
 			'analytics',
 			$request,
 			$this->createMock(LoggerInterface::class),
 			$datasetService,
-			$this->createMock(ReportService::class),
+			$reportService ?? $this->createMock(ReportService::class),
 			$storageService,
 			$this->createMock(StorageMapper::class),
 			$this->createMock(IDateTimeFormatter::class),

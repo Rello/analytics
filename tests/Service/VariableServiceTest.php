@@ -77,6 +77,34 @@ class VariableServiceTest extends TestCase
         ];
     }
 
+    public function testQuarterOffsetsCrossYearWithoutIteration(): void
+    {
+        $ref = new \ReflectionMethod(VariableService::class, 'parseFilter');
+        $currentIndex = (((int)date('Y') - 1) * 4) + intdiv((int)date('n') - 1, 3);
+
+        foreach (['next' => 401, 'last' => -401] as $direction => $offset) {
+            $result = $ref->invoke($this->service, '%' . $direction . abs($offset) . 'quarters%');
+            $targetIndex = $currentIndex + $offset;
+
+            $this->assertSame('BETWEEN', $result['option']);
+            $this->assertSame(intdiv($targetIndex, 4) + 1, $result['4$target_year']);
+            $this->assertSame(($targetIndex % 4) + 1, $result['3$target_quarter']);
+        }
+    }
+
+    public function testOversizedQuarterOffsetsAreRejected(): void
+    {
+        $ref = new \ReflectionMethod(VariableService::class, 'parseFilter');
+
+        foreach (['next', 'last', 'yester'] as $direction) {
+            $variable = '%' . $direction . '999999999999999999999999999999quarters%';
+            $this->assertFalse($ref->invoke($this->service, $variable));
+
+            $report = ['filteroptions' => json_encode(['filter' => [['option' => 'GT', 'value' => $variable]]])];
+            $this->assertSame($report, $this->service->replaceFilterVariables($report));
+        }
+    }
+
     public function testReplaceThresholdsVariables()
     {
         $thresholds = [

@@ -157,4 +157,41 @@ class ReportServiceTest extends TestCase {
 
 		$this->assertSame(0, $result);
 	}
+	public function testCreateRejectsNonInternalDatasetReference(): void {
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->expects($this->never())->method('create');
+		$service = $this->createReportService($reportMapper, $this->createMock(DatasetService::class));
+		$this->assertSame(0, $service->create('External', '', 0, 4, 77, '{}', 'table', 'table', '', '', ''));
+	}
+
+	public function testReadOwnDatasetReportRejectsExistingForeignAssociation(): void {
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->method('readOwn')->with(42)->willReturn(['type' => 2, 'dataset' => 77]);
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->method('readOwn')->with(77)->willReturn(false);
+		$service = $this->createReportService($reportMapper, $datasetService);
+		$this->assertSame([], $service->readOwnDatasetReport(42));
+	}
+
+	public function testReadOwnDatasetReportAllowsOwnedInternalDataset(): void {
+		$reportMapper = $this->createMock(ReportMapper::class);
+		$reportMapper->method('readOwn')->with(42)->willReturn(['type' => 2, 'dataset' => 77]);
+		$datasetService = $this->createMock(DatasetService::class);
+		$datasetService->method('readOwn')->with(77)->willReturn(['id' => 77]);
+		$service = $this->createReportService($reportMapper, $datasetService);
+		$this->assertSame(['type' => 2, 'dataset' => 77], $service->readOwnDatasetReport(42));
+	}
+
+	private function createReportService(ReportMapper $reportMapper, DatasetService $datasetService): ReportService {
+		return new ReportService(
+			'u1', new FakeL10N(), $this->createMock(LoggerInterface::class),
+			$this->createMock(\OCP\ITagManager::class), $this->createMock(ShareService::class),
+			$datasetService, $this->createMock(StorageMapper::class), $reportMapper,
+			$this->createMock(ThresholdMapper::class), $this->createMock(DataloadMapper::class),
+			$this->createMock(ActivityManager::class), $this->createMock(\OCP\Files\IRootFolder::class),
+			$this->createMock(\OCP\IConfig::class), $this->createMock(VariableService::class),
+			$this->createMock(FlexibleStorageService::class)
+		);
+	}
+
 }

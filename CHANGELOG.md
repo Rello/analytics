@@ -2,57 +2,33 @@
 
 ## Unreleased
 ### Added
-- Highlight data table rows when the mouse hovers over them.
-- Select a worksheet from a dropdown populated by the chosen spreadsheet.
-- Offer applicable link, content, chart-only, and table-only choices in the native Smart Picker search results for Analytics reports and panoramas without the redundant Analytics group heading, preserving explicit chart/table selections when reports gain another view; content previews render live charts, tables, KPIs, text, and pictures with ten-row table pages, bottom-only pagination, and chart libraries loaded only for chart previews.
-- Add a V4 API endpoint for deleting legacy dataset rows through structured filters, including dynamic date variables.
-- Configure tables interactively with a seven-row live preview independent of report pagination, column formatting, layout controls with accurate empty-field placeholders, shared section navigation with linked documentation and an active-section underline that follows scrolling, a left settings panel paired with a live preview, and draft Apply/Cancel actions; use alternating rows by default in previews and live tables, keep section headings visible when navigating, immediately mark the chosen compact header button for column formatting, prevent Appearance controls from scrolling the dialog shell blank, use report headers as the sole persisted sort control, and support DataTables 3 column metadata.
-- New interactive chart configuration with flexible field mapping and a live-data preview in the shared options-dialog layout.
-- Add the internal foundation for flexible shared datasets and source-independent chart mapping.
-- Configure shared panorama filters with editable report mappings and temporary viewer selections.
-- Allow thresholds to target calculated table columns.
-- Persist aggregation and disaggregation chart functions and show their secondary axis automatically.
-- Mark the Analysis menu when aggregation or disaggregation functions are active.
+- Smart Picker can show live report charts and tables.
+- Spreadsheet: Select a worksheet from a dropdown.
+- API endpoint for deleting legacy dataset rows.
+- New interactive chart and table configuration with live-preview.
+- Persist aggregation and disaggregation chart functions.
 
 ### Changed
-- Keep the latest Playwright run's artifacts and clean up older runs after completion.
 - Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
 - Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
 - Preserve External JSON table text and numeric values when another row contains a date-like string #590.
-- Restore the edit pen for Basic settings in the navigation menu.
-- Align flexible dataset manual entry and imports with the standard sidebar, including dimension value suggestions and positional file or clipboard imports without listing records there.
-- Omit totals for table columns that mix text with numeric values and align totals with their column formatting.
+- Keep panorama PDF cloud exports in the selected folder and prevent overwriting existing files.
 - Restore table footer totals and saving table options with DataTables 3.
-- Remove unused sort controls from the table options dialog.
-- Make browser checks wait for refresh saves, handle duplicate test groups, select filter rows precisely, and report scenario failures in the full runner.
-- Remove the misleading drag handle from chart visualization options.
-- Resolve reports and panoramas shared with the current user in link previews and respect the `link_preview_enabled` admin setting.
 - Enable panorama layout changes and page deletion only while editing.
-- Focus the dataset name when opening its creation wizard and create it with Enter.
-- Stack panorama tiles with balanced, full-width headers and preserved outer corner radii on narrow screens.
+- Panorama scaling on mobile screens.
 - Restore access to the Analytics navigation on mobile browsers, including the Overview dashboard #592.
 - Normalize spreadsheet dates for reliable chart parsing and render them in the viewer's local format #589.
 - Make aggregation and disaggregation series labels available for translation #593.
 - Require HTTPS when using Basic Authentication with external JSON data sources.
-- Keep legacy data-load simulations focused on the returned rows.
-- Log scheduled data-load and external transport failures with diagnostic details in both messages and context.
-- Show the specific internal-URL validation message when a data load fails.
 - Match navigation and navigation-menu icon colors to their labels in light and dark themes.
 - Export panoramas using a consistent light theme in PDFs.
-- Keep the report menu open while using its hover-based second-level options.
-- Close the navigation settings popover when clicking outside it.
-- Use the standard Analytics dialog for choosing a panorama report.
-- Use the standard Analytics dialog for selecting a panorama layout while keeping all previews visible.
-- Leave more space between dialog headings and the close button.
+- Use the standard Analytics dialogs for choosing panorama reports and layouts, with all layout previews visible.
 - Ask for confirmation before deleting the current panorama page.
 - Normalize primary and secondary button colors and action ordering across screens and dialogs.
 - Update the browser title when selecting a panorama.
 - Preserve slashes in Nextcloud Tables names and ignore malformed entries in the grouped data source selector.
-- Open the panorama content selector only from the edit prompt instead of the entire cell.
-- Close open options and navigation menus when clicking outside them.
-- Toggle sidebar sections when clicking their expand arrow.
 
 ## 6.8.1 - 2026-08-27
 ### Fixed

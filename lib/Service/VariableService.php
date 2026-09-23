@@ -231,9 +231,23 @@ class VariableService {
 				$currentMonth = (int)date('n');
 				$currentYear = (int)date('Y');
 				$currentQuarter = (int)ceil($currentMonth / 3);
+				$currentQuarterIndex = (($currentYear - 1) * 4) + $currentQuarter - 1;
 
 				$targetQuarter = $currentQuarter;
 				$targetYear = $currentYear;
+				if ($direction === 'last' || $direction === 'yester' || $direction === 'next') {
+					// Keep the target in the four-digit year range before converting the offset.
+					$maxOffset = $direction === 'next' ? (9999 * 4) - 1 - $currentQuarterIndex : $currentQuarterIndex;
+					$offset = ltrim((string)$offset, '0');
+					$offset = $offset === '' ? '0' : $offset;
+					if (strlen($offset) > strlen((string)$maxOffset)
+						|| (strlen($offset) === strlen((string)$maxOffset) && strcmp($offset, (string)$maxOffset) > 0)) {
+						return false;
+					}
+					$targetQuarterIndex = $currentQuarterIndex + ($direction === 'next' ? (int)$offset : -(int)$offset);
+					$targetYear = intdiv($targetQuarterIndex, 4) + 1;
+					$targetQuarter = ($targetQuarterIndex % 4) + 1;
+				}
 
 				switch ($direction) {
 					case 'first':
@@ -250,18 +264,7 @@ class VariableService {
 						break;
 					case 'last':
 					case 'yester':
-						$targetQuarter = $currentQuarter - $offset;
-						while ($targetQuarter < 1) {
-							$targetQuarter += 4;
-							$targetYear -= 1;
-						}
-						break;
 					case 'next':
-						$targetQuarter = $currentQuarter + $offset;
-						while ($targetQuarter > 4) {
-							$targetQuarter -= 4;
-							$targetYear += 1;
-						}
 						break;
 					case 'current':
 					default:

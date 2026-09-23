@@ -724,7 +724,7 @@ class DataloadService
             $ownDataset = $this->DatasetService->readOwn((int)$objectId);
             $dataset = empty($ownDataset) ? '' : (int)$ownDataset['id'];
         } else {
-            $reportMetadata = $this->ReportService->read($objectId);
+            $reportMetadata = $this->ReportService->readOwnDatasetReport((int)$objectId);
             $dataset = empty($reportMetadata) ? '' : (int)$reportMetadata['dataset'];
         }
         return $dataset;

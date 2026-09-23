@@ -138,6 +138,18 @@ class DataloadServiceTest extends TestCase {
 		$this->assertFalse($service->updateData(77, 'a', 'b', '1', true));
 	}
 
+	public function testUpdateDataRejectsForgedReportDataset(): void {
+		$reportService = $this->createMock(ReportService::class);
+		$reportService->expects($this->once())->method('readOwnDatasetReport')->with(42)->willReturn([]);
+		$storageService = $this->createMock(StorageService::class);
+		$storageService->expects($this->never())->method('update');
+		$service = $this->createService(
+			$this->createMock(DatasourceController::class),
+			$this->createMock(DataloadMapper::class), null, $reportService, $storageService
+		);
+		$this->assertFalse($service->updateData(42, 'a', 'b', '1', false));
+	}
+
 	public function testGetDataFromDatasourceRejectsUnownedDataload(): void {
 		$dataloadMapper = $this->createMock(DataloadMapper::class);
 		$dataloadMapper->expects($this->once())
