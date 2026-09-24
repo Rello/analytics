@@ -26,6 +26,7 @@ OC.L10N.register(
     "Add" : "הוספה",
     "Sort order" : "סידור",
     "Default" : "ברירת מחדל",
+    "Line" : "קו",
     "Bar" : "בר",
     "Favorites" : "מועדפים",
     "New" : "חדש",

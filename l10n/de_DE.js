@@ -274,6 +274,7 @@ OC.L10N.register(
     "No" : "Nein",
     "Variables" : "Variablen",
     "Save data" : "Daten speichern",
+    "Failed to load values" : "Werte konnten nicht geladen werden",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "In den Dimensionen können Textvariablen verwendet werden.<br>Sie werden ersetzt, wenn die Daten hinzugefügt werden.",
     "Failed to save data" : "Daten konnten nicht gespeichert werden",
     "Delete data" : "Daten löschen",

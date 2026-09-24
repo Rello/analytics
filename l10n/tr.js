@@ -274,6 +274,7 @@ OC.L10N.register(
     "No" : "Hayıt",
     "Variables" : "Değişkenler",
     "Save data" : "Verileri kaydet",
+    "Failed to load values" : "Değerler yüklenemedi",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Yazı değişkenleri boyutlar olarak kullanılabilir.<br>Veriler hazırlanırken gerçek değerleri yerleştirilir.",
     "Failed to save data" : "Veriler kaydedilemedi",
     "Delete data" : "Verileri sil",

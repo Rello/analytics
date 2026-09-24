@@ -274,6 +274,7 @@ OC.L10N.register(
     "No" : "Nie",
     "Variables" : "Premenné",
     "Save data" : "Uložiť údaje",
+    "Failed to load values" : "Nepodarilo sa načítať hodnoty",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Pre rozmery je možné použiť textové premenné. <br> Nahradia sa, keď budú pridané dáta.",
     "Failed to save data" : "Nepodarilo sa uložiť údaje",
     "Delete data" : "Zmazať údaje",
