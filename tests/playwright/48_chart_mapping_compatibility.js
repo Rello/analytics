@@ -99,7 +99,7 @@ const config = buildScenarioConfig('48');
         assert.equal(await page.locator('#optionsChartType3').inputValue(),'line');
         assert.equal(await page.evaluate(()=>OCA.Analytics.Filter.getChartColumnMapping()),null);
         assert.equal(await page.evaluate(()=>Chart.getChart(document.getElementById('chartColumnPreviewCanvas')).data.datasets[3].type),'line');
-        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Data mapping'}).click();
+        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Data & series'}).click();
         await page.waitForTimeout(400);
         await capture('legacy_finance_mapping');
         await page.evaluate(()=>{

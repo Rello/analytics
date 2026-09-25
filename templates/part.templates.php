@@ -1179,53 +1179,9 @@
 </template>
 
 <template id="templateChartOptions">
-    <div id="chartDataFormatSection" class="analyticsDialogSection"
-         data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
-        <h2><?php p($l->t('Data format')); ?></h2>
-        <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
-        <div class="analyticsModelSelector">
-            <div class="analyticsModelOption">
-                <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked>
-                <label for="analyticsModelOpt1" class="analyticsModelCard">
-                    <span class="analyticsModelCardTop">
-                        <img src="<?php echo image_path('analytics', 'row.svg'); ?>"
-                             class="analyticsModelCardIcon" alt="">
-                        <span class="analyticsModelCardIndicator"></span>
-                    </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('In rows')); ?></span>
-                    <span class="analyticsModelCardText"><?php p($l->t('Data series are organized by horizontal rows.')); ?></span>
-                </label>
-            </div>
-            <div class="analyticsModelOption">
-                <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel">
-                <label for="analyticsModelOpt2" class="analyticsModelCard">
-                    <span class="analyticsModelCardTop">
-                        <img src="<?php echo image_path('analytics', 'column.svg'); ?>"
-                             class="analyticsModelCardIcon" alt="">
-                        <span class="analyticsModelCardIndicator"></span>
-                    </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('In columns')); ?></span>
-                    <span class="analyticsModelCardText"><?php p($l->t('Data series are grouped by vertical columns.')); ?></span>
-                </label>
-            </div>
-            <div class="analyticsModelOption">
-                <input type="radio" id="analyticsModelOpt3" name="analyticsModel" value="timeSeriesModel">
-                <label for="analyticsModelOpt3" class="analyticsModelCard">
-                    <span class="analyticsModelCardTop">
-                        <img src="<?php echo image_path('analytics', 'chartTime.svg'); ?>"
-                             class="analyticsModelCardIcon analyticsModelCardIcon--time" alt="">
-                        <span class="analyticsModelCardIndicator"></span>
-                    </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Timestamps')); ?></span>
-                    <span class="analyticsModelCardText"><?php p($l->t('Use first column for time-series indexing.')); ?></span>
-                </label>
-            </div>
-        </div>
-    </div>
-
     <div id="chartColumnMappingSection" class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
-        <h2><?php p($l->t('Data mapping')); ?></h2>
+        <h2><?php p($l->t('Data & series')); ?></h2>
         <div class="chartColumnMappingToolbar">
             <span id="chartColumnMappingStatus" class="chartColumnMappingHint"></span>
             <button type="button" id="chartColumnMappingSuggest"><?php p($l->t('Suggest mapping')); ?></button>
@@ -1238,17 +1194,19 @@
             <div class="chartColumnMappingRole">
                 <label id="chartColumnValuesLabel" for="chartColumnValueAdd"><?php p($l->t('Values / Y-axis')); ?></label>
                 <div id="chartColumnValues" class="chartColumnSelections"></div>
+                <p class="chartColumnMappingHint"><?php p($l->t('Chart types apply to every group. Use Advanced to customize individual series.')); ?></p>
                 <select id="chartColumnValueAdd" class="optionsInput" aria-labelledby="chartColumnValuesLabel"></select>
             </div>
             <div id="chartColumnSeriesFieldset" class="chartColumnMappingRole">
                 <div class="chartColumnMappingToolbar">
-                    <label for="chartColumnSeriesAdd"><?php p($l->t('Break down by')); ?></label>
+                    <label for="chartColumnSeriesAdd"><?php p($l->t('Split by')); ?></label>
                     <button type="button" id="chartColumnMappingSwap"><?php p($l->t('Swap')); ?></button>
                 </div>
                 <div id="chartColumnSeries" class="chartColumnSelections"></div>
                 <select id="chartColumnSeriesAdd" class="optionsInput"></select>
                 <span class="chartColumnMappingHint"><?php p($l->t('Optional. One series for each distinct group.')); ?></span>
             </div>
+            <div id="chartSegmentColors" class="chartColumnMappingRole" hidden></div>
             <p id="chartColumnMappingError" class="chartColumnMappingError" role="alert" hidden></p>
         </div>
         <p id="chartColumnMappingSummary" class="chartColumnMappingSummary" aria-live="polite"></p>
@@ -1256,7 +1214,7 @@
 
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'label.svg'); ?>">
-        <h2><?php p($l->t('Labels')); ?></h2>
+        <h2><?php p($l->t('Appearance')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Choose how doughnut chart labels are displayed')); ?></span>
         <div class="table" style="display: table;">
             <div style="display: table-row;">
@@ -1275,7 +1233,52 @@
 
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
-        <h2><?php p($l->t('Visualization')); ?></h2>
+        <h2><?php p($l->t('Advanced')); ?></h2>
+        <div id="chartDataFormatSection" class="chartColumnMappingRole"
+             data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
+            <h3><?php p($l->t('Data layout')); ?></h3>
+            <span class="userGuidance"><?php p($l->t('Select how the raw data is structured')); ?></span>
+            <div class="analyticsModelSelector">
+                <div class="analyticsModelOption">
+                    <input type="radio" id="analyticsModelOpt1" name="analyticsModel" value="kpiModel" checked>
+                    <label for="analyticsModelOpt1" class="analyticsModelCard">
+                        <span class="analyticsModelCardTop">
+                            <img src="<?php echo image_path('analytics', 'row.svg'); ?>"
+                                 class="analyticsModelCardIcon" alt="">
+                            <span class="analyticsModelCardIndicator"></span>
+                        </span>
+                        <span class="analyticsModelCardTitle"><?php p($l->t('In rows')); ?></span>
+                        <span class="analyticsModelCardText"><?php p($l->t('Data series are organized by horizontal rows.')); ?></span>
+                    </label>
+                </div>
+                <div class="analyticsModelOption">
+                    <input type="radio" id="analyticsModelOpt2" name="analyticsModel" value="accountModel">
+                    <label for="analyticsModelOpt2" class="analyticsModelCard">
+                        <span class="analyticsModelCardTop">
+                            <img src="<?php echo image_path('analytics', 'column.svg'); ?>"
+                                 class="analyticsModelCardIcon" alt="">
+                            <span class="analyticsModelCardIndicator"></span>
+                        </span>
+                        <span class="analyticsModelCardTitle"><?php p($l->t('In columns')); ?></span>
+                        <span class="analyticsModelCardText"><?php p($l->t('Data series are grouped by vertical columns.')); ?></span>
+                    </label>
+                </div>
+                <div class="analyticsModelOption">
+                    <input type="radio" id="analyticsModelOpt3" name="analyticsModel" value="timeSeriesModel">
+                    <label for="analyticsModelOpt3" class="analyticsModelCard">
+                        <span class="analyticsModelCardTop">
+                            <img src="<?php echo image_path('analytics', 'chartTime.svg'); ?>"
+                                 class="analyticsModelCardIcon analyticsModelCardIcon--time" alt="">
+                            <span class="analyticsModelCardIndicator"></span>
+                        </span>
+                        <span class="analyticsModelCardTitle"><?php p($l->t('Timestamps')); ?></span>
+                        <span class="analyticsModelCardText"><?php p($l->t('Use first column for time-series indexing.')); ?></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <h3><?php p($l->t('Individual series')); ?></h3>
         <div id="chartOptionsTable" class="chartOptionsSeriesList">
             <div class="chartOptionsSeriesHeader">
                 <div class="chartOptionsSeriesHeaderTitle"></div>

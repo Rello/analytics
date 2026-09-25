@@ -201,8 +201,41 @@ async function setSwitch(page, selector, checked) {
         data: nonPivotData,
         options: { tableoptions: nonPivotOptions },
       }, 'timeSeriesModel');
-      if (chartData.header.length !== nonPivotHeader.length || chartData.data[0].length !== nonPivotData[0].length) {
-        throw new Error('Table calculated columns leaked into chart data');
+      if (chartData.header.at(-1) !== 'Revenue' || chartData.data[0].at(-1) !== 10
+        || chartData.data[1].at(-1) !== 21) {
+        throw new Error('Calculated column is missing from time-series chart data');
+      }
+      const chart = visualization.convertDataToChartJsFormat({
+        header: nonPivotHeader,
+        data: nonPivotData,
+        options: {chart: 'line', chartoptions: {analyticsModel: 'timeSeriesModel'}, tableoptions: nonPivotOptions},
+      }, 'line');
+      if (!chart[1].some(series => series.label === 'Revenue'
+        && series.data[0].y === 10 && series.data[1].y === 21)) {
+        throw new Error('Calculated column is missing from the chart series');
+      }
+      const kpiChartData = visualization.getChartDataWithCalculatedColumns({
+        header: nonPivotHeader,
+        data: nonPivotData,
+        options: {tableoptions: nonPivotOptions},
+      }, 'kpiModel', true);
+      if (kpiChartData.header.at(-1) !== 'Revenue' || kpiChartData.data[0].at(-1) !== 10) {
+        throw new Error('Calculated column is missing from KPI chart mapping fields');
+      }
+      const kpiChart = visualization.convertDataToChartJsFormat({
+        header: nonPivotHeader,
+        data: nonPivotData,
+        options: {
+          chart: 'line',
+          chartoptions: OCA.Analytics.ChartOptions.setGuiState({}, {
+            model: 'kpiModel', columnMapping: {category: 0, series: [], measures: [1, 3]},
+          }),
+          tableoptions: nonPivotOptions,
+        },
+      }, 'line');
+      if (!kpiChart[1].some(series => series.label === 'Revenue'
+        && series.data[0].y === 10 && series.data[1].y === 21)) {
+        throw new Error('Selected calculated column is missing from KPI chart data');
       }
 
       return { nonPivotRows: nonPivot.data.length, pivotRows: pivot.data.length };

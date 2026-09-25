@@ -35,7 +35,7 @@ const config = buildScenarioConfig('47');
             window.mappingChartCount = Object.keys(Chart.instances).length;
             OCA.Analytics.Filter.openChartOptionsDialog();
         }, fixture);
-        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText: 'Data mapping'}).click();
+        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText: 'Data & series'}).click();
         if (fixture.data?.length === 0) {
             await page.locator('#chartColumnPreviewMessage').filter({hasText:'No data'}).waitFor();
         } else {
@@ -46,7 +46,7 @@ const config = buildScenarioConfig('47');
         await ensureAnalyticsLoaded(page, config);
         await open();
         assert.deepEqual(await page.locator('.analyticsEnhancedDialogNavButton').allTextContents(),
-            ['Data format', 'Data mapping', 'Labels', 'Visualization']);
+            ['Data & series', 'Appearance', 'Advanced']);
         assert.equal(await page.locator('#chartColumnCategory.optionsInput').count(), 1);
         assert.equal(await page.locator('#chartColumnValueAdd.optionsInput').count(), 1);
         assert.equal(await page.locator('#chartColumnSeriesAdd.optionsInput').count(), 1);
@@ -55,10 +55,36 @@ const config = buildScenarioConfig('47');
         assert.equal(await page.locator('#chartColumnMappingSummary').innerText(), 'Show € and Cost by Segment, broken down by Year.');
         assert.equal(await page.locator('#chartColumnMappingSummary strong').count(), 3);
         assert.deepEqual((await previewData()).datasets.map(d => d.label), ['2025 · €', '2025 · Cost', '2026 · €', '2026 · Cost']);
+        await page.getByLabel('Show Cost as', {exact: true}).selectOption('line');
+        await page.getByLabel('Color for 2025', {exact: true}).fill('#123456');
+        await page.getByLabel('Color for 2025', {exact: true}).dispatchEvent('change');
+        await page.waitForFunction(() => {
+            const datasets = Chart.getChart(document.getElementById('chartColumnPreviewCanvas'))?.data.datasets;
+            return datasets?.filter(d => d.label.endsWith('Cost')).every(d => d.type === 'line')
+                && datasets.filter(d => d.label.startsWith('2025')).every(d => d.backgroundColor === '#123456');
+        });
+        assert.equal(await page.locator('#analyticsDialogBtnGo').innerText(), 'Apply');
+        await page.getByLabel('Show € as', {exact: true}).selectOption('bar');
+        await page.getByLabel('Color for 2026', {exact: true}).fill('#654321');
+        await page.getByLabel('Color for 2026', {exact: true}).dispatchEvent('change');
+        await page.waitForFunction(() => {
+            const chart = Chart.getChart(document.getElementById('chartColumnPreviewCanvas'));
+            return chart?.legend.legendItems.map(item => item.text).join('|') === '2025|2026|Bars: €|Line: Cost';
+        });
+        await capture('measure_types_and_group_colors');
+        assert.deepEqual(await page.evaluate(() => {
+            const chart = Chart.getChart(document.getElementById('chartColumnPreviewCanvas'));
+            const item = chart.legend.legendItems[0];
+            OCA.Analytics.Visualization.toggleGroupedLegend(item, chart);
+            const hidden = chart.data.datasets.map((d, i) => !chart.isDatasetVisible(i));
+            OCA.Analytics.Visualization.toggleGroupedLegend(item, chart);
+            return hidden;
+        }), [true, true, false, false]);
+
         await page.locator('#chartColumnValues [data-column-id="3"] .chartColumnRemove').click();
         await page.waitForFunction(() => Chart.getChart(document.getElementById('chartColumnPreviewCanvas'))?.data.datasets.length === 2);
         assert.deepEqual((await previewData()).datasets[0].data, [{x:'Retail', y:12000}, {x:'Online', y:18000}]);
-        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Data mapping'}).click();
+        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Data & series'}).click();
         await page.waitForTimeout(400);
         await capture('mapping_live_preview');
         await page.locator('#chartColumnMappingSwap').click();
@@ -89,6 +115,7 @@ const config = buildScenarioConfig('47');
         await page.waitForFunction(() => !Chart.getChart(document.getElementById('chartColumnPreviewCanvas')));
         await page.locator('#chartColumnValueAdd').selectOption('2');
         await waitPreview();
+        await page.getByLabel('Show € as', {exact: true}).selectOption('line');
         // Apply through the actual handler, intercepting only the backend reload so
         // this UI fixture never writes a report or requests a nonexistent report ID.
         await page.evaluate(() => {
@@ -99,6 +126,7 @@ const config = buildScenarioConfig('47');
         assert.deepEqual(await page.evaluate(() => OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions).columnMapping),
             {category:0,series:[1],measures:[2]});
         assert.equal(await page.evaluate(() => window.mappingReloaded), true);
+        assert.equal(await page.evaluate(() => OCA.Analytics.Flexible.seriesOptions(OCA.Analytics.currentReportData.options.dataoptions)[0].type), 'line');
         await page.evaluate(() => {OCA.Analytics.Report.Backend.getData = window.mappingOriginalReload;});
 
         await open({header:['Date','Revenue','Cost'], data:[['2026-01-01',10,6],['2026-02-01',20,9]],
@@ -106,6 +134,19 @@ const config = buildScenarioConfig('47');
         assert.equal(await page.locator('#chartColumnCategoryLabel').innerText(), 'Time / X-axis');
         assert.equal(await page.locator('#chartColumnMappingSummary').innerText(), 'Show Revenue and Cost over time using Date.');
         assert.deepEqual((await previewData()).datasets[0].data, [{x:'2026-01-01',y:10},{x:'2026-02-01',y:20}]);
+
+        await open({header: ['Segment', 'Year', '€'], data: [['Retail', 2025, 10], ['Online', 2025, 20]],
+            options: {chart: 'column', chartoptions: {}, dataoptions: [],
+                tableoptions: {calculatedColumns: JSON.stringify({operation: 'formula', expression: 'column3 * 2', title: 'Target'})}}});
+        assert.equal(await page.locator('#chartColumnCategory').inputValue(), '1');
+        await page.locator('#chartColumnValueAdd').selectOption('3');
+        assert.equal(await page.getByLabel('Show Target as', {exact: true}).inputValue(), 'line');
+        await page.waitForFunction(() => {
+            const datasets = Chart.getChart(document.getElementById('chartColumnPreviewCanvas'))?.data.datasets;
+            return datasets?.length === 4 && datasets[1].data[0].y === 20 && datasets[3].data[0].y === 40;
+        });
+        await page.getByLabel('Show € as', {exact: true}).selectOption('bar');
+        await capture('calculated_value_combo');
 
         const manyRows = Array.from({length:40}, (_,i) => ['Segment '+i,2026,i+1,i]);
         await open({data:manyRows});
@@ -115,7 +156,7 @@ const config = buildScenarioConfig('47');
         assert.match(await page.locator('#chartColumnPreviewStatus').innerText(), /12 of 40 report rows/);
         await page.locator('#chartColumnPreviewMessage').waitFor({state:'visible'});
         await page.setViewportSize({width:800,height:1000});
-        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Data mapping'}).click();
+        await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText:'Data & series'}).click();
         await page.waitForTimeout(500);
         assert.equal(await page.locator('#chartColumnMappingSection').evaluate(el => el.scrollWidth > el.clientWidth), false);
         await capture('mapping_narrow');

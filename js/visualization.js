@@ -1690,6 +1690,11 @@ OCA.Analytics.Visualization = {
         const defaultLegendClickHandler = Chart.defaults.plugins.legend.onClick;
         const pieDoughnutLegendClickHandler = Chart.controllers.doughnut.overrides.plugins.legend.onClick;
         const newLegendClickHandler = function (e, legendItem, legend) {
+            if (legendItem.analyticsDatasetIndexes) {
+                OCA.Analytics.Visualization.toggleGroupedLegend(legendItem, legend.chart);
+                OCA.Analytics.Filter.syncChartLegendSelections();
+                return;
+            }
             const index = legendItem.datasetIndex;
             const type = legend.chart.config.type;
 
@@ -1741,7 +1746,7 @@ OCA.Analytics.Visualization = {
                     index: index
                 }));
             } else {
-                labels = defaultGenerateLabels(chart);
+                labels = OCA.Analytics.Visualization.getGroupedChartLegend(chart) || defaultGenerateLabels(chart);
             }
 
             const showAllNeeded = labels.length > 4 && labels.some(label => label.hidden);
@@ -2088,10 +2093,26 @@ OCA.Analytics.Visualization = {
         return {annotations};
     },
 
-    getChartDataWithCalculatedColumns: function (reportData, dataModel) {
+    getChartDataWithCalculatedColumns: function (reportData, dataModel, includeForMapping = false) {
+        const header = Array.isArray(reportData.header) ? [...reportData.header] : [];
+        const data = Array.isArray(reportData.data) ? reportData.data.map(row => Array.isArray(row) ? [...row] : row) : [];
+        const mapping = OCA.Analytics.ChartOptions?.getGuiState(reportData.options?.chartoptions).columnMapping;
+        const calculatedColumnIsMapped = mapping && [mapping.category, ...mapping.series, ...mapping.measures]
+            .some(column => Number.isInteger(column) && column >= header.length);
+        if ((!includeForMapping && dataModel !== 'timeSeriesModel' && !calculatedColumnIsMapped)
+            || reportData._analyticsChartCalculated
+            || !reportData.options?.tableoptions?.calculatedColumns) {
+            return {header, data};
+        }
+
+        const columns = header.map((label, index) => ({
+            analyticsReference: this.getTableColumnReference('source', index, label, null, reportData.columnRefs?.[index]),
+        }));
+        const calculated = this.dataTableCalculatedColumns(data, columns, {...reportData.options.tableoptions});
         return {
-            header: Array.isArray(reportData.header) ? [...reportData.header] : [],
-            data: Array.isArray(reportData.data) ? reportData.data.map(row => Array.isArray(row) ? [...row] : row) : [],
+            header: [...header, ...calculated.columns.slice(header.length).map(column => column.analyticsLabel)],
+            data: calculated.data,
+            _analyticsChartCalculated: true,
         };
     },
 
@@ -2133,10 +2154,45 @@ OCA.Analytics.Visualization = {
         return parts.join(' · ');
     },
 
+    toggleGroupedLegend: function (item, chart) {
+        const visible = !item.analyticsDatasetIndexes.every(index => chart.isDatasetVisible(index));
+        item.analyticsDatasetIndexes.forEach(index => chart.setDatasetVisibility(index, visible));
+        chart.update();
+    },
+
+    getGroupedChartLegend: function (chart) {
+        const datasets = chart.data.datasets;
+        if (!datasets.length || datasets.some(dataset => !dataset.analyticsGroupLabel)) return null;
+        const groups = new Map(), measures = new Map();
+        datasets.forEach((dataset, index) => {
+            const group = dataset.analyticsGroupKey;
+            if (!groups.has(group)) groups.set(group, []);
+            groups.get(group).push(index);
+            if (!measures.has(dataset.analyticsMeasureId)) measures.set(dataset.analyticsMeasureId, []);
+            measures.get(dataset.analyticsMeasureId).push(index);
+        });
+        if (measures.size < 2) return null;
+        const type = index => datasets[index].type || chart.config.type;
+        if ([...groups.values()].some(indexes => new Set(indexes.map(index => datasets[index].backgroundColor)).size !== 1)
+            || [...measures.values()].some(indexes => new Set(indexes.map(type)).size !== 1)
+            || [...measures.values()].some(indexes => !['bar', 'line'].includes(type(indexes[0])))) return null;
+        const item = (indexes, text, color, pointStyle = 'rect') => ({
+            text, fillStyle: color, strokeStyle: color, pointStyle,
+            lineWidth: 2, datasetIndex: indexes[0], analyticsDatasetIndexes: indexes,
+            hidden: indexes.every(index => !chart.isDatasetVisible(index)),
+        });
+        return [
+            ...[...groups.values()].map(indexes => item(indexes, datasets[indexes[0]].analyticsGroupLabel, datasets[indexes[0]].backgroundColor)),
+            ...[...measures.values()].map(indexes => item(indexes,
+                (type(indexes[0]) === 'line' ? t('analytics', 'Line') : t('analytics', 'Bars')) + ': ' + datasets[indexes[0]].analyticsMeasureLabel,
+                '#808080', type(indexes[0]) === 'line' ? 'line' : 'rect')),
+        ];
+    },
+
     getChartSeriesItems: function (reportData, dataModel, configuredMapping = undefined) {
         const model = dataModel || OCA.Analytics.ChartOptions.getGuiState(reportData.options?.chartoptions).model;
-        const chartData = this.getChartDataWithCalculatedColumns(reportData, model);
-        const fields = this.getChartColumnFields(reportData, model, configuredMapping);
+        const chartData = this.getChartDataWithCalculatedColumns(reportData, model, !!configuredMapping);
+        const fields = this.getChartColumnFields({...reportData, ...chartData}, model, configuredMapping);
 
         if (fields && model === 'kpiModel') {
             const labels = new Map();
@@ -2144,7 +2200,12 @@ OCA.Analytics.Visualization = {
                 const label = this.getChartSeriesLabel(row, fields, measure);
                 const key = fields.seriesDimensions.map(field => String(row[field.index] ?? '')).join('\u0000')
                     + '\u0001' + String(measure.id);
-                if (!labels.has(key)) labels.set(key, {label});
+                if (!labels.has(key)) labels.set(key, {
+                    label,
+                    measureId: measure.id,
+                    groupKey: JSON.stringify(fields.seriesDimensions.map(field => row[field.index])),
+                    groupLabel: fields.seriesDimensions.map(field => row[field.index]).join(' · '),
+                });
             }));
             return Array.from(labels.values());
         }
@@ -2153,6 +2214,7 @@ OCA.Analytics.Visualization = {
             return fields.measures.map(measure => ({
                 label: measure.label,
                 index: measure.index,
+                measureId: measure.id,
             }));
         }
 
@@ -2198,7 +2260,7 @@ OCA.Analytics.Visualization = {
         const guiState = OCA.Analytics.ChartOptions.getGuiState(data.options.chartoptions);
         const dataModel = guiState.model;
         const chartData = this.getChartDataWithCalculatedColumns(data, dataModel);
-        const fields = this.getChartColumnFields(data, dataModel);
+        const fields = this.getChartColumnFields({...data, ...chartData}, dataModel);
         let header = chartData.header.slice(1);
         const isTopGrouping = !!data.options?.filteroptions?.topN;
         let datasetCounter = 0;
@@ -2223,6 +2285,10 @@ OCA.Analytics.Visualization = {
                         const label = this.getChartSeriesLabel(row, fields, measure);
                         series.set(key, {
                             ...(chartType !== 'doughnut' && {label: label || undefined}),
+                            analyticsGroupKey: JSON.stringify(fields.seriesDimensions.map(field => row[field.index])),
+                            analyticsGroupLabel: fields.seriesDimensions.map(field => row[field.index]).join(' · '),
+                            analyticsMeasureId: measure.id,
+                            analyticsMeasureLabel: measure.label,
                             data: [],
                             hidden: datasetCounter >= 4 && !isTopGrouping,
                             yAxisID: 'primary',
@@ -2399,7 +2465,17 @@ OCA.Analytics.Visualization = {
             maintainAspectRatio: false,
             animation: false,
             plugins: {
-                legend: {display: true, position: 'bottom', labels: {boxWidth: 10, padding: 10}},
+                legend: {
+                    display: true, position: 'bottom',
+                    labels: {
+                        boxWidth: 10, padding: 10,
+                        generateLabels: chart => this.getGroupedChartLegend(chart) || Chart.defaults.plugins.legend.labels.generateLabels(chart),
+                    },
+                    onClick: (event, item, legend) => {
+                        if (item.analyticsDatasetIndexes) this.toggleGroupedLegend(item, legend.chart);
+                        else Chart.defaults.plugins.legend.onClick(event, item, legend);
+                    },
+                },
                 datalabels: {display: false},
                 zoom: false,
                 annotation: false,
@@ -2419,6 +2495,8 @@ OCA.Analytics.Visualization = {
             previewOptions.scales.x.time = {...configured.scales.x.time};
         }
         if (circular) {
+            delete previewOptions.plugins.legend.labels.generateLabels;
+            delete previewOptions.plugins.legend.onClick;
             delete previewOptions.scales;
             if (chartType === 'doughnut') {
                 previewOptions.circumference = 180;

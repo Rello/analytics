@@ -3001,6 +3001,29 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     flex-shrink: 0;
 }
 
+.chartMeasureStyle {
+    display: grid;
+    gap: 4px;
+    min-width: 120px;
+    margin-inline-start: auto;
+}
+
+.chartMeasureStyle summary {
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--color-text-maxcontrast);
+}
+
+.chartMeasureStyle details select {
+    margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+    #chartColumnValues .chartColumnSelection {
+        flex-wrap: wrap;
+    }
+}
+
 .chartColumnSelectionActions button {
     min-width: 32px;
     min-height: 32px;

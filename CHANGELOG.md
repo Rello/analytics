@@ -14,6 +14,7 @@
 - Store report option data as longtext instead of varchar(1000).
 
 ### Fixed
+- Configure calculated chart values with a chart type per value and shared colors per group, with individual series settings under Advanced.
 - Preserve External JSON table text and numeric values when another row contains a date-like string #590.
 - Keep panorama PDF cloud exports in the selected folder and prevent overwriting existing files.
 - Restore table footer totals and saving table options with DataTables 3.

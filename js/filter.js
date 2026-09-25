@@ -1825,13 +1825,27 @@ OCA.Analytics.Filter = {
             if (!seriesTable) {
                 return;
             }
-            if (resetSeriesOptions) dataOptions = [];
+            const dataModel = document.querySelector('input[name="analyticsModel"]:checked')?.value || guiState.model;
+            if (resetSeriesOptions) {
+                const previous = OCA.Analytics.Filter.getChartOptionsSeriesRows(seriesTable);
+                const oldItems = seriesTable._analyticsStyleItems || [];
+                const key = item => JSON.stringify([item.groupKey, item.measureId, item.index]);
+                const saved = new Map(oldItems.map((item, index) => [key(item), previous[index]]));
+                const newItems = columnMapping && OCA.Analytics.Visualization.getChartSeriesItems(
+                    OCA.Analytics.currentReportData, dataModel, columnMapping);
+                dataOptions = newItems ? newItems.map(item => {
+                    if (saved.has(key(item))) return saved.get(key(item));
+                    const sameGroup = item.groupKey === undefined ? -1 : oldItems.findIndex(old => old.groupKey === item.groupKey);
+                    return sameGroup >= 0 ? {...previous[sameGroup], type: 'line'} : {};
+                }) : [];
+            }
             if (columnMapping === false) {
                 seriesTable.querySelectorAll('.chartOptionsSeriesRow').forEach(row => row.remove());
+                document.getElementById('chartSegmentColors').hidden = true;
                 return;
             }
-            const dataModel = document.querySelector('input[name="analyticsModel"]:checked')?.value || guiState.model;
             OCA.Analytics.Filter.renderChartOptionsSeriesRows(seriesTable, dataOptions, dataModel, columnMapping);
+            document.getElementById('chartColumnMappingSection')?._analyticsSyncStyles?.();
         });
         if (guiState.model === 'accountModel') {
             container.getElementById('analyticsModelOpt2').checked = true;
@@ -1851,6 +1865,7 @@ OCA.Analytics.Filter = {
         );
 
         const dialog = document.getElementById('analyticsDialogContainer');
+        document.getElementById('analyticsDialogBtnGo').textContent = t('analytics', 'Apply');
         dialog.classList.add('analyticsDialog--chartOptions', 'analyticsDialog--visualizationOptions');
         dialog.querySelector('.analyticsEnhancedDialogLayout').append(
             document.getElementById('chartColumnMappingPreview')
@@ -1861,7 +1876,11 @@ OCA.Analytics.Filter = {
             mappingSection?._analyticsDestroyPreview?.();
             cleanup?.();
         };
-        dialog.addEventListener('change', () => mappingSection?._analyticsRefreshPreview?.());
+        dialog.addEventListener('change', event => {
+            if (event.target.closest('#chartOptionsTable')) mappingSection?._analyticsSyncStyles?.();
+            mappingSection?._analyticsRefreshPreview?.();
+        });
+        mappingSection?._analyticsSyncStyles?.();
         mappingSection?._analyticsStartPreview?.();
 
         document.querySelectorAll('#analyticsDialogContent input[name="analyticsModel"]').forEach(field => {
@@ -1877,7 +1896,10 @@ OCA.Analytics.Filter = {
     },
 
     renderChartColumnMapping: function (container, guiState, onChange = null) {
-        const reportData = OCA.Analytics.currentReportData;
+        const sourceReportData = OCA.Analytics.currentReportData;
+        const chartData = OCA.Analytics.Visualization.getChartDataWithCalculatedColumns(
+            sourceReportData, guiState.model, true);
+        const reportData = {...sourceReportData, ...chartData};
         const section = container.getElementById('chartColumnMappingSection');
         const chartOptions = OCA.Analytics.ChartOptions;
         const columns = chartOptions.columnDescriptors(reportData);
@@ -1897,7 +1919,12 @@ OCA.Analytics.Filter = {
         const error = field('chartColumnMappingError');
         let dataModel = guiState.model;
         let automatic = !guiState.columnMapping;
-        let mapping = chartOptions.columnMapping(reportData, dataModel, guiState.columnMapping);
+        const getMapping = model => chartOptions.columnMapping(
+            reportData,
+            model,
+            guiState.columnMapping || chartOptions.defaultColumnMapping(model === 'timeSeriesModel' ? reportData : sourceReportData, model)
+        );
+        let mapping = getMapping(dataModel);
         let preview = null;
         let timer = null;
         let mounted = false;
@@ -1930,6 +1957,12 @@ OCA.Analytics.Filter = {
                 row.dataset.columnId = String(id);
                 const name = document.createElement('span');
                 name.textContent = labelFor(id);
+                if (role === 'measures' && Number.isInteger(id) && id >= sourceReportData.header.length) {
+                    const badge = document.createElement('small');
+                    badge.className = 'chartColumnMappingHint';
+                    badge.textContent = ' · ' + t('analytics', 'Calculated');
+                    name.append(badge);
+                }
                 const actions = document.createElement('div');
                 actions.className = 'chartColumnSelectionActions';
                 if (mapping[role].length > 1) {
@@ -2016,7 +2049,8 @@ OCA.Analytics.Filter = {
             try {
                 const table = document.getElementById('chartOptionsTable');
                 const seriesOptions = table ? OCA.Analytics.Filter.getChartOptionsSeriesRows(table) : [];
-                const result = OCA.Analytics.Visualization.chartMappingPreview(reportData, dataModel, automatic ? null : mapping, seriesOptions);
+                const previewData = automatic && dataModel !== 'timeSeriesModel' ? sourceReportData : reportData;
+                const result = OCA.Analytics.Visualization.chartMappingPreview(previewData, dataModel, automatic ? null : mapping, seriesOptions);
                 status.textContent = t('analytics', 'Preview: {shown} of {total} report rows. Current filters apply.', {
                     shown: result.shownRows.toLocaleString(), total: result.totalRows.toLocaleString(),
                 });
@@ -2027,7 +2061,7 @@ OCA.Analytics.Filter = {
                 }
                 chartContainer.hidden = false;
                 message.hidden = !result.limited;
-                message.textContent = t('analytics', 'The preview shows a limited selection of categories and series. Report values are used without additional aggregation.');
+                message.textContent = t('analytics', 'The preview shows a selection of groups and values. Current filters apply.');
                 result.config.options = OCA.Analytics.Visualization.applyThemeToChartOptions(result.config.options, canvas);
                 preview = new Chart(canvas, result.config);
             } catch (exception) {
@@ -2048,9 +2082,9 @@ OCA.Analytics.Filter = {
             category.value = chartOptions.encodeColumnId(mapping.category);
             field('chartColumnCategoryLabel').textContent = dataModel === 'timeSeriesModel'
                 ? t('analytics', 'Time / X-axis')
-                : dataModel === 'accountModel' ? t('analytics', 'Series label column') : t('analytics', 'Category / X-axis');
+                : dataModel === 'accountModel' ? t('analytics', 'Series label column') : t('analytics', 'Horizontal axis');
             field('chartColumnValuesLabel').textContent = dataModel === 'accountModel'
-                ? t('analytics', 'Value columns / X-axis') : t('analytics', 'Values / Y-axis');
+                ? t('analytics', 'Value columns / X-axis') : t('analytics', 'Values to show');
             field('chartColumnSeriesFieldset').hidden = dataModel !== 'kpiModel';
             field('chartColumnMappingSwap').disabled = mapping.series.length !== 1;
             field('chartColumnMappingStatus').textContent = automatic
@@ -2095,9 +2129,92 @@ OCA.Analytics.Filter = {
             changed();
         });
         section._analyticsGetMapping = readMapping;
+        section._analyticsSyncStyles = () => {
+            const advancedRows = [...document.querySelectorAll('#chartOptionsTable .chartOptionsSeriesRow')];
+            const items = OCA.Analytics.Visualization.getChartSeriesItems(sourceReportData, dataModel, mapping);
+            const advancedTable = document.getElementById('chartOptionsTable');
+            if (advancedTable) advancedTable._analyticsStyleItems = items;
+            const matchingRows = predicate => advancedRows.filter((row, index) => items[index] && predicate(items[index]));
+            const setAll = (rows, name, value) => {
+                rows.forEach(row => {
+                    const input = row.querySelector('[name="' + name + '"]');
+                    input.value = value;
+                    if (name === 'optionsColor') OCA.Analytics.Filter.updateColor({target: input});
+                });
+                section._analyticsSyncStyles();
+                schedulePreview();
+            };
+            const sharedSelect = (rows, name, label, choices) => {
+                const select = document.createElement('select');
+                select.className = 'optionsInput';
+                select.setAttribute('aria-label', label);
+                const values = new Set(rows.map(row => row.querySelector('[name="' + name + '"]').value));
+                if (values.size > 1) select.add(new Option(t('analytics', 'Mixed — customize'), ''));
+                choices.forEach(([value, text]) => select.add(new Option(text, value)));
+                select.value = values.size === 1 ? [...values][0] : '';
+                select.addEventListener('change', () => {
+                    if (select.value) setAll(rows, name, select.value);
+                });
+                return select;
+            };
+            valueList.querySelectorAll('.chartMeasureStyle').forEach(element => element.remove());
+            [...valueList.children].forEach((row, index) => {
+                const id = mapping.measures[index];
+                const rows = matchingRows(item => item.measureId === id);
+                if (!rows.length) return;
+                const controls = document.createElement('div');
+                controls.className = 'chartMeasureStyle';
+                controls.append(sharedSelect(rows, 'optionsChartType', t('analytics', 'Show {column} as', {column: labelFor(id)}), [
+                    ['bar', t('analytics', 'Bars')], ['line', t('analytics', 'Line')],
+                    ['doughnut', t('analytics', 'Doughnut')], ['funnel', t('analytics', 'Funnel')],
+                ]));
+                const more = document.createElement('details');
+                const summary = document.createElement('summary');
+                summary.textContent = t('analytics', 'More options');
+                more.append(summary, sharedSelect(rows, 'optionsYAxis', t('analytics', 'Axis for {column}', {column: labelFor(id)}), [
+                    ['primary', t('analytics', 'Left axis')], ['secondary', t('analytics', 'Right axis')],
+                ]));
+                controls.append(more);
+                row.insertBefore(controls, row.querySelector('.chartColumnSelectionActions'));
+            });
+            const colors = section.querySelector('#chartSegmentColors');
+            colors.replaceChildren();
+            const groups = new Map(items.filter(item => item.groupLabel).map(item => [item.groupKey, item.groupLabel]));
+            colors.hidden = groups.size === 0;
+            if (!groups.size) return;
+            const heading = document.createElement('h3');
+            heading.textContent = t('analytics', 'Group colors');
+            const hint = document.createElement('p');
+            hint.className = 'chartColumnMappingHint';
+            hint.textContent = t('analytics', 'Choose a color to use for all bars and lines in a group.');
+            colors.append(heading, hint);
+            groups.forEach((label, key) => {
+                const rows = matchingRows(item => item.groupKey === key);
+                const values = new Set(rows.map(row => row.querySelector('[name="optionsColor"]').value));
+                const row = document.createElement('label');
+                row.className = 'chartColumnSelection';
+                const text = document.createElement('span');
+                text.textContent = label;
+                const color = document.createElement('input');
+                color.type = 'color';
+                color.className = 'chartOptionsColorInput';
+                color.setAttribute('aria-label', t('analytics', 'Color for {group}', {group: label}));
+                color.value = [...values][0] || '#000000';
+                if (values.size > 1) {
+                    const mixed = document.createElement('span');
+                    mixed.className = 'chartColumnMappingHint';
+                    mixed.textContent = t('analytics', 'Mixed colors');
+                    row.append(mixed);
+                }
+                color.addEventListener('change', () => setAll(rows, 'optionsColor', color.value));
+                row.prepend(text);
+                row.append(color);
+                colors.append(row);
+            });
+        };
         section._analyticsSetModel = model => {
             dataModel = model;
-            if (automatic) mapping = chartOptions.columnMapping(reportData, dataModel);
+            if (automatic) mapping = getMapping(dataModel);
             update();
             onChange?.(readMapping(), false);
         };
