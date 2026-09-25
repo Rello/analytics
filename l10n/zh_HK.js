@@ -274,6 +274,7 @@ OC.L10N.register(
     "No" : "否",
     "Variables" : "變量",
     "Save data" : "保存數據",
+    "Failed to load values" : "載入數值失敗",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "文字變數可在欄位中使用。<br>其會在新增資料時被取代。",
     "Failed to save data" : "儲存數據失敗",
     "Delete data" : "刪除數據",

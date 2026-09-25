@@ -256,6 +256,7 @@ OC.L10N.register(
     "No" : "Ei",
     "Variables" : "Muutujad",
     "Save data" : "Salvesta andmed",
+    "Failed to load values" : "Väärtuste laadimine ei õnnestunud",
     "Text variables can be used in the dimensions.<br>They are replaced when the data is added." : "Saad mõõtmetes kasutada tekstimuutujaid.<br>Andmed väärtustuvad aruande lõplikul koostamisel.",
     "Failed to save data" : "Andmete salvestamine ei õnnestunud",
     "Delete data" : "Kustuta andmed",
