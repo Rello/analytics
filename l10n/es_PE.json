@@ -11,6 +11,7 @@
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
+    "Apply" : "Aplicar",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Remove from favorites" : "Eliminar de favoritos",
@@ -20,7 +21,6 @@
     "Download" : "Descargar",
     "Reset" : "Restablecer",
     "Enabled" : "Habilitado",
-    "Apply" : "Aplicar",
     "Yes" : "Sí",
     "No" : "No",
     "Type" : "Tipo",
@@ -67,6 +67,7 @@
     "4" : "4",
     "Close" : "Cerrar",
     "Disabled" : "Deshabilitado",
+    "Advanced" : "Avanzado",
     "Sort by" : "Ordenar por",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

@@ -8,6 +8,7 @@
     "Region" : "Region",
     "Delete" : "Deler",
     "Done" : "Preste",
+    "Apply" : "Applicar",
     "Favorites" : "Favoritos",
     "New" : "Nove",
     "Remove from favorites" : "Remove from favorites",
@@ -17,7 +18,6 @@
     "Download" : "Discargar",
     "Reset" : "Re-fixar",
     "Enabled" : "Activate",
-    "Apply" : "Applicar",
     "Yes" : "Si",
     "No" : "No",
     "Type" : "Typo",
@@ -47,7 +47,6 @@
     "Copy link" : "Copiar ligamine",
     "Automatic" : "Automatic",
     "Close" : "Clauder",
-    "Labels" : "Etiquettas",
     "Sort by" : "Ordinar per",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

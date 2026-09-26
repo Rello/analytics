@@ -42,6 +42,7 @@ OC.L10N.register(
     "Unshare" : "பகிரப்படாதது",
     "Password protection" : "Password protection",
     "Close" : "மூடுக",
+    "Advanced" : "உயர்ந்த",
     "Create" : "உருவாக்குக"
 },
 "nplurals=2; plural=(n != 1);");

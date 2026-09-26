@@ -51,6 +51,7 @@ OC.L10N.register(
     "Automatic" : "Avtomatik",
     "Close" : "Bağla",
     "Disabled" : "Dayandırılıb",
+    "Advanced" : "İrəliləmiş",
     "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },

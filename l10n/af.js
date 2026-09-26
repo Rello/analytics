@@ -50,6 +50,7 @@ OC.L10N.register(
     "Text" : "Teks",
     "3" : "3",
     "Close" : "Close",
+    "Advanced" : "Gevorderd",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },

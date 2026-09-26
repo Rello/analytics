@@ -17,6 +17,7 @@
     "Multiply" : "Multiplizéieren",
     "Divide" : "Dividéieren",
     "Default" : "Standard",
+    "Apply" : "Uwenden",
     "Favorites" : "Favoriten",
     "New" : "Nei",
     "Remove from favorites" : "Remove from favorites",
@@ -28,7 +29,6 @@
     "Reset" : "Zeréck setzen",
     "Enabled" : "Aktivéiert",
     "Selected" : "Ausgewielt",
-    "Apply" : "Uwenden",
     "Yes" : "Yes",
     "No" : "No",
     "Type" : "Typ",
@@ -64,6 +64,7 @@
     "Close" : "Zoumaachen",
     "Formula" : "Formel",
     "Disabled" : "Desaktivéiert",
+    "Advanced" : "Erweidert",
     "Sort by" : "Zortéieren no",
     "Templates" : "Virlagen",
     "Create" : "Erstellen"

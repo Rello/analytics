@@ -45,6 +45,7 @@ OC.L10N.register(
     "Copy link" : "Copïo dolen",
     "Automatic" : "Awtomatig",
     "Close" : "Cau",
+    "Advanced" : "Uwch",
     "Sort by" : "Trefnu yn ôl",
     "Create" : "Creu"
 },

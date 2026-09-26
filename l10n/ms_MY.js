@@ -63,6 +63,7 @@ OC.L10N.register(
     "Rename" : "Namakan",
     "Password protection" : "Password protection",
     "Close" : "Tutup",
+    "Advanced" : "Maju",
     "Sort by" : "Susun mengikut",
     "Create" : "Buat"
 },

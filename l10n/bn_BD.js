@@ -47,6 +47,7 @@ OC.L10N.register(
     "Automatic" : "স্বয়ংক্রিয়",
     "Close" : "বন্ধ",
     "Disabled" : "অকার্যকর",
+    "Advanced" : "সুচারু",
     "Create" : "তৈরী কর"
 },
 "nplurals=2; plural=(n != 1);");

@@ -23,6 +23,7 @@ OC.L10N.register(
     "none" : "ingen",
     "Add" : "Legg til",
     "Sort order" : "Sortering",
+    "Apply" : "Anvend",
     "Favorites" : "Favorittar",
     "New" : "Ny",
     "Overview" : "Oversyn",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Save" : "Lagre",
     "All data will be deleted!" : "Alle data vert sletta",
     "Download" : "Last ned",
-    "Apply" : "Anvend",
     "Yes" : "Ja",
     "No" : "Nei",
     "Variables" : "Variablar",
@@ -75,6 +75,7 @@ OC.L10N.register(
     "Close" : "Lat att",
     "Appearance" : "Utsjånad",
     "Disabled" : "Deaktivert",
+    "Advanced" : "Avansert",
     "Sort by" : "Sorter på",
     "Nextcloud forum" : "Nextcloud forum",
     "Create" : "Lag"

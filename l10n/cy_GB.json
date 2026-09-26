@@ -43,6 +43,7 @@
     "Copy link" : "Copïo dolen",
     "Automatic" : "Awtomatig",
     "Close" : "Cau",
+    "Advanced" : "Uwch",
     "Sort by" : "Trefnu yn ôl",
     "Create" : "Creu"
 },"pluralForm" :"nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;"

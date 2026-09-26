@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
+    "Apply" : "Aplicar",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Overview" : "Generalidades",
@@ -23,7 +24,6 @@ OC.L10N.register(
     "Download" : "Descargar",
     "Reset" : "Restablecer",
     "Enabled" : "Habilitado",
-    "Apply" : "Aplicar",
     "Yes" : "Sí",
     "No" : "No",
     "Reset to defaults" : "Restablercer los valores predeterminados",
@@ -70,6 +70,7 @@ OC.L10N.register(
     "4" : "4",
     "Close" : "Cerrar",
     "Disabled" : "Deshabilitado",
+    "Advanced" : "Avanzado",
     "Get more information" : "Obten más información",
     "Create" : "Crear"
 },

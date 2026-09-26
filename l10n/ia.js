@@ -10,6 +10,7 @@ OC.L10N.register(
     "Region" : "Region",
     "Delete" : "Deler",
     "Done" : "Preste",
+    "Apply" : "Applicar",
     "Favorites" : "Favoritos",
     "New" : "Nove",
     "Remove from favorites" : "Remove from favorites",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Download" : "Discargar",
     "Reset" : "Re-fixar",
     "Enabled" : "Activate",
-    "Apply" : "Applicar",
     "Yes" : "Si",
     "No" : "No",
     "Type" : "Typo",
@@ -49,7 +49,6 @@ OC.L10N.register(
     "Copy link" : "Copiar ligamine",
     "Automatic" : "Automatic",
     "Close" : "Clauder",
-    "Labels" : "Etiquettas",
     "Sort by" : "Ordinar per",
     "Create" : "Crear"
 },

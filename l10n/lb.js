@@ -19,6 +19,7 @@ OC.L10N.register(
     "Multiply" : "Multiplizéieren",
     "Divide" : "Dividéieren",
     "Default" : "Standard",
+    "Apply" : "Uwenden",
     "Favorites" : "Favoriten",
     "New" : "Nei",
     "Remove from favorites" : "Remove from favorites",
@@ -30,7 +31,6 @@ OC.L10N.register(
     "Reset" : "Zeréck setzen",
     "Enabled" : "Aktivéiert",
     "Selected" : "Ausgewielt",
-    "Apply" : "Uwenden",
     "Yes" : "Yes",
     "No" : "No",
     "Type" : "Typ",
@@ -66,6 +66,7 @@ OC.L10N.register(
     "Close" : "Zoumaachen",
     "Formula" : "Formel",
     "Disabled" : "Desaktivéiert",
+    "Advanced" : "Erweidert",
     "Sort by" : "Zortéieren no",
     "Templates" : "Virlagen",
     "Create" : "Erstellen"

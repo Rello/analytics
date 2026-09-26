@@ -45,6 +45,7 @@ OC.L10N.register(
     "Filter" : "Filtrar",
     "Add" : "Guardar",
     "Default" : "Por defecto",
+    "Apply" : "Aplicar",
     "Favorites" : "Favoritos",
     "New" : "Nuevo",
     "Overview" : "Generalidades",
@@ -55,7 +56,6 @@ OC.L10N.register(
     "Download" : "Descargar",
     "Reset" : "Restablecer",
     "Enabled" : "Habilitado",
-    "Apply" : "Aplicar",
     "Reset zoom" : "Restablecer zoom",
     "Trend" : "Tendencia",
     "Dataset" : "Conjunto de datos",
@@ -105,6 +105,7 @@ OC.L10N.register(
     "4" : "4",
     "Close" : "Close",
     "Disabled" : "Deshabilitado",
+    "Advanced" : "Avanzado",
     "Sort by" : "Ordenar por",
     "Get more information" : "Obten más información",
     "Create" : "Crear"
