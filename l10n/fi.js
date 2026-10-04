@@ -146,6 +146,7 @@ OC.L10N.register(
     "Timestamp of data load" : "Tietojen lataamisen aikaleima",
     "Releases" : "Julkaisut",
     "Issues" : "Ongelmat",
+    "Limit" : "Raja",
     "Personal access token" : "Henkilökohtainen valtuutustietue",
     "Download count" : "Latausmäärä",
     "Tag" : "Tunniste",
