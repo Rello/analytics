@@ -65,6 +65,21 @@ class StorageService {
 		}
 
 		if (!empty($datasetMetadata)) {
+			if (is_array($options) && isset($options['transformations'])) {
+				return [
+					'header' => [$datasetMetadata['dimension1'], $datasetMetadata['dimension2'], $datasetMetadata['value']],
+					'columnRefs' => ['dimension1', 'dimension2', 'value'],
+					'sourceColumns' => [
+						['ref' => 'dimension1', 'name' => $datasetMetadata['dimension1'], 'role' => 'dimension'],
+						['ref' => 'dimension2', 'name' => $datasetMetadata['dimension2'], 'role' => 'dimension'],
+						['ref' => 'value', 'name' => $datasetMetadata['value'], 'role' => 'measure', 'defaultAggregation' => 'sum'],
+					],
+					'dimensions' => ['dimension1' => $datasetMetadata['dimension1'], 'dimension2' => $datasetMetadata['dimension2']],
+					'keyFigures' => [$datasetMetadata['value']],
+					'data' => $this->StorageMapper->readRaw((int)$datasetId, $options),
+					'error' => 0,
+				];
+			}
 			// output the dimensions available for filtering of this dataset
 			// this needs to map the technical name to its display name in the report
 			$dimensions['dimension1'] = $datasetMetadata['dimension1'];
@@ -90,12 +105,22 @@ class StorageService {
 
 		return empty($data) ? [
 			'header' => [...$header, ...$keyFigures],
+			'sourceColumns' => [
+				['ref' => 'dimension1', 'name' => $datasetMetadata['dimension1'], 'role' => 'dimension'],
+				['ref' => 'dimension2', 'name' => $datasetMetadata['dimension2'], 'role' => 'dimension'],
+				['ref' => 'value', 'name' => $datasetMetadata['value'], 'role' => 'measure', 'defaultAggregation' => 'sum'],
+			],
 			'dimensions' => $dimensions,
 			'keyFigures' => $keyFigures,
 			'status' => 'nodata',
 			'error' => 0
 		] : [
 			'header' => [...$header, ...$keyFigures],
+			'sourceColumns' => [
+				['ref' => 'dimension1', 'name' => $datasetMetadata['dimension1'], 'role' => 'dimension'],
+				['ref' => 'dimension2', 'name' => $datasetMetadata['dimension2'], 'role' => 'dimension'],
+				['ref' => 'value', 'name' => $datasetMetadata['value'], 'role' => 'measure', 'defaultAggregation' => 'sum'],
+			],
 			'dimensions' => $dimensions,
 			'keyFigures' => $keyFigures,
 			'data' => $data,

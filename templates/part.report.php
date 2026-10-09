@@ -10,13 +10,16 @@
 <div id="analytics-content-report" hidden>
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
-    <span id="reportHeader" class="reportHeader"></span>
-    <span id="reportSubHeader" class="reportSubHeader" hidden></span>
+    <div class="reportHeading">
+        <span id="reportHeader" class="reportHeader" role="heading" aria-level="2"></span>
+        <span id="reportSubHeader" class="reportSubHeader" hidden></span>
+        <span class="reportHeadingBrand" aria-hidden="true"></span>
+    </div>
     <div id="reportPlaceholder"></div>
     <div id="chartContainer">
-    </div>
-    <div id="chartLegendContainer">
-        <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
+        <div id="chartLegendContainer">
+            <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
+        </div>
     </div>
     <div id="tableSeparatorContainer"></div>
     <table id="tableContainer"></table>

@@ -167,6 +167,19 @@ class StorageMapper
         return $rows;
     }
 
+	/** Return complete source rows so report calculations can run before grouping. */
+	public function readRaw(int $dataset, array $options = []): array {
+		$sql = $this->db->getQueryBuilder();
+		$sql->select('dimension1', 'dimension2', 'value')
+			->from(self::TABLE_NAME)
+			->where($sql->expr()->eq('dataset', $sql->createNamedParameter($dataset)));
+		$this->applyFilterOptions($sql, $options);
+		$result = $sql->executeQuery();
+		$rows = $result->fetchAll();
+		$result->closeCursor();
+		return array_map('array_values', is_array($rows) ? $rows : []);
+	}
+
     /**
      * delete data
      * @param int $datasetId

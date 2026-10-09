@@ -8,14 +8,14 @@
 
 ?>
 <template id="wizardDialog">
-    <div class="modal-mask" id="analyticsWizard"
+    <div class="modal-mask" id="analyticsWizard" role="dialog" aria-modal="true" aria-label="<?php p($l->t('Analytics')); ?>"
          style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
         <div class="modal-wrapper modal-wrapper--normal" style="">
-            <a class="prev" id="wizardPrevious">
+            <button type="button" class="prev" id="wizardPrevious" aria-label="<?php p($l->t('Previous')); ?>">
                 <svg fill="currentColor" width="40" height="40" viewBox="0 0 24 24" class="material-design-icon__svg">
                     <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"><!----></path>
                 </svg>
-            </a>
+            </button>
             <div class="modal-container">
                 <div class="modal-header">
                     <div class="firstrunwizard-header">
@@ -27,7 +27,7 @@
                 <div id="pageBody" class="modal-body"></div>
                 <div class="modal-footer" id="wizardFooter">
                 </div>
-                <button id="wizardClose" class="wizardClose">
+                <button type="button" id="wizardClose" class="wizardClose" aria-label="<?php p($l->t('Close')); ?>">
                     <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24"
                          class="material-design-icon__svg">
                         <path
@@ -36,11 +36,11 @@
                     </svg>
                 </button>
             </div>
-            <a class="next" id="wizardNext">
+            <button type="button" class="next" id="wizardNext" aria-label="<?php p($l->t('Next')); ?>">
                 <svg fill="currentColor" width="40" height="40" viewBox="0 0 24 24" style="">
                     <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"><!----></path>
                 </svg>
-            </a>
+            </button>
         </div>
 </template>
 
@@ -203,14 +203,14 @@
             <div class="table" style="display: table; width: 100%;">
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
-                        <?php p($l->t('Report title')); ?>
+                        <label for="wizardNewName"><?php p($l->t('Report title')); ?></label>
                         <br>
-                        <input style="display: table-cell; width: 400px;" id="wizardNewName"
+                        <input class="sidebarInput" id="wizardNewName"
                                value="<?php p($l->t('New report')); ?>">
                         <br><br>
-                        <?php p($l->t('Subheader')); ?>
+                        <label for="wizardNewSubheader"><?php p($l->t('Subheader')); ?></label>
                         <br>
-                        <input style="display: table-cell; width: 400px;" id="wizardNewSubheader">
+                        <input class="sidebarInput" id="wizardNewSubheader">
                         <br><br>
                     </div>
                     <div style="display: table-cell;">
@@ -223,7 +223,7 @@
                 </div>
                 <div style="display: table-row;">
                     <div style="display: table-cell; width: 50%;">
-                        <?php p($l->t('Report group')); ?>
+                        <label for="wizardNewGrouping"><?php p($l->t('Report group')); ?></label>
                         <br>
                         <select style="display: table-cell;" id="wizardNewGrouping" class="sidebarInput">
                             <option value="0"></option>

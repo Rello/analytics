@@ -89,6 +89,10 @@
     min-width: 60px;
     height: 100%;
     color: white;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
 }
 
 #analyticsWizard .modal-wrapper .modal-container .wizardClose {
@@ -154,6 +158,7 @@
 
 #analyticsWizard .modal-body {
     flex-grow: 1;
+    min-height: 0;
     display: flex;
     overflow-x: hidden;
     overflow-y: auto;
@@ -169,7 +174,7 @@
 
 #analyticsWizard .modal-footer {
     display: flex;
-    flex-grow: 1;
+    flex: 0 0 30px;
     align-items: center;
     justify-content: center;
     height: 5px;
@@ -250,6 +255,30 @@
 #analyticsWizard .page .content {
     padding: 20px;
     width: 100%;
+    box-sizing: border-box;
+}
+
+#analyticsWizard .page,
+#analyticsWizard .page .table {
+    min-width: 0;
+    max-width: 100%;
+}
+
+#analyticsWizard .page input:not([type=checkbox]):not([type=radio]),
+#analyticsWizard .page select,
+#analyticsWizard .page textarea {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#analyticsWizard button:focus-visible {
+    outline: 2px solid var(--color-main-text);
+    outline-offset: -3px;
+}
+
+#analyticsWizard .prev:focus-visible,
+#analyticsWizard .next:focus-visible {
+    outline-color: white;
 }
 
 #analyticsWizard .page p {
@@ -465,6 +494,59 @@
 }
 
 @media only screen and (max-width: 680px) {
+    #analyticsWizard .modal-wrapper {
+        padding: 8px 8px 64px;
+    }
+
+    #analyticsWizard .modal-wrapper .modal-container {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        min-width: 0;
+    }
+
+    #analyticsWizard .modal-wrapper .prev,
+    #analyticsWizard .modal-wrapper .next {
+        position: absolute;
+        bottom: 10px;
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+    }
+
+    #analyticsWizard .modal-wrapper .prev {
+        left: calc(50% - 64px);
+    }
+
+    #analyticsWizard .modal-wrapper .next {
+        right: calc(50% - 64px);
+    }
+
+    #analyticsWizard .modal-body > .page {
+        display: block;
+        width: 100%;
+        margin: 0;
+    }
+
+    #analyticsWizard #wizardNewGeneralPage .table,
+    #analyticsWizard #wizardNewGeneralPage .table > div,
+    #analyticsWizard #wizardNewGeneralPage .table > div > div {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+    }
+
+    #analyticsWizard .modal-header .firstrunwizard-header .logo {
+        max-width: 100%;
+    }
+
+    #analyticsWizard .page .image,
+    #analyticsWizard .page .description,
+    #analyticsWizard .page .description-wide {
+        max-width: 100%;
+    }
+
     #firstrunwizard .firstrunwizard-header div.logo {
         background-size: 120px;
     }

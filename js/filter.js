@@ -43,7 +43,6 @@ OCA.Analytics.Filter = {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
         const map = {
             drilldown: 'optionsMenuColumnSelection',
-            sort: 'optionsMenuSort',
             topN: 'optionsMenuTopN',
             timeAggregation: 'optionsMenuTimeAggregation'
         };
@@ -57,6 +56,8 @@ OCA.Analytics.Filter = {
                 active = !!(
                     (filterOptions.drilldown && Object.keys(filterOptions.drilldown).length)
                     || filterOptions.aggregate === false
+                    || filterOptions.sort
+                    || filterOptions.transformations
                 );
             } else {
                 active = filterOptions[key] !== undefined;
@@ -67,7 +68,6 @@ OCA.Analytics.Filter = {
                 el.classList.remove('report-option-active');
             }
         }
-
         const thresholdEl = document.getElementById('optionsMenuThreshold');
         if (thresholdEl) {
             const thresholds = OCA.Analytics.currentReportData.thresholds || [];
@@ -88,9 +88,20 @@ OCA.Analytics.Filter = {
             }
         }
 
-        const aggregationFunctions = OCA.Analytics.ChartOptions.getGuiState(
-            OCA.Analytics.currentReportData.options.chartoptions
-        ).aggregationFunctions;
+        const chartOptions = OCA.Analytics.currentReportData.options.chartoptions;
+        const chartGuiState = OCA.Analytics.ChartOptions.getGuiState(chartOptions);
+        const chartOptionsEl = document.getElementById('optionsMenuChartOptions');
+        if (chartOptionsEl) {
+            const seriesOptions = OCA.Analytics.Flexible.seriesOptions(OCA.Analytics.currentReportData.options.dataoptions);
+            const hasCustomSettings = OCA.Analytics.ChartOptions.toSidebarEditorValue(chartOptions) !== ''
+                || chartGuiState.model !== 'kpiModel'
+                || chartGuiState.doughnutLabelStyle !== 'percentage'
+                || !!chartGuiState.columnMapping
+                || seriesOptions.some(option => option && Object.keys(option).length > 0);
+            chartOptionsEl.classList.toggle('report-option-active', hasCustomSettings);
+        }
+
+        const aggregationFunctions = chartGuiState.aggregationFunctions;
         const analysisEl = document.getElementById('optionsMenuAnalysis');
         if (analysisEl) {
             analysisEl.classList.toggle('report-option-active', aggregationFunctions.length > 0);
@@ -106,107 +117,622 @@ OCA.Analytics.Filter = {
 
         const dialogOptions = {
             variant: 'enhanced',
-            compact: true,
+            documentationUrl: 'https://github.com/Rello/analytics/wiki/Column-selection',
         };
 
         OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Column selection'),
+            t('analytics', 'Columns'),
             OCA.Analytics.Filter.processColumnsSelectionDialog,
             dialogOptions
         );
 
         const container = document.importNode(document.getElementById('templateDrilldownOptions').content, true);
         const table = container.getElementById('drilldownOptionsTable');
-        const aggregateCheckbox = container.getElementById('drilldownAggregate');
 
-        const availableDimensions = OCA.Analytics.currentReportData.dimensions;
-        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        if (aggregateCheckbox) {
-            aggregateCheckbox.checked = filterOptions.aggregate !== false;
-        }
-
-        const fragment = document.createDocumentFragment();
-        Object.keys(availableDimensions).forEach((dimension, index) => {
-            const row = document.createElement('div');
-            row.style.display = 'table-row';
-
-            const cellLabel = document.createElement('div');
-            cellLabel.className = 'tableOptionsSettingsLabel';
-            cellLabel.textContent = availableDimensions[dimension];
-            row.appendChild(cellLabel);
-
-            const cellCheckbox = document.createElement('div');
-            cellCheckbox.className = 'tableOptionsSettingsValue';
-            const switchLabel = document.createElement('label');
-            switchLabel.classList.add('analyticsSwitch');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = 'drilldownColumn' + index;
-            checkbox.name = 'drilldownColumn';
-            checkbox.value = dimension;
-            checkbox.setAttribute('role', 'switch');
-            checkbox.setAttribute('aria-label', availableDimensions[dimension]);
-            if (!(filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined)) {
-                checkbox.checked = true;
+        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || {};
+        const definition = filterOptions.transformations || {version: 1, calculations: [], hidden: [], sort: [], aggregations: {}};
+        const sourceColumns = OCA.Analytics.Filter.getTransformationSourceColumns();
+        const visibleSource = sourceColumns.filter(column => column.role !== 'dimension'
+            || (!Object.prototype.hasOwnProperty.call(filterOptions.drilldown || {}, column.ref)
+                && !Object.prototype.hasOwnProperty.call(filterOptions.drilldown || {}, String(column.ref).replace(/^source:/, ''))));
+        const legacySortColumn = filterOptions.sort?.column
+            ?? visibleSource[Number(filterOptions.sort?.dimension)]?.ref;
+        const selectedSort = definition.sort?.length ? definition.sort : (filterOptions.sort && legacySortColumn !== undefined ? [{
+            column: String(legacySortColumn),
+            direction: filterOptions.sort.direction,
+        }] : []);
+        sourceColumns.forEach((column, index) => {
+            const row = OCA.Analytics.Filter.createTransformationColumnRow(column, definition, filterOptions, selectedSort);
+            if (column.role === 'dimension') {
+                row.querySelector('.transformInclude').id = 'drilldownColumn' + index;
             }
-            const switchSlider = document.createElement('span');
-            switchSlider.classList.add('analyticsSwitchSlider');
-            switchSlider.setAttribute('aria-hidden', 'true');
-            switchLabel.appendChild(checkbox);
-            switchLabel.appendChild(switchSlider);
-            cellCheckbox.appendChild(switchLabel);
-            row.appendChild(cellCheckbox);
-
-            fragment.appendChild(row);
+            table.appendChild(row);
         });
-        table.appendChild(fragment);
+        const list = container.getElementById('transformCalculationList');
+        (definition.calculations || []).forEach(calculation => {
+            list.appendChild(OCA.Analytics.Filter.createTransformationCalculationRow(
+                filterOptions.aggregate === false ? {...calculation, aggregation: 'none'} : calculation,
+                sourceColumns, selectedSort, definition.calculations));
+        });
+        const priorityHeader = container.querySelector('.analyticsTransformColumnsHeader span:last-child');
+        const updateSortPriorities = () => {
+            const rows = [...document.querySelectorAll('#drilldownOptionsTable .analyticsTransformColumnRow, #transformCalculationList .analyticsTransformCalculation'),
+                ...container.querySelectorAll('.analyticsTransformColumnRow, .analyticsTransformCalculation')];
+            const sortedCount = rows.filter(row => row.querySelector('.transformSort').value).length;
+            if (priorityHeader) priorityHeader.style.display = sortedCount < 2 ? 'none' : '';
+            rows.forEach(row => {
+                const priority = row.querySelector('.transformPriority');
+                priority.style.display = sortedCount < 2 ? 'none' : '';
+                priority.disabled = sortedCount < 2 || !row.querySelector('.transformSort').value;
+            });
+        };
+        const bindSort = row => row.querySelector('.transformSort').addEventListener('change', updateSortPriorities);
+        container.querySelectorAll('.analyticsTransformColumnRow, .analyticsTransformCalculation').forEach(bindSort);
+        updateSortPriorities();
+        container.getElementById('transformAddCalculation').onclick = function () {
+            const id = 'calc:' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+            const row = OCA.Analytics.Filter.createTransformationCalculationRow({
+                id, name: '', expression: '', phase: 'after', aggregation: 'sum'
+            }, sourceColumns, []);
+            list.appendChild(row);
+            bindSort(row);
+            list.querySelectorAll('.analyticsTransformCalculation').forEach(row => row.refreshColumnChips());
+            updateSortPriorities();
+        };
+        container.getElementById('transformPreviewButton').onclick = function () {
+            OCA.Analytics.Filter.processColumnsSelectionDialog(true);
+        };
+        const imports = OCA.Analytics.Filter.getImportableTableCalculations(sourceColumns);
+        const notice = container.getElementById('transformLegacyNotice');
+        const importButton = container.getElementById('transformImportTableCalculations');
+        if (imports.length) {
+            notice.hidden = false;
+            notice.textContent = t('analytics', 'Move existing table calculations here to use them in both chart and table. Missing numeric inputs will show as blank values.');
+            importButton.hidden = false;
+            importButton.onclick = function () {
+                imports.forEach(calculation => {
+                    if (list.querySelector('[data-ref="' + calculation.id + '"]')) return;
+                    const row = OCA.Analytics.Filter.createTransformationCalculationRow(calculation, sourceColumns, []);
+                    row.dataset.legacyIndex = calculation.legacyIndex;
+                    list.appendChild(row);
+                    bindSort(row);
+                });
+                list.querySelectorAll('.analyticsTransformCalculation').forEach(row => row.refreshColumnChips());
+                updateSortPriorities();
+                importButton.hidden = true;
+                notice.textContent = t('analytics', 'Apply to move these calculations into the shared report data.');
+            };
+        } else if (OCA.Analytics.currentReportData.options.tableoptions?.calculatedColumns) {
+            notice.hidden = false;
+            notice.textContent = t('analytics', 'Pivot, threshold-based, or unsupported table calculations remain in Table options.');
+        }
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Removing columns will aggregate the key figures.<br>This applies to the chart and table'),
+            t('analytics', 'Configure fields for both chart and table.'),
             dialogOptions
         );
+        document.getElementById('analyticsDialogContainer').classList.add(
+            'analyticsDialog--visualizationOptions', 'analyticsDialog--columnOptions'
+        );
+    },
+
+    getTransformationSourceColumns: function () {
+        const report = OCA.Analytics.currentReportData;
+        if (Array.isArray(report.sourceColumns) && report.sourceColumns.length) {
+            return report.sourceColumns.filter(column => !String(column.ref).startsWith('calc:'));
+        }
+        return (report.header || []).map((name, index) => ({
+            ref: OCA.Analytics.Flexible.isFlexible(report)
+                ? OCA.Analytics.Flexible.referenceForIndex(report, index)
+                : 'source:' + index,
+            name,
+            role: (report.keyFigures || []).includes(name) ? 'measure' : 'dimension',
+            defaultAggregation: 'sum',
+        }));
+    },
+
+    getImportableTableCalculations: function (sourceColumns) {
+        const report = OCA.Analytics.currentReportData;
+        const tableOptions = report.options.tableoptions || {};
+        if (!tableOptions.calculatedColumns
+            || (tableOptions.layout?.columns || []).length
+            || (tableOptions.layout?.measures || []).length) return [];
+        if ((report.thresholds || []).some(threshold =>
+            Number(threshold.dimension ?? threshold.dimension2) >= OCA.Analytics.Visualization.thresholdCalculatedColumnOffset)) return [];
+        const calculations = OCA.Analytics.Visualization.getCalculatedColumns({...tableOptions});
+        try {
+            const raw = String(tableOptions.calculatedColumns).trim();
+            const stored = JSON.parse(raw.startsWith('[') ? raw : '[' + raw + ']');
+            if (!Array.isArray(stored) || stored.length !== calculations.length) return [];
+        } catch (error) {
+            return [];
+        }
+        let displayed = [];
+        try {
+            displayed = OCA.Analytics.Visualization.getTableCalculatedColumnSources(
+                report.data, report.header, tableOptions, report.columnRefs || []);
+        } catch (error) {
+            return [];
+        }
+        const resolve = reference => {
+            if (!reference) return null;
+            if (reference.startsWith('source-ref:')) {
+                const ref = reference.slice('source-ref:'.length);
+                return sourceColumns.some(column => column.ref === ref) ? ref : null;
+            }
+            const match = reference.match(/^source:(\d+):(.+)$/);
+            if (!match) return null;
+            const name = decodeURIComponent(match[2]);
+            const byIndex = sourceColumns[Number(match[1])];
+            if (byIndex?.name === name) return byIndex.ref;
+            const matches = sourceColumns.filter(column => column.name === name);
+            return matches.length === 1 ? matches[0].ref : null;
+        };
+        const converted = calculations.map((calc, index) => {
+            const references = calc.references.length
+                ? calc.references
+                : displayed.map(column => column.reference);
+            const stableRefs = references.map(resolve);
+            let expression = null;
+            if (calc.operation === 'formula') {
+                expression = calc.expression.replace(/\b(?:ref|column|col)(\d+)\b/gi, (match, number) => {
+                    const position = Number(number) - 1;
+                    const ref = stableRefs[position];
+                    return ref ? '{' + ref + '}' : match;
+                });
+                if (/[^0-9\s.+*/()-]/.test(expression.replace(/\{[A-Za-z0-9_:-]+\}/g, ''))
+                    || expression.includes('/')) return null;
+            } else if (['add', 'substract', 'subtract', 'multiply'].includes(calc.operation)) {
+                const selected = calc.references.length
+                    ? stableRefs
+                    : calc.columns.map(position => resolve(displayed[position]?.reference));
+                if (selected.length < 1 || selected.some(ref => !ref)) return null;
+                const operator = calc.operation === 'multiply' ? ' * '
+                    : (calc.operation === 'substract' || calc.operation === 'subtract' ? ' - ' : ' + ');
+                expression = selected.map(ref => '{' + ref + '}').join(operator);
+            }
+            if (!expression || expression.includes('ref') && /\bref\d+\b/.test(expression)
+                || /\b(?:column|col)\d+\b/i.test(expression)) return null;
+            return {
+                id: 'calc:legacy_' + index,
+                name: calc.title || t('analytics', 'Calculated measure'),
+                expression,
+                phase: 'after',
+                aggregation: 'sum',
+                legacyIndex: index,
+            };
+        });
+        return converted.length && converted.every(Boolean) ? converted : [];
+    },
+
+    transformationSelect: function (choices, value, label) {
+        const select = document.createElement('select');
+        select.className = 'optionsInput';
+        select.setAttribute('aria-label', label);
+        choices.forEach(choice => select.add(new Option(choice.label, choice.value)));
+        select.value = value;
+        return select;
+    },
+
+    displayTransformationFormula: function (expression, sources) {
+        const counts = sources.reduce((result, item) => {
+            const label = item.name || item.title;
+            result[label] = (result[label] || 0) + 1;
+            return result;
+        }, {});
+        return String(expression || '').replace(/\{([A-Za-z0-9_:-]+)\}/g, (token, ref) => {
+            const source = sources.find(item => item.ref === ref || item.id === ref);
+            const label = source?.name || source?.title;
+            return label && counts[label] === 1 ? '[' + label + ']' : token;
+        });
+    },
+
+    createTransformationColumnRow: function (column, definition, options, sort) {
+        const row = document.createElement('div');
+        row.className = 'analyticsTransformColumnRow';
+        row.dataset.ref = column.ref;
+        row.dataset.role = column.role;
+        const title = document.createElement('span');
+        title.textContent = column.name;
+        row.appendChild(title);
+        const include = document.createElement('input');
+        include.type = 'checkbox';
+        include.className = 'transformInclude';
+        include.setAttribute('aria-label', t('analytics', 'Include {column}', {column: column.name}));
+        include.checked = column.role === 'dimension'
+            ? !Object.prototype.hasOwnProperty.call(options.drilldown || {}, column.ref)
+                && !Object.prototype.hasOwnProperty.call(options.drilldown || {}, String(column.ref).replace(/^source:/, ''))
+            : !(definition.hidden || []).includes(column.ref);
+        row.appendChild(include);
+        if (column.role === 'measure') {
+            const aggregation = OCA.Analytics.Filter.transformationSelect([
+                {value: 'none', label: t('analytics', 'None (original values)')},
+                {value: 'sum', label: t('analytics', 'Sum')},
+                {value: 'avg', label: t('analytics', 'Average')},
+                {value: 'min', label: t('analytics', 'Minimum')},
+                {value: 'max', label: t('analytics', 'Maximum')},
+                {value: 'count', label: t('analytics', 'Count')},
+                {value: 'count_distinct', label: t('analytics', 'Count distinct')},
+            ], options.aggregate === false ? 'none'
+                : (definition.aggregations || {})[column.ref] || column.defaultAggregation || column.aggregation || 'sum',
+            t('analytics', 'Aggregate {column}', {column: column.name}));
+            aggregation.classList.add('transformAggregation');
+            row.appendChild(aggregation);
+        } else {
+            row.appendChild(document.createElement('span'));
+        }
+        const sortIndex = sort.findIndex(item => String(item.column) === String(column.ref));
+        const direction = OCA.Analytics.Filter.transformationSelect([
+            {value: '', label: t('analytics', 'None')},
+            {value: 'ASC', label: t('analytics', 'Ascending')},
+            {value: 'DESC', label: t('analytics', 'Descending')},
+        ], sortIndex >= 0 ? String(sort[sortIndex].direction).toUpperCase() : '',
+        t('analytics', 'Sort {column}', {column: column.name}));
+        direction.classList.add('transformSort');
+        row.appendChild(direction);
+        const priority = document.createElement('input');
+        priority.type = 'number';
+        priority.min = '1';
+        priority.step = '1';
+        priority.className = 'optionsInput transformPriority';
+        priority.setAttribute('aria-label', t('analytics', 'Sort priority for {column}', {column: column.name}));
+        priority.value = sortIndex >= 0 ? String(sortIndex + 1) : '';
+        priority.disabled = direction.value === '';
+        row.appendChild(priority);
+        return row;
+    },
+
+    createTransformationCalculationRow: function (calculation, sourceColumns, sort, allCalculations = []) {
+        const row = document.createElement('div');
+        row.className = 'analyticsTransformCalculation';
+        row.dataset.ref = calculation.id;
+        row.dataset.originalName = calculation.name || '';
+        const heading = document.createElement('div');
+        heading.className = 'analyticsTransformCalculationHeading';
+        const name = document.createElement('input');
+        name.className = 'optionsInput transformCalculationName';
+        name.type = 'text';
+        name.placeholder = t('analytics', 'Measure name');
+        name.setAttribute('aria-label', t('analytics', 'Measure name'));
+        name.value = calculation.name || '';
+        heading.appendChild(name);
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'button analyticsSecondary';
+        remove.textContent = t('analytics', 'Remove');
+        const refreshAllChips = () => document.querySelectorAll('#transformCalculationList .analyticsTransformCalculation')
+            .forEach(item => item.refreshColumnChips());
+        remove.onclick = () => { row.remove(); refreshAllChips(); };
+        name.oninput = refreshAllChips;
+        heading.appendChild(remove);
+        row.appendChild(heading);
+        const formula = document.createElement('input');
+        formula.type = 'text';
+        formula.className = 'optionsInput transformCalculationFormula';
+        formula.setAttribute('aria-label', t('analytics', 'Formula'));
+        formula.placeholder = t('analytics', 'Drag or click a column below, then use +, -, * or /');
+        formula.value = OCA.Analytics.Filter.displayTransformationFormula(
+            calculation.expression, [...sourceColumns, ...allCalculations]);
+        row.appendChild(formula);
+        const picker = document.createElement('div');
+        picker.className = 'analyticsTransformColumnChips';
+        const insertToken = token => {
+            const start = formula.selectionStart;
+            formula.setRangeText(token, start, formula.selectionEnd, 'end');
+            formula.focus();
+            formula.dispatchEvent(new Event('input', {bubbles: true}));
+        };
+        row.refreshColumnChips = () => {
+            const calculations = [...document.querySelectorAll('#transformCalculationList .analyticsTransformCalculation')]
+                .filter(other => other !== row)
+                .map(other => ({ref: other.dataset.ref, name: other.querySelector('.transformCalculationName').value.trim()}))
+                .filter(item => item.name);
+            const available = [...sourceColumns, ...(row.isConnected ? calculations : allCalculations
+                .filter(item => item.id !== calculation.id).map(item => ({ref: item.id, name: item.name})))];
+            picker.replaceChildren();
+            available.forEach(item => {
+                const token = available.filter(other => other.name === item.name).length > 1
+                    ? '{' + item.ref + '}' : '[' + item.name + ']';
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'button analyticsSecondary';
+                chip.textContent = item.name;
+                chip.dataset.ref = item.ref;
+                chip.draggable = true;
+                chip.onclick = () => insertToken(token);
+                chip.ondragstart = event => {
+                    event.dataTransfer.setData('application/x-analytics-column', token);
+                    event.dataTransfer.setData('text/plain', token);
+                    event.dataTransfer.effectAllowed = 'copy';
+                };
+                picker.appendChild(chip);
+            });
+        };
+        formula.ondragover = event => {
+            if ([...event.dataTransfer.types].includes('application/x-analytics-column')) {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'copy';
+            }
+        };
+        formula.ondrop = event => {
+            const token = event.dataTransfer.getData('application/x-analytics-column');
+            if (!token) return;
+            event.preventDefault();
+            insertToken(token);
+        };
+        row.refreshColumnChips();
+        row.appendChild(picker);
+        const controls = document.createElement('div');
+        controls.className = 'analyticsTransformCalculationControls';
+        const phase = OCA.Analytics.Filter.transformationSelect([
+            {value: 'before', label: t('analytics', 'For each source row')},
+            {value: 'after', label: t('analytics', 'After aggregation')},
+        ], calculation.phase || 'after', t('analytics', 'Calculation timing'));
+        phase.classList.add('transformPhase');
+        controls.appendChild(phase);
+        const aggregation = OCA.Analytics.Filter.transformationSelect([
+            {value: 'none', label: t('analytics', 'None (original values)')},
+            {value: 'sum', label: t('analytics', 'Sum')},
+            {value: 'avg', label: t('analytics', 'Average')},
+            {value: 'min', label: t('analytics', 'Minimum')},
+            {value: 'max', label: t('analytics', 'Maximum')},
+            {value: 'count', label: t('analytics', 'Count')},
+            {value: 'count_distinct', label: t('analytics', 'Count distinct')},
+        ], calculation.aggregation || 'sum', t('analytics', 'Aggregate calculated measure'));
+        aggregation.classList.add('transformAggregation');
+        aggregation.hidden = phase.value !== 'before';
+        phase.onchange = () => { aggregation.hidden = phase.value !== 'before'; };
+        controls.appendChild(aggregation);
+        const include = document.createElement('label');
+        include.textContent = t('analytics', 'Include');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'transformInclude';
+        checkbox.checked = calculation.visible !== false;
+        include.className = 'analyticsTransformInclude';
+        include.prepend(checkbox);
+        controls.appendChild(include);
+        const sortIndex = sort.findIndex(item => item.column === calculation.id);
+        const direction = OCA.Analytics.Filter.transformationSelect([
+            {value: '', label: t('analytics', 'No sort')},
+            {value: 'ASC', label: t('analytics', 'Sort ascending')},
+            {value: 'DESC', label: t('analytics', 'Sort descending')},
+        ], sortIndex >= 0 ? String(sort[sortIndex].direction).toUpperCase() : '', t('analytics', 'Sort calculated measure'));
+        direction.classList.add('transformSort');
+        controls.appendChild(direction);
+        const priority = document.createElement('input');
+        priority.type = 'number';
+        priority.min = '1';
+        priority.className = 'optionsInput transformPriority';
+        priority.setAttribute('aria-label', t('analytics', 'Sort priority'));
+        priority.placeholder = t('analytics', 'Priority');
+        priority.value = sortIndex >= 0 ? String(sortIndex + 1) : '';
+        priority.disabled = direction.value === '';
+        controls.appendChild(priority);
+        row.appendChild(controls);
+        return row;
     },
 
     /**
      * Persist the drilldown dialog selections and reload the report.
      */
-    processColumnsSelectionDialog: function () {
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
+    processColumnsSelectionDialog: function (previewOnly = false) {
+        let filterOptions = structuredClone(OCA.Analytics.currentReportData.options.filteroptions);
         if (!filterOptions || typeof filterOptions !== 'object' || Array.isArray(filterOptions)) {
             filterOptions = {};
         }
-        let drilldownColumns = document.getElementsByName('drilldownColumn');
-        const aggregateCheckbox = document.getElementById('drilldownAggregate');
+        const sourceRows = [...document.querySelectorAll('#drilldownOptionsTable .analyticsTransformColumnRow')];
+        const calculationRows = [...document.querySelectorAll('#transformCalculationList .analyticsTransformCalculation')];
+        const definition = {version: 1, calculations: [], hidden: [], aggregations: {}, sort: []};
+        const drilldown = {};
+        const sortable = [];
+        const message = document.getElementById('transformColumnsMessage');
+        const showError = text => { message.textContent = text; message.hidden = false; };
+        const readSort = row => {
+            const direction = row.querySelector('.transformSort').value;
+            if (!direction) return;
+            sortable.push({column: row.dataset.ref, direction, priority: row.querySelector('.transformPriority').value});
+        };
+        try {
+            const names = new Map(sourceRows.map(row => [row.dataset.ref, row.firstChild.textContent]));
+            calculationRows.forEach(row => {
+                const name = row.querySelector('.transformCalculationName').value.trim();
+                if (!name || [...names.values()].includes(name)) {
+                    throw new Error(t('analytics', 'Use a unique name for every calculated measure.'));
+                }
+                names.set(row.dataset.ref, name);
+            });
+            const labelToRef = new Map([...names].map(([ref, name]) => [name, ref]));
+            const labelCounts = [...names.values()].reduce((counts, name) => {
+                counts[name] = (counts[name] || 0) + 1;
+                return counts;
+            }, {});
+            calculationRows.forEach(row => {
+                const previousName = row.dataset.originalName;
+                if (previousName && !labelToRef.has(previousName)) labelToRef.set(previousName, row.dataset.ref);
+            });
+            sourceRows.forEach(row => {
+                const ref = row.dataset.ref;
+                if (!row.querySelector('.transformInclude').checked) {
+                    if (row.dataset.role === 'dimension') drilldown[ref.replace(/^source:/, '')] = false;
+                    else definition.hidden.push(ref);
+                }
+                if (row.dataset.role === 'measure') {
+                    definition.aggregations[ref] = row.querySelector('.transformAggregation').value;
+                }
+                readSort(row);
+            });
+            calculationRows.forEach(row => {
+                const name = row.querySelector('.transformCalculationName').value.trim();
+                const expression = row.querySelector('.transformCalculationFormula').value.trim()
+                    .replace(/\[([^\]]+)\]/g, (token, label) => {
+                        if (labelCounts[label] > 1) {
+                            throw new Error(t('analytics', 'Use Insert column to choose between columns with the same name.'));
+                        }
+                        const ref = labelToRef.get(label);
+                        if (!ref) throw new Error(t('analytics', 'The formula refers to an unavailable column.'));
+                        return '{' + ref + '}';
+                    });
+                if (!name || !expression) {
+                    throw new Error(t('analytics', 'Enter a name and formula for every calculated measure.'));
+                }
+                if (/[\[\]]/.test(expression)) {
+                    throw new Error(t('analytics', 'The formula contains an incomplete column reference.'));
+                }
+                definition.calculations.push({
+                    id: row.dataset.ref, name, expression,
+                    phase: row.querySelector('.transformPhase').value,
+                    aggregation: row.querySelector('.transformAggregation').value,
+                });
+                if (!row.querySelector('.transformInclude').checked) definition.hidden.push(row.dataset.ref);
+                readSort(row);
+            });
+            if (sortable.length > 1 && sortable.some(item => !Number.isInteger(Number(item.priority)) || Number(item.priority) < 1)) {
+                throw new Error(t('analytics', 'Enter a positive sort priority for every sorted column.'));
+            }
+            if (sortable.length > 1 && new Set(sortable.map(item => Number(item.priority))).size !== sortable.length) {
+                throw new Error(t('analytics', 'Use a different priority for each sorted column.'));
+            }
+        } catch (error) {
+            showError(error.message);
+            return;
+        }
+        sortable.sort((a, b) => Number(a.priority) - Number(b.priority));
+        definition.sort = sortable.map(({column, direction}) => ({column, direction}));
+        if (Object.keys(drilldown).length) filterOptions.drilldown = drilldown;
+        else delete filterOptions.drilldown;
 
-        for (let i = 0; i < drilldownColumns.length; i++) {
-            let dimension = drilldownColumns[i].value;
-            if (drilldownColumns[i].checked === false) {
-                if (filterOptions['drilldown'] === undefined) {
-                    filterOptions['drilldown'] = {};
-                }
-                filterOptions['drilldown'][dimension] = false;
+        // Aggregation is selected per column; remove the legacy global override.
+        delete filterOptions.aggregate;
+
+        const sourceColumns = OCA.Analytics.Filter.getTransformationSourceColumns();
+        const changedAggregations = sourceColumns.some(column => column.role === 'measure'
+            && definition.aggregations[column.ref] !== (column.defaultAggregation || column.aggregation || 'sum'));
+        const needsTransformation = definition.calculations.length > 0 || definition.hidden.length > 0
+            || definition.sort.length > 1 || changedAggregations;
+        if (needsTransformation && (filterOptions.topN || filterOptions.timeAggregation)) {
+            showError(t('analytics', 'Remove Top N and time aggregation before using shared calculated measures or multi-column sorting.'));
+            return;
+        }
+        if (needsTransformation) {
+            filterOptions.transformations = definition;
+            delete filterOptions.sort;
+        } else {
+            delete filterOptions.transformations;
+            if (definition.sort.length === 1) {
+                const item = definition.sort[0];
+                const visibleSource = sourceColumns.filter(column => column.role !== 'dimension'
+                    || (!Object.hasOwn(drilldown, column.ref) && !Object.hasOwn(drilldown, column.ref.replace(/^source:/, ''))));
+                filterOptions.sort = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
+                    ? {column: item.column, direction: item.direction.toLowerCase()}
+                    : {dimension: visibleSource.findIndex(column => column.ref === item.column), direction: item.direction.toLowerCase()};
             } else {
-                if (filterOptions['drilldown'] !== undefined && filterOptions['drilldown'][dimension] !== undefined) {
-                    delete filterOptions['drilldown'][dimension];
-                }
-                if (filterOptions['drilldown'] !== undefined && Object.keys(filterOptions['drilldown']).length === 0) {
-                    delete filterOptions['drilldown'];
-                }
+                delete filterOptions.sort;
             }
         }
 
-        // `aggregate=true` is the default and should not be persisted.
-        if (aggregateCheckbox && aggregateCheckbox.checked === false) {
-            filterOptions.aggregate = false;
-        } else {
-            delete filterOptions.aggregate;
+        const tableOptions = structuredClone(OCA.Analytics.currentReportData.options.tableoptions || {});
+        const movedIndices = calculationRows.map(row => Number(row.dataset.legacyIndex))
+            .filter(index => Number.isInteger(index) && index >= 0);
+        if (movedIndices.length) {
+            const raw = String(tableOptions.calculatedColumns || '').trim();
+            try {
+                const items = JSON.parse(raw.startsWith('[') ? raw : '[' + raw + ']');
+                const remaining = items.filter((item, index) => !movedIndices.includes(index));
+                if (remaining.length) {
+                    tableOptions.calculatedColumns = remaining.map(item => JSON.stringify(item)).join(',');
+                } else {
+                    delete tableOptions.calculatedColumns;
+                }
+                if (Array.isArray(tableOptions.columnFormats)) {
+                    tableOptions.columnFormats = tableOptions.columnFormats.map(format => {
+                        const match = /^calculation:(\d+)$/.exec(format.reference || '');
+                        if (!match) return format;
+                        const index = Number(match[1]);
+                        if (movedIndices.includes(index)) {
+                            return {...format, reference: 'source-ref:calc:legacy_' + index};
+                        }
+                        const removedBefore = movedIndices.filter(moved => moved < index).length;
+                        return removedBefore ? {...format, reference: 'calculation:' + (index - removedBefore)} : format;
+                    });
+                }
+                if (Array.isArray(tableOptions.layout?.rows)) {
+                    const originalRefs = OCA.Analytics.currentReportData.columnRefs || [];
+                    tableOptions.layout.rows = tableOptions.layout.rows.map(item => {
+                        const index = typeof item === 'number' ? item : (/^\d+$/.test(String(item)) ? Number(item) : -1);
+                        return index >= 0 ? (originalRefs[index] || 'source:' + index) : item;
+                    });
+                    movedIndices.forEach(index => {
+                        const ref = 'calc:legacy_' + index;
+                        if (!tableOptions.layout.rows.includes(ref)) tableOptions.layout.rows.push(ref);
+                    });
+                }
+            } catch (error) {
+                showError(t('analytics', 'The existing table calculations could not be moved.'));
+                return;
+            }
         }
 
+        if (previewOnly === true) {
+            OCA.Analytics.Filter.previewTransformationResult(filterOptions, tableOptions);
+            return;
+        }
+
+        OCA.Analytics.currentReportData.options.tableoptions = tableOptions;
         OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();
         OCA.Analytics.Notification.dialogClose();
+    },
+
+    previewTransformationResult: async function (filterOptions, tableOptions) {
+        const button = document.getElementById('transformPreviewButton');
+        const status = document.getElementById('transformPreviewStatus');
+        const target = document.getElementById('transformPreviewResult');
+        const reportId = OCA.Analytics.currentReportData.options.id;
+        if (!reportId) {
+            status.textContent = t('analytics', 'Save the report before previewing its data.');
+            return;
+        }
+        button.disabled = true;
+        status.textContent = t('analytics', 'Preparing preview…');
+        target.replaceChildren();
+        try {
+            const draft = structuredClone(filterOptions);
+            if (draft.transformations) draft.transformations.limit = 10;
+            const params = new URLSearchParams({
+                filteroptions: JSON.stringify(draft),
+                tableoptions: JSON.stringify(tableOptions),
+            });
+            const response = await fetch(OC.generateUrl('apps/analytics/data/') + reportId + '?' + params, {
+                headers: {'requesttoken': OC.requestToken, 'OCS-APIREQUEST': 'true'},
+            });
+            if (!response.ok) throw new Error(t('analytics', 'The preview request failed.'));
+            const result = await response.json();
+            if (result.error && result.error !== 0) throw new Error(String(result.error));
+            const table = document.createElement('table');
+            const head = table.createTHead().insertRow();
+            (result.header || []).forEach(label => {
+                const cell = document.createElement('th');
+                cell.textContent = String(label);
+                head.appendChild(cell);
+            });
+            const body = table.createTBody();
+            (result.data || []).slice(0, 10).forEach(row => {
+                const tableRow = body.insertRow();
+                row.forEach(value => {
+                    const cell = tableRow.insertCell();
+                    cell.textContent = value === null || value === undefined ? '' : String(value);
+                });
+            });
+            target.appendChild(table);
+            status.textContent = t('analytics', 'Showing up to 10 result rows.');
+        } catch (error) {
+            status.textContent = error.message || t('analytics', 'The preview could not be prepared.');
+        } finally {
+            button.disabled = false;
+        }
     },
 
     /**
@@ -433,6 +959,11 @@ OCA.Analytics.Filter = {
     processTopNDialog: function () {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
 
+        if (document.getElementById('groupOptionType').value !== 'none' && filterOptions.transformations) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Remove calculated measures and other column transformations before using Top N or time aggregation.'));
+            return;
+        }
+
         if (!filterOptions.topN) {
             filterOptions.topN = {};
         }
@@ -539,6 +1070,11 @@ OCA.Analytics.Filter = {
         const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
 
         const grouping = document.getElementById('timeGroupingGrouping').value;
+
+        if (grouping !== 'none' && filterOptions.transformations) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Remove calculated measures and other column transformations before using Top N or time aggregation.'));
+            return;
+        }
 
         if (!filterOptions.timeAggregation) {
             filterOptions.timeAggregation = {};
@@ -1694,98 +2230,6 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Filter.renderCalculatedColumnsList();
         OCA.Analytics.Filter.syncCalculatedColumnsEditorContext(deletedIndex);
         OCA.Analytics.Filter.closeCalculatedColumnEditor();
-    },
-
-    /**
-     * Open the sort configuration dialog used to define default
-     * sort direction and dimension.
-     */
-    openSortDialog: function () {
-        OCA.Analytics.Report.hideReportMenu();
-
-        OCA.Analytics.Notification.htmlDialogInitiate(
-            t('analytics', 'Sort order'),
-            OCA.Analytics.Filter.processSortOptionsDialog
-        );
-
-        // Clone the DOM template
-        const container = document.importNode(document.getElementById('templateSortOptions').content, true);
-
-        // Get the header array
-        let headerArray = OCA.Analytics.currentReportData.header;
-
-        // Clear existing options
-        let sortOptionDimension = container.getElementById('sortOptionDimension');
-        sortOptionDimension.innerHTML = ''; // Clear existing options
-
-        // Create options for every available report header column
-        const fragment = document.createDocumentFragment();
-        headerArray.forEach((header, index) => {
-            const optionValue = OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)
-                ? OCA.Analytics.Flexible.referenceForIndex(OCA.Analytics.currentReportData, index)
-                : index;
-            const dimensionOption = new Option(header, optionValue); // Create option directly
-            fragment.appendChild(dimensionOption);
-        });
-        sortOptionDimension.appendChild(fragment); // Append all options at once
-
-        // Define an array of options
-        const directionOptions = [
-            {value: 'def', text: t('analytics', 'Default')},
-            {value: 'asc', text: t('analytics', 'Ascending')},
-            {value: 'desc', text: t('analytics', 'Descending')}
-        ];
-
-        // Create options for sortOptionDirection
-        let sortOptionDirection = container.getElementById('sortOptionDirection');
-        directionOptions.forEach(({value, text}) => {
-            const directionOption = new Option(text, value); // Create option directly
-            sortOptionDirection.options.add(directionOption); // Add option to dropdown
-        });
-
-        // set current values
-        let filterOptions = OCA.Analytics.currentReportData.options.filteroptions;
-        if (filterOptions !== null && filterOptions['sort'] !== undefined) {
-            container.getElementById('sortOptionDimension').value = filterOptions.sort.column || filterOptions.sort.dimension;
-            container.getElementById('sortOptionDirection').value = filterOptions.sort.direction;
-        }
-
-        OCA.Analytics.Notification.htmlDialogUpdate(
-            container,
-            t('analytics', 'Sort data ascending or descending')
-        );
-    },
-
-    /**
-     * Save the chosen sorting dimension and direction and refresh the report.
-     */
-    processSortOptionsDialog: function () {
-        // Ensure filterOptions is initialized properly
-        const filterOptions = OCA.Analytics.currentReportData.options.filteroptions || (OCA.Analytics.currentReportData.options.filteroptions = {});
-
-        // Initialize sort if it doesn't exist
-        if (!filterOptions.sort) {
-            filterOptions.sort = {};
-        }
-
-        // Set dimension and direction
-        if (OCA.Analytics.Flexible.isFlexible(OCA.Analytics.currentReportData)) {
-            filterOptions.sort.column = document.getElementById('sortOptionDimension').value;
-            delete filterOptions.sort.dimension;
-        } else {
-            filterOptions.sort.dimension = document.getElementById('sortOptionDimension').value;
-        }
-        filterOptions.sort.direction = document.getElementById('sortOptionDirection').value;
-
-        // Remove sort if direction is 'def'
-        if (filterOptions.sort.direction === 'def') {
-            delete filterOptions.sort;
-        }
-
-        OCA.Analytics.currentReportData.options.filteroptions = filterOptions;
-        OCA.Analytics.unsavedChanges = true;
-        OCA.Analytics.Report.Backend.getData();
-        OCA.Analytics.Notification.dialogClose();
     },
 
     /**

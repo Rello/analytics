@@ -70,7 +70,7 @@ OCA.Analytics.TableOptions = {
         const bindings = {
             tableColumnTitle: 'title', tableColumnFormat: 'format', tableColumnCurrency: 'currency',
             tableColumnDecimals: 'decimals', tableColumnAlign: 'align', tableColumnWidth: 'width',
-            tableColumnWrap: 'wrap', tableHighlightBelow: 'highlightBelow',
+            tableColumnWrap: 'wrap',
         };
         Object.entries(bindings).forEach(([id, key]) => field(id).addEventListener('input', () => {
             if (!state.selected) return;
@@ -82,7 +82,7 @@ OCA.Analytics.TableOptions = {
             this.updateFormatVisibility();
             this.schedule();
         }));
-        ['tableColumnSelect', 'tableHighlightColumn'].forEach(id => field(id).addEventListener('change', () => this.selectColumn(field(id).value)));
+        field('tableColumnSelect').addEventListener('change', () => this.selectColumn(field('tableColumnSelect').value));
         field('tableColumnReset').addEventListener('click', () => {
             state.draft.columnFormats = (state.draft.columnFormats || []).filter(item => item.reference !== state.selected);
             this.selectColumn(state.selected);
@@ -251,13 +251,12 @@ OCA.Analytics.TableOptions = {
     updateColumnChoices: function () {
         const state = this.active;
         const {field} = state;
-        const options = () => state.columns.map(column => new Option(column.analyticsLabel || OCA.Analytics.Visualization.unescapeHtml(column.sTitle), column.analyticsReference));
-        for (const id of ['tableColumnSelect', 'tableHighlightColumn']) field(id).replaceChildren(...options());
+        const options = state.columns.map(column => new Option(column.analyticsLabel || OCA.Analytics.Visualization.unescapeHtml(column.sTitle), column.analyticsReference));
+        field('tableColumnSelect').replaceChildren(...options);
         if (!state.columns.some(column => column.analyticsReference === state.selected)) {
             this.selectColumn(state.columns[0]?.analyticsReference);
         } else {
             field('tableColumnSelect').value = state.selected;
-            field('tableHighlightColumn').value = state.selected;
         }
     },
 
@@ -269,11 +268,11 @@ OCA.Analytics.TableOptions = {
         state.selected = reference;
         const format = OCA.Analytics.Visualization.getTableColumnFormat(state.draft, reference) || {};
         const values = {
-            tableColumnSelect: reference, tableHighlightColumn: reference,
+            tableColumnSelect: reference,
             tableColumnTitle: format.title ?? column.analyticsLabel ?? '',
             tableColumnFormat: format.format || 'auto', tableColumnCurrency: format.currency || 'EUR',
             tableColumnDecimals: format.decimals ?? '', tableColumnAlign: format.align || 'auto',
-            tableColumnWidth: format.width || '', tableHighlightBelow: format.highlightBelow ?? '',
+            tableColumnWidth: format.width || '',
         };
         Object.entries(values).forEach(([id, value]) => { state.field(id).value = value; });
         state.field('tableColumnWrap').checked = format.wrap === true;

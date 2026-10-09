@@ -234,30 +234,36 @@
 <template id="templateDrilldownOptions">
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'column.svg'); ?>">
-        <h2><?php p($l->t('Column selection')); ?></h2>
-        <span class="userGuidance"><?php p($l->t('Select the source columns available to the chart and table.')); ?></span>
-        <div class="tableOptionsSettingsTable" id="drilldownOptionsTable">
+        <h2><?php p($l->t('Columns')); ?></h2>
+        <span class="userGuidance"><?php p($l->t('Columns set to None keep their original values and define the groups. Set all measures to None to show the original rows. Removing a dimension combines its groups.')); ?></span>
+        <div class="analyticsTransformColumnsHeader" aria-hidden="true">
+            <span><?php p($l->t('Column')); ?></span><span><?php p($l->t('Include')); ?></span>
+            <span><?php p($l->t('Aggregate')); ?></span><span><?php p($l->t('Sort')); ?></span>
+            <span><?php p($l->t('Priority')); ?></span>
         </div>
+        <div id="drilldownOptionsTable" class="analyticsTransformColumns"></div>
+        <p id="transformColumnsMessage" class="userGuidance" role="alert" hidden></p>
+    </div>
+    <div class="analyticsDialogSection"
+         data-section-icon="<?php echo image_path('analytics', 'column.svg'); ?>">
+        <h2><?php p($l->t('Calculated measures')); ?></h2>
+        <p class="userGuidance"><?php p($l->t('Calculate for each source row before aggregation, or from aggregated values. Drag a column into the formula or click it to insert at the cursor, then combine columns with +, -, * or /.')); ?></p>
+        <p id="transformLegacyNotice" class="userGuidance" hidden></p>
+        <button type="button" id="transformImportTableCalculations" class="button analyticsSecondary" hidden>
+            <?php p($l->t('Move table calculations to report')); ?>
+        </button>
+        <div id="transformCalculationList"></div>
+        <button type="button" id="transformAddCalculation" class="button analyticsSecondary"><?php p($l->t('Add calculated measure')); ?></button>
     </div>
 
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
-        <h2><?php p($l->t('Visualizations')); ?></h2>
-        <div class="tableOptionsSettingsTable">
-            <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel">
-                    <label for="drilldownAggregate"><?php p($l->t('Aggregate values')); ?></label>
-                </div>
-                <div class="tableOptionsSettingsValue">
-                    <label class="analyticsSwitch" for="drilldownAggregate">
-                        <input type="checkbox" id="drilldownAggregate" name="drilldownAggregate" role="switch" checked
-                               aria-label="<?php p($l->t('Aggregate values')); ?>">
-                        <span class="analyticsSwitchSlider" aria-hidden="true"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
+        <h2><?php p($l->t('Data preview')); ?></h2>
+        <button type="button" id="transformPreviewButton" class="button analyticsSecondary"><?php p($l->t('Preview result')); ?></button>
+        <p id="transformPreviewStatus" class="userGuidance" aria-live="polite"></p>
+        <div id="transformPreviewResult" class="analyticsTransformPreview"></div>
     </div>
+
 </template>
 
 <template id="templateFilterDialog">
@@ -413,6 +419,7 @@
     <div class="sidebarHeaderOpened"><h3 id="dataManualSectionHeaderH3"
                                          class="sidebarPointer"><?php p($l->t('Manual entry')); ?></h3></div>
     <div id="dataManualSection" style="display: table; width: 100%; max-width: 500px;">
+        <p class="userGuidance"><?php p($l->t('For simple tables, click a report row to fill these fields. Review the values before saving.')); ?></p>
         <div class="table" style="display: table; width: 100%; max-width: 500px;">
             <div style="display: table-row;">
                 <div id="DataTextDimension1"
@@ -1088,6 +1095,19 @@
             </div>
             <div class="tableOptionsSettingsRow">
                 <div class="tableOptionsSettingsLabel">
+                    <label for="tablePageLength"><?php p($l->t('Rows per page')); ?></label>
+                </div>
+                <div class="tableOptionsSettingsValue">
+                    <select id="tablePageLength" class="optionsInput">
+                        <option value="10"><?php p($l->t('10')); ?></option>
+                        <option value="25"><?php p($l->t('25')); ?></option>
+                        <option value="50"><?php p($l->t('50')); ?></option>
+                        <option value="100"><?php p($l->t('100')); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="tableOptionsSettingsRow">
+                <div class="tableOptionsSettingsLabel">
                     <label for="tableShowHeader"><?php p($l->t('Show column headers')); ?></label>
                 </div>
                 <div class="tableOptionsSettingsValue">
@@ -1100,19 +1120,6 @@
                 </div>
                 <div class="tableOptionsSettingsValue">
                     <label class="analyticsSwitch" for="tableStriped"><input id="tableStriped" type="checkbox" role="switch" checked><span class="analyticsSwitchSlider" aria-hidden="true"></span></label>
-                </div>
-            </div>
-            <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel">
-                    <label for="tablePageLength"><?php p($l->t('Rows per page')); ?></label>
-                </div>
-                <div class="tableOptionsSettingsValue">
-                    <select id="tablePageLength" class="optionsInput">
-                        <option value="10"><?php p($l->t('10')); ?></option>
-                        <option value="25"><?php p($l->t('25')); ?></option>
-                        <option value="50"><?php p($l->t('50')); ?></option>
-                        <option value="100"><?php p($l->t('100')); ?></option>
-                    </select>
                 </div>
             </div>
             <div class="tableOptionsSettingsRow">
@@ -1143,28 +1150,6 @@
                                aria-label="<?php p($l->t('Compact visualization')); ?>">
                         <span class="analyticsSwitchSlider" aria-hidden="true"></span>
                     </label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="tableHighlightSection" class="analyticsDialogSection" data-section-icon="<?php echo image_path('analytics', 'visibility.svg'); ?>">
-        <h2><?php p($l->t('Highlighting')); ?></h2>
-        <span class="userGuidance"><?php p($l->t('Highlight values below a limit with a background and downward marker. Existing report thresholds also apply.')); ?></span>
-        <div class="tableOptionsSettingsTable">
-            <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel">
-                    <label for="tableHighlightColumn"><?php p($l->t('Column')); ?></label>
-                </div>
-                <div class="tableOptionsSettingsValue">
-                    <select id="tableHighlightColumn" class="optionsInput"></select>
-                </div>
-            </div>
-            <div class="tableOptionsSettingsRow">
-                <div class="tableOptionsSettingsLabel">
-                    <label for="tableHighlightBelow"><?php p($l->t('Values below')); ?></label>
-                </div>
-                <div class="tableOptionsSettingsValue">
-                    <input type="number" step="any" id="tableHighlightBelow" class="optionsInput" placeholder="<?php p($l->t('Disabled')); ?>">
                 </div>
             </div>
         </div>
@@ -1296,24 +1281,4 @@
         </div>
         <p id="chartColumnPreviewMessage" class="chartColumnMappingHint" hidden></p>
     </aside>
-</template>
-
-<template id="templateSortOptions">
-    <div class="table" style="display: table;" id="sortOptionsTable">
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
-                <label for="sortOptionDimension"><?php p($l->t('Sort by')); ?></label>
-            </div>
-            <div style="display: table-cell; width: 150px;">
-                <label for="sortOptionDirection"><?php p($l->t('Direction')); ?></label>
-            </div>
-        </div>
-        <div style="display: table-row;">
-            <div style="display: table-cell; width: 150px;">
-                <select id="sortOptionDimension" class="optionsInput"></select>
-            </div>
-            <div style="display: table-cell; width: 150px;">
-                <select id="sortOptionDirection" class="optionsInput"></select>
-            </div>
-        </div>
 </template>

@@ -185,6 +185,7 @@ OCA.Analytics.Navigation = {
         let a = document.createElement('a');
         a.classList.add('icon-add', 'svg', 'analytics-navigation-icon');
         a.id = 'newReportButton';
+        a.href = '#';
         a.addEventListener('click', OCA.Analytics.Navigation.handleNewButton);
         a.innerText = t('analytics', 'New');
 
@@ -366,7 +367,8 @@ OCA.Analytics.Navigation = {
             a.addEventListener("drop", OCA.Analytics.Navigation.Drag.drop_handler);
             a.addEventListener("dragover", OCA.Analytics.Navigation.Drag.dragover_handler);
             a.addEventListener("dragleave", OCA.Analytics.Navigation.Drag.dragleave_handler);
-        } else {
+        } else if (rootListId === 'section-favorites') {
+            // Favorites mix item types, so their icons provide useful context.
             if (data['item_type'] === 'dataset') {
                 typeIcon = 'icon-analytics-dataset';
             } else if (data['item_type'] === 'panorama') {
@@ -376,11 +378,15 @@ OCA.Analytics.Navigation = {
             }
         }
 
-        if (data['isShare'] === 1) {
+        if (data['isShare'] === 1 && typeINT !== OCA.Analytics.TYPE_GROUP) {
             typeIcon = 'icon-shared';
         }
 
-        a.classList.add(typeIcon, 'svg', 'analytics-navigation-icon');
+        if (typeIcon) {
+            a.classList.add(typeIcon, 'svg', 'analytics-navigation-icon');
+        } else {
+            a.classList.add('analytics-navigation-label');
+        }
 
         // also add items to the navigation menu
         a.innerText = data['name'];
@@ -398,7 +404,7 @@ OCA.Analytics.Navigation = {
         let ulSublist = document.createElement('ul');
         ulSublist.id = 'dataset-' + data['item_type'] + '-' + data['id'];
 
-        if (parseInt(data['favorite']) === 1) {
+        if (parseInt(data['favorite']) === 1 && rootListId !== 'section-favorites') {
             let divFav = OCA.Analytics.Navigation.buildFavoriteIcon(data['id'], data['name'])
             a.appendChild(divFav);
         }
@@ -462,7 +468,7 @@ OCA.Analytics.Navigation = {
         );
         anchors.forEach(anchor => {
             const favMark = anchor.querySelector('#fav-' + datasetId);
-            if (isFavorite === 'true') {
+            if (isFavorite === 'true' && !anchor.closest('#section-favorites')) {
                 if (!favMark) {
                     anchor.appendChild(OCA.Analytics.Navigation.buildFavoriteIcon(datasetId, ''));
                 }

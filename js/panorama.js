@@ -1229,8 +1229,9 @@ Object.assign(OCA.Analytics.Panorama = {
             OCA.Analytics.Notification.dialogClose
         );
 
-        // const headerHeight = 35; // Fixed height that looks good
-        const headerHeight = 0; // Fixed height that looks good
+        // Keep the captured page below the title/subtitle and above the branding.
+        const headerHeight = 60;
+        const footerHeight = 45;
         const pages = document.querySelectorAll('.flex-container');
         const pdf = new jspdf.jsPDF({
             orientation: 'landscape',
@@ -1333,7 +1334,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 // Add the page content centered and scaled
                 // Determine the scale factor to fit the image within the PDF page size
                 let scaleX = pdf.internal.pageSize.getWidth() / canvas.width;
-                let scaleY = (pdf.internal.pageSize.getHeight() - headerHeight) / canvas.height;
+                let scaleY = (pdf.internal.pageSize.getHeight() - headerHeight - footerHeight) / canvas.height;
                 let scaleFactor = Math.min(scaleX, scaleY);
 
                 // Calculate the scaled dimensions
@@ -1342,7 +1343,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
                 // Calculate the center position
                 let xOffset = (pdf.internal.pageSize.getWidth() - scaledWidth) / 2;
-                let yOffset = (pdf.internal.pageSize.getHeight() - scaledHeight) / 2 + headerHeight;
+                let yOffset = (pdf.internal.pageSize.getHeight() - headerHeight - footerHeight - scaledHeight) / 2 + headerHeight;
 
                 // Add the page content centered and scaled
                 pdf.addImage(imgData, 'PNG', xOffset, yOffset, scaledWidth, scaledHeight, index, 'FAST');

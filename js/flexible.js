@@ -94,7 +94,7 @@ OCA.Analytics.Flexible = {
         if (!layout || typeof layout !== 'object') return layout;
         return Object.fromEntries(Object.entries(layout).map(([section, items]) => [section,
             Array.isArray(items) ? items.map(item => {
-                if (typeof item === 'string' && /^c_[1-9][0-9]*$/.test(item)) {
+                if (typeof item === 'string' && this.indexForReference(response, item) >= 0) {
                     return this.indexForReference(response, item);
                 }
                 if (typeof item === 'number' && Number.isInteger(item)) {

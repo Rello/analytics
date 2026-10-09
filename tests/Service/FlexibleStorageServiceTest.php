@@ -12,6 +12,7 @@ use OCA\Analytics\Db\DatasetMapper;
 use OCA\Analytics\Db\FlexibleStorageMapper;
 use OCA\Analytics\Db\ReportMapper;
 use OCA\Analytics\Service\FlexibleStorageService;
+use OCA\Analytics\Service\TransformationService;
 use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Storage\DatasetStorageResolver;
 use OCA\Analytics\Storage\FlexibleValueNormalizer;
@@ -98,6 +99,77 @@ class FlexibleStorageServiceTest extends TestCase {
 
 		$this->assertSame(['Date', 'Region', 'Revenue', 'Cost'], $result['header']);
 		$this->assertSame(['c_1', 'c_2', 'c_3', 'c_4'], $result['columnRefs']);
+	}
+
+	public function testAfterAggregationReportCalculationUsesCompleteSqlGroups(): void {
+		$mapper = $this->createMock(FlexibleStorageMapper::class);
+		$mapper->expects($this->once())->method('getColumns')->with(7)->willReturn($this->columns());
+		$mapper->expects($this->once())->method('query')->with(
+			7,
+			$this->callback(static fn (array $projection): bool =>
+				array_column(array_column($projection, 'column'), 'ref') === ['c_2', 'c_3', 'c_4']
+				&& array_column($projection, 'aggregation') === ['', 'sum', 'sum']),
+			[], [], true, 0, 0
+		)->willReturn([['c_2' => 'North', 'c_3' => '15', 'c_4' => '5']]);
+		$service = $this->createServiceWithMapper($mapper, $this->createMock(ReportMapper::class));
+		$options = ['drilldown' => ['c_1' => false], 'transformations' => [
+			'version' => 1,
+			'calculations' => [[
+				'id' => 'calc:margin', 'name' => 'Margin', 'expression' => '{c_3} / {c_4}', 'phase' => 'after',
+			]],
+		]];
+		$source = $service->queryForReport(7, ['filteroptions' => json_encode($options, JSON_THROW_ON_ERROR)]);
+		$this->assertTrue($source['queryProcessing']['aggregation']);
+		$result = (new TransformationService())->execute($source, $options['transformations'], $options);
+		$this->assertSame(['Region', 'Revenue', 'Cost', 'Margin'], $result['header']);
+		$this->assertSame([['North', '15', '5', 3.0]], $result['data']);
+	}
+
+	public function testBeforeAggregationReportCalculationFetchesAllSourceRows(): void {
+		$mapper = $this->createMock(FlexibleStorageMapper::class);
+		$mapper->expects($this->once())->method('getColumns')->with(7)->willReturn($this->columns());
+		$mapper->expects($this->once())->method('query')->with(
+			7,
+			$this->callback(static fn (array $projection): bool =>
+				array_column(array_column($projection, 'column'), 'ref') === ['c_1', 'c_2', 'c_3', 'c_4']),
+			[], [], false, 0, 0
+		)->willReturn([
+			['c_1' => '2026-01-01', 'c_2' => 'North', 'c_3' => '2', 'c_4' => '10'],
+			['c_1' => '2026-01-01', 'c_2' => 'North', 'c_3' => '3', 'c_4' => '20'],
+		]);
+		$service = $this->createServiceWithMapper($mapper, $this->createMock(ReportMapper::class));
+		$options = ['transformations' => [
+			'version' => 1,
+			'calculations' => [[
+				'id' => 'calc:amount', 'name' => 'Amount', 'expression' => '{c_3} * {c_4}', 'phase' => 'before',
+			]],
+		]];
+		$source = $service->queryForReport(7, ['filteroptions' => json_encode($options, JSON_THROW_ON_ERROR)]);
+		$this->assertFalse($source['queryProcessing']['aggregation']);
+		$result = (new TransformationService())->execute($source, $options['transformations'], $options);
+		$this->assertSame(80.0, $result['data'][0][4]);
+	}
+
+	public function testNoneMeasureFetchesSourceRowsForMixedGrouping(): void {
+		$mapper = $this->createMock(FlexibleStorageMapper::class);
+		$mapper->expects($this->once())->method('getColumns')->with(7)->willReturn($this->columns());
+		$mapper->expects($this->once())->method('query')->with(
+			7,
+			$this->callback(static fn (array $projection): bool => array_column($projection, 'aggregation') === ['', '', '', '']),
+			[], [], false, 0, 0
+		)->willReturn([
+			['c_1' => '2026-01-01', 'c_2' => 'North', 'c_3' => '2', 'c_4' => '10'],
+			['c_1' => '2026-01-01', 'c_2' => 'North', 'c_3' => '2', 'c_4' => '20'],
+			['c_1' => '2026-01-01', 'c_2' => 'North', 'c_3' => '3', 'c_4' => '20'],
+		]);
+		$service = $this->createServiceWithMapper($mapper, $this->createMock(ReportMapper::class));
+		$options = ['transformations' => [
+			'version' => 1, 'calculations' => [], 'aggregations' => ['c_3' => 'none', 'c_4' => 'count'],
+		]];
+		$source = $service->queryForReport(7, ['filteroptions' => json_encode($options, JSON_THROW_ON_ERROR)]);
+		$this->assertFalse($source['queryProcessing']['aggregation']);
+		$result = (new TransformationService())->execute($source, $options['transformations'], $options);
+		$this->assertSame([['2026-01-01', 'North', '2', 2], ['2026-01-01', 'North', '3', 1]], $result['data']);
 	}
 
 	public function testMappedLoadStoresOnlyMappedColumnsAndLastDuplicateWins(): void {

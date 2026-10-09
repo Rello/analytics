@@ -11,22 +11,19 @@
     <button id="mobileNavigationToggle" class="analytics-options icon-menu" type="button"
             aria-controls="app-navigation" aria-expanded="false"
             aria-label="<?php p($l->t('Navigation')); ?>" title="<?php p($l->t('Navigation')); ?>"></button>
-    <div id="optionsMenuIcon" class="analytics-options icon-analytics-more has-tooltip"
-         title="<?php p($l->t('Options')); ?>"></div>
+    <button id="optionsMenuIcon" class="analytics-options icon-analytics-more has-tooltip" type="button"
+         aria-label="<?php p($l->t('Options')); ?>" title="<?php p($l->t('Options')); ?>"></button>
     <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
 
     <div id="optionsMenu" class="popovermenu">
         <ul id="optionsMenuMainReport" style="display: none !important;">
+            <li class="menu-section-heading">
+                <span role="heading" aria-level="2"><?php p($l->t('Data')); ?></span>
+            </li>
             <li>
                 <button id="optionsMenuColumnSelection" class="has-tooltip" title="<?php p($l->t('Select columns')); ?>">
                     <span class="icon-analytics-drilldown"></span>
-                    <span><?php p($l->t('Column selection')); ?></span>
-                </button>
-            </li>
-            <li>
-                <button id="optionsMenuSort" class="has-tooltip" title="<?php p($l->t('Sort data ascending or descending')); ?>">
-                    <span class="icon-analytics-sort"></span>
-                    <span><?php p($l->t('Sort order')); ?></span>
+                    <span><?php p($l->t('Columns')); ?></span>
                 </button>
             </li>
             <li>
@@ -41,7 +38,9 @@
                     <span><?php p($l->t('Time aggregation')); ?></span>
                 </button>
             </li>
-            <li class="action-separator"></li>
+            <li class="menu-section-heading">
+                <span role="heading" aria-level="2"><?php p($l->t('Visualisation')); ?></span>
+            </li>
             <li>
                 <button id="optionsMenuChartOptions">
                     <span class="icon-analytics-chart-options"></span>
@@ -139,7 +138,9 @@
                     </li>
                 </ul>
             </li>
-            <li class="action-separator"></li>
+            <li class="menu-section-heading">
+                <span role="heading" aria-level="2"><?php p($l->t('Report')); ?></span>
+            </li>
             <li>
                 <button id="optionsMenuDownload">
                     <span class="icon-analytics-download"></span>

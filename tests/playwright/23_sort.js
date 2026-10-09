@@ -37,10 +37,20 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     const seedState = await ensureStoredReportWithDefaultData(page, reportName, 'Sort regression');
     steps.push(`report ${seedState}`);
 
+    if (await page.locator('#optionsMenuSort').count()) {
+      throw new Error('The redundant Sort order menu entry is still present');
+    }
+
     steps.push('sort by value descending');
-    await openOptionsMenuItem(page, 'optionsMenuSort', 'sort dialog');
-    await page.locator('#sortOptionDimension').selectOption({ label: 'Value' });
-    await page.locator('#sortOptionDirection').selectOption({ label: 'Descending' });
+    await openOptionsMenuItem(page, 'optionsMenuColumnSelection', 'columns dialog');
+    const sortPositions = await page.evaluate(() => ({
+      dimension: document.querySelector('.analyticsTransformColumnRow[data-ref="dimension1"] .transformSort').getBoundingClientRect().left,
+      measure: document.querySelector('.analyticsTransformColumnRow[data-ref="value"] .transformSort').getBoundingClientRect().left,
+    }));
+    if (Math.abs(sortPositions.dimension - sortPositions.measure) > 2) {
+      throw new Error('Sort controls for dimensions and measures are not aligned');
+    }
+    await page.locator('.analyticsTransformColumnRow[data-ref="value"] .transformSort').selectOption('DESC');
     await page.locator('#analyticsDialogBtnGo').click();
     steps.push('save reload and validate sorted report');
     await saveAndReloadReport(page, reportName);
@@ -48,13 +58,15 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     await capture('value_descending');
 
     let firstRow = (await page.locator('#tableContainer tbody tr').first().innerText()).replace(/\s+/g, ' ').trim();
-    if (firstRow !== 'Top N Dimension 2 5') {
+    const sortedCells = await page.locator('#tableContainer tbody tr').first().locator('td').allTextContents();
+    if (sortedCells[0].trim() !== 'Top N' || sortedCells[1].trim() !== 'Dimension 2'
+      || Number(sortedCells[2].trim()) !== 5) {
       throw new Error(`Expected first row "Top N | Dimension 2 | 5" after descending value sort, got "${firstRow}"`);
     }
 
     steps.push('reset sort direction to default');
-    await openOptionsMenuItem(page, 'optionsMenuSort', 'sort dialog reset');
-    await page.locator('#sortOptionDirection').selectOption({ label: 'Default' });
+    await openOptionsMenuItem(page, 'optionsMenuColumnSelection', 'columns dialog reset');
+    await page.locator('.analyticsTransformColumnRow[data-ref="value"] .transformSort').selectOption('');
     await page.locator('#analyticsDialogBtnGo').click();
     steps.push('save reload and validate original report');
     await saveAndReloadReport(page, reportName);

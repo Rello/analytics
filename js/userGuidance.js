@@ -16,6 +16,47 @@ if (!OCA.Analytics) {
      */
     OCA.Analytics = {};
 }
+/** Shared keyboard behavior for the app's existing modal surfaces. */
+OCA.Analytics.Dialog = {
+    focusable: function (container) {
+        return [...container.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')]
+            .filter(element => element.tabIndex >= 0 && !element.disabled
+                && element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden');
+    },
+
+    activate: function (container, close, initialFocus = container) {
+        const opener = document.activeElement;
+        const fallback = opener?.closest('#optionsMenu') ? document.getElementById('optionsMenuIcon')
+            : document.getElementById('newReportButton');
+        container.setAttribute('role', 'dialog');
+        container.setAttribute('aria-modal', 'true');
+        container.tabIndex = -1;
+        const onKeydown = event => {
+            if (event.defaultPrevented) return;
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                event.stopPropagation();
+                close();
+            } else if (event.key === 'Tab') {
+                const controls = OCA.Analytics.Dialog.focusable(container);
+                const index = controls.indexOf(document.activeElement);
+                if (!controls.length || index < 0 || (!event.shiftKey && index === controls.length - 1)
+                    || (event.shiftKey && index === 0)) {
+                    event.preventDefault();
+                    (event.shiftKey ? controls.at(-1) : controls[0])?.focus();
+                }
+            }
+        };
+        container.addEventListener('keydown', onKeydown);
+        container._analyticsDialogDeactivate = () => {
+            container.removeEventListener('keydown', onKeydown);
+            const target = opener?.isConnected && opener.getClientRects().length ? opener : fallback;
+            target?.focus({preventScroll: true});
+        };
+        initialFocus.focus({preventScroll: true});
+    },
+};
+
 /**
  * @namespace OCA.Analytics.Wizard
  */
@@ -46,6 +87,7 @@ OCA.Analytics.Wizard = {
         document.getElementById('wizardNext').addEventListener('click', OCA.Analytics.Wizard.next);
         document.getElementById('wizardPrevious').addEventListener('click', OCA.Analytics.Wizard.previous);
         document.getElementById('wizardClose').addEventListener('click', OCA.Analytics.Wizard.cancel);
+        OCA.Analytics.Dialog.activate(document.getElementById('analyticsWizard'), OCA.Analytics.Wizard.cancel);
 
         // load all pages in the background
         for (let i = 1; i < OCA.Analytics.Wizard.sildeArray.length; i++) {
@@ -84,11 +126,13 @@ OCA.Analytics.Wizard = {
     },
 
     close: function () {
-        document.getElementById('analyticsWizard').remove();
+        const wizard = document.getElementById('analyticsWizard');
+        wizard?.remove();
+        wizard?._analyticsDialogDeactivate?.();
     },
 
     cancel: function () {
-        document.getElementById('analyticsWizard').remove();
+        OCA.Analytics.Wizard.close();
     },
 
     dismissWizard: function () {
@@ -97,6 +141,122 @@ OCA.Analytics.Wizard = {
         xhr.setRequestHeader('requesttoken', OC.requestToken);
         xhr.setRequestHeader('OCS-APIREQUEST', 'true');
         xhr.send();
+    },
+
+    salesRankingDemo: function () {
+        const segment = t('analytics', 'Sales channel');
+        const year = t('analytics', 'Year');
+        const revenue = t('analytics', 'Revenue');
+        const previousYear = OCA.Analytics.Visualization.getTableColumnReference('pivot', 1, year, '2025');
+        const currentYear = OCA.Analytics.Visualization.getTableColumnReference('pivot', 1, year, '2026');
+        const currencyFormat = {format: 'currency', currency: 'EUR', decimals: 0, align: 'right'};
+        const channels = [
+            [t('analytics', 'Online shop'), 42000, 58000, 76000],
+            [t('analytics', 'Retail stores'), 38000, 51000, 63000],
+            [t('analytics', 'Channel partners'), 31000, 39000, 54000],
+            [t('analytics', 'Direct sales'), 14000, 18000, 24000],
+            [t('analytics', 'Marketplace'), 9000, 12000, 16000],
+            [t('analytics', 'Events'), 4000, 6000, 8000],
+        ];
+
+        // Pivot calculations run after Top N, so they can coexist with grouping.
+        // Shared report transformations cannot currently be combined with Top N.
+        return JSON.stringify({
+            report: {
+                name: t('analytics', 'Demo: Sales Ranking'),
+                type: 2,
+                link: '{}',
+                visualization: 'ct',
+                chart: 'column',
+                dimension1: segment,
+                dimension2: year,
+                value: revenue,
+                subheader: t('analytics', 'Top 3 sales channels and others, comparing 2025 and 2026. Explore filters, sorting, chart field mapping and styles, and a pivot table with calculated totals and currency formatting.'),
+                chartoptions: JSON.stringify({
+                    __analytics_gui: {
+                        version: 4,
+                        model: 'kpiModel',
+                        columnMapping: {category: 0, series: [1], measures: [2]},
+                    },
+                    plugins: {legend: {display: true, position: 'bottom'}},
+                    scales: {
+                        x: {title: {display: true, text: segment}},
+                        primary: {beginAtZero: true, title: {display: true, text: revenue + ' (€)'}},
+                    },
+                }),
+                dataoptions: JSON.stringify([
+                    {type: 'bar', yAxisID: 'primary', backgroundColor: '#0082c9', borderColor: '#0082c9'},
+                    {type: 'line', yAxisID: 'primary', backgroundColor: '#e9a23b', borderColor: '#e9a23b', borderWidth: 3, pointRadius: 0.5, fill: false},
+                ]),
+                filteroptions: JSON.stringify({
+                    filter: {dimension2: {option: 'GT', value: '2024'}},
+                    sort: {dimension: '1', direction: 'ASC'},
+                    topN: {dimension: '0', type: 'top', number: 3, others: true},
+                }),
+                tableoptions: JSON.stringify({
+                    layout: {rows: [0], columns: [1], measures: [2], notRequired: []},
+                    calculatedColumns: [
+                        JSON.stringify({version: 2, operation: 'add', references: [previousYear, currentYear], title: t('analytics', 'Total revenue')}),
+                        JSON.stringify({version: 2, operation: 'formula', references: [previousYear, currentYear], expression: 'ROUND(ref2 - ref1, 0)', title: t('analytics', 'Revenue increase')}),
+                        JSON.stringify({version: 2, operation: 'percentage', references: [currentYear, previousYear], title: t('analytics', '2026 vs. 2025')}),
+                    ].join(','),
+                    columnFormats: [
+                        {reference: OCA.Analytics.Visualization.getTableColumnReference('source', 0, segment), format: 'text', wrap: true, width: 180},
+                        {reference: previousYear, ...currencyFormat},
+                        {reference: currentYear, ...currencyFormat},
+                        {reference: 'calculation:0', ...currencyFormat},
+                        {reference: 'calculation:1', ...currencyFormat},
+                        {reference: 'calculation:2', format: 'percent', decimals: 1, align: 'right'},
+                    ],
+                    order: [[3, 'desc']],
+                    colReorder: {order: [0, 2, 1, 3, 4, 5]},
+                    footer: true,
+                    density: 'compact',
+                    striped: true,
+                    showHeader: true,
+                    length: 10,
+                }),
+            },
+            dataload: [],
+            threshold: [],
+            favorite: 'true',
+            data: channels.flatMap(([channel, ...values]) => values.map((value, index) => [channel, String(2024 + index), String(value)])),
+        });
+    },
+
+    salesRawDataDemo: async function (rankingReportId) {
+        const request = async (path, method = 'GET', body) => {
+            const response = await fetch(OC.generateUrl('apps/analytics/' + path), {
+                method,
+                headers: OCA.Analytics.headers(),
+                body: body === undefined ? undefined : JSON.stringify(body),
+            });
+            if (!response.ok) throw new Error('Demo report creation failed');
+            return response.json();
+        };
+        try {
+            const ranking = await request('report/' + rankingReportId);
+            if (!(Number(ranking.dataset) > 0)) throw new Error('Demo dataset missing');
+            const reportId = await request('report', 'POST', {
+                name: t('analytics', 'Demo: Sales raw data'),
+                subheader: t('analytics', 'All sales channels and years from the same dataset as Demo: Sales Ranking, without filters, grouping, or calculated columns. Compare the two reports to see what report options can do with the same data.'),
+                parent: 0,
+                type: 2,
+                dataset: Number(ranking.dataset),
+                link: '{}',
+                visualization: 'table',
+                chart: '',
+                dimension1: ranking.dimension1,
+                dimension2: ranking.dimension2,
+                value: ranking.value,
+            });
+            if (!(Number(reportId) > 0)) throw new Error('Demo report creation failed');
+            await request('favorite/' + reportId, 'POST', {favorite: 'true'});
+            return reportId;
+        } catch (error) {
+            OCA.Analytics.Notification.notification('error', t('analytics', 'Import failed'));
+            throw error;
+        }
     },
 
     demo: async function () {
@@ -120,6 +280,11 @@ OCA.Analytics.Wizard = {
                     rethrowError: true,
                 });
             }
+            const rankingReportId = await OCA.Analytics.Sidebar.Report.import(null, OCA.Analytics.Wizard.salesRankingDemo(), null, {
+                refreshNavigation: false,
+                rethrowError: true,
+            });
+            await OCA.Analytics.Wizard.salesRawDataDemo(rankingReportId);
         } catch (error) {
             // The import helper already showed the failure notification.
         } finally {
@@ -146,6 +311,15 @@ OCA.Analytics.Wizard = {
 
         OCA.Analytics.Wizard.currentSlide === 1 ? prev.style.visibility = 'hidden' : prev.style.visibility = 'initial';
         OCA.Analytics.Wizard.currentSlide === OCA.Analytics.Wizard.sildeArray.length - 1 ? next.style.visibility = 'hidden' : next.style.visibility = 'initial';
+        const page = document.getElementById(nextSlide + 'Page');
+        const heading = page.querySelector('h2, h3');
+        if (heading) {
+            heading.id ||= nextSlide + 'Heading';
+            heading.tabIndex = -1;
+            document.getElementById('analyticsWizard').setAttribute('aria-labelledby', heading.id);
+        }
+        document.getElementById('pageBody').scrollTop = 0;
+        (heading || OCA.Analytics.Dialog.focusable(page)[0] || next).focus({preventScroll: true});
     },
 
     wizardFinal: function () {
@@ -287,14 +461,14 @@ OCA.Analytics.Notification = {
         OCA.Analytics.Notification.closeExistingDialog();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
-            + '<div id="analyticsDialogContainer" class="analyticsDialog">'
-            + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<div id="analyticsDialogContainer" aria-labelledby="analyticsDialogHeader" class="analyticsDialog">'
+            + '<button type="button" class="analyticsDialogClose" id="analyticsDialogBtnClose" aria-label="' + t('analytics', 'Close') + '"></button>'
             + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;"></span></div>'
             + '<span id="analyticsDialogGuidance" class="userGuidance"></span><br><br>'
             + '<div id="analyticsDialogContent">'
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
-            + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+            + '<button type="button" class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</button>'
             + '</div></div>'
         );
         document.getElementById('analyticsDialogHeader').textContent = header;
@@ -302,20 +476,21 @@ OCA.Analytics.Notification = {
         document.getElementById('analyticsDialogContent').innerHTML = text;
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnGo").addEventListener("click", OCA.Analytics.Notification.dialogClose);
+        OCA.Analytics.Dialog.activate(document.getElementById('analyticsDialogContainer'), OCA.Analytics.Notification.dialogClose);
     },
 
     confirm: function (header, text, callback) {
         OCA.Analytics.Notification.closeExistingDialog();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
-            + '<div id="analyticsDialogContainer" class="analyticsDialog">'
-            + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<div id="analyticsDialogContainer" aria-labelledby="analyticsDialogHeader" class="analyticsDialog">'
+            + '<button type="button" class="analyticsDialogClose" id="analyticsDialogBtnClose" aria-label="' + t('analytics', 'Close') + '"></button>'
             + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;"></span></div>'
             + '<div id="analyticsDialogContent">'
             + '<div style="text-align:center; padding-top:100px" class="get-metadata icon-loading"></div>'
             + '</div>'
             + '<br><div class="analyticsDialogButtonrow">'
-            + '<a class="button analyticsSecondary" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
+            + '<button type="button" class="button analyticsSecondary" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</button>'
             + '<button type="button" class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</button>'
             + '</div></div>'
         );
@@ -324,7 +499,8 @@ OCA.Analytics.Notification = {
         document.getElementById("analyticsDialogBtnClose").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnCancel").addEventListener("click", OCA.Analytics.Notification.dialogClose);
         document.getElementById("analyticsDialogBtnGo").addEventListener("click", callback);
-        document.getElementById("analyticsDialogBtnGo").focus();
+        OCA.Analytics.Dialog.activate(document.getElementById('analyticsDialogContainer'), OCA.Analytics.Notification.dialogClose,
+            document.getElementById('analyticsDialogBtnGo'));
     },
 
     /**
@@ -352,10 +528,10 @@ OCA.Analytics.Notification = {
         OCA.Analytics.Notification.closeExistingDialog();
         document.body.insertAdjacentHTML('beforeend',
             '<div id="analyticsDialogOverlay" class="analyticsDialogDim"></div>'
-            + '<div id="analyticsDialogContainer" class="analyticsDialog'
+            + '<div id="analyticsDialogContainer" aria-labelledby="analyticsDialogHeader" class="analyticsDialog'
             + (dialogOptions.variant === 'enhanced' ? ' analyticsDialog--enhanced' : '')
             + '">'
-            + '<a class="analyticsDialogClose" id="analyticsDialogBtnClose"></a>'
+            + '<button type="button" class="analyticsDialogClose" id="analyticsDialogBtnClose" aria-label="' + t('analytics', 'Close') + '"></button>'
             + '<div class="analyticsDialogHeaderWrap">'
             + '<div class="analyticsDialogHeader"><span class="analyticsDialogHeaderIcon"></span><span id="analyticsDialogHeader" style="margin-left: 10px;"></span></div>'
             + '<span id="analyticsDialogGuidance" class="userGuidance analyticsDialogGuidance"></span>'
@@ -368,15 +544,15 @@ OCA.Analytics.Notification = {
                     ? '<div class="analyticsDialogButtonrow">'
                     + (
                         dialogOptions.leadingAction
-                            ? '<a class="button analyticsSecondary analyticsDialogButtonLeading'
+                            ? '<button type="button" class="button analyticsSecondary analyticsDialogButtonLeading'
                             + (dialogOptions.leadingAction.className ? ' ' + dialogOptions.leadingAction.className : '')
                             + '" id="analyticsDialogBtnLeading">'
                             + dialogOptions.leadingAction.label
-                            + '</a>'
+                            + '</button>'
                             : ''
                     )
-                    + '<a class="button analyticsSecondary" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</a>'
-                    + '<a class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</a>'
+                    + '<button type="button" class="button analyticsSecondary" id="analyticsDialogBtnCancel">' + t('analytics', 'Cancel') + '</button>'
+                    + '<button type="button" class="button analyticsPrimary" id="analyticsDialogBtnGo">' + t('analytics', 'OK') + '</button>'
                     + '</div>'
                     : ''
             )
@@ -396,6 +572,7 @@ OCA.Analytics.Notification = {
         if (dialogOptions.showActions && dialogOptions.leadingAction) {
             document.getElementById('analyticsDialogBtnLeading').addEventListener('click', dialogOptions.leadingAction.onClick);
         }
+        OCA.Analytics.Dialog.activate(dialogContainer, OCA.Analytics.Notification.dialogClose);
     },
 
     htmlDialogUpdate: function (content, guidance, options = null) {
@@ -437,6 +614,9 @@ OCA.Analytics.Notification = {
         } else {
             contentElement.appendChild(content);
         }
+        if (!dialogContainer.contains(document.activeElement) || document.activeElement === dialogContainer) {
+            (OCA.Analytics.Dialog.focusable(contentElement)[0] || dialogContainer).focus({preventScroll: true});
+        }
     },
 
     htmlDialogUpdateAdd: function (guidance) {
@@ -450,6 +630,7 @@ OCA.Analytics.Notification = {
         }
         dialogContainer?.remove();
         document.getElementById('analyticsDialogOverlay')?.remove();
+        dialogContainer?._analyticsDialogDeactivate?.();
     },
 
     normalizeDialogOptions: function (options = {}) {

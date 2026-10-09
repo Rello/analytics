@@ -14074,84 +14074,27 @@
           "id": "d61755c2-5886-43f6-9623-1bc00e73e4bb",
           "comment": "",
           "command": "click",
-          "target": "id=optionsMenuSort",
+          "target": "id=optionsMenuColumnSelection",
           "targets": [
             [
-              "css=#optionsMenuSort > span:nth-child(2)",
-              "css:finder"
-            ],
-            [
-              "xpath=//button[@id='optionsMenuSort']/span[2]",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//li[2]/button/span[2]",
-              "xpath:position"
-            ],
-            [
-              "xpath=//span[contains(.,'Sort')]",
-              "xpath:innerText"
+              "id=optionsMenuColumnSelection",
+              "id"
             ]
           ],
           "value": ""
         },
         {
-          "id": "2e1ce2ec-d216-4344-83ca-0b5b17b73a55",
-          "comment": "",
-          "command": "select",
-          "target": "id=sortOptionDimension",
-          "targets": [
-            [
-              "id=sortOptionDimension",
-              "id"
-            ],
-            [
-              "css=#sortOptionDimension",
-              "css:finder"
-            ],
-            [
-              "xpath=//select[@id='sortOptionDimension']",
-              "xpath:attributes"
-            ],
-            [
-              "xpath=//div[@id='sortOptionsTable']/div[2]/div/select",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//div/select",
-              "xpath:position"
-            ]
-          ],
-          "value": "label=Value"
-        },
-        {
           "id": "6e4fe3a2-7d0f-48a8-90ae-a52c1a149e60",
           "comment": "",
           "command": "select",
-          "target": "id=sortOptionDirection",
+          "target": "css=.analyticsTransformColumnRow[data-ref=\"value\"] .transformSort",
           "targets": [
             [
-              "id=sortOptionDimension",
-              "id"
-            ],
-            [
-              "css=#sortOptionDimension",
+              "css=.analyticsTransformColumnRow[data-ref=\"value\"] .transformSort",
               "css:finder"
-            ],
-            [
-              "xpath=//select[@id='sortOptionDimension']",
-              "xpath:attributes"
-            ],
-            [
-              "xpath=//div[@id='sortOptionsTable']/div[2]/div/select",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//div/select",
-              "xpath:position"
             ]
           ],
-          "value": "label=Descending"
+          "value": "value=DESC"
         },
         {
           "id": "0fa21243-c6e7-4d98-bd0a-cdcc26062e75",
@@ -14285,23 +14228,11 @@
           "id": "b50e06ed-159f-44da-90bb-850a1b36036f",
           "comment": "",
           "command": "click",
-          "target": "id=optionsMenuSort",
+          "target": "id=optionsMenuColumnSelection",
           "targets": [
             [
-              "css=#optionsMenuSort > span:nth-child(2)",
-              "css:finder"
-            ],
-            [
-              "xpath=//button[@id='optionsMenuSort']/span[2]",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//li[2]/button/span[2]",
-              "xpath:position"
-            ],
-            [
-              "xpath=//span[contains(.,'Sort')]",
-              "xpath:innerText"
+              "id=optionsMenuColumnSelection",
+              "id"
             ]
           ],
           "value": ""
@@ -14310,30 +14241,14 @@
           "id": "eee3194a-706b-45d1-9d97-043152604cee",
           "comment": "",
           "command": "select",
-          "target": "id=sortOptionDirection",
+          "target": "css=.analyticsTransformColumnRow[data-ref=\"value\"] .transformSort",
           "targets": [
             [
-              "id=sortOptionDimension",
-              "id"
-            ],
-            [
-              "css=#sortOptionDimension",
+              "css=.analyticsTransformColumnRow[data-ref=\"value\"] .transformSort",
               "css:finder"
-            ],
-            [
-              "xpath=//select[@id='sortOptionDimension']",
-              "xpath:attributes"
-            ],
-            [
-              "xpath=//div[@id='sortOptionsTable']/div[2]/div/select",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//div/select",
-              "xpath:position"
             ]
           ],
-          "value": "label=Default"
+          "value": "value="
         },
         {
           "id": "73839912-b4ce-4049-8fe0-d767654b51d1",
@@ -14556,24 +14471,7 @@
           "comment": "",
           "command": "click",
           "target": "id=optionsMenuTopN",
-          "targets": [
-            [
-              "css=#optionsMenuSort > span:nth-child(2)",
-              "css:finder"
-            ],
-            [
-              "xpath=//button[@id='optionsMenuSort']/span[2]",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//li[2]/button/span[2]",
-              "xpath:position"
-            ],
-            [
-              "xpath=//span[contains(.,'Sort')]",
-              "xpath:innerText"
-            ]
-          ],
+          "targets": [],
           "value": ""
         },
         {
@@ -14581,28 +14479,7 @@
           "comment": "",
           "command": "select",
           "target": "id=groupOptionDimension",
-          "targets": [
-            [
-              "id=sortOptionDimension",
-              "id"
-            ],
-            [
-              "css=#sortOptionDimension",
-              "css:finder"
-            ],
-            [
-              "xpath=//select[@id='sortOptionDimension']",
-              "xpath:attributes"
-            ],
-            [
-              "xpath=//div[@id='sortOptionsTable']/div[2]/div/select",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//div/select",
-              "xpath:position"
-            ]
-          ],
+          "targets": [],
           "value": "label=Column 1"
         },
         {
@@ -14610,28 +14487,7 @@
           "comment": "",
           "command": "select",
           "target": "id=groupOptionType",
-          "targets": [
-            [
-              "id=sortOptionDimension",
-              "id"
-            ],
-            [
-              "css=#sortOptionDimension",
-              "css:finder"
-            ],
-            [
-              "xpath=//select[@id='sortOptionDimension']",
-              "xpath:attributes"
-            ],
-            [
-              "xpath=//div[@id='sortOptionsTable']/div[2]/div/select",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//div/select",
-              "xpath:position"
-            ]
-          ],
+          "targets": [],
           "value": "label=Top N"
         },
         {
@@ -14759,24 +14615,7 @@
           "comment": "",
           "command": "click",
           "target": "id=optionsMenuTopN",
-          "targets": [
-            [
-              "css=#optionsMenuSort > span:nth-child(2)",
-              "css:finder"
-            ],
-            [
-              "xpath=//button[@id='optionsMenuSort']/span[2]",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//li[2]/button/span[2]",
-              "xpath:position"
-            ],
-            [
-              "xpath=//span[contains(.,'Sort')]",
-              "xpath:innerText"
-            ]
-          ],
+          "targets": [],
           "value": ""
         },
         {
@@ -14784,28 +14623,7 @@
           "comment": "",
           "command": "select",
           "target": "id=groupOptionType",
-          "targets": [
-            [
-              "id=sortOptionDimension",
-              "id"
-            ],
-            [
-              "css=#sortOptionDimension",
-              "css:finder"
-            ],
-            [
-              "xpath=//select[@id='sortOptionDimension']",
-              "xpath:attributes"
-            ],
-            [
-              "xpath=//div[@id='sortOptionsTable']/div[2]/div/select",
-              "xpath:idRelative"
-            ],
-            [
-              "xpath=//div/select",
-              "xpath:position"
-            ]
-          ],
+          "targets": [],
           "value": "label=none"
         },
         {

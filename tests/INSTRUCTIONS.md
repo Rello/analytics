@@ -60,6 +60,9 @@ Supported identifiers:
 - `51`, `favorites`, `navigation-favorites`
 - `52`, `reference-assets` (isolated link-preview asset loading)
 - `53`, `panorama-pdf-upload` (safe panorama PDF uploads and overwrite protection)
+- `54`, `report-transformations` (shared calculated measures, hidden inputs, sorting, preview, and table-calculation migration)
+- `55`, `dialog-keyboard-mobile` (keyboard navigation, modal focus, and mobile report creation)
+- `56`, `demo-sales-ranking` (two demo reports sharing one dataset, raw table, Top N, mixed chart, pivot calculations, column order, formatting, indicators, and reload)
 - `91`, `91-delete`, `report-delete`, `delete`
 - `92`, `92-delete`, `group-delete`
 

@@ -64,6 +64,44 @@ const {chromium} = require('playwright');
         });
         assert.equal(invalidFolder.requestsMade, 0);
         assert.equal(invalidFolder.notification.type, 'error');
+
+        // Capture the actual export drawing commands for tall and wide content.
+        // Page images must not intersect either the title/subtitle or the footer.
+        await page.setContent('<div id="panoramaHeader">Export title</div><div class="panoramaSubHeaderRow" id="panoramaSubHeader-0">Revenue overview</div><div class="flex-container"></div><div id="analytics-content-panorama"><div id="byAnalytics"><img id="byAnalyticsImg"></div></div>');
+        await page.evaluate(() => {
+            OCA.Analytics.PanoramaFilters = {state: {renders: new Set(), errors: new Set()}};
+            OCA.Analytics.Panorama.applyPdfLightTheme = () => () => {};
+            for (const method of ['htmlDialogInitiate', 'htmlDialogUpdate', 'htmlDialogUpdateAdd', 'dialogClose']) {
+                OCA.Analytics.Notification[method] = () => {};
+            }
+            OC.getCurrentUser = () => ({displayName: 'Test user'});
+            window.jspdf = {jsPDF: class {
+                constructor() {
+                    this.internal = {pageSize: {getWidth: () => 842, getHeight: () => 595}};
+                }
+                setProperties() {}
+                setFontSize() {}
+                text(text, x, y) { window.draws.push({text, x, y}); }
+                addImage(data, format, x, y, width, height, alias) { window.draws.push({alias, x, y, width, height}); }
+                save() { window.pdfSaved = true; }
+            }};
+        });
+        for (const size of [{width: 1000, height: 600}, {width: 600, height: 1400}]) {
+            const output = await page.evaluate(async size => {
+                window.draws = [];
+                window.pdfSaved = false;
+                window.html2canvas = async () => ({...size, toDataURL: () => 'data:image/png;base64,test'});
+                await OCA.Analytics.Panorama.convertPDF('/', true);
+                return {saved: window.pdfSaved, draws: window.draws};
+            }, size);
+            assert.equal(output.saved, true);
+            const content = output.draws.find(draw => draw.alias === 0);
+            const subtitle = output.draws.find(draw => draw.text === 'Revenue overview');
+            const footer = output.draws.find(draw => draw.alias === 100);
+            assert.ok(content.y > subtitle.y, 'report content must start below the subtitle');
+            assert.ok(content.y + content.height < footer.y, 'report content must end above branding');
+        }
+        console.log(JSON.stringify({scriptId: '53', status: 'PASS'}));
     } finally {
         await browser.close();
     }

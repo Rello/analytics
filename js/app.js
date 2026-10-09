@@ -426,6 +426,9 @@ Object.assign(OCA.Analytics.Datasource = {
      * Fill dropdown element with data source entries
      */
     fillDropdown: function (target, data, addLoadingMore) {
+        // The wizard or sidebar can close while registered data sources are loading.
+        const select = document.getElementById(target);
+        if (!select) return;
         let options = document.createDocumentFragment();
         let option = document.createElement('option');
         option.value = '';
@@ -448,11 +451,11 @@ Object.assign(OCA.Analytics.Datasource = {
             option.innerText = t('analytics', 'Loading more...');
             options.appendChild(option);
         }
-        document.getElementById(target).innerHTML = '';
-        document.getElementById(target).appendChild(options);
-        if (document.getElementById(target).dataset.typeId) {
+        select.innerHTML = '';
+        select.appendChild(options);
+        if (select.dataset.typeId) {
             // in case the value was set in the sidebar before the dropdown was ready
-            document.getElementById(target).value = document.getElementById(target).dataset.typeId;
+            select.value = select.dataset.typeId;
         }
     },
 

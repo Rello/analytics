@@ -1405,6 +1405,18 @@ OCA.Analytics.Sidebar.Report = {
 OCA.Analytics.Sidebar.Data = {
     flexibleDescriptor: null,
 
+    prefillLegacyRecord: function (row) {
+        const form = document.getElementById('tabContainerData');
+        if (!Array.isArray(row) || row.length !== 3 || !document.getElementById('tabHeaderData')?.classList.contains('selected')) return;
+        const dimension1 = form.querySelector('#DataDimension1');
+        const dimension2 = form.querySelector('#DataDimension2');
+        const value = form.querySelector('#DataValue');
+        if (!dimension1 || !dimension2 || !value) return;
+        dimension1.value = row[0] ?? '';
+        dimension2.value = row[1] ?? '';
+        value.value = row[2] ?? '';
+    },
+
     tabContainerData: function () {
         OCA.Analytics.Sidebar.Data.flexibleDescriptor = null;
         let reportId;

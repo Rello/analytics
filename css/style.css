@@ -40,11 +40,6 @@ button, .button {
     content: inherit;
 }
 
-/* show a down-triangle if a folder is opened */
-#app-navigation .collapsible.open > div > a {
-    background-image: var(--icon-triangle-s-dark);
-}
-
 /* show the ... icon when the navigation row is hovered */
 #app-navigation > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button,
 #app-navigation > ul > li > ul > li > div > a:hover + .app-navigation-entry-utils > ul > li > button,
@@ -83,6 +78,7 @@ button, .button {
 }
 
 #app-navigation .app-navigation-entry {
+    position: relative;
     display: inline-flex;
     flex-wrap: wrap;
     order: 1;
@@ -93,12 +89,23 @@ button, .button {
     border-radius: var(--border-radius-element, var(--border-radius-pill));
 }
 
-#app-navigation .app-navigation-entry:hover {
-    background-color: var(--color-background-hover);
+#app-navigation .app-navigation-entry:hover,
+#app-navigation .app-navigation-entry:focus-within {
+    background-color: color-mix(in srgb, var(--color-primary-element) 8%, transparent);
 }
 
-#app-navigation .app-navigation-entry.active:not(:hover) {
-    background-color: var(--color-primary-element-light);
+#app-navigation .app-navigation-entry.active {
+    background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
+}
+
+#app-navigation .app-navigation-entry.active:not(:has(a[data-editing="true"]))::before {
+    content: '';
+    position: absolute;
+    inset-block: calc(var(--default-grid-baseline, 4px) * 2);
+    inset-inline-start: 0;
+    width: 3px;
+    background-color: var(--color-primary-element);
+    border-radius: 999px;
 }
 
 #app-navigation > ul > li > div > a,
@@ -120,6 +127,15 @@ button, .button {
     color: var(--color-main-text);
     flex: 1 1 0px;
     z-index: 100;
+}
+
+/* Category icons already identify ordinary items; reclaim their icon space. */
+#app-navigation #navigationDatasets .app-navigation-entry > a.analytics-navigation-label {
+    padding-inline-start: 14px;
+}
+
+#app-navigation #navigationDatasets .app-navigation-entry > a:has(.favorite-mark) {
+    padding-inline-end: 26px;
 }
 
 #app-navigation .analytics-navigation-icon {
@@ -183,9 +199,30 @@ button, .button {
 #app-navigation .icon-delete { --analytics-navigation-icon: var(--icon-delete-dark); }
 #app-navigation .icon-close { --analytics-navigation-icon: var(--icon-close-dark); }
 
-/* A section uses the same text-colored disclosure arrow when expanded. */
-#app-navigation .collapsible.open > div > .analytics-navigation-icon {
-    --analytics-navigation-icon: var(--icon-triangle-s-dark);
+/* Keep section/folder icons and show disclosure separately at the trailing edge. */
+#app-navigation .collapsible > .app-navigation-entry > a {
+    padding-inline-end: 34px;
+}
+
+#app-navigation .collapsible > .app-navigation-entry > a::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    inset-inline-end: 14px;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+}
+
+#app-navigation .collapsible.open > .app-navigation-entry > a::after {
+    transform: translateY(-30%) rotate(225deg);
+}
+
+#app-navigation .collapsible > .app-navigation-entry > a[data-editing="true"]::after {
+    content: none;
 }
 
 
@@ -260,20 +297,24 @@ button, .button {
     position: relative;
 }
 
-#app-navigation ul ul > li > div {
-    padding-left: 24px;
+#app-navigation ul ul > li > .app-navigation-entry {
+    margin-inline-start: 24px;
+    width: calc(100% - 24px);
 }
 
-#app-navigation ul ul ul > li > div {
-    padding-left: 48px;
+#app-navigation ul ul ul > li > .app-navigation-entry {
+    margin-inline-start: 48px;
+    width: calc(100% - 48px);
 }
 
-#app-navigation ul ul ul ul > li > div {
-    padding-left: 72px;
+#app-navigation ul ul ul ul > li > .app-navigation-entry {
+    margin-inline-start: 72px;
+    width: calc(100% - 72px);
 }
 
-#app-navigation ul ul ul ul ul > li > div {
-    padding-left: 96px;
+#app-navigation ul ul ul ul ul > li > .app-navigation-entry {
+    margin-inline-start: 96px;
+    width: calc(100% - 96px);
 }
 
 #app-navigation > ul > li.deleted > ul,
@@ -389,6 +430,100 @@ button, .button {
     display: block;
 }
 
+/* The underline meets the fine-line Analytics mark at the end of the header. */
+.reportHeading {
+    position: relative;
+    box-sizing: border-box;
+    min-height: 90px;
+    margin: 10px 30px 0;
+    padding: 12px 120px 8px 20px;
+}
+
+.reportHeading::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 8px;
+    border-left: 3px solid var(--color-analytics-primary);
+    border-bottom: 1.25px solid var(--color-analytics-primary);
+    border-radius: 3px 0 0 5px;
+}
+
+.reportHeading::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: calc(100% - 105px);
+    height: 1.25px;
+    background: var(--color-analytics-primary);
+}
+
+.reportHeadingBrand {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 70px;
+    border-radius: 100% 5px 5px 0;
+    background: color-mix(in srgb, var(--color-analytics-primary) 7%, transparent);
+    pointer-events: none;
+}
+
+.reportHeadingBrand::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-analytics-primary);
+    mask: url('../img/report-header-line.svg?v=6') center / contain no-repeat;
+    -webkit-mask: url('../img/report-header-line.svg?v=6') center / contain no-repeat;
+}
+
+#analytics-content-report .reportHeader,
+#analytics-content-report .reportSubHeader {
+    box-sizing: border-box;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow-wrap: anywhere;
+}
+
+#analytics-content-report .reportHeader {
+    color: color-mix(in srgb, var(--color-analytics-primary) 50%, var(--color-main-text));
+    font-size: 24px;
+    line-height: 1.3;
+}
+
+#analytics-content-report .reportSubHeader {
+    margin-top: 10px;
+    color: var(--color-main-text);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .reportHeading {
+        padding-right: 0;
+        padding-bottom: 78px;
+    }
+
+    .reportHeadingBrand {
+        width: 100px;
+        height: 70px;
+    }
+
+    .reportHeading::before {
+        width: calc(100% - 105px);
+        height: 1.25px;
+    }
+}
+
 .reportHeader[contenteditable="true"] {
     border: 1px dashed blue;
     font-weight: bold;
@@ -409,9 +544,32 @@ button, .button {
     right: 20px;
 }
 
+/* Match the report sections' 30px inset on both toolbar edges. */
+#app-content:has(#analytics-content-report:not([hidden])) #menuBar {
+    box-sizing: border-box;
+    height: 54px;
+    margin: 0 30px;
+    padding-top: 30px;
+    top: 0;
+    right: 0;
+}
+
+#app-content:has(#analytics-content-report:not([hidden])) #optionsMenu {
+    top: 64px;
+}
+
+#app-content:has(#analytics-content-report:not([hidden])) #mobileNavigationToggle {
+    top: 30px;
+    left: -10px;
+}
+
 #optionsMenu {
     top: 40px;
     overflow: visible;
+}
+
+#optionsMenuMainReport {
+    min-width: 214px;
 }
 
 #optionsMenuMainReport > .report-menu-has-submenu {
@@ -560,8 +718,16 @@ button, .button {
 }
 
 #chartLegendContainer {
-    height: 16px;
-    padding: 0 40px;
+    position: absolute;
+    right: 10px;
+    bottom: 6px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+}
+
+#chartContainer:has(#chartLegendContainer:not([hidden])) {
+    padding-bottom: 38px;
 }
 
 #tableSeparatorContainer {
@@ -569,9 +735,10 @@ button, .button {
 }
 
 #chartLegend {
-    padding-left: 80px;
+    padding-left: 24px;
+    background-position: left center;
+    background-size: 16px;
     opacity: 0.5;
-    float: right;
 }
 
 #chartLegend:hover {
@@ -830,6 +997,16 @@ div.dt-container .dt-paging .dt-paging-button {
 .analytics-options:hover {
     opacity: 1;
     cursor: pointer;
+}
+
+#menuBar button.analytics-options {
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    padding: 0;
+    border: 0;
+    margin: 0 0 0 10px;
+    background-color: transparent;
 }
 
 [class^='icon-analytics'] {
@@ -1120,6 +1297,19 @@ div.dt-container .dt-paging .dt-paging-button {
     text-align: center;
 }
 
+.popovermenu li.menu-section-heading {
+    padding: 7px 12px 3px;
+    color: var(--color-text-maxcontrast);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    cursor: default;
+}
+
+.popovermenu li.menu-section-heading:not(:first-child) {
+    margin-top: 6px;
+}
+
 .action-separator {
     height: 0;
     margin: 5px 10px 5px 15px;
@@ -1133,9 +1323,11 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .favorite-mark {
     position: absolute;
-    top: 2px;
-    left: 20px;
-    line-height: 100%;
+    top: 50%;
+    inset-inline-end: 4px;
+    transform: translateY(-50%);
+    line-height: 0;
+    pointer-events: none;
 }
 
 .favorite-star {
@@ -1249,6 +1441,16 @@ div.dt-container .dt-paging .dt-paging-button {
     opacity: .5;
     transition: opacity .2s;
     border-radius: var(--border-radius-pill);
+    border: 0;
+    margin: 0;
+    width: 50px;
+    height: 50px;
+}
+
+.analyticsDialog button:focus-visible,
+button.analytics-options:focus-visible {
+    outline: 2px solid var(--color-main-text);
+    outline-offset: -2px;
 }
 
 .analyticsDialogClose:hover {
@@ -1842,6 +2044,143 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: table;
     width: min(720px, 100%);
     max-width: 100%;
+}
+
+.analyticsTransformColumnsHeader,
+.analyticsTransformColumnRow {
+    display: grid;
+    grid-template-columns: minmax(10rem, 2fr) 4rem minmax(7rem, 1fr) minmax(8rem, 1fr) 5rem;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.analyticsTransformColumnsHeader {
+    color: var(--color-text-maxcontrast);
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.analyticsTransformColumnRow + .analyticsTransformColumnRow {
+    border-top: 1px solid var(--color-border);
+}
+
+.analyticsTransformColumnRow .transformAggregation {
+    grid-column: 3;
+}
+
+.analyticsTransformColumnRow .transformSort {
+    grid-column: 4;
+}
+
+.analyticsTransformColumnRow .transformPriority {
+    grid-column: 5;
+}
+
+.analyticsTransformColumnRow .optionsInput,
+.analyticsTransformCalculation .optionsInput {
+    width: 100%;
+    min-width: 0;
+}
+
+.analyticsTransformColumnRow input[type="checkbox"] {
+    margin: 0 auto;
+}
+
+.analyticsTransformCalculation {
+    background-color: var(--color-main-background);
+    padding: 1rem;
+    margin: 0.75rem 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+}
+
+.analyticsTransformCalculationHeading,
+.analyticsTransformCalculationControls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.analyticsTransformCalculationHeading input {
+    flex: 1;
+}
+
+.analyticsTransformColumnChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.analyticsTransformColumnChips button {
+    cursor: grab;
+}
+
+.analyticsTransformCalculationControls {
+    flex-wrap: wrap;
+    margin: 0.75rem 0 0;
+}
+
+.analyticsTransformCalculationControls .optionsInput {
+    width: auto;
+    margin: 0;
+    flex: 1 1 8rem;
+}
+
+.analyticsTransformCalculationControls .analyticsTransformInclude {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+.analyticsTransformCalculationControls .analyticsTransformInclude input {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.analyticsTransformCalculationControls .transformPriority {
+    width: 5rem;
+    flex: 0 0 5rem;
+}
+
+.analyticsTransformPreview {
+    overflow-x: auto;
+    max-height: 18rem;
+    overflow-y: auto;
+}
+
+.analyticsTransformPreview table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.analyticsTransformPreview th,
+.analyticsTransformPreview td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+    .analyticsTransformColumnsHeader {
+        display: none;
+    }
+
+    .analyticsTransformColumnRow {
+        grid-template-columns: minmax(8rem, 1fr) minmax(8rem, 1fr);
+    }
+
+    .analyticsTransformColumnRow .transformAggregation,
+    .analyticsTransformColumnRow .transformSort,
+    .analyticsTransformColumnRow .transformPriority {
+        grid-column: auto;
+    }
 }
 
 .tableOptionsSettingsRow {
@@ -3078,7 +3417,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     }
 }
 
-/* Visualization options share the same top navigation, settings panel, and preview column. */
+/* Visualization options share the same top navigation and settings panel. */
 .analyticsDialog--visualizationOptions {
     /* Keep focus scrolling inside the options panel instead of scrolling the dialog shell. */
     overflow: clip;
@@ -3127,6 +3466,10 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     padding: 20px;
 }
 
+.analyticsDialog--columnOptions .analyticsEnhancedDialogPanel {
+    grid-column: 1 / -1;
+}
+
 .analyticsVisualizationOptionsPreview {
     margin: 16px;
     min-height: 0;
@@ -3156,6 +3499,10 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.analyticsDialog--tableOptions.analyticsTableModeList .tableOptionsLayout {
+    padding-top: 12px;
 }
 
 .analyticsTableModeList #tableOptionsLayoutColumns,
@@ -3258,18 +3605,13 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     overflow-wrap: anywhere;
 }
 
-.analyticsTableHighlight {
-    display: inline-block;
-    padding: 1px 5px;
-    border-radius: var(--border-radius);
-    background: var(--color-warning);
-    color: var(--color-warning-text, #222);
-}
-
 @media (max-width: 800px) {
     .analyticsDialog--visualizationOptions .analyticsEnhancedDialogLayout {
         grid-template-columns: minmax(0, 1fr);
         grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .analyticsDialog--columnOptions .analyticsEnhancedDialogLayout {
+        grid-template-rows: auto minmax(0, 1fr);
     }
     .analyticsDialog--visualizationOptions .analyticsEnhancedDialogNav {
         padding: 8px 12px;

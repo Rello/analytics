@@ -233,6 +233,17 @@ class DatasourceController extends Controller {
 				$datasetMetadata['panoramaMappings'] ?? [], $result['dimensions'] ?? []
 			);
 			$originalFilterOptions = $datasetMetadata['filteroptions'] ?? null;
+			if (isset($result['header']) && is_array($result['header'])) {
+				$sourceHeader = array_values($result['header']);
+				$result['sourceColumns'] = array_map(static function ($name, $index) use ($sourceHeader): array {
+					return [
+						'ref' => 'source:' . $index,
+						'name' => (string)$name,
+						'role' => $index === count($sourceHeader) - 1 ? 'measure' : 'dimension',
+						'defaultAggregation' => 'sum',
+					];
+				}, $sourceHeader, array_keys($sourceHeader));
+			}
 			$datasetMetadata['filteroptions'] = $this->normalizeFilterOptionsForData(
 				$originalFilterOptions,
 				$result['header'] ?? []
@@ -249,7 +260,10 @@ class DatasourceController extends Controller {
 			// not typed like internal storage with e.g. dimension1: test
 			// due to this, we first need to filter because aggregation would alter the index numbers
 			$result = $this->filterData($result, $datasetMetadata['filteroptions']);
-			$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
+			$preparedOptions = json_decode($datasetMetadata['filteroptions'], true);
+			if (!isset($preparedOptions['transformations'])) {
+				$result = $this->aggregateData($result, $datasetMetadata['filteroptions']);
+			}
 
 		} catch (NotFoundException $e) {
 			$result = [

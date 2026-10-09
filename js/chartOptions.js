@@ -305,7 +305,7 @@ Object.assign(OCA.Analytics.ChartOptions, {
         if (Number.isInteger(value) && value >= 0) {
             return value;
         }
-        if (typeof value === 'string' && /^c_[1-9][0-9]*$/.test(value)) {
+        if (typeof value === 'string' && /^(?:c_[1-9][0-9]*|calc:[A-Za-z0-9_-]+|source:[0-9]+|dimension[12]|value)$/.test(value)) {
             return value;
         }
         return null;
@@ -336,8 +336,11 @@ Object.assign(OCA.Analytics.ChartOptions, {
     columnDescriptors: function (reportData) {
         const header = Array.isArray(reportData?.header) ? reportData.header : [];
         const references = Array.isArray(reportData?.columnRefs) ? reportData.columnRefs : [];
+        const typed = Array.isArray(reportData?.columns) && reportData.columns.length === header.length;
         return header.map((label, index) => ({
-            id: typeof references[index] === 'string' && /^c_[1-9][0-9]*$/.test(references[index])
+            id: typeof references[index] === 'string'
+                && this._normalizeColumnId(references[index]) !== null
+                && (typed || /^c_[1-9][0-9]*$/.test(references[index]))
                 ? references[index]
                 : index,
             index,
@@ -458,10 +461,13 @@ Object.assign(OCA.Analytics.ChartOptions, {
         if (!normalized) {
             return fallback;
         }
-        const available = new Set(this.columnDescriptors(reportData).map(column => column.id));
-        const category = available.has(normalized.category) ? normalized.category : fallback.category;
-        const series = normalized.series.filter(column => available.has(column) && column !== category);
-        const measures = normalized.measures.filter(column => available.has(column) && column !== category);
+        const descriptors = this.columnDescriptors(reportData);
+        const available = new Set(descriptors.map(column => column.id));
+        const currentId = column => available.has(column) ? column
+            : (Number.isInteger(column) ? descriptors[column]?.id : null);
+        const category = currentId(normalized.category) ?? fallback.category;
+        const series = normalized.series.map(currentId).filter(column => column !== null && column !== undefined && column !== category);
+        const measures = normalized.measures.map(currentId).filter(column => column !== null && column !== undefined && column !== category);
         return {
             category,
             series: model === 'kpiModel' ? series : [],

@@ -132,6 +132,7 @@ Object.assign(OCA.Analytics.Report, {
         } else {
             OCA.Analytics.Visualization.showElement('noDataContainer');
             if (parseInt(OCA.Analytics.currentReportData.error) !== 0) {
+                document.getElementById('noDataContainer').textContent = OCA.Analytics.currentReportData.error;
                 OCA.Analytics.Notification.notification('error', OCA.Analytics.currentReportData.error);
             }
         }
@@ -294,8 +295,10 @@ Object.assign(OCA.Analytics.Report, {
         OCA.Analytics.tableObject = [];
         OCA.Analytics.Visualization.hideElement('chartContainer');
         OCA.Analytics.Visualization.hideElement('chartLegendContainer');
-        document.getElementById('chartContainer').innerHTML = '';
-        document.getElementById('chartContainer').innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
+        const chartContainer = document.getElementById('chartContainer');
+        const chartLegendContainer = document.getElementById('chartLegendContainer');
+        chartContainer.innerHTML = '<button id="chartZoomReset" hidden>' + t('analytics', 'Reset zoom') + '</button><canvas id="myChart" ></canvas>';
+        chartContainer.appendChild(chartLegendContainer);
         document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
         OCA.Analytics.Visualization.hideElement('tableContainer');
         OCA.Analytics.Visualization.hideElement('tableSeparatorContainer');
@@ -315,7 +318,6 @@ Object.assign(OCA.Analytics.Report, {
         document.getElementById('optionsMenuTableOptions').disabled = false;
         document.getElementById('optionsMenuAnalysis').disabled = false;
         document.getElementById('optionsMenuColumnSelection').disabled = false;
-        document.getElementById('optionsMenuSort').disabled = false;
         document.getElementById('optionsMenuTopN').disabled = false;
         document.getElementById('optionsMenuTimeAggregation').disabled = false;
         document.getElementById('optionsMenuDownload').disabled = false;
@@ -400,7 +402,6 @@ Object.assign(OCA.Analytics.Report, {
         });
         document.getElementById('optionsMenuSave').addEventListener('click', OCA.Analytics.Filter.Backend.newReport);
         document.getElementById('optionsMenuColumnSelection').addEventListener('click', OCA.Analytics.Filter.openColumnsSelectionDialog);
-        document.getElementById('optionsMenuSort').addEventListener('click', OCA.Analytics.Filter.openSortDialog);
         document.getElementById('optionsMenuTopN').addEventListener('click', OCA.Analytics.Filter.openTopNDialog);
         document.getElementById('optionsMenuTimeAggregation').addEventListener('click', OCA.Analytics.Filter.openTimeAggregationDialog);
         document.getElementById('optionsMenuChartOptions').addEventListener('click', OCA.Analytics.Filter.openChartOptionsDialog);
@@ -589,8 +590,6 @@ Object.assign(OCA.Analytics.Report, {
         let listCountMax = 4;
         for (let item of listValues) {
             let li = document.createElement('li');
-            li.id = /\s/.test(item) ? `'${item}'` : item;
-            ;
             li.innerText = item;
             li.title = item;
             listCount > listCountMax ? li.style.display = 'none' : li.style.display = '';
@@ -674,8 +673,8 @@ Object.assign(OCA.Analytics.Report, {
         let isClickOnInput = inputField === event.target;
 
         // If the click is inside the list and the target is an LI
-        if (isClickInside && event.target.tagName === 'LI') {
-            inputField.value = event.target.id;
+        if (isClickInside && event.target.tagName === 'LI' && event.target.id !== 'dummy') {
+            inputField.value = event.target.textContent;
             OCA.Analytics.Report.hideDropDownList();
         }
         // If the click is outside the list, hide the list
@@ -1012,6 +1011,11 @@ Object.assign(OCA.Analytics.Report.Backend = {
 
         const parsedTableOptions = OCA.Analytics.ChartOptions.safeParse(data.options.tableoptions, {});
         data.options.tableoptions = (parsedTableOptions !== null && typeof parsedTableOptions === 'object') ? parsedTableOptions : {};
+
+        // Keep server errors and empty results intact for buildReport's error/empty state.
+        if (String(data.error ?? 0) !== '0' || !Array.isArray(data.data) || data.data.length === 0) {
+            return data;
+        }
 
         const processing = data.queryProcessing || {};
         // Flexible queries can apply these operations in SQL/PHP. Do not repeat them in the browser.

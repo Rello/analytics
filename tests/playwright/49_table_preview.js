@@ -133,8 +133,8 @@ const config = buildScenarioConfig('49');
             return heading.top >= bounds.top + 20 && heading.top <= bounds.top + 50;
         });
         await page.waitForFunction(() => document.querySelector('.analyticsEnhancedDialogNavButton--active')?.textContent.trim() === 'Columns');
-        await nav('Highlighting');
-        await page.waitForFunction(() => document.querySelector('.analyticsEnhancedDialogNavButton--active')?.textContent.trim() === 'Highlighting');
+        await nav('Appearance');
+        await page.waitForFunction(() => document.querySelector('.analyticsEnhancedDialogNavButton--active')?.textContent.trim() === 'Appearance');
         await nav('Layout');
         assert.match(await tableText(), /12,400/);
         await page.locator('#tableOptionsPreviewTable button').filter({hasText:'Revenue'}).click();
@@ -178,10 +178,6 @@ const config = buildScenarioConfig('49');
         assert.equal(await page.locator('#analyticsDialogContainer').evaluate(dialog => dialog.scrollTop), 0);
         await page.locator('#analyticsDialogBtnCancel').focus();
         assert.equal(await page.locator('#analyticsDialogContainer').evaluate(dialog => dialog.scrollTop), 0);
-        await nav('Highlighting');
-        await page.locator('#tableHighlightBelow').fill('10000');
-        await page.locator('#tableOptionsPreviewTable .analyticsTableHighlight').waitFor();
-        assert.match(await page.locator('#tableOptionsPreviewTable .analyticsTableHighlight').innerText(), /8,200/);
         assert.equal(await page.evaluate(() => JSON.stringify(OCA.Analytics.currentReportData) === window.tableBefore && !OCA.Analytics.unsavedChanges), true);
         assert.deepEqual(await page.evaluate(() => Object.keys(OCA.Analytics.tableObject)), await page.evaluate(() => window.tableRegistryBefore));
         await capture('table_options_preview');
@@ -339,7 +335,7 @@ const config = buildScenarioConfig('49');
     console.log(JSON.stringify({
         scriptId: '49', status: 'PASS', baseUrl: config.baseUrl, issues,
         steps: ['live preview', 'raw numeric formatting', 'totals and calculated percentages',
-            'highlighting', 'pivot validation', 'stable references', 'saved column order and sorting',
+            'pivot validation', 'stable references', 'saved column order and sorting',
             'Apply/Cancel and reset', 'escaping', 'responsive layout and cleanup'],
     }, null, 2));
 })();

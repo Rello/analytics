@@ -41,6 +41,8 @@ const scenarios = [
   { id: '51', title: 'navigation_favorites', script: 'tests/playwright/51_navigation_favorites.js' },
   { id: '52', title: 'reference_asset_split', script: 'tests/playwright/52_reference_asset_split.js' },
   { id: '53', title: 'panorama_pdf_upload', script: 'tests/playwright/53_panorama_pdf_upload.js' },
+  { id: '54', title: 'report_transformations', script: 'tests/playwright/54_report_transformations.js' },
+  { id: '55', title: 'dialog_keyboard_mobile', script: 'tests/playwright/55_dialog_keyboard_mobile.js' },
   { id: '91', title: 'report_delete', script: 'tests/playwright/91_report_delete.js' },
   { id: '92', title: 'group_delete', script: 'tests/playwright/92_group_delete.js' },
 ];

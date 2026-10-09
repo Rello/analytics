@@ -165,3 +165,9 @@ SPDX-FileCopyrightText = [
     "2018 Nicolas CARPi <nicolas.carpi@curie.fr>",
 ]
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "img/report-header-line.svg"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

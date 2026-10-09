@@ -284,7 +284,7 @@ OCA.Analytics.Dashboard = {
         }
 
         // pass the last dimension index for threshold evaluation
-        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds, data.length - 1);
+        let widgetRow = OCA.Analytics.Dashboard.buildWidgetRow(report, reportId, subheader, value, jsondata.thresholds, data.length - 1, jsondata);
         widgetItem.replaceChildren(widgetRow);
         widgetItem.addEventListener('click', OCA.Analytics.Dashboard.handleNavigationClicked);
 
@@ -315,10 +315,9 @@ OCA.Analytics.Dashboard = {
         return emptyState;
     },
 
-    buildWidgetRow: function (report, reportId, subheader, value, thresholds, dimension) {
+    buildWidgetRow: function (report, reportId, subheader, value, thresholds, dimension, reportData) {
         let thresholdColor = OCA.Analytics.Visualization.validateThreshold(dimension, value, thresholds);
-        //value = parseFloat(value).toLocaleString();
-        value = OCA.Analytics.Dashboard.nFormatter(value);
+        value = OCA.Analytics.Dashboard.formatWidgetValue(value, reportData, dimension);
         let href = OC.generateUrl('apps/analytics/r/' + reportId);
 
         const link = document.createElement('a');
@@ -396,17 +395,17 @@ OCA.Analytics.Dashboard = {
         return link;
     },
 
-    nFormatter: function (num) {
-        if (num >= 1000000000) {
-            return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+    formatWidgetValue: function (value, reportData, sourceIndex) {
+        const visualization = OCA.Analytics.Visualization;
+        const reference = visualization.getTableColumnReference('source', sourceIndex,
+            reportData?.header?.[sourceIndex], null, reportData?.columnRefs?.[sourceIndex]);
+        const format = visualization.getTableColumnFormat(reportData?.options?.tableoptions, reference);
+        if (format) {
+            return visualization.formatTableColumnValue(value, format);
         }
-        if (num >= 1000000) {
-            return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-        }
-        if (num >= 1000) {
-            return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-        }
-        return num;
+        // Match the table's default numeric formatting, including integer zero.
+        const number = parseFloat(value);
+        return Number.isFinite(number) ? number.toLocaleString() : String(value ?? '');
     },
 
     buildChart: function (jsondata) {

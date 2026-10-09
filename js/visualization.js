@@ -934,6 +934,31 @@ OCA.Analytics.Visualization = {
         domTarget.classList.toggle('analyticsTableDense', tableOptions.density === 'compact');
         domTarget.classList.toggle('stripe', tableOptions.striped !== false);
         domTarget.classList.add('hover');
+        // A three-column legacy table can reorder its display columns without changing source rows.
+        const layout = tableOptions.layout;
+        const simpleLayout = !layout || Object.keys(layout).length === 0
+            || (!layout.columns?.length && !layout.measures?.length
+                && Array.isArray(layout.rows) && layout.rows.length === 3
+                && layout.rows.every((index, position, rows) => Number.isInteger(index)
+                    && index >= 0 && index < 3 && rows.indexOf(index) === position));
+        const canPrefillMaintenance = !preview && !referencePreview && !OCA.Analytics.isPanorama
+            && jsondata.header?.length === 3
+            && (!jsondata.sourceColumns || jsondata.sourceColumns.map(column => column.ref).join(',') === 'dimension1,dimension2,value')
+            && !jsondata.columnRefs?.length && simpleLayout
+            && !jsondata.options?.filteroptions?.transformations
+            && !jsondata.options?.filteroptions?.timeAggregation;
+        if (canPrefillMaintenance) {
+            domTarget.querySelector('tbody')?.addEventListener('click', event => {
+                if (event.target.closest('a, button, input, select')) return;
+                const rowElement = event.target.closest('tr');
+                if (!rowElement || !domTarget.contains(rowElement)) return;
+                const sourceRow = jsondata.data[instance.row(rowElement).index()];
+                // Date-time strings may have been shifted to the viewer's timezone during rendering.
+                if (sourceRow?.slice(0, 2).some(value => typeof value === 'string'
+                    && /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/.test(value))) return;
+                OCA.Analytics.Sidebar.Data.prefillLegacyRecord(sourceRow);
+            });
+        }
         if (tableOptions.showHeader === false || (tableOptions.showHeader === undefined && tableOptions.compactDisplay)) {
             const thead = domTarget.querySelector('thead');
             if (thead) {
@@ -1019,12 +1044,6 @@ OCA.Analytics.Visualization = {
                     formatted = this.formatTableLocaleDateValue(formatted);
                 }
                 const escaped = this.escapeHtml(formatted);
-                const below = format.highlightBelow;
-                if (below !== '' && below !== undefined && data !== '' && data !== null
-                    && Number.isFinite(Number(data)) && Number.isFinite(Number(below))
-                    && this.thresholdOperators.LT(Number(data), Number(below))) {
-                    return '<span class="analyticsTableHighlight">↓ ' + escaped + '</span>';
-                }
                 return this.renderTableCellContent(escaped, type);
             };
         });
@@ -1778,6 +1797,8 @@ OCA.Analytics.Visualization = {
         Chart.defaults.elements.line.tension = 0.1;
         Chart.defaults.elements.line.fill = false;
         Chart.defaults.elements.point.radius = 0.5;
+        chartOptions.elements ??= {};
+        chartOptions.elements.point = {...chartOptions.elements.point, radius: 0.5};
 
         // convert the data array
         let [xAxisCategories, datasets] = this.convertDataToChartJsFormat(jsondata, chartType);
@@ -2450,7 +2471,7 @@ OCA.Analytics.Visualization = {
                 backgroundColor: circular ? [...palette] : color,
                 borderColor: circular ? [...palette] : (appearance.borderColor || color),
                 borderWidth: 2,
-                pointRadius: 2,
+                pointRadius: appearance.pointRadius ?? 0.5,
                 fill: chartType === 'area',
             };
         });
@@ -2603,6 +2624,9 @@ OCA.Analytics.Visualization = {
             return data;
         }
 
+        if (!Array.isArray(data.data) || !Array.isArray(data.data[0])) {
+            return data;
+        }
         const valueIndex = data.data[0].length - 1;
 
         // 1. Calculate totals

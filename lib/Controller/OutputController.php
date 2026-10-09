@@ -13,6 +13,7 @@ use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\ShareService;
 use OCA\Analytics\Service\ThresholdService;
 use OCA\Analytics\Service\StorageService;
+use OCA\Analytics\Service\TransformationService;
 use OCA\Analytics\Service\VariableService;
 use OCA\Analytics\Service\PanoramaService;
 use OCA\Analytics\Service\PanoramaFilterService;
@@ -41,6 +42,7 @@ class OutputController extends Controller {
 	private $ThresholdService;
 	private $VariableService;
 	private $PanoramaService;
+	private TransformationService $TransformationService;
 
 	public function __construct(
 		$userId,
@@ -54,7 +56,8 @@ class OutputController extends Controller {
 		StorageService $StorageService,
 		ThresholdService $ThresholdService,
 		VariableService $VariableService,
-		PanoramaService $PanoramaService
+		PanoramaService $PanoramaService,
+		TransformationService $TransformationService
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
@@ -67,6 +70,7 @@ class OutputController extends Controller {
 		$this->ThresholdService = $ThresholdService;
 		$this->VariableService = $VariableService;
 		$this->PanoramaService = $PanoramaService;
+		$this->TransformationService = $TransformationService;
 	}
 
 	/**
@@ -315,33 +319,50 @@ class OutputController extends Controller {
 		$filterOptions = $reportMetadata['filteroptions']; // need to remember the filter with original text variables
 		$reportMetadata = $this->VariableService->replaceFilterVariables($reportMetadata); // replace %xx% dynamic variables
 
-		if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
-			// Internal data
-			if ($datasetId !== 0) {
-				$result = $this->StorageService->read($datasetId, $reportMetadata);
+		try {
+			if ($datasource === DatasourceController::DATASET_TYPE_INTERNAL_DB) {
+				// Internal data
+				if ($datasetId !== 0) {
+					$result = $this->StorageService->read($datasetId, $reportMetadata);
+				} else {
+					$result['error'] = 'inconsistent report';
+				}
 			} else {
-				$result['error'] = 'inconsistent report';
-			}
-		} else {
-			// Realtime data
-			$result = $this->DatasourceController->read($datasource, $reportMetadata);
-			$result = DatasourceResultSanitizer::sanitize($result);
-			if (isset($result['filteroptions']) && is_string($result['filteroptions'])) {
-				$reportMetadata['filteroptions'] = $result['filteroptions'];
-				$filterOptions = $result['filteroptions'];
-				unset($result['filteroptions']);
-			}
+				// Realtime data
+				$result = $this->DatasourceController->read($datasource, $reportMetadata);
+				$result = DatasourceResultSanitizer::sanitize($result);
+				if (isset($result['filteroptions']) && is_string($result['filteroptions'])) {
+					$reportMetadata['filteroptions'] = $result['filteroptions'];
+					$filterOptions = $result['filteroptions'];
+					unset($result['filteroptions']);
+				}
 
-			// datasource confirmed a stable cache key and no change
-			if (isset($result['cache']['notModified']) && $result['cache']['notModified'] === true) {
-				return $result;
+				// datasource confirmed a stable cache key and no change
+				if (isset($result['cache']['notModified']) && $result['cache']['notModified'] === true) {
+					return $result;
+				}
+			}
+		} catch (\InvalidArgumentException $e) {
+			$result = ['error' => $e->getMessage(), 'data' => []];
+		}
+
+		$transformationOptions = json_decode((string)($reportMetadata['filteroptions'] ?? ''), true);
+		if (is_array($transformationOptions) && isset($transformationOptions['transformations']) && (string)($result['error'] ?? 0) === '0') {
+			try {
+				if (isset($transformationOptions['topN']) || isset($transformationOptions['timeAggregation'])) {
+					throw new \InvalidArgumentException('Calculated report measures cannot yet be combined with Top N or time aggregation.');
+				}
+				$result = $this->TransformationService->execute($result, $transformationOptions['transformations'], $transformationOptions);
+			} catch (\InvalidArgumentException $e) {
+				$result['error'] = $e->getMessage();
+				$result['data'] = [];
 			}
 		}
 
 		// sort the data by a given column
-			if ($filterOptions && isset($result['data']) && !($result['queryProcessing']['backendProcessed'] ?? false)) {
-				$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
-			}
+		if ($filterOptions && isset($result['data']) && !($result['queryProcessing']['backendProcessed'] ?? false)) {
+			$result['data'] = $this->sortByColumn($result['data'], $filterOptions);
+		}
 
 		unset($reportMetadata['parent'], $reportMetadata['user_id'], $reportMetadata['link'], $reportMetadata['dimension1'], $reportMetadata['dimension2'], $reportMetadata['dimension3'], $reportMetadata['value'], $reportMetadata['password'], $reportMetadata['dataset'], $reportMetadata['cacheKey'], $reportMetadata['panoramaMappings']);
 

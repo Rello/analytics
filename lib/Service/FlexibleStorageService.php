@@ -271,6 +271,7 @@ class FlexibleStorageService {
 			'header' => array_column($projectedColumns, 'name'),
 			'columnRefs' => array_column($projectedColumns, 'ref'),
 			'columns' => $projectedColumns,
+			'sourceColumns' => $columns,
 			'dimensions' => $dimensions,
 			'keyFigures' => $keyFigures,
 			'data' => $data,
@@ -297,6 +298,10 @@ class FlexibleStorageService {
 	/** @param array<string,mixed>|null $reportMetadata */
 	public function queryForReport(int $datasetId, ?array $reportMetadata): array {
 		$columns = $this->storageMapper->getColumns($datasetId);
+		$transformationOptions = is_array($reportMetadata) ? json_decode((string)($reportMetadata['filteroptions'] ?? ''), true) : null;
+		if (is_array($transformationOptions) && isset($transformationOptions['transformations'])) {
+			return $this->querySourceRowsForReport($datasetId, $columns, $transformationOptions);
+		}
 		$query = [
 			'aggregate' => true,
 			'dimensions' => array_column(array_filter($columns, static fn (array $column): bool => $column['role'] === 'dimension'), 'ref'),
@@ -347,6 +352,65 @@ class FlexibleStorageService {
 		}
 
 		return $this->query($datasetId, $query, false);
+	}
+
+	/** Fetch all filtered source rows; the transformation engine owns grouping and limits. */
+	private function querySourceRowsForReport(int $datasetId, array $columns, array $options): array {
+		$resolver = new FlexibleColumnResolver($columns);
+		$definition = $options['transformations'];
+		if (!is_array($definition) || ($definition['version'] ?? null) !== 1
+			|| !is_array($definition['calculations'] ?? [])) {
+			throw new \InvalidArgumentException('The report transformation definition is invalid.');
+		}
+		$afterOnly = ($options['aggregate'] ?? true) !== false
+			&& !in_array('none', $definition['aggregations'] ?? [], true)
+			&& array_reduce($definition['calculations'] ?? [], static fn (bool $valid, mixed $calc): bool =>
+				$valid && is_array($calc) && ($calc['phase'] ?? '') === 'after', true);
+		$projection = [];
+		foreach ($columns as $column) {
+			if ($afterOnly && $column['role'] === 'dimension'
+				&& isset($options['drilldown'][$column['ref']])) continue;
+			$aggregation = $afterOnly && $column['role'] === 'measure'
+				? ($definition['aggregations'][$column['ref']] ?? $column['defaultAggregation']) : '';
+			if ($afterOnly && $column['role'] === 'measure'
+				&& !in_array($aggregation, FlexibleValueNormalizer::AGGREGATIONS, true)) {
+				throw new \InvalidArgumentException('A source measure has an invalid aggregation.');
+			}
+			$projection[] = [
+				'column' => $column,
+				'aggregation' => $aggregation,
+			];
+		}
+		$filters = [];
+		foreach (($options['filter'] ?? []) as $key => $filter) {
+			if (!is_array($filter)) continue;
+			$reference = (string)($filter['dimension'] ?? $key);
+			if (preg_match('/^c_[1-9][0-9]*$/D', $reference)) {
+				$filters[] = ['column' => $reference, 'operator' => $filter['option'] ?? 'EQ', 'value' => $filter['value'] ?? null];
+			}
+		}
+		$rows = $this->storageMapper->query($datasetId, $projection, $this->resolveFilters($filters, $resolver), [], $afterOnly, 0, 0);
+		$data = [];
+		foreach ($rows as $row) {
+			$values = [];
+			foreach ($projection as $item) {
+				$column = $item['column'];
+				$values[] = $this->apiValue($column, $row[$column['ref']] ?? null, $afterOnly, $item['aggregation']);
+			}
+			$data[] = $values;
+		}
+		return [
+			'storageMode' => DatasetStorageResolver::FLEXIBLE_SHARED,
+			'header' => array_column(array_column($projection, 'column'), 'name'),
+			'columnRefs' => array_column(array_column($projection, 'column'), 'ref'),
+			'columns' => array_column($projection, 'column'),
+			'sourceColumns' => $columns,
+			'dimensions' => array_column(array_filter($columns, static fn (array $column): bool => $column['role'] === 'dimension'), 'name', 'ref'),
+			'keyFigures' => array_values(array_column(array_filter($columns, static fn (array $column): bool => $column['role'] === 'measure'), 'name')),
+			'data' => $data,
+			'error' => 0,
+			'queryProcessing' => ['aggregation' => $afterOnly],
+		];
 	}
 
 	/**
