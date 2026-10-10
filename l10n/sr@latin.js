@@ -9,6 +9,7 @@ OC.L10N.register(
     "Date" : "Date",
     "Delete" : "Obriši",
     "Done" : "Gotovo",
+    "None" : "Ništa",
     "Favorites" : "Omiljene",
     "New" : "Nov",
     "Remove from favorites" : "Ukloni iz omiljenih",
@@ -18,6 +19,7 @@ OC.L10N.register(
     "Yes" : "Da",
     "No" : "Ne",
     "Type" : "Tip",
+    "Close" : "Zatvori",
     "OK" : "U redu",
     "Cancel" : "Otkaži",
     "Search" : "Traži",
@@ -41,7 +43,6 @@ OC.L10N.register(
     "Unshare" : "Ukini deljenje",
     "Password protection" : "Password protection",
     "Copy link" : "Kopiraj vezu",
-    "Close" : "Zatvori",
     "Appearance" : "Izgled",
     "Create" : "Napravi",
     "Add column" : "Dodaj kolonu"

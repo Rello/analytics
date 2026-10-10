@@ -47,6 +47,7 @@ OC.L10N.register(
     "No" : "No",
     "Type" : "Jenis",
     "Notification" : "Pemberitahuan",
+    "Close" : "Tutup",
     "OK" : "OK",
     "Cancel" : "Batal",
     "Search" : "Search",
@@ -55,6 +56,7 @@ OC.L10N.register(
     "Name" : "Nama",
     "Export" : "Eksport",
     "Update" : "Kemaskini",
+    "Sort" : "Susun",
     "Description" : "Keterangan",
     "Import" : "Import",
     "Title" : "Judul",
@@ -62,9 +64,8 @@ OC.L10N.register(
     "Hourly" : "Setiap jam",
     "Rename" : "Namakan",
     "Password protection" : "Password protection",
-    "Close" : "Tutup",
     "Advanced" : "Maju",
-    "Sort by" : "Susun mengikut",
+    "Previous" : "Sebelum",
     "Create" : "Buat"
 },
 "nplurals=1; plural=0;");

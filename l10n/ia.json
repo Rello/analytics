@@ -8,6 +8,8 @@
     "Region" : "Region",
     "Delete" : "Deler",
     "Done" : "Preste",
+    "None" : "Nulle",
+    "Priority" : "Prioritate",
     "Apply" : "Applicar",
     "Favorites" : "Favoritos",
     "New" : "Nove",
@@ -21,6 +23,7 @@
     "Yes" : "Si",
     "No" : "No",
     "Type" : "Typo",
+    "Close" : "Clauder",
     "OK" : "Ok",
     "Cancel" : "Cancellar",
     "Open documentation" : "Aperir documentation",
@@ -46,8 +49,8 @@
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
     "Automatic" : "Automatic",
-    "Close" : "Clauder",
-    "Sort by" : "Ordinar per",
+    "Previous" : "Previe",
+    "Next" : "Proxime",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

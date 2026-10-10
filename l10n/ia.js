@@ -10,6 +10,8 @@ OC.L10N.register(
     "Region" : "Region",
     "Delete" : "Deler",
     "Done" : "Preste",
+    "None" : "Nulle",
+    "Priority" : "Prioritate",
     "Apply" : "Applicar",
     "Favorites" : "Favoritos",
     "New" : "Nove",
@@ -23,6 +25,7 @@ OC.L10N.register(
     "Yes" : "Si",
     "No" : "No",
     "Type" : "Typo",
+    "Close" : "Clauder",
     "OK" : "Ok",
     "Cancel" : "Cancellar",
     "Open documentation" : "Aperir documentation",
@@ -48,8 +51,8 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Copiar ligamine",
     "Automatic" : "Automatic",
-    "Close" : "Clauder",
-    "Sort by" : "Ordinar per",
+    "Previous" : "Previe",
+    "Next" : "Proxime",
     "Create" : "Crear"
 },
 "nplurals=2; plural=(n != 1);");

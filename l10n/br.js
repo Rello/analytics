@@ -30,6 +30,7 @@ OC.L10N.register(
     "Notification" : "Kemennadenn",
     "New in" : "Nevez e-bazh",
     "View changelog" : "Sellet al levr kemmoù",
+    "Close" : "Serriñ",
     "OK" : "OK",
     "Cancel" : "Nullañ",
     "Open documentation" : "Digeriñ an dielvadur",
@@ -57,8 +58,6 @@ OC.L10N.register(
     "Display name" : "Anv ardivink",
     "Automatic" : "Otomatek",
     "Text" : "Testenn",
-    "Close" : "Serriñ",
-    "Disabled" : "Disaotreañ",
     "Advanced" : "Araokadennet",
     "Create" : "Krouiñ"
 },

@@ -45,6 +45,7 @@
     "No" : "No",
     "Type" : "Jenis",
     "Notification" : "Pemberitahuan",
+    "Close" : "Tutup",
     "OK" : "OK",
     "Cancel" : "Batal",
     "Search" : "Search",
@@ -53,6 +54,7 @@
     "Name" : "Nama",
     "Export" : "Eksport",
     "Update" : "Kemaskini",
+    "Sort" : "Susun",
     "Description" : "Keterangan",
     "Import" : "Import",
     "Title" : "Judul",
@@ -60,9 +62,8 @@
     "Hourly" : "Setiap jam",
     "Rename" : "Namakan",
     "Password protection" : "Password protection",
-    "Close" : "Tutup",
     "Advanced" : "Maju",
-    "Sort by" : "Susun mengikut",
+    "Previous" : "Sebelum",
     "Create" : "Buat"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

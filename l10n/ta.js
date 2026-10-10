@@ -12,6 +12,7 @@ OC.L10N.register(
     "Region" : "பிரதேசம்",
     "Delete" : "நீக்குக",
     "Done" : "Done",
+    "None" : "ஒன்றுமில்லை",
     "Add" : "சேர்க்க",
     "Favorites" : "விருப்பங்கள்",
     "New" : "புதிய",
@@ -24,6 +25,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Type" : "வகை",
+    "Close" : "மூடுக",
     "OK" : "சரி ",
     "Cancel" : "இரத்து செய்க",
     "Search" : "Search",
@@ -41,8 +43,8 @@ OC.L10N.register(
     "Rename" : "பெயர்மாற்றம்",
     "Unshare" : "பகிரப்படாதது",
     "Password protection" : "Password protection",
-    "Close" : "மூடுக",
     "Advanced" : "உயர்ந்த",
+    "Previous" : "முன்தைய",
     "Create" : "உருவாக்குக"
 },
 "nplurals=2; plural=(n != 1);");

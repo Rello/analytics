@@ -24,6 +24,7 @@ OC.L10N.register(
     "No" : "No",
     "Type" : "ধরণ",
     "Notification" : "নোটিফিকেশন ",
+    "Close" : "বন্ধ",
     "OK" : "তথাস্তু",
     "Cancel" : "বাতির",
     "Search" : "Search",
@@ -45,9 +46,8 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "লিঙ্ক কপি করো",
     "Automatic" : "স্বয়ংক্রিয়",
-    "Close" : "বন্ধ",
-    "Disabled" : "অকার্যকর",
     "Advanced" : "সুচারু",
+    "Previous" : "পূর্ববর্তী",
     "Create" : "তৈরী কর"
 },
 "nplurals=2; plural=(n != 1);");

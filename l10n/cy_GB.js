@@ -17,9 +17,10 @@ OC.L10N.register(
     "Download" : "Llwytho i lawr",
     "Yes" : "Iawn",
     "No" : "No",
+    "Year" : "Blwyddyn",
     "Type" : "Math",
     "Notification" : "Hysbysiad",
-    "Year" : "Blwyddyn",
+    "Close" : "Cau",
     "OK" : "Iawn",
     "Cancel" : "Diddymu",
     "Search" : "Chwilio",
@@ -44,9 +45,8 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "Copïo dolen",
     "Automatic" : "Awtomatig",
-    "Close" : "Cau",
     "Advanced" : "Uwch",
-    "Sort by" : "Trefnu yn ôl",
+    "Previous" : "Blaenorol",
     "Create" : "Creu"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

@@ -7,6 +7,7 @@
     "Date" : "Date",
     "Delete" : "Obriši",
     "Done" : "Gotovo",
+    "None" : "Ništa",
     "Favorites" : "Omiljene",
     "New" : "Nov",
     "Remove from favorites" : "Ukloni iz omiljenih",
@@ -16,6 +17,7 @@
     "Yes" : "Da",
     "No" : "Ne",
     "Type" : "Tip",
+    "Close" : "Zatvori",
     "OK" : "U redu",
     "Cancel" : "Otkaži",
     "Search" : "Traži",
@@ -39,7 +41,6 @@
     "Unshare" : "Ukini deljenje",
     "Password protection" : "Password protection",
     "Copy link" : "Kopiraj vezu",
-    "Close" : "Zatvori",
     "Appearance" : "Izgled",
     "Create" : "Napravi",
     "Add column" : "Dodaj kolonu"

@@ -22,6 +22,7 @@ OC.L10N.register(
     "Yes" : "ඔව්",
     "No" : "නැහැ",
     "Year" : "වර්ෂය",
+    "Close" : "වසන්න",
     "OK" : "හරි",
     "Cancel" : "අවලංගු කරන්න",
     "Search" : "සොයන්න",
@@ -39,8 +40,7 @@ OC.L10N.register(
     "Daily" : "දිනපතා",
     "Password protection" : "මුරපද ආරක්ෂාව",
     "Copy link" : "සබැඳිය පිටපත් කරන්න",
-    "Close" : "වසන්න",
-    "Disabled" : "අබල කර ඇත",
+    "Previous" : "පෙර",
     "Create" : "සාදන්න"
 },
 "nplurals=2; plural=(n != 1);");

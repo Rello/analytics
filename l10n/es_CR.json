@@ -30,6 +30,8 @@
     "Region" : "Región",
     "This dataset is not used!" : "Este conjunto de datos no se utiliza.",
     "Delete" : "Borrar",
+    "None" : "Ninguno",
+    "Priority" : "Prioridad",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
     "Apply" : "Aplicar",
@@ -48,6 +50,7 @@
     "Reset to defaults" : "Restablercer los valores predeterminados",
     "Type" : "Tipo",
     "Notification" : "Notificación",
+    "Close" : "Close",
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Open documentation" : "Abrir la documentación",
@@ -86,9 +89,7 @@
     "2" : "2",
     "3" : "3",
     "4" : "4",
-    "Close" : "Close",
-    "Disabled" : "Deshabilitado",
-    "Sort by" : "Ordenar por",
+    "Previous" : "Previo",
     "Get more information" : "Obten más información",
     "Create" : "Crear"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

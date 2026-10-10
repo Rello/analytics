@@ -21,6 +21,7 @@ OC.L10N.register(
     "No" : "No",
     "Type" : "Տիպ",
     "Notification" : "Ծանուցում",
+    "Close" : "Փակել",
     "OK" : "Լավ",
     "Cancel" : "ընդհատել",
     "Search" : "Search",
@@ -42,8 +43,7 @@ OC.L10N.register(
     "Unshare" : "Չկիսվել",
     "Password protection" : "Password protection",
     "Copy link" : "Պատճենել հղումը",
-    "Close" : "Փակել",
-    "Sort by" : "Դասակարգել ըստ",
+    "Previous" : "Նախորդ",
     "Create" : "Ստեղծել"
 },
 "nplurals=2; plural=(n != 1);");

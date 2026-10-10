@@ -11,6 +11,8 @@ OC.L10N.register(
     "Date" : "Fecha",
     "Region" : "Región",
     "Delete" : "Borrar",
+    "None" : "Ninguno",
+    "Priority" : "Prioridad",
     "Filter" : "Filtrar",
     "Add" : "Guardar",
     "Apply" : "Aplicar",
@@ -28,6 +30,7 @@ OC.L10N.register(
     "Reset to defaults" : "Restablercer los valores predeterminados",
     "Type" : "Tipo",
     "Notification" : "Notificación",
+    "Close" : "Cerrar",
     "OK" : "OK",
     "Cancel" : "Cancelar",
     "Open documentation" : "Abrir la documentación",
@@ -67,9 +70,7 @@ OC.L10N.register(
     "2" : "2",
     "3" : "3",
     "4" : "4",
-    "Close" : "Cerrar",
-    "Disabled" : "Deshabilitado",
-    "Sort by" : "Ordenar por",
+    "Previous" : "Anterior",
     "Create" : "Crear"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

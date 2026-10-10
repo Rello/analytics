@@ -19,6 +19,7 @@
     "No" : "No",
     "Type" : "Տիպ",
     "Notification" : "Ծանուցում",
+    "Close" : "Փակել",
     "OK" : "Լավ",
     "Cancel" : "ընդհատել",
     "Search" : "Search",
@@ -40,8 +41,7 @@
     "Unshare" : "Չկիսվել",
     "Password protection" : "Password protection",
     "Copy link" : "Պատճենել հղումը",
-    "Close" : "Փակել",
-    "Sort by" : "Դասակարգել ըստ",
+    "Previous" : "Նախորդ",
     "Create" : "Ստեղծել"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

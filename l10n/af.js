@@ -24,6 +24,7 @@ OC.L10N.register(
     "No" : "Nee",
     "Type" : "Tipe",
     "Notification" : "Kennisgewing",
+    "Close" : "Close",
     "OK" : "Goed",
     "Cancel" : "Kanselleer",
     "Open documentation" : "Open dokumentasie",
@@ -49,7 +50,6 @@ OC.L10N.register(
     "Automatic" : "Outomaties",
     "Text" : "Teks",
     "3" : "3",
-    "Close" : "Close",
     "Advanced" : "Gevorderd",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"

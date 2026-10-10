@@ -24,6 +24,7 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "No",
     "Type" : "Type",
+    "Close" : "Bağla",
     "OK" : "Oldu",
     "Cancel" : "Dayandır",
     "Open documentation" : "Sənədləri aç",
@@ -49,10 +50,7 @@ OC.L10N.register(
     "Password protection" : "Password protection",
     "Copy link" : "linki nüsxələ",
     "Automatic" : "Avtomatik",
-    "Close" : "Bağla",
-    "Disabled" : "Dayandırılıb",
     "Advanced" : "İrəliləmiş",
-    "Sort by" : "Təyinata görə çeşidləmək ",
     "Create" : "Yarat"
 },
 "nplurals=2; plural=(n != 1);");
