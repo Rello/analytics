@@ -38,6 +38,9 @@ jobs:
           - nextcloud-version: stable34
             php-version: '8.5'
             database: pgsql
+          - nextcloud-version: stable35
+            php-version: '8.5'
+            database: pgsql
 
     name: nc-${{ matrix.nextcloud-version }}-php${{ matrix.php-version }}-${{ matrix.database }}
 
