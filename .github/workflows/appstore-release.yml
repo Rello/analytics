@@ -5,6 +5,16 @@ name: Build and publish appstore release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish
+        required: true
+        type: string
+      prerelease:
+        description: Publish as a nightly release
+        default: false
+        type: boolean
 
 env:
   APP_NAME: analytics
@@ -16,6 +26,8 @@ jobs:
     steps:
       - name: Checkout app repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -88,17 +100,17 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ../server/apps/${{ env.APP_NAME }}/build/artifacts/appstore/${{ env.APP_NAME }}.tar.gz
           asset_name: ${{ env.APP_NAME }}.tar.gz
-          tag: ${{ github.event.release.tag_name }}
+          tag: ${{ inputs.tag || github.event.release.tag_name }}
           overwrite: true
 
       - name: Upload app to Nextcloud appstore
-        uses: R0Wi/nextcloud-appstore-push-action@v1.0.4
+        uses: R0Wi/nextcloud-appstore-push-action@v1.0.5
         with:
           app_name: ${{ env.APP_NAME }}
           appstore_token: ${{ secrets.APPSTORE_TOKEN }}
           download_url: ${{ steps.attach_to_release.outputs.browser_download_url }}
           app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
-          nightly: ${{ github.event.release.prerelease }}
+          nightly: ${{ inputs.prerelease || github.event.release.prerelease || false }}
 
       - name: Remove local key material
         if: always()
