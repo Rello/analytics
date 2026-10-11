@@ -15,6 +15,10 @@ on:
         description: Publish as a nightly release
         default: false
         type: boolean
+      reuse_asset:
+        description: Submit the existing signed release asset without rebuilding
+        default: false
+        type: boolean
 
 env:
   APP_NAME: analytics
@@ -30,6 +34,7 @@ jobs:
           ref: ${{ inputs.tag || github.event.release.tag_name }}
 
       - name: Set up PHP
+        if: ${{ !inputs.reuse_asset }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
@@ -37,6 +42,7 @@ jobs:
           coverage: none
 
       - name: Set up local Nextcloud server
+        if: ${{ !inputs.reuse_asset }}
         uses: SMillerDev/nextcloud-actions/setup-nextcloud@fae87e29aa7cdf1ea0b8033c67f60e75b10be2cd
         with:
           version: stable29
@@ -44,12 +50,14 @@ jobs:
           cron: false
 
       - name: Install app into local Nextcloud server
+        if: ${{ !inputs.reuse_asset }}
         uses: SMillerDev/nextcloud-actions/setup-nextcloud-app@fae87e29aa7cdf1ea0b8033c67f60e75b10be2cd
         with:
           app: ${{ env.APP_NAME }}
           check-code: false
 
       - name: Create signing key and certificate files from secrets
+        if: ${{ !inputs.reuse_asset }}
         run: |
           cert_dir="$HOME/.nextcloud/certificates"
           mkdir -p "$cert_dir"
@@ -60,6 +68,7 @@ jobs:
           APP_PUBLIC_CRT: ${{ secrets.APP_PUBLIC_CRT }}
 
       - name: Build signed app archive (without Makefile)
+        if: ${{ !inputs.reuse_asset }}
         run: |
           cert_dir="$HOME/.nextcloud/certificates"
           app_dir="../server/apps/${APP_NAME}"
@@ -94,6 +103,7 @@ jobs:
             "${APP_NAME}"
 
       - name: Upload app tarball to release
+        if: ${{ !inputs.reuse_asset }}
         id: attach_to_release
         uses: svenstaro/upload-release-action@v2
         with:
@@ -103,12 +113,23 @@ jobs:
           tag: ${{ inputs.tag || github.event.release.tag_name }}
           overwrite: true
 
+      - name: Resolve existing release asset
+        if: ${{ inputs.reuse_asset }}
+        id: existing_asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          url=$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[] | select(.name == "analytics.tar.gz") | .url')
+          test -n "$url"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
       - name: Upload app to Nextcloud appstore
         uses: R0Wi/nextcloud-appstore-push-action@v1.0.5
         with:
           app_name: ${{ env.APP_NAME }}
           appstore_token: ${{ secrets.APPSTORE_TOKEN }}
-          download_url: ${{ steps.attach_to_release.outputs.browser_download_url }}
+          download_url: ${{ steps.existing_asset.outputs.url || steps.attach_to_release.outputs.browser_download_url }}
           app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
           nightly: ${{ inputs.prerelease || github.event.release.prerelease || false }}
 
