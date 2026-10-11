@@ -65,7 +65,7 @@ const reportName = buildUniqueName('Flexible sales report');
     await page.evaluate(() => OCA.Analytics.handlers.create.dataset());
     const datasetNameInput = page.locator('#wizardDatasetName');
     await datasetNameInput.waitFor({state: 'visible'});
-    assert.equal(await datasetNameInput.evaluate(input => input === document.activeElement), true);
+    await page.waitForFunction(() => document.activeElement?.id === 'wizardDatasetGeneralHeading');
     await datasetNameInput.fill(datasetName);
     assert.equal(await page.locator('.flexibleDatasetMode').isVisible(), false);
     await page.locator('input[name="wizardDatasetMode"][value="flexible_shared"]').evaluate(input => {
@@ -290,7 +290,7 @@ const reportName = buildUniqueName('Flexible sales report');
       datasetName,
       reportName,
       steps,
-      issues: issues.concat([`fatal:${error.message}`]),
+      issues: issues.concat([`fatal:${error.stack || error.message}`]),
     };
     await capture('failure_state').catch(() => {});
     console.log(JSON.stringify(result, null, 2));

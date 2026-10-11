@@ -3,7 +3,7 @@
 This project runs tests in containers for reproducibility.
 
 ## Prerequisites
-- Docker daemon running locally
+- Docker daemon running locally with host networking enabled for Playwright to reach Nextcloud 35 and Client Push
 
 ## Unit Tests (PHPUnit)
 - Build the local PHPUnit image:
@@ -24,7 +24,7 @@ Notes:
   - the wrapper builds the local `analytics-playwright:local` image automatically when it is missing
 - Rebuild the local Playwright image manually:
   - `./tests/playwright/build-playwright-image.sh`
-- Run the full test suite:
+- Run the full test suite (stops at the first failure to avoid cascading failures in the shared report):
   - `./tests/run-playwright.sh full`
 - Run single scenario e.g. `10` (smoke/navigation):
   - `./tests/run-playwright.sh 10`
@@ -63,11 +63,12 @@ Supported identifiers:
 - `54`, `report-transformations` (shared calculated measures, hidden inputs, sorting, preview, and table-calculation migration)
 - `55`, `dialog-keyboard-mobile` (keyboard navigation, modal focus, and mobile report creation)
 - `56`, `demo-sales-ranking` (two demo reports sharing one dataset, raw table, Top N, mixed chart, pivot calculations, column order, formatting, indicators, and reload)
+- `tests/playwright/dashboard_number_format.js` (standalone dashboard values, locales, and thresholds)
 - `91`, `91-delete`, `report-delete`, `delete`
 - `92`, `92-delete`, `group-delete`
 
 Environment variables:
-- `BASE_URL` (default: `http://host.docker.internal:8032/apps/analytics/`)
+- `BASE_URL` (default: `http://localhost:8035/apps/analytics/`)
 - `NC_USER` (default: `admin`)
 - `NC_PASS` (default: `admin`)
 - Optional pass-throughs for Playwright scripts:
@@ -76,9 +77,11 @@ Environment variables:
   - `REPORT_SUBHEADER`
   - `GROUP_NAME`
   - `ARTIFACT_DIR`
-- Shared-run recommendation:
-  - `./tests/run-playwright.sh` defaults to the shared report name `Playwright Regression`.
-  - Override `REPORT_NAME` only when you intentionally want a different shared report.
+- Report lifecycle:
+  - Every full run generates a unique report and group name, printed at startup and shared by all scenarios in that run.
+  - Standalone scenarios generate their own unique names by default.
+  - Set `REPORT_NAME` and `GROUP_NAME` explicitly only to reuse an existing test run, such as when resuming with a starting scenario.
+  - The filter scenario removes and saves its filters even when an assertion fails, and captures the cleared report as evidence.
 
 Artifacts:
 - After each run, the wrapper keeps that run's artifacts and removes older artifacts. An explicit `ARTIFACT_DIR` overrides this cleanup.

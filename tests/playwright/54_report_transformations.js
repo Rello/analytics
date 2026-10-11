@@ -203,7 +203,7 @@ const reportName = buildUniqueName('Playwright Transformations', process.env.REP
     console.log(JSON.stringify({scriptId: config.scriptId, status: 'PASS', reportName}));
   } catch (error) {
     await capture('failure_state').catch(() => {});
-    console.log(JSON.stringify({scriptId: config.scriptId, status: 'FAIL', reportName, error: error.message, issues}));
+    console.log(JSON.stringify({scriptId: config.scriptId, status: 'FAIL', reportName, error: error.stack || error.message, issues}));
     process.exitCode = 1;
   } finally {
     await browser.close();

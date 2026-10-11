@@ -4,7 +4,7 @@ const path = require('path');
 function buildScenarioConfig(scriptId, options = {}) {
   return {
     scriptId,
-    baseUrl: process.env.BASE_URL || options.baseUrl || 'http://host.docker.internal:8032/apps/analytics/',
+    baseUrl: process.env.BASE_URL || options.baseUrl || 'http://localhost:8035/apps/analytics/',
     user: process.env.NC_USER || options.user || 'admin',
     pass: process.env.NC_PASS || options.pass || 'admin',
     headless: process.env.HEADLESS !== 'false',
@@ -217,6 +217,14 @@ async function openNavigationEntry(page, name) {
   }
   if (!(await link.count())) {
     link = links.first();
+    // Reveal nested reports through the same folder controls used by users.
+    const ancestors = link.locator('xpath=ancestor::li[contains(concat(" ", normalize-space(@class), " "), " collapsible ")]');
+    for (let index = 0; index < await ancestors.count(); index += 1) {
+      const ancestor = ancestors.nth(index);
+      if (!await ancestor.evaluate(node => node.classList.contains('open'))) {
+        await ancestor.locator(':scope > .app-navigation-entry > a').click();
+      }
+    }
   }
 
   await link.waitFor({ state: 'visible', timeout: 20000 });
@@ -606,13 +614,13 @@ async function openOrCreateStoredReport(page, reportName, reportSubheader, optio
 }
 
 async function waitForToast(page, timeout = 15000) {
-  const toast = page.locator('.toastify').first();
+  const toast = page.locator('.toastify, [role="status"]:has(button[aria-label="Close"])').last();
   await toast.waitFor({ state: 'visible', timeout });
   return toast;
 }
 
 async function dismissToast(page) {
-  const closeButton = page.locator('.toast-close').first();
+  const closeButton = page.locator('.toast-close, [role="status"] button[aria-label="Close"]').last();
   const visible = await closeButton.isVisible().catch(() => false);
   if (!visible) {
     return false;

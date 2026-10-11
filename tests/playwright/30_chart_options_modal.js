@@ -69,7 +69,7 @@ const reportName = buildUniqueName('Playwright Chart Modal', process.env.REPORT_
       (sections) => sections.map((section) => section.id)
     );
 
-    const expectedNavigationLabels = ['Data format', 'Data mapping', 'Labels', 'Visualization'];
+    const expectedNavigationLabels = ['Chart type', 'Data & series', 'Colors', 'Appearance', 'Advanced'];
     if (JSON.stringify(navigationLabels) !== JSON.stringify(expectedNavigationLabels)) {
       throw new Error(`Expected chart option nav items ${JSON.stringify(expectedNavigationLabels)}, got ${JSON.stringify(navigationLabels)}`);
     }
@@ -93,7 +93,7 @@ const reportName = buildUniqueName('Playwright Chart Modal', process.env.REPORT_
     }
 
     steps.push('switch navigation section');
-    const targetNav = navigationLinks.nth(2);
+    const targetNav = navigationLinks.filter({hasText: 'Appearance'});
     const targetSectionId = await targetNav.evaluate((link) => link.dataset.target || '');
     const targetLabel = (await targetNav.textContent() || '').trim();
     await targetNav.click();

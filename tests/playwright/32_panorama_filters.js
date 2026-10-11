@@ -152,6 +152,9 @@ const config = buildScenarioConfig('32-panorama-filters');
             document.querySelector('#panoramaPages > .flex-container:first-child').appendChild(row);
             const result = {
                 headerRow: bounds('#panoramaHeaderRow'),
+                titleHeading: bounds('.panoramaTitleHeading'),
+                pageHeading: bounds('.panoramaPageHeading'),
+                menuBar: bounds('#menuBar'),
                 mainHeader: bounds('#panoramaHeader'),
                 subHeader: bounds('#panoramaSubHeader-0'),
                 firstPage: bounds('#panoramaPages > .flex-container:first-child'),
@@ -171,12 +174,15 @@ const config = buildScenarioConfig('32-panorama-filters');
         assert.ok(narrowLayout.wrappedItems[1].top >= narrowLayout.wrappedItems[0].bottom, 'panorama tiles wrap onto separate rows');
         assert.ok(Math.abs(narrowLayout.wrappedItems[0].left - narrowLayout.wrappedItems[1].left) <= 1);
         assert.ok(Math.abs(narrowLayout.wrappedItems[0].width - narrowLayout.wrappedItems[1].width) <= 1);
-        assert.ok(Math.abs(narrowLayout.headerRow.width - narrowLayout.firstPage.width) <= 1);
-        assert.ok(Math.abs((narrowLayout.mainHeader.top - narrowLayout.headerRow.top) - (narrowLayout.items[0].top - narrowLayout.subHeader.bottom)) <= 1, 'header group has matching top and bottom spacing');
+        for (const heading of [narrowLayout.titleHeading, narrowLayout.pageHeading]) {
+            assert.ok(Math.abs(heading.left - narrowLayout.items[0].left) <= 1, 'shared headers align with tile left edges');
+            assert.ok(Math.abs(heading.right - narrowLayout.items[0].right) <= 1, 'shared headers align with tile right edges: ' + JSON.stringify({heading, tile: narrowLayout.items[0], title: narrowLayout.titleHeading, page: narrowLayout.pageHeading}));
+        }
+        assert.ok(Math.abs(narrowLayout.titleHeading.bottom - narrowLayout.pageHeading.top) <= 1, 'title and page headings join without a gap');
         assert.ok(Math.abs(narrowLayout.mainHeader.left - narrowLayout.subHeader.left) <= 1);
-        assert.ok(Math.abs(narrowLayout.mainHeader.width - narrowLayout.subHeader.width) <= 1);
-        assert.ok(Math.abs(narrowLayout.mainHeader.bottom - narrowLayout.subHeader.top) <= 1, 'empty filter actions leave no gap between headers');
-        assert.equal(narrowLayout.mainHeaderFontSize, narrowLayout.subHeaderFontSize);
+        assert.ok(narrowLayout.menuBar.right <= narrowLayout.titleHeading.right + 1, 'wrapped toolbar fits the header');
+        assert.equal(narrowLayout.mainHeaderFontSize, '24px');
+        assert.equal(narrowLayout.subHeaderFontSize, '16px');
         assert.equal(narrowLayout.mainHeaderPadding, wideHeaderRadii.mainPadding, 'narrow layout preserves report header padding');
         assert.deepEqual(narrowLayout.mainHeaderRadii, wideHeaderRadii.main, 'narrow layout preserves main header corner radii');
         assert.deepEqual(narrowLayout.subHeaderRadii, wideHeaderRadii.sub, 'narrow layout preserves subheader corner radii');
@@ -238,16 +244,22 @@ const config = buildScenarioConfig('32-panorama-filters');
         assert.equal(filtered.data.data.length, 2);
         assert.equal((await api('data/pa/' + reportId + '?panoramaId=' + panoramaId + '&variables=' + encodeURIComponent('{"unknown":"x"}'))).status, 400);
         const broken = structuredClone(panorama);
-        broken.filters.find(f => f.enabled).mappings[0].dimensionLabel = 'Renamed';
+        const brokenMapping = broken.filters.find(f => f.enabled).mappings.find(mapping => mapping.reportId === reportId);
+        assert.ok(brokenMapping, 'the requested report has a filter mapping');
+        brokenMapping.dimensionLabel = 'Renamed';
         assert.equal((await api('panorama/' + panoramaId, 'PUT', broken)).data, true);
-        assert.equal((await api('data/pa/' + reportId + query)).status, 400);
+        const invalidDimension = await api('data/pa/' + reportId + query);
+        // Data-loading errors use the report error payload; malformed variables above return HTTP 400.
+        assert.equal(invalidDimension.status, 200);
+        assert.match(invalidDimension.data.error, /dimension has changed/);
+        assert.deepEqual(invalidDimension.data.data, []);
         await page.reload();
         await page.waitForFunction(() => OCA.Analytics.PanoramaFilters?.state?.errors.size > 0);
         await idle();
         assert.match(await page.locator('#myWidget0-0').innerText(), /dimension has changed/);
         assert.deepEqual((await api('report/' + reportId)).data, original, 'source report is unchanged');
         assert.deepEqual(errors, []);
-        console.log('PASS panorama configuration, defaults, mapping, apply/cancel/reset, pages, deduplication, stale requests, cache and dimension validation');
+        console.log('PASS: panorama configuration, defaults, mapping, apply/cancel/reset, pages, deduplication, stale requests, cache and dimension validation');
     } catch (error) {
         await capture('failure');
         console.error(error);

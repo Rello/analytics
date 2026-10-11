@@ -1,41 +1,24 @@
 # Changelog
 
-## Unreleased
+## 7.0.0 - 2026-10-11
 ### Added
-- Show a small schematic report layout preview in the creation wizard that follows the selected chart and table.
-- Sales Ranking and Sales raw data demo reports share one dataset to compare a plain table with Top N, filtering, sorting, mixed chart styles, and a pivot table with calculations, formatting, and totals.
-- Documentation link in the column selection dialog covering shared fields, aggregation, sorting, and calculated measures.
-- Clicking a simple report table row pre-fills the open data maintenance form, with guidance beside the fields.
-- Calculate report measures before or after aggregation with clickable and draggable formula columns, shared sorting with priority only for multiple sorts, and previews for charts and tables.
 - Smart Picker can show live report charts and tables.
+- New interactive chart and table configuration with live-preview.
 - Spreadsheet: Select a worksheet from a dropdown.
 - API endpoint for deleting legacy dataset rows.
-- New interactive chart and table configuration with live-preview.
 - Persist aggregation and disaggregation chart functions.
+- More complex demo reports.
 
 ### Changed
-- Select and save chart types with compact cards in Chart options, and enable or disable charts and tables from their option dialogs.
-- Organize chart and table options into consistently spaced sections, with group colors in a dedicated section and unavailable field selectors hidden.
-- Open panorama tile content menus beside the selected edit button with a brief animation.
-- Refresh report and panorama surfaces and share a responsive branded header with wrapping titles, descriptions, and aligned controls.
 - Match navigation hover and selection styling to Nextcloud 35, preserving indentation and a rounded selection stripe.
-- Simplify navigation icons and expand/collapse arrows while preserving folder, section, and Favorites context.
-- Move the Legend toggle inside the chart's bottom-right corner, clear of axis labels.
+- Simplify navigation icons.
 - Configure sorting in Columns; remove the duplicate Sort order dialog.
-- Widen the chart menu and group its options under compact Data, Visualisation, and Report section headers.
-- Choose None in measure aggregation options to retain original values and define groups, replacing the global aggregation switch; dimension columns have no aggregation dropdown.
-- Remove duplicate Highlighting controls from Table options; use Thresholds for conditional coloring.
-- Align column options with chart and table navigation, and place table Appearance dropdowns before toggles.
-- Include the panorama PDF upload regression in the Playwright scenario runner and full suite.
 - Update bundled DataTables to v3.0.3 and remove the jQuery dependency.
 - Store report option data as longtext instead of varchar(1000).
+- Various UI and UX improvements
 
 ### Fixed
-- Fill Chart options color selection boxes completely with the selected color.
 - Show the panorama save icon after adding or editing text in a tile.
-- Keep report branding correctly positioned on screen and in printed page footers, with a cleanly printed header logo.
-- Keep dialog close icons transparent and align their inset with the dialog content and action buttons.
-- Use small line-chart dots in the Sales Ranking demo and chart previews, and keep report point sizes independent of shared Chart.js defaults.
 - Match dashboard last values to the report's number formatting, including integer zero and saved column formats.
 - Show the Chart options menu indicator when custom appearance, field mapping, model, or series settings are saved.
 - Prevent incompatible Top N and calculated-measure settings and show report errors without getting stuck loading.
@@ -43,14 +26,12 @@
 - Keep panorama PDF titles and subtitles clear of the exported charts.
 - Make report dialogs and wizard navigation operable by keyboard, with focus restoration and Escape to close, while preserving toolbar icon spacing.
 - Fit report creation fields and guidance within narrow mobile screens.
-- Match the spacing above visible and hidden columns in table layout options.
 - Selecting a distinct value with spaces in a report dropdown no longer adds quotes when saving data.
-- Configure calculated chart values with a chart type per value and shared colors per group, with individual series settings under Advanced.
 - Preserve External JSON table text and numeric values when another row contains a date-like string #590.
 - Keep panorama PDF cloud exports in the selected folder and prevent overwriting existing files.
 - Restore table footer totals and saving table options with DataTables 3.
 - Enable panorama layout changes and page deletion only while editing.
-- Panorama scaling on mobile screens.
+- Scale panoramas on mobile screens and align page headers with their tiles.
 - Restore access to the Analytics navigation on mobile browsers, including the Overview dashboard #592.
 - Normalize spreadsheet dates for reliable chart parsing and render them in the viewer's local format #589.
 - Make aggregation and disaggregation series labels available for translation #593.

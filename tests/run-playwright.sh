@@ -6,10 +6,9 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 UI_ARTIFACT_ROOT="${ROOT_DIR}/tests/ui-artifacts"
 
 PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-analytics-playwright:local}"
-BASE_URL="${BASE_URL:-http://host.docker.internal:8033/apps/analytics/}"
+BASE_URL="${BASE_URL:-http://localhost:8035/apps/analytics/}"
 NC_USER="${NC_USER:-admin}"
 NC_PASS="${NC_PASS:-admin}"
-REPORT_NAME="${REPORT_NAME:-Playwright Regression}"
 
 SCENARIO="${1:-full}"
 START_AT="${2:-}"
@@ -148,6 +147,7 @@ DOCKER_ARGS=(
   --rm
   --init
   --ipc=host
+  --network host
   --entrypoint node
   -v "${ROOT_DIR}:/work"
   -w /work

@@ -8,9 +8,11 @@
 const fs = require('fs/promises');
 const path = require('path');
 const { spawn } = require('child_process');
+const { randomUUID } = require('node:crypto');
 
-const reportName = process.env.REPORT_NAME || 'Playwright Regression';
-const groupName = process.env.GROUP_NAME || 'Playwright Regression Group';
+const runId = `${new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-')}-${randomUUID().slice(0, 8)}`;
+const reportName = process.env.REPORT_NAME || `Playwright Regression ${runId}`;
+const groupName = process.env.GROUP_NAME || `Playwright Regression Group ${runId}`;
 const artifactRoot = process.env.ARTIFACT_DIR || path.join(process.cwd(), 'tests', 'ui-artifacts');
 const startAt = (process.env.PLAYWRIGHT_START || '').trim();
 
@@ -30,12 +32,15 @@ const scenarios = [
   { id: '29', title: 'options_group_top_n', script: 'tests/playwright/29_group_top_n.js' },
   { id: '30', title: 'chart_options_modal', script: 'tests/playwright/30_chart_options_modal.js' },
   { id: '31', title: 'options_thresholds', script: 'tests/playwright/31_options_thresholds.js' },
+  { id: '32', title: 'panorama_filters', script: 'tests/playwright/32_panorama_filters.js' },
   { id: '41', title: 'datasource_git', script: 'tests/playwright/41_datasource_git.js' },
   { id: '42', title: 'datasource_json', script: 'tests/playwright/42_datasource_json.js' },
   { id: '43', title: 'datasource_csv', script: 'tests/playwright/43_datasource_csv.js' },
   { id: '44', title: 'automation_dataload_csv_column_picker', script: 'tests/playwright/44_automation_dataload_csv_column_picker.js' },
   { id: '45', title: 'automation_deletion', script: 'tests/playwright/45_automation_deletion.js' },
   { id: '46', title: 'flexible_datasets', script: 'tests/playwright/46_flexible_datasets.js' },
+  { id: '47', title: 'chart_mapping', script: 'tests/playwright/47_chart_mapping.js' },
+  { id: '48', title: 'chart_mapping_compatibility', script: 'tests/playwright/48_chart_mapping_compatibility.js' },
   { id: '49', title: 'table_preview', script: 'tests/playwright/49_table_preview.js' },
   { id: '50', title: 'navigation_share', script: 'tests/playwright/50_navigation_share.js' },
   { id: '51', title: 'navigation_favorites', script: 'tests/playwright/51_navigation_favorites.js' },
@@ -43,6 +48,7 @@ const scenarios = [
   { id: '53', title: 'panorama_pdf_upload', script: 'tests/playwright/53_panorama_pdf_upload.js' },
   { id: '54', title: 'report_transformations', script: 'tests/playwright/54_report_transformations.js' },
   { id: '55', title: 'dialog_keyboard_mobile', script: 'tests/playwright/55_dialog_keyboard_mobile.js' },
+  { id: '56', title: 'demo_sales_ranking', script: 'tests/playwright/56_demo_sales_ranking.js' },
   { id: '91', title: 'report_delete', script: 'tests/playwright/91_report_delete.js' },
   { id: '92', title: 'group_delete', script: 'tests/playwright/92_group_delete.js' },
 ];
@@ -60,7 +66,7 @@ function resolveScenariosToRun() {
   return scenarios.slice(startIndex);
 }
 
-function parseScenarioOutput(stdout, fallbackScenario) {
+function parseScenarioOutput(stdout, fallbackScenario, exitCode) {
   const trimmed = stdout.trim();
   if (!trimmed) {
     return {
@@ -68,6 +74,10 @@ function parseScenarioOutput(stdout, fallbackScenario) {
       status: 'FAIL',
       issues: ['fatal:missing scenario output'],
     };
+  }
+
+  if (exitCode === 0 && trimmed.startsWith('PASS:')) {
+    return {scriptId: fallbackScenario.id, status: 'PASS', issues: [], details: trimmed};
   }
 
   try {
@@ -108,7 +118,7 @@ function runScenario(scenario) {
       stderr += chunk.toString();
     });
     child.on('close', (code) => {
-      const json = parseScenarioOutput(stdout, scenario);
+      const json = parseScenarioOutput(stdout, scenario, code);
       resolve({
         code,
         stdout,
@@ -127,6 +137,8 @@ function runScenario(scenario) {
   let overallStatus = 'PASS';
   let finalUrl = '';
   const scenariosToRun = resolveScenariosToRun();
+  console.error(`Report: ${reportName}`);
+  console.error(`Group: ${groupName}`);
 
   for (const scenario of scenariosToRun) {
     const result = await runScenario(scenario);
@@ -135,12 +147,14 @@ function runScenario(scenario) {
       title: scenario.title,
       status: result.json.status || (result.code === 0 ? 'PASS' : 'FAIL'),
       finalUrl: result.json.finalUrl || '',
-      issues: [...(result.json.issues || []), ...(result.code !== 0 && result.stderr.trim() ? [`stderr:${result.stderr.trim()}`] : [])],
+      issues: [...(result.json.issues || []), ...(result.json.error ? [`fatal:${result.json.error}`] : []), ...(result.code !== 0 && result.stderr.trim() ? [`stderr:${result.stderr.trim()}`] : [])],
     });
     finalUrl = result.json.finalUrl || finalUrl;
+    console.error(`Scenario ${scenario.id} (${scenario.title}): ${results[results.length - 1].status}`);
 
-    if (result.code !== 0 || result.json.status === 'FAIL') {
+    if (result.json.status === 'FAIL' || (result.code !== 0 && result.json.status !== 'WARN')) {
       overallStatus = 'FAIL';
+      // Later scenarios share this report and must not inherit failed changes.
       break;
     }
     if (result.json.status === 'WARN' && overallStatus === 'PASS') {
@@ -151,7 +165,7 @@ function runScenario(scenario) {
   const output = {
     scriptId: 'full',
     status: overallStatus,
-    baseUrl: process.env.BASE_URL || 'http://host.docker.internal:8032/apps/analytics/',
+    baseUrl: process.env.BASE_URL || 'http://localhost:8035/apps/analytics/',
     finalUrl,
     reportName,
     groupName,

@@ -306,6 +306,8 @@ async function setSwitch(page, selector, checked) {
         if (displayIndex === 0) {
           return 'Total';
         }
+        // Column 2 mixes labels and numbers, so it must not have a total.
+        if (header === 'Column 2') return '';
         return table.column(`${displayIndex}:visible`).data().toArray()
           .reduce((sum, value) => sum + OCA.Analytics.Visualization.parseCalculatedColumnNumber(value), 0);
       });
@@ -318,6 +320,12 @@ async function setSwitch(page, selector, checked) {
       if (index === 0) {
         if (reorderedFooter.footers[index] !== expected) {
           throw new Error(`Expected Total in the first reordered footer cell, got ${JSON.stringify(reorderedFooter)}`);
+        }
+        return;
+      }
+      if (expected === '') {
+        if (reorderedFooter.footers[index] !== '') {
+          throw new Error(`Mixed text/numeric dimension must have no footer total: ${JSON.stringify(reorderedFooter)}`);
         }
         return;
       }

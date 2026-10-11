@@ -21,12 +21,33 @@ const {
 const config = buildScenarioConfig('21-filter');
 const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_NAME);
 
+async function clearFiltersAndReload(page) {
+  const cancel = page.locator('#analyticsDialogBtnCancel');
+  if (await cancel.isVisible()) await cancel.click();
+  const buttons = page.locator('.filterVisualizationRemove');
+  while (await buttons.count()) {
+    const count = await buttons.count();
+    await buttons.first().click();
+    await page.waitForFunction(previousCount =>
+      document.querySelectorAll('.filterVisualizationRemove').length < previousCount
+      && !OCA.Analytics.currentXhrRequest, count);
+  }
+  await saveAndReloadReport(page, reportName);
+  const savedFilterCount = await page.evaluate(() =>
+    Object.keys(OCA.Analytics.currentReportData.options.filteroptions?.filter || {}).length);
+  if (savedFilterCount !== 0 || await buttons.count()) {
+    throw new Error('Filter cleanup did not persist after Save and reload');
+  }
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: config.headless });
   const page = await browser.newPage({ viewport: config.viewport });
   const issues = [];
   const steps = [];
   const capture = createCapture(page, config);
+  let cleanupRequired = false;
+  let failed = false;
 
   attachPageIssueListeners(page, issues);
 
@@ -37,6 +58,12 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     steps.push('open seeded report');
     const seedState = await ensureStoredReportWithDefaultData(page, reportName, 'Filter regression');
     steps.push(`report ${seedState}`);
+    const existingFilterCount = await page.evaluate(() =>
+      Object.keys(OCA.Analytics.currentReportData.options.filteroptions?.filter || {}).length);
+    if (existingFilterCount !== 0) {
+      throw new Error('Filter test requires an unfiltered report; start a new run without REPORT_NAME');
+    }
+    cleanupRequired = true;
 
     steps.push('apply combined same-dimension filters');
     await clickFirst(page, ['#addFilterIcon'], 'add filter');
@@ -85,18 +112,10 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
     if (filterChipCount !== 3) {
       throw new Error(`Expected 3 active filter chips before removal, got ${filterChipCount}`);
     }
-    await filterRemoveButtons.nth(0).click();
-    await page.waitForTimeout(300);
-    await filterRemoveButtons.nth(0).click();
-    await page.waitForTimeout(500);
-    await filterRemoveButtons.nth(0).click();
-    await page.waitForTimeout(500);
-    if (await page.locator('.filterVisualizationRemove').count()) {
-      throw new Error('Filter chip remove buttons still visible after removing both filters');
-    }
+    await clearFiltersAndReload(page);
+    cleanupRequired = false;
 
-    steps.push('save reload and validate original report');
-    await saveAndReloadReport(page, reportName);
+    steps.push('validate original report after filter cleanup');
     await waitForIdle(page, 10000);
     rowTexts = await page.locator('#tableContainer tbody tr').evaluateAll((nodes) =>
       nodes.map((node) => node.innerText.replace(/\s+/g, ' ').trim())
@@ -108,9 +127,25 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
       throw new Error(`Expected unfiltered seeded rows after removing filter, got: ${JSON.stringify(rowTexts)}`);
     }
 
+    await capture('cleared');
+  } catch (error) {
+    failed = true;
+    issues.push(`fatal:${error.message}`);
+    await capture('failure_state').catch(() => {});
+  } finally {
+    if (cleanupRequired) {
+      try {
+        await clearFiltersAndReload(page);
+        steps.push('filters removed and saved after failure');
+        await capture('cleared_after_failure');
+      } catch (error) {
+        failed = true;
+        issues.push(`fatal:filter cleanup failed: ${error.message}`);
+      }
+    }
     const result = {
       scriptId: config.scriptId,
-      status: issues.length ? 'WARN' : 'PASS',
+      status: failed ? 'FAIL' : issues.length ? 'WARN' : 'PASS',
       baseUrl: config.baseUrl,
       finalUrl: page.url(),
       reportName,
@@ -118,23 +153,7 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
       issues,
     };
     console.log(JSON.stringify(result, null, 2));
-    if (result.status !== 'PASS') {
-      process.exitCode = 1;
-    }
-  } catch (error) {
-    const result = {
-      scriptId: config.scriptId,
-      status: 'FAIL',
-      baseUrl: config.baseUrl,
-      finalUrl: page.url(),
-      reportName,
-      steps,
-      issues: issues.concat([`fatal:${error.message}`]),
-    };
-    await capture('failure_state').catch(() => {});
-    console.log(JSON.stringify(result, null, 2));
-    process.exitCode = 1;
-  } finally {
+    if (result.status !== 'PASS') process.exitCode = 1;
     await browser.close();
   }
 })();

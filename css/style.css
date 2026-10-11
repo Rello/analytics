@@ -3122,7 +3122,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
     #analytics-content-panorama .panoramaSubHeaderRow {
         flex: 0 0 auto;
-        width: 100%;
+        width: auto;
     }
 
     #analytics-content-panorama .flex-row {
