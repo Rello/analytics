@@ -8,6 +8,8 @@
     "Saved" : "Bewaar",
     "Date" : "Datum",
     "Delete" : "Skrap",
+    "None" : "Geen",
+    "Priority" : "Prioriteit",
     "Filter" : "Filter",
     "Add" : "Voeg toe",
     "Favorites" : "Gunstelinge",
@@ -49,6 +51,7 @@
     "Text" : "Teks",
     "3" : "3",
     "Advanced" : "Gevorderd",
+    "Previous" : "Vorige",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

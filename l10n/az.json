@@ -9,6 +9,8 @@
     "Region" : "Ərazi",
     "Delete" : "Sil",
     "Done" : "Edildi",
+    "None" : "Heç bir",
+    "Priority" : "Prioritet",
     "Favorites" : "Sevimlilər",
     "New" : "Yeni",
     "Overview" : "İcmal",
@@ -36,6 +38,7 @@
     "Display" : "Ekran",
     "Export" : "Çıxarış",
     "Update" : "Yenilənmə",
+    "Sort" : "Çeşidləmək",
     "Description" : "Açıqlanma",
     "Import" : "Əlavə et",
     "Title" : "Başlıq",
@@ -49,6 +52,7 @@
     "Copy link" : "linki nüsxələ",
     "Automatic" : "Avtomatik",
     "Advanced" : "İrəliləmiş",
+    "Previous" : "Əvvələ",
     "Create" : "Yarat"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

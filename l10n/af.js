@@ -10,6 +10,8 @@ OC.L10N.register(
     "Saved" : "Bewaar",
     "Date" : "Datum",
     "Delete" : "Skrap",
+    "None" : "Geen",
+    "Priority" : "Prioriteit",
     "Filter" : "Filter",
     "Add" : "Voeg toe",
     "Favorites" : "Gunstelinge",
@@ -51,6 +53,7 @@ OC.L10N.register(
     "Text" : "Teks",
     "3" : "3",
     "Advanced" : "Gevorderd",
+    "Previous" : "Vorige",
     "Nextcloud forum" : "Nextcloud-forum",
     "Create" : "Skep"
 },

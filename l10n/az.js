@@ -11,6 +11,8 @@ OC.L10N.register(
     "Region" : "Ərazi",
     "Delete" : "Sil",
     "Done" : "Edildi",
+    "None" : "Heç bir",
+    "Priority" : "Prioritet",
     "Favorites" : "Sevimlilər",
     "New" : "Yeni",
     "Overview" : "İcmal",
@@ -38,6 +40,7 @@ OC.L10N.register(
     "Display" : "Ekran",
     "Export" : "Çıxarış",
     "Update" : "Yenilənmə",
+    "Sort" : "Çeşidləmək",
     "Description" : "Açıqlanma",
     "Import" : "Əlavə et",
     "Title" : "Başlıq",
@@ -51,6 +54,7 @@ OC.L10N.register(
     "Copy link" : "linki nüsxələ",
     "Automatic" : "Avtomatik",
     "Advanced" : "İrəliləmiş",
+    "Previous" : "Əvvələ",
     "Create" : "Yarat"
 },
 "nplurals=2; plural=(n != 1);");

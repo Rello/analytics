@@ -10,6 +10,7 @@ OC.L10N.register(
     "Region" : "এলাকা",
     "Delete" : "মুছে",
     "Done" : "শেষ হলো",
+    "None" : "কোনটিই নয়",
     "Add" : "যোগ কর",
     "Favorites" : "প্রিয়জন",
     "New" : "নতুন",

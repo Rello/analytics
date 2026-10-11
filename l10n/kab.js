@@ -30,6 +30,7 @@ OC.L10N.register(
     "contains" : "i yegebren",
     "Columns" : "Ijga",
     "Minimum" : "Minimum",
+    "Maximum" : "Afellay",
     "Count" : "Amḍan amatu",
     "None" : "Ula d yiwen",
     "Ascending" : "S walluy",

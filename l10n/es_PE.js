@@ -52,6 +52,7 @@ OC.L10N.register(
     "Display" : "Mostrar",
     "Export" : "Exportar",
     "Update" : "Actualizar",
+    "Sort" : "Ordenar",
     "Nextcloud Assistant" : "Asistente de Nextcloud",
     "Description" : "Descripción",
     "Import" : "Importar",

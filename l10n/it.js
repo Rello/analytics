@@ -61,6 +61,7 @@ OC.L10N.register(
     "Columns" : "Colonne",
     "Average" : "Media",
     "Minimum" : "Minimo",
+    "Maximum" : "Massimo",
     "Count" : "Conto",
     "None" : "Nessuno",
     "Ascending" : "Ascendente",

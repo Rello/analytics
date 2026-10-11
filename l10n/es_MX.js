@@ -278,6 +278,7 @@ OC.L10N.register(
     "Update" : "Actualizar",
     "Mode" : "Modo",
     "Option" : "Opción",
+    "Sort" : "Ordenar",
     "Number of records" : "Número de registros",
     "Nextcloud Assistant" : "Asistente de Nextcloud",
     "Context Chat is required" : "Se requiere chat contextual",

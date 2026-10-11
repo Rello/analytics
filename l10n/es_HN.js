@@ -53,6 +53,7 @@ OC.L10N.register(
     "Export" : "Exportar",
     "Update" : "Actualizar",
     "Mode" : "Modo",
+    "Sort" : "Ordenar",
     "Description" : "Descripción",
     "Import" : "Importar",
     "Setting" : "Configuración",

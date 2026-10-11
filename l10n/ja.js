@@ -58,6 +58,7 @@ OC.L10N.register(
     "Columns" : "カラム",
     "Average" : "平均",
     "Minimum" : "最小",
+    "Maximum" : "最大",
     "None" : "なし",
     "Ascending" : "昇順",
     "Descending" : "降順",

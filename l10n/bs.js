@@ -8,6 +8,7 @@ OC.L10N.register(
     "Saved" : "Spremljeno",
     "Date" : "Date",
     "Delete" : "Obriši",
+    "None" : "Ništa",
     "Favorites" : "Favoriti",
     "New" : "Novo",
     "Remove from favorites" : "Remove from favorites",
