@@ -239,7 +239,7 @@ class ReportMapper
      * @return bool
      * @throws Exception
      */
-    public function updateOptions($id, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
+    public function updateOptions($id, $chartoptions, $dataoptions, $filteroptions, $tableoptions, ?string $chart = null, ?string $visualization = null)
     {
         $sql = $this->db->getQueryBuilder();
         $sql->update(self::TABLE_NAME)
@@ -250,6 +250,12 @@ class ReportMapper
             ->set('version', $sql->createFunction('COALESCE(version, 0) + 1'))
             ->where($sql->expr()->eq('user_id', $sql->createNamedParameter($this->userId)))
             ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($id)));
+        if ($chart !== null) {
+            $sql->set('chart', $sql->createNamedParameter($chart));
+        }
+        if ($visualization !== null && in_array($visualization, ['chart', 'table', 'ct'], true)) {
+            $sql->set('visualization', $sql->createNamedParameter($visualization));
+        }
         $sql->executeStatement();
         return true;
     }

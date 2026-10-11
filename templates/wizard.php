@@ -401,6 +401,16 @@
                             <label for="chartLine"><?php p($l->t('Line')); ?></label>
                         </div>
                     </div>
+                    <div style="display: table-cell; vertical-align: top; position: relative;">
+                        <div class="wizardReportPreview">
+                            <div class="userGuidance"><?php p($l->t('Layout preview')); ?></div>
+                            <div class="wizardReportPreviewPage" aria-hidden="true">
+                                <div class="wizardReportPreviewHeader"><span></span><span></span></div>
+                                <div id="wizardReportPreviewChart" class="wizardReportPreviewChart" hidden></div>
+                                <div id="wizardReportPreviewTable" class="wizardReportPreviewTable icon-analytics-chartTable" hidden></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div style="display: table-row;">
                     <div style="display: table-cell; ">

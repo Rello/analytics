@@ -77,9 +77,35 @@
         display: none !important;
     }
 
+    /* Print the SVG directly instead of relying on a masked background. */
+    #analytics-content-report .reportHeadingBrand {
+        background: none !important;
+        border: 0 !important;
+    }
+
+    #analytics-content-report .reportHeadingBrand::after {
+        content: url('../img/report-header-line.svg?v=7');
+        display: block;
+        background: none !important;
+        border: 0 !important;
+        mask: none;
+        -webkit-mask: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    #content #analytics-content-report > #byAnalytics {
+        display: flex !important;
+        position: fixed;
+        left: 20px;
+        bottom: 0;
+        margin: 0;
+        color: #12426e;
+    }
+
     /* Layout */
     @page {
         size: A4 portrait;
-        margin: 20mm 0 10mm 0;
+        margin: 20mm 0 20mm 0;
     }
 }

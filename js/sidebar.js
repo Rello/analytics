@@ -766,6 +766,7 @@ OCA.Analytics.Sidebar.Report = {
     },
 
     updateWizardVisualTemplateState: function (templateDefinition) {
+        OCA.Analytics.Sidebar.Report.updateWizardLayoutPreview();
         const visualHint = document.getElementById('wizardNewVisualTemplateHint');
         const chartInputs = document.querySelectorAll('input[name="chart"], input[name="table"]');
         const hasTemplate = !!(templateDefinition && templateDefinition.report);
@@ -781,6 +782,7 @@ OCA.Analytics.Sidebar.Report = {
         }
 
         OCA.Analytics.Sidebar.Report.applyTemplateVisualizationWizard(templateDefinition.report);
+        OCA.Analytics.Sidebar.Report.updateWizardLayoutPreview();
 
         chartInputs.forEach((input) => {
             input.disabled = true;
@@ -839,6 +841,24 @@ OCA.Analytics.Sidebar.Report = {
                 chartNone.checked = true;
             }
         }
+    },
+
+    updateWizardLayoutPreview: function () {
+        const chart = document.getElementById('wizardReportPreviewChart');
+        const table = document.getElementById('wizardReportPreviewTable');
+        if (!chart || !table) return;
+
+        const selectedChart = document.querySelector('#analyticsWizard input[name="chart"]:checked');
+        const hasChart = selectedChart && selectedChart.id !== 'chartNone';
+        chart.hidden = !hasChart;
+        // Reuse the selected option's icon, including template-selected chart types.
+        chart.className = 'wizardReportPreviewChart';
+        if (hasChart) {
+            const icon = selectedChart.parentElement.previousElementSibling;
+            const iconClass = Array.from(icon.classList).find(name => name.startsWith('icon-analytics-chart') && name !== 'icon-analytics-charts-wizard');
+            if (iconClass) chart.classList.add(iconClass);
+        }
+        table.hidden = !document.getElementById('chartTable').checked;
     },
 
     applyTemplateOptionsToReport: function (reportId, templateDefinition) {
@@ -1348,6 +1368,11 @@ OCA.Analytics.Sidebar.Report = {
             wizardDialog.dataset.reportWizardInitialized = '1';
         }
         OCA.Analytics.Sidebar.Report.wizardTemplateJump = false;
+
+        wizardDialog.querySelectorAll('input[name="chart"], input[name="table"]').forEach(input => {
+            input.addEventListener('change', OCA.Analytics.Sidebar.Report.updateWizardLayoutPreview);
+        });
+        OCA.Analytics.Sidebar.Report.updateWizardLayoutPreview();
 
         document.getElementById('wizardNewCreate').addEventListener('click', OCA.Analytics.Sidebar.Report.create);
         document.getElementById('wizardNewCancel').addEventListener('click', OCA.Analytics.Wizard.cancel);

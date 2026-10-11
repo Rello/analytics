@@ -10,10 +10,12 @@
 
 <div id="analytics-content-panorama" hidden>
 
-    <div id="panoramaHeaderRow" class="panoramaHeaderRow">
-        <div id="panoramaHeader" class="reportHeader editable"></div>
-        <div class="panoramaFilterActions">
-            <button type="button" id="panoramaConfigureFilters" hidden><?php p($l->t('Configure filters')); ?></button>
+    <div class="reportHeading panoramaTitleHeading">
+        <div id="panoramaHeaderRow" class="panoramaHeaderRow reportHeadingPrimary">
+            <div id="panoramaHeader" class="reportHeader editable"></div>
+            <div class="panoramaFilterActions">
+                <button type="button" id="panoramaConfigureFilters" hidden><?php p($l->t('Configure filters')); ?></button>
+            </div>
         </div>
     </div>
 

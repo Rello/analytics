@@ -43,7 +43,13 @@ OCA.Analytics.TableOptions = {
         }
         field('tablePageLength').value = length;
 
+        state.enabled = report.options.visualization !== 'chart';
+        if (!state.enabled) field('tableModeNone').checked = true;
+        OCA.Analytics.Filter.setDialogOptionsEnabled(dialog, '.analyticsDialogSection:first-child', state.enabled);
         dialog.querySelectorAll('[name="tableMode"]').forEach(input => input.addEventListener('change', () => {
+            state.enabled = input.value !== 'none';
+            OCA.Analytics.Filter.setDialogOptionsEnabled(dialog, '.analyticsDialogSection:first-child', state.enabled);
+            if (!state.enabled) return;
             state.mode = input.value;
             if (state.mode === 'table') {
                 for (const role of ['columns', 'measures']) {
@@ -298,6 +304,8 @@ OCA.Analytics.TableOptions = {
         if (!state) return;
         state.draft = {};
         state.mode = 'table';
+        state.enabled = true;
+        OCA.Analytics.Filter.setDialogOptionsEnabled(state.dialog, '.analyticsDialogSection:first-child', true);
         state.field('tableModeList').checked = true;
         state.field('tablePageLength').value = '10';
         state.field('tableDensity').value = 'comfortable';
@@ -316,11 +324,12 @@ OCA.Analytics.TableOptions = {
     apply: function () {
         const state = this.active;
         if (!state) return;
-        const options = this.read();
+        const options = state.enabled ? this.read() : state.draft;
         if (!options) return;
         for (const input of state.dialog.querySelectorAll('input[type="number"], input[pattern]')) {
-            if (input.offsetParent !== null && !input.reportValidity()) return;
+            if (state.enabled && input.offsetParent !== null && !input.reportValidity()) return;
         }
+        OCA.Analytics.Filter.setVisualizationEnabled('table', state.enabled);
         state.report.options.tableoptions = options;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Notification.dialogClose();

@@ -1182,6 +1182,30 @@ OCA.Analytics.Filter = {
      * Launch the table options dialog for configuring layout and
      * appearance of the table visualization.
      */
+    setVisualizationEnabled: function (kind, enabled) {
+        const options = OCA.Analytics.currentReportData.options;
+        const other = kind === 'chart' ? 'table' : 'chart';
+        options.visualization = enabled
+            ? (options.visualization === other || options.visualization === 'ct' ? 'ct' : kind)
+            : other;
+        const sidebar = document.getElementById('sidebarReportVisualization');
+        if (sidebar) sidebar.value = options.visualization;
+    },
+
+    setDialogOptionsEnabled: function (dialog, selector, enabled) {
+        dialog.querySelectorAll('.analyticsDialogSection').forEach(section => {
+            const controls = section.matches(selector) ? [...section.children].filter(child => !child.matches('h2, .userGuidance, .analyticsModelSelector')) : [section];
+            controls.forEach(control => {
+                control.inert = !enabled;
+                control.classList.toggle('analyticsOptionsDisabled', !enabled);
+            });
+        });
+        dialog.querySelectorAll('aside').forEach(preview => {
+            preview.inert = !enabled;
+            preview.classList.toggle('analyticsOptionsDisabled', !enabled);
+        });
+    },
+
     openTableOptionsDialog: function () {
         OCA.Analytics.Report.hideReportMenu();
 
@@ -2262,6 +2286,10 @@ OCA.Analytics.Filter = {
         let container = document.getElementById('templateChartOptions').content;
         container = document.importNode(container, true);
         const table = container.getElementById('chartOptionsTable');
+        const selectedChartType = OCA.Analytics.currentReportData.options.visualization === 'table'
+            ? 'none' : OCA.Analytics.currentReportData.options.chart || 'column';
+        const chartTypeField = container.getElementById('chartType_' + selectedChartType);
+        if (chartTypeField) chartTypeField.checked = true;
 
         const guiState = OCA.Analytics.ChartOptions.getGuiState(OCA.Analytics.currentReportData.options.chartoptions);
         OCA.Analytics.Filter.renderChartColumnMapping(container, guiState, function (columnMapping, resetSeriesOptions = true) {
@@ -2314,6 +2342,8 @@ OCA.Analytics.Filter = {
         dialog.querySelector('.analyticsEnhancedDialogLayout').append(
             document.getElementById('chartColumnMappingPreview')
         );
+        dialog.dataset.chartType = selectedChartType;
+        OCA.Analytics.Filter.setDialogOptionsEnabled(dialog, '#chartTypeSection', selectedChartType !== 'none');
         const mappingSection = document.getElementById('chartColumnMappingSection');
         const cleanup = dialog._analyticsDialogCleanup;
         dialog._analyticsDialogCleanup = () => {
@@ -2321,6 +2351,17 @@ OCA.Analytics.Filter = {
             cleanup?.();
         };
         dialog.addEventListener('change', event => {
+            if (event.target.name === 'analyticsChartType') {
+                OCA.Analytics.Filter.setDialogOptionsEnabled(dialog, '#chartTypeSection', event.target.value !== 'none');
+                if (event.target.value === 'none') return;
+                const previousDefault = OCA.Analytics.chartTypeMapping[dialog.dataset.chartType.replace(/St100$/, '')] || 'bar';
+                const nextDefault = OCA.Analytics.chartTypeMapping[event.target.value.replace(/St100$/, '')] || 'bar';
+                dialog.querySelectorAll('[name="optionsChartType"]').forEach(select => {
+                    if (select.value === previousDefault) select.value = nextDefault;
+                });
+                dialog.dataset.chartType = event.target.value;
+                mappingSection?._analyticsSyncStyles?.();
+            }
             if (event.target.closest('#chartOptionsTable')) mappingSection?._analyticsSyncStyles?.();
             mappingSection?._analyticsRefreshPreview?.();
         });
@@ -2345,6 +2386,7 @@ OCA.Analytics.Filter = {
             sourceReportData, guiState.model, true);
         const reportData = {...sourceReportData, ...chartData};
         const section = container.getElementById('chartColumnMappingSection');
+        const colors = container.getElementById('chartSegmentColors');
         const chartOptions = OCA.Analytics.ChartOptions;
         const columns = chartOptions.columnDescriptors(reportData);
         if (!section || columns.length < 2) {
@@ -2445,6 +2487,7 @@ OCA.Analytics.Filter = {
                 && (dataModel !== 'kpiModel' || !mapping.series.includes(column.id)))
                 .forEach(column => select.add(new Option(sampleLabels.get(column.id), chartOptions.encodeColumnId(column.id))));
             select.disabled = select.options.length === 1;
+            select.hidden = select.disabled;
         }
 
         function renderSummary() {
@@ -2493,7 +2536,9 @@ OCA.Analytics.Filter = {
             try {
                 const table = document.getElementById('chartOptionsTable');
                 const seriesOptions = table ? OCA.Analytics.Filter.getChartOptionsSeriesRows(table) : [];
-                const previewData = automatic && dataModel !== 'timeSeriesModel' ? sourceReportData : reportData;
+                const basePreviewData = automatic && dataModel !== 'timeSeriesModel' ? sourceReportData : reportData;
+                const previewData = {...basePreviewData, options: {...basePreviewData.options,
+                    chart: document.querySelector('input[name="analyticsChartType"]:checked')?.value || basePreviewData.options.chart}};
                 const result = OCA.Analytics.Visualization.chartMappingPreview(previewData, dataModel, automatic ? null : mapping, seriesOptions);
                 status.textContent = t('analytics', 'Preview: {shown} of {total} report rows. Current filters apply.', {
                     shown: result.shownRows.toLocaleString(), total: result.totalRows.toLocaleString(),
@@ -2621,17 +2666,20 @@ OCA.Analytics.Filter = {
                 controls.append(more);
                 row.insertBefore(controls, row.querySelector('.chartColumnSelectionActions'));
             });
-            const colors = section.querySelector('#chartSegmentColors');
             colors.replaceChildren();
             const groups = new Map(items.filter(item => item.groupLabel).map(item => [item.groupKey, item.groupLabel]));
-            colors.hidden = groups.size === 0;
-            if (!groups.size) return;
-            const heading = document.createElement('h3');
-            heading.textContent = t('analytics', 'Group colors');
+            const hasSharedColors = [...groups.keys()].some(key => matchingRows(item => item.groupKey === key).length > 1);
+            colors.closest('.analyticsDialogSection').hidden = !hasSharedColors;
+            document.querySelectorAll('.analyticsEnhancedDialogNavButton[data-target="chartColorsSection"]').forEach(link => {
+                link.hidden = !hasSharedColors;
+                link.style.display = hasSharedColors ? '' : 'none';
+            });
             const hint = document.createElement('p');
             hint.className = 'chartColumnMappingHint';
-            hint.textContent = t('analytics', 'Choose a color to use for all bars and lines in a group.');
-            colors.append(heading, hint);
+            hint.textContent = groups.size
+                ? t('analytics', 'Choose a color to use for all bars and lines in a group.')
+                : t('analytics', 'Select a Split by field in Data & series to configure group colors.');
+            colors.append(hint);
             groups.forEach((label, key) => {
                 const rows = matchingRows(item => item.groupKey === key);
                 const values = new Set(rows.map(row => row.querySelector('[name="optionsColor"]').value));
@@ -2715,8 +2763,9 @@ OCA.Analytics.Filter = {
         table.querySelectorAll('.chartOptionsSeriesRow').forEach(row => row.remove());
 
         // get the default chart type to preset the drop downs
-        const chartType = OCA.Analytics.currentReportData.options.chart || 'column';
-        const defaultChartType = OCA.Analytics.chartTypeMapping[chartType] || 'bar';
+        const chartType = document.querySelector('input[name="analyticsChartType"]:checked')?.value
+            || OCA.Analytics.currentReportData.options.chart || 'column';
+        const defaultChartType = OCA.Analytics.chartTypeMapping[chartType.replace(/St100$/, '')] || 'bar';
         const seriesItems = OCA.Analytics.Visualization?.getChartSeriesItems
             ? OCA.Analytics.Visualization.getChartSeriesItems(
                 OCA.Analytics.currentReportData,
@@ -2886,6 +2935,13 @@ OCA.Analytics.Filter = {
      * existing settings and trigger a reload of the report.
      */
     processChartOptionsDialog: function () {
+        if (document.getElementById('chartType_none').checked) {
+            OCA.Analytics.Filter.setVisualizationEnabled('chart', false);
+            OCA.Analytics.unsavedChanges = true;
+            OCA.Analytics.Notification.dialogClose();
+            OCA.Analytics.Report.Backend.getData();
+            return;
+        }
         const storedDataOptions = OCA.Analytics.currentReportData.options.dataoptions;
         const previousGuiState = OCA.Analytics.ChartOptions.getGuiState(
             OCA.Analytics.currentReportData.options.chartoptions
@@ -2909,8 +2965,9 @@ OCA.Analytics.Filter = {
         let optionObject;
 
         // get the defaults (e.g. line or bar) to derive if there is any relevant change by the user
-        const chartType = OCA.Analytics.currentReportData.options.chart || 'column';
-        let defaultChartType = OCA.Analytics.chartTypeMapping[chartType] || 'bar';
+        const chartType = document.querySelector('input[name="analyticsChartType"]:checked')?.value
+            || OCA.Analytics.currentReportData.options.chart || 'column';
+        let defaultChartType = OCA.Analytics.chartTypeMapping[chartType.replace(/St100$/, '')] || 'bar';
         let defaultYAxis = 'primary';
         let defaultColors = OCA.Analytics.Visualization.defaultColorPalette;
 
@@ -2965,6 +3022,8 @@ OCA.Analytics.Filter = {
             storedDataOptions,
             dataOptions
         );
+        OCA.Analytics.Filter.setVisualizationEnabled('chart', true);
+        OCA.Analytics.currentReportData.options.chart = chartType;
         OCA.Analytics.currentReportData.options.chartoptions = chartOptionsObj;
         OCA.Analytics.unsavedChanges = true;
         OCA.Analytics.Report.Backend.getData();
@@ -3382,6 +3441,8 @@ OCA.Analytics.Filter.Backend = {
                 headers: headers,
                 body: JSON.stringify({
                     reportId: reportId,
+                    visualization: OCA.Analytics.currentReportData.options.visualization,
+                    chart: OCA.Analytics.currentReportData.options.chart,
                     chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
                     dataoptions: JSON.stringify(OCA.Analytics.currentReportData.options.dataoptions),
                     filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),
@@ -3434,7 +3495,8 @@ OCA.Analytics.Filter.Backend = {
             OCA.Analytics.currentReportData.options.filteroptions = OCA.Analytics.currentReportData.options.filteroptions;
         }
 
-        let tableOptions = {};
+        let tableOptions = OCA.Analytics.currentReportData.options.visualization === 'chart'
+            ? structuredClone(OCA.Analytics.currentReportData.options.tableoptions || {}) : {};
 
         //get the table states
         if (OCA.Analytics.tableObject.length !== 0) {
@@ -3500,6 +3562,8 @@ OCA.Analytics.Filter.Backend = {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
+                    visualization: OCA.Analytics.currentReportData.options.visualization,
+                    chart: OCA.Analytics.currentReportData.options.chart,
                     chartoptions: JSON.stringify(OCA.Analytics.currentReportData.options.chartoptions),
                     dataoptions: JSON.stringify(dataOptions),
                     filteroptions: JSON.stringify(OCA.Analytics.currentReportData.options.filteroptions),

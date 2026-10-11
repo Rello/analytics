@@ -79,9 +79,9 @@ class ReportController extends Controller
      * @throws Exception
      */
     #[NoAdminRequired]
-    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
+    public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, ?string $chart = null)
     {
-        return new DataResponse($this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions));
+        return new DataResponse($this->ReportService->createCopy($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, $chart));
     }
 
     /**
@@ -159,9 +159,9 @@ class ReportController extends Controller
      * @throws Exception
      */
     #[NoAdminRequired]
-    public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions)
+    public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, ?string $chart = null, ?string $visualization = null)
     {
-        return new DataResponse($this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions));
+        return new DataResponse($this->ReportService->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, $chart, $visualization));
     }
 
     /**

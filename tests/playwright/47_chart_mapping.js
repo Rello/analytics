@@ -46,7 +46,7 @@ const config = buildScenarioConfig('47');
         await ensureAnalyticsLoaded(page, config);
         await open();
         assert.deepEqual(await page.locator('.analyticsEnhancedDialogNavButton').allTextContents(),
-            ['Data & series', 'Appearance', 'Advanced']);
+            ['Chart type', 'Data & series', 'Colors', 'Appearance', 'Advanced']);
         assert.equal(await page.locator('#chartColumnCategory.optionsInput').count(), 1);
         assert.equal(await page.locator('#chartColumnValueAdd.optionsInput').count(), 1);
         assert.equal(await page.locator('#chartColumnSeriesAdd.optionsInput').count(), 1);

@@ -11,9 +11,13 @@
     <input type="hidden" name="sharingToken" value="<?php p($_['token']); ?>" id="sharingToken">
     <input type="hidden" name="dataset" value="" id="datasetId">
     <div class="reportHeading">
-        <span id="reportHeader" class="reportHeader" role="heading" aria-level="2"></span>
-        <span id="reportSubHeader" class="reportSubHeader" hidden></span>
-        <span class="reportHeadingBrand" aria-hidden="true"></span>
+        <div class="reportHeadingPrimary">
+            <span id="reportHeader" class="reportHeader" role="heading" aria-level="2"></span>
+        </div>
+        <div class="reportHeadingSecondary">
+            <span id="reportSubHeader" class="reportSubHeader" hidden></span>
+            <span class="reportHeadingBrand" aria-hidden="true"></span>
+        </div>
     </div>
     <div id="reportPlaceholder"></div>
     <div id="chartContainer">

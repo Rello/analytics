@@ -52,7 +52,7 @@ Object.assign(OCA.Analytics.Panorama = {
     layouts: [
         {
             id: 1, name: '2-1', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '</div>' +
@@ -61,7 +61,7 @@ Object.assign(OCA.Analytics.Panorama = {
         },
         {
             id: 2, name: '1-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>' +
                 '<div class="flex-item" style="height: 50%;"></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
@@ -70,7 +70,7 @@ Object.assign(OCA.Analytics.Panorama = {
         },
         {
             id: 3, name: '2-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '</div>' +
@@ -81,7 +81,7 @@ Object.assign(OCA.Analytics.Panorama = {
         },
         {
             id: 4, name: '4-2', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>' +
                 '<div class="flex-row" style="height: 50%;">' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
                 '<div class="flex-item"></div><div class="flex-item"></div>' +
@@ -93,14 +93,14 @@ Object.assign(OCA.Analytics.Panorama = {
         },
         {
             id: 5, name: '1-1', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>' +
                 '<div class="flex-item" style="height: 50%;"></div>' +
                 '<div class="flex-item" style="height: 50%;"></div>' +
                 '</div>'
         },
         {
             id: 6, name: '1', layout: '<div class="flex-container">' +
-                '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>' +
+                '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>' +
                 '<div class="flex-item"></div>' +
                 '</div>'
         },
@@ -603,6 +603,7 @@ Object.assign(OCA.Analytics.Panorama = {
         flexItem.appendChild(overlay);
 
         overlayText.addEventListener('click', function () {
+            const anchorRect = overlayText.getBoundingClientRect();
             // Remove the active state from any previous flex-item
             OCA.Analytics.Panorama.resetEditOverlays();
 
@@ -610,7 +611,7 @@ Object.assign(OCA.Analytics.Panorama = {
             overlay.classList.add('active');
             overlayText.innerText = t('analytics', 'choose the content');
 
-            OCA.Analytics.Panorama.showWidgetContentSelector(overlay.dataset.itemId); // Position the menu items in a circle
+            OCA.Analytics.Panorama.showWidgetContentSelector(overlay.dataset.itemId, anchorRect); // Position the menu items in a circle
         });
 
         if (isActive) {
@@ -721,8 +722,15 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     // show the flower style content selector menu when the edit prompt is clicked
-    showWidgetContentSelector: function (itemId) {
-        document.getElementById('editMenuContainer').style.display = 'block';
+    showWidgetContentSelector: function (itemId, anchorRect) {
+        const container = document.getElementById('editMenuContainer');
+        container.style.display = 'block';
+        const anchor = anchorRect || document.getElementById(itemId).getBoundingClientRect();
+        const margin = 8;
+        const left = anchor.left + anchor.width / 2 - container.offsetWidth / 2;
+        const top = anchor.top + anchor.height / 2 - container.offsetHeight / 2;
+        container.style.left = `${Math.max(margin, Math.min(left, window.innerWidth - container.offsetWidth - margin))}px`;
+        container.style.top = `${Math.max(margin, Math.min(top, window.innerHeight - container.offsetHeight - margin))}px`;
         const menu = document.getElementById('editMenu');
         //menu.style.display = 'block'; // Show the menu
         menu.dataset.itemId = itemId;
@@ -834,6 +842,8 @@ Object.assign(OCA.Analytics.Panorama = {
                 OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
 
                 document.getElementById('modalText').style.display = 'none';
+                OCA.Analytics.unsavedChanges = true;
+                OCA.Analytics.Filter.toggleSaveButtonDisplay();
             });
 
             // Image Picker

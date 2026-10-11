@@ -86,12 +86,12 @@ class OutputController extends Controller {
 	 * @throws Exception
 	 */
 	#[NoAdminRequired]
-	public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions, $tableoptions) {
+	public function read(int $reportId, $filteroptions, $dataoptions, $chartoptions, $tableoptions, ?string $chart = null, ?string $visualization = null) {
 		$reportMetadata = $this->ReportService->read($reportId);
 		if (empty($reportMetadata)) $reportMetadata = $this->ShareService->getSharedReport($reportId);
 
 		if (!empty($reportMetadata)) {
-			$reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
+			$reportMetadata = $this->evaluateCanFilter($reportMetadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions, $chart, $visualization);
 			if ($filteroptions === null) {
 				$reportMetadata['cacheKey'] = $this->getDatasourceCacheKey(
 					$reportMetadata,
@@ -396,7 +396,7 @@ class OutputController extends Controller {
 	#[NoAdminRequired]
 	#[UseSession]
 	#[PublicPage]
-	public function readPublic($token, $filteroptions, $dataoptions, $chartoptions, $tableoptions) {
+	public function readPublic($token, $filteroptions, $dataoptions, $chartoptions, $tableoptions, ?string $chart = null, ?string $visualization = null) {
 		$share = $this->ShareService->getReportByToken($token);
 		if (empty($share)) {
 			// Dataset not shared or wrong token
@@ -407,7 +407,7 @@ class OutputController extends Controller {
 					return new NotFoundResponse();
 				}
 			}
-			$share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions, $chartoptions, $tableoptions);
+			$share = $this->evaluateCanFilter($share, $filteroptions, $dataoptions, $chartoptions, $tableoptions, $chart, $visualization);
 			$result = $this->getData($share);
 			return new DataResponse($result, HTTP::STATUS_OK);
 		}
@@ -423,7 +423,7 @@ class OutputController extends Controller {
 	 * @param $tableoptions
 	 * @return mixed
 	 */
-	private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions) {
+	private function evaluateCanFilter($metadata, $filteroptions, $dataoptions, $chartoptions, $tableoptions, ?string $chart = null, ?string $visualization = null) {
 		// send current user filter options to the data request
 		// only if the report has update-permissions
 		// if nothing is changed by the user, the filter which is stored for the report, will be used
@@ -432,6 +432,12 @@ class OutputController extends Controller {
 			$metadata['dataoptions'] = $dataoptions;
 			$metadata['chartoptions'] = $chartoptions;
 			$metadata['tableoptions'] = $tableoptions;
+			if ($visualization !== null && in_array($visualization, ['chart', 'table', 'ct'], true)) {
+				$metadata['visualization'] = $visualization;
+			}
+			if ($chart !== null) {
+				$metadata['chart'] = $chart;
+			}
 		}
 		return $metadata;
 	}

@@ -260,12 +260,12 @@ class ReportService {
 	 * @return int
 	 * @throws Exception
 	 */
-	public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions) {
+	public function createCopy(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, ?string $chart = null) {
 
 		$template = $this->ReportMapper->readOwn($reportId);
 		$newId = $this->ReportMapper->create(// TRANSLATORS Noun
 			$template['name'] . ' - ' . $this->l10n->t('copy'), $template['subheader'], $template['parent'], $template['type'], $template['dataset'], $template['link'], $template['visualization'], $template['chart'], $template['dimension1'], $template['dimension2'], $template['value']);
-		$this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
+		$this->ReportMapper->updateOptions($newId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, $chart);
 
 		// Copy thresholds from original report to the new copy
 		$sourceThresholds = $this->ThresholdMapper->getThresholdsByReport($reportId);
@@ -670,8 +670,8 @@ class ReportService {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions) {
-		return $this->ReportMapper->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions);
+	public function updateOptions(int $reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, ?string $chart = null, ?string $visualization = null) {
+		return $this->ReportMapper->updateOptions($reportId, $chartoptions, $dataoptions, $filteroptions, $tableoptions, $chart, $visualization);
 	}
 
 	/**

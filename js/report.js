@@ -372,15 +372,12 @@ Object.assign(OCA.Analytics.Report, {
 
         let visualization = currentReport.options.visualization;
         if (visualization === 'table') {
-            document.getElementById('optionsMenuChartOptions').disabled = true;
             document.getElementById('optionsMenuTableOptions').disabled = false;
             document.getElementById('optionsMenuAnalysis').disabled = true;
             document.getElementById('optionsMenuDownload').disabled = true;
         }
 
-        if (visualization === 'chart') {
-            document.getElementById('optionsMenuTableOptions').disabled = true;
-        }
+
 
         let refresh = parseInt(currentReport.options.refresh);
         isNaN(refresh) ? refresh = 0 : refresh;
@@ -910,6 +907,14 @@ Object.assign(OCA.Analytics.Report.Backend = {
             }
             return acc;
         }, {});
+
+        if (OCA.Analytics.currentReportData.options?.chart !== undefined) {
+            ajaxData.chart = OCA.Analytics.currentReportData.options.chart;
+        }
+
+        if (OCA.Analytics.currentReportData.options?.visualization !== undefined) {
+            ajaxData.visualization = OCA.Analytics.currentReportData.options.visualization;
+        }
 
         const sharingToken = document.getElementById('sharingToken').value;
         const isPublic = sharingToken !== '';

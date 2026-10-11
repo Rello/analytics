@@ -868,7 +868,8 @@
          data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
         <h2><?php p($l->t('Layout')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Choose visible columns or arrange fields as a pivot table.')); ?></span>
-        <div class="analyticsModelSelector tableOptionsModeSelector">
+        <div class="analyticsModelSelector analyticsChartTypeSelector tableOptionsModeSelector">
+            <div class="analyticsModelOption"><input type="radio" name="tableMode" id="tableModeNone" value="none"><label class="analyticsModelCard" for="tableModeNone"><span class="analyticsModelCardTop"><img src="<?php echo image_path('analytics', 'chartNone.svg'); ?>" class="analyticsModelCardIcon" alt=""><span class="analyticsModelCardIndicator"></span></span><span class="analyticsModelCardTitle"><?php p($l->t('No')); ?></span></label></div>
             <div class="analyticsModelOption"><input type="radio" name="tableMode" id="tableModeList" value="table" checked>
                 <label class="analyticsModelCard" for="tableModeList"><span class="analyticsModelCardTop"><img src="<?php echo image_path('analytics', 'row.svg'); ?>" class="analyticsModelCardIcon" alt=""><span class="analyticsModelCardIndicator"></span></span><span class="analyticsModelCardTitle"><?php p($l->t('Table')); ?></span><span class="analyticsModelCardText"><?php p($l->t('Choose and order visible columns')); ?></span></label></div>
             <div class="analyticsModelOption"><input type="radio" name="tableMode" id="tableModePivot" value="pivot">
@@ -1164,6 +1165,103 @@
 </template>
 
 <template id="templateChartOptions">
+    <div id="chartTypeSection" class="analyticsDialogSection"
+         data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
+        <h2><?php p($l->t('Chart type')); ?></h2>
+        <div class="analyticsModelSelector analyticsChartTypeSelector" role="radiogroup" aria-label="<?php p($l->t('Chart type')); ?>">
+            <div class="analyticsModelOption"><input type="radio" name="analyticsChartType" id="chartType_none" value="none"><label class="analyticsModelCard" for="chartType_none"><span class="analyticsModelCardTop"><img src="<?php echo image_path('analytics', 'chartNone.svg'); ?>" class="analyticsModelCardIcon" alt=""><span class="analyticsModelCardIndicator"></span></span><span class="analyticsModelCardTitle"><?php p($l->t('No')); ?></span></label></div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_line" name="analyticsChartType" value="line">
+                <label for="chartType_line" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartLine.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Line')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_datetime" name="analyticsChartType" value="datetime">
+                <label for="chartType_datetime" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartTime.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Timeline (date in column 2)')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_column" name="analyticsChartType" value="column">
+                <label for="chartType_column" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartBar.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Bar')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_columnSt" name="analyticsChartType" value="columnSt">
+                <label for="chartType_columnSt" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartBar.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Bar - Stacked')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_columnSt100" name="analyticsChartType" value="columnSt100">
+                <label for="chartType_columnSt100" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartBar.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Bar - Stacked 100%%')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_area" name="analyticsChartType" value="area">
+                <label for="chartType_area" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartArea.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Area')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_areaSt100" name="analyticsChartType" value="areaSt100">
+                <label for="chartType_areaSt100" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartArea.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Area - 100%%')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_doughnut" name="analyticsChartType" value="doughnut">
+                <label for="chartType_doughnut" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartDonut.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Doughnut')); ?></span>
+                </label>
+            </div>
+            <div class="analyticsModelOption">
+                <input type="radio" id="chartType_funnel" name="analyticsChartType" value="funnel">
+                <label for="chartType_funnel" class="analyticsModelCard">
+                    <span class="analyticsModelCardTop">
+                        <img src="<?php echo image_path('analytics', 'chartFunnel.svg'); ?>" class="analyticsModelCardIcon" alt="">
+                        <span class="analyticsModelCardIndicator"></span>
+                    </span>
+                    <span class="analyticsModelCardTitle"><?php p($l->t('Funnel')); ?></span>
+                </label>
+            </div>
+        </div>
+    </div>
     <div id="chartColumnMappingSection" class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'chartBar.svg'); ?>">
         <h2><?php p($l->t('Data & series')); ?></h2>
@@ -1191,10 +1289,15 @@
                 <select id="chartColumnSeriesAdd" class="optionsInput"></select>
                 <span class="chartColumnMappingHint"><?php p($l->t('Optional. One series for each distinct group.')); ?></span>
             </div>
-            <div id="chartSegmentColors" class="chartColumnMappingRole" hidden></div>
             <p id="chartColumnMappingError" class="chartColumnMappingError" role="alert" hidden></p>
         </div>
         <p id="chartColumnMappingSummary" class="chartColumnMappingSummary" aria-live="polite"></p>
+    </div>
+
+    <div id="chartColorsSection" class="analyticsDialogSection"
+         data-section-icon="<?php echo image_path('analytics', 'label.svg'); ?>">
+        <h2><?php p($l->t('Colors')); ?></h2>
+        <div id="chartSegmentColors" class="chartColumnMappingRole"></div>
     </div>
 
     <div class="analyticsDialogSection"

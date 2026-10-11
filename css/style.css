@@ -89,13 +89,13 @@ button, .button {
     border-radius: var(--border-radius-element, var(--border-radius-pill));
 }
 
+#app-navigation .app-navigation-entry.active {
+    background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
+}
+
 #app-navigation .app-navigation-entry:hover,
 #app-navigation .app-navigation-entry:focus-within {
     background-color: color-mix(in srgb, var(--color-primary-element) 8%, transparent);
-}
-
-#app-navigation .app-navigation-entry.active {
-    background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
 }
 
 #app-navigation .app-navigation-entry.active:not(:has(a[data-editing="true"]))::before {
@@ -217,6 +217,14 @@ button, .button {
     pointer-events: none;
 }
 
+#app-navigation .collapsible[data-section-id] > .app-navigation-entry > a::after {
+    opacity: 0;
+}
+
+#app-navigation .collapsible[data-section-id] > .app-navigation-entry:hover > a::after {
+    opacity: 1;
+}
+
 #app-navigation .collapsible.open > .app-navigation-entry > a::after {
     transform: translateY(-30%) rotate(225deg);
 }
@@ -328,6 +336,21 @@ button, .button {
     background-color: var(--color-background-hover) !important;
 }
 
+#app-content:has(#analytics-content-report:not([hidden])) {
+    background-color: var(--color-main-background) !important;
+}
+
+#analytics-content-report #tableContainer {
+    --analytics-table-stripe: var(--color-main-background);
+}
+
+#analytics-content-report #tableContainer,
+#analytics-content-report #tableContainer > thead,
+#analytics-content-report #tableContainer > tbody > tr,
+#analytics-content-report #tableContainer > tfoot {
+    background-color: var(--color-background-hover);
+}
+
 #mobileNavigationToggle {
     display: none;
     margin: 0;
@@ -417,32 +440,20 @@ button, .button {
     width: 32px;
 }
 
-.reportHeader {
-    font-weight: bold;
-    font-size: 22px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    color: white;
-    padding: 8px 20px;
-    width: 600px;
-    background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%);
-    margin: 10px 0 0 30px;
-    display: block;
-}
-
 /* The underline meets the fine-line Analytics mark at the end of the header. */
 .reportHeading {
     position: relative;
     box-sizing: border-box;
-    min-height: 90px;
-    margin: 10px 30px 0;
-    padding: 12px 120px 8px 20px;
+    --report-brand-height: 36px;
+    --report-brand-width: 51.429px;
+    margin: 0 30px;
+    padding: 42px 0 0 20px;
 }
 
 .reportHeading::after {
     content: '';
     position: absolute;
-    top: 12px;
+    top: 30px;
     bottom: 0;
     left: 0;
     box-sizing: border-box;
@@ -457,7 +468,7 @@ button, .button {
     position: absolute;
     bottom: 0;
     left: 5px;
-    width: calc(100% - 105px);
+    width: calc(100% - var(--report-brand-width) - 5px);
     height: 1.25px;
     background: var(--color-analytics-primary);
 }
@@ -466,10 +477,8 @@ button, .button {
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 100px;
-    height: 70px;
-    border-radius: 100% 5px 5px 0;
-    background: color-mix(in srgb, var(--color-analytics-primary) 7%, transparent);
+    width: var(--report-brand-width);
+    height: var(--report-brand-height);
     pointer-events: none;
 }
 
@@ -478,12 +487,34 @@ button, .button {
     position: absolute;
     inset: 0;
     background: var(--color-analytics-primary);
-    mask: url('../img/report-header-line.svg?v=6') center / contain no-repeat;
-    -webkit-mask: url('../img/report-header-line.svg?v=6') center / contain no-repeat;
+    mask: url('../img/report-header-line.svg?v=7') center / contain no-repeat;
+    -webkit-mask: url('../img/report-header-line.svg?v=7') center / contain no-repeat;
 }
 
-#analytics-content-report .reportHeader,
-#analytics-content-report .reportSubHeader {
+.reportHeadingPrimary {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+}
+
+.reportHeadingSecondary {
+    position: relative;
+    margin-top: 10px;
+    padding-right: calc(var(--report-brand-width) + 20px);
+}
+
+.reportHeadingSecondary:has(.reportSubHeader[hidden]) {
+    display: none;
+}
+
+.reportHeading:has(.reportSubHeader[hidden])::before {
+    width: calc(100% - 5px);
+}
+
+.reportHeader,
+.reportSubHeader,
+.panoramaSubHeader {
     box-sizing: border-box;
     width: auto;
     margin: 0;
@@ -494,46 +525,30 @@ button, .button {
     overflow-wrap: anywhere;
 }
 
-#analytics-content-report .reportHeader {
+.reportHeader {
+    display: block;
+    font-weight: bold;
     color: color-mix(in srgb, var(--color-analytics-primary) 50%, var(--color-main-text));
+    flex: 1 1 220px;
+    min-width: 0;
     font-size: 24px;
     line-height: 1.3;
 }
 
-#analytics-content-report .reportSubHeader {
-    margin-top: 10px;
+.reportSubHeader,
+.panoramaSubHeader {
+    display: block;
+    padding-bottom: 12px;
     color: var(--color-main-text);
     font-size: 16px;
     line-height: 1.5;
 }
 
-@media (max-width: 768px) {
-    .reportHeading {
-        padding-right: 0;
-        padding-bottom: 78px;
-    }
 
-    .reportHeadingBrand {
-        width: 100px;
-        height: 70px;
-    }
-
-    .reportHeading::before {
-        width: calc(100% - 105px);
-        height: 1.25px;
-    }
-}
-
-.reportHeader[contenteditable="true"] {
-    border: 1px dashed blue;
-    font-weight: bold;
-    font-size: 22px;
-    border-radius: 5px 5px 0 0;
-    padding: 8px 20px;
-    width: 600px;
-    background: white;
-    display: block;
-    margin: 10px 0 0 30px;
+.reportHeader[contenteditable="true"],
+.panoramaSubHeader[contenteditable="true"] {
+    outline: 1px dashed var(--color-analytics-primary);
+    outline-offset: 3px;
 }
 
 #menuBar {
@@ -544,23 +559,41 @@ button, .button {
     right: 20px;
 }
 
-/* Match the report sections' 30px inset on both toolbar edges. */
-#app-content:has(#analytics-content-report:not([hidden])) #menuBar {
-    box-sizing: border-box;
-    height: 54px;
-    margin: 0 30px;
-    padding-top: 30px;
+/* Reuse the shared controls alongside the primary report title. */
+.reportHeadingPrimary #menuBar {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 24px;
+    margin: 3.6px 0 0 auto;
+    padding: 0;
     top: 0;
     right: 0;
 }
 
-#app-content:has(#analytics-content-report:not([hidden])) #optionsMenu {
-    top: 64px;
+.reportHeadingPrimary #menuBar:not([hidden]) {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 100%;
+    row-gap: 8px;
 }
 
-#app-content:has(#analytics-content-report:not([hidden])) #mobileNavigationToggle {
-    top: 30px;
-    left: -10px;
+.reportHeadingPrimary #menuBar > .analytics-options {
+    flex-shrink: 0;
+}
+
+.reportHeadingPrimary #filterVisualisation {
+    max-width: 100%;
+}
+
+.reportHeadingPrimary #optionsMenu {
+    top: 34px;
+    right: 0;
+}
+
+.reportHeadingPrimary #mobileNavigationToggle {
+    position: static;
 }
 
 #optionsMenu {
@@ -656,35 +689,8 @@ button, .button {
     width: 100%;
 }
 
-.reportSubHeader,
-.panoramaSubHeader {
-    font-size: 16px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    color: #FFFFFF;
-    padding: 0 0 8px 20px;
-    width: 600px;
-    background-size: 600px 100%;
-    background: linear-gradient(to right, #1A366C 20%, var(--color-background-hover) 98%) no-repeat;
-    margin-left: 30px;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.panoramaSubHeader[contenteditable="true"] {
-    border: 1px dashed blue;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 0 0 5px 5px;
-    padding: 8px 20px;
-    width: 600px;
-    background: white;
-    display: block;
-    margin: 0 0 10px 30px;
-}
-
 #reportPlaceholder {
-    height: 20px;
+    height: 40px;
 }
 
 #filterContainer {
@@ -1434,8 +1440,8 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .analyticsDialogClose {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 24px;
     padding: 25px;
     background: var(--icon-close-dark) no-repeat center;
     opacity: .5;
@@ -1445,6 +1451,13 @@ div.dt-container .dt-paging .dt-paging-button {
     margin: 0;
     width: 50px;
     height: 50px;
+}
+
+button.analyticsDialogClose,
+button.analyticsDialogClose:hover,
+button.analyticsDialogClose:focus,
+button.analyticsDialogClose:active {
+    background-color: transparent !important;
 }
 
 .analyticsDialog button:focus-visible,
@@ -1640,8 +1653,20 @@ button.analytics-options:focus-visible {
     scroll-padding-top: 24px;
 }
 
-.analyticsDialogSection + .analyticsDialogSection {
-    margin-top: 40px;
+/* Shared section spacing and separators for enhanced dialog panels. */
+.analyticsEnhancedDialogPanel > .analyticsDialogSection + .analyticsDialogSection {
+    position: relative;
+    margin-top: 60px;
+}
+
+.analyticsEnhancedDialogPanel > .analyticsDialogSection + .analyticsDialogSection::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-main-text) 8%, transparent);
 }
 
 .analyticsDialogSection {
@@ -1849,18 +1874,23 @@ button.analytics-options:focus-visible {
     align-items: center;
     justify-content: center;
     border: 1px solid var(--color-border);
-    border-radius: 999px;
+    border-radius: var(--border-radius-element);
+    overflow: hidden;
     background: var(--color-main-background);
     box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.02);
     cursor: pointer;
 }
 
-.chartOptionsColorInput {
-    width: 30px;
-    height: 30px;
+.analyticsDialog input.chartOptionsColorInput[type="color"] {
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    min-height: 0;
+    margin: 0;
     padding: 0;
     border: 0;
-    border-radius: 50%;
+    border-radius: var(--border-radius-element);
     background: transparent;
     cursor: pointer;
     appearance: none;
@@ -1873,12 +1903,12 @@ button.analytics-options:focus-visible {
 
 .chartOptionsColorInput::-webkit-color-swatch {
     border: 0;
-    border-radius: 50%;
+    border-radius: 0;
 }
 
 .chartOptionsColorInput::-moz-color-swatch {
     border: 0;
-    border-radius: 50%;
+    border-radius: 0;
 }
 
 @media (max-width: 900px) {
@@ -2591,6 +2621,24 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: flex !important;
 }
 
+#content.analyticsFullscreen #analytics-content-report {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+
+#content.analyticsFullscreen #analytics-content-report > * {
+    flex-shrink: 0;
+}
+
+#content.analyticsFullscreen #analytics-content-report > #byAnalytics {
+    margin-top: auto;
+    bottom: auto;
+}
+
 .kpiWidget {
     display: flex;
     justify-content: center;
@@ -2634,9 +2682,65 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 /* === Panorama === */
 
+/* Use the shared report header while retaining the panorama's grey page. */
+#analytics-content-panorama:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+}
+
+#analytics-content-panorama > .reportHeading {
+    flex-shrink: 0;
+}
+
+#analytics-content-panorama > .pages {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+}
+
+#analytics-content-panorama .reportHeading {
+    background-color: var(--color-main-background);
+}
+
+.panoramaTitleHeading {
+    margin-top: 30px;
+    padding-top: 12px;
+    border-top-right-radius: var(--analytics-surface-radius);
+}
+
+.panoramaTitleHeading::before {
+    display: none;
+}
+
+.panoramaTitleHeading::after {
+    top: 0;
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+}
+
+.panoramaPageHeading {
+    margin: 0 15px 25px;
+    border-bottom-right-radius: var(--analytics-surface-radius);
+    padding-top: 10px;
+    flex-shrink: 0;
+}
+
+.panoramaPageHeading::after {
+    top: 0;
+    border-top-left-radius: 0;
+}
+
+.panoramaPageHeading .reportHeadingSecondary {
+    margin-top: 0;
+}
+
+.panoramaFilterActions:not(:has(button:not([hidden]))) {
+    display: none;
+}
+
+
 .filterReportNames { max-width: 220px; white-space: normal; overflow-wrap: anywhere; font-size: 12px; color: var(--color-text-maxcontrast); }
-#panoramaHeaderRow { display: flex; align-items: center; }
-.panoramaFilterActions { display: flex; gap: 8px; margin-left: auto; margin-right: 20px; }
+.panoramaFilterActions { display: flex; gap: 8px; margin-left: auto; }
 .panoramaFilters { width: min(720px, 78vw); max-height: 68vh; overflow-y: auto; padding-right: 4px; }
 .panoramaFilters fieldset { border: 1px solid var(--color-border); border-radius: var(--border-radius-large); padding: 0; margin-bottom: 8px; overflow: hidden; }
 .panoramaFilterCardHeader { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 4px 10px; border-bottom: 1px solid var(--color-border); background-color: var(--color-background-hover); }
@@ -2690,8 +2794,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     position: fixed;
     width: 250px;
     height: 250px;
-    top: 40%;
-    left: 50%;
     z-index: 1000;
 }
 
@@ -2699,6 +2801,24 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     position: relative;
     width: 100%;
     height: 100%;
+    animation: panorama-menu-open 160ms ease-out;
+}
+
+@keyframes panorama-menu-open {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .editMenu {
+        animation: none;
+    }
 }
 
 .menu-item {
@@ -2891,10 +3011,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     color: #222222;
 }
 
-.panoramaSubHeader {
-    margin-left: 15px !important;
-}
-
 .pages {
     display: flex;
     width: 200%;
@@ -2992,36 +3108,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
         min-height: 100%;
     }
 
-    #panoramaHeaderRow {
-        flex-wrap: wrap;
-        width: 100%;
-    }
-
-    #analytics-content-panorama .reportHeader,
-    #analytics-content-panorama .panoramaSubHeader {
-        box-sizing: border-box;
-        width: calc(100% - 60px);
-        max-width: calc(100% - 60px);
-        background-size: 100% 100%;
-    }
-
-    #analytics-content-panorama .reportHeader {
-        flex: 1 1 calc(100% - 60px);
-        font-size: 16px;
-        font-weight: normal;
-        margin: 25px 30px 0;
-    }
-
-    #panoramaHeaderRow .panoramaFilterActions {
-        flex: 1 0 100%;
-        justify-content: flex-end;
-        margin: 0 30px;
-    }
-
-    #panoramaHeaderRow .panoramaFilterActions:has(button:not([hidden])) {
-        margin-top: 8px;
-    }
-
     #analytics-content-panorama .pages {
         align-items: flex-start;
         height: auto;
@@ -3037,12 +3123,6 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     #analytics-content-panorama .panoramaSubHeaderRow {
         flex: 0 0 auto;
         width: 100%;
-    }
-
-    #analytics-content-panorama .panoramaSubHeader {
-        width: calc(100% - 30px);
-        max-width: calc(100% - 30px);
-        margin: 0 15px 10px !important;
     }
 
     #analytics-content-panorama .flex-row {
@@ -3620,4 +3700,43 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
         max-height: none;
         margin: 8px;
     }
+}
+
+/* Compact variant of the shared model cards for report chart types. */
+.analyticsChartTypeSelector {
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 10px;
+}
+
+.analyticsChartTypeSelector .analyticsModelCard {
+    min-height: 58px;
+    padding: 10px;
+    gap: 6px;
+    box-shadow: none;
+}
+
+.analyticsChartTypeSelector .analyticsModelCardTitle {
+    font-size: 14px;
+}
+
+.analyticsModelOption input[type="radio"]:focus-visible + .analyticsModelCard {
+    outline: 2px solid var(--color-primary-element);
+    outline-offset: 2px;
+}
+
+.analyticsChartTypeSelector input[type="radio"]:checked + .analyticsModelCard,
+.analyticsChartTypeSelector input[type="radio"]:checked + .analyticsModelCard .analyticsModelCardIndicator {
+    border-color: var(--color-analytics-primary);
+}
+
+.analyticsChartTypeSelector input[type="radio"]:checked + .analyticsModelCard .analyticsModelCardIndicator::after {
+    background: var(--color-analytics-primary);
+}
+
+.analyticsOptionsDisabled {
+    opacity: 0.45;
+}
+
+.tableOptionsModeSelector .analyticsModelCardText {
+    display: none;
 }

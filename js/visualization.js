@@ -3056,6 +3056,14 @@ OCA.Analytics.Visualization = {
 
         //}
         const menuBar = document.getElementById('menuBar');
+        const reportHeadingPrimary = document.querySelector('#analytics-content-' + type + ' .reportHeadingPrimary');
+        if (menuBar) {
+            if (reportHeadingPrimary) {
+                reportHeadingPrimary.appendChild(menuBar);
+            } else {
+                document.getElementById('app-content').prepend(menuBar);
+            }
+        }
         const isOverview = type === 'intro' || type === 'warning' || type === 'loading';
         const hasMobileNavigation = document.getElementById('mobileNavigationToggle') !== null;
 

@@ -28,6 +28,7 @@ const reportName = buildUniqueName('Playwright Regression', process.env.REPORT_N
 
 async function openChartOptions(page, label) {
   await openOptionsMenuItem(page, 'optionsMenuChartOptions', label);
+  await page.locator('.analyticsEnhancedDialogNavButton').filter({hasText: 'Advanced'}).click();
   await page.locator('#optionsYAxis0').waitFor({ state: 'visible', timeout: 15000 });
 }
 
@@ -59,6 +60,62 @@ async function setAnalyticsModel(page, selector) {
     const seedState = await ensureStoredReportWithDefaultData(page, reportName, 'Chart options regression');
     steps.push(`report ${seedState}`);
     const initialReportChart = await page.evaluate(() => OCA.Analytics.currentReportData.options.chart || '');
+
+    steps.push('chart type draft, cancel, and persistence through report Save');
+    await openOptionsMenuItem(page, 'optionsMenuChartOptions', 'chart type');
+    const chartTypeSection = page.locator('#chartTypeSection');
+    await chartTypeSection.waitFor({state: 'visible'});
+    if (await page.locator('input[name="analyticsChartType"]').count() !== 10) {
+      throw new Error('Expected nine chart types and No');
+    }
+    await page.locator('label[for="chartType_area"]').click();
+    await capture('chart_type_selector');
+    await page.locator('#analyticsDialogBtnCancel').click();
+    if (await page.evaluate(() => OCA.Analytics.currentReportData.options.chart || '') !== initialReportChart) {
+      throw new Error('Cancel must preserve the report chart type');
+    }
+    await openOptionsMenuItem(page, 'optionsMenuChartOptions', 'chart type Apply');
+    await page.locator('label[for="chartType_area"]').click();
+    await page.locator('#analyticsDialogBtnGo').click();
+    await waitForIdle(page, 15000);
+    await saveAndReloadReport(page, reportName);
+    if (await page.evaluate(() => OCA.Analytics.currentReportData.options.chart) !== 'area') {
+      throw new Error('Chart type must survive Save and reload');
+    }
+    await openReportBasicSettings(page, reportName);
+    if (await page.locator('#sidebarReportChart').inputValue() !== 'area') {
+      throw new Error('Dialog and sidebar must use the same chart field');
+    }
+    await openExistingReport(page, reportName);
+    await openOptionsMenuItem(page, 'optionsMenuChartOptions', 'restore chart type');
+    await page.locator('label[for="chartType_' + (initialReportChart || 'column') + '"]').click();
+    await page.locator('#analyticsDialogBtnGo').click();
+    await waitForIdle(page, 15000);
+    await saveAndReloadReport(page, reportName);
+
+    steps.push('chart and table visibility, disabled controls, and persistence');
+    for (const [menu, card, visualization, disabledSelector] of [
+      ['optionsMenuChartOptions', 'chartType_none', 'table', '#chartColumnMappingSection'],
+      ['optionsMenuChartOptions', 'chartType_column', 'ct', null],
+      ['optionsMenuTableOptions', 'tableModeNone', 'chart', '.tableOptionsLayout'],
+      ['optionsMenuTableOptions', 'tableModeList', 'ct', null],
+    ]) {
+      await openOptionsMenuItem(page, menu, 'visibility');
+      await page.locator('label[for="' + card + '"]').click();
+      if (disabledSelector && !await page.locator(disabledSelector).evaluate(node => node.inert)) {
+        throw new Error('Disabled visualization controls must be inert');
+      }
+      await capture(card);
+      await page.locator('#analyticsDialogBtnGo').click();
+      await waitForIdle(page, 15000);
+      await saveAndReloadReport(page, reportName);
+      if (await page.evaluate(() => OCA.Analytics.currentReportData.options.visualization) !== visualization) {
+        throw new Error('Visualization must survive Save and reload: ' + visualization);
+      }
+      for (const id of ['optionsMenuChartOptions', 'optionsMenuTableOptions']) {
+        if (await page.locator('#' + id).isDisabled()) throw new Error('Both option menus must remain enabled');
+      }
+    }
 
     steps.push('ensure a fifth chart series');
     const initialSeriesCount = await page.evaluate(() => OCA.Analytics.chartObject.data.datasets.length);
