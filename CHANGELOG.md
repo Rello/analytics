@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.1 - 2026-10-12
+### Fixed
+- Restore existing external reports after upgrading by clearing obsolete internal dataset references.
+
 ## 7.0.0 - 2026-10-11
 ### Added
 - Smart Picker can show live report charts and tables.
