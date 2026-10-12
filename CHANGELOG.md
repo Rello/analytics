@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.2 - 2026-10-12
+### Fixed
+- Restore panorama tiles for saved layouts using the original page header markup.
+
 ## 7.0.1 - 2026-10-12
 ### Fixed
 - Restore existing external reports after upgrading by clearing obsolete internal dataset references.

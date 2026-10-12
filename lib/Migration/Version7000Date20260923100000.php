@@ -25,7 +25,7 @@ class Version7000Date20260923100000 extends SimpleMigrationStep {
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('analytics_whats_new')->values([
-			'version' => $query->createNamedParameter('7.0.1'),
+			'version' => $query->createNamedParameter('7.0.2'),
 			'data' => $query->createNamedParameter('{"changelogURL":"https:\/\/github.com\/rello\/analytics\/blob\/master\/CHANGELOG.md","whatsNew":{
 "en":{"regular":["Smart Picker can show live report charts and tables.","New interactive chart and table configuration with live-preview.","Spreadsheet: Select a worksheet from a dropdown.","UI and UX improvements"],"admin":["New Features apply to users"]},
 "de":{"regular":["Der Smart Picker kann Live-Diagramme und -Tabellen aus Berichten anzeigen.","Neue interaktive Diagramm- und Tabellenkonfiguration mit Live-Vorschau.","Tabellenkalkulation: Ein Arbeitsblatt aus einem Dropdown auswählen.","Verbesserungen an Benutzeroberfläche und Benutzererlebnis"],"admin":["Nur User Features"]}

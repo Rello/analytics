@@ -97,3 +97,19 @@ Notes:
 - Default container image: `fsfe/reuse`
 - Override image if needed:
   - `REUSE_IMAGE=fsfe/reuse:latest ./tests/run-reuse.sh`
+
+## Legacy Panorama Layout Compatibility
+
+This scenario creates a temporary panorama with the original saved HTML layout,
+checks that all four reports render, saves it as `layoutId: 3`, and reloads it.
+It deletes the temporary panorama afterwards and does not modify its referenced reports.
+The local instance must run the current app version and have internal reports owned by `admin`.
+
+```sh
+mkdir -p tests/ui-artifacts/legacy-panorama
+docker exec -i -u www-data nc35-app-1 php \
+  < tests/playwright/fixtures/create_legacy_panorama.php \
+  > tests/ui-artifacts/legacy-panorama/fixture.json
+ARTIFACT_DIR=/work/tests/ui-artifacts/legacy-panorama \
+  ./tests/run-playwright.sh tests/playwright/panorama_legacy_layout.js
+```

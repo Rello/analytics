@@ -109,7 +109,13 @@ Object.assign(OCA.Analytics.Panorama = {
 	normalizeLayoutId: function (page) {
 		let layoutId = Number.parseInt(page.layoutId, 10);
 		if (!Number.isInteger(layoutId) || layoutId < 1 || layoutId > 6) {
-			const legacyLayout = OCA.Analytics.Panorama.layouts.find(layout => layout.layout === page.layout);
+			// Older saved pages use the original header markup. Match those known
+			// templates too, but always render the current application-owned layout.
+			const currentHeader = '<div class="panoramaSubHeaderRow reportHeading panoramaPageHeading"><div class="reportHeadingSecondary"><div class="panoramaSubHeader editable"></div><span class="reportHeadingBrand" aria-hidden="true"></span></div></div>';
+			const legacyHeader = '<div class="panoramaSubHeaderRow"><div class="panoramaSubHeader editable"></div></div>';
+			const legacyLayout = OCA.Analytics.Panorama.layouts.find(layout =>
+				layout.layout === page.layout
+				|| layout.layout.replace(currentHeader, legacyHeader) === page.layout);
 			layoutId = legacyLayout ? legacyLayout.id : 0;
 		}
 		page.layoutId = layoutId;
