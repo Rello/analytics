@@ -154,6 +154,7 @@ OC.L10N.register(
     "Number" : "Uṭṭun",
     "Appearance" : "Udem",
     "Compact" : "Compact",
+    "Colors" : "Initen",
     "Absolute value" : "Azal aqbur",
     "Advanced" : "Talqayt",
     "Previous" : "Uzwir",

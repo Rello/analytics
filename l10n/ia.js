@@ -41,6 +41,7 @@ OC.L10N.register(
     "Name" : "Nomine",
     "Export" : "Exportar",
     "Update" : "Actualisation",
+    "Sort" : "Ordinar",
     "Description" : "Description",
     "Import" : "Importar",
     "Title" : "Titulo",

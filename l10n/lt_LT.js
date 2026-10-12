@@ -482,6 +482,7 @@ OC.L10N.register(
     "Compact visualization" : "Kompaktiška vizualizacija",
     "Live preview" : "Tiesioginė peržiūra",
     "Swap" : "Swap",
+    "Colors" : "Spalvos",
     "Choose how doughnut chart labels are displayed" : "Pasirinkite, kaip rodomos žiedinės diagramos etiketės",
     "Doughnut label style" : "Žiedinės etiketės stilius",
     "Absolute value" : "Absoliuti vertė",

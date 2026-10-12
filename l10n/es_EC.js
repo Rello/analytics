@@ -297,6 +297,7 @@ OC.L10N.register(
     "3" : "3",
     "4" : "4",
     "Appearance" : "Apariencia",
+    "Colors" : "Colores",
     "Advanced" : "Avanzado",
     "Vertical axis" : "Eje vertical",
     "Previous" : "Previo",

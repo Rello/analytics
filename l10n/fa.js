@@ -454,6 +454,7 @@ OC.L10N.register(
     "Show totals" : "نمایش مجموع‌ها",
     "Compact visualization" : "نمایش فشرده",
     "Live preview" : "پیش‌نمایش زنده",
+    "Colors" : "رنگ‌ها",
     "Choose how doughnut chart labels are displayed" : "نحوه نمایش برچسب‌های نمودار دونات را انتخاب کنید",
     "Doughnut label style" : "سبک برچسب دونات",
     "Absolute value" : "مقدار مطلق",

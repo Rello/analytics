@@ -490,6 +490,7 @@ OC.L10N.register(
     "Compact visualization" : "Kompakt visualisering",
     "Live preview" : "Liveförhandsgranskning",
     "Swap" : "Växlingsutrymme",
+    "Colors" : "Färger",
     "Choose how doughnut chart labels are displayed" : "Välj hur etiketter i ringdiagram visas",
     "Doughnut label style" : "Etikettformat för ringdiagram",
     "Absolute value" : "Absolut värde",

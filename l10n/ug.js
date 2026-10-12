@@ -389,6 +389,7 @@ OC.L10N.register(
     "Show totals" : "ئومۇمىي ساننى كۆرسەت",
     "Compact visualization" : "يىغىنچاق كۆرسىتىش",
     "Live preview" : "نەقمەيدان سىناق",
+    "Colors" : "رەڭلەر",
     "Advanced" : "ئىلغار",
     "Select how the raw data is structured" : "خام سانلىق مەلۇماتنىڭ قانداق قۇرۇلمىسىنى تاللاڭ",
     "In rows" : "قۇرلاردا",

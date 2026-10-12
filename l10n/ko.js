@@ -58,6 +58,7 @@ OC.L10N.register(
     "list of values" : "값 목록",
     "Columns" : "행",
     "Minimum" : "최소",
+    "Maximum" : "최대",
     "Count" : "총수",
     "None" : "없음",
     "Ascending" : "오름차순",

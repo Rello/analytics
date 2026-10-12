@@ -483,6 +483,7 @@ OC.L10N.register(
     "Show totals" : "Εμφάνιση συνόλων",
     "Compact visualization" : "Συμπαγής οπτικοποίηση",
     "Live preview" : "Ζωντανή προεπισκόπηση",
+    "Colors" : "Χρώματα",
     "Choose how doughnut chart labels are displayed" : "Επιλέξτε πώς εμφανίζονται οι ετικέτες του γραφήματος ντόνατ",
     "Doughnut label style" : "Στυλ ετικέτας ντόνατ",
     "Absolute value" : "Απόλυτη τιμή",

@@ -432,6 +432,7 @@ OC.L10N.register(
     "Compact visualization" : "Kompaktní vizualizace",
     "Live preview" : "Živý náhled",
     "Swap" : "Odkládací prostor (swap)",
+    "Colors" : "Barvy",
     "Choose how doughnut chart labels are displayed" : "Zvolte jak budou zobrazovány popisky koblihového grafu",
     "Doughnut label style" : "Styl koblihového štítku",
     "Absolute value" : "Absolutní hodnota",

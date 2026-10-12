@@ -441,6 +441,7 @@ OC.L10N.register(
     "Show totals" : "Mostrar totais",
     "Compact visualization" : "Visualização compacta",
     "Live preview" : "Visualização ao vivo",
+    "Colors" : "Cores",
     "Choose how doughnut chart labels are displayed" : "Escolha como as legendas do gráfico em donut serão exibidas",
     "Doughnut label style" : "Estilo de rótulo de donut",
     "Absolute value" : "Valor absoluto",

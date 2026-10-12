@@ -82,6 +82,7 @@ OC.L10N.register(
     "Export" : "ייצוא",
     "Update" : "עדכון",
     "Mode" : "מצב",
+    "Sort" : "מיון",
     "Description" : "תיאור",
     "Import" : "ייבוא",
     "Setting" : "הגדרות",

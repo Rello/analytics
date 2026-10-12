@@ -403,6 +403,7 @@ OC.L10N.register(
     "Show totals" : "Amosar os totais",
     "Compact visualization" : "Vista compacta",
     "Live preview" : "Vista previa en directo",
+    "Colors" : "Cores",
     "Choose how doughnut chart labels are displayed" : "Escolla como se amosan as etiquetas do gráfico de rosca.",
     "Doughnut label style" : "Estilo de etiqueta de rosca",
     "Absolute value" : "Valor absoluto",

@@ -496,6 +496,7 @@ OC.L10N.register(
     "Compact" : "Ringkas",
     "Show totals" : "Tampilkan total",
     "Compact visualization" : "Visualisasi ringkas",
+    "Colors" : "Warna",
     "Choose how doughnut chart labels are displayed" : "Pilih cara label diagram donat ditampilkan",
     "Doughnut label style" : "Gaya label diagram donat",
     "Absolute value" : "Nilai absolut",

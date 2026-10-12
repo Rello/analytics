@@ -95,6 +95,7 @@ OC.L10N.register(
     "Update" : "Ažuriraj",
     "Mode" : "Način rada",
     "Option" : "Opcija",
+    "Sort" : "Razvrstaj",
     "Nextcloud Assistant" : "Nextcloud Asistent",
     "Description" : "Opis",
     "Import" : "Uvezi",

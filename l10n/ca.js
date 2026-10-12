@@ -365,6 +365,7 @@ OC.L10N.register(
     "100" : "100",
     "Show totals" : "Mostra els totals",
     "Compact visualization" : "Visualització Compactada",
+    "Colors" : "Colors",
     "Advanced" : "Avançat",
     "Select how the raw data is structured" : "Seleccioneu com s'estructuren les dades en brut",
     "In rows" : "En files",
