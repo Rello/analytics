@@ -23,6 +23,12 @@ const config = buildScenarioConfig('10');
   try {
     await ensureAnalyticsLoaded(page, config);
     visited.push(`loaded:${page.url()}`);
+    if (await page.locator('#navigationDatasets li.collapsible.open').count()) {
+      throw new Error('Expected Overview to start with all navigation groups collapsed');
+    }
+    await page.evaluate(() => {
+      document.querySelectorAll('#navigationDatasets li.collapsible').forEach((element) => element.classList.add('open'));
+    });
 
     await page.setViewportSize({ width: 390, height: 844 });
     const mobileNavigationToggle = page.locator('#mobileNavigationToggle');
@@ -48,6 +54,9 @@ const config = buildScenarioConfig('10');
       throw new Error('Expected the mobile navigation toggle to report an open drawer');
     }
     await page.locator('#overviewButton').click();
+    if (await page.locator('#navigationDatasets li.collapsible.open').count()) {
+      throw new Error('Expected selecting Overview to collapse all navigation groups');
+    }
     await page.waitForFunction(() => !document.getElementById('app-navigation')?.classList.contains('analytics-mobile-navigation-open'));
     await mobileNavigationToggle.waitFor({ state: 'visible', timeout: 10000 });
     if (!(await page.locator('#menuBar').evaluate((element) => element.classList.contains('analytics-mobile-navigation-only')))) {
@@ -107,8 +116,40 @@ const config = buildScenarioConfig('10');
     for (const href of linkHrefs) {
       index += 1;
       const targetUrl = href.startsWith('http') ? href : new URL(href, page.url()).toString();
+      await page.evaluate(() => {
+        document.querySelector('#navigationDatasets li[data-section-id="section-favorites"]')?.classList.add('open');
+      });
       await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
       await waitForIdle(page, 10000);
+      if (await page.locator('#navigationDatasets li.collapsible[data-section-id="section-favorites"].open').count()) {
+        throw new Error('Expected content links to leave Favorites collapsed by default');
+      }
+      const contentType = new URL(targetUrl).pathname.match(/\/(r|pa|d)\/\d+$/)?.[1];
+      if (contentType) {
+        const section = { r: 'section-reports', pa: 'section-panoramas', d: 'section-datasets' }[contentType];
+        const openSections = await page.locator('#navigationDatasets > li.collapsible.open').evaluateAll((nodes) => nodes.map((node) => node.dataset.sectionId));
+        if (openSections.length !== 1 || openSections[0] !== section) {
+          throw new Error('Expected only the URL-selected content section to open');
+        }
+        await page.evaluate(() => document.querySelectorAll('#navigationDatasets li.collapsible').forEach((node) => node.classList.add('open')));
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForIdle(page, 10000);
+        const restoredSections = await page.locator('#navigationDatasets > li.collapsible.open').evaluateAll((nodes) => nodes.map((node) => node.dataset.sectionId));
+        if (restoredSections.length !== 1 || restoredSections[0] !== section) {
+          throw new Error('Expected reload to ignore previously opened sections and follow the URL');
+        }
+        const selectedId = new URL(targetUrl).pathname.split('/').pop();
+        const itemType = { r: 'report', pa: 'panorama', d: 'dataset' }[contentType];
+        const selectedItem = page.locator(`#${section} .active > a[data-id="${selectedId}"][data-item_type="${itemType}"]`);
+        if (await selectedItem.count() !== 1 || !(await selectedItem.isVisible())) {
+          throw new Error('Expected the URL-selected item to be selected and visible after reload');
+        }
+        const contentUrl = page.url();
+        await page.locator('#navigationDatasets > li[data-section-id="section-reports"] > .app-navigation-entry > a').click();
+        if (page.url() !== contentUrl) {
+          throw new Error('Expected toggling a section to preserve the selected content URL');
+        }
+      }
       visited.push(`nav:${href}`);
     }
 

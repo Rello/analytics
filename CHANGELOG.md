@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- Use the URL to select content and open its navigation folders without saving navigation state or changing the URL when toggling folders; keep Overview groups collapsed.
+
 ## 7.0.2 - 2026-10-12
 ### Fixed
 - Restore panorama tiles for saved layouts using the original page header markup.

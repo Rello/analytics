@@ -98,6 +98,7 @@ OCA.Analytics.Navigation = {
                 OCA.Analytics.Navigation.buildNavigation(data);
 
                 if (navigationItem === undefined) {
+                    OCA.Analytics.Navigation.collapseAllGroups();
                     OCA.Analytics.Dashboard.init();
                 } else {
                     let navigationType = navigationItem[1]; // r, pa, d
@@ -114,14 +115,16 @@ OCA.Analytics.Navigation = {
                     if (navigationId && foundItem) {
                         OCA.Analytics.Sidebar?.close?.();
                         // QuerySelector for both id and item_type
+                        const sectionMap = {report: 'section-reports', panorama: 'section-panoramas', dataset: 'section-datasets'};
                         let navigationItemElem = document.querySelector(
-                            '#navigationDatasets [data-id="' + navigationId + '"][data-item_type="' + mappedType + '"]'
+                            '#' + sectionMap[mappedType] + ' a[data-id="' + navigationId + '"][data-item_type="' + mappedType + '"]'
                         );
-                        if (
-                            navigationItemElem &&
-                            navigationItemElem.parentElement.parentElement.parentElement.classList.contains('collapsible')
-                        ) {
-                            navigationItemElem.parentElement.parentElement.parentElement.classList.add('open');
+                        let parent = navigationItemElem?.parentElement;
+                        while (parent && parent.id !== 'navigationDatasets') {
+                            if (parent.classList.contains('collapsible')) {
+                                parent.classList.add('open');
+                            }
+                            parent = parent.parentElement;
                         }
                         if (OCA.Analytics.isNewObject) {
                             OCA.Analytics.isNewObject = false;
@@ -131,7 +134,6 @@ OCA.Analytics.Navigation = {
                         } else if (navigationItemElem) {
                             navigationItemElem.click();
                         }
-                        OCA.Analytics.Navigation.saveOpenState();
                     }
                 }
             });
@@ -146,7 +148,7 @@ OCA.Analytics.Navigation = {
         if (data === undefined || data.length === 0) {
             nav.appendChild(OCA.Analytics.Navigation.buildIntroRow());
         } else {
-            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-analytics-star', true, true));
+            nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Favorites'), 'section-favorites', 'icon-analytics-star'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Panoramas'), 'section-panoramas', 'icon-analytics-panorama'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Reports'), 'section-reports', 'icon-analytics-report'));
             nav.appendChild(OCA.Analytics.Navigation.buildSection(t('analytics', 'Datasets'), 'section-datasets', 'icon-analytics-dataset'));
@@ -174,7 +176,6 @@ OCA.Analytics.Navigation = {
         nav.appendChild(OCA.Analytics.Navigation.buildNewButton()); // first pinned
         nav.appendChild(OCA.Analytics.Navigation.buildSettingsButton()); // second pinned
         // no secondary pinned buttons
-        OCA.Analytics.Navigation.restoreOpenState();
     },
 
     buildNewButton: function () {
@@ -679,6 +680,7 @@ OCA.Analytics.Navigation = {
             }
             OCA.Analytics.Navigation.closeMobileNavigation();
             OCA.Analytics.Sidebar?.close?.();
+            OCA.Analytics.Navigation.collapseAllGroups();
             if (document.querySelector('#navigationDatasets .active')) {
                 document.querySelector('#navigationDatasets .active').classList.remove('active');
             }
@@ -782,7 +784,6 @@ OCA.Analytics.Navigation = {
                 parent = parent.parentElement;
             }
             anchor.click();
-            OCA.Analytics.Navigation.saveOpenState();
         } else if (datasetId !== undefined) {
             const datasetUrl = '/' + datasetId;
             window.location = OC.generateUrl('apps/analytics/d') + datasetUrl;
@@ -853,9 +854,7 @@ OCA.Analytics.Navigation = {
             }
             li.classList.add('open');
         }
-        OCA.Analytics.Navigation.saveOpenState();
         evt.preventDefault();
-        history.pushState(null, '', evt.target.href);
     },
 
     handleImportButton: function () {
@@ -932,7 +931,6 @@ OCA.Analytics.Navigation = {
             }
         }
 
-        OCA.Analytics.Navigation.saveOpenState();
     },
 
     removeNavigationItem: function (id, itemType) {
@@ -963,7 +961,6 @@ OCA.Analytics.Navigation = {
     handleUnshareButton: function (evt) {
         let shareId = evt.target.parentNode.dataset.shareId;
 
-        OCA.Analytics.Navigation.saveOpenState();
 
         let xhr = new XMLHttpRequest();
         xhr.open('DELETE', OC.generateUrl('apps/analytics/share/' + shareId, true), true);
@@ -1141,61 +1138,12 @@ OCA.Analytics.Navigation = {
         }
     },
 
-    saveOpenState: function () {
-        const storage = OCA.Analytics.getLocalStorage();
-        if (!storage) {
-            return;
-        }
-        const openNodes = [];
+    collapseAllGroups: function () {
         document.querySelectorAll('#navigationDatasets li.collapsible.open').forEach(li => {
-            if (li.dataset.id) {
-                openNodes.push('g-' + li.dataset.item_type + '-' + li.dataset.id);
-            } else if (li.dataset.sectionId) {
-                openNodes.push('s-' + li.dataset.sectionId);
-            }
+            li.classList.remove('open');
         });
-        try {
-            storage.setItem('analyticsNavState', JSON.stringify(openNodes));
-        } catch (e) {
-        }
     },
 
-    restoreOpenState: function () {
-        const storage = OCA.Analytics.getLocalStorage();
-        let saved;
-        if (!storage) {
-            saved = [];
-        } else {
-            try {
-                saved = JSON.parse(storage.getItem('analyticsNavState')) || [];
-            } catch (e) {
-                saved = [];
-            }
-        }
-        saved.forEach(id => {
-            if (id.startsWith('g-')) {
-                const parts = id.slice(2).split('-', 2);
-                const itemType = parts[0];
-                const gid = parts[1];
-                const li = document.querySelector('#navigationDatasets li.collapsible[data-id="' + gid + '"][data-item_type="' + itemType + '"]');
-                if (li) li.classList.add('open');
-            } else if (id.startsWith('s-')) {
-                const sid = id.slice(2);
-                const li = document.querySelector('#navigationDatasets li.collapsible[data-section-id="' + sid + '"]');
-                if (li) li.classList.add('open');
-            }
-        });
-
-        const fav = document.querySelector('#navigationDatasets li.collapsible[data-section-id="section-favorites"]');
-        if (fav) fav.classList.add('open');
-
-        const openSections = Array.from(document.querySelectorAll('#navigationDatasets > li.collapsible[data-section-id]:not([data-section-id="section-favorites"]).open'));
-        if (openSections.length > 1) {
-            for (let i = 1; i < openSections.length; i++) {
-                openSections[i].classList.remove('open');
-            }
-        }
-    },
 
 };
 /**
@@ -1273,7 +1221,6 @@ OCA.Analytics.Navigation.Drag = {
     },
 
     addItemToGroup: function (groupId, itemType, itemId) {
-        OCA.Analytics.Navigation.saveOpenState();
         let baseUrl = 'apps/analytics/';
         if (itemType === 'panorama') {
             baseUrl += 'panorama/';
