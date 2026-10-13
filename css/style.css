@@ -199,12 +199,12 @@ button, .button {
 #app-navigation .icon-delete { --analytics-navigation-icon: var(--icon-delete-dark); }
 #app-navigation .icon-close { --analytics-navigation-icon: var(--icon-close-dark); }
 
-/* Keep section/folder icons and show disclosure separately at the trailing edge. */
-#app-navigation .collapsible > .app-navigation-entry > a {
+/* Show section disclosure at the trailing edge on hover. */
+#app-navigation .collapsible[data-section-id] > .app-navigation-entry > a {
     padding-inline-end: 34px;
 }
 
-#app-navigation .collapsible > .app-navigation-entry > a::after {
+#app-navigation .collapsible[data-section-id] > .app-navigation-entry > a::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -215,9 +215,6 @@ button, .button {
     border-bottom: 2px solid currentColor;
     transform: translateY(-70%) rotate(45deg);
     pointer-events: none;
-}
-
-#app-navigation .collapsible[data-section-id] > .app-navigation-entry > a::after {
     opacity: 0;
 }
 
@@ -225,7 +222,20 @@ button, .button {
     opacity: 1;
 }
 
-#app-navigation .collapsible.open > .app-navigation-entry > a::after {
+/* An expanded report folder uses a downward chevron in place of its folder icon. */
+#app-navigation .collapsible.open:not([data-section-id]) > .app-navigation-entry > a.icon-folder::before {
+    left: 19px;
+    width: 6px;
+    height: 6px;
+    background-color: transparent;
+    mask-image: none;
+    -webkit-mask-image: none;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+}
+
+#app-navigation .collapsible.open[data-section-id] > .app-navigation-entry > a::after {
     transform: translateY(-30%) rotate(225deg);
 }
 
