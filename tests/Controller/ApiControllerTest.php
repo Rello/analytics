@@ -23,11 +23,11 @@ class ApiControllerTest extends TestCase {
 	public function testListIncludesSharedReportsAndOmitsFolders(): void {
 		$reports = $this->createMock(ReportService::class);
 		$reports->method('index')->willReturn([
-			['id' => 1, 'type' => 2], ['id' => 2, 'type' => 0],
-			['id' => 3, 'type' => 2, 'isShare' => 1],
+			['id' => 1, 'name' => 'Owned', 'type' => 2, 'parent' => 0, 'dataset' => 2, 'version' => 23495, 'favorite' => 0, 'item_type' => 'report'], ['id' => 2, 'type' => 0],
+			['id' => 3, 'name' => 'Shared', 'type' => 2, 'isShare' => 1, 'futureInternalField' => true],
 		]);
 		$result = $this->controller($reports, $this->createMock(ShareService::class), $this->createMock(OutputController::class))->index()->getData();
-		$this->assertSame([1, 3], array_column($result, 'id'));
+		$this->assertSame([['id' => 1, 'name' => 'Owned'], ['id' => 3, 'name' => 'Shared']], $result);
 		$this->assertSame([0, 1], array_keys($result));
 	}
 

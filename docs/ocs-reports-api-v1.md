@@ -13,7 +13,7 @@ envelope. Existing `/apps/analytics/api/1.0` through `4.0` APIs are unchanged.
 
 | Method | Path | Result in `ocs.data` |
 | --- | --- | --- |
-| GET | `/reports` | Array of accessible report summaries, excluding folders |
+| GET | `/reports` | Accessible reports with only `id` and `name`, excluding folders |
 | GET | `/reports/{reportId}` | Report metadata and saved visualization/filter options |
 | GET | `/reports/{reportId}/data` | Viewer data payload including rows, headers and report options |
 

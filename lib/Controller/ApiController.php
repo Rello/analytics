@@ -79,10 +79,14 @@ class ApiController extends OCSController {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1/reports')]
 	public function index(): DataResponse {
-		return new DataResponse(array_values(array_filter(
+		$reports = array_values(array_filter(
 			$this->reportService->index(),
 			static fn (array $report): bool => (int)$report['type'] !== ReportService::REPORT_TYPE_GROUP
-		)));
+		));
+		return new DataResponse(array_map(
+			static fn (array $report): array => array_intersect_key($report, array_flip(['id', 'name'])),
+			$reports
+		));
 	}
 
 	#[NoAdminRequired]

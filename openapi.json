@@ -922,6 +922,11 @@
       },
       "ReportSummary": {
         "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name"
+        ],
         "properties": {
           "id": {
             "oneOf": [
@@ -933,82 +938,10 @@
               }
             ]
           },
-          "type": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "dataset": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "parent": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "version": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "isShare": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
           "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "favorite": {
-            "type": "integer"
-          },
-          "item_type": {
             "type": "string"
-          },
-          "shareId": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "string"
-              }
-            ]
           }
-        },
-        "required": [
-          "id",
-          "type",
-          "name"
-        ]
+        }
       },
       "ReportMetadata": {
         "type": "object",
