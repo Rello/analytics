@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:4d162810-5622-4471-9fc8-6cf9221ad7fe",
+  "serialNumber": "urn:uuid:dd498d66-6acc-4d4b-8f8e-7ee98309d7ba",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-15T19:35:36Z",
+    "timestamp": "2026-10-15T20:13:41Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -74,7 +74,7 @@
       },
       {
         "name": "local:note",
-        "value": "Root composer.json requires phpoffice/phpspreadsheet ^5.8; composer.lock records phpoffice/phpspreadsheet 5.10.0; bundled version is 5.10.0."
+        "value": "Root composer.json requires phpoffice/phpspreadsheet *; composer.lock records phpoffice/phpspreadsheet 5.10.0; bundled version is 5.10.0."
       },
       {
         "name": "local:note",
@@ -102,7 +102,7 @@
         },
         {
           "name": "local:sha256",
-          "value": "75aad9436d03e96bb4f5e321784550d7f533ba5b0e297bba2bc2141032acca0c"
+          "value": "632f2bf7447c4137c55f582928f09eb8c49da23974a252347453aacaeddbf1b9"
         }
       ]
     },
