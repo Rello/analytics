@@ -43,3 +43,37 @@ curl --user 'USER:APP_PASSWORD' \
 The machine-readable contract is maintained in the repository root `openapi.json`.
 This repository currently has no configured OpenAPI extractor; keep the specification
 in sync when changing the controller.
+
+## Dataset operations
+
+| Method | Path | Result in `ocs.data` |
+| --- | --- | --- |
+| GET | `/datasets` | Existing V3 list of owned datasets |
+| POST | `/datasets/{datasetId}/data/add` | Existing V4 add/update result |
+| POST | `/datasets/{datasetId}/data/delete` | Existing V4 deletion result, including `delete` count |
+
+The OCS controller delegates these operations to the existing external API handlers.
+Dataset writes require ownership and legacy storage; shared report access does not
+allow dataset writes. Flexible datasets continue to use the stable-column record API.
+The URL dataset ID takes precedence over any body parameter.
+
+Add/update body (technical keys or configured dataset column names):
+
+```json
+{"data":[{"dimension1":"2026-10-15","dimension2":"Sales","value":"42"}]}
+```
+
+Delete body (a nonempty filter is required):
+
+```json
+{"filter":{"dimension1":{"option":"EQ","value":"2026-10-15"}}}
+```
+
+Deletion supports `dimension1`, `dimension2`, or their configured names, and the
+V4 operators `EQ`, `GT`, `LT`, `IN`, `LIKE`, `NOTLIKE`, and `BETWEEN`, including
+dynamic date variables. These endpoints retain V4 application error semantics:
+HTTP 200 with `ocs.data.success=false` and `ocs.data.error.code/message`.
+Codes are 9001 (unknown), 9002 (invalid input), 9003 (missing or unauthorized
+dataset), and 9004 (unsupported storage mode). Check `success`, not just the OCS
+metadata. Successful writes return `success=true` and a message; deletion also
+returns the deleted row count. Authentication failures remain HTTP 401.

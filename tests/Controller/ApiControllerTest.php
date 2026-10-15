@@ -6,6 +6,8 @@
 namespace OCA\Analytics\Tests\Controller;
 
 use OCA\Analytics\Controller\ApiController;
+use OCA\Analytics\Controller\ApiDataController;
+use OCP\AppFramework\Http\DataResponse;
 use OCA\Analytics\Controller\OutputController;
 use OCA\Analytics\Service\ReportService;
 use OCA\Analytics\Service\ShareService;
@@ -14,8 +16,8 @@ use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
 
 class ApiControllerTest extends TestCase {
-	private function controller($reports, $shares, $output): ApiController {
-		return new ApiController('analytics', $this->createMock(IRequest::class), $this->createMock(\Psr\Log\LoggerInterface::class), $reports, $shares, $output);
+	private function controller($reports, $shares, $output, $apiData = null): ApiController {
+		return new ApiController('analytics', $this->createMock(IRequest::class), $this->createMock(\Psr\Log\LoggerInterface::class), $reports, $shares, $output, $apiData ?? $this->createMock(ApiDataController::class));
 	}
 
 	public function testListIncludesSharedReportsAndOmitsFolders(): void {
@@ -53,7 +55,7 @@ class ApiControllerTest extends TestCase {
 			'filterApplied' => $metadata['filteroptions'], 'options' => $metadata + ['token' => 'secret'],
 			'cache' => ['key' => 'internal'],
 		]);
-		$result = $this->controller($reports, $shares, $output)->data(3)->getData();
+		$result = $this->controller($reports, $shares, $output, $apiData = null)->data(3)->getData();
 		$this->assertSame([['saved', 42]], $result['data']);
 		$this->assertSame($metadata['filteroptions'], $result['filterApplied']);
 		$this->assertArrayNotHasKey('cache', $result);
@@ -68,7 +70,7 @@ class ApiControllerTest extends TestCase {
 		$output = $this->createMock(OutputController::class);
 		$output->expects($this->never())->method('getData');
 		$this->expectException(OCSNotFoundException::class);
-		$this->controller($reports, $shares, $output)->data(99);
+		$this->controller($reports, $shares, $output, $apiData = null)->data(99);
 	}
 
 	public function testOwnedMetadataDoesNotRequireShare(): void {
@@ -77,5 +79,31 @@ class ApiControllerTest extends TestCase {
 		$shares = $this->createMock(ShareService::class);
 		$shares->expects($this->never())->method('getSharedReport');
 		$this->assertSame(1, $this->controller($reports, $shares, $this->createMock(OutputController::class))->read(1)->getData()['id']);
+	}
+
+	public function testDatasetListingUsesExistingExternalApi(): void {
+		$apiData = $this->createMock(ApiDataController::class);
+		$datasets = [['id' => 4, 'name' => 'Owned dataset']];
+		$apiData->expects($this->once())->method('datasetIndexV3')->willReturn($datasets);
+		$controller = $this->controller($this->createMock(ReportService::class), $this->createMock(ShareService::class), $this->createMock(OutputController::class), $apiData);
+		$this->assertSame($datasets, $controller->datasets()->getData());
+	}
+
+	/** @dataProvider writeOperations */
+	public function testWritesPreserveExistingSuccessAndErrorResponses(string $method, string $delegate, array $payload): void {
+		$apiData = $this->createMock(ApiDataController::class);
+		$response = new DataResponse($payload);
+		$apiData->expects($this->once())->method($delegate)->with(42)->willReturn($response);
+		$controller = $this->controller($this->createMock(ReportService::class), $this->createMock(ShareService::class), $this->createMock(OutputController::class), $apiData);
+		$this->assertSame($response, $controller->$method(42));
+	}
+
+	public function writeOperations(): array {
+		return [
+			['addData', 'addDataV4', ['success' => true, 'message' => 'Data update successful']],
+			['deleteData', 'deleteDataV4', ['success' => true, 'delete' => 2]],
+			['addData', 'addDataV4', ['success' => false, 'error' => ['code' => 9003, 'message' => 'Unknown or unauthorized report or dataset']]],
+			['deleteData', 'deleteDataV4', ['success' => false, 'error' => ['code' => 9002, 'message' => 'filter required']]],
+		];
 	}
 }

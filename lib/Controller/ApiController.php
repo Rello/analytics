@@ -30,7 +30,8 @@ class ApiController extends OCSController {
 		LoggerInterface $logger,
 		ReportService $reportService,
 		private ShareService $shareService,
-		private OutputController $outputController
+		private OutputController $outputController,
+		private ApiDataController $apiDataController
 	) {
 		parent::__construct($appName, $request);
 		$this->reportService = $reportService;
@@ -103,6 +104,30 @@ class ApiController extends OCSController {
 			$result['options'] = $this->publicMetadata($result['options']);
 		}
 		return new DataResponse($result);
+	}
+
+	/** List owned datasets using the existing external API contract. */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/v1/datasets')]
+	public function datasets(): DataResponse {
+		return new DataResponse($this->apiDataController->datasetIndexV3());
+	}
+
+	/** Add or update rows using the existing V4 validation and write path. */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/v1/datasets/{datasetId}/data/add')]
+	public function addData(int $datasetId): DataResponse {
+		return $this->apiDataController->addDataV4($datasetId);
+	}
+
+	/** Delete rows using the existing V4 structured-filter write path. */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/v1/datasets/{datasetId}/data/delete')]
+	public function deleteData(int $datasetId): DataResponse {
+		return $this->apiDataController->deleteDataV4($datasetId);
 	}
 
 	private function accessibleReport(int $reportId): array {

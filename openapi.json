@@ -508,6 +508,357 @@
           }
         }
       }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets": {
+      "get": {
+        "operationId": "listDatasets",
+        "summary": "List owned datasets",
+        "description": "Same payload and ownership scope as the existing V3 dataset list. Shared reports do not grant dataset write access.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Owned datasets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/data/add": {
+      "post": {
+        "operationId": "addDatasetData",
+        "summary": "Add or update dataset rows",
+        "description": "Delegates to the existing V4 external API. Requires ownership of a legacy dataset; flexible datasets are rejected. Application errors retain HTTP 200 and success=false with error.code and error.message in ocs.data (9002 invalid input, 9003 missing or unauthorized dataset, 9004 unsupported storage mode). Inspect success, not only ocs.meta. The URL datasetId takes precedence over body parameters.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing V4 operation result; inspect success for application errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/DataWriteResult"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "description": "Provide dimension1, dimension2 and value using technical keys or configured dataset column names."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/data/delete": {
+      "post": {
+        "operationId": "deleteDatasetData",
+        "summary": "Delete dataset rows matching a filter",
+        "description": "Delegates to the existing V4 external API. Requires ownership of a legacy dataset; flexible datasets are rejected. Application errors retain HTTP 200 and success=false with error.code and error.message in ocs.data (9002 invalid input, 9003 missing or unauthorized dataset, 9004 unsupported storage mode). Inspect success, not only ocs.meta. The URL datasetId takes precedence over body parameters.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing V4 operation result; inspect success for application errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/DataWriteResult"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "filter"
+                ],
+                "properties": {
+                  "filter": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {
+                      "type": "object",
+                      "required": [
+                        "option",
+                        "value"
+                      ],
+                      "properties": {
+                        "option": {
+                          "type": "string",
+                          "enum": [
+                            "EQ",
+                            "GT",
+                            "LT",
+                            "IN",
+                            "LIKE",
+                            "NOTLIKE",
+                            "BETWEEN"
+                          ]
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "description": "Keys are dimension1/dimension2 or their configured names. Values support the existing V4 filter syntax and date variables."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -819,6 +1170,45 @@
           }
         },
         "additionalProperties": true
+      },
+      "DataWriteResult": {
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "delete": {
+            "type": "integer",
+            "description": "Number of deleted rows"
+          },
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "integer",
+                "enum": [
+                  9001,
+                  9002,
+                  9003,
+                  9004
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
       }
     }
   }
