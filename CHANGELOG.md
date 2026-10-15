@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Fixed
+- Update bundled Moment.js to 2.31.0, which includes the fix for CVE-2026-17495.
 - Update bundled PhpSpreadsheet to 5.10.0 to address known spreadsheet processing vulnerabilities.
 - Restore report tiles for recipients of shared panoramas.
 - Replace the report folder icon with a downward arrow when expanded and remove redundant trailing folder arrows.

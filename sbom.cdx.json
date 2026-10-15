@@ -820,15 +820,15 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/moment@2.30.1",
+      "bom-ref": "pkg:npm/moment@2.31.0",
       "group": "npm",
       "name": "moment",
-      "version": "2.30.1",
+      "version": "2.31.0",
       "scope": "required",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a68f64a74e0a99c214357bbb1406b232189a9c50a03e7db4984aafbae43392c8"
+          "content": "c111ad2e4447c253765e679bb4a40ba91a3e23d80b4b69d603a0fd25164cb9de"
         }
       ],
       "licenses": [
@@ -838,7 +838,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/moment@2.30.1",
+      "purl": "pkg:npm/moment@2.31.0",
       "properties": [
         {
           "name": "local:path",
@@ -872,7 +872,7 @@
         "pkg:npm/datatables.net-colreorder@3.0.1",
         "pkg:npm/html2canvas@1.4.1",
         "pkg:npm/jspdf@4.2.1",
-        "pkg:npm/moment@2.30.1"
+        "pkg:npm/moment@2.31.0"
       ]
     },
     {
@@ -920,7 +920,7 @@
       "ref": "pkg:npm/chartjs-adapter-moment@1.0.0",
       "dependsOn": [
         "pkg:npm/chart.js@4.4.9",
-        "pkg:npm/moment@2.30.1"
+        "pkg:npm/moment@2.31.0"
       ]
     },
     {
