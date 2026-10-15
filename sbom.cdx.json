@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:d625993d-b562-4e4b-b9a8-526338ac4c07",
+  "serialNumber": "urn:uuid:4d162810-5622-4471-9fc8-6cf9221ad7fe",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-15T19:20:42Z",
+    "timestamp": "2026-10-15T19:35:36Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -74,7 +74,7 @@
       },
       {
         "name": "local:note",
-        "value": "Root composer.json requires phpoffice/phpspreadsheet ^5.8; composer.lock records phpoffice/phpspreadsheet 5.10.0; bundled version is 5.8.0."
+        "value": "Root composer.json requires phpoffice/phpspreadsheet ^5.8; composer.lock records phpoffice/phpspreadsheet 5.10.0; bundled version is 5.10.0."
       },
       {
         "name": "local:note",
@@ -303,10 +303,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+      "bom-ref": "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
       "group": "phpoffice",
       "name": "phpspreadsheet",
-      "version": "5.8.0",
+      "version": "5.10.0",
       "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
       "scope": "required",
       "licenses": [
@@ -316,7 +316,7 @@
           }
         }
       ],
-      "purl": "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+      "purl": "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
       "externalReferences": [
         {
           "type": "vcs",
@@ -334,7 +334,7 @@
         },
         {
           "name": "local:directory-sha256",
-          "value": "f02f61bac8e66a7a76d9a83a904b4bd9e650982e71b05abe73c54ab9afb1c7a9"
+          "value": "be263259cf40c83efbe159f12a69efcfd0b8763fe2d6028b9a63940bb5b328c0"
         },
         {
           "name": "local:metadata-source",
@@ -342,7 +342,7 @@
         },
         {
           "name": "vcs:reference",
-          "value": "01964d92536edf1a3a874b9580a52824bebf6fbb"
+          "value": "eb18727acf6b1f4cc67145a52ab04f9fd4c28d53"
         }
       ]
     },
@@ -859,7 +859,7 @@
       "dependsOn": [
         "platform:php",
         "pkg:github/nextcloud/server",
-        "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+        "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
         "pkg:npm/chart.js@4.4.9",
         "pkg:npm/chartjs-adapter-moment@1.0.0",
         "pkg:npm/chartjs-plugin-annotation@3.1.0",
@@ -900,7 +900,7 @@
       ]
     },
     {
-      "ref": "pkg:composer/phpoffice/phpspreadsheet@5.8.0",
+      "ref": "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
       "dependsOn": [
         "pkg:composer/composer/pcre@3.4.0",
         "pkg:composer/maennchen/zipstream-php@3.1.2",
