@@ -7,7 +7,7 @@ This `AGENTS.md` file provides guidelines for OpenAI Codex and other AI agents i
 
 | Directory       | Description                                         | Agent Action         |
 |-----------------|-----------------------------------------------------|----------------------|
-| `/vendor`       | External plugins; may help understand data sources. | Do not modify        |
+| `/vendor`       | Bundled PHP dependencies. | Generated dependency updates only; see below |
 | `/l10n`         | Translation files from Transifex.                   | Do not modify        |
 | `/js/3rdParty`  | Third-party JavaScript plugins.                     | Do not modify        |
 | `/css/3rdParty` | Third-party CSS plugins.                            | Do not modify        |
@@ -32,6 +32,15 @@ No nodejs or vue components are used. Everything is plain Javascript.
 Do not use ILogger. It is deprecated in favor of Psr\Log\LoggerInterface
 
 When changing a column type in a database migration, pass a Doctrine `Type` object, for example `Type::getType(Types::TEXT)`, to `changeColumn()` or `setType()`. Passing a string such as `'text'` can cause a `TypeError` with the bundled Doctrine DBAL version.
+
+### Dependency updates and SBOM automation
+
+- Dependency workflow details and manual commands are maintained in [build/SBOM.md](build/SBOM.md). Keep this section as a short guide; update that document when changing the process.
+- `composer.lock` records the requested PHP dependency versions; committed `vendor/` files are what the app ships. A lock-file update alone does not update the bundled libraries. Do not hand-edit third-party PHP code; use the install/prune workflow for authorized dependency upgrades.
+- `.github/dependabot.yml` configures Composer and GitHub Actions updates. `.github/workflows/dependabot-vendor.yml` installs the locked libraries, applies `build/prune-phpspreadsheet.php`, tests them, and commits `vendor/` to Composer Dependabot PRs. Wait for bundling to finish and review the resulting files before merging. Manual dispatch accepts an open same-repository PR number for catch-up work.
+- `.github/workflows/sbom-security.yml` regenerates and scans `sbom.cdx.json` on pushes to `master` and manual refresh runs. Weekly runs scan the existing SBOM. Do not manually change SBOM versions to make a finding disappear; `build/generate-sbom.sh` inventories the bundled files and installed package metadata.
+- `build/scan-sbom.py` reconciles `sbom-security` issues. A successful workflow means the scan completed, not that no vulnerabilities were found; inspect its report and issues. Let a successful rescan resolve findings after the bundled dependency is fixed. Document applicability decisions before closing a finding as not planned.
+- Dependabot does not update loose JavaScript files in `js/3rdParty`. Those require an explicitly requested dependency update. Unknown versions and PHP/Nextcloud version ranges remain coverage gaps, not clean scan results.
 
 ### WhatsNew Migrations
 
