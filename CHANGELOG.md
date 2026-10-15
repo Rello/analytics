@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Fixed
+- Restore report tiles for recipients of shared panoramas.
 - Replace the report folder icon with a downward arrow when expanded and remove redundant trailing folder arrows.
 - Use the URL to select content and open its navigation folders without saving navigation state or changing the URL when toggling folders; keep Overview groups collapsed.
 
