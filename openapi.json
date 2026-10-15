@@ -513,7 +513,7 @@
       "get": {
         "operationId": "listDatasets",
         "summary": "List owned datasets",
-        "description": "Same payload and ownership scope as the existing V3 dataset list. Shared reports do not grant dataset write access.",
+        "description": "List owned datasets with only their ID, name and column labels. Shared reports do not grant dataset write access. The legacy V3 dataset response is unchanged.",
         "tags": [
           "analytics"
         ],
@@ -560,7 +560,39 @@
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "additionalProperties": true
+                            "additionalProperties": false,
+                            "required": [
+                              "id",
+                              "name"
+                            ],
+                            "properties": {
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "dimension1": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "dimension2": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
                           }
                         }
                       }

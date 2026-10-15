@@ -48,11 +48,14 @@ in sync when changing the controller.
 
 | Method | Path | Result in `ocs.data` |
 | --- | --- | --- |
-| GET | `/datasets` | Existing V3 list of owned datasets |
+| GET | `/datasets` | Owned datasets: `id`, `name`, `dimension1`, `dimension2`, `value` |
 | POST | `/datasets/{datasetId}/data/add` | Existing V4 add/update result |
 | POST | `/datasets/{datasetId}/data/delete` | Existing V4 deletion result, including `delete` count |
 
 The OCS controller delegates these operations to the existing external API handlers.
+The dataset list exposes only `id`, `name`, `dimension1`, `dimension2`, and `value`;
+internal navigation, scheduling, and storage fields are omitted. The legacy V3
+dataset response is unchanged.
 Dataset writes require ownership and legacy storage; shared report access does not
 allow dataset writes. Flexible datasets continue to use the stable-column record API.
 The URL dataset ID takes precedence over any body parameter.

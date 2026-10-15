@@ -106,12 +106,17 @@ class ApiController extends OCSController {
 		return new DataResponse($result);
 	}
 
-	/** List owned datasets using the existing external API contract. */
+	/** List owned datasets with their column labels. */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1/datasets')]
 	public function datasets(): DataResponse {
-		return new DataResponse($this->apiDataController->datasetIndexV3());
+		return new DataResponse(array_map(
+			static fn (array $dataset): array => array_intersect_key($dataset, array_flip([
+				'id', 'name', 'dimension1', 'dimension2', 'value',
+			])),
+			$this->apiDataController->datasetIndexV3()
+		));
 	}
 
 	/** Add or update rows using the existing V4 validation and write path. */

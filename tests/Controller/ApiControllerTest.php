@@ -83,10 +83,15 @@ class ApiControllerTest extends TestCase {
 
 	public function testDatasetListingUsesExistingExternalApi(): void {
 		$apiData = $this->createMock(ApiDataController::class);
-		$datasets = [['id' => 4, 'name' => 'Owned dataset']];
+		$expected = [['id' => 4, 'name' => 'Owned dataset', 'dimension1' => 'Object', 'dimension2' => 'Date', 'value' => 'Value']];
+		$datasets = [$expected[0] + [
+			'type' => 2, 'parent' => null, 'storage_mode' => 'legacy', 'schema_version' => 0,
+			'schedules' => 1, 'item_type' => 'dataset', 'storageMode' => 'legacy', 'schemaVersion' => 0,
+			'futureInternalField' => 'must not leak',
+		]];
 		$apiData->expects($this->once())->method('datasetIndexV3')->willReturn($datasets);
 		$controller = $this->controller($this->createMock(ReportService::class), $this->createMock(ShareService::class), $this->createMock(OutputController::class), $apiData);
-		$this->assertSame($datasets, $controller->datasets()->getData());
+		$this->assertSame($expected, $controller->datasets()->getData());
 	}
 
 	/** @dataProvider writeOperations */
