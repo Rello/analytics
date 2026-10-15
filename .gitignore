@@ -15,6 +15,7 @@ CVS/*
 RCS/*
 *.backup*
 *.Lock
+!composer.lock
 .idea
 .phpunit.result.cache
 tests/ui-artifacts/

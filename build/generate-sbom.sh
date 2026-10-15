@@ -114,7 +114,7 @@ def package_component(root, package)
   properties = [
     property('local:path', package_path),
     property('local:directory-sha256', directory_sha256(root, package_path)),
-    property('local:metadata-source', 'composer.lock'),
+    property('local:metadata-source', 'vendor/composer/installed.json'),
   ]
   properties << property('vcs:reference', package.dig('source', 'reference')) if package.dig('source', 'reference')
 
@@ -188,7 +188,13 @@ app_id = info_xml.match(%r{<id>([^<]+)</id>})&.[](1) || 'analytics'
 app_version = info_xml.match(%r{<version>([^<]+)</version>})&.[](1) || 'unknown'
 composer_json = read_json(root, 'composer.json')
 composer_lock = read_json(root, 'composer.lock')
-composer_packages = composer_lock.fetch('packages', [])
+installed = read_json(root, 'vendor/composer/installed.json')
+composer_packages = installed.is_a?(Array) ? installed : installed.fetch('packages')
+locked_versions = composer_lock.fetch('packages', []).to_h { |p| [p.fetch('name'), p.fetch('version')] }
+bundled_versions = composer_packages.to_h { |p| [p.fetch('name'), p.fetch('version')] }
+if locked_versions != bundled_versions
+  warn 'WARNING: composer.lock differs from bundled vendor packages; SBOM reports bundled versions.'
+end
 composer_package_refs = composer_packages.to_h do |package|
   [package.fetch('name'), composer_purl(package.fetch('name'), package.fetch('version'))]
 end
@@ -485,8 +491,8 @@ bom = {
     },
     'properties' => [
       property('local:generated-from', 'appinfo/info.xml, composer.json, composer.lock, vendor/composer/installed.json, js/3rdParty, css/3rdParty'),
-      property('local:note', "Root composer.json requires phpoffice/phpspreadsheet #{composer_json.fetch('require').fetch('phpoffice/phpspreadsheet')}; composer.lock records phpoffice/phpspreadsheet #{phpspreadsheet&.fetch('version', 'unknown')}."),
-      property('local:note', 'Composer packages are taken from composer.lock and verified against the bundled vendor package directories.'),
+      property('local:note', "Root composer.json requires phpoffice/phpspreadsheet #{composer_json.fetch('require').fetch('phpoffice/phpspreadsheet')}; composer.lock records phpoffice/phpspreadsheet #{locked_versions['phpoffice/phpspreadsheet']}; bundled version is #{phpspreadsheet&.fetch('version', 'unknown')}."),
+      property('local:note', 'Composer versions come from vendor/composer/installed.json; bundled package directories are hashed. Updating composer.lock alone does not update shipped dependencies.'),
     ],
   },
   'components' => components,
@@ -494,6 +500,14 @@ bom = {
 }
 
 output_path.dirname.mkpath
+# Keep the existing document when only generation time and UUID would change.
+if output_path.exist?
+  existing = JSON.parse(output_path.read)
+  comparable = Marshal.load(Marshal.dump(bom))
+  comparable['serialNumber'] = existing['serialNumber']
+  comparable['metadata']['timestamp'] = existing.dig('metadata', 'timestamp')
+  bom = existing if comparable == existing
+end
 output_path.write(JSON.pretty_generate(bom) + "\n")
 RUBY
 

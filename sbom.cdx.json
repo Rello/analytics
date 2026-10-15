@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:954d7de0-b2ca-4958-83ef-995defe71c93",
+  "serialNumber": "urn:uuid:1699d95f-67f0-4f96-a036-fd23a8cef70a",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-12T12:08:35Z",
+    "timestamp": "2026-10-15T19:15:27Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -26,9 +26,9 @@
     },
     "component": {
       "type": "application",
-      "bom-ref": "pkg:github/Rello/analytics@6.8.1",
+      "bom-ref": "pkg:github/Rello/analytics@7.0.2",
       "name": "analytics",
-      "version": "6.8.1",
+      "version": "7.0.2",
       "description": "Nextcloud Analytics app",
       "licenses": [
         {
@@ -37,7 +37,7 @@
           }
         }
       ],
-      "purl": "pkg:github/Rello/analytics@6.8.1",
+      "purl": "pkg:github/Rello/analytics@7.0.2",
       "externalReferences": [
         {
           "type": "website",
@@ -63,7 +63,7 @@
         },
         {
           "name": "local:sha256",
-          "value": "c0b3e94b1e22db67bc2be872ed3737c45388b673505f430da83efd6eb9e4de71"
+          "value": "1061fc554141168b13f89a22f2ab1756638bb75b1d67536e97b12ab13f330db0"
         }
       ]
     },
@@ -74,11 +74,11 @@
       },
       {
         "name": "local:note",
-        "value": "Root composer.json requires phpoffice/phpspreadsheet ^5.8; composer.lock records phpoffice/phpspreadsheet 5.8.0."
+        "value": "Root composer.json requires phpoffice/phpspreadsheet ^5.8; composer.lock records phpoffice/phpspreadsheet 5.8.0; bundled version is 5.8.0."
       },
       {
         "name": "local:note",
-        "value": "Composer packages are taken from composer.lock and verified against the bundled vendor package directories."
+        "value": "Composer versions come from vendor/composer/installed.json; bundled package directories are hashed. Updating composer.lock alone does not update shipped dependencies."
       }
     ]
   },
@@ -158,7 +158,7 @@
         },
         {
           "name": "local:metadata-source",
-          "value": "composer.lock"
+          "value": "vendor/composer/installed.json"
         },
         {
           "name": "vcs:reference",
@@ -203,7 +203,7 @@
         },
         {
           "name": "local:metadata-source",
-          "value": "composer.lock"
+          "value": "vendor/composer/installed.json"
         },
         {
           "name": "vcs:reference",
@@ -248,7 +248,7 @@
         },
         {
           "name": "local:metadata-source",
-          "value": "composer.lock"
+          "value": "vendor/composer/installed.json"
         },
         {
           "name": "vcs:reference",
@@ -293,7 +293,7 @@
         },
         {
           "name": "local:metadata-source",
-          "value": "composer.lock"
+          "value": "vendor/composer/installed.json"
         },
         {
           "name": "vcs:reference",
@@ -338,7 +338,7 @@
         },
         {
           "name": "local:metadata-source",
-          "value": "composer.lock"
+          "value": "vendor/composer/installed.json"
         },
         {
           "name": "vcs:reference",
@@ -383,7 +383,7 @@
         },
         {
           "name": "local:metadata-source",
-          "value": "composer.lock"
+          "value": "vendor/composer/installed.json"
         },
         {
           "name": "vcs:reference",
@@ -855,7 +855,7 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:github/Rello/analytics@6.8.1",
+      "ref": "pkg:github/Rello/analytics@7.0.2",
       "dependsOn": [
         "platform:php",
         "pkg:github/nextcloud/server",
