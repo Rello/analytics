@@ -75,14 +75,14 @@ jobs:
 
     steps:
       - name: Checkout Nextcloud server
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: nextcloud/server
           ref: ${{ matrix.nextcloud-version }}
           submodules: recursive
 
       - name: Checkout Analytics app
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: apps/${{ env.APP_NAME }}
 

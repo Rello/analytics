@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout app repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.tag || github.event.release.tag_name }}
 
@@ -43,7 +43,7 @@ jobs:
 
       - name: Set up local Nextcloud server
         if: ${{ !inputs.reuse_asset }}
-        uses: SMillerDev/nextcloud-actions/setup-nextcloud@fae87e29aa7cdf1ea0b8033c67f60e75b10be2cd
+        uses: SMillerDev/nextcloud-actions/setup-nextcloud@ae95709955d06dea39756101e07ec5b6134f14d7
         with:
           version: stable29
           database-type: sqlite
@@ -51,7 +51,7 @@ jobs:
 
       - name: Install app into local Nextcloud server
         if: ${{ !inputs.reuse_asset }}
-        uses: SMillerDev/nextcloud-actions/setup-nextcloud-app@fae87e29aa7cdf1ea0b8033c67f60e75b10be2cd
+        uses: SMillerDev/nextcloud-actions/setup-nextcloud-app@ae95709955d06dea39756101e07ec5b6134f14d7
         with:
           app: ${{ env.APP_NAME }}
           check-code: false
