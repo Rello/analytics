@@ -21,6 +21,7 @@ RCS/*
 tests/ui-artifacts/
 docs/*
 !docs/flexible-storage-api-v1.md
+!docs/ocs-reports-api-v1.md
 
 # Mac OS
 .DS_Store

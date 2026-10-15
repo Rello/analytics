@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+### Added
+- OCS endpoints to list accessible reports and retrieve report metadata and data with saved filters, including shared reports.
+
 ### Fixed
 - Update bundled Moment.js to 2.31.0, which includes the fix for CVE-2026-17495.
 - Update bundled PhpSpreadsheet to 5.10.0 to address known spreadsheet processing vulnerabilities.
