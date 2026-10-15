@@ -21,9 +21,13 @@ The workflow succeeds when scanning and issue synchronization succeed; findings 
 in issues. It does not upgrade dependencies or merge PRs.
 
 Dependabot checks Composer and GitHub Actions weekly and proposes updates. Security alerts and security
-updates must also be enabled in repository settings. Composer updates do not refresh committed vendor
-files. Before considering a fix complete, update the bundled libraries with the project's Composer/pruning
-process, test them, and commit the resulting metadata and files. The generator uses installed vendor
+updates must also be enabled in repository settings. The `Bundle Dependabot libraries` workflow installs the exact locked PHP packages on same-repository
+Composer Dependabot PRs, applies the existing pruning, validates the spreadsheet readers, runs the
+spreadsheet datasource tests, and commits `vendor/` back to that PR. Installation has read-only permissions
+and disables Composer scripts/plugins; a separate publishing job writes only generated vendor files.
+Manual dispatch accepts an open PR number for catch-up work. Wait for this workflow to finish before
+merging a Composer update. A token-authored vendor commit does not trigger other workflows, so the
+library checks run before it is committed. Dependency changes still need review before merging. The generator uses installed vendor
 metadata rather than claiming the versions in a newer lock file are already shipped. It warns if these differ.
 
 ## Manual verification

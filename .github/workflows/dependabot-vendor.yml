@@ -1,0 +1,91 @@
+# SPDX-FileCopyrightText: 2026 Marcel Scherello
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Bundle Dependabot libraries
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths: [composer.json, composer.lock]
+  workflow_dispatch:
+    inputs:
+      pull_request:
+        description: Open same-repository PR to synchronize (also supports catch-up PRs)
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: dependabot-vendor-${{ github.event.pull_request.number || inputs.pull_request }}
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      sha: ${{ steps.target.outputs.sha }}
+      branch: ${{ steps.target.outputs.branch }}
+      number: ${{ steps.target.outputs.number }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: master
+          path: automation
+          persist-credentials: false
+      - name: Validate target PR
+        id: target
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pull_request }}
+        run: python3 automation/build/dependabot-vendor.py target
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+          path: source
+          persist-credentials: false
+      - uses: shivammathur/setup-php@4424c9aab975b57bd706ee5a39c6b4334d6e4f60 # 2.40.0
+        with:
+          php-version: '8.2'
+          extensions: gd, mbstring, zip
+          tools: composer:v2, phpunit:9.6.22
+          coverage: none
+      - name: Install locked libraries and prune
+        run: bash automation/build/bundle-vendor.sh source
+      - name: Validate spreadsheet readers
+        working-directory: source
+        run: |
+          composer check-platform-reqs --no-dev
+          php -r 'require "vendor/autoload.php"; $s = new PhpOffice\PhpSpreadsheet\Spreadsheet(); $s->getActiveSheet()->setCellValue("A1", "bundle smoke test"); if ($s->getActiveSheet()->getCell("A1")->getValue() !== "bundle smoke test") { exit(1); } foreach (["Xlsx", "Xls", "Csv", "Gnumeric"] as $type) { PhpOffice\PhpSpreadsheet\IOFactory::createReader($type); } echo "Spreadsheet and reader smoke checks passed\n";'
+      - name: Test spreadsheet datasource
+        working-directory: source
+        run: phpunit --configuration phpunit.xml tests/Datasource/LocalSpreadsheetTest.php
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bundled-vendor
+          path: source/vendor/
+          include-hidden-files: true
+          retention-days: 7
+  publish:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: master
+          persist-credentials: false
+      - name: Preserve trusted publishing script
+        run: cp build/dependabot-vendor.py "$RUNNER_TEMP/dependabot-vendor.py"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: bundled-vendor
+          path: ${{ runner.temp }}/bundled-vendor
+      - name: Commit only bundled libraries to the PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ needs.prepare.outputs.number }}
+          EXPECTED_SHA: ${{ needs.prepare.outputs.sha }}
+          EXPECTED_BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: python3 "$RUNNER_TEMP/dependabot-vendor.py" publish
