@@ -5,6 +5,7 @@
 - OCS endpoints to list accessible reports and owned datasets, retrieve report metadata and filtered data including shared reports, and add or delete dataset rows.
 
 ### Fixed
+- Fit report title, subheader, and group fields to the report wizard's left column.
 - Update bundled Moment.js to 2.31.0, which includes the fix for CVE-2026-17495.
 - Update bundled PhpSpreadsheet to 5.10.0 to address known spreadsheet processing vulnerabilities.
 - Restore report tiles for recipients of shared panoramas.

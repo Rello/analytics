@@ -276,6 +276,15 @@
     outline-offset: -3px;
 }
 
+#analyticsWizard #wizardNewGeneralPage .table > div > div:first-child {
+    padding-inline-end: 24px;
+    vertical-align: top;
+}
+
+#analyticsWizard #wizardNewGeneralPage .sidebarInput {
+    width: 100%;
+}
+
 #analyticsWizard .prev:focus-visible,
 #analyticsWizard .next:focus-visible {
     outline-color: white;
@@ -535,6 +544,10 @@
         width: 100% !important;
         box-sizing: border-box;
         overflow-wrap: anywhere;
+    }
+
+    #analyticsWizard #wizardNewGeneralPage .table > div > div:first-child {
+        padding-inline-end: 0;
     }
 
     #analyticsWizard .modal-header .firstrunwizard-header .logo {
