@@ -925,7 +925,8 @@
         "additionalProperties": false,
         "required": [
           "id",
-          "name"
+          "name",
+          "dataset"
         ],
         "properties": {
           "id": {
@@ -940,6 +941,16 @@
           },
           "name": {
             "type": "string"
+          },
+          "dataset": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         }
       },
