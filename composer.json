@@ -1,7 +1,7 @@
 {
   "require": {
     "php": ">=8.2 <8.6",
-    "phpoffice/phpspreadsheet": "^5.8"
+    "phpoffice/phpspreadsheet": "*"
   },
   "config": {
     "platform": {
