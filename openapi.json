@@ -9,7 +9,9 @@
       "post": {
         "summary": "Create analytics report from a data file",
         "operationId": "createFromDataFile",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -22,7 +24,9 @@
                     "description": "ID of the file to import"
                   }
                 },
-                "required": ["fileId"]
+                "required": [
+                  "fileId"
+                ]
               }
             }
           }
@@ -35,14 +39,561 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "version": {"type": "number"},
-                    "root": {
+                    "ocs": {
                       "type": "object",
                       "properties": {
-                        "orientation": {"type": "string"},
-                        "rows": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string"
+                            },
+                            "root": {
+                              "type": "object",
+                              "properties": {
+                                "orientation": {
+                                  "type": "string"
+                                },
+                                "rows": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "400": {
+            "description": "fileId missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "error": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/reports": {
+      "get": {
+        "operationId": "listReports",
+        "summary": "List owned and shared reports",
+        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
                           "type": "array",
-                          "items": {"type": "object"}
+                          "items": {
+                            "$ref": "#/components/schemas/ReportSummary"
+                          }
+                        }
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/reports/{reportId}": {
+      "get": {
+        "operationId": "getReport",
+        "summary": "Get accessible report metadata",
+        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Accessible report ID; folders are not reports"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/ReportMetadata"
+                        }
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Report missing or inaccessible",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/reports/{reportId}/data": {
+      "get": {
+        "operationId": "getReportData",
+        "summary": "Get report data with saved filters",
+        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access. Uses the report viewer backend pipeline, including saved filters, variables, sorting and transformations. No temporary filter overrides. Browser-side formatting and pivots are not rendered. Datasource failures use the payload error field.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Accessible report ID; folders are not reports"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/ReportData"
+                        }
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Report missing or inaccessible",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets": {
+      "get": {
+        "operationId": "listDatasets",
+        "summary": "List owned datasets",
+        "description": "List owned datasets with only their ID, name and column labels. Shared reports do not grant dataset write access. The legacy V3 dataset response is unchanged.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Owned datasets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "id",
+                              "name"
+                            ],
+                            "properties": {
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "dimension1": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "dimension2": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -51,7 +602,588 @@
               }
             }
           },
-          "404": {"description": "File not found"}
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/data/add": {
+      "post": {
+        "operationId": "addDatasetData",
+        "summary": "Add or update dataset rows",
+        "description": "Delegates to the existing V4 external API. Requires ownership of a legacy dataset; flexible datasets are rejected. Application errors retain HTTP 200 and success=false with error.code and error.message in ocs.data (9002 invalid input, 9003 missing or unauthorized dataset, 9004 unsupported storage mode). Inspect success, not only ocs.meta. The URL datasetId takes precedence over body parameters.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing V4 operation result; inspect success for application errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/DataWriteResult"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "description": "Provide dimension1, dimension2 and value using technical keys or configured dataset column names."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/data/delete": {
+      "post": {
+        "operationId": "deleteDatasetData",
+        "summary": "Delete dataset rows matching a filter",
+        "description": "Delegates to the existing V4 external API. Requires ownership of a legacy dataset; flexible datasets are rejected. Application errors retain HTTP 200 and success=false with error.code and error.message in ocs.data (9002 invalid input, 9003 missing or unauthorized dataset, 9004 unsupported storage mode). Inspect success, not only ocs.meta. The URL datasetId takes precedence over body parameters.",
+        "tags": [
+          "analytics"
+        ],
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing V4 operation result; inspect success for application errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "$ref": "#/components/schemas/DataWriteResult"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "meta",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ocs"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "filter"
+                ],
+                "properties": {
+                  "filter": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {
+                      "type": "object",
+                      "required": [
+                        "option",
+                        "value"
+                      ],
+                      "properties": {
+                        "option": {
+                          "type": "string",
+                          "enum": [
+                            "EQ",
+                            "GT",
+                            "LT",
+                            "IN",
+                            "LIKE",
+                            "NOTLIKE",
+                            "BETWEEN"
+                          ]
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "description": "Keys are dimension1/dimension2 or their configured names. Values support the existing V4 filter syntax and date variables."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basic_auth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "OCSMeta": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "statuscode": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "statuscode",
+          "message"
+        ]
+      },
+      "ReportSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "dataset"
+        ],
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "dataset": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "ReportMetadata": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "dataset": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "parent": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "version": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "permissions": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "isShare": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "schemaVersion": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "refresh": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subheader": {
+            "type": "string",
+            "nullable": true
+          },
+          "visualization": {
+            "type": "string",
+            "nullable": true
+          },
+          "chart": {
+            "type": "string",
+            "nullable": true
+          },
+          "chartoptions": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataoptions": {
+            "type": "string",
+            "nullable": true
+          },
+          "tableoptions": {
+            "type": "string",
+            "nullable": true
+          },
+          "filteroptions": {
+            "type": "string",
+            "nullable": true
+          },
+          "storageMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "dimension1": {
+            "type": "string",
+            "nullable": true
+          },
+          "dimension2": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "ReportData": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "header": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "$ref": "#/components/schemas/ReportMetadata"
+          },
+          "filterApplied": {
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "thresholds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "DataWriteResult": {
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "delete": {
+            "type": "integer",
+            "description": "Number of deleted rows"
+          },
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "integer",
+                "enum": [
+                  9001,
+                  9002,
+                  9003,
+                  9004
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }
