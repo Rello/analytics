@@ -130,13 +130,10 @@ class OutputController extends Controller {
 		if ($panoramaId !== null) {
 			$panorama = $this->PanoramaService->read($panoramaId);
 			$metadata = [];
-			if ($panorama) {
+			if ($panorama && $this->PanoramaService->isOwn($panoramaId)) {
 				$metadata = $this->ReportService->read($reportId);
-			} else {
-				foreach ($this->ShareService->getSharedItems(ShareService::SHARE_ITEM_TYPE_PANORAMA) as $shared) {
-					if ((int)$shared['id'] === $panoramaId) { $panorama = $shared; break; }
-				}
-				if ($panorama) $metadata = $this->ShareService->getSharedPanoramaReport($reportId, $panoramaId);
+			} elseif ($panorama) {
+				$metadata = $this->ShareService->getSharedPanoramaReport($reportId, $panoramaId);
 			}
 			$pages = json_decode($panorama['pages'] ?? '[]', true) ?: [];
 			$member = false;
