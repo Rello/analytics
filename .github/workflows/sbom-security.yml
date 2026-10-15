@@ -4,6 +4,18 @@ name: SBOM security
 on:
   push:
     branches: [master]
+    paths:
+      - 'composer.json'
+      - 'composer.lock'
+      - 'vendor/**'
+      - 'js/3rdParty/**'
+      - 'css/3rdParty/**'
+      - 'appinfo/info.xml'
+      - 'sbom.cdx.json'
+      - 'build/generate-sbom.sh'
+      - 'build/scan-sbom.py'
+      - 'tests/sbom/**'
+      - '.github/workflows/sbom-security.yml'
   workflow_dispatch:
     inputs:
       refresh:
