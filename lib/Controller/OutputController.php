@@ -270,7 +270,7 @@ class OutputController extends Controller {
 	}
 
 	/**
-	 * Preview the data
+	 * Preview the data (one row for column pickers, up to 20 for datasource previews)
 	 *
 	 * @param $type
 	 * @param $options
@@ -278,7 +278,7 @@ class OutputController extends Controller {
 	 * @throws Exception
 	 */
 	#[NoAdminRequired]
-	public function readPreview($type, $options) {
+	public function readPreview($type, $options, int $limit = 1) {
 		$reportMetadata = [];
 		$array = json_decode($options, true);
 		foreach ($array as $key => $value) {
@@ -293,7 +293,7 @@ class OutputController extends Controller {
 
 		$result = $this->getData($reportMetadata);
 		unset($result['options'], $result['dimensions'], $result['filterApplied'], $result['thresholds']);
-		$result['data'] = array_slice($result['data'], 0, 1);
+		$result['data'] = array_slice($result['data'] ?? [], 0, max(1, min($limit, 20)));
 
 		return new DataResponse($result, HTTP::STATUS_OK);
 	}

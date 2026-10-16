@@ -1385,3 +1385,7 @@
         <p id="chartColumnPreviewMessage" class="chartColumnMappingHint" hidden></p>
     </aside>
 </template>
+
+<template id="templateDatasourcePreviewButton">
+    <button type="button" class="button analyticsSecondary" id="datasourcePreviewButton"><?php p($l->t('Data preview')); ?></button>
+</template>

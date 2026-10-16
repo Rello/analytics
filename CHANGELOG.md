@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Preview live datasource data from the report wizard and sidebar before saving.
 - OCS endpoints to list accessible reports and owned datasets, retrieve report metadata and filtered data including shared reports, and add or delete dataset rows.
 
 ### Fixed
