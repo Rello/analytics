@@ -212,7 +212,7 @@ OCA.Analytics.Sidebar.Report = {
                     } else if (data['type'] === OCA.Analytics.TYPE_INTERNAL_DB) {
                         // OCA.Analytics.Sidebar.Report.fillDatasetRelatedFields();
                     } else {
-                        let optionForm = OCA.Analytics.Datasource.buildDatasourceRelatedForm(data['type']);
+                        let optionForm = OCA.Analytics.Datasource.buildDatasourceRelatedForm(data['type'], true);
                         document.getElementById('reportDatasourceSection').appendChild(optionForm);
                         OCA.Analytics.Sidebar.Report.fillDatasourceRelatedFields(data);
                     }
@@ -410,7 +410,7 @@ OCA.Analytics.Sidebar.Report = {
         const type = parseInt(document.getElementById('wizardNewDatasource').value);
         document.getElementById('wizardNewTypeOptionsRow').style.display = 'table-row';
         document.getElementById('wizardNewDatasourceSection').innerHTML = '';
-        document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(type));
+        document.getElementById('wizardNewDatasourceSection').appendChild(OCA.Analytics.Datasource.buildDatasourceRelatedForm(type, true));
         OCA.Analytics.Sidebar.Report.buildTemplateDropdownWizard(type);
         OCA.Analytics.Sidebar.Report.updateWizardVisualTemplateState(OCA.Analytics.Sidebar.Report.getSelectedTemplateWizard());
         OCA.Analytics.Sidebar.Report.syncGlobalTemplateSelection();

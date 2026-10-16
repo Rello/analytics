@@ -516,7 +516,7 @@ Object.assign(OCA.Analytics.Datasource = {
     /**
      * Generate configuration form for the selected data source
      */
-    buildDatasourceRelatedForm: function (datasource) {
+    buildDatasourceRelatedForm: function (datasource, showPreview = false) {
         let template = OCA.Analytics.datasources.options[datasource];
         let form = document.createElement('div');
         let insideSection = false;
@@ -582,7 +582,50 @@ Object.assign(OCA.Analytics.Datasource = {
             tableRow.appendChild(input);
             tableRow.appendChild(infoColumn);
         }
+        if (showPreview) {
+            const preview = document.importNode(document.getElementById('templateDatasourcePreviewButton').content, true);
+            preview.querySelector('button').addEventListener('click', () => OCA.Analytics.Datasource.preview(form, datasource));
+            form.appendChild(preview);
+        }
         return form;
+    },
+
+    /**
+     * Preview the current datasource settings without saving the report.
+     */
+    preview: async function (form, datasource) {
+        const options = {};
+        for (const input of form.querySelectorAll('input, select')) {
+            if (input.id !== 'dataSourceType') options[input.id] = input.value;
+        }
+        const controller = new AbortController();
+        OCA.Analytics.Notification.htmlDialogInitiate(
+            t('analytics', 'Data preview'), OCA.Analytics.Notification.dialogClose
+        );
+        const dialog = document.getElementById('analyticsDialogContainer');
+        dialog._analyticsDialogCleanup = () => controller.abort();
+        try {
+            const response = await fetch(OC.generateUrl('apps/analytics/data'), {
+                method: 'POST',
+                headers: OCA.Analytics.headers(),
+                signal: controller.signal,
+                body: JSON.stringify({type: Number(datasource), options: JSON.stringify(options), limit: 20})
+            });
+            if (!response.ok) throw new Error(t('analytics', 'The preview request failed.'));
+            const data = await response.json();
+            if (data.error && String(data.error) !== '0') throw new Error(String(data.error));
+            if (document.getElementById('analyticsDialogContainer') !== dialog) return;
+            const content = document.createElement('pre');
+            content.id = 'simulationData';
+            content.textContent = JSON.stringify({header: data.header || [], data: data.data || []}, null, 2);
+            OCA.Analytics.Notification.htmlDialogUpdate(content, t('analytics', 'Preview of the first 20 rows.'));
+        } catch (error) {
+            if (error.name === 'AbortError' || document.getElementById('analyticsDialogContainer') !== dialog) return;
+            const content = document.createElement('p');
+            content.setAttribute('role', 'alert');
+            content.textContent = error.message || t('analytics', 'The preview could not be prepared.');
+            OCA.Analytics.Notification.htmlDialogUpdate(content, '');
+        }
     },
 
     /**
