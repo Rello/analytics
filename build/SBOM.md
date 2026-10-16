@@ -22,15 +22,29 @@ reopen completed issues. To accept an inapplicable finding, explain why in a com
 The workflow succeeds when scanning and issue synchronization succeed; findings themselves are tracked
 in issues. It does not upgrade dependencies or merge PRs.
 
-Dependabot checks Composer and GitHub Actions weekly and proposes updates. Security alerts and security
-updates must also be enabled in repository settings. The `Bundle Dependabot libraries` workflow installs the exact locked PHP packages on same-repository
-Composer Dependabot PRs, applies the existing pruning, validates the spreadsheet readers, runs the
-spreadsheet datasource tests, and commits `vendor/` back to that PR. Installation has read-only permissions
-and disables Composer scripts/plugins; a separate publishing job writes only generated vendor files.
-Manual dispatch accepts an open PR number for catch-up work. Wait for this workflow to finish before
-merging a Composer update. A token-authored vendor commit does not trigger other workflows, so the
-library checks run before it is committed. Dependency changes still need review before merging. The generator uses installed vendor
-metadata rather than claiming the versions in a newer lock file are already shipped. It warns if these differ.
+Dependabot checks Composer and GitHub Actions weekly and proposes version updates. Security alerts and
+security updates must also be enabled in repository settings. Composer PRs update `composer.json` and/or
+`composer.lock`; no workflow installs or commits bundled PHP libraries to those PRs.
+The generator uses installed vendor metadata rather than claiming the versions in a newer lock file
+are already shipped. It warns if these differ.
+
+## Install PHP libraries locally
+
+After pulling the reviewed Composer version updates, run from the repository root:
+
+```sh
+composer install --no-dev --prefer-dist --optimize-autoloader
+composer check-platform-reqs --no-dev
+```
+
+`composer install` uses the exact versions in `composer.lock`. The existing `pre-autoload-dump` Composer
+hook runs `build/prune-phpspreadsheet.php` automatically before generating the autoloader; keep scripts
+enabled for this local command. To choose newer versions yourself, use `composer update --no-dev
+--prefer-dist --optimize-autoloader` instead, which also updates the lock file.
+
+Review the generated `vendor/` changes, run `./tests/run-unit.sh`, and commit the bundled libraries
+along with any manifest changes. Until that local update is committed, the app still ships the old
+bundled versions. The SBOM workflow inventories the bundled files after they are pushed.
 
 ## Manual verification
 
