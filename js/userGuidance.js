@@ -19,7 +19,7 @@ if (!OCA.Analytics) {
 /** Shared keyboard behavior for the app's existing modal surfaces. */
 OCA.Analytics.Dialog = {
     focusable: function (container) {
-        return [...container.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')]
+        return [...container.querySelectorAll('a[href], button, input, select, textarea, summary, [tabindex]')]
             .filter(element => element.tabIndex >= 0 && !element.disabled
                 && element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden');
     },

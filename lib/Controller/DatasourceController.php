@@ -164,6 +164,37 @@ class DatasourceController extends Controller {
 		}
 	}
 
+	/** Browse only a JSON source supplied by the authenticated user, never a shared report. */
+	#[NoAdminRequired]
+	public function jsonContent(int $type, string $options = '{}'): DataResponse {
+		$user = $this->userSession->getUser();
+		$settings = json_decode($options, true);
+		if ($user === null || !is_array($settings)
+			|| !in_array($type, [self::DATASET_TYPE_LOCAL_JSON, self::DATASET_TYPE_EXTERNAL_JSON], true)
+			|| !isset($this->getDatasources()[$type])) {
+			return new DataResponse(['error' => $this->l10n->t('Data source not available anymore')], 400);
+		}
+		// Browsing must work before an extraction path has been chosen.
+		$settings['path'] = '';
+		$settings['timestamp'] = 'false';
+		try {
+			$result = $this->read($type, [
+				'link' => json_encode($settings), 'user_id' => $user->getUID(), 'filteroptions' => '',
+			], false);
+			if (!empty($result['error']) || !is_string($result['rawdata'] ?? null)) {
+				return new DataResponse(['error' => $this->l10n->t('Could not load JSON data. Check the datasource settings.')], 400);
+			}
+			if (strlen($result['rawdata']) > 2 * 1024 * 1024) {
+				return new DataResponse(['error' => $this->l10n->t('This JSON is too large to browse. Enter the Object path manually.')], 400);
+			}
+			// Do not return request headers, authentication, or other datasource metadata.
+			return new DataResponse(['content' => $result['rawdata']]);
+		} catch (\Throwable $e) {
+			$this->logger->debug('Could not browse JSON data', ['exception' => $e]);
+			return new DataResponse(['error' => $this->l10n->t('Could not load JSON data. Check the datasource settings.')], 400);
+		}
+	}
+
 	/**
      * Get the data from a data source;
 	 *

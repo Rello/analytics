@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "generatedAt": "2026-10-16T12:00:00Z",
+    "currency": "EUR",
+    "totalOrders": 4,
+    "description": "Fictional orders for exploring JSON datasource paths"
+  },
+  "data": {
+    "orders": [
+      {
+        "id": "ORD-1001",
+        "createdAt": "2026-10-12T09:15:00Z",
+        "status": "shipped",
+        "customer": {
+          "id": "CUS-001",
+          "name": "Example Office GmbH",
+          "address": {"city": "Berlin", "country": "DE", "postalCode": "10115"}
+        },
+        "totals": {"net": 1250, "tax": 237.5, "gross": 1487.5, "discount": 0},
+        "items": [
+          {"sku": "HW-001", "product": "Laptop", "quantity": 1, "price": 1200, "net": 1200},
+          {"sku": "HW-002", "product": "Mouse", "quantity": 2, "price": 25, "net": 50}
+        ],
+        "paid": true,
+        "tags": ["business", "hardware"],
+        "shipping": {
+          "method": "standard",
+          "tracking": "DEMO-DE-1001",
+          "events": [
+            {"at": "2026-10-12T14:00:00Z", "status": "packed"},
+            {"at": "2026-10-13T08:30:00Z", "status": "dispatched"}
+          ]
+        },
+        "notes": "Deliver to reception"
+      },
+      {
+        "id": "ORD-1002",
+        "createdAt": "2026-10-13T11:40:00Z",
+        "status": "processing",
+        "customer": {
+          "id": "CUS-002",
+          "name": "Example Studio",
+          "address": {"city": "Paris", "country": "FR", "postalCode": "75002"}
+        },
+        "totals": {"net": 600, "tax": 120, "gross": 720, "discount": 0},
+        "items": [
+          {"sku": "HW-003", "product": "Monitor", "quantity": 2, "price": 250, "net": 500},
+          {"sku": "HW-004", "product": "Keyboard", "quantity": 2, "price": 50, "net": 100}
+        ],
+        "paid": false,
+        "tags": ["business"],
+        "shipping": {"method": "express", "tracking": null, "events": []},
+        "notes": "",
+        "purchaseOrder": "PO-2026-042"
+      },
+      {
+        "id": "ORD-1003",
+        "createdAt": "2026-10-14T15:05:00Z",
+        "status": "completed",
+        "customer": {
+          "id": "CUS-003",
+          "name": "Example Workshop",
+          "address": {"city": "Vienna", "country": "AT", "postalCode": "1010"}
+        },
+        "totals": {"net": 180, "tax": 36, "gross": 216, "discount": 20},
+        "items": [
+          {"sku": "SV-001", "product": "Setup service", "quantity": 2, "price": 100, "net": 200}
+        ],
+        "paid": true,
+        "tags": [],
+        "shipping": {"method": "digital", "tracking": null, "events": []}
+      },
+      {
+        "id": "ORD-1004",
+        "createdAt": "2026-10-15T08:20:00Z",
+        "status": "draft",
+        "customer": {
+          "id": "CUS-001",
+          "name": "Example Office GmbH",
+          "address": {"city": "Berlin", "country": "DE", "postalCode": "10115"}
+        },
+        "totals": {"net": 0, "tax": 0, "gross": 0, "discount": 0},
+        "items": [],
+        "paid": false,
+        "tags": [],
+        "notes": null
+      }
+    ],
+    "summary": {
+      "byStatus": {"shipped": 1, "processing": 1, "completed": 1, "draft": 1},
+      "byCountry": {"DE": 2, "FR": 1, "AT": 1}
+    }
+  }
+}

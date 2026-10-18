@@ -1389,3 +1389,19 @@
 <template id="templateDatasourcePreviewButton">
     <button type="button" class="button analyticsSecondary" id="datasourcePreviewButton"><?php p($l->t('Data preview')); ?></button>
 </template>
+
+<template id="templateJsonPickerButton">
+    <button type="button" class="icon icon-analytics-select jsonPickerBrowse" title="<?php p($l->t('Select data')); ?>" aria-label="<?php p($l->t('Select data')); ?>"></button>
+</template>
+
+<template id="templateJsonPicker">
+    <div class="jsonPicker">
+        <p class="userGuidance"><?php p($l->t('Expand a group to select values or entries. For lists of records, choose the fields to extract.')); ?></p>
+        <button type="button" class="button analyticsSecondary" data-action="root" hidden><?php p($l->t('Select higher level')); ?></button>
+        <div data-role="tree" class="jsonPickerTree"></div>
+        <p class="jsonPickerPath"><?php p($l->t('Object path')); ?>: <span id="jsonPickerPath"></span></p>
+        <button type="button" class="button analyticsSecondary" data-action="preview"><?php p($l->t('Preview result')); ?></button>
+        <p data-role="status" class="userGuidance" role="status"></p>
+        <div data-role="preview" class="analyticsTransformPreview"></div>
+    </div>
+</template>

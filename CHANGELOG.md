@@ -2,16 +2,17 @@
 
 ## Unreleased
 ### Added
+- Visual field picker for JSON datasources, with a browsable hierarchy and selection preview.
 - Preview live datasource data from the report wizard and sidebar before saving.
 - OCS endpoints to list accessible reports and owned datasets, retrieve report metadata and filtered data including shared reports, and add or delete dataset rows.
 
+### Changed
+- Simplify folder navigation and icons, using the URL to select content and keeping Overview groups collapsed.
+
 ### Fixed
 - Fit report title, subheader, and group fields to the report wizard's left column.
-- Update bundled Moment.js to 2.31.0, which includes the fix for CVE-2026-17495.
-- Update bundled PhpSpreadsheet to 5.10.0 to address known spreadsheet processing vulnerabilities.
+- Update bundled Moment.js to 2.31.0 and PhpSpreadsheet to 5.10.0 to address security vulnerabilities, including CVE-2026-17495 in Moment.js.
 - Restore report tiles for recipients of shared panoramas.
-- Replace the report folder icon with a downward arrow when expanded and remove redundant trailing folder arrows.
-- Use the URL to select content and open its navigation folders without saving navigation state or changing the URL when toggling folders; keep Overview groups collapsed.
 
 ## 7.0.2 - 2026-10-12
 ### Fixed
