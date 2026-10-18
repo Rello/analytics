@@ -577,6 +577,11 @@ Object.assign(OCA.Analytics.Datasource = {
                 infoColumn.classList.add('datasourceTextVariableCell');
                 infoColumn.appendChild(OCA.Analytics.Datasource.buildTextVariableButton(input));
             }
+            if (templateOption.id === 'path' && [6, 8].includes(Number(datasource))) {
+                const picker = document.importNode(document.getElementById('templateJsonPickerButton').content, true);
+                picker.querySelector('button').addEventListener('click', () => OCA.Analytics.JsonPicker.open(form, datasource, input));
+                infoColumn.appendChild(picker);
+            }
             form.appendChild(tableRow);
             tableRow.appendChild(label);
             tableRow.appendChild(input);

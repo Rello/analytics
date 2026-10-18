@@ -892,7 +892,8 @@ button, .button {
     vertical-align: middle;
 }
 
-button.datasourceTextVariableEdit {
+button.datasourceTextVariableEdit,
+button.jsonPickerBrowse {
     width: 20px;
     min-width: 20px;
     height: 32px;
@@ -908,7 +909,10 @@ button.datasourceTextVariableEdit {
 
 button.datasourceTextVariableEdit:hover,
 button.datasourceTextVariableEdit:focus,
-button.datasourceTextVariableEdit:active {
+button.datasourceTextVariableEdit:active,
+button.jsonPickerBrowse:hover,
+button.jsonPickerBrowse:focus,
+button.jsonPickerBrowse:active {
     border: 0;
     background-color: transparent;
     box-shadow: none;
@@ -2186,6 +2190,81 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .analyticsTransformCalculationControls .transformPriority {
     width: 5rem;
     flex: 0 0 5rem;
+}
+
+.jsonPicker {
+    width: min(620px, calc(100vw - 80px));
+}
+
+.icon-analytics-select {
+    background-image: url(../img/select.svg);
+    background-size: 16px;
+    filter: var(--background-invert-if-dark);
+}
+
+.jsonPickerTree {
+    max-height: 340px;
+    overflow: auto;
+    margin-block: 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--analytics-surface-radius);
+    box-sizing: border-box;
+}
+
+.jsonPickerTree details > :not(summary) {
+    margin-inline-start: 16px;
+}
+
+.jsonPickerTree button {
+    max-width: calc(100% - 16px);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    height: auto;
+}
+
+.jsonPickerTree summary,
+.jsonPickerValue {
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    overflow-wrap: anywhere;
+}
+
+.jsonPickerTree summary {
+    list-style: none;
+}
+
+.jsonPickerTree summary::-webkit-details-marker {
+    display: none;
+}
+
+.jsonPickerTree summary::before {
+    content: '▸';
+    text-align: center;
+}
+
+.jsonPickerTree details[open] > summary::before {
+    content: '▾';
+}
+
+.jsonPickerValue input[type="checkbox"] {
+    min-height: 0;
+    min-width: 0;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.jsonPickerPath {
+    color: var(--color-text-maxcontrast);
+    font-size: 12px;
+    margin-bottom: 16px;
+    overflow-wrap: anywhere;
 }
 
 .analyticsTransformPreview {

@@ -6,6 +6,12 @@ SPDX-PackageSupplier = "Marcel Scherello <analytics@scherello.de>"
 SPDX-PackageDownloadLocation = "https://github.com/rello/analytics"
 
 [[annotations]]
+path = "img/select.svg"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Google LLC"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
 path = "l10n/**"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019-2024 Nextcloud translators"
@@ -20,6 +26,12 @@ SPDX-License-Identifier = "AGPL-3.0-or-later"
 [[annotations]]
 path = "sbom.cdx.json"
 precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "sample_data/sample_orders.json"
+precedence = "override"
 SPDX-FileCopyrightText = "2026 Marcel Scherello"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 

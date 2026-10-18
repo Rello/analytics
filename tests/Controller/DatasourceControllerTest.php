@@ -6,6 +6,50 @@ use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
 
 class DatasourceControllerTest extends TestCase {
+    public function testJsonBrowseUsesCurrentUserAndReturnsOnlyContent(): void {
+        $json = $this->createMock(\OCA\Analytics\Datasource\LocalJson::class);
+        $json->expects($this->once())->method('readData')->with($this->callback(function ($options) {
+            $this->assertSame('u1', $options['user_id']);
+            $this->assertSame('', $options['path']);
+            $this->assertSame('false', $options['timestamp']);
+            $this->assertArrayNotHasKey('cacheKey', $options);
+            return true;
+        }))->willReturn(['rawdata' => '{"value":0}', 'auth' => 'secret', 'error' => 0, 'data' => []]);
+        $user = $this->createMock(\OCP\IUser::class);
+        $user->method('getUID')->willReturn('u1');
+        $session = $this->createMock(\OCP\IUserSession::class);
+        $session->method('getUser')->willReturn($user);
+        $controller = $this->createController(userSession: $session, localJson: $json);
+        $response = $controller->jsonContent(8, '{"link":"/test.json","path":"old","user_id":"other","cacheKey":"old","timestamp":"true"}');
+        $this->assertSame(200, $response->getStatus());
+        $this->assertSame(['content' => '{"value":0}'], $response->getData());
+    }
+
+    public function testJsonBrowseRejectsUnauthenticatedAndOtherDatasourceTypes(): void {
+        $json = $this->createMock(\OCA\Analytics\Datasource\LocalJson::class);
+        $json->expects($this->never())->method('readData');
+        $controller = $this->createController(localJson: $json);
+        $this->assertSame(400, $controller->jsonContent(8)->getStatus());
+        $user = $this->createMock(\OCP\IUser::class);
+        $session = $this->createMock(\OCP\IUserSession::class);
+        $session->method('getUser')->willReturn($user);
+        $controller = $this->createController(userSession: $session, localJson: $json);
+        $this->assertSame(400, $controller->jsonContent(1)->getStatus());
+        $this->assertSame(400, $controller->jsonContent(8, 'invalid')->getStatus());
+    }
+
+    public function testJsonBrowseLimitsResponseSize(): void {
+        $json = $this->createMock(\OCA\Analytics\Datasource\LocalJson::class);
+        $json->method('readData')->willReturn(['rawdata' => str_repeat(' ', 2 * 1024 * 1024 + 1), 'error' => 0, 'data' => []]);
+        $user = $this->createMock(\OCP\IUser::class);
+        $user->method('getUID')->willReturn('u1');
+        $session = $this->createMock(\OCP\IUserSession::class);
+        $session->method('getUser')->willReturn($user);
+        $response = $this->createController(userSession: $session, localJson: $json)->jsonContent(8);
+        $this->assertSame(400, $response->getStatus());
+        $this->assertArrayNotHasKey('content', $response->getData());
+    }
+
     public function testSpreadsheetSheetsListsNamesForCurrentUsersFile(): void {
         $spreadsheet = $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class);
         $spreadsheet->expects($this->once())->method('listWorksheetNames')
@@ -752,7 +796,8 @@ class DatasourceControllerTest extends TestCase {
         ?\OCP\EventDispatcher\IEventDispatcher $dispatcher = null,
         ?\OCA\Analytics\Service\VariableService $variableService = null,
         ?\OCA\Analytics\Datasource\LocalSpreadsheet $spreadsheet = null,
-        ?\OCP\IUserSession $userSession = null
+        ?\OCP\IUserSession $userSession = null,
+        ?\OCA\Analytics\Datasource\LocalJson $localJson = null
     ): DatasourceController {
         $appConfig = $this->createMock(\OCP\IAppConfig::class);
         $appConfig->method('getValueString')->willReturn('');
@@ -769,7 +814,7 @@ class DatasourceControllerTest extends TestCase {
             $localCsv ?? $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class),
             $this->createMock(\OCA\Analytics\Datasource\Regex::class),
             $this->createMock(\OCA\Analytics\Datasource\ExternalJson::class),
-            $this->createMock(\OCA\Analytics\Datasource\LocalJson::class),
+            $localJson ?? $this->createMock(\OCA\Analytics\Datasource\LocalJson::class),
             $this->createMock(\OCA\Analytics\Datasource\ExternalCsv::class),
             $spreadsheet ?? $this->createMock(\OCA\Analytics\Datasource\LocalSpreadsheet::class),
             new FakeL10N(),
