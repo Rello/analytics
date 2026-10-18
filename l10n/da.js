@@ -11,6 +11,7 @@ OC.L10N.register(
     "Data source not available anymore" : "Data kilde ikke tilgængelig",
     "Data preview" : "Forhåndsvisning af data",
     "The preview request failed." : "Forhåndsvisningen kunne ikke hentes.",
+    "Preview of the first 20 rows." : "Forhåndsvisning af de første 20 rækker.",
     "The preview could not be prepared." : "Forhåndsvisningen kunne ikke forberedes.",
     "Edit text variables" : "Rediger tekstvariabler",
     "Edit file name" : "Rediger filnavn",

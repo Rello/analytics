@@ -11,6 +11,7 @@ OC.L10N.register(
     "Data source not available anymore" : "Fonte de dados não está mais disponível",
     "Data preview" : "Pré-visualização dos dados",
     "The preview request failed." : "A solicitação de pré-visualização falhou.",
+    "Preview of the first 20 rows." : "Pré-visualização das primeiras 20 linhas.",
     "The preview could not be prepared." : "Não foi possível preparar a pré-visualização.",
     "Edit text variables" : "Editar variáveis de texto",
     "Edit file name" : "Editar nome de arquivo",
