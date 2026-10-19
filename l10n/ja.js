@@ -83,6 +83,7 @@ OC.L10N.register(
     "Bar" : "バー",
     "Drag fields here" : "ここにフィールドをドラッグ",
     "Request could not be processed" : "リクエストを処理できませんでした",
+    "Show more" : "表示を増やす",
     "Favorites" : "お気に入り",
     "Reports" : "報告",
     "New" : "新規作成",

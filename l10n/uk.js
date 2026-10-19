@@ -99,6 +99,7 @@ OC.L10N.register(
     "Thresholds" : "Пороги",
     "Drag fields here" : "Перетягнути поля сюди",
     "Request could not be processed" : "Не вдалося обробити запит",
+    "Show more" : "Показати більше",
     "Favorites" : "Із зірочкою",
     "Panoramas" : "Панорами",
     "Reports" : "Звіти",

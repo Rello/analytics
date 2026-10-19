@@ -99,6 +99,7 @@ OC.L10N.register(
     "Thresholds" : "Drempelwaarden",
     "Drag fields here" : "Sleep velden hierheen",
     "Request could not be processed" : "Het verzoek kon niet worden verwerkt.",
+    "Show more" : "Toon meer",
     "Favorites" : "Favorieten",
     "Panoramas" : "Panoramas",
     "Reports" : "Rapportages",

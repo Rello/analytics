@@ -94,6 +94,7 @@ OC.L10N.register(
     "Thresholds" : "Vizingiti",
     "Drag fields here" : "Buruta sehemu hapa",
     "Request could not be processed" : "Ombi halikuweza kuchakatwa",
+    "Show more" : "Onesha zaidi",
     "Favorites" : "Vipendwa",
     "Panoramas" : "Mandhari",
     "Reports" : "Taarifa",

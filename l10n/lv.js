@@ -56,6 +56,7 @@ OC.L10N.register(
     "Primary" : "Galvenā",
     "Secondary" : "Sekundāri",
     "Request could not be processed" : "Pieprasījums nevarēja tikt apstrādāts",
+    "Show more" : "Parādīt vairāk",
     "Favorites" : "Izlases vienumi",
     "Reports" : "Atskaites",
     "New" : "Jauns",

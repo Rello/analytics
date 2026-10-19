@@ -25,6 +25,7 @@ OC.L10N.register(
     "Add" : "Agiunghe",
     "Apply" : "Àplica",
     "Bar" : "Tzilleri",
+    "Show more" : "Mustra de prus",
     "Favorites" : "Preferidos",
     "New" : "Nou",
     "Overview" : "Panoràmica",

@@ -138,6 +138,7 @@ OC.L10N.register(
     "Drag fields here" : "فیلدها را اینجا بکشید",
     "Request could not be processed" : "درخواست قابل پردازش نیست",
     "Import a csv directly; Do not use a data load." : "مستقیماً یک فایل CSV وارد کنید؛ از بارگذاری داده استفاده نکنید.",
+    "Show more" : "نمایش بیشتر",
     "Favorites" : "موارد دلخواه",
     "Panoramas" : "پانوراماها",
     "Reports" : "گزارش‌ها",

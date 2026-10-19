@@ -48,6 +48,7 @@ OC.L10N.register(
     "More options" : "Ugar n textiṛiyin",
     "Primary" : "Agejdan",
     "Bar" : "Ttberna",
+    "Show more" : "Sken ugar",
     "Favorites" : "Imenyafen",
     "Reports" : "Assaɣen",
     "New" : "Amaynut",

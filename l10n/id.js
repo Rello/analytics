@@ -159,6 +159,7 @@ OC.L10N.register(
     "Drag fields here" : "Masukan bidang di sini",
     "Request could not be processed" : "Permintaan tidak dapat diproses",
     "Import a csv directly; Do not use a data load." : "Impor CSV secara langsung; jangan gunakan pemuatan data.",
+    "Show more" : "Tampilkan lebih banyak",
     "Favorites" : "Disukai",
     "Panoramas" : "Panorama",
     "Reports" : "Laporan",

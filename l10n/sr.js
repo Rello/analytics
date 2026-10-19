@@ -95,6 +95,7 @@ OC.L10N.register(
     "Thresholds" : "Прагови",
     "Drag fields here" : "Превуците поља овде",
     "Request could not be processed" : "Захтев не може да се обради",
+    "Show more" : "Прикажи више",
     "Favorites" : "Омиљене",
     "Panoramas" : "Panoramas",
     "Reports" : "Извештај",

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Apply" : "החלה",
     "Line" : "קו",
     "Bar" : "בר",
+    "Show more" : "להציג יותר",
     "Favorites" : "מועדפים",
     "New" : "חדש",
     "New group" : "קבוצה חדשה",

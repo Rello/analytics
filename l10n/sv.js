@@ -242,6 +242,7 @@ OC.L10N.register(
     "Not mapped" : "Inte mappad",
     "Ignored source columns" : "Ignorerade källkolumner",
     "Import a csv directly; Do not use a data load." : "Importera en CSV-fil direkt. Använd inte en datainläsning.",
+    "Show more" : "Visa mer",
     "Favorites" : "Favoriter",
     "Panoramas" : "Panoraman",
     "Reports" : "Rapporter",

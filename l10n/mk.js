@@ -28,6 +28,7 @@ OC.L10N.register(
     "Line" : "Линија",
     "More options" : "Повеќе опции ",
     "Bar" : "Бар",
+    "Show more" : "Прикажи повеќе",
     "Favorites" : "Омилени",
     "New" : "Ново",
     "Overview" : "Преглед",

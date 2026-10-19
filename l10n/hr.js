@@ -32,6 +32,7 @@ OC.L10N.register(
     "Apply" : "Primijeni",
     "Line" : "Linija",
     "Bar" : "Bar",
+    "Show more" : "Prikaži više",
     "Favorites" : "Favoriti",
     "Reports" : "Izvješća",
     "New" : "Novo",

@@ -19,6 +19,7 @@ OC.L10N.register(
     "None" : "Nenio",
     "Priority" : "Prioritato",
     "Apply" : "Validigi",
+    "Show more" : "Montri pli",
     "Favorites" : "Pliŝataĵoj",
     "New" : "Nova",
     "Overview" : "Superrigardo",

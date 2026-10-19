@@ -76,6 +76,7 @@ OC.L10N.register(
     "Secondary" : "Toissijainen",
     "Bar" : "Palkki",
     "Request could not be processed" : "Pyyntöä ei voitu käsitellä",
+    "Show more" : "Näytä enemmän",
     "Favorites" : "Suosikit",
     "Reports" : "Raportit",
     "New" : "Uusi",

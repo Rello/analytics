@@ -91,6 +91,7 @@ OC.L10N.register(
     "Thresholds" : "Terskler",
     "Drag fields here" : "Dra felt her",
     "Request could not be processed" : "Forespørselen kunne ikke behandles",
+    "Show more" : "Vis mer",
     "Favorites" : "Favoritter",
     "Panoramas" : "Panoramer",
     "Reports" : "Rapporter",

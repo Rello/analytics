@@ -114,6 +114,7 @@ OC.L10N.register(
     "Thresholds" : "Práhy",
     "Drag fields here" : "Kolonky přetáhněte sem",
     "Request could not be processed" : "Požadavek se nepodařilo zpracovat",
+    "Show more" : "Zobrazit více",
     "Favorites" : "Oblíbené",
     "Panoramas" : "Panoramata",
     "Reports" : "Výkazy",

@@ -96,6 +96,7 @@ OC.L10N.register(
     "Thresholds" : "چەكلەر",
     "Drag fields here" : "بۇ يەرنى سۆرەپ تاشلاڭ",
     "Request could not be processed" : "تەلەپ بىر تەرەپ قىلىنمىدى",
+    "Show more" : "تېخىمۇ كۆپ كۆرسەت",
     "Favorites" : "يىغقۇچ",
     "Panoramas" : "ئۇمۇمىي ئەھۋال",
     "Reports" : "دوكلات",

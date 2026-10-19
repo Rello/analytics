@@ -154,6 +154,7 @@ OC.L10N.register(
     "Drag fields here" : "Σύρετε πεδία εδώ",
     "Request could not be processed" : "Δεν ήταν δυνατή η επεξεργασία του αιτήματος",
     "Import a csv directly; Do not use a data load." : "Εισαγάγετε ένα csv απευθείας. Μην χρησιμοποιήσετε φόρτωση δεδομένων.",
+    "Show more" : "Εμφάνιση περισσότερων",
     "Favorites" : "Αγαπημένα",
     "Panoramas" : "Πανoράματα",
     "Reports" : "Αναφορές",

@@ -203,6 +203,7 @@ OC.L10N.register(
     "Not mapped" : "未對應",
     "Ignored source columns" : "已忽略的來源欄",
     "Import a csv directly; Do not use a data load." : "直接匯入 CSV；不要使用資料載入。",
+    "Show more" : "顯示更多",
     "Favorites" : "我的最愛",
     "Panoramas" : "全景",
     "Reports" : "報告",

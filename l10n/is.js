@@ -28,6 +28,7 @@ OC.L10N.register(
     "Line" : "Lína",
     "More options" : "Fleiri valkostir",
     "Bar" : "Bar",
+    "Show more" : "Birta meira",
     "Favorites" : "Eftirlæti",
     "New" : "Nýtt",
     "Overview" : "Yfirlit",

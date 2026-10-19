@@ -87,6 +87,7 @@ OC.L10N.register(
     "Thresholds" : "Soglie",
     "Drag fields here" : "Trascina i campi qui",
     "Request could not be processed" : "La richiesta non può essere elaborata",
+    "Show more" : "Mostra più",
     "Favorites" : "Preferiti",
     "Reports" : "Reports",
     "New" : "Nuovo",

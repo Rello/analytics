@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Filter" : "පෙරහන",
     "Add" : "එකතු කරන්න",
+    "Show more" : "තව පෙන්වන්න",
     "Favorites" : "ප්‍රියතම",
     "New" : "නව",
     "Save" : "Save",

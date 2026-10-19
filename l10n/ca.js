@@ -86,6 +86,7 @@ OC.L10N.register(
     "Thresholds" : "Llindars",
     "Drag fields here" : "Arrossega els camps aquí",
     "Request could not be processed" : "No s'ha pogut processar la sol·licitud",
+    "Show more" : "Mostra'n més",
     "Favorites" : "Preferits",
     "Panoramas" : "Panoramas",
     "Reports" : "Informes",

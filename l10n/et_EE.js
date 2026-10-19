@@ -192,6 +192,7 @@ OC.L10N.register(
     "Not mapped" : "Vastendamata",
     "Ignored source columns" : "Eiratud lähteveerud",
     "Import a csv directly; Do not use a data load." : "Impordi otse CSV-failist. Ära kasuta andmelaadimist.",
+    "Show more" : "Näita rohkem",
     "Favorites" : "Lemmikud",
     "Panoramas" : "Koondvaated",
     "Reports" : "Aruanded",

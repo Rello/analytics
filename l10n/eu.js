@@ -86,6 +86,7 @@ OC.L10N.register(
     "Thresholds" : "Atalaseak",
     "Drag fields here" : "Arrastatu eremuak hona",
     "Request could not be processed" : "Ezin izan da prozesatu eskaera",
+    "Show more" : "Erakutsi gehiago",
     "Favorites" : "Gogokoak",
     "Panoramas" : "Panoramak",
     "Reports" : "Txostenak",

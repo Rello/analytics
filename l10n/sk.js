@@ -243,6 +243,7 @@ OC.L10N.register(
     "Not mapped" : "Nemapované",
     "Ignored source columns" : "Ignorované stĺpce zdroja",
     "Import a csv directly; Do not use a data load." : "Importujte csv priamo; nepoužívajte načítanie údajov.",
+    "Show more" : "Zobraziť viac",
     "Favorites" : "Obľúbené",
     "Panoramas" : "Panorámy",
     "Reports" : "Zostavy",

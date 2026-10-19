@@ -133,6 +133,7 @@ OC.L10N.register(
     "Thresholds" : "Progi",
     "Drag fields here" : "Przeciągnij tutaj pola",
     "Request could not be processed" : "Nie można przetworzyć żądania",
+    "Show more" : "Pokaż więcej",
     "Favorites" : "Ulubione",
     "Panoramas" : "Panoramas",
     "Reports" : "Raporty",

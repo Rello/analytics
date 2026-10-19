@@ -243,6 +243,7 @@ OC.L10N.register(
     "Not mapped" : "Nicht zugeordnet",
     "Ignored source columns" : "Ignorierte Quellspalten",
     "Import a csv directly; Do not use a data load." : "Eine CSV-Datei direkt importieren; keine Datenladung verwenden.",
+    "Show more" : "Mehr anzeigen",
     "Favorites" : "Favoriten",
     "Panoramas" : "Panoramen",
     "Reports" : "Berichte",

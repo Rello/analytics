@@ -243,6 +243,7 @@ OC.L10N.register(
     "Not mapped" : "Gan a bheith mapáilte",
     "Ignored source columns" : "Colúin fho-fhoinse neamhaird orthu",
     "Import a csv directly; Do not use a data load." : "Iompórtáil csv go díreach; Ná húsáid ualach sonraí.",
+    "Show more" : "Taispeáin níos mó",
     "Favorites" : "Ceanáin",
     "Panoramas" : "Lánléargas",
     "Reports" : "Tuairiscí",

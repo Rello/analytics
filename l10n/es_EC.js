@@ -75,6 +75,7 @@ OC.L10N.register(
     "Bar" : "Barra",
     "Thresholds" : "Límites",
     "Request could not be processed" : "No se pudo procesar la solicitud",
+    "Show more" : "Mostrar más",
     "Favorites" : "Favoritos",
     "Reports" : "Informes",
     "New" : "Nuevo",

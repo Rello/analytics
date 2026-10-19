@@ -95,6 +95,7 @@ OC.L10N.register(
     "Thresholds" : "ເກນກຳນົດ",
     "Drag fields here" : "ລາກຟິວມາທີ່ນີ້",
     "Request could not be processed" : "ບໍ່ສາມາດປະມວນຜົນຄຳຮ້ອງຂໍໄດ້",
+    "Show more" : "ສະແດງເພີ່ມເຕີມ",
     "Favorites" : "ລາຍການທີ່ມັກ",
     "Panoramas" : "ພາບລວມ",
     "Reports" : "ລາຍງານ",

@@ -156,6 +156,7 @@ OC.L10N.register(
     "Drag fields here" : "Vilkite laukus čia",
     "Request could not be processed" : "Užklausos apdoroti nepavyko",
     "Import a csv directly; Do not use a data load." : "Importuokite CSV failą tiesiogiai; nenaudokite duomenų įkėlimo.",
+    "Show more" : "Rodyti daugiau",
     "Favorites" : "Mėgstami",
     "Panoramas" : "Panoramos",
     "Reports" : "Ataskaitos",

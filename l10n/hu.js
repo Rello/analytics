@@ -99,6 +99,7 @@ OC.L10N.register(
     "Thresholds" : "Küszöbértékek",
     "Drag fields here" : "Húzza ide a mezőket",
     "Request could not be processed" : "A kérést nem sikerült feldolgozni",
+    "Show more" : "Több megjelenítése",
     "Favorites" : "Kedvencek",
     "Panoramas" : "Panorámák",
     "Reports" : "Jelentések",

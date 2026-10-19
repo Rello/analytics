@@ -100,6 +100,7 @@ OC.L10N.register(
     "Thresholds" : "Limiares",
     "Drag fields here" : "Arrastre os campos cara aquí",
     "Request could not be processed" : "Non foi posíbel procesar a solicitude",
+    "Show more" : "Amosar máis",
     "Favorites" : "Favoritos",
     "Panoramas" : "Panoramas",
     "Reports" : "Informes",

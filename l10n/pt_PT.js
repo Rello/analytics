@@ -132,6 +132,7 @@ OC.L10N.register(
     "Drag fields here" : "Arrastar campos para aqui",
     "Request could not be processed" : "O pedido não pode ser processado",
     "Import a csv directly; Do not use a data load." : "Importar um CSV diretamente; Não usar um carregamento de dados.",
+    "Show more" : "Mostrar mais",
     "Favorites" : "Favoritos",
     "Panoramas" : "Panoramas",
     "Reports" : "Relatórios",

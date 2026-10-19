@@ -45,6 +45,7 @@ OC.L10N.register(
     "Doughnut" : "დონატი",
     "More options" : "მეტი ოფცია",
     "Bar" : "Bar",
+    "Show more" : "Show more",
     "Favorites" : "Favorites",
     "New" : "ახალი",
     "Overview" : "მიმოხილვა",
