@@ -63,6 +63,7 @@ OC.L10N.register(
     "Bar" : "Barra",
     "Drag fields here" : "Arrastra los campos equí",
     "Request could not be processed" : "Nun se pudo procesar la solicitú",
+    "Show more" : "Amosar más",
     "Favorites" : "Favoritos",
     "Reports" : "Informes",
     "New" : "Nuevu",

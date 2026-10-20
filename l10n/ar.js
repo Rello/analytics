@@ -87,6 +87,7 @@ OC.L10N.register(
     "Thresholds" : "عَتَبَات thresholds",
     "Drag fields here" : "سحب الحقول هنا",
     "Request could not be processed" : "تتعذر معالجة الطلب",
+    "Show more" : "عرض المزيد",
     "Favorites" : "المُفضّلة",
     "Panoramas" : "نظرات شاملة",
     "Reports" : "تقارير",
