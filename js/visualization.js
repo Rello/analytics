@@ -862,9 +862,11 @@ OCA.Analytics.Visualization = {
         let defaultColReorder = true;
         let data, columns;
         let language = {
-            // TRANSLATORS Noun
+            // TRANSLATORS: Noun: label for the table search field.
             search: t('analytics', 'Search'),
+            // TRANSLATORS: _MENU_ is replaced with a page-size selector, e.g. 10. Preserve this token.
             lengthMenu: t('analytics', 'Show _MENU_ entries'),
+            // TRANSLATORS: _START_, _END_, and _TOTAL_ are row numbers, e.g. 1, 10, and 200. Preserve these tokens.
             info: t('analytics', 'Showing _START_ to _END_ of _TOTAL_ entries'),
             infoEmpty: t('analytics', 'Showing 0 to 0 of 0 entries'),
             paginate: {
@@ -1999,7 +2001,9 @@ OCA.Analytics.Visualization = {
 
         return {
             label: mode === 'aggregate'
+                // TRANSLATORS: Noun in a chart legend: running total series; {label} is the original series name, e.g. Revenue.
                 ? t('analytics', '{label} Aggregation', {label: dataset.label})
+                // TRANSLATORS: Noun in a chart legend: differences between consecutive values; {label} is the original series name, e.g. Revenue.
                 : t('analytics', '{label} Disaggregation', {label: dataset.label}),
             backgroundColor: dataset.backgroundColor,
             borderColor: dataset.borderColor,
@@ -2644,6 +2648,7 @@ OCA.Analytics.Visualization = {
         entries.sort((a, b) => isTop ? b[1] - a[1] : a[1] - b[1]);
         const keepKeysSet = new Set(entries.slice(0, n).map(e => e[0]));
 
+        // TRANSLATORS: Label for the combined group of items outside the chosen ranking.
         const othersLabel = t('analytics', 'others');
         const aggregated = {};
 

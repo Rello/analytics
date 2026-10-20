@@ -7,6 +7,7 @@
 - OCS endpoints to list accessible reports and owned datasets, retrieve report metadata and filtered data including shared reports, and add or delete dataset rows.
 
 ### Changed
+- Clarify ambiguous report actions, chart and data terminology, and placeholders with translator comments.
 - Simplify folder navigation and icons, using the URL to select content and keeping Overview groups collapsed.
 
 ### Fixed

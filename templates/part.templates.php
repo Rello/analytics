@@ -87,7 +87,8 @@
     </div>
     <div id="reportVisualizationSection" style="display: none; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
-            <div style="display: table-cell;  width: 100%;"><?php p($l->t('Display')); ?></div>
+            <div style="display: table-cell;  width: 100%;"><?php // TRANSLATORS: Noun: the report display mode, such as chart, table, or both.
+                p($l->t('Display')); ?></div>
             <div style="display: table-cell;">
                 <select id="sidebarReportVisualization" class="sidebarInput">
                     <option value="ct" selected><?php p($l->t('Chart & Table')); ?></option>
@@ -152,7 +153,8 @@
 			<?php p($l->t('Delete')); ?>
         </button>
         <button id="sidebarReportExportButton" type="button" class="analyticsSecondary">
-			<?php p($l->t('Export')); ?>
+			<?php // TRANSLATORS: Verb: export the report configuration.
+			    p($l->t('Export')); ?>
         </button>
         <button id="sidebarReportUpdateButton" type="button" class="analyticsPrimary">
 			<?php p($l->t('Update')); ?>
@@ -195,7 +197,8 @@
                 <label for="groupOptionDimension"><?php p($l->t('Group by')); ?></label>
             </div>
             <div class="flexibleTopNMeasure" style="display: none; width: 150px;">
-                <label for="groupOptionMeasure"><?php p($l->t('Measure')); ?></label>
+                <label for="groupOptionMeasure"><?php // TRANSLATORS: Noun: a numeric data column that can be aggregated, such as revenue.
+                    p($l->t('Measure')); ?></label>
             </div>
             <div style="display: table-cell; width: 150px;">
                 <label for="groupOptionType"><?php p($l->t('Option')); ?></label>
@@ -204,7 +207,8 @@
                 <label for="groupOptionNumber">N</label>
             </div>
             <div style="display: table-cell; width: 100px;">
-                <label for="groupOptionOthers"><?php p($l->t('with others')); ?></label>
+                <label for="groupOptionOthers"><?php // TRANSLATORS: Ranking option: combine items outside the chosen ranking into an additional group.
+                    p($l->t('with others')); ?></label>
             </div>
         </div>
         <div style="display: table-row;">
@@ -223,7 +227,8 @@
             <div style="display: table-cell; width: 100px;">
                 <label class="analyticsSwitch analyticsSwitch--centered" for="groupOptionOthers">
                     <input type="checkbox" id="groupOptionOthers" name="groupOptionOthers" role="switch"
-                           aria-label="<?php p($l->t('with others')); ?>"/>
+                           aria-label="<?php // TRANSLATORS: Ranking option: combine items outside the chosen ranking into an additional group.
+                               p($l->t('with others')); ?>"/>
                     <span class="analyticsSwitchSlider" aria-hidden="true"></span>
                 </label>
             </div>
@@ -237,9 +242,15 @@
         <h2><?php p($l->t('Columns')); ?></h2>
         <span class="userGuidance"><?php p($l->t('Columns set to None keep their original values and define the groups. Set all measures to None to show the original rows. Removing a dimension combines its groups.')); ?></span>
         <div class="analyticsTransformColumnsHeader" aria-hidden="true">
-            <span><?php p($l->t('Column')); ?></span><span><?php p($l->t('Include')); ?></span>
-            <span><?php p($l->t('Aggregate')); ?></span><span><?php p($l->t('Sort')); ?></span>
-            <span><?php p($l->t('Priority')); ?></span>
+            <span><?php p($l->t('Column')); ?></span>
+            <span><?php // TRANSLATORS: Verb: include this column or calculated measure in the report.
+                p($l->t('Include')); ?></span>
+            <span><?php // TRANSLATORS: Verb: choose how numeric column values are combined within each group.
+                p($l->t('Aggregate')); ?></span>
+            <span><?php // TRANSLATORS: Verb: choose the sorting direction for a report column.
+                p($l->t('Sort')); ?></span>
+            <span><?php // TRANSLATORS: Noun: sorting precedence; lower numbers are applied first.
+                p($l->t('Priority')); ?></span>
         </div>
         <div id="drilldownOptionsTable" class="analyticsTransformColumns"></div>
         <p id="transformColumnsMessage" class="userGuidance" role="alert" hidden></p>
@@ -725,7 +736,8 @@
                 </a>
             </li>
             <li><a href="#" id="navigationMenuShare"><span
-                            class="icon-share analytics-navigation-menu-icon"></span><span><?php p($l->t('Share')); ?></span></a></li>
+                            class="icon-share analytics-navigation-menu-icon"></span><span><?php // TRANSLATORS: Verb: give other people access to this report, dataset, or panorama.
+                                p($l->t('Share')); ?></span></a></li>
             <li><a href="#" id="navigationMenuAdvanced"><span
                             class="icon-category-customization analytics-navigation-menu-icon"></span><span><?php p($l->t('Dataset maintenance')); ?></span></a>
             </li>
@@ -733,7 +745,8 @@
             <li><a href="#" id="navigationMenuDelete"><span
                             class="icon-delete analytics-navigation-menu-icon"></span><span><?php p($l->t('Delete')); ?></span></a></li>
             <li><a href="#" id="navigationMenuUnshare"><span
-                            class="icon-close analytics-navigation-menu-icon"></span><span><?php p($l->t('Unshare')); ?></span></a></li>
+                            class="icon-close analytics-navigation-menu-icon"></span><span><?php // TRANSLATORS: Verb: revoke shared access to this item.
+                                p($l->t('Unshare')); ?></span></a></li>
         </ul>
     </div>
 </template>
@@ -770,14 +783,16 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('can navigate')); ?></label>
+                                <label for="shareEditing"><?php // TRANSLATORS: Sharing permission: allow the recipient to navigate to other accessible Analytics content.
+                                    p($l->t('can navigate')); ?></label>
                             </span>
                         </li>
                         <li class="action-separator"></li>
                        <li>
                             <a href="#" class="unshare" id="deleteShare">
                                 <span class="icon icon-close" id="deleteShareIcon"></span>
-                                <span><?php p($l->t('Unshare')); ?></span>
+                                <span><?php // TRANSLATORS: Verb: revoke shared access to this item.
+                                    p($l->t('Unshare')); ?></span>
                             </a>
                         </li>
                     </ul>
@@ -821,7 +836,8 @@
                             <span class="menuitem">
                                 <input type="checkbox" name="shareEditing" id="shareEditing"
                                        class="checkbox showPasswordCheckbox">
-                                <label for="shareEditing"><?php p($l->t('can navigate')); ?></label>
+                                <label for="shareEditing"><?php // TRANSLATORS: Sharing permission: allow the recipient to navigate to other accessible Analytics content.
+                                    p($l->t('can navigate')); ?></label>
                             </span></li>
                         <li>
                             <span class="menuitem">
@@ -853,7 +869,8 @@
                         <li>
                             <a href="#" class="unshare" id="deleteShare">
                                 <span class="icon icon-close" id="deleteShareIcon"></span>
-                                <span><?php p($l->t('Unshare')); ?></span>
+                                <span><?php // TRANSLATORS: Verb: revoke shared access to this item.
+                                    p($l->t('Unshare')); ?></span>
                             </a>
                         </li>
                     </ul>
@@ -1177,7 +1194,8 @@
                         <img src="<?php echo image_path('analytics', 'chartLine.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Line')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: a line chart.
+                        p($l->t('Line')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1197,7 +1215,8 @@
                         <img src="<?php echo image_path('analytics', 'chartBar.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Bar')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: a bar chart.
+                        p($l->t('Bar')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1207,7 +1226,8 @@
                         <img src="<?php echo image_path('analytics', 'chartBar.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Bar - Stacked')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: bars with the values of multiple series stacked together.
+                        p($l->t('Bar - Stacked')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1217,7 +1237,8 @@
                         <img src="<?php echo image_path('analytics', 'chartBar.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Bar - Stacked 100%%')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: stacked bars normalized to 100 percent. Preserve the doubled percent sign.
+                        p($l->t('Bar - Stacked 100%%')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1227,7 +1248,8 @@
                         <img src="<?php echo image_path('analytics', 'chartArea.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Area')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: a filled area chart.
+                        p($l->t('Area')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1237,7 +1259,8 @@
                         <img src="<?php echo image_path('analytics', 'chartArea.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Area - 100%%')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: stacked areas normalized to 100 percent. Preserve the doubled percent sign.
+                        p($l->t('Area - 100%%')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1247,7 +1270,8 @@
                         <img src="<?php echo image_path('analytics', 'chartDonut.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Doughnut')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: a ring-shaped pie chart.
+                        p($l->t('Doughnut')); ?></span>
                 </label>
             </div>
             <div class="analyticsModelOption">
@@ -1257,7 +1281,8 @@
                         <img src="<?php echo image_path('analytics', 'chartFunnel.svg'); ?>" class="analyticsModelCardIcon" alt="">
                         <span class="analyticsModelCardIndicator"></span>
                     </span>
-                    <span class="analyticsModelCardTitle"><?php p($l->t('Funnel')); ?></span>
+                    <span class="analyticsModelCardTitle"><?php // TRANSLATORS: Chart type: values shown as progressively sized funnel sections.
+                        p($l->t('Funnel')); ?></span>
                 </label>
             </div>
         </div>
@@ -1282,8 +1307,10 @@
             </div>
             <div id="chartColumnSeriesFieldset" class="chartColumnMappingRole">
                 <div class="chartColumnMappingToolbar">
-                    <label for="chartColumnSeriesAdd"><?php p($l->t('Split by')); ?></label>
-                    <button type="button" id="chartColumnMappingSwap"><?php p($l->t('Swap')); ?></button>
+                    <label for="chartColumnSeriesAdd"><?php // TRANSLATORS: Chart setting: choose fields whose distinct values create separate data series.
+                        p($l->t('Split by')); ?></label>
+                    <button type="button" id="chartColumnMappingSwap"><?php // TRANSLATORS: Verb: exchange the category field and the series breakdown field.
+                        p($l->t('Swap')); ?></button>
                 </div>
                 <div id="chartColumnSeries" class="chartColumnSelections"></div>
                 <select id="chartColumnSeriesAdd" class="optionsInput"></select>
@@ -1399,7 +1426,8 @@
         <p class="userGuidance"><?php p($l->t('Expand a group to select values or entries. For lists of records, choose the fields to extract.')); ?></p>
         <button type="button" class="button analyticsSecondary" data-action="root" hidden><?php p($l->t('Select higher level')); ?></button>
         <div data-role="tree" class="jsonPickerTree"></div>
-        <p class="jsonPickerPath"><?php p($l->t('Object path')); ?>: <span id="jsonPickerPath"></span></p>
+        <p class="jsonPickerPath"><?php // TRANSLATORS: JSON datasource setting: path to the nested object or array from which data is extracted.
+            p($l->t('Object path')); ?>: <span id="jsonPickerPath"></span></p>
         <button type="button" class="button analyticsSecondary" data-action="preview"><?php p($l->t('Preview result')); ?></button>
         <p data-role="status" class="userGuidance" role="status"></p>
         <div data-role="preview" class="analyticsTransformPreview"></div>

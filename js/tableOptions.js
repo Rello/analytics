@@ -229,6 +229,7 @@ OCA.Analytics.TableOptions = {
             });
             this.updatePreviewSelection();
             const info = state.preview.page.info();
+            // TRANSLATORS: {shown} is the number of preview rows and {total} is the number of table rows, e.g. 10 and 200.
             field('tableOptionsPreviewStatus').textContent = t('analytics', 'Preview: {shown} of {total} table rows. Current report filters apply.', {
                 shown: info.end.toLocaleString(), total: info.recordsTotal.toLocaleString(),
             });

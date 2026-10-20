@@ -29,7 +29,8 @@
             <li>
                 <button id="optionsMenuTopN" class="has-tooltip" title="<?php p($l->t('Show top N items and group others together')); ?>">
                     <span class="icon-analytics-group"></span>
-                    <span><?php p($l->t('Top N')); ?></span>
+                    <span><?php // TRANSLATORS: Ranking option: keep the N highest-ranked items; N is the number chosen by the user.
+                        p($l->t('Top N')); ?></span>
                 </button>
             </li>
             <li>
@@ -69,17 +70,20 @@
                 <ul id="optionsMenuSubAnalysis" class="report-menu-submenu">
                     <li>
                         <button id="trendIcon">
-                            <span><?php p($l->t('Trend')); ?></span>
+                            <span><?php // TRANSLATORS: Noun: a linear trend line calculated from a chart series.
+                                p($l->t('Trend')); ?></span>
                         </button>
                     </li>
                     <li>
                         <button id="aggregateIcon">
-                            <span><?php p($l->t('Aggregate values')); ?></span>
+                            <span><?php // TRANSLATORS: Verb: add a chart series showing the running total of the source values.
+                                p($l->t('Aggregate values')); ?></span>
                         </button>
                     </li>
                     <li>
                         <button id="disAggregateIcon">
-                            <span><?php p($l->t('Disaggregate values')); ?></span>
+                            <span><?php // TRANSLATORS: Verb: add a chart series showing differences between consecutive source values.
+                                p($l->t('Disaggregate values')); ?></span>
                         </button>
                     </li>
                 </ul>
@@ -187,6 +191,7 @@
          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
 
     <div id="addFilterIcon" class="analytics-options icon-analytics-filter has-tooltip"
-         title="<?php p($l->t('Filter')); ?>"></div>
+         title="<?php // TRANSLATORS: Noun: report filter settings.
+             p($l->t('Filter')); ?>"></div>
     <div id="filterVisualisation" style="display: inline-block; float: right;"></div>
 </div>

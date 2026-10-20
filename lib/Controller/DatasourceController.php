@@ -298,6 +298,7 @@ class DatasourceController extends Controller {
 
 		} catch (NotFoundException $e) {
 			$result = [
+				// TRANSLATORS: %s is the missing file path, e.g. reports/sales.csv.
 				'error' => $this->l10n->t('File not found: %s', [$option['link'] ?? '']),
 				'data' => [],
 				'status' => 'nodata',

@@ -711,6 +711,7 @@ Object.assign(OCA.Analytics.Report.Functions = {
         let datasetType = 'time';
         for (let y = 0; y < numberDatasets; y++) {
             let dataset = OCA.Analytics.chartObject.data.datasets[y];
+            // TRANSLATORS: Noun: a linear trend line calculated from a chart series.
             let newLabel = dataset.label + " " + t('analytics', 'Trend');
 
             // Add the function only for visible source series.
@@ -718,6 +719,7 @@ Object.assign(OCA.Analytics.Report.Functions = {
             // dont add trend twice
             if (OCA.Analytics.chartObject.data.datasets.find(o => o.label === newLabel) !== undefined) continue;
             // dont add trend for a trend
+            // TRANSLATORS: Noun: a linear trend line calculated from a chart series.
             if (dataset.label.substr(dataset.label.length - 5) === t('analytics', 'Trend')) continue;
 
             let yValues = [];

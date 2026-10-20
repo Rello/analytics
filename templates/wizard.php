@@ -398,7 +398,8 @@
                         <div class="icon-analytics-chartLine icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 10px;">
                             <input type="radio" id="chartLine" class="radio" name="chart" value="line">
-                            <label for="chartLine"><?php p($l->t('Line')); ?></label>
+                            <label for="chartLine"><?php // TRANSLATORS: Chart type: a line chart.
+                                p($l->t('Line')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell; vertical-align: top; position: relative;">
@@ -417,7 +418,8 @@
                         <div class="icon-analytics-chartArea icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 10px;">
                             <input type="radio" id="chartArea" class="radio" name="chart" value="area">
-                            <label for="chartArea"><?php p($l->t('Area')); ?></label>
+                            <label for="chartArea"><?php // TRANSLATORS: Chart type: a filled area chart.
+                                p($l->t('Area')); ?></label>
                         </div>
                     </div>
                 </div>
@@ -426,7 +428,8 @@
                         <div class="icon-analytics-chartFunnel icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 10px;">
                             <input type="radio" id="chartFunnel" class="radio" name="chart" value="funnel">
-                            <label for="chartFunnel"><?php p($l->t('Funnel')); ?></label>
+                            <label for="chartFunnel"><?php // TRANSLATORS: Chart type: values shown as progressively sized funnel sections.
+                                p($l->t('Funnel')); ?></label>
                         </div>
                     </div>
                 </div>
@@ -435,7 +438,8 @@
                         <div class="icon-analytics-chartBar icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 10px;">
                             <input type="radio" id="chartBar" class="radio" name="chart" value="column">
-                            <label for="chartBar"><?php p($l->t('Bar')); ?></label>
+                            <label for="chartBar"><?php // TRANSLATORS: Chart type: a bar chart.
+                                p($l->t('Bar')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">
@@ -447,7 +451,8 @@
                         <div class="icon-analytics-chartDonut icon-analytics-charts-wizard"></div>
                         <div style="padding-top: 10px;">
                             <input type="radio" id="chartDonut" class="radio" name="chart" value="doughnut">
-                            <label for="chartDonut"><?php p($l->t('Doughnut')); ?></label>
+                            <label for="chartDonut"><?php // TRANSLATORS: Chart type: a ring-shaped pie chart.
+                                p($l->t('Doughnut')); ?></label>
                         </div>
                     </div>
                     <div style="display: table-cell;">

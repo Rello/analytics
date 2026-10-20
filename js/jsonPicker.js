@@ -77,6 +77,7 @@ OCA.Analytics.JsonPicker = {
             });
             let result;
             try { result = await response.json(); }
+            // TRANSLATORS: {status} is an HTTP response status code, e.g. 404.
             catch (error) { throw new Error(t('analytics', 'The datasource request failed (HTTP {status}).', {status: response.status})); }
             if (!response.ok || (result.error && String(result.error) !== '0')) {
                 throw new Error(result.error || t('analytics', 'Could not load JSON data. Check the datasource settings.'));
@@ -103,6 +104,7 @@ OCA.Analytics.JsonPicker = {
                 for (let i = 0; i < width; i++) {
                     const cell = document.createElement('th');
                     cell.scope = 'col';
+                    // TRANSLATORS: Fallback column label; {number} is a one-based column number, e.g. 1.
                     cell.textContent = result.header?.[i] ?? t('analytics', 'Column {number}', {number: i + 1});
                     heading.appendChild(cell);
                 }
@@ -184,6 +186,7 @@ OCA.Analytics.JsonPicker = {
                         if (!details.open || details.dataset.loaded) return;
                         details.dataset.loaded = 'true';
                         if (!fields && isArray && value.some(item => picker.isContainer(item))) {
+                            // TRANSLATORS: JSON selection action; {name} is an array or group name from the source data, e.g. orders.
                             details.appendChild(action(t('analytics', 'Use all {name} and choose the relevant fields', {name: key}), () => showFields(value, path), picker.selectable(path)));
                         } else if (!fields && Object.values(value).every(item => !picker.isContainer(item))) {
                             details.appendChild(action(t('analytics', 'Use entries as rows'), () => {

@@ -758,6 +758,7 @@ Object.assign(OCA.Analytics.Datasource = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             editor,
+            // TRANSLATORS: {linkstart} and {linkend} wrap the documentation link. Preserve the text-variable syntax and any <br> tags in this guidance.
             t('analytics', 'Keep the selected path and replace parts of the file name with text variables, for example report_%today%(Y-m-d).csv. The variable is resolved when the data load runs. See the {linkstart}Wiki{linkend}.')
                 .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#text-variables" target="_blank" rel="noreferrer noopener">')
                 .replace('{linkend}', '</a>')
@@ -1139,6 +1140,7 @@ Object.assign(OCA.Analytics.Datasource = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             content,
+            // TRANSLATORS: {linkstart} and {linkend} wrap the documentation link. Preserve the text-variable syntax and any <br> tags in this guidance.
             t('analytics', 'Select the required columns.<br>Rearrange the sequence with drag & drop.<br>Remove all selections to reset.<br>Add custom columns including text variables for dates. See the {linkstart}Wiki{linkend}.')
                 .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#text-variables" target="_blank">')
                 .replace('{linkend}', '</a>')
@@ -1267,6 +1269,7 @@ Object.assign(OCA.Analytics.Share = {
         let navigationItem = evt.target.closest('div');
 
         OCA.Analytics.Notification.htmlDialogInitiate(
+            // TRANSLATORS: Verb: give other people access to this report, dataset, or panorama.
             t('analytics', 'Share') + ' ' + navigationItem.dataset.name,
             OCA.Analytics.Notification.dialogClose
         );
@@ -1336,6 +1339,7 @@ Object.assign(OCA.Analytics.Share = {
 
         linkRow.getElementById('row').dataset.id = id;
         if (add) linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Add share link');
+        // TRANSLATORS: Noun: a public link that gives access to the shared item.
         else linkRow.getElementById('shareLinkTitle').innerText = t('analytics', 'Share link');
 
         if (add) {
@@ -1801,6 +1805,7 @@ Object.assign(OCA.Analytics.Threshold = {
 
         if (data.option === 'new') { // adjust the text for the "new records" option
             data.value = '';
+            // TRANSLATORS: Noun: a newly added data row; also used as a notification subject.
             data.dimension1 = t('analytics', 'new record');
             data.option = '';
         }

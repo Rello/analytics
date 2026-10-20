@@ -63,6 +63,7 @@ class LocalSpreadsheet implements IDatasource {
 		];
 		$template[] = [
 			'id' => 'sheet',
+			// TRANSLATORS: Noun: a worksheet within a spreadsheet file.
 			'name' => $this->l10n->t('Sheet'),
 			'placeholder' => $this->l10n->t('sheet name'),
 			'type' => 'sheetPicker'

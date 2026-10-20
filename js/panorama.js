@@ -1305,10 +1305,12 @@ Object.assign(OCA.Analytics.Panorama = {
 
             for (const [index, page] of pages.entries()) {
                 //page.style.backgroundColor = backgroundColor;
+                // TRANSLATORS: PDF export progress; {pageCount} is the one-based page number, e.g. 2.
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'capturing page {pageCount}', {pageCount: index}));
                 const canvas = await html2canvas(page, {scale: 2});
                 const imgData = canvas.toDataURL('image/png');
 
+                // TRANSLATORS: PDF export progress; {pageCount} is the one-based page number, e.g. 2.
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'captured page {pageCount}', {pageCount: index}));
                 if (index > 0) {
                     pdf.addPage();
@@ -1370,6 +1372,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 pdf.text('Created with', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 22);
                 pdf.text('Analytics', pdf.internal.pageSize.getWidth() - 65, pdf.internal.pageSize.getHeight() - 12);
 
+                // TRANSLATORS: PDF export progress; {pageCount} is the one-based page number, e.g. 2.
                 OCA.Analytics.Notification.htmlDialogUpdateAdd(t('analytics', 'page {pageCount} added to pdf', {pageCount: index}));
             }
 

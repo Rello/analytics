@@ -53,6 +53,7 @@ class LocalJson implements IDatasource {
 			'type' => 'filePicker',
 			'allowTextVariables' => true
 		];
+		// TRANSLATORS: JSON datasource setting: path to the nested object or array from which data is extracted.
 		$template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
 		$template[] = [
 			'id' => 'timestamp',

@@ -296,6 +296,7 @@ OCA.Analytics.Filter = {
                 || /\b(?:column|col)\d+\b/i.test(expression)) return null;
             return {
                 id: 'calc:legacy_' + index,
+                // TRANSLATORS: Noun: a numeric report field computed from a formula.
                 name: calc.title || t('analytics', 'Calculated measure'),
                 expression,
                 phase: 'after',
@@ -339,6 +340,7 @@ OCA.Analytics.Filter = {
         const include = document.createElement('input');
         include.type = 'checkbox';
         include.className = 'transformInclude';
+        // TRANSLATORS: Checkbox label; {column} is a data column name, e.g. Revenue.
         include.setAttribute('aria-label', t('analytics', 'Include {column}', {column: column.name}));
         include.checked = column.role === 'dimension'
             ? !Object.prototype.hasOwnProperty.call(options.drilldown || {}, column.ref)
@@ -348,14 +350,19 @@ OCA.Analytics.Filter = {
         if (column.role === 'measure') {
             const aggregation = OCA.Analytics.Filter.transformationSelect([
                 {value: 'none', label: t('analytics', 'None (original values)')},
+                // TRANSLATORS: Noun: aggregation function that adds the values in a group.
                 {value: 'sum', label: t('analytics', 'Sum')},
+                // TRANSLATORS: Noun: arithmetic mean of the values in a group.
                 {value: 'avg', label: t('analytics', 'Average')},
                 {value: 'min', label: t('analytics', 'Minimum')},
                 {value: 'max', label: t('analytics', 'Maximum')},
+                // TRANSLATORS: Noun: number of values in a group.
                 {value: 'count', label: t('analytics', 'Count')},
+                // TRANSLATORS: Aggregation function: number of different values in a group.
                 {value: 'count_distinct', label: t('analytics', 'Count distinct')},
             ], options.aggregate === false ? 'none'
                 : (definition.aggregations || {})[column.ref] || column.defaultAggregation || column.aggregation || 'sum',
+            // TRANSLATORS: Verb: choose an aggregation function; {column} is a numeric column name, e.g. Revenue.
             t('analytics', 'Aggregate {column}', {column: column.name}));
             aggregation.classList.add('transformAggregation');
             row.appendChild(aggregation);
@@ -368,6 +375,7 @@ OCA.Analytics.Filter = {
             {value: 'ASC', label: t('analytics', 'Ascending')},
             {value: 'DESC', label: t('analytics', 'Descending')},
         ], sortIndex >= 0 ? String(sort[sortIndex].direction).toUpperCase() : '',
+        // TRANSLATORS: Verb: choose a sort direction; {column} is a column name, e.g. Revenue.
         t('analytics', 'Sort {column}', {column: column.name}));
         direction.classList.add('transformSort');
         row.appendChild(direction);
@@ -376,6 +384,7 @@ OCA.Analytics.Filter = {
         priority.min = '1';
         priority.step = '1';
         priority.className = 'optionsInput transformPriority';
+        // TRANSLATORS: {column} is a column name, e.g. Revenue. Lower priority numbers are sorted first.
         priority.setAttribute('aria-label', t('analytics', 'Sort priority for {column}', {column: column.name}));
         priority.value = sortIndex >= 0 ? String(sortIndex + 1) : '';
         priority.disabled = direction.value === '';
@@ -393,7 +402,9 @@ OCA.Analytics.Filter = {
         const name = document.createElement('input');
         name.className = 'optionsInput transformCalculationName';
         name.type = 'text';
+        // TRANSLATORS: Name of a numeric field computed from a formula.
         name.placeholder = t('analytics', 'Measure name');
+        // TRANSLATORS: Name of a numeric field computed from a formula.
         name.setAttribute('aria-label', t('analytics', 'Measure name'));
         name.value = calculation.name || '';
         heading.appendChild(name);
@@ -473,18 +484,25 @@ OCA.Analytics.Filter = {
         controls.appendChild(phase);
         const aggregation = OCA.Analytics.Filter.transformationSelect([
             {value: 'none', label: t('analytics', 'None (original values)')},
+            // TRANSLATORS: Noun: aggregation function that adds the values in a group.
             {value: 'sum', label: t('analytics', 'Sum')},
+            // TRANSLATORS: Noun: arithmetic mean of the values in a group.
             {value: 'avg', label: t('analytics', 'Average')},
             {value: 'min', label: t('analytics', 'Minimum')},
             {value: 'max', label: t('analytics', 'Maximum')},
+            // TRANSLATORS: Noun: number of values in a group.
             {value: 'count', label: t('analytics', 'Count')},
+            // TRANSLATORS: Aggregation function: number of different values in a group.
             {value: 'count_distinct', label: t('analytics', 'Count distinct')},
-        ], calculation.aggregation || 'sum', t('analytics', 'Aggregate calculated measure'));
+        ], calculation.aggregation || 'sum',
+        // TRANSLATORS: Verb: choose how calculated numeric values are combined within a group.
+        t('analytics', 'Aggregate calculated measure'));
         aggregation.classList.add('transformAggregation');
         aggregation.hidden = phase.value !== 'before';
         phase.onchange = () => { aggregation.hidden = phase.value !== 'before'; };
         controls.appendChild(aggregation);
         const include = document.createElement('label');
+        // TRANSLATORS: Verb: include this column or calculated measure in the report.
         include.textContent = t('analytics', 'Include');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -506,6 +524,7 @@ OCA.Analytics.Filter = {
         priority.min = '1';
         priority.className = 'optionsInput transformPriority';
         priority.setAttribute('aria-label', t('analytics', 'Sort priority'));
+        // TRANSLATORS: Noun: sorting precedence; lower numbers are applied first.
         priority.placeholder = t('analytics', 'Priority');
         priority.value = sortIndex >= 0 ? String(sortIndex + 1) : '';
         priority.disabled = direction.value === '';
@@ -747,6 +766,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
+            // TRANSLATORS: Noun: report filter settings.
             t('analytics', 'Filter'),
             apply,
             context?.dialogOptions || {}
@@ -860,6 +880,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
+            // TRANSLATORS: {linkstart} and {linkend} wrap the documentation link. Preserve the text-variable syntax and any <br> tags in this guidance.
             t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
                 .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#text-variables" target="_blank">')
                 .replace('{linkend}', '</a>')
@@ -900,6 +921,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Report.hideReportMenu();
 
         OCA.Analytics.Notification.htmlDialogInitiate(
+            // TRANSLATORS: Ranking option: keep the N highest-ranked items; N is the number chosen by the user.
             t('analytics', 'Top N'),
             OCA.Analytics.Filter.processTopNDialog
         );
@@ -931,7 +953,9 @@ OCA.Analytics.Filter = {
         typeSelect.innerHTML = '';
         const typeOptions = [
             {value: 'none', text: t('analytics', 'none')},
+            // TRANSLATORS: Ranking option: keep the N highest-ranked items; N is the number chosen by the user.
             {value: 'top', text: t('analytics', 'Top N')},
+            // TRANSLATORS: Ranking option: keep the N lowest-ranked items; N is the number chosen by the user.
             {value: 'flop', text: t('analytics', 'Flop N')}
         ];
         typeOptions.forEach(({value, text}) => {
@@ -1047,7 +1071,12 @@ OCA.Analytics.Filter = {
         });
 
         const modeSelect = container.getElementById('timeGroupingMode');
-        [{value: 'summation', text: t('analytics', 'summation')}, {value: 'average', text: t('analytics', 'average')}].forEach(({value, text}) => {
+        [
+            // TRANSLATORS: Noun: sum of the values within each time period.
+            {value: 'summation', text: t('analytics', 'summation')},
+            // TRANSLATORS: Noun: arithmetic mean of the values within each time period.
+            {value: 'average', text: t('analytics', 'average')}
+        ].forEach(({value, text}) => {
             modeSelect.options.add(new Option(text, value));
         });
 
@@ -1573,6 +1602,7 @@ OCA.Analytics.Filter = {
             {value: 'multiply', label: t('analytics', 'Multiply')},
             {value: 'divide', label: t('analytics', 'Divide')},
             {value: 'percentage', label: t('analytics', 'Percentage')},
+            // TRANSLATORS: Calculation method: a custom mathematical formula entered by the user.
             {value: 'formula', label: t('analytics', 'Own Formular')},
         ];
     },
@@ -1745,8 +1775,10 @@ OCA.Analytics.Filter = {
             const meta = document.createElement('span');
             meta.className = 'tableOptionsCalculatedColumnCardMeta';
             if (item.operation === 'formula') {
+                // TRANSLATORS: Calculation method: a custom mathematical formula entered by the user.
                 meta.textContent = t('analytics', 'Own Formular');
             } else {
+                // TRANSLATORS: Calculation summary; {operation} is a localized method such as Add, and {count} is the number of input columns, e.g. 2.
                 meta.textContent = t('analytics', '{operation} using {count} source columns', {
                     operation: OCA.Analytics.Filter.getCalculatedColumnOperationLabel(item.operation),
                     count: item.columns.length
@@ -1770,6 +1802,7 @@ OCA.Analytics.Filter = {
         const headers = OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders.length > 0
             ? OCA.Analytics.Filter.calculatedColumnsEditorState.sourceHeaders
             : OCA.Analytics.currentReportData.header || [];
+        // TRANSLATORS: Fallback column label; {column} is the source column index, e.g. 2.
         return headers[index] || t('analytics', 'Column {column}', {column: index});
     },
 
@@ -2007,21 +2040,35 @@ OCA.Analytics.Filter = {
 
     getCalculatedColumnSourceRoleLabel: function (operation, index) {
         if (operation === 'percentage') {
-            return index === 0 ? t('analytics', 'Numerator') : t('analytics', 'Denominator');
+            return index === 0
+                // TRANSLATORS: The dividend in a percentage calculation (numerator / denominator * 100).
+                ? t('analytics', 'Numerator')
+                // TRANSLATORS: The divisor in a percentage calculation (numerator / denominator * 100).
+                : t('analytics', 'Denominator');
         }
 
         if (operation === 'substract') {
-            return index === 0 ? t('analytics', 'Base value') : t('analytics', 'Subtract value');
+            return index === 0
+                // TRANSLATORS: Noun: the starting value from which other selected values are subtracted.
+                ? t('analytics', 'Base value')
+                // TRANSLATORS: Noun: a value to subtract from the starting value.
+                : t('analytics', 'Subtract value');
         }
 
         if (operation === 'divide') {
-            return index === 0 ? t('analytics', 'Base value') : t('analytics', 'Divide by');
+            return index === 0
+                // TRANSLATORS: Noun: the starting value divided by the other selected values.
+                ? t('analytics', 'Base value')
+                // TRANSLATORS: Label for the divisor in a calculation.
+                : t('analytics', 'Divide by');
         }
 
         if (operation === 'multiply') {
+            // TRANSLATORS: Multiplication operand; {position} is its one-based position, e.g. 2.
             return t('analytics', 'Factor {position}', {position: index + 1});
         }
 
+        // TRANSLATORS: Calculation input column; {position} is its one-based position, e.g. 2.
         return t('analytics', 'Source {position}', {position: index + 1});
     },
 
@@ -2456,6 +2503,7 @@ OCA.Analytics.Filter = {
                     up.type = 'button';
                     up.textContent = '↑';
                     up.disabled = index === 0;
+                    // TRANSLATORS: Reorder action; {column} is a chart field name, e.g. Revenue.
                     up.setAttribute('aria-label', t('analytics', 'Move {column} up', {column: labelFor(id)}));
                     up.addEventListener('click', () => {
                         [mapping[role][index - 1], mapping[role][index]] = [id, mapping[role][index - 1]];
@@ -2468,6 +2516,7 @@ OCA.Analytics.Filter = {
                 remove.type = 'button';
                 remove.textContent = '×';
                 remove.className = 'chartColumnRemove';
+                // TRANSLATORS: Remove a field from the chart mapping; {column} is its name, e.g. Revenue.
                 remove.setAttribute('aria-label', t('analytics', 'Remove {column}', {column: labelFor(id)}));
                 remove.addEventListener('click', () => {
                     mapping[role] = mapping[role].filter(column => column !== id);
@@ -2497,11 +2546,15 @@ OCA.Analytics.Filter = {
             // Translate the complete sentence; insert field names as text nodes, never HTML.
             const markers = {values: '{values}', category: '{category}', series: '{series}'};
             const sentence = dataModel === 'accountModel'
+                // TRANSLATORS: Chart summary; {values} lists numeric field names, e.g. Revenue, and {category} is the field naming each row, e.g. Region.
                 ? t('analytics', 'Show {values}, with one series per {category} row.', markers)
                 : dataModel === 'timeSeriesModel'
+                    // TRANSLATORS: Chart summary; {values} lists numeric field names, e.g. Revenue, and {category} is the date field name, e.g. Date.
                     ? t('analytics', 'Show {values} over time using {category}.', markers)
                     : mapping.series.length
+                        // TRANSLATORS: Chart summary; {values} lists numeric fields, {category} is the category field, and {series} lists grouping fields, e.g. Revenue, Date, and Region.
                         ? t('analytics', 'Show {values} by {category}, broken down by {series}.', markers)
+                        // TRANSLATORS: Chart summary; {values} lists numeric field names, e.g. Revenue, and {category} is the category field name, e.g. Region.
                         : t('analytics', 'Show {values} by {category}.', markers);
             summary.replaceChildren();
             if (!mapping.measures.length) return;
@@ -2540,6 +2593,7 @@ OCA.Analytics.Filter = {
                 const previewData = {...basePreviewData, options: {...basePreviewData.options,
                     chart: document.querySelector('input[name="analyticsChartType"]:checked')?.value || basePreviewData.options.chart}};
                 const result = OCA.Analytics.Visualization.chartMappingPreview(previewData, dataModel, automatic ? null : mapping, seriesOptions);
+                // TRANSLATORS: {shown} is the number of preview rows and {total} is the number of report rows, e.g. 10 and 200.
                 status.textContent = t('analytics', 'Preview: {shown} of {total} report rows. Current filters apply.', {
                     shown: result.shownRows.toLocaleString(), total: result.totalRows.toLocaleString(),
                 });
@@ -2653,6 +2707,7 @@ OCA.Analytics.Filter = {
                 if (!rows.length) return;
                 const controls = document.createElement('div');
                 controls.className = 'chartMeasureStyle';
+                // TRANSLATORS: Chart type selector; {column} is a numeric field name, e.g. Revenue.
                 controls.append(sharedSelect(rows, 'optionsChartType', t('analytics', 'Show {column} as', {column: labelFor(id)}), [
                     ['bar', t('analytics', 'Bars')], ['line', t('analytics', 'Line')],
                     ['doughnut', t('analytics', 'Doughnut')], ['funnel', t('analytics', 'Funnel')],
@@ -2660,6 +2715,7 @@ OCA.Analytics.Filter = {
                 const more = document.createElement('details');
                 const summary = document.createElement('summary');
                 summary.textContent = t('analytics', 'More options');
+                // TRANSLATORS: Chart axis selector; {column} is a numeric field name, e.g. Revenue.
                 more.append(summary, sharedSelect(rows, 'optionsYAxis', t('analytics', 'Axis for {column}', {column: labelFor(id)}), [
                     ['primary', t('analytics', 'Left axis')], ['secondary', t('analytics', 'Right axis')],
                 ]));
@@ -2690,6 +2746,7 @@ OCA.Analytics.Filter = {
                 const color = document.createElement('input');
                 color.type = 'color';
                 color.className = 'chartOptionsColorInput';
+                // TRANSLATORS: Chart color selector; {group} is a data series group label, e.g. Europe.
                 color.setAttribute('aria-label', t('analytics', 'Color for {group}', {group: label}));
                 color.value = [...values][0] || '#000000';
                 if (values.size > 1) {
@@ -2798,7 +2855,9 @@ OCA.Analytics.Filter = {
             yAxisSelect.id = 'optionsYAxis' + i;
             yAxisSelect.name = 'optionsYAxis';
             yAxisSelect.className = 'optionsInput';
+            // TRANSLATORS: Chart axis: the primary vertical axis.
             yAxisSelect.appendChild(new Option(t('analytics', 'Primary'), 'primary'));
+            // TRANSLATORS: Chart axis: the secondary vertical axis.
             yAxisSelect.appendChild(new Option(t('analytics', 'Secondary'), 'secondary'));
             yAxisSelect.value = OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'primary', 'primary') ? 'primary' :
                 (OCA.Analytics.Filter.checkOption(dataOptions, i, 'yAxisID', 'secondary', 'primary') ? 'secondary' : 'primary');
@@ -2811,9 +2870,13 @@ OCA.Analytics.Filter = {
             typeSelect.id = 'optionsChartType' + i;
             typeSelect.name = 'optionsChartType';
             typeSelect.className = 'optionsInput';
+            // TRANSLATORS: Chart type: a line chart.
             typeSelect.appendChild(new Option(t('analytics', 'Line'), 'line'));
+            // TRANSLATORS: Chart type: a bar chart.
             typeSelect.appendChild(new Option(t('analytics', 'Bar'), 'bar'));
+            // TRANSLATORS: Chart type: a ring-shaped pie chart.
             typeSelect.appendChild(new Option(t('analytics', 'Doughnut'), 'doughnut'));
+            // TRANSLATORS: Chart type: values shown as progressively sized funnel sections.
             typeSelect.appendChild(new Option(t('analytics', 'Funnel'), 'funnel'));
             typeSelect.value = OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'line', defaultChartType) ? 'line' :
                 (OCA.Analytics.Filter.checkOption(dataOptions, i, 'type', 'bar', defaultChartType) ? 'bar' :
