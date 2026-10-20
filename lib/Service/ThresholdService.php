@@ -261,6 +261,7 @@ class ThresholdService {
 				$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
 					'report' => $datasetMetadata['name'],
 					'subject' => $subject,
+					// TRANSLATORS: Noun: a newly added data row; also used as a notification subject.
 					'rule' => $this->l10n->t('new record'),
 					'value' => ''
 				], $threshold['user_id']);
@@ -363,6 +364,7 @@ class ThresholdService {
 					$this->NotificationManager->triggerNotification(NotificationManager::SUBJECT_THRESHOLD, $reportId, $threshold['id'], [
 						'report' => $report['name'],
 						'subject' => $columns[$reference]['name'],
+						// TRANSLATORS: Noun: a newly added data row; also used as a notification subject.
 						'rule' => $threshold['option'] === 'new' ? $this->l10n->t('new record') : $threshold['option'],
 						'value' => $threshold['option'] === 'new' ? '' : $threshold['target'],
 					], $threshold['user_id']);

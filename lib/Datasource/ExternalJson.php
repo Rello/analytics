@@ -55,6 +55,7 @@ class ExternalJson implements IDatasource
         $template = array();
         $template[] = ['id' => 'url', 'name' => 'URL', 'placeholder' => 'url'];
         $template[] = ['id' => 'method', 'name' => $this->l10n->t('HTTP method'), 'placeholder' => 'GET/POST', 'type' => 'tf'];
+        // TRANSLATORS: JSON datasource setting: path to the nested object or array from which data is extracted.
         $template[] = ['id' => 'path', 'name' => $this->l10n->t('Object path'), 'placeholder' => 'x/y/z'];
         $template[] = ['id' => 'section', 'name' => $this->l10n->t('More options'), 'type' => 'section'];
         $template[] = ['id' => 'content-type', 'name' => 'Header Content-Type', 'placeholder' => 'application/json'];

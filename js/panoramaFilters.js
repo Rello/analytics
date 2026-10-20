@@ -351,6 +351,7 @@ OCA.Analytics.PanoramaFilters = {
             const mappingHeader = document.createElement('div');
             mappingHeader.className = 'panoramaFilterMappingHeader';
             mappingHeader.append(Object.assign(document.createElement('span'), {textContent: t('analytics', 'Report')}),
+                // TRANSLATORS: Noun: a data column used to identify or group records, such as region or date.
                 Object.assign(document.createElement('span'), {textContent: t('analytics', 'Dimension')}), document.createElement('span'));
             mappingList.append(mappingHeader);
             const candidates = new Map();

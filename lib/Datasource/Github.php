@@ -53,11 +53,19 @@ class Github implements IDatasource, IReportTemplateProvider {
 		$template[] = [
 			'id' => 'data',
 			'name' => 'Releases, Packages, Issues or PRs',
-			'placeholder' => 'release-' . $this->l10n->t('Releases') . '/package-' . $this->l10n->t('Packages') . '/issues-' . $this->l10n->t('Issues') . '/pulls-' . $this->l10n->t('Pull Requests'),
+			// TRANSLATORS: Noun: published versions of a GitHub project.
+			'placeholder' => 'release-' . $this->l10n->t('Releases')
+				// TRANSLATORS: Noun: software packages hosted by GitHub.
+				. '/package-' . $this->l10n->t('Packages')
+				// TRANSLATORS: Noun: GitHub issue tickets.
+				. '/issues-' . $this->l10n->t('Issues')
+				// TRANSLATORS: Noun: proposed code changes on GitHub.
+				. '/pulls-' . $this->l10n->t('Pull Requests'),
 			'type' => 'tf'
 		];
 		$template[] = [
 			'id' => 'limit',
+			// TRANSLATORS: Noun: maximum number of datasource rows to retrieve.
 			'name' => $this->l10n->t('Limit'),
 			'placeholder' => $this->l10n->t('Number of rows'),
 			'type' => 'number'
@@ -174,6 +182,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 
 			$header[] = $this->l10n->t('Version');
 			if (isset($option['showAssets']) and $option['showAssets'] === 'true') {
+				// TRANSLATORS: Noun: a downloadable file attached to a GitHub release.
 				$header[] = $this->l10n->t('Asset');
 			}
 			$header[] = $this->l10n->t('Download count');
@@ -194,6 +203,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 				];
 			}
 
+			// TRANSLATORS: Noun: a Git tag identifying a release or package version.
 			$header[] = $this->l10n->t('Tag');
 			$header[] = $this->l10n->t('Download count');
 		} else if ($option['data'] === 'issues') {
@@ -219,8 +229,10 @@ class Github implements IDatasource, IReportTemplateProvider {
 
 			$issuesCleaned = $issuesTotal - $pulls;
 
+			// TRANSLATORS: Noun: GitHub issue tickets.
 			$data[] = [$this->l10n->t('Issues'), $issuesCleaned];
 			$header[] = $this->l10n->t('Type');
+			// TRANSLATORS: Noun: the number of GitHub issues or pull requests.
 			$header[] = $this->l10n->t('Count');
 		} else if ($option['data'] === 'pulls') {
 			$url = 'https://api.github.com/repos/' . $option['user'] . '/' . $option['repository'] . '/pulls?per_page=100';
@@ -232,6 +244,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			}
 			$data[] = [$this->l10n->t('Pull Requests'), count($curlResult['data'])];
 			$header[] = $this->l10n->t('Type');
+			// TRANSLATORS: Noun: the number of GitHub issues or pull requests.
 			$header[] = $this->l10n->t('Count');
 		}
 

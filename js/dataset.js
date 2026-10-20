@@ -735,7 +735,9 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
 
         const role = document.createElement('select');
         role.className = 'sidebarInput flexibleColumnRole';
+        // TRANSLATORS: Noun: a data column used to identify or group records, such as region or date.
         role.add(new Option(t('analytics', 'Dimension'), 'dimension'));
+        // TRANSLATORS: Noun: a numeric data column that can be aggregated, such as revenue.
         role.add(new Option(t('analytics', 'Measure'), 'measure'));
         role.value = column.role || 'dimension';
 
@@ -744,6 +746,7 @@ Object.assign(OCA.Analytics.Dataset.Dataset = {
         nullable.type = 'checkbox';
         nullable.className = 'flexibleColumnNullable';
         nullable.checked = column.nullable === true;
+        // TRANSLATORS: Column setting: allow missing values in this numeric field.
         nullableLabel.append(nullable, document.createTextNode(' ' + t('analytics', 'Nullable')));
 
         const aggregation = document.createElement('select');

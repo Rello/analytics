@@ -269,6 +269,7 @@ OCA.Analytics.Sidebar.Report = {
                 {method: 'GET', headers: OCA.Analytics.headers()},
                 t('analytics', 'Failed to load dataset')
             );
+            // TRANSLATORS: {count} is the number of dataset columns, e.g. 5.
             summaryElement.textContent = t('analytics', 'Flexible dataset · All {count} columns are included in the report.', {
                 count: OCA.Analytics.Flexible.columns(descriptor).length,
             });
@@ -288,6 +289,7 @@ OCA.Analytics.Sidebar.Report = {
         if (flexible) {
             dimensionHeader.style.display = 'none';
             dimensionSection.style.display = 'none';
+            // TRANSLATORS: {count} is the number of dataset columns, e.g. 5.
             summary.textContent = t('analytics', 'Flexible dataset · All {count} columns are included in the report.', {
                 count: OCA.Analytics.Flexible.columns(data).length,
             });

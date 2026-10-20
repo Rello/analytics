@@ -59,65 +59,83 @@ class Provider implements IProvider {
 
 		switch ($event->getSubject()) {
 			case ActivityManager::SUBJECT_REPORT_ADD:
+				// TRANSLATORS: {report} is the report name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('You created a new report: {report}');
 				break;
 			case ActivityManager::SUBJECT_REPORT_DELETE:
+				// TRANSLATORS: {report} is the report name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('You deleted the report {report}');
 				break;
 			case ActivityManager::SUBJECT_REPORT_SHARE:
 				if ($ownActivity) {
+					// TRANSLATORS: {report} is the report name, e.g. Sales.
 					$parsedSubject = $this->l10n->t('You shared the report {report}');
 				} else {
+					// TRANSLATORS: {report} is the report name, e.g. Sales. The acting user name is prepended to this sentence fragment.
 					$parsedSubject = $event->getSubjectParameters()['author'] . ' ' . $this->l10n->t('shared the report {report} with you');
 				}
 				break;
 
 			case ActivityManager::SUBJECT_DATASET_ADD:
+				// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('You created a new dataset: {report}');
 				break;
 			case ActivityManager::SUBJECT_DATASET_DELETE:
+				// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('You deleted the dataset {report}');
 				break;
 			case ActivityManager::SUBJECT_DATASET_SHARE:
 				if ($ownActivity) {
+					// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 					$parsedSubject = $this->l10n->t('You shared the dataset {report}');
 				} else {
+					// TRANSLATORS: {report} is the dataset name, e.g. Sales. The acting user name is prepended to this sentence fragment.
 					$parsedSubject = $event->getSubjectParameters()['author'] . ' ' . $this->l10n->t('shared the dataset {report} with you');
 				}
 				break;
 
 			case ActivityManager::SUBJECT_PANORAMA_ADD:
+				// TRANSLATORS: {report} is the panorama name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('You created a new panorama: {report}');
 				break;
 			case ActivityManager::SUBJECT_PANORAMA_DELETE:
+				// TRANSLATORS: {report} is the panorama name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('You deleted the panorama {report}');
 				break;
 			case ActivityManager::SUBJECT_PANORAMA_SHARE:
 				if ($ownActivity) {
+					// TRANSLATORS: {report} is the panorama name, e.g. Sales.
 					$parsedSubject = $this->l10n->t('You shared the panorama {report}');
 				} else {
+					// TRANSLATORS: {report} is the panorama name, e.g. Sales. The acting user name is prepended to this sentence fragment.
 					$parsedSubject = $event->getSubjectParameters()['author'] . ' ' . $this->l10n->t('shared the panorama {report} with you');
 				}
 				break;
 
 			case ActivityManager::SUBJECT_DATA_ADD:
 				if ($ownActivity) {
+					// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 					$parsedSubject = $this->l10n->t('You have added new data to dataset {report}');
 				} else {
+					// TRANSLATORS: {report} is the dataset name, e.g. Sales. The acting user name is prepended to this sentence fragment.
 					$parsedSubject = $event->getSubjectParameters()['author'] . ' ' . $this->l10n->t('has added new data to dataset {report}');
 				}
 				break;
 			case ActivityManager::SUBJECT_DATA_ADD_IMPORT:
 				if ($ownActivity) {
+					// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 					$parsedSubject = $this->l10n->t('You have imported data in dataset {report}');
 				} else {
+					// TRANSLATORS: {report} is the dataset name, e.g. Sales. The acting user name is prepended to this sentence fragment.
 					$parsedSubject = $event->getSubjectParameters()['author'] . ' ' . $this->l10n->t('has imported data in dataset {report}');
 				}
 				break;
 			case ActivityManager::SUBJECT_DATA_ADD_API:
+				// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('New data has been added to dataset {report} via API');
 				break;
 			case ActivityManager::SUBJECT_DATA_ADD_DATALOAD:
+				// TRANSLATORS: {report} is the dataset name, e.g. Sales.
 				$parsedSubject = $this->l10n->t('New data has been added to dataset {report} via data load');
 				break;
 			default:
