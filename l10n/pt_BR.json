@@ -252,7 +252,7 @@
     "Use entries as rows" : "Usar entradas como linhas",
     "This nesting is too deep to browse. Enter the Object path manually." : "Essa hierarquia é muito profunda para ser navegada. Insira o caminho do objeto manualmente.",
     "The datasource did not return valid JSON." : "A fonte de dados não respondeu com JSON válido.",
-    "Use all entries and choose the relevant fields" : "Usar todas as entradas e escolher os campos relevantes",
+    "Use all entries and choose the relevant fields" : "Use todas as entradas e escolha os campos relevantes",
     "No selectable fields found. You can still enter the Object path manually." : "Não foram encontrados campos selecionáveis. Você ainda pode inserir o caminho do objeto manualmente.",
     "Favorites" : "Favoritos",
     "Panoramas" : "Panoramas",
