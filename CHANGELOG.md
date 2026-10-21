@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 7.1.0 - 2026-10-21
 ### Added
 - Visual field picker for JSON datasources, with a browsable hierarchy and selection preview.
 - Preview live datasource data from the report wizard and sidebar before saving.
