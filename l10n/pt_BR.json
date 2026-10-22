@@ -517,7 +517,7 @@
     "Option" : "Opção",
     "with others" : "com outros",
     "Columns set to None keep their original values and define the groups. Set all measures to None to show the original rows. Removing a dimension combines its groups." : "As colunas definidas como “Nenhum” mantêm seus valores originais e definem os grupos. Defina todas as medidas como “Nenhum” para exibir as linhas originais. A remoção de uma dimensão combina seus grupos.",
-    "Aggregate" : "Agregato",
+    "Aggregate" : "Agregar",
     "Sort" : "Ordenar",
     "Calculated measures" : "Medidas calculadas",
     "Calculate for each source row before aggregation, or from aggregated values. Drag a column into the formula or click it to insert at the cursor, then combine columns with +, -, * or /." : "Calcule para cada linha de origem antes da agregação ou a partir dos valores agregados. Arraste uma coluna para dentro da fórmula ou clique nela para inseri-la no local do cursor; em seguida, combine as colunas com +, -, * ou /.",
