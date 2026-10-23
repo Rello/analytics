@@ -114,7 +114,7 @@ OC.L10N.register(
     "Drag or click a column below, then use +, -, * or /" : "Arraste ou clique em uma coluna abaixo e, em seguida, use +, -, * ou /",
     "For each source row" : "Para cada linha de fonte",
     "After aggregation" : "Após a agregação",
-    "Calculation timing" : "Tempo de cálculo",
+    "Calculation timing" : "Momento de cálculo",
     "Aggregate calculated measure" : "Agregar medidas calculadas",
     "Include" : "Incluir",
     "No sort" : "Sem ordenação",
