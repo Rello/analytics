@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 # SBOM security maintenance
 
-The `SBOM security` workflow runs on relevant pushes to `master`, manually, and every Monday at 06:23 UTC.
+The `SBOM security` workflow runs on relevant pushes to `master`, manually, and every Sunday at 06:23 UTC.
 Pushes trigger it only when dependency manifests, bundled libraries, app metadata, the SBOM, its generator/scanner,
 scanner tests, or the workflow itself change. Documentation-only pushes do not trigger it; manual and scheduled runs are unaffected.
 Pushes and manual runs with `refresh` enabled regenerate and commit `sbom.cdx.json` before scanning.
