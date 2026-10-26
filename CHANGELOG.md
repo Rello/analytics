@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Changed
+- Increase the connection timeout for external datasources from 10 to 30 seconds.
+
 ## 7.1.0 - 2026-10-21
 ### Added
 - Visual field picker for JSON datasources, with a browsable hierarchy and selection preview.
