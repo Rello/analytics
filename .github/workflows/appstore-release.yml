@@ -43,7 +43,7 @@ jobs:
 
       - name: Set up local Nextcloud server
         if: ${{ !inputs.reuse_asset }}
-        uses: SMillerDev/nextcloud-actions/setup-nextcloud@ae95709955d06dea39756101e07ec5b6134f14d7
+        uses: SMillerDev/nextcloud-actions/setup-nextcloud@86ea139d16492bcec127944d7c21efd2269c763b
         with:
           version: stable29
           database-type: sqlite
@@ -51,7 +51,7 @@ jobs:
 
       - name: Install app into local Nextcloud server
         if: ${{ !inputs.reuse_asset }}
-        uses: SMillerDev/nextcloud-actions/setup-nextcloud-app@ae95709955d06dea39756101e07ec5b6134f14d7
+        uses: SMillerDev/nextcloud-actions/setup-nextcloud-app@86ea139d16492bcec127944d7c21efd2269c763b
         with:
           app: ${{ env.APP_NAME }}
           check-code: false
