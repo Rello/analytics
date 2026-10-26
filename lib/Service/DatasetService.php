@@ -318,6 +318,21 @@ class DatasetService {
 	}
 
 	/**
+	 * Submit all datasets with context chat indexing enabled
+	 * Used for the initial import requested by context chat
+	 *
+	 * @return int number of processed datasets
+	 * @throws Exception
+	 */
+	public function providerAll(): int {
+		$datasetIds = $this->DatasetMapper->indexAiIndexed();
+		foreach ($datasetIds as $datasetId) {
+			$this->provider($datasetId);
+		}
+		return count($datasetIds);
+	}
+
+	/**
 	 * Remove dataset from context chat
 	 *
 	 * @NoAdminRequired

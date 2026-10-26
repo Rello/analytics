@@ -9,6 +9,7 @@
 namespace OCA\Analytics\Db;
 
 use OCP\DB\Exception;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use Psr\Log\LoggerInterface;
@@ -72,6 +73,21 @@ class DatasetMapper {
 		$result = $statement->fetchAll();
 		$statement->closeCursor();
 		return $result;
+	}
+
+	/**
+	 * get ids of all datasets with context chat indexing enabled
+	 * @return array
+	 * @throws Exception
+	 */
+	public function indexAiIndexed(): array {
+		$sql = $this->db->getQueryBuilder();
+		$sql->from(self::TABLE_NAME)->select('id')
+			->where($sql->expr()->eq('ai_index', $sql->createNamedParameter(1, IQueryBuilder::PARAM_INT)));
+		$statement = $sql->executeQuery();
+		$result = $statement->fetchAll();
+		$statement->closeCursor();
+		return array_map('intval', array_column($result, 'id'));
 	}
 
 	/**
