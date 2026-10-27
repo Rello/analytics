@@ -65,6 +65,7 @@ Supported identifiers:
 - `56`, `demo-sales-ranking` (two demo reports sharing one dataset, raw table, Top N, mixed chart, pivot calculations, column order, formatting, indicators, and reload)
 - `tests/playwright/datasource_preview.js` (live datasource previews in the wizard and sidebar, unsaved options, and error handling)
 - `tests/playwright/json_picker.js` (JSON hierarchy, existing path syntax, live local extraction preview, and picker lifecycle)
+- `tests/playwright/time_aggregation.js` (quarterly sums, averages, calendar boundaries, dimensions, and table labels)
 - `tests/playwright/chart_export.js` (SVG vector output and visual comparisons, original PNG downloads, chart state restoration, failures, and download dialog)
 - `tests/playwright/dashboard_number_format.js` (standalone dashboard values, locales, and thresholds)
 - `91`, `91-delete`, `report-delete`, `delete`

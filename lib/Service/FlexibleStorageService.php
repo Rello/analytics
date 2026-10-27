@@ -771,7 +771,7 @@ class FlexibleStorageService {
 		}
 		$grouping = strtolower((string)($option['grouping'] ?? ''));
 		$mode = strtolower((string)($option['mode'] ?? 'summation'));
-		if (!in_array($grouping, ['day', 'week', 'month', 'year'], true) || !in_array($mode, ['summation', 'average'], true)) {
+		if (!in_array($grouping, ['day', 'week', 'month', 'quarter', 'year'], true) || !in_array($mode, ['summation', 'average'], true)) {
 			throw new FlexibleStorageException('invalid_time_aggregation', 'Unsupported time grouping or aggregation mode.', ['grouping' => $grouping, 'mode' => $mode]);
 		}
 		return ['column' => $column, 'grouping' => $grouping, 'mode' => $mode];
@@ -891,6 +891,7 @@ class FlexibleStorageService {
 			'day' => $date->setTime(0, 0),
 			'week' => $date->modify('monday this week')->setTime(0, 0),
 			'month' => $date->modify('first day of this month')->setTime(0, 0),
+			'quarter' => $date->setDate((int)$date->format('Y'), intdiv((int)$date->format('n') - 1, 3) * 3 + 1, 1)->setTime(0, 0),
 			'year' => $date->setDate((int)$date->format('Y'), 1, 1)->setTime(0, 0),
 		};
 		return $type === 'date' ? $date->format('Y-m-d') : $date->format('Y-m-d\TH:i:s\Z');

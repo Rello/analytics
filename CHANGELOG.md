@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Group time-based data by calendar quarter, with table labels such as 2026-Q3 and correct first-dimension selection.
 - Exclude multiple exact values with the “not in list” filter in reports and panoramas.
 - Download charts as editable SVG files alongside the existing PNG export.
 

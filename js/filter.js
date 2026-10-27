@@ -1067,8 +1067,16 @@ OCA.Analytics.Filter = {
         });
 
         const groupingSelect = container.getElementById('timeGroupingGrouping');
-        ['none', 'day', 'week', 'month', 'year'].forEach(val => {
-            groupingSelect.options.add(new Option(t('analytics', val), val));
+        [
+            {value: 'none', text: t('analytics', 'none')},
+            {value: 'day', text: t('analytics', 'day')},
+            {value: 'week', text: t('analytics', 'week')},
+            {value: 'month', text: t('analytics', 'month')},
+            // TRANSLATORS: Noun: a calendar quarter of three months, used for time aggregation.
+            {value: 'quarter', text: t('analytics', 'quarter')},
+            {value: 'year', text: t('analytics', 'year')}
+        ].forEach(({value, text}) => {
+            groupingSelect.options.add(new Option(text, value));
         });
 
         const modeSelect = container.getElementById('timeGroupingMode');
@@ -1089,7 +1097,7 @@ OCA.Analytics.Filter = {
 
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
-            t('analytics', 'Aggregate daily data into weeks, months, or years')
+            t('analytics', 'Aggregate daily data into weeks, months, quarters, or years')
         );
     },
 

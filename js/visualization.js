@@ -62,6 +62,7 @@ OCA.Analytics.Visualization = {
         day: 'YYYY-MM-DD',
         week: 'YYYY-MM-DD',
         month: 'YYYY-MM',
+        quarter: 'YYYY-[Q]Q',
         year: 'YYYY',
     },
 
@@ -2686,7 +2687,7 @@ OCA.Analytics.Visualization = {
      */
     resolveDimensionIndex: function (dimension, drilldown) {
         let idx;
-        if (typeof dimension === 'string' && dimension.includes('dimension2')) {
+        if (typeof dimension === 'string' && /^dimension[12]$/.test(dimension)) {
             // for internal storage, the dimensions are named like "dimension1"
             // for internal processing we need the index of the column
             idx = parseInt(String(dimension).match(/\d+$/)?.[0], 10) - 1;
@@ -2880,6 +2881,8 @@ OCA.Analytics.Visualization = {
                 date = myMoment(date).startOf('week').toDate();
             } else if (grouping === 'month') {
                 date = myMoment(date).startOf('month').toDate();
+            } else if (grouping === 'quarter') {
+                date = myMoment(date).startOf('quarter').toDate();
             } else if (grouping === 'year') {
                 date = myMoment(date).startOf('year').toDate();
             }

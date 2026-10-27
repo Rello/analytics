@@ -56,6 +56,34 @@ class FlexibleStorageServiceTest extends TestCase {
 		$this->assertTrue($result['queryProcessing']['timeAggregation']);
 	}
 
+	public function testQuarterAggregationKeepsCalendarBoundariesAndOtherDimensions(): void {
+		foreach (['summation' => '6', 'average' => '3'] as $mode => $expected) {
+			$service = $this->createService([
+				['c_1' => '2026-01-01', 'c_2' => 'North', 'c_3' => '2'],
+				['c_1' => '2026-03-31', 'c_2' => 'North', 'c_3' => '4'],
+				['c_1' => '2026-04-01', 'c_2' => 'North', 'c_3' => '8'],
+				['c_1' => '2026-07-01', 'c_2' => 'North', 'c_3' => '10'],
+				['c_1' => '2026-10-01', 'c_2' => 'North', 'c_3' => '12'],
+				['c_1' => '2027-01-01', 'c_2' => 'North', 'c_3' => '14'],
+				['c_1' => '2026-03-31', 'c_2' => 'South', 'c_3' => '16'],
+			]);
+			$result = $service->query(7, [
+				'aggregate' => true,
+				'dimensions' => ['c_1', 'c_2'],
+				'measures' => [['column' => 'c_3', 'aggregation' => 'sum']],
+				'timeAggregation' => ['column' => 'c_1', 'grouping' => 'quarter', 'mode' => $mode],
+			], true);
+			$this->assertSame([
+				['2026-01-01', 'North', $expected],
+				['2026-04-01', 'North', '8'],
+				['2026-07-01', 'North', '10'],
+				['2026-10-01', 'North', '12'],
+				['2027-01-01', 'North', '14'],
+				['2026-01-01', 'South', '16'],
+			], $result['data']);
+		}
+	}
+
 	public function testTopNUsesExplicitMeasureAndAggregatesAllOthersMeasures(): void {
 		$service = $this->createService([
 			['c_1' => '2026-01-01 00:00:00', 'c_2' => 'A', 'c_3' => '10.0', 'c_4' => '1.0'],
