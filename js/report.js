@@ -276,9 +276,95 @@ Object.assign(OCA.Analytics.Report, {
      */
     downloadChart: function () {
         OCA.Analytics.Report.hideReportMenu();
-        document.getElementById('downloadChartLink').href = OCA.Analytics.chartObject.toBase64Image();
-        document.getElementById('downloadChartLink').setAttribute('download', OCA.Analytics.currentReportData.options.name + '.png');
-        document.getElementById('downloadChartLink').click();
+        const chart = OCA.Analytics.chartObject;
+        if (!chart || !chart.width || !chart.height) return;
+        OCA.Analytics.Notification.htmlDialogInitiate(t('analytics', 'Download chart'), async () => {
+            const format = document.getElementById('chartExportFormat').value;
+            const button = document.getElementById('analyticsDialogBtnGo');
+            const reportName = OCA.Analytics.currentReportData.options.name;
+            button.disabled = true;
+            let objectUrl;
+            try {
+                let image;
+                if (format === 'svg') {
+                    const svg = await OCA.Analytics.Report.renderChartSvg(chart);
+                    // The user may have closed this dialog while the adapter was loading.
+                    if (!button.isConnected) return;
+                    objectUrl = URL.createObjectURL(new Blob([svg], {type: 'image/svg+xml'}));
+                    image = objectUrl;
+                } else {
+                    image = chart.toBase64Image();
+                }
+                const link = document.getElementById('downloadChartLink');
+                link.href = image;
+                link.download = reportName + '.' + format;
+                link.click();
+                link.removeAttribute('href');
+                OCA.Analytics.Notification.dialogClose();
+            } catch (error) {
+                if (button.isConnected) OCA.Analytics.Notification.notification('error', t('analytics', 'Could not export the chart.'));
+            } finally {
+                button.disabled = false;
+                if (objectUrl) setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+            }
+        });
+        const content = document.importNode(document.getElementById('templateChartExport').content, true);
+        OCA.Analytics.Notification.htmlDialogUpdate(content,
+            t('analytics', 'Export the chart as SVG or PNG.'));
+        document.getElementById('analyticsDialogBtnGo').textContent = t('analytics', 'Download chart');
+    },
+
+    /** Render an independent chart through the Canvas-to-SVG adapter. */
+    renderChartSvg: async function (chart) {
+        const {Context} = await import(OC.filePath('analytics', 'js', '3rdParty/svgcanvas.esm.js'));
+        if (!chart.ctx || !chart.width || !chart.height) throw new Error('Chart is no longer available');
+        const canvas = document.createElement('canvas');
+        canvas.width = chart.width;
+        canvas.height = chart.height;
+        const context = new Context(chart.width, chart.height);
+        context.canvas = canvas;
+        const options = Chart.helpers.clone(chart.config.options);
+        options.responsive = false;
+        options.maintainAspectRatio = false;
+        options.animation = false;
+        options.devicePixelRatio = 1;
+        options.events = [];
+        options.onResize = null;
+        options.plugins = {...options.plugins, tooltip: false, zoom: false};
+        const data = Chart.helpers.clone(chart.data);
+        data.datasets.forEach(dataset => {
+            // Chart.js otherwise strokes opaque Path2D objects that SVGCanvas cannot serialize.
+            dataset.segment ??= {};
+        });
+        // Preserve the displayed range, including any active zoom.
+        options.scales ??= {};
+        for (const [id, scale] of Object.entries(chart.scales)) {
+            options.scales[id] = {...options.scales[id], min: scale.min, max: scale.max};
+        }
+        class SvgPlatform extends Chart.BasicPlatform {
+            acquireContext() { return context; }
+        }
+        let exported;
+        try {
+            exported = new Chart(canvas, {
+                type: chart.config.type, data, options,
+                plugins: chart.config.plugins,
+                platform: SvgPlatform,
+            });
+            chart.data.datasets.forEach((dataset, index) => {
+                exported.setDatasetVisibility(index, chart.isDatasetVisible(index));
+            });
+            const count = Math.max(data.labels?.length || 0, ...data.datasets.map(dataset => dataset.data.length));
+            for (let index = 0; index < count; index++) {
+                if (!chart.getDataVisibility(index)) exported.toggleDataVisibility(index);
+            }
+            exported.update('none');
+            const svg = context.getSvg();
+            svg.setAttribute('viewBox', `0 0 ${chart.width} ${chart.height}`);
+            return context.getSerializedSvg();
+        } finally {
+            (exported || Chart.getChart(canvas))?.destroy();
+        }
     },
 
     /**

@@ -63,3 +63,12 @@ python3 build/scan-sbom.py
 
 The final command requires network access. `--issues` additionally requires an authenticated `gh` CLI,
 `GITHUB_REPOSITORY`, and the `sbom-security` label. Do not use it for offline tests.
+
+## SVG chart export dependency
+
+`js/3rdParty/svgcanvas.esm.js` is the unchanged `dist/svgcanvas.esm.js` from
+`https://registry.npmjs.org/svgcanvas/-/svgcanvas-2.6.0.tgz` (MIT; bundled license
+in `js/3rdParty/svgcanvas.LICENSE`). The archive SHA-512 integrity is
+`sha512-H/2iVTLyuLxbLNYArnTaR8RmCR7fi8Gx7Hul7+lnPcN/b6AXLS56iVzUudgfMmkKrF9+GvXm+YJlT9Tg4eIj3A==`.
+The SBOM generator records the pinned version and hashes the shipped module.
+When upgrading, replace the upstream distribution and update the pinned version together.

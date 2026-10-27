@@ -237,6 +237,16 @@ components << browser_component(
   website: 'https://www.chartjs.org'
 )
 
+# Pinned upstream distribution; see build/SBOM.md for provenance and integrity.
+components << browser_component(
+  root,
+  name: 'svgcanvas',
+  version: '2.6.0',
+  bom_ref: npm_purl('svgcanvas', '2.6.0'),
+  path: 'js/3rdParty/svgcanvas.esm.js',
+  website: 'https://github.com/zenozeng/svgcanvas'
+)
+
 adapter_version = detect_version(root, 'js/3rdParty/chartjs-adapter-moment.js', /chartjs-adapter-moment v([0-9.]+)/)
 components << browser_component(
   root,
@@ -371,6 +381,7 @@ components << browser_component(
 component_refs = components.to_h { |component| [component['name'], component['bom-ref']] }
 browser_dependency_refs = [
   component_refs.fetch('chart.js'),
+  component_refs.fetch('svgcanvas'),
   component_refs.fetch('chartjs-adapter-moment'),
   component_refs.fetch('chartjs-plugin-annotation'),
   component_refs.fetch('chartjs-plugin-colorschemes'),

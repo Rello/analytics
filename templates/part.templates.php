@@ -1433,3 +1433,13 @@
         <div data-role="preview" class="analyticsTransformPreview"></div>
     </div>
 </template>
+
+<template id="templateChartExport">
+    <div class="analyticsDialogSection">
+        <label for="chartExportFormat"><?php p($l->t('Image format')); ?></label>
+        <select id="chartExportFormat" class="optionsInput">
+            <option value="svg"><?php p($l->t('SVG (vector)')); ?></option>
+            <option value="png"><?php p($l->t('PNG (image)')); ?></option>
+        </select>
+    </div>
+</template>
