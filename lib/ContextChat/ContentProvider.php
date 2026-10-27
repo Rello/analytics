@@ -8,7 +8,9 @@
 
 namespace OCA\Analytics\ContextChat;
 
+use OCA\Analytics\BackgroundJob\ContextChatInitialImport;
 use OCA\ContextChat\Public\IContentProvider;
+use OCP\BackgroundJob\IJobList;
 use OCP\IURLGenerator;
 use OCA\ContextChat\Event\ContentProviderRegisterEvent;
 use OCP\EventDispatcher\Event;
@@ -24,6 +26,7 @@ class ContentProvider implements IContentProvider, IEventListener {
 
 	public function __construct(
 		private IURLGenerator $urlGenerator,
+		private IJobList      $jobList,
 		LoggerInterface       $logger,
 	) {
 		$this->logger = $logger;
@@ -74,6 +77,6 @@ class ContentProvider implements IContentProvider, IEventListener {
 	 * @since 1.1.0
 	 */
 	public function triggerInitialImport(): void {
-		return;
+		$this->jobList->add(ContextChatInitialImport::class);
 	}
 }

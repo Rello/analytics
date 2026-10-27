@@ -75,6 +75,47 @@ class DatasetServiceTest extends TestCase {
 		$this->assertTrue($service->provider(11));
 	}
 
+	public function testProviderAllSubmitsEveryIndexedDataset(): void {
+		if (!class_exists('\OC')) {
+			eval('class OC { public static $server; }');
+		}
+
+		$contextChatManager = new class() {
+			public array $submitted = [];
+
+			public function submitContent(int $datasetId): void {
+				$this->submitted[] = $datasetId;
+				if ($datasetId === 5) {
+					throw new \RuntimeException('indexing failed');
+				}
+			}
+		};
+
+		\OC::$server = new class($contextChatManager) {
+			private $contextChatManager;
+
+			public function __construct($contextChatManager) {
+				$this->contextChatManager = $contextChatManager;
+			}
+
+			public function query(string $class) {
+				return $this->contextChatManager;
+			}
+		};
+
+		$datasetMapper = $this->createMock(DatasetMapper::class);
+		$datasetMapper->expects($this->once())->method('indexAiIndexed')->willReturn([3, 5, 8]);
+		$logger = $this->createMock(LoggerInterface::class);
+		$logger->expects($this->once())->method('warning');
+
+		$this->setContextChatAvailable(true);
+
+		$service = $this->createService($logger, $datasetMapper);
+
+		$this->assertSame(3, $service->providerAll());
+		$this->assertSame([3, 5, 8], $contextChatManager->submitted);
+	}
+
 	public function testUpdateRejectsForeignDatasetBeforeSideEffects(): void {
 		$datasetMapper = $this->createMock(DatasetMapper::class);
 		$datasetMapper->expects($this->once())->method('readOwn')->with(77)->willReturn(false);
@@ -102,7 +143,7 @@ class DatasetServiceTest extends TestCase {
 		$this->assertFalse($service->update(77, 'foreign', '', '', '', '', 0));
 	}
 
-	private function createService(LoggerInterface $logger): DatasetService {
+	private function createService(LoggerInterface $logger, ?DatasetMapper $datasetMapper = null): DatasetService {
 		return new DatasetService(
 			'u1',
 			new FakeL10N(),
@@ -110,7 +151,7 @@ class DatasetServiceTest extends TestCase {
 			$this->createMock(ITagManager::class),
 			$this->createMock(ShareService::class),
 			$this->createMock(StorageMapper::class),
-			$this->createMock(DatasetMapper::class),
+			$datasetMapper ?? $this->createMock(DatasetMapper::class),
 			$this->createMock(ThresholdService::class),
 			$this->createMock(DataloadMapper::class),
 			$this->createMock(ActivityManager::class),
