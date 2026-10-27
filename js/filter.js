@@ -216,6 +216,10 @@ OCA.Analytics.Filter = {
         document.getElementById('analyticsDialogContainer').classList.add(
             'analyticsDialog--visualizationOptions', 'analyticsDialog--columnOptions'
         );
+        // Keep validation visible when the user is editing a different section.
+        const message = document.getElementById('transformColumnsMessage');
+        const actions = document.querySelector('#analyticsDialogContainer .analyticsDialogButtonrow');
+        actions.before(message);
     },
 
     getTransformationSourceColumns: function () {
@@ -323,7 +327,8 @@ OCA.Analytics.Filter = {
             result[label] = (result[label] || 0) + 1;
             return result;
         }, {});
-        return String(expression || '').replace(/\{([A-Za-z0-9_:-]+)\}/g, (token, ref) => {
+        return String(expression || '').replace(/'(?:[^']|'')*'|\{([A-Za-z0-9_:-]+)\}/g, (token, ref) => {
+            if (!ref) return token;
             const source = sources.find(item => item.ref === ref || item.id === ref);
             const label = source?.name || source?.title;
             return label && counts[label] === 1 ? '[' + label + ']' : token;
@@ -548,7 +553,12 @@ OCA.Analytics.Filter = {
         const drilldown = {};
         const sortable = [];
         const message = document.getElementById('transformColumnsMessage');
-        const showError = text => { message.textContent = text; message.hidden = false; };
+        const showError = text => {
+            message.textContent = text;
+            message.hidden = false;
+        };
+        message.hidden = true;
+        message.textContent = '';
         const readSort = row => {
             const direction = row.querySelector('.transformSort').value;
             if (!direction) return;
@@ -586,7 +596,8 @@ OCA.Analytics.Filter = {
             calculationRows.forEach(row => {
                 const name = row.querySelector('.transformCalculationName').value.trim();
                 const expression = row.querySelector('.transformCalculationFormula').value.trim()
-                    .replace(/\[([^\]]+)\]/g, (token, label) => {
+                    .replace(/'(?:[^']|'')*'|\[([^\]]+)\]/g, (token, label) => {
+                        if (label === undefined) return token;
                         if (labelCounts[label] > 1) {
                             throw new Error(t('analytics', 'Use Insert column to choose between columns with the same name.'));
                         }
@@ -597,7 +608,7 @@ OCA.Analytics.Filter = {
                 if (!name || !expression) {
                     throw new Error(t('analytics', 'Enter a name and formula for every calculated measure.'));
                 }
-                if (/[\[\]]/.test(expression)) {
+                if (/[\[\]]/.test(expression.replace(/'(?:[^']|'')*'/g, ''))) {
                     throw new Error(t('analytics', 'The formula contains an incomplete column reference.'));
                 }
                 definition.calculations.push({

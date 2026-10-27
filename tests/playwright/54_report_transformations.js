@@ -84,7 +84,9 @@ const reportName = buildUniqueName('Playwright Transformations', process.env.REP
     const amount = page.locator('.analyticsTransformCalculation').first();
     const amountRef = await amount.getAttribute('data-ref');
     await amount.locator('.transformCalculationName').fill('Double');
-    await amount.locator('.transformCalculationFormula').fill('{value} * 2');
+    const lookupMatch = String(baselineReport.data[0][0]).replace(/'/g, "''");
+    const lookupFormula = "LOOKUP([Column 1], '[literal] {value}', 999, '" + lookupMatch + "', {value} * 2, {value} * 2)";
+    await amount.locator('.transformCalculationFormula').fill(lookupFormula);
     await amount.locator('.transformPhase').selectOption('before');
     await amount.locator('.transformSort').selectOption('DESC');
     assert.equal(await amount.locator('.transformPriority').isHidden(), true);
@@ -144,6 +146,12 @@ const reportName = buildUniqueName('Playwright Transformations', process.env.REP
     await page.waitForFunction(() => OCA.Analytics.currentReportData?.header?.includes('Ratio'));
     const persisted = await page.evaluate(() => OCA.Analytics.currentReportData.options.filteroptions.transformations);
     assert.equal(persisted.calculations[0].name, 'Double');
+    assert.ok(persisted.calculations[0].expression.includes("'[literal] {value}'"));
+    await openOptionsMenuItem(page, 'optionsMenuColumnSelection', 'saved lookup');
+    const savedFormula = await page.locator('.transformCalculationFormula').first().inputValue();
+    assert.ok(savedFormula.startsWith('LOOKUP([Column 1],'));
+    assert.ok(savedFormula.includes("'[literal] {value}'"));
+    await page.locator('#analyticsDialogBtnCancel').click();
     assert.equal(persisted.sort[0].column, amountRef);
 
     for (const [menu, select, value, key] of [
@@ -158,6 +166,24 @@ const reportName = buildUniqueName('Playwright Transformations', process.env.REP
       await page.getByText('Remove calculated measures and other column transformations before using Top N or time aggregation.', {exact: true}).first().waitFor();
       await page.locator('#analyticsDialogBtnCancel').click();
     }
+
+    // A blocked save must expose its reason even while editing calculations.
+    await page.evaluate(() => {
+      OCA.Analytics.currentReportData.options.filteroptions.topN = {type: 'top', dimension: 0, number: 1};
+    });
+    await openOptionsMenuItem(page, 'optionsMenuColumnSelection', 'blocked calculation save');
+    await page.locator('.transformCalculationFormula').last().focus();
+    await page.locator('#analyticsDialogBtnGo').click();
+    const validation = page.locator('#transformColumnsMessage');
+    assert.equal(await validation.isVisible(), true);
+    assert.ok((await validation.innerText()).includes('Remove Top N'));
+    assert.equal(await validation.evaluate(element => {
+      const box = element.getBoundingClientRect();
+      return element.parentElement.id === 'analyticsDialogContainer'
+        && box.top >= 0 && box.bottom <= window.innerHeight;
+    }), true);
+    await page.locator('#analyticsDialogBtnCancel').click();
+    await page.evaluate(() => { delete OCA.Analytics.currentReportData.options.filteroptions.topN; });
 
     // Existing invalid settings and empty Top N responses must still render a recoverable state.
     const emptyResults = await page.evaluate(baseline => {

@@ -285,7 +285,7 @@ class TransformationService {
 				$offset += strlen($match[0]);
 				continue;
 			}
-			if (!preg_match('/\G(\{[A-Za-z0-9_:-]+\}|(?:\d+(?:\.\d*)?|\.\d+)|[()+*\/-])/A', $expression, $match, 0, $offset)) {
+			if (!preg_match('/\G(\{[A-Za-z0-9_:-]+\}|(?:\d+(?:\.\d*)?|\.\d+)|\'(?:[^\']|\'\')*\'|LOOKUP\b|[(),+*\/-])/Ai', $expression, $match, 0, $offset)) {
 				throw new \InvalidArgumentException('The formula contains an unsupported token.');
 			}
 			$tokens[] = $match[1];
@@ -294,40 +294,41 @@ class TransformationService {
 		if ($tokens === []) {
 			throw new \InvalidArgumentException('A formula is required.');
 		}
-		$output = [];
-		$operators = [];
-		$precedence = ['+' => 1, '-' => 1, '*' => 2, '/' => 2, 'neg' => 3];
-		$expectOperand = true;
-		foreach ($tokens as $token) {
-			if ($token === '(') {
-				if (!$expectOperand) throw new \InvalidArgumentException('Invalid formula parentheses.');
-				$operators[] = $token;
-			} elseif ($token === ')') {
-				if ($expectOperand) throw new \InvalidArgumentException('Invalid formula parentheses.');
-				while ($operators !== [] && end($operators) !== '(') $output[] = array_pop($operators);
-				if ($operators === []) throw new \InvalidArgumentException('Unmatched formula parenthesis.');
-				array_pop($operators);
-				$expectOperand = false;
-			} elseif (isset($precedence[$token])) {
-				if ($expectOperand && $token !== '-') throw new \InvalidArgumentException('Invalid formula operator.');
-				if ($expectOperand) $token = 'neg';
-				while ($operators !== [] && end($operators) !== '(' && $precedence[end($operators)] >= $precedence[$token] && $token !== 'neg') {
-					$output[] = array_pop($operators);
+		$position = 0;
+		$parse = function (int $minimum = 0) use (&$parse, &$position, $tokens): array {
+			$token = $tokens[$position++] ?? '';
+			if ($token === '-') {
+				$output = [...$parse(3), 'neg'];
+			} elseif ($token === '(') {
+				$output = $parse();
+				if (($tokens[$position++] ?? '') !== ')') throw new \InvalidArgumentException('Unmatched formula parenthesis.');
+			} elseif (strtoupper($token) === 'LOOKUP') {
+				if (($tokens[$position++] ?? '') !== '(') throw new \InvalidArgumentException('LOOKUP requires parentheses.');
+				$output = [];
+				$count = 0;
+				do {
+					$output = [...$output, ...$parse()];
+					$count++;
+					$separator = $tokens[$position++] ?? '';
+				} while ($separator === ',');
+				if ($separator !== ')' || $count < 4 || $count % 2 !== 0) {
+					throw new \InvalidArgumentException('Use LOOKUP(value, match, score, ..., fallback).');
 				}
-				$operators[] = $token;
-				$expectOperand = true;
+				$output[] = 'lookup:' . $count;
+			} elseif (is_numeric($token) || str_starts_with($token, '{') || str_starts_with($token, "'")) {
+				$output = [$token];
 			} else {
-				if (!$expectOperand) throw new \InvalidArgumentException('Missing formula operator.');
-				$output[] = $token;
-				$expectOperand = false;
+				throw new \InvalidArgumentException('Missing formula operand.');
 			}
-		}
-		if ($expectOperand) throw new \InvalidArgumentException('Incomplete formula.');
-		while ($operators !== []) {
-			$operator = array_pop($operators);
-			if ($operator === '(') throw new \InvalidArgumentException('Unmatched formula parenthesis.');
-			$output[] = $operator;
-		}
+			$precedence = ['+' => 1, '-' => 1, '*' => 2, '/' => 2];
+			while (isset($precedence[$tokens[$position] ?? '']) && $precedence[$tokens[$position]] >= $minimum) {
+				$operator = $tokens[$position++];
+				$output = [...$output, ...$parse($precedence[$operator] + 1), $operator];
+			}
+			return $output;
+		};
+		$output = $parse();
+		if ($position !== count($tokens)) throw new \InvalidArgumentException('Unexpected formula token.');
 		return $output;
 	}
 
@@ -336,16 +337,30 @@ class TransformationService {
 		foreach ($rpn as $token) {
 			if (str_starts_with($token, '{')) {
 				$value = $row[substr($token, 1, -1)] ?? null;
-				$stack[] = is_numeric($value) ? (float)$value : null;
+				$stack[] = $value;
+			} elseif (str_starts_with($token, "'")) {
+				$stack[] = str_replace("''", "'", substr($token, 1, -1));
+			} elseif (str_starts_with($token, 'lookup:')) {
+				$args = array_splice($stack, -(int)substr($token, 7));
+				$value = array_shift($args);
+				$result = array_pop($args);
+				for ($index = 0; $index < count($args); $index += 2) {
+					// Text matches are exact and case-sensitive; missing values use the fallback.
+					if ($value !== null && $args[$index] !== null && (string)$value === (string)$args[$index]) {
+						$result = $args[$index + 1];
+						break;
+					}
+				}
+				$stack[] = is_numeric($result) ? (float)$result : null;
 			} elseif (is_numeric($token)) {
 				$stack[] = (float)$token;
 			} elseif ($token === 'neg') {
 				$value = array_pop($stack);
-				$stack[] = $value === null ? null : -$value;
+				$stack[] = !is_numeric($value) ? null : -(float)$value;
 			} else {
 				$right = array_pop($stack);
 				$left = array_pop($stack);
-				$stack[] = $left === null || $right === null || ($token === '/' && $right == 0.0) ? null : match ($token) {
+				$stack[] = !is_numeric($left) || !is_numeric($right) || ($token === '/' && $right == 0.0) ? null : match ($token) {
 					'+' => $left + $right,
 					'-' => $left - $right,
 					'*' => $left * $right,
@@ -354,6 +369,6 @@ class TransformationService {
 			}
 		}
 		$value = $stack[0] ?? null;
-		return $value !== null && is_finite($value) ? $value : null;
+		return is_numeric($value) && is_finite((float)$value) ? (float)$value : null;
 	}
 }

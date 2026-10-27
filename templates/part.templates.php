@@ -258,11 +258,20 @@
     <div class="analyticsDialogSection"
          data-section-icon="<?php echo image_path('analytics', 'column.svg'); ?>">
         <h2><?php p($l->t('Calculated measures')); ?></h2>
-        <p class="userGuidance"><?php p($l->t('Calculate for each source row before aggregation, or from aggregated values. Drag a column into the formula or click it to insert at the cursor, then combine columns with +, -, * or /.')); ?></p>
+        <p class="userGuidance"><?php p($l->t('Drag a column into the formula or click it to insert at the cursor, then combine columns with +, -, * or /.')); ?></p>
         <p id="transformLegacyNotice" class="userGuidance" hidden></p>
         <button type="button" id="transformImportTableCalculations" class="button analyticsSecondary" hidden>
             <?php p($l->t('Move table calculations to report')); ?>
         </button>
+        <p class="userGuidance">
+            <?php p($l->t('More calculations like weighting are available.')); ?>
+            <a target="_blank" rel="noreferrer noopener"
+               title="<?php p($l->t('Open documentation')); ?>"
+               aria-label="<?php p($l->t('Open documentation')); ?>"
+               href="https://github.com/Rello/analytics/wiki/Column-selection#weighting">
+                <span class="icon-info" aria-hidden="true" style="display: inline-block; vertical-align: middle; width: 20px; height: 20px;"></span>
+            </a>
+        </p>
         <div id="transformCalculationList"></div>
         <button type="button" id="transformAddCalculation" class="button analyticsSecondary"><?php p($l->t('Add calculated measure')); ?></button>
     </div>

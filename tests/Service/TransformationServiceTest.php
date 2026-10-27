@@ -129,6 +129,53 @@ class TransformationServiceTest extends TestCase {
 		$this->assertSame($source['data'], $result['data']);
 	}
 
+	public function testLookupScoresEachArticleBeforeSumming(): void {
+		$source = $this->source([
+			['T1', 1, 0, 0], ['T1', 1, 0, 0], ['T2', 1, 0, 0],
+			['T3', 1, 0, 0], ['other', 1, 0, 0], [null, 1, 0, 0],
+		]);
+		$definition = $this->definition([
+			['id' => 'calc:score', 'name' => 'Score', 'expression' => "LOOKUP({segment}, 'T1', 3, 'T2', 2, 'T3', 1, 0)", 'phase' => 'before'],
+			['id' => 'calc:progress', 'name' => 'Progress', 'expression' => '{calc:score} / 10', 'phase' => 'after'],
+		]);
+		$result = $this->service->execute($source, $definition, ['drilldown' => ['segment' => false]]);
+		$this->assertSame([[6.0, 0.0, 0.0, 9.0, 0.9]], $result['data']);
+	}
+
+	public function testLookupExactMatchingEscapesFallbackAndArithmetic(): void {
+		$definition = $this->definition([
+			['id' => 'calc:score', 'name' => 'Score',
+				'expression' => "2 * lookup({segment}, 'T1', -3, 'Editor''s [tier] {unknown}', {profit} + 1, LOOKUP({segment}, '', 4, 7))",
+				'phase' => 'before'],
+		]);
+		$source = $this->source([
+			['T1', 1, 0, 2], ['t1', 1, 0, 2], ['T1 ', 1, 0, 2],
+			["Editor's [tier] {unknown}", 1, 0, 2], ['', 1, 0, 2], [null, 1, 0, 2],
+		]);
+		$result = $this->service->execute($source, $definition, ['aggregate' => false]);
+		$this->assertSame([-6.0, 14.0, 14.0, 6.0, 8.0, 14.0], array_column($result['data'], 4));
+	}
+
+	public function testLookupRejectsMalformedExpressions(): void {
+		foreach (["LOOKUP({segment}, 'T1', 3)", "LOOKUP({segment}, 'T1', 3,)", "LOOKUP({segment}, 'T1, 3, 0)", "LOOKUP({missing}, 'T1', 3, 0)", "OTHER(1)", "1 2", "1 +"] as $expression) {
+			try {
+				$this->service->execute($this->source([]), $this->definition([
+					['id' => 'calc:score', 'name' => 'Score', 'expression' => $expression, 'phase' => 'before'],
+				]));
+				$this->fail('Accepted invalid formula: ' . $expression);
+			} catch (\InvalidArgumentException $exception) {
+				$this->assertNotSame('', $exception->getMessage());
+			}
+		}
+	}
+
+	public function testTextArithmeticStillReturnsNull(): void {
+		$result = $this->service->execute($this->source([['T1', 1, 0, 2]]), $this->definition([
+			['id' => 'calc:score', 'name' => 'Score', 'expression' => '{segment} + 1', 'phase' => 'before'],
+		]));
+		$this->assertNull($result['data'][0][4]);
+	}
+
 	private function source(array $rows): array {
 		return [
 			'header' => ['Segment', 'Quantity', 'Price', 'Profit'],

@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Map text values to numeric scores in calculated measures with LOOKUP, including a fallback for unmatched values.
 - Group time-based data by calendar quarter, with table labels such as 2026-Q3 and correct first-dimension selection.
 - Exclude multiple exact values with the “not in list” filter in reports and panoramas.
 - Download charts as editable SVG files alongside the existing PNG export.
@@ -11,6 +12,7 @@
 - Increase the connection timeout for external datasources from 10 to 30 seconds.
 
 ### Fixed
+- Keep Columns dialog validation errors visible above the action buttons when saving is blocked.
 - Re-index all AI-enabled datasets in Context Chat when it requests an initial import, e.g. after its index was reset.
 
 ## 7.1.0 - 2026-10-21
