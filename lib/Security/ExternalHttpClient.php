@@ -10,7 +10,7 @@ use OCP\Http\Client\IClientService;
 use Psr\Log\LoggerInterface;
 
 class ExternalHttpClient {
-	public const CONNECT_TIMEOUT_SECONDS = 10;
+	public const CONNECT_TIMEOUT_SECONDS = 30;
 	public const TIMEOUT_SECONDS = 60;
 
 	public function __construct(
