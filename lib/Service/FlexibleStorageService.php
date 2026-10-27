@@ -687,7 +687,7 @@ class FlexibleStorageService {
 			}
 			$column = $resolver->resolve((string)($filter['column'] ?? ''));
 			$operator = strtoupper((string)($filter['operator'] ?? 'EQ'));
-			if (!in_array($operator, ['EQ', 'GT', 'LT', 'IN', 'LIKE', 'NOTLIKE', 'BETWEEN'], true)) {
+			if (!in_array($operator, ['EQ', 'GT', 'LT', 'IN', 'NOTIN', 'LIKE', 'NOTLIKE', 'BETWEEN'], true)) {
 				throw new FlexibleStorageException('invalid_filter', 'Unsupported filter operator.', ['filter' => $index, 'operator' => $operator]);
 			}
 			$value = $filter['value'] ?? null;
@@ -695,13 +695,13 @@ class FlexibleStorageService {
 				if ($column['type'] !== 'text' || !is_string($value)) {
 					throw new FlexibleStorageException('invalid_filter', 'LIKE filters require a text column and string value.', ['filter' => $index]);
 				}
-			} elseif ($operator === 'IN') {
+			} elseif ($operator === 'IN' || $operator === 'NOTIN') {
 				if (is_string($value)) {
-					preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value, $matches);
+					preg_match_all("/\\s*'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value, $matches);
 					$value = array_map(static fn (string $item): string => trim($item, " '\t\n\r\0\x0B"), $matches[0]);
 				}
 				if (!is_array($value) || $value === []) {
-					throw new FlexibleStorageException('invalid_filter', 'IN filters require a non-empty array.', ['filter' => $index]);
+					throw new FlexibleStorageException('invalid_filter', 'IN and NOTIN filters require a non-empty array.', ['filter' => $index]);
 				}
 				$value = array_map(fn (mixed $item): mixed => $this->filterValue($column, $item, $index), $value);
 			} elseif ($operator === 'BETWEEN') {

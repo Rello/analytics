@@ -626,6 +626,37 @@ class DatasourceControllerTest extends TestCase {
         $this->assertSame(['France', 'EU', 2], $result['data'][1]);
     }
 
+    public function testNotInExcludesExactValuesWithOtherFilters(): void {
+        $rows = [
+            ['Germany', 'Europe', 1],
+            ['France', 'Europe', 2],
+            ['Spain', 'Europe', 3],
+            ['Germany East', 'Europe', 4],
+            ['Spain', 'Other', 5],
+            ['Name, with comma', 'Europe', 6],
+        ];
+        foreach ([false, true] as $withPositive) {
+            $localCsv = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+            $localCsv->method('readData')->willReturn([
+                'header' => ['Country', 'Region', 'Value'],
+                'dimensions' => ['Country', 'Region'],
+                'data' => $rows, 'error' => 0,
+            ]);
+            $filters = [
+                ['dimension' => '0', 'option' => 'NOTIN', 'value' => " Germany ; France, 'Name, with comma'"],
+                ['dimension' => '1', 'option' => 'EQ', 'value' => 'Europe'],
+            ];
+            if ($withPositive) {
+                $filters[] = ['dimension' => '0', 'option' => 'IN', 'value' => 'Germany,France,Spain'];
+            }
+            $result = $this->createController($localCsv)->read(DatasourceController::DATASET_TYPE_LOCAL_CSV, [
+                'link' => '{"link":"/data.csv"}', 'user_id' => 'u1',
+                'filteroptions' => json_encode(['aggregate' => false, 'filter' => $filters]),
+            ], false);
+            $this->assertSame($withPositive ? [$rows[2]] : [$rows[2], $rows[3]], $result['data']);
+        }
+    }
+
     /**
      * Confirms multiple filters for one dimension are combined with OR while other dimensions use AND.
      */

@@ -326,7 +326,7 @@ class FlexibleStorageMapper {
 				$column = $filter['column'];
 				$field = $this->valueAlias($column) . '.' . FlexibleColumnResolver::valueField($column);
 				$expression = $this->filterExpression($sql, $field, $filter['operator'], $filter['value']);
-				if ($filter['operator'] === 'NOTLIKE') {
+				if (in_array($filter['operator'], ['NOTLIKE', 'NOTIN'], true)) {
 					$negative[] = $expression;
 				} else {
 					$positive[] = $expression;
@@ -345,10 +345,12 @@ class FlexibleStorageMapper {
 		if ($operator === 'EQ' && $value === null) {
 			return $sql->expr()->isNull($field);
 		}
-		if ($operator === 'IN') {
+		if ($operator === 'IN' || $operator === 'NOTIN') {
 			$name = 'flexIn' . (++$this->parameterCounter);
 			$sql->setParameter($name, $value, IQueryBuilder::PARAM_STR_ARRAY);
-			return $sql->expr()->in($field, $sql->createParameter($name));
+			return $operator === 'NOTIN'
+				? $sql->expr()->notIn($field, $sql->createParameter($name))
+				: $sql->expr()->in($field, $sql->createParameter($name));
 		}
 		if ($operator === 'BETWEEN') {
 			return $sql->expr()->andX(

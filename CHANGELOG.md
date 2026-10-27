@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Exclude multiple exact values with the “not in list” filter in reports and panoramas.
 - Download charts as editable SVG files alongside the existing PNG export.
 
 ### Changed

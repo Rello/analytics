@@ -20,6 +20,22 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
 class FlexibleStorageServiceTest extends TestCase {
+    public function testNotInNormalizesListForStorage(): void {
+        $mapper = $this->createMock(FlexibleStorageMapper::class);
+        $mapper->method('getColumns')->willReturn($this->columns());
+        $mapper->expects($this->once())->method('query')->with(
+            7, $this->anything(),
+            $this->callback(static fn (array $filters): bool =>
+                $filters[0]['operator'] === 'NOTIN'
+                && $filters[0]['value'] === ['Germany', 'France', 'Name, with comma']),
+            $this->anything(), $this->anything(), $this->anything(), $this->anything()
+        )->willReturn([]);
+        $service = $this->createServiceWithMapper($mapper, $this->createMock(ReportMapper::class));
+        $service->query(7, [
+            'filters' => [['column' => 'c_2', 'operator' => 'NOTIN', 'value' => "Germany; France, 'Name, with comma'"]],
+        ], true);
+    }
+
 	public function testTimeAggregationRunsBeforePaginationWithoutFloatConversion(): void {
 		$service = $this->createService([
 			['c_1' => '2026-01-01 00:00:00', 'c_2' => 'North', 'c_3' => '99999999999999999999.1000000000'],

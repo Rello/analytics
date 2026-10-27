@@ -335,7 +335,11 @@ class StorageMapper
 			foreach ($filters as $filter) {
 				$expression = $this->buildFilterExpression($sql, $column, $filter['option'], $filter['value']);
 				if ($expression !== null) {
-					$expressions[] = $expression;
+					if ($filter['option'] === 'NOTIN') {
+						$sql->andWhere($expression);
+					} else {
+						$expressions[] = $expression;
+					}
 				}
 			}
 
@@ -373,15 +377,17 @@ class StorageMapper
 			return $sql->expr()->gt($column, $sql->createNamedParameter($valueNoQuotes));
 		} elseif ($option === 'LT') {
 			return $sql->expr()->lt($column, $sql->createNamedParameter($valueNoQuotes));
-		} elseif ($option === 'IN') {
-			preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value, $matches);
+		} elseif ($option === 'IN' || $option === 'NOTIN') {
+			preg_match_all("/\\s*'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $value, $matches);
 			$valuesArray = array_map(function($v) {
 				return trim($v, " '");
 			}, $matches[0]);
 
 			$parameter = 'inValues' . (++$this->filterParameterCounter);
 			$sql->setParameter($parameter, $valuesArray, IQueryBuilder::PARAM_STR_ARRAY);
-			return $sql->expr()->in($column, $sql->createParameter($parameter));
+			return $option === 'NOTIN'
+				? $sql->expr()->notIn($column, $sql->createParameter($parameter))
+				: $sql->expr()->in($column, $sql->createParameter($parameter));
 		} elseif ($option === 'LIKE') {
 			return $sql->expr()->like($column, $sql->createNamedParameter($this->buildLikePattern($valueNoQuotes)));
 		} elseif ($option === 'NOTLIKE') {

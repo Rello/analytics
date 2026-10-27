@@ -21,6 +21,17 @@ class PanoramaFilterServiceTest extends TestCase {
         $this->assertSame([$this->variable()], Filters::normalize(json_encode([$this->variable()]), $pages));
     }
 
+    public function testNotInConfigurationAndViewerSelection(): void {
+        $variable = $this->variable();
+        $variable['operator'] = 'NOTIN';
+        $pages = [['reports' => [['type' => 0, 'value' => 1]]]];
+        $this->assertSame([$variable], Filters::normalize([$variable], $pages));
+        $result = Filters::apply(['id' => 1, 'filteroptions' => '{}'], [$variable],
+            ['date' => [['option' => 'NOTIN', 'value' => 'Germany,France']]]);
+        $this->assertSame([['dimension' => 'dimension1', 'option' => 'NOTIN', 'value' => 'Germany,France']],
+            json_decode($result['filteroptions'], true)['filter']);
+    }
+
     public function testUnknownReportMappingIsRejected(): void {
         $this->expectException(\InvalidArgumentException::class);
         Filters::normalize([$this->variable()], [['reports' => [['type' => 1, 'value' => 1]]]]);

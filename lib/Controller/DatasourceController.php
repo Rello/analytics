@@ -508,19 +508,29 @@ class DatasourceController extends Controller {
 				continue;
 			}
 
-			$hasPositiveFilter = true;
-
-			if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
-				$matchesPositiveFilter = true;
-			} else if ($filterOption === 'IN') {
-				preg_match_all("/'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
+			if ($filterOption === 'IN' || $filterOption === 'NOTIN') {
+				preg_match_all("/\\s*'(?:[^'\\\\]|\\\\.)*'|[^,;]+/", $filterValue, $matches);
 				$valuesArray = array_map(function($v) {
 					return trim($v, " '");
 				}, $matches[0]);
 
+				if ($filterOption === 'NOTIN') {
+					if (in_array($record[$key], $valuesArray)) {
+						return false;
+					}
+					continue;
+				}
+				$hasPositiveFilter = true;
 				if (in_array($record[$key], $valuesArray)) {
 					$matchesPositiveFilter = true;
 				}
+				continue;
+			}
+
+			$hasPositiveFilter = true;
+
+			if (($filterOption === 'EQ' && $record[$key] === $filterValueNoQuotes) || ($filterOption === 'GT' && $record[$key] > $filterValueNoQuotes) || ($filterOption === 'LT' && $record[$key] < $filterValueNoQuotes) || ($filterOption === 'LIKE' && $this->matchesLikeFilter($record[$key], $filterValueNoQuotes))) {
+				$matchesPositiveFilter = true;
 			}
 		}
 

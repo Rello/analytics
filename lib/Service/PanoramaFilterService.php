@@ -30,7 +30,7 @@ class PanoramaFilterService {
 				|| !preg_match('/^[a-zA-Z0-9_-]{1,80}$/D', $filter['id']) || isset($ids[$filter['id']])
 				|| !is_string($filter['label'] ?? null) || trim($filter['label']) === ''
 				|| !is_bool($filter['enabled'] ?? null)
-				|| !in_array($filter['operator'] ?? null, ['EQ', 'GT', 'LT', 'LIKE', 'NOTLIKE', 'IN'], true)
+				|| !in_array($filter['operator'] ?? null, ['EQ', 'GT', 'LT', 'LIKE', 'NOTLIKE', 'IN', 'NOTIN'], true)
 				|| !is_array($filter['mappings'] ?? null) || !array_is_list($filter['mappings'])
 				|| (isset($filter['defaultValue']) && !is_string($filter['defaultValue']))) {
 				throw new InvalidArgumentException('Invalid panorama variable');
@@ -85,7 +85,7 @@ class PanoramaFilterService {
                 throw new InvalidArgumentException('Invalid panorama conditions');
             }
             foreach ($selections as $selection) {
-                if (!is_array($selection) || !in_array($selection['option'] ?? null, ['EQ', 'GT', 'LT', 'LIKE', 'NOTLIKE', 'IN'], true)
+                if (!is_array($selection) || !in_array($selection['option'] ?? null, ['EQ', 'GT', 'LT', 'LIKE', 'NOTLIKE', 'IN', 'NOTIN'], true)
                     || !is_string($selection['value'] ?? null)) {
                     throw new InvalidArgumentException('Invalid panorama condition');
                 }

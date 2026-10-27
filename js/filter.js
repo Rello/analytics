@@ -25,6 +25,7 @@ OCA.Analytics.Filter = {
         'LIKE': t('analytics', 'contains'),
         'NOTLIKE': t('analytics', 'not contains'),
         'IN': t('analytics', 'list of values'),
+        'NOTIN': t('analytics', 'not in list'),
     },
     calculatedColumnsEditorState: {
         items: [],
@@ -881,7 +882,7 @@ OCA.Analytics.Filter = {
         OCA.Analytics.Notification.htmlDialogUpdate(
             container,
             // TRANSLATORS: {linkstart} and {linkend} wrap the documentation link. Preserve the text-variable syntax and any <br> tags in this guidance.
-            t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
+            t('analytics', 'Dynamic text variables can be used to select dates.<br>The selection is written between two % (e.g. %last2months%).<br>Use * and ? as wildcards for contains and not contains filters.<br>Separate values with commas or semicolons for list of values and not in list filters.<br>Information on available filters and alternative date formats is available in the {linkstart}Wiki{linkend}.')
                 .replace('{linkstart}', '<a href="https://github.com/Rello/analytics/wiki/Filter,-chart-options-&-drilldown#text-variables" target="_blank">')
                 .replace('{linkend}', '</a>')
         );

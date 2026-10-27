@@ -404,7 +404,7 @@ class ApiDataController extends ApiController {
 			'dimension1' => (string)$datasetMetadata['dimension1'],
 			'dimension2' => (string)$datasetMetadata['dimension2'],
 		];
-		$allowedOptions = ['EQ', 'GT', 'LT', 'IN', 'LIKE', 'NOTLIKE', 'BETWEEN'];
+		$allowedOptions = ['EQ', 'GT', 'LT', 'IN', 'NOTIN', 'LIKE', 'NOTLIKE', 'BETWEEN'];
 		$normalized = [];
 
 		foreach ($filter as $column => $condition) {

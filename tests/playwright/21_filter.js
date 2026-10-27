@@ -113,6 +113,26 @@ async function clearFiltersAndReload(page) {
       throw new Error(`Expected 3 active filter chips before removal, got ${filterChipCount}`);
     }
     await clearFiltersAndReload(page);
+    steps.push('apply not in list and verify saved exclusion');
+    const originalData = await page.evaluate(() => OCA.Analytics.currentReportData.data);
+    await clickFirst(page, ['#addFilterIcon'], 'add exclusion filter');
+    await page.locator('#filterDialogDimension').selectOption({ label: 'Column 2' });
+    await page.locator('#filterDialogOption').selectOption({ label: 'not in list' });
+    await page.locator('#filterDialogValue').fill('Dimension 2; Threshold Test');
+    await clickFirst(page, ['#analyticsDialogBtnGo'], 'confirm exclusion');
+    await saveAndReloadReport(page, reportName);
+    const excluded = await page.evaluate(() => ({
+      data: OCA.Analytics.currentReportData.data,
+      filters: OCA.Analytics.currentReportData.options.filteroptions.filter,
+    }));
+    const expected = originalData.filter(row => !['Dimension 2', 'Threshold Test'].includes(row[1]));
+    if (expected.length === originalData.length || expected.length === 0
+        || JSON.stringify(excluded.data) !== JSON.stringify(expected)
+        || excluded.filters[0].option !== 'NOTIN') {
+      throw new Error('Not in list did not persist or return the expected remaining rows');
+    }
+    await capture('not_in_list');
+    await clearFiltersAndReload(page);
     cleanupRequired = false;
 
     steps.push('validate original report after filter cleanup');
