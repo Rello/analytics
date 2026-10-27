@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Changed
+- Opening a report subfolder closes other open report folders while keeping its parent folders open.
 - Increase the connection timeout for external datasources from 10 to 30 seconds.
 
 ### Fixed

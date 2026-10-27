@@ -833,7 +833,7 @@ OCA.Analytics.Navigation = {
 
 
     handleGroupClicked: function (evt) {
-        const li = evt.target.parentNode.parentNode;
+        const li = evt.currentTarget.closest('li.collapsible');
         /*if (li.dataset.sectionId === 'section-favorites') {
             // favorites are always open and not collapsible
             evt.preventDefault();
@@ -848,6 +848,13 @@ OCA.Analytics.Navigation = {
                 document.querySelectorAll('#navigationDatasets > li.collapsible[data-section-id]')
                     .forEach(node => {
                         if (node !== li) {
+                            node.classList.remove('open');
+                        }
+                    });
+            } else if (li.closest('#section-reports')) {
+                document.querySelectorAll('#section-reports li.collapsible.open')
+                    .forEach(node => {
+                        if (!node.contains(li)) {
                             node.classList.remove('open');
                         }
                     });
