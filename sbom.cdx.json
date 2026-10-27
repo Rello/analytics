@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:b215a34e-b90d-4ac4-b041-2de12b8c9437",
+  "serialNumber": "urn:uuid:b3537584-06f0-4066-b68d-ff35bf7c4e10",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-21T19:02:38Z",
+    "timestamp": "2026-10-27T18:06:39Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -422,6 +422,40 @@
         {
           "type": "website",
           "url": "https://www.chartjs.org"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/svgcanvas@2.6.0",
+      "group": "npm",
+      "name": "svgcanvas",
+      "version": "2.6.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "21823f13c9f62e399467860578925c25e65bd7d581ae23f4d207bf4c7ddcf30f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/svgcanvas@2.6.0",
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "js/3rdParty/svgcanvas.esm.js"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/zenozeng/svgcanvas"
         }
       ]
     },
@@ -861,6 +895,7 @@
         "pkg:github/nextcloud/server",
         "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
         "pkg:npm/chart.js@4.4.9",
+        "pkg:npm/svgcanvas@2.6.0",
         "pkg:npm/chartjs-adapter-moment@1.0.0",
         "pkg:npm/chartjs-plugin-annotation@3.1.0",
         "pkg:npm/chartjs-plugin-colorschemes@0.4.0",
