@@ -13,6 +13,7 @@
 - Increase the connection timeout for external datasources from 10 to 30 seconds.
 
 ### Fixed
+- Preserve values containing | during aggregation without splitting columns or merging distinct groups.
 - Keep Columns dialog validation errors visible above the action buttons when saving is blocked.
 - Re-index all AI-enabled datasets in Context Chat when it requests an initial import, e.g. after its index was reset.
 

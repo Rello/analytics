@@ -662,6 +662,7 @@ class DatasourceController extends Controller {
 		}
 
 		$aggregatedData = [];
+		$groupDimensions = [];
 
 		foreach ($data['data'] as $row) {
 			if (!is_array($row) || empty($row)) {
@@ -670,7 +671,10 @@ class DatasourceController extends Controller {
 
 			$row = array_values($row);
 			$value = array_pop($row);
-			$key = empty($row) ? 'xxsingle_valuexx' : implode("|", $row);
+			// Keep the existing string normalization without using dimension content as a delimiter.
+			$dimensions = array_map('strval', $row);
+			$key = serialize($dimensions);
+			$groupDimensions[$key] = $dimensions;
 
 			if (!isset($aggregatedData[$key])) {
 				$aggregatedData[$key] = 0;
@@ -690,7 +694,7 @@ class DatasourceController extends Controller {
 
 		$result = [];
 		foreach ($aggregatedData as $aKey => $aValue) {
-			if ($aKey === 'xxsingle_valuexx') {
+			if ($groupDimensions[$aKey] === []) {
 				if (!isset($data['header']) || !is_array($data['header'])) {
 					$data['header'] = [''];
 				} else {
@@ -698,7 +702,7 @@ class DatasourceController extends Controller {
 				}
 				$result[] = [$this->l10n->t('Total'), $aValue];
 			} else {
-				$components = explode('|', $aKey);
+				$components = $groupDimensions[$aKey];
 				$result[] = array_merge($components, [$aValue]);
 			}
 		}

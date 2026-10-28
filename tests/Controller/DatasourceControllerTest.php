@@ -159,6 +159,42 @@ class DatasourceControllerTest extends TestCase {
         $this->assertCount(10, $result['header']);
     }
 
+    public function testAggregationPreservesPipesAndDistinctDimensionTuples(): void {
+        $data = [
+            'header' => ['Country', 'Publication', 'Count'],
+            'data' => [
+                ['Spain', 'André Machado | Blog', 1],
+                ['Spain', 'André Machado | Blog', 2],
+                ['a|b', 'c', 4],
+                ['a', 'b|c', 8],
+                ['', '|', 16],
+                ['|', '', 32],
+            ],
+        ];
+        $method = (new \ReflectionClass(DatasourceController::class))->getMethod('aggregateData');
+        $result = $method->invoke($this->createController(), $data, '{}');
+
+        $this->assertSame($data['header'], $result['header']);
+        $this->assertSame([
+            ['Spain', 'André Machado | Blog', 3],
+            ['a|b', 'c', 4],
+            ['a', 'b|c', 8],
+            ['', '|', 16],
+            ['|', '', 32],
+        ], $result['data']);
+    }
+
+    public function testAggregationPreservesFormerSentinelAndNumericDimensionGrouping(): void {
+        $method = (new \ReflectionClass(DatasourceController::class))->getMethod('aggregateData');
+        $result = $method->invoke($this->createController(), [
+            'header' => ['Dimension', 'Count'],
+            'data' => [['xxsingle_valuexx', 1], [1, 2], ['1', 3]],
+        ], '{}');
+
+        $this->assertSame(['Dimension', 'Count'], $result['header']);
+        $this->assertSame([['xxsingle_valuexx', 1], ['1', 5]], $result['data']);
+    }
+
     /**
      * Ensures persisted cache keys are not forwarded when cache validation is disabled.
      */
