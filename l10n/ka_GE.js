@@ -14,6 +14,8 @@ OC.L10N.register(
     "None" : "არც ერთი",
     "Priority" : "პრიორიტეტი",
     "Filter" : "ფილტრი",
+    "day" : "დღე",
+    "week" : "კვირა",
     "Apply" : "გამოყენება",
     "Favorites" : "რჩეულები",
     "New" : "ახალი",

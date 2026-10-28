@@ -44,6 +44,7 @@ OC.L10N.register(
     "Ascending" : "Tăng dần",
     "Descending" : "Giảm dần",
     "Filter" : "Lọc",
+    "week" : "tuần",
     "Add" : "Thêm",
     "Chart options" : "Tuỳ chọn biểu đồ",
     "Apply" : "Áp dụng",

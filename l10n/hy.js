@@ -10,6 +10,7 @@ OC.L10N.register(
     "Saved" : "Պահված",
     "Date" : "Date",
     "Delete" : "հեռացնել",
+    "week" : "շաբաթ",
     "Favorites" : "Սիրվածներ",
     "New" : "Նոր",
     "Remove from favorites" : "Remove from favorites",

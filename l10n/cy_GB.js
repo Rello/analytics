@@ -10,6 +10,8 @@ OC.L10N.register(
     "Date" : "Date",
     "Delete" : "Dileu",
     "None" : "Dim",
+    "week" : "wythnos",
+    "year" : "blwyddyn",
     "Favorites" : "Ffefrynnau",
     "New" : "Newydd",
     "Remove from favorites" : "Remove from favorites",

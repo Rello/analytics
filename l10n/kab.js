@@ -38,6 +38,8 @@ OC.L10N.register(
     "Priority" : "Tazwarayt",
     "Filter" : "Sizdeg",
     "none" : "ulac",
+    "day" : "ass",
+    "month" : "ayyur",
     "Add" : "Rnu",
     "Percentage" : "Afmiḍi",
     "Up" : "Ali",

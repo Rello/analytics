@@ -12,6 +12,7 @@ OC.L10N.register(
     "Done" : "Preste",
     "None" : "Nulle",
     "Priority" : "Prioritate",
+    "day" : "die",
     "Apply" : "Applicar",
     "Favorites" : "Favoritos",
     "New" : "Nove",

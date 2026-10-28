@@ -35,6 +35,8 @@ OC.L10N.register(
     "None" : "Ninguno",
     "Priority" : "Prioridad",
     "Filter" : "Filtrar",
+    "day" : "día",
+    "week" : "semana",
     "Add" : "Guardar",
     "Apply" : "Aplicar",
     "Favorites" : "Favoritos",
