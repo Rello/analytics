@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Record share creation, revocation, and permission, password, and embedding-domain changes with readable sharer, recipient, item name, and share type in the Nextcloud admin audit log.
 - Map text values to numeric scores in calculated measures with LOOKUP, including a fallback for unmatched values.
 - Group time-based data by calendar quarter, with table labels such as 2026-Q3 and correct first-dimension selection.
 - Exclude multiple exact values with the “not in list” filter in reports and panoramas.

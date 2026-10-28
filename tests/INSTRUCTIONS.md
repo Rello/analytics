@@ -16,6 +16,16 @@ Notes:
 - Override image if needed:
   - `PHPUNIT_IMAGE=my-image:tag ./tests/run-unit.sh`
 
+## Share audit integration
+
+Run against the development Nextcloud database:
+
+```sh
+docker exec -u www-data nc35-app-1 php /var/tmp/own_apps/analytics/tests/integration/share-audit.php
+```
+
+Requires the development `admin` user and the mounted checkout. Verifies the five share audit events, secret exclusion, duplicate/no-op suppression, authorization, and cascade revocations. Captures audit events without publishing them and rolls back all fixture database changes.
+
 ## UI Tests (Playwright)
 - Default run:
   - `./tests/run-playwright.sh`

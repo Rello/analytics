@@ -11,6 +11,8 @@ namespace OCA\Analytics\Db;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
@@ -28,7 +30,8 @@ class ShareMapper
     public function __construct(
         IDBConnection $db,
         IUserSession $userSession,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        private IEventDispatcher $eventDispatcher
     )
     {
         $this->userSession = $userSession;
@@ -151,7 +154,16 @@ class ShareMapper
                 ]);
             $sql->executeStatement();
         }
-        return $sql->getLastInsertId();
+        $shareId = $sql->getLastInsertId();
+        $this->auditShare('created', [
+            'id' => $shareId,
+            'item_type' => $item_type,
+            'item_source' => $item_source,
+            'type' => $type,
+            'uid_owner' => $uid_owner,
+            'uid_initiator' => $this->userSession->getUser()->getUID(),
+        ]);
+        return $shareId;
     }
 
 	/**
@@ -208,13 +220,7 @@ class ShareMapper
      */
     public function updateSharePassword($shareId, $password)
     {
-        $sql = $this->db->getQueryBuilder();
-        $sql->update(self::TABLE_NAME)
-            ->set('password', $sql->createNamedParameter($password))
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
-        $sql->executeStatement();
-        return true;
+        return $this->updateShareField($shareId, 'password', $password, 'password_changed');
     }
 
     /**
@@ -227,13 +233,7 @@ class ShareMapper
      */
     public function updateShareDomain($shareId, $domain)
     {
-        $sql = $this->db->getQueryBuilder();
-        $sql->update(self::TABLE_NAME)
-            ->set('domain', $sql->createNamedParameter($domain))
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
-        $sql->executeStatement();
-        return true;
+        return $this->updateShareField($shareId, 'domain', $domain, 'domain_changed');
     }
 
 	/**
@@ -245,15 +245,7 @@ class ShareMapper
 	 */
     public function updateSharePermissions($shareId, $permissions)
     {
-        // update the share itself
-        $sql = $this->db->getQueryBuilder();
-        $sql->update(self::TABLE_NAME)
-            ->set('permissions', $sql->createNamedParameter($permissions))
-            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
-            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
-        $sql->executeStatement();
-
-        return true;
+        return $this->updateShareField($shareId, 'permissions', $permissions, 'permissions_changed');
     }
 
     /**
@@ -265,13 +257,14 @@ class ShareMapper
     public function deleteShare($shareId)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->delete(self::TABLE_NAME)
+        $sql->select('id', 'item_type', 'item_source', 'type', 'uid_owner', 'uid_initiator')
+            ->from(self::TABLE_NAME)
             ->where($sql->expr()->eq('id', $sql->createNamedParameter($shareId)))
             ->andWhere($sql->expr()->orX(
                 $sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())),
                 $sql->expr()->eq('uid_owner', $sql->createNamedParameter($this->userSession->getUser()->getUID()))
             ));
-        $sql->executeStatement();
+        $this->deleteAuditedShares($sql);
         return true;
     }
 
@@ -286,10 +279,11 @@ class ShareMapper
     public function deleteSharesByItem($item_type, $item_source)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->delete(self::TABLE_NAME)
+        $sql->select('id', 'item_type', 'item_source', 'type', 'uid_owner', 'uid_initiator')
+            ->from(self::TABLE_NAME)
 			->where($sql->expr()->eq('item_type', $sql->createNamedParameter($item_type)))
 			->andWhere($sql->expr()->eq('item_source', $sql->createNamedParameter($item_source)));
-        $sql->executeStatement();
+        $this->deleteAuditedShares($sql);
         return true;
     }
 
@@ -303,10 +297,123 @@ class ShareMapper
     public function deleteByUser($userId)
     {
         $sql = $this->db->getQueryBuilder();
-        $sql->delete(self::TABLE_NAME)
+        $sql->select('id', 'item_type', 'item_source', 'type', 'uid_owner', 'uid_initiator')
+            ->from(self::TABLE_NAME)
             ->where($sql->expr()->eq('uid_owner', $sql->createNamedParameter($userId)))
             ->andWhere($sql->expr()->eq('type', $sql->createNamedParameter(0)));
-        $sql->executeStatement();
+        $this->deleteAuditedShares($sql);
         return true;
     }
+
+    /** Update only shares owned by the actor; audit only persisted changes. */
+    private function updateShareField($shareId, string $field, $value, string $action): bool
+    {
+        $sql = $this->db->getQueryBuilder();
+        $sql->select('id', 'item_type', 'item_source', 'type', 'uid_owner', 'uid_initiator', $field)
+            ->from(self::TABLE_NAME)
+            ->where($sql->expr()->eq('uid_initiator', $sql->createNamedParameter($this->userSession->getUser()->getUID())))
+            ->andWhere($sql->expr()->eq('id', $sql->createNamedParameter($shareId)));
+        $statement = $sql->executeQuery();
+        $share = $statement->fetch();
+        $statement->closeCursor();
+        if (!$share || (string)$share[$field] === (string)$value) {
+            return true;
+        }
+
+        $sql->update(self::TABLE_NAME)->set($field, $sql->createNamedParameter($value));
+        if ($sql->executeStatement() > 0) {
+            // Password material must never enter either the message or event parameters.
+            $changes = $field === 'password' ? [] : [
+                'previous' => $share[$field],
+                'new' => $value,
+            ];
+            $this->auditShare($action, $share, $changes);
+        }
+        return true;
+    }
+
+    /** Preserve the original deletion predicates, including recipient/owner checks. */
+    private function deleteAuditedShares(IQueryBuilder $sql): void
+    {
+        $statement = $sql->executeQuery();
+        $shares = $statement->fetchAll();
+        $statement->closeCursor();
+        foreach ($shares as $share) {
+            $delete = $this->db->getQueryBuilder();
+            $delete->delete(self::TABLE_NAME)
+                ->where($delete->expr()->eq('id', $delete->createNamedParameter($share['id'])));
+            // Do not revoke a share whose ownership or target changed since selection.
+            foreach (['uid_initiator', 'uid_owner', 'item_type', 'item_source', 'type'] as $field) {
+                $delete->andWhere($share[$field] === null
+                    ? $delete->expr()->isNull($field)
+                    : $delete->expr()->eq($field, $delete->createNamedParameter($share[$field])));
+            }
+            if ($delete->executeStatement() > 0) {
+                $this->auditShare('revoked', $share);
+            }
+        }
+    }
+
+    private function auditShare(string $action, array $share, array $changes = []): void
+    {
+        $table = match ($share['item_type']) {
+            'report' => self::TABLE_NAME_REPORT,
+            'panorama' => self::TABLE_NAME_PANORAMA,
+            'dataset' => 'analytics_dataset',
+            default => null,
+        };
+        $name = null;
+        if ($table !== null) {
+            $query = $this->db->getQueryBuilder();
+            $query->select('name')->from($table)
+                ->where($query->expr()->eq('id', $query->createNamedParameter($share['item_source'])));
+            $result = $query->executeQuery();
+            $item = $result->fetch();
+            $result->closeCursor();
+            $name = $item ? $item['name'] : null;
+        }
+        $shareType = match ((int)$share['type']) {
+            0 => 'user',
+            1 => 'group',
+            2 => 'user/group',
+            3 => 'public link',
+            10 => 'Talk room',
+            default => 'unknown recipient type',
+        };
+        $parameters = [
+            'itemType' => in_array($share['item_type'], ['report', 'panorama'], true)
+                ? 'Analytics ' . $share['item_type']
+                : $share['item_type'],
+            'name' => $name ?? '(unavailable)',
+            'itemId' => (int)$share['item_source'],
+            'owner' => $share['uid_initiator'],
+            'shareType' => $shareType,
+            'recipient' => (int)$share['type'] === 3 ? 'anyone with the link' : ($share['uid_owner'] ?? ''),
+            'actor' => $this->userSession->getUser()?->getUID() ?? 'system',
+            'shareId' => (int)$share['id'],
+        ];
+        $message = match ($action) {
+            'created' => 'The %s "%s" with ID "%s" owned by "%s" has been shared to the %s "%s" by "%s" (share ID "%s").',
+            'revoked' => 'The share of the %s "%s" with ID "%s" from "%s" to the %s "%s" has been revoked by "%s" (share ID "%s").',
+            'permissions_changed' => 'The permissions for the %s "%s" with ID "%s" shared from "%s" to the %s "%s" have been changed by "%s" (share ID "%s").',
+            'password_changed' => 'The password for the %s "%s" with ID "%s" shared from "%s" to the %s "%s" has been changed by "%s" (share ID "%s").',
+            'domain_changed' => 'The embedding domain for the %s "%s" with ID "%s" shared from "%s" to the %s "%s" has been changed by "%s" (share ID "%s").',
+        };
+        if ($changes !== []) {
+            if ($action === 'permissions_changed') {
+                foreach ($changes as $key => $value) {
+                    $changes[$key] = match ((int)$value) {
+                        1 => 'read-only',
+                        2 => 'update allowed',
+                        default => 'permissions ' . $value,
+                    };
+                }
+            }
+            $parameters += $changes;
+            $message .= ' Changed from "%s" to "%s".';
+        }
+        // The first three arguments are supported on every supported Nextcloud version.
+        $this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($message, $parameters));
+    }
+
 }
