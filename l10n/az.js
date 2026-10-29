@@ -13,6 +13,8 @@ OC.L10N.register(
     "Done" : "Edildi",
     "None" : "Heç bir",
     "Priority" : "Prioritet",
+    "day" : "gün",
+    "week" : "həftə",
     "Favorites" : "Sevimlilər",
     "New" : "Yeni",
     "Overview" : "İcmal",

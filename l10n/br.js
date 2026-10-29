@@ -13,6 +13,7 @@ OC.L10N.register(
     "Done" : "Graet",
     "None" : "Hini ebet",
     "Filter" : "Filtre",
+    "week" : "sizunvezh",
     "Apply" : "Lakaat",
     "Bar" : "Tavarn",
     "Favorites" : "Pennrolloù",
