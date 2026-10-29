@@ -16,7 +16,7 @@ Business intelligence and reporting within Nextcloud. Turn operational data into
 Bring insights into everyday collaboration with Analytics in your Nextcloud workspace.
 
 ]]></description>
-    <version>7.1.0</version>
+    <version>7.2.0</version>
     <licence>agpl</licence>
     <author>Marcel Scherello</author>
     <namespace>Analytics</namespace>

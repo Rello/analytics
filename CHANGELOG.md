@@ -1,33 +1,28 @@
 # Changelog
 
-## Unreleased
+## 7.2.0 - 2026-10-29
 ### Added
+- Panorama header filters with per-variable visibility, reset, and compact, collapsible configuration.
 - Switch panorama pages with horizontal scrolling or Shift+mouse wheel.
-- Show panorama filters as compact, single-row quick drilldown selectors with low-height bordered dropdowns and a transparent Reset button below the title, with a per-filter visibility option enabled by default.
-- Record share creation, revocation, and permission, password, and embedding-domain changes with readable sharer, recipient, item name, and share type in the Nextcloud admin audit log.
-- Download charts as editable SVG files alongside the existing PNG export.
-- Map text values to numeric scores in calculated measures with LOOKUP, including a fallback for unmatched values.
-- Exclude multiple exact values with the “not in list” filter in reports and panoramas.
-
-- Group time-based data by calendar quarter, with table labels such as 2026-Q3 and correct first-dimension selection.
+- Record share creation, revocation, and changes to permissions, passwords, and embedding domains in the Nextcloud admin audit log.
+- Download charts as editable SVG files alongside PNG exports.
+- Scoring/weighting in calculated measures.
+- Exclude multiple exact values with the “not in list”.
+- Group time-based data by calendar quarter.
 
 ### Changed
-- Compact filter configuration into initially collapsed variable sections with low-height headers, right-aligned status controls, and an unboxed trash icon link.
-- Edit panorama titles in place with their normal typography and a dotted outline contained within the header frame, configure filters from the filter row, and keep Save visible while hiding the fullscreen toggle during editing.
-- Refresh the README and app description with business benefits, professional reporting use cases, and current Analytics capabilities.
-- Soften chart axis labels, hide vertical lines, round unstacked bars, and reduce Y-axis labels in smaller charts.
-- Opening a report subfolder closes other open report folders while keeping its parent folders open.
-- Increase the connection timeout for external datasources from 10 to 30 seconds.
+- Simplify panorama editing.
+- Refine chart styling with softer axis labels, fewer grid lines, rounded unstacked bars, and fewer Y-axis labels in small charts.
+- Opening a report subfolder closes other report folders while keeping its parent folders open.
+- Increase the external datasource connection timeout from 10 to 30 seconds.
 
 ### Fixed
-- Remove obsolete panorama filter mappings when replacing reports or deleting pages, and remove filters with no remaining mapped reports.
-- Resize panorama charts after leaving fullscreen or narrowing the window.
-- Align the report and panorama header underline with its frame while preserving the original header logo.
-- Allow panorama filter visibility changes when a mapped report is unavailable or a disabled filter has outdated dimensions.
-- Center panorama charts below their tile headlines with balanced vertical spacing.
-- Preserve values containing | during aggregation without splitting columns or merging distinct groups.
-- Keep Columns dialog validation errors visible above the action buttons when saving is blocked.
-- Re-index all AI-enabled datasets in Context Chat when it requests an initial import, e.g. after its index was reset.
+- Remove obsolete panorama filter mappings when reports are replaced or pages deleted, including filters with no remaining reports.
+- Allow panorama filter visibility changes when reports are unavailable or disabled filters have outdated dimensions.
+- Correct panorama chart resizing after fullscreen or window changes, and center charts below their titles.
+- Preserve values containing | during aggregation without splitting columns or merging groups.
+- Keep Columns dialog validation errors visible above the action buttons.
+- Re-index all AI-enabled datasets when Context Chat requests an initial import.
 
 ## 7.1.0 - 2026-10-21
 ### Added

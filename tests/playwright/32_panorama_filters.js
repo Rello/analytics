@@ -31,6 +31,8 @@ const config = buildScenarioConfig('32-panorama-filters');
     const idle = () => page.waitForFunction(() => OCA.Analytics.PanoramaFilters.state?.renders.size === 0);
     try {
         await ensureAnalyticsLoaded(page, config);
+        // Release notes can cover the navigation actions after an app upgrade.
+        await page.locator('.whatsNewPopover .icon-close').click({timeout: 3000}).catch(() => {});
         // Exercise the actual creation response, before any navigation-list reload.
         await page.evaluate(() => OCA.Analytics.Panorama.newPanorama());
         await page.locator('#panoramaLayoutGrid .panoramaLayoutGridCell').first().waitFor();
