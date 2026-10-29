@@ -124,6 +124,99 @@ const config = buildScenarioConfig('32-panorama-filters');
         assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), true);
         assert.equal(filteredRequests, 2, 'each distinct report has one request across all widgets');
         assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 2);
+        const wheelNavigation = await page.evaluate(() => {
+            const panorama = OCA.Analytics.Panorama;
+            const root = document.getElementById('analytics-content-panorama');
+            const wheel = (options, target = root) => {
+                const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, ...options});
+                target.dispatchEvent(event);
+                return {page: OCA.Analytics.currentPage, prevented: event.defaultPrevented};
+            };
+            panorama.navigatePage('start');
+            panorama.pageWheel = null;
+            const vertical = wheel({deltaY: 100});
+            const forward = wheel({deltaX: 100});
+            const momentum = wheel({deltaX: 100});
+            const back = wheel({deltaX: -100});
+            const backMomentum = wheel({deltaX: -100});
+            const forwardAgain = wheel({deltaX: 100});
+            const shiftBack = wheel({deltaY: -100, shiftKey: true});
+            panorama.pageWheel = null;
+            const boundary = wheel({deltaX: -100});
+            panorama.pageWheel = null;
+            const zoom = wheel({deltaX: 100, ctrlKey: true});
+            const table = document.createElement('div');
+            table.style.cssText = 'width:100px;overflow-x:auto';
+            table.innerHTML = '<div style="width:300px;height:10px"></div>';
+            root.appendChild(table);
+            const nested = wheel({deltaX: 100}, table);
+            table.remove();
+            OCA.Analytics.editMode = true;
+            const editing = wheel({deltaX: 100});
+            OCA.Analytics.editMode = false;
+            panorama.pageWheel = null;
+            return {vertical, forward, momentum, back, backMomentum, forwardAgain, shiftBack, boundary, zoom, nested, editing};
+        });
+        assert.deepEqual(wheelNavigation, {
+            vertical: {page: 0, prevented: false},
+            forward: {page: 1, prevented: true},
+            momentum: {page: 1, prevented: true},
+            back: {page: 0, prevented: true},
+            backMomentum: {page: 0, prevented: true},
+            forwardAgain: {page: 1, prevented: true},
+            shiftBack: {page: 0, prevented: true},
+            boundary: {page: 0, prevented: true},
+            zoom: {page: 0, prevented: false},
+            nested: {page: 0, prevented: false},
+            editing: {page: 0, prevented: false},
+        });
+        await page.waitForTimeout(550);
+        await page.locator('#panoramaHeader').hover();
+        await page.mouse.wheel(120, 0);
+        await page.waitForFunction(() => OCA.Analytics.currentPage === 1);
+        await page.mouse.wheel(-120, 0);
+        await page.waitForFunction(() => OCA.Analytics.currentPage === 0);
+        assert.equal(await page.locator('#app-content').evaluate(node => node.scrollLeft), 0,
+            'real wheel input switches pages without scrolling the screen sideways');
+        await page.waitForTimeout(550);
+        // Responsive canvases must shrink after fullscreen and browser resizing.
+        await page.evaluate(() => {
+            const row = document.createElement('div');
+            row.id = 'panoramaResizeRegression';
+            row.className = 'flex-row';
+            for (let i = 0; i < 2; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'flex-item';
+                tile.innerHTML = '<div style="position:relative;height:150px"><canvas></canvas></div>';
+                row.appendChild(tile);
+            }
+            document.querySelector('#panoramaPages > .flex-container').appendChild(row);
+            row.querySelectorAll('canvas').forEach(canvas => new Chart(canvas, {
+                type: 'bar',
+                data: {labels: ['A', 'B'], datasets: [{data: [1, 2]}]},
+                options: {responsive: true, maintainAspectRatio: false, animation: false},
+            }));
+        });
+        const chartWidth = () => page.locator('#panoramaResizeRegression canvas').first().evaluate(canvas => canvas.getBoundingClientRect().width);
+        await page.waitForTimeout(500);
+        const originalChartWidth = await chartWidth();
+        await page.locator('#fullscreenToggle').click();
+        await page.waitForTimeout(500);
+        assert.ok(await chartWidth() > originalChartWidth, 'charts expand in fullscreen');
+        await page.locator('#fullscreenToggle').click();
+        await page.waitForTimeout(500);
+        assert.ok(Math.abs(await chartWidth() - originalChartWidth) <= 2, 'charts return to their original width after fullscreen');
+        await page.setViewportSize({width: 1000, height: 900});
+        await page.waitForTimeout(500);
+        assert.equal(await page.locator('#panoramaResizeRegression').evaluate(row =>
+            row.getBoundingClientRect().right <= document.querySelector('#app-content').getBoundingClientRect().right + 1
+        ), true, 'chart tiles fit inside the restored window');
+        await page.evaluate(() => {
+            const row = document.getElementById('panoramaResizeRegression');
+            row.querySelectorAll('canvas').forEach(canvas => Chart.getChart(canvas).destroy());
+            row.remove();
+        });
+        await page.setViewportSize(config.viewport);
         const wideHeaderRadii = await page.evaluate(() => {
             const radii = selector => {
                 const style = getComputedStyle(document.querySelector(selector));

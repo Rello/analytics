@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Switch panorama pages with horizontal scrolling or Shift+mouse wheel.
 - Record share creation, revocation, and permission, password, and embedding-domain changes with readable sharer, recipient, item name, and share type in the Nextcloud admin audit log.
 - Map text values to numeric scores in calculated measures with LOOKUP, including a fallback for unmatched values.
 - Group time-based data by calendar quarter, with table labels such as 2026-Q3 and correct first-dimension selection.
@@ -13,6 +14,7 @@
 - Increase the connection timeout for external datasources from 10 to 30 seconds.
 
 ### Fixed
+- Resize panorama charts after leaving fullscreen or narrowing the window.
 - Preserve values containing | during aggregation without splitting columns or merging distinct groups.
 - Keep Columns dialog validation errors visible above the action buttons when saving is blocked.
 - Re-index all AI-enabled datasets in Context Chat when it requests an initial import, e.g. after its index was reset.

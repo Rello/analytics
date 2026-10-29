@@ -134,6 +134,7 @@ Object.assign(OCA.Analytics.Panorama = {
 
         document.getElementById('prevBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('prev'));
         document.getElementById('nextBtn').addEventListener('click', () => OCA.Analytics.Panorama.navigatePage('next'));
+        document.getElementById('analytics-content-panorama').addEventListener('wheel', OCA.Analytics.Panorama.handlePageWheel, {passive: false});
 
         document.addEventListener('click', OCA.Analytics.Panorama.handleEditMenuDocumentClick);
 
@@ -1444,6 +1445,35 @@ Object.assign(OCA.Analytics.Panorama = {
         let pagesContainer = document.getElementById('panoramaPages');
         let pageCount = pagesContainer.children.length;
         pagesContainer.style.width = `${pageCount * 100}%`;
+    },
+
+    handlePageWheel: function (event) {
+        const panorama = OCA.Analytics.Panorama;
+        if (event.ctrlKey || event.defaultPrevented || OCA.Analytics.editMode) return;
+        const delta = event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX;
+        if (!delta || (!event.shiftKey && Math.abs(delta) <= Math.abs(event.deltaY))) return;
+
+        // Keep horizontal scrolling within wide tables and other scrollable widgets.
+        for (let node = event.target; node && node !== event.currentTarget; node = node.parentElement) {
+            if (node.scrollWidth > node.clientWidth + 1 && /^(auto|scroll)$/.test(getComputedStyle(node).overflowX)) return;
+        }
+        const pages = document.getElementById('panoramaPages');
+        if (pages.children.length < 2) return;
+        event.preventDefault();
+
+        // Consume same-direction momentum, but allow a reverse swipe immediately.
+        const now = performance.now();
+        const direction = Math.sign(delta);
+        if (!panorama.pageWheel || now - panorama.pageWheel.time > 200 || panorama.pageWheel.direction !== direction) {
+            panorama.pageWheel = {distance: 0, consumed: false, time: now, direction};
+        }
+        const gesture = panorama.pageWheel;
+        gesture.time = now;
+        if (gesture.consumed) return;
+        gesture.distance += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? event.currentTarget.clientWidth : 1);
+        if (Math.abs(gesture.distance) < 40) return;
+        gesture.consumed = true;
+        panorama.navigatePage(gesture.distance > 0 ? 'next' : 'prev');
     },
 
     navigatePage: function (direction) {

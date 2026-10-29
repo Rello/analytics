@@ -2771,6 +2771,18 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 /* === Panorama === */
 
+#app-content:has(#analytics-content-panorama:not([hidden])) {
+    overflow-x: hidden;
+}
+
+/* Let responsive canvases shrink again after fullscreen or window resizing. */
+#analytics-content-panorama .flex-container,
+#analytics-content-panorama .flex-row,
+#analytics-content-panorama .flex-item,
+#analytics-content-panorama .flex-item-tall {
+    min-width: 0;
+}
+
 /* Use the shared report header while retaining the panorama's grey page. */
 #analytics-content-panorama:not([hidden]) {
     display: flex;
