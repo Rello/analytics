@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:b3537584-06f0-4066-b68d-ff35bf7c4e10",
+  "serialNumber": "urn:uuid:37f99d50-b028-404a-b769-88bed1399f16",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-27T18:06:39Z",
+    "timestamp": "2026-10-29T16:33:29Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -63,7 +63,7 @@
         },
         {
           "name": "local:sha256",
-          "value": "a4093ab700555e80f8be4247dd87a9008688e436dfaf37bc62685e28d01aa33f"
+          "value": "4e1fe09aff0468e262474aa224cc2e2bb3874dced2d7a0800d64650dc3ba7920"
         }
       ]
     },
