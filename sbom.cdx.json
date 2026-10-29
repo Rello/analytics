@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:37f99d50-b028-404a-b769-88bed1399f16",
+  "serialNumber": "urn:uuid:1aa45ed9-3026-4083-a17d-a44f558dd572",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-29T16:33:29Z",
+    "timestamp": "2026-10-29T16:45:23Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -26,9 +26,9 @@
     },
     "component": {
       "type": "application",
-      "bom-ref": "pkg:github/Rello/analytics@7.1.0",
+      "bom-ref": "pkg:github/Rello/analytics@7.2.0",
       "name": "analytics",
-      "version": "7.1.0",
+      "version": "7.2.0",
       "description": "Nextcloud Analytics app",
       "licenses": [
         {
@@ -37,7 +37,7 @@
           }
         }
       ],
-      "purl": "pkg:github/Rello/analytics@7.1.0",
+      "purl": "pkg:github/Rello/analytics@7.2.0",
       "externalReferences": [
         {
           "type": "website",
@@ -63,7 +63,7 @@
         },
         {
           "name": "local:sha256",
-          "value": "4e1fe09aff0468e262474aa224cc2e2bb3874dced2d7a0800d64650dc3ba7920"
+          "value": "18ff73ef6785596e91c5b6b68affbeb65a4ca558e8eab0d325f3aec5be0ee6c1"
         }
       ]
     },
@@ -889,7 +889,7 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:github/Rello/analytics@7.1.0",
+      "ref": "pkg:github/Rello/analytics@7.2.0",
       "dependsOn": [
         "platform:php",
         "pkg:github/nextcloud/server",
