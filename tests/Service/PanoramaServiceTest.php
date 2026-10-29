@@ -76,7 +76,7 @@ class PanoramaServiceTest extends TestCase {
         $mapper = $this->createMock(PanoramaMapper::class);
         $mapper->method('readOwn')->willReturn(['id' => 1]);
         $pages = [['layoutId' => 5, 'reports' => [['type' => 0, 'value' => 7]]]];
-        $filters = [['id' => 'date', 'label' => 'Date', 'enabled' => true, 'operator' => 'EQ', 'defaultValue' => null,
+        $filters = [['id' => 'date', 'label' => 'Date', 'enabled' => true, 'showInHeader' => true, 'operator' => 'EQ', 'defaultValue' => null,
             'mappings' => [['reportId' => 7, 'dimension' => 'dimension1', 'dimensionLabel' => 'Date']]]];
         $mapper->expects($this->exactly(2))->method('update')->withConsecutive(
             [1, 'Name', 1, 0, json_encode($pages), json_encode($filters)],

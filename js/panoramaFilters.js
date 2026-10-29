@@ -24,13 +24,14 @@ OCA.Analytics.PanoramaFilters = {
             panorama: OCA.Analytics.currentPanorama,
             definitions: structuredClone(definitions),
             values: Object.fromEntries(definitions.filter(f => f.enabled && f.defaultValue).map(f => [f.id, f.defaultValue])),
-            requests: new Map(), metadata: new Map(), errors: new Set(), renders: new Map(),
+            requests: new Map(), metadata: new Map(), choices: new Map(), choiceLoads: new Set(), errors: new Set(), renders: new Map(),
         };
     },
     stop: function () {
         if (!this.state) return;
         this.state.requests.forEach(request => request.controller.abort());
         this.state.requests.clear();
+        this.state.choiceLoads.clear();
         this.state.renders.clear();
     },
     ensureState: function () {
@@ -47,6 +48,7 @@ OCA.Analytics.PanoramaFilters = {
         filterIcon.hidden = OCA.Analytics.editMode || !hasEnabledFilters;
         filterVisualisation.hidden = OCA.Analytics.editMode || !hasEnabledFilters;
         this.refreshFilterVisualisation();
+        this.loadQuickFilterValues();
     },
     reports: function () {
         const reports = new Map();
@@ -60,6 +62,25 @@ OCA.Analytics.PanoramaFilters = {
         });
         return reports;
     },
+    pruneRemovedReports: function () {
+        const reports = this.reports();
+        let changed = false;
+        const definitions = this.definitions().flatMap(filter => {
+            const mappings = filter.mappings.filter(mapping => reports.has(Number(mapping.reportId)));
+            if (mappings.length === filter.mappings.length) return [filter];
+            changed = true;
+            return mappings.length ? [{...filter, mappings}] : [];
+        });
+        if (!changed) return;
+        OCA.Analytics.currentPanorama.filters = definitions;
+        const state = this.ensureState();
+        state.definitions = structuredClone(definitions);
+        const ids = new Set(definitions.map(filter => filter.id));
+        Object.keys(state.values).forEach(id => {
+            if (!ids.has(id)) delete state.values[id];
+        });
+        this.updateButtons();
+    },
     valuesFor: function (reportId, values = this.state.values) {
         return Object.fromEntries(this.state.definitions.filter(f => f.enabled && Object.hasOwn(values, f.id)
             && values[f.id] !== '' && values[f.id] !== null && f.mappings.some(m => m.reportId === Number(reportId)))
@@ -72,7 +93,7 @@ OCA.Analytics.PanoramaFilters = {
         const key = JSON.stringify([Number(reportId), values]);
         if (state.requests.has(key)) return state.requests.get(key).promise;
         const controller = new AbortController();
-        const request = {controller, reportId: Number(reportId)};
+        const request = {controller, reportId: Number(reportId), discovery};
         request.promise = (async () => {
             const storage = filtered ? null : OCA.Analytics.getLocalStorage();
             const cacheKey = `analytics-report-${reportId}`;
@@ -108,7 +129,9 @@ OCA.Analytics.PanoramaFilters = {
                 const unambiguous = stableIndex >= 0 || (index >= 0 && data.header.lastIndexOf(label) === index);
                 return [key, unambiguous ? [...new Set((data.data || []).map(row => row[index]).filter(value => value != null))] : []];
             }));
+            if (!filtered) state.choices.set(Number(reportId), suggestions);
             state.metadata.set(Number(reportId), {name: data.options.name, dimensions: data.dimensions || {}, suggestions});
+            this.refreshQuickFilters();
             return data;
         })().finally(() => {
             if (state.requests.get(key) === request) state.requests.delete(key);
@@ -165,7 +188,7 @@ OCA.Analytics.PanoramaFilters = {
             JSON.stringify(this.valuesFor(id)) !== JSON.stringify(this.valuesFor(id, values))));
         state.values = values;
         state.requests.forEach((request, key) => {
-            if (changed.has(request.reportId)) { request.controller.abort(); state.requests.delete(key); }
+            if (changed.has(request.reportId) && !request.discovery) { request.controller.abort(); state.requests.delete(key); }
         });
         state.panorama.pages.forEach((page, pageIndex) => (page.reports || []).forEach((report, index) => {
             if (Number(report?.type) === 0 && changed.has(Number(report.value))) this.render(report.value, `${pageIndex}-${index}`);
@@ -174,6 +197,7 @@ OCA.Analytics.PanoramaFilters = {
     },
     refreshFilterVisualisation: function () {
         const state = this.ensureState();
+        this.refreshQuickFilters();
         const container = document.getElementById('filterVisualisation');
         if (!container) return;
         container.replaceChildren();
@@ -182,6 +206,7 @@ OCA.Analytics.PanoramaFilters = {
         state.definitions.filter(filter => filter.enabled).forEach(filter => {
             const value = state.values[filter.id];
             const conditions = Array.isArray(value) ? value : value ? [{option: filter.operator, value}] : [];
+            if (filter.showInHeader !== false && conditions.length === 1 && conditions[0].option === 'EQ') return;
             conditions.forEach((condition, index) => {
                 if (condition.value === '') return;
                 const item = document.createElement('span');
@@ -203,6 +228,95 @@ OCA.Analytics.PanoramaFilters = {
             });
         });
         container.append(fragment);
+    },
+    quickDefinitions: function () {
+        return this.ensureState().definitions.filter(filter => filter.enabled && filter.showInHeader !== false);
+    },
+    loadQuickFilterValues: function () {
+        if (OCA.Analytics.editMode) return;
+        const state = this.ensureState();
+        const reportIds = new Set(this.quickDefinitions().flatMap(filter => filter.mappings.map(mapping => mapping.reportId)));
+        reportIds.forEach(id => {
+            if (state.choices.has(id) || state.choiceLoads.has(id)) return;
+            state.choiceLoads.add(id);
+            this.request(id, true).catch(() => {
+                // Report tiles and the existing filter dialog retain their error handling.
+            }).finally(() => {
+                if (this.state === state) this.refreshQuickFilters();
+            });
+        });
+    },
+    refreshQuickFilters: function () {
+        const container = document.getElementById('panoramaQuickFilters');
+        if (!container) return;
+        const state = this.ensureState();
+        const definitions = this.quickDefinitions();
+        const configure = document.getElementById('panoramaConfigureFilters');
+        container.hidden = configure.hidden && (OCA.Analytics.editMode || !definitions.length);
+        container.querySelectorAll('.panoramaQuickFilterField, .panoramaQuickFilterReset').forEach(control => {
+            control.hidden = OCA.Analytics.editMode;
+        });
+        if (OCA.Analytics.editMode) return;
+        if (container.hidden) return;
+        // Reuse controls while data arrives so keyboard focus and open selectors survive.
+        const existing = new Map([...container.querySelectorAll('select')].map(select => [select.dataset.filterId, select]));
+        definitions.forEach(filter => {
+            let select = existing.get(filter.id);
+            if (!select) {
+                select = document.createElement('select');
+                select.className = 'panoramaQuickFilterSelect';
+                select.dataset.filterId = filter.id;
+                const label = document.createElement('label');
+                label.className = 'panoramaFilterField panoramaQuickFilterField';
+                label.append(document.createElement('span'), select);
+                container.append(label);
+                select.addEventListener('change', () => {
+                    const values = {...this.ensureState().values};
+                    if (select.value === '') delete values[filter.id];
+                    else values[filter.id] = [{option: 'EQ', value: select.value}];
+                    this.apply(values);
+                });
+            }
+            existing.delete(filter.id);
+            select.previousElementSibling.textContent = filter.label;
+            const value = state.values[filter.id];
+            const conditions = Array.isArray(value) ? value : value ? [{option: filter.operator, value}] : [];
+            const simple = !conditions.length || (conditions.length === 1 && conditions[0].option === 'EQ');
+            const selected = conditions.length ? conditions[0].value : '';
+            const choices = [...new Set(filter.mappings.flatMap(mapping =>
+                state.choices.get(mapping.reportId)?.[mapping.dimension] || []).map(String))]
+                .filter(value => value !== '').sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+            if (simple && selected && !choices.includes(selected)) choices.unshift(selected);
+            // TRANSLATORS: All values of this panorama filter; no drilldown selection.
+            const allValues = t('analytics', 'All');
+            const options = [[allValues, ''], ...choices.map(value => [value, value])];
+            if (!simple) options.push([t('analytics', 'Custom filter'), '']);
+            const signature = JSON.stringify(options);
+            if (select.dataset.options !== signature) {
+                select.replaceChildren(...options.map(([label, value]) => new Option(label, value)));
+                if (!simple) select.lastElementChild.disabled = true;
+                select.dataset.options = signature;
+            }
+            if (simple) select.value = selected;
+            else select.selectedIndex = select.options.length - 1;
+        });
+        existing.forEach(select => select.parentElement.remove());
+        let reset = container.querySelector('.panoramaQuickFilterReset');
+        if (!reset) {
+            reset = document.createElement('button');
+            reset.type = 'button';
+            reset.className = 'panoramaQuickFilterReset';
+            reset.textContent = t('analytics', 'Reset');
+            reset.addEventListener('click', () => {
+                const values = {...this.ensureState().values};
+                this.quickDefinitions().forEach(filter => {
+                    if (filter.defaultValue) values[filter.id] = filter.defaultValue;
+                    else delete values[filter.id];
+                });
+                this.apply(values);
+            });
+        }
+        container.append(reset);
     },
     removeCondition: function (filterId, conditionIndex) {
         const values = Object.assign(Object.create(null), this.ensureState().values);
@@ -308,23 +422,34 @@ OCA.Analytics.PanoramaFilters = {
             const header = document.createElement('div');
             header.className = 'panoramaFilterCardHeader';
             row.append(header);
+            const summary = document.createElement('button');
+            summary.type = 'button';
+            summary.className = 'analyticsSecondary panoramaFilterSummary';
+            summary.setAttribute('aria-expanded', 'false');
+            summary.textContent = filter.label || t('analytics', 'New variable');
+            header.append(summary);
             const enabled = this.field(header, t('analytics', 'Enabled'), this.input('', 'checkbox'));
             enabled.parentElement.classList.add('panoramaFilterEnable');
             enabled.checked = filter.enabled;
-            const summary = document.createElement('strong');
-            summary.className = 'panoramaFilterSummary';
-            summary.textContent = filter.label || t('analytics', 'New variable');
-            header.append(summary);
             const mappingCount = document.createElement('span');
             mappingCount.className = 'panoramaFilterMappingCount';
             header.append(mappingCount);
-            const remove = document.createElement('button');
-            remove.type = 'button';
-            remove.className = 'analyticsSecondary panoramaFilterRemove';
-            remove.textContent = t('analytics', 'Remove');
+            const remove = document.createElement('a');
+            remove.href = '#';
+            remove.setAttribute('role', 'button');
+            remove.className = 'icon-delete panoramaFilterRemove';
+            remove.title = t('analytics', 'Remove');
+            remove.setAttribute('aria-label', remove.title);
             header.append(remove);
             const settings = document.createElement('div');
             settings.className = 'panoramaFilterSettings';
+            settings.id = `panoramaFilterSettings-${this.newId()}`;
+            settings.hidden = true;
+            summary.setAttribute('aria-controls', settings.id);
+            summary.addEventListener('click', () => {
+                settings.hidden = !settings.hidden;
+                summary.setAttribute('aria-expanded', String(!settings.hidden));
+            });
             row.append(settings);
             const controls = document.createElement('div');
             controls.className = 'panoramaFilterDefinitionControls';
@@ -341,6 +466,8 @@ OCA.Analytics.PanoramaFilters = {
             const defaultValueInput = this.input(filter.defaultValue);
             defaultValueInput.className = 'sidebarInput';
             const defaultValue = this.field(controls, t('analytics', 'Default value'), defaultValueInput);
+            const showInHeader = this.field(settings, t('analytics', 'Show in panorama header'), this.input('', 'checkbox'));
+            showInHeader.checked = filter.showInHeader !== false;
             const mappingTitle = document.createElement('div');
             mappingTitle.className = 'panoramaFilterMappingsTitle';
             mappingTitle.textContent = t('analytics', 'Applies to');
@@ -369,7 +496,9 @@ OCA.Analytics.PanoramaFilters = {
             groupedCandidates.forEach((reportMappings, reportId) => reportMappings.forEach((mapping, index) => {
                 const original = filter.mappings.some(m => m.reportId === mapping.reportId && m.dimension === mapping.dimension);
                 const currentLabel = available.get(mapping.reportId)?.dimensions[mapping.dimension];
-                const stale = currentLabel !== mapping.dimensionLabel;
+                // A failed report request cannot establish whether its dimensions changed.
+                // Keep its saved mappings so unrelated presentation changes remain editable.
+                const stale = available.has(reportId) && currentLabel !== mapping.dimensionLabel;
                 const addMapping = (candidate, selected, invalid) => {
                     const mappingRow = document.createElement('div');
                     mappingRow.className = 'panoramaFilterMappingRow';
@@ -400,8 +529,18 @@ OCA.Analytics.PanoramaFilters = {
             enabled.addEventListener('change', setEnabled);
             setEnabled();
             updateMappingCount();
-            const entry = {filter, row, enabled, label, operator, defaultValue, mappings};
-            remove.addEventListener('click', () => { row.remove(); rows.splice(rows.indexOf(entry), 1); });
+            const entry = {filter, row, enabled, label, operator, defaultValue, showInHeader, mappings};
+            remove.addEventListener('click', event => {
+                event.preventDefault();
+                row.remove();
+                rows.splice(rows.indexOf(entry), 1);
+            });
+            remove.addEventListener('keydown', event => {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                    remove.click();
+                }
+            });
             content.append(row);
             rows.push(entry);
         };
@@ -424,19 +563,22 @@ OCA.Analytics.PanoramaFilters = {
             for (const entry of rows) {
                 const selected = entry.mappings.filter(m => m.check.checked);
                 if (!entry.label.value.trim() || (entry.enabled.checked && !selected.length)
-                    || selected.some(m => m.stale || !reports.has(m.mapping.reportId))) {
+                    || selected.some(m => (entry.enabled.checked && m.stale) || !reports.has(m.mapping.reportId))) {
                     errors.textContent = t('analytics', 'Enter a name and repair missing dimensions. Enabled variables need a report dimension.');
+                    errors.scrollIntoView({block: 'nearest'});
                     return;
                 }
                 for (const {mapping} of selected) {
                     const key = `${mapping.reportId}:${mapping.dimension}`;
                     if (entry.enabled.checked && targets.has(key)) {
                         errors.textContent = t('analytics', 'A dimension can only belong to one enabled variable');
+                        errors.scrollIntoView({block: 'nearest'});
                         return;
                     }
                     if (entry.enabled.checked) targets.add(key);
                 }
                 next.push({...entry.filter, label: entry.label.value.trim(), enabled: entry.enabled.checked,
+                    showInHeader: entry.showInHeader.checked,
                     operator: entry.operator.value, defaultValue: entry.defaultValue.value || null,
                     mappings: selected.map(m => m.mapping)});
             }

@@ -52,7 +52,7 @@ Supported identifiers:
 - `25`, `table-options`
 - `26`, `chart-options`
 - `27`, `refresh`, `auto-refresh`
-- `28`, `translate`
+- `28`, `translate` (deterministic translation API responses; checks the UI and XML parser, not provider quality; requires advertised German and English languages and selects their actual codes)
 - `29`, `top-n`, `group-top-n`
 - `30`, `chart`, `modal`
 - `31`, `thresholds`, `options-thresholds`

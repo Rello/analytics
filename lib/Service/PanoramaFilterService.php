@@ -30,6 +30,7 @@ class PanoramaFilterService {
 				|| !preg_match('/^[a-zA-Z0-9_-]{1,80}$/D', $filter['id']) || isset($ids[$filter['id']])
 				|| !is_string($filter['label'] ?? null) || trim($filter['label']) === ''
 				|| !is_bool($filter['enabled'] ?? null)
+				|| (array_key_exists('showInHeader', $filter) && !is_bool($filter['showInHeader']))
 				|| !in_array($filter['operator'] ?? null, ['EQ', 'GT', 'LT', 'LIKE', 'NOTLIKE', 'IN', 'NOTIN'], true)
 				|| !is_array($filter['mappings'] ?? null) || !array_is_list($filter['mappings'])
 				|| (isset($filter['defaultValue']) && !is_string($filter['defaultValue']))) {
@@ -54,6 +55,7 @@ class PanoramaFilterService {
 			if ($filter['enabled'] && !$mappings) throw new InvalidArgumentException('Select a report dimension');
 			$result[] = [
 				'id' => $filter['id'], 'label' => trim($filter['label']), 'enabled' => $filter['enabled'],
+				'showInHeader' => $filter['showInHeader'] ?? true,
 				'operator' => $filter['operator'], 'defaultValue' => $filter['defaultValue'] ?? null,
 				'mappings' => $mappings,
 			];

@@ -58,7 +58,7 @@ class ExternalHttpClientTest extends TestCase {
 		$this->assertNull($result['error']);
 		$this->assertFalse($captured['options']['allow_redirects']);
 		$this->assertTrue($captured['options']['verify']);
-		$this->assertSame(10, $captured['options']['connect_timeout']);
+		$this->assertSame(30, $captured['options']['connect_timeout']);
 		$this->assertSame(60, $captured['options']['timeout']);
 		$this->assertArrayNotHasKey('stream', $captured['options']);
 	}

@@ -469,7 +469,7 @@ button, .button {
     box-sizing: border-box;
     width: 8px;
     border-left: 3px solid var(--color-analytics-primary);
-    border-bottom: 1.25px solid var(--color-analytics-primary);
+    border-bottom: 1px solid var(--color-analytics-primary);
     border-radius: 3px 0 0 5px;
 }
 
@@ -479,7 +479,7 @@ button, .button {
     bottom: 0;
     left: 5px;
     width: calc(100% - var(--report-brand-width) - 5px);
-    height: 1.25px;
+    height: 1px;
     background: var(--color-analytics-primary);
 }
 
@@ -497,8 +497,8 @@ button, .button {
     position: absolute;
     inset: 0;
     background: var(--color-analytics-primary);
-    mask: url('../img/report-header-line.svg?v=7') center / contain no-repeat;
-    -webkit-mask: url('../img/report-header-line.svg?v=7') center / contain no-repeat;
+    mask: url('../img/report-header-line.svg?v=10') center / contain no-repeat;
+    -webkit-mask: url('../img/report-header-line.svg?v=10') center / contain no-repeat;
 }
 
 .reportHeadingPrimary {
@@ -555,10 +555,38 @@ button, .button {
 }
 
 
-.reportHeader[contenteditable="true"],
-.panoramaSubHeader[contenteditable="true"] {
-    outline: 1px dashed var(--color-analytics-primary);
+#analytics-content-panorama:has(.editable[contenteditable="true"]) #fullscreenToggle {
+    display: none;
+}
+
+/* Keep editable headings in the live layout, overriding the platform's input styling. */
+#analytics-content-panorama .editable[contenteditable="true"] {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-family: inherit;
+    outline: 1px dotted var(--color-analytics-primary);
     outline-offset: 3px;
+}
+
+#analytics-content-panorama .reportHeader[contenteditable="true"] {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.3;
+    color: color-mix(in srgb, var(--color-analytics-primary) 50%, var(--color-main-text));
+}
+
+#analytics-content-panorama .panoramaSubHeader[contenteditable="true"] {
+    padding-bottom: 0;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5;
+    color: var(--color-main-text);
 }
 
 #menuBar {
@@ -2833,23 +2861,25 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 .panoramaPageHeading .reportHeadingSecondary {
     margin-top: 0;
+    padding-bottom: 12px;
 }
 
-.panoramaFilterActions:not(:has(button:not([hidden]))) {
-    display: none;
+.panoramaPageHeading .panoramaSubHeader {
+    padding-bottom: 0;
 }
 
 
 .filterReportNames { max-width: 220px; white-space: normal; overflow-wrap: anywhere; font-size: 12px; color: var(--color-text-maxcontrast); }
-.panoramaFilterActions { display: flex; gap: 8px; margin-left: auto; }
 .panoramaFilters { width: min(720px, 78vw); max-height: 68vh; overflow-y: auto; padding-right: 4px; }
 .panoramaFilters fieldset { border: 1px solid var(--color-border); border-radius: var(--border-radius-large); padding: 0; margin-bottom: 8px; overflow: hidden; }
-.panoramaFilterCardHeader { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 4px 10px; border-bottom: 1px solid var(--color-border); background-color: var(--color-background-hover); }
-.panoramaFilterEnable { display: flex; align-items: center; justify-content: flex-start; gap: 6px; margin: 0; font-weight: 600; white-space: nowrap; }
-.panoramaFilterSummary { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panoramaFilterCardHeader { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 8px; background-color: var(--color-background-hover); }
+.panoramaFilterCardHeader .panoramaFilterEnable { display: flex; align-items: center; justify-content: flex-start; gap: 6px; margin: 0; font-weight: 600; white-space: nowrap; }
+.panoramaFilterSummary { flex: 1; min-width: 0; min-height: 28px; height: 28px; line-height: 24px; padding: 0 4px; margin: 0; border: 0; background-color: transparent !important; text-align: start; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panoramaFilterSummary::before { content: '›'; display: inline-block; margin-inline-end: 8px; }
+.panoramaFilterSummary[aria-expanded="true"]::before { transform: rotate(90deg); }
 .panoramaFilterMappingCount { color: var(--color-text-maxcontrast); font-size: 12px; white-space: nowrap; }
-.panoramaFilterRemove { margin-left: auto; }
-.panoramaFilterSettings { padding: 10px; }
+.panoramaFilterRemove { display: inline-block; flex-shrink: 0; width: 24px; height: 24px; padding: 0; margin: 0; cursor: pointer; }
+.panoramaFilterSettings { padding: 10px; border-top: 1px solid var(--color-border); }
 .panoramaFilterDefinitionControls { display: grid; grid-template-columns: minmax(160px, 1.4fr) minmax(120px, 1fr) minmax(120px, 1fr); align-items: end; gap: 12px; }
 .panoramaFilterDefinitionControls .panoramaFilterField { flex-direction: column; align-items: stretch; gap: 2px; margin: 0; }
 .panoramaFilterDefinitionControls .panoramaFilterField input:not([type="checkbox"]), .panoramaFilterDefinitionControls .panoramaFilterField select { width: 100%; }
@@ -3148,6 +3178,26 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     padding: 15px;
     background-color: var(--color-main-background);
     border-radius: var(--analytics-surface-radius);
+}
+
+.panoramaReportWidget {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.panoramaReportWidgetTitle {
+    flex: 0 0 30px;
+    padding-left: 10px;
+    font-weight: 500;
+}
+
+.panoramaReportWidgetContent {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    padding-block: 12px;
 }
 
 .textContainer {
@@ -3840,4 +3890,73 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 
 .tableOptionsModeSelector .analyticsModelCardText {
     display: none;
+}
+
+/* Panorama-wide drilldown selectors share the title surface above all pages. */
+.panoramaQuickFilters:not([hidden]) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 15px 8px 0;
+    overflow-x: auto;
+    font-size: 13px;
+}
+.panoramaQuickFilters .panoramaQuickFilterField {
+    position: relative;
+    flex: 0 0 auto;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.panoramaQuickFilters .panoramaQuickFilterField select {
+    width: auto;
+    min-width: 70px;
+    max-width: 160px;
+    height: 22px;
+    min-height: 22px;
+    padding: 0 28px 0 6px;
+    margin: 0;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 4px;
+    background-color: var(--color-main-background);
+    background-image: none;
+    color: var(--color-main-text);
+    appearance: none;
+    line-height: 18px;
+    font-size: 13px;
+}
+.panoramaQuickFilters .panoramaQuickFilterField::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-color: var(--color-main-text);
+    mask: url('../img/arrowDown.svg') center / contain no-repeat;
+    pointer-events: none;
+}
+.panoramaQuickFilters button {
+    flex: 0 0 auto;
+    height: 22px;
+    min-height: 22px;
+    padding: 0 8px;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--color-main-text);
+    line-height: 18px;
+    font-size: 13px;
+}
+.panoramaQuickFilters button:hover,
+.panoramaQuickFilters button:active {
+    background: var(--color-background-hover);
 }

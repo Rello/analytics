@@ -84,7 +84,7 @@
     }
 
     #analytics-content-report .reportHeadingBrand::after {
-        content: url('../img/report-header-line.svg?v=7');
+        content: url('../img/report-header-line.svg?v=10');
         display: block;
         background: none !important;
         border: 0 !important;

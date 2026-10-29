@@ -1676,6 +1676,7 @@ OCA.Analytics.Visualization = {
             return styles.getPropertyValue(name).trim() || fallback;
         };
         const textColor = styles.color || cssColor('--color-main-text', '#222222');
+        const axisColor = cssColor('--color-text-maxcontrast', '#6b6b6b');
         const textChannels = textColor.match(/[\d.]+/g);
         const gridColor = textChannels && textChannels.length >= 3
             ? `rgba(${textChannels[0]}, ${textChannels[1]}, ${textChannels[2]}, 0.14)`
@@ -1683,15 +1684,43 @@ OCA.Analytics.Visualization = {
 
         chartOptions.color ??= textColor;
         if (chartOptions.scales) {
-            Object.values(chartOptions.scales).forEach(function (scale) {
+            Object.entries(chartOptions.scales).forEach(function ([id, scale]) {
+                const horizontal = scale.axis === 'x' || id === 'x' || scale.position === 'top' || scale.position === 'bottom';
                 scale.ticks ??= {};
-                scale.ticks.color ??= textColor;
+                scale.ticks.color ??= axisColor;
+                scale.title ??= {};
+                scale.title.color ??= axisColor;
                 scale.grid ??= {};
                 scale.grid.color ??= gridColor;
                 scale.border ??= {};
                 scale.border.color ??= gridColor;
+                if (horizontal) {
+                    scale.grid.display = false;
+                } else {
+                    scale.border.display ??= false;
+                    scale.grid.drawTicks ??= false;
+                    // Calculate useful bounds before thinning labels: a small tick limit
+                    // can otherwise inflate a 76K maximum to 100K instead of 80K.
+                    scale.ticks.maxTicksLimit ??= 6;
+                    scale.afterBuildTicks ??= axis => {
+                        const limit = Math.max(2, Math.min(6, Math.floor(axis.chart.height / 60)));
+                        const last = axis.ticks.length - 1;
+                        if (last < limit) return;
+                        const stride = Math.ceil(last / (limit - 1));
+                        axis.ticks = axis.ticks.filter((tick, index) => index % stride === 0 || index === last);
+                    };
+                }
             });
         }
+
+        chartOptions.elements ??= {};
+        chartOptions.elements.bar ??= {};
+        chartOptions.elements.bar.borderRadius ??= context => {
+            const meta = context.chart.getDatasetMeta(context.datasetIndex);
+            const stacked = meta.vScale?.options.stacked;
+            return stacked === true || stacked === 'single'
+                || (stacked === undefined && context.dataset.stack !== undefined) ? 0 : 4;
+        };
 
         chartOptions.plugins ??= {};
         chartOptions.plugins.legend ??= {};
@@ -2509,7 +2538,7 @@ OCA.Analytics.Visualization = {
             scales: {
                 x: {type: model === 'timeSeriesModel' || chartType === 'datetime' || chartType === 'area' ? 'time' : 'category',
                     stacked, ticks: {maxTicksLimit: 6}, title: {display: model !== 'accountModel', text: reportData.header[categoryIndex]}},
-                primary: {type: 'linear', position: 'left', stacked, beginAtZero: true, ticks: {maxTicksLimit: 5}},
+                primary: {type: 'linear', position: 'left', stacked, beginAtZero: true},
                 secondary: {type: 'linear', position: 'right', display: datasets.some(dataset => dataset.yAxisID === 'secondary'),
                     grid: {drawOnChartArea: false}},
             },

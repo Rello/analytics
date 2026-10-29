@@ -13,9 +13,9 @@
     <div class="reportHeading panoramaTitleHeading">
         <div id="panoramaHeaderRow" class="panoramaHeaderRow reportHeadingPrimary">
             <div id="panoramaHeader" class="reportHeader editable"></div>
-            <div class="panoramaFilterActions">
-                <button type="button" id="panoramaConfigureFilters" hidden><?php p($l->t('Configure filters')); ?></button>
-            </div>
+        </div>
+        <div id="panoramaQuickFilters" class="panoramaQuickFilters" role="group" aria-label="<?php p($l->t('Panorama filters')); ?>" hidden>
+            <button type="button" id="panoramaConfigureFilters" hidden><?php p($l->t('Configure filters')); ?></button>
         </div>
     </div>
 

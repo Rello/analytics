@@ -473,14 +473,13 @@ Object.assign(OCA.Analytics.Panorama = {
     },
 
     buildWidgetTypeReport: function (reportId, itemId) {
-        //let href = OC.generateUrl('apps/analytics/#/r/' + reportId);
-        //return `<canvas id="myWidget${reportId}" class="chartContainer"></canvas>`;
-        return `<div style="height: 30px;">
-                    <div id="analyticsWidgetReport${itemId}" style="padding-left: 10px; font-weight: 500;"></div>
-                    <!--<div id="analyticsWidgetSmall${itemId}"></div>-->
-                </div>
-                <div style="position: relative; height: calc(100% - 60px);">
+        return `<div class="panoramaReportWidget">
+                    <div class="panoramaReportWidgetTitle">
+                        <div id="analyticsWidgetReport${itemId}"></div>
+                    </div>
+                    <div class="panoramaReportWidgetContent">
                         <div id="myWidget${itemId}"></div>
+                    </div>
                 </div>`;
     },
 
@@ -708,6 +707,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 editableElement.setAttribute('listenerAdded', 'true');
             }
         });
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
     removeEditableTextBoxes: function () {
@@ -721,6 +721,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 editableElement.removeAttribute('listenerAdded');
             }
         });
+        OCA.Analytics.Filter.toggleSaveButtonDisplay();
     },
 
     handleEditableChange: function () {
@@ -845,6 +846,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 };
                 delete reportsArr[reportIndex].options;
                 //page.reports = reportsArr.join(',');
+                OCA.Analytics.PanoramaFilters.pruneRemovedReports();
                 OCA.Analytics.Panorama.buildWidget(itemId);
                 OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
 
@@ -997,6 +999,7 @@ Object.assign(OCA.Analytics.Panorama = {
                 if (existingOptions && Object.keys(existingOptions).length > 0) {
                     reportsArr[reportIndex].options = existingOptions;
                 }
+                OCA.Analytics.PanoramaFilters.pruneRemovedReports();
                 OCA.Analytics.Panorama.buildWidget(itemId);
                 OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
 
@@ -1044,6 +1047,7 @@ Object.assign(OCA.Analytics.Panorama = {
                         };
                         delete reportsArr[reportIndex].options;
                         //page.reports = reportsArr.join(',');
+                        OCA.Analytics.PanoramaFilters.pruneRemovedReports();
                         OCA.Analytics.Panorama.buildWidget(itemId);
                         OCA.Analytics.Panorama.buildSingleOverlay(targetItem, true);
 
@@ -1141,6 +1145,7 @@ Object.assign(OCA.Analytics.Panorama = {
             t('analytics', 'Are you sure?'),
             function () {
                 OCA.Analytics.currentPanorama.pages.splice(OCA.Analytics.currentPage, 1);
+                OCA.Analytics.PanoramaFilters.pruneRemovedReports();
                 OCA.Analytics.Panorama.getPanorama();
                 OCA.Analytics.Panorama.updateNavButtons();
                 // show the save icon
@@ -1562,6 +1567,7 @@ Object.assign(OCA.Analytics.Panorama.Backend = {
     },
 
     update: function () {
+        OCA.Analytics.PanoramaFilters.pruneRemovedReports();
         // clean up possible html data within the headers
         let requestUrl = OC.generateUrl('apps/analytics/panorama/') + OCA.Analytics.currentPanorama.id;
         fetch(requestUrl, {

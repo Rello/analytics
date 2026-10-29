@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const {
   buildScenarioConfig,
@@ -49,6 +50,25 @@ async function openTranslateMenu(page, label) {
   const issues = [];
   const steps = [];
   const capture = createCapture(page, config);
+  const translationRequests = [];
+
+  // Exercise the real translation UI and response parser without relying on
+  // provider latency or an LLM returning exactly the expected wording.
+  await page.route('**/ocs/v2.php/translation/translate', async route => {
+    const request = route.request();
+    const body = request.postDataJSON();
+    translationRequests.push({method: request.method(), ...body});
+    const translations = /^de(?:-|$)/i.test(body.toLanguage)
+      ? {'Column 1': 'Spalte 1', 'Column 2': 'Spalte 2', 'Value': 'Wert'}
+      : {'Spalte 1': 'Column 1', 'Spalte 2': 'Column 2', 'Wert': 'Value'};
+    const text = (translations[body.text] || body.text)
+      .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/xml',
+      body: `<ocs><meta><status>ok</status><statuscode>200</statuscode></meta><data><text>${text}</text></data></ocs>`,
+    });
+  });
 
   attachPageIssueListeners(page, issues);
 
@@ -77,13 +97,22 @@ async function openTranslateMenu(page, label) {
       console.log(JSON.stringify(result, null, 2));
       return;
     }
-    await page.locator('#translateLanguage').selectOption('de');
+    const languages = await page.locator('#translateLanguage option').evaluateAll(options => options.map(option => option.value));
+    const german = languages.find(language => /^de(?:-|$)/i.test(language));
+    const english = languages.find(language => /^en(?:-|$)/i.test(language));
+    assert.ok(german && english, 'Translation scenario requires advertised German and English languages');
+    await page.locator('#translateLanguage').selectOption(german);
     await waitForHeaders(page, 'Spalte 2', 'Wert');
 
     steps.push('translate report labels back to english');
     await openTranslateMenu(page, 'translate menu revert');
-    await page.locator('#translateLanguage').selectOption('en-gb');
+    await page.locator('#translateLanguage').selectOption(english);
     await waitForHeaders(page, 'Column 2', 'Value');
+    for (const [toLanguage, text] of [[german, 'Column 2'], [german, 'Value'], [english, 'Spalte 2'], [english, 'Wert']]) {
+      assert.ok(translationRequests.some(request => request.method === 'POST'
+        && request.toLanguage === toLanguage && request.text === text && request.fromLanguage === null),
+      `Expected a translation request for ${text} to ${toLanguage}`);
+    }
     await capture('final_translate');
 
     const result = {

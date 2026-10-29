@@ -37,6 +37,19 @@ const config = buildScenarioConfig('32-panorama-filters');
         freshPanoramaId = await page.evaluate(() => OCA.Analytics.currentPanorama.id);
         await page.locator('#panoramaLayoutGrid .panoramaLayoutGridCell[id="5"]').click();
         await page.locator('#panoramaConfigureFilters').waitFor();
+        const headingStyles = await page.locator('#panoramaHeader, .panoramaSubHeader').evaluateAll(headings =>
+            headings.map(heading => {
+                const properties = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'color', 'padding', 'margin', 'borderWidth', 'borderRadius', 'backgroundColor'];
+                const styles = () => Object.fromEntries(properties.map(property => [property, getComputedStyle(heading)[property]]));
+                const editing = styles();
+                heading.removeAttribute('contenteditable');
+                const viewing = styles();
+                heading.setAttribute('contenteditable', 'true');
+                return {editing, viewing};
+            }));
+        headingStyles.forEach(({editing, viewing}) => assert.deepEqual(editing, viewing, 'editing retains the normal heading typography and spacing'));
+        assert.equal(await page.locator('#panoramaQuickFilters #panoramaConfigureFilters').isVisible(), true);
+        await capture('inline-title-editing');
         assert.equal(await page.locator('#optionsMenuPanoramaEdit').isDisabled(), false);
         assert.equal(await page.locator('#optionsMenuPanoramaLayout').isDisabled(), false);
         assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), false);
@@ -59,6 +72,44 @@ const config = buildScenarioConfig('32-panorama-filters');
                 remaining: filters.suggestions([date], metadata).flatMap(f => f.mappings).filter(m => m.dimensionLabel.trim().toLowerCase() === 'date').length};
         });
         assert.deepEqual(grouping, {targets: [1, 2], count: 2, remaining: 0});
+        const pruning = await page.evaluate(() => {
+            const filters = OCA.Analytics.PanoramaFilters;
+            const original = OCA.Analytics.currentPanorama;
+            const editMode = OCA.Analytics.editMode;
+            const mapping = reportId => ({reportId, dimension: 'dimension1', dimensionLabel: 'Category'});
+            const definition = (id, ids, enabled = true) => ({id, label: id, enabled, operator: 'EQ',
+                defaultValue: '', mappings: ids.map(mapping)});
+            try {
+                OCA.Analytics.editMode = true;
+                OCA.Analytics.currentPanorama = {...original,
+                    pages: [{reports: [{type: 0, value: 1}, {type: 0, value: 1}]}, {reports: [{type: 0, value: 2}]}],
+                    filters: [definition('exclusive', [1]), definition('shared', [1, 2]),
+                        definition('disabled', [1], false)]};
+                filters.reset();
+                filters.state.values = {exclusive: 'A', shared: 'B'};
+                OCA.Analytics.currentPanorama.pages[0].reports.pop();
+                filters.pruneRemovedReports();
+                const retained = filters.definitions().map(f => f.id);
+                // Replacing the last occurrence removes exclusive filters, including disabled ones.
+                OCA.Analytics.currentPanorama.pages[0].reports[0] = {type: 0, value: 3};
+                filters.pruneRemovedReports();
+                const replaced = structuredClone(filters.definitions());
+                const values = structuredClone(filters.state.values);
+                // Deleting the remaining mapped page removes the shared filter as well.
+                OCA.Analytics.currentPanorama.pages.pop();
+                filters.pruneRemovedReports();
+                return {retained, replaced: replaced.map(f => [f.id, f.mappings.map(m => m.reportId)]),
+                    values, remaining: filters.definitions().length, stateRemaining: filters.state.definitions.length};
+            } finally {
+                OCA.Analytics.currentPanorama = original;
+                OCA.Analytics.editMode = editMode;
+                filters.reset();
+                filters.updateButtons();
+            }
+        });
+        assert.deepEqual(pruning, {retained: ['exclusive', 'shared', 'disabled'],
+            replaced: [['shared', [2]]], values: {shared: 'B'}, remaining: 0, stateRemaining: 0});
+
         await ensureStoredReportWithDefaultData(page, 'Panorama filters ' + Date.now(), 'Isolated panorama filter test');
         reportId = await page.evaluate(() => Number(OCA.Analytics.currentDataset));
         const initial = (await api('report/' + reportId)).data;
@@ -83,10 +134,19 @@ const config = buildScenarioConfig('32-panorama-filters');
         assert.equal(await rows.count(), 2);
         // Enable Column 2. The owner can map dimensions manually using the checkboxes.
         const variable = rows.nth(1);
+        assert.equal(await rows.first().locator('.panoramaFilterSettings').isVisible(), false);
+        assert.equal(await variable.locator('.panoramaFilterSettings').isVisible(), false);
+        await variable.locator('.panoramaFilterSummary').focus();
+        await page.keyboard.press('Enter');
+        assert.equal(await variable.locator('.panoramaFilterSummary').getAttribute('aria-expanded'), 'true');
         assert.equal(await variable.locator('.panoramaFilterSettings input').first().isDisabled(), true);
         await variable.locator('input[type=checkbox]').first().check();
         assert.equal(await variable.locator('.panoramaFilterSettings input').first().isDisabled(), false);
         assert.ok(await variable.locator('.panoramaFilterMappingRow').count() > 0);
+        const showInHeader = variable.getByLabel('Show in panorama header', {exact: true});
+        assert.equal(await showInHeader.isChecked(), true);
+        await showInHeader.uncheck();
+        await showInHeader.check();
         await variable.locator('input[type=text]').first().fill('Shared category');
         await variable.locator('input[type=text]').nth(1).fill('Dimension 2');
         await variable.locator('.panoramaFilterMappings input[type=checkbox]').nth(1).uncheck();
@@ -124,6 +184,32 @@ const config = buildScenarioConfig('32-panorama-filters');
         assert.equal(await page.locator('#optionsMenuPanoramaDeletePage').isDisabled(), true);
         assert.equal(filteredRequests, 2, 'each distinct report has one request across all widgets');
         assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 2);
+        const quick = page.locator('#panoramaQuickFilters select');
+        await quick.waitFor();
+        assert.equal(await quick.count(), 1);
+        await page.waitForFunction(() => document.querySelector('#panoramaQuickFilters select').options.length > 2);
+        const quickOptions = await quick.locator('option').allTextContents();
+        assert.ok(quickOptions.includes('Dimension 2'));
+        assert.ok(quickOptions.includes('Threshold Test'));
+        await quick.selectOption('Threshold Test');
+        await idle();
+        assert.deepEqual(await page.evaluate(id => OCA.Analytics.PanoramaFilters.state.values[id], variableId),
+            [{option: 'EQ', value: 'Threshold Test'}]);
+        assert.equal(await page.locator('#filterVisualisation .filterVisualizationItem').count(), 0);
+        assert.deepEqual(await quick.locator('option').allTextContents(), quickOptions, 'drilldown choices survive filtering');
+        await page.locator('#panoramaQuickFilters .panoramaQuickFilterReset').click();
+        await idle();
+        assert.equal(await quick.inputValue(), 'Dimension 2', 'reset restores the configured default');
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        assert.equal(await page.locator('#panoramaQuickFilters').isVisible(), true);
+        assert.equal(await page.locator('#panoramaConfigureFilters').isVisible(), true);
+        assert.equal(await quick.isVisible(), false);
+        assert.equal(await page.locator('#saveIcon').isVisible(), true, 'save remains available when entering edit mode without changes');
+        assert.equal(await page.locator('#fullscreenToggle').isVisible(), false);
+        assert.equal(await page.locator('#panoramaQuickFilters .panoramaQuickFilterReset').isVisible(), false);
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        assert.equal(await page.locator('#panoramaQuickFilters').isVisible(), true);
+        assert.equal(await page.locator('#fullscreenToggle').isVisible(), true);
         const wheelNavigation = await page.evaluate(() => {
             const panorama = OCA.Analytics.Panorama;
             const root = document.getElementById('analytics-content-panorama');
@@ -336,6 +422,54 @@ const config = buildScenarioConfig('32-panorama-filters');
         assert.equal(filtered.cacheable, 'false');
         assert.equal(filtered.data.data.length, 2);
         assert.equal((await api('data/pa/' + reportId + '?panoramaId=' + panoramaId + '&variables=' + encodeURIComponent('{"unknown":"x"}'))).status, 400);
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        await page.locator('#panoramaConfigureFilters').click();
+        const enabledRow = page.locator('.panoramaFilterDefinition').filter({has: page.getByText('Shared category', {exact: true})});
+        await enabledRow.locator('.panoramaFilterSummary').click();
+        await enabledRow.getByLabel('Show in panorama header', {exact: true}).uncheck();
+        await page.locator('#analyticsDialogBtnGo').click();
+        const [hiddenSave] = await Promise.all([
+            page.waitForResponse(r => r.request().method() === 'PUT' && r.url().endsWith('/panorama/' + panoramaId)),
+            page.locator('#saveIcon').click(),
+        ]);
+        assert.equal(await hiddenSave.json(), true);
+        await page.reload();
+        await page.waitForFunction(() => OCA.Analytics.PanoramaFilters?.state?.metadata.size > 0);
+        await idle();
+        assert.equal(await page.locator('#panoramaQuickFilters').isVisible(), false);
+        assert.equal(await page.locator('#addFilterIcon').isVisible(), true);
+        assert.equal(await page.locator('#filterVisualisation .filterVisualizationItem').count(), 1,
+            'hidden header selectors still apply their defaults and show the existing filter summary');
+        assert.equal(await page.locator('#myWidget0-0 tbody tr').count(), 2);
+        // A disabled stale mapping and an unavailable report must not block visibility edits.
+        const outage = structuredClone(panorama);
+        const disabled = outage.filters.find(filter => !filter.enabled);
+        disabled.mappings[0].dimensionLabel = 'Previously named dimension';
+        assert.equal((await api('panorama/' + panoramaId, 'PUT', outage)).data, true);
+        const unavailableRoute = '**/data/pa/' + copyId + '*';
+        await page.route(unavailableRoute, route => route.fulfill({status: 503, contentType: 'application/json',
+            body: JSON.stringify({error: 'Temporarily unavailable'})}));
+        await page.reload();
+        await page.waitForFunction(() => OCA.Analytics.PanoramaFilters?.state?.metadata.size > 0);
+        await idle();
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        await page.locator('#panoramaConfigureFilters').click();
+        await page.getByText('Some report dimensions could not be loaded. Reopen this dialog to retry.', {exact: true}).waitFor();
+        await enabledRow.locator('.panoramaFilterSummary').click();
+        await page.locator('.panoramaFilterDefinition').filter({has: page.getByText('Shared category', {exact: true})})
+            .getByLabel('Show in panorama header', {exact: true}).uncheck();
+        await page.locator('#analyticsDialogBtnGo').click();
+        await page.locator('#analyticsDialogContainer').waitFor({state: 'hidden'});
+        const [outageSave] = await Promise.all([
+            page.waitForResponse(r => r.request().method() === 'PUT' && r.url().endsWith('/panorama/' + panoramaId)),
+            page.locator('#saveIcon').click(),
+        ]);
+        assert.equal(await outageSave.json(), true);
+        const outageSaved = JSON.parse((await api('panorama/' + panoramaId)).data.filters);
+        assert.equal(outageSaved.find(filter => filter.enabled).showInHeader, false);
+        assert.deepEqual(outageSaved.find(filter => filter.enabled).mappings, outage.filters.find(filter => filter.enabled).mappings);
+        assert.deepEqual(outageSaved.find(filter => filter.id === disabled.id).mappings, disabled.mappings);
+        await page.unroute(unavailableRoute);
         const broken = structuredClone(panorama);
         const brokenMapping = broken.filters.find(f => f.enabled).mappings.find(mapping => mapping.reportId === reportId);
         assert.ok(brokenMapping, 'the requested report has a filter mapping');
@@ -350,6 +484,17 @@ const config = buildScenarioConfig('32-panorama-filters');
         await page.waitForFunction(() => OCA.Analytics.PanoramaFilters?.state?.errors.size > 0);
         await idle();
         assert.match(await page.locator('#myWidget0-0').innerText(), /dimension has changed/);
+        await page.evaluate(() => OCA.Analytics.Panorama.handleEditButton());
+        await page.locator('#panoramaConfigureFilters').click();
+        await page.locator('#analyticsDialogBtnGo').click();
+        assert.equal(await page.locator('#analyticsDialogContainer').isVisible(), true,
+            'a confirmed changed dimension on an enabled filter still requires repair');
+        assert.match(await page.locator('.panoramaFilters [role=alert]').innerText(), /repair missing dimensions/);
+        assert.equal(await page.locator('.panoramaFilters [role=alert]').evaluate(node => {
+            const bounds = node.getBoundingClientRect();
+            return bounds.top >= 0 && bounds.bottom <= window.innerHeight;
+        }), true, 'validation errors are scrolled into view');
+        await page.locator('#analyticsDialogBtnCancel').click();
         assert.deepEqual((await api('report/' + reportId)).data, original, 'source report is unchanged');
         assert.deepEqual(errors, []);
         console.log('PASS: panorama configuration, defaults, mapping, apply/cancel/reset, pages, deduplication, stale requests, cache and dimension validation');

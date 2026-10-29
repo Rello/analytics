@@ -2,28 +2,18 @@
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>analytics</id>
     <name>Analytics</name>
-    <summary>extract / store / visualize</summary>
+    <summary>Business intelligence and reporting within Nextcloud</summary>
 	<description><![CDATA[
-Connect data from different sources in one place and turn it into shareable insights. Analytics lets teams build flexible panoramas, dashboards, and reports with seamless Nextcloud integration.
+Business intelligence and reporting within Nextcloud. Turn operational data into interactive reports and management dashboards, with your Analytics datasets hosted in your own Nextcloud environment.
 
-## Why Analytics
-- **Centralize data**: combine CSV, spreadsheets, APIs, and Nextcloud apps in one place.
-- **Analyze faster**: use charts, tables, filters, and panoramas to explore data quickly.
-- **Share securely**: collaborate with users, groups, or share links with fine-grained access.
-- **Automate updates**: schedule data loads and keep reports current.
+- **Connect your data:** bring together spreadsheets, business systems, and Nextcloud data with visual data source configuration and live previews.
+- **Understand performance:** explore charts and tables with filters, drilldowns, calculated columns, and trends.
+- **Present the big picture:** combine reports in multi-page dashboards called panoramas and export them as PDF.
+- **Reduce manual work:** automate recurring data loads and highlight exceptions with thresholds and notifications.
+- **Collaborate with control:** share with users and groups or use password-protected public links.
+- **Explore deeper insights with Nextcloud Assistant:** ask questions about your data in natural language.
 
-#### Features:
-- **Visualization**: panoramas, reports, charts, tables, filters
-- **Data sources**:
-  - CSV, spreadsheets, API, imports, manual entry
-  - External sources: GitHub, website grabber, JSON
-- **Extensible**: register custom data sources from other apps
-- **Storage**: real-time or database
-- **Automation**: scheduled data loads
-- **Functions**: trend calculations, dis-/aggregation
-- **Alerts**: thresholds for notifications and color coding
-- **Integration**: Files, Activity, Notifications, Flow, Dashboard, Search, Smart picker, Translation
-- **AI Assistant**: Context Chat integration
+Bring insights into everyday collaboration with Analytics in your Nextcloud workspace.
 
 ]]></description>
     <version>7.1.0</version>

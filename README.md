@@ -1,42 +1,56 @@
 # Analytics for Nextcloud
 
-Connect data from different sources in one place and turn it into shareable insights. Analytics lets teams build flexible panoramas, dashboards, and reports with seamless Nextcloud integration.
+**Business intelligence and reporting within Nextcloud.**
+
+Turn operational data into a shared basis for decisions. Analytics helps business teams connect data sources, monitor key performance indicators, and publish interactive reports and management dashboards in their existing Nextcloud environment.
+
+From recurring departmental reports to executive overviews, Analytics brings data preparation, visualization, and collaboration into one workflow. Your Analytics datasets and reports are hosted in your Nextcloud instance, under your organization's control.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Analytics logo" width="300" title="Analytics">
-  <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts.png" alt="Analytics charts" width="300" title="Analytics">
+  <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/logo.png" alt="Analytics overview" width="300" title="Analytics">
+  <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/charts.png" alt="Charts and reports in Analytics" width="300" title="Analytics">
 </p>
 
-## Why Analytics
-- **Centralize data**: combine CSV, spreadsheets, APIs, and Nextcloud apps in one place.
-- **Analyze faster**: use charts, tables, filters, and panoramas to explore data quickly.
-- **Share securely**: collaborate with users, groups, or share links with fine-grained access.
-- **Automate updates**: schedule data loads and keep reports current.
+## Business value
 
-## Features
-- **Visualization**: panoramas, [charts](https://github.com/Rello/analytics/wiki/Filter,-display-options-&-drilldown), tables, filters
-- **Data sources**:
-  - CSV, spreadsheets, [API](https://github.com/Rello/analytics/wiki/API), imports, manual entry
-  - Nextcloud Files, Forms, Tables
-  - External sources: GitHub, [website grabber](https://github.com/Rello/analytics/wiki/Datasource:-website-grabber), [JSON](https://github.com/Rello/analytics/wiki/Datasource:-JSON)
-- **Extensible**: [register](https://github.com/Rello/analytics/wiki/Register-own-datasource) custom data sources from other apps
-- **Storage**: real-time or database
-- **Automation**: [scheduled data loads](https://github.com/Rello/analytics/wiki/Scheduled-dataloads)
-- **Functions**: trend calculations, dis-/aggregation
-- **Alerts**: [thresholds](https://github.com/Rello/analytics/wiki/Thresholds) for notifications and color coding
-- **Integration**: Files, Activity, Notifications, [Flow](https://github.com/Rello/analytics/wiki/Flow-integration), Dashboard, Search, Smart picker, Translation
-- **AI Assistant**: Context Chat integration
+- **Give teams a shared view of performance.** Bring reports together in panoramas: multi-page dashboards combining charts, tables, text, and images.
+- **Reduce recurring reporting work.** Reuse datasets across reports and schedule data loads instead of repeating manual imports.
+- **Explore the drivers behind the numbers.** Filter, drill down, aggregate, and calculate measures using visual configuration and live previews.
+- **Keep reporting close to collaboration.** Share reports and panoramas with Nextcloud users and groups, or reach external audiences through share links.
+- **Retain control of your reporting environment.** Run Analytics within Nextcloud and choose which data sources to connect and which reports to share.
 
-## Architecture
-<p align="center">
-  <img src="https://raw.githubusercontent.com/rello/data/master/screenshots/architecture.png" alt="Analytics architecture" width="610" title="Analytics">
-</p>
+## Typical business applications
 
-## Getting started
-1. Install via the [Nextcloud App Store](https://apps.nextcloud.com/apps/analytics).
-2. Create a report or panorama.
-3. Connect a data source or upload a file.
-4. Share the result with your team.
+| Team | Example use |
+| --- | --- |
+| Management | Combine departmental KPIs and commentary into a shared performance overview. |
+| Finance and controlling | Compare revenue, costs, and budget figures from connected files or imported datasets. |
+| Operations | Track volumes, service metrics, and trends; highlight values that cross defined thresholds. |
+| Project and service teams | Turn survey responses and structured operational data into progress and quality reports. |
+
+## Capabilities
+
+### Connect and prepare data
+
+- Bring together spreadsheets, business systems, and data from Nextcloud Files, Forms, and Tables.
+- Configure data sources visually with intuitive field selection and live data previews.
+- Combine current figures and historical data for recurring reporting and long-term comparisons.
+- Reuse your data across reports to give teams a consistent basis for analysis.
+
+### Analyze and present
+
+- Build interactive charts and tables with visual configuration and live previews.
+- Explore performance with filters, drilldowns, calculated measures, and trends.
+- Assemble multi-page panoramas with reports, explanatory text, and images.
+- Export dashboards and charts for meetings, presentations, and stakeholder updates.
+
+### Automate and collaborate
+
+- Keep reports current with scheduled updates and automated workflows.
+- Highlight exceptions with color coding and notifications.
+- Share with teams and external stakeholders while controlling access to your reports.
+- Bring live charts and tables into everyday work across Nextcloud.
+- **Explore deeper insights with Nextcloud Assistant.** Ask questions about your data in natural language.
 
 ## Documentation
 - [Wiki overview](https://github.com/Rello/analytics/wiki)
@@ -48,13 +62,6 @@ Support translations on [Transifex](https://app.transifex.com/nextcloud/nextclou
 
 ## Maintainers
 - [Marcel Scherello](https://github.com/rello) (author, project leader)
-
-## Support
-Supported by PhpStorm from [JetBrains](https://www.jetbrains.com/?from=AudioPlayerforNextcloudandownCloud)
-
-<p>
-  <img src="https://raw.githubusercontent.com/rello/analytics/master/screenshots/jetbrains.svg" alt="JetBrains" width="250" title="JetBrains">
-</p>
 
 ---
 

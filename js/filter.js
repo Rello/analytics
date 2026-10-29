@@ -1193,7 +1193,9 @@ OCA.Analytics.Filter = {
 
     toggleSaveButtonDisplay: function () {
         const saveIcon = document.getElementById("saveIcon");
-        if (OCA.Analytics.unsavedChanges === true) {
+        const editingPanorama = OCA.Analytics.currentContentType === 'panorama'
+            && document.querySelector('#panoramaHeader[contenteditable="true"]') !== null;
+        if (OCA.Analytics.unsavedChanges === true || editingPanorama) {
             saveIcon.style.removeProperty("display");
         } else {
             saveIcon.style.display = "none";

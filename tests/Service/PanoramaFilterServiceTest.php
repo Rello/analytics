@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class PanoramaFilterServiceTest extends TestCase {
     private function variable(string $dimension = 'dimension1'): array {
-        return ['id' => 'date', 'label' => 'Date', 'enabled' => true, 'operator' => 'EQ', 'defaultValue' => null,
+        return ['id' => 'date', 'label' => 'Date', 'enabled' => true, 'showInHeader' => true, 'operator' => 'EQ', 'defaultValue' => null,
             'mappings' => [['reportId' => 1, 'dimension' => $dimension, 'dimensionLabel' => 'Date']]];
     }
 
@@ -19,6 +19,22 @@ class PanoramaFilterServiceTest extends TestCase {
         $pages = [['reports' => [['type' => 0, 'value' => 1]]]];
         $this->assertSame([], Filters::normalize([], $pages));
         $this->assertSame([$this->variable()], Filters::normalize(json_encode([$this->variable()]), $pages));
+    }
+
+    public function testHeaderVisibilityDefaultsToTrueAndPreservesOptOut(): void {
+        $pages = [['reports' => [['type' => 0, 'value' => 1]]]];
+        $legacy = $this->variable();
+        unset($legacy['showInHeader']);
+        $this->assertTrue(Filters::normalize([$legacy], $pages)[0]['showInHeader']);
+        $legacy['showInHeader'] = false;
+        $this->assertFalse(Filters::normalize([$legacy], $pages)[0]['showInHeader']);
+    }
+
+    public function testInvalidHeaderVisibilityIsRejected(): void {
+        $variable = $this->variable();
+        $variable['showInHeader'] = 'false';
+        $this->expectException(\InvalidArgumentException::class);
+        Filters::normalize([$variable], [['reports' => [['type' => 0, 'value' => 1]]]]);
     }
 
     public function testNotInConfigurationAndViewerSelection(): void {
