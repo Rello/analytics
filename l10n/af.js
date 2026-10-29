@@ -13,6 +13,8 @@ OC.L10N.register(
     "None" : "Geen",
     "Priority" : "Prioriteit",
     "Filter" : "Filter",
+    "day" : "dag",
+    "week" : "week",
     "Add" : "Voeg toe",
     "Favorites" : "Gunstelinge",
     "New" : "Nuut",

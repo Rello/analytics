@@ -142,6 +142,8 @@ OC.L10N.register(
     "Results can be limited to Top or Flop N. Remaining values may be summarized as \"others\"." : "Rezultati se mogu ograničiti na Top ili Flop N. Preostale vrijednosti mogu se sažeti kao „ostalo“.",
     "Remove calculated measures and other column transformations before using Top N or time aggregation." : "Uklonite izračunate mjere i druge transformacije kolona prije korištenja Top N ili vremenske agregacije.",
     "Time aggregation" : "Vremenska agregacija",
+    "day" : "dan",
+    "week" : "sedmica",
     "summation" : "zbir",
     "average" : "prosjek",
     "Reset table" : "Poništi tabelu",
