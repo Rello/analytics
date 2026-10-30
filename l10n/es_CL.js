@@ -57,6 +57,7 @@ OC.L10N.register(
     "Delete folder" : "Borrar carpeta",
     "Save" : "Guardar",
     "Download" : "Descargar",
+    "All" : "Todos",
     "Reset" : "Restablecer",
     "Enabled" : "Habilitado",
     "Reset zoom" : "Restablecer zoom",

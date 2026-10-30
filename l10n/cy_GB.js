@@ -20,6 +20,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Save" : "Cadw",
     "Download" : "Llwytho i lawr",
+    "All" : "Popeth",
     "Yes" : "Iawn",
     "No" : "No",
     "Close" : "Cau",

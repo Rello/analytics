@@ -24,6 +24,7 @@ OC.L10N.register(
     "Delete folder" : "Dilemel an teuliad",
     "Save" : "Enrollañ",
     "Download" : "Pellgargañ",
+    "All" : "Pep tra",
     "Report" : "Kemmenn",
     "Selected" : "Choazet",
     "Yes" : "Ya",

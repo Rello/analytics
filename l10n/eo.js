@@ -32,6 +32,7 @@ OC.L10N.register(
     "Delete folder" : "Forigi dosierujon",
     "Save" : "Konservi",
     "Download" : "Elŝuti",
+    "All" : "Ĉiuj",
     "Reset" : "Restarigi",
     "Dataset" : "Datumaro",
     "Yes" : "Yes",

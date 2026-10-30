@@ -49,6 +49,7 @@ OC.L10N.register(
     "Discard" : "Хаях",
     "Download" : "Татах",
     "Remove filter" : "Шүүлтүүр хасах",
+    "All" : "бүх",
     "Reset" : "—Ç–æ—Ö–∏—Ä—É—É–ª–∞—Ö",
     "Enabled" : "–ò–¥—ç–≤—Ö–∏–∂“Ø“Ø–ª—ç—Ö",
     "Selected" : "Сонгогдсон",

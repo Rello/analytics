@@ -46,6 +46,7 @@ OC.L10N.register(
     "Add to favorites" : "Agregar a tus favoritos",
     "Delete folder" : "Borrar carpeta",
     "Save" : "Guardar",
+    "All" : "Todos",
     "Reset" : "Restablecer",
     "Enabled" : "Habilitado",
     "Dataset" : "Conjunto de datos",

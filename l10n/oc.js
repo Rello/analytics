@@ -37,6 +37,7 @@ OC.L10N.register(
     "Save" : "Enregistrar",
     "Download" : "Teledescargar",
     "No data" : "Cap de donada",
+    "All" : "Tot",
     "Reset" : "Reïnicializar",
     "Enabled" : "Activada",
     "Selected" : "Seleccionat",

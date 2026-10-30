@@ -32,6 +32,7 @@ OC.L10N.register(
     "Delete folder" : "Borrar carpeta",
     "Save" : "Guardar",
     "Download" : "Descargar",
+    "All" : "Todos",
     "Reset" : "Restaurar",
     "Dataset" : "Conjunto de datos",
     "Yes" : "Sí",

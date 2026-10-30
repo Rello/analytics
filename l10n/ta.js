@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete folder" : "கோப்பை அழிக்க",
     "Save" : "சேமிக்க ",
     "Download" : "பதிவிறக்குக",
+    "All" : "எல்லாம்",
     "Selected" : "Selected",
     "Yes" : "Yes",
     "No" : "No",

@@ -18,6 +18,7 @@ OC.L10N.register(
     "New" : "නව",
     "Save" : "Save",
     "Download" : "බාගන්න",
+    "All" : "සියල්ල",
     "Enabled" : "සබල කර ඇත",
     "Selected" : "තෝරා ඇත",
     "Yes" : "ඔව්",

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete folder" : "Deler dossier",
     "Save" : "Salveguardar",
     "Download" : "Discargar",
+    "All" : "Tote",
     "Reset" : "Re-fixar",
     "Enabled" : "Activate",
     "Yes" : "Si",
