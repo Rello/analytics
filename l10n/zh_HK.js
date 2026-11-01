@@ -227,7 +227,7 @@ OC.L10N.register(
     "Show {column} as" : "將 {column} 顯示為",
     "Bars" : "長條",
     "Line" : "線形",
-    "Doughnut" : "Doughnut",
+    "Doughnut" : "冬甩",
     "Funnel" : "漏斗",
     "More options" : "更多選項",
     "Axis for {column}" : "{column} 的座標軸",

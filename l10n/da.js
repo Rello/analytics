@@ -545,7 +545,7 @@ OC.L10N.register(
     "Add nullable measure" : "Tilføj nøgletal, der kan være tomt",
     "Number of records" : "Antal poster",
     "Nextcloud Assistant" : "Nextcloud Assistent",
-    "Context Chat is required" : "Context Chat er påkrævet",
+    "Context Chat is required" : "Context Chat kræves",
     "Description" : "Beskrivelse",
     "Explain the data and the purpose of the data in a full sentence. This is required for the AI Assistant to understand the raw data for further processing." : "Forklar dataene og deres formål med en hel sætning. Det er nødvendigt, for at AI-assistenten kan forstå rådataene og behandle dem videre.",
     "Context Chat relevant" : "Relevant for Context Chat",
