@@ -198,9 +198,11 @@ class ShareService {
 		if ($item_type === self::SHARE_ITEM_TYPE_PANORAMA) {
 			foreach ($reports as $report) {
 				if ((int)$report['type'] === PanoramaService::REPORT_TYPE_GROUP) {
+					$groupPermissions = (int)($report['permissions'] ?? \OCP\Constants::PERMISSION_READ);
 					$subreport = $this->PanoramaMapper->getPanoramasByGroup($report['id'], $report['user_id']);
-					$subreport = array_map(function ($pano) {
+					$subreport = array_map(function ($pano) use ($groupPermissions) {
 						$pano['isShare'] = self::SHARE_TYPE_GROUP;
+						$pano['permissions'] = $groupPermissions;
 						return $pano;
 					}, $subreport);
 
@@ -210,10 +212,12 @@ class ShareService {
 		} else {
 			foreach ($reports as $report) {
 				if ((int)$report['type'] === ReportService::REPORT_TYPE_GROUP) {
+					$groupPermissions = (int)($report['permissions'] ?? \OCP\Constants::PERMISSION_READ);
 					$subreport = $this->ReportMapper->getReportsByGroup($report['id'], $report['user_id']);
-					$subreport = array_map(function ($report) {
-						$report['isShare'] = self::SHARE_TYPE_GROUP;
-						return $report;
+					$subreport = array_map(function ($child) use ($groupPermissions) {
+						$child['isShare'] = self::SHARE_TYPE_GROUP;
+						$child['permissions'] = $groupPermissions;
+						return $child;
 					}, $subreport);
 
 					$reports = array_merge($reports, $subreport);

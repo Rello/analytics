@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- Inherit shared folder permissions for child reports and Panoramas, restoring editable recipient filters and preventing missing-permission warnings.
+
 ## 7.2.0 - 2026-10-29
 ### Added
 - Panorama header filters with per-variable visibility, reset, and compact, collapsible configuration.

@@ -58,6 +58,43 @@ class OutputControllerTest extends TestCase {
 		$this->assertSame('42:csv-1234', $cacheKey);
 	}
 
+	public function testRecipientOptionsRequireUpdatePermission(): void {
+		foreach ([2, '2', 1, null] as $permissions) {
+			$metadata = [
+				'filteroptions' => 'owner filters',
+				'dataoptions' => 'owner columns',
+				'chartoptions' => 'owner chart options',
+				'tableoptions' => 'owner table options',
+				'chart' => 'bar',
+				'visualization' => 'chart',
+			];
+			if ($permissions !== null) {
+				$metadata['permissions'] = $permissions;
+			}
+			$recipientOptions = [
+				'filteroptions' => '{}',
+				'dataoptions' => '[]',
+				'chartoptions' => '{}',
+				'tableoptions' => '{"length":100}',
+				'chart' => 'line',
+				'visualization' => 'table',
+			];
+			set_error_handler(static function (int $severity, string $message): void {
+				throw new \ErrorException($message, 0, $severity);
+			});
+			try {
+				$result = $this->invokePrivateMethod(
+					$this->createControllerWithoutConstructor(),
+					'evaluateCanFilter',
+					array_merge([$metadata], array_values($recipientOptions))
+				);
+			} finally {
+				restore_error_handler();
+			}
+			$this->assertSame((int)$permissions === 2 ? array_replace($metadata, $recipientOptions) : $metadata, $result);
+		}
+	}
+
 	private function createControllerWithoutConstructor(): OutputController {
 		$reflection = new \ReflectionClass(OutputController::class);
 		return $reflection->newInstanceWithoutConstructor();
