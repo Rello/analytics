@@ -614,29 +614,9 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
                             Array.isArray(data.data?.[0]) ? data.data[0] : []
                         );
                     }
-                    let dialogContent;
-                    let errorData = '';
-                    if (parseInt(data.error) === 0) {
-						dialogContent = document.createElement('pre');
-                        dialogContent.id = 'simulationData';
-                        const simulationData = isFlexibleDataset
-                            ? {data: data.data, mappingPreview: data.mappingPreview}
-                            : data.data;
-                        dialogContent.textContent = JSON.stringify(simulationData, null, 2);
-                    } else {
-                        dialogContent = document.createElement('div');
-						const rawData = document.createElement('textarea');
-						rawData.style.width = '500px';
-						rawData.cols = 200;
-						rawData.rows = 15;
-						rawData.value = JSON.stringify(data.rawdata);
-						dialogContent.appendChild(rawData);
-						errorData = document.createElement('span');
-						errorData.textContent = 'Error: ' + data.error;
-                    }
                     OCA.Analytics.Notification.htmlDialogUpdate(
-                        dialogContent,
-						errorData,
+                        OCA.Analytics.Datasource.renderPreview(data),
+                        '',
                     );
 
                 } else {

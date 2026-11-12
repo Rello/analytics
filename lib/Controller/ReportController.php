@@ -9,6 +9,7 @@
 namespace OCA\Analytics\Controller;
 
 use OCA\Analytics\Service\ReportService;
+use OCA\Analytics\Service\BundleImportService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\Exception;
@@ -26,7 +27,8 @@ class ReportController extends Controller
         $appName,
         IRequest $request,
         LoggerInterface $logger,
-        ReportService $ReportService
+        ReportService $ReportService,
+        private BundleImportService $bundleImportService
     )
     {
         parent::__construct($appName, $request);
@@ -239,6 +241,12 @@ class ReportController extends Controller
         return $this->ReportService->export($reportId);
     }
 
+    #[NoAdminRequired]
+    public function installDemo(): DataResponse
+    {
+        return new DataResponse($this->bundleImportService->installDemo());
+    }
+
     /**
      * Import report
      *
@@ -251,6 +259,10 @@ class ReportController extends Controller
     #[NoAdminRequired]
     public function import(?string $path = null, ?string $raw = null)
     {
-        return new DataResponse($this->ReportService->import($path, $raw));
+        try {
+            return new DataResponse($this->bundleImportService->import($path, $raw));
+        } catch (\InvalidArgumentException $e) {
+            return new DataResponse(['error' => $e->getMessage()], 400);
+        }
     }
 }

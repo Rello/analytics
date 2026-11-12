@@ -195,3 +195,9 @@ path = ["js/3rdParty/svgcanvas.esm.js", "js/3rdParty/svgcanvas.LICENSE"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = ["2014 Gliffy Inc.", "2021 Zeno Zeng"]
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "resources/demo.json"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Marcel Scherello"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

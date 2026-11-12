@@ -1,8 +1,21 @@
 # Changelog
 
 ## Unreleased
+### Added
+- Import JSON bundles containing shared datasets, reports, folders, and Panoramas; first-start setup now installs the six-tile Business performance demo.
+
+### Changed
+- Show data source previews and load simulations as readable tables, with expandable raw data for troubleshooting.
+- Cache datasource metadata in browser memory for 60 seconds to speed up repeated editing; reloading the app clears the cache.
+- Use compact, collapsible Tables data source groups so views appear only when their table is expanded.
+- Use compact circular color indicators in chart legends to save space.
+- Hide the options menu and filter icon in Panorama presentation mode; move the fullscreen control to the page’s upper-right corner with a lighter appearance and balance header spacing.
+
 ### Fixed
+- Correct Analytics schema checks on Nextcloud 35 and reconcile legacy sharing and dataload columns during upgrades.
 - Inherit shared folder permissions for child reports and Panoramas, restoring editable recipient filters and preventing missing-permission warnings.
+- Let Panorama tiles and KPI text shrink with the window size and vertically center text, scrolling longer content within its tile.
+- Respect report table formatting for Panorama KPIs, including currency, percentages, and decimal places.
 
 ## 7.2.0 - 2026-10-29
 ### Added

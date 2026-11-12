@@ -46,9 +46,8 @@ class Version4013Date20240408180000 extends SimpleMigrationStep
 
         // Change Type of Description from string to text. Necessary due to length restrictions.
         $column = $schema->getTable('analytics_dataload')->getColumn('option');
-        if ($column->getType() === Type::getType(Types::STRING)) {
-            $column->setType(Type::getType(Types::TEXT));
-        }
+        // Apply unconditionally: Nextcloud 35 returns a ColumnType enum from getType().
+        $column->setType(Type::getType(Types::TEXT));
 
         return $schema;
     }

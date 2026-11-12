@@ -1452,3 +1452,21 @@
         </select>
     </div>
 </template>
+
+<template id="templateTablePicker">
+    <div class="jsonPicker tablePicker">
+        <p class="userGuidance"><?php p($l->t('Expand a table to select the entire table or one of its views.')); ?></p>
+        <div data-role="tree" class="jsonPickerTree"></div>
+    </div>
+</template>
+
+<template id="templateDatasourcePreview">
+    <div class="datasourcePreview">
+        <p data-role="status" class="userGuidance"></p>
+        <div data-role="table" class="analyticsTransformPreview"></div>
+        <details class="datasourcePreviewRaw">
+            <summary><?php p($l->t('Raw data')); ?></summary>
+            <pre id="simulationData" class="analyticsTransformPreview"></pre>
+        </details>
+    </div>
+</template>

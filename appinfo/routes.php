@@ -35,6 +35,7 @@ return [
 		['name' => 'report#setFavorite', 'url' => '/favorite/{reportId}', 'verb' => 'POST'],
 		['name' => 'report#export', 'url' => '/report/export/{reportId}', 'verb' => 'GET'],
 		['name' => 'report#import', 'url' => '/report/import/', 'verb' => 'POST'],
+		['name' => 'report#installDemo', 'url' => '/demo', 'verb' => 'POST'],
 
 		// Dataset
 		['name' => 'dataset#index', 'url' => '/dataset', 'verb' => 'GET'],

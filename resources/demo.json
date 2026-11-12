@@ -1,0 +1,870 @@
+{
+  "format": "analytics-bundle",
+  "version": 1,
+  "id": "business-performance",
+  "folders": [
+    {
+      "key": "demo-reports",
+      "scope": "reports",
+      "name": "Demo Reports"
+    },
+    {
+      "key": "demo-datasets",
+      "scope": "datasets",
+      "name": "Demo Reports"
+    }
+  ],
+  "datasets": [
+    {
+      "key": "performance-kpis",
+      "name": "Performance Kpis",
+      "folder": "demo-datasets",
+      "dimension1": "Metric",
+      "dimension2": "Period",
+      "value": "Value",
+      "data": [
+        [
+          "Revenue 2026",
+          "2026",
+          "241000.00"
+        ],
+        [
+          "Year-over-year growth",
+          "2026",
+          "30.98"
+        ]
+      ]
+    },
+    {
+      "key": "revenue-by-region",
+      "name": "Revenue By Region",
+      "folder": "demo-datasets",
+      "dimension1": "Category",
+      "dimension2": "Period",
+      "value": "Revenue (EUR)",
+      "data": [
+        [
+          "Central Europe",
+          "2026",
+          "96000.00"
+        ],
+        [
+          "Northern Europe",
+          "2026",
+          "65000.00"
+        ],
+        [
+          "Southern Europe",
+          "2026",
+          "32000.00"
+        ],
+        [
+          "Western Europe",
+          "2026",
+          "48000.00"
+        ]
+      ]
+    },
+    {
+      "key": "sales-channel-mix",
+      "name": "Sales Channel Mix",
+      "folder": "demo-datasets",
+      "dimension1": "Category",
+      "dimension2": "Period",
+      "value": "Revenue (EUR)",
+      "data": [
+        [
+          "Channel partners",
+          "2026",
+          "54000.00"
+        ],
+        [
+          "Direct sales",
+          "2026",
+          "24000.00"
+        ],
+        [
+          "Events",
+          "2026",
+          "8000.00"
+        ],
+        [
+          "Marketplace",
+          "2026",
+          "16000.00"
+        ],
+        [
+          "Online shop",
+          "2026",
+          "76000.00"
+        ],
+        [
+          "Retail stores",
+          "2026",
+          "63000.00"
+        ]
+      ]
+    },
+    {
+      "key": "monthly-revenue-vs-target",
+      "name": "Monthly Revenue Vs Target",
+      "folder": "demo-datasets",
+      "dimension1": "Month",
+      "dimension2": "Scenario",
+      "value": "Revenue (EUR)",
+      "data": [
+        [
+          "01/2026",
+          "Actual",
+          "14000.00"
+        ],
+        [
+          "01/2026",
+          "Target",
+          "15000.00"
+        ],
+        [
+          "02/2026",
+          "Actual",
+          "15000.00"
+        ],
+        [
+          "02/2026",
+          "Target",
+          "16000.00"
+        ],
+        [
+          "03/2026",
+          "Actual",
+          "18000.00"
+        ],
+        [
+          "03/2026",
+          "Target",
+          "17000.00"
+        ],
+        [
+          "04/2026",
+          "Actual",
+          "17000.00"
+        ],
+        [
+          "04/2026",
+          "Target",
+          "18000.00"
+        ],
+        [
+          "05/2026",
+          "Actual",
+          "19000.00"
+        ],
+        [
+          "05/2026",
+          "Target",
+          "19000.00"
+        ],
+        [
+          "06/2026",
+          "Actual",
+          "20000.00"
+        ],
+        [
+          "06/2026",
+          "Target",
+          "20000.00"
+        ],
+        [
+          "07/2026",
+          "Actual",
+          "18000.00"
+        ],
+        [
+          "07/2026",
+          "Target",
+          "19000.00"
+        ],
+        [
+          "08/2026",
+          "Actual",
+          "19000.00"
+        ],
+        [
+          "08/2026",
+          "Target",
+          "20000.00"
+        ],
+        [
+          "09/2026",
+          "Actual",
+          "23000.00"
+        ],
+        [
+          "09/2026",
+          "Target",
+          "21000.00"
+        ],
+        [
+          "10/2026",
+          "Actual",
+          "24000.00"
+        ],
+        [
+          "10/2026",
+          "Target",
+          "22000.00"
+        ],
+        [
+          "11/2026",
+          "Actual",
+          "25000.00"
+        ],
+        [
+          "11/2026",
+          "Target",
+          "23000.00"
+        ],
+        [
+          "12/2026",
+          "Actual",
+          "29000.00"
+        ],
+        [
+          "12/2026",
+          "Target",
+          "25000.00"
+        ]
+      ]
+    },
+    {
+      "key": "sales-ranking",
+      "name": "Sales Ranking",
+      "folder": "demo-datasets",
+      "dimension1": "Sales channel",
+      "dimension2": "Year",
+      "value": "Revenue",
+      "data": [
+        [
+          "Channel partners",
+          "2024",
+          "31000.00"
+        ],
+        [
+          "Channel partners",
+          "2025",
+          "39000.00"
+        ],
+        [
+          "Channel partners",
+          "2026",
+          "54000.00"
+        ],
+        [
+          "Direct sales",
+          "2024",
+          "14000.00"
+        ],
+        [
+          "Direct sales",
+          "2025",
+          "18000.00"
+        ],
+        [
+          "Direct sales",
+          "2026",
+          "24000.00"
+        ],
+        [
+          "Events",
+          "2024",
+          "4000.00"
+        ],
+        [
+          "Events",
+          "2025",
+          "6000.00"
+        ],
+        [
+          "Events",
+          "2026",
+          "8000.00"
+        ],
+        [
+          "Marketplace",
+          "2024",
+          "9000.00"
+        ],
+        [
+          "Marketplace",
+          "2025",
+          "12000.00"
+        ],
+        [
+          "Marketplace",
+          "2026",
+          "16000.00"
+        ],
+        [
+          "Online shop",
+          "2024",
+          "42000.00"
+        ],
+        [
+          "Online shop",
+          "2025",
+          "58000.00"
+        ],
+        [
+          "Online shop",
+          "2026",
+          "76000.00"
+        ],
+        [
+          "Retail stores",
+          "2024",
+          "38000.00"
+        ],
+        [
+          "Retail stores",
+          "2025",
+          "51000.00"
+        ],
+        [
+          "Retail stores",
+          "2026",
+          "63000.00"
+        ]
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "key": "annual-revenue",
+      "dataset": "performance-kpis",
+      "folder": "demo-reports",
+      "name": "Annual revenue",
+      "subheader": "Synthetic full-year 2026 demo data. Fixed snapshot for testing and presentation.",
+      "visualization": "table",
+      "chart": "",
+      "chartoptions": {
+        "__analytics_gui": {
+          "version": 4,
+          "model": "kpiModel",
+          "doughnutLabelStyle": "percentage",
+          "aggregationFunctions": []
+        }
+      },
+      "dataoptions": [
+        {
+          "hidden": false
+        },
+        {
+          "hidden": false
+        }
+      ],
+      "filteroptions": {
+        "drilldown": {
+          "dimension2": true
+        },
+        "filter": {
+          "dimension1": {
+            "option": "EQ",
+            "value": "Revenue 2026"
+          }
+        }
+      },
+      "tableoptions": {
+        "columnFormats": [
+          {
+            "reference": "source:1:Value",
+            "format": "currency",
+            "currency": "EUR",
+            "decimals": 0
+          }
+        ]
+      },
+      "thresholds": [
+        {
+          "dimension": 1,
+          "value": "211500",
+          "option": "LT",
+          "severity": 2,
+          "coloring": "value"
+        },
+        {
+          "dimension": 1,
+          "value": "211500",
+          "option": "GE",
+          "severity": 3,
+          "coloring": "value"
+        },
+        {
+          "dimension": 1,
+          "value": "235000",
+          "option": "GE",
+          "severity": 4,
+          "coloring": "value"
+        }
+      ]
+    },
+    {
+      "key": "revenue-growth",
+      "dataset": "performance-kpis",
+      "folder": "demo-reports",
+      "name": "Revenue growth",
+      "subheader": "Synthetic full-year 2026 demo data. Fixed snapshot for testing and presentation.",
+      "visualization": "table",
+      "chart": "",
+      "chartoptions": {
+        "__analytics_gui": {
+          "version": 4,
+          "model": "kpiModel",
+          "doughnutLabelStyle": "percentage",
+          "aggregationFunctions": []
+        }
+      },
+      "dataoptions": [
+        {
+          "hidden": false
+        }
+      ],
+      "filteroptions": {
+        "drilldown": {
+          "dimension2": true
+        },
+        "filter": {
+          "dimension1": {
+            "option": "EQ",
+            "value": "Year-over-year growth"
+          }
+        },
+        "transformations": {
+          "version": 1,
+          "calculations": [
+            {
+              "id": "calc:growth",
+              "name": "Growth",
+              "expression": "{value} / 100",
+              "phase": "after",
+              "aggregation": "sum"
+            }
+          ],
+          "hidden": [
+            "value"
+          ],
+          "sort": []
+        }
+      },
+      "tableoptions": {
+        "columnFormats": [
+          {
+            "reference": "source-ref:calc:growth",
+            "format": "percent",
+            "decimals": 1
+          }
+        ]
+      },
+      "thresholds": []
+    },
+    {
+      "key": "revenue-by-region",
+      "dataset": "revenue-by-region",
+      "folder": "demo-reports",
+      "name": "Revenue by region",
+      "subheader": "Synthetic full-year 2026 demo data. Fixed snapshot for testing and presentation.",
+      "visualization": "chart",
+      "chart": "column",
+      "chartoptions": null,
+      "dataoptions": null,
+      "filteroptions": {
+        "drilldown": {
+          "dimension2": true
+        }
+      },
+      "tableoptions": null,
+      "thresholds": []
+    },
+    {
+      "key": "sales-channel-mix",
+      "dataset": "sales-channel-mix",
+      "folder": "demo-reports",
+      "name": "Sales channel mix",
+      "subheader": "Synthetic full-year 2026 demo data. Fixed snapshot for testing and presentation.",
+      "visualization": "chart",
+      "chart": "doughnut",
+      "chartoptions": null,
+      "dataoptions": null,
+      "filteroptions": {
+        "drilldown": {
+          "dimension2": true
+        }
+      },
+      "tableoptions": null,
+      "thresholds": []
+    },
+    {
+      "key": "monthly-revenue-vs-target",
+      "dataset": "monthly-revenue-vs-target",
+      "folder": "demo-reports",
+      "name": "Monthly revenue vs. target",
+      "subheader": "Synthetic full-year 2026 demo data. Fixed snapshot for testing and presentation.",
+      "visualization": "chart",
+      "chart": "column",
+      "chartoptions": {
+        "__analytics_gui": {
+          "version": 4,
+          "model": "kpiModel",
+          "columnMapping": {
+            "category": 0,
+            "series": [
+              1
+            ],
+            "measures": [
+              2
+            ]
+          }
+        },
+        "plugins": {
+          "legend": {
+            "display": true,
+            "position": "bottom"
+          }
+        }
+      },
+      "dataoptions": [
+        {
+          "type": "bar",
+          "backgroundColor": "#0082c9",
+          "borderColor": "#0082c9",
+          "yAxisID": "primary"
+        },
+        {
+          "type": "line",
+          "borderColor": "#e9a23b",
+          "backgroundColor": "#e9a23b",
+          "borderWidth": 3,
+          "pointRadius": 2,
+          "fill": false,
+          "yAxisID": "primary"
+        }
+      ],
+      "filteroptions": {},
+      "tableoptions": null,
+      "thresholds": []
+    },
+    {
+      "key": "sales-ranking",
+      "dataset": "sales-ranking",
+      "folder": "demo-reports",
+      "name": "Sales Ranking",
+      "subheader": "Top 3 sales channels and others, comparing 2025 and 2026. Explore filters, sorting, chart field mapping and styles, and a pivot table with calculated totals and currency formatting.",
+      "visualization": "ct",
+      "chart": "column",
+      "chartoptions": {
+        "__analytics_gui": {
+          "version": 4,
+          "model": "kpiModel",
+          "columnMapping": {
+            "category": 0,
+            "series": [
+              1
+            ],
+            "measures": [
+              2
+            ]
+          },
+          "doughnutLabelStyle": "percentage",
+          "aggregationFunctions": []
+        },
+        "plugins": {
+          "legend": {
+            "display": false,
+            "position": "bottom"
+          }
+        },
+        "scales": {
+          "x": {
+            "title": {
+              "display": true,
+              "text": "Sales channel"
+            }
+          },
+          "primary": {
+            "beginAtZero": true,
+            "title": {
+              "display": true,
+              "text": "Revenue (€)"
+            }
+          }
+        }
+      },
+      "dataoptions": [
+        {
+          "backgroundColor": "#0082c9",
+          "borderColor": "#0082c9",
+          "hidden": false
+        },
+        {
+          "type": "line",
+          "backgroundColor": "#e9a23b",
+          "borderColor": "#e9a23b",
+          "hidden": false
+        }
+      ],
+      "filteroptions": {
+        "filter": {
+          "dimension2": {
+            "option": "GT",
+            "value": "2024"
+          }
+        },
+        "sort": {
+          "dimension": "1",
+          "direction": "ASC"
+        },
+        "topN": {
+          "dimension": "0",
+          "type": "top",
+          "number": 3,
+          "others": true
+        }
+      },
+      "tableoptions": {
+        "order": [
+          [
+            3,
+            "desc"
+          ]
+        ],
+        "colReorder": {
+          "order": [
+            0,
+            2,
+            1,
+            3,
+            4,
+            5
+          ]
+        },
+        "footer": true,
+        "layout": {
+          "rows": [
+            0
+          ],
+          "columns": [
+            1
+          ],
+          "measures": [
+            2
+          ],
+          "notRequired": []
+        },
+        "calculatedColumns": "{\"version\":2,\"operation\":\"add\",\"references\":[\"pivot:1:Year:2025\",\"pivot:1:Year:2026\"],\"title\":\"Total revenue\"},{\"version\":2,\"operation\":\"formula\",\"references\":[\"pivot:1:Year:2025\",\"pivot:1:Year:2026\"],\"expression\":\"ROUND(ref2 - ref1, 0)\",\"title\":\"Revenue increase\"},{\"version\":2,\"operation\":\"percentage\",\"references\":[\"pivot:1:Year:2026\",\"pivot:1:Year:2025\"],\"title\":\"2026 vs. 2025\"}",
+        "columnFormats": [
+          {
+            "reference": "source:0:Sales%20channel",
+            "format": "text",
+            "wrap": true,
+            "width": 180
+          },
+          {
+            "reference": "pivot:1:Year:2025",
+            "format": "currency",
+            "currency": "EUR",
+            "decimals": 0,
+            "align": "right"
+          },
+          {
+            "reference": "pivot:1:Year:2026",
+            "format": "currency",
+            "currency": "EUR",
+            "decimals": 0,
+            "align": "right"
+          },
+          {
+            "reference": "calculation:0",
+            "format": "currency",
+            "currency": "EUR",
+            "decimals": 0,
+            "align": "right"
+          },
+          {
+            "reference": "calculation:1",
+            "format": "currency",
+            "currency": "EUR",
+            "decimals": 0,
+            "align": "right"
+          },
+          {
+            "reference": "calculation:2",
+            "format": "percent",
+            "decimals": 1,
+            "align": "right"
+          }
+        ],
+        "density": "compact",
+        "showHeader": true,
+        "striped": true
+      },
+      "thresholds": []
+    },
+    {
+      "key": "sales-raw-data",
+      "dataset": "sales-ranking",
+      "folder": "demo-reports",
+      "name": "Sales raw data",
+      "subheader": "All sales channels and years from the same dataset as Demo: Sales Ranking, without filters, grouping, or calculated columns. Compare the two reports to see what report options can do with the same data.",
+      "visualization": "table",
+      "chart": "",
+      "chartoptions": null,
+      "dataoptions": null,
+      "filteroptions": null,
+      "tableoptions": null,
+      "thresholds": []
+    }
+  ],
+  "panoramas": [
+    {
+      "key": "business-performance",
+      "name": "Demo: Business performance",
+      "pages": [
+        {
+          "page": 0,
+          "name": "2026 annual overview",
+          "layoutId": 4,
+          "reports": [
+            {
+              "type": 0,
+              "value": "annual-revenue",
+              "options": {
+                "legend": false
+              }
+            },
+            {
+              "type": 0,
+              "value": "revenue-growth",
+              "options": {
+                "legend": false
+              }
+            },
+            {
+              "type": 0,
+              "value": "revenue-by-region",
+              "options": {
+                "legend": false
+              }
+            },
+            {
+              "type": 0,
+              "value": "sales-channel-mix",
+              "options": {
+                "legend": true
+              }
+            },
+            {
+              "type": 0,
+              "value": "monthly-revenue-vs-target",
+              "options": {
+                "legend": true
+              }
+            },
+            {
+              "type": 0,
+              "value": "sales-ranking",
+              "options": {
+                "legend": false
+              }
+            }
+          ]
+        }
+      ],
+      "filters": [
+        {
+          "id": "filter-1",
+          "label": "Category",
+          "enabled": true,
+          "showInHeader": true,
+          "operator": "EQ",
+          "defaultValue": null,
+          "mappings": [
+            {
+              "reportId": "revenue-by-region",
+              "dimension": "dimension1",
+              "dimensionLabel": "Category"
+            },
+            {
+              "reportId": "sales-channel-mix",
+              "dimension": "dimension1",
+              "dimensionLabel": "Category"
+            },
+            {
+              "reportId": "sales-ranking",
+              "dimension": "dimension1",
+              "dimensionLabel": "Sales channel"
+            }
+          ]
+        },
+        {
+          "id": "filter-2",
+          "label": "Period",
+          "enabled": true,
+          "showInHeader": true,
+          "operator": "EQ",
+          "defaultValue": null,
+          "mappings": [
+            {
+              "reportId": "annual-revenue",
+              "dimension": "dimension2",
+              "dimensionLabel": "Period"
+            },
+            {
+              "reportId": "revenue-growth",
+              "dimension": "dimension2",
+              "dimensionLabel": "Period"
+            },
+            {
+              "reportId": "revenue-by-region",
+              "dimension": "dimension2",
+              "dimensionLabel": "Period"
+            },
+            {
+              "reportId": "sales-channel-mix",
+              "dimension": "dimension2",
+              "dimensionLabel": "Period"
+            }
+          ]
+        },
+        {
+          "id": "filter-3",
+          "label": "Month",
+          "enabled": true,
+          "showInHeader": true,
+          "operator": "EQ",
+          "defaultValue": null,
+          "mappings": [
+            {
+              "reportId": "monthly-revenue-vs-target",
+              "dimension": "dimension1",
+              "dimensionLabel": "Month"
+            }
+          ]
+        },
+        {
+          "id": "filter-4",
+          "label": "Scenario",
+          "enabled": true,
+          "showInHeader": true,
+          "operator": "EQ",
+          "defaultValue": null,
+          "mappings": [
+            {
+              "reportId": "monthly-revenue-vs-target",
+              "dimension": "dimension2",
+              "dimensionLabel": "Scenario"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "entrypoint": "business-performance"
+}

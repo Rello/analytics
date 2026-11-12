@@ -1610,11 +1610,19 @@ OCA.Analytics.Visualization = {
         domTarget.innerHTML = '';
         let kpi = jsondata.data[0][0];
 
-        let rawValue = parseFloat(jsondata.data[0][1]);
+        const sourceValue = jsondata.data[0][1];
+        let rawValue = parseFloat(sourceValue);
+        const reference = this.getTableColumnReference('source', 1,
+            jsondata.header?.[1], null, jsondata.columnRefs?.[1]);
+        const format = this.getTableColumnFormat(jsondata.options?.tableoptions, reference);
         let value;
         const isAverageTimeAggregation = jsondata.options?.filteroptions?.timeAggregation?.mode === 'average';
 
-        if (isAverageTimeAggregation) {
+        if (format) {
+            value = this.formatTableColumnValue(sourceValue, format);
+        } else if (!Number.isFinite(rawValue)) {
+            value = String(sourceValue ?? '');
+        } else if (isAverageTimeAggregation) {
             value = rawValue.toLocaleString(undefined, {maximumFractionDigits: 1});
         } else if (rawValue % 1 === 0) {
             // If the number is an integer, format without decimals
@@ -1989,6 +1997,10 @@ OCA.Analytics.Visualization = {
         chartOptions.plugins.legend.onClick = newLegendClickHandler;
         chartOptions.plugins.legend.labels ??= {};
         chartOptions.plugins.legend.labels.generateLabels = customGenerateLabels;
+        chartOptions.plugins.legend.labels.usePointStyle = true;
+        chartOptions.plugins.legend.labels.pointStyle = 'circle';
+        chartOptions.plugins.legend.labels.boxWidth = 8;
+        chartOptions.plugins.legend.labels.boxHeight = 8;
 
         // Add threshold annotations for supported chart types
         if (chartType !== 'doughnut' && chartType !== 'funnel') {
@@ -2231,7 +2243,7 @@ OCA.Analytics.Visualization = {
         if ([...groups.values()].some(indexes => new Set(indexes.map(index => datasets[index].backgroundColor)).size !== 1)
             || [...measures.values()].some(indexes => new Set(indexes.map(type)).size !== 1)
             || [...measures.values()].some(indexes => !['bar', 'line'].includes(type(indexes[0])))) return null;
-        const item = (indexes, text, color, pointStyle = 'rect') => ({
+        const item = (indexes, text, color, pointStyle = 'circle') => ({
             text, fillStyle: color, strokeStyle: color, pointStyle,
             lineWidth: 2, datasetIndex: indexes[0], analyticsDatasetIndexes: indexes,
             hidden: indexes.every(index => !chart.isDatasetVisible(index)),
@@ -2240,7 +2252,7 @@ OCA.Analytics.Visualization = {
             ...[...groups.values()].map(indexes => item(indexes, datasets[indexes[0]].analyticsGroupLabel, datasets[indexes[0]].backgroundColor)),
             ...[...measures.values()].map(indexes => item(indexes,
                 (type(indexes[0]) === 'line' ? t('analytics', 'Line') : t('analytics', 'Bars')) + ': ' + datasets[indexes[0]].analyticsMeasureLabel,
-                '#808080', type(indexes[0]) === 'line' ? 'line' : 'rect')),
+                '#808080', type(indexes[0]) === 'line' ? 'line' : 'circle')),
         ];
     },
 
@@ -2523,7 +2535,7 @@ OCA.Analytics.Visualization = {
                 legend: {
                     display: true, position: 'bottom',
                     labels: {
-                        boxWidth: 10, padding: 10,
+                        usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8, padding: 10,
                         generateLabels: chart => this.getGroupedChartLegend(chart) || Chart.defaults.plugins.legend.labels.generateLabels(chart),
                     },
                     onClick: (event, item, legend) => {
@@ -3093,6 +3105,14 @@ OCA.Analytics.Visualization = {
 
         //}
         const menuBar = document.getElementById('menuBar');
+        const fullscreenToggle = document.getElementById('fullscreenToggle');
+        if (fullscreenToggle && menuBar) {
+            if (type === 'panorama') {
+                document.getElementById('analytics-content-panorama').prepend(fullscreenToggle);
+            } else {
+                menuBar.insertBefore(fullscreenToggle, document.getElementById('optionsMenu'));
+            }
+        }
         const reportHeadingPrimary = document.querySelector('#analytics-content-' + type + ' .reportHeadingPrimary');
         if (menuBar) {
             if (reportHeadingPrimary) {

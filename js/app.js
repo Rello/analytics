@@ -384,11 +384,54 @@ Object.assign(OCA.Analytics.Translation = {
 OCA.Analytics.Datasource = OCA.Analytics.Datasource || {};
 Object.assign(OCA.Analytics.Datasource = {
     registeredDatasourceLoading: false,
+    metadataCache: new Map(),
+    metadataRequests: new Map(),
+    dropdownRequest: 0,
+
+    /**
+     * Cache metadata only for this page lifetime. Each caller receives its own copy.
+     */
+    loadMetadata: async function (requestUrl) {
+        const cached = this.metadataCache.get(requestUrl);
+        if (cached && performance.now() - cached.loadedAt < 60000) {
+            return structuredClone(cached.data);
+        }
+        let request = this.metadataRequests.get(requestUrl);
+        if (!request) {
+            request = (async () => {
+                const response = await fetch(requestUrl, {
+                    method: 'GET',
+                    headers: OCA.Analytics.headers(),
+                    cache: 'no-store'
+                });
+                if (!response.ok) throw new Error('Could not load datasource metadata');
+                const data = await response.json();
+                if (!data || !data.datasources || !data.options || !data.reportTemplates) {
+                    throw new Error('Invalid datasource metadata');
+                }
+                this.metadataCache.set(requestUrl, {data, loadedAt: performance.now()});
+                return data;
+            })();
+            this.metadataRequests.set(requestUrl, request);
+        }
+        try {
+            return structuredClone(await request);
+        } finally {
+            if (this.metadataRequests.get(requestUrl) === request) {
+                this.metadataRequests.delete(requestUrl);
+            }
+        }
+    },
 
     /**
      * Load data source list and fill dropdown element
      */
     buildDropdown: async function (target, filter) {
+        const requestId = ++this.dropdownRequest;
+        const select = document.getElementById(target);
+        const isCurrent = () => this.dropdownRequest === requestId
+            && document.getElementById(target) === select;
+        this.registeredDatasourceLoading = !filter;
         let optionsInit = document.createDocumentFragment();
         let optionInit = document.createElement('option');
         optionInit.value = '';
@@ -401,25 +444,20 @@ Object.assign(OCA.Analytics.Datasource = {
         if (filter) {
             filterDatasource = '/' + filter;
         }
-        if (!filter) {
-            OCA.Analytics.Datasource.registeredDatasourceLoading = true;
-        }
         // need to offer an await here, because the data source options are important for subsequent functions in the sidebar
         let requestUrl = OC.generateUrl('apps/analytics/datasource' + filterDatasource);
         if (!filter) {
             requestUrl = OC.generateUrl('apps/analytics/datasource/own');
         }
-        let response = await fetch(requestUrl, {
-            method: 'GET',
-            headers: OCA.Analytics.headers()
-        });
-        let data = await response.json();
+        const data = await this.loadMetadata(requestUrl);
+        if (!isCurrent()) return false;
 
         OCA.Analytics.datasources = data;
         OCA.Analytics.Datasource.fillDropdown(target, data, !filter);
         if (!filter) {
-            OCA.Analytics.Datasource.loadRegisteredDatasources(target);
+            OCA.Analytics.Datasource.loadRegisteredDatasources(target, isCurrent);
         }
+        return true;
     },
 
     /**
@@ -462,15 +500,13 @@ Object.assign(OCA.Analytics.Datasource = {
     /**
      * Load registered data sources after the internal data sources are already available
      */
-    loadRegisteredDatasources: async function (target) {
+    loadRegisteredDatasources: async function (target, isCurrent = () => true) {
         let data = null;
         try {
-            let response = await fetch(OC.generateUrl('apps/analytics/datasource/registered'), {
-                method: 'GET',
-                headers: OCA.Analytics.headers()
-            });
-            data = await response.json();
+            data = await this.loadMetadata(OC.generateUrl('apps/analytics/datasource/registered'));
+            if (!isCurrent()) return;
         } catch (error) {
+            if (!isCurrent()) return;
             console.error('Could not load registered data sources', error);
             OCA.Analytics.Datasource.registeredDatasourceLoading = false;
             OCA.Analytics.Datasource.fillDropdown(target, OCA.Analytics.datasources, false);
@@ -618,11 +654,8 @@ Object.assign(OCA.Analytics.Datasource = {
             });
             if (!response.ok) throw new Error(t('analytics', 'The preview request failed.'));
             const data = await response.json();
-            if (data.error && String(data.error) !== '0') throw new Error(String(data.error));
             if (document.getElementById('analyticsDialogContainer') !== dialog) return;
-            const content = document.createElement('pre');
-            content.id = 'simulationData';
-            content.textContent = JSON.stringify({header: data.header || [], data: data.data || []}, null, 2);
+            const content = OCA.Analytics.Datasource.renderPreview(data);
             OCA.Analytics.Notification.htmlDialogUpdate(content, t('analytics', 'Preview of the first 20 rows.'));
         } catch (error) {
             if (error.name === 'AbortError' || document.getElementById('analyticsDialogContainer') !== dialog) return;
@@ -631,6 +664,54 @@ Object.assign(OCA.Analytics.Datasource = {
             content.textContent = error.message || t('analytics', 'The preview could not be prepared.');
             OCA.Analytics.Notification.htmlDialogUpdate(content, '');
         }
+    },
+
+    /**
+     * Show tabular source data while retaining the response for troubleshooting.
+     */
+    renderPreview: function (data) {
+        const content = document.importNode(document.getElementById('templateDatasourcePreview').content, true);
+        const tableContainer = content.querySelector('[data-role="table"]');
+        const status = content.querySelector('[data-role="status"]');
+        const raw = content.querySelector('details');
+        content.querySelector('#simulationData').textContent = JSON.stringify(data, null, 2);
+        const failed = data.error && String(data.error) !== '0';
+        const rows = Array.isArray(data.data) ? data.data : [];
+        if (failed) {
+            status.setAttribute('role', 'alert');
+            status.textContent = String(data.error);
+            raw.open = true;
+        } else if (data.data !== undefined && data.data !== null && !Array.isArray(data.data)) {
+            status.textContent = typeof data.data === 'string' ? data.data : JSON.stringify(data.data);
+            raw.open = true;
+        } else if (!rows.length) {
+            status.textContent = t('analytics', 'No sample rows available.');
+        } else if (!rows.every(Array.isArray)) {
+            raw.open = true;
+        } else {
+            const headers = Array.isArray(data.header) ? data.header : [];
+            const width = rows.reduce((width, row) => Math.max(width, row.length), headers.length);
+            const table = document.createElement('table');
+            const heading = table.createTHead().insertRow();
+            for (let i = 0; i < width; i++) {
+                const cell = document.createElement('th');
+                cell.scope = 'col';
+                // TRANSLATORS: Fallback heading for a source column without a name.
+                cell.textContent = headers[i] ?? t('analytics', 'Column {number}', {number: i + 1});
+                heading.appendChild(cell);
+            }
+            const body = table.createTBody();
+            for (const row of rows) {
+                const tr = body.insertRow();
+                for (let i = 0; i < width; i++) {
+                    const value = row[i];
+                    tr.insertCell().textContent = value === undefined ? ''
+                        : typeof value === 'string' ? value : JSON.stringify(value);
+                }
+            }
+            tableContainer.appendChild(table);
+        }
+        return content;
     },
 
     /**
@@ -942,7 +1023,64 @@ Object.assign(OCA.Analytics.Datasource = {
         }
 
         OCA.Analytics.Datasource.configureTableSelectDisplayOptions(input);
+        OCA.Analytics.Datasource.configureTablePicker(input);
         return true;
+    },
+
+    /**
+     * Keep the select value contract while browsing large lists in the shared tree dialog.
+     */
+    configureTablePicker: function (input) {
+        input.setAttribute('role', 'button');
+        input.setAttribute('aria-haspopup', 'dialog');
+        const open = () => {
+            if (input.disabled) return;
+            const content = document.importNode(document.getElementById('templateTablePicker').content, true);
+            const tree = content.querySelector('[data-role="tree"]');
+            let selected = input.value;
+            OCA.Analytics.Notification.htmlDialogInitiate(t('analytics', 'Select table or view'), () => {
+                input.value = selected;
+                input.dispatchEvent(new Event('input', {bubbles: true}));
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+                OCA.Analytics.Notification.dialogClose();
+            });
+            for (const group of input.querySelectorAll('optgroup')) {
+                const section = document.createElement('details');
+                const summary = document.createElement('summary');
+                summary.textContent = group.label;
+                section.appendChild(summary);
+                for (const option of group.querySelectorAll('option')) {
+                    if (option.dataset.tableDisplayOption === 'true') continue;
+                    const row = document.createElement('label');
+                    row.className = 'jsonPickerValue';
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'analyticsTableSelection';
+                    radio.value = option.value;
+                    radio.checked = option.value === selected;
+                    radio.addEventListener('change', () => { selected = radio.value; });
+                    const text = document.createElement('span');
+                    text.textContent = option.textContent;
+                    row.append(radio, text);
+                    section.appendChild(row);
+                }
+                tree.appendChild(section);
+            }
+            OCA.Analytics.Notification.htmlDialogUpdate(content, '');
+        };
+        input.addEventListener('pointerdown', event => {
+            event.preventDefault();
+            input.focus();
+        });
+        input.addEventListener('click', event => {
+            event.preventDefault();
+            open();
+        });
+        input.addEventListener('keydown', event => {
+            if (['Tab', 'Escape', 'Shift', 'Control', 'Alt', 'Meta'].includes(event.key)) return;
+            event.preventDefault();
+            if (['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) open();
+        });
     },
 
     /**

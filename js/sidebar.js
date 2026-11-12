@@ -162,6 +162,12 @@ OCA.Analytics.Sidebar.Report = {
 
     tabContainerReport: function () {
         const reportId = OCA.Analytics.currentDataset;
+        const sidebarRequest = {};
+        OCA.Analytics.Sidebar.Report.reportRequest = sidebarRequest;
+        const reportContainer = document.getElementById('tabContainerReport');
+        const isCurrent = () => OCA.Analytics.Sidebar.Report.reportRequest === sidebarRequest
+            && document.getElementById('tabContainerReport') === reportContainer
+            && OCA.Analytics.currentDataset === reportId;
         OCA.Analytics.Sidebar.Report.metadataChanged = false;
 
         OCA.Analytics.Sidebar.resetView();
@@ -182,6 +188,7 @@ OCA.Analytics.Sidebar.Report = {
                 return data;
             })
             .then(async data => {
+                if (!isCurrent()) return;
                 let table;
                 if (data !== false) {
                     data['type'] = parseInt(data['type']);
@@ -194,7 +201,8 @@ OCA.Analytics.Sidebar.Report = {
 
                     // create the drop downs for Data source, grouping and possible data set
                     // need to do an await here, because the data source options are important for subsequent functions
-                    await OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource', data['type']);
+                    const loaded = await OCA.Analytics.Datasource.buildDropdown('sidebarReportDatasource', data['type']);
+                    if (!loaded || !isCurrent()) return;
                     OCA.Analytics.Sidebar.Report.buildGroupingDropdown('sidebarReportParent');
                     OCA.Analytics.Sidebar.Report.buildDatasetDropdown('sidebarReportDataset');
 
@@ -1342,11 +1350,15 @@ OCA.Analytics.Sidebar.Report = {
         })
             .then(async response => {
                 const data = await response.json();
-                if (!response.ok) {
+                if (!response.ok || data === 0 || data === false) {
                     throw new Error('Import failed');
                 }
                 if (refreshNavigation) {
-                    OCA.Analytics.Navigation.init();
+                    if (data?.kind === 'bundle' && Number(data.panoramaId) > 0) {
+                        window.location.href = OC.generateUrl('apps/analytics/pa/' + data.panoramaId);
+                    } else {
+                        OCA.Analytics.Navigation.init();
+                    }
                 }
                 return data;
             })

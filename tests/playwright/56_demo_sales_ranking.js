@@ -20,6 +20,7 @@ const reportName = buildUniqueName('Demo sales ranking regression', process.env.
     attachPageIssueListeners(page, issues);
     try {
         await ensureAnalyticsLoaded(page, config);
+        await page.addScriptTag({path: require('node:path').resolve(__dirname, 'fixtures/legacy_sales_demo.js')});
         const pair = await page.evaluate(async name => {
             const demo = JSON.parse(OCA.Analytics.Wizard.salesRankingDemo());
             demo.report.name = name;

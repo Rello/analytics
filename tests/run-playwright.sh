@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 UI_ARTIFACT_ROOT="${ROOT_DIR}/tests/ui-artifacts"
 
-PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-analytics-playwright:local}"
+PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-nextcloud-playwright:1.58.2-chromium-v1}"
 BASE_URL="${BASE_URL:-http://localhost:8035/apps/analytics/}"
 NC_USER="${NC_USER:-admin}"
 NC_PASS="${NC_PASS:-admin}"

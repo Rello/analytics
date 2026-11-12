@@ -26,18 +26,38 @@ docker exec -u www-data nc35-app-1 php /var/tmp/own_apps/analytics/tests/integra
 
 Requires the development `admin` user and the mounted checkout. Verifies the five share audit events, secret exclusion, duplicate/no-op suppression, authorization, and cascade revocations. Captures audit events without publishing them and rolls back all fixture database changes.
 
+## Schema migration compatibility
+
+Run the following in either the Nextcloud 34 or 35 development container:
+
+```sh
+docker exec -u www-data nc35-app-1 php /var/tmp/own_apps/analytics/tests/integration/schema-repair.php
+```
+
+Replays schema migrations and checks legacy sharing/dataload repair and idempotency
+using in-memory schemas only. No live database changes are made.
+
 ## UI Tests (Playwright)
+- The wrapper uses a versioned Chromium-only runtime and reuses the installed
+  image when available, building it locally when missing.
+- Both full Chromium and its headless shell are included; Firefox and WebKit are not.
+- When changing the runtime, update the default image tag in the test wrapper
+  and any build helpers to avoid stale images.
+- `PLAYWRIGHT_IMAGE` can select a custom image. For a custom Playwright version,
+  build with `--build-arg PLAYWRIGHT_VERSION=<version>` and use a distinct image tag.
 - Default run:
   - `./tests/run-playwright.sh`
 - The Playwright container is self-contained:
   - no local `.playwright-browsers` cache is required after cloning the repository
-  - the wrapper builds the local `analytics-playwright:local` image automatically when it is missing
+  - the wrapper builds the local `nextcloud-playwright:1.58.2-chromium-v1` image automatically when it is missing
 - Rebuild the local Playwright image manually:
   - `./tests/playwright/build-playwright-image.sh`
 - Run the full test suite (stops at the first failure to avoid cascading failures in the shared report):
   - `./tests/run-playwright.sh full`
 - Run single scenario e.g. `10` (smoke/navigation):
   - `./tests/run-playwright.sh 10`
+
+Run `./tests/run-playwright.sh tests/playwright/datasource_cache.js` for datasource metadata cache reuse, expiry, concurrent requests, failure retry, stale dropdown protection, and reset on reload.
 
 Supported identifiers:
 - `full`, `regression`
@@ -102,6 +122,18 @@ Artifacts:
 - Full run: `tests/ui-artifacts/<timestamp>/`
   - All screenshots for the chained run are written into that one folder.
   - Filenames are prefixed as `<number>_<current_title>_<capture>.png`.
+
+## Business performance demo and bundle imports
+
+Run `ARTIFACT_DIR=/work/tests/ui-artifacts/business-demo ./tests/run-playwright.sh tests/playwright/setup_business_demo.js`
+to install or reopen the first-start demo in the configured test account. It retains the result
+for manual review. The source is `resources/demo.json`; existing user edits are not overwritten.
+
+Run `ARTIFACT_DIR=/work/tests/ui-artifacts/bundle ./tests/run-playwright.sh tests/playwright/bundle_import.js`
+for bundle/file import, shared datasets, header filter remapping, single-report compatibility,
+and first-start navigation/reuse checks. The test removes its own imported objects afterward.
+Run `./tests/run-unit.sh --filter 'BundleDefinitionTest|BundleImportServiceTest|ReportServiceTest'`
+for format validation, rollback, and report service checks. See `docs/bundles.md` for the format.
 
 ## License Compliance (REUSE)
 - Run REUSE lint:

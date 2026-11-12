@@ -58,7 +58,13 @@ const {chromium} = require('playwright');
                     cell.innerHTML = table.columns[1].render(table.data[1][1], 'display');
                     OCA.Analytics.Dashboard.createWidgetContent(report, 0);
                     const widget = document.querySelector('.analyticsWidgetValue');
+                    const panorama = document.createElement('div');
+                    visualization.buildKpiDisplay(panorama, {...report, data: [report.data[1]]});
                     results.push({
+                        panorama: panorama.querySelector('.kpiWidgetValue').textContent,
+                        panoramaThreshold: panorama.querySelector('.kpiWidgetValue').style.color,
+                        expectedPanoramaThreshold: visualization.validateThreshold(1, parseFloat(entry.value), report.thresholds),
+                        formatted: !!entry.format,
                         value: entry.value, actual: widget.textContent, table: cell.textContent,
                         expected: entry.expected, threshold: widget.style.color,
                         expectedThreshold: visualization.validateThreshold(1, entry.value, report.thresholds),
@@ -69,13 +75,15 @@ const {chromium} = require('playwright');
             });
             for (const result of cases) {
                 assert.equal(result.actual, result.table, `${locale}: ${result.value}`);
+                if (result.formatted) assert.equal(result.panorama, result.table, `Panorama ${locale}: ${result.value}`);
+                assert.equal(!!result.panoramaThreshold, !!result.expectedPanoramaThreshold);
                 if (result.expected !== undefined) assert.equal(result.actual, result.expected);
                 assert.equal(result.subheader, 'Last');
                 assert.equal(!!result.threshold, !!result.expectedThreshold);
             }
             await context.close();
         }
-        console.log('Dashboard values match table formatting in en-US and de-DE; thresholds retain raw values.');
+        console.log('Dashboard and Panorama values respect table formatting in en-US and de-DE; thresholds retain raw values.');
     } finally {
         await browser.close();
     }

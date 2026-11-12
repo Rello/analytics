@@ -743,8 +743,11 @@ async function deleteDataloadEntryIfExists(page, name) {
 async function assertSimulationData(page, expectedText) {
   await page.locator('#analyticsDialogContainer').first().waitFor({ state: 'visible', timeout: 30000 });
   const simulation = page.locator('#simulationData').first();
-  await simulation.waitFor({ state: 'visible', timeout: 30000 });
-  const actual = (await simulation.innerText()).trim();
+  await simulation.waitFor({ state: 'attached', timeout: 30000 });
+  await page.locator('.datasourcePreviewRaw summary').click();
+  const response = JSON.parse(await simulation.innerText());
+  const actual = JSON.stringify(response.mappingPreview !== undefined
+    ? {data: response.data, mappingPreview: response.mappingPreview} : response.data, null, 2);
   if (actual !== expectedText) {
     throw new Error(`Simulation data mismatch. Expected "${expectedText}", got "${actual}"`);
   }

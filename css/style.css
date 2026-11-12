@@ -2278,7 +2278,8 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     content: '▾';
 }
 
-.jsonPickerValue input[type="checkbox"] {
+.jsonPickerValue input[type="checkbox"],
+.tablePicker .jsonPickerValue input[type="radio"] {
     min-height: 0;
     min-width: 0;
     width: 14px;
@@ -2286,6 +2287,13 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     margin: 0;
     padding: 0;
     flex-shrink: 0;
+}
+
+.tablePicker .jsonPickerTree summary,
+.tablePicker .jsonPickerValue {
+    min-height: 0;
+    padding-block: 3px;
+    line-height: 22px;
 }
 
 .jsonPickerPath {
@@ -2738,6 +2746,12 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     display: flex !important;
 }
 
+#content.analyticsFullscreen #analytics-content-panorama #optionsMenuIcon,
+#content.analyticsFullscreen #analytics-content-panorama #optionsMenu,
+#content.analyticsFullscreen #analytics-content-panorama #addFilterIcon {
+    display: none !important;
+}
+
 #content.analyticsFullscreen #analytics-content-report {
     display: flex;
     flex-direction: column;
@@ -2781,6 +2795,28 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     font-weight: 400;
 }
 
+/* Size Panorama KPI typography against the available tile, including its
+   height when multiple rows share a short window. */
+#analytics-content-panorama .kpiWidget {
+    container-type: size;
+}
+
+#analytics-content-panorama .kpiWidgetContent {
+    max-width: 100%;
+}
+
+#analytics-content-panorama .kpiWidgetTitel {
+    font-size: min(1.5rem, 8cqw, 18cqh);
+    line-height: 1.25;
+    margin-bottom: min(0.5rem, 4cqh);
+    overflow-wrap: anywhere;
+}
+
+#analytics-content-panorama .kpiWidgetValue {
+    font-size: min(3.5rem, 16cqw, 32cqh);
+    line-height: 1.2;
+}
+
 /* indicator for report options when filters are active */
 .report-option-active span:first-child {
     position: relative;
@@ -2809,12 +2845,27 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 #analytics-content-panorama .flex-item,
 #analytics-content-panorama .flex-item-tall {
     min-width: 0;
+    min-height: 0;
 }
 
 /* Use the shared report header while retaining the panorama's grey page. */
 #analytics-content-panorama:not([hidden]) {
+    position: relative;
     display: flex;
     flex-direction: column;
+}
+
+#analytics-content-panorama > #fullscreenToggle {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    margin: 0;
+    opacity: .65 !important;
+    z-index: 1;
+}
+
+#analytics-content-panorama > #fullscreenToggle:hover {
+    opacity: 1 !important;
 }
 
 #analytics-content-panorama > .reportHeading {
@@ -2834,6 +2885,7 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
 .panoramaTitleHeading {
     margin-top: 30px;
     padding-top: 12px;
+    padding-right: 12px;
     border-top-right-radius: var(--analytics-surface-radius);
 }
 
@@ -3206,6 +3258,33 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     height: 100%;
     justify-content: center;
     padding-left: 50px;
+}
+
+/* The embedded Text editor grows to fill its parent by default. Keep its
+   natural height so short text is centered and long text scrolls from the top. */
+#analytics-content-panorama .textContainer:has(.text-editor__wrapper) {
+    justify-content: flex-start;
+    overflow: auto;
+}
+
+#analytics-content-panorama .textContainer .text-editor__wrapper {
+    flex: 0 0 auto;
+    margin-block: auto;
+}
+
+#analytics-content-panorama .textContainer .ProseMirror {
+    padding-bottom: 4px;
+}
+
+/* Text adds an empty final paragraph for the editing caret even in read-only
+   mode. Exclude that spacer when centering the displayed content. */
+#analytics-content-panorama .textContainer .ProseMirror[contenteditable="false"] > p:last-child:has(> br.ProseMirror-trailingBreak:only-child) {
+    display: none;
+}
+
+#analytics-content-panorama .textContainer .ProseMirror > :last-child,
+#analytics-content-panorama .textContainer .ProseMirror > :has(+ p:last-child > br.ProseMirror-trailingBreak:only-child) {
+    margin-bottom: 0;
 }
 
 .textContainer ul {
