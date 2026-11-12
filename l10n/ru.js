@@ -372,7 +372,7 @@ OC.L10N.register(
     "Check the column settings." : "Проверьте параметры столбцов.",
     "Preview: {shown} of {total} table rows. Current report filters apply." : "Предпросмотр: {shown} из {total} строк таблицы. Применяются текущие фильтры отчёта.",
     "This table cannot be previewed. Check the layout and column settings." : "Для этой таблицы предпросмотр недоступен. Проверьте макет и параметры столбцов.",
-    "Fractional values are displayed as percentages: 0.25 becomes 25%. Calculated percentages keep their existing scale." : "Дробные значения показываются в процентах: 0,25 становится 25 %. Вычисляемые проценты сохраняют прежний масштаб.",
+    "Fractional values are displayed as percentages: 0.25 becomes 25%. Calculated percentages keep their existing scale." : "Дробные значения показываются в процентах: 0,25 становится 25 %. Вычисляемые проценты сохраняют прежний масштаб.",
     "New in" : "Новое в",
     "View changelog" : "Показать изменения",
     "Close" : "Закрыть",
