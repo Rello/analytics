@@ -92,6 +92,7 @@ OC.L10N.register(
     "created pdf" : "creóse'l pdf",
     "No data" : "Nun hai nengún datu!",
     "Remove filter" : "Quitar la peñera",
+    "All" : "Too",
     "Reset" : "Reafitar",
     "Report" : "Informar",
     "Enabled" : "Activóse",

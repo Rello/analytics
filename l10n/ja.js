@@ -221,6 +221,7 @@ OC.L10N.register(
     "Appearance" : "表示",
     "Swap" : "スワップ",
     "Advanced" : "高度な",
+    "Raw data" : "未加工データ",
     "Previous" : "前へ",
     "Next" : "次へ",
     "Give your numbers a meaning." : "数字に意味を持たせましょう。",

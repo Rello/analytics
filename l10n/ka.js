@@ -120,6 +120,7 @@ OC.L10N.register(
     "Automatic" : "Automatic",
     "Text" : "Text",
     "Advanced" : "Advanced",
+    "Raw data" : "Raw data",
     "Previous" : "წინა",
     "Next" : "Next",
     "Get more information" : "Get more information",

@@ -23,6 +23,7 @@ OC.L10N.register(
     "Delete folder" : "Skrap vouer",
     "Save" : "Stoor",
     "Download" : "Laai af",
+    "All" : "Alle",
     "Reset" : "Herstel",
     "Yes" : "Ja",
     "No" : "Nee",

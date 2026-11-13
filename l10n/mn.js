@@ -123,6 +123,7 @@ OC.L10N.register(
     "Live preview" : "Шууд урьдчилан харах",
     "Swap" : "Swap",
     "Advanced" : "–Ω–∞—Ä–∏–π–≤—á–∏–ª—Å–∞–Ω",
+    "Raw data" : "Түүхий өгөгдөл",
     "Previous" : "”©–º–Ω”©—Ö",
     "Next" : "–î–∞–∞—Ä–∞–∞—Ö",
     "Nextcloud forum" : "Nextcloud форум",
