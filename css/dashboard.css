@@ -47,7 +47,7 @@
 }
 
 .analyticsWidgetSmall {
-    color: var(--color-text-maxcontrast);
+    color: var(--color-main-text);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

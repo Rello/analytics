@@ -291,13 +291,13 @@
         <div style="display: table-row;">
             <div style="display: table-cell; width: 80px;"></div>
             <div style="display: table-cell; width: 150px;">
-                <label><?php p($l->t('Filter by')); ?></label>
+                <span id="filterDialogDimensionLabel"><?php p($l->t('Filter by')); ?></span>
             </div>
             <div style="display: table-cell; width: 150px;">
-                <label><?php p($l->t('Operator')); ?></label>
+                <span id="filterDialogOptionLabel"><?php p($l->t('Operator')); ?></span>
             </div>
             <div style="display: table-cell; width: 220px;">
-                <label><?php p($l->t('Value')); ?></label>
+                <span id="filterDialogValueLabel"><?php p($l->t('Value')); ?></span>
             </div>
         </div>
         <div style="display: table-row;" class="filterRow">
@@ -305,14 +305,16 @@
                 <span class="icon-analytics-filterRow"></span>
             </div>
             <div style="display: table-cell;">
-                <select id="filterDialogDimension" class="filterDialogDimension checkbox optionsInput"></select>
+                <select id="filterDialogDimension" class="filterDialogDimension checkbox optionsInput"
+                        aria-labelledby="filterDialogDimensionLabel"></select>
             </div>
             <div style="display: table-cell;">
-                <select id="filterDialogOption" class="filterDialogOption checkbox optionsInput"></select>
+                <select id="filterDialogOption" class="filterDialogOption checkbox optionsInput"
+                        aria-labelledby="filterDialogOptionLabel"></select>
             </div>
             <div style="display: table-cell;">
                 <input id="filterDialogValue" type="text" class="filterDialogValue optionsInputValue" autocomplete="off"
-                       data-dropDownListIndex="0">
+                       data-dropDownListIndex="0" aria-labelledby="filterDialogValueLabel">
             </div>
         </div>
     </div>
@@ -328,14 +330,14 @@
             <span class="icon-analytics-filterRow-remove" title="<?php p($l->t('Remove filter')); ?>"></span>
         </div>
         <div style="display: table-cell;">
-            <select class="filterDialogDimension checkbox optionsInput"></select>
+            <select class="filterDialogDimension checkbox optionsInput" aria-labelledby="filterDialogDimensionLabel"></select>
         </div>
         <div style="display: table-cell;">
-            <select class="filterDialogOption checkbox optionsInput"></select>
+            <select class="filterDialogOption checkbox optionsInput" aria-labelledby="filterDialogOptionLabel"></select>
         </div>
         <div style="display: table-cell;">
             <input type="text" class="filterDialogValue optionsInputValue" autocomplete="off"
-                   data-dropDownListIndex="0">
+                   data-dropDownListIndex="0" aria-labelledby="filterDialogValueLabel">
         </div>
     </div>
 </template>
@@ -343,7 +345,7 @@
 <template id="templateDataset">
     <div class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Name')); ?></div>
+            <label for="sidebarDatasetName" style="display: table-cell; width: 100%;"><?php p($l->t('Name')); ?></label>
             <input style="display: table-cell;" id="sidebarDatasetName" class="sidebarInput">
         </div>
     </div>
@@ -351,15 +353,15 @@
     <div id="datasetDimensionSectionHeader"><h3><?php p($l->t('Column headers')); ?></h3></div>
     <div id="datasetDimensionSection" class="table" style="display: table; width: 100%; max-width: 500px;">
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</div>
+            <label for="sidebarDatasetDimension1" style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;1</label>
             <div style="display: table-cell;"><input id="sidebarDatasetDimension1" class="sidebarInput"></div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</div>
+            <label for="sidebarDatasetDimension2" style="display: table-cell; width: 100%;"><?php p($l->t('Column')); ?>&nbsp;2</label>
             <div style="display: table-cell;"><input id="sidebarDatasetDimension2" class="sidebarInput"></div>
         </div>
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></div>
+            <label for="sidebarDatasetValue" style="display: table-cell; width: 100%;"><?php p($l->t('Value')); ?></label>
             <div style="display: table-cell;"><input id="sidebarDatasetValue" class="sidebarInput"></div>
         </div>
     </div>
@@ -442,8 +444,8 @@
         <p class="userGuidance"><?php p($l->t('For simple tables, click a report row to fill these fields. Review the values before saving.')); ?></p>
         <div class="table" style="display: table; width: 100%; max-width: 500px;">
             <div style="display: table-row;">
-                <div id="DataTextDimension1"
-                     style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></div>
+                <label id="DataTextDimension1" for="DataDimension1"
+                       style="display: table-cell; width: 100%;"><?php p($l->t('Object')); ?></label>
                 <input style="display: table-cell;" class="sidebarInput" id="DataDimension1" autocomplete="off"
                        data-dropDownListIndex="0">
                 <div style="display: table-cell;">
@@ -452,7 +454,7 @@
                     </a></div>
             </div>
             <div style="display: table-row;">
-                <div id="DataTextDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></div>
+                <label id="DataTextDimension2" for="DataDimension2" style="display: table-cell; width: 120px;"><?php p($l->t('Date')); ?></label>
                 <input style="display: table-cell;" class="sidebarInput" id="DataDimension2" autocomplete="off"
                        data-dropDownListIndex="1">
                 <div style="display: table-cell;">
@@ -461,8 +463,8 @@
                     </a></div>
             </div>
             <div style="display: table-row;">
-                <div id="DataTextValue"
-                     style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></div>
+                <label id="DataTextValue" for="DataValue"
+                       style="display: table-cell; width: 120px;"><?php p($l->t('Value')); ?></label>
                 <input style="display: table-cell;" class="sidebarInput" id="DataValue">
             </div>
         </div>
@@ -603,14 +605,14 @@
     <div style="display: flex;">
         <div style="width: 25%;">
             <div class="dataloadHeader"><?php p($l->t('Selection')); ?></div>
-            <h3 style="padding-top: 20px;"><?php p($l->t('Data load')); ?></h3>
+            <h3 id="dataloadSourceLabel" style="padding-top: 20px;"><?php p($l->t('Data load')); ?></h3>
             <div style="display: table-row;">
                 <div style="display: table-cell;">
                     <div id="createDataloadButton" class="icon-add icon sidebarPointer" style="padding: 0 0px 0 44px;">
                     </div>
                 </div>
                 <div style="display: table-cell;">
-                    <select id="datasourceSelect" class="siebarInput">
+                    <select id="datasourceSelect" class="siebarInput" aria-labelledby="dataloadSourceLabel">
                     </select>
                 </div>
             </div>
@@ -768,11 +770,11 @@
     <ul id="shareSearchResult" class="shareWithList" style="display: none;">
     </ul>
     <div class="linkShareView subView">
-        <div id="linkShareList" class="shareWithList">
-        </div>
+        <ul id="linkShareList" class="shareWithList">
+        </ul>
     </div>
     <div class="shareeListView subView">
-        <div id="shareeList" class="shareWithList"></div>
+        <ul id="shareeList" class="shareWithList"></ul>
     </div>
     <div style="height: 50px"></div>
 </template>
@@ -816,7 +818,8 @@
         <div class="avatar icon-public-white"></div>
         <span id="shareLinkTitle" class="username"></span>
         <span id="sharingOptionsGroupNew" class="sharingOptionsGroup">
-            <a id="newLinkShare" class="icon-add icon new-share" href="#" data-share-type="3"></a>
+            <a id="newLinkShare" class="icon-add icon new-share" href="#" data-share-type="3"
+               aria-label="<?php p($l->t('Add share link')); ?>"></a>
         </span>
         <span id="sharingOptionsGroupMenu" class="sharingOptionsGroup">
             <a id="shareOpenDirect" target="_blank" hidden></a>
@@ -1343,7 +1346,7 @@
         <div class="table" style="display: table;">
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 220px;">
-                    <?php p($l->t('Doughnut label style')); ?>
+                    <label for="chartDoughnutLabelStyle"><?php p($l->t('Doughnut label style')); ?></label>
                 </div>
                 <div style="display: table-cell; width: 220px;">
                     <select id="chartDoughnutLabelStyle" class="optionsInput">
@@ -1406,8 +1409,8 @@
         <div id="chartOptionsTable" class="chartOptionsSeriesList">
             <div class="chartOptionsSeriesHeader">
                 <div class="chartOptionsSeriesHeaderTitle"></div>
-                <div><?php p($l->t('Vertical axis')); ?></div>
-                <div><?php p($l->t('Chart type')); ?></div>
+                <div id="chartOptionsSeriesAxisLabel"><?php p($l->t('Vertical axis')); ?></div>
+                <div id="chartOptionsSeriesTypeLabel"><?php p($l->t('Chart type')); ?></div>
                 <div class="chartOptionsSeriesHeaderColor"></div>
             </div>
         </div>

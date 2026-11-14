@@ -64,8 +64,7 @@ Object.assign(OCA.Analytics.Dataset = {
 
         OCA.Analytics.Dataset.constructTabs();
 
-        document.getElementById('tabHeaderDataset').classList.add('selected');
-        document.querySelector('.tabHeader.selected').click();
+        document.getElementById('tabHeaderDataset').click();
     },
 
     registerSidebarTab: function (tab) {
@@ -104,29 +103,79 @@ Object.assign(OCA.Analytics.Dataset = {
         let items = Object.values(OCA.Analytics.Dataset.sidebar_tabs);
         items.sort(OCA.Analytics.Dataset.sortByName);
 
-        let tabHeaders = document.querySelector('.datasetTabHeaders');
-        for (let tab in items) {
-            let li = document.createElement('li');
-            li.classList.add('tabHeader');
-            li.setAttribute('id', items[tab].id);
-            li.setAttribute('tabindex', items[tab].tabindex);
-            let atag = document.createElement('a');
-            atag.textContent = items[tab].name;
-            atag.setAttribute('title', items[tab].name);
-            li.append(atag);
+        const tabHeaders = document.querySelector('.datasetTabHeaders');
+        tabHeaders.setAttribute('role', 'tablist');
+        tabHeaders.setAttribute('aria-label', t('analytics', 'Dataset maintenance'));
+        for (const [index, tab] of items.entries()) {
+            const li = document.createElement('li');
+            li.classList.add('datasetTabHeaderItem');
+            li.setAttribute('role', 'presentation');
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.classList.add('tabHeader');
+            button.id = tab.id;
+            button.textContent = tab.name;
+            button.title = tab.name;
+            button.setAttribute('role', 'tab');
+            button.setAttribute('aria-controls', tab.class);
+            button.setAttribute('aria-selected', 'false');
+            button.tabIndex = index === 0 ? 0 : -1;
+            li.appendChild(button);
             tabHeaders.appendChild(li);
 
-            let div = document.createElement('div');
-            div.classList.add('tab', items[tab].class);
-            div.setAttribute('id', items[tab].class);
-            let tabContainer = document.querySelector('.datasetTabContainer');
+            const div = document.createElement('div');
+            div.classList.add('tab', tab.class);
+            div.id = tab.class;
+            div.setAttribute('role', 'tabpanel');
+            div.setAttribute('aria-labelledby', tab.id);
+            div.tabIndex = 0;
+            div.hidden = true;
+            const tabContainer = document.querySelector('.datasetTabContainer');
             tabContainer.appendChild(div);
-            document.getElementById(items[tab].id).addEventListener('click', items[tab].action);
+            button.addEventListener('click', event => {
+                tab.action.call(button, event);
+                OCA.Analytics.Dataset.selectTab(tab.id);
+            });
+            button.addEventListener('keydown', OCA.Analytics.Dataset.handleTabKeydown);
         }
     },
 
+    selectTab: function (id) {
+        for (const tab of document.querySelectorAll('.datasetTabHeaders [role="tab"]')) {
+            const selected = tab.id === id;
+            tab.classList.toggle('selected', selected);
+            tab.setAttribute('aria-selected', String(selected));
+            tab.tabIndex = selected ? 0 : -1;
+        }
+    },
+
+    handleTabKeydown: function (event) {
+        const tabs = Array.from(event.currentTarget.closest('[role="tablist"]').querySelectorAll('[role="tab"]'));
+        const currentIndex = tabs.indexOf(event.currentTarget);
+        let nextIndex;
+        switch (event.key) {
+            case 'ArrowRight':
+                nextIndex = (currentIndex + 1) % tabs.length;
+                break;
+            case 'ArrowLeft':
+                nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                break;
+            case 'Home':
+                nextIndex = 0;
+                break;
+            case 'End':
+                nextIndex = tabs.length - 1;
+                break;
+            default:
+                return;
+        }
+        event.preventDefault();
+        tabs.forEach((tab, index) => { tab.tabIndex = index === nextIndex ? 0 : -1; });
+        tabs[nextIndex].focus();
+    },
+
     resetView: function () {
-        document.querySelector('.tabHeader.selected')?.classList.remove('selected');
+        OCA.Analytics.Dataset.selectTab(null);
         let tabs = document.querySelectorAll('.datasetTabContainer .tab');
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].hidden = true;

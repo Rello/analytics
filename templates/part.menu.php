@@ -13,7 +13,9 @@
             aria-label="<?php p($l->t('Navigation')); ?>" title="<?php p($l->t('Navigation')); ?>"></button>
     <button id="optionsMenuIcon" class="analytics-options icon-analytics-more has-tooltip" type="button"
          aria-label="<?php p($l->t('Options')); ?>" title="<?php p($l->t('Options')); ?>"></button>
-    <div id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen"></div>
+    <button id="fullscreenToggle" class="analytics-options icon-analytics-fullscreen" type="button" aria-pressed="false"
+            aria-label="<?php // TRANSLATORS: Noun: the fullscreen viewing mode toggled by this button.
+                p($l->t('Fullscreen')); ?>"></button>
 
     <div id="optionsMenu" class="popovermenu">
         <ul id="optionsMenuMainReport" style="display: none !important;">
@@ -190,8 +192,8 @@
     <div id="saveIcon" style="display: none;" class="analytics-options icon-analytics-save-warning has-tooltip"
          title="<?php p($l->t('Report was changed - Press here to save the current state')); ?>"></div>
 
-    <div id="addFilterIcon" class="analytics-options icon-analytics-filter has-tooltip"
+    <button id="addFilterIcon" class="analytics-options icon-analytics-filter has-tooltip" type="button" aria-haspopup="dialog"
          title="<?php // TRANSLATORS: Noun: report filter settings.
-             p($l->t('Filter')); ?>"></div>
+             p($l->t('Filter')); ?>"></button>
     <div id="filterVisualisation" style="display: inline-block; float: right;"></div>
 </div>

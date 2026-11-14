@@ -12,6 +12,7 @@
 - Hide the options menu and filter icon in Panorama presentation mode; move the fullscreen control to the page’s upper-right corner with a lighter appearance and balance header spacing.
 
 ### Fixed
+- Make report and dataset controls accessible by keyboard, label form fields and sharing actions, expose chart-only data as a screen-reader table, and correct filter and favorite text contrast and list semantics.
 - Correct Analytics schema checks on Nextcloud 35 and reconcile legacy sharing and dataload columns during upgrades.
 - Inherit shared folder permissions for child reports and Panoramas, restoring editable recipient filters and preventing missing-permission warnings.
 - Let Panorama tiles and KPI text shrink with the window size and vertically center text, scrolling longer content within its tile.

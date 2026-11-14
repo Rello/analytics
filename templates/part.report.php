@@ -22,10 +22,25 @@
     <div id="reportPlaceholder"></div>
     <div id="chartContainer">
         <div id="chartLegendContainer">
-            <div id="chartLegend" class="icon icon-menu"><?php p($l->t('Legend')); ?></div>
+            <button id="chartLegend" class="icon icon-menu" type="button" aria-pressed="false"><?php // TRANSLATORS: Noun: the chart key whose visibility this button toggles.
+                p($l->t('Legend')); ?></button>
         </div>
     </div>
     <div id="tableSeparatorContainer"></div>
+    <div id="chartDataAlternative" class="hidden-visually" role="region" aria-label="<?php p($l->t('Data')); ?>" hidden></div>
+    <template id="templateChartDataTable">
+        <table id="chartDataTable">
+            <caption></caption>
+            <thead><tr>
+                <th scope="col"><?php // TRANSLATORS: Noun: a named series of values plotted in a chart.
+                    p($l->t('Series')); ?></th>
+                <th scope="col"><?php // TRANSLATORS: Noun: the category or date identifying a chart data point.
+                    p($l->t('Label')); ?></th>
+                <th scope="col"><?php p($l->t('Value')); ?></th>
+            </tr></thead>
+            <tbody></tbody>
+        </table>
+    </template>
     <table id="tableContainer"></table>
     <div id="noDataContainer" hidden>
         <?php p($l->t('No data found')); ?>

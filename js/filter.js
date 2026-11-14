@@ -2877,6 +2877,7 @@ OCA.Analytics.Filter = {
             yAxisSelect.id = 'optionsYAxis' + i;
             yAxisSelect.name = 'optionsYAxis';
             yAxisSelect.className = 'optionsInput';
+            yAxisSelect.setAttribute('aria-labelledby', 'chartOptionsSeriesAxisLabel ' + titleText.id);
             // TRANSLATORS: Chart axis: the primary vertical axis.
             yAxisSelect.appendChild(new Option(t('analytics', 'Primary'), 'primary'));
             // TRANSLATORS: Chart axis: the secondary vertical axis.
@@ -2892,6 +2893,7 @@ OCA.Analytics.Filter = {
             typeSelect.id = 'optionsChartType' + i;
             typeSelect.name = 'optionsChartType';
             typeSelect.className = 'optionsInput';
+            typeSelect.setAttribute('aria-labelledby', 'chartOptionsSeriesTypeLabel ' + titleText.id);
             // TRANSLATORS: Chart type: a line chart.
             typeSelect.appendChild(new Option(t('analytics', 'Line'), 'line'));
             // TRANSLATORS: Chart type: a bar chart.
@@ -2917,6 +2919,7 @@ OCA.Analytics.Filter = {
             colorInput.name = 'optionsColor';
             colorInput.type = 'color';
             colorInput.className = 'chartOptionsColorInput';
+            colorInput.setAttribute('aria-label', t('analytics', 'Color for {group}', {group: titleText.textContent}));
             colorInput.value = OCA.Analytics.Filter.normalizeHexColor(color, OCA.Analytics.Visualization.defaultColorPalette[i % OCA.Analytics.Visualization.defaultColorPalette.length]);
             colorInput.style.backgroundColor = colorInput.value;
             colorInput.addEventListener('input', OCA.Analytics.Filter.updateColor);

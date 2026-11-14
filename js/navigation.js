@@ -201,14 +201,17 @@ OCA.Analytics.Navigation = {
         li.classList.add('pinned', 'second-pinned');
         let navigationEntrydiv = document.createElement('div');
         navigationEntrydiv.classList.add('app-navigation-entry');
-        let a = document.createElement('a');
-        a.classList.add('icon-analytics-settings', 'analytics-navigation-icon');
-        a.id = 'settingsButton';
-        a.addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);
-        a.innerText = t('analytics', 'Settings');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('icon-analytics-settings', 'analytics-navigation-icon');
+        button.id = 'settingsButton';
+        button.setAttribute('aria-controls', 'app-settings-content');
+        button.setAttribute('aria-expanded', String(document.getElementById('app-settings-content').style.display !== 'none'));
+        button.addEventListener('click', OCA.Analytics.Navigation.handleSettingsButton);
+        button.innerText = t('analytics', 'Settings');
 
         li.appendChild(navigationEntrydiv);
-        navigationEntrydiv.appendChild(a);
+        navigationEntrydiv.appendChild(button);
         return li;
     },
 
@@ -893,6 +896,7 @@ OCA.Analytics.Navigation = {
     handleSettingsButton: function () {
         const appSettingsContent = document.getElementById('app-settings-content');
         appSettingsContent.style.display = appSettingsContent.style.display === 'none' ? 'block' : 'none';
+        document.getElementById('settingsButton').setAttribute('aria-expanded', String(appSettingsContent.style.display !== 'none'));
     },
 
     addNavigationItem: function (item) {

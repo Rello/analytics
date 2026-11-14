@@ -2008,7 +2008,10 @@ OCA.Analytics.Visualization = {
         }
 
         OCA.Analytics.chartObject = new Chart(ctx, {
-            plugins: [ChartDataLabels],
+            plugins: [ChartDataLabels, {
+                id: 'analyticsChartData',
+                afterUpdate: chart => OCA.Analytics.Report?.updateChartDataAlternative?.(chart, jsondata),
+            }],
             type: OCA.Analytics.chartTypeMapping[chartType],
             data: {
                 labels: xAxisCategories,
@@ -3079,6 +3082,7 @@ OCA.Analytics.Visualization = {
         if (fullscreenToggle) {
             fullscreenToggle.classList.toggle('icon-analytics-fullscreen');
             fullscreenToggle.classList.toggle('icon-analytics-fullscreenExit');
+            fullscreenToggle.setAttribute('aria-pressed', String(fullscreenToggle.classList.contains('icon-analytics-fullscreenExit')));
         }
     },
 

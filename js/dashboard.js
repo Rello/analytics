@@ -310,7 +310,7 @@ OCA.Analytics.Dashboard = {
     },
 
     buildEmptyState: function () {
-        const emptyState = document.createElement('div');
+        const emptyState = document.createElement('li');
         emptyState.textContent = t('analytics', 'Add a report to the favorites to be shown here.');
         return emptyState;
     },

@@ -272,6 +272,63 @@ Object.assign(OCA.Analytics.Report, {
     },
 
     /**
+     * Keep the screen-reader data table in sync with the plotted series.
+     */
+    updateChartDataAlternative: function (chart, report) {
+        const alternative = document.getElementById('chartDataAlternative');
+        if (!alternative || chart.canvas.id !== 'myChart') return;
+
+        chart.canvas.setAttribute('role', 'img');
+        chart.canvas.setAttribute('aria-label', report.options.name);
+        const legend = document.getElementById('chartLegend');
+        legend?.setAttribute('aria-pressed', String(chart.options.plugins.legend.display !== false));
+        alternative.hidden = report.options.visualization !== 'chart';
+        chart.canvas.setAttribute('aria-details', alternative.hidden ? 'tableContainer' : alternative.id);
+        if (alternative.hidden) return;
+
+        if (!document.getElementById('chartDataTable')) {
+            alternative.appendChild(
+                document.importNode(document.getElementById('templateChartDataTable').content, true)
+            );
+        }
+        const table = document.getElementById('chartDataTable');
+        table.caption.textContent = report.options.name;
+        const rows = document.createDocumentFragment();
+        const text = value => {
+            if (value === null || value === undefined) return '';
+            if (Array.isArray(value)) return value.map(text).join(' – ');
+            if (typeof value === 'number') return value.toLocaleString(undefined, {maximumSignificantDigits: 21});
+            return String(value);
+        };
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+            if (!chart.isDatasetVisible(datasetIndex)) return;
+            dataset.data.forEach((point, index) => {
+                if (!chart.getDataVisibility(index)) return;
+                const coordinates = point !== null && typeof point === 'object' && !Array.isArray(point);
+                const label = coordinates ? point.x : chart.data.labels[index];
+                const value = coordinates ? point.y : point;
+                const row = document.createElement('tr');
+                [dataset.label || report.options.name, label ?? index + 1, value].forEach((value, column) => {
+                    const cell = document.createElement(column === 1 ? 'th' : 'td');
+                    if (column === 1) cell.scope = 'row';
+                    cell.textContent = text(value);
+                    row.appendChild(cell);
+                });
+                rows.appendChild(row);
+            });
+        });
+        if (!rows.childElementCount) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 3;
+            cell.textContent = t('analytics', 'No data found');
+            row.appendChild(cell);
+            rows.appendChild(row);
+        }
+        table.tBodies[0].replaceChildren(rows);
+    },
+
+    /**
      * Trigger download of the current chart image
      */
     downloadChart: function () {
@@ -387,6 +444,9 @@ Object.assign(OCA.Analytics.Report, {
         chartContainer.appendChild(chartLegendContainer);
         document.getElementById('chartZoomReset').addEventListener('click', OCA.Analytics.Report.handleZoomResetButton);
         OCA.Analytics.Visualization.hideElement('tableContainer');
+        const chartData = document.getElementById('chartDataAlternative');
+        chartData.hidden = true;
+        chartData.replaceChildren();
         OCA.Analytics.Visualization.hideElement('tableSeparatorContainer');
         document.getElementById('tableContainer').innerHTML = '';
 

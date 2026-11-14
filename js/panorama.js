@@ -1703,9 +1703,9 @@ Object.assign(OCA.Analytics.Panorama.Dashboard = {
 
                     }
                 } else {
-                    document.getElementById('ulAnalytics').innerHTML = '<div>'
+                    document.getElementById('ulAnalytics').innerHTML = '<li>'
                         + t('analytics', 'Add a report to the favorites to be shown here.')
-                        + '</div>';
+                        + '</li>';
                 }
             }
         };

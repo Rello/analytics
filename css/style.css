@@ -111,7 +111,8 @@ button, .button {
 #app-navigation > ul > li > div > a,
 #app-navigation > ul > li > ul > li > div > a,
 #app-navigation > ul > li > ul > li > ul > li > div > a,
-#app-navigation > ul > li > ul > li > ul > li > ul > li > div > a {
+#app-navigation > ul > li > ul > li > ul > li > ul > li > div > a,
+#app-navigation .app-navigation-entry > button.analytics-navigation-icon {
     background-size: 18px 18px;
     background-position: 14px center;
     background-repeat: no-repeat;
@@ -127,6 +128,15 @@ button, .button {
     color: var(--color-main-text);
     flex: 1 1 0px;
     z-index: 100;
+}
+
+#app-navigation .app-navigation-entry > button.analytics-navigation-icon {
+    margin: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    font: inherit;
+    line-height: var(--default-clickable-area);
 }
 
 /* Category icons already identify ordinary items; reclaim their icon space. */
@@ -779,10 +789,16 @@ button, .button {
 }
 
 #chartLegend {
+    margin: 0;
+    border: 0;
+    border-radius: var(--border-radius-element);
+    min-height: 24px;
+    padding-block: 0;
+    background-color: transparent;
+    color: var(--color-main-text);
     padding-left: 24px;
     background-position: left center;
     background-size: 16px;
-    opacity: 0.5;
 }
 
 #chartLegend:hover {
@@ -1047,7 +1063,7 @@ div.dt-container .dt-paging .dt-paging-button {
     cursor: pointer;
 }
 
-#menuBar button.analytics-options {
+button.analytics-options {
     width: 24px;
     height: 24px;
     min-height: 24px;
@@ -1294,9 +1310,9 @@ div.dt-container .dt-paging .dt-paging-button {
 
 .filterVisualizationItem {
     background-color: var(--color-background-dark);
+    color: var(--color-main-text);
     padding: 5px;
     border-radius: 15px;
-    opacity: .5;
     font-size: smaller;
     display: inline-flex;
     align-items: center;
@@ -3398,11 +3414,37 @@ div[id^="analytics-content"] .button:not(.analyticsPrimary):hover,
     border-bottom: 4px solid #1A366C;
 }
 
-.tabHeader a {
+.tabHeader a,
+.datasetTabHeaders button.tabHeader {
     display: block;
     padding: 10px 0;
     text-decoration: none;
     color: inherit;
+}
+
+.datasetTabHeaders .datasetTabHeaderItem {
+    flex: 1;
+    min-width: 0;
+}
+
+.datasetTabHeaders button.tabHeader {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-bottom: 4px solid transparent;
+    border-radius: 0;
+    background: transparent;
+}
+
+.datasetTabHeaders button.tabHeader.selected {
+    border-bottom-color: var(--color-primary-element);
+}
+
+.datasetTabHeaders button.tabHeader:focus-visible,
+#chartLegend:focus-visible,
+#settingsButton:focus-visible {
+    outline: 2px solid var(--color-main-text);
+    outline-offset: -2px;
 }
 
 .datasetTabContainer .tab {

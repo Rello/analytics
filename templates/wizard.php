@@ -309,7 +309,7 @@
                 <div id="wizardNewTypeDatasetRow" style="display: none;">
                     <div style="display: table-cell; width: 50%;">
                         <br>
-                        <select id="wizardNewDataset">
+                        <select id="wizardNewDataset" aria-labelledby="wizardNewTypeStoredOld">
                         </select>
                         <div id="wizardNewDatasetSummary" class="userGuidance" hidden></div>
                         <br>

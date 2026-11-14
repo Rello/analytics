@@ -9,7 +9,7 @@
 ?>
 
 <div id="analytics-content-intro" hidden>
-    <img src="<?php echo image_path('analytics', 'logo.svg') ?>" style="width: 300px;margin-left: auto;margin-right: auto;/* padding-left: 100px; */display: block;">
+    <img src="<?php echo image_path('analytics', 'logo.svg') ?>" alt="Analytics" style="width: 300px;margin-left: auto;margin-right: auto;/* padding-left: 100px; */display: block;">
     <br>
     <h3><?php p($l->t('Favorites')); ?></h3>
     <div>
