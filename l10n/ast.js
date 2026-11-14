@@ -208,6 +208,7 @@ OC.L10N.register(
     "Calculated Columns" : "Columnes calculaes",
     "Appearance" : "Aspeutu",
     "Vertical axis" : "Exes verticales",
+    "Raw data" : "Datos en bruto",
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "Data is processed inside Nextcloud." : "Los datos procésense dientro de Nextcloud.",

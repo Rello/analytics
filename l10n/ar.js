@@ -666,6 +666,7 @@ OC.L10N.register(
     "Select data" : "اختر البيانات",
     "Expand a group to select values or entries. For lists of records, choose the fields to extract." : "وسّع مجموعة لتحديد القيم أو العناصر. بالنسبة لقوائم السجلات، اختر الحقول المراد استخراجها.",
     "Select higher level" : "اختر المستوى الأعلى",
+    "Raw data" : "البيانات الخام",
     "Previous" : "السابق",
     "Next" : "التالي",
     "Nextcloud Analytics makes your data visible and helps you to evaluate them - from financial data to IoT logs." : "يجعل Nextcloud Analytics بياناتك مرئية ويساعدك على تقييمها - بداية من البيانات المالية حتى سجلات log لإنترنت الأشياء IoT\".",
