@@ -94,6 +94,7 @@ OC.L10N.register(
     "10 min" : "10 წთ",
     "30 min" : "30 წთ",
     "Edit" : "Edit",
+    "Label" : "Label",
     "Do you like this app?" : "მოგწონთ ეს აპლიკაცია?",
     "Introduction" : "შესავალი",
     "More information …" : "მეტი ინფორმაცია ...",

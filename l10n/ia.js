@@ -39,6 +39,7 @@ OC.L10N.register(
     "Link" : "Ligamine",
     "The password is wrong. Try again." : "Le contrasigno es incorrecte. Tenta de novo.",
     "Password" : "Contrasigno",
+    "Fullscreen" : "Schermo plen",
     "Edit" : "Modificar",
     "Name" : "Nomine",
     "Export" : "Exportar",

@@ -53,6 +53,7 @@ OC.L10N.register(
     "Password" : "Passwuert",
     "Translate" : "Iwwersetzen",
     "Edit" : "Änneren",
+    "Label" : "Beschrëftung",
     "Name" : "Numm",
     "Export" : "Exportéieren",
     "Update" : "Update",

@@ -83,6 +83,7 @@ OC.L10N.register(
     "Content" : "Contenido",
     "The password is wrong. Try again." : "La contraseña está equivoada. Por favor vuelve a intentarlo. ",
     "Password" : "Contraseña",
+    "Fullscreen" : "Pantalla completa",
     "Translate" : "Traducir",
     "Edit" : "Editar",
     "Name" : "Nombre",

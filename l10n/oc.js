@@ -67,6 +67,7 @@ OC.L10N.register(
     "Password" : "Senhal",
     "Navigation" : "Navegacion",
     "Options" : "Opcions",
+    "Fullscreen" : "Ecran complèt",
     "Translate" : "Tradurre",
     "1 min" : "1 min",
     "10 min" : "10 min",
