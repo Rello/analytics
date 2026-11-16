@@ -5,6 +5,7 @@
 - Import JSON bundles containing shared datasets, reports, folders, and Panoramas; first-start setup now installs the six-tile Business performance demo.
 
 ### Changed
+- Update the bundled spreadsheet import library to PhpSpreadsheet 5.11.0 for reader and formula fixes.
 - Show data source previews and load simulations as readable tables, with expandable raw data for troubleshooting.
 - Cache datasource metadata in browser memory for 60 seconds to speed up repeated editing; reloading the app clears the cache.
 - Use compact, collapsible Tables data source groups so views appear only when their table is expanded.

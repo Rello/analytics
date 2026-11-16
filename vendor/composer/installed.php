@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
         'reference' => null,
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
             'reference' => null,
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
@@ -56,11 +56,20 @@
             'dev_requirement' => false,
         ),
         'phpoffice/phpspreadsheet' => array(
-            'pretty_version' => '5.10.0',
-            'version' => '5.10.0.0',
-            'reference' => 'eb18727acf6b1f4cc67145a52ab04f9fd4c28d53',
+            'pretty_version' => '5.11.0',
+            'version' => '5.11.0.0',
+            'reference' => '3aa1f0d0f3c658b803c18050ac49244d07d96907',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoffice/phpspreadsheet',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'phpoffice/wmf' => array(
+            'pretty_version' => '0.2.1',
+            'version' => '0.2.1.0',
+            'reference' => 'd1eafbab74509ee2adfcdda3888737cd8d349820',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpoffice/wmf',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

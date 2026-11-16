@@ -144,7 +144,7 @@ SPDX-FileCopyrightText = "2017 Mark Baker (https://github.com/MarkBaker/PHPCompl
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = "vendor/phpoffice/phpspreadsheet/**"
+path = ["vendor/phpoffice/phpspreadsheet/**", "vendor/phpoffice/wmf/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019 PhpSpreadsheet Authors"
 SPDX-License-Identifier = "MIT"
