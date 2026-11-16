@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:1aa45ed9-3026-4083-a17d-a44f558dd572",
+  "serialNumber": "urn:uuid:652cb585-a579-45e5-8726-d4377ce85919",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-29T16:45:23Z",
+    "timestamp": "2026-11-16T22:23:23Z",
     "tools": [
       {
         "vendor": "OpenAI",
@@ -74,7 +74,7 @@
       },
       {
         "name": "local:note",
-        "value": "Root composer.json requires phpoffice/phpspreadsheet *; composer.lock records phpoffice/phpspreadsheet 5.10.0; bundled version is 5.10.0."
+        "value": "Root composer.json requires phpoffice/phpspreadsheet *; composer.lock records phpoffice/phpspreadsheet 5.11.0; bundled version is 5.11.0."
       },
       {
         "name": "local:note",
@@ -303,10 +303,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
+      "bom-ref": "pkg:composer/phpoffice/phpspreadsheet@5.11.0",
       "group": "phpoffice",
       "name": "phpspreadsheet",
-      "version": "5.10.0",
+      "version": "5.11.0",
       "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
       "scope": "required",
       "licenses": [
@@ -316,7 +316,7 @@
           }
         }
       ],
-      "purl": "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
+      "purl": "pkg:composer/phpoffice/phpspreadsheet@5.11.0",
       "externalReferences": [
         {
           "type": "vcs",
@@ -334,7 +334,7 @@
         },
         {
           "name": "local:directory-sha256",
-          "value": "be263259cf40c83efbe159f12a69efcfd0b8763fe2d6028b9a63940bb5b328c0"
+          "value": "a10feaf9a7a1e876dce38ce4e5043e0c2d66e2d050477a6a1c06e18aaec384bd"
         },
         {
           "name": "local:metadata-source",
@@ -342,7 +342,52 @@
         },
         {
           "name": "vcs:reference",
-          "value": "eb18727acf6b1f4cc67145a52ab04f9fd4c28d53"
+          "value": "3aa1f0d0f3c658b803c18050ac49244d07d96907"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:composer/phpoffice/wmf@0.2.1",
+      "group": "phpoffice",
+      "name": "wmf",
+      "version": "0.2.1",
+      "description": "WMF - Manipulate WMF Images",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:composer/phpoffice/wmf@0.2.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/PHPOffice/WMF.git"
+        },
+        {
+          "type": "website",
+          "url": "https://phpoffice.github.io/WMF/"
+        }
+      ],
+      "properties": [
+        {
+          "name": "local:path",
+          "value": "vendor/phpoffice/wmf"
+        },
+        {
+          "name": "local:directory-sha256",
+          "value": "5916ed4b1a31e915319da742176af987e0879f02cdce371a3b56d08364a0cf9a"
+        },
+        {
+          "name": "local:metadata-source",
+          "value": "vendor/composer/installed.json"
+        },
+        {
+          "name": "vcs:reference",
+          "value": "d1eafbab74509ee2adfcdda3888737cd8d349820"
         }
       ]
     },
@@ -893,7 +938,7 @@
       "dependsOn": [
         "platform:php",
         "pkg:github/nextcloud/server",
-        "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
+        "pkg:composer/phpoffice/phpspreadsheet@5.11.0",
         "pkg:npm/chart.js@4.4.9",
         "pkg:npm/svgcanvas@2.6.0",
         "pkg:npm/chartjs-adapter-moment@1.0.0",
@@ -935,14 +980,21 @@
       ]
     },
     {
-      "ref": "pkg:composer/phpoffice/phpspreadsheet@5.10.0",
+      "ref": "pkg:composer/phpoffice/phpspreadsheet@5.11.0",
       "dependsOn": [
         "pkg:composer/composer/pcre@3.4.0",
         "pkg:composer/maennchen/zipstream-php@3.1.2",
         "pkg:composer/markbaker/complex@3.0.2",
         "pkg:composer/markbaker/matrix@3.0.1",
         "platform:php",
+        "pkg:composer/phpoffice/wmf@0.2.1",
         "pkg:composer/psr/simple-cache@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:composer/phpoffice/wmf@0.2.1",
+      "dependsOn": [
+        "platform:php"
       ]
     },
     {
