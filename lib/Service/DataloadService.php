@@ -116,6 +116,10 @@ class DataloadService
         }
         $option = $this->DatasourceController->encodeOptionsForStorage((int)$dataload['datasource'], $option);
 
+        if (in_array($dataload['datasource'], [0, '0'], true)) {
+            $this->deletionFilter((int)$dataload['dataset'], $option);
+        }
+
         if (is_array($storageMapping)) {
             $storageMapping = json_encode($storageMapping, JSON_THROW_ON_ERROR);
         }
@@ -260,18 +264,15 @@ class DataloadService
                 'error' => 1,
             ];
         }
-        $option = json_decode($dataloadMetadata['option'], true);
-	        $datasetId = $dataloadMetadata['dataset'];
+        $datasetId = $dataloadMetadata['dataset'];
 
-        // this is a deletion request. Just run the deletion and stop after that with a return.
-	        if ($dataloadMetadata['datasource'] === 0) {
-            // deletion jobs are using the same dimension/option/value settings a report filter
-            $filter = array();
-            $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
-            // Text variables like %xx% could be in use here
-            $filter = $this->VariableService->replaceFilterVariables($filter);
-
-            $records = $this->StorageService->deleteWithFilter($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true));
+        if (in_array($dataloadMetadata['datasource'], [0, '0'], true)) {
+            try {
+                $filter = $this->deletionFilter((int)$datasetId, $dataloadMetadata['option']);
+                $records = $this->StorageService->deleteWithFilter($datasetId, $filter);
+            } catch (\InvalidArgumentException|FlexibleStorageException $e) {
+                return ['insert' => 0, 'update' => 0, 'delete' => 0, 'error' => 1, 'message' => $e->getMessage()];
+            }
 
             return [
                 'insert' => $insert,
@@ -279,9 +280,10 @@ class DataloadService
                 'delete' => $records,
                 'error' => $error,
             ];
-	        }
+        }
 
-	        $dataset = $this->DatasetService->read((int)$datasetId);
+        $option = json_decode($dataloadMetadata['option'], true);
+        $dataset = $this->DatasetService->read((int)$datasetId);
 	        if (is_array($dataset) && ($dataset['storageMode'] ?? 'legacy') === 'flexible_shared') {
 	            try {
 	                $flexibleResult = $this->FlexibleStorageService->executeMappedLoad(
@@ -400,7 +402,7 @@ class DataloadService
 
         if (!empty($dataloadMetadata)) {
 
-            if ($dataloadMetadata['datasource'] !== 0) {
+            if (!in_array($dataloadMetadata['datasource'], [0, '0'], true)) {
                 $dataloadMetadata['link'] = $dataloadMetadata['option']; //remap until data source table is renamed link=>option
                 unset($dataloadMetadata['cacheKey']);
                 if ($file !== null && $file !== '') {
@@ -435,27 +437,46 @@ class DataloadService
 	                    );
 	                }
             } else {
-                // this is a deletion request. Just run the simulation and return the possible row count in the expected result array
-                $option = json_decode($dataloadMetadata['option'], true);
-
-                // deletion jobs are using the same dimension/option/value settings a report filter
-                $filter = array();
-                $filter['filteroptions'] = '{"filter":{"' . $option['filterDimension'] . '":{"option":"' . $option['filterOption'] . '","value":"' . $option['filterValue'] . '"}}}';
-                // Text variables like %xx% could be in use here
-                $filter = $this->VariableService->replaceFilterVariables($filter);
-
-                $result = [
-                    'header' => '',
-                    'dimensions' => '',
-                    'data' => $this->StorageService->deleteWithFilterSimulate($dataloadMetadata['dataset'], json_decode($filter['filteroptions'], true)),
-                    'error' => 0,
-                ];
+                try {
+                    $datasetId = (int)$dataloadMetadata['dataset'];
+                    $filter = $this->deletionFilter($datasetId, $dataloadMetadata['option']);
+                    $count = $this->StorageService->deleteWithFilterSimulate($datasetId, $filter);
+                    $result = ['header' => '', 'dimensions' => '', 'data' => $count, 'error' => 0];
+                } catch (\InvalidArgumentException|FlexibleStorageException $e) {
+                    $result = ['header' => '', 'dimensions' => '', 'data' => [], 'error' => $e->getMessage()];
+                }
             }
 
             return $result;
         } else {
             return new NotFoundResponse();
         }
+    }
+
+    private function deletionFilter(int $datasetId, ?string $options): array
+    {
+        $options = json_decode($options ?? '', true);
+        $dimension = $options['filterDimension'] ?? null;
+        $operator = $options['filterOption'] ?? null;
+        $value = $options['filterValue'] ?? null;
+        $dataset = $this->DatasetService->read($datasetId);
+        $dimensions = ['dimension1', 'dimension2'];
+        if (($dataset['storageMode'] ?? '') === 'flexible_shared') {
+            $columns = array_filter($dataset['columns'], static fn ($column) => $column['role'] === 'dimension');
+            $dimensions = array_column($columns, 'ref');
+        }
+        if (!$dataset || !in_array($dimension, $dimensions, true)
+            || !in_array($operator, ['EQ', 'GT', 'LT', 'LIKE', 'NOTLIKE', 'IN', 'NOTIN'], true)
+            || !is_string($value) || trim($value, " '\t\n\r") === ''
+            || (in_array($operator, ['IN', 'NOTIN'], true) && trim($value, " ,;\t\n\r") === '')) {
+            throw new \InvalidArgumentException($this->l10n->t('Select a valid column, operator, and value for the deletion filter.'));
+        }
+
+        $filter = ['filter' => [$dimension => ['option' => $operator, 'value' => $value]]];
+        $metadata = $this->VariableService->replaceFilterVariables([
+            'filteroptions' => json_encode($filter, JSON_THROW_ON_ERROR),
+        ]);
+        return json_decode($metadata['filteroptions'], true, 512, JSON_THROW_ON_ERROR);
     }
 
     // Data Manipulation

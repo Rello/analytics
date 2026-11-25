@@ -456,15 +456,18 @@ class FlexibleStorageService {
 		$this->requireFlexible($datasetId, false);
 		$columns = $this->storageMapper->getColumns($datasetId);
 		$filters = [];
-		foreach (($options['filter'] ?? []) as $key => $filter) {
-			if (!is_array($filter)) {
-				continue;
+		if (empty($options['filter']) || !is_array($options['filter'])) {
+			throw new FlexibleStorageException('invalid_filter', 'A deletion filter is required.');
+		}
+		foreach ($options['filter'] as $key => $filter) {
+			if (!isset($filter['option'], $filter['value'])) {
+				throw new FlexibleStorageException('invalid_filter', 'A deletion filter requires an operator and a value.');
 			}
 			$reference = (string)($filter['dimension'] ?? $key);
 			$filters[] = [
 				'column' => $reference,
-				'operator' => $filter['option'] ?? 'EQ',
-				'value' => $filter['value'] ?? null,
+				'operator' => $filter['option'],
+				'value' => $filter['value'],
 			];
 		}
 		$recordIds = [];

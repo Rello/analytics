@@ -18,6 +18,57 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class DataloadServiceTest extends TestCase {
+	/** @dataProvider invalidDeletionOptions */
+	public function testInvalidStoredDeletionJobCannotCountOrDeleteRows(string $options): void {
+		$loads = $this->createMock(DataloadMapper::class);
+		$metadata = ['datasource' => '0', 'dataset' => 11, 'option' => $options];
+		$loads->method('readOwnById')->willReturn($metadata);
+		$loads->method('getDataloadById')->willReturn($metadata);
+		$datasets = $this->createMock(DatasetService::class);
+		$datasets->method('read')->willReturn(['storageMode' => 'legacy']);
+		$storage = $this->createMock(StorageService::class);
+		$storage->expects($this->never())->method('deleteWithFilterSimulate');
+		$storage->expects($this->never())->method('deleteWithFilter');
+		$service = $this->createService($this->createMock(DatasourceController::class), $loads, $datasets, storageService: $storage);
+
+		$this->assertNotEmpty($service->getDataFromDatasource(42)['error']);
+		foreach ([true, false] as $enforceOwnership) {
+			$result = $service->execute(42, null, $enforceOwnership);
+			$this->assertSame(1, $result['error']);
+			$this->assertSame(0, $result['delete']);
+		}
+	}
+
+	public static function invalidDeletionOptions(): array {
+		return [
+			'incomplete saved job' => ['{}'],
+			'invalid JSON' => ['{'],
+			'unknown column' => ['{"filterDimension":"obsolete","filterOption":"EQ","filterValue":"0"}'],
+			'unknown operator' => ['{"filterDimension":"dimension2","filterOption":"obsolete","filterValue":"%currentday%"}'],
+			'missing value' => ['{"filterDimension":"dimension1","filterOption":"LIKE"}'],
+			'empty contains' => ['{"filterDimension":"dimension1","filterOption":"LIKE","filterValue":" "}'],
+			'empty exclusion list' => ['{"filterDimension":"dimension1","filterOption":"NOTIN","filterValue":";,"}'],
+		];
+	}
+
+	public function testDeletionExecutionUsesTheSameLiteralFilterAsSimulation(): void {
+		$value = 'Sales "North"';
+		$options = ['filterDimension' => 'c_2', 'filterOption' => 'EQ', 'filterValue' => $value];
+		$loads = $this->createMock(DataloadMapper::class);
+		$loads->method('readOwnById')->willReturn(['datasource' => 0, 'dataset' => 11, 'option' => json_encode($options)]);
+		$datasets = $this->createMock(DatasetService::class);
+		$datasets->method('read')->willReturn(['storageMode' => 'flexible_shared', 'columns' => [['role' => 'dimension', 'ref' => 'c_2']]]);
+		$variables = $this->createMock(VariableService::class);
+		$variables->method('replaceFilterVariables')->willReturnArgument(0);
+		$storage = $this->createMock(StorageService::class);
+		$expected = ['filter' => ['c_2' => ['option' => 'EQ', 'value' => $value]]];
+		$storage->expects($this->once())->method('deleteWithFilterSimulate')->with(11, $expected)->willReturn(['count' => 1]);
+		$storage->expects($this->once())->method('deleteWithFilter')->with(11, $expected)->willReturn(1);
+		$service = $this->createService($this->createMock(DatasourceController::class), $loads, $datasets, storageService: $storage, variableService: $variables);
+
+		$this->assertSame(1, $service->execute(42)['delete']);
+	}
+
 	public function testDataloadUpdateValidatesOptionsForTheStoredDatasourceBeforeWriting(): void {
 		$options = '{"mode":"unavailable"}';
 		$dataloadMapper = $this->createMock(DataloadMapper::class);

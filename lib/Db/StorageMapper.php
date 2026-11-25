@@ -258,7 +258,7 @@ class StorageMapper
         $sql->delete(self::TABLE_NAME)
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
-        $this->applyFilterOptions($sql, $options);
+        $this->applyFilterOptions($sql, $options, required: true);
         return $sql->executeStatement(); // number of deleted rows
     }
 
@@ -276,7 +276,7 @@ class StorageMapper
             ->selectAlias($sql->func()->count('*'), 'count')
             ->where($sql->expr()->eq('dataset', $sql->createNamedParameter($datasetId)));
 
-        $this->applyFilterOptions($sql, $options);
+        $this->applyFilterOptions($sql, $options, required: true);
 
         $statement = $sql->executeQuery();
         $result = $statement->fetch();
@@ -319,21 +319,33 @@ class StorageMapper
         return $result;
     }
 
-	private function applyFilterOptions(IQueryBuilder $sql, $options): void
+	private function applyFilterOptions(IQueryBuilder $sql, $options, bool $required = false): void
 	{
-		if (!isset($options['filter']) || !is_array($options['filter'])) {
+		if (empty($options['filter']) || !is_array($options['filter'])) {
+			if ($required) {
+				throw new \InvalidArgumentException('A deletion filter is required.');
+			}
 			return;
 		}
 
 		foreach ($this->groupFiltersByDimension($options['filter']) as $dimension => $filters) {
 			$column = $this->getAllowedFilterColumn($dimension);
 			if ($column === null) {
+				if ($required) {
+					throw new \InvalidArgumentException('Unknown deletion filter column.');
+				}
 				continue;
 			}
 
 			$expressions = [];
 			foreach ($filters as $filter) {
+				if ($required && !isset($filter['option'], $filter['value'])) {
+					throw new \InvalidArgumentException('A deletion filter requires an operator and a value.');
+				}
 				$expression = $this->buildFilterExpression($sql, $column, $filter['option'], $filter['value']);
+				if ($expression === null && $required) {
+					throw new \InvalidArgumentException('Unknown deletion filter operator.');
+				}
 				if ($expression !== null) {
 					if ($filter['option'] === 'NOTIN') {
 						$sql->andWhere($expression);

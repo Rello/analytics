@@ -12,6 +12,7 @@
 - Update PhpSpreadsheet to 5.11.0 for spreadsheet reader and formula fixes.
 
 ### Fixed
+- Stop deletion jobs with missing or invalid filters before they can remove dataset rows.
 - Reject unavailable datasource dropdown selections when saving reports or data loads, importing data loads, and previewing data.
 - Restore inherited permissions for reports and Panoramas in shared folders so recipients with edit permission can change filters.
 - Repair legacy sharing and data load columns during upgrades and correct schema checks on Nextcloud 35.

@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const {
   assertSimulationData,
@@ -54,6 +55,22 @@ const dataloadName = 'Test Deletion';
     await fillRequired(page, '#filterValue', 'Dimension 2', 'deletion filter value');
     await clickFirst(page, ['#dataloadUpdateButton'], 'update deletion');
     await waitForToastAndDismiss(page);
+
+    steps.push('reject an obsolete deletion filter and preserve the saved job');
+    const request = await page.evaluate(() => ({
+      url: new URL(OC.generateUrl('apps/analytics/dataload/') + document.getElementById('dataloadDetail').dataset.dataloadId, location.href).href,
+      headers: Object.fromEntries(OCA.Analytics.headers()),
+    }));
+    const rejected = await page.request.put(request.url, {
+      headers: request.headers,
+      data: {
+        name: dataloadName,
+        schedule: '',
+        option: JSON.stringify({filterDimension: 'obsolete', filterOption: 'EQ', filterValue: 'Dimension 2'}),
+      },
+    });
+    assert.equal(rejected.status(), 400);
+    assert.ok((await rejected.json()).error);
 
     steps.push('execute deletion simulation');
     await clickFirst(page, ['#dataloadExecuteButton'], 'execute deletion');
