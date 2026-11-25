@@ -68,6 +68,21 @@ OCA.Analytics.Visualization = {
 
     _hexToRgbCache: {},
 
+    getNearestXItems: function (chart, event, options, useFinalPosition) {
+        const nearest = Chart.Interaction.modes.nearest(chart, event, {
+            axis: 'x',
+            intersect: options.intersect,
+            includeInvisible: options.includeInvisible,
+        }, useFinalPosition);
+        if (nearest.length < 2) return nearest;
+
+        // At a midpoint Chart.js returns both dates. Sparse series can have
+        // different array indexes for the same date, so match their parsed x.
+        const getX = item => chart.getDatasetMeta(item.datasetIndex).controller.getParsed(item.index).x;
+        const selectedX = getX(nearest[0]);
+        return nearest.filter(item => getX(item) === selectedX);
+    },
+
     getSharedTooltipOptions: function () {
         return {
             mode: 'x',
@@ -1831,6 +1846,14 @@ OCA.Analytics.Visualization = {
         jsondata.options.chart === '' ? chartTypeFull = 'column' : chartTypeFull = jsondata.options.chart;
         let chartType = chartTypeFull.replace(/St100$/, '').replace(/St$/, '');
         const guiState = OCA.Analytics.ChartOptions.getGuiState(jsondata.options.chartoptions);
+
+        if (OCA.Analytics.chartTypeMapping[chartType] === 'line') {
+            Chart.Interaction.modes.analyticsNearestX = this.getNearestXItems;
+            chartOptions.interaction = {mode: 'analyticsNearestX', intersect: false};
+            if (chartOptions.plugins?.tooltip) {
+                chartOptions.plugins.tooltip.mode = chartOptions.interaction.mode;
+            }
+        }
 
         // get the default settings for a chart
         Chart.defaults.elements.line.borderWidth = 2;
