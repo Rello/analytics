@@ -2,7 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Analytics OCS API",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "description": "Analytics OCS v1. Additional endpoints wrap existing services and permissions using ordinary Nextcloud authentication. See docs/ocs-reports-api-v1.md for native JSON, partial updates, secret handling, Chart.js merge precedence and sequential retry limitations."
   },
   "paths": {
     "/ocs/v2.php/apps/analytics/createFromDataFile": {
@@ -172,7 +173,7 @@
       "get": {
         "operationId": "listReports",
         "summary": "List owned and shared reports",
-        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access.",
+        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access. Returns parent and type. Groups are omitted by default; includeGroups=true includes all accessible nested groups. No inaccessible ancestors are fetched.\n\nReports and datasets are different objects; several reports can reference the same dataset. With includeGroups enabled, type 0 identifies a navigation group, not a renderable report. Traverse parent IDs recursively, including nested descendants, with a visited-ID set; parent 0/null denotes the root. Resolve duplicate group names by ancestry. Missing ancestors may be inaccessible. Report groups and dataset groups are separate namespaces. To find datasets used under a report group, deduplicate nonzero dataset IDs from descendant reports and check owned dataset details.",
         "tags": [
           "analytics"
         ],
@@ -192,6 +193,15 @@
                 "true"
               ]
             }
+          },
+          {
+            "name": "includeGroups",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include accessible navigation groups (type 0), at every nesting level. Follow parent IDs within this resource namespace; groups are not data-bearing items."
           }
         ],
         "responses": {
@@ -257,13 +267,118 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "createReportConfiguration",
+        "summary": "Create report configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nOperations are independent; there is no transaction across calls. Retain returned IDs when a later operation fails. After an uncertain creation response, inspect existing objects before retrying: names are not unique and retrying can create duplicates.\n\nUse native Analytics chart names, not arbitrary Chart.js type names. For a table-only report set visualization to table; chart is not table. Stored reports default to type 2. Live sources require an enabled provider type and dataset 0; link contains flat provider settings, not a sourceOptions wrapper. Retain returned report IDs for Panorama composition.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSReportConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ReportConfigurationWrite"
+                  },
+                  {
+                    "required": [
+                      "name"
+                    ]
+                  }
+                ]
+              },
+              "examples": {
+                "line": {
+                  "summary": "Line report using an existing dataset",
+                  "value": {
+                    "name": "Revenue",
+                    "dataset": 42,
+                    "chart": "line",
+                    "chartoptions": {
+                      "elements": {
+                        "line": {
+                          "tension": 0.37
+                        }
+                      }
+                    }
+                  }
+                },
+                "table": {
+                  "summary": "Table-only report",
+                  "value": {
+                    "name": "Revenue table",
+                    "dataset": 42,
+                    "visualization": "table"
+                  }
+                },
+                "pie": {
+                  "summary": "Solid pie using native doughnut mode",
+                  "value": {
+                    "name": "Regional revenue",
+                    "dataset": 42,
+                    "chart": "doughnut",
+                    "chartoptions": {
+                      "cutout": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ocs/v2.php/apps/analytics/api/v1/reports/{reportId}": {
       "get": {
         "operationId": "getReport",
         "summary": "Get accessible report metadata",
-        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access.",
+        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access.\n\nShared-safe metadata can contain native options encoded as JSON strings. Access to a shared report does not grant access to its editable source configuration or its underlying dataset.",
         "tags": [
           "analytics"
         ],
@@ -382,13 +497,108 @@
             }
           }
         }
+      },
+      "put": {
+        "operationId": "updateReportConfiguration",
+        "summary": "Update report configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nRead editable configuration immediately before updating. type and dataset are immutable. Supplied chartoptions, dataoptions, filteroptions and tableoptions replace complete values rather than merging nested keys; preserve unrelated settings and use null to clear. link replaces visible source settings while retaining omitted write-only settings; link:null clears all settings including credentials. Unsupported report-level chart values return HTTP 400 and must be corrected before retrying.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSReportConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportConfigurationWrite"
+              },
+              "examples": {
+                "title": {
+                  "summary": "Change title without replacing options",
+                  "value": {
+                    "name": "Monthly revenue performance",
+                    "subheader": "Revenue versus target"
+                  }
+                },
+                "options": {
+                  "summary": "Replace the complete chart options object",
+                  "value": {
+                    "chartoptions": {
+                      "elements": {
+                        "line": {
+                          "tension": 0.2
+                        }
+                      },
+                      "plugins": {
+                        "legend": {
+                          "display": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ocs/v2.php/apps/analytics/api/v1/reports/{reportId}/data": {
       "get": {
         "operationId": "getReportData",
         "summary": "Get report data with saved filters",
-        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access. Uses the report viewer backend pipeline, including saved filters, variables, sorting and transformations. No temporary filter overrides. Browser-side formatting and pivots are not rendered. Datasource failures use the payload error field.",
+        "description": "Includes reports shared with the user, their groups, or through report folders. Excludes public-link-only and panorama-only access. Uses the report viewer backend pipeline, including saved filters, variables, sorting and transformations. No temporary filter overrides. Browser-side formatting and pivots are not rendered. Datasource failures use the payload error field.\n\nReads viewer backend data with saved filters and transformations and may execute the configured source. It does not render a chart. A provider error is a failed data read, not an empty dataset.",
         "tags": [
           "analytics"
         ],
@@ -513,7 +723,7 @@
       "get": {
         "operationId": "listDatasets",
         "summary": "List owned datasets",
-        "description": "List owned datasets with only their ID, name and column labels. Shared reports do not grant dataset write access. The legacy V3 dataset response is unchanged.",
+        "description": "List owned datasets with their ID, name, column labels, parent and type. Shared reports do not grant dataset write access. The legacy V3 dataset response is unchanged. Returns parent and type. Groups are omitted by default; includeGroups=true includes all accessible nested groups. No inaccessible ancestors are fetched.\n\nUse this endpoint to discover datasets under a dataset navigation group, rather than inferring one dataset per report. With includeGroups enabled, type 0 identifies a group, not a data-bearing dataset. Recursively traverse parent IDs with a visited-ID set; parent 0/null denotes the root. Resolve duplicate names by ancestry and include nested descendants. Never use a group ID as a dataset ID. Dataset groups are separate from report groups. Read dataset details before choosing legacy-row or flexible-record operations or shared filter mappings.",
         "tags": [
           "analytics"
         ],
@@ -533,6 +743,15 @@
                 "true"
               ]
             }
+          },
+          {
+            "name": "includeGroups",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include accessible navigation groups (type 0), at every nesting level. Follow parent IDs within this resource namespace; groups are not data-bearing items."
           }
         ],
         "responses": {
@@ -591,6 +810,29 @@
                               "value": {
                                 "type": "string",
                                 "nullable": true
+                              },
+                              "parent": {
+                                "description": "Parent group ID; 0 or null is root. A shared item may reference a group not accessible to this user.",
+                                "oneOf": [
+                                  {
+                                    "type": "integer",
+                                    "nullable": true
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "type": {
+                                "description": "0 is a navigation group; nonzero is a report provider or dataset type.",
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
                               }
                             }
                           }
@@ -631,13 +873,115 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "createDatasetConfiguration",
+        "summary": "Create dataset configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nOperations are independent; there is no transaction across calls. Retain returned IDs when a later operation fails. After an uncertain creation response, inspect existing objects before retrying: names are not unique and retrying can create duplicates.\n\nCreates an owned dataset, not a live connection to another application. Data copied from another application is a snapshot unless a separately configured existing provider supplies ongoing updates.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDatasetConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DatasetConfigurationWrite"
+                  },
+                  {
+                    "required": [
+                      "name"
+                    ]
+                  }
+                ]
+              },
+              "examples": {
+                "legacy": {
+                  "summary": "Classic dataset",
+                  "value": {
+                    "name": "Revenue",
+                    "dimension1": "Region",
+                    "dimension2": "Month",
+                    "value": "Revenue"
+                  }
+                },
+                "flexible": {
+                  "summary": "Flexible dataset",
+                  "value": {
+                    "name": "Sales",
+                    "storageMode": "flexible_shared",
+                    "columns": [
+                      {
+                        "name": "Region",
+                        "type": "text",
+                        "role": "dimension",
+                        "nullable": false
+                      },
+                      {
+                        "name": "Revenue",
+                        "type": "decimal",
+                        "role": "measure",
+                        "nullable": true,
+                        "defaultAggregation": "sum"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/data/add": {
       "post": {
         "operationId": "addDatasetData",
         "summary": "Add or update dataset rows",
-        "description": "Delegates to the existing V4 external API. Requires ownership of a legacy dataset; flexible datasets are rejected. Application errors retain HTTP 200 and success=false with error.code and error.message in ocs.data (9002 invalid input, 9003 missing or unauthorized dataset, 9004 unsupported storage mode). Inspect success, not only ocs.meta. The URL datasetId takes precedence over body parameters.",
+        "description": "Delegates to the existing V4 external API. Requires ownership of a legacy dataset; flexible datasets are rejected. Application errors retain HTTP 200 and success=false with error.code and error.message in ocs.data (9002 invalid input, 9003 missing or unauthorized dataset, 9004 unsupported storage mode). Inspect success, not only ocs.meta. The URL datasetId takes precedence over body parameters.\n\nFor legacy storage only; read dataset details first. Existing dimension identities are overwritten. Copying values from another application creates a snapshot, not a live connection. Send the complete intended data rather than a truncated preview.",
         "tags": [
           "analytics"
         ],
@@ -744,6 +1088,20 @@
                       "additionalProperties": {},
                       "description": "Provide dimension1, dimension2 and value using technical keys or configured dataset column names."
                     }
+                  }
+                }
+              },
+              "examples": {
+                "rows": {
+                  "summary": "Add or overwrite a classic row",
+                  "value": {
+                    "data": [
+                      {
+                        "dimension1": "North",
+                        "dimension2": "2026-11",
+                        "value": "42"
+                      }
+                    ]
                   }
                 }
               }
@@ -891,6 +1249,1382 @@
           }
         }
       }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasources": {
+      "get": {
+        "operationId": "listDatasourceProviders",
+        "summary": "List datasource providers",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Existing enabled built-in/registered providers and their native option definitions. No new source discovery integration.\n\nReturns enabled provider IDs and native option/report templates. Use these templates to configure existing providers; creating a dataset or saving a dataload does not establish a new cross-application integration.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDatasourceCatalogue"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/reports/{reportId}/configuration": {
+      "get": {
+        "operationId": "getReportConfiguration",
+        "summary": "Get report configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Owner-only editable configuration without text-variable expansion; source credentials/unknown settings and remote URLs are write-only. Existing shared metadata reads are unchanged.\n\nRead this owner-only configuration before updating. Native options are objects/arrays. Write-only source settings are omitted; omission from a read response does not mean that a setting is absent. Preserve unrelated options when replacing an option object.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSReportConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}": {
+      "put": {
+        "operationId": "updateDatasetConfiguration",
+        "summary": "Update dataset configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nRead current dataset details first. storageMode cannot change. All flexible dataset updates, including renames, require expectedSchemaVersion and replace the complete columns array: retain every existing column and its stable ref. Omitted fields remain unchanged.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDatasetConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatasetConfigurationWrite"
+              },
+              "examples": {
+                "rename": {
+                  "summary": "Rename a legacy dataset without replacing column labels",
+                  "value": {
+                    "name": "Regional sales"
+                  }
+                },
+                "schema": {
+                  "summary": "Replace complete two-column schema using existing refs",
+                  "value": {
+                    "expectedSchemaVersion": 1,
+                    "columns": [
+                      {
+                        "ref": "c_101",
+                        "name": "Region",
+                        "type": "text",
+                        "role": "dimension",
+                        "nullable": false
+                      },
+                      {
+                        "ref": "c_102",
+                        "name": "Revenue",
+                        "type": "decimal",
+                        "role": "measure",
+                        "nullable": true,
+                        "defaultAggregation": "sum"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getDatasetConfiguration",
+        "summary": "Get dataset configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nReturns storageMode, schemaVersion and stable column refs. legacy datasets use classic row operations; flexible_shared datasets use record operations and schema versions.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDatasetConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/dataloads": {
+      "post": {
+        "operationId": "createDataloadConfiguration",
+        "summary": "Create dataload configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nOperations are independent; there is no transaction across calls. Retain returned IDs when a later operation fails. After an uncertain creation response, inspect existing objects before retrying: names are not unique and retrying can create duplicates.\n\nRequires an owned dataset and an enabled datasource provider. option is a flat provider-settings object. Saving configures the load without executing it; it does not add a new provider integration.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDataloadConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DataloadConfigurationWrite"
+                  },
+                  {
+                    "required": [
+                      "dataset",
+                      "datasource"
+                    ]
+                  }
+                ]
+              },
+              "examples": {
+                "file": {
+                  "summary": "Configure an existing file provider without executing it",
+                  "value": {
+                    "dataset": 42,
+                    "datasource": 1,
+                    "option": {
+                      "link": "/Revenue.csv",
+                      "hasHeader": "true"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/dataloads/{dataloadId}": {
+      "put": {
+        "operationId": "updateDataloadConfiguration",
+        "summary": "Update dataload configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nRead current settings first. dataset and datasource cannot change. option replaces visible settings while preserving omitted write-only values; null clears all settings. storageMapping replaces the whole mapping; null or {} clears it. A null or empty schedule disables scheduling. Saving does not execute the load.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "dataloadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDataloadConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataloadConfigurationWrite"
+              },
+              "examples": {
+                "disable": {
+                  "summary": "Disable scheduling without replacing provider settings",
+                  "value": {
+                    "schedule": ""
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getDataloadConfiguration",
+        "summary": "Get dataload configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nRead current settings before updating. Write-only provider settings are omitted from responses; omission does not mean they are absent.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "dataloadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSDataloadConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/panoramas": {
+      "post": {
+        "operationId": "createPanoramaConfiguration",
+        "summary": "Create panorama configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nOperations are independent; there is no transaction across calls. Retain returned IDs when a later operation fails. After an uncertain creation response, inspect existing objects before retrying: names are not unique and retrying can create duplicates.\n\nUse existing, accessible report IDs, for example IDs returned by separate report creation calls. Choose a layout with enough slots for every tile. Five reports across two pages can use layout 1 (three slots) followed by layout 5 (two slots). For shared filters, inspect report data labels and dataset column refs and supply mappings only for compatible dimensions.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSPanoramaConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PanoramaConfigurationWrite"
+                  },
+                  {
+                    "required": [
+                      "name"
+                    ]
+                  }
+                ]
+              },
+              "examples": {
+                "overview": {
+                  "summary": "Two stacked panels containing a report and text",
+                  "value": {
+                    "name": "Overview",
+                    "pages": [
+                      {
+                        "page": 0,
+                        "name": "Overview",
+                        "layoutId": 5,
+                        "reports": [
+                          {
+                            "type": 0,
+                            "value": 42
+                          },
+                          {
+                            "type": 1,
+                            "value": "Snapshot"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listPanoramas",
+        "summary": "List panoramas",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nReturns accessible Panorama IDs/names, excluding folders. Names need not be unique; use returned IDs for subsequent operations.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "parent": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "permissions": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/panoramas/{panoramaId}": {
+      "put": {
+        "operationId": "updatePanoramaConfiguration",
+        "summary": "Update panorama configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nRead current state first. pages and filters replace complete arrays; [] clears either array. filters:null clears filters, but pages:null is invalid. Omitted fields remain unchanged. Number pages explicitly and preserve unrelated tiles. Filter mappings must reference report tiles and real dimension labels/refs.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "panoramaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSPanoramaConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PanoramaConfigurationWrite"
+              },
+              "examples": {
+                "rename": {
+                  "summary": "Rename while preserving pages and filters",
+                  "value": {
+                    "name": "Sales overview"
+                  }
+                },
+                "clearFilters": {
+                  "summary": "Remove all shared filters while preserving pages",
+                  "value": {
+                    "filters": []
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getPanoramaConfiguration",
+        "summary": "Get panorama configuration",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nRead current pages and filters before editing. Updates replace complete arrays; preserve unrelated pages, tiles and filters.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "panoramaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCSPanoramaConfiguration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/dataloads": {
+      "get": {
+        "operationId": "listDatasetDataloads",
+        "summary": "List dataset dataloads",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.\n\nLists owned dataset load configurations. A saved configuration does not mean data has been fetched.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/DataloadConfiguration"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/records": {
+      "post": {
+        "operationId": "upsertFlexibleRecords",
+        "summary": "Upsert flexible records",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Existing owner-only flexible record upsert; keys are stable c_<id> references. See docs/flexible-storage-api-v1.md for limits, identity and values.\n\nFor flexible_shared storage only. Read the current schema first and use stable column refs with schemaVersion. Full records replace values for existing dimension identities; nullable omissions become null. Use strings for decimal values to preserve precision.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "records": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "values": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "values"
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "schemaVersion",
+                  "records"
+                ]
+              },
+              "examples": {
+                "records": {
+                  "summary": "Upsert complete records with stable column refs",
+                  "value": {
+                    "schemaVersion": 1,
+                    "records": [
+                      {
+                        "values": {
+                          "c_101": "North",
+                          "c_102": "42"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/records/{recordId}": {
+      "put": {
+        "operationId": "replaceFlexibleRecord",
+        "summary": "Replace flexible record",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Replace one record in an owned flexible_shared dataset. Read the dataset schema and current record values first. Supply schemaVersion and a complete values object using stable column refs; this is a replacement, not a partial field update. Preserve decimal precision with strings. HTTP 409 indicates a stale schema or identity conflict; refresh the relevant state before retrying. See docs/flexible-storage-api-v1.md.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "values": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "schemaVersion",
+                  "values"
+                ]
+              },
+              "examples": {
+                "record": {
+                  "summary": "Replace all values in a record",
+                  "value": {
+                    "schemaVersion": 1,
+                    "values": {
+                      "c_101": "North",
+                      "c_102": "42"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteFlexibleRecord",
+        "summary": "Delete flexible record",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Authenticated native configuration. Owner-only writes. Omitted fields retain saved values; supplied option objects replace them. See docs/ocs-reports-api-v1.md for clearing, secret preservation and sequential retry semantics.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        }
+      }
+    },
+    "/ocs/v2.php/apps/analytics/api/v1/datasets/{datasetId}/query": {
+      "post": {
+        "operationId": "queryFlexibleDataset",
+        "summary": "Query flexible dataset",
+        "tags": [
+          "analytics"
+        ],
+        "description": "Read an owned flexible_shared dataset using its native query. This POST operation is read-only. Read the schema first and use actual stable column refs. Supports raw or grouped queries with native filters, sorting and measures. Use backend limit/offset for record pagination; a page or sample is not the complete dataset or a complete aggregate. See docs/flexible-storage-api-v1.md for query formats and limits.",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "OCS-APIRequest",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "datasetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ocs"
+                  ],
+                  "properties": {
+                    "ocs": {
+                      "type": "object",
+                      "required": [
+                        "meta",
+                        "data"
+                      ],
+                      "properties": {
+                        "meta": {
+                          "$ref": "#/components/schemas/OCSMeta"
+                        },
+                        "data": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ConfigurationError400"
+          },
+          "401": {
+            "$ref": "#/components/responses/ConfigurationError401"
+          },
+          "404": {
+            "$ref": "#/components/responses/ConfigurationError404"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConfigurationError409"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Existing flexible raw/grouped query: columns, dimensions, measures, filters, sort, aggregate, timeAggregation, topN, limit<=1000 and offset. See docs/flexible-storage-api-v1.md."
+              },
+              "examples": {
+                "raw": {
+                  "summary": "Read a page of raw records",
+                  "value": {
+                    "aggregate": false,
+                    "columns": [
+                      "c_101",
+                      "c_102"
+                    ],
+                    "limit": 100,
+                    "offset": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -943,6 +2677,29 @@
             "type": "string"
           },
           "dataset": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "parent": {
+            "description": "Parent group ID; 0 or null is root. A shared item may reference a group not accessible to this user.",
+            "oneOf": [
+              {
+                "type": "integer",
+                "nullable": true
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "description": "0 is a navigation group; nonzero is a report provider or dataset type.",
             "oneOf": [
               {
                 "type": "integer"
@@ -1181,6 +2938,1063 @@
               },
               "message": {
                 "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ReportConfigurationWrite": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subheader": {
+            "type": "string",
+            "nullable": true
+          },
+          "parent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "type": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Provider type on creation; immutable on update."
+          },
+          "dataset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Creation: 0 creates an internal dataset for type=2; nonzero requires an owned dataset. Immutable on update."
+          },
+          "visualization": {
+            "type": "string",
+            "description": "Native display mode: chart, table, or ct (chart and table). For a table-only report use visualization:\"table\", not chart:\"table\"."
+          },
+          "chart": {
+            "type": "string",
+            "enum": [
+              "",
+              "column",
+              "columnSt",
+              "columnSt100",
+              "line",
+              "datetime",
+              "area",
+              "doughnut",
+              "funnel"
+            ],
+            "description": "Analytics chart type; empty defaults to column. For a solid pie use doughnut with chartoptions.cutout=0. Unsupported values are rejected with HTTP 400. These are report-level Analytics names: use column for bars, doughnut for pie-style distributions, and visualization:\"table\" for tables. The restriction does not apply to per-series Chart.js types in dataoptions."
+          },
+          "refresh": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "dimension1": {
+            "type": "string"
+          },
+          "dimension2": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "chartoptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values. Chart.js 4 JSON options remain flexible; JavaScript and callbacks are unsupported. Legend visibility is plugins.legend.display, not legend.display. __analytics_gui, analyticsModel and scales.secondary have GUI precedence. Read current configuration and preserve unrelated nested options before replacement.",
+            "example": {
+              "elements": {
+                "line": {
+                  "tension": 0.2
+                }
+              },
+              "plugins": {
+                "legend": {
+                  "display": false
+                }
+              }
+            }
+          },
+          "dataoptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values."
+          },
+          "filteroptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values."
+          },
+          "tableoptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values."
+          },
+          "link": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "nullable": true
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Flat native provider settings. Reads omit write-only credentials, credential-bearing URLs and unknown settings. Replacement preserves omitted write-only fields; null clears the entire source including credentials; a null property clears that key. See docs/ocs-reports-api-v1.md."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Native configuration adapted to existing report services. type/dataset are immutable after creation; type=2 with dataset=0 keeps the existing implicit dataset creation behaviour."
+      },
+      "ReportConfiguration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subheader": {
+            "type": "string",
+            "nullable": true
+          },
+          "parent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "type": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Provider type on creation; immutable on update."
+          },
+          "dataset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Creation: 0 creates an internal dataset for type=2; nonzero requires an owned dataset. Immutable on update."
+          },
+          "visualization": {
+            "type": "string",
+            "description": "Native display mode: chart, table, or ct (chart and table). For a table-only report use visualization:\"table\", not chart:\"table\"."
+          },
+          "chart": {
+            "type": "string",
+            "enum": [
+              "",
+              "column",
+              "columnSt",
+              "columnSt100",
+              "line",
+              "datetime",
+              "area",
+              "doughnut",
+              "funnel"
+            ],
+            "description": "Analytics chart type; empty defaults to column. For a solid pie use doughnut with chartoptions.cutout=0. Unsupported values are rejected with HTTP 400. These are report-level Analytics names: use column for bars, doughnut for pie-style distributions, and visualization:\"table\" for tables. The restriction does not apply to per-series Chart.js types in dataoptions."
+          },
+          "refresh": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "dimension1": {
+            "type": "string"
+          },
+          "dimension2": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "chartoptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values. Chart.js 4 JSON options remain flexible; JavaScript and callbacks are unsupported. Legend visibility is plugins.legend.display, not legend.display. __analytics_gui, analyticsModel and scales.secondary have GUI precedence. Read current configuration and preserve unrelated nested options before replacement.",
+            "example": {
+              "elements": {
+                "line": {
+                  "tension": 0.2
+                }
+              },
+              "plugins": {
+                "legend": {
+                  "display": false
+                }
+              }
+            }
+          },
+          "dataoptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values."
+          },
+          "filteroptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values."
+          },
+          "tableoptions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values."
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "url": {
+            "type": "string",
+            "description": "Root-relative object URL. Preserve the returned relative path in links, or resolve it against the current browser origin including its port. Do not prepend a guessed hostname or an internal service address.",
+            "example": "/apps/analytics/r/42"
+          },
+          "link": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "nullable": true
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Flat native provider settings. Reads omit write-only credentials, credential-bearing URLs and unknown settings. Replacement preserves omitted write-only fields; null clears the entire source including credentials; a null property clears that key. See docs/ocs-reports-api-v1.md."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "description": "Native configuration adapted to existing report services. type/dataset are immutable after creation; type=2 with dataset=0 keeps the existing implicit dataset creation behaviour."
+      },
+      "FlexibleColumn": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "ref": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "decimal",
+              "date",
+              "datetime",
+              "boolean"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "dimension",
+              "measure"
+            ]
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "nullable": {
+            "type": "boolean"
+          },
+          "defaultAggregation": {
+            "type": "string",
+            "enum": [
+              "sum",
+              "avg",
+              "min",
+              "max",
+              "count",
+              "count_distinct"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "type",
+          "role"
+        ]
+      },
+      "DatasetConfigurationWrite": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subheader": {
+            "type": "string",
+            "nullable": true
+          },
+          "dimension1": {
+            "type": "string"
+          },
+          "dimension2": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "storageMode": {
+            "type": "string",
+            "enum": [
+              "legacy",
+              "flexible_shared"
+            ],
+            "description": "legacy uses classic rows; flexible_shared uses schema-versioned records. Immutable after creation."
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlexibleColumn"
+            },
+            "description": "Complete flexible dataset schema. On update retain all existing columns and their stable ref values; this array is replaced, not merged."
+          },
+          "expectedSchemaVersion": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Current schema version required for every flexible dataset update, including renames; read dataset details before constructing the update."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DatasetConfiguration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subheader": {
+            "type": "string",
+            "nullable": true
+          },
+          "dimension1": {
+            "type": "string"
+          },
+          "dimension2": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "storageMode": {
+            "type": "string",
+            "enum": [
+              "legacy",
+              "flexible_shared"
+            ],
+            "description": "legacy uses classic rows; flexible_shared uses schema-versioned records. Immutable after creation."
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlexibleColumn"
+            },
+            "description": "Complete flexible dataset schema. On update retain all existing columns and their stable ref values; this array is replaced, not merged."
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "ai_index": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "DataloadConfigurationWrite": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "dataset": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "datasource": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "option": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "nullable": true
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Flat native provider settings. Reads omit write-only credentials, credential-bearing URLs and unknown settings. Replacement preserves omitted write-only fields; null clears the entire source including credentials; a null property clears that key. See docs/ocs-reports-api-v1.md."
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true,
+            "description": "Native schedule code: empty string, h, d, e, or b. null or empty string disables scheduling."
+          },
+          "storageMapping": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values. An empty object also clears the complete mapping."
+          }
+        },
+        "additionalProperties": false,
+        "description": "dataset and datasource are required on create and immutable thereafter. Saving configuration does not execute a dataload."
+      },
+      "DataloadConfiguration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "dataset": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "datasource": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "option": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "nullable": true
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Flat native provider settings. Reads omit write-only credentials, credential-bearing URLs and unknown settings. Replacement preserves omitted write-only fields; null clears the entire source including credentials; a null property clears that key. See docs/ocs-reports-api-v1.md."
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true,
+            "description": "Native schedule code: empty string, h, d, e, or b. null or empty string disables scheduling."
+          },
+          "storageMapping": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "nullable": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ],
+            "description": "Native JSON; supplied field replaces its saved counterpart. null clears it. Omitted fields retain saved values. An empty object also clears the complete mapping."
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "PanoramaTile": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "legend": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "nullable": true,
+        "description": "Native tile passed through PanoramaService. type 0: report ID; type 1: text; type 2: picture file ID. Viewer access rules are unchanged."
+      },
+      "PanoramaPage": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "layoutId": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6,
+            "description": "Layout slot counts: 0=0, 1=3, 2=3, 3=4, 4=6, 5=2, 6=1. Layout 5 is two stacked full-width panels. Layout 1 has two side-by-side upper slots plus one full-width lower slot; use null for an empty slot. Layout 3 is a 2x2 grid. There is no dedicated two-side-by-side-only layout. Choose enough slots for all tiles; layout 5 cannot display three or four reports."
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PanoramaTile"
+            },
+            "description": "Ordered tiles corresponding to layout slots; null represents an empty slot. Tile type 0 uses an accessible report ID, type 1 contains text, and type 2 uses an accessible PNG/JPEG file ID."
+          }
+        },
+        "additionalProperties": true
+      },
+      "PanoramaFilter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]{1,80}$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "showInHeader": {
+            "type": "boolean"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "EQ",
+              "GT",
+              "LT",
+              "LIKE",
+              "NOTLIKE",
+              "IN",
+              "NOTIN"
+            ]
+          },
+          "defaultValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reportId": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "dimension": {
+                  "type": "string"
+                },
+                "dimensionLabel": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "reportId",
+                "dimension",
+                "dimensionLabel"
+              ]
+            },
+            "description": "Mappings reference reports included as Panorama tiles and their actual dimension labels or stable column refs. Read report data/dataset schema to identify compatible dimensions before constructing a shared filter."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "enabled",
+          "operator",
+          "mappings"
+        ]
+      },
+      "PanoramaConfigurationWrite": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "parent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PanoramaPage"
+            },
+            "description": "Complete ordered page configuration. Supplied arrays replace all pages; [] clears pages and null is invalid. Preserve unrelated pages/tiles when updating."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PanoramaFilter"
+            },
+            "nullable": true,
+            "description": "Complete shared-filter configuration. Supplied arrays replace all filters; [] or null clears filters. Map enabled filters to compatible dimensions of report tiles."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PanoramaConfiguration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "parent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PanoramaPage"
+            },
+            "description": "Complete ordered page configuration. Supplied arrays replace all pages; [] clears pages and null is invalid. Preserve unrelated pages/tiles when updating."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PanoramaFilter"
+            },
+            "nullable": true,
+            "description": "Complete shared-filter configuration. Supplied arrays replace all filters; [] or null clears filters. Map enabled filters to compatible dimensions of report tiles."
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "permissions": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "url": {
+            "type": "string",
+            "description": "Root-relative object URL. Preserve the returned relative path in links, or resolve it against the current browser origin including its port. Do not prepend a guessed hostname or an internal service address.",
+            "example": "/apps/analytics/pa/42"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "ConfigurationError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "array",
+                    "items": {}
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "error"
+        ]
+      },
+      "DatasourceCatalogue": {
+        "type": "object",
+        "properties": {
+          "datasources": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "reportTemplates": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "datasources",
+          "options",
+          "reportTemplates"
+        ]
+      },
+      "OCSReportConfiguration": {
+        "type": "object",
+        "required": [
+          "ocs"
+        ],
+        "properties": {
+          "ocs": {
+            "type": "object",
+            "required": [
+              "meta",
+              "data"
+            ],
+            "properties": {
+              "meta": {
+                "$ref": "#/components/schemas/OCSMeta"
+              },
+              "data": {
+                "$ref": "#/components/schemas/ReportConfiguration"
+              }
+            }
+          }
+        }
+      },
+      "OCSDatasetConfiguration": {
+        "type": "object",
+        "required": [
+          "ocs"
+        ],
+        "properties": {
+          "ocs": {
+            "type": "object",
+            "required": [
+              "meta",
+              "data"
+            ],
+            "properties": {
+              "meta": {
+                "$ref": "#/components/schemas/OCSMeta"
+              },
+              "data": {
+                "$ref": "#/components/schemas/DatasetConfiguration"
+              }
+            }
+          }
+        }
+      },
+      "OCSDatasourceCatalogue": {
+        "type": "object",
+        "required": [
+          "ocs"
+        ],
+        "properties": {
+          "ocs": {
+            "type": "object",
+            "required": [
+              "meta",
+              "data"
+            ],
+            "properties": {
+              "meta": {
+                "$ref": "#/components/schemas/OCSMeta"
+              },
+              "data": {
+                "$ref": "#/components/schemas/DatasourceCatalogue"
+              }
+            }
+          }
+        }
+      },
+      "OCSDataloadConfiguration": {
+        "type": "object",
+        "required": [
+          "ocs"
+        ],
+        "properties": {
+          "ocs": {
+            "type": "object",
+            "required": [
+              "meta",
+              "data"
+            ],
+            "properties": {
+              "meta": {
+                "$ref": "#/components/schemas/OCSMeta"
+              },
+              "data": {
+                "$ref": "#/components/schemas/DataloadConfiguration"
+              }
+            }
+          }
+        }
+      },
+      "OCSPanoramaConfiguration": {
+        "type": "object",
+        "required": [
+          "ocs"
+        ],
+        "properties": {
+          "ocs": {
+            "type": "object",
+            "required": [
+              "meta",
+              "data"
+            ],
+            "properties": {
+              "meta": {
+                "$ref": "#/components/schemas/OCSMeta"
+              },
+              "data": {
+                "$ref": "#/components/schemas/PanoramaConfiguration"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "ConfigurationError400": {
+        "description": "Invalid configuration",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "ocs"
+              ],
+              "properties": {
+                "ocs": {
+                  "type": "object",
+                  "required": [
+                    "meta",
+                    "data"
+                  ],
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/OCSMeta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ConfigurationError"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ConfigurationError401": {
+        "description": "Authentication required"
+      },
+      "ConfigurationError404": {
+        "description": "Missing, inaccessible or folder ID",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "ocs"
+              ],
+              "properties": {
+                "ocs": {
+                  "type": "object",
+                  "required": [
+                    "meta",
+                    "data"
+                  ],
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/OCSMeta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ConfigurationError"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ConfigurationError409": {
+        "description": "Existing flexible schema/record version conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "ocs"
+              ],
+              "properties": {
+                "ocs": {
+                  "type": "object",
+                  "required": [
+                    "meta",
+                    "data"
+                  ],
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/OCSMeta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ConfigurationError"
+                    }
+                  }
+                }
               }
             }
           }

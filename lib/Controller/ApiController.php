@@ -78,13 +78,13 @@ class ApiController extends OCSController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1/reports')]
-	public function index(): DataResponse {
+	public function index(bool $includeGroups = false): DataResponse {
 		$reports = array_values(array_filter(
 			$this->reportService->index(),
-			static fn (array $report): bool => (int)$report['type'] !== ReportService::REPORT_TYPE_GROUP
+			static fn (array $report): bool => $includeGroups || (int)$report['type'] !== ReportService::REPORT_TYPE_GROUP
 		));
 		return new DataResponse(array_map(
-			static fn (array $report): array => array_intersect_key($report, array_flip(['id', 'name', 'dataset'])),
+			static fn (array $report): array => array_intersect_key($report, array_flip(['id', 'name', 'dataset', 'parent', 'type'])),
 			$reports
 		));
 	}
@@ -114,12 +114,15 @@ class ApiController extends OCSController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1/datasets')]
-	public function datasets(): DataResponse {
+	public function datasets(bool $includeGroups = false): DataResponse {
 		return new DataResponse(array_map(
 			static fn (array $dataset): array => array_intersect_key($dataset, array_flip([
-				'id', 'name', 'dimension1', 'dimension2', 'value',
+				'id', 'name', 'dimension1', 'dimension2', 'value', 'parent', 'type',
 			])),
-			$this->apiDataController->datasetIndexV3()
+			array_values(array_filter(
+				$this->apiDataController->datasetIndexV3(),
+				static fn (array $dataset): bool => $includeGroups || (int)$dataset['type'] !== 0
+			))
 		));
 	}
 
