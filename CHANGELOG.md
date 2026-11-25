@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 7.3.0 - 2026-11-25
 
 ### Added
 - Import related datasets, reports, folders, and Panoramas together in a JSON bundle. First-time setup uses a bundle to install the six-tile Business performance demo.
