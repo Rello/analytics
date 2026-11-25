@@ -27,7 +27,7 @@ class ApiControllerTest extends TestCase {
 			['id' => 3, 'name' => 'Shared', 'dataset' => 7, 'type' => 2, 'isShare' => 1, 'futureInternalField' => true],
 		]);
 		$result = $this->controller($reports, $this->createMock(ShareService::class), $this->createMock(OutputController::class))->index()->getData();
-		$this->assertSame([['id' => 1, 'name' => 'Owned', 'dataset' => 2], ['id' => 3, 'name' => 'Shared', 'dataset' => 7]], $result);
+		$this->assertSame([['id' => 1, 'name' => 'Owned', 'type' => 2, 'parent' => 0, 'dataset' => 2], ['id' => 3, 'name' => 'Shared', 'dataset' => 7, 'type' => 2]], $result);
 		$this->assertSame([0, 1], array_keys($result));
 	}
 
@@ -83,7 +83,7 @@ class ApiControllerTest extends TestCase {
 
 	public function testDatasetListingUsesExistingExternalApi(): void {
 		$apiData = $this->createMock(ApiDataController::class);
-		$expected = [['id' => 4, 'name' => 'Owned dataset', 'dimension1' => 'Object', 'dimension2' => 'Date', 'value' => 'Value']];
+		$expected = [['id' => 4, 'name' => 'Owned dataset', 'dimension1' => 'Object', 'dimension2' => 'Date', 'value' => 'Value', 'parent' => null, 'type' => 2]];
 		$datasets = [$expected[0] + [
 			'type' => 2, 'parent' => null, 'storage_mode' => 'legacy', 'schema_version' => 0,
 			'schedules' => 1, 'item_type' => 'dataset', 'storageMode' => 'legacy', 'schemaVersion' => 0,
@@ -92,6 +92,24 @@ class ApiControllerTest extends TestCase {
 		$apiData->expects($this->once())->method('datasetIndexV3')->willReturn($datasets);
 		$controller = $this->controller($this->createMock(ReportService::class), $this->createMock(ShareService::class), $this->createMock(OutputController::class), $apiData);
 		$this->assertSame($expected, $controller->datasets()->getData());
+	}
+
+	public function testListsExposeNestedGroupsOnlyWhenRequested(): void {
+		$nodes = [
+			['id' => 10, 'name' => 'Demo Report', 'type' => 0, 'parent' => 0],
+			['id' => 11, 'name' => 'Nested', 'type' => 0, 'parent' => 10],
+			['id' => 12, 'name' => 'Leaf', 'type' => 2, 'parent' => 11],
+			['id' => 13, 'name' => 'Demo Report', 'type' => 0, 'parent' => 99],
+		];
+		$reports = $this->createMock(ReportService::class);
+		$reports->method('index')->willReturn(array_map(fn($n) => $n + ['token' => 'secret'], $nodes));
+		$apiData = $this->createMock(ApiDataController::class);
+		$apiData->method('datasetIndexV3')->willReturn(array_map(fn($n) => $n + ['user_id' => 'owner'], $nodes));
+		$c = $this->controller($reports, $this->createMock(ShareService::class), $this->createMock(OutputController::class), $apiData);
+		$this->assertSame($nodes, $c->index(true)->getData());
+		$this->assertSame($nodes, $c->datasets(true)->getData());
+		$this->assertSame([$nodes[2]], $c->index()->getData());
+		$this->assertSame([$nodes[2]], $c->datasets()->getData());
 	}
 
 	/** @dataProvider writeOperations */

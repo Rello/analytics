@@ -84,6 +84,11 @@ class DataloadService
         return $this->DataloadMapper->create((int)$datasetId, $datasourceId);
     }
 
+    /** Owned raw configuration for the generic API; never return it without redaction. */
+    public function readOwnConfiguration(int $dataloadId): array {
+        return $this->DataloadMapper->readOwnById($dataloadId) ?: [];
+    }
+
     /**
      * get all data loads for a dataset or report
      *

@@ -159,3 +159,11 @@ docker exec -i -u www-data nc35-app-1 php \
 ARTIFACT_DIR=/work/tests/ui-artifacts/legacy-panorama \
   ./tests/run-playwright.sh tests/playwright/panorama_legacy_layout.js
 ```
+
+## Generic OCS configuration API
+
+Run `./tests/run-unit.sh --filter 'ApiConfigurationServiceTest|ApiControllerTest|ReportServiceTest|DataloadServiceTest'` for native options, omitted fields, clearing, source secrets, invalid references, rollback and schema contracts.
+
+Run `ARTIFACT_DIR=/work/tests/ui-artifacts/ocs-configuration ./tests/run-playwright.sh tests/playwright/ocs_configuration.js` for isolated HTTP create/read/update operations across all resources, classic/flexible data, later-call failures and rendered/reloaded reports and Panoramas. It removes its own objects.
+
+Run `docker exec -u www-data nc35-app-1 php /var/tmp/own_apps/analytics/tests/integration/ocs-configuration-permissions.php` for ordinary HTTP Basic authentication, nested dataset group discovery, and owned/shared/inaccessible permissions. Credentials stay in memory and both temporary users/objects are removed.
