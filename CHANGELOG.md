@@ -1,24 +1,22 @@
 # Changelog
 
 ## Unreleased
+
 ### Added
-- Import JSON bundles containing shared datasets, reports, folders, and Panoramas; first-start setup now installs the six-tile Business performance demo.
+- Import related datasets, reports, folders, and Panoramas together in a JSON bundle. First-time setup uses a bundle to install the six-tile Business performance demo.
 
 ### Changed
-- Update the bundled spreadsheet import library to PhpSpreadsheet 5.11.0 for reader and formula fixes.
-- Show data source previews and load simulations as readable tables, with expandable raw data for troubleshooting.
-- Cache datasource metadata in browser memory for 60 seconds to speed up repeated editing; reloading the app clears the cache.
-- Use compact, collapsible Tables data source groups so views appear only when their table is expanded.
-- Use compact circular color indicators in chart legends to save space.
-- Hide the options menu and filter icon in Panorama presentation mode; move the fullscreen control to the page’s upper-right corner with a lighter appearance and balance header spacing.
+- Show datasource previews and data load simulations as tables, with expandable raw data for troubleshooting.
+- Reuse datasource settings for 60 seconds when reopening editors and group Tables views under their parent table in the source picker.
+- Simplify Panorama presentation controls and use smaller color markers in chart legends.
+- Update PhpSpreadsheet to 5.11.0 for spreadsheet reader and formula fixes.
 
 ### Fixed
-- Reject unavailable datasource dropdown selections when saving reports and data loads, importing data loads, or previewing source data.
-- Make report and dataset controls accessible by keyboard, label form fields and sharing actions, expose chart-only data as a screen-reader table, and correct filter and favorite text contrast and list semantics.
-- Correct Analytics schema checks on Nextcloud 35 and reconcile legacy sharing and dataload columns during upgrades.
-- Inherit shared folder permissions for child reports and Panoramas, restoring editable recipient filters and preventing missing-permission warnings.
-- Let Panorama tiles and KPI text shrink with the window size and vertically center text, scrolling longer content within its tile.
-- Respect report table formatting for Panorama KPIs, including currency, percentages, and decimal places.
+- Reject unavailable datasource dropdown selections when saving reports or data loads, importing data loads, and previewing data.
+- Restore inherited permissions for reports and Panoramas in shared folders so recipients with edit permission can change filters.
+- Repair legacy sharing and data load columns during upgrades and correct schema checks on Nextcloud 35.
+- Improve keyboard access, labels, contrast, and list navigation for report and dataset controls. Screen readers can also read chart-only reports as tables.
+- Fit Panorama tiles to smaller windows, keep long text scrollable, and preserve currency, percentage, and decimal formatting in KPIs.
 
 ## 7.2.0 - 2026-10-29
 ### Added
