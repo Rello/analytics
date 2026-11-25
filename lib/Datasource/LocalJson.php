@@ -59,7 +59,7 @@ class LocalJson implements IDatasource {
 			'id' => 'timestamp',
 			'name' => $this->l10n->t('Timestamp of data load'),
 			'placeholder' => 'false-' . $this->l10n->t('No') . '/true-' . $this->l10n->t('Current time') . '/filename-' . $this->l10n->t('From filename'),
-			'type' => 'tf'
+			'type' => 'valueList'
 		];
 		return $template;
 	}

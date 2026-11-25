@@ -146,6 +146,69 @@ class DatasourceController extends Controller {
 	}
 
 	/**
+	 * Validate submitted datasource options against the current user's template.
+	 */
+	public function encodeOptionsForStorage(int $datasourceId, mixed $options, bool $fromExport = false): string {
+		if ($options !== null && !is_string($options)) {
+			throw new \InvalidArgumentException($this->l10n->t('Invalid data source options'));
+		}
+		$decoded = json_decode($options ?? '', true);
+		if ($decoded === null && in_array($options, [null, '', 'null'], true)) {
+			$this->validateOptions($datasourceId, []);
+			return 'null';
+		}
+		if (!is_array($decoded)) {
+			throw new \InvalidArgumentException($this->l10n->t('Invalid data source options'));
+		}
+
+		// Exported data loads already contain the storage escaping applied on save.
+		if ($fromExport) {
+			foreach ($decoded as $key => $value) {
+				if (is_string($value)) {
+					$decoded[$key] = htmlspecialchars_decode($value, ENT_NOQUOTES);
+				}
+			}
+		}
+		$this->validateOptions($datasourceId, $decoded);
+		foreach ($decoded as $key => $value) {
+			$decoded[$key] = htmlspecialchars((string)$value, ENT_NOQUOTES, 'UTF-8');
+		}
+		return json_encode($decoded, JSON_THROW_ON_ERROR);
+	}
+
+	private function validateOptions(int $datasourceId, array $options): void {
+		foreach ($options as $value) {
+			if ($value !== null && !is_scalar($value)) {
+				throw new \InvalidArgumentException($this->l10n->t('Invalid data source options'));
+			}
+		}
+		if (in_array($datasourceId, [self::DATASET_TYPE_GROUP, self::DATASET_TYPE_INTERNAL_DB], true)) {
+			return;
+		}
+		$datasource = $this->getDatasources($datasourceId)[$datasourceId] ?? null;
+		if ($datasource === null) {
+			throw new \InvalidArgumentException($this->l10n->t('The selected data source is unavailable'));
+		}
+		foreach ($datasource->getTemplate() as $field) {
+			if (in_array($field['type'] ?? null, ['valueList', 'tf'], true) && array_key_exists($field['id'], $options)) {
+				$this->validateValueList($field, $options[$field['id']]);
+			}
+		}
+	}
+
+	private function validateValueList(array $field, mixed $value): void {
+		$placeholder = $field['placeholder'];
+		// Numeric values can have labels containing slashes.
+		$entries = preg_match('/^\d+(?::\d+)?-/', $placeholder)
+			? preg_split('/\/(?=\d+(?::\d+)?-)/', rtrim($placeholder, '/'))
+			: explode('/', $placeholder);
+		$allowed = array_map(static fn (string $entry): string => explode('-', $entry, 2)[0], $entries);
+		if ((!is_string($value) && !is_int($value)) || !in_array((string)$value, $allowed, true)) {
+			throw new \InvalidArgumentException($this->l10n->t('Select an available value for %s', [$field['name']]));
+		}
+	}
+
+	/**
 	 * Worksheet suggestions for a file accessible to the current user.
 	 */
 	#[NoAdminRequired]
@@ -170,9 +233,13 @@ class DatasourceController extends Controller {
 		$user = $this->userSession->getUser();
 		$settings = json_decode($options, true);
 		if ($user === null || !is_array($settings)
-			|| !in_array($type, [self::DATASET_TYPE_LOCAL_JSON, self::DATASET_TYPE_EXTERNAL_JSON], true)
-			|| !isset($this->getDatasources()[$type])) {
+			|| !in_array($type, [self::DATASET_TYPE_LOCAL_JSON, self::DATASET_TYPE_EXTERNAL_JSON], true)) {
 			return new DataResponse(['error' => $this->l10n->t('Data source not available anymore')], 400);
+		}
+		try {
+			$this->validateOptions($type, $settings);
+		} catch (\InvalidArgumentException $e) {
+			return new DataResponse(['error' => $e->getMessage()], 400);
 		}
 		// Browsing must work before an extraction path has been chosen.
 		$settings['path'] = '';

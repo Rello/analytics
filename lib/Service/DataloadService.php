@@ -110,14 +110,11 @@ class DataloadService
      */
     public function update(int $dataloadId, $name, $option, $schedule, $storageMapping = null)
     {
-        if (empty($this->DataloadMapper->readOwnById($dataloadId))) {
+        $dataload = $this->DataloadMapper->readOwnById($dataloadId);
+        if (empty($dataload)) {
             return false;
         }
-        $array = json_decode($option, true);
-        foreach ($array as $key => $value) {
-            $array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-        }
-        $option = json_encode($array);
+        $option = $this->DatasourceController->encodeOptionsForStorage((int)$dataload['datasource'], $option);
 
         if (is_array($storageMapping)) {
             $storageMapping = json_encode($storageMapping, JSON_THROW_ON_ERROR);

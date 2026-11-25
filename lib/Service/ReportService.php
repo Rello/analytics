@@ -58,7 +58,8 @@ class ReportService {
 		IRootFolder $rootFolder,
 		IConfig $config,
 		VariableService $VariableService,
-		FlexibleStorageService $FlexibleStorageService
+		FlexibleStorageService $FlexibleStorageService,
+		private DatasourceController $datasourceController,
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
@@ -215,14 +216,6 @@ class ReportService {
 		$value,
 		$addReport = null
 	): int {
-		$array = json_decode($link, true);
-		if (is_array($array)) {
-			foreach ($array as $key => $value) {
-				$array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-			}
-		}
-		$link = json_encode($array);
-
 		if ($type === DatasourceController::DATASET_TYPE_GROUP) {
 			$parent = 0;
 		}
@@ -232,6 +225,7 @@ class ReportService {
 		if ($dataset < 0 || ($type !== DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset !== 0)) {
 			return 0;
 		}
+		$link = $this->datasourceController->encodeOptionsForStorage((int)$type, $link);
 		if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset === 0) { // New dataset
 			$dataset = $this->DatasetService->create($name, $dimension1, $dimension2, $value);
 		} else if ($type === DatasourceController::DATASET_TYPE_INTERNAL_DB && $dataset !== 0) {
@@ -349,14 +343,11 @@ class ReportService {
 			$dimension2 = null,
 			$value = null
 	) {
-		if (!$this->isOwn($reportId) || !$this->isValidParent($parent, $reportId)) {
+		$report = $this->ReportMapper->readOwn($reportId);
+		if (empty($report) || !$this->isValidParent($parent, $reportId)) {
 			return false;
 		}
-		$array = json_decode($options, true);
-		foreach ($array as $key => $tmpValue) {
-			$array[$key] = htmlspecialchars($tmpValue, ENT_NOQUOTES, 'UTF-8');
-		}
-		$options = json_encode($array);
+		$options = $this->datasourceController->encodeOptionsForStorage((int)$report['type'], $options);
 
 		return $this->ReportMapper->update($reportId, $name, $subheader, $parent, $options, $visualization, $chart, $chartoptions, $dataoptions, $dimension1, $dimension2, $value);
 	}
@@ -492,6 +483,21 @@ class ReportService {
 			return 0;
 		}
 
+		// Validate every attached load before the import creates a dataset or report.
+		$dataloads = $data['dataload'] ?? [];
+		if (!is_array($dataloads)) {
+			throw new \InvalidArgumentException($this->l10n->t('Invalid data source options'));
+		}
+		foreach ($dataloads as $key => $dataload) {
+			$datasource = $dataload['datasource'] ?? null;
+			if (!is_int($datasource) && !(is_string($datasource) && ctype_digit($datasource))) {
+				throw new \InvalidArgumentException($this->l10n->t('Invalid data source options'));
+			}
+			$dataloads[$key]['option'] = $this->datasourceController->encodeOptionsForStorage(
+				(int)$datasource, $dataload['option'] ?? null, fromExport: true
+			);
+		}
+
 		$report = $data['report'];
 		$exportedDataset = is_array($data['dataset'] ?? null) ? $data['dataset'] : [];
 		$columnMap = [];
@@ -551,15 +557,13 @@ class ReportService {
 
 		$this->DataloadMapper->beginTransaction();
 
-		foreach (($data['dataload'] ?? []) as $dataload) {
-			isset($dataload['datasource']) ? $datasource = $dataload['datasource'] : $datasource = null;
+		foreach ($dataloads as $dataload) {
 			isset($dataload['name']) ? $name = $dataload['name'] : $name = null;
-			isset($dataload['option']) ? $option = $dataload['option'] : $option = null;
 			$schedule = null;
 
-			$dataloadId = $this->DataloadMapper->create($datasetId, $datasource);
+			$dataloadId = $this->DataloadMapper->create($datasetId, (int)$dataload['datasource']);
 			$storageMapping = $this->remapFlexibleJson($dataload['storage_mapping'] ?? null, $columnMap);
-			$this->DataloadMapper->update($dataloadId, $name, $option, $schedule, $storageMapping);
+			$this->DataloadMapper->update($dataloadId, $name, $dataload['option'], $schedule, $storageMapping);
 		}
 
 		foreach (($data['threshold'] ?? []) as $threshold) {

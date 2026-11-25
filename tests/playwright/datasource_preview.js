@@ -24,6 +24,15 @@ const config = buildScenarioConfig('datasource-preview');
         await page.locator('#wizardNewDatasource').selectOption({label: 'External: csv'});
         await page.locator('#dataSourceOptions #link').fill(source);
         const type = await page.locator('#wizardNewDatasource').inputValue();
+        const invalidSelection = await page.evaluate(async type => {
+            const response = await fetch(OC.generateUrl('apps/analytics/data'), {
+                method: 'POST', headers: OCA.Analytics.headers(),
+                body: JSON.stringify({type: Number(type), options: JSON.stringify({hasHeader: 'unavailable'})})
+            });
+            return {status: response.status, body: await response.json()};
+        }, type);
+        assert.equal(invalidSelection.status, 400);
+        assert.ok(invalidSelection.body.error);
         await page.locator('#datasourcePreviewButton').click();
         await page.locator('.datasourcePreview tbody tr').first().waitFor();
         assert.equal(await page.locator('#simulationData').isVisible(), false);

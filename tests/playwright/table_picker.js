@@ -11,6 +11,20 @@ const config = buildScenarioConfig('table-picker');
     try {
         const page = await browser.newPage({viewport: config.viewport});
         await ensureAnalyticsLoaded(page, config);
+        const methods = await page.evaluate(() => {
+            const input = OCA.Analytics.Datasource.buildOptionsSelect({
+                id: 'method', type: 'valueList', placeholder: 'GET/POST/-Default (GET)'
+            });
+            return Array.from(input.options, option => option.value);
+        });
+        assert.deepEqual(methods, ['GET', 'POST', '']);
+        const sources = await page.evaluate(() => {
+            const input = OCA.Analytics.Datasource.buildOptionsSelect({
+                id: 'sourceId', type: 'valueList', placeholder: '12-Planning/Archive/12:3-View/'
+            });
+            return Array.from(input.options, option => [option.value, option.textContent]);
+        });
+        assert.deepEqual(sources, [['12', 'Planning/Archive'], ['12:3', 'View']]);
         await page.evaluate(() => {
             const entries = [];
             for (let table = 1; table <= 50; table++) {

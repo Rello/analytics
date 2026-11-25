@@ -597,7 +597,7 @@ Object.assign(OCA.Analytics.Datasource = {
             let input = OCA.Analytics.Datasource.buildOptionsInput(templateOption);
             input.style.display = 'table-cell';
             if (templateOption.type) {
-                if (templateOption.type === 'tf' || templateOption.type === 'sheetPicker') {
+                if (['valueList', 'tf', 'sheetPicker'].includes(templateOption.type)) {
                     input = OCA.Analytics.Datasource.buildOptionsSelect(templateOption);
                     if (templateOption.type === 'sheetPicker') {
                         input.addEventListener('focus', () => OCA.Analytics.Datasource.loadSheetOptions(input));
@@ -893,7 +893,6 @@ Object.assign(OCA.Analytics.Datasource = {
      */
     buildOptionsSelect: function (templateOption) {
         let input = document.createElement('select');
-        let text, value;
         input.style.display = 'inline-flex';
         input.classList.add('sidebarInput');
         input.id = templateOption.id;
@@ -911,23 +910,22 @@ Object.assign(OCA.Analytics.Datasource = {
             return input;
         }
 
-        // if options are split with "-", they are considered as value/key pairs
-        let selectOptions = templateOption.placeholder.split("/")
-        for (let selectOption of selectOptions) {
-            let index = selectOption.indexOf('-');
-            let keyValue = [selectOption.substring(0, index), selectOption.substring(index + 1)];
-            value = selectOption;
-            text = selectOption;
-            if (keyValue.length >> 1) {
-                value = keyValue[0];
-                text = keyValue[1];
-            }
-            let option = document.createElement('option');
-            option.value = value;
-            option.innerText = text;
+        for (const entry of OCA.Analytics.Datasource.valueListEntries(templateOption.placeholder)) {
+            const separator = entry.indexOf('-');
+            const option = document.createElement('option');
+            option.value = separator === -1 ? entry : entry.slice(0, separator);
+            option.innerText = separator === -1 ? entry : entry.slice(separator + 1);
             input.appendChild(option);
         }
         return input;
+    },
+
+    valueListEntries: function (entries) {
+        if (/^\d+(?::\d+)?-/.test(entries)) {
+            // Numeric values can have labels containing slashes.
+            return entries.replace(/\/+$/, '').split(/\/(?=\d+(?::\d+)?-)/);
+        }
+        return entries.split('/');
     },
 
     /**
@@ -938,11 +936,7 @@ Object.assign(OCA.Analytics.Datasource = {
             return false;
         }
 
-        // Preserve slashes in labels by splitting only before the next table or view ID.
-        const rawOptions = templateOption.placeholder
-            .replace(/\/$/, '')
-            .split(/\/(?=\d+(?::\d+)?-)/)
-            .filter(option => option !== '');
+        const rawOptions = OCA.Analytics.Datasource.valueListEntries(templateOption.placeholder);
         const parsedOptions = [];
         let hasView = false;
 

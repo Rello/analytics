@@ -36,7 +36,8 @@ interface IDatasource
      * every field needs to provide the following format
      *  id          *mandatory*     = name of the option for the readData
      *  name        *mandatory*     = displayed name of the input field in the UI
-     *  type        *optional*      =   'tf' to create a dropdown. Values need to be provided in the placeholder separated with "/".
+     *  type        *optional*      =   'valueList' for a dropdown with allowed values separated by "/" in the placeholder.
+     *                                  'tf' is a legacy alias for 'valueList'.
      *                                  'filePicker' will launch the file picker
      *                                  'columnPicker' will launch the file picker
      *                                  'number' for a number-only input field
@@ -44,15 +45,16 @@ interface IDatasource
      *                                  'longtext' will create a text area input
      *  placeholder *mandatory*     = help text for the input field in the UI
      *  allowTextVariables *optional* = adds a separate editor for text variables without triggering the input's primary action
-     *                                for type=tf:
+     *                                for type=valueList:
      *                                  e.g. "true/false"
      *                                  if value/text pairs are required for the dropdown/option, the values need to be separated with "-" in addition.
      *                                  e.g. "eq-equal/gt-greater"
+     *                                  Numeric lists split at slashes before the next labelled numeric value (e.g. "12" or "12:3").
      *                                  to avoid translation of the technical strings, separate them
      *                                  'true-' - $this->l10n->t('Yes').'/false-'.$this->l10n->t('No')
      *
      *  example:
-     *  {['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'tf', 'placeholder' => 'adaptation/absolute']}
+     *  {['id' => 'datatype', 'name' => 'Type of Data', 'type' => 'valueList', 'placeholder' => 'adaptation/absolute']}
      *
      * @return array
      * @since 3.1.0

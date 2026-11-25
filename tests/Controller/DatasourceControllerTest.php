@@ -6,6 +6,72 @@ use OCA\Analytics\Tests\Stubs\FakeL10N;
 use PHPUnit\Framework\TestCase;
 
 class DatasourceControllerTest extends TestCase {
+    public function testSaveChecksValueListAndLegacyDropdownAgainstFreshChoices(): void {
+        $datasource = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $modes = ['id' => 'mode', 'name' => 'Mode', 'type' => 'valueList', 'placeholder' => 'first/second'];
+        $source = ['id' => 'sourceId', 'name' => 'Source', 'type' => 'tf', 'placeholder' => '12-Planning/Archive/12:3-View/'];
+        $datasource->expects($this->exactly(2))->method('getTemplate')->willReturnOnConsecutiveCalls(
+            [$modes, $source],
+            [$modes, array_replace($source, ['placeholder' => '12-Planning/Archive/'])]
+        );
+        $controller = $this->createController(localCsv: $datasource);
+        $options = '{"mode":"second","sourceId":"12:3","path":"one & two"}';
+
+        $this->assertSame(
+            ['mode' => 'second', 'sourceId' => '12:3', 'path' => 'one &amp; two'],
+            json_decode($controller->encodeOptionsForStorage(DatasourceController::DATASET_TYPE_LOCAL_CSV, $options), true)
+        );
+
+        $this->expectExceptionMessage('Select an available value for Source');
+        $controller->encodeOptionsForStorage(DatasourceController::DATASET_TYPE_LOCAL_CSV, $options);
+    }
+
+    public function testSaveRejectsPartOfANumericChoiceLabelAsAValue(): void {
+        $datasource = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $datasource->method('getTemplate')->willReturn([
+            ['id' => 'sourceId', 'name' => 'Source', 'type' => 'valueList', 'placeholder' => '12-Planning/Archive/12:3-View/'],
+        ]);
+        $controller = $this->createController(localCsv: $datasource);
+
+        $this->expectExceptionMessage('Select an available value for Source');
+        $controller->encodeOptionsForStorage(DatasourceController::DATASET_TYPE_LOCAL_CSV, '{"sourceId":"Archive"}');
+    }
+
+    public function testSaveRejectsAnUnlistedValueListChoice(): void {
+        $datasource = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $datasource->method('getTemplate')->willReturn([
+            ['id' => 'mode', 'name' => 'Mode', 'type' => 'valueList', 'placeholder' => 'first-First mode/second-Second mode'],
+        ]);
+        $controller = $this->createController(localCsv: $datasource);
+
+        $this->expectExceptionMessage('Select an available value for Mode');
+        $controller->encodeOptionsForStorage(DatasourceController::DATASET_TYPE_LOCAL_CSV, '{"mode":"Second mode"}');
+    }
+
+    public function testExportedOptionsRoundTripWithoutAdditionalEscaping(): void {
+        $datasource = $this->createMock(\OCA\Analytics\Datasource\LocalCsv::class);
+        $datasource->method('getTemplate')->willReturn([
+            ['id' => 'mode', 'name' => 'Mode', 'type' => 'valueList', 'placeholder' => 'A&B-Combined'],
+        ]);
+        $controller = $this->createController(localCsv: $datasource);
+        $stored = $controller->encodeOptionsForStorage(1, '{"mode":"A&B","path":"A &amp; B"}');
+        $this->assertSame($stored, $controller->encodeOptionsForStorage(1, $stored, fromExport: true));
+        $this->expectException(\InvalidArgumentException::class);
+        $controller->encodeOptionsForStorage(1, '{"mode":"stale"}', fromExport: true);
+    }
+
+    public function testJsonBrowseRejectsAnUnavailableDropdownBeforeReading(): void {
+        $json = $this->createMock(\OCA\Analytics\Datasource\LocalJson::class);
+        $json->method('getTemplate')->willReturn([
+            ['id' => 'timestamp', 'name' => 'Timestamp', 'type' => 'valueList', 'placeholder' => 'true/false'],
+        ]);
+        $json->expects($this->never())->method('readData');
+        $session = $this->createMock(\OCP\IUserSession::class);
+        $session->method('getUser')->willReturn($this->createMock(\OCP\IUser::class));
+        $controller = $this->createController(userSession: $session, localJson: $json);
+        $this->assertSame(400, $controller->jsonContent(8, '{"timestamp":"stale"}')->getStatus());
+    }
+
     public function testJsonBrowseUsesCurrentUserAndReturnsOnlyContent(): void {
         $json = $this->createMock(\OCA\Analytics\Datasource\LocalJson::class);
         $json->expects($this->once())->method('readData')->with($this->callback(function ($options) {

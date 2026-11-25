@@ -366,13 +366,13 @@ Object.assign(OCA.Analytics.Dataset.Dataload = {
         datasetOptions.push({
             id: 'filterDimension',
             name: t('analytics', 'Filter by'),
-            type: 'tf',
+            type: 'valueList',
             placeholder: dimensionPlaceholder
         });
         datasetOptions.push({
             id: 'filterOption',
             name: t('analytics', 'Operator'),
-            type: 'tf',
+            type: 'valueList',
             placeholder: optionSelectOptions
         });
         datasetOptions.push({id: 'filterValue', name: t('analytics', 'Value'), placeholder: ''});

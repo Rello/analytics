@@ -278,13 +278,13 @@ class OutputController extends Controller {
 	 * @throws Exception
 	 */
 	#[NoAdminRequired]
-	public function readPreview($type, $options, int $limit = 1) {
+	public function readPreview(int $type, $options, int $limit = 1) {
 		$reportMetadata = [];
-		$array = json_decode($options, true);
-		foreach ($array as $key => $value) {
-			$array[$key] = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+		try {
+			$reportMetadata['link'] = $this->DatasourceController->encodeOptionsForStorage($type, $options);
+		} catch (\InvalidArgumentException $e) {
+			return new DataResponse(['error' => $e->getMessage()], 400);
 		}
-		$reportMetadata['link'] = json_encode($array);
 		$reportMetadata['type'] = $type;
 		$reportMetadata['dataset'] = 0;
 		$reportMetadata['filteroptions'] = '';

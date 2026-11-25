@@ -61,7 +61,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 				. '/issues-' . $this->l10n->t('Issues')
 				// TRANSLATORS: Noun: proposed code changes on GitHub.
 				. '/pulls-' . $this->l10n->t('Pull Requests'),
-			'type' => 'tf'
+			'type' => 'valueList'
 		];
 		$template[] = [
 			'id' => 'limit',
@@ -74,7 +74,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			'id' => 'timestamp',
 			'name' => $this->l10n->t('Timestamp of data load'),
 			'placeholder' => 'false-' . $this->l10n->t('No') . '/true-' . $this->l10n->t('Yes'),
-			'type' => 'tf'
+			'type' => 'valueList'
 		];
 		$template[] = ['id' => 'section', 'name' => $this->l10n->t('More options'), 'type' => 'section'];
 		$template[] = [
@@ -86,7 +86,7 @@ class Github implements IDatasource, IReportTemplateProvider {
 			'id' => 'showAssets',
 			'name' => $this->l10n->t('Show assets'),
 			'placeholder' => 'false-' . $this->l10n->t('No') . '/true-' . $this->l10n->t('Yes'),
-			'type' => 'tf'
+			'type' => 'valueList'
 		];
 		$template[] = [
 			'id' => 'token',

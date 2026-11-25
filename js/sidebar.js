@@ -1137,8 +1137,11 @@ OCA.Analytics.Sidebar.Report = {
             headers: OCA.Analytics.headers(),
             body: JSON.stringify(payload)
         })
-            .then(response => response.json())
-            .then(id => {
+            .then(async response => {
+                const id = await response.json();
+                if (!response.ok || !Number.isInteger(id) || id <= 0) {
+                    throw new Error(id?.error || t('analytics', 'Request could not be processed'));
+                }
                 return OCA.Analytics.Sidebar.Report.applyTemplateOptionsToReport(id, selectedTemplate);
             })
             .then(id => {
@@ -1154,7 +1157,8 @@ OCA.Analytics.Sidebar.Report = {
                 OCA.Analytics.Navigation.addNavigationItem(data);
                 const anchor = document.querySelector('#navigationDatasets a[data-id="' + data.id + '"][data-item_type="report"]');
                 anchor?.click();
-            });
+            })
+            .catch(error => OCA.Analytics.Notification.notification('error', error.message));
     },
 
     // not used; rework to be done as the fileId is expected now

@@ -18,6 +18,21 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class DataloadServiceTest extends TestCase {
+	public function testDataloadUpdateValidatesOptionsForTheStoredDatasourceBeforeWriting(): void {
+		$options = '{"mode":"unavailable"}';
+		$dataloadMapper = $this->createMock(DataloadMapper::class);
+		$dataloadMapper->method('readOwnById')->with(42)->willReturn(['datasource' => DatasourceController::DATASET_TYPE_LOCAL_CSV]);
+		$dataloadMapper->expects($this->never())->method('update');
+		$datasourceController = $this->createMock(DatasourceController::class);
+		$datasourceController->expects($this->once())->method('encodeOptionsForStorage')
+			->with(DatasourceController::DATASET_TYPE_LOCAL_CSV, $options)
+			->willThrowException(new \InvalidArgumentException('Invalid source choice'));
+		$service = $this->createService($datasourceController, $dataloadMapper);
+
+		$this->expectExceptionMessage('Invalid source choice');
+		$service->update(42, 'Data load', $options, '');
+	}
+
 	public function testGetDataFromDatasourceDisablesCacheValidation(): void {
 		$datasourceController = $this->createMock(DatasourceController::class);
 		$datasourceController->expects($this->once())

@@ -75,7 +75,11 @@ class DataloadController extends Controller
     #[NoAdminRequired]
     public function update(int $dataloadId, $name, $option, $schedule, $storageMapping = null): DataResponse
     {
-        return new DataResponse(['update' => $this->DataloadService->update($dataloadId, $name, $option, $schedule, $storageMapping)]);
+        try {
+            return new DataResponse(['update' => $this->DataloadService->update($dataloadId, $name, $option, $schedule, $storageMapping)]);
+        } catch (\InvalidArgumentException $e) {
+            return new DataResponse(['error' => $e->getMessage()], 400);
+        }
     }
 
     /**
