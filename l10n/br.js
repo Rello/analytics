@@ -44,6 +44,7 @@ OC.L10N.register(
     "Password" : "Ger-tremen",
     "Translate" : "Treiñ",
     "Edit" : "Embann",
+    "Label" : "Tiketenn",
     "Name" : "Anv",
     "Update" : "Hizivaat",
     "Mode" : "Mod",

@@ -493,6 +493,7 @@ OC.L10N.register(
     "Report was changed - Press here to save the current state" : "S'ha canviat l'informe: premeu aquí per desar l'estat actual",
     "Legend" : "Llegenda",
     "Series" : "Sèries",
+    "Label" : "Etiqueta",
     "Do you like this app?" : "Us agrada l'aplicació?",
     "Introduction" : "Introducció",
     "More information …" : "Més informació …",
