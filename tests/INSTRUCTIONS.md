@@ -97,6 +97,7 @@ Supported identifiers:
 - `tests/playwright/json_picker.js` (JSON hierarchy, existing path syntax, live local extraction preview, and picker lifecycle)
 - `tests/playwright/time_aggregation.js` (quarterly sums, averages, calendar boundaries, dimensions, and table labels)
 - `tests/playwright/chart_export.js` (SVG vector output and visual comparisons, original PNG downloads, chart state restoration, failures, and download dialog)
+- `tests/playwright/chart_touch_tooltip.js` (touch and mouse selection on dense line charts with missing dates)
 - `tests/playwright/dashboard_number_format.js` (standalone dashboard values, locales, and thresholds)
 - `91`, `91-delete`, `report-delete`, `delete`
 - `92`, `92-delete`, `group-delete`
